@@ -27,6 +27,10 @@ fs.readFile('./ja.json',function(err,data){
 				break;
 			}else
 			{
+				if (m2[0] != m[0]) //英文的会提前没有内容
+				{
+					m2 = null;
+				}
 				//类型'
 				var type = [m[5]];
 				if (m[6]!=-1) //第二个type
