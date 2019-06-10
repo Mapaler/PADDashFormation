@@ -1,0 +1,179 @@
+@charset "utf-8";
+.title{
+	border: none;
+	background: none;
+	font-size: 2em;
+	font-weight: bold;
+}
+ul{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+/*队伍的整个盒子*/
+.formation-box{
+}
+/*辅助行*/
+.formation-assist{
+}
+/*队伍行*/
+.formation-team{
+}
+/*单个怪物*/
+.monster{
+	width: 100px;
+	height: 100px;
+	margin: 0;
+	display: block;
+	float: left;
+	background-image: url(images/5139.png);
+	position: relative;
+	margin: 4px; /*留给队长边框的*/
+}
+/*怪物-加值*/
+.monster .addition{
+	color: yellow;
+	font-size: 20px;
+	line-height: 20px;
+	font-weight: bold;
+	text-shadow: black 2px 2px 0;
+	position: absolute;
+	left: 5px;
+}
+/*怪物-觉醒*/
+.monster .awoken-icon{
+	color: yellow;
+	font-size: 18px;
+	line-height: 24px;
+	font-weight: bold;
+	text-shadow: black 0 0 4px;
+	text-align: center;
+	background-image: url(images/awoken-bg.png);
+	background-size: 27px 30px;
+	width: 27px;
+	height: 30px;
+	position: absolute;
+	right: 0;
+}
+/*怪物-等级*/
+.monster .level{
+	color: white;
+	font-size: 18px;
+	text-shadow: black 2px 2px 0;
+	position: absolute;
+	left: 5px;
+	bottom: 0;
+}
+/*辅助和队伍的每一只框架*/
+.assist, .team, .acquisitus-awoken-icon {
+	display: block;
+	float: left;
+	position: relative;
+	width: 108px;
+}
+/*
+.assist:first-of-type, .team:first-of-type {
+	margin-left: 0px;
+}
+*/
+/*队伍的背景色*/
+.formation-assist, .formation-team{
+	display: inline-block;
+}
+.formation-A-box .formation-team{
+	background-color:pink;
+}
+.formation-B-box .formation-team{
+	background-color:lightblue;
+}
+.formation-A-bigbox, .formation-B-bigbox{
+	position: relative;
+	font-size:0;
+}
+.formation-B-bigbox{
+	margin-top:15px;
+}
+/*队伍A、B的文字*/
+.formation-A-bigbox::after, .formation-B-bigbox::before{
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 50px;
+	white-space: pre-wrap;
+	display: inline-block;
+	width: 108px;
+	height: 108px;
+}
+.formation-A-bigbox::after{
+	color:red;
+	background-color:pink;
+	content: "队伍\A A";
+}
+.formation-B-bigbox::before{
+	color:blue;
+	background-color:lightblue;
+	content: "队伍\A B";
+	vertical-align:top;
+}
+.formation-A-box, .formation-B-box{
+	display: inline-block;
+	vertical-align:bottom;
+}
+
+.formation-A-box .assist::after, .formation-B-box .assist::before{
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	display: block;
+	position: relative;
+}
+.formation-A-box .assist::after{
+	color:red;
+	content: "▼辅助";
+}
+.formation-B-box .assist::before{
+	color:blue;
+	content: "▲辅助";
+}
+
+.a-awoken-icon-1 li{
+	background-image: url(images/sha.png);
+	background-size: 50px 21px;
+	width: 50px;
+	height: 21px;
+	margin-right: 4px;
+}
+.a-awoken-icon-2 li{
+	background-image: url(images/fangzuo.png);
+	background-size: 21px 21px;
+	width: 21px;
+	height: 21px;
+	margin-left: 6px;
+}
+.a-awoken-icon-ul li{
+	float:left;
+}
+/*
+.formation-A-box .team::after, .formation-B-box .team::before{
+	text-align: center;
+	border: 1px green solid;
+	color:red;
+	font-size: 18px;
+	font-weight: bold;
+	display: block;
+	content: " ";
+}
+*/
+/*队长的边框*/
+.formation-A-box .formation-team .team-leader .monster, .formation-B-box .formation-team .team-leader .monster{
+	border-radius: 10px;
+	border-width:4px;
+	border-style:solid;
+	margin: 0;
+}
+.formation-A-box .formation-team .team-leader .monster{
+	border-color: red;
+}
+.formation-B-box .formation-team .team-leader .monster{
+	border-color: blue;
+}
