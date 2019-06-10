@@ -3,7 +3,7 @@ window.onload = function()
 {
 	GM_xmlhttpRequest({
 		method: "GET",
-		url:"monsters-info/ja.json",
+		url:"monsters-info/mon.json",
 		onload: function(response) {
 			mdata.ja = JSON.parse(response.response);
 			GM_xmlhttpRequest({

@@ -1,4 +1,6 @@
-使用Fidder从游戏内抓包获得怪物信息，经研究后得出如下结论。数字指的数组下标。
+使用Fidder从游戏内抓包获得怪物信息。  
+https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data  
+经研究后得出如下结论。数字指的数组下标。
 * 0为id，一样的时候是可以获得的，之后的就是敌人怪物了。
 * 1为名字
 * 2为主属性，3为副属性，为-1的时候表示没有副属性。
@@ -27,3 +29,5 @@ function get(id)
 	);
 }
 ```
+
+执行`提取信息.bat`，用node来执行`extractByNode.js`，将日文和英文的有用信息提取到一个文件内。
