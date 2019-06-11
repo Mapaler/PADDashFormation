@@ -26,9 +26,56 @@ ul{
 	margin: 0;
 	display: block;
 	float: left;
-	background-image: url(images/5139.png);
+	background-image: url(images/001.png);
+	background-repeat: no-repeat;
 	position: relative;
 	margin: 4px; /*留给队长边框的*/
+}
+/*怪物属性*/
+.property,.subproperty{
+	position:absolute;
+	left:0;top:0;
+	width: 100px;
+	height: 100px;
+	background-repeat: no-repeat;
+	background-image: url(images/CARDFRAME2.PNG);
+	background-position: 100px 100px; /*默认都不显示*/
+}
+.property--1{
+	background: none; /*无*/
+}
+.property-0{
+	background-position: 0 0; /*火*/
+}
+.property-1{
+	background-position: -102px 0; /*水*/
+}
+.property-2{
+	background-position: -204px 0; /*木*/
+}
+.property-3{
+	background-position: -306px 0; /*光*/
+}
+.property-4{
+	background-position: -408px 0; /*暗*/
+}
+.subproperty--1{
+	background: none; /*无*/
+}
+.subproperty-0{
+	background-position: 0 -104px; /*火*/
+}
+.subproperty-1{
+	background-position: -102px -104px; /*水*/
+}
+.subproperty-2{
+	background-position: -204px -104px; /*木*/
+}
+.subproperty-3{
+	background-position: -306px -104px; /*光*/
+}
+.subproperty-4{
+	background-position: -408px -104px; /*暗*/
 }
 /*怪物-加值*/
 .monster .addition{
@@ -36,9 +83,26 @@ ul{
 	font-size: 20px;
 	line-height: 20px;
 	font-weight: bold;
-	text-shadow: black 2px 2px 0;
+	text-shadow: black 0 0 1px, black 2px 2px 0;
 	position: absolute;
-	left: 5px;
+	left:0;
+}
+.monster .addition ._297{
+	display:none;
+}
+.monster .addition .hp::before,
+.monster .addition .atk::before,
+.monster .addition .def::before,
+.monster .addition ._297::before{
+	content: "+";
+}
+.monster .addition.has297 .hp,
+.monster .addition.has297 .atk,
+.monster .addition.has297 .def{
+	display:none;
+}
+.monster .addition.has297 ._297{
+	display:block;
 }
 /*怪物-觉醒*/
 .monster .awoken-icon{
@@ -55,6 +119,9 @@ ul{
 	position: absolute;
 	right: 0;
 }
+.monster .awoken-icon.awoken-none{
+	display:none;
+}
 /*怪物-等级*/
 .monster .level{
 	color: white;
@@ -63,6 +130,9 @@ ul{
 	position: absolute;
 	left: 5px;
 	bottom: 0;
+}
+.monster .level::before{
+	content: "Lv";
 }
 /*辅助和队伍的每一只框架*/
 .assist, .team, .acquisitus-awoken-icon {
@@ -177,3 +247,125 @@ ul{
 .formation-B-box .formation-team .team-leader .monster{
 	border-color: blue;
 }
+
+/*宠物头像所用的图片*/
+.pet-cards-1{background-image: url(images/cards/CARDS_001.PNG);}
+.pet-cards-2{background-image: url(images/cards/CARDS_002.PNG);}
+.pet-cards-3{background-image: url(images/cards/CARDS_003.PNG);}
+.pet-cards-4{background-image: url(images/cards/CARDS_004.PNG);}
+.pet-cards-5{background-image: url(images/cards/CARDS_005.PNG);}
+.pet-cards-6{background-image: url(images/cards/CARDS_006.PNG);}
+.pet-cards-7{background-image: url(images/cards/CARDS_007.PNG);}
+.pet-cards-8{background-image: url(images/cards/CARDS_008.PNG);}
+.pet-cards-9{background-image: url(images/cards/CARDS_009.PNG);}
+.pet-cards-10{background-image: url(images/cards/CARDS_010.PNG);}
+.pet-cards-11{background-image: url(images/cards/CARDS_011.PNG);}
+.pet-cards-12{background-image: url(images/cards/CARDS_012.PNG);}
+.pet-cards-13{background-image: url(images/cards/CARDS_013.PNG);}
+.pet-cards-14{background-image: url(images/cards/CARDS_014.PNG);}
+.pet-cards-15{background-image: url(images/cards/CARDS_015.PNG);}
+.pet-cards-16{background-image: url(images/cards/CARDS_016.PNG);}
+.pet-cards-17{background-image: url(images/cards/CARDS_017.PNG);}
+.pet-cards-18{background-image: url(images/cards/CARDS_018.PNG);}
+.pet-cards-19{background-image: url(images/cards/CARDS_019.PNG);}
+.pet-cards-20{background-image: url(images/cards/CARDS_020.PNG);}
+.pet-cards-21{background-image: url(images/cards/CARDS_021.PNG);}
+.pet-cards-22{background-image: url(images/cards/CARDS_022.PNG);}
+.pet-cards-23{background-image: url(images/cards/CARDS_023.PNG);}
+.pet-cards-24{background-image: url(images/cards/CARDS_024.PNG);}
+.pet-cards-25{background-image: url(images/cards/CARDS_025.PNG);}
+.pet-cards-26{background-image: url(images/cards/CARDS_026.PNG);}
+.pet-cards-27{background-image: url(images/cards/CARDS_027.PNG);}
+.pet-cards-28{background-image: url(images/cards/CARDS_028.PNG);}
+.pet-cards-29{background-image: url(images/cards/CARDS_029.PNG);}
+.pet-cards-30{background-image: url(images/cards/CARDS_030.PNG);}
+.pet-cards-31{background-image: url(images/cards/CARDS_031.PNG);}
+.pet-cards-32{background-image: url(images/cards/CARDS_032.PNG);}
+.pet-cards-33{background-image: url(images/cards/CARDS_033.PNG);}
+.pet-cards-34{background-image: url(images/cards/CARDS_034.PNG);}
+.pet-cards-35{background-image: url(images/cards/CARDS_035.PNG);}
+.pet-cards-36{background-image: url(images/cards/CARDS_036.PNG);}
+.pet-cards-37{background-image: url(images/cards/CARDS_037.PNG);}
+.pet-cards-38{background-image: url(images/cards/CARDS_038.PNG);}
+.pet-cards-39{background-image: url(images/cards/CARDS_039.PNG);}
+.pet-cards-40{background-image: url(images/cards/CARDS_040.PNG);}
+.pet-cards-41{background-image: url(images/cards/CARDS_041.PNG);}
+.pet-cards-42{background-image: url(images/cards/CARDS_042.PNG);}
+.pet-cards-43{background-image: url(images/cards/CARDS_043.PNG);}
+.pet-cards-44{background-image: url(images/cards/CARDS_044.PNG);}
+.pet-cards-45{background-image: url(images/cards/CARDS_045.PNG);}
+.pet-cards-46{background-image: url(images/cards/CARDS_046.PNG);}
+.pet-cards-47{background-image: url(images/cards/CARDS_047.PNG);}
+.pet-cards-48{background-image: url(images/cards/CARDS_048.PNG);}
+.pet-cards-49{background-image: url(images/cards/CARDS_049.PNG);}
+.pet-cards-50{background-image: url(images/cards/CARDS_050.PNG);}
+.pet-cards-51{background-image: url(images/cards/CARDS_051.PNG);}
+.pet-cards-52{background-image: url(images/cards/CARDS_052.PNG);}
+.pet-cards-53{background-image: url(images/cards/CARDS_053.PNG);}
+.pet-cards-54{background-image: url(images/cards/CARDS_054.PNG);}
+.pet-cards-55{background-image: url(images/cards/CARDS_055.PNG);}
+.pet-cards-56{background-image: url(images/cards/CARDS_056.PNG);}
+.pet-cards-57{background-image: url(images/cards/CARDS_057.PNG);}
+.pet-cards-58{background-image: url(images/cards/CARDS_058.PNG);}
+.pet-cards-59{background-image: url(images/cards/CARDS_059.PNG);}
+.pet-cards-60{background-image: url(images/cards/CARDS_060.PNG);}
+.pet-cards-61{background-image: url(images/cards/CARDS_061.PNG);}
+.pet-cards-62{background-image: url(images/cards/CARDS_062.PNG);}
+.pet-cards-63{background-image: url(images/cards/CARDS_063.PNG);}
+.pet-cards-64{background-image: url(images/cards/CARDS_064.PNG);}
+.pet-cards-65{background-image: url(images/cards/CARDS_065.PNG);}
+.pet-cards-66{background-image: url(images/cards/CARDS_066.PNG);}
+.pet-cards-67{background-image: url(images/cards/CARDS_067.PNG);}
+.pet-cards-68{background-image: url(images/cards/CARDS_068.PNG);}
+.pet-cards-69{background-image: url(images/cards/CARDS_069.PNG);}
+.pet-cards-70{background-image: url(images/cards/CARDS_070.PNG);}
+.pet-cards-71{background-image: url(images/cards/CARDS_071.PNG);}
+.pet-cards-72{background-image: url(images/cards/CARDS_072.PNG);}
+.pet-cards-73{background-image: url(images/cards/CARDS_073.PNG);}
+.pet-cards-74{background-image: url(images/cards/CARDS_074.PNG);}
+.pet-cards-75{background-image: url(images/cards/CARDS_075.PNG);}
+.pet-cards-76{background-image: url(images/cards/CARDS_076.PNG);}
+.pet-cards-77{background-image: url(images/cards/CARDS_077.PNG);}
+.pet-cards-78{background-image: url(images/cards/CARDS_078.PNG);}
+.pet-cards-79{background-image: url(images/cards/CARDS_079.PNG);}
+.pet-cards-80{background-image: url(images/cards/CARDS_080.PNG);}
+.pet-cards-81{background-image: url(images/cards/CARDS_081.PNG);}
+.pet-cards-82{background-image: url(images/cards/CARDS_082.PNG);}
+.pet-cards-83{background-image: url(images/cards/CARDS_083.PNG);}
+.pet-cards-84{background-image: url(images/cards/CARDS_084.PNG);}
+.pet-cards-85{background-image: url(images/cards/CARDS_085.PNG);}
+.pet-cards-86{background-image: url(images/cards/CARDS_086.PNG);}
+.pet-cards-87{background-image: url(images/cards/CARDS_087.PNG);}
+.pet-cards-88{background-image: url(images/cards/CARDS_088.PNG);}
+.pet-cards-89{background-image: url(images/cards/CARDS_089.PNG);}
+.pet-cards-90{background-image: url(images/cards/CARDS_090.PNG);}
+.pet-cards-91{background-image: url(images/cards/CARDS_091.PNG);}
+.pet-cards-92{background-image: url(images/cards/CARDS_092.PNG);}
+.pet-cards-93{background-image: url(images/cards/CARDS_093.PNG);}
+.pet-cards-94{background-image: url(images/cards/CARDS_094.PNG);}
+.pet-cards-95{background-image: url(images/cards/CARDS_095.PNG);}
+.pet-cards-96{background-image: url(images/cards/CARDS_096.PNG);}
+.pet-cards-97{background-image: url(images/cards/CARDS_097.PNG);}
+.pet-cards-98{background-image: url(images/cards/CARDS_098.PNG);}
+.pet-cards-99{background-image: url(images/cards/CARDS_099.PNG);}
+/*宠物在图中编号对应的坐标*/
+.pet-cards-index-x-0{background-position-x:0px;}
+.pet-cards-index-x-1{background-position-x:-102px;}
+.pet-cards-index-x-2{background-position-x:-204px;}
+.pet-cards-index-x-3{background-position-x:-306px;}
+.pet-cards-index-x-4{background-position-x:-408px;}
+.pet-cards-index-x-5{background-position-x:-510px;}
+.pet-cards-index-x-6{background-position-x:-612px;}
+.pet-cards-index-x-7{background-position-x:-714px;}
+.pet-cards-index-x-8{background-position-x:-816px;}
+.pet-cards-index-x-9{background-position-x:-918px;}
+.pet-cards-index-y-0{background-position-y:0px;}
+.pet-cards-index-y-1{background-position-y:-102px;}
+.pet-cards-index-y-2{background-position-y:-204px;}
+.pet-cards-index-y-3{background-position-y:-306px;}
+.pet-cards-index-y-4{background-position-y:-408px;}
+.pet-cards-index-y-5{background-position-y:-510px;}
+.pet-cards-index-y-6{background-position-y:-612px;}
+.pet-cards-index-y-7{background-position-y:-714px;}
+.pet-cards-index-y-8{background-position-y:-816px;}
+.pet-cards-index-y-9{background-position-y:-918px;}
