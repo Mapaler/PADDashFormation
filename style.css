@@ -57,7 +57,7 @@ ul{
 }
 .monster .addition .hp::before,
 .monster .addition .atk::before,
-.monster .addition .def::before,
+.monster .addition .rcv::before,
 .monster .addition ._297::before{
 	content: "+";
 }
@@ -66,7 +66,7 @@ ul{
 }
 .monster .addition.has297 .hp,
 .monster .addition.has297 .atk,
-.monster .addition.has297 .def{ /*当是297时隐藏3维*/
+.monster .addition.has297 .rcv{ /*当是297时隐藏3维*/
 	display:none;
 }
 .monster .addition.has297 ._297{ /*当是297时显示297*/
@@ -335,27 +335,27 @@ ul{
 	content: "怪物加值";
 	display: block;
 }
-.setting-box .m-add-hp,.setting-box .m-add-atk,.setting-box .m-add-def{
+.setting-box .m-add-hp,.setting-box .m-add-atk,.setting-box .m-add-rcv{
 	font-size: 25px;
 	height: 40px;
 	width: calc(100% - 212px);
 	box-sizing: border-box;
 }
-.m-add-hp-li::before,.m-add-atk-li::before,.m-add-def-li::before{
+.m-add-hp-li::before,.m-add-atk-li::before,.m-add-rcv-li::before{
 	font-size: 25px;
 	width: 55px;
 	display: inline-block;
 }
 .m-add-hp-li::before{content: "HP";}
 .m-add-atk-li::before{content: "攻击";}
-.m-add-def-li::before{content: "回复";}
-.m-add-hp-btn-99,.m-add-atk-btn-99,.m-add-def-btn-99{
+.m-add-rcv-li::before{content: "回复";}
+.m-add-hp-btn-99,.m-add-atk-btn-99,.m-add-rcv-btn-99{
 	height: 40px;
 	width: 70px;
 	box-sizing: border-box;
 	font-size: 25px;
 }
-.m-add-hp-btn-99::before,.m-add-atk-btn-99::before,.m-add-def-btn-99::before,.m-add-btn-297::before{
+.m-add-hp-btn-99::before,.m-add-atk-btn-99::before,.m-add-rcv-btn-99::before,.m-add-btn-297::before{
 	content: "+";
 }
 .m-add-btn-297{
@@ -365,11 +365,44 @@ ul{
 	box-sizing: border-box;
 	font-size: 25px;
 }
-.edit-box .setting-box .row-mon-a-awoken::before{
+.edit-box .setting-box .row-mon-latent::before{
 	content: "潜在觉醒";
 }
-
-
+.m-latent-ul{
+	text-align: center;
+	font-size: 0;
+}
+.m-latent-ul .latent-icon{
+	margin-left: 12px;
+}
+.m-latent-ul .latent-icon:first-of-type{
+	margin-left: 0;
+}
+.m-latent-allowable-ul{
+	margin-top: 5px;
+}
+.m-latent-allowable-ul .latent-icon{
+	cursor: pointer;
+}
+.m-latent-allowable-ul .latent-icon.unselected-latent{
+	cursor: default;
+	opacity: 0.3;
+}
+.latent-icon-11,
+.latent-icon-13,
+.latent-icon-14,
+.latent-icon-15,
+.latent-icon-16,
+.latent-icon-17,
+.latent-icon-18,
+.latent-icon-19,
+.latent-icon-20,
+.latent-icon-21,
+.latent-icon-22,
+.latent-icon-23,
+.latent-icon-24{
+	cursor: pointer;
+}
 
 .edit-box .button-box .button-done::after{
 	content: "确认修改";
