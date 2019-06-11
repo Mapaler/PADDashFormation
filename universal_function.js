@@ -1,4 +1,20 @@
-﻿//仿GM_xmlhttpRequest函数v1.3
+﻿
+//类型允许的潜觉杀，前面的数字是官方数据的类型编号，后面的杀是自己做的图片中的潜觉序号
+var type_allowable_latent = {
+    "0":[], //0进化
+    "12":[], //12觉醒
+    "14":[], //14强化
+    "15":[], //15卖钱
+    "1":[17,18,19,20,21,22,23,24], //1平衡
+    "2":[20,24],//2体力
+    "3":[18,22],//3回复
+    "4":[20,24],//4龙
+    "5":[19],//5神
+    "6":[19,23],//6攻击
+    "7":[17],//7恶魔
+    "8":[17,20,21,24],//8机械
+}
+//仿GM_xmlhttpRequest函数v1.3
 if (typeof(GM_xmlhttpRequest) == "undefined") {
     var GM_xmlhttpRequest = function(GM_param) {
 
@@ -24,6 +40,25 @@ if (typeof(GM_xmlhttpRequest) == "undefined") {
     }
 }
 //数字补0
-function PrefixInteger(num, length) {  
+function PrefixInteger(num, length)
+{  
 	return (Array(length).join('0') + num).slice(-length); 
+}
+//数组去重
+/* https://www.cnblogs.com/baiyangyuanzi/p/6726258.html
+* 实现思路：获取没重复的最右一值放入新数组。
+* （检测到有重复值时终止当前循环同时进入顶层循环的下一轮判断）*/
+function uniq(array){
+    var temp = [];
+    var l = array.length;
+    for(var i = 0; i < l; i++) {
+        for(var j = i + 1; j < l; j++){
+            if (array[i] === array[j]){
+                i++;
+                j = i;
+            }
+        }
+        temp.push(array[i]);
+    }
+    return temp;
 }
