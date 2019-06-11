@@ -6,12 +6,24 @@ window.onload = function()
 		url:"monsters-info/mon.json",
 		onload: function(response) {
 			ms = JSON.parse(response.response);
-			console.log(ms);
+			initialize();//初始化
 		},
 		onerror: function(response) {
 			console.error("怪物数据获取错误",response);
 		}
-	})
+	});
+}
+//初始化
+function initialize()
+{
+	console.log(ms);
+	var monstersList = document.querySelector("#monsters-list");
+	ms.forEach(function(m){
+		var opt = monstersList.appendChild(document.createElement("option"));
+		opt.value = m.id;
+		opt.label = m.id + " | " +  m.name + " | " + m.ename;
+	});
+	test();
 }
 function changeid(mon,monDom,awokenDom)
 {
@@ -44,11 +56,11 @@ function changeid(mon,monDom,awokenDom)
 		var awokenIcon = monDom.querySelector(".awoken-icon");
 		if (mon.awoken == 0 || md.awoken.length < 1) //没觉醒
 		{
-			awokenIcon.classList.add("awoken-none");
+			awokenIcon.classList.add("display-none");
 			awokenIcon.innerHTML = "";
 		}else
 		{
-			awokenIcon.classList.remove("awoken-none");
+			awokenIcon.classList.remove("display-none");
 			if (mon.awoken < md.awoken.length) //觉醒没满直接写数字
 				awokenIcon.innerHTML = mon.awoken;
 			else //满觉醒打星星
@@ -74,6 +86,8 @@ function changeid(mon,monDom,awokenDom)
 	}
 }
 
+function test()
+{
 var m1 = document.querySelector(".formation-A-box .formation-team .team-1 .monster");
 var a1 = document.querySelector(".formation-A-box .formation-team .team-1 .acquisitus-awoken-ul");
 changeid({
@@ -83,3 +97,4 @@ awoken:8,
 addition:[99,99,99],
 acquisitusAwoken:[],
 },m1,a1)
+}

@@ -27,12 +27,3 @@ if (typeof(GM_xmlhttpRequest) == "undefined") {
 function PrefixInteger(num, length) {  
 	return (Array(length).join('0') + num).slice(-length); 
 }
-//根据id返回宠物图标的坐标
-function iconPosition(monid)
-{
-    var indexInThisPage = (monid-1) % 100;
-    var ix = indexInThisPage % 10;
-    var iy = parseInt(indexInThisPage / 10);
-    var position = [(100 + 2) * ix * -1,(100 + 2) * iy * -1];
-    return position;
-}
