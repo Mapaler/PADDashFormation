@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script type="text/javascript" src="jajson.js"></script>
+</head>
+
+<body>
+	<script type="text/javascript">
+function g(id)
+{
+	var m = gw.card[id];
+	var pn = ["火","水","木","光","暗"];
+	var p1 = pn[m[2]]||"无",p2 = pn[m[3]]||"无";
+	var tn = ["0进化","1平衡","2体力","3回复","4龙","5神","6攻击","7恶魔","8机械","9","10","11","12觉醒","13","14强化","15卖钱"];
+	var type = [];
+	type.push(tn[m[5]]);
+	if (m[6]!=-1) //第二个type
+		type.push(tn[m[6]]);
+	if (m[m.length-9]!=-1) //第三个type要倒着来
+		type.push(tn[m[m.length-9]]);
+	console.log(m);
+	console.log("编号：%d,名字：%s，属性：%s/%s，%s退化，类型：%s，%d星，COST：%d，%s个觉醒，110级增长%d%%，卖%d MP，%s当二技",m[0],m[1],p1,p2,m[4]?"可":"不可",type.join("|"),m[7],m[8],
+	m[58+m[57]*3],m[m.length-3],m[m.length-8],m[m.length-5]>2?"能":"不能"
+	);
+}
+</script>
+</body>
+</html>

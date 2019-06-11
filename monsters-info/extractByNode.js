@@ -50,6 +50,7 @@ fs.readFile('./ja.json',function(err,data){
 					rare: m[7],
 					awoken: awoken,
 					maxLevel: m[m.length-3]>0?110:m[10],
+					assist: m[m.length-5]>2?1:0,
 				}
 				mArr.push(mon);
 			}
