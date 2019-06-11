@@ -157,3 +157,301 @@
 .pet-cards-index-y-7{background-position-y:-714px;}
 .pet-cards-index-y-8{background-position-y:-816px;}
 .pet-cards-index-y-9{background-position-y:-918px;}
+/*觉醒和类型*/
+.awoken-icon,.type-icon{
+	display:inline-block;
+	width:32px;height:32px;
+    vertical-align: middle;
+	background-repeat: no-repeat;
+}
+/*觉醒*/
+.awoken-icon{
+    background-image: url(images/awoken.png);
+}
+.awoken-0{/*问号*/
+	background-position: 0 0;
+}
+.awoken-1{/*HP+*/
+	background-position: 0px -32px;
+}
+.awoken-2{/*攻击+*/
+	background-position: 0px -64px;
+}
+.awoken-3{/*回复+*/
+	background-position: 0px -96px;
+}
+.awoken-4{/*火盾*/
+	background-position: 0px -128px;
+}
+.awoken-5{/*水盾*/
+	background-position: 0px -160px;
+}
+.awoken-6{/*木盾*/
+	background-position: 0px -192px;
+}
+.awoken-7{/*光盾*/
+	background-position: 0px -224px;
+}
+.awoken-8{/*暗盾*/
+	background-position: 0px -256px;
+}
+.awoken-9{/*自回*/
+	background-position: 0px -288px;
+}
+.awoken-10{/*防封*/
+	background-position: 0px -320px;
+}
+.awoken-11{/*防暗*/
+	background-position: 0px -352px;
+}
+.awoken-12{/*防废*/
+	background-position: 0px -384px;
+}
+.awoken-13{/*防毒*/
+	background-position: 0px -416px;
+}
+.awoken-14{/*火+*/
+	background-position: 0px -448px;
+}
+.awoken-15{/*水+*/
+	background-position: 0px -480px;
+}
+.awoken-16{/*木+*/
+	background-position: 0px -512px;
+}
+.awoken-17{/*光+*/
+	background-position: 0px -544px;
+}
+.awoken-18{/*暗+*/
+	background-position: 0px -576px;
+}
+.awoken-19{/*手指*/
+	background-position: 0px -608px;
+}
+.awoken-20{/*心解*/
+	background-position: 0px -640px;
+}
+.awoken-21{/*SB*/
+	background-position: 0px -672px;
+}
+.awoken-22{/*火横*/
+	background-position: 0px -704px;
+}
+.awoken-23{/*水横*/
+	background-position: 0px -736px;
+}
+.awoken-24{/*木横*/
+	background-position: 0px -768px;
+}
+.awoken-25{/*光横*/
+	background-position: 0px -800px;
+}
+.awoken-26{/*暗横*/
+	background-position: 0px -832px;
+}
+.awoken-27{/*U*/
+	background-position: 0px -864px;
+}
+.awoken-28{/*SX*/
+	background-position: 0px -896px;
+}
+.awoken-29{/*心+*/
+	background-position: 0px -928px;
+}
+.awoken-30{/*协力*/
+	background-position: 0px -960px;
+}
+.awoken-31{/*龙杀*/
+	background-position: 0px -992px;
+}
+.awoken-32{/*神杀*/
+	background-position: 0px -1024px;
+}
+.awoken-33{/*恶魔杀*/
+	background-position: 0px -1056px;
+}
+.awoken-34{/*机杀*/
+	background-position: 0px -1088px;
+}
+.awoken-35{/*平衡杀*/
+	background-position: 0px -1120px;
+}
+.awoken-36{/*攻击杀*/
+	background-position: 0px -1152px;
+}
+.awoken-37{/*体力杀*/
+	background-position: 0px -1184px;
+}
+.awoken-38{/*回复杀*/
+	background-position: 0px -1216px;
+}
+.awoken-39{/*进化杀*/
+	background-position: 0px -1248px;
+}
+.awoken-40{/*觉醒杀*/
+	background-position: 0px -1280px;
+}
+.awoken-41{/*强化杀*/
+	background-position: 0px -1312px;
+}
+.awoken-42{/*卖钱杀*/
+	background-position: 0px -1344px;
+}
+.awoken-43{/*7c*/
+	background-position: 0px -1376px;
+}
+.awoken-44{/*5色破防*/
+	background-position: 0px -1408px;
+}
+.awoken-45{/*心追*/
+	background-position: 0px -1440px;
+}
+.awoken-46{/*全体HP*/
+	background-position: 0px -1472px;
+}
+.awoken-47{/*全体回复*/
+	background-position: 0px -1504px;
+}
+.awoken-48{/*破无效*/
+	background-position: 0px -1536px;
+}
+.awoken-49{/*武器觉醒*/
+	background-position: 0px -1568px;
+}
+.awoken-50{/*方块心追*/
+	background-position: 0px -1600px;
+}
+.awoken-51{/*5色溜*/
+	background-position: 0px -1632px;
+}
+.awoken-52{/*大防封*/
+	background-position: 0px -1664px;
+}
+.awoken-53{/*大手指*/
+	background-position: 0px -1696px;
+}
+.awoken-54{/*防云*/
+	background-position: 0px -1728px;
+}
+.awoken-55{/*防封条*/
+	background-position: 0px -1760px;
+}
+.awoken-56{/*大SB*/
+	background-position: 0px -1792px;
+}
+.awoken-57{/*满血强化*/
+	background-position: 0px -1824px;
+}
+.awoken-58{/*下半血强化*/
+	background-position: 0px -1856px;
+}
+.awoken-59{/*L盾*/
+	background-position: 0px -1888px;
+}
+.awoken-60{/*L解锁*/
+	background-position: 0px -1920px;
+}
+.awoken-61{/*10c*/
+	background-position: 0px -1952px;
+}
+.awoken-62{/*c珠*/
+	background-position: 0px -1984px;
+}
+.awoken-63{/*语音*/
+	background-position: 0px -2016px;
+}
+.awoken-64{/*奖励增加*/
+	background-position: 0px -2048px;
+}
+.awoken-65{/*HP-*/
+	background-position: 0px -2080px;
+}
+.awoken-66{/*攻击-*/
+	background-position: 0px -2112px;
+}
+.awoken-67{/*回复-*/
+	background-position: 0px -2144px;
+}
+/*类型*/
+.type-icon{
+	background-image: url(images/type.png);
+	background-position: 0px 32px; /*默认不显示*/
+}
+.type-icon-4{/*龙*/
+	background-position: 0px 0px;
+}
+.type-name-4::after{
+	content: "龙";
+}
+.type-icon-5{/*神*/
+	background-position: 0px -32px;
+}
+.type-name-5::after{
+	content: "神";
+}
+.type-icon-7{/*恶魔*/
+	background-position: 0px -64px;
+}
+.type-name-7::after{
+	content: "恶魔";
+}
+.type-icon-8{/*机械*/
+	background-position: 0px -96px;
+}
+.type-name-8::after{
+	content: "机械";
+}
+.type-icon-1{/*平衡*/
+	background-position: 0px -128px;
+}
+.type-name-1::after{
+	content: "平衡";
+}
+.type-icon-6{/*攻击*/
+	background-position: 0px -160px;
+}
+.type-name-6::after{
+	content: "攻击";
+}
+.type-icon-2{/*体力*/
+	background-position: 0px -192px;
+}
+.type-name-2::after{
+	content: "体力";
+}
+.type-icon-3{/*回复*/
+	background-position: 0px -224px;
+}
+.type-name-3::after{
+	content: "回复";
+}
+.type-icon-0{/*进化用*/
+	background-position: 0px -256px;
+}
+.type-name-0::after{
+	content: "进化用";
+}
+.type-icon-12{/*能力觉醒用*/
+	background-position: 0px -288px;
+}
+.type-name-12::after{
+	content: "能力觉醒用";
+}
+.type-icon-14{/*强化合成用*/
+	background-position: 0px -320px;
+}
+.type-name-14::after{
+	content: "强化合成用";
+}
+.type-icon-15{/*贩卖用*/
+	background-position: 0px -352px;
+}
+.type-name-15::after{/*龙*/
+	content: "贩卖用";
+}
+.type-icon-9{/*特殊*/
+	background-position: 0px -384px;
+}
+.type-name-9::after{
+	content: "特殊";
+}
