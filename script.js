@@ -132,44 +132,12 @@ function initialize()
 			else if (lIdx < 12 && usedHoleN<=5)
 				latent.push(lIdx);
 			refreshLatent();
-			/*
-			var allowHole =  monEditLatents.filter(function(l){ //返回空余潜觉格子
-				return !l.classList.contains("display-none") && //没被隐藏的
-				Array.prototype.slice.call(l.classList).filter(function(c){ //存在觉醒图标className的
-					return /^latent\-icon\-\d+$/ig.test(c);
-				}).length<1;
-			})
-			var lIdx = parseInt(this.value);
-			if (lIdx >= 12)
-			{ //占两格
-				if (allowHole.length>=2)
-				{
-					allowHole[0].className = "latent-icon latent-icon-" + lIdx;
-					allowHole.value = lIdx;
-					allowHole[allowHole.length-1].className = "display-none";
-				}
-			}else
-			{ //占一格
-				if (allowHole.length>=1)
-				{
-					allowHole[0].className = "latent-icon latent-icon-" + lIdx;
-					allowHole.value = lIdx;
-				}
-			}
-			*/
 		}
 	})
 }
 function changeid(mon,monDom,awokenDom)
 {
 	var md = ms[mon.id]; //怪物固定数据
-	/*
-	mon.id
-	mon.level
-	mon.awoken
-	mon.addition
-	mon.acquisitusAwoken
-	*/
 	if (mon.id>-1) //如果提供了id
 	{
 		monDom.className = "monster";
@@ -184,7 +152,20 @@ function changeid(mon,monDom,awokenDom)
 	}
 	if (mon.level>0) //如果提供了等级
 	{
-		monDom.querySelector(".level").innerHTML = mon.level || 99;
+		var levelDom = monDom.querySelector(".level");
+		if (mon.level == 99 || (mon.level >= md.maxLevel && md.maxLevel <=99))
+		{
+			//levelDom.innerHTML = "Max";
+			levelDom.classList.add("max");
+		}else
+		{
+			levelDom.innerHTML = mon.level;
+			levelDom.classList.remove("max");
+		}
+		if (md.maxLevel>99 && mon.level>=99)
+			levelDom.classList.add("_110");
+		else
+			levelDom.classList.remove("_110");
 	}
 	if (mon.awoken>-1) //如果提供了觉醒
 	{
@@ -197,9 +178,15 @@ function changeid(mon,monDom,awokenDom)
 		{
 			awokenIcon.classList.remove("display-none");
 			if (mon.awoken < md.awoken.length) //觉醒没满直接写数字
+			{
 				awokenIcon.innerHTML = mon.awoken;
-			else //满觉醒打星星
+				awokenIcon.classList.remove("allowable-assist");
+			}else //满觉醒打星星
+			{
 				awokenIcon.innerHTML = "★";
+				if (md.assist)
+					awokenIcon.classList.add("allowable-assist");
+			}
 		}
 	}
 	if (mon.addition) //如果提供了加值
@@ -215,25 +202,12 @@ function changeid(mon,monDom,awokenDom)
 			monDom.querySelector(".addition").classList.remove("has297");
 		}
 	}
-	if (awokenDom && mon.acquisitusAwoken) //如果提供了潜觉
+	if (awokenDom && mon.latent) //如果提供了潜觉
 	{
 		
 	}
 }
 
-function test()
-{
-var m1 = document.querySelector(".formation-A-box .formation-team .team-1 .monster");
-var a1 = document.querySelector(".formation-A-box .formation-team .team-1 .acquisitus-awoken-ul");
-changeid({
-id:5209,
-level:98,
-awoken:8,
-addition:[99,99,99],
-acquisitusAwoken:[],
-},m1,a1)
-editChangeMonId(3264);
-}
 
 function editChangeMonId(id)
 {
@@ -305,4 +279,21 @@ function editChangeMonId(id)
 
 	editBox.latent.length = 0;
 	editBox.refreshLatent();
+}
+
+
+
+
+function test()
+{
+var m1 = document.querySelector(".formation-A-box .formation-team .team-1 .monster");
+var a1 = document.querySelector(".formation-A-box .formation-team .team-1 .acquisitus-awoken-ul");
+changeid({
+id:5209,
+level:99,
+awoken:9,
+addition:[99,99,99],
+latent:[],
+},m1,a1)
+editChangeMonId(3264);
 }
