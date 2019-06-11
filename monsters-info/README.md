@@ -8,10 +8,11 @@ https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data
 * 5是第一个类型，6是第二个，没有时为-1，第三个类型则是倒着数第9个，没有时为-1。
 * 7是几星
 * 8是cost
+* 10是一般等级，倒着数第3个大于0时表示110级比99级增长多少属性。
 * 57的值乘以3加58就是觉醒数量。后面则继续跟着数量对应的觉醒id。
 
 ```js
-function get(id)
+function g(id)
 {
 	var m = gw.card[id];
 	var pn = ["火","水","木","光","暗"];
@@ -24,8 +25,8 @@ function get(id)
 	if (m[m.length-9]!=-1) //第三个type要倒着来
 		type.push(tn[m[m.length-9]]);
 	console.log(m);
-	console.log("编号：%d,名字：%s，属性：%s/%s，%s退化，类型：%s，%d星，COST：%d，%s个觉醒",m[0],m[1],p1,p2,m[4]?"可":"不可",type.join("|"),m[7],m[8],
-	m[58+m[57]*3]
+	console.log("编号：%d,名字：%s，属性：%s/%s，%s退化，类型：%s，%d星，COST：%d，%s个觉醒，110级增长%d%",m[0],m[1],p1,p2,m[4]?"可":"不可",type.join("|"),m[7],m[8],
+	m[58+m[57]*3],m[m.length-3]
 	);
 }
 ```
