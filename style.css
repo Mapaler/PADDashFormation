@@ -75,29 +75,45 @@ ul{
 /*怪物-觉醒*/
 .monster .awoken-count{
 	color: yellow;
-	font-size: 18px;
-	line-height: 24px;
+	font-size: 20px;
+	line-height: 30px;
 	font-weight: bold;
 	text-shadow: black 0 0 4px;
 	text-align: center;
 	background-image: url(images/awoken-bg.png);
-	background-size: 27px 30px;
-	width: 27px;
-	height: 30px;
+	background-repeat: no-repeat;
+	width: 34px;
+	height: 38px;
 	position: absolute;
 	right: 0;
+}
+.monster .awoken-count.allowable-assist{
+	font-size: 0;
+	text-shadow: none;
+	background-position: 0 -38px;
 }
 /*怪物-等级*/
 .monster .level{
 	color: white;
 	font-size: 18px;
+	font-weight: bold;
 	text-shadow: black 2px 2px 0;
 	position: absolute;
 	left: 5px;
 	bottom: 0;
 }
+.monster .level._110{
+	color: lightskyblue;
+}
 .monster .level::before{
-	content: "Lv";
+	content: "Lv.";
+}
+.monster .level.max{
+	font-size: 0;
+}
+.monster .level.max::before{
+	font-size: 18px;
+	content: "Lv.最大";
 }
 /*辅助和队伍的每一只框架*/
 .assist, .team, .acquisitus-awoken-icon {
