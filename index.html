@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>智龙迷城车队阵型图制作</title>
+<meta name="viewport" content="width=664" />
 <link href="style.css" rel="stylesheet" type="text/css">
 <link href="style-monsterimages.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="universal_function.js"></script>
@@ -10,7 +11,7 @@
 </head>
 
 <body>
-	<div class="formation-box blur-bg">
+	<div class="formation-box">
 		<div class="title-box"><input type="text" class="title" placeholder="输入阵型标题" /></div>
 		<div class="formation-A-bigbox">
 			<div class="formation-A-box">
@@ -96,7 +97,7 @@
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="addition has297"><div class="hp">99</div><div class="atk">99</div><div class="def">99</div><div class="_297">297</div></div>
-							<div class="awoken-icon display-none"></div>
+							<div class="awoken-count display-none"></div>
 							<div class="level">99</div>
 						</a>
 					</li>
@@ -293,12 +294,6 @@
 	</div>
 	<div class="edit-box">
 		<div class="edit-box-title"><!--修改怪物--></div>
-		<div class="search-box">
-			<div class="mid-label"><!--输入怪物ID--></div>
-			<input type="text" class="m-id" list="monsters-list"/>
-			<button class="search-button">🔍</button>
-			<datalist id="monsters-list"></datalist>
-		</div>
 		<div class="monsterinfo-box">
 			<a class="monster" target="_blank">
 				<div class="property"></div>
@@ -307,29 +302,49 @@
 			<div class="monster-id"></div>
 			<div class="monster-rare"></div>
 			<div class="monster-name"></div>
-			<ul class="monster-type"></ul>
+			<ul class="monster-type">
+				<li class="type-name"><div class="type-icon"></div></li>
+				<li class="type-name"><div class="type-icon"></div></li>
+				<li class="type-name"><div class="type-icon"></div></li>
+			</ul>
+		</div>
+		<div class="search-box">
+			<input type="search" class="m-id" list="monsters-list" placeholder="请在此输入怪物ID"/>
+			<datalist id="monsters-list"></datalist>
 		</div>
 		<div class="setting-box">
-			<div class="setting-row">
-				<label>怪物等级<input type="number" class="m-level" min=1 max=110 /></label>
-				<button class="m-level-btn-99">Lv99</button>
-				<button class="m-level-btn-99">Lv110</button>
-			</div>
-			<div class="setting-row">
-				<div>怪物觉醒</div>
+			<div class="setting-row row-mon-awoken">
+				<!--怪物觉醒-->
 				<ul class="m-awoken-ul">
-					<li></li>
+					<li class="awoken-icon awoken-count"></li>
+					<li class="awoken-icon"></li>
+					<li class="awoken-icon"></li>
+					<li class="awoken-icon"></li>
+					<li class="awoken-icon"></li>
+					<li class="awoken-icon"></li>
+					<li class="awoken-icon"></li>
+					<li class="awoken-icon"></li>
+					<li class="awoken-icon"></li>
+					<li class="awoken-icon"></li>
 				</ul>
 			</div>
-			<div class="setting-row">
-				<div>怪物加值</div>
-				<label>❤️<input type="number" class="m-add-hp" min=0 max=99 /><button class="m-add-hp-btn-99">+99</button></label>
-				<label>⚔️<input type="number" class="m-add-atk" min=0 max=99 /><button class="m-add-atk-btn-99">+99</button></label>
-				<label>🛡️<input type="number" class="m-add-def" min=0 max=99 /><button class="m-add-def-btn-99">+99</button></label>
-				<button class="m-add-btn-297">+297</button>
+			<div class="setting-row row-mon-level">
+				<!--怪物等级-->
+				<input type="number" class="m-level" min=1 max=110 placeholder="怪物等级"/>
+				<button class="m-level-btn-99" value="99">99</button>
+				<button class="m-level-btn-110" value="110">110</button>
 			</div>
-			<div class="setting-row">
-				<div>潜在觉醒</div>
+			<div class="setting-row row-mon-addition">
+				<!--怪物加值-->
+				<button class="m-add-btn-297">297</button>
+				<ul>
+					<li class="m-add-hp-li"><input type="number" class="m-add-hp" min=0 max=99 /><button class="m-add-hp-btn-99" value="99">99</button></li>
+					<li class="m-add-atk-li"><input type="number" class="m-add-atk" min=0 max=99 /><button class="m-add-atk-btn-99" value="99">99</button></li>
+					<li class="m-add-def-li"><input type="number" class="m-add-def" min=0 max=99 /><button class="m-add-def-btn-99" value="99">99</button></li>
+				</ul>
+			</div>
+			<div class="setting-row row-mon-a-awoken">
+				<!--潜在觉醒-->
 				<ul class="m-a-awoken-ul">
 					<li></li>
 					<li></li>
@@ -346,7 +361,7 @@
 		</div>
 		<div class="button-box">
 			<button class="button-null">留空格子</button>
-			<button class="button-delay">防止坐下</button>
+			<button class="button-delay">应对威吓</button>
 			<button class="button-cancel">取消修改</button>
 			<button class="button-done"><!--确认修改--></button>
 		</div>

@@ -15,6 +15,8 @@ ul{
 }
 /*队伍的整个盒子*/
 .formation-box{
+	width: 648px;
+	background: rgb(119, 167, 255);
 }
 /*辅助行*/
 .formation-assist{
@@ -32,7 +34,6 @@ ul{
 	background-image: url(images/001.png);
 	background-repeat: no-repeat;
 	position: relative;
-	margin: 4px; /*留给队长边框的*/
 }
 /*怪物属性*/
 .property,.subproperty{
@@ -72,7 +73,7 @@ ul{
 	display:block;
 }
 /*怪物-觉醒*/
-.monster .awoken-icon{
+.monster .awoken-count{
 	color: yellow;
 	font-size: 18px;
 	line-height: 24px;
@@ -85,9 +86,6 @@ ul{
 	height: 30px;
 	position: absolute;
 	right: 0;
-}
-.monster .awoken-icon.awoken-none{
-	display:none;
 }
 /*怪物-等级*/
 .monster .level{
@@ -107,6 +105,9 @@ ul{
 	float: left;
 	position: relative;
 	width: 108px;
+}
+.formation-box .monster{
+	margin: 4px; /*留给队长边框的*/
 }
 /*
 .assist:first-of-type, .team:first-of-type {
@@ -208,28 +209,168 @@ ul{
 	filter:blur(5px);
 }
 .edit-box{
-	background-color: rgba(0,100,100,0.2);
+	background-color: rgba(200,255,200,0.8);
 	text-shadow: white 0 0 2px;
 	position: absolute;
 	left:0;
 	top:0;
 	width:100%;
-	height:100%;
 	padding: 10px;
+	box-sizing: border-box;
+	width:664px; /*测试时手机上的最大宽度*/
 }
 .edit-box-title{
 	text-align: center;
-	font-size: 25px;
+	font-size: 2em;
 	font-weight: bold;
-	content: "修改怪物";
 }
 .edit-box .edit-box-title::before{
 	content: "修改怪物";
 }
-
-.edit-box .search-box .mid-label::before{
-	content: "请输入怪物ID后点击搜索按钮";
+.setting-row{
+	width: 100%;
 }
+.edit-box .search-box::before{
+	content: "怪物ID";
+}
+.edit-box .search-box .m-id{
+	box-sizing: border-box;
+	font-size: 25px;
+	height: 40px;
+	width: 100%;
+}
+.edit-box .search-box .search-button{
+	width: 100%;
+	height: 40px;
+	font-size: 25px;
+}
+.edit-box .monsterinfo-box{
+	height: 100px;
+	margin: 5px 0;
+}
+.monsterinfo-box .monster{
+	margin-right:5px;
+}
+.monsterinfo-box .monster-id{
+	display:inline-block;
+	width:150px;
+}
+.monsterinfo-box .monster-id::before{
+	content: "No.";
+}
+.monsterinfo-box .monster-rare{
+	display:inline-block;
+}
+.monsterinfo-box .monster-rare::before{
+	color:gold;
+	text-shadow: black 0 0 3px;
+}
+.rare-1::before{content: "★";}
+.rare-2::before{content: "★★";}
+.rare-3::before{content: "★★★";}
+.rare-4::before{content: "★★★★";}
+.rare-5::before{content: "★★★★★";}
+.rare-6::before{content: "★★★★★★";}
+.rare-7::before{content: "★★★★★★★";}
+.rare-8::before{content: "★★★★★★★★";}
+.rare-9::before{content: "★★★★★★★★★";}
+.rare-10::before{content: "★★★★★★★★★★";}
+.monsterinfo-box .monster-id,.monsterinfo-box .monster-rare,.monsterinfo-box .monster-name{
+	vertical-align: top;
+	margin:0;
+	height: 34px;
+	font-size: 22px;
+}
+.monsterinfo-box .monster-type .type-name{
+	display:inline-block;
+}
+.monsterinfo-box .monster-type .type-icon{
+	margin-right:3px;
+}
+.monsterinfo-box .monster-type .type-name::after{
+	vertical-align: middle;
+	font-size: 22px;
+}
+
+.edit-box .setting-box .row-mon-level::before{
+	content: "怪物等级";
+	display: block;
+}
+.edit-box .setting-box .m-level{
+	font-size: 25px;
+	height: 40px;
+	width: calc(100% - 200px);
+	box-sizing: border-box;
+}
+.m-level-btn-99,.m-level-btn-110{
+	height: 40px;
+	width: 90px;
+	box-sizing: border-box;
+	font-size: 25px;
+}
+.m-level-btn-99::before,.m-level-btn-110::before{
+	content: "Lv";
+}
+.edit-box .setting-box .row-mon-awoken::before{
+	content: "怪物觉醒";
+}
+.row-mon-awoken .m-awoken-ul{
+	height: 32px;
+}
+.m-awoken-ul .awoken-icon{
+	cursor: pointer;
+}
+.m-awoken-ul .awoken-icon.unselected-awoken{
+	opacity: 0.3;
+}
+.awoken-icon.awoken-count{
+	color: yellow;
+	font-size: 22px;
+	line-height: 28px;
+	font-weight: bold;
+	text-shadow: black 0 0 4px;
+	text-align: center;
+}
+.edit-box .setting-box .row-mon-addition::before{
+	content: "怪物加值";
+	display: block;
+}
+.setting-box .m-add-hp,.setting-box .m-add-atk,.setting-box .m-add-def{
+	font-size: 25px;
+	height: 40px;
+	width: calc(100% - 212px);
+	box-sizing: border-box;
+}
+.m-add-hp-li::before,.m-add-atk-li::before,.m-add-def-li::before{
+	font-size: 25px;
+	width: 55px;
+	display: inline-block;
+}
+.m-add-hp-li::before{content: "HP";}
+.m-add-atk-li::before{content: "攻击";}
+.m-add-def-li::before{content: "回复";}
+.m-add-hp-btn-99,.m-add-atk-btn-99,.m-add-def-btn-99{
+	height: 40px;
+	width: 70px;
+	box-sizing: border-box;
+	font-size: 25px;
+}
+.m-add-hp-btn-99::before,.m-add-atk-btn-99::before,.m-add-def-btn-99::before,.m-add-btn-297::before{
+	content: "+";
+}
+.m-add-btn-297{
+	float:right;
+	width: 85px;
+	height: 120px;
+	box-sizing: border-box;
+	font-size: 25px;
+}
+.edit-box .setting-box .row-mon-a-awoken::before{
+	content: "潜在觉醒";
+}
+
+
+
 .edit-box .button-box .button-done::after{
 	content: "确认修改";
 }
