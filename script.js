@@ -61,12 +61,10 @@ function initialize()
 	})
 	//等级
 	var monEditLv = settingBox.querySelector(".m-level");
-	var monEditLv99 = settingBox.querySelector(".m-level-btn-99");
-	var monEditLv110 = settingBox.querySelector(".m-level-btn-110");
-	monEditLv99.onclick = function(){
+	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
+	monEditLvMax.onclick = function(){
 		monEditLv.value = this.value;
 	}
-	monEditLv110.onclick = monEditLv99.onclick;
 	//加蛋
 	var monEditAddHp = settingBox.querySelector(".m-add-hp");
 	var monEditAddAtk = settingBox.querySelector(".m-add-atk");
@@ -267,8 +265,8 @@ function editChangeMonId(id)
 		}
 	}
 
-	var monSettingBox = editBox.querySelector(".setting-box");
-	var mAwoken = monSettingBox.querySelectorAll(".m-awoken-ul li");
+	var settingBox = editBox.querySelector(".setting-box");
+	var mAwoken = settingBox.querySelectorAll(".m-awoken-ul li");
 	mAwoken[0].innerHTML = md.awoken.length?"★":"0";
 	for (var ai=1;ai<mAwoken.length;ai++)
 	{
@@ -280,6 +278,12 @@ function editChangeMonId(id)
 			mAwoken[ai].className = "display-none";
 		}
 	}
+
+	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
+	monEditLvMax.innerHTML = monEditLvMax.value = md.maxLevel;
+	var monEditLv = settingBox.querySelector(".m-level");
+	monEditLv.value = md.maxLevel>99?99:md.maxLevel;
+
 	var monLatentAllowUl = editBox.querySelector(".m-latent-allowable-ul");
 	//该宠Type允许的杀
 	var allowLatent = uniq(md.type.reduce(function (previous, t, index, array) {

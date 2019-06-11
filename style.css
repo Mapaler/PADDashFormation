@@ -299,17 +299,17 @@ ul{
 .edit-box .setting-box .m-level{
 	font-size: 25px;
 	height: 40px;
-	width: calc(100% - 200px);
+	width: calc(100% - 150px);
 	box-sizing: border-box;
 }
-.m-level-btn-99,.m-level-btn-110{
+.m-level-btn-max{
 	height: 40px;
-	width: 90px;
+	width: 145px;
 	box-sizing: border-box;
 	font-size: 25px;
 }
-.m-level-btn-99::before,.m-level-btn-110::before{
-	content: "Lv";
+.m-level-btn-max::before{
+	content: "最高Lv";
 }
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "怪物觉醒";

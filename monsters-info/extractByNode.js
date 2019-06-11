@@ -48,7 +48,8 @@ fs.readFile('./ja.json',function(err,data){
 					ppt: [m[2],m[3]], //属性property
 					type: type,
 					rare: m[7],
-					awoken: awoken
+					awoken: awoken,
+					maxLevel: m[m.length-3]>0?110:m[10],
 				}
 				mArr.push(mon);
 			}
