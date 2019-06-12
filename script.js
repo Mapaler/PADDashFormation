@@ -1,4 +1,37 @@
 var ms = null;
+var memberTeamObj = function(){
+	return {id:0,level:0,awoken:0,plus:[0,0,0],latent:[]};
+}
+var memberAssistObj = function(){
+	return {id:0,level:0,awoken:0,plus:[0,0,0]};
+}
+var teamObj = function(){
+	return [
+		[
+			new memberTeamObj(),
+			new memberTeamObj(),
+			new memberTeamObj(),
+			new memberTeamObj(),
+			new memberTeamObj(),
+			new memberTeamObj(),
+		],
+		[
+			new memberAssistObj(),
+			new memberAssistObj(),
+			new memberAssistObj(),
+			new memberAssistObj(),
+			new memberAssistObj(),
+			new memberAssistObj(),
+		],
+	];
+}
+var formation = {
+	title:"",
+	team:[
+		new teamObj(),//队伍A
+		new teamObj(),//队伍B
+	]
+};
 window.onload = function()
 {
 	GM_xmlhttpRequest({
@@ -21,18 +54,28 @@ function initialize()
 	ms.forEach(function(m){
 		var opt = monstersList.appendChild(document.createElement("option"));
 		opt.value = m.id;
-		opt.label = m.id + " | " +  m.name + " | " + m.ename;
+		opt.label = m.id + " | " +  m.name["ja"] + " | " + m.name["en"] + " | " + m.name["ko"];
 	});
+
+	//队伍框
+	var formationBox = document.querySelector(".formation-box");
+	formationBox.formationBox = formation;
 
 	//编辑框
 	var editBox = document.querySelector(".edit-box");
+	editBox.latent = []; //储存潜在觉醒
+	editBox.assist = false; //储存是否为辅助宠物
+	editBox.monsterBox = null;
+	editBox.latentBox = null;
+	editBox.member = null;
+
 	var settingBox = editBox.querySelector(".setting-box")
 	//id搜索
 	var monstersSearch = editBox.querySelector(".edit-box .m-id");
 	monstersSearch.onchange = function(){
 		if (/^\d+$/.test(this.value))
 		{
-			editChangeMonId(parseInt(this.value));
+			editBoxChangeMonId(parseInt(this.value));
 		}
 	}
 	monstersSearch.oninput = monstersSearch.onchange;
@@ -66,30 +109,23 @@ function initialize()
 		monEditLv.value = this.value;
 	}
 	//加蛋
-	var monEditAddHp = settingBox.querySelector(".m-add-hp");
-	var monEditAddAtk = settingBox.querySelector(".m-add-atk");
-	var monEditAddRcv = settingBox.querySelector(".m-add-rcv");
-	var monEditAddHp99 = settingBox.querySelector(".m-add-hp-btn-99");
+	var monEditAddHp = settingBox.querySelector(".m-plus-hp");
+	var monEditAddAtk = settingBox.querySelector(".m-plus-atk");
+	var monEditAddRcv = settingBox.querySelector(".m-plus-rcv");
+	var monEditAddHp99 = settingBox.querySelector(".m-plus-hp-btn-99");
 	monEditAddHp99.onclick = function(){monEditAddHp.value = this.value}
-	var monEditAddAtk99 = settingBox.querySelector(".m-add-atk-btn-99");
+	var monEditAddAtk99 = settingBox.querySelector(".m-plus-atk-btn-99");
 	monEditAddAtk99.onclick = function(){monEditAddAtk.value = this.value}
-	var monEditAddRcv99 = settingBox.querySelector(".m-add-rcv-btn-99");
+	var monEditAddRcv99 = settingBox.querySelector(".m-plus-rcv-btn-99");
 	monEditAddRcv99.onclick = function(){monEditAddRcv.value = this.value}
-	var monEditAdd297 = settingBox.querySelector(".m-add-btn-297");
+	var monEditAdd297 = settingBox.querySelector(".m-plus-btn-297");
 	monEditAdd297.onclick = function(){monEditAddHp.value = monEditAddAtk.value = monEditAddRcv.value = 99}
 	//潜觉
 	var monEditLatentUl = settingBox.querySelector(".m-latent-ul");
-	var latent = editBox.latent = [];
 	var monEditLatents = Array.prototype.slice.call(monEditLatentUl.querySelectorAll("li"));
 	var monEditLatentAllowableUl = settingBox.querySelector(".m-latent-allowable-ul");
 	var monEditLatentsAllowable = Array.prototype.slice.call(monEditLatentAllowableUl.querySelectorAll("li"));
-	function usedHole(latent) //计算用了多少潜觉格子
-	{
-		return latent.reduce(function(previous,current){
-			return previous + (current>= 12?2:1);
-		},0);
-	}
-	function refreshLatent() //刷新潜觉
+	function refreshLatent(latent) //刷新潜觉
 	{
 		if (this.value<0) return;
 		var usedHoleN = usedHole(latent);
@@ -117,8 +153,8 @@ function initialize()
 	monEditLatents.forEach(function(l){
 		l.onclick = function(){
 			var aIdx = parseInt(this.value);
-			latent.splice(aIdx,1);
-			refreshLatent();
+			editBox.latent.splice(aIdx,1);
+			refreshLatent(editBox.latent);
 		}
 	})
 	//可选觉醒的添加
@@ -126,16 +162,50 @@ function initialize()
 		la.onclick = function(){
 			if (this.classList.contains("unselected-latent")) return;
 			var lIdx = parseInt(this.value);
-			var usedHoleN = usedHole(latent);
+			var usedHoleN = usedHole(editBox.latent);
 			if (lIdx >= 12 && usedHoleN<=4)
-				latent.push(lIdx);
+				editBox.latent.push(lIdx);
 			else if (lIdx < 12 && usedHoleN<=5)
-				latent.push(lIdx);
-			refreshLatent();
+				editBox.latent.push(lIdx);
+			refreshLatent(editBox.latent);
 		}
 	})
+	
+	var btnCancel = editBox.querySelector(".button-cancel");
+	var btnDone = editBox.querySelector(".button-done");
+	btnCancel.onclick = function(){
+		btnDone.classList.remove("cant-assist");
+		btnDone.disabled = false;
+		editBox.member = null;
+		editBox.classList.add("display-none");
+	}
+	btnDone.onclick = function(){
+		var mD = editBox.member;
+		mD.id = parseInt(monstersSearch.value);
+		mD.level = parseInt(monEditLv.value);
+		mD.awoken = monEditAwokens.filter(function(akDom){
+			return !akDom.classList.contains("unselected-awoken") && !akDom.classList.contains("display-none") 
+		}).length - 1;
+		mD.plus[0] = parseInt(monEditAddHp.value);
+		mD.plus[1] = parseInt(monEditAddAtk.value);
+		mD.plus[2] = parseInt(monEditAddRcv.value);
+		if (!editBox.assist)
+		{
+			mD.latent = editBox.latent.concat();
+		}
+
+		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		editBox.classList.add("display-none");
+	}
 }
-function changeid(mon,monDom,awokenDom)
+function usedHole(latent) //计算用了多少潜觉格子
+{
+	return latent.reduce(function(previous,current){
+		return previous + (current>= 12?2:1);
+	},0);
+}
+
+function changeid(mon,monDom,latentDom)
 {
 	var md = ms[mon.id]; //怪物固定数据
 	if (mon.id>-1) //如果提供了id
@@ -147,19 +217,18 @@ function changeid(mon,monDom,awokenDom)
 		monDom.classList.add("pet-cards-index-y-" + parseInt(idxInPage / 10)); //添加Y方向序号
 		monDom.querySelector(".property").className = "property property-" + md.ppt[0]; //主属性
 		monDom.querySelector(".subproperty").className = "subproperty subproperty-" + md.ppt[1]; //副属性
-		monDom.title = "No." + mon.id + " " + md.name;
+		monDom.title = "No." + mon.id + " " + md.name["ja"];
 		monDom.href = "http://pad.skyozora.com/pets/" + mon.id;
 	}
 	if (mon.level>0) //如果提供了等级
 	{
 		var levelDom = monDom.querySelector(".level");
+		levelDom.innerHTML = mon.level;
 		if (mon.level == 99 || (mon.level >= md.maxLevel && md.maxLevel <=99))
 		{
-			//levelDom.innerHTML = "Max";
 			levelDom.classList.add("max");
 		}else
 		{
-			levelDom.innerHTML = mon.level;
 			levelDom.classList.remove("max");
 		}
 		if (md.maxLevel>99 && mon.level>=99)
@@ -189,27 +258,87 @@ function changeid(mon,monDom,awokenDom)
 			}
 		}
 	}
-	if (mon.addition) //如果提供了加值
+	if (mon.plus) //如果提供了加值
 	{
-		monDom.querySelector(".addition .hp").innerHTML = mon.addition[0];
-		monDom.querySelector(".addition .atk").innerHTML = mon.addition[1];
-		monDom.querySelector(".addition .rcv").innerHTML = mon.addition[2];
-		if (mon.addition[0]+mon.addition[1]+mon.addition[2] >= 297)
+		monDom.querySelector(".plus .hp").innerHTML = mon.plus[0];
+		monDom.querySelector(".plus .atk").innerHTML = mon.plus[1];
+		monDom.querySelector(".plus .rcv").innerHTML = mon.plus[2];
+		if (mon.plus[0]+mon.plus[1]+mon.plus[2] >= 297)
 		{
-			monDom.querySelector(".addition").classList.add("has297");
+			monDom.querySelector(".plus").classList.add("has297");
 		}else
 		{
-			monDom.querySelector(".addition").classList.remove("has297");
+			monDom.querySelector(".plus").classList.remove("has297");
 		}
 	}
-	if (awokenDom && mon.latent) //如果提供了潜觉
+	if (latentDom && mon.latent) //如果提供了潜觉
 	{
-		
+		var latent = mon.latent.sort(function(a,b){return b-a;});
+		var latentDoms = Array.prototype.slice.call(latentDom.querySelectorAll("li"));
+		var usedHoleN = usedHole(latent);
+		for (var ai=0;ai<6;ai++)
+		{
+			if (latent[ai])
+			{
+				latentDoms[ai].className = "latent-icon latent-icon-" + latent[ai];
+			}
+			else if(ai<(6-usedHoleN+latent.length))
+			{
+				latentDoms[ai].className = "latent-icon";
+			}
+			else
+			{
+				latentDoms[ai].className = "display-none";
+			}
+		}
+	}
+}
+//点击怪物头像，出现编辑框
+function editMon(AorB,isAssist,tempIdx)
+{
+	//数据
+	var mD = formation.team[AorB][isAssist][tempIdx];
+	//对应的Dom
+	var formationBox = AorB?document.querySelector(".formation-box .formation-B-box"):document.querySelector(".formation-box .formation-A-box");
+	var teamBox = isAssist?formationBox.querySelector(".formation-assist"):formationBox.querySelector(".formation-team");
+	var memberBox = teamBox.querySelector(".member-" + (tempIdx+1));
+
+	var editBox = document.querySelector(".edit-box");
+	var monsterBox = memberBox.querySelector(".monster");
+
+	editBox.classList.remove("display-none");
+	editBox.assist = isAssist;
+	editBox.monsterBox = monsterBox;
+	editBox.member = mD;
+	editBox.assist = isAssist;
+	if (!isAssist)
+	{
+		var latentBox = formationBox.querySelector(".formation-latents .latents-"+(tempIdx+1)+" .latent-ul");
+		editBox.latentBox = latentBox;
+	}
+
+	var monstersSearch = editBox.querySelector(".search-box .m-id");
+	monstersSearch.value = mD.id;
+	monstersSearch.onchange();
+	var settingBox = editBox.querySelector(".setting-box");
+	var monEditAwokens = settingBox.querySelectorAll(".m-awoken-ul .awoken-icon");
+	monEditAwokens[mD.awoken].onclick();
+	var monEditLv = settingBox.querySelector(".m-level");
+	monEditLv.value = mD.level;
+	var monEditAddHp = settingBox.querySelector(".m-plus-hp");
+	var monEditAddAtk = settingBox.querySelector(".m-plus-atk");
+	var monEditAddRcv = settingBox.querySelector(".m-plus-rcv");
+	monEditAddHp.value = mD.plus[0];
+	monEditAddAtk.value = mD.plus[1];
+	monEditAddRcv.value = mD.plus[2];
+	if (!isAssist)
+	{
+		editBox.latent = mD.latent.concat();
+		editBox.refreshLatent(editBox.latent);
 	}
 }
 
-
-function editChangeMonId(id)
+function editBoxChangeMonId(id)
 {
 	var md = ms[id]; //怪物固定数据
 	if (!md){
@@ -225,7 +354,7 @@ function editChangeMonId(id)
 	var mRare = monInfoBox.querySelector(".monster-rare");
 	mRare.className = "monster-rare rare-" + md.rare;
 	var mName = monInfoBox.querySelector(".monster-name");
-	mName.innerHTML = md.name;
+	mName.innerHTML = md.name["ja"];
 	var mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (var ti=0;ti<mType.length;ti++)
 	{
@@ -258,7 +387,7 @@ function editChangeMonId(id)
 	var monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.value = md.maxLevel>99?99:md.maxLevel;
 
-	var monLatentAllowUl = editBox.querySelector(".m-latent-allowable-ul");
+	var monLatentAllowUl = settingBox.querySelector(".m-latent-allowable-ul");
 	//该宠Type允许的杀
 	var allowLatent = uniq(md.type.reduce(function (previous, t, index, array) {
 		return previous.concat(type_allowable_latent[t]);
@@ -277,8 +406,21 @@ function editChangeMonId(id)
 		}
 	}
 
+	if (editBox.assist)
+	{
+		var btnDone = editBox.querySelector(".button-done");
+		if (!md.assist)
+		{
+			btnDone.classList.add("cant-assist");
+			btnDone.disabled = true;
+		}else
+		{
+			btnDone.classList.remove("cant-assist");
+			btnDone.disabled = false;
+		}
+	}
 	editBox.latent.length = 0;
-	editBox.refreshLatent();
+	editBox.refreshLatent(editBox.latent);
 }
 
 
@@ -286,14 +428,17 @@ function editChangeMonId(id)
 
 function test()
 {
-var m1 = document.querySelector(".formation-A-box .formation-team .team-1 .monster");
-var a1 = document.querySelector(".formation-A-box .formation-team .team-1 .acquisitus-awoken-ul");
-changeid({
-id:5209,
-level:99,
-awoken:9,
-addition:[99,99,99],
-latent:[],
-},m1,a1)
-editChangeMonId(3264);
+var m1 = document.querySelector(".formation-A-box .formation-team .member-1 .monster");
+var a1 = document.querySelector(".formation-A-box .formation-latents .latents-1 .latent-ul");
+
+var m = formation.team[0][0][0];
+m.id=5209;
+m.level=36;
+m.awoken=5;
+m.plus[0]=98;
+m.plus[1]=96;
+m.plus[2]=95;
+m.latent=[11,11,16,11,11];
+changeid(m,m1,a1);
+//editBoxChangeMonId(3264);
 }
