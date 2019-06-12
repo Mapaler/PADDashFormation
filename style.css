@@ -24,6 +24,7 @@
 	width:100%;
 	max-width:100%;
 	min-width:100%;
+	height: 100px;
 	resize: vertical; 
 	border: none;
 	background: none;
@@ -254,9 +255,9 @@ ul{
 /*队伍的潜觉*/
 .formation-box .latents{
 	width: 108px;
-	/*height: 46px;*/
-	float: left;
+	/*float:left;*/
 	margin-bottom: -19px;
+	display: inline-block;
 }
 .formation-box .latent-ul{
 	font-size: 0;

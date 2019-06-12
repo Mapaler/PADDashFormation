@@ -41,19 +41,18 @@ window.onload = function()
 		onload: function(response) {
 			ms = JSON.parse(response.response);
 			initialize();//初始化
-
 			try
 			{
 				var idataQer = getQueryString("data");
 				if (idataQer)
 				{
-					var idata = JSON.parse(decodeURIComponent(idataQer));
+					var idata = JSON.parse(idataQer);
 					formation = idata;
 					refreshAll(formation);
 				}
 			}catch(e)
 			{
-				console.log("初始数据解码出错");
+				console.log("初始数据解码出错",e);
 			}
 			//test(); //测试代码
 		},
@@ -73,7 +72,7 @@ function creatNewUrl(){
 function getQueryString(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
 	var r = window.location.search.substr(1).match(reg);
-	if (r != null) return unescape(r[2]); return null;
+	if (r != null) return decodeURIComponent(r[2]); return null;
 }
 //初始化
 function initialize()
@@ -337,6 +336,8 @@ function changeid(mon,monDom,latentDom)
 				awokenIcon.innerHTML = "★";
 				if (md.assist)
 					awokenIcon.classList.add("allowable-assist");
+				else
+					awokenIcon.classList.remove("allowable-assist");
 			}
 		}
 	}
