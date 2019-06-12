@@ -61,11 +61,27 @@ window.onload = function()
 		}
 	});
 }
+window.onpopstate = function()
+{ //前进后退时修改页面
+	try
+	{
+		var idataQer = getQueryString("data");
+		if (idataQer)
+		{
+			var idata = JSON.parse(idataQer);
+			formation = idata;
+			refreshAll(formation);
+		}
+	}catch(e)
+	{
+		console.log("初始数据解码出错",e);
+	}
+}
 //创建新的分享地址
 function creatNewUrl(){
 	if (!!(window.history && history.pushState)) {
 		// 支持History API
-		history.replaceState(null, null, '?data=' + encodeURIComponent(JSON.stringify(formation)));
+		history.pushState(null, null, '?data=' + encodeURIComponent(JSON.stringify(formation)));
 	}
 }
 //获取URL参数
@@ -91,12 +107,10 @@ function initialize()
 		formation.title = this.value;
 		creatNewUrl();
 	}
-	txtTitle.oninput = txtTitle.onchange;
 	txtDetail.onchange = function(){
 		formation.detail = this.value;
 		creatNewUrl();
 	}
-	txtDetail.oninput = txtDetail.onchange;
 
 	//队伍框
 	var formationBox = document.querySelector(".formation-box");
