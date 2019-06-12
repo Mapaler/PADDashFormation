@@ -27,6 +27,7 @@ var teamObj = function(){
 }
 var formation = {
 	title:"",
+	detail:"",
 	team:[
 		new teamObj(),//队伍A
 		new teamObj(),//队伍B
@@ -40,12 +41,39 @@ window.onload = function()
 		onload: function(response) {
 			ms = JSON.parse(response.response);
 			initialize();//初始化
-			test(); //测试代码
+
+			try
+			{
+				var idataQer = getQueryString("data");
+				if (idataQer)
+				{
+					var idata = JSON.parse(decodeURIComponent(idataQer));
+					formation = idata;
+					refreshAll(formation);
+				}
+			}catch(e)
+			{
+				console.log("初始数据解码出错");
+			}
+			//test(); //测试代码
 		},
 		onerror: function(response) {
 			console.error("怪物数据获取错误",response);
 		}
 	});
+}
+//创建新的分享地址
+function creatNewUrl(){
+	if (!!(window.history && history.pushState)) {
+		// 支持History API
+		history.replaceState(null, null, '?data=' + encodeURIComponent(JSON.stringify(formation)));
+	}
+}
+//获取URL参数
+function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return unescape(r[2]); return null;
 }
 //初始化
 function initialize()
@@ -57,6 +85,20 @@ function initialize()
 		opt.label = m.id + " | " +  m.name["ja"] + " | " + m.name["en"] + " | " + m.name["ko"];
 	});
 
+	//标题和介绍文本框
+	var txtTitle = document.querySelector(".title-box .title");
+	var txtDetail = document.querySelector(".detail-box .detail");
+	txtTitle.onchange = function(){
+		formation.title = this.value;
+		creatNewUrl();
+	}
+	txtTitle.oninput = txtTitle.onchange;
+	txtDetail.onchange = function(){
+		formation.detail = this.value;
+		creatNewUrl();
+	}
+	txtDetail.oninput = txtDetail.onchange;
+
 	//队伍框
 	var formationBox = document.querySelector(".formation-box");
 	formationBox.formationBox = formation;
@@ -67,7 +109,15 @@ function initialize()
 	editBox.assist = false; //储存是否为辅助宠物
 	editBox.monsterBox = null;
 	editBox.latentBox = null;
-	editBox.member = null;
+	editBox.memberIdx = []; //储存队伍数组下标
+	editBox.show = function(){
+		editBox.classList.remove("display-none");
+		formationBox.classList.add("blur-bg");
+	}
+	editBox.hide = function(){
+		editBox.classList.add("display-none");
+		formationBox.classList.remove("blur-bg");
+	}
 
 	var settingBox = editBox.querySelector(".setting-box")
 	//id搜索
@@ -173,15 +223,21 @@ function initialize()
 	
 	var btnCancel = editBox.querySelector(".button-cancel");
 	var btnDone = editBox.querySelector(".button-done");
+	var btnNull = editBox.querySelector(".button-null");
+	var btnDelay = editBox.querySelector(".button-delay");
 	btnCancel.onclick = function(){
 		btnDone.classList.remove("cant-assist");
 		btnDone.disabled = false;
-		editBox.member = null;
-		editBox.classList.add("display-none");
-		formationBox.classList.remove("blur-bg");
+		editBox.memberIdx = [];
+		editBox.hide();
 	}
 	btnDone.onclick = function(){
-		var mD = editBox.member;
+		if (parseInt(monEditLv.value) == 0)
+		{
+			btnNull.onclick();
+			return;
+		}
+		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = editBox.assist?new memberAssistObj():new memberTeamObj();
 		mD.id = parseInt(monstersSearch.value);
 		mD.level = parseInt(monEditLv.value);
 		mD.awoken = monEditAwokens.filter(function(akDom){
@@ -196,8 +252,20 @@ function initialize()
 		}
 
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
-		editBox.classList.add("display-none");
-		formationBox.classList.remove("blur-bg");
+		creatNewUrl();
+		editBox.hide();
+	}
+	btnNull.onclick = function(){
+		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = {id:0};
+		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		creatNewUrl();
+		editBox.hide();
+	}
+	btnDelay.onclick = function(){ //应对威吓
+		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = {id:-1};
+		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		creatNewUrl();
+		editBox.hide();
 	}
 }
 function usedHole(latent) //计算用了多少潜觉格子
@@ -210,8 +278,20 @@ function usedHole(latent) //计算用了多少潜觉格子
 function changeid(mon,monDom,latentDom)
 {
 	var md = ms[mon.id]; //怪物固定数据
-	if (mon.id>-1) //如果提供了id
+	if (mon.id<0) //如果是延迟
 	{
+		monDom.parentNode.classList.add("delay");
+		monDom.parentNode.classList.remove("null");
+		return;
+	}else if (mon.id==0) //如果是空
+	{
+		monDom.parentNode.classList.add("null");
+		monDom.parentNode.classList.remove("delay");
+		return;
+	}else (mon.id>-1) //如果提供了id
+	{
+		monDom.parentNode.classList.remove("null");
+		monDom.parentNode.classList.remove("delay");
 		monDom.className = "monster";
 		monDom.classList.add("pet-cards-" + Math.ceil(mon.id/100)); //添加图片编号
 		var idxInPage = (mon.id-1) % 100; //获取当前页面的总序号
@@ -276,6 +356,10 @@ function changeid(mon,monDom,latentDom)
 	if (latentDom && mon.latent) //如果提供了潜觉
 	{
 		var latent = mon.latent.sort(function(a,b){return b-a;});
+		if (latent.length < 1)
+			latentDom.classList.add("display-none");
+		else
+			latentDom.classList.remove("display-none");
 		var latentDoms = Array.prototype.slice.call(latentDom.querySelectorAll("li"));
 		var usedHoleN = usedHole(latent);
 		for (var ai=0;ai<6;ai++)
@@ -300,6 +384,7 @@ function editMon(AorB,isAssist,tempIdx)
 {
 	//数据
 	var mD = formation.team[AorB][isAssist][tempIdx];
+
 	//对应的Dom
 	var formationBox = AorB?document.querySelector(".formation-box .formation-B-box"):document.querySelector(".formation-box .formation-A-box");
 	
@@ -309,11 +394,11 @@ function editMon(AorB,isAssist,tempIdx)
 	var editBox = document.querySelector(".edit-box");
 	var monsterBox = memberBox.querySelector(".monster");
 
-	document.querySelector(".formation-box").classList.add("blur-bg");
-	editBox.classList.remove("display-none");
+	editBox.show();
+
 	editBox.assist = isAssist;
 	editBox.monsterBox = monsterBox;
-	editBox.member = mD;
+	editBox.memberIdx = [AorB,isAssist,tempIdx]; //储存队伍数组下标
 	editBox.assist = isAssist;
 	if (!isAssist)
 	{
@@ -328,17 +413,29 @@ function editMon(AorB,isAssist,tempIdx)
 	var monEditAwokens = settingBox.querySelectorAll(".m-awoken-ul .awoken-icon");
 	if (mD.awoken>0) monEditAwokens[mD.awoken].onclick();
 	var monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.value = mD.level;
+	monEditLv.value = mD.level || 1;
 	var monEditAddHp = settingBox.querySelector(".m-plus-hp");
 	var monEditAddAtk = settingBox.querySelector(".m-plus-atk");
 	var monEditAddRcv = settingBox.querySelector(".m-plus-rcv");
-	monEditAddHp.value = mD.plus[0];
-	monEditAddAtk.value = mD.plus[1];
-	monEditAddRcv.value = mD.plus[2];
+	if (mD.plus)
+	{
+		monEditAddHp.value = mD.plus[0];
+		monEditAddAtk.value = mD.plus[1];
+		monEditAddRcv.value = mD.plus[2];
+	}
+	var btnDelay = editBox.querySelector(".button-delay");
 	if (!isAssist)
 	{
-		editBox.latent = mD.latent.concat();
+		editBox.latent = mD.latent || [];
 		editBox.refreshLatent(editBox.latent);
+		btnDelay.classList.add("display-none");
+		settingBox.querySelector(".row-mon-latent").classList.remove("display-none");
+		editBox.querySelector(".edit-box-title").classList.remove("edit-box-title-assist");
+	}else
+	{
+		btnDelay.classList.remove("display-none");
+		settingBox.querySelector(".row-mon-latent").classList.add("display-none");
+		editBox.querySelector(".edit-box-title").classList.add("edit-box-title-assist");
 	}
 }
 
@@ -427,8 +524,26 @@ function editBoxChangeMonId(id)
 	editBox.refreshLatent(editBox.latent);
 }
 
-
-
+function refreshAll(fmt){
+	document.querySelector(".title-box .title").value = fmt.title || "";
+	document.querySelector(".detail-box .detail").value = fmt.detail || "";
+	var formationA = document.querySelector(".formation-box .formation-A-box");
+	var formationB = document.querySelector(".formation-box .formation-B-box");
+	
+	var fATeam = formationA.querySelectorAll(".formation-team .monster");
+	var fALatents = formationA.querySelectorAll(".formation-latents .latent-ul");
+	var fAAssist = formationA.querySelectorAll(".formation-assist .monster");
+	var fBTeam = formationB.querySelectorAll(".formation-team .monster");
+	var fBLatents = formationB.querySelectorAll(".formation-latents .latent-ul");
+	var fBAssist = formationB.querySelectorAll(".formation-assist .monster");
+	for (var ti=0;ti<5;ti++)
+	{
+		changeid(fmt.team[0][0][ti],fATeam[ti],fALatents[ti]);
+		changeid(fmt.team[0][1][ti],fAAssist[ti]);
+		changeid(fmt.team[1][0][ti],fBTeam[ti],fBLatents[ti]);
+		changeid(fmt.team[1][1][ti],fBAssist[ti]);
+	}
+}
 
 function test()
 {

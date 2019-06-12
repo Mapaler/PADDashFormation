@@ -14,10 +14,21 @@
 	display:none;
 }
 .title{
+	width:100%;
 	border: none;
 	background: none;
 	font-size: 2em;
 	font-weight: bold;
+}
+.detail{
+	width:100%;
+	max-width:100%;
+	min-width:100%;
+	resize: vertical; 
+	border: none;
+	background: none;
+	font-size: 1.5em;
+	font-family: "Source Han Sans","Microsoft Yahei",Arial, Helvetica, sans-serif;
 }
 ul{
 	margin: 0;
@@ -35,6 +46,7 @@ ul{
 /*队伍行*/
 .formation-team{
 }
+
 /*单个怪物*/
 .monster{
 	font-family: 'FOT-KurokaneStd-EB';
@@ -43,10 +55,44 @@ ul{
 	margin: 0;
 	display: block;
 	float: left;
-	background-image: url(images/001.png);
 	background-repeat: no-repeat;
 	position: relative;
 	cursor: pointer;
+	border-radius: 5px;
+}
+.null .monster,.delay .monster,
+.null .property,.delay .property,
+.null .subproperty,.delay .subproperty
+{
+	box-sizing: border-box;
+	background-image: none;
+}
+.null .monster{
+	background-color: rgba(100,100,100,0.5);
+	border: 3px grey dashed;
+}
+.edit-box .null .monster{
+	background-color: #653;
+	border: none;
+	box-shadow: inset black 0 0 7px;
+}
+.delay .monster{
+	background-color: yellow;
+	box-shadow: inset orange 0 0 7px;
+	border: 3px black solid;
+}
+.delay .monster::before{
+	display: block;
+	width: 94px;
+	height: 94px;
+	color: black;
+	font-size: 30px;
+	line-height: 47px;
+	text-align: center;
+	font-weight: bold;
+	content: "应 对\A威 吓";
+	white-space: pre-wrap;
+	display: inline-block;
 }
 /*怪物属性*/
 .property,.subproperty{
@@ -66,6 +112,12 @@ ul{
 	text-shadow: black 0 0 1px, black 2px 2px 0;
 	position: absolute;
 	left:0;
+}
+
+.null .plus,.delay .plus,
+.null .awoken-count,.delay .awoken-count,
+.null .level,.delay .level{
+	display:none;
 }
 .monster .plus .hp::before,
 .monster .plus .atk::before,
@@ -142,9 +194,6 @@ ul{
 .formation-assist, .formation-team{
 	display: inline-block;
 }
-.formation-latents{
-	height:47px;
-}
 .formation-A-box .formation-team,.formation-A-box .formation-latents{
 	background-color:pink;
 }
@@ -205,8 +254,9 @@ ul{
 /*队伍的潜觉*/
 .formation-box .latents{
 	width: 108px;
-	height: 46px;
+	/*height: 46px;*/
 	float: left;
+	margin-bottom: -19px;
 }
 .formation-box .latent-ul{
 	font-size: 0;
@@ -236,6 +286,7 @@ ul{
 	border-radius: 10px;
 	border-width:4px;
 	border-style:solid;
+	box-sizing: initial;
 	margin: 0;
 }
 .formation-A-box .formation-team .team-leader .monster{
@@ -264,7 +315,10 @@ ul{
 	font-weight: bold;
 }
 .edit-box .edit-box-title::before{
-	content: "修改怪物";
+	content: "修改队员";
+}
+.edit-box .edit-box-title.edit-box-title-assist::before{
+	content: "修改辅助";
 }
 .edit-box .monsterinfo-box{
 	font-family: 'FOT-KurokaneStd-EB';
