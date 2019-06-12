@@ -142,10 +142,13 @@ ul{
 .formation-assist, .formation-team{
 	display: inline-block;
 }
-.formation-A-box .formation-team{
+.formation-latents{
+	height:47px;
+}
+.formation-A-box .formation-team,.formation-A-box .formation-latents{
 	background-color:pink;
 }
-.formation-B-box .formation-team{
+.formation-B-box .formation-team,.formation-B-box .formation-latents{
 	background-color:lightblue;
 }
 .formation-A-bigbox, .formation-B-bigbox{
@@ -246,16 +249,14 @@ ul{
 	filter:blur(5px);
 }
 .edit-box{
-	background-color: rgba(200,255,200,0.8);
-	text-shadow: white 0 0 2px;
+	background-color: rgba(82, 53, 30, 0.8);
+	color: white;
 	position: absolute;
 	left:0;
 	top:0;
 	width:100%;
-	padding: 10px;
 	box-sizing: border-box;
 	min-width:664px;
-	width:664px; /*测试时手机上的最大宽度*/
 }
 .edit-box-title{
 	text-align: center;
@@ -265,11 +266,20 @@ ul{
 .edit-box .edit-box-title::before{
 	content: "修改怪物";
 }
-.setting-row{
-	width: 100%;
+.edit-box .monsterinfo-box{
+	font-family: 'FOT-KurokaneStd-EB';
+	color: white;
+	text-shadow: black 2px 2px 0;
+	height: 100px;
+	margin: 5px 0;
+	background-image: linear-gradient(#798421,#394914);
+	border-top: #B1BB39 solid 4px;
+	border-bottom: #72941D ridge 7px;
+	box-shadow: black 0 3px 3px;
+	padding: 5px 10px;
 }
 .edit-box .search-box::before{
-	content: "怪物ID";
+	content: "▼怪物ID";
 }
 .edit-box .search-box .m-id{
 	box-sizing: border-box;
@@ -282,17 +292,11 @@ ul{
 	height: 40px;
 	font-size: 25px;
 }
-.edit-box .monsterinfo-box{
-	font-family: 'FOT-KurokaneStd-EB';
-	color: white;
-	text-shadow: black 2px 2px 0;
-	height: 100px;
-	margin: 5px 0;
-	background-image: linear-gradient(#798421,#394914);
-	border-top: #B1BB39 solid 4px;
-	border-bottom: #72941D ridge 7px;
-	box-shadow: black 0 3px 3px;
-	padding: 5px;
+.edit-box .search-box,.edit-box .setting-box{
+	padding: 0 10px;
+}
+.edit-box .setting-row{
+	width: 100%;
 }
 .monsterinfo-box .monster{
 	margin-right:5px;
@@ -345,7 +349,7 @@ ul{
 }
 
 .edit-box .setting-box .row-mon-level::before{
-	content: "怪物等级";
+	content: "▼怪物等级";
 	display: block;
 }
 .edit-box .setting-box .m-level{
@@ -364,7 +368,7 @@ ul{
 	content: "最高Lv";
 }
 .edit-box .setting-box .row-mon-awoken::before{
-	content: "怪物觉醒";
+	content: "▼怪物觉醒";
 }
 .row-mon-awoken .m-awoken-ul{
 	height: 32px;
@@ -384,7 +388,7 @@ ul{
 	text-align: center;
 }
 .edit-box .setting-box .row-mon-plus::before{
-	content: "怪物加值";
+	content: "▼怪物加值";
 	display: block;
 }
 .setting-box .m-plus-hp,.setting-box .m-plus-atk,.setting-box .m-plus-rcv{
@@ -418,7 +422,7 @@ ul{
 	font-size: 25px;
 }
 .edit-box .setting-box .row-mon-latent::before{
-	content: "潜在觉醒";
+	content: "▼潜在觉醒";
 }
 .m-latent-ul{
 	text-align: center;

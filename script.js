@@ -83,7 +83,7 @@ function initialize()
 	var monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".m-awoken-ul>.awoken-icon"));
 	monEditAwokens.forEach(function(akDom,idx,domArr){
 		akDom.onclick = function(){
-			if (idx >= domArr.filter(function(d){return !d.classList.contains("display-none")}).length-1)
+			if (idx>0 && idx>=domArr.filter(function(d){return !d.classList.contains("display-none")}).length-1)
 				domArr[0].innerHTML = "★";
 			else
 				domArr[0].innerHTML = idx;
@@ -178,6 +178,7 @@ function initialize()
 		btnDone.disabled = false;
 		editBox.member = null;
 		editBox.classList.add("display-none");
+		formationBox.classList.remove("blur-bg");
 	}
 	btnDone.onclick = function(){
 		var mD = editBox.member;
@@ -196,6 +197,7 @@ function initialize()
 
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
 		editBox.classList.add("display-none");
+		formationBox.classList.remove("blur-bg");
 	}
 }
 function usedHole(latent) //计算用了多少潜觉格子
@@ -300,12 +302,14 @@ function editMon(AorB,isAssist,tempIdx)
 	var mD = formation.team[AorB][isAssist][tempIdx];
 	//对应的Dom
 	var formationBox = AorB?document.querySelector(".formation-box .formation-B-box"):document.querySelector(".formation-box .formation-A-box");
+	
 	var teamBox = isAssist?formationBox.querySelector(".formation-assist"):formationBox.querySelector(".formation-team");
 	var memberBox = teamBox.querySelector(".member-" + (tempIdx+1));
 
 	var editBox = document.querySelector(".edit-box");
 	var monsterBox = memberBox.querySelector(".monster");
 
+	document.querySelector(".formation-box").classList.add("blur-bg");
 	editBox.classList.remove("display-none");
 	editBox.assist = isAssist;
 	editBox.monsterBox = monsterBox;
@@ -322,7 +326,7 @@ function editMon(AorB,isAssist,tempIdx)
 	monstersSearch.onchange();
 	var settingBox = editBox.querySelector(".setting-box");
 	var monEditAwokens = settingBox.querySelectorAll(".m-awoken-ul .awoken-icon");
-	monEditAwokens[mD.awoken].onclick();
+	if (mD.awoken>0) monEditAwokens[mD.awoken].onclick();
 	var monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.value = mD.level;
 	var monEditAddHp = settingBox.querySelector(".m-plus-hp");
