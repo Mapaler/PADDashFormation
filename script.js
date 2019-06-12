@@ -422,7 +422,7 @@ function editMon(AorB,isAssist,tempIdx)
 	}
 
 	var monstersSearch = editBox.querySelector(".search-box .m-id");
-	monstersSearch.value = mD.id;
+	monstersSearch.value = mD.id>0?mD.id:0;
 	monstersSearch.onchange();
 	var settingBox = editBox.querySelector(".setting-box");
 	var monEditAwokens = settingBox.querySelectorAll(".m-awoken-ul .awoken-icon");
