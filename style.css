@@ -18,7 +18,7 @@
 	font-weight: bold;
 }
 .detail{
-	height: 100px;
+	min-height: 100px;
 	font-size: 1.5em;
 	font-family: "Source Han Sans","Microsoft Yahei",Arial, Helvetica, sans-serif;
 }
@@ -29,7 +29,7 @@
 }
 .title:focus,.detail:focus{
 	border: black solid 1px;;
-	background: rgba(200,200,200,0.5);
+	background-color: #eee;
 }
 ul{
 	margin: 0;
@@ -69,7 +69,7 @@ ul{
 	background-image: none;
 }
 .null .monster{
-	background-color: rgba(100,100,100,0.5);
+	background-color: rgba(230,230,230,0.5);
 	border: 3px grey dashed;
 }
 .edit-box .null .monster{
