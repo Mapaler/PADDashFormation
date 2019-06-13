@@ -82,6 +82,22 @@ window.onload = function()
 		},
 		onerror: function(response) {
 			console.error("怪物数据获取错误",response);
+			try
+			{
+				ms = JSON.parse(response.response);
+				initialize();//初始化
+
+				var idataQer = getQueryString("data");
+				if (idataQer)
+				{
+					var idata = JSON.parse(idataQer);
+					formation = idata;
+					refreshAll(formation);
+				}
+			}catch(e)
+			{
+				console.log("尝试解码Chrome错误返回失败。或初始数据解码出错。",e);
+			}
 		}
 	});
 }
