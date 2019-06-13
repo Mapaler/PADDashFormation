@@ -2,19 +2,20 @@
 ======
 * 这个工具可以帮助你方便的制作和分享车队阵型。  
 This tool can help you easily create and share Dash Formation.  
-![主要界面预览](https://gitee.com/mapaler/PADDashFormation/raw/master/document/preview-main.png)  
+![主要界面预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-main.png)  
 
 * 易用的编辑界面。  
 Easy to use editing interface.  
-![编辑界面预览](https://gitee.com/mapaler/PADDashFormation/raw/master/document/preview-edit.png)
+![编辑界面预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-edit.png)
 
 * 可以简单的修改显示语言，手机上也可以轻松使用。  
 Easy to change language and use on your phone。  
-![手机端预览](https://gitee.com/mapaler/PADDashFormation/raw/master/document/preview-mobile.png)
+![手机端预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-mobile.png)
 # 如何使用 | HOW TO USE
 ## 在哪里打开 | Where to open
 * 快速使用在线版 | Fast Start  
-http://mapaler.gitee.io/paddashformation/
+    * https://mapaler.github.io/PADDashFormation/
+    * http://mapaler.gitee.io/paddashformation/ (中国镜象比较快)
 * 或下载压缩包后使用火狐浏览器打开`index.html`。  
 Or download ZIP, and open the `index.html` by Firefox.
 
