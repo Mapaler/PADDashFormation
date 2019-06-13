@@ -1,0 +1,121 @@
+﻿@charset "utf-8";
+.delay .monster::before{
+	content: "지 연\A방 지";
+}
+.monster .level.max::before{
+	content: "Lv.최대";
+}
+.monster .plus .hp::before,
+.monster .plus .atk::before,
+.monster .plus .rcv::before,
+.monster .plus ._297::before{
+	content: "+";
+}
+.monster .level::before{
+	content: "Lv.";
+}
+.formation-A-bigbox::after{
+	content: "팀\A A";
+}
+.formation-B-bigbox::before{
+	content: "팀\A B";
+}
+.formation-A-box .formation-assist .member::after{
+	content: "▼돕다";
+}
+.formation-B-box .formation-assist .member::before{
+	content: "▲돕다";
+}
+.edit-box .edit-box-title::before{
+	content: "회원 수정";
+}
+.edit-box .edit-box-title.edit-box-title-assist::before{
+	content: "보조 수정";
+}
+.edit-box .search-box::before{
+	content: "▼몬스터 ID";
+}
+.monsterinfo-box .monster-id::before{
+	content: "No.";
+}
+.edit-box .setting-box .row-mon-level::before{
+	content: "▼몬스터 레벨";
+}
+.m-level-btn-max::before{
+	content: "최고Lv";
+}
+.edit-box .setting-box .row-mon-awoken::before{
+	content: "▼몬스터 각성";
+}
+.edit-box .setting-box .row-mon-plus::before{
+	content: "▼몬스터 플러스";
+}
+.m-plus-hp-li::before{
+	content: "HP";
+}
+.m-plus-atk-li::before{
+	content: "공격";
+}
+.m-plus-rcv-li::before{
+	content: "회복";
+}
+.m-plus-hp-btn-99::before,
+.m-plus-atk-btn-99::before,
+.m-plus-rcv-btn-99::before,
+.m-plus-btn-297::before{
+	content: "+";
+}
+.edit-box .setting-box .row-mon-latent::before{
+	content: "▼몬스터 숨어있는";
+}
+.edit-box .button-box .button-null::after{
+	content: "비워 둡니다";
+}
+.edit-box .button-box .button-delay::after{
+	content: "지연 방지";
+}
+.edit-box .button-box .button-cancel::after{
+	content: "편집 취소";
+}
+.edit-box .button-box .button-done::after{
+	content: "수정 확인";
+}
+.edit-box .button-box .button-done.cant-assist::after{
+	content: "협조 할 수 없음";
+}
+.type-name-4::after{
+	content: "드래곤";
+}
+.type-name-5::after{
+	content: "신";
+}
+.type-name-7::after{
+	content: "악마";
+}
+.type-name-8::after{
+	content: "머신";
+}
+.type-name-1::after{
+	content: "밸런스";
+}
+.type-name-6::after{
+	content: "공격";
+}
+.type-name-2::after{
+	content: "체력";
+}
+.type-name-3::after{
+	content: "회복";
+}
+.type-name-0::after{
+	content: "진화용";
+}
+.type-name-12::after{
+	content: "능력각성";
+}
+.type-name-14::after{
+	content: "강화합성용";
+}
+.type-name-15::after{
+	content: "매각용";
+}

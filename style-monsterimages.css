@@ -380,74 +380,38 @@
 .type-icon-4{/*龙*/
 	background-position: 0px 0px;
 }
-.type-name-4::after{
-	content: "龍";
-}
 .type-icon-5{/*神*/
 	background-position: 0px -32px;
-}
-.type-name-5::after{
-	content: "神";
 }
 .type-icon-7{/*恶魔*/
 	background-position: 0px -64px;
 }
-.type-name-7::after{
-	content: "惡魔";
-}
 .type-icon-8{/*机械*/
 	background-position: 0px -96px;
-}
-.type-name-8::after{
-	content: "机械";
 }
 .type-icon-1{/*平衡*/
 	background-position: 0px -128px;
 }
-.type-name-1::after{
-	content: "平衡";
-}
 .type-icon-6{/*攻击*/
 	background-position: 0px -160px;
-}
-.type-name-6::after{
-	content: "攻撃";
 }
 .type-icon-2{/*体力*/
 	background-position: 0px -192px;
 }
-.type-name-2::after{
-	content: "体力";
-}
 .type-icon-3{/*回复*/
 	background-position: 0px -224px;
-}
-.type-name-3::after{
-	content: "回復";
 }
 .type-icon-0{/*进化用*/
 	background-position: 0px -256px;
 }
-.type-name-0::after{
-	content: "進化用";
-}
 .type-icon-12{/*能力觉醒用*/
 	background-position: 0px -288px;
-}
-.type-name-12::after{
-	content: "能力覺醒用";
 }
 .type-icon-14{/*强化合成用*/
 	background-position: 0px -320px;
 }
-.type-name-14::after{
-	content: "強化合成用";
-}
 .type-icon-15{/*贩卖用*/
 	background-position: 0px -352px;
-}
-.type-name-15::after{
-	content: "販賣用";
 }
 /*潜在觉醒*/
 .latent-icon{

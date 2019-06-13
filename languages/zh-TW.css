@@ -1,0 +1,121 @@
+﻿@charset "utf-8";
+.delay .monster::before{
+	content: "應 對\A威 嚇";
+}
+.monster .level.max::before{
+	content: "Lv.最大";
+}
+.monster .plus .hp::before,
+.monster .plus .atk::before,
+.monster .plus .rcv::before,
+.monster .plus ._297::before{
+	content: "+";
+}
+.monster .level::before{
+	content: "Lv.";
+}
+.formation-A-bigbox::after{
+	content: "隊伍\A A";
+}
+.formation-B-bigbox::before{
+	content: "隊伍\A B";
+}
+.formation-A-box .formation-assist .member::after{
+	content: "▼輔助";
+}
+.formation-B-box .formation-assist .member::before{
+	content: "▲輔助";
+}
+.edit-box .edit-box-title::before{
+	content: "修改隊員";
+}
+.edit-box .edit-box-title.edit-box-title-assist::before{
+	content: "修改輔助";
+}
+.edit-box .search-box::before{
+	content: "▼怪物ID";
+}
+.monsterinfo-box .monster-id::before{
+	content: "No.";
+}
+.edit-box .setting-box .row-mon-level::before{
+	content: "▼怪物等級";
+}
+.m-level-btn-max::before{
+	content: "最高Lv";
+}
+.edit-box .setting-box .row-mon-awoken::before{
+	content: "▼怪物覺醒";
+}
+.edit-box .setting-box .row-mon-plus::before{
+	content: "▼怪物加值";
+}
+.m-plus-hp-li::before{
+	content: "HP";
+}
+.m-plus-atk-li::before{
+	content: "攻擊";
+}
+.m-plus-rcv-li::before{
+	content: "回復";
+}
+.m-plus-hp-btn-99::before,
+.m-plus-atk-btn-99::before,
+.m-plus-rcv-btn-99::before,
+.m-plus-btn-297::before{
+	content: "+";
+}
+.edit-box .setting-box .row-mon-latent::before{
+	content: "▼潛在覺醒";
+}
+.edit-box .button-box .button-null::after{
+	content: "留空格子";
+}
+.edit-box .button-box .button-delay::after{
+	content: "應對威嚇";
+}
+.edit-box .button-box .button-cancel::after{
+	content: "取消修改";
+}
+.edit-box .button-box .button-done::after{
+	content: "確認修改";
+}
+.edit-box .button-box .button-done.cant-assist::after{
+	content: "不能輔助";
+}
+.type-name-4::after{
+	content: "龍";
+}
+.type-name-5::after{
+	content: "神";
+}
+.type-name-7::after{
+	content: "惡魔";
+}
+.type-name-8::after{
+	content: "機械";
+}
+.type-name-1::after{
+	content: "平衡";
+}
+.type-name-6::after{
+	content: "攻撃";
+}
+.type-name-2::after{
+	content: "體力";
+}
+.type-name-3::after{
+	content: "回復";
+}
+.type-name-0::after{
+	content: "進化用";
+}
+.type-name-12::after{
+	content: "能力覺醒用";
+}
+.type-name-14::after{
+	content: "強化合成用";
+}
+.type-name-15::after{
+	content: "販賣用";
+}

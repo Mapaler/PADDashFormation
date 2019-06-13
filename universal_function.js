@@ -1,5 +1,4 @@
-﻿
-//类型允许的潜觉杀，前面的数字是官方数据的类型编号，后面的杀是自己做的图片中的潜觉序号
+﻿//类型允许的潜觉杀，前面的数字是官方数据的类型编号，后面的杀是自己做的图片中的潜觉序号
 var type_allowable_latent = {
     "0":[], //0进化
     "12":[], //12觉醒
@@ -43,6 +42,12 @@ if (typeof(GM_xmlhttpRequest) == "undefined") {
 function PrefixInteger(num, length)
 {  
 	return (Array(length).join('0') + num).slice(-length); 
+}
+//获取URL参数
+function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return decodeURIComponent(r[2]); return null;
 }
 //数组去重
 /* https://www.cnblogs.com/baiyangyuanzi/p/6726258.html

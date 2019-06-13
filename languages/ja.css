@@ -1,0 +1,121 @@
+﻿@charset "utf-8";
+.delay .monster::before{
+	content: "遅 延\A対 策";
+}
+.monster .level.max::before{
+	content: "Lv.最大";
+}
+.monster .plus .hp::before,
+.monster .plus .atk::before,
+.monster .plus .rcv::before,
+.monster .plus ._297::before{
+	content: "+";
+}
+.monster .level::before{
+	content: "Lv.";
+}
+.formation-A-bigbox::after{
+	content: "チーム\A A";
+}
+.formation-B-bigbox::before{
+	content: "チーム\A B";
+}
+.formation-A-box .formation-assist .member::after{
+	content: "▼継承";
+}
+.formation-B-box .formation-assist .member::before{
+	content: "▲継承";
+}
+.edit-box .edit-box-title::before{
+	content: "変更メンバー";
+}
+.edit-box .edit-box-title.edit-box-title-assist::before{
+	content: "変更継承";
+}
+.edit-box .search-box::before{
+	content: "▼モンスターID";
+}
+.monsterinfo-box .monster-id::before{
+	content: "No.";
+}
+.edit-box .setting-box .row-mon-level::before{
+	content: "▼モンスターレベル";
+}
+.m-level-btn-max::before{
+	content: "最高Lv";
+}
+.edit-box .setting-box .row-mon-awoken::before{
+	content: "▼モンスター覚醒";
+}
+.edit-box .setting-box .row-mon-plus::before{
+	content: "▼モンスタープラス";
+}
+.m-plus-hp-li::before{
+	content: "HP";
+}
+.m-plus-atk-li::before{
+	content: "攻撃";
+}
+.m-plus-rcv-li::before{
+	content: "回復";
+}
+.m-plus-hp-btn-99::before,
+.m-plus-atk-btn-99::before,
+.m-plus-rcv-btn-99::before,
+.m-plus-btn-297::before{
+	content: "+";
+}
+.edit-box .setting-box .row-mon-latent::before{
+	content: "▼モンスター潜在覚醒";
+}
+.edit-box .button-box .button-null::after{
+	content: "空白のままに";
+}
+.edit-box .button-box .button-delay::after{
+	content: "遅延対策";
+}
+.edit-box .button-box .button-cancel::after{
+	content: "キャンセル";
+}
+.edit-box .button-box .button-done::after{
+	content: "確認する";
+}
+.edit-box .button-box .button-done.cant-assist::after{
+	content: "継承できない";
+}
+.type-name-4::after{
+	content: "ドラゴン";
+}
+.type-name-5::after{
+	content: "神";
+}
+.type-name-7::after{
+	content: "悪魔";
+}
+.type-name-8::after{
+	content: "マシン";
+}
+.type-name-1::after{
+	content: "バランス";
+}
+.type-name-6::after{
+	content: "攻撃";
+}
+.type-name-2::after{
+	content: "体力";
+}
+.type-name-3::after{
+	content: "回復";
+}
+.type-name-0::after{
+	content: "進化用";
+}
+.type-name-12::after{
+	content: "能力覚醒用";
+}
+.type-name-14::after{
+	content: "強化合成用";
+}
+.type-name-15::after{
+	content: "売却用";
+}
