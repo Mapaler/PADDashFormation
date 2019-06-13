@@ -557,6 +557,9 @@ ul{
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "不能辅助";
 }*/
+.control-box{
+	margin-bottom: 10px;
+}
 .control-box .languages-label::before{
 	content: "Lanuage:";
 }
