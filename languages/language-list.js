@@ -1,5 +1,4 @@
-﻿/**/
-var languageList = [
+﻿var languageList = [
     {
         name:"中文（简体）",i18n:"zh",searchlist:["ja","en"],
         guideURL:"http://pad.skyozora.com/pets/$1"
