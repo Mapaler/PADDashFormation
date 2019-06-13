@@ -410,6 +410,7 @@ function changeid(mon,monDom,latentDom)
 					awokenIcon.classList.remove("allowable-assist");
 			}
 		}
+		refreshAwokenCount(formation.team);
 	}
 	if (mon.plus) //如果提供了加值
 	{
@@ -600,7 +601,7 @@ function editBoxChangeMonId(id)
 	editBox.latent.length = 0;
 	editBox.refreshLatent(editBox.latent);
 }
-
+//刷新整个队伍
 function refreshAll(fmt){
 	var txtTitle = document.querySelector(".title-box .title");
 	var txtDetail = document.querySelector(".detail-box .detail");
@@ -624,4 +625,24 @@ function refreshAll(fmt){
 		changeid(fmt.team[1][0][ti],fBTeam[ti],fBLatents[ti]);
 		changeid(fmt.team[1][1][ti],fBAssist[ti]);
 	}
+	refreshAwokenCount(fmt.team);
+}
+//刷新觉醒总计
+function refreshAwokenCount(team){
+	var awokenUL = document.querySelector(".awoken-total-box .m-awoken-ul");
+	function setCount(idx,number){
+		var ali = awokenUL.querySelector(".a-c-" + idx);
+		ali.querySelector(".count").innerHTML = number;
+		if (number)
+			ali.classList.remove("display-none");
+		else
+			ali.classList.add("display-none");
+	}
+	setCount(21,awokenCountInTeam(team,21)+awokenCountInTeam(team,56)*2); //SB+大SB
+	setCount(28,awokenCountInTeam(team,28)); //SX
+	setCount(11,awokenCountInTeam(team,11)); //防暗
+	setCount(12,awokenCountInTeam(team,12)); //防废
+	setCount(13,awokenCountInTeam(team,13)); //防毒
+	setCount(54,awokenCountInTeam(team,54)); //防云
+	setCount(55,awokenCountInTeam(team,55)); //防封条
 }

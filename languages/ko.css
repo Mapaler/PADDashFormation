@@ -83,6 +83,9 @@
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "협조 할 수 없음";
 }
+.awoken-total-box::before{
+	content: "총 각성：";
+}
 .type-name-4::after{
 	content: "드래곤";
 }

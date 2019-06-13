@@ -90,6 +90,9 @@
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "Can't be Assist";
 }
+.awoken-total-box::before{
+	content: "Awoken Total:";
+}
 .type-name-4::after{
 	content: "Dragon";
 }
