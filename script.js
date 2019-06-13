@@ -54,7 +54,6 @@ window.onload = function()
 			{
 				console.log("初始数据解码出错",e);
 			}
-			//test(); //测试代码
 		},
 		onerror: function(response) {
 			console.error("怪物数据获取错误",response);
@@ -110,6 +109,9 @@ function initialize()
 	txtDetail.onchange = function(){
 		formation.detail = this.value;
 		creatNewUrl();
+	}
+	txtDetail.onblur = function(){
+		this.style.height=this.scrollHeight+"px";
 	}
 
 	//队伍框
@@ -540,8 +542,12 @@ function editBoxChangeMonId(id)
 }
 
 function refreshAll(fmt){
-	document.querySelector(".title-box .title").value = fmt.title || "";
-	document.querySelector(".detail-box .detail").value = fmt.detail || "";
+	var txtTitle = document.querySelector(".title-box .title");
+	var txtDetail = document.querySelector(".detail-box .detail");
+	txtTitle.value = fmt.title || "";
+	txtDetail.value = fmt.detail || "";
+	txtDetail.onblur();
+
 	var formationA = document.querySelector(".formation-box .formation-A-box");
 	var formationB = document.querySelector(".formation-box .formation-B-box");
 	
@@ -558,21 +564,4 @@ function refreshAll(fmt){
 		changeid(fmt.team[1][0][ti],fBTeam[ti],fBLatents[ti]);
 		changeid(fmt.team[1][1][ti],fBAssist[ti]);
 	}
-}
-
-function test()
-{
-var m1 = document.querySelector(".formation-A-box .formation-team .member-1 .monster");
-var a1 = document.querySelector(".formation-A-box .formation-latents .latents-1 .latent-ul");
-
-var m = formation.team[0][0][0];
-m.id=5209;
-m.level=36;
-m.awoken=5;
-m.plus[0]=98;
-m.plus[1]=96;
-m.plus[2]=95;
-m.latent=[11,11,16,11,11];
-changeid(m,m1,a1);
-//editBoxChangeMonId(3264);
 }
