@@ -476,7 +476,7 @@ function editBoxChangeMonId(id)
 	var mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (var ti=0;ti<mType.length;ti++)
 	{
-		if (md.type[ti])
+		if (md.type[ti]>=0)
 		{
 			mType[ti].className = "type-name type-name-" + md.type[ti];
 			mType[ti].firstChild.className = "type-icon type-icon-" + md.type[ti];
