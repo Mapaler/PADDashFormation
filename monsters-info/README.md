@@ -1,6 +1,18 @@
-使用Fidder从游戏内抓包获得怪物信息。  
-https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data  
-经研究后得出如下结论。数字指的数组下标。
+使用Fidder从游戏内抓包获得怪物信息  
+Use Fidder to capture monster information from in-game capture  
+https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data
+
+目前的获取时间为
+The current acquisition time is
+| 语言 | 时间 |
+| --- | --- |
+| 日语(ja) | ‎2019‎年‎6‎月‎10‎日，‏‎12:21:51 |
+| 英语(en) | 2019‎年‎6‎月‎10‎日，‏‎15:13:13 |
+| 韩语(ko) | ‎2019‎年‎6‎月‎12‎日，‏‎19:15:26 |
+
+经研究后得出如下结论，JSON里数字指的数组下标。  
+The following conclusions were drawn from the research. The number in JSON refers to the array subscript.(no translate)
+
 * 0为id，一样的时候是可以获得的，之后的就是敌人怪物了。
 * 1为名字
 * 2为主属性，3为副属性，为-1的时候表示没有副属性。
@@ -16,7 +28,7 @@ https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data
 ```js
 function g(id)
 {
-	var m = gw.card[id];
+	var m = data.card[id];
 	var pn = ["火","水","木","光","暗"];
 	var p1 = pn[m[2]]||"无",p2 = pn[m[3]]||"无";
 	var tn = ["0进化","1平衡","2体力","3回复","4龙","5神","6攻击","7恶魔","8机械","9","10","11","12觉醒","13","14强化","15卖钱"];
@@ -33,4 +45,11 @@ function g(id)
 }
 ```
 
-执行`提取信息.bat`，用node来执行`extractByNode.js`，将日文和英文的有用信息提取到一个文件内。
+命令行内执行如下代码  
+Execute the following code in CMD
+```bat
+node.exe extractByNode.js
+```
+会将几种语言的信息提取到一个文件内  
+Extract information from several languages into one file  
+`mon.json`
