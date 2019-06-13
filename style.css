@@ -130,9 +130,9 @@ ul{
 .monster .plus ._297{ /*297默认不显示*/
 	display:none;
 }
-.monster .plus.has297 .hp,
-.monster .plus.has297 .atk,
-.monster .plus.has297 .rcv{ /*当是297时隐藏3维*/
+.monster .plus.has297 .hp,.monster .plus.zero .hp,
+.monster .plus.has297 .atk,.monster .plus.zero .atk,
+.monster .plus.has297 .rcv,.monster .plus.zero .rcv{ /*当是297时隐藏3维*/
 	display:none;
 }
 .monster .plus.has297 ._297{ /*当是297时显示297*/

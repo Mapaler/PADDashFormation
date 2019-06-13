@@ -298,9 +298,9 @@ function initialize()
 		mD.awoken = monEditAwokens.filter(function(akDom){
 			return !akDom.classList.contains("unselected-awoken") && !akDom.classList.contains("display-none") 
 		}).length - 1;
-		mD.plus[0] = parseInt(monEditAddHp.value);
-		mD.plus[1] = parseInt(monEditAddAtk.value);
-		mD.plus[2] = parseInt(monEditAddRcv.value);
+		mD.plus[0] = parseInt(monEditAddHp.value) || 0;
+		mD.plus[1] = parseInt(monEditAddAtk.value) || 0;
+		mD.plus[2] = parseInt(monEditAddRcv.value) || 0;
 		if (!editBox.assist)
 		{
 			mD.latent = editBox.latent.concat();
@@ -419,8 +419,14 @@ function changeid(mon,monDom,latentDom)
 		if (mon.plus[0]+mon.plus[1]+mon.plus[2] >= 297)
 		{
 			monDom.querySelector(".plus").classList.add("has297");
+			monDom.querySelector(".plus").classList.remove("zero");
+		}else if (mon.plus[0]+mon.plus[1]+mon.plus[2] <= 0)
+		{
+			monDom.querySelector(".plus").classList.add("zero");
+			monDom.querySelector(".plus").classList.remove("has297");
 		}else
 		{
+			monDom.querySelector(".plus").classList.remove("zero");
 			monDom.querySelector(".plus").classList.remove("has297");
 		}
 	}

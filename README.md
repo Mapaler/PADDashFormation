@@ -14,10 +14,12 @@ Easy to change language and use on your phone。
 # 如何使用 | HOW TO USE
 ## 在哪里打开 | Where to open
 * 快速使用在线版 | Fast Start  
-    * https://mapaler.github.io/PADDashFormation/
-    * http://mapaler.gitee.io/paddashformation/ (中国镜象比较快)
+    * https://mapaler.github.io/PADDashFormation/ (Github Pages)
+    * http://mapaler.gitee.io/paddashformation/ (中国码云，比较快|Chinese mirror)
+    * [示例 \| Sample](http://mapaler.github.io/paddashformation/?data={%22title%22%3A%22%E6%88%91%E7%9A%84%E6%9C%A8%E8%BD%A6%E9%98%9F%7CMy%20wood%20Dash%20Formation%22%2C%22detail%22%3A%22%E6%88%91%E5%B9%B3%E6%97%B6%E7%9A%84%E6%9C%A8%E8%BD%A6%E9%98%9F\n%E5%BC%80%E8%BD%A6%E4%BA%86%EF%BC%8C%E6%BB%B4%E6%BB%B4%22%2C%22team%22%3A[[[{%22id%22%3A4813%2C%22level%22%3A110%2C%22awoken%22%3A9%2C%22plus%22%3A[99%2C99%2C99]%2C%22latent%22%3A[20%2C20%2C20]}%2C{%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A[99%2C99%2C99]%2C%22latent%22%3A[]}%2C{%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A[99%2C99%2C99]%2C%22latent%22%3A[]}%2C{%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A[99%2C99%2C99]%2C%22latent%22%3A[]}%2C{%22id%22%3A5323%2C%22level%22%3A99%2C%22awoken%22%3A9%2C%22plus%22%3A[99%2C99%2C99]%2C%22latent%22%3A[]}]%2C[{%22id%22%3A5267%2C%22level%22%3A99%2C%22awoken%22%3A5%2C%22plus%22%3A[0%2C0%2C0]}%2C{%22id%22%3A-1}%2C{%22id%22%3A4986%2C%22level%22%3A99%2C%22awoken%22%3A4%2C%22plus%22%3A[0%2C0%2C0]}%2C{%22id%22%3A0}%2C{%22id%22%3A0}]]%2C[[{%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A[99%2C99%2C99]%2C%22latent%22%3A[]}%2C{%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A[99%2C99%2C99]%2C%22latent%22%3A[]}%2C{%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A[99%2C99%2C99]%2C%22latent%22%3A[]}%2C{%22id%22%3A5042%2C%22level%22%3A110%2C%22awoken%22%3A9%2C%22plus%22%3A[99%2C99%2C99]%2C%22latent%22%3A[]}%2C{%22id%22%3A4813%2C%22level%22%3A110%2C%22awoken%22%3A9%2C%22plus%22%3A[99%2C99%2C99]%2C%22latent%22%3A[24%2C24%2C11%2C11]}]%2C[{%22id%22%3A-1}%2C{%22id%22%3A0}%2C{%22id%22%3A4986%2C%22level%22%3A99%2C%22awoken%22%3A4%2C%22plus%22%3A[0%2C0%2C0]}%2C{%22id%22%3A-1}%2C{%22id%22%3A5267%2C%22level%22%3A99%2C%22awoken%22%3A5%2C%22plus%22%3A[0%2C0%2C0]}]]]})
 * 或下载压缩包后使用火狐浏览器打开`index.html`。  
 Or download ZIP, and open the `index.html` by Firefox.
+### 示例|Sample
 
 ## 有哪些功能 | Features
 * 支持桌面与手机  
