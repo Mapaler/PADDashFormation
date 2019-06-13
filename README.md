@@ -10,7 +10,24 @@ http://mapaler.gitee.io/paddashformation/
 * 或下载压缩包后使用火狐浏览器打开`index.html`。  
 Or download ZIP, and open the `index.html` by Firefox.
 
+## 有哪些功能 | Features
+* 支持桌面与手机  
+Support desktop and mobile phone
+* 直接复制网址即可分享组队  
+Copy the URL directly to share the Formation
+* 使用后退即可撤销上一次修改  
+Use back to undo the last edit
+* 支持多语言  
+Support for multiple languages
+
 # 翻译我 | TRANSLATE ME
+## 目前支持的语言 | Languages that are now supported
+1. 中文（简体）
+1. 中文（繁體）
+1. English
+1. 日本語 (by google translate)
+1. 한국어 (by google translate)
+
 ## How to **Pull requests**
 1. Click **Fork** In the page top right corner. Fork your own copy of this repository to your account.
 1. Use Git to clone/pull repository locally for modification(How to modify please see below).
@@ -18,35 +35,28 @@ Or download ZIP, and open the `index.html` by Firefox.
 1. Go to the **[Pull requests](//github.com/puzzled-dragon/pad-helper/pulls)** page in the top middle of this repository, and click the **New pull request** button.
 1. Click the **Compare Across Forks** button and select your fork, the page then displays the changes.
 1. Click the **Create pull request** button and enter the details of the modification, create your pull request.
+
 ## Translate
+1. Go to the `languages` folder
 1. Push your language info into `language-list.js`.  
 This is a Object for a language list item.
     ```js
     {
-        name:"English",i18n:"en",searchlist:["en","ja"],
+        name:"English",
+        i18n:"en",
+        searchlist:["en","ja"],
         guideURL:"http://www.puzzledragonx.com/en/awokenskill.asp?n=$1"
-    },
+    }
     ```
     * `name` is the name shown in the list.
-    * `i18n` is the language-code for your language.
+    * `i18n` is the language-tag for your language.
     * `searchlist` is the search candidate list string order when you search monster in edit window.  
     Currently only `ja`,`en`,`ko` languages.(See `monsters-info`)
-    * `guideURL` is the language-code for your language.
-1. Create your language's Localisation file `i18n.css` and `i18n.js`.
+    * `guideURL` is the game guide URL for your language, `$1` means monster ID.
+1. Create your language's Localisation file `i18n.css` and `i18n.js`.  
+Please refer to existing files.
 
-1. The original English webpage is `web/news/news.html` and `web/changelog/changelog.html`.
-1. Copy the two HTML files to themselves folder, change filename to `news-your_language_tag.html` and `changelog-your_language_tag.html`, and then add to Git repository.
-1. Translate your HTML files.
-1. Change the `i18n_suffix` node value in your `strings.xml` to your language tag.
-# Languages that are now supported
-| Language Tag | Language variant |
-| --- | --- |
-| en | English |
-| zh-rCN | 简体中文（中国） |
-| zh-rHK | 繁體中文（香港） |
-| zh-rTW | 繁體中文（台灣） |
-
-### 智龙迷城官网 | Puzzle & Dragons Official Website
+# 智龙迷城官网 | Puzzle & Dragons Official Website
 * [パズル＆ドラゴンズ](http://pad.gungho.jp)
 * [龍族拼圖](https://pad.gungho.jp/hktw/pad/)
 * [Puzzle & Dragons](https://www.puzzleanddragons.us/)
