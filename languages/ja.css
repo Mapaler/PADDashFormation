@@ -83,6 +83,9 @@
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "継承できない";
 }
+.awoken-total-box::before{
+	content: "覚醒合計：";
+}
 .type-name-4::after{
 	content: "ドラゴン";
 }

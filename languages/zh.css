@@ -83,6 +83,9 @@
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "不能辅助";
 }
+.awoken-total-box::before{
+	content: "觉醒总计：";
+}
 .type-name-4::after{
 	content: "龍";
 }
