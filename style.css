@@ -10,6 +10,9 @@
 		 url(fonts/sfont.ttf) format('truetype'),
 		 url(fonts/sfont.svg#mywebfontregular) format('svg');
 }
+body{
+	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
+}
 .display-none{
 	display:none;
 }
@@ -20,7 +23,7 @@
 .detail{
 	min-height: 100px;
 	font-size: 1.5em;
-	font-family: "Source Han Sans","Microsoft Yahei",Arial, Helvetica, sans-serif;
+	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
 }
 .title,.detail{
 	width:100%;
@@ -47,7 +50,7 @@ ul{
 
 /*单个怪物*/
 .monster{
-	font-family: 'FOT-KurokaneStd-EB',"Source Han Sans","Microsoft Yahei",Arial, Helvetica, sans-serif;
+	font-family: 'FOT-KurokaneStd-EB',"Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
 	width: 100px;
 	height: 100px;
 	margin: 0;
@@ -89,7 +92,7 @@ ul{
 	text-align: center;
 	font-weight: bold;
 	/*content: "应 对\A威 吓";*/
-	font-family: "Source Han Sans","Microsoft Yahei",Arial, Helvetica, sans-serif;
+	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
 	white-space: pre-wrap;
 	display: inline-block;
 }
