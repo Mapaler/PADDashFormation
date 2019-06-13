@@ -1,0 +1,128 @@
+@charset "utf-8";
+.delay .monster::before{
+	content: "Prevent\A Delay";
+	font-size: 22px;
+}
+.monster .level.max::before{
+	content: "Lv.Max";
+}
+.monster .plus .hp::before,
+.monster .plus .atk::before,
+.monster .plus .rcv::before,
+.monster .plus ._297::before{
+	content: "+";
+}
+.monster .level::before{
+	content: "Lv.";
+}
+.formation-A-bigbox::after{
+	content: "Team\A A";
+}
+.formation-B-bigbox::before{
+	content: "Team\A B";
+}
+.formation-A-box .formation-assist .member::after{
+	content: "▼Assist";
+}
+.formation-B-box .formation-assist .member::before{
+	content: "▲Assist";
+}
+.edit-box .edit-box-title::before{
+	content: "Edit Member";
+}
+.edit-box .edit-box-title.edit-box-title-assist::before{
+	content: "Edit Assist";
+}
+.edit-box .search-box::before{
+	content: "▼Monster ID";
+}
+.monsterinfo-box .monster-id::before{
+	content: "No.";
+}
+.edit-box .setting-box .row-mon-level::before{
+	content: "▼Monster Level";
+}
+.m-level-btn-max::before{
+	content: "Max Lv";
+}
+.edit-box .setting-box .row-mon-awoken::before{
+	content: "▼Monster Awoken";
+}
+.edit-box .setting-box .row-mon-plus::before{
+	content: "▼Monster Plus";
+}
+.m-plus-hp-li::before{
+	content: "HP";
+}
+.m-plus-atk-li::before{
+	content: "ATK";
+}
+.m-plus-rcv-li::before{
+	content: "RCV";
+}
+.m-plus-hp-btn-99::before,
+.m-plus-atk-btn-99::before,
+.m-plus-rcv-btn-99::before,
+.m-plus-btn-297::before{
+	content: "+";
+}
+.edit-box .setting-box .row-mon-latent::before{
+	content: "▼Latent Awoken";
+}
+.edit-box .button-box .button-null::after{
+	content: "Leave a blank";
+}
+.edit-box .button-box .button-delay::after{
+	content: "Prevent Delay";
+}
+.edit-box .button-box .button-cancel::after{
+	content: "Cancel";
+}
+.edit-box .button-box .button-done::after{
+	content: "Done";
+}
+.edit-box .button-box .button-null,
+.edit-box .button-box .button-delay,
+.edit-box .button-box .button-cancel,
+.edit-box .button-box .button-done{
+	font-size: 15px;
+}
+.edit-box .button-box .button-done.cant-assist::after{
+	content: "Can't be Assist";
+}
+.type-name-4::after{
+	content: "Dragon";
+}
+.type-name-5::after{
+	content: "God";
+}
+.type-name-7::after{
+	content: "Devil";
+}
+.type-name-8::after{
+	content: "Machine";
+}
+.type-name-1::after{
+	content: "Balanced";
+}
+.type-name-6::after{
+	content: "Attacker";
+}
+.type-name-2::after{
+	content: "Physical";
+}
+.type-name-3::after{
+	content: "Healer";
+}
+.type-name-0::after{
+	content: "Evo Material";
+}
+.type-name-12::after{
+	content: "Awaken";
+}
+.type-name-14::after{
+	content: "Enhance Material";
+}
+.type-name-15::after{
+	content: "Redeemable";
+}

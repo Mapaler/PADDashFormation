@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=664" />
 <link href="style.css" rel="stylesheet" type="text/css">
 <link href="style-monsterimages.css" rel="stylesheet" type="text/css">
+<link id="language-css" href="languages/zh.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="language-list.js"></script>
 <script type="text/javascript" src="universal_function.js"></script>
 <script type="text/javascript" src="script.js"></script>
 </head>
@@ -332,7 +334,7 @@
 			</ul>
 		</div>
 		<div class="search-box">
-			<input type="search" class="m-id" list="monsters-list" placeholder="请在此输入怪物ID"/>
+			<input type="search" class="m-id" list="monsters-list"/>
 			<datalist id="monsters-list"></datalist>
 		</div>
 		<div class="setting-box">
@@ -353,7 +355,7 @@
 			</div>
 			<div class="setting-row row-mon-level">
 				<!--怪物等级-->
-				<input type="number" class="m-level" min=1 max=110 placeholder="怪物等级"/>
+				<input type="number" class="m-level" min=1 max=110/>
 				<button class="m-level-btn-max" value="99">99</button>
 			</div>
 			<div class="setting-row row-mon-plus">

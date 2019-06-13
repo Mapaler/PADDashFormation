@@ -1,4 +1,5 @@
 var ms = null;
+var language = null;
 var memberTeamObj = function(){
 	return {id:0,level:0,awoken:0,plus:[0,0,0],latent:[]};
 }
@@ -8,20 +9,18 @@ var memberAssistObj = function(){
 var teamObj = function(){
 	return [
 		[
-			new memberTeamObj(),
-			new memberTeamObj(),
-			new memberTeamObj(),
-			new memberTeamObj(),
-			new memberTeamObj(),
-			new memberTeamObj(),
+			{id:0},
+			{id:0},
+			{id:0},
+			{id:0},
+			{id:0},
 		],
 		[
-			new memberAssistObj(),
-			new memberAssistObj(),
-			new memberAssistObj(),
-			new memberAssistObj(),
-			new memberAssistObj(),
-			new memberAssistObj(),
+			{id:0},
+			{id:0},
+			{id:0},
+			{id:0},
+			{id:0},
 		],
 	];
 }
@@ -35,6 +34,17 @@ var formation = {
 };
 window.onload = function()
 {
+	var language_i18n = getQueryString("lang"); //获取参数指定的语言
+	var browser_i18n = (navigator.language||navigator.userLanguage); //获取浏览器语言
+	var hasLanguage = languageList.filter(function(l){
+		if (language_i18n) //如果已指定就用指定的语言
+			return language_i18n.indexOf(l.i18n)>=0;
+		else
+			return browser_i18n.indexOf(l.i18n)>=0;
+	});
+	language = hasLanguage.length?hasLanguage[hasLanguage.length-1]:languageList[0];
+	document.head.querySelector("#language-css").href = "languages/"+language.i18n+".css";
+
 	GM_xmlhttpRequest({
 		method: "GET",
 		url:"monsters-info/mon.json",
@@ -80,14 +90,9 @@ window.onpopstate = function()
 function creatNewUrl(){
 	if (!!(window.history && history.pushState)) {
 		// 支持History API
-		history.pushState(null, null, '?data=' + encodeURIComponent(JSON.stringify(formation)));
+		var language_i18n = getQueryString("lang"); //获取参数指定的语言
+		history.pushState(null, null, '?' + (language_i18n?'lang=' + language_i18n + '&':'') + 'data=' + encodeURIComponent(JSON.stringify(formation)));
 	}
-}
-//获取URL参数
-function getQueryString(name) {
-	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-	var r = window.location.search.substr(1).match(reg);
-	if (r != null) return decodeURIComponent(r[2]); return null;
 }
 //初始化
 function initialize()
@@ -96,7 +101,11 @@ function initialize()
 	ms.forEach(function(m){
 		var opt = monstersList.appendChild(document.createElement("option"));
 		opt.value = m.id;
-		opt.label = m.id + " | " +  m.name["ja"] + " | " + m.name["en"] + " | " + m.name["ko"];
+		opt.label = m.id + " - " +  language.searchlist.map(function(lc){ //取出每种语言
+			return m.name[lc];
+		}).filter(function(ln){ //去掉空值
+			return ln.length>0;
+		}).join(" | ");
 	});
 
 	//标题和介绍文本框
@@ -282,14 +291,21 @@ function initialize()
 		creatNewUrl();
 		editBox.hide();
 	}
+	
+	/*添对应语言执行的JS*/
+	var languageJS = document.head.appendChild(document.createElement("script"));
+	languageJS.id = "language-js";
+	languageJS.type = "text/javascript";
+	languageJS.src = "languages/"+language.i18n+".js";
 }
-function usedHole(latent) //计算用了多少潜觉格子
+//计算用了多少潜觉格子
+function usedHole(latent)
 {
 	return latent.reduce(function(previous,current){
 		return previous + (current>= 12?2:1);
 	},0);
 }
-
+//改变一个怪物头像
 function changeid(mon,monDom,latentDom)
 {
 	var md = ms[mon.id]; //怪物固定数据
@@ -314,8 +330,8 @@ function changeid(mon,monDom,latentDom)
 		monDom.classList.add("pet-cards-index-y-" + parseInt(idxInPage / 10)); //添加Y方向序号
 		monDom.querySelector(".property").className = "property property-" + md.ppt[0]; //主属性
 		monDom.querySelector(".subproperty").className = "subproperty subproperty-" + md.ppt[1]; //副属性
-		monDom.title = "No." + mon.id + " " + md.name["ja"];
-		monDom.href = "http://pad.skyozora.com/pets/" + mon.id;
+		monDom.title = "No." + mon.id + " " + md.name[language.searchlist[0]] || md.name["ja"];
+		monDom.href = mon.id.toString().replace(/^(\d+)$/ig,language.guideURL);
 	}
 	if (mon.level>0) //如果提供了等级
 	{
@@ -472,7 +488,7 @@ function editBoxChangeMonId(id)
 	var mRare = monInfoBox.querySelector(".monster-rare");
 	mRare.className = "monster-rare rare-" + md.rare;
 	var mName = monInfoBox.querySelector(".monster-name");
-	mName.innerHTML = md.name["ja"];
+	mName.innerHTML = md.name[language.searchlist[0]] || md.name["ja"];
 	var mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (var ti=0;ti<mType.length;ti++)
 	{
