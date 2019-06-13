@@ -34,6 +34,14 @@ var formation = {
 };
 window.onload = function()
 {
+	//添加语言列表
+	var controlBox = document.body.querySelector(".control-box");
+	var langList = controlBox.querySelector(".languages");
+	languageList.forEach(function(l){
+		var langOpt = new Option(l.name,l.i18n);
+		langList.options.add(langOpt);
+	})
+
 	var language_i18n = getQueryString("lang"); //获取参数指定的语言
 	var browser_i18n = (navigator.language||navigator.userLanguage); //获取浏览器语言
 	var hasLanguage = languageList.filter(function(l){
@@ -44,6 +52,13 @@ window.onload = function()
 	});
 	language = hasLanguage.length?hasLanguage[hasLanguage.length-1]:languageList[0];
 	document.head.querySelector("#language-css").href = "languages/"+language.i18n+".css";
+	Array.prototype.slice.call(langList.options).some(function(lOpt){
+		if (lOpt.value == language.i18n)
+		{
+			lOpt.selected = true;
+			return true;
+		}
+	});
 
 	GM_xmlhttpRequest({
 		method: "GET",
@@ -87,10 +102,10 @@ window.onpopstate = function()
 	}
 }
 //创建新的分享地址
-function creatNewUrl(){
+function creatNewUrl(lang){
 	if (!!(window.history && history.pushState)) {
 		// 支持History API
-		var language_i18n = getQueryString("lang"); //获取参数指定的语言
+		var language_i18n = lang || getQueryString("lang"); //获取参数指定的语言
 		history.pushState(null, null, '?' + (language_i18n?'lang=' + language_i18n + '&':'') + 'data=' + encodeURIComponent(JSON.stringify(formation)));
 	}
 }
@@ -292,6 +307,13 @@ function initialize()
 		editBox.hide();
 	}
 	
+	var controlBox = document.body.querySelector(".control-box");
+	var langList = controlBox.querySelector(".languages");
+	langList.onchange = function(){
+		creatNewUrl(this.value);
+		history.go();
+	}
+
 	/*添对应语言执行的JS*/
 	var languageJS = document.head.appendChild(document.createElement("script"));
 	languageJS.id = "language-js";

@@ -119,3 +119,6 @@
 .type-name-15::after{
 	content: "販賣用";
 }
+.control-box .languages-label::before{
+	content: "语言：";
+}
