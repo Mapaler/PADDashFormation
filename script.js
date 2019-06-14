@@ -135,7 +135,7 @@ function initialize()
 		opt.label = m.id + " - " +  language.searchlist.map(function(lc){ //取出每种语言
 			return m.name[lc];
 		}).filter(function(ln){ //去掉空值
-			return ln.length>0;
+			return ln?(ln.length>0):false;
 		}).join(" | ");
 	});
 

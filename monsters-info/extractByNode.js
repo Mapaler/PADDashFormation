@@ -42,9 +42,14 @@ fs.readFile('./ja.json',function(err,data){
 					//名字
 					var nameObj = {
 						ja:m[1],
-						en:((m2 && !/^\*+/.test(m2[1]))?m2[1]:""), //没有数据，或者名字是星号都为空
-						ko:((m3 && !/^\*+/.test(m3[1]))?m3[1]:""),
+						//en:((m2 && !/^\*+/.test(m2[1]))?m2[1]:""), //没有数据，或者名字是星号都为空
+						//ko:((m3 && !/^\*+/.test(m3[1]))?m3[1]:""),
 					}
+					if (m2 && !/^\*+/.test(m2[1]))
+						nameObj.en = m2[1];
+					if (m3 && !/^\*+/.test(m3[1]))
+						nameObj.en = m3[1];
+
 					//类型
 					var type = [m[5]];
 					if (m[6]!=-1) //第二个type
