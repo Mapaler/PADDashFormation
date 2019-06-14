@@ -130,9 +130,9 @@ ul{
 .monster .plus ._297{ /*297默认不显示*/
 	display:none;
 }
-.monster .plus.has297 .hp,
-.monster .plus.has297 .atk,
-.monster .plus.has297 .rcv{ /*当是297时隐藏3维*/
+.monster .plus.has297 .hp,.monster .plus.zero .hp,
+.monster .plus.has297 .atk,.monster .plus.zero .atk,
+.monster .plus.has297 .rcv,.monster .plus.zero .rcv{ /*当是297时隐藏3维*/
 	display:none;
 }
 .monster .plus.has297 ._297{ /*当是297时显示297*/
@@ -557,6 +557,28 @@ ul{
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "不能辅助";
 }*/
+.awoken-total-box::before{
+	font-size: 20px;
+	/*content: "觉醒总计：";*/
+}
+.detail-box{
+	margin-top:5px;
+}
+.awoken-total-box .m-awoken-ul .awoken-count{
+	font-size: 20px;
+	line-height: 32px;
+	font-family: 'FOT-KurokaneStd-EB';
+	float: left;
+	margin-right: 5px;
+}
+.awoken-total-box .m-awoken-ul .count{
+	height: 32px;
+	vertical-align: middle;
+}
+.awoken-total-box .m-awoken-ul .count::before{
+	content: "×";
+}
+
 .control-box{
 	margin-bottom: 10px;
 }

@@ -67,3 +67,37 @@ function uniq(array){
     }
     return temp;
 }
+//计算用了多少潜觉格子
+function usedHole(latent)
+{
+	return latent.reduce(function(previous,current){
+		return previous + (current>= 12?2:1);
+	},0);
+}
+//计算用了多少潜觉格子
+function awokenCountInTeam(formationTeam,ak)
+{
+    var allAwokenCount = formationTeam.reduce(function(fc,fm){
+        var formationAwokenCount = fm.reduce(function(tc,tm,isAssist){
+            var teamAwokenCount = tm.reduce(function(c,m){
+                if (m.id<=0)
+                { //如果是特殊情况的
+                    return c;
+                }
+                var mdAwoken = ms[m.id].awoken; //这个怪物的觉醒数据
+                if (!mdAwoken || (isAssist && mdAwoken[0] != 49))
+                { //如果没有觉醒 || （如果是辅助队 &&第一个不是武器觉醒）
+                    return c;
+                }
+                //启用的觉醒数
+                var enableAwoken = mdAwoken.slice(0,m.awoken);
+                //相同的觉醒数
+                var hasAwoken = enableAwoken.filter(function(a){return a == ak;}).length;
+                return c + hasAwoken;
+            },0);
+            return tc + teamAwokenCount;
+        },0)
+        return fc + formationAwokenCount;
+    },0)
+    return allAwokenCount;
+}
