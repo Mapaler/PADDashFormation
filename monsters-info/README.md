@@ -45,7 +45,9 @@ function g(id)
 }
 ```
 
-命令行内执行如下代码  
+`CHT.json`与`CHS.json`信息来源于战友网，见子项目 https://github.com/Mapaler/Download-pad.skyozora.com
+
+运行`提取整合怪物信息.bat`   
 Execute the following code in CMD
 ```bat
 node.exe extractByNode.js

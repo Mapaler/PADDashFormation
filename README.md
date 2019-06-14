@@ -65,7 +65,7 @@ This is a Object for a language list item.
     * `name` is the name shown in the list.
     * `i18n` is the language-tag for your language.
     * `searchlist` is the search candidate list string order when you search monster in edit window.  
-    Currently only `ja`,`en`,`ko` languages.(See `monsters-info`)
+    Currently only `ja`,`en`,`ko`,`cht`,`chs` languages.(See `monsters-info`)
     * `guideURL` is the game guide URL for your language, `$1` means monster ID.
 1. Create your language's Localisation file `i18n.css` and `i18n.js`.  
 Please refer to existing files.

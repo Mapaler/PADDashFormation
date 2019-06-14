@@ -1,10 +1,10 @@
 ﻿var languageList = [
     {
-        name:"中文（简体）",i18n:"zh",searchlist:["ja","en"],
+        name:"中文（简体）",i18n:"zh",searchlist:["chs","ja"],
         guideURL:"http://pad.skyozora.com/pets/$1"
     },
     {
-        name:"中文（繁體）",i18n:"zh-TW",searchlist:["ja","en"],
+        name:"中文（繁體）",i18n:"zh-TW",searchlist:["cht","ja"],
         guideURL:"http://pad.skyozora.com/pets/$1"
     },
     {
