@@ -16,6 +16,11 @@ body{
 .display-none{
 	display:none;
 }
+.disabled{
+	cursor: not-allowed;
+	pointer-events: none;
+	opacity: 0.5;
+}
 .title{
 	font-size: 2em;
 	font-weight: bold;

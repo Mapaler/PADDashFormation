@@ -63,7 +63,7 @@ fs.readFile('./ja.json',function(err,data){
 						rare: m[7],
 						awoken: awoken,
 						maxLevel: m[m.length-3]>0?110:m[10],
-						assist: m[m.length-5]>2?1:0,
+						assist: (m[m.length-5]>2 && [303,305,307,600,602].indexOf(m[0])<0)?1:0, //但是5种小企鹅是特殊情况
 					}
 					mArr.push(mon);
 				}
