@@ -29,11 +29,17 @@ Or download ZIP, and open the `index.html` by Firefox.
 
 ## 小提示 | Tips
 * 直接复制网址即可分享组队  
-Copy the URL directly to share the Formation
+Copy the URL directly to share the Formation  
+![分享组队](https://github.com/Mapaler/PADDashFormation/raw/master/document/tips-share.png)
 * 使用后退即可撤销上一次修改  
-Use back to undo the last edit
+Use back to undo the last edit  
+![撤銷修改](https://github.com/Mapaler/PADDashFormation/raw/master/document/tips-undo.png)
 * 点击编辑界面的怪物头像可以跳转到攻略网站  
-Click on the monster avatar in the editing interface to jump to the Guide.
+Click on the monster avatar in the editing interface to jump to the Guide.  
+![攻略網站](https://github.com/Mapaler/PADDashFormation/raw/master/document/tips-guide.png)
+* 可以在编辑界面的怪物ID输入怪物名称来搜索怪物  
+You can search for monsters by entering the monster name in the monster ID of the editing interface.  
+![搜索怪物](https://github.com/Mapaler/PADDashFormation/raw/master/document/tips-search.png)
 
 # 翻译我 | TRANSLATE ME
 ## How to **Pull requests**
