@@ -1,14 +1,13 @@
 使用Fidder从游戏内抓包获得怪物信息  
 Use Fidder to capture monster information from in-game capture  
-https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data
 
 目前的获取时间为
 The current acquisition time is
-| 语言 | 时间 |
-| --- | --- |
-| 日语(ja) | ‎2019‎年‎6‎月‎10‎日，‏‎12:21:51 |
-| 英语(en) | 2019‎年‎6‎月‎10‎日，‏‎15:13:13 |
-| 韩语(ko) | ‎2019‎年‎6‎月‎12‎日，‏‎19:15:26 |
+| 语言 | 时间 | API |
+| --- | --- | --- |
+| 日语(ja) | ‎2019‎-‎6‎-‎14 ‏‎15:20 | https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
+| 英语(en) | 2019‎-‎6‎-14 ‏‎15:20 | https://api-na-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
+| 韩语(ko) | ‎2019‎-‎6-14 ‏‎15:20 | https://api-kr-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
 
 经研究后得出如下结论，JSON里数字指的数组下标。  
 The following conclusions were drawn from the research. The number in JSON refers to the array subscript.(no translate)
