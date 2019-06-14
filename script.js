@@ -298,12 +298,18 @@ function initialize()
 		mD.awoken = monEditAwokens.filter(function(akDom){
 			return !akDom.classList.contains("unselected-awoken") && !akDom.classList.contains("display-none") 
 		}).length - 1;
-		mD.plus[0] = parseInt(monEditAddHp.value) || 0;
-		mD.plus[1] = parseInt(monEditAddAtk.value) || 0;
-		mD.plus[2] = parseInt(monEditAddRcv.value) || 0;
-		if (!editBox.assist)
+		if (ms[mD.id].type.some(function(t){return t == 0 || t == 12 || t == 14 || t == 15;}) && [303,305,307,600,602].indexOf(mD.id)<0)
+		{ //当4种特殊type的时候是无法297和打觉醒的，但是5种小企鹅可以
+			mD.plus = [0,0,0]; 
+		}else
 		{
-			mD.latent = editBox.latent.concat();
+			mD.plus[0] = parseInt(monEditAddHp.value) || 0;
+			mD.plus[1] = parseInt(monEditAddAtk.value) || 0;
+			mD.plus[2] = parseInt(monEditAddRcv.value) || 0;
+			if (!editBox.assist)
+			{ //如果不是辅助，则可以设定潜觉
+				mD.latent = editBox.latent.concat();
+			}
 		}
 
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
@@ -566,7 +572,18 @@ function editBoxChangeMonId(id)
 	var monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.value = md.maxLevel>99?99:md.maxLevel;
 
-	var monLatentAllowUl = settingBox.querySelector(".m-latent-allowable-ul");
+	var rowPlus =  settingBox.querySelector(".row-mon-plus");
+	var rowLatent =  settingBox.querySelector(".row-mon-latent");
+	if (ms[id].type.some(function(t){return t == 0 || t == 12 || t == 14 || t == 15;}) && [303,305,307,600,602].indexOf(id)<0)
+	{ //当4种特殊type的时候是无法297和打觉醒的，但是5种小企鹅可以
+		rowPlus.classList.add("disabled"); 
+		rowLatent.classList.add("disabled"); 
+	}else
+	{
+		rowPlus.classList.remove("disabled"); 
+		rowLatent.classList.remove("disabled"); 
+	}
+	var monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
 	//该宠Type允许的杀
 	var allowLatent = uniq(md.type.reduce(function (previous, t, index, array) {
 		return previous.concat(type_allowable_latent[t]);
