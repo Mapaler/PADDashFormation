@@ -305,6 +305,7 @@ ul{
 /*编辑窗口*/
 .blur-bg{
 	filter:blur(5px);
+	pointer-events: none;
 }
 .edit-box{
 	background-color: rgba(82, 53, 30, 0.8);
