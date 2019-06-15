@@ -62,7 +62,7 @@ window.onload = function()
 
 	GM_xmlhttpRequest({
 		method: "GET",
-		url:"monsters-info/mon.json?ver=2",
+		url:"monsters-info/mon.json?ver=3",
 		onload: function(response) {
 			ms = JSON.parse(response.response);
 			initialize();//初始化

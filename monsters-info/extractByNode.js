@@ -32,9 +32,9 @@ for (var mi=0;mi<msja.length;mi++)
 			//ko:((m3 && !/^\*+/.test(m3[1]))?m3[1]:""),
 		}
 		if (m2 && !/^\*+/.test(m2[1]))
-			nameObj.en = m2[1];
+			nameObj["en"] = m2[1];
 		if (m3 && !/^\*+/.test(m3[1]))
-			nameObj.en = m3[1];
+			nameObj["ko"] = m3[1];
 
 		//类型
 		var type = [m[5]];
