@@ -47,6 +47,9 @@
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼몬스터 각성";
 }
+.edit-box .setting-box .row-mon-super-awoken::before{
+	content: "▼몬스터 슈퍼 각성";
+}
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼몬스터 플러스";
 }

@@ -47,6 +47,9 @@
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼モンスター覚醒";
 }
+.edit-box .setting-box .row-mon-super-awoken::before{
+	content: "▼モンスター超覚醒";
+}
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼モンスタープラス";
 }

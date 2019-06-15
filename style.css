@@ -459,9 +459,9 @@ ul{
 .row-mon-awoken .m-super-awoken-ul{
 	margin-top: 5px;
 }
-.edit-box .setting-box .row-mon-super-awoken::before{
+/*.edit-box .setting-box .row-mon-super-awoken::before{
 	content: "▼超觉醒";
-}
+}*/
 .edit-box .setting-box .row-mon-plus::before{
 	/*content: "▼怪物加值";*/
 	display: block;
