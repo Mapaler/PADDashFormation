@@ -48,6 +48,9 @@
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼Monster Awoken";
 }
+.edit-box .setting-box .row-mon-super-awoken::before{
+	content: "▼Super Awoken";
+}
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼Monster Plus";
 }
