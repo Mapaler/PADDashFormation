@@ -45,6 +45,7 @@ for (var mi=0;mi<msja.length;mi++)
 
 		var awokenCIdx = 58+m[57]*3; //awoken Count Index
 		var awoken = m.slice(awokenCIdx+1,awokenCIdx+1+m[awokenCIdx]);
+		var superAwoken = m[awokenCIdx+1+m[awokenCIdx]].split(",").map(function(ns){return parseInt(ns);}); //超觉醒
 
 		var mon = {
 			id:	m[0],
@@ -53,8 +54,12 @@ for (var mi=0;mi<msja.length;mi++)
 			type: type,
 			rare: m[7],
 			awoken: awoken,
-			maxLevel: m[m.length-3]>0?110:m[10],
+			maxLv: m[m.length-3]>0?110:m[10],
 			assist: (m[m.length-5]>2 && [303,305,307,600,602].indexOf(m[0])<0)?1:0, //但是5种小企鹅是特殊情况
+		}
+		if (mon.maxLv>99 && superAwoken)
+		{
+			mon.sAwoken = superAwoken;
 		}
 		mArr.push(mon);
 	}

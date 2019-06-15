@@ -1,7 +1,7 @@
 var ms = null;
 var language = null;
 var memberTeamObj = function(){
-	return {id:0,level:0,awoken:0,plus:[0,0,0],latent:[]};
+	return {id:0,level:0,awoken:0,plus:[0,0,0],latent:[]}; //sawoken作为可选项目，默认不在内
 }
 var memberAssistObj = function(){
 	return {id:0,level:0,awoken:0,plus:[0,0,0]};
@@ -185,7 +185,7 @@ function initialize()
 	}
 	monstersSearch.oninput = monstersSearch.onchange;
 	//觉醒
-	var monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".m-awoken-ul>.awoken-icon"));
+	var monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon"));
 	monEditAwokens.forEach(function(akDom,idx,domArr){
 		akDom.onclick = function(){
 			if (idx>0 && idx>=domArr.filter(function(d){return !d.classList.contains("display-none")}).length-1)
@@ -196,17 +196,33 @@ function initialize()
 			{
 				if(ai<=idx)
 				{
-					if(domArr[ai].classList.contains("unselected-awoken"))
-						domArr[ai].classList.remove("unselected-awoken");
+					domArr[ai].classList.remove("unselected-awoken");
 				}
 				else
 				{
-					if(!domArr[ai].classList.contains("unselected-awoken"))
-						domArr[ai].classList.add("unselected-awoken");
+					domArr[ai].classList.add("unselected-awoken");
 				}
 			}
 		}
 	})
+	//超觉醒
+	var monEditSAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon"));
+	monEditSAwokens.forEach(function(akDom,idx,domArr){
+		akDom.onclick = function(){
+			for(var ai=0;ai<domArr.length;ai++)
+			{
+				if(ai==idx)
+				{
+					domArr[ai].classList.toggle("unselected-awoken");
+				}
+				else
+				{
+					domArr[ai].classList.add("unselected-awoken");
+				}
+			}
+		}
+	})
+
 	//等级
 	var monEditLv = settingBox.querySelector(".m-level");
 	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
@@ -298,6 +314,23 @@ function initialize()
 		mD.awoken = monEditAwokens.filter(function(akDom){
 			return !akDom.classList.contains("unselected-awoken") && !akDom.classList.contains("display-none") 
 		}).length - 1;
+		if (ms[mD.id].sAwoken) //如果支持超觉醒
+		{
+			mD.sawoken = -1;
+			for (var sai = 0;sai<monEditSAwokens.length;sai++)
+			{
+				
+				if (
+					!monEditSAwokens[sai].classList.contains("unselected-awoken") &&
+					!monEditSAwokens[sai].classList.contains("display-none")
+				)
+				{
+					mD.sawoken = sai;
+					break;
+				}
+			}
+		}
+		
 		if (ms[mD.id].type.some(function(t){return t == 0 || t == 12 || t == 14 || t == 15;}) && [303,305,307,600,602].indexOf(mD.id)<0)
 		{ //当4种特殊type的时候是无法297和打觉醒的，但是5种小企鹅可以
 			mD.plus = [0,0,0]; 
@@ -381,14 +414,14 @@ function changeid(mon,monDom,latentDom)
 	{
 		var levelDom = monDom.querySelector(".level");
 		levelDom.innerHTML = mon.level;
-		if (mon.level == 99 || (mon.level >= md.maxLevel && md.maxLevel <=99))
+		if (mon.level == 99 || (mon.level >= md.maxLv && md.maxLv <=99))
 		{
 			levelDom.classList.add("max");
 		}else
 		{
 			levelDom.classList.remove("max");
 		}
-		if (md.maxLevel>99 && mon.level>=99)
+		if (md.maxLv>99 && mon.level>=99)
 			levelDom.classList.add("_110");
 		else
 			levelDom.classList.remove("_110");
@@ -494,8 +527,12 @@ function editMon(AorB,isAssist,tempIdx)
 	monstersSearch.value = mD.id>0?mD.id:0;
 	monstersSearch.onchange();
 	var settingBox = editBox.querySelector(".setting-box");
-	var monEditAwokens = settingBox.querySelectorAll(".m-awoken-ul .awoken-icon");
+	//觉醒
+	var monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon");
 	if (mD.awoken>0) monEditAwokens[mD.awoken].onclick();
+	//超觉醒
+	var monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon");
+	if (mD.sawoken>=0) monEditSAwokens[mD.sawoken].onclick();
 	var monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.value = mD.level || 1;
 	var monEditAddHp = settingBox.querySelector(".m-plus-hp");
@@ -554,7 +591,7 @@ function editBoxChangeMonId(id)
 	}
 
 	var settingBox = editBox.querySelector(".setting-box");
-	var mAwoken = settingBox.querySelectorAll(".m-awoken-ul li");
+	var mAwoken = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul li");
 	mAwoken[0].innerHTML = md.awoken.length?"★":"0";
 	for (var ai=1;ai<mAwoken.length;ai++)
 	{
@@ -567,10 +604,28 @@ function editBoxChangeMonId(id)
 		}
 	}
 
+	//超觉醒
+	var mSAwokenRow = settingBox.querySelector(".row-mon-super-awoken");
+	var mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
+	if (md.sAwoken)
+	{
+		mSAwokenRow.classList.remove("display-none");
+		for (var ai=0;ai<mSAwoken.length;ai++)
+		{
+			if (ai < md.sAwoken.length)
+				mSAwoken[ai].className = "awoken-icon unselected-awoken awoken-" + md.sAwoken[ai];
+			else
+				mSAwoken[ai].className = "display-none";
+		}
+	}else
+	{
+		mSAwokenRow.classList.add("display-none");
+	}
+
 	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
-	monEditLvMax.innerHTML = monEditLvMax.value = md.maxLevel;
+	monEditLvMax.innerHTML = monEditLvMax.value = md.maxLv;
 	var monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.value = md.maxLevel>99?99:md.maxLevel;
+	monEditLv.value = md.maxLv>99?99:md.maxLv;
 
 	var rowPlus =  settingBox.querySelector(".row-mon-plus");
 	var rowLatent =  settingBox.querySelector(".row-mon-latent");
@@ -646,7 +701,7 @@ function refreshAll(fmt){
 }
 //刷新觉醒总计
 function refreshAwokenCount(team){
-	var awokenUL = document.querySelector(".awoken-total-box .m-awoken-ul");
+	var awokenUL = document.querySelector(".awoken-total-box .awoken-ul");
 	function setCount(idx,number){
 		var ali = awokenUL.querySelector(".a-c-" + idx);
 		ali.querySelector(".count").innerHTML = number;
