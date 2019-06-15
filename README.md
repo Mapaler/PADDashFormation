@@ -28,8 +28,8 @@ Easy to change language and use on your phone。
 Or download ZIP, and open the `index.html` by Firefox.
 
 ## 小提示 | Tips
-* 直接复制网址即可分享组队  
-Copy the URL directly to share the Formation  
+* 直接复制网址即可分享组队。你可以使用短网址服务进一步缩短网址。  
+Copy the URL directly to share the Formation. You can use the short URL service to further shorten the URL.  
 ![分享组队](https://github.com/Mapaler/PADDashFormation/raw/master/document/tips-share.png)
 * 使用后退即可撤销上一次修改  
 Use back to undo the last edit  
