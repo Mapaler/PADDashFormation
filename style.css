@@ -432,22 +432,35 @@ ul{
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼怪物觉醒";
 }*/
-.row-mon-awoken .m-awoken-ul{
+.row-mon-awoken .awoken-ul, .row-mon-super-awoken .awoken-ul{
+	font-size: 0;
 	height: 32px;
 }
-.m-awoken-ul .awoken-icon{
+.awoken-ul li{
+	margin-left: 5px;
+}
+.awoken-ul li:first-of-type{
+	margin-left: 0;
+}
+.awoken-ul .awoken-icon{
 	cursor: pointer;
 }
-.m-awoken-ul .awoken-icon.unselected-awoken{
+.awoken-ul .awoken-icon.unselected-awoken{
 	opacity: 0.3;
 }
-.awoken-icon.awoken-count{
+.row-mon-awoken .awoken-icon.awoken-count{
 	color: yellow;
 	font-size: 22px;
 	line-height: 28px;
 	font-weight: bold;
 	text-shadow: black 0 0 4px;
 	text-align: center;
+}
+.row-mon-awoken .m-super-awoken-ul{
+	margin-top: 5px;
+}
+.edit-box .setting-box .row-mon-super-awoken::before{
+	content: "▼超觉醒";
 }
 .edit-box .setting-box .row-mon-plus::before{
 	/*content: "▼怪物加值";*/
@@ -570,18 +583,18 @@ ul{
 .detail-box{
 	margin-top:5px;
 }
-.awoken-total-box .m-awoken-ul .awoken-count{
+.awoken-total-box .awoken-ul .awoken-count{
 	font-size: 20px;
 	line-height: 32px;
 	font-family: 'FOT-KurokaneStd-EB';
 	float: left;
 	margin-right: 5px;
 }
-.awoken-total-box .m-awoken-ul .count{
+.awoken-total-box .awoken-ul .count{
 	height: 32px;
 	vertical-align: middle;
 }
-.awoken-total-box .m-awoken-ul .count::before{
+.awoken-total-box .awoken-ul .count::before{
 	content: "×";
 }
 
