@@ -37,8 +37,26 @@ function g(id)
 		type.push(tn[m[6]]);
 	if (m[m.length-9]!=-1) //第三个type要倒着来
 		type.push(tn[m[m.length-9]]);
-	console.log("%oNo.%d %s [%s/%s]，%s退化，类型：%s，%d星，COST：%d，%s个觉醒，110级增长%d%%，卖%d MP，%s当二技",m,m[0],m[1],p[0],p[1],m[4]?"可":"不可",type.join("|"),m[7],m[8],
-	m[58+m[57]*3],m[m.length-3],m[m.length-8],m[m.length-5]>2?"能":"不能"
+	console.log("%oNo.%d %s [%s/%s]，Lv%d，%s究极退化为%d，类型：%s，%d星，COST%d，%s个觉醒，三维%s，110级增长%d%%，%s当二技，1级吃经验%d，1级卖￥%d，%dMP，成长类型%d，升2级经验",
+		m, //对象
+		m[0], //ID
+		m[1], //名字
+		p[0],p[1], //属性
+		m[10], //最大等级
+		m[4]?"可":"不可", //可退化？
+		m[40], //可退化？
+		type.join("|"), //类型
+		m[7], //星级
+		m[8], //cost
+		m[58+m[57]*3], //觉醒数
+		m[14]+"-"+m[15]+"/"+m[14]+"-"+m[17]+"/"+m[20]+"-"+m[21], //三维
+		m[m.length-3], //110级增长
+		m[m.length-5]>2?"能":"不能", //二技
+		Math.round(m[11]/4), //1级经验，每级，直接乘
+		Math.round(m[13]/10), //1级卖钱
+		m[m.length-8], //MP
+		m[23], //成长类型
+		Math.round(m[23] * Math.pow((2 - 1) / 98,m[24])) //1级升2级经验
 	);
 }
 GM_xmlhttpRequest({
@@ -51,6 +69,12 @@ GM_xmlhttpRequest({
 			return [9,10,11,13].indexOf(m[5])>=0;
 		})
 		console.log(ts);
+		*/
+		/*
+		console.log(card.sort(function(a,b){
+			return  b[b.length-3] - a[a.length-3];
+		}));
+		g(0);
 		*/
 	},
 	onerror: function(response) {
