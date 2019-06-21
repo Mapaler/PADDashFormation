@@ -3,12 +3,11 @@
 	font-family: 'FOT-KurokaneStd-EB';
 	font-style: normal;
 	/*font-weight: 400;*/
-	src: url(fonts/FOT-KurokaneStd-EB.woff2) format('woff2'),
-		 url(fonts/FOT-KurokaneStd-EB.eot?#iefix) format('embedded-opentype'),
-		 url(fonts/FOT-KurokaneStd-EB.woff2) format('woff2'),
-		 url(fonts/FOT-KurokaneStd-EB.woff) format('woff'),
-		 url(fonts/FOT-KurokaneStd-EB.ttf) format('truetype'),
-		 url(fonts/FOT-KurokaneStd-EB.svg#mywebfontregular) format('svg');
+	src: url("fonts/FOT-KurokaneStd-EB.woff2") format('woff2'),
+		 url("fonts/FOT-KurokaneStd-EB.woff") format('woff'),
+		 url("fonts/FOT-KurokaneStd-EB.ttf") format('truetype'),
+		 url("fonts/FOT-KurokaneStd-EB.eot") format('embedded-opentype'),
+		 url("fonts/FOT-KurokaneStd-EB.svg") format('svg');
 }
 body{
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
