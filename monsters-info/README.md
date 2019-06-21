@@ -6,7 +6,7 @@ The current acquisition time is
 
 | 语言 | 时间 | API |
 | --- | --- | --- |
-| 日语(ja) | 2019-6-14 17:40 | https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
+| 日语(ja) | 2019-6-21 15:00 | https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
 | 英语(en) | 2019-6-21 14:00 | https://api-na-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
 | 韩语(ko) | 2019-6-21 14:00 | https://api-kr-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
 
