@@ -112,6 +112,8 @@ function initialize()
 			return ln?(ln.length>0):false;
 		}).join(" | ");
 	});
+	//控制框
+	var controlBox = document.querySelector(".control-box");
 
 	//标题和介绍文本框
 	var txtTitle = document.querySelector(".title-box .title");
@@ -142,10 +144,12 @@ function initialize()
 	editBox.show = function(){
 		editBox.classList.remove("display-none");
 		formationBox.classList.add("blur-bg");
+		controlBox.classList.add("blur-bg");
 	}
 	editBox.hide = function(){
 		editBox.classList.add("display-none");
 		formationBox.classList.remove("blur-bg");
+		controlBox.classList.remove("blur-bg");
 	}
 
 	var settingBox = editBox.querySelector(".setting-box")
