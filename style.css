@@ -448,7 +448,7 @@ ul{
 .awoken-ul li:first-of-type{
 	margin-left: 0;
 }
-.awoken-ul .awoken-icon{
+.edit-box .awoken-ul .awoken-icon{
 	cursor: pointer;
 }
 .awoken-ul .awoken-icon.unselected-awoken{
