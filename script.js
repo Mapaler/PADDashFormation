@@ -428,14 +428,17 @@ function changeid(mon,monDom,latentDom)
 		}
 	}
 	var sawoken = monDom.querySelector(".super-awoken");
-	if (sawoken && mon.sawoken != undefined && mon.sawoken>=0) //如果存在超觉醒的DOM且提供了超觉醒
+	if (sawoken) //如果存在超觉醒的DOM且提供了超觉醒
 	{
-		var awokenIcon = sawoken.querySelector(".awoken-icon");
-		sawoken.classList.remove("display-none");
-		awokenIcon.className = "awoken-icon awoken-" + md.sAwoken[mon.sawoken];
-	}else
-	{
-		sawoken.classList.add("display-none");
+		if (mon.sawoken != undefined && mon.sawoken>=0)
+		{
+			var awokenIcon = sawoken.querySelector(".awoken-icon");
+			sawoken.classList.remove("display-none");
+			awokenIcon.className = "awoken-icon awoken-" + md.sAwoken[mon.sawoken];
+		}else
+		{
+			sawoken.classList.add("display-none");
+		}
 	}
 	if (mon.plus) //如果提供了加值
 	{
