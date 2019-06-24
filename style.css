@@ -119,12 +119,6 @@ ul{
 	position: absolute;
 	left:0;
 }
-/*怪物-超觉醒*/
-.monster .super-awoken{
-	position: absolute;
-	right:0;
-	bottom: 0;
-}
 
 .null .plus,.delay .plus,
 .null .awoken-count,.delay .awoken-count,
@@ -166,6 +160,13 @@ ul{
 	font-size: 0;
 	text-shadow: none;
 	background-position: 0 -38px;
+}
+/*怪物-超觉醒*/
+.monster .super-awoken{
+	position: absolute;
+	right:0;
+	top: 30px;
+	transform: scale(0.80) translateX(4px);
 }
 /*怪物-等级*/
 .monster .level{
