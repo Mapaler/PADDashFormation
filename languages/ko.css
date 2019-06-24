@@ -125,3 +125,9 @@
 .type-name-15::after{
 	content: "매각용";
 }
+.control-box .solo-link::before{
+	content: "싱글 플레이어 게임으로 이동";
+}
+.control-box .multi-link::before{
+	content: "2인 게임으로 이동";
+}

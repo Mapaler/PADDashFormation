@@ -132,3 +132,9 @@
 .type-name-15::after{
 	content: "Redeemable";
 }
+.control-box .solo-link::before{
+	content: "Jump To Solo Version";
+}
+.control-box .multi-link::before{
+	content: "Jump To 2-Player Version";
+}

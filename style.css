@@ -48,7 +48,7 @@ ul{
 }
 /*队伍的整个盒子*/
 .formation-box{
-	/*width: 648px;*/
+	width: 648px;
 	min-width: 648px;
 }
 
@@ -118,6 +118,12 @@ ul{
 	text-shadow: black 0 0 1px, black 2px 2px 0;
 	position: absolute;
 	left:0;
+}
+/*怪物-超觉醒*/
+.monster .super-awoken{
+	position: absolute;
+	right:0;
+	bottom: 0;
 }
 
 .null .plus,.delay .plus,
@@ -591,6 +597,8 @@ ul{
 }
 .awoken-total-box .awoken-ul .count{
 	height: 32px;
+	width: 45px;
+	display: inline-block;
 	vertical-align: middle;
 }
 .awoken-total-box .awoken-ul .count::before{
@@ -602,4 +610,13 @@ ul{
 }
 .control-box .languages-label::before{
 	content: "Lanuage:";
+}
+.control-box .solo-link,.control-box .multi-link{
+	margin-left: 10px;
+}
+.control-box .solo-link::before{
+	content: "Jump To Solo Version";
+}
+.control-box .multi-link::before{
+	content: "Jump To 2-Player Version";
 }
