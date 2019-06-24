@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>代码测试</title>
+<script type="text/javascript">
+var skill;
+var mid;
+var GM_xmlhttpRequest = function(GM_param) {
+	var xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
+	xhr.open(GM_param.method, GM_param.url, true);
+	if (GM_param.responseType) xhr.responseType = GM_param.responseType;
+	if (GM_param.overrideMimeType) xhr.overrideMimeType(GM_param.overrideMimeType);
+	xhr.onreadystatechange = function() //设置回调函数
+		{
+			if (xhr.readyState === xhr.DONE) {
+				if (xhr.status === 200 && GM_param.onload)
+					GM_param.onload(xhr);
+				if (xhr.status !== 200 && GM_param.onerror)
+					GM_param.onerror(xhr);
+			}
+		}
+	for (var header in GM_param.headers) {
+		xhr.setRequestHeader(header, GM_param.headers[header]);
+	}
+	xhr.send(GM_param.data ? GM_param.data : null);
+}
+function g(id)
+{
+	var m = skill[id];
+	console.log("%oCD:%s",
+		m, //对象
+		m[4] + "-" + (m[4]-m[3]+1), //技能CD
+	);
+}
+GM_xmlhttpRequest({
+	method: "GET",
+	url:"ja-skill.json",
+	onload: function(response) {
+		skill = JSON.parse(response.response).skill;
+	},
+	onerror: function(response) {
+		console.error("怪物数据获取错误",response);
+	}
+});
+</script>
+</head>
+
+<body>
+<script type="text/javascript">
+window.onload = function()
+{
+	mid = document.querySelector("#mid");
+}
+</script>
+<input type="number" id="mid"><input type="button" value="测试" onclick="g(parseInt(mid.value));">
+</body>
+</html>

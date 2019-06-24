@@ -6,9 +6,9 @@ The current acquisition time is
 
 | 语言 | 时间 | API |
 | --- | --- | --- |
-| 日语(ja) | 2019-6-14 17:40 | https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
-| 英语(en) | 2019-6-14 15:20 | https://api-na-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
-| 韩语(ko) | 2019-6-14 15:20 | https://api-kr-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
+| 日语(ja) | 2019-6-21 15:00 | https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
+| 英语(en) | 2019-6-21 14:00 | https://api-na-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
+| 韩语(ko) | 2019-6-21 14:00 | https://api-kr-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
 
 经研究后得出如下结论，JSON里数字指的数组下标。  
 The following conclusions were drawn from the research. The number in JSON refers to the array subscript.(no translate)
@@ -55,3 +55,5 @@ node.exe extractByNode.js
 会将几种语言的信息提取到一个文件内  
 Extract information from several languages into one file  
 `mon.json`
+
+运行`提取中文数据.bat`，将战友网页面内容抽出，再使用Win64版exe`opencc`来繁转简。

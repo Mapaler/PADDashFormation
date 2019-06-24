@@ -75,7 +75,7 @@ function usedHole(latent)
 	},0);
 }
 //计算用了多少潜觉格子
-function awokenCountInTeam(formationTeam,ak)
+function awokenCountInTeam(formationTeam,ak,solo)
 {
     var allAwokenCount = formationTeam.reduce(function(fc,fm){
         var formationAwokenCount = fm.reduce(function(tc,tm,isAssist){
@@ -85,14 +85,20 @@ function awokenCountInTeam(formationTeam,ak)
                     return c;
                 }
                 var mdAwoken = ms[m.id].awoken; //这个怪物的觉醒数据
-                if (!mdAwoken || (isAssist && mdAwoken[0] != 49))
-                { //如果没有觉醒 || （如果是辅助队 &&第一个不是武器觉醒）
+                var mdSAwoken = ms[m.id].sAwoken; //这个怪物的超觉醒数据
+                if ((!mdAwoken && !mdSAwoken) || (isAssist && mdAwoken[0] != 49))
+                { //如果没有觉醒和超觉醒 || （如果是辅助队 &&第一个不是武器觉醒）
                     return c;
                 }
-                //启用的觉醒数
+                //启用的觉醒数组片段
                 var enableAwoken = mdAwoken.slice(0,m.awoken);
                 //相同的觉醒数
                 var hasAwoken = enableAwoken.filter(function(a){return a == ak;}).length;
+                //如果有超觉醒，且超觉醒id和计数的id相同
+                if (mdSAwoken && (mdSAwoken[m.sawoken] == ak))
+                {
+                    hasAwoken++;
+                }
                 return c + hasAwoken;
             },0);
             return tc + teamAwokenCount;
