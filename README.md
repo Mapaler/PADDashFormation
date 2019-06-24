@@ -1,15 +1,12 @@
 ﻿智龙迷城车队阵型图制作工具 | Puzzle & Dragons Dash Formation Maker
 ======
-* 这个工具可以帮助你方便的制作和分享车队阵型。  
-This tool can help you easily create and share Dash Formation.  
-![主要界面预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-main.png)  
+* 这个工具可以帮助你方便的制作和分享车队阵型或单人队形。  
+This tool can help you easily create and share Dash Formation or Solo Formation.  
+![协力界面预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-main.png)  
+![单人界面预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-solo.png)  
 
-* 易用的编辑界面。  
-Easy to use editing interface.  
-![编辑界面预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-edit.png)
-
-* 可以简单的修改显示语言，手机上也可以轻松使用。  
-Easy to change language and use on your phone。  
+* 易用的编辑界面，手机上也可以轻松使用。  
+Easy to use editing interface and use on your phone.   
 ![手机端预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-mobile.png)
 ## 目前支持的语言 | Languages that are now supported
 1. 中文（简体）
@@ -29,8 +26,8 @@ Easy to change language and use on your phone。
 Or download ZIP, and open the `index.html` by Firefox.
 
 ## 小提示 | Tips
-* 直接复制网址即可分享组队。你可以使用短网址服务进一步缩短网址。  
-Copy the URL directly to share the Formation. You can use the short URL service to further shorten the URL.  
+* 直接复制网址即可分享组队。你可以使用*短网址服务*进一步缩短网址。  
+Copy the URL directly to share the Formation. You can use any *Short URL Service* to further shorten the URL.  
 ![分享组队](https://github.com/Mapaler/PADDashFormation/raw/master/document/tips-share.png)
 * 使用后退即可撤销上一次修改  
 Use back to undo the last edit  
@@ -41,6 +38,8 @@ Click on the monster avatar in the editing interface to jump to the Guide.
 * 可以在编辑界面的怪物ID输入怪物名称来搜索怪物  
 You can search for monsters by entering the monster name in the monster ID of the editing interface.  
 ![搜索怪物](https://github.com/Mapaler/PADDashFormation/raw/master/document/tips-search.png)
+* 车队模式只显示部分杀潜觉以及共用的觉醒的统计，单人则全部显示。  
+2-Player Multi Games Mode only show the killer latent and several common awoken statistics, but solo mode shows all.
 
 # 翻译我 | TRANSLATE ME
 ## How to **Pull requests**

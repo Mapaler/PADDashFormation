@@ -133,8 +133,8 @@
 	content: "Redeemable";
 }
 .control-box .solo-link::before{
-	content: "Jump To Solo Version";
+	content: "Jump To Solo Mode";
 }
 .control-box .multi-link::before{
-	content: "Jump To 2-Player Version";
+	content: "Jump To 2-Player Mode";
 }
