@@ -540,7 +540,7 @@ function editMon(AorB,isAssist,tempIdx)
 		editBox.refreshLatent(editBox.latent);
 		btnDelay.classList.add("display-none");
 		settingBox.querySelector(".row-mon-latent").classList.remove("display-none");
-		settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
+		if (ms[mD.id].sAwoken)settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
 		editBox.querySelector(".edit-box-title").classList.remove("edit-box-title-assist");
 	}else
 	{
@@ -610,7 +610,9 @@ function editBoxChangeMonId(id)
 		}
 	}else
 	{
+		console.log(mSAwokenRow.classList);
 		mSAwokenRow.classList.add("display-none");
+		console.log(mSAwokenRow.classList);
 	}
 
 	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
