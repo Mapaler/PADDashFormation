@@ -55,3 +55,5 @@ node.exe extractByNode.js
 会将几种语言的信息提取到一个文件内  
 Extract information from several languages into one file  
 `mon.json`
+
+运行`提取中文数据.bat`，将战友网页面内容抽出，再使用Win64版exe`opencc`来繁转简。
