@@ -1,37 +1,11 @@
 var ms = null;
 var language = null;
 var memberTeamObj = function(){
-	return {id:0,level:0,awoken:0,plus:[0,0,0],latent:[]};
+	return {id:0,level:0,awoken:0,plus:[0,0,0],latent:[]}; //sawoken作为可选项目，默认不在内
 }
 var memberAssistObj = function(){
 	return {id:0,level:0,awoken:0,plus:[0,0,0]};
 }
-var teamObj = function(){
-	return [
-		[
-			{id:0},
-			{id:0},
-			{id:0},
-			{id:0},
-			{id:0},
-		],
-		[
-			{id:0},
-			{id:0},
-			{id:0},
-			{id:0},
-			{id:0},
-		],
-	];
-}
-var formation = {
-	title:"",
-	detail:"",
-	team:[
-		new teamObj(),//队伍A
-		new teamObj(),//队伍B
-	]
-};
 window.onload = function()
 {
 	//添加语言列表
@@ -62,7 +36,7 @@ window.onload = function()
 
 	GM_xmlhttpRequest({
 		method: "GET",
-		url:"monsters-info/mon.json?ver=2",
+		url:"monsters-info/mon.json",
 		onload: function(response) {
 			ms = JSON.parse(response.response);
 			initialize();//初始化
@@ -138,6 +112,8 @@ function initialize()
 			return ln?(ln.length>0):false;
 		}).join(" | ");
 	});
+	//控制框
+	var controlBox = document.querySelector(".control-box");
 
 	//标题和介绍文本框
 	var txtTitle = document.querySelector(".title-box .title");
@@ -168,10 +144,12 @@ function initialize()
 	editBox.show = function(){
 		editBox.classList.remove("display-none");
 		formationBox.classList.add("blur-bg");
+		controlBox.classList.add("blur-bg");
 	}
 	editBox.hide = function(){
 		editBox.classList.add("display-none");
 		formationBox.classList.remove("blur-bg");
+		controlBox.classList.remove("blur-bg");
 	}
 
 	var settingBox = editBox.querySelector(".setting-box")
@@ -185,7 +163,7 @@ function initialize()
 	}
 	monstersSearch.oninput = monstersSearch.onchange;
 	//觉醒
-	var monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".m-awoken-ul>.awoken-icon"));
+	var monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon"));
 	monEditAwokens.forEach(function(akDom,idx,domArr){
 		akDom.onclick = function(){
 			if (idx>0 && idx>=domArr.filter(function(d){return !d.classList.contains("display-none")}).length-1)
@@ -196,17 +174,33 @@ function initialize()
 			{
 				if(ai<=idx)
 				{
-					if(domArr[ai].classList.contains("unselected-awoken"))
-						domArr[ai].classList.remove("unselected-awoken");
+					domArr[ai].classList.remove("unselected-awoken");
 				}
 				else
 				{
-					if(!domArr[ai].classList.contains("unselected-awoken"))
-						domArr[ai].classList.add("unselected-awoken");
+					domArr[ai].classList.add("unselected-awoken");
 				}
 			}
 		}
 	})
+	//超觉醒
+	var monEditSAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon"));
+	monEditSAwokens.forEach(function(akDom,idx,domArr){
+		akDom.onclick = function(){
+			for(var ai=0;ai<domArr.length;ai++)
+			{
+				if(ai==idx)
+				{
+					domArr[ai].classList.toggle("unselected-awoken");
+				}
+				else
+				{
+					domArr[ai].classList.add("unselected-awoken");
+				}
+			}
+		}
+	})
+
 	//等级
 	var monEditLv = settingBox.querySelector(".m-level");
 	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
@@ -298,6 +292,23 @@ function initialize()
 		mD.awoken = monEditAwokens.filter(function(akDom){
 			return !akDom.classList.contains("unselected-awoken") && !akDom.classList.contains("display-none") 
 		}).length - 1;
+		if (ms[mD.id].sAwoken) //如果支持超觉醒
+		{
+			mD.sawoken = -1;
+			for (var sai = 0;sai<monEditSAwokens.length;sai++)
+			{
+				
+				if (
+					!monEditSAwokens[sai].classList.contains("unselected-awoken") &&
+					!monEditSAwokens[sai].classList.contains("display-none")
+				)
+				{
+					mD.sawoken = sai;
+					break;
+				}
+			}
+		}
+		
 		if (ms[mD.id].type.some(function(t){return t == 0 || t == 12 || t == 14 || t == 15;}) && [303,305,307,600,602].indexOf(mD.id)<0)
 		{ //当4种特殊type的时候是无法297和打觉醒的，但是5种小企鹅可以
 			mD.plus = [0,0,0]; 
@@ -313,18 +324,21 @@ function initialize()
 		}
 
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		refreshAwokenCount(formation.team);
 		creatNewUrl();
 		editBox.hide();
 	}
 	btnNull.onclick = function(){
 		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = {id:0};
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		refreshAwokenCount(formation.team);
 		creatNewUrl();
 		editBox.hide();
 	}
 	btnDelay.onclick = function(){ //应对威吓
 		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = {id:-1};
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		refreshAwokenCount(formation.team);
 		creatNewUrl();
 		editBox.hide();
 	}
@@ -381,14 +395,14 @@ function changeid(mon,monDom,latentDom)
 	{
 		var levelDom = monDom.querySelector(".level");
 		levelDom.innerHTML = mon.level;
-		if (mon.level == 99 || (mon.level >= md.maxLevel && md.maxLevel <=99))
+		if (mon.level == 99 || (mon.level >= md.maxLv && md.maxLv <=99))
 		{
 			levelDom.classList.add("max");
 		}else
 		{
 			levelDom.classList.remove("max");
 		}
-		if (md.maxLevel>99 && mon.level>=99)
+		if (md.maxLv>99 && mon.level>=99)
 			levelDom.classList.add("_110");
 		else
 			levelDom.classList.remove("_110");
@@ -416,7 +430,19 @@ function changeid(mon,monDom,latentDom)
 					awokenIcon.classList.remove("allowable-assist");
 			}
 		}
-		refreshAwokenCount(formation.team);
+	}
+	var sawoken = monDom.querySelector(".super-awoken");
+	if (sawoken) //如果存在超觉醒的DOM且提供了超觉醒
+	{
+		if (mon.sawoken != undefined && mon.sawoken>=0)
+		{
+			var awokenIcon = sawoken.querySelector(".awoken-icon");
+			sawoken.classList.remove("display-none");
+			awokenIcon.className = "awoken-icon awoken-" + md.sAwoken[mon.sawoken];
+		}else
+		{
+			sawoken.classList.add("display-none");
+		}
 	}
 	if (mon.plus) //如果提供了加值
 	{
@@ -494,8 +520,12 @@ function editMon(AorB,isAssist,tempIdx)
 	monstersSearch.value = mD.id>0?mD.id:0;
 	monstersSearch.onchange();
 	var settingBox = editBox.querySelector(".setting-box");
-	var monEditAwokens = settingBox.querySelectorAll(".m-awoken-ul .awoken-icon");
+	//觉醒
+	var monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon");
 	if (mD.awoken>0) monEditAwokens[mD.awoken].onclick();
+	//超觉醒
+	var monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon");
+	if (mD.sawoken>=0) monEditSAwokens[mD.sawoken].onclick();
 	var monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.value = mD.level || 1;
 	var monEditAddHp = settingBox.querySelector(".m-plus-hp");
@@ -514,11 +544,13 @@ function editMon(AorB,isAssist,tempIdx)
 		editBox.refreshLatent(editBox.latent);
 		btnDelay.classList.add("display-none");
 		settingBox.querySelector(".row-mon-latent").classList.remove("display-none");
+		if (ms[mD.id].sAwoken)settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
 		editBox.querySelector(".edit-box-title").classList.remove("edit-box-title-assist");
 	}else
 	{
 		btnDelay.classList.remove("display-none");
 		settingBox.querySelector(".row-mon-latent").classList.add("display-none");
+		settingBox.querySelector(".row-mon-super-awoken").classList.add("display-none");
 		editBox.querySelector(".edit-box-title").classList.add("edit-box-title-assist");
 	}
 }
@@ -554,7 +586,7 @@ function editBoxChangeMonId(id)
 	}
 
 	var settingBox = editBox.querySelector(".setting-box");
-	var mAwoken = settingBox.querySelectorAll(".m-awoken-ul li");
+	var mAwoken = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul li");
 	mAwoken[0].innerHTML = md.awoken.length?"★":"0";
 	for (var ai=1;ai<mAwoken.length;ai++)
 	{
@@ -567,10 +599,30 @@ function editBoxChangeMonId(id)
 		}
 	}
 
+	//超觉醒
+	var mSAwokenRow = settingBox.querySelector(".row-mon-super-awoken");
+	var mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
+	if (md.sAwoken)
+	{
+		mSAwokenRow.classList.remove("display-none");
+		for (var ai=0;ai<mSAwoken.length;ai++)
+		{
+			if (ai < md.sAwoken.length)
+				mSAwoken[ai].className = "awoken-icon unselected-awoken awoken-" + md.sAwoken[ai];
+			else
+				mSAwoken[ai].className = "display-none";
+		}
+	}else
+	{
+		console.log(mSAwokenRow.classList);
+		mSAwokenRow.classList.add("display-none");
+		console.log(mSAwokenRow.classList);
+	}
+
 	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
-	monEditLvMax.innerHTML = monEditLvMax.value = md.maxLevel;
+	monEditLvMax.innerHTML = monEditLvMax.value = md.maxLv;
 	var monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.value = md.maxLevel>99?99:md.maxLevel;
+	monEditLv.value = md.maxLv>99?99:md.maxLv;
 
 	var rowPlus =  settingBox.querySelector(".row-mon-plus");
 	var rowLatent =  settingBox.querySelector(".row-mon-latent");
@@ -632,29 +684,56 @@ function refreshAll(fmt){
 	var fATeam = formationA.querySelectorAll(".formation-team .monster");
 	var fALatents = formationA.querySelectorAll(".formation-latents .latent-ul");
 	var fAAssist = formationA.querySelectorAll(".formation-assist .monster");
-	var fBTeam = formationB.querySelectorAll(".formation-team .monster");
-	var fBLatents = formationB.querySelectorAll(".formation-latents .latent-ul");
-	var fBAssist = formationB.querySelectorAll(".formation-assist .monster");
-	for (var ti=0;ti<5;ti++)
+	if (formationB)
+	{
+		var fBTeam = formationB.querySelectorAll(".formation-team .monster");
+		var fBLatents = formationB.querySelectorAll(".formation-latents .latent-ul");
+		var fBAssist = formationB.querySelectorAll(".formation-assist .monster");
+	}
+	for (var ti=0;ti<(formationB?5:6);ti++)
 	{
 		changeid(fmt.team[0][0][ti],fATeam[ti],fALatents[ti]);
 		changeid(fmt.team[0][1][ti],fAAssist[ti]);
-		changeid(fmt.team[1][0][ti],fBTeam[ti],fBLatents[ti]);
-		changeid(fmt.team[1][1][ti],fBAssist[ti]);
+		if (formationB)
+		{
+			changeid(fmt.team[1][0][ti],fBTeam[ti],fBLatents[ti]);
+			changeid(fmt.team[1][1][ti],fBAssist[ti]);
+		}
 	}
 	refreshAwokenCount(fmt.team);
 }
 //刷新觉醒总计
 function refreshAwokenCount(team){
-	var awokenUL = document.querySelector(".awoken-total-box .m-awoken-ul");
+	var awokenUL = document.querySelector(".awoken-total-box .awoken-ul");
 	function setCount(idx,number){
 		var ali = awokenUL.querySelector(".a-c-" + idx);
+		if (!ali) return; //没有这个觉醒就撤回 
 		ali.querySelector(".count").innerHTML = number;
 		if (number)
 			ali.classList.remove("display-none");
 		else
 			ali.classList.add("display-none");
 	}
+	for (var ai=1;ai<=67;ai++)
+	{
+		if (ai == 10) //防封
+		{
+			setCount(ai,awokenCountInTeam(team,ai,solo)+awokenCountInTeam(team,52,solo)*2);
+		}else if (ai == 19) //手指
+		{
+			setCount(ai,awokenCountInTeam(team,ai,solo)+awokenCountInTeam(team,53,solo)*2);
+		}else if (ai == 21) //SB
+		{
+			setCount(ai,awokenCountInTeam(team,ai,solo)+awokenCountInTeam(team,56,solo)*2);
+		}else if (ai == 52 || ai == 53 || ai == 56) //大手指，大SB
+		{
+			continue;
+		}else
+		{
+			setCount(ai,awokenCountInTeam(team,ai,solo));
+		}
+	}
+	/*
 	setCount(21,awokenCountInTeam(team,21)+awokenCountInTeam(team,56)*2); //SB+大SB
 	setCount(28,awokenCountInTeam(team,28)); //SX
 	setCount(11,awokenCountInTeam(team,11)); //防暗
@@ -662,4 +741,5 @@ function refreshAwokenCount(team){
 	setCount(13,awokenCountInTeam(team,13)); //防毒
 	setCount(54,awokenCountInTeam(team,54)); //防云
 	setCount(55,awokenCountInTeam(team,55)); //防封条
+	*/
 }

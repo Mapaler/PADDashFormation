@@ -47,6 +47,9 @@
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼몬스터 각성";
 }
+.edit-box .setting-box .row-mon-super-awoken::before{
+	content: "▼몬스터 슈퍼 각성";
+}
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼몬스터 플러스";
 }
@@ -121,4 +124,10 @@
 }
 .type-name-15::after{
 	content: "매각용";
+}
+.control-box .solo-link::before{
+	content: "싱글 플레이어 게임으로 이동";
+}
+.control-box .multi-link::before{
+	content: "2인 게임으로 이동";
 }

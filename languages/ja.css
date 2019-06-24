@@ -47,6 +47,9 @@
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼モンスター覚醒";
 }
+.edit-box .setting-box .row-mon-super-awoken::before{
+	content: "▼モンスター超覚醒";
+}
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼モンスタープラス";
 }
@@ -121,4 +124,10 @@
 }
 .type-name-15::after{
 	content: "売却用";
+}
+.control-box .solo-link::before{
+	content: "ソロゲームに移動";
+}
+.control-box .multi-link::before{
+	content: "2人協力のゲームに移動";
 }

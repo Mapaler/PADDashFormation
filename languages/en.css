@@ -48,6 +48,9 @@
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼Monster Awoken";
 }
+.edit-box .setting-box .row-mon-super-awoken::before{
+	content: "▼Super Awoken";
+}
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼Monster Plus";
 }
@@ -128,4 +131,10 @@
 }
 .type-name-15::after{
 	content: "Redeemable";
+}
+.control-box .solo-link::before{
+	content: "Jump To Solo Mode";
+}
+.control-box .multi-link::before{
+	content: "Jump To 2-Player Mode";
 }

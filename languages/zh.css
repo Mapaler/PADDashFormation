@@ -47,6 +47,9 @@
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼怪物觉醒";
 }
+.edit-box .setting-box .row-mon-super-awoken::before{
+	content: "▼超觉醒";
+}
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼怪物加值";
 }
@@ -124,4 +127,10 @@
 }
 .control-box .languages-label::before{
 	content: "语言：";
+}
+.control-box .solo-link::before{
+	content: "转到单人游戏";
+}
+.control-box .multi-link::before{
+	content: "转到2人车队";
 }
