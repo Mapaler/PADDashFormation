@@ -417,8 +417,41 @@
 .latent-icon{
 	background-image: url(images/latent.png);
 }
+.latent-icon-1{ /*HP*/
+	background-position: 0px -32px;
+}
+.latent-icon-2{ /*攻击*/
+	background-position: 0px -64px;
+}
+.latent-icon-3{ /*回复*/
+	background-position: 0px -96px;
+}
+.latent-icon-4{ /*手指*/
+	background-position: 0px -128px;
+}
+.latent-icon-5{ /*自回*/
+	background-position: 0px -160px;
+}
+.latent-icon-6{ /*火盾*/
+	background-position: 0px -192px;
+}
+.latent-icon-7{ /*水盾*/
+	background-position: 0px -224px;
+}
+.latent-icon-8{ /*木盾*/
+	background-position: 0px -256px;
+}
+.latent-icon-9{ /*光盾*/
+	background-position: 0px -288px;
+}
+.latent-icon-10{ /*暗盾*/
+	background-position: 0px -320px;
+}
 .latent-icon-11{ /*防坐*/
 	background-position: 0px -352px;
+}
+.latent-icon-12{ /*三维*/
+	background-position: 0px -384px;
 }
 .latent-icon-13{ /*进化杀*/
 	background-position: 0px -416px;
@@ -456,6 +489,34 @@
 .latent-icon-24{ /*回复杀*/
 	background-position: 0px -768px;
 }
+.latent-icon-25{ /*大HP*/
+	background-position: 0px -800px;
+}
+.latent-icon-26{ /*大攻击*/
+	background-position: 0px -832px;
+}
+.latent-icon-27{ /*大回复*/
+	background-position: 0px -864px;
+}
+.latent-icon-28{ /*大手指*/
+	background-position: 0px -896px;
+}
+.latent-icon-29{ /*大火盾*/
+	background-position: 0px -928px;
+}
+.latent-icon-30{ /*大水盾*/
+	background-position: 0px -960px;
+}
+.latent-icon-31{ /*大木盾*/
+	background-position: 0px -992px;
+}
+.latent-icon-32{ /*大光盾*/
+	background-position: 0px -1024px;
+}
+.latent-icon-33{ /*大暗盾*/
+	background-position: 0px -1056px;
+}
+.latent-icon-12,
 .latent-icon-13,
 .latent-icon-14,
 .latent-icon-15,
@@ -467,6 +528,52 @@
 .latent-icon-21,
 .latent-icon-22,
 .latent-icon-23,
-.latent-icon-24{
+.latent-icon-24,
+.latent-icon-25,
+.latent-icon-26,
+.latent-icon-27,
+.latent-icon-28,
+.latent-icon-29,
+.latent-icon-30,
+.latent-icon-31,
+.latent-icon-32,
+.latent-icon-33{
 	width: 76px;
 }
+/*
+var sawokens = [
+	"HP",
+	"攻击",
+	"回复",
+	"手指",
+	"自回",
+	"火盾",
+	"水盾",
+	"木盾",
+	"光盾",
+	"暗盾",
+	"防坐",
+	"三维",
+	"进化杀",
+	"觉醒杀",
+	"强化杀",
+	"卖钱杀",
+	"神杀",
+	"龙杀",
+	"恶魔杀",
+	"机械杀",
+	"平衡杀",
+	"攻击杀",
+	"体力杀",
+	"回复杀",
+	"大HP",
+	"大攻击",
+	"大回复",
+	"大手指",
+	"大火盾",
+	"大水盾",
+	"大木盾",
+	"大光盾",
+	"大暗盾",
+];
+*/

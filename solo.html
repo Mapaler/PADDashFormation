@@ -11,7 +11,7 @@
 <script type="text/javascript" src="universal_function.js"></script>
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript">
-var solo = false;
+var solo = true;
 var teamObj = function(){
 	return [
 		[
@@ -20,8 +20,10 @@ var teamObj = function(){
 			{id:0},
 			{id:0},
 			{id:0},
+			{id:0},
 		],
 		[
+			{id:0},
 			{id:0},
 			{id:0},
 			{id:0},
@@ -35,15 +37,19 @@ var formation = {
 	detail:"",
 	team:[
 		new teamObj(),//队伍A
-		new teamObj(),//队伍B
 	]
 };
 </script>
+<style type="text/css">
+.formation-A-bigbox::after{
+	display: none;
+}
+</style>
 </head>
 
 <body>
 	<div class="control-box">
-		<label class="languages-label"><select class="languages"></select></label><a href="solo.html" class="solo-link"></a>
+		<label class="languages-label"><select class="languages"></select></label><a href="index.html" class="multi-link"></a>
 	</div>
 	<div class="formation-box">
 		<div class="title-box"><input type="text" class="title" placeholder="输入阵型标题" /></div>
@@ -95,6 +101,15 @@ var formation = {
 							<div class="level"></div>
 						</a>
 					</li>
+					<li class="member member-6 null">
+						<a class="monster" target="_blank" onclick="editMon(0,1,5);return false;">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+						</a>
+					</li>
 				</ul>
 				<ul class="formation-latents">
 					<li class="latents latents-1">
@@ -138,6 +153,16 @@ var formation = {
 						</ul>
 					</li>
 					<li class="latents latents-5">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-6">
 						<ul class="latent-ul display-none">
 							<li class="latent-icon"></li>
 							<li class="latent-icon"></li>
@@ -199,158 +224,13 @@ var formation = {
 							<div class="level"></div>
 						</a>
 					</li>
-				</ul>
-			</div>
-		</div>
-		<div class="formation-B-bigbox">
-			<div class="formation-B-box">
-				<ul class="formation-team">
-					<li class="member member-1 null">
-						<a class="monster" target="_blank" onclick="editMon(1,0,0);return false;">
+					<li class="member member-6 team-leader null">
+						<a class="monster" target="_blank" onclick="editMon(0,0,5);return false;">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
 							<div class="awoken-count display-none"></div>
 							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
-							<div class="level"></div>
-						</a>
-					</li>
-					<li class="member member-2 null">
-						<a class="monster" target="_blank" onclick="editMon(1,0,1);return false;">
-							<div class="property"></div>
-							<div class="subproperty"></div>
-							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-							<div class="awoken-count display-none"></div>
-							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
-							<div class="level"></div>
-						</a>
-					</li>
-					<li class="member member-3 null">
-						<a class="monster" target="_blank" onclick="editMon(1,0,2);return false;">
-							<div class="property"></div>
-							<div class="subproperty"></div>
-							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-							<div class="awoken-count display-none"></div>
-							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
-							<div class="level"></div>
-						</a>
-					</li>
-					<li class="member member-4 null">
-						<a class="monster" target="_blank" onclick="editMon(1,0,3);return false;">
-							<div class="property"></div>
-							<div class="subproperty"></div>
-							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-							<div class="awoken-count display-none"></div>
-							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
-							<div class="level"></div>
-						</a>
-					</li>
-					<li class="member member-5 team-leader null">
-						<a class="monster" target="_blank" onclick="editMon(1,0,4);return false;">
-							<div class="property"></div>
-							<div class="subproperty"></div>
-							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-							<div class="awoken-count display-none"></div>
-							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
-							<div class="level"></div>
-						</a>
-					</li>
-				</ul>
-				<ul class="formation-latents">
-					<li class="latents latents-1">
-						<ul class="latent-ul display-none">
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-						</ul>
-					</li>
-					<li class="latents latents-2">
-						<ul class="latent-ul display-none">
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-						</ul>
-					</li>
-					<li class="latents latents-3">
-						<ul class="latent-ul display-none">
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-						</ul>
-					</li>
-					<li class="latents latents-4">
-						<ul class="latent-ul display-none">
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-						</ul>
-					</li>
-					<li class="latents latents-5">
-						<ul class="latent-ul display-none">
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-							<li class="latent-icon"></li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="formation-assist">
-					<li class="member member-1 null">
-						<a class="monster" target="_blank" onclick="editMon(1,1,0);return false;">
-							<div class="property"></div>
-							<div class="subproperty"></div>
-							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-							<div class="awoken-count display-none"></div>
-							<div class="level"></div>
-						</a>
-					</li>
-					<li class="member member-2 null">
-						<a class="monster" target="_blank" onclick="editMon(1,1,1);return false;">
-							<div class="property"></div>
-							<div class="subproperty"></div>
-							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-							<div class="awoken-count display-none"></div>
-							<div class="level"></div>
-						</a>
-					</li>
-					<li class="member member-3 null">
-						<a class="monster" target="_blank" onclick="editMon(1,1,2);return false;">
-							<div class="property"></div>
-							<div class="subproperty"></div>
-							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-							<div class="awoken-count display-none"></div>
-							<div class="level"></div>
-						</a>
-					</li>
-					<li class="member member-4 null">
-						<a class="monster" target="_blank" onclick="editMon(1,1,3);return false;">
-							<div class="property"></div>
-							<div class="subproperty"></div>
-							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-							<div class="awoken-count display-none"></div>
-							<div class="level"></div>
-						</a>
-					</li>
-					<li class="member member-5 null">
-						<a class="monster" target="_blank" onclick="editMon(1,1,4);return false;">
-							<div class="property"></div>
-							<div class="subproperty"></div>
-							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-							<div class="awoken-count display-none"></div>
 							<div class="level"></div>
 						</a>
 					</li>
@@ -360,13 +240,73 @@ var formation = {
 		<div class="awoken-total-box">
 			<!--怪物觉醒-->
 			<ul class="awoken-ul">
-				<li class="awoken-count a-c-21 display-none"><span class="awoken-icon awoken-21"></span><span class="count"></span></li><!--SB-->
-				<li class="awoken-count a-c-28 display-none"><span class="awoken-icon awoken-28"></span><span class="count"></span></li><!--SX-->
+				<li class="awoken-count a-c-1 display-none"><span class="awoken-icon awoken-1"></span><span class="count"></span></li><!--HP+-->
+				<li class="awoken-count a-c-2 display-none"><span class="awoken-icon awoken-2"></span><span class="count"></span></li><!--攻击+-->
+				<li class="awoken-count a-c-3 display-none"><span class="awoken-icon awoken-3"></span><span class="count"></span></li><!--回复+-->
+				<li class="awoken-count a-c-4 display-none"><span class="awoken-icon awoken-4"></span><span class="count"></span></li><!--火盾-->
+				<li class="awoken-count a-c-5 display-none"><span class="awoken-icon awoken-5"></span><span class="count"></span></li><!--水盾-->
+				<li class="awoken-count a-c-6 display-none"><span class="awoken-icon awoken-6"></span><span class="count"></span></li><!--木盾-->
+				<li class="awoken-count a-c-7 display-none"><span class="awoken-icon awoken-7"></span><span class="count"></span></li><!--光盾-->
+				<li class="awoken-count a-c-8 display-none"><span class="awoken-icon awoken-8"></span><span class="count"></span></li><!--暗盾-->
+				<li class="awoken-count a-c-9 display-none"><span class="awoken-icon awoken-9"></span><span class="count"></span></li><!--自回-->
+				<li class="awoken-count a-c-10 display-none"><span class="awoken-icon awoken-10"></span><span class="count"></span></li><!--防封-->
 				<li class="awoken-count a-c-11 display-none"><span class="awoken-icon awoken-11"></span><span class="count"></span></li><!--防暗-->
 				<li class="awoken-count a-c-12 display-none"><span class="awoken-icon awoken-12"></span><span class="count"></span></li><!--防废-->
 				<li class="awoken-count a-c-13 display-none"><span class="awoken-icon awoken-13"></span><span class="count"></span></li><!--防毒-->
+				<li class="awoken-count a-c-14 display-none"><span class="awoken-icon awoken-14"></span><span class="count"></span></li><!--火+-->
+				<li class="awoken-count a-c-15 display-none"><span class="awoken-icon awoken-15"></span><span class="count"></span></li><!--水+-->
+				<li class="awoken-count a-c-16 display-none"><span class="awoken-icon awoken-16"></span><span class="count"></span></li><!--木+-->
+				<li class="awoken-count a-c-17 display-none"><span class="awoken-icon awoken-17"></span><span class="count"></span></li><!--光+-->
+				<li class="awoken-count a-c-18 display-none"><span class="awoken-icon awoken-18"></span><span class="count"></span></li><!--暗+-->
+				<li class="awoken-count a-c-19 display-none"><span class="awoken-icon awoken-19"></span><span class="count"></span></li><!--手指-->
+				<li class="awoken-count a-c-20 display-none"><span class="awoken-icon awoken-20"></span><span class="count"></span></li><!--心解-->
+				<li class="awoken-count a-c-21 display-none"><span class="awoken-icon awoken-21"></span><span class="count"></span></li><!--SB-->
+				<li class="awoken-count a-c-22 display-none"><span class="awoken-icon awoken-22"></span><span class="count"></span></li><!--火横-->
+				<li class="awoken-count a-c-23 display-none"><span class="awoken-icon awoken-23"></span><span class="count"></span></li><!--水横-->
+				<li class="awoken-count a-c-24 display-none"><span class="awoken-icon awoken-24"></span><span class="count"></span></li><!--木横-->
+				<li class="awoken-count a-c-25 display-none"><span class="awoken-icon awoken-25"></span><span class="count"></span></li><!--光横-->
+				<li class="awoken-count a-c-26 display-none"><span class="awoken-icon awoken-26"></span><span class="count"></span></li><!--暗横-->
+				<li class="awoken-count a-c-27 display-none"><span class="awoken-icon awoken-27"></span><span class="count"></span></li><!--U-->
+				<li class="awoken-count a-c-28 display-none"><span class="awoken-icon awoken-28"></span><span class="count"></span></li><!--SX-->
+				<li class="awoken-count a-c-29 display-none"><span class="awoken-icon awoken-29"></span><span class="count"></span></li><!--心+-->
+				<li class="awoken-count a-c-30 display-none"><span class="awoken-icon awoken-30"></span><span class="count"></span></li><!--协力-->
+				<li class="awoken-count a-c-31 display-none"><span class="awoken-icon awoken-31"></span><span class="count"></span></li><!--龙杀-->
+				<li class="awoken-count a-c-32 display-none"><span class="awoken-icon awoken-32"></span><span class="count"></span></li><!--神杀-->
+				<li class="awoken-count a-c-33 display-none"><span class="awoken-icon awoken-33"></span><span class="count"></span></li><!--恶魔杀-->
+				<li class="awoken-count a-c-34 display-none"><span class="awoken-icon awoken-34"></span><span class="count"></span></li><!--机杀-->
+				<li class="awoken-count a-c-35 display-none"><span class="awoken-icon awoken-35"></span><span class="count"></span></li><!--平衡杀-->
+				<li class="awoken-count a-c-36 display-none"><span class="awoken-icon awoken-36"></span><span class="count"></span></li><!--攻击杀-->
+				<li class="awoken-count a-c-37 display-none"><span class="awoken-icon awoken-37"></span><span class="count"></span></li><!--体力杀-->
+				<li class="awoken-count a-c-38 display-none"><span class="awoken-icon awoken-38"></span><span class="count"></span></li><!--回复杀-->
+				<li class="awoken-count a-c-39 display-none"><span class="awoken-icon awoken-39"></span><span class="count"></span></li><!--进化杀-->
+				<li class="awoken-count a-c-40 display-none"><span class="awoken-icon awoken-40"></span><span class="count"></span></li><!--觉醒杀-->
+				<li class="awoken-count a-c-41 display-none"><span class="awoken-icon awoken-41"></span><span class="count"></span></li><!--强化杀-->
+				<li class="awoken-count a-c-42 display-none"><span class="awoken-icon awoken-42"></span><span class="count"></span></li><!--卖钱杀-->
+				<li class="awoken-count a-c-43 display-none"><span class="awoken-icon awoken-43"></span><span class="count"></span></li><!--7c-->
+				<li class="awoken-count a-c-44 display-none"><span class="awoken-icon awoken-44"></span><span class="count"></span></li><!--5色破防-->
+				<li class="awoken-count a-c-45 display-none"><span class="awoken-icon awoken-45"></span><span class="count"></span></li><!--心追-->
+				<li class="awoken-count a-c-46 display-none"><span class="awoken-icon awoken-46"></span><span class="count"></span></li><!--全体HP-->
+				<li class="awoken-count a-c-47 display-none"><span class="awoken-icon awoken-47"></span><span class="count"></span></li><!--全体回复-->
+				<li class="awoken-count a-c-48 display-none"><span class="awoken-icon awoken-48"></span><span class="count"></span></li><!--破无效-->
+				<li class="awoken-count a-c-49 display-none"><span class="awoken-icon awoken-49"></span><span class="count"></span></li><!--武器觉醒-->
+				<li class="awoken-count a-c-50 display-none"><span class="awoken-icon awoken-50"></span><span class="count"></span></li><!--方块心追-->
+				<li class="awoken-count a-c-51 display-none"><span class="awoken-icon awoken-51"></span><span class="count"></span></li><!--5色溜-->
+				<li class="awoken-count a-c-52 display-none"><span class="awoken-icon awoken-52"></span><span class="count"></span></li><!--大防封-->
+				<li class="awoken-count a-c-53 display-none"><span class="awoken-icon awoken-53"></span><span class="count"></span></li><!--大手指-->
 				<li class="awoken-count a-c-54 display-none"><span class="awoken-icon awoken-54"></span><span class="count"></span></li><!--防云-->
 				<li class="awoken-count a-c-55 display-none"><span class="awoken-icon awoken-55"></span><span class="count"></span></li><!--防封条-->
+				<li class="awoken-count a-c-56 display-none"><span class="awoken-icon awoken-56"></span><span class="count"></span></li><!--大SB-->
+				<li class="awoken-count a-c-57 display-none"><span class="awoken-icon awoken-57"></span><span class="count"></span></li><!--满血强化-->
+				<li class="awoken-count a-c-58 display-none"><span class="awoken-icon awoken-58"></span><span class="count"></span></li><!--下半血强化-->
+				<li class="awoken-count a-c-59 display-none"><span class="awoken-icon awoken-59"></span><span class="count"></span></li><!--L盾-->
+				<li class="awoken-count a-c-60 display-none"><span class="awoken-icon awoken-60"></span><span class="count"></span></li><!--L解锁-->
+				<li class="awoken-count a-c-61 display-none"><span class="awoken-icon awoken-61"></span><span class="count"></span></li><!--10c-->
+				<li class="awoken-count a-c-62 display-none"><span class="awoken-icon awoken-62"></span><span class="count"></span></li><!--c珠-->
+				<li class="awoken-count a-c-63 display-none"><span class="awoken-icon awoken-63"></span><span class="count"></span></li><!--语音-->
+				<li class="awoken-count a-c-64 display-none"><span class="awoken-icon awoken-64"></span><span class="count"></span></li><!--奖励增加-->
+				<li class="awoken-count a-c-65 display-none"><span class="awoken-icon awoken-65"></span><span class="count"></span></li><!--HP--->
+				<li class="awoken-count a-c-66 display-none"><span class="awoken-icon awoken-66"></span><span class="count"></span></li><!--攻击--->
+				<li class="awoken-count a-c-67 display-none"><span class="awoken-icon awoken-67"></span><span class="count"></span></li><!--回复--->
 			</ul>
 		</div>
 		<div class="detail-box"><textarea class="detail" placeholder="输入说明"></textarea></div>
@@ -445,6 +385,22 @@ var formation = {
 					<li class="latent-icon"></li>
 				</ul>
 				<ul class="m-latent-allowable-ul">
+					<li class="latent-icon latent-icon-1" value="1"></li><!--HP-->
+					<li class="latent-icon latent-icon-2" value="2"></li><!--攻击-->
+					<li class="latent-icon latent-icon-3" value="3"></li><!--回复-->
+					<li class="latent-icon latent-icon-4" value="4"></li><!--手指-->
+					<li class="latent-icon latent-icon-5" value="5"></li><!--自回-->
+					<li class="latent-icon latent-icon-6" value="6"></li><!--火盾-->
+					<li class="latent-icon latent-icon-7" value="7"></li><!--水盾-->
+					<li class="latent-icon latent-icon-8" value="8"></li><!--木盾-->
+					<li class="latent-icon latent-icon-9" value="9"></li><!--光盾-->
+					<li class="latent-icon latent-icon-10" value="10"></li><!--暗盾-->
+					<li class="latent-icon latent-icon-11" value="11"></li><!--防坐-->
+					<li class="latent-icon latent-icon-12" value="12"></li><!--三维-->
+					<li class="latent-icon latent-icon-13" value="13"></li><!--进化杀-->
+					<li class="latent-icon latent-icon-14" value="14"></li><!--觉醒杀-->
+					<li class="latent-icon latent-icon-15" value="15"></li><!--强化杀-->
+					<li class="latent-icon latent-icon-16" value="16"></li><!--卖钱杀-->
 					<li class="latent-icon latent-icon-17" value="17"></li><!--神杀-->
 					<li class="latent-icon latent-icon-18" value="18"></li><!--龙杀-->
 					<li class="latent-icon latent-icon-19" value="19"></li><!--恶魔杀-->
@@ -453,11 +409,15 @@ var formation = {
 					<li class="latent-icon latent-icon-22" value="22"></li><!--攻击杀-->
 					<li class="latent-icon latent-icon-23" value="23"></li><!--体力杀-->
 					<li class="latent-icon latent-icon-24" value="24"></li><!--回复杀-->
-					<li class="latent-icon latent-icon-13" value="13"></li><!--进化杀-->
-					<li class="latent-icon latent-icon-14" value="14"></li><!--觉醒杀-->
-					<li class="latent-icon latent-icon-15" value="15"></li><!--强化杀-->
-					<li class="latent-icon latent-icon-16" value="16"></li><!--卖钱杀-->
-					<li class="latent-icon latent-icon-11" value="11"></li><!--防坐-->
+					<li class="latent-icon latent-icon-25" value="25"></li><!--大HP-->
+					<li class="latent-icon latent-icon-26" value="26"></li><!--大攻击-->
+					<li class="latent-icon latent-icon-27" value="27"></li><!--大回复-->
+					<li class="latent-icon latent-icon-28" value="28"></li><!--大手指-->
+					<li class="latent-icon latent-icon-29" value="29"></li><!--大火盾-->
+					<li class="latent-icon latent-icon-30" value="30"></li><!--大水盾-->
+					<li class="latent-icon latent-icon-31" value="31"></li><!--大木盾-->
+					<li class="latent-icon latent-icon-32" value="32"></li><!--大光盾-->
+					<li class="latent-icon latent-icon-33" value="33"></li><!--大暗盾-->
 				</ul>
 			</div>
 			

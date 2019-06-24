@@ -128,3 +128,9 @@
 .control-box .languages-label::before{
 	content: "語言：";
 }
+.control-box .solo-link::before{
+    content: "轉到單人遊戲";
+}
+.control-box .multi-link::before{
+    content: "轉到2人車隊";
+}
