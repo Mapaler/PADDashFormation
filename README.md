@@ -7,7 +7,7 @@ This tool can help you easily create and share Dash Formation or Solo Formation.
 
 * 易用的编辑界面，手机上也可以轻松使用。  
 Easy to use editing interface and use on your phone.   
-![手机端预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-mobile.png)
+![手机端预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-mobile.jpg)
 ## 目前支持的语言 | Languages that are now supported
 1. 中文（简体）
 1. 中文（繁體）
