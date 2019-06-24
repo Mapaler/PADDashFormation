@@ -4,11 +4,10 @@
 This tool can help you easily create and share Dash Formation or Solo Formation.  
 ![协力界面预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-main.png)  
 ![单人界面预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-solo.png)  
-
 * 易用的编辑界面，手机上也可以轻松使用。  
 Easy to use editing interface and use on your phone.   
 ![手机端预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-mobile.jpg)
-## 目前支持的语言 | Languages that are now supported
+## 目前支持的语言 | Supported Languages
 1. 中文（简体）
 1. 中文（繁體）
 1. English
@@ -17,13 +16,13 @@ Easy to use editing interface and use on your phone.
 
 # 如何使用 | HOW TO USE
 ## 在哪里打开 | Where to open
-* 快速使用在线版 | Fast Start  
+* 快速使用在线版 | Quick Start  
     * https://mapaler.github.io/PADDashFormation/ (Github Pages)
     * http://mapaler.gitee.io/paddashformation/ (码云的镜象，国内比较快|Chinese mirror)
     * [车队示例 \| Multi Team Sample](https://mapaler.github.io/PADDashFormation/?data=%7B%22title%22%3A%22%E6%88%91%E7%9A%84%E6%9C%A8%E8%BD%A6%E9%98%9F%7CMy%20Wood%20Dash%20Formation%22%2C%22detail%22%3A%22%E6%88%91%E5%B9%B3%E6%97%B6%E7%9A%84%E6%9C%A8%E8%BD%A6%E9%98%9F%5Cn5%E4%B8%AASX%E5%88%9A%E5%A5%BD%E5%A4%9F%5Cn%E5%BC%80%E8%BD%A6%E4%BA%86%EF%BC%8C%E6%BB%B4%E6%BB%B4%22%2C%22team%22%3A%5B%5B%5B%7B%22id%22%3A4813%2C%22level%22%3A110%2C%22awoken%22%3A9%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B20%2C20%2C20%5D%2C%22sawoken%22%3A1%7D%2C%7B%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B21%2C21%2C21%5D%7D%2C%7B%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B22%2C22%5D%7D%2C%7B%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B19%2C19%5D%7D%2C%7B%22id%22%3A5323%2C%22level%22%3A99%2C%22awoken%22%3A9%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B20%2C20%2C11%2C11%5D%7D%5D%2C%5B%7B%22id%22%3A5267%2C%22level%22%3A99%2C%22awoken%22%3A5%2C%22plus%22%3A%5B0%2C0%2C0%5D%7D%2C%7B%22id%22%3A3640%2C%22level%22%3A99%2C%22awoken%22%3A8%2C%22plus%22%3A%5B0%2C0%2C0%5D%2C%22sawoken%22%3A-1%7D%2C%7B%22id%22%3A4986%2C%22level%22%3A1%2C%22awoken%22%3A4%2C%22plus%22%3A%5B0%2C0%2C0%5D%7D%2C%7B%22id%22%3A0%7D%2C%7B%22id%22%3A0%7D%5D%5D%2C%5B%5B%7B%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B22%2C13%2C13%5D%7D%2C%7B%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B21%2C21%2C21%5D%7D%2C%7B%22id%22%3A2948%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B22%2C22%2C22%5D%7D%2C%7B%22id%22%3A4813%2C%22level%22%3A110%2C%22awoken%22%3A9%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B20%2C20%2C11%2C11%5D%2C%22sawoken%22%3A1%7D%2C%7B%22id%22%3A5042%2C%22level%22%3A101%2C%22awoken%22%3A9%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B20%2C20%2C11%2C11%5D%2C%22sawoken%22%3A2%7D%5D%2C%5B%7B%22id%22%3A3640%2C%22level%22%3A99%2C%22awoken%22%3A8%2C%22plus%22%3A%5B0%2C0%2C0%5D%2C%22sawoken%22%3A-1%7D%2C%7B%22id%22%3A4986%2C%22level%22%3A1%2C%22awoken%22%3A4%2C%22plus%22%3A%5B0%2C0%2C0%5D%7D%2C%7B%22id%22%3A0%7D%2C%7B%22id%22%3A5267%2C%22level%22%3A1%2C%22awoken%22%3A5%2C%22plus%22%3A%5B99%2C99%2C99%5D%7D%2C%7B%22id%22%3A5267%2C%22level%22%3A1%2C%22awoken%22%3A5%2C%22plus%22%3A%5B0%2C0%2C0%5D%7D%5D%5D%5D%7D)
     * [单人示例 \| Solo Sample](https://mapaler.github.io/PADDashFormation/solo.html?data=%7B%22title%22%3A%22%E5%A4%A7%E5%8F%B7%E6%89%93%E9%87%8C%C2%B7%E4%B8%89%E9%92%88%22%2C%22detail%22%3A%22%E6%B3%A8%E6%84%8F%E5%89%8D%E9%9D%A2%E5%87%A0%E5%85%B3%E8%A6%81%E5%BF%AB%E7%82%B9%E6%89%93%EF%BC%8C%E4%B8%8D%E7%84%B6%E5%B0%8F%E6%8A%A4%E5%A3%AB2%E6%8A%80%E8%B7%B3%E4%BA%86%EF%BC%8C%E4%BC%9A%E8%A2%AB%E5%B0%81%E8%A7%89%E9%86%92%E9%98%9F%E9%95%BF%E6%8D%B6%E6%AD%BB%E3%80%82%22%2C%22team%22%3A%5B%5B%5B%7B%22id%22%3A5139%2C%22level%22%3A102%2C%22awoken%22%3A9%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B17%2C17%2C11%2C11%5D%2C%22sawoken%22%3A1%7D%2C%7B%22id%22%3A4635%2C%22level%22%3A110%2C%22awoken%22%3A9%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B27%2C27%2C27%5D%2C%22sawoken%22%3A2%7D%2C%7B%22id%22%3A5004%2C%22level%22%3A110%2C%22awoken%22%3A9%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B17%2C17%2C17%5D%2C%22sawoken%22%3A0%7D%2C%7B%22id%22%3A4137%2C%22level%22%3A101%2C%22awoken%22%3A8%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B23%2C23%2C11%2C11%5D%2C%22sawoken%22%3A1%7D%2C%7B%22id%22%3A5331%2C%22level%22%3A110%2C%22awoken%22%3A9%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B18%2C18%2C11%2C11%5D%2C%22sawoken%22%3A2%7D%2C%7B%22id%22%3A5139%2C%22level%22%3A110%2C%22awoken%22%3A9%2C%22plus%22%3A%5B99%2C99%2C99%5D%2C%22latent%22%3A%5B17%2C17%2C11%2C11%5D%2C%22sawoken%22%3A2%7D%5D%2C%5B%7B%22id%22%3A4140%2C%22level%22%3A99%2C%22awoken%22%3A5%2C%22plus%22%3A%5B99%2C99%2C99%5D%7D%2C%7B%22id%22%3A4148%2C%22level%22%3A71%2C%22awoken%22%3A5%2C%22plus%22%3A%5B0%2C0%2C0%5D%7D%2C%7B%22id%22%3A5257%2C%22level%22%3A99%2C%22awoken%22%3A6%2C%22plus%22%3A%5B0%2C0%2C0%5D%7D%2C%7B%22id%22%3A5239%2C%22level%22%3A1%2C%22awoken%22%3A6%2C%22plus%22%3A%5B0%2C0%2C0%5D%7D%2C%7B%22id%22%3A4154%2C%22level%22%3A99%2C%22awoken%22%3A5%2C%22plus%22%3A%5B0%2C0%2C0%5D%7D%2C%7B%22id%22%3A4897%2C%22level%22%3A99%2C%22awoken%22%3A5%2C%22plus%22%3A%5B0%2C0%2C0%5D%7D%5D%5D%5D%7D)
 * 或下载压缩包后使用火狐浏览器打开`index.html`。  
-Or download ZIP, and open the `index.html` by Firefox.
+Or download ZIP, and open the `index.html` with Firefox.
 
 ## 小提示 | Tips
 * 直接复制网址即可分享组队。你可以使用*短网址服务*进一步缩短网址。  
@@ -44,7 +43,7 @@ You can search for monsters by entering the monster name in the monster ID of th
 # 翻译我 | TRANSLATE ME
 ## How to **Pull requests**
 1. Click **Fork** In the page top right corner. Fork your own copy of this repository to your account.
-1. Use Git to clone/pull repository locally for modification(How to modify please see below).
+1. Use Git to clone/pull repository locally for modification (How to modify please see below).
 1. Use Git to commit and push changes to your repository on GitHub.
 1. Go to the **[Pull requests](//github.com/puzzled-dragon/pad-helper/pulls)** page in the top middle of this repository, and click the **New pull request** button.
 1. Click the **Compare Across Forks** button and select your fork, the page then displays the changes.
@@ -53,7 +52,7 @@ You can search for monsters by entering the monster name in the monster ID of th
 ## Translate
 1. Go to the `languages` folder
 1. Push your language info into `language-list.js`.  
-This is a Object for a language list item.
+This is an Object for a language list item.
     ```js
     {
         name:"English",
