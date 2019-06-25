@@ -14,6 +14,9 @@
 .monster .level::before{
 	content: "Lv.";
 }
+.monster .id::before{
+	content: "No.";
+}
 .formation-A-bigbox::after{
 	content: "隊伍\A A";
 }
@@ -133,4 +136,10 @@
 }
 .control-box .multi-link::before{
     content: "轉到2人車隊";
+}
+.control-box .btn-show-mon-id::before{
+    content: "隱藏怪物ID";
+}
+.not-show-mon-id .control-box .btn-show-mon-id::before{
+    content: "顯示怪物ID";
 }

@@ -14,6 +14,9 @@
 .monster .level::before{
 	content: "Lv.";
 }
+.monster .id::before{
+	content: "No.";
+}
 .formation-A-bigbox::after{
 	content: "チーム\A A";
 }
@@ -130,4 +133,10 @@
 }
 .control-box .multi-link::before{
 	content: "2人協力のゲームに移動";
+}
+.control-box .btn-show-mon-id::before{
+	content: "隠しモンスターID";
+}
+.not-show-mon-id .control-box .btn-show-mon-id::before{
+	content: "モンスターIDを表示";
 }

@@ -14,6 +14,9 @@
 .monster .level::before{
 	content: "Lv.";
 }
+.monster .id::before{
+	content: "No.";
+}
 .formation-A-bigbox::after{
 	content: "팀\A A";
 }
@@ -130,4 +133,10 @@
 }
 .control-box .multi-link::before{
 	content: "2인 게임으로 이동";
+}
+.control-box .btn-show-mon-id::before{
+	content: "숨겨진 몬스터 ID";
+}
+.not-show-mon-id .control-box .btn-show-mon-id::before{
+	content: "괴물 ID 표시";
 }

@@ -444,6 +444,11 @@ function changeid(mon,monDom,latentDom)
 			sawoken.classList.add("display-none");
 		}
 	}
+	var m_id = monDom.querySelector(".id");
+	if (m_id) //如果存在超觉醒的DOM且提供了超觉醒
+	{
+		m_id.innerHTML = mon.id;
+	}
 	if (mon.plus) //如果提供了加值
 	{
 		monDom.querySelector(".plus .hp").innerHTML = mon.plus[0];
