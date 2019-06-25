@@ -608,7 +608,7 @@ ul{
 	margin-top:5px;
 }
 .awoken-total-box .awoken-ul .awoken-count{
-	font-size: 20px;
+	font-size: 16px;
 	line-height: 32px;
 	font-family: 'FOT-KurokaneStd-EB';
 	float: left;
@@ -616,7 +616,7 @@ ul{
 }
 .awoken-total-box .awoken-ul .count{
 	height: 32px;
-	width: 45px;
+	width: 30px;
 	display: inline-block;
 	vertical-align: middle;
 }
