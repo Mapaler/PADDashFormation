@@ -15,6 +15,9 @@
 .monster .level::before{
 	content: "Lv.";
 }
+.monster .id::before{
+	content: "No.";
+}
 .formation-A-bigbox::after{
 	content: "Team\A A";
 }
@@ -137,4 +140,10 @@
 }
 .control-box .multi-link::before{
 	content: "Jump To 2-Player Mode";
+}
+.control-box .btn-show-mon-id::before{
+	content: "Hide monster ID";
+}
+.not-show-mon-id .control-box .btn-show-mon-id::before{
+	content: "Show monster ID";
 }

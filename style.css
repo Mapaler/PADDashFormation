@@ -113,9 +113,9 @@ ul{
 /*怪物-加值*/
 .monster .plus{
 	color: yellow;
-	font-size: 20px;
-	line-height: 20px;
-	text-shadow: black 0 0 1px, black 2px 2px 0;
+	font-size: 17px;
+	line-height: 17px;
+	text-shadow: black 0 0 1px,black 0 0 2px, black 2px 2px 0;
 	position: absolute;
 	left:0;
 }
@@ -154,7 +154,9 @@ ul{
 	width: 34px;
 	height: 38px;
 	position: absolute;
+	top: -4px;
 	right: 0;
+	transform: scale(0.80) translateX(4px);
 }
 .monster .awoken-count.allowable-assist{
 	font-size: 0;
@@ -165,34 +167,52 @@ ul{
 .monster .super-awoken{
 	position: absolute;
 	right:0;
-	top: 30px;
+	top: 25px;
 	transform: scale(0.80) translateX(4px);
 }
 /*怪物-等级*/
 .monster .level{
 	color: white;
-	font-size: 18px;
-	line-height: 27px;
-	height: 27px;
-	text-shadow: black 0 0 1px, black 2px 2px 0;
+	height: 17px;
+	text-shadow: black 0 0 2px, black 2px 2px 0;
 	position: absolute;
 	left: 5px;
-	bottom: 0;
+	bottom: 0px;
 	vertical-align: top;
+}
+.monster .level,.monster .level.max::before{
+	font-size: 15px;
+	line-height: 17px;
+}
+.monster .level.max{
+	font-size: 0;
 }
 .monster .level._110{
 	color: lightskyblue;
 }
 /*.monster .level::before{
 	content: "Lv.";
+}.monster .level.max::before{
+	content: "Lv.最大";
 }*/
-.monster .level.max{
-	font-size: 0;
+.monster .id{
+	display: block;
+	color: white;
+	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	line-height: 17px;
+	height: 17px;
+	text-shadow: black 1px 1px 0,black 1px -1px 0,black -1px 1px 0,black -1px -1px 0;
+	position: absolute;
+	left: 5px;
+	bottom: 15px;
 }
-.monster .level.max::before{
-	font-size: 18px;
-	/*content: "Lv.最大";*/
+.not-show-mon-id .monster .id{
+	display: none;
 }
+/*.monster .id::before{
+	content: "No.";
+}*/
 /*辅助和队伍的每一只框架*/
 .member, .acquisitus-awoken-icon {
 	display: block;
@@ -605,7 +625,7 @@ ul{
 .awoken-total-box .awoken-ul .count::before{
 	content: "×";
 }
-
+/*控制框*/
 .control-box{
 	margin-bottom: 10px;
 }
@@ -621,3 +641,12 @@ ul{
 .control-box .multi-link::before{
 	content: "Jump To 2-Player Version";
 }
+.control-box .btn-show-mon-id{
+	margin-left: 5px;
+}
+/*.control-box .btn-show-mon-id::before{
+	content: "隐藏怪物ID";
+}
+.not-show-mon-id .control-box .btn-show-mon-id::before{
+	content: "显示怪物ID";
+}*/
