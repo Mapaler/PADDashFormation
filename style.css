@@ -120,9 +120,7 @@ ul{
 	left:0;
 }
 
-.null .plus,.delay .plus,
-.null .awoken-count,.delay .awoken-count,
-.null .level,.delay .level{
+.null .monster>div,.delay .monster>div{
 	display:none;
 }
 /*.monster .plus .hp::before,
