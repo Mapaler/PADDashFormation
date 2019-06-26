@@ -36,7 +36,7 @@ for (var mi=0;mi<mainCard.length;mi++)
 
 		var awokenCIdx = 58+m[57]*3; //awoken Count Index
 		var awoken = m.slice(awokenCIdx+1,awokenCIdx+1+m[awokenCIdx]);
-		var superAwoken = m[awokenCIdx+1+m[awokenCIdx]].split(",").map(function(ns){return parseInt(ns);}); //超觉醒
+		var superAwoken = m[awokenCIdx+1+m[awokenCIdx]].length>0?(m[awokenCIdx+1+m[awokenCIdx]].split(",").map(function(ns){return parseInt(ns);})):null; //超觉醒
 
 		var mon = {
 			id:	m[0],

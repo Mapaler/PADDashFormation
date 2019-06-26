@@ -328,6 +328,15 @@ function initialize()
 		creatNewUrl();
 		editBox.hide();
 	}
+	window.onkeydown = function(e){
+		if (!editBox.classList.contains("display-none"))
+		{
+			if (e.keyCode == 27)
+			{ //按下ESC时，自动关闭编辑窗
+				btnCancel.onclick();
+			}
+		}
+	}
 	btnNull.onclick = function(){
 		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = {id:0};
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
@@ -445,7 +454,7 @@ function changeid(mon,monDom,latentDom)
 		}
 	}
 	var m_id = monDom.querySelector(".id");
-	if (m_id) //如果存在超觉醒的DOM且提供了超觉醒
+	if (m_id) //怪物ID
 	{
 		m_id.innerHTML = mon.id;
 	}
@@ -607,7 +616,7 @@ function editBoxChangeMonId(id)
 	//超觉醒
 	var mSAwokenRow = settingBox.querySelector(".row-mon-super-awoken");
 	var mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
-	if (md.sAwoken)
+	if (md.sAwoken && md.sAwoken.length>0)
 	{
 		mSAwokenRow.classList.remove("display-none");
 		for (var ai=0;ai<mSAwoken.length;ai++)
@@ -619,9 +628,7 @@ function editBoxChangeMonId(id)
 		}
 	}else
 	{
-		console.log(mSAwokenRow.classList);
 		mSAwokenRow.classList.add("display-none");
-		console.log(mSAwokenRow.classList);
 	}
 
 	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
