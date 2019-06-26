@@ -7,6 +7,7 @@ This tool can help you easily create and share Dash Formation or Solo Formation.
 * 易用的编辑界面，手机上也可以轻松使用。  
 Easy to use editing interface and use on your phone.   
 ![手机端预览](https://github.com/Mapaler/PADDashFormation/raw/master/document/preview-mobile.jpg)
+
 ## 目前支持的语言 | Supported Languages
 1. 中文（简体）
 1. 中文（繁體）
@@ -69,7 +70,17 @@ This is an Object for a language list item.
 1. Create your language's Localisation file `i18n.css` and `i18n.js`.  
 Please refer to existing files.
 
-# 智龙迷城官网 | Puzzle & Dragons Official Website
+
+
+# 权利归属 | Copyright
+> 本软件灵感来源于[PDC 智龙迷城伤害计算器](https://play.google.com/store/apps/details?id=com.corombo13.paddamagecal)  
+> This software is inspired by [PDC パズドラダメージ計算](https://play.google.com/store/apps/details?id=com.corombo13.paddamagecal)
+
+© GungHo Online Entertainment Inc. All Right Reserved.  
+所有图片素材版权与怪物信息归属于GungHo在线娱乐有限公司。  
+パズル&ドラゴンズに関する画像及び情報等の権利はGungHo Online Entertainment Inc.に帰属します。
+
+## 智龙迷城官网 | Puzzle & Dragons Official Website
 * [パズル＆ドラゴンズ](http://pad.gungho.jp)
 * [龍族拼圖](https://pad.gungho.jp/hktw/pad/)
 * [Puzzle & Dragons](https://www.puzzleanddragons.us/)
