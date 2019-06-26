@@ -63,7 +63,7 @@ function g(id)
 }
 GM_xmlhttpRequest({
 	method: "GET",
-	url:"ja.json",
+	url:"en.json",
 	onload: function(response) {
 		card = JSON.parse(response.response).card;
 		/*

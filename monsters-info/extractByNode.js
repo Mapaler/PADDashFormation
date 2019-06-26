@@ -11,49 +11,67 @@ var cards = officialAPI.map(function(code){
 
 var mainCard = cards[0]; //数据的主要card
 var mArr = []; //储存输出内容
-for (var mi=0;mi<mainCard.length;mi++)
-{
-	var m = mainCard[mi];
-	if (m[0] != mi) //id超了，都是些怪物了
+
+var maxLength = cards.map(function(card){ //获取最大怪物id
+	var length = card.length;
+	for (var mi=0;mi<card.length;mi++)
 	{
-		break;
-	}else
-	{
-		//名字
-		var nameObj = {};
-		officialAPI.forEach(function(code,idx){
-			var _m = cards[idx][mi];
-			if (_m && !/^\*+/.test(_m[1])) //没有数据，或者名字是星号，则为空
-				nameObj[code] = _m[1];
-		})
-
-		//类型
-		var type = [m[5]];
-		if (m[6]!=-1) //第二个type
-			type.push(m[6]);
-		if (m[m.length-9]!=-1) //第三个type要倒着来
-			type.push(m[m.length-9]);
-
-		var awokenCIdx = 58+m[57]*3; //awoken Count Index
-		var awoken = m.slice(awokenCIdx+1,awokenCIdx+1+m[awokenCIdx]);
-		var superAwoken = m[awokenCIdx+1+m[awokenCIdx]].length>0?(m[awokenCIdx+1+m[awokenCIdx]].split(",").map(function(ns){return parseInt(ns);})):null; //超觉醒
-
-		var mon = {
-			id:	m[0],
-			name: nameObj,
-			ppt: [m[2],m[3]], //属性property
-			type: type,
-			rare: m[7],
-			awoken: awoken,
-			maxLv: m[m.length-3]>0?110:m[10],
-			assist: (m[m.length-5]>2 && [303,305,307,600,602].indexOf(m[0])<0)?1:0, //但是5种小企鹅是特殊情况
-		}
-		if (mon.maxLv>99 && superAwoken)
+		if (card[mi][0] != mi) //id超了，都是些怪物了
 		{
-			mon.sAwoken = superAwoken;
+			length = mi;
+			break;
 		}
-		mArr.push(mon);
 	}
+	return length;
+}).sort(function(a,b){return b-a;})[0];
+
+for (var mi=0;mi<maxLength;mi++)
+{
+	var m = mainCard[mi]; //预设默认的数据
+
+	//名字对象
+	var nameObj = {};
+	officialAPI.forEach(function(code,idx){
+		var _m = cards[idx][mi];
+		if (_m[0] == mi) //如果id是一致的才添加，否则是怪物，不添加
+		{
+			if (_m && !/^\*+/.test(_m[1])) //没有数据，或者名字是星号，则为空
+			{
+				nameObj[code] = _m[1]; //储存当前语言，问号也存
+				if (m[0] != mi || /^\?+/.test(m[1])) //如果日服没有基础数据，或日服是问号而后面的有内容，则使用后面服的数据
+				{
+					m = _m;
+				}
+			}
+		}
+	})
+
+	//类型
+	var type = [m[5]];
+	if (m[6]!=-1) //第二个type
+		type.push(m[6]);
+	if (m[m.length-9]!=-1) //第三个type要倒着来
+		type.push(m[m.length-9]);
+
+	var awokenCIdx = 58+m[57]*3; //awoken Count Index
+	var awoken = m.slice(awokenCIdx+1,awokenCIdx+1+m[awokenCIdx]);
+	var superAwoken = m[awokenCIdx+1+m[awokenCIdx]].length>0?(m[awokenCIdx+1+m[awokenCIdx]].split(",").map(function(ns){return parseInt(ns);})):null; //超觉醒
+
+	var mon = {
+		id:	m[0],
+		name: nameObj,
+		ppt: [m[2],m[3]], //属性property
+		type: type,
+		rare: m[7],
+		awoken: awoken,
+		maxLv: m[m.length-3]>0?110:m[10],
+		assist: (m[m.length-5]>2 && [303,305,307,600,602].indexOf(m[0])<0)?1:0, //但是5种小企鹅是特殊情况
+	}
+	if (mon.maxLv>99 && superAwoken)
+	{
+		mon.sAwoken = superAwoken;
+	}
+	mArr.push(mon);
 }
 
 var cards_c = custom.map(function(code){

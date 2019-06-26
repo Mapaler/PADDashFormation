@@ -106,11 +106,7 @@ function initialize()
 	ms.forEach(function(m){
 		var opt = monstersList.appendChild(document.createElement("option"));
 		opt.value = m.id;
-		opt.label = m.id + " - " +  language.searchlist.map(function(lc){ //取出每种语言
-			return m.name[lc];
-		}).filter(function(ln){ //去掉空值
-			return ln?(ln.length>0):false;
-		}).join(" | ");
+		opt.label = m.id + " - " +  returnMonsterNameArr(m,language.searchlist).join(" | ");
 	});
 	//控制框
 	var controlBox = document.querySelector(".control-box");
@@ -585,7 +581,7 @@ function editBoxChangeMonId(id)
 	var mRare = monInfoBox.querySelector(".monster-rare");
 	mRare.className = "monster-rare rare-" + md.rare;
 	var mName = monInfoBox.querySelector(".monster-name");
-	mName.innerHTML = md.name[language.searchlist[0]] || md.name["ja"];
+	mName.innerHTML = returnMonsterNameArr(md,language.searchlist)[0];
 	var mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (var ti=0;ti<mType.length;ti++)
 	{
