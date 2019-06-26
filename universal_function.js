@@ -107,3 +107,25 @@ function awokenCountInTeam(formationTeam,ak,solo)
     },0)
     return allAwokenCount;
 }
+//返回可用的怪物名称
+function returnMonsterNameArr(m,lsList)
+{
+	var monNameArr = lsList.map(function(lc){ //取出每种语言
+		return m.name[lc];
+	}).filter(function(ln){ //去掉空值和问号
+		return (ln?(ln.length>0):false) && !/^(?:초월\s*)?\?+/.test(ln);
+	});
+	if (monNameArr.length < 1) //如果本来的列表里没有名字
+	{
+		for (var nc in m.name)
+		{ //循环所有名字
+			var theName = m.name[nc]; //当前的名字
+			if (!/^(?:초월\s*)?\?+/.test(theName)) //如果不是问号
+			{
+				monNameArr.push(theName);
+			}
+		}
+		if (monNameArr.length < 1) monNameArr.push("????"); //如果还没有，默认名是问号
+	}
+	return monNameArr;
+}
