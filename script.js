@@ -388,6 +388,10 @@ function changeid(mon,monDom,latentDom)
 		monDom.parentNode.classList.remove("delay");
 		monDom.className = "monster";
 		monDom.classList.add("pet-cards-" + Math.ceil(mon.id/100)); //添加图片编号
+		if (md.name["jp"] == undefined || /^\?+/.test(md.name["jp"])) //如果没日文或日文是问号，就改为英文的图片
+			monDom.classList.add("en-only");
+		else
+			monDom.classList.remove("en-only");
 		var idxInPage = (mon.id-1) % 100; //获取当前页面的总序号
 		monDom.classList.add("pet-cards-index-x-" + idxInPage % 10); //添加X方向序号
 		monDom.classList.add("pet-cards-index-y-" + parseInt(idxInPage / 10)); //添加Y方向序号
