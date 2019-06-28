@@ -388,7 +388,7 @@ function changeid(mon,monDom,latentDom)
 		monDom.parentNode.classList.remove("delay");
 		monDom.className = "monster";
 		monDom.classList.add("pet-cards-" + Math.ceil(mon.id/100)); //添加图片编号
-		if (md.name["jp"] == undefined || /^\?+/.test(md.name["jp"])) //如果没日文或日文是问号，就改为英文的图片
+		if (md.name["ja"] == undefined || /^\?+/.test(md.name["ja"])) //如果没日文或日文是问号，就改为英文的图片
 			monDom.classList.add("en-only");
 		else
 			monDom.classList.remove("en-only");
