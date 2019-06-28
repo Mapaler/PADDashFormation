@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>代码测试</title>
+<title>技能代码测试</title>
 <script type="text/javascript">
 var skill;
 var mid;
@@ -25,14 +25,6 @@ var GM_xmlhttpRequest = function(GM_param) {
 	}
 	xhr.send(GM_param.data ? GM_param.data : null);
 }
-function g(id)
-{
-	var m = skill[id];
-	console.log("%oCD:%s",
-		m, //对象
-		m[4] + "-" + (m[4]-m[3]+1), //技能CD
-	);
-}
 GM_xmlhttpRequest({
 	method: "GET",
 	url:"ja-skill.json",
@@ -40,9 +32,185 @@ GM_xmlhttpRequest({
 		skill = JSON.parse(response.response).skill;
 	},
 	onerror: function(response) {
-		console.error("怪物数据获取错误",response);
+		console.error("技能数据获取错误",response);
 	}
 });
+function g(id)
+{
+	var m = skill[id];
+	console.log("No.%d CD:%d-%d(Lv%d) %o",
+		id,
+		m[4], //技能CD MAX
+		(m[4]-m[3]+1), //技能CD MIN
+		m[3], //技能CD LV
+		m, //对象
+	);
+	//console.log(skillDetail(id));
+	skillDetail(id)
+}
+
+function skillDetail(si)
+{
+	var sk = skill[si];
+	var str = null;
+	//珠子名数组
+	var pna = ["火","水","木","光","暗","回复","邪魔","毒","剧毒","炸弹"];
+	//类型名数组
+	var tna = ["进化","平衡","体力","回复","龙","神","攻击","恶魔","机械","9","10","11","觉醒","13","强化","卖钱"];
+	//返回属性名
+	function pn(i)
+	{
+		return pna[i] || ("未知属性" + i);
+	}
+	//从二进制(10禁止保存)的数字中获得有哪些珠子
+	function binPns(b)
+	{	/*b是输入的数字，比如10进制465转二进制=>111010001
+		然后从地位到高位表示火水木光暗……
+		用逻辑运算AND序号来获得有没有这个值*/
+		var pns = pna.filter(function(pn,pi){
+			return b & Math.pow(2,pi);
+		});
+		return pns;
+	}
+	//返回类型名
+	function tn(i)
+	{
+		return tna[i] || ("未知类型" + i);
+	}
+	switch(sk[2])
+	{
+		case 0:
+			str = "对敌方全体造成自身攻击力×" + sk[7]/100 + "倍的" + pn(sk[6]) + "属性伤害";
+			break;
+		case 1:
+			str = "对敌方全体造成" + sk[7] + "的" + pn(sk[6]) + "属性攻击";
+			break;
+		case 2:
+			str = "对敌方1体造成自身攻击力×" + sk[6]/100 + "倍的伤害";
+			break;
+		case 3:
+			str = sk[6] + "回合内受到的伤害减少" + sk[7] + "%";
+			break;
+		case 4:
+			str = "使敌方全体中毒，每回合损失宠物自身攻击力×" + sk[6]/100 + "倍的HP";
+			break;
+		case 5:
+			str = sk[6] + "秒内时间停止，可以任意移动宝珠";
+			break;
+		case 6:
+			str = "敌人的HP减少" + sk[6] + "%";
+			break;
+		case 8:
+			str = "回复" + sk[6] + "HP";
+			break;
+		case 9:
+			str = pn(sk[6]) + "变为" + pn(sk[7] || 0);
+			break;
+		case 10:
+			str = "全版刷新";
+			break;
+		case 11:
+			str = pn(sk[6]) + "属性宠物的攻击力×" + sk[7]/100 + "倍";
+			break;
+		case 12:
+			str = "消除宝珠的回合，以自身攻击力×" + sk[6]/100 + "倍的伤害追打敌人";
+			break;
+		case 13:
+			str = "消除宝珠的回合，回复自身回复力×" + sk[6]/100 + "倍的HP";
+			break;
+		case 14:
+			str = "如当前HP在HP上限的"+sk[6]+"%~"+sk[7]+"%的话，受到单一次致命攻击时，将会以1点HP生还";
+			break;
+		case 15:
+			str = "操作时间演延长" + sk[6]/100 + "秒";
+			break;
+		case 16:
+			str = "受到的所有伤害减少" + sk[6] + "%";
+			break;
+		case 17:
+			str = "受到的" +pn(sk[6])+ "属性伤害减少" + sk[7] + "%";
+			break;
+		case 19:
+			str = sk[6] + "回合内敌方防御力减少" + sk[7] + "%";
+			break;
+		case 50:
+			str = sk[6] + "回合内" + (sk[7]==5?"回复力":(pn(sk[7]) + "属性的攻击力")) + "×"+ sk[8]/100 + "倍";
+			break;
+		case 71:
+			var Orbs = sk.slice(6,sk.indexOf(-1,6)); //6开到-1为止都是会产生的属性
+			str = "全画面的宝珠变成" + Orbs.map(function(o){return pn(o);}).join("、");
+			break;
+		case 84:
+			str = "HP减少"+ sk[9] +"%，对敌方1体造成自身攻击力×" + (sk[7]!=sk[8]?(sk[7]/100+"~"+sk[8]/100):sk[7]/100) + "倍的" + pn(sk[6]) + "属性伤害";
+			break;
+		case 85:
+			str = "HP减少"+ sk[9] +"%，对敌方全体造成自身攻击力×" + (sk[7]!=sk[8]?(sk[7]/100+"~"+sk[8]/100):sk[7]/100) + "倍的" + pn(sk[6]) + "属性伤害";
+			break;
+		case 88:
+			str = sk[6] + "回合内" + tn(sk[7]) + "类型的攻击力×"+ sk[8]/100 + "倍";
+			break;
+		case 92:
+			var Types = sk.slice(7,sk.length-1);
+			str = sk[6] + "回合内" + Types.map(ti => {return tn(ti);}).join("、") + "类型的攻击力×"+ sk[9]/100 + "倍";
+			break;
+		case 116:case 138:
+			var nextSkillId = sk.slice(6); //6开始都是下个技能的内容
+			/*var nextSkillDetail = nextSkillId.map(function(si){ //每个技能单独获取解释
+				return skillDetail(si);
+			});*/
+			str = "按顺序组合发动如下"  + (sk[2]==116?"主动":"队长") + "技能：";
+			console.log(str);
+			nextSkillId.forEach(si => {skillDetail(si)});
+			return;
+			break;
+		case 117:
+			var arrT = [];
+			if(sk[7]>0) arrT.push("回复宠物自身回复力x" + sk[7]/100 + "倍的HP");
+			if(sk[9]) arrT.push("回复最大HP" + sk[9] + "%的HP");
+			if(sk[6]>0) arrT.push("封锁状态减少" + sk[6] + "回合");
+			if(sk[10]>0) arrT.push("觉醒无效状态减少" + sk[6] + "回合");
+			if(sk[8]) arrT.push("未知的sk[8]");
+			str = arrT.join("，");
+			break;
+		case 126:
+			str = sk[7] +"回合内" + binPns(sk[6]).join("、") + "珠的掉落率提高"+ sk[9] + "%";
+			if (sk[7] != sk[8]) str += "还有未知sk[8]";
+			break;
+		case 141:
+			str = "随机生成" + binPns(sk[7]).join("、") + "珠各"+ sk[6] + "个";
+			if (sk[7] != sk[8]) str += "还有未知sk[8]";
+			break;
+		case 146:
+			str = "自身以外的宠物技能CD减少"+ (sk[6]!=sk[7]?(sk[6]+"~"+sk[7]):sk[6])+"回合";
+			break;
+		case 153:
+			str = "敌人全体变为"+ pn(sk[6]) + "属性。（" +(sk[7]?"不":"")+"受防护盾的影响）";
+			break;
+		case 154:
+			str = binPns(sk[6]).join("、") + "珠变为"+ pn(sk[7]);
+			break;
+		case 172:
+			str = "解锁所有宝珠";
+			break;
+		case 173:
+			var arrT = [];
+			if (sk[7]) arrT.push("属性吸收");
+			if (sk[8]) arrT.push("连击吸收？目前是猜测");
+			if (sk[9]) arrT.push("伤害吸收");
+			str = sk[6] + "回合内敌人的" + arrT.join("、") + "无效化";
+			break;
+		case 191:
+			str = sk[6] + "回合内可以贯穿伤害无效盾";
+			break;
+		default:
+			str = "未知的技能类型" + sk[2] + "(No." + si + ")";
+			console.log(str,sk);
+			return;
+			break;
+	}
+	//return str;
+	console.log(str);
+}
 </script>
 </head>
 
@@ -53,6 +221,6 @@ window.onload = function()
 	mid = document.querySelector("#mid");
 }
 </script>
-<input type="number" id="mid"><input type="button" value="测试" onclick="g(parseInt(mid.value));">
+<input type="number" id="mid"><input type="button" value="获取技能" onclick="g(parseInt(mid.value));">
 </body>
 </html>

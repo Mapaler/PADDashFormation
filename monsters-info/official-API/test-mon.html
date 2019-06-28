@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>代码测试</title>
+<title>怪物代码测试</title>
 <script type="text/javascript">
 var card;
 var mid;
@@ -63,7 +63,7 @@ function g(id)
 }
 GM_xmlhttpRequest({
 	method: "GET",
-	url:"en.json",
+	url:"ja.json",
 	onload: function(response) {
 		card = JSON.parse(response.response).card;
 		/*
@@ -93,6 +93,6 @@ window.onload = function()
 	mid = document.querySelector("#mid");
 }
 </script>
-<input type="number" id="mid"><input type="button" value="测试" onclick="g(parseInt(mid.value));">
+<input type="number" id="mid"><input type="button" value="获取怪物" onclick="g(parseInt(mid.value));">
 </body>
 </html>
