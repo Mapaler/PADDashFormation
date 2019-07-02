@@ -254,7 +254,7 @@ function skillDetail(si)
 			str = arrT.join("，");
 			break;
 		case 132:
-			str = sk[6] + "回合内，宝珠移动时间增加" + sk[7]/10 + "秒";
+			str = sk[6] + "回合内，宝珠移动时间" + (sk[8]?("变为"+sk[8]/100+"倍"):("增加"+sk[7]/10+"秒"));
 			break;
 		case 138: //多内容队长技能
 			var nextSkillId = sk.slice(6); //6开始都是下个技能的内容
@@ -302,6 +302,19 @@ function skillDetail(si)
 		case 172:
 			str = "解锁所有宝珠";
 			break;
+		case 176:
+		//●◉○◍◯
+			var table = [sk[6],sk[7],sk[8],sk[9],sk[10]];
+			str = "以如下形状生成" + pn(sk[11]) + "宝珠\n";
+			str += table.map(r=>{
+				var rArr = [];
+				for(var c=0;c<=5;c++)
+				{
+					rArr.push(r & Math.pow(2,c)?"●":"○");
+				}
+				return rArr.join("");
+			}).join("\n");
+			break;
 		case 173:
 			var arrT = [];
 			if (sk[7]) arrT.push("属性吸收");
@@ -317,6 +330,9 @@ function skillDetail(si)
 			break;
 		case 191:
 			str = sk[6] + "回合内可以贯穿伤害无效盾";
+			break;
+		case 196:
+			str = "无法消除宝珠状态减少"+ sk[6] + "回合";
 			break;
 		default:
 			str = "未知的技能类型" + sk[2] + "(No." + si + ")";
