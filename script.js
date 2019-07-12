@@ -616,7 +616,7 @@ function editBoxChangeMonId(id)
 	//超觉醒
 	var mSAwokenRow = settingBox.querySelector(".row-mon-super-awoken");
 	var mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
-	if (md.sAwoken && md.sAwoken.length>0)
+	if (!editBox.assist && md.sAwoken && md.sAwoken.length>0)
 	{
 		mSAwokenRow.classList.remove("display-none");
 		for (var ai=0;ai<mSAwoken.length;ai++)
