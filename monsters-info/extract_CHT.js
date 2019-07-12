@@ -1,6 +1,6 @@
 ﻿var fs = require('fs');
 var sourceFolder = "Download-pad.skyozora.com/pad.skyozora.com";
-var outJSON = "custom/CHT.json";
+var outJSON = "custom/cht.json";
 var path = require('path');//解析需要遍历的文件夹
 
 fs.access(outJSON,function(err){
