@@ -28,9 +28,11 @@ fs.access(outJSON,function(err){
 					var searchName = /<h2 .+>\s*?([\s\S]+)\s*?<\/h2>/igm.exec(htmlText);
 					try
 					{
+						var mname = searchName[1].replace("\n","");
+						mname = mname.replace("探偵","偵探"); //把日语的探侦都换成侦探
 						var m = {
 							id:searchID[1],
-							name:searchName[1].replace("\n",""),
+							name:mname,
 						}
 						monArr.push(m);
 						if (monArr.length % 100 == 0)

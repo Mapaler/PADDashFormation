@@ -70,7 +70,7 @@ window.onload = function()
 				}
 			}catch(e)
 			{
-				console.log("尝试解码Chrome错误返回失败。或初始数据解码出错。",e);
+				console.log("尝试解码仍错误。或初始数据解码出错。",e);
 			}
 		}
 	});
