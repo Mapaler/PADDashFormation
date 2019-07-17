@@ -54,7 +54,7 @@ function skillDetail(si)
 	var sk = skill[si];
 	var str = null;
 	//珠子名数组
-	var pna = ["火","水","木","光","暗","回复","邪魔","毒","剧毒","炸弹"];
+	var pna = ["火","水","木","光","暗","回复","废","毒","剧毒","炸弹"];
 	//类型名数组
 	var tna = ["进化","平衡","体力","回复","龙","神","攻击","恶魔","机械","9","10","11","觉醒","13","强化","卖钱"];
 	//觉醒名数组
@@ -160,11 +160,17 @@ function skillDetail(si)
 			}
 			str = arrT.join("，");
 			break;
+		case 21:
+			str = sk[6] + "回合内" + pn(sk[7]) + "属性的伤害减少" + sk[8] + "%";
+			break;
 		case 50:
 			str = sk[6] + "回合内" + (sk[7]==5?"回复力":(pn(sk[7]) + "属性的攻击力")) + "×"+ sk[8]/100 + "倍";
 			break;
 		case 51:
 			str = sk[6] + "回合内，所有攻击转为全体攻击";
+			break;
+		case 52:
+			str = pn(sk[6]) + "宝珠强化（每颗强化珠伤害/回复增加"+sk[7]+"%）";
 			break;
 		case 55:
 			str = "对敌方1体造成" + sk[6] + "点无视防御的固定伤害";
@@ -263,14 +269,14 @@ function skillDetail(si)
 			return;
 			break;
 		case 140:
-			str = binPns(sk[6]).join("、") + "宝珠强化（每颗强化珠伤害增加"+sk[7]+"%）";
+			str = binPns(sk[6]).join("、") + "宝珠强化（每颗强化珠伤害/回复增加"+sk[7]+"%）";
 			break;
 		case 141:
 			str = "随机生成" + binPns(sk[7]).join("、") + "珠各"+ sk[6] + "个";
 			if (sk[7] != sk[8]) str += "还有未知sk[8]";
 			break;
 		case 144:
-			str = "对敌方全体造成"+binPns(sk[6]).join("、")+"属性总攻击力×" + sk[7]/100 + "倍的" + pn(sk[9]) + "属性伤害";
+			str = "对敌方全体造成"+binPns(sk[6]).join("、")+"属性总攻击力×" + sk[7]/100 + "倍的" + pn(sk[9]||0) + "属性伤害";
 			if (sk[8]>0) str += "还有未知sk[8]";
 			break;
 		case 146:
@@ -324,6 +330,9 @@ function skillDetail(si)
 			break;
 		case 184:
 			str = sk[6] + "回合内，天降的宝珠不会产生COMBO";
+			break;
+		case 180:
+			str = sk[6] + "回合内，" + sk[7] + "%概率掉落强化宝珠";
 			break;
 		case 188:
 			str = "对敌方1体造成" + sk[6] + "点无视防御的固定伤害(×多次)";
