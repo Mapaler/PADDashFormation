@@ -554,7 +554,7 @@ function editMon(AorB,isAssist,tempIdx)
 	var btnDelay = editBox.querySelector(".button-delay");
 	if (!isAssist)
 	{
-		editBox.latent = mD.latent || [];
+		editBox.latent = mD.latent.concat() || [];
 		editBox.refreshLatent(editBox.latent);
 		btnDelay.classList.add("display-none");
 		settingBox.querySelector(".row-mon-latent").classList.remove("display-none");
