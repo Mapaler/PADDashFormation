@@ -1,7 +1,14 @@
 ﻿智龙迷城车队阵型图制作工具 | Puzzle & Dragons Dash Formation Maker
 ======
 这个工具可以帮助你方便的制作和分享车队阵型或单人队形。  
-This tool can help you easily create and share Dash Formation or Solo Formation.
+This tool can help you easily create and share Dash Formation or Solo Formation.  
+#### Some similar English names with Dash Formation
+Information comes from [this post](https://puzzleanddragonsforum.com/threads/107636).
+* co-op speed farming
+* ALB farming
+* green row
+* swipe team
+* swipe sarming
 
 易用的编辑界面，手机上也可以轻松使用。  
 Easy to use editing interface and use on your phone. 
@@ -47,6 +54,8 @@ You can search for monsters by entering the monster name in the monster ID of th
 ![搜索怪物](https://github.com/Mapaler/PADDashFormation/raw/master/document/tips-search.png)
 * 车队模式只显示部分杀潜觉以及共用的觉醒的统计，单人则全部显示。  
 2-Player Multi Games Mode only show the killer latent and several common awoken statistics, but solo mode shows all.
+* 怪物数据基于日版。  
+Monsters Data based on Japanese version.
 
 # 翻译我 | TRANSLATE ME
 ## How to **Pull requests**
