@@ -117,7 +117,7 @@ ul{
 	line-height: 17px;
 	text-shadow: black 0 0 1px,black 0 0 2px, black 2px 2px 0;
 	position: absolute;
-	left:0;
+	left:10px;
 }
 
 .null .monster>div,.delay .monster>div{
@@ -479,7 +479,7 @@ ul{
 .setting-box .m-plus-hp,.setting-box .m-plus-atk,.setting-box .m-plus-rcv{
 	font-size: 25px;
 	height: 40px;
-	width: calc(100% - 212px);
+	width: calc(100% - 198px);
 	box-sizing: border-box;
 }
 .m-plus-hp-li::before,.m-plus-atk-li::before,.m-plus-rcv-li::before{
@@ -492,7 +492,7 @@ ul{
 .m-plus-rcv-li::before{content: "回复";}*/
 .m-plus-hp-btn-99,.m-plus-atk-btn-99,.m-plus-rcv-btn-99{
 	height: 40px;
-	width: 70px;
+	width: 55px;
 	box-sizing: border-box;
 	font-size: 25px;
 }
@@ -522,27 +522,36 @@ ul{
 .m-latent-allowable-ul{
 	margin-top: 5px;
 }
-.m-latent-allowable-ul .latent-icon{
+.m-latent-allowable-ul .latent-icon,
+.m-latent-ul .latent-icon-1,
+.m-latent-ul .latent-icon-2,
+.m-latent-ul .latent-icon-3,
+.m-latent-ul .latent-icon-4,
+.m-latent-ul .latent-icon-5,
+.m-latent-ul .latent-icon-6,
+.m-latent-ul .latent-icon-7,
+.m-latent-ul .latent-icon-8,
+.m-latent-ul .latent-icon-9,
+.m-latent-ul .latent-icon-10,
+.m-latent-ul .latent-icon-11,
+.m-latent-ul .latent-icon-12,
+.m-latent-ul .latent-icon-13,
+.m-latent-ul .latent-icon-14,
+.m-latent-ul .latent-icon-15,
+.m-latent-ul .latent-icon-16,
+.m-latent-ul .latent-icon-17,
+.m-latent-ul .latent-icon-18,
+.m-latent-ul .latent-icon-19,
+.m-latent-ul .latent-icon-20,
+.m-latent-ul .latent-icon-21,
+.m-latent-ul .latent-icon-22,
+.m-latent-ul .latent-icon-23,
+.m-latent-ul .latent-icon-24{
 	cursor: pointer;
 }
 .m-latent-allowable-ul .latent-icon.unselected-latent{
 	cursor: default;
 	opacity: 0.3;
-}
-.latent-icon-11,
-.latent-icon-13,
-.latent-icon-14,
-.latent-icon-15,
-.latent-icon-16,
-.latent-icon-17,
-.latent-icon-18,
-.latent-icon-19,
-.latent-icon-20,
-.latent-icon-21,
-.latent-icon-22,
-.latent-icon-23,
-.latent-icon-24{
-	cursor: pointer;
 }
 
 .edit-box .button-box{
