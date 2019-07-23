@@ -7,10 +7,7 @@ var Member = function(){
 Member.prototype.outObj = function(){
 	var m = this;
 	var obj = [
-		m.id,
-		m.level,
-		m.awoken,
-		m.plus,
+		m.id
 	];
 	if (m.level) obj.push[m.level];
 	if (m.awoken) obj.push[m.awoken];
