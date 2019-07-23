@@ -283,35 +283,21 @@ ul{
 }
 
 /*队伍的潜觉*/
-.formation-box .latents{
+.formation-latents {
+	height: 44px;
+}
+.formation-latents .latents{
 	width: 108px;
 	/*float:left;*/
-	margin-bottom: -19px;
+	margin-bottom: -20px;
 	display: inline-block;
 }
-.formation-box .latent-ul{
+.formation-latents .latent-ul{
 	font-size: 0;
 	width: 152px;
-	transform: translate(-22px,-10px) scale(0.71);
+	transform: translate(-22px,-10px) scale(0.68);
 }
 
-.a-awoken-icon-1 li{
-	background-image: url(images/sha.png);
-	background-size: 50px 21px;
-	width: 50px;
-	height: 21px;
-	margin-right: 4px;
-}
-.a-awoken-icon-2 li{
-	background-image: url(images/fangzuo.png);
-	background-size: 21px 21px;
-	width: 21px;
-	height: 21px;
-	margin-left: 6px;
-}
-.a-awoken-icon-ul li{
-	float:left;
-}
 /*队长的边框*/
 .formation-A-box .formation-team .team-leader .monster, .formation-B-box .formation-team .team-leader .monster{
 	border-radius: 10px;
@@ -461,10 +447,10 @@ ul{
 	height: 32px;
 }
 .awoken-ul li{
-	margin-left: 5px;
+	margin-right: 5px;
 }
-.awoken-ul li:first-of-type{
-	margin-left: 0;
+.awoken-ul li:last-of-type{
+	margin-right: 0;
 }
 .edit-box .awoken-ul .awoken-icon{
 	cursor: pointer;
