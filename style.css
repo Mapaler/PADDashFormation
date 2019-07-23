@@ -123,12 +123,12 @@ ul{
 .null .monster>div,.delay .monster>div{
 	display:none;
 }
-/*.monster .plus .hp::before,
+.monster .plus .hp::before,
 .monster .plus .atk::before,
 .monster .plus .rcv::before,
 .monster .plus ._297::before{
 	content: "+";
-}*/
+}
 .monster .plus ._297{ /*297默认不显示*/
 	display:none;
 }
@@ -143,8 +143,6 @@ ul{
 /*怪物-觉醒*/
 .monster .awoken-count{
 	color: yellow;
-	font-size: 20px;
-	line-height: 30px;
 	text-shadow: black 0 0 4px;
 	text-align: center;
 	background-image: url(images/awoken-bg.png);
@@ -155,6 +153,20 @@ ul{
 	top: -4px;
 	right: 0;
 	transform: scale(0.80) translateX(4px);
+}
+.monster .awoken-count,
+.monster .awoken-count.full-awoken::before{
+	font-size: 20px;
+	line-height: 28px;
+}
+.monster .awoken-count.full-awoken{
+	font-size: 0;
+}
+.monster .awoken-count.full-awoken::before{
+	content: "★";
+}
+.monster .awoken-count.allowable-assist.full-awoken::before{
+	content: none;
 }
 .monster .awoken-count.allowable-assist{
 	font-size: 0;
@@ -212,7 +224,7 @@ ul{
 	content: "No.";
 }*/
 /*辅助和队伍的每一只框架*/
-.member, .acquisitus-awoken-icon {
+.member, .acquisitus-awoken-icon{
 	display: block;
 	float: left;
 	position: relative;
@@ -312,6 +324,30 @@ ul{
 .formation-B-box .formation-team .team-leader .monster{
 	border-color: blue;
 }
+
+/*三维计算值*/
+.formation-ability .abilitys{
+	padding-left: 5px;
+	box-sizing: border-box;
+	font-size: 15px;
+	width: 108px;
+	display: inline-block;
+}
+.abilitys .hp::before,.abilitys .atk::before,.abilitys .rcv::before{
+	width: 45px;
+	display: inline-block;
+}
+/*.abilitys .hp::before{
+	content: "HP：";
+}
+.abilitys .atk::before{
+	content: "攻击：";
+}
+.abilitys .rcv::before{
+	content: "回复：";
+}*/
+
+
 /*编辑窗口*/
 .blur-bg{
 	filter:blur(5px);
@@ -509,9 +545,9 @@ ul{
 	box-sizing: border-box;
 	font-size: 25px;
 }
-/*.m-plus-btn::before,.m-plus-btn-297::before{
+.m-plus-btn::before,.m-plus-btn-297::before{
 	content: "+";
-}*/
+}
 .m-plus-btn-297{
 	float:right;
 	width: 85px;
@@ -567,6 +603,7 @@ ul{
 	opacity: 0.3;
 }
 
+
 .edit-box .button-box{
 	border-top: black solid 3px;
 	background-color: rgba(0,0,0,0.5);
@@ -610,6 +647,7 @@ ul{
 }*/
 .awoken-total-box::before{
 	font-size: 20px;
+	margin-top:5px;
 	/*content: "觉醒总计：";*/
 }
 .detail-box{

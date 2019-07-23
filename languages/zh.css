@@ -5,12 +5,6 @@
 .monster .level.max::before{
 	content: "Lv.最大";
 }
-.monster .plus .hp::before,
-.monster .plus .atk::before,
-.monster .plus .rcv::before,
-.monster .plus ._297::before{
-	content: "+";
-}
 .monster .level::before{
 	content: "Lv.";
 }
@@ -28,6 +22,15 @@
 }
 .formation-B-box .formation-assist .member::before{
 	content: "▲辅助";
+}
+.abilitys .hp::before{
+	content: "HP：";
+}
+.abilitys .atk::before{
+	content: "攻击：";
+}
+.abilitys .rcv::before{
+	content: "回复：";
 }
 .edit-box .edit-box-title::before{
 	content: "修改队员";
@@ -64,10 +67,6 @@
 }
 .m-plus-rcv-li::before{
 	content: "回复";
-}
-.m-plus-btn::before,
-.m-plus-btn-297::before{
-	content: "+";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼潜在觉醒";
