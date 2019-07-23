@@ -6,12 +6,6 @@
 .monster .level.max::before{
 	content: "Lv.Max";
 }
-.monster .plus .hp::before,
-.monster .plus .atk::before,
-.monster .plus .rcv::before,
-.monster .plus ._297::before{
-	content: "+";
-}
 .monster .level::before{
 	content: "Lv.";
 }
@@ -29,6 +23,15 @@
 }
 .formation-B-box .formation-assist .member::before{
 	content: "▲Assist";
+}
+.abilitys .hp::before{
+	content: "HP:";
+}
+.abilitys .atk::before{
+	content: "ATK:";
+}
+.abilitys .rcv::before{
+	content: "RCV:";
 }
 .edit-box .edit-box-title::before{
 	content: "Edit Member";
@@ -65,10 +68,6 @@
 }
 .m-plus-rcv-li::before{
 	content: "RCV";
-}
-.m-plus-btn::before,
-.m-plus-btn-297::before{
-	content: "+";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼Latent Awoken";

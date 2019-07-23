@@ -5,12 +5,6 @@
 .monster .level.max::before{
 	content: "Lv.最大";
 }
-.monster .plus .hp::before,
-.monster .plus .atk::before,
-.monster .plus .rcv::before,
-.monster .plus ._297::before{
-	content: "+";
-}
 .monster .level::before{
 	content: "Lv.";
 }
@@ -47,6 +41,15 @@
 .m-level-btn-max::before{
 	content: "最高Lv";
 }
+.abilitys .hp::before{
+	content: "HP：";
+}
+.abilitys .atk::before{
+	content: "攻擊：";
+}
+.abilitys .rcv::before{
+	content: "回復：";
+}
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼怪物覺醒";
 }
@@ -64,10 +67,6 @@
 }
 .m-plus-rcv-li::before{
 	content: "回復";
-}
-.m-plus-btn::before,
-.m-plus-btn-297::before{
-	content: "+";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼潛在覺醒";

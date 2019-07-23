@@ -338,10 +338,13 @@ function initialize()
 			parseInt(monEditAddRcv.value)
 		];
 		var latent = editBox.latent;
-		var abilitys = calculateAbility(monid,level,awoken,plus,latent);
+		var abilitys = calculateAbility(monid,level,plus,awoken,latent);
 
 		[monEditHpValue,monEditAtkValue,monEditRcvValue].forEach(function(div,idx){
-			div.innerHTML = abilitys[idx];
+			if (abilitys)
+				div.innerHTML = abilitys[idx];
+			else
+				div.innerHTML = 0;
 		})
 	}
 
@@ -397,6 +400,33 @@ function initialize()
 		}
 
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		/*
+		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
+		if (formationAbilityDom)
+		{
+			//另一个怪物数据
+			var mD2 = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]?0:1][editBox.memberIdx[2]];
+			var mainMD,assistMD; //主怪与辅助
+			if (editBox.memberIdx[1])
+			{
+				assistMD = mD;
+				mainMD = mD2;
+			}else
+			{
+				mainMD = mD;
+				assistMD = mD2;
+			}
+			
+		}
+		*/
+		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
+		if (formationAbilityDom)
+		{
+			refreshAbility(
+				formationAbilityDom,
+				formation.team[editBox.memberIdx[0]],
+				editBox.memberIdx[2]);
+		}
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
 		editBox.hide();
@@ -413,6 +443,14 @@ function initialize()
 	btnNull.onclick = function(){
 		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = {id:0};
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
+		if (formationAbilityDom)
+		{
+			refreshAbility(
+				formationAbilityDom,
+				formation.team[editBox.memberIdx[0]],
+				editBox.memberIdx[2]);
+		}
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
 		editBox.hide();
@@ -420,6 +458,14 @@ function initialize()
 	btnDelay.onclick = function(){ //应对威吓
 		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = {id:-1};
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
+		if (formationAbilityDom)
+		{
+			refreshAbility(
+				formationAbilityDom,
+				formation.team[editBox.memberIdx[0]],
+				editBox.memberIdx[2]);
+		}
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
 		editBox.hide();
@@ -499,18 +545,23 @@ function changeid(mon,monDom,latentDom)
 		}else
 		{
 			awokenIcon.classList.remove("display-none");
-			if (mon.awoken < md.awoken.length) //觉醒没满直接写数字
+			awokenIcon.innerHTML = mon.awoken;
+			if (mon.awoken == md.awoken.length)
 			{
-				awokenIcon.innerHTML = mon.awoken;
-				awokenIcon.classList.remove("allowable-assist");
-			}else //满觉醒打星星
-			{
-				awokenIcon.innerHTML = "★";
+				awokenIcon.classList.add("full-awoken");
 				if (md.assist)
+				{//可以辅助的满觉醒打黄色星星
 					awokenIcon.classList.add("allowable-assist");
-				else
+				}else 
+				{
 					awokenIcon.classList.remove("allowable-assist");
+				}
+			}else
+			{
+				awokenIcon.classList.remove("full-awoken");
+				awokenIcon.classList.remove("allowable-assist");
 			}
+			
 		}
 	}
 	var sawoken = monDom.querySelector(".super-awoken");
@@ -627,7 +678,7 @@ function editMon(AorB,isAssist,tempIdx)
 	var btnDelay = editBox.querySelector(".button-delay");
 	if (!isAssist)
 	{
-		editBox.latent = mD.latent.concat() || [];
+		editBox.latent = mD.latent?mD.latent.concat():[];
 		editBox.refreshLatent(editBox.latent);
 		btnDelay.classList.add("display-none");
 		settingBox.querySelector(".row-mon-latent").classList.remove("display-none");
@@ -778,10 +829,18 @@ function refreshAll(fmt){
 		var fBLatents = formationB.querySelectorAll(".formation-latents .latent-ul");
 		var fBAssist = formationB.querySelectorAll(".formation-assist .monster");
 	}
+	var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 	for (var ti=0;ti<(formationB?5:6);ti++)
 	{
 		changeid(fmt.team[0][0][ti],fATeam[ti],fALatents[ti]);
 		changeid(fmt.team[0][1][ti],fAAssist[ti]);
+		if (formationAbilityDom)
+		{
+			refreshAbility(
+				formationAbilityDom,
+				fmt.team[0],
+				ti);
+		}
 		if (formationB)
 		{
 			changeid(fmt.team[1][0][ti],fBTeam[ti],fBLatents[ti]);
@@ -791,7 +850,7 @@ function refreshAll(fmt){
 	refreshAwokenCount(fmt.team);
 }
 //刷新觉醒总计
-function refreshAwokenCount(team){
+function refreshAwokenCount(teams){
 	var awokenUL = document.querySelector(".awoken-total-box .awoken-ul");
 	function setCount(idx,number){
 		var ali = awokenUL.querySelector(".a-c-" + idx);
@@ -806,19 +865,46 @@ function refreshAwokenCount(team){
 	{
 		if (ai == 10) //防封
 		{
-			setCount(ai,awokenCountInTeam(team,ai,solo)+awokenCountInTeam(team,52,solo)*2);
+			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,52,solo)*2);
 		}else if (ai == 19) //手指
 		{
-			setCount(ai,awokenCountInTeam(team,ai,solo)+awokenCountInTeam(team,53,solo)*2);
+			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,53,solo)*2);
 		}else if (ai == 21) //SB
 		{
-			setCount(ai,awokenCountInTeam(team,ai,solo)+awokenCountInTeam(team,56,solo)*2);
+			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,56,solo)*2);
 		}else if (ai == 52 || ai == 53 || ai == 56) //大防封、大手指，大SB
 		{
 			continue;
 		}else
 		{
-			setCount(ai,awokenCountInTeam(team,ai,solo));
+			setCount(ai,awokenCountInTeam(teams,ai,solo));
 		}
 	}
+}
+//刷新能力值
+function refreshAbility(dom,team,idx){
+	var ali = dom.querySelector(".abilitys-" + (idx+1));
+	var mainMD = team[0][idx];
+	var assistMD = team[1][idx];
+	var bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性
+	//如果辅助是武器，还要加上辅助的觉醒
+	var mainAbility = calculateAbility(mainMD.id,mainMD.level,mainMD.plus,mainMD.awoken,mainMD.latent,assistMD.id,assistMD.awoken);
+	//如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
+	var assistAbility = ms[mainMD.id].ppt[0]==ms[assistMD.id].ppt[0]
+		?calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null)
+		:[0,0,0];
+	var hpDom = ali.querySelector(".hp");
+	var atkDom = ali.querySelector(".atk");
+	var rcvDom = ali.querySelector(".rcv");
+	[hpDom,atkDom,rcvDom].forEach(function(div,ai){
+		if (mainAbility)
+		{
+			div.classList.remove("display-none");
+			div.innerHTML = mainAbility[ai] + Math.round(assistAbility[ai]*bonusScale[ai]);
+		}else
+		{
+			div.classList.add("display-none");
+			div.innerHTML = 0;
+		}
+	})
 }

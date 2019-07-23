@@ -49,6 +49,7 @@ function getQueryString(name) {
 	var r = window.location.search.substr(1).match(reg);
 	if (r != null) return decodeURIComponent(r[2]); return null;
 }
+
 //数组去重
 /* https://www.cnblogs.com/baiyangyuanzi/p/6726258.html
 * 实现思路：获取没重复的最右一值放入新数组。
@@ -74,7 +75,7 @@ function usedHole(latent)
 		return previous + (current>= 12?2:1);
 	},0);
 }
-//计算用了多少潜觉格子
+//计算队伍中有多少个该觉醒
 function awokenCountInTeam(formationTeam,ak,solo)
 {
     var allAwokenCount = formationTeam.reduce(function(fc,fm){
@@ -86,7 +87,7 @@ function awokenCountInTeam(formationTeam,ak,solo)
                 }
                 var mdAwoken = ms[m.id].awoken; //这个怪物的觉醒数据
                 var mdSAwoken = ms[m.id].sAwoken; //这个怪物的超觉醒数据
-                if ((!mdAwoken && !mdSAwoken) || (isAssist && mdAwoken[0] != 49))
+                if ((!mdAwoken && !mdSAwoken) || (isAssist && mdAwoken.indexOf(49)<0))
                 { //如果没有觉醒和超觉醒 || （如果是辅助队 &&第一个不是武器觉醒）
                     return c;
                 }
@@ -131,9 +132,10 @@ function returnMonsterNameArr(m,lsList)
 }
 
 //计算怪物的能力
-function calculateAbility(monid,level,awoken,plus,latent)
+function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
 {
-	var m = ms[monid]; //怪物固定数据
+    if (monid<=0) return null;
+	var m = ms[monid]; //怪物数据
 	var plusAdd = [10,5,3]; //加值的增加值
 	var awokenAdd = [ //对应加三维觉醒的序号与增加值
 		{index:1,value:500},
@@ -152,12 +154,20 @@ function calculateAbility(monid,level,awoken,plus,latent)
 			n_base = Math.round(ab[1] + ab[1]*(m.a110/100)*(level-99)/11);
 		}
         var n_plus = plus[idx]*plusAdd[idx]; //加值增加量
-		var awokenCount = m.awoken.slice(0,awoken).filter(function(a){return a==awokenAdd[idx].index;}).length; //含有增加三维觉醒的数量
+        var awokenList = m.awoken.slice(0,awoken); //储存生效的觉醒
+        if (weaponId)
+        {
+            var weapon = ms[weaponId]; //武器的怪物数据
+            var weaponAwokenList = weapon.awoken.slice(0,weaponAwoken);
+            if (weaponAwokenList.indexOf(49)>=0)
+                awokenList = awokenList.concat(weaponAwokenList);
+        }
+		var awokenCount = awoken?awokenList.filter(function(a){return a==awokenAdd[idx].index;}).length:0; //含有增加三维觉醒的数量
 		var n_awoken = Math.round(awokenCount*awokenAdd[idx].value);
-		var n_latent = Math.round(latentAdd[idx].reduce(function(previous,la){
+		var n_latent = latent?Math.round(latentAdd[idx].reduce(function(previous,la){
 			var latentCount = latent.filter(function(l){return l==la.index;}).length; //每个潜觉的数量
 			return previous + n_base * la.scale * latentCount; //无加值与觉醒的基础值，乘以那么多个潜觉的增加倍数
-        },0));
+        },0)):0;
         //console.log("基础值：%d，加蛋值：%d，觉醒x%d增加：%d，潜觉增加：%d",n_base,n_plus,awokenCount,n_awoken,n_latent);
 		return n_base + n_plus + n_awoken + n_latent;
 	})
