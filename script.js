@@ -1,10 +1,18 @@
 var ms = null;
 var language = null;
 var memberTeamObj = function(){
-	return {id:0,level:0,awoken:0,plus:[0,0,0],latent:[]}; //sawoken作为可选项目，默认不在内
+	this.id = 0;
+	this.level = 0;
+	this.awoken = 0;
+	this.plus = [0,0,0];
+	this.latent = [];
+	 //sawoken作为可选项目，默认不在内
 }
 var memberAssistObj = function(){
-	return {id:0,level:0,awoken:0,plus:[0,0,0]};
+	this.id = 0;
+	this.level = 0;
+	this.awoken = 0;
+	this.plus = [0,0,0];
 }
 window.onload = function()
 {
@@ -361,13 +369,6 @@ function initialize()
 	languageJS.type = "text/javascript";
 	languageJS.src = "languages/"+language.i18n+".js";
 }
-//计算用了多少潜觉格子
-function usedHole(latent)
-{
-	return latent.reduce(function(previous,current){
-		return previous + (current>= 12?2:1);
-	},0);
-}
 //改变一个怪物头像
 function changeid(mon,monDom,latentDom)
 {
@@ -503,7 +504,7 @@ function changeid(mon,monDom,latentDom)
 		}
 	}
 }
-//点击怪物头像，出现编辑框
+//点击怪物头像，出现编辑窗
 function editMon(AorB,isAssist,tempIdx)
 {
 	//数据
@@ -568,7 +569,7 @@ function editMon(AorB,isAssist,tempIdx)
 		editBox.querySelector(".edit-box-title").classList.add("edit-box-title-assist");
 	}
 }
-
+//编辑窗，修改怪物ID
 function editBoxChangeMonId(id)
 {
 	var md = ms[id]; //怪物固定数据
@@ -737,7 +738,7 @@ function refreshAwokenCount(team){
 		}else if (ai == 21) //SB
 		{
 			setCount(ai,awokenCountInTeam(team,ai,solo)+awokenCountInTeam(team,56,solo)*2);
-		}else if (ai == 52 || ai == 53 || ai == 56) //大手指，大SB
+		}else if (ai == 52 || ai == 53 || ai == 56) //大防封、大手指，大SB
 		{
 			continue;
 		}else
@@ -745,13 +746,4 @@ function refreshAwokenCount(team){
 			setCount(ai,awokenCountInTeam(team,ai,solo));
 		}
 	}
-	/*
-	setCount(21,awokenCountInTeam(team,21)+awokenCountInTeam(team,56)*2); //SB+大SB
-	setCount(28,awokenCountInTeam(team,28)); //SX
-	setCount(11,awokenCountInTeam(team,11)); //防暗
-	setCount(12,awokenCountInTeam(team,12)); //防废
-	setCount(13,awokenCountInTeam(team,13)); //防毒
-	setCount(54,awokenCountInTeam(team,54)); //防云
-	setCount(55,awokenCountInTeam(team,55)); //防封条
-	*/
 }
