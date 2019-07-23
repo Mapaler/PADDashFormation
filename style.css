@@ -458,13 +458,21 @@ ul{
 .awoken-ul .awoken-icon.unselected-awoken{
 	opacity: 0.3;
 }
-.row-mon-awoken .awoken-icon.awoken-count{
+.row-mon-awoken .awoken-icon.awoken-count,
+.row-mon-awoken .awoken-icon.awoken-count.full-awoken::before
+{
 	color: yellow;
 	font-size: 22px;
 	line-height: 28px;
 	font-weight: bold;
 	text-shadow: black 0 0 4px;
 	text-align: center;
+}
+.row-mon-awoken .awoken-icon.awoken-count.full-awoken{
+	font-size: 0;
+}
+.row-mon-awoken .awoken-icon.awoken-count.full-awoken::before{
+	content: "★";
 }
 .row-mon-awoken .m-super-awoken-ul{
 	margin-top: 5px;
@@ -476,27 +484,32 @@ ul{
 	/*content: "▼怪物加值";*/
 	display: block;
 }
+.row-mon-plus .ability-value::before{content: "(";}
+.row-mon-plus .ability-value::after{content: ")";}
 .setting-box .m-plus-hp,.setting-box .m-plus-atk,.setting-box .m-plus-rcv{
 	font-size: 25px;
 	height: 40px;
-	width: calc(100% - 198px);
+	width: calc(100% - 288px);
 	box-sizing: border-box;
 }
-.m-plus-hp-li::before,.m-plus-atk-li::before,.m-plus-rcv-li::before{
+.m-plus-hp-li::before,.m-plus-atk-li::before,.m-plus-rcv-li::before,.row-mon-plus .ability-value{
 	font-size: 25px;
 	width: 55px;
 	display: inline-block;
 }
+.row-mon-plus .ability-value{
+	width: 90px;
+}
 /*.m-plus-hp-li::before{content: "HP";}
 .m-plus-atk-li::before{content: "攻击";}
 .m-plus-rcv-li::before{content: "回复";}*/
-.m-plus-hp-btn-99,.m-plus-atk-btn-99,.m-plus-rcv-btn-99{
+.m-plus-btn{
 	height: 40px;
 	width: 55px;
 	box-sizing: border-box;
 	font-size: 25px;
 }
-/*.m-plus-hp-btn-99::before,.m-plus-atk-btn-99::before,.m-plus-rcv-btn-99::before,.m-plus-btn-297::before{
+/*.m-plus-btn::before,.m-plus-btn-297::before{
 	content: "+";
 }*/
 .m-plus-btn-297{

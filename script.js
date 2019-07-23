@@ -140,6 +140,8 @@ function initialize()
 
 	//编辑框
 	var editBox = document.querySelector(".edit-box");
+	editBox.mid = 0; //储存怪物id
+	editBox.awokenCount = 0; //储存怪物潜觉数量
 	editBox.latent = []; //储存潜在觉醒
 	editBox.assist = false; //储存是否为辅助宠物
 	editBox.monsterBox = null;
@@ -158,35 +160,44 @@ function initialize()
 
 	var settingBox = editBox.querySelector(".setting-box")
 	//id搜索
-	var monstersSearch = editBox.querySelector(".edit-box .m-id");
-	monstersSearch.onchange = function(){
+	var monstersID = editBox.querySelector(".edit-box .m-id");
+	monstersID.onchange = function(){
 		if (/^\d+$/.test(this.value))
 		{
-			editBoxChangeMonId(parseInt(this.value));
+			editBox.mid = parseInt(this.value);
+			editBoxChangeMonId(editBox.mid);
 		}
 	}
-	monstersSearch.oninput = monstersSearch.onchange;
+	monstersID.oninput = monstersID.onchange;
 	//觉醒
 	var monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon"));
 	monEditAwokens.forEach(function(akDom,idx,domArr){
 		akDom.onclick = function(){
-			if (idx>0 && idx>=domArr.filter(function(d){return !d.classList.contains("display-none")}).length-1)
-				domArr[0].innerHTML = "★";
-			else
-				domArr[0].innerHTML = idx;
-			for(var ai=1;ai<domArr.length;ai++)
+			editBox.awokenCount = idx;
+			editBox.reCalculateAbility();
+			editBox.refreshAwokens();
+		};
+	});
+	//刷新觉醒
+	editBox.refreshAwokens = function(){
+		monEditAwokens[0].innerHTML = editBox.awokenCount;
+		if (editBox.awokenCount>0 && editBox.awokenCount==(ms[editBox.mid].awoken.length))
+			monEditAwokens[0].classList.add("full-awoken");
+		else
+			monEditAwokens[0].classList.remove("full-awoken");
+		for(var ai=1;ai<monEditAwokens.length;ai++)
+		{
+			if(ai<=editBox.awokenCount)
 			{
-				if(ai<=idx)
-				{
-					domArr[ai].classList.remove("unselected-awoken");
-				}
-				else
-				{
-					domArr[ai].classList.add("unselected-awoken");
-				}
+				monEditAwokens[ai].classList.remove("unselected-awoken");
+			}
+			else
+			{
+				monEditAwokens[ai].classList.add("unselected-awoken");
 			}
 		}
-	})
+	}
+
 	//超觉醒
 	var monEditSAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon"));
 	monEditSAwokens.forEach(function(akDom,idx,domArr){
@@ -207,28 +218,68 @@ function initialize()
 
 	//等级
 	var monEditLv = settingBox.querySelector(".m-level");
+	monEditLv.onchange = function(){editBox.reCalculateAbility();};
 	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
 	monEditLvMax.onclick = function(){
-		monEditLv.value = this.value;
-	}
+		var ipt = monEditLv;
+		if (ipt.value != this.value)
+		{
+			ipt.value = this.value;
+			ipt.onchange();
+		}
+	};
 	//加蛋
-	var monEditAddHp = settingBox.querySelector(".m-plus-hp");
-	var monEditAddAtk = settingBox.querySelector(".m-plus-atk");
-	var monEditAddRcv = settingBox.querySelector(".m-plus-rcv");
-	var monEditAddHp99 = settingBox.querySelector(".m-plus-hp-btn-99");
-	monEditAddHp99.onclick = function(){monEditAddHp.value = this.value}
-	var monEditAddAtk99 = settingBox.querySelector(".m-plus-atk-btn-99");
-	monEditAddAtk99.onclick = function(){monEditAddAtk.value = this.value}
-	var monEditAddRcv99 = settingBox.querySelector(".m-plus-rcv-btn-99");
-	monEditAddRcv99.onclick = function(){monEditAddRcv.value = this.value}
-	var monEditAdd297 = settingBox.querySelector(".m-plus-btn-297");
-	monEditAdd297.onclick = function(){monEditAddHp.value = monEditAddAtk.value = monEditAddRcv.value = 99}
+	var monEditAddHpLi = settingBox.querySelector(".row-mon-plus .m-plus-hp-li");
+	var monEditAddAtkLi = settingBox.querySelector(".row-mon-plus .m-plus-atk-li");
+	var monEditAddRcvLi = settingBox.querySelector(".row-mon-plus .m-plus-rcv-li");
+	var monEditAddHp = monEditAddHpLi.querySelector(".m-plus-hp");
+	monEditAddHp.onchange = function(){editBox.reCalculateAbility();};
+	var monEditAddAtk = monEditAddAtkLi.querySelector(".m-plus-atk");
+	monEditAddAtk.onchange = function(){editBox.reCalculateAbility();};
+	var monEditAddRcv = monEditAddRcvLi.querySelector(".m-plus-rcv");
+	monEditAddRcv.onchange = function(){editBox.reCalculateAbility();};
+	//3个快速设置按钮
+	var monEditAddHpBtn = monEditAddHpLi.querySelector(".m-plus-btn");
+	monEditAddHpBtn.onclick = function(){
+		var ipt = monEditAddHp;
+		if (ipt.value != this.value)
+		{
+			ipt.value = this.value;
+			ipt.onchange();
+		}
+	};
+	var monEditAddAtkBtn = monEditAddAtkLi.querySelector(".m-plus-btn");
+	monEditAddAtkBtn.onclick = function(){
+		var ipt = monEditAddAtk;
+		if (ipt.value != this.value)
+		{
+			ipt.value = this.value;
+			ipt.onchange();
+		}
+	};
+	var monEditAddRcvBtn = monEditAddRcvLi.querySelector(".m-plus-btn");
+	monEditAddRcvBtn.onclick = function(){
+		var ipt = monEditAddRcv;
+		if (ipt.value != this.value)
+		{
+			ipt.value = this.value;
+			ipt.onchange();
+		}
+	};
+	//297按钮
+	var monEditAdd297 = settingBox.querySelector(".row-mon-plus .m-plus-btn-297");
+	monEditAdd297.onclick = function(){monEditAddHp.value = monEditAddAtk.value = monEditAddRcv.value = 99;editBox.reCalculateAbility();}
+	//三维的计算值
+	var monEditHpValue = monEditAddHpLi.querySelector(".ability-value");
+	var monEditAtkValue = monEditAddAtkLi.querySelector(".ability-value");
+	var monEditRcvValue = monEditAddRcvLi.querySelector(".ability-value");
+	
 	//潜觉
 	var monEditLatentUl = settingBox.querySelector(".m-latent-ul");
 	var monEditLatents = Array.prototype.slice.call(monEditLatentUl.querySelectorAll("li"));
 	var monEditLatentAllowableUl = settingBox.querySelector(".m-latent-allowable-ul");
 	var monEditLatentsAllowable = Array.prototype.slice.call(monEditLatentAllowableUl.querySelectorAll("li"));
-	function refreshLatent(latent) //刷新潜觉
+	editBox.refreshLatent = function(latent) //刷新潜觉
 	{
 		if (this.value<0) return;
 		var usedHoleN = usedHole(latent);
@@ -251,13 +302,13 @@ function initialize()
 			}
 		}
 	}
-	editBox.refreshLatent = refreshLatent;
 	//已有觉醒的去除
 	monEditLatents.forEach(function(l){
 		l.onclick = function(){
 			var aIdx = parseInt(this.value);
 			editBox.latent.splice(aIdx,1);
-			refreshLatent(editBox.latent);
+			editBox.reCalculateAbility();
+			editBox.refreshLatent(editBox.latent);
 		}
 	})
 	//可选觉醒的添加
@@ -270,10 +321,30 @@ function initialize()
 				editBox.latent.push(lIdx);
 			else if (lIdx < 12 && usedHoleN<=5)
 				editBox.latent.push(lIdx);
-			refreshLatent(editBox.latent);
+
+			editBox.reCalculateAbility();
+			editBox.refreshLatent(editBox.latent);
 		}
 	})
-	
+
+	//重新计算怪物的能力
+	editBox.reCalculateAbility = function(){
+		var monid = parseInt(monstersID.value);
+		var level = parseInt(monEditLv.value);
+		var awoken = editBox.awokenCount;
+		var plus = [
+			parseInt(monEditAddHp.value),
+			parseInt(monEditAddAtk.value),
+			parseInt(monEditAddRcv.value)
+		];
+		var latent = editBox.latent;
+		var abilitys = calculateAbility(monid,level,awoken,plus,latent);
+
+		[monEditHpValue,monEditAtkValue,monEditRcvValue].forEach(function(div,idx){
+			div.innerHTML = abilitys[idx];
+		})
+	}
+
 	var btnCancel = editBox.querySelector(".button-cancel");
 	var btnDone = editBox.querySelector(".button-done");
 	var btnNull = editBox.querySelector(".button-null");
@@ -291,11 +362,9 @@ function initialize()
 			return;
 		}
 		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = editBox.assist?new memberAssistObj():new memberTeamObj();
-		mD.id = parseInt(monstersSearch.value);
+		mD.id = parseInt(monstersID.value);
 		mD.level = parseInt(monEditLv.value);
-		mD.awoken = monEditAwokens.filter(function(akDom){
-			return !akDom.classList.contains("unselected-awoken") && !akDom.classList.contains("display-none") 
-		}).length - 1;
+		mD.awoken = editBox.awokenCount;
 		if (ms[mD.id].sAwoken) //如果支持超觉醒
 		{
 			mD.sawoken = -1;
@@ -405,17 +474,20 @@ function changeid(mon,monDom,latentDom)
 	{
 		var levelDom = monDom.querySelector(".level");
 		levelDom.innerHTML = mon.level;
-		if (mon.level == 99 || (mon.level >= md.maxLv && md.maxLv <=99))
-		{
+		if (mon.level == md.maxLv)
+		{ //如果等级刚好等于最大等级，则修改为“最大”的字
 			levelDom.classList.add("max");
 		}else
 		{
 			levelDom.classList.remove("max");
 		}
-		if (md.maxLv>99 && mon.level>=99)
+		if (md.a110 && mon.level >= md.maxLv)
+		{ //如果支持超觉，并且等级超过99，就添加支持超觉的蓝色
 			levelDom.classList.add("_110");
-		else
+		}else
+		{
 			levelDom.classList.remove("_110");
+		}
 	}
 	if (mon.awoken>-1) //如果提供了觉醒
 	{
@@ -531,9 +603,9 @@ function editMon(AorB,isAssist,tempIdx)
 		editBox.latentBox = latentBox;
 	}
 
-	var monstersSearch = editBox.querySelector(".search-box .m-id");
-	monstersSearch.value = mD.id>0?mD.id:0;
-	monstersSearch.onchange();
+	var monstersID = editBox.querySelector(".search-box .m-id");
+	monstersID.value = mD.id>0?mD.id:0;
+	monstersID.onchange();
 	var settingBox = editBox.querySelector(".setting-box");
 	//觉醒
 	var monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon");
@@ -568,6 +640,7 @@ function editMon(AorB,isAssist,tempIdx)
 		settingBox.querySelector(".row-mon-super-awoken").classList.add("display-none");
 		editBox.querySelector(".edit-box-title").classList.add("edit-box-title-assist");
 	}
+	editBox.reCalculateAbility();
 }
 //编辑窗，修改怪物ID
 function editBoxChangeMonId(id)
@@ -602,7 +675,8 @@ function editBoxChangeMonId(id)
 
 	var settingBox = editBox.querySelector(".setting-box");
 	var mAwoken = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul li");
-	mAwoken[0].innerHTML = md.awoken.length?"★":"0";
+	editBox.awokenCount = md.awoken.length;
+	mAwoken[0].innerHTML = editBox.awokenCount?"★":"0";
 	for (var ai=1;ai<mAwoken.length;ai++)
 	{
 		if (md.awoken[ai-1])
@@ -633,9 +707,9 @@ function editBoxChangeMonId(id)
 	}
 
 	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
-	monEditLvMax.innerHTML = monEditLvMax.value = md.maxLv;
+	monEditLvMax.innerHTML = monEditLvMax.value = md.a110?110:md.maxLv; //最大等级按钮
 	var monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.value = md.maxLv>99?99:md.maxLv;
+	monEditLv.value = md.maxLv; //默认等级为最大等级而不是110
 
 	var rowPlus =  settingBox.querySelector(".row-mon-plus");
 	var rowLatent =  settingBox.querySelector(".row-mon-latent");
@@ -682,6 +756,7 @@ function editBoxChangeMonId(id)
 	}
 	editBox.latent.length = 0;
 	editBox.refreshLatent(editBox.latent);
+	editBox.reCalculateAbility();
 }
 //刷新整个队伍
 function refreshAll(fmt){
