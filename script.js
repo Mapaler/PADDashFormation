@@ -1,18 +1,99 @@
 var ms = null;
 var language = null;
-var memberTeamObj = function(){
-	this.id = 0;
-	this.level = 0;
-	this.awoken = 0;
-	this.plus = [0,0,0];
-	this.latent = [];
-	 //sawoken作为可选项目，默认不在内
+//队员基本的留空
+var Member = function(){
+	this.id=0;
 }
-var memberAssistObj = function(){
-	this.id = 0;
+Member.prototype.outObj = function(){
+	var m = this;
+	var obj = [
+		m.id,
+		m.level,
+		m.awoken,
+		m.plus,
+	];
+	if (m.level) obj.push[m.level];
+	if (m.awoken) obj.push[m.awoken];
+	if (m.plus) obj.push[m.plus];
+	if (m.latent) obj.push[m.latent];
+	if (m.sawoken) obj.push[m.sawoken];
+	return obj;
+}
+Member.prototype.loadObj = function(m){
+	this.id = m[0] || m.id;
+	if (m[1] || m.level) this.level = m[1] || m.level;
+	if (m[2] || m.awoken) this.awoken = m[2] || m.awoken;
+	if (m[3] || m.plus) this.plus = m[3] || m.plus;
+	if (m[4] || m.latent) this.latent = m[4] || m.latent;
+	if (m[5] || m.sawoken) this.sawoken = m[5] || m.sawoken;
+}
+//只用来防坐的任何队员
+var MemberDelay = function(){
+	this.id=-1;
+}
+MemberDelay.prototype = Object.create(Member.prototype);
+MemberDelay.prototype.constructor = MemberDelay;
+//辅助队员
+var MemberAssist = function(){
 	this.level = 0;
 	this.awoken = 0;
 	this.plus = [0,0,0];
+	Member.call(this);
+}
+MemberAssist.prototype = Object.create(Member.prototype);
+MemberAssist.prototype.constructor = MemberAssist
+//正式队伍
+var MemberTeam = function(){
+	this.latent = [];
+	MemberAssist.call(this);
+	//sawoken作为可选项目，默认不在内
+}
+MemberTeam.prototype = Object.create(MemberAssist.prototype);
+MemberTeam.prototype.constructor = MemberTeam;
+
+var Formation = function(teamCount,memberCount){
+	this.title = "",
+	this.detail = "",
+	this.team = [];
+	for (var ti=0;ti<teamCount;ti++)
+	{
+		var team = [[],[]];
+		for (var mi=0;mi<memberCount;mi++)
+		{
+			team[0].push(new Member());
+			team[1].push(new Member());
+		}
+		this.team.push(team);
+	}
+}
+Formation.prototype.outObj= function(){
+	var obj = {
+		t:this.title,
+		d:this.detail,
+		f:this.team.map(function(t){
+			return t.map(function(st){
+				return st.map(function(m){
+					return m.outObj();
+				})
+			})
+		})
+	}
+	return obj;
+}
+Formation.prototype.loadObj= function(f){
+	this.title = f.t || f.title;
+	this.detail = f.d || f.detail;
+	var teamArr = f.f || f.team;
+	this.team.forEach(function(t,ti){
+		var tf = teamArr[ti];
+		t.forEach(function(st,sti){
+			var fst = tf[sti]
+			st.forEach(function(m,mi){
+				var fm = fst[mi]
+				m.loadObj(fm);
+			})
+		})
+	});
 }
 window.onload = function()
 {
@@ -48,22 +129,29 @@ window.onload = function()
 		onload: function(response) {
 			ms = JSON.parse(response.response);
 			initialize();//初始化
+			var idata;
 			try
 			{
 				var idataQer = getQueryString("data");
 				if (idataQer)
 				{
-					var idata = JSON.parse(idataQer);
-					formation = idata;
-					refreshAll(formation);
+					idata = JSON.parse(idataQer);
 				}
 			}catch(e)
 			{
-				console.log("初始数据解码出错",e);
+				console.log("初始数据JSON解码出错",e);
+				return;
+			}
+			if (idata)
+			{
+				//formation = idata;
+				formation.loadObj(idata);
+				refreshAll(formation);
 			}
 		},
 		onerror: function(response) {
 			console.error("怪物数据获取错误",response);
+			var idata;
 			try
 			{
 				ms = JSON.parse(response.response);
@@ -72,31 +160,42 @@ window.onload = function()
 				var idataQer = getQueryString("data");
 				if (idataQer)
 				{
-					var idata = JSON.parse(idataQer);
-					formation = idata;
-					refreshAll(formation);
+					idata = JSON.parse(idataQer);
 				}
 			}catch(e)
 			{
-				console.log("尝试解码仍错误。或初始数据解码出错。",e);
+				console.log("网络请求返回错误，尝试解码仍错误。",e);
+				return;
+			}
+			if (idata)
+			{
+				//formation = idata;
+				formation.loadObj(idata);
+				refreshAll(formation);
 			}
 		}
 	});
 }
 window.onpopstate = function()
 { //前进后退时修改页面
+	var idata;
 	try
 	{
 		var idataQer = getQueryString("data");
 		if (idataQer)
 		{
-			var idata = JSON.parse(idataQer);
-			formation = idata;
-			refreshAll(formation);
+			idata = JSON.parse(idataQer);
 		}
 	}catch(e)
 	{
-		console.log("初始数据解码出错",e);
+		console.log("初始数据JSON解码出错",e);
+		return;
+	}
+	if (idata)
+	{
+		//formation = idata;
+		formation.loadObj(idata);
+		refreshAll(formation);
 	}
 }
 //创建新的分享地址
@@ -104,7 +203,10 @@ function creatNewUrl(lang){
 	if (!!(window.history && history.pushState)) {
 		// 支持History API
 		var language_i18n = lang || getQueryString("lang"); //获取参数指定的语言
-		history.pushState(null, null, '?' + (language_i18n?'lang=' + language_i18n + '&':'') + 'data=' + encodeURIComponent(JSON.stringify(formation)));
+		var outObj = formation.outObj();
+		history.pushState(null, null, '?' 
+			+ (language_i18n?'lang=' + language_i18n + '&':'') 
+			+ 'data=' + encodeURIComponent(JSON.stringify(outObj)));
 	}
 }
 //初始化
@@ -364,7 +466,7 @@ function initialize()
 			btnNull.onclick();
 			return;
 		}
-		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = editBox.assist?new memberAssistObj():new memberTeamObj();
+		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = editBox.assist?new MemberAssist():new MemberTeam();
 		mD.id = parseInt(monstersID.value);
 		mD.level = parseInt(monEditLv.value);
 		mD.awoken = editBox.awokenCount;
@@ -441,7 +543,7 @@ function initialize()
 		}
 	}
 	btnNull.onclick = function(){
-		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = {id:0};
+		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = new Member();
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
 		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 		if (formationAbilityDom)
@@ -456,7 +558,7 @@ function initialize()
 		editBox.hide();
 	}
 	btnDelay.onclick = function(){ //应对威吓
-		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = {id:-1};
+		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = new MemberDelay();
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
 		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 		if (formationAbilityDom)

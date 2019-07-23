@@ -12,32 +12,7 @@
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript">
 var solo = false;
-var teamObj = function(){
-	return [
-		[
-			{id:0},
-			{id:0},
-			{id:0},
-			{id:0},
-			{id:0},
-		],
-		[
-			{id:0},
-			{id:0},
-			{id:0},
-			{id:0},
-			{id:0},
-		],
-	];
-}
-var formation = {
-	title:"",
-	detail:"",
-	team:[
-		new teamObj(),//队伍A
-		new teamObj(),//队伍B
-	]
-};
+var formation = new Formation(2,5);
 </script>
 </head>
 
