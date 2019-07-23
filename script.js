@@ -105,7 +105,7 @@ window.onload = function()
 		langList.options.add(langOpt);
 	})
 
-	var language_i18n = getQueryString("lang"); //获取参数指定的语言
+	var language_i18n =  getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
 	var browser_i18n = (navigator.language||navigator.userLanguage); //获取浏览器语言
 	var hasLanguage = languageList.filter(function(l){
 		if (language_i18n) //如果已指定就用指定的语言
@@ -132,7 +132,7 @@ window.onload = function()
 			var idata;
 			try
 			{
-				var idataQer = getQueryString("data");
+				var idataQer = getQueryString("d") || getQueryString("data");
 				if (idataQer)
 				{
 					idata = JSON.parse(idataQer);
@@ -157,7 +157,7 @@ window.onload = function()
 				ms = JSON.parse(response.response);
 				initialize();//初始化
 
-				var idataQer = getQueryString("data");
+				var idataQer = getQueryString("d") || getQueryString("data");
 				if (idataQer)
 				{
 					idata = JSON.parse(idataQer);
@@ -181,7 +181,7 @@ window.onpopstate = function()
 	var idata;
 	try
 	{
-		var idataQer = getQueryString("data");
+		var idataQer = getQueryString("d") || getQueryString("data");
 		if (idataQer)
 		{
 			idata = JSON.parse(idataQer);
@@ -202,11 +202,11 @@ window.onpopstate = function()
 function creatNewUrl(lang){
 	if (!!(window.history && history.pushState)) {
 		// 支持History API
-		var language_i18n = lang || getQueryString("lang"); //获取参数指定的语言
+		var language_i18n = lang || getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
 		var outObj = formation.outObj();
 		history.pushState(null, null, '?' 
-			+ (language_i18n?'lang=' + language_i18n + '&':'') 
-			+ 'data=' + encodeURIComponent(JSON.stringify(outObj)));
+			+ (language_i18n?'l=' + language_i18n + '&':'') 
+			+ 'd=' + encodeURIComponent(JSON.stringify(outObj)));
 	}
 }
 //初始化
