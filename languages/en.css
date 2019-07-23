@@ -66,9 +66,7 @@
 .m-plus-rcv-li::before{
 	content: "RCV";
 }
-.m-plus-hp-btn-99::before,
-.m-plus-atk-btn-99::before,
-.m-plus-rcv-btn-99::before,
+.m-plus-btn::before,
 .m-plus-btn-297::before{
 	content: "+";
 }
