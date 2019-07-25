@@ -374,6 +374,21 @@
 .awoken-67{/*回复-*/
 	background-position: 0px -2144px;
 }
+.awoken-68{/*大防暗*/
+	background-position: 0px -2176px;
+}
+.awoken-69{/*大防废*/
+	background-position: 0px -2208px;
+}
+.awoken-70{/*大防毒*/
+	background-position: 0px -2240px;
+}
+.awoken-71{/*掉废*/
+	background-position: 0px -2272px;
+}
+.awoken-72{/*掉毒*/
+	background-position: 0px -2304px;
+}
 /*类型*/
 .type-icon{
 	background-image: url(images/type.png);
