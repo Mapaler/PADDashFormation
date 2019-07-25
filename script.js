@@ -938,26 +938,38 @@ function refreshAll(fmt){
 function refreshAwokenCount(teams){
 	var awokenUL = document.querySelector(".awoken-total-box .awoken-ul");
 	function setCount(idx,number){
-		var ali = awokenUL.querySelector(".a-c-" + idx);
-		if (!ali) return; //没有这个觉醒就撤回 
-		ali.querySelector(".count").innerHTML = number;
+		var aicon = awokenUL.querySelector(".awoken-" + idx);
+		if (!aicon) return; //没有这个觉醒就撤回 
+		var ali = aicon.parentNode;
+		var countDom = ali.querySelector(".count");
+		countDom.innerHTML = number;
 		if (number)
 			ali.classList.remove("display-none");
 		else
 			ali.classList.add("display-none");
 	}
-	for (var ai=1;ai<=67;ai++)
+	var bigAwoken = [52,53,56,68,69,70]; //等于几个小觉醒的大觉醒
+	for (var ai=1;ai<=72;ai++)
 	{
 		if (ai == 10) //防封
 		{
 			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,52,solo)*2);
+		}else if (ai == 11) //防暗
+		{
+			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,68,solo)*5);
+		}else if (ai == 12) //防废
+		{
+			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,69,solo)*5);
+		}else if (ai == 13) //防毒
+		{
+			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,70,solo)*5);
 		}else if (ai == 19) //手指
 		{
 			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,53,solo)*2);
 		}else if (ai == 21) //SB
 		{
 			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,56,solo)*2);
-		}else if (ai == 52 || ai == 53 || ai == 56) //大防封、大手指，大SB
+		}else if (bigAwoken.indexOf(ai)>=0) //属于大觉醒
 		{
 			continue;
 		}else
