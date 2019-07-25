@@ -655,11 +655,11 @@ ul{
 	line-height: 32px;
 	font-family: 'FOT-KurokaneStd-EB';
 	float: left;
-	margin-right: 5px;
+	margin-right: 3px;
 }
 .awoken-total-box .awoken-ul .count{
 	height: 32px;
-	width: 30px;
+	width: 37px;
 	display: inline-block;
 	vertical-align: middle;
 }
