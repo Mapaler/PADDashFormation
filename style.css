@@ -145,7 +145,7 @@ ul{
 	color: yellow;
 	text-shadow: black 0 0 4px;
 	text-align: center;
-	background-image: url(images/awoken-bg.png);
+	background-image: url(images/awoken-count-bg.png);
 	background-repeat: no-repeat;
 	width: 34px;
 	height: 38px;
@@ -295,9 +295,6 @@ ul{
 }
 
 /*队伍的潜觉*/
-.formation-latents {
-	height: 44px;
-}
 .formation-latents .latents{
 	width: 108px;
 	/*float:left;*/

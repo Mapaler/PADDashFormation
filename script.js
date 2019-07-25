@@ -9,20 +9,20 @@ Member.prototype.outObj = function(){
 	var obj = [
 		m.id
 	];
-	if (m.level) obj.push[m.level];
-	if (m.awoken) obj.push[m.awoken];
-	if (m.plus) obj.push[m.plus];
-	if (m.latent) obj.push[m.latent];
-	if (m.sawoken) obj.push[m.sawoken];
+	if (m.level != undefined) obj.push(m.level);
+	if (m.awoken != undefined) obj.push(m.awoken);
+	if (m.plus != undefined) obj.push(m.plus);
+	if (m.latent != undefined) obj.push(m.latent);
+	if (m.sawoken != undefined) obj.push(m.sawoken);
 	return obj;
 }
 Member.prototype.loadObj = function(m){
-	this.id = m[0] || m.id;
-	if (m[1] || m.level) this.level = m[1] || m.level;
-	if (m[2] || m.awoken) this.awoken = m[2] || m.awoken;
-	if (m[3] || m.plus) this.plus = m[3] || m.plus;
-	if (m[4] || m.latent) this.latent = m[4] || m.latent;
-	if (m[5] || m.sawoken) this.sawoken = m[5] || m.sawoken;
+	this.id = m.id || m[0];
+	if (m[1] || m.level) this.level = m.level || m[1];
+	if (m[2] || m.awoken) this.awoken = m.awoken || m[2];
+	if (m[3] || m.plus) this.plus = m.plus || m[3];
+	if (m[4] || m.latent) this.latent = m.latent || m[4];
+	if (m[5] || m.sawoken) this.sawoken = m.sawoken || m[5];
 }
 //只用来防坐的任何队员
 var MemberDelay = function(){
@@ -78,15 +78,15 @@ Formation.prototype.outObj= function(){
 	return obj;
 }
 Formation.prototype.loadObj= function(f){
-	this.title = f.t || f.title;
-	this.detail = f.d || f.detail;
-	var teamArr = f.f || f.team;
+	this.title = f.title || f.t;
+	this.detail = f.detail || f.d;
+	var teamArr = f.team || f.f;
 	this.team.forEach(function(t,ti){
-		var tf = teamArr[ti];
+		var tf = teamArr[ti] || [];
 		t.forEach(function(st,sti){
-			var fst = tf[sti]
+			var fst = tf[sti] || [];
 			st.forEach(function(m,mi){
-				var fm = fst[mi]
+				var fm = fst[mi] || new Member();
 				m.loadObj(fm);
 			})
 		})
@@ -428,13 +428,13 @@ function initialize()
 
 	//重新计算怪物的能力
 	editBox.reCalculateAbility = function(){
-		var monid = parseInt(monstersID.value);
-		var level = parseInt(monEditLv.value);
+		var monid = parseInt(monstersID.value || 0);
+		var level = parseInt(monEditLv.value || 0);
 		var awoken = editBox.awokenCount;
 		var plus = [
-			parseInt(monEditAddHp.value),
-			parseInt(monEditAddAtk.value),
-			parseInt(monEditAddRcv.value)
+			parseInt(monEditAddHp.value || 0),
+			parseInt(monEditAddAtk.value || 0),
+			parseInt(monEditAddRcv.value || 0)
 		];
 		var latent = editBox.latent;
 		var abilitys = calculateAbility(monid,level,plus,awoken,latent);
@@ -499,25 +499,7 @@ function initialize()
 		}
 
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
-		/*
-		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
-		if (formationAbilityDom)
-		{
-			//另一个怪物数据
-			var mD2 = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]?0:1][editBox.memberIdx[2]];
-			var mainMD,assistMD; //主怪与辅助
-			if (editBox.memberIdx[1])
-			{
-				assistMD = mD;
-				mainMD = mD2;
-			}else
-			{
-				mainMD = mD;
-				assistMD = mD2;
-			}
-			
-		}
-		*/
+
 		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 		if (formationAbilityDom)
 		{
@@ -615,18 +597,19 @@ function changeid(mon,monDom,latentDom)
 		monDom.title = "No." + mon.id + " " + md.name[language.searchlist[0]] || md.name["ja"];
 		monDom.href = mon.id.toString().replace(/^(\d+)$/ig,language.guideURL);
 	}
-	if (mon.level>0) //如果提供了等级
+	var level = mon.level || 1;
+	var levelDom = monDom.querySelector(".level");
+	if (levelDom) //如果提供了等级
 	{
-		var levelDom = monDom.querySelector(".level");
-		levelDom.innerHTML = mon.level;
-		if (mon.level == md.maxLv)
+		levelDom.innerHTML = level;
+		if (level == md.maxLv)
 		{ //如果等级刚好等于最大等级，则修改为“最大”的字
 			levelDom.classList.add("max");
 		}else
 		{
 			levelDom.classList.remove("max");
 		}
-		if (md.a110 && mon.level >= md.maxLv)
+		if (md.a110 && level >= md.maxLv)
 		{ //如果支持超觉，并且等级超过99，就添加支持超觉的蓝色
 			levelDom.classList.add("_110");
 		}else
@@ -681,23 +664,26 @@ function changeid(mon,monDom,latentDom)
 	{
 		m_id.innerHTML = mon.id;
 	}
-	if (mon.plus) //如果提供了加值
+	var plusArr = mon.plus || [0,0,0];
+	var plusDom = monDom.querySelector(".plus");
+	if (plusArr && plusDom) //如果提供了加值，且怪物头像内有加值
 	{
-		monDom.querySelector(".plus .hp").innerHTML = mon.plus[0];
-		monDom.querySelector(".plus .atk").innerHTML = mon.plus[1];
-		monDom.querySelector(".plus .rcv").innerHTML = mon.plus[2];
-		if (mon.plus[0]+mon.plus[1]+mon.plus[2] >= 297)
+		plusDom.querySelector(".hp").innerHTML = plusArr[0];
+		plusDom.querySelector(".atk").innerHTML = plusArr[1];
+		plusDom.querySelector(".rcv").innerHTML = plusArr[2];
+		var plusCount = plusArr[0]+plusArr[1]+plusArr[2];
+		if (plusCount >= 297)
 		{
-			monDom.querySelector(".plus").classList.add("has297");
-			monDom.querySelector(".plus").classList.remove("zero");
-		}else if (mon.plus[0]+mon.plus[1]+mon.plus[2] <= 0)
+			plusDom.classList.add("has297");
+			plusDom.classList.remove("zero");
+		}else if (plusCount <= 0)
 		{
-			monDom.querySelector(".plus").classList.add("zero");
-			monDom.querySelector(".plus").classList.remove("has297");
+			plusDom.classList.add("zero");
+			plusDom.classList.remove("has297");
 		}else
 		{
-			monDom.querySelector(".plus").classList.remove("zero");
-			monDom.querySelector(".plus").classList.remove("has297");
+			plusDom.classList.remove("zero");
+			plusDom.classList.remove("has297");
 		}
 	}
 	if (latentDom && mon.latent) //如果提供了潜觉

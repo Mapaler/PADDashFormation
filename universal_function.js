@@ -134,6 +134,12 @@ function returnMonsterNameArr(m,lsList)
 //计算怪物的能力
 function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
 {
+    if (monid == undefined) monid = 0;
+    if (level == undefined) level = 1;
+    if (plus == undefined) plus = [0,0,0];
+    if (awoken == undefined) awoken = 0;
+    if (latent == undefined) latent = [];
+    
     if (monid<=0) return null;
 	var m = ms[monid]; //怪物数据
 	var plusAdd = [10,5,3]; //加值的增加值
