@@ -35,8 +35,8 @@ This tool can help you easily create and share Dash Formation or Solo Formation.
 [Download ZIP](https://github.com/Mapaler/PADDashFormation/archive/master.zip), and open the `index.html` with Browser. Firefox 68.0 or above need setting the `privacy.file_unique_origin` to `false` in `about:config`.
 
 ## 小提示 | Tips
-* 直接复制网址即可分享组队。你可以使用*短网址服务*进一步缩短网址。  
-Copy the URL directly to share the Formation. You can use any *Short URL Service* to further shorten the URL.  
+* 直接复制网址即可分享组队或自己添加收藏夹保存。你可以使用*短网址服务*进一步缩短网址。  
+Copy the URL directly to share the Formation, or add a Bookmark to archives. You can use any *Short URL Service* to further shorten the URL.  
 ![分享组队](https://github.com/Mapaler/PADDashFormation/raw/master/document/tips-share.png)
 * 使用后退即可撤销上一次修改  
 Use back to undo the last edit  
