@@ -16,13 +16,20 @@ Member.prototype.outObj = function(){
 	if (m.sawoken != undefined) obj.push(m.sawoken);
 	return obj;
 }
-Member.prototype.loadObj = function(m){
-	this.id = m.id || m[0];
-	if (m[1] || m.level) this.level = m.level || m[1];
-	if (m[2] || m.awoken) this.awoken = m.awoken || m[2];
-	if (m[3] || m.plus) this.plus = m.plus || m[3];
-	if (m[4] || m.latent) this.latent = m.latent || m[4];
-	if (m[5] || m.sawoken) this.sawoken = m.sawoken || m[5];
+Member.prototype.loadObj = function(m,dataVersion){
+	if (m == undefined) //如果没有提供数据，直接返回默认
+	{
+		return;
+	}
+	if (dataVersion == undefined) dataVersion = 1;
+	this.id = dataVersion>1 ? m[0] : m.id;
+	this.level = dataVersion>1 ? m[1] : m.level;
+	this.awoken = dataVersion>1 ? m[2] : m.awoken;
+	this.plus = dataVersion>1 ? m[3] : m.plus;
+	if (!(this.plus instanceof Array)) this.plus = [0,0,0]; //如果潜觉不是数组，则改变
+	this.latent = dataVersion>1 ? m[4] : m.latent;
+	if (!(this.latent instanceof Array)) this.latent = []; //如果潜觉不是数组，则改变
+	this.sawoken = dataVersion>1 ? m[5] : m.sawoken;
 }
 //只用来防坐的任何队员
 var MemberDelay = function(){
@@ -78,16 +85,17 @@ Formation.prototype.outObj= function(){
 	return obj;
 }
 Formation.prototype.loadObj= function(f){
-	this.title = f.title || f.t;
-	this.detail = f.detail || f.d;
-	var teamArr = f.team || f.f;
+	var dataVeision = f.f?2:1; //是第几版格式
+	this.title = dataVeision>1 ? f.t : f.title;
+	this.detail = dataVeision>1 ? f.d : f.detail;
+	var teamArr = dataVeision>1 ? f.f : f.team;
 	this.team.forEach(function(t,ti){
 		var tf = teamArr[ti] || [];
 		t.forEach(function(st,sti){
 			var fst = tf[sti] || [];
 			st.forEach(function(m,mi){
-				var fm = fst[mi] || new Member();
-				m.loadObj(fm);
+				var fm = fst[mi];
+				m.loadObj(fm,dataVeision);
 			})
 		})
 	});
