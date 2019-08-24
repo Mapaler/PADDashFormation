@@ -144,9 +144,9 @@ function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
 	var m = ms[monid]; //怪物数据
 	var plusAdd = [10,5,3]; //加值的增加值
 	var awokenAdd = [ //对应加三维觉醒的序号与增加值
-		{index:1,value:500},
-		{index:2,value:100},
-		{index:3,value:200}
+		[{index:1,value:500},{index:65,value:-5000}],
+		[{index:2,value:100},{index:66,value:-1000}],
+		[{index:3,value:200},{index:67,value:-2000}]
 	];
 	var latentAdd = [ //对应加三维潜在觉醒的序号与增加比例
 		[{index:1,scale:0.015},{index:12,scale:0.03},{index:25,scale:0.045}],
@@ -168,14 +168,22 @@ function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
             if (weaponAwokenList.indexOf(49)>=0)
                 awokenList = awokenList.concat(weaponAwokenList);
         }
-		var awokenCount = awoken?awokenList.filter(function(a){return a==awokenAdd[idx].index;}).length:0; //含有增加三维觉醒的数量
-		var n_awoken = Math.round(awokenCount*awokenAdd[idx].value);
-		var n_latent = latent?Math.round(latentAdd[idx].reduce(function(previous,la){
-			var latentCount = latent.filter(function(l){return l==la.index;}).length; //每个潜觉的数量
-			return previous + n_base * la.scale * latentCount; //无加值与觉醒的基础值，乘以那么多个潜觉的增加倍数
-        },0)):0;
+        var n_awoken = awoken
+            ?Math.round(awokenAdd[idx].reduce(function(previous,aw){
+                    var awokenCount = awokenList.filter(function(a){return a==aw.index;}).length; //每个潜觉的数量
+                    return previous + aw.value * awokenCount; //无加值与觉醒的基础值，乘以那么多个潜觉的增加倍数
+                },0))
+            :0;
+        var n_latent = latent
+            ?Math.round(latentAdd[idx].reduce(function(previous,la){
+                    var latentCount = latent.filter(function(l){return l==la.index;}).length; //每个潜觉的数量
+                    return previous + n_base * la.scale * latentCount; //无加值与觉醒的基础值，乘以那么多个潜觉的增加倍数
+                },0))
+            :0;
         //console.log("基础值：%d，加蛋值：%d，觉醒x%d增加：%d，潜觉增加：%d",n_base,n_plus,awokenCount,n_awoken,n_latent);
-		return n_base + n_plus + n_awoken + n_latent;
+        var reValue = n_base + n_plus + n_awoken + n_latent;
+        if (idx<2 && reValue<1) reValue = 1; //HP和ATK最低为1
+		return reValue;
 	})
 	return abilitys;
 }
