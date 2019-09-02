@@ -995,7 +995,7 @@ function refreshAbility(dom,team,idx){
 	//如果辅助是武器，还要加上辅助的觉醒
 	var mainAbility = calculateAbility(mainMD.id,mainMD.level,mainMD.plus,mainMD.awoken,mainMD.latent,assistMD.id,assistMD.awoken);
 	//如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
-	var assistAbility = ms[mainMD.id].ppt[0]==ms[assistMD.id].ppt[0]
+	var assistAbility = (assistMD.id > 0 && ms[mainMD.id].ppt[0]==ms[assistMD.id].ppt[0])
 		?calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null)
 		:[0,0,0];
 	var hpDom = ali.querySelector(".hp");
