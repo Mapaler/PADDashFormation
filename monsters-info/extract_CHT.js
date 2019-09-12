@@ -25,19 +25,25 @@ fs.access(outJSON,function(err){
 				{
 					var filepath = path.join(sourceFolder, filename);//合并当前文件的路径
 					var htmlText = fs.readFileSync(filepath, 'utf-8'); //使用同步读取
-					var searchName = /<h2 .+>\s*?([\s\S]+)\s*?<\/h2>/igm.exec(htmlText);
+					var searchName = /<h2 .+>\s*?([\s\S]*)\s*?<\/h2>/igm.exec(htmlText);
 					try
 					{
-						var mname = searchName[1].replace("\n","");
+						var mname = searchName[1].trim();
 						mname = mname.replace("探偵","偵探"); //把日语的探侦都换成侦探
-						var m = {
-							id:searchID[1],
-							name:mname,
-						}
-						monArr.push(m);
-						if (monArr.length % 100 == 0)
+						if (mname.length>0)
 						{
-							console.log("已添加 " + monArr.length + " 个数据");
+							var m = {
+								id:searchID[1],
+								name:mname,
+							}
+							monArr.push(m);
+							if (monArr.length % 100 == 0)
+							{
+								console.log("已添加 " + monArr.length + " 个数据");
+							}
+						}else
+						{
+							console.log(filename + "的中文名为空。");
 						}
 					}catch(e)
 					{
