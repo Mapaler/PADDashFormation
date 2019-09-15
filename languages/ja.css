@@ -125,6 +125,9 @@
 .type-name-15::after{
 	content: "売却用";
 }
+.type-name-9::after{
+	content: "特別保護";
+}
 .control-box .solo-link::before{
 	content: "ソロゲームに移動";
 }

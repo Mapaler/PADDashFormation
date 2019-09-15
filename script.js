@@ -90,7 +90,7 @@ Formation.prototype.loadObj= function(f){
 	var dataVeision = f.f?2:1; //是第几版格式
 	this.title = dataVeision>1 ? f.t : f.title;
 	this.detail = dataVeision>1 ? f.d : f.detail;
-	this.badge = f.b?f.b:0; //徽章
+	this.badge = f.b ? f.b : 0; //徽章
 	var teamArr = dataVeision>1 ? f.f : f.team;
 	this.team.forEach(function(t,ti){
 		var tf = teamArr[ti] || [];

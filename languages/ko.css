@@ -125,6 +125,9 @@
 .type-name-15::after{
 	content: "매각용";
 }
+.type-name-9::after{
+	content: "특별 보호";
+}
 .control-box .solo-link::before{
 	content: "싱글 플레이어 게임으로 이동";
 }
@@ -136,4 +139,24 @@
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
 	content: "괴물 ID 표시";
+}
+
+/*Some icons, style different from the Japanese version*/
+.awoken-40,
+.awoken-46,
+.awoken-47,
+.awoken-48,
+.type-icon-12,
+.type-icon-9
+{
+	background-position-x: -32px;
+}
+.latent-icon-14
+{
+	background-position-x: -76px;
+}
+.badge-0,
+.badge-2
+{
+	background-position-x: -36px;
 }
