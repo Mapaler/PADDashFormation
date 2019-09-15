@@ -594,3 +594,63 @@ var sawokens = [
 	"大暗盾",
 ];
 */
+/* 徽章背景 */
+.badge-bg{
+	background-image: url(images/badge-bg.png);
+	width: 53px;
+	height: 41px;
+	line-height: 41px;
+	float: left;
+	text-align: center;
+	margin-right: 5px;
+	cursor: pointer;
+}
+.badge{
+	display:inline-block;
+    vertical-align: middle;
+	background-repeat: no-repeat;
+	background-image: url(images/badge.png);
+	width: 36px; height: 30px;
+}
+.badge-0{
+	background-position-y: 0px;
+}
+.badge-1{
+	background-position-y: -30px;
+}
+.badge-2{
+	background-position-y: -60px;
+}
+.badge-3{
+	background-position-y: -90px;
+}
+.badge-4{
+	background-position-y: -120px;
+}
+.badge-5{
+	background-position-y: -150px;
+}
+.badge-6{
+	background-position-y: -180px;
+}
+.badge-7{
+	background-position-y: -210px;
+}
+.badge-8{
+	background-position-y: -240px;
+}
+.badge-9{
+	background-position-y: -270px;
+}
+.badge-10{
+	background-position-y: -300px;
+}
+.badge-11{
+	background-position-y: -330px;
+}
+.badge-12{
+	background-position-y: -360px;
+}
+.badge-13{
+	background-position-y: -390px;
+}
