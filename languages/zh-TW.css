@@ -125,6 +125,9 @@
 .type-name-15::after{
 	content: "販賣用";
 }
+.type-name-9::after{
+	content: "特別保護";
+}
 .control-box .languages-label::before{
 	content: "語言：";
 }

@@ -132,6 +132,9 @@
 .type-name-15::after{
 	content: "Redeemable";
 }
+.type-name-9::after{
+	content: "Special Protection";
+}
 .control-box .solo-link::before{
 	content: "Jump To Solo Mode";
 }
@@ -143,4 +146,24 @@
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
 	content: "Show monster ID";
+}
+
+/*Some icons, style different from the Japanese version*/
+.awoken-40,
+.awoken-46,
+.awoken-47,
+.awoken-48,
+.type-icon-12,
+.type-icon-9
+{
+	background-position-x: -32px;
+}
+.latent-icon-14
+{
+	background-position-x: -76px;
+}
+.badge-0,
+.badge-2
+{
+	background-position-x: -36px;
 }
