@@ -233,10 +233,10 @@ ul{
 .formation-box .monster{
 	margin: 4px; /*留给队长边框的*/
 }
-/*队伍的背景色*/
-.formation-assist, .formation-team{
+.formation-assist, .formation-team,.formation-badge{
 	display: inline-block;
 }
+/*队伍的背景色*/
 .formation-A-box .formation-team,.formation-A-box .formation-latents{
 	background-color:pink;
 }

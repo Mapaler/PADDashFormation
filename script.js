@@ -59,6 +59,7 @@ var Formation = function(teamCount,memberCount){
 	this.title = "",
 	this.detail = "",
 	this.team = [];
+	this.badge = 0;
 	for (var ti=0;ti<teamCount;ti++)
 	{
 		var team = [[],[]];
@@ -82,12 +83,14 @@ Formation.prototype.outObj= function(){
 			})
 		})
 	}
+	if (this.badge>0) obj.b = this.badge; //徽章
 	return obj;
 }
 Formation.prototype.loadObj= function(f){
 	var dataVeision = f.f?2:1; //是第几版格式
 	this.title = dataVeision>1 ? f.t : f.title;
 	this.detail = dataVeision>1 ? f.d : f.detail;
+	this.badge = f.b?f.b:0; //徽章
 	var teamArr = dataVeision>1 ? f.f : f.team;
 	this.team.forEach(function(t,ti){
 		var tf = teamArr[ti] || [];
@@ -243,7 +246,23 @@ function initialize()
 
 	//队伍框
 	var formationBox = document.querySelector(".formation-box");
-	formationBox.formationBox = formation;
+	formationBox.formation = formation;
+	
+	//徽章
+	var badges = Array.prototype.slice.call(formationBox.querySelectorAll(".formation-badge .badge-bg"));
+	badges.forEach(function(badge,bidx){
+		badge.onclick = function(){
+			if (badges.some(function(b){return b.classList.contains("display-none");}))
+			{ //未展开时
+				badges.forEach(function(b,idx){if (idx!=bidx)b.classList.remove("display-none");})
+			}else
+			{ //展开时
+				badges.forEach(function(b,idx){if (idx!=bidx)b.classList.add("display-none");})
+				formation.badge = bidx;
+				creatNewUrl();
+			}
+		}
+	})
 
 	//编辑框
 	var editBox = document.querySelector(".edit-box");
@@ -909,6 +928,9 @@ function refreshAll(fmt){
 	txtTitle.value = fmt.title || "";
 	txtDetail.value = fmt.detail || "";
 	txtDetail.onblur();
+	
+	var badges = Array.prototype.slice.call(document.querySelectorAll(".formation-box .formation-badge .badge-bg"));
+	badges.forEach(function(b,idx){if (idx==fmt.badge) b.classList.remove("display-none"); else b.classList.add("display-none");})
 
 	var formationA = document.querySelector(".formation-box .formation-A-box");
 	var formationB = document.querySelector(".formation-box .formation-B-box");
