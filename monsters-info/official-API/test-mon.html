@@ -31,12 +31,19 @@ function g(id)
 	var pn = ["火","水","木","光","暗"];
 	var p = [pn[m[2]]||"无", pn[m[3]]||"无"];
 	var tn = ["0进化","1平衡","2体力","3回复","4龙","5神","6攻击","7恶魔","8机械","9","10","11","12觉醒","13","14强化","15卖钱"];
+
+
+	//因为觉醒数量的不一样，所以需要制定序号
+	var awokenCIdx = 58+m[57]*3; //awoken Count Index，觉醒数量的序号
+	var superAwokenIdx = awokenCIdx+1+m[awokenCIdx]; //super awoken Index，超觉醒的序号
+	
+	//类型
 	var type = [];
 	type.push(tn[m[5]]);
 	if (m[6]!=-1) //第二个type
 		type.push(tn[m[6]]);
-	if (m[m.length-9]!=-1) //第三个type要倒着来
-		type.push(tn[m[m.length-9]]);
+	if (m[superAwokenIdx+3]!=-1) //第三个type要倒着来
+		type.push(tn[m[superAwokenIdx+3]]);
 	console.log("%oNo.%d %s [%s/%s]，Lv%d，%s究极退化为%d，类型：%s，%d星，COST%d，%s个觉醒，三维%s，110级增长%d%%，%s当二技，1级吃经验%d，1级卖￥%d，%dMP，成长类型%d，升2级经验%d，技能编号%d，队长%d",
 		m, //对象
 		m[0], //ID
@@ -50,11 +57,11 @@ function g(id)
 		m[8], //cost
 		m[58+m[57]*3], //觉醒数
 		m[14]+"-"+m[15]+"/"+m[17]+"-"+m[18]+"/"+m[20]+"-"+m[21], //三维
-		m[m.length-3], //110级增长
-		m[m.length-5]>2?"能":"不能", //二技
+		m[superAwokenIdx+9], //110级增长
+		m[superAwokenIdx+7]>2?"能":"不能", //二技
 		Math.round(m[11]/4), //1级经验，每级，直接乘
 		Math.round(m[13]/10), //1级卖钱
-		m[m.length-8], //MP
+		m[superAwokenIdx+4], //MP
 		m[23], //成长类型
 		Math.round(m[23] * Math.pow((2 - 1) / 98,m[24])), //1级升2级经验
 		m[25], //技能编号

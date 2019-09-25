@@ -46,14 +46,17 @@ for (var mi=0;mi<maxLength;mi++)
 		}
 	})
 
+	//因为觉醒数量的不一样，所以需要制定序号
+	var awokenCIdx = 58+m[57]*3; //awoken Count Index，觉醒数量的序号
+	var superAwokenIdx = awokenCIdx+1+m[awokenCIdx]; //super awoken Index，超觉醒的序号
+
 	//类型
 	var type = [m[5]];
 	if (m[6]!=-1) //第二个type
 		type.push(m[6]);
-	if (m[m.length-9]!=-1) //第三个type要倒着来
-		type.push(m[m.length-9]);
+	if (m[superAwokenIdx+3]!=-1) //第三个type要倒着来
+		type.push(m[superAwokenIdx+3]);
 
-	var awokenCIdx = 58+m[57]*3; //awoken Count Index，觉醒数量的序号
 	var awoken = m.slice(awokenCIdx+1,awokenCIdx+1+m[awokenCIdx]); //具体觉醒编号的数组
 
 	var mon = {
@@ -64,18 +67,20 @@ for (var mi=0;mi<maxLength;mi++)
 		rare: m[7], //稀有度
 		awoken: awoken, //觉醒
 		maxLv: m[10],
-		assist: (m[m.length-5]>2 && [303,305,307,600,602].indexOf(m[0])<0)?1:0, //但是5种小企鹅是特殊情况
+		assist: (m[superAwokenIdx+7]>2 && [303,305,307,600,602].indexOf(m[0])<0)?1:0, //但是5种小企鹅是特殊情况
 		ability: [ //三维
 			[m[14],m[15]], //HP
 			[m[17],m[18]], //ATK
 			[m[20],m[21]], //RCV
 		],
 	}
-	if (m[m.length-3]>0) //如果可以110级
+	if (m[superAwokenIdx+9]>0) //如果可以110级
 	{
-		mon.a110 = m[m.length-3];
-		var superAwokenIdx = awokenCIdx+1+m[awokenCIdx]; //super awoken Index，超觉醒的序号
-		var superAwoken = m[superAwokenIdx].length>0?(m[superAwokenIdx].split(",").map(function(sa){return parseInt(sa);})):null; //超觉醒
+		mon.a110 = m[superAwokenIdx+9];
+		var superAwoken = //超觉醒
+			m[superAwokenIdx].length>0
+			? (m[superAwokenIdx].split(",").map(function(sa){return parseInt(sa);}))
+			: null;
 		if (superAwoken)
 		{
 			mon.sAwoken = superAwoken;
