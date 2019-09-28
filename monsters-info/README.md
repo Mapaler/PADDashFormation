@@ -1,17 +1,17 @@
 使用Fidder从游戏内抓包获得怪物信息  
 Use Fidder to capture monster information from in-game capture  
 
-目前的获取时间为
-The current acquisition time is
+目前的获取API为  
+The current acquisition API is
 
-| 语言 | 时间 | API |
-| --- | --- | --- |
-| 日语(ja) | 2019-6-26 16:20 | https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
-| 英语(en) | 2019-6-26 16:20 | https://api-na-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
-| 韩语(ko) | 2019-6-26 16:20 | https://api-kr-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
+| 语言 | API |
+| --- | --- |
+| 日语(ja) | https://api-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
+| 英语(en) | https://api-na-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
+| 韩语(ko) | https://api-kr-adrv2.padsv.gungho.jp/api.php?action=download_card_data |
 
-经研究后得出如下结论，JSON里数字指的数组下标。  
-The following conclusions were drawn from the research. The number in JSON refers to the array subscript.(no translate)
+经研究后得出如下结论，JSON里数字指的数组下标。（这里已经有误了，更新请见[official-API/test-mon.html](official-API/test-mon.html)）  
+The following conclusions were drawn from the research. The number in JSON refers to the array subscript.(There are some mistake here, new update see [official-API/test-mon.html](official-API/test-mon.html) , no English translate)
 
 * 0为id，一样的时候是可以获得的，之后的就是敌人怪物了。
 * 1为名字
