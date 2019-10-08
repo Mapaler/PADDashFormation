@@ -143,3 +143,8 @@
 .not-show-mon-id .control-box .btn-show-mon-id::before{
 	content: "显示怪物ID";
 }
+
+.badge-0
+{
+	background-position-x: -72px;
+}
