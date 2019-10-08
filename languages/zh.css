@@ -144,6 +144,12 @@
 	content: "显示怪物ID";
 }
 
+/*Some icons, style different from the Japanese version*/
+.awoken-46,
+.awoken-47
+{
+	background-position-x: -64px;
+}
 .badge-0
 {
 	background-position-x: -72px;
