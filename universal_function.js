@@ -154,7 +154,7 @@ function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
 		[{index:3,scale:0.1},{index:12,scale:0.2},{index:27,scale:0.3}]
 	];
 	var abilitys = m.ability.map(function(ab,idx){
-		var n_base = Math.round((ab[1]-ab[0])*(level>99?99:level)/99+ab[0]); //99级以内的增加
+		var n_base = Math.round((ab[1]-ab[0])*(level-1)/98+ab[0]); //99级以内的增加
 		if (level>99) //110级的增加
 		{ //100到110级有11级，将m.a110的成长比率平均分配到这11级内
 			n_base = Math.round(ab[1] + ab[1]*(m.a110/100)*(level-99)/11);
