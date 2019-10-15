@@ -66,14 +66,16 @@ function skillDetail(si)
 	//返回觉醒名
 	function an(i){return ana[i-1] || ("未知觉醒" + i);}
 	//从二进制的数字中获得有哪些内容
-	function getNamesFromBinary(num,arr)
-	{
-		var results = arr.filter(function(pn,pi){
-			return num & Math.pow(2,pi);
+	function getNamesFromBinary(num,dataArr)
+	{	/*num是输入的数字，2的N次方在2进制下表示1后面跟着N个0。
+		如果num和2的N次方同时存在某位1，则返回这个数，逻辑上转换为true。
+		filter就可以返回所有有这个数的数据*/
+		var results = dataArr.filter(function(pn,pi){
+			return num & Math.pow(2,pi); //Math.pow(x,y)计算以x为底的y次方值
 		});
 		return results;
 	}
-	//从二进制(10禁止保存)的数字中获得有哪些珠子
+	//从二进制(10进制保存)的数字中获得有哪些珠子
 	function binPns(b)
 	{	/*b是输入的数字，比如10进制465转二进制=>111010001
 		然后从地位到高位表示火水木光暗……
