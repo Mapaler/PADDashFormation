@@ -143,6 +143,12 @@
 .not-show-mon-id .control-box .btn-show-mon-id::before{
 	content: "显示怪物ID";
 }
+.team-info .tIf-total-hp::before{
+	content: "总HP：";
+}
+.team-info .tIf-total-rcv::before{
+	content: "总回复：";
+}
 
 /*Some icons, style different from the Japanese version*/
 .awoken-46,

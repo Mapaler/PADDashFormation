@@ -51,7 +51,10 @@ function g(id)
 
 function skillDetail(si)
 {
-	var sk = skill[si];
+	skillDataDetail(skill[si]);
+}
+function skillDataDetail(sk)
+{
 	var str = null;
 	//珠子名数组
 	var pna = ["火","水","木","光","暗","回复","废","毒","剧毒","炸弹"];
@@ -65,6 +68,14 @@ function skillDetail(si)
 	function tn(i){return tna[i] || ("未知类型" + i);}
 	//返回觉醒名
 	function an(i){return ana[i-1] || ("未知觉醒" + i);}
+	//从二进制的数字中获得布尔值数组
+	function getBooleanFromBinary(num,reverse=true)
+	{	/*num是输入的数字，2的N次方在2进制下表示1后面跟着N个0。
+		如果num和2的N次方同时存在某位1，则返回这个数，逻辑上转换为true。*/
+		let arr = num.toString(2).split("").map(c=>{return parseInt(c);});
+		if (reverse) arr.reverse();
+		return arr;
+	}
 	//从二进制的数字中获得有哪些内容
 	function getNamesFromBinary(num,dataArr)
 	{	/*num是输入的数字，2的N次方在2进制下表示1后面跟着N个0。
@@ -313,7 +324,7 @@ function skillDetail(si)
 		case 176:
 		//●◉○◍◯
 			var table = [sk[6],sk[7],sk[8],sk[9],sk[10]];
-			str = "以如下形状生成" + pn(sk[11]) + "宝珠\n";
+			str = "以如下形状生成" + pn(sk[11]||0) + "宝珠\n";
 			str += table.map(r=>{
 				var rArr = [];
 				for(var c=0;c<=5;c++)

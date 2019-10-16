@@ -44,14 +44,11 @@ function g(id)
 		type.push(tn[m[6]]);
 	if (m[superAwokenIdx+3]!=-1) //第三个type要倒着来
 		type.push(tn[m[superAwokenIdx+3]]);
-	console.log("%oNo.%d %s [%s/%s]，Lv%d，%s究极退化为%d，类型：%s，%d星，COST%d，%s个觉醒，三维%s，110级增长%d%%，%s当二技，1级吃经验%d，1级卖￥%d，%dMP，成长类型%d，升2级经验%d，技能编号%d，队长%d",
-		m, //对象
+	console.log("No.%d %s [%s/%s]，Lv%d，类型：%s，%d星，COST%d，%s个觉醒，三维%s，110级增长%d%%，%s当二技，1级吃经验%d，1级卖￥%d，%dMP，成长类型%d，升2级经验%d，技能编号%d，队长%d，进化链根%d，%s究极退化为%d，进化素材ID[%d,%d,%d,%d,%d]\n%o",
 		m[0], //ID
 		m[1], //名字
 		p[0],p[1], //属性
 		m[10], //最大等级
-		m[4]?"可":"不可", //可退化？
-		m[40], //可退化？
 		type.join("|"), //类型
 		m[7], //星级
 		m[8], //cost
@@ -65,8 +62,27 @@ function g(id)
 		m[23], //成长类型
 		Math.round(m[23] * Math.pow((2 - 1) / 98,m[24])), //1级升2级经验
 		m[25], //技能编号
-		m[26] //队长技能编号
+		m[26], //队长技能编号
+		m[superAwokenIdx+1], //进化根编号
+		m[4]?"可":"不可", //可退化？
+		m[40], //可退化？
+		m[41],m[42],m[43],m[44],m[45], //进化素材ID 1-5
+		m //原始对象
 	);
+	//if (m[57]>0) console.log("[57]="+m[57]);
+	/*
+	m[superAwokenIdx+1], //进化根编号
+	m[superAwokenIdx+2], //
+	m[superAwokenIdx+3], //第三个type
+	m[superAwokenIdx+4], //卖MP
+	m[superAwokenIdx+5], //
+	m[superAwokenIdx+6], //
+	m[superAwokenIdx+7], //是否能当二技
+	m[superAwokenIdx+8], //怀疑是区分怪物所属合作的文字
+	m[superAwokenIdx+9], //110级增长
+	m[superAwokenIdx+10], //
+	m[superAwokenIdx+11], //
+	*/
 }
 GM_xmlhttpRequest({
 	method: "GET",

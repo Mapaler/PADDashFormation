@@ -147,6 +147,12 @@
 .not-show-mon-id .control-box .btn-show-mon-id::before{
 	content: "Show monster ID";
 }
+.team-info .tIf-total-hp::before{
+	content: "Total HP: ";
+}
+.team-info .tIf-total-rcv::before{
+	content: "Total RCV: ";
+}
 
 /*Some icons, style different from the Japanese version*/
 .awoken-40,
