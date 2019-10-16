@@ -294,6 +294,13 @@ ul{
 	/*content: "▲辅助";*/
 }
 
+.formation-box .team-info{
+	font-size: 15px;
+}
+.team-info .tIf-total-hp,.team-info .tIf-total-rcv{
+	display:inline-block;
+}
+
 /*队伍的潜觉*/
 .formation-latents .latents{
 	width: 108px;

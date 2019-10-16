@@ -95,8 +95,8 @@ function awokenCountInTeam(formationTeam,ak,solo)
                 var enableAwoken = mdAwoken.slice(0,m.awoken);
                 //相同的觉醒数
                 var hasAwoken = enableAwoken.filter(function(a){return a == ak;}).length;
-                //如果有超觉醒，且超觉醒id和计数的id相同
-                if (mdSAwoken && (mdSAwoken[m.sawoken] == ak))
+                //如果是单人，有超觉醒，且超觉醒id和计数的id相同
+                if (solo && mdSAwoken && (mdSAwoken[m.sawoken] == ak))
                 {
                     hasAwoken++;
                 }

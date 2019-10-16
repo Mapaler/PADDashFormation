@@ -49,6 +49,7 @@ MemberAssist.prototype.constructor = MemberAssist
 //正式队伍
 var MemberTeam = function(){
 	this.latent = [];
+	this.ability = [0,0,0];
 	MemberAssist.call(this);
 	//sawoken作为可选项目，默认不在内
 }
@@ -65,8 +66,8 @@ var Formation = function(teamCount,memberCount){
 		var team = [[],[]];
 		for (var mi=0;mi<memberCount;mi++)
 		{
-			team[0].push(new Member());
-			team[1].push(new Member());
+			team[0].push(new MemberTeam());
+			team[1].push(new MemberAssist());
 		}
 		this.team.push(team);
 	}
@@ -1020,6 +1021,10 @@ function refreshAbility(dom,team,idx){
 	var assistAbility = (assistMD.id > 0 && ms[mainMD.id].ppt[0]==ms[assistMD.id].ppt[0])
 		?calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null)
 		:[0,0,0];
+	for (let ai=0;ai<3;ai++)
+	{
+		mainMD.ability[ai] = mainAbility[ai] + Math.round(assistAbility[ai]*bonusScale[ai]);
+	}
 	var hpDom = ali.querySelector(".hp");
 	var atkDom = ali.querySelector(".atk");
 	var rcvDom = ali.querySelector(".rcv");
@@ -1027,11 +1032,21 @@ function refreshAbility(dom,team,idx){
 		if (mainAbility)
 		{
 			div.classList.remove("display-none");
-			div.innerHTML = mainAbility[ai] + Math.round(assistAbility[ai]*bonusScale[ai]);
+			div.innerHTML = mainMD.ability[ai];
 		}else
 		{
 			div.classList.add("display-none");
 			div.innerHTML = 0;
 		}
-	})
+	});
+
+	//计算总的生命值
+	var tHpDom = document.querySelector(".formation-box .team-info .tIf-total-hp");
+	var tRcvDom = document.querySelector(".formation-box .team-info .tIf-total-rcv");
+	tHpDom.innerHTML = team[0].reduce(function(value,mon){
+		return value += mon.ability[0];
+	},0);
+	tRcvDom.innerHTML = team[0].reduce(function(value,mon){
+		return value += mon.ability[2];
+	},0);
 }

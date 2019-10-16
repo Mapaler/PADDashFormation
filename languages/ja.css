@@ -140,3 +140,9 @@
 .not-show-mon-id .control-box .btn-show-mon-id::before{
 	content: "モンスターIDを表示";
 }
+.team-info .tIf-total-hp::before{
+	content: "合計HP：";
+}
+.team-info .tIf-total-rcv::before{
+	content: "合計回復：";
+}

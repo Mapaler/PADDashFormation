@@ -140,6 +140,12 @@
 .not-show-mon-id .control-box .btn-show-mon-id::before{
 	content: "괴물 ID 표시";
 }
+.team-info .tIf-total-hp::before{
+	content: "총 HP：";
+}
+.team-info .tIf-total-rcv::before{
+	content: "총 회복：";
+}
 
 /*Some icons, style different from the Japanese version*/
 .awoken-40,
