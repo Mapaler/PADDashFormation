@@ -51,9 +51,9 @@ function g(id)
 
 function skillDetail(sid)
 {
-	skillDataDetail(skill[sid]);
+	skillDataDetail(skill[sid],sid);
 }
-function skillDataDetail(sk)
+function skillDataDetail(sk,si)
 {
 	var str = null;
 	//珠子名数组
@@ -353,11 +353,14 @@ function skillDataDetail(sk)
 		case 191:
 			str = sk[6] + "回合内可以贯穿伤害无效盾";
 			break;
+		case 195:
+			str = "HP减少"+ sk[6] + "%";
+			break;
 		case 196:
 			str = "无法消除宝珠状态减少"+ sk[6] + "回合";
 			break;
 		default:
-			str = "未知的技能类型" + sk[2] + "(No." + sk + ")";
+			str = "未知的技能类型" + sk[2] + "(No." + si + ")";
 			console.log(str,sk);
 			return;
 			break;
