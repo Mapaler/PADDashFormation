@@ -49,9 +49,9 @@ function g(id)
 	skillDetail(id)
 }
 
-function skillDetail(si)
+function skillDetail(sid)
 {
-	skillDataDetail(skill[si]);
+	skillDataDetail(skill[sid]);
 }
 function skillDataDetail(sk)
 {
@@ -357,7 +357,7 @@ function skillDataDetail(sk)
 			str = "无法消除宝珠状态减少"+ sk[6] + "回合";
 			break;
 		default:
-			str = "未知的技能类型" + sk[2] + "(No." + si + ")";
+			str = "未知的技能类型" + sk[2] + "(No." + sk + ")";
 			console.log(str,sk);
 			return;
 			break;
