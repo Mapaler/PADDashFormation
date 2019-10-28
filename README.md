@@ -49,8 +49,6 @@ You can search for monsters by entering the monster name in the monster ID of th
 ![搜索怪物](document/tips-search.png)
 * 车队模式只显示部分杀潜觉以及共用的觉醒的统计，单人则全部显示。  
 2-Player Multi Games Mode only show the killer latent and several common awoken statistics, but solo mode shows all.
-* 怪物数据基于日版。  
-Monsters Data based on Japanese version.
 
 # 翻译我 | TRANSLATE ME
 ## How to **Pull requests**
