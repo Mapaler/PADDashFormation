@@ -141,10 +141,10 @@
 	content: "괴물 ID 표시";
 }
 .team-info .tIf-total-hp::before{
-	content: "총 HP：";
+	content: "총 HP(팀의 각 성과 배지)：";
 }
 .team-info .tIf-total-rcv::before{
-	content: "총 회복：";
+	content: "총 회복(팀의 각 성과 배지)：";
 }
 
 /*Some icons, style different from the Japanese version*/

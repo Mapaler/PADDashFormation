@@ -260,6 +260,7 @@ function initialize()
 			{ //展开时
 				badges.forEach(function(b,idx){if (idx!=bidx)b.classList.add("display-none");})
 				formation.badge = bidx;
+				refreshTotalAbility(formation.team[0]);
 				creatNewUrl();
 			}
 		}
@@ -535,6 +536,7 @@ function initialize()
 				formationAbilityDom,
 				formation.team[editBox.memberIdx[0]],
 				editBox.memberIdx[2]);
+			refreshTotalAbility(formation.team[editBox.memberIdx[0]]);
 		}
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
@@ -559,6 +561,7 @@ function initialize()
 				formationAbilityDom,
 				formation.team[editBox.memberIdx[0]],
 				editBox.memberIdx[2]);
+			refreshTotalAbility(formation.team[editBox.memberIdx[0]]);
 		}
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
@@ -574,6 +577,7 @@ function initialize()
 				formationAbilityDom,
 				formation.team[editBox.memberIdx[0]],
 				editBox.memberIdx[2]);
+			refreshTotalAbility(formation.team[editBox.memberIdx[0]]);
 		}
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
@@ -956,6 +960,7 @@ function refreshAll(fmt){
 				formationAbilityDom,
 				fmt.team[0],
 				ti);
+			refreshTotalAbility(fmt.team[0]);
 		}
 		if (formationB)
 		{
@@ -984,28 +989,28 @@ function refreshAwokenCount(teams){
 	{
 		if (ai == 10) //防封
 		{
-			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,52,solo)*2);
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,52,solo)*2);
 		}else if (ai == 11) //防暗
 		{
-			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,68,solo)*5);
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,68,solo)*5);
 		}else if (ai == 12) //防废
 		{
-			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,69,solo)*5);
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,69,solo)*5);
 		}else if (ai == 13) //防毒
 		{
-			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,70,solo)*5);
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,70,solo)*5);
 		}else if (ai == 19) //手指
 		{
-			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,53,solo)*2);
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,53,solo)*2);
 		}else if (ai == 21) //SB
 		{
-			setCount(ai,awokenCountInTeam(teams,ai,solo)+awokenCountInTeam(teams,56,solo)*2);
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,56,solo)*2);
 		}else if (bigAwoken.indexOf(ai)>=0) //属于大觉醒
 		{
 			continue;
 		}else
 		{
-			setCount(ai,awokenCountInTeam(teams,ai,solo));
+			setCount(ai,awokenCountInFormation(teams,ai,solo));
 		}
 	}
 }
@@ -1042,14 +1047,44 @@ function refreshAbility(dom,team,idx){
 			div.innerHTML = 0;
 		}
 	});
-
+}
+//刷新能力值合计
+function refreshTotalAbility(team){
 	//计算总的生命值
-	var tHpDom = document.querySelector(".formation-box .team-info .tIf-total-hp");
-	var tRcvDom = document.querySelector(".formation-box .team-info .tIf-total-rcv");
-	tHpDom.innerHTML = team[0].reduce(function(value,mon){
+	let tHpDom = document.querySelector(".formation-box .team-info .tIf-total-hp");
+	let tRcvDom = document.querySelector(".formation-box .team-info .tIf-total-rcv");
+	let tHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
 		return value += mon.ability ? mon.ability[0] : 0;
 	},0);
-	tRcvDom.innerHTML = team[0].reduce(function(value,mon){
+	let teamHPAwoken = awokenCountInTeam(team,46,solo); //全队血包个数
+	//let tHPwithAwoken = Math.round(tHP * (1 + awokenCountInTeam(team,46,solo) * 0.05)); //全队血包
+	let badgeHPScale = 1; //徽章倍率
+	if (formation.badge == 4)
+	{
+		badgeHPScale = 1.05;
+	}else if (formation.badge == 11)
+	{
+		badgeHPScale = 1.15;
+	}
+	let tRCV = team[0].reduce(function(value,mon){ //队伍计算的总回复
 		return value += mon.ability ? mon.ability[2] : 0;
 	},0);
+	let teamRCVAwoken = awokenCountInTeam(team,47,solo); //全队回复个数
+	//let tRCVwithAwoken = Math.round(tRCV * (1 + awokenCountInTeam(team,47,solo) * 0.10)); //全队回复
+	let badgeRCVScale = 1; //徽章倍率
+	if (formation.badge == 3)
+	{
+		badgeRCVScale = 1.25;
+	}else if (formation.badge == 10)
+	{
+		badgeRCVScale = 1.35;
+	}
+	tHpDom.innerHTML = tHP.toString() + 
+		(teamHPAwoken>0||badgeHPScale>1 
+			? ("("+Math.round(tHP * (1 + 0.05 * teamHPAwoken)*badgeHPScale).toString()+")")
+			: "");
+	tRcvDom.innerHTML = tRCV.toString() + 
+		(teamRCVAwoken>0||badgeRCVScale>1 
+			? ("("+Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)*badgeRCVScale).toString()+")")
+			: "");
 }

@@ -144,10 +144,10 @@
 	content: "显示怪物ID";
 }
 .team-info .tIf-total-hp::before{
-	content: "总HP：";
+	content: "总HP(队伍觉醒和徽章)：";
 }
 .team-info .tIf-total-rcv::before{
-	content: "总回复：";
+	content: "总回复(队伍觉醒和徽章)：";
 }
 
 /*Some icons, style different from the Japanese version*/

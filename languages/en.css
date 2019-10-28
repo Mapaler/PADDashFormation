@@ -148,10 +148,10 @@
 	content: "Show monster ID";
 }
 .team-info .tIf-total-hp::before{
-	content: "Total HP: ";
+	content: "Total HP(Team Awoken & Badge): ";
 }
 .team-info .tIf-total-rcv::before{
-	content: "Total RCV: ";
+	content: "Total RCV(Team Awoken & Badge): ";
 }
 
 /*Some icons, style different from the Japanese version*/
