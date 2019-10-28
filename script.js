@@ -251,7 +251,7 @@ function creatNewUrl(arg){
 		let outObj = formation.outObj();
 		history.pushState(null, null, '?' 
 			+ (language_i18n?'l=' + language_i18n + '&':'') 
-			+ (datasource?'s=' + datasource + '&':'') 
+			+ (datasource&&datasource!="ja"?'s=' + datasource + '&':'') 
 			+ 'd=' + encodeURIComponent(JSON.stringify(outObj)));
 	}
 }
