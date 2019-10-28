@@ -128,6 +128,9 @@
 .type-name-9::after{
 	content: "特別保護";
 }
+.control-box .datasource-label::before{
+	content: "データ ソース：";
+}
 .control-box .solo-link::before{
 	content: "ソロゲームに移動";
 }

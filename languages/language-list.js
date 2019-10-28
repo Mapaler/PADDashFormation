@@ -1,15 +1,15 @@
 ﻿var languageList = [
     {
+        name:"English",i18n:"en",searchlist:["en","ja"],
+        guideURL:"http://www.puzzledragonx.com/en/awokenskill.asp?n=$1"
+    },
+    {
         name:"中文（简体）",i18n:"zh",searchlist:["chs","ja"],
         guideURL:"http://pad.skyozora.com/pets/$1"
     },
     {
         name:"中文（繁體）",i18n:"zh-TW",searchlist:["cht","ja"],
         guideURL:"http://pad.skyozora.com/pets/$1"
-    },
-    {
-        name:"English",i18n:"en",searchlist:["en","ja"],
-        guideURL:"http://www.puzzledragonx.com/en/awokenskill.asp?n=$1"
     },
     {
         name:"日本語",i18n:"ja",searchlist:["ja"],

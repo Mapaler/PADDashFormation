@@ -43,105 +43,305 @@
 	background-position-x: -408px; /*暗*/
 }
 /*宠物头像所用的图片*/
-.pet-cards-1{background-image: url(images/cards/CARDS_001.PNG);}
-.pet-cards-2{background-image: url(images/cards/CARDS_002.PNG);}
-.pet-cards-3{background-image: url(images/cards/CARDS_003.PNG);}
-.pet-cards-4{background-image: url(images/cards/CARDS_004.PNG);}
-.pet-cards-5{background-image: url(images/cards/CARDS_005.PNG);}
-.pet-cards-6{background-image: url(images/cards/CARDS_006.PNG);}
-.pet-cards-7{background-image: url(images/cards/CARDS_007.PNG);}
-.pet-cards-8{background-image: url(images/cards/CARDS_008.PNG);}
-.pet-cards-9{background-image: url(images/cards/CARDS_009.PNG);}
-.pet-cards-10{background-image: url(images/cards/CARDS_010.PNG);}
-.pet-cards-11{background-image: url(images/cards/CARDS_011.PNG);}
-.pet-cards-12{background-image: url(images/cards/CARDS_012.PNG);}
-.pet-cards-13{background-image: url(images/cards/CARDS_013.PNG);}
-.pet-cards-14{background-image: url(images/cards/CARDS_014.PNG);}
-.pet-cards-15{background-image: url(images/cards/CARDS_015.PNG);}
-.pet-cards-16{background-image: url(images/cards/CARDS_016.PNG);}
-.pet-cards-17{background-image: url(images/cards/CARDS_017.PNG);}
-.pet-cards-18{background-image: url(images/cards/CARDS_018.PNG);}
-.pet-cards-19{background-image: url(images/cards/CARDS_019.PNG);}
-.pet-cards-20{background-image: url(images/cards/CARDS_020.PNG);}
-.pet-cards-21{background-image: url(images/cards/CARDS_021.PNG);}
-.pet-cards-22{background-image: url(images/cards/CARDS_022.PNG);}
-.pet-cards-23{background-image: url(images/cards/CARDS_023.PNG);}
-.pet-cards-24{background-image: url(images/cards/CARDS_024.PNG);}
-.pet-cards-25{background-image: url(images/cards/CARDS_025.PNG);}
-.pet-cards-26{background-image: url(images/cards/CARDS_026.PNG);}
-.pet-cards-27{background-image: url(images/cards/CARDS_027.PNG);}
-.pet-cards-28{background-image: url(images/cards/CARDS_028.PNG);}
-.pet-cards-29{background-image: url(images/cards/CARDS_029.PNG);}
-.pet-cards-30{background-image: url(images/cards/CARDS_030.PNG);}
-.pet-cards-31{background-image: url(images/cards/CARDS_031.PNG);}
-.pet-cards-32{background-image: url(images/cards/CARDS_032.PNG);}
-.pet-cards-33{background-image: url(images/cards/CARDS_033.PNG);}
-.pet-cards-34{background-image: url(images/cards/CARDS_034.PNG);}
-.pet-cards-35{background-image: url(images/cards/CARDS_035.PNG);}
-.pet-cards-36{background-image: url(images/cards/CARDS_036.PNG);}
-.pet-cards-37{background-image: url(images/cards/CARDS_037.PNG);}
-.pet-cards-38{background-image: url(images/cards/CARDS_038.PNG);}
-.pet-cards-39{background-image: url(images/cards/CARDS_039.PNG);}
-.pet-cards-40{background-image: url(images/cards/CARDS_040.PNG);}
-.pet-cards-41{background-image: url(images/cards/CARDS_041.PNG);}
-.pet-cards-42{background-image: url(images/cards/CARDS_042.PNG);}
-.pet-cards-43{background-image: url(images/cards/CARDS_043.PNG);}
-.pet-cards-44{background-image: url(images/cards/CARDS_044.PNG);}
-.pet-cards-45{background-image: url(images/cards/CARDS_045.PNG);}
-.pet-cards-46{background-image: url(images/cards/CARDS_046.PNG);}
-.pet-cards-47{background-image: url(images/cards/CARDS_047.PNG);}
-.pet-cards-48{background-image: url(images/cards/CARDS_048.PNG);}
-.pet-cards-49{background-image: url(images/cards/CARDS_049.PNG);}
-.pet-cards-50{background-image: url(images/cards/CARDS_050.PNG);}
-.pet-cards-51{background-image: url(images/cards/CARDS_051.PNG);}
-.pet-cards-52{background-image: url(images/cards/CARDS_052.PNG);}
-.pet-cards-53{background-image: url(images/cards/CARDS_053.PNG);}
-.pet-cards-54{background-image: url(images/cards/CARDS_054.PNG);}
-.pet-cards-55{background-image: url(images/cards/CARDS_055.PNG);}
-.pet-cards-56{background-image: url(images/cards/CARDS_056.PNG);}
-.pet-cards-57{background-image: url(images/cards/CARDS_057.PNG);}
-.pet-cards-58{background-image: url(images/cards/CARDS_058.PNG);}
-.pet-cards-59{background-image: url(images/cards/CARDS_059.PNG);}
-.pet-cards-60{background-image: url(images/cards/CARDS_060.PNG);}
-.pet-cards-61{background-image: url(images/cards/CARDS_061.PNG);}
-.pet-cards-62{background-image: url(images/cards/CARDS_062.PNG);}
-.pet-cards-63{background-image: url(images/cards/CARDS_063.PNG);}
-.pet-cards-64{background-image: url(images/cards/CARDS_064.PNG);}
-.pet-cards-65{background-image: url(images/cards/CARDS_065.PNG);}
-.pet-cards-66{background-image: url(images/cards/CARDS_066.PNG);}
-.pet-cards-67{background-image: url(images/cards/CARDS_067.PNG);}
-.pet-cards-68{background-image: url(images/cards/CARDS_068.PNG);}
-.pet-cards-69{background-image: url(images/cards/CARDS_069.PNG);}
-.pet-cards-70{background-image: url(images/cards/CARDS_070.PNG);}
-.pet-cards-71{background-image: url(images/cards/CARDS_071.PNG);}
-.pet-cards-72{background-image: url(images/cards/CARDS_072.PNG);}
-.pet-cards-73{background-image: url(images/cards/CARDS_073.PNG);}
-.pet-cards-74{background-image: url(images/cards/CARDS_074.PNG);}
-.pet-cards-75{background-image: url(images/cards/CARDS_075.PNG);}
-.pet-cards-76{background-image: url(images/cards/CARDS_076.PNG);}
-.pet-cards-77{background-image: url(images/cards/CARDS_077.PNG);}
-.pet-cards-78{background-image: url(images/cards/CARDS_078.PNG);}
-.pet-cards-79{background-image: url(images/cards/CARDS_079.PNG);}
-.pet-cards-80{background-image: url(images/cards/CARDS_080.PNG);}
-.pet-cards-81{background-image: url(images/cards/CARDS_081.PNG);}
-.pet-cards-82{background-image: url(images/cards/CARDS_082.PNG);}
-.pet-cards-83{background-image: url(images/cards/CARDS_083.PNG);}
-.pet-cards-84{background-image: url(images/cards/CARDS_084.PNG);}
-.pet-cards-85{background-image: url(images/cards/CARDS_085.PNG);}
-.pet-cards-86{background-image: url(images/cards/CARDS_086.PNG);}
-.pet-cards-87{background-image: url(images/cards/CARDS_087.PNG);}
-.pet-cards-88{background-image: url(images/cards/CARDS_088.PNG);}
-.pet-cards-89{background-image: url(images/cards/CARDS_089.PNG);}
-.pet-cards-90{background-image: url(images/cards/CARDS_090.PNG);}
-.pet-cards-91{background-image: url(images/cards/CARDS_091.PNG);}
-.pet-cards-92{background-image: url(images/cards/CARDS_092.PNG);}
-.pet-cards-93{background-image: url(images/cards/CARDS_093.PNG);}
-.pet-cards-94{background-image: url(images/cards/CARDS_094.PNG);}
-.pet-cards-95{background-image: url(images/cards/CARDS_095.PNG);}
-.pet-cards-96{background-image: url(images/cards/CARDS_096.PNG);}
-.pet-cards-97{background-image: url(images/cards/CARDS_097.PNG);}
-.pet-cards-98{background-image: url(images/cards/CARDS_098.PNG);}
-.pet-cards-99{background-image: url(images/cards/CARDS_099.PNG);}
+.pet-cards-1{background-image: url(images/cards_ja/CARDS_001.PNG);}
+.pet-cards-2{background-image: url(images/cards_ja/CARDS_002.PNG);}
+.pet-cards-3{background-image: url(images/cards_ja/CARDS_003.PNG);}
+.pet-cards-4{background-image: url(images/cards_ja/CARDS_004.PNG);}
+.pet-cards-5{background-image: url(images/cards_ja/CARDS_005.PNG);}
+.pet-cards-6{background-image: url(images/cards_ja/CARDS_006.PNG);}
+.pet-cards-7{background-image: url(images/cards_ja/CARDS_007.PNG);}
+.pet-cards-8{background-image: url(images/cards_ja/CARDS_008.PNG);}
+.pet-cards-9{background-image: url(images/cards_ja/CARDS_009.PNG);}
+.pet-cards-10{background-image: url(images/cards_ja/CARDS_010.PNG);}
+.pet-cards-11{background-image: url(images/cards_ja/CARDS_011.PNG);}
+.pet-cards-12{background-image: url(images/cards_ja/CARDS_012.PNG);}
+.pet-cards-13{background-image: url(images/cards_ja/CARDS_013.PNG);}
+.pet-cards-14{background-image: url(images/cards_ja/CARDS_014.PNG);}
+.pet-cards-15{background-image: url(images/cards_ja/CARDS_015.PNG);}
+.pet-cards-16{background-image: url(images/cards_ja/CARDS_016.PNG);}
+.pet-cards-17{background-image: url(images/cards_ja/CARDS_017.PNG);}
+.pet-cards-18{background-image: url(images/cards_ja/CARDS_018.PNG);}
+.pet-cards-19{background-image: url(images/cards_ja/CARDS_019.PNG);}
+.pet-cards-20{background-image: url(images/cards_ja/CARDS_020.PNG);}
+.pet-cards-21{background-image: url(images/cards_ja/CARDS_021.PNG);}
+.pet-cards-22{background-image: url(images/cards_ja/CARDS_022.PNG);}
+.pet-cards-23{background-image: url(images/cards_ja/CARDS_023.PNG);}
+.pet-cards-24{background-image: url(images/cards_ja/CARDS_024.PNG);}
+.pet-cards-25{background-image: url(images/cards_ja/CARDS_025.PNG);}
+.pet-cards-26{background-image: url(images/cards_ja/CARDS_026.PNG);}
+.pet-cards-27{background-image: url(images/cards_ja/CARDS_027.PNG);}
+.pet-cards-28{background-image: url(images/cards_ja/CARDS_028.PNG);}
+.pet-cards-29{background-image: url(images/cards_ja/CARDS_029.PNG);}
+.pet-cards-30{background-image: url(images/cards_ja/CARDS_030.PNG);}
+.pet-cards-31{background-image: url(images/cards_ja/CARDS_031.PNG);}
+.pet-cards-32{background-image: url(images/cards_ja/CARDS_032.PNG);}
+.pet-cards-33{background-image: url(images/cards_ja/CARDS_033.PNG);}
+.pet-cards-34{background-image: url(images/cards_ja/CARDS_034.PNG);}
+.pet-cards-35{background-image: url(images/cards_ja/CARDS_035.PNG);}
+.pet-cards-36{background-image: url(images/cards_ja/CARDS_036.PNG);}
+.pet-cards-37{background-image: url(images/cards_ja/CARDS_037.PNG);}
+.pet-cards-38{background-image: url(images/cards_ja/CARDS_038.PNG);}
+.pet-cards-39{background-image: url(images/cards_ja/CARDS_039.PNG);}
+.pet-cards-40{background-image: url(images/cards_ja/CARDS_040.PNG);}
+.pet-cards-41{background-image: url(images/cards_ja/CARDS_041.PNG);}
+.pet-cards-42{background-image: url(images/cards_ja/CARDS_042.PNG);}
+.pet-cards-43{background-image: url(images/cards_ja/CARDS_043.PNG);}
+.pet-cards-44{background-image: url(images/cards_ja/CARDS_044.PNG);}
+.pet-cards-45{background-image: url(images/cards_ja/CARDS_045.PNG);}
+.pet-cards-46{background-image: url(images/cards_ja/CARDS_046.PNG);}
+.pet-cards-47{background-image: url(images/cards_ja/CARDS_047.PNG);}
+.pet-cards-48{background-image: url(images/cards_ja/CARDS_048.PNG);}
+.pet-cards-49{background-image: url(images/cards_ja/CARDS_049.PNG);}
+.pet-cards-50{background-image: url(images/cards_ja/CARDS_050.PNG);}
+.pet-cards-51{background-image: url(images/cards_ja/CARDS_051.PNG);}
+.pet-cards-52{background-image: url(images/cards_ja/CARDS_052.PNG);}
+.pet-cards-53{background-image: url(images/cards_ja/CARDS_053.PNG);}
+.pet-cards-54{background-image: url(images/cards_ja/CARDS_054.PNG);}
+.pet-cards-55{background-image: url(images/cards_ja/CARDS_055.PNG);}
+.pet-cards-56{background-image: url(images/cards_ja/CARDS_056.PNG);}
+.pet-cards-57{background-image: url(images/cards_ja/CARDS_057.PNG);}
+.pet-cards-58{background-image: url(images/cards_ja/CARDS_058.PNG);}
+.pet-cards-59{background-image: url(images/cards_ja/CARDS_059.PNG);}
+.pet-cards-60{background-image: url(images/cards_ja/CARDS_060.PNG);}
+.pet-cards-61{background-image: url(images/cards_ja/CARDS_061.PNG);}
+.pet-cards-62{background-image: url(images/cards_ja/CARDS_062.PNG);}
+.pet-cards-63{background-image: url(images/cards_ja/CARDS_063.PNG);}
+.pet-cards-64{background-image: url(images/cards_ja/CARDS_064.PNG);}
+.pet-cards-65{background-image: url(images/cards_ja/CARDS_065.PNG);}
+.pet-cards-66{background-image: url(images/cards_ja/CARDS_066.PNG);}
+.pet-cards-67{background-image: url(images/cards_ja/CARDS_067.PNG);}
+.pet-cards-68{background-image: url(images/cards_ja/CARDS_068.PNG);}
+.pet-cards-69{background-image: url(images/cards_ja/CARDS_069.PNG);}
+.pet-cards-70{background-image: url(images/cards_ja/CARDS_070.PNG);}
+.pet-cards-71{background-image: url(images/cards_ja/CARDS_071.PNG);}
+.pet-cards-72{background-image: url(images/cards_ja/CARDS_072.PNG);}
+.pet-cards-73{background-image: url(images/cards_ja/CARDS_073.PNG);}
+.pet-cards-74{background-image: url(images/cards_ja/CARDS_074.PNG);}
+.pet-cards-75{background-image: url(images/cards_ja/CARDS_075.PNG);}
+.pet-cards-76{background-image: url(images/cards_ja/CARDS_076.PNG);}
+.pet-cards-77{background-image: url(images/cards_ja/CARDS_077.PNG);}
+.pet-cards-78{background-image: url(images/cards_ja/CARDS_078.PNG);}
+.pet-cards-79{background-image: url(images/cards_ja/CARDS_079.PNG);}
+.pet-cards-80{background-image: url(images/cards_ja/CARDS_080.PNG);}
+.pet-cards-81{background-image: url(images/cards_ja/CARDS_081.PNG);}
+.pet-cards-82{background-image: url(images/cards_ja/CARDS_082.PNG);}
+.pet-cards-83{background-image: url(images/cards_ja/CARDS_083.PNG);}
+.pet-cards-84{background-image: url(images/cards_ja/CARDS_084.PNG);}
+.pet-cards-85{background-image: url(images/cards_ja/CARDS_085.PNG);}
+.pet-cards-86{background-image: url(images/cards_ja/CARDS_086.PNG);}
+.pet-cards-87{background-image: url(images/cards_ja/CARDS_087.PNG);}
+.pet-cards-88{background-image: url(images/cards_ja/CARDS_088.PNG);}
+.pet-cards-89{background-image: url(images/cards_ja/CARDS_089.PNG);}
+.pet-cards-90{background-image: url(images/cards_ja/CARDS_090.PNG);}
+.pet-cards-91{background-image: url(images/cards_ja/CARDS_091.PNG);}
+.pet-cards-92{background-image: url(images/cards_ja/CARDS_092.PNG);}
+.pet-cards-93{background-image: url(images/cards_ja/CARDS_093.PNG);}
+.pet-cards-94{background-image: url(images/cards_ja/CARDS_094.PNG);}
+.pet-cards-95{background-image: url(images/cards_ja/CARDS_095.PNG);}
+.pet-cards-96{background-image: url(images/cards_ja/CARDS_096.PNG);}
+.pet-cards-97{background-image: url(images/cards_ja/CARDS_097.PNG);}
+.pet-cards-98{background-image: url(images/cards_ja/CARDS_098.PNG);}
+.pet-cards-99{background-image: url(images/cards_ja/CARDS_099.PNG);}
+/*美服*/
+.ds-en .pet-cards-1{background-image: url(images/cards_en/CARDS_001.PNG);}
+.ds-en .pet-cards-2{background-image: url(images/cards_en/CARDS_002.PNG);}
+.ds-en .pet-cards-3{background-image: url(images/cards_en/CARDS_003.PNG);}
+.ds-en .pet-cards-4{background-image: url(images/cards_en/CARDS_004.PNG);}
+.ds-en .pet-cards-5{background-image: url(images/cards_en/CARDS_005.PNG);}
+.ds-en .pet-cards-6{background-image: url(images/cards_en/CARDS_006.PNG);}
+.ds-en .pet-cards-7{background-image: url(images/cards_en/CARDS_007.PNG);}
+.ds-en .pet-cards-8{background-image: url(images/cards_en/CARDS_008.PNG);}
+.ds-en .pet-cards-9{background-image: url(images/cards_en/CARDS_009.PNG);}
+.ds-en .pet-cards-10{background-image: url(images/cards_en/CARDS_010.PNG);}
+.ds-en .pet-cards-11{background-image: url(images/cards_en/CARDS_011.PNG);}
+.ds-en .pet-cards-12{background-image: url(images/cards_en/CARDS_012.PNG);}
+.ds-en .pet-cards-13{background-image: url(images/cards_en/CARDS_013.PNG);}
+.ds-en .pet-cards-14{background-image: url(images/cards_en/CARDS_014.PNG);}
+.ds-en .pet-cards-15{background-image: url(images/cards_en/CARDS_015.PNG);}
+.ds-en .pet-cards-16{background-image: url(images/cards_en/CARDS_016.PNG);}
+.ds-en .pet-cards-17{background-image: url(images/cards_en/CARDS_017.PNG);}
+.ds-en .pet-cards-18{background-image: url(images/cards_en/CARDS_018.PNG);}
+.ds-en .pet-cards-19{background-image: url(images/cards_en/CARDS_019.PNG);}
+.ds-en .pet-cards-20{background-image: url(images/cards_en/CARDS_020.PNG);}
+.ds-en .pet-cards-21{background-image: url(images/cards_en/CARDS_021.PNG);}
+.ds-en .pet-cards-22{background-image: url(images/cards_en/CARDS_022.PNG);}
+.ds-en .pet-cards-23{background-image: url(images/cards_en/CARDS_023.PNG);}
+.ds-en .pet-cards-24{background-image: url(images/cards_en/CARDS_024.PNG);}
+.ds-en .pet-cards-25{background-image: url(images/cards_en/CARDS_025.PNG);}
+.ds-en .pet-cards-26{background-image: url(images/cards_en/CARDS_026.PNG);}
+.ds-en .pet-cards-27{background-image: url(images/cards_en/CARDS_027.PNG);}
+.ds-en .pet-cards-28{background-image: url(images/cards_en/CARDS_028.PNG);}
+.ds-en .pet-cards-29{background-image: url(images/cards_en/CARDS_029.PNG);}
+.ds-en .pet-cards-30{background-image: url(images/cards_en/CARDS_030.PNG);}
+.ds-en .pet-cards-31{background-image: url(images/cards_en/CARDS_031.PNG);}
+.ds-en .pet-cards-32{background-image: url(images/cards_en/CARDS_032.PNG);}
+.ds-en .pet-cards-33{background-image: url(images/cards_en/CARDS_033.PNG);}
+.ds-en .pet-cards-34{background-image: url(images/cards_en/CARDS_034.PNG);}
+.ds-en .pet-cards-35{background-image: url(images/cards_en/CARDS_035.PNG);}
+.ds-en .pet-cards-36{background-image: url(images/cards_en/CARDS_036.PNG);}
+.ds-en .pet-cards-37{background-image: url(images/cards_en/CARDS_037.PNG);}
+.ds-en .pet-cards-38{background-image: url(images/cards_en/CARDS_038.PNG);}
+.ds-en .pet-cards-39{background-image: url(images/cards_en/CARDS_039.PNG);}
+.ds-en .pet-cards-40{background-image: url(images/cards_en/CARDS_040.PNG);}
+.ds-en .pet-cards-41{background-image: url(images/cards_en/CARDS_041.PNG);}
+.ds-en .pet-cards-42{background-image: url(images/cards_en/CARDS_042.PNG);}
+.ds-en .pet-cards-43{background-image: url(images/cards_en/CARDS_043.PNG);}
+.ds-en .pet-cards-44{background-image: url(images/cards_en/CARDS_044.PNG);}
+.ds-en .pet-cards-45{background-image: url(images/cards_en/CARDS_045.PNG);}
+.ds-en .pet-cards-46{background-image: url(images/cards_en/CARDS_046.PNG);}
+.ds-en .pet-cards-47{background-image: url(images/cards_en/CARDS_047.PNG);}
+.ds-en .pet-cards-48{background-image: url(images/cards_en/CARDS_048.PNG);}
+.ds-en .pet-cards-49{background-image: url(images/cards_en/CARDS_049.PNG);}
+.ds-en .pet-cards-50{background-image: url(images/cards_en/CARDS_050.PNG);}
+.ds-en .pet-cards-51{background-image: url(images/cards_en/CARDS_051.PNG);}
+.ds-en .pet-cards-52{background-image: url(images/cards_en/CARDS_052.PNG);}
+.ds-en .pet-cards-53{background-image: url(images/cards_en/CARDS_053.PNG);}
+.ds-en .pet-cards-54{background-image: url(images/cards_en/CARDS_054.PNG);}
+.ds-en .pet-cards-55{background-image: url(images/cards_en/CARDS_055.PNG);}
+.ds-en .pet-cards-56{background-image: url(images/cards_en/CARDS_056.PNG);}
+.ds-en .pet-cards-57{background-image: url(images/cards_en/CARDS_057.PNG);}
+.ds-en .pet-cards-58{background-image: url(images/cards_en/CARDS_058.PNG);}
+.ds-en .pet-cards-59{background-image: url(images/cards_en/CARDS_059.PNG);}
+.ds-en .pet-cards-60{background-image: url(images/cards_en/CARDS_060.PNG);}
+.ds-en .pet-cards-61{background-image: url(images/cards_en/CARDS_061.PNG);}
+.ds-en .pet-cards-62{background-image: url(images/cards_en/CARDS_062.PNG);}
+.ds-en .pet-cards-63{background-image: url(images/cards_en/CARDS_063.PNG);}
+.ds-en .pet-cards-64{background-image: url(images/cards_en/CARDS_064.PNG);}
+.ds-en .pet-cards-65{background-image: url(images/cards_en/CARDS_065.PNG);}
+.ds-en .pet-cards-66{background-image: url(images/cards_en/CARDS_066.PNG);}
+.ds-en .pet-cards-67{background-image: url(images/cards_en/CARDS_067.PNG);}
+.ds-en .pet-cards-68{background-image: url(images/cards_en/CARDS_068.PNG);}
+.ds-en .pet-cards-69{background-image: url(images/cards_en/CARDS_069.PNG);}
+.ds-en .pet-cards-70{background-image: url(images/cards_en/CARDS_070.PNG);}
+.ds-en .pet-cards-71{background-image: url(images/cards_en/CARDS_071.PNG);}
+.ds-en .pet-cards-72{background-image: url(images/cards_en/CARDS_072.PNG);}
+.ds-en .pet-cards-73{background-image: url(images/cards_en/CARDS_073.PNG);}
+.ds-en .pet-cards-74{background-image: url(images/cards_en/CARDS_074.PNG);}
+.ds-en .pet-cards-75{background-image: url(images/cards_en/CARDS_075.PNG);}
+.ds-en .pet-cards-76{background-image: url(images/cards_en/CARDS_076.PNG);}
+.ds-en .pet-cards-77{background-image: url(images/cards_en/CARDS_077.PNG);}
+.ds-en .pet-cards-78{background-image: url(images/cards_en/CARDS_078.PNG);}
+.ds-en .pet-cards-79{background-image: url(images/cards_en/CARDS_079.PNG);}
+.ds-en .pet-cards-80{background-image: url(images/cards_en/CARDS_080.PNG);}
+.ds-en .pet-cards-81{background-image: url(images/cards_en/CARDS_081.PNG);}
+.ds-en .pet-cards-82{background-image: url(images/cards_en/CARDS_082.PNG);}
+.ds-en .pet-cards-83{background-image: url(images/cards_en/CARDS_083.PNG);}
+.ds-en .pet-cards-84{background-image: url(images/cards_en/CARDS_084.PNG);}
+.ds-en .pet-cards-85{background-image: url(images/cards_en/CARDS_085.PNG);}
+.ds-en .pet-cards-86{background-image: url(images/cards_en/CARDS_086.PNG);}
+.ds-en .pet-cards-87{background-image: url(images/cards_en/CARDS_087.PNG);}
+.ds-en .pet-cards-88{background-image: url(images/cards_en/CARDS_088.PNG);}
+.ds-en .pet-cards-89{background-image: url(images/cards_en/CARDS_089.PNG);}
+.ds-en .pet-cards-90{background-image: url(images/cards_en/CARDS_090.PNG);}
+.ds-en .pet-cards-91{background-image: url(images/cards_en/CARDS_091.PNG);}
+.ds-en .pet-cards-92{background-image: url(images/cards_en/CARDS_092.PNG);}
+.ds-en .pet-cards-93{background-image: url(images/cards_en/CARDS_093.PNG);}
+.ds-en .pet-cards-94{background-image: url(images/cards_en/CARDS_094.PNG);}
+.ds-en .pet-cards-95{background-image: url(images/cards_en/CARDS_095.PNG);}
+.ds-en .pet-cards-96{background-image: url(images/cards_en/CARDS_096.PNG);}
+.ds-en .pet-cards-97{background-image: url(images/cards_en/CARDS_097.PNG);}
+.ds-en .pet-cards-98{background-image: url(images/cards_en/CARDS_098.PNG);}
+.ds-en .pet-cards-99{background-image: url(images/cards_en/CARDS_099.PNG);}
+/*韩服*/
+.ds-ko .pet-cards-1{background-image: url(images/cards_ko/CARDS_001.PNG);}
+.ds-ko .pet-cards-2{background-image: url(images/cards_ko/CARDS_002.PNG);}
+.ds-ko .pet-cards-3{background-image: url(images/cards_ko/CARDS_003.PNG);}
+.ds-ko .pet-cards-4{background-image: url(images/cards_ko/CARDS_004.PNG);}
+.ds-ko .pet-cards-5{background-image: url(images/cards_ko/CARDS_005.PNG);}
+.ds-ko .pet-cards-6{background-image: url(images/cards_ko/CARDS_006.PNG);}
+.ds-ko .pet-cards-7{background-image: url(images/cards_ko/CARDS_007.PNG);}
+.ds-ko .pet-cards-8{background-image: url(images/cards_ko/CARDS_008.PNG);}
+.ds-ko .pet-cards-9{background-image: url(images/cards_ko/CARDS_009.PNG);}
+.ds-ko .pet-cards-10{background-image: url(images/cards_ko/CARDS_010.PNG);}
+.ds-ko .pet-cards-11{background-image: url(images/cards_ko/CARDS_011.PNG);}
+.ds-ko .pet-cards-12{background-image: url(images/cards_ko/CARDS_012.PNG);}
+.ds-ko .pet-cards-13{background-image: url(images/cards_ko/CARDS_013.PNG);}
+.ds-ko .pet-cards-14{background-image: url(images/cards_ko/CARDS_014.PNG);}
+.ds-ko .pet-cards-15{background-image: url(images/cards_ko/CARDS_015.PNG);}
+.ds-ko .pet-cards-16{background-image: url(images/cards_ko/CARDS_016.PNG);}
+.ds-ko .pet-cards-17{background-image: url(images/cards_ko/CARDS_017.PNG);}
+.ds-ko .pet-cards-18{background-image: url(images/cards_ko/CARDS_018.PNG);}
+.ds-ko .pet-cards-19{background-image: url(images/cards_ko/CARDS_019.PNG);}
+.ds-ko .pet-cards-20{background-image: url(images/cards_ko/CARDS_020.PNG);}
+.ds-ko .pet-cards-21{background-image: url(images/cards_ko/CARDS_021.PNG);}
+.ds-ko .pet-cards-22{background-image: url(images/cards_ko/CARDS_022.PNG);}
+.ds-ko .pet-cards-23{background-image: url(images/cards_ko/CARDS_023.PNG);}
+.ds-ko .pet-cards-24{background-image: url(images/cards_ko/CARDS_024.PNG);}
+.ds-ko .pet-cards-25{background-image: url(images/cards_ko/CARDS_025.PNG);}
+.ds-ko .pet-cards-26{background-image: url(images/cards_ko/CARDS_026.PNG);}
+.ds-ko .pet-cards-27{background-image: url(images/cards_ko/CARDS_027.PNG);}
+.ds-ko .pet-cards-28{background-image: url(images/cards_ko/CARDS_028.PNG);}
+.ds-ko .pet-cards-29{background-image: url(images/cards_ko/CARDS_029.PNG);}
+.ds-ko .pet-cards-30{background-image: url(images/cards_ko/CARDS_030.PNG);}
+.ds-ko .pet-cards-31{background-image: url(images/cards_ko/CARDS_031.PNG);}
+.ds-ko .pet-cards-32{background-image: url(images/cards_ko/CARDS_032.PNG);}
+.ds-ko .pet-cards-33{background-image: url(images/cards_ko/CARDS_033.PNG);}
+.ds-ko .pet-cards-34{background-image: url(images/cards_ko/CARDS_034.PNG);}
+.ds-ko .pet-cards-35{background-image: url(images/cards_ko/CARDS_035.PNG);}
+.ds-ko .pet-cards-36{background-image: url(images/cards_ko/CARDS_036.PNG);}
+.ds-ko .pet-cards-37{background-image: url(images/cards_ko/CARDS_037.PNG);}
+.ds-ko .pet-cards-38{background-image: url(images/cards_ko/CARDS_038.PNG);}
+.ds-ko .pet-cards-39{background-image: url(images/cards_ko/CARDS_039.PNG);}
+.ds-ko .pet-cards-40{background-image: url(images/cards_ko/CARDS_040.PNG);}
+.ds-ko .pet-cards-41{background-image: url(images/cards_ko/CARDS_041.PNG);}
+.ds-ko .pet-cards-42{background-image: url(images/cards_ko/CARDS_042.PNG);}
+.ds-ko .pet-cards-43{background-image: url(images/cards_ko/CARDS_043.PNG);}
+.ds-ko .pet-cards-44{background-image: url(images/cards_ko/CARDS_044.PNG);}
+.ds-ko .pet-cards-45{background-image: url(images/cards_ko/CARDS_045.PNG);}
+.ds-ko .pet-cards-46{background-image: url(images/cards_ko/CARDS_046.PNG);}
+.ds-ko .pet-cards-47{background-image: url(images/cards_ko/CARDS_047.PNG);}
+.ds-ko .pet-cards-48{background-image: url(images/cards_ko/CARDS_048.PNG);}
+.ds-ko .pet-cards-49{background-image: url(images/cards_ko/CARDS_049.PNG);}
+.ds-ko .pet-cards-50{background-image: url(images/cards_ko/CARDS_050.PNG);}
+.ds-ko .pet-cards-51{background-image: url(images/cards_ko/CARDS_051.PNG);}
+.ds-ko .pet-cards-52{background-image: url(images/cards_ko/CARDS_052.PNG);}
+.ds-ko .pet-cards-53{background-image: url(images/cards_ko/CARDS_053.PNG);}
+.ds-ko .pet-cards-54{background-image: url(images/cards_ko/CARDS_054.PNG);}
+.ds-ko .pet-cards-55{background-image: url(images/cards_ko/CARDS_055.PNG);}
+.ds-ko .pet-cards-56{background-image: url(images/cards_ko/CARDS_056.PNG);}
+.ds-ko .pet-cards-57{background-image: url(images/cards_ko/CARDS_057.PNG);}
+.ds-ko .pet-cards-58{background-image: url(images/cards_ko/CARDS_058.PNG);}
+.ds-ko .pet-cards-59{background-image: url(images/cards_ko/CARDS_059.PNG);}
+.ds-ko .pet-cards-60{background-image: url(images/cards_ko/CARDS_060.PNG);}
+.ds-ko .pet-cards-61{background-image: url(images/cards_ko/CARDS_061.PNG);}
+.ds-ko .pet-cards-62{background-image: url(images/cards_ko/CARDS_062.PNG);}
+.ds-ko .pet-cards-63{background-image: url(images/cards_ko/CARDS_063.PNG);}
+.ds-ko .pet-cards-64{background-image: url(images/cards_ko/CARDS_064.PNG);}
+.ds-ko .pet-cards-65{background-image: url(images/cards_ko/CARDS_065.PNG);}
+.ds-ko .pet-cards-66{background-image: url(images/cards_ko/CARDS_066.PNG);}
+.ds-ko .pet-cards-67{background-image: url(images/cards_ko/CARDS_067.PNG);}
+.ds-ko .pet-cards-68{background-image: url(images/cards_ko/CARDS_068.PNG);}
+.ds-ko .pet-cards-69{background-image: url(images/cards_ko/CARDS_069.PNG);}
+.ds-ko .pet-cards-70{background-image: url(images/cards_ko/CARDS_070.PNG);}
+.ds-ko .pet-cards-71{background-image: url(images/cards_ko/CARDS_071.PNG);}
+.ds-ko .pet-cards-72{background-image: url(images/cards_ko/CARDS_072.PNG);}
+.ds-ko .pet-cards-73{background-image: url(images/cards_ko/CARDS_073.PNG);}
+.ds-ko .pet-cards-74{background-image: url(images/cards_ko/CARDS_074.PNG);}
+.ds-ko .pet-cards-75{background-image: url(images/cards_ko/CARDS_075.PNG);}
+.ds-ko .pet-cards-76{background-image: url(images/cards_ko/CARDS_076.PNG);}
+.ds-ko .pet-cards-77{background-image: url(images/cards_ko/CARDS_077.PNG);}
+.ds-ko .pet-cards-78{background-image: url(images/cards_ko/CARDS_078.PNG);}
+.ds-ko .pet-cards-79{background-image: url(images/cards_ko/CARDS_079.PNG);}
+.ds-ko .pet-cards-80{background-image: url(images/cards_ko/CARDS_080.PNG);}
+.ds-ko .pet-cards-81{background-image: url(images/cards_ko/CARDS_081.PNG);}
+.ds-ko .pet-cards-82{background-image: url(images/cards_ko/CARDS_082.PNG);}
+.ds-ko .pet-cards-83{background-image: url(images/cards_ko/CARDS_083.PNG);}
+.ds-ko .pet-cards-84{background-image: url(images/cards_ko/CARDS_084.PNG);}
+.ds-ko .pet-cards-85{background-image: url(images/cards_ko/CARDS_085.PNG);}
+.ds-ko .pet-cards-86{background-image: url(images/cards_ko/CARDS_086.PNG);}
+.ds-ko .pet-cards-87{background-image: url(images/cards_ko/CARDS_087.PNG);}
+.ds-ko .pet-cards-88{background-image: url(images/cards_ko/CARDS_088.PNG);}
+.ds-ko .pet-cards-89{background-image: url(images/cards_ko/CARDS_089.PNG);}
+.ds-ko .pet-cards-90{background-image: url(images/cards_ko/CARDS_090.PNG);}
+.ds-ko .pet-cards-91{background-image: url(images/cards_ko/CARDS_091.PNG);}
+.ds-ko .pet-cards-92{background-image: url(images/cards_ko/CARDS_092.PNG);}
+.ds-ko .pet-cards-93{background-image: url(images/cards_ko/CARDS_093.PNG);}
+.ds-ko .pet-cards-94{background-image: url(images/cards_ko/CARDS_094.PNG);}
+.ds-ko .pet-cards-95{background-image: url(images/cards_ko/CARDS_095.PNG);}
+.ds-ko .pet-cards-96{background-image: url(images/cards_ko/CARDS_096.PNG);}
+.ds-ko .pet-cards-97{background-image: url(images/cards_ko/CARDS_097.PNG);}
+.ds-ko .pet-cards-98{background-image: url(images/cards_ko/CARDS_098.PNG);}
+.ds-ko .pet-cards-99{background-image: url(images/cards_ko/CARDS_099.PNG);}
 /*.en-only.pet-cards-54{background-image: url(images/cards/en/CARDS_054.PNG);}
 .en-only.pet-cards-55{background-image: url(images/cards/en/CARDS_055.PNG);}*/
 /*宠物在图中编号对应的坐标*/
