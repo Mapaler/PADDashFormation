@@ -84,7 +84,8 @@ officialAPI.forEach(function(lang){
 	});
 })
 
-//比较两只怪物是否是同一只（在不同语言服务器）
+/*
+//比较两只怪物是否是同一只（在不同语言服务器），原始数据模式
 function sameCard(m1,m2)
 {
 	//因为觉醒数量的不一样，所以需要制定序号
@@ -92,16 +93,32 @@ function sameCard(m1,m2)
 	//let superAwokenIdx1 = awokenCountIdx1+1+m1[awokenCountIdx1]; //超觉醒的序号
 	//let awokenCountIdx2 = 58+m2[57]*3; //觉醒数量的序号
 	//let superAwokenIdx2 = awokenCountIdx2+1+m2[awokenCountIdx2]; //超觉醒的序号
+	if (m1[0]==4949)console.log(m1[7],m2[7],m1[7] != m2[7])
 
-	let res = true;
 	if (m1 == undefined || m2 == undefined) return false; //是否存在
 	if (m1[2] != m2[2]) return false; //主属性
 	if (m1[3] != m2[3]) return false; //副属性
 	if (m1[5] != m2[5]) return false; //type1
 	if (m1[6] != m2[6]) return false; //type2
 	//if (m1[superAwokenIdx+3] != m2[superAwokenIdx+3]) return false; //type3
+	if (m1[7] != m2[7]) return false; //稀有度
 	if (m1[10] != m2[10]) return false; //最大等级
-	return res;
+	return true;
+}
+*/
+//比较两只怪物是否是同一只（在不同语言服务器）
+function sameCard(m1,m2)
+{
+	if (m1 == undefined || m2 == undefined) return false; //是否存在
+	if (m1.ppt[0] != m2.ppt[0]) return false; //主属性
+	if (m1.ppt[1] != m2.ppt[1]) return false; //副属性
+	if (m1.type.length != m2.type.length) return false; //副属性
+	if (m1.type.some(function(t1,ti){
+		return m2.type[ti] == undefined || m2.type[ti] != t1;
+	})) return false; //全部类型
+	if (m1.rare != m2.rare) return false; //稀有度
+	if (m1.maxLv != m2.maxLv) return false; //最大等级
+	return true;
 }
 //加入其他语言
 for (let li = 0;li < officialAPI.length; li++)
@@ -113,15 +130,21 @@ for (let li = 0;li < officialAPI.length; li++)
 	for (let mi=0; mi<monArray.length; mi++)
 	{
 		let m = monArray[mi];
+		let name = m.name[lang.code];
 
 		//名字对象
 		otherLangs.forEach(function(olang){
 			let _m = olang.monArray[mi]; //获得这种语言的当前这个怪物数据
-			if (_m,sameCard(m,_m)) //如果有这个怪物，且与原语言怪物是同一只
+			if (_m && sameCard(m,_m)) //如果有这个怪物，且与原语言怪物是同一只
 			{
 				let oname = _m.name[olang.code];
-				if (!/^\*+/.test(oname) //名字不是星号开头
-					&& !/^\?+/.test(oname)) //名字不是问号开头
+				if (!/^\*+/.test(name) && //名字不是星号开头
+					!/^\*+/.test(oname) && //名字不是星号开头
+					!/^\?+/.test(name) && //名字不是问号开头
+					!/^\?+/.test(oname) && //名字不是问号开头
+					!/^초월\s*\?+/.test(name) && //名字不是韩文的问号开头
+					!/^초월\s*\?+/.test(oname) //名字不是韩文的问号开头
+				)
 				{
 					m.name = Object.assign(m.name, _m.name); //增加储存当前语言的全部
 				}

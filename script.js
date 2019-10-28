@@ -1,5 +1,19 @@
-var ms = null;
-var language = null;
+var ms = null; //怪物数据
+var language = null; //当前语言
+const dataSourceList = [ //几个不同的游戏服务区
+	{
+		code:"ja",
+		source:"パズル＆ドラゴンズ"
+	},
+	{
+		code:"en",
+		source:"Puzzle & Dragons"
+	},
+	{
+		code:"ko",
+		source:"퍼즐앤드래곤"
+	},
+];
 //队员基本的留空
 var Member = function(){
 	this.id=0;
@@ -106,8 +120,8 @@ Formation.prototype.loadObj= function(f){
 }
 window.onload = function()
 {
-	//添加语言列表
 	var controlBox = document.body.querySelector(".control-box");
+	//添加语言列表
 	var langList = controlBox.querySelector(".languages");
 	languageList.forEach(function(l){
 		var langOpt = new Option(l.name,l.i18n);
@@ -116,13 +130,13 @@ window.onload = function()
 
 	var language_i18n =  getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
 	var browser_i18n = (navigator.language||navigator.userLanguage); //获取浏览器语言
-	var hasLanguage = languageList.filter(function(l){
+	var hasLanguage = languageList.filter(function(l){ //筛选出符合的语言
 		if (language_i18n) //如果已指定就用指定的语言
 			return language_i18n.indexOf(l.i18n)>=0;
 		else
 			return browser_i18n.indexOf(l.i18n)>=0;
 	});
-	language = hasLanguage.length?hasLanguage[hasLanguage.length-1]:languageList[0];
+	language = hasLanguage.length?hasLanguage[hasLanguage.length-1]:languageList[0]; //没有找到指定语言的情况下，自动用默认的语言
 	document.head.querySelector("#language-css").href = "languages/"+language.i18n+".css";
 	Array.prototype.slice.call(langList.options).some(function(lOpt){
 		if (lOpt.value == language.i18n)
@@ -132,9 +146,29 @@ window.onload = function()
 		}
 	});
 
+	//添加数据来源列表
+	let dataList = controlBox.querySelector(".datasource");
+	dataSourceList.forEach(function(ds){
+		let dsOpt = new Option(ds.source,ds.code);
+		dataList.options.add(dsOpt);
+	})
+	let dataSourceCode =  getQueryString("s"); //获取参数指定的数据来源
+	let hasDataSource = dataSourceList.filter(function(ds){ //筛选出符合的数据源
+		return ds.code == dataSourceCode;
+	});
+	let dataSource = hasDataSource.length ? hasDataSource[0]: dataSourceList[0];
+	document.body.classList.add("ds-"+dataSource.code);
+	Array.prototype.slice.call(dataList.options).some(function(dOpt){
+		if (dOpt.value == dataSource.code)
+		{
+			dOpt.selected = true;
+			return true;
+		}
+	});
+
 	GM_xmlhttpRequest({
 		method: "GET",
-		url:"monsters-info/mon.json",
+		url:"monsters-info/mon_"+dataSource.code+".json",
 		onload: function(response) {
 			ms = JSON.parse(response.response);
 			initialize();//初始化
@@ -208,13 +242,16 @@ window.onpopstate = function()
 	}
 }
 //创建新的分享地址
-function creatNewUrl(lang){
+function creatNewUrl(arg){
+	if (arg == undefined) arg = {};
 	if (!!(window.history && history.pushState)) {
 		// 支持History API
-		var language_i18n = lang || getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
-		var outObj = formation.outObj();
+		let language_i18n = arg.language || getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
+		let datasource = arg.datasource || getQueryString("s");
+		let outObj = formation.outObj();
 		history.pushState(null, null, '?' 
 			+ (language_i18n?'l=' + language_i18n + '&':'') 
+			+ (datasource?'s=' + datasource + '&':'') 
 			+ 'd=' + encodeURIComponent(JSON.stringify(outObj)));
 	}
 }
@@ -584,10 +621,18 @@ function initialize()
 		editBox.hide();
 	}
 	
+	//控制栏
 	var controlBox = document.body.querySelector(".control-box");
+	//语言选择
 	var langList = controlBox.querySelector(".languages");
 	langList.onchange = function(){
-		creatNewUrl(this.value);
+		creatNewUrl({language:this.value});
+		history.go();
+	}
+	//数据源选择
+	let dataList = controlBox.querySelector(".datasource");
+	dataList.onchange = function(){
+		creatNewUrl({datasource:this.value});
 		history.go();
 	}
 
@@ -617,10 +662,10 @@ function changeid(mon,monDom,latentDom)
 		monDom.parentNode.classList.remove("delay");
 		monDom.className = "monster";
 		monDom.classList.add("pet-cards-" + Math.ceil(mon.id/100)); //添加图片编号
-		if (md.name["ja"] == undefined || /^\?+/.test(md.name["ja"])) //如果没日文或日文是问号，就改为英文的图片
+		/*if (md.name["ja"] == undefined || /^\?+/.test(md.name["ja"])) //如果没日文或日文是问号，就改为英文的图片
 			monDom.classList.add("en-only");
 		else
-			monDom.classList.remove("en-only");
+			monDom.classList.remove("en-only");*/
 		var idxInPage = (mon.id-1) % 100; //获取当前页面的总序号
 		monDom.classList.add("pet-cards-index-x-" + idxInPage % 10); //添加X方向序号
 		monDom.classList.add("pet-cards-index-y-" + parseInt(idxInPage / 10)); //添加Y方向序号
@@ -681,7 +726,7 @@ function changeid(mon,monDom,latentDom)
 	var sawoken = monDom.querySelector(".super-awoken");
 	if (sawoken) //如果存在超觉醒的DOM且提供了超觉醒
 	{
-		if (mon.sawoken != undefined && mon.sawoken>=0)
+		if (mon.sawoken != undefined && mon.sawoken>=0 && md.sAwoken)
 		{
 			var awokenIcon = sawoken.querySelector(".awoken-icon");
 			sawoken.classList.remove("display-none");
@@ -777,10 +822,10 @@ function editMon(AorB,isAssist,tempIdx)
 	var settingBox = editBox.querySelector(".setting-box");
 	//觉醒
 	var monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon");
-	if (mD.awoken>0) monEditAwokens[mD.awoken].onclick();
+	if (mD.awoken>0 && monEditAwokens[mD.awoken]) monEditAwokens[mD.awoken].onclick();
 	//超觉醒
 	var monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon");
-	if (mD.sawoken>=0) monEditSAwokens[mD.sawoken].onclick();
+	if (mD.sawoken>=0 && monEditSAwokens[mD.sawoken]) monEditSAwokens[mD.sawoken].onclick();
 	var monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.value = mD.level || 1;
 	var monEditAddHp = settingBox.querySelector(".m-plus-hp");

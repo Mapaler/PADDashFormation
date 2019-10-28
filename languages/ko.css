@@ -128,6 +128,9 @@
 .type-name-9::after{
 	content: "특별 보호";
 }
+.control-box .datasource-label::before{
+	content: "데이터 소스：";
+}
 .control-box .solo-link::before{
 	content: "싱글 플레이어 게임으로 이동";
 }
