@@ -17,56 +17,16 @@ var officialAPI = [ //来源于官方API
 officialAPI.forEach(function(lang){
 	console.log("正在读取官方 " + lang.code + " 信息");
 	let json = fs.readFileSync("official-API/" + lang.code +".json", 'utf-8'); //使用同步读取
-	lang.cardOriginal = JSON.parse(json).card;//将字符串转换为json对象
-})
+	let card = lang.cardOriginal = JSON.parse(json).card;//将字符串转换为json对象
+	let monArray = lang.monArray = []; //储存输出内容
 
-//比较两只怪物是否是同一只（在不同语言服务器）
-function sameCard(m1,m2)
-{
-	//因为觉醒数量的不一样，所以需要制定序号
-	//let awokenCountIdx1 = 58+m1[57]*3; //觉醒数量的序号
-	//let superAwokenIdx1 = awokenCountIdx1+1+m1[awokenCountIdx1]; //超觉醒的序号
-	//let awokenCountIdx2 = 58+m2[57]*3; //觉醒数量的序号
-	//let superAwokenIdx2 = awokenCountIdx2+1+m2[awokenCountIdx2]; //超觉醒的序号
-
-	let res = true;
-	if (m1[2] != m2[2]) return false; //主属性
-	if (m1[3] != m2[3]) return false; //副属性
-	if (m1[5] != m2[5]) return false; //type1
-	if (m1[6] != m2[6]) return false; //type2
-	//if (m1[superAwokenIdx+3] != m2[superAwokenIdx+3]) return false; //type3
-	if (m1[10] != m2[10]) return false; //最大等级
-	return res;
-}
-for (let li = 0;li < officialAPI.length; li++)
-{
-	let otherLangs = officialAPI.concat(); //复制一份原始数组
-	let lang = otherLangs.splice(li,1)[0]; //删掉并取得当前的数组
-	let card = lang.cardOriginal;
-	let monArray = []; //储存输出内容
-
-	for (let mi=0; mi<card.length && card[mi][0] == mi; mi++)
+	for (let mi=0; mi<card.length && card[mi][0] == mi; mi++)//id不等于索引时，都是些怪物了
 	{
-		//if (card[mi][0] != mi) {break;}//id超了，都是些怪物了
 		let m = card[mi];
 
 		//名字对象
-		let nameObj = {},dname = m[1];
-		nameObj[lang.code] = dname;
-
-		otherLangs.forEach(function(olang){
-			let _m = olang.cardOriginal[mi]; //获得这种语言的当前这个怪物数据
-			let oname = _m[1];
-			if (_m[0] == mi //id和位置相等
-				&& !/^\*+/.test(oname) //名字不是星号开头
-				&& !/^\?+/.test(oname)) //名字不是问号开头
-			{
-				if (sameCard(m,_m)) //如果这个怪物与原语言怪物时同一只，则储存它的名字
-				{
-					nameObj[olang.code] = oname; //增加储存当前语言
-				}
-			}
-		})
+		let nameObj = {};
+		nameObj[lang.code] = m[1];
 
 		//因为觉醒数量的不一样，所以需要制定序号
 		let awokenCountIdx = 58+m[57]*3; //awoken Count Index，觉醒数量的序号
@@ -122,12 +82,62 @@ for (let li = 0;li < officialAPI.length; li++)
 				m.name[lcode] = cm.name;
 		});
 	});
+})
 
-	let str = JSON.stringify(monArray);
+//比较两只怪物是否是同一只（在不同语言服务器）
+function sameCard(m1,m2)
+{
+	//因为觉醒数量的不一样，所以需要制定序号
+	//let awokenCountIdx1 = 58+m1[57]*3; //觉醒数量的序号
+	//let superAwokenIdx1 = awokenCountIdx1+1+m1[awokenCountIdx1]; //超觉醒的序号
+	//let awokenCountIdx2 = 58+m2[57]*3; //觉醒数量的序号
+	//let superAwokenIdx2 = awokenCountIdx2+1+m2[awokenCountIdx2]; //超觉醒的序号
+
+	let res = true;
+	if (m1 == undefined || m2 == undefined) return false; //是否存在
+	if (m1[2] != m2[2]) return false; //主属性
+	if (m1[3] != m2[3]) return false; //副属性
+	if (m1[5] != m2[5]) return false; //type1
+	if (m1[6] != m2[6]) return false; //type2
+	//if (m1[superAwokenIdx+3] != m2[superAwokenIdx+3]) return false; //type3
+	if (m1[10] != m2[10]) return false; //最大等级
+	return res;
+}
+//加入其他语言
+for (let li = 0;li < officialAPI.length; li++)
+{
+	let otherLangs = officialAPI.concat(); //复制一份原始数组，储存其他语言
+	let lang = otherLangs.splice(li,1)[0]; //删掉并取得当前的语言
+	let monArray = lang.monArray; //储存输出内容
+
+	for (let mi=0; mi<monArray.length; mi++)
+	{
+		let m = monArray[mi];
+
+		//名字对象
+		otherLangs.forEach(function(olang){
+			let _m = olang.monArray[mi]; //获得这种语言的当前这个怪物数据
+			if (_m,sameCard(m,_m)) //如果有这个怪物，且与原语言怪物是同一只
+			{
+				let oname = _m.name[olang.code];
+				if (!/^\*+/.test(oname) //名字不是星号开头
+					&& !/^\?+/.test(oname)) //名字不是问号开头
+				{
+					m.name = Object.assign(m.name, _m.name); //增加储存当前语言的全部
+				}
+			}
+		})
+
+	}
+}
+
+//最后批量保存
+officialAPI.forEach(function(lang){
+	let str = JSON.stringify(lang.monArray);
 	fs.writeFile('./mon_'+lang.code+'.json',str,function(err){
 		if(err){
 			console.error(err);
 		}
 		console.log('mon_'+lang.code+'.json 导出成功');
 	})
-}
+})
