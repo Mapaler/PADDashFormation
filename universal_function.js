@@ -76,37 +76,42 @@ function usedHole(latent)
 	},0);
 }
 //计算队伍中有多少个该觉醒
-function awokenCountInTeam(formationTeam,ak,solo)
+function awokenCountInFormation(formationTeam,ak,solo)
 {
     var allAwokenCount = formationTeam.reduce(function(fc,fm){
-        var formationAwokenCount = fm.reduce(function(tc,tm,isAssist){
-            var teamAwokenCount = tm.reduce(function(c,m){
-                if (m.id<=0)
-                { //如果是特殊情况的
-                    return c;
-                }
-                var mdAwoken = ms[m.id].awoken; //这个怪物的觉醒数据
-                var mdSAwoken = ms[m.id].sAwoken; //这个怪物的超觉醒数据
-                if ((!mdAwoken && !mdSAwoken) || (isAssist && mdAwoken.indexOf(49)<0))
-                { //如果没有觉醒和超觉醒 || （如果是辅助队 &&第一个不是武器觉醒）
-                    return c;
-                }
-                //启用的觉醒数组片段
-                var enableAwoken = mdAwoken.slice(0,m.awoken);
-                //相同的觉醒数
-                var hasAwoken = enableAwoken.filter(function(a){return a == ak;}).length;
-                //如果是单人，有超觉醒，且超觉醒id和计数的id相同
-                if (solo && mdSAwoken && (mdSAwoken[m.sawoken] == ak))
-                {
-                    hasAwoken++;
-                }
-                return c + hasAwoken;
-            },0);
-            return tc + teamAwokenCount;
-        },0)
-        return fc + formationAwokenCount;
+        return fc + awokenCountInTeam(fm,ak,solo);
     },0)
     return allAwokenCount;
+}
+//计算队伍中有多少个该觉醒
+function awokenCountInTeam(team,ak,solo)
+{
+    var formationAwokenCount = team.reduce(function(tc,tm,isAssist){
+        var teamAwokenCount = tm.reduce(function(c,m){
+            if (m.id<=0)
+            { //如果是特殊情况的
+                return c;
+            }
+            var mdAwoken = ms[m.id].awoken; //这个怪物的觉醒数据
+            var mdSAwoken = ms[m.id].sAwoken; //这个怪物的超觉醒数据
+            if ((!mdAwoken && !mdSAwoken) || (isAssist && mdAwoken.indexOf(49)<0))
+            { //如果没有觉醒和超觉醒 || （如果是辅助队 &&第一个不是武器觉醒）
+                return c;
+            }
+            //启用的觉醒数组片段
+            var enableAwoken = mdAwoken.slice(0,m.awoken);
+            //相同的觉醒数
+            var hasAwoken = enableAwoken.filter(function(a){return a == ak;}).length;
+            //如果是单人，有超觉醒，且超觉醒id和计数的id相同
+            if (solo && mdSAwoken && (mdSAwoken[m.sawoken] == ak))
+            {
+                hasAwoken++;
+            }
+            return c + hasAwoken;
+        },0);
+        return tc + teamAwokenCount;
+    },0)
+    return formationAwokenCount;
 }
 //返回可用的怪物名称
 function returnMonsterNameArr(m,lsList)

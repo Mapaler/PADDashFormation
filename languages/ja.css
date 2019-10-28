@@ -141,8 +141,8 @@
 	content: "モンスターIDを表示";
 }
 .team-info .tIf-total-hp::before{
-	content: "合計HP：";
+	content: "合計HP(チーム覚醒とバッジ)：";
 }
 .team-info .tIf-total-rcv::before{
-	content: "合計回復：";
+	content: "合計回復(チーム覚醒とバッジ)：";
 }
