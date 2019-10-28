@@ -1015,15 +1015,18 @@ function refreshAbility(dom,team,idx){
 	var mainMD = team[0][idx];
 	var assistMD = team[1][idx];
 	var bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性
-	//如果辅助是武器，还要加上辅助的觉醒
+	//基底三维，如果辅助是武器，还要加上辅助的觉醒
 	var mainAbility = calculateAbility(mainMD.id,mainMD.level,mainMD.plus,mainMD.awoken,mainMD.latent,assistMD.id,assistMD.awoken);
-	//如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
+	//辅助增加的三维，如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
 	var assistAbility = (assistMD.id > 0 && ms[mainMD.id].ppt[0]==ms[assistMD.id].ppt[0])
 		?calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null)
 		:[0,0,0];
-	for (let ai=0;ai<3;ai++)
+	if (mainAbility && mainMD.ability)
 	{
-		mainMD.ability[ai] = mainAbility[ai] + Math.round(assistAbility[ai]*bonusScale[ai]);
+		for (let ai=0;ai<3;ai++)
+		{
+			mainMD.ability[ai] = mainAbility[ai] + Math.round(assistAbility[ai]*bonusScale[ai]);
+		}
 	}
 	var hpDom = ali.querySelector(".hp");
 	var atkDom = ali.querySelector(".atk");
@@ -1044,9 +1047,9 @@ function refreshAbility(dom,team,idx){
 	var tHpDom = document.querySelector(".formation-box .team-info .tIf-total-hp");
 	var tRcvDom = document.querySelector(".formation-box .team-info .tIf-total-rcv");
 	tHpDom.innerHTML = team[0].reduce(function(value,mon){
-		return value += mon.ability[0];
+		return value += mon.ability ? mon.ability[0] : 0;
 	},0);
 	tRcvDom.innerHTML = team[0].reduce(function(value,mon){
-		return value += mon.ability[2];
+		return value += mon.ability ? mon.ability[2] : 0;
 	},0);
 }
