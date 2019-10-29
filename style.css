@@ -152,7 +152,7 @@ ul{
 	position: absolute;
 	top: -4px;
 	right: 0;
-	transform: scale(0.80) translateX(4px);
+	transform: scale(0.75) translateX(4px);
 }
 .monster .awoken-count,
 .monster .awoken-count.full-awoken::before{
@@ -178,7 +178,7 @@ ul{
 	position: absolute;
 	right:0;
 	top: 25px;
-	transform: scale(0.80) translateX(4px);
+	transform: scale(0.75) translateX(4px);
 }
 /*怪物-等级*/
 .monster .level{
@@ -311,9 +311,23 @@ ul{
 .formation-latents .latent-ul{
 	font-size: 0;
 	width: 152px;
-	transform: translate(-22px,-8px) scale(0.68);
+	transform: translate(-22px,-8px) scale(0.63);
 }
 
+.latent-icon-1,
+.latent-icon-2,
+.latent-icon-3,
+.latent-icon-4,
+.latent-icon-5,
+.latent-icon-6,
+.latent-icon-7,
+.latent-icon-8,
+.latent-icon-9,
+.latent-icon-10,
+.latent-icon-11{
+	margin-left: 3px;
+	margin-right: 3px;
+}
 /*队长的边框*/
 .formation-A-box .formation-team .team-leader .monster, .formation-B-box .formation-team .team-leader .monster{
 	border-radius: 10px;
