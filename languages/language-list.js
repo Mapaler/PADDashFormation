@@ -1,7 +1,7 @@
 ﻿var languageList = [
     {
         name:"English",i18n:"en",searchlist:["en","ja"],
-        guideURL:"http://www.puzzledragonx.com/en/awokenskill.asp?n=$1"
+        guideURL:"http://www.puzzledragonx.com/en/monster.asp?n=$1"
     },
     {
         name:"中文（简体）",i18n:"zh",searchlist:["chs","ja"],
