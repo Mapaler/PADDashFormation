@@ -131,17 +131,23 @@
 .control-box .datasource-label::before{
 	content: "データ ソース：";
 }
-.control-box .solo-link::before{
-	content: "ソロゲームに移動";
+.control-box .btn-solo-link::before{
+	content: "🧑ソロゲームに移動";
 }
-.control-box .multi-link::before{
-	content: "2人協力のゲームに移動";
+.control-box .btn-multi-link::before{
+	content: "🧑‍🤝‍🧑2人協力のゲームに移動";
+}
+.control-box .btn-clear-data::before{
+	content: "🗑️データの消去";
+}
+.control-box .btn-swap-AB-team::before{
+	content: "🔄交換ABチーム";
 }
 .control-box .btn-show-mon-id::before{
-	content: "隠しモンスターID";
+	content: "⬜隠しモンスターID";
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
-	content: "モンスターIDを表示";
+	content: "🆔モンスターIDを表示";
 }
 .team-info .tIf-total-hp::before{
 	content: "合計HP(チーム覚醒とバッジ)：";

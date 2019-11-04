@@ -133,6 +133,53 @@ function createCardHead(id)
 	changeid({id:id},cdom);
 	return cli;
 }
+//切换怪物ID显示
+function toggleShowMonId()
+{
+	document.body.classList.toggle('not-show-mon-id');
+}
+//清除数据
+function clearData()
+{
+	location.href=location.href.replace(location.search,'');
+}
+//交换AB队
+function swapABteam()
+{
+	if (formation.team.length>0)
+	{
+		formation.team[0][0].splice(4, 0, formation.team[0][0].splice(0,1)[0]); //第1个数组基底删掉0并移动到4
+		formation.team[0][1].splice(4, 0, formation.team[0][1].splice(0,1)[0]); //第1个数组辅助删掉0并移动到4
+		formation.team[1][0].splice(0, 0, formation.team[1][0].splice(4,1)[0]); //第2个数组基底删掉4并移动到0
+		formation.team[1][1].splice(0, 0, formation.team[1][1].splice(4,1)[0]); //第2个数组辅助删掉4并移动到0
+		formation.team.splice(0,0,formation.team.splice(1,1)[0]); //交换AB队
+	}
+	creatNewUrl();
+	history.go();
+}
+//在单人和多人之间转移数据
+function swapSingleMulitple()
+{
+	if (solo)
+	{
+		//创建第二支队伍，各4个空的
+		formation.team[1] = [
+			Array.from(new Array(4)).map(()=>{return new MemberTeam()}),
+			Array.from(new Array(4)).map(()=>{return new MemberAssist()})
+		];
+		//把右边的队长加到第二支队伍最后面
+		formation.team[1][0].push(formation.team[0][0].splice(5,1)[0])
+		formation.team[1][1].push(formation.team[0][1].splice(5,1)[0])
+	}else
+	{
+		//把第二支队五的队长添加到最后方
+		formation.team[0][0].push(formation.team[1][0][4]);
+		formation.team[0][1].push(formation.team[1][1][4]);
+		//删掉第二支队伍
+		formation.team.splice(1,1);
+	}
+	location.href = creatNewUrl({url:solo?"index.html":"solo.html",notPushState:true});
+}
 window.onload = function()
 {
 	var controlBox = document.body.querySelector(".control-box");
@@ -264,10 +311,15 @@ function creatNewUrl(arg){
 		let language_i18n = arg.language || getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
 		let datasource = arg.datasource || getQueryString("s");
 		let outObj = formation.outObj();
-		history.pushState(null, null, '?' 
-			+ (language_i18n?'l=' + language_i18n + '&':'') 
-			+ (datasource&&datasource!="ja"?'s=' + datasource + '&':'') 
-			+ 'd=' + encodeURIComponent(JSON.stringify(outObj)));
+		
+		let newUrl = (arg.url?arg.url:"")
+		+ '?' 
+		+ (language_i18n?'l=' + language_i18n + '&':'') 
+		+ (datasource&&datasource!="ja"?'s=' + datasource + '&':'') 
+		+ 'd=' + encodeURIComponent(JSON.stringify(outObj));
+
+		if (!arg.notPushState) history.pushState(null, null, newUrl);
+		return newUrl;
 	}
 }
 //初始化

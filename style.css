@@ -212,7 +212,7 @@ ul{
 	font-size: 15px;
 	line-height: 17px;
 	height: 17px;
-	text-shadow: black 1px 1px 0,black 1px -1px 0,black -1px 1px 0,black -1px -1px 0;
+	text-shadow: black 0px 0px 2px,black -1px -1px 1px,black 1px 1px 1px;
 	position: absolute;
 	left: 5px;
 	bottom: 15px;
@@ -423,12 +423,16 @@ ul{
 }
 .edit-box .search-box .evo-card-list li{
 	display: inline-block;
+	width: 75px;
+	height: 75px;
 }
 .edit-box .search-box .evo-card-list .monster{
 	float: none;
+	transform: scale(0.75) translate(-13px,-13px);
 }
 .edit-box .search-box .evo-card-list .monster .id{
 	bottom: 5px;
+	font-size: 20px;
 }
 .edit-box .setting-row{
 	width: 100%;
@@ -704,7 +708,7 @@ ul{
 	content: "Lanuage:";
 }
 .control-box .solo-link,.control-box .multi-link{
-	margin-left: 10px;
+	/*margin-left: 10px;*/
 }
 .control-box .solo-link::before{
 	content: "Jump To Solo Version";
