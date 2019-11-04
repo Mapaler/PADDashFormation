@@ -421,6 +421,15 @@ ul{
 .edit-box .search-box,.edit-box .setting-box{
 	padding: 0 10px;
 }
+.edit-box .search-box .evo-card-list li{
+	display: inline-block;
+}
+.edit-box .search-box .evo-card-list .monster{
+	float: none;
+}
+.edit-box .search-box .evo-card-list .monster .id{
+	bottom: 5px;
+}
 .edit-box .setting-row{
 	width: 100%;
 }
