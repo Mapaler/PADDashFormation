@@ -178,7 +178,7 @@ function swapSingleMulitple()
 		//删掉第二支队伍
 		formation.team.splice(1,1);
 	}
-	location.href = creatNewUrl({url:solo?"index.html":"solo.html",notPushState:true});
+	location.href = creatNewUrl({url:solo?"multi.html":"solo.html",notPushState:true});
 }
 window.onload = function()
 {

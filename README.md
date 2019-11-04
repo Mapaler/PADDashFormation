@@ -1,8 +1,8 @@
-﻿智龙迷城车队阵型图制作工具 | Puzzle & Dragons Dash Formation Maker
+﻿智龙迷城队伍图制作工具 | Puzzle & Dragons Formation Maker
 ======
 这个工具可以帮助你方便的制作和分享车队阵型或单人队形。易用的编辑界面，电脑、手机上都可以轻松使用。   
-This tool can help you easily create and share Dash Formation or Solo Formation. Easy to use editing interface and use on your PC and Phone.  
-**Some similar English names with Dash Formation**, information comes from [this post](https://puzzleanddragonsforum.com/threads/107636).
+This tool can help you easily create and share Swipe Formation or Solo Formation. Easy to use editing interface and use on your PC and Phone.  
+**Some similar English names with Swipe Formation**, information comes from [this post](https://puzzleanddragonsforum.com/threads/107636).
 * co-op speed farming
 * ALB farming
 * green row
