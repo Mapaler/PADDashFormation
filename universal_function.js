@@ -4,6 +4,7 @@ var type_allowable_latent = {
     "12":[], //12觉醒
     "14":[], //14强化
     "15":[], //15卖钱
+    "9":[],//特殊保护
     "1":[17,18,19,20,21,22,23,24], //1平衡
     "2":[20,24],//2体力
     "3":[18,22],//3回复
@@ -135,7 +136,11 @@ function returnMonsterNameArr(m,lsList)
 	}
 	return monNameArr;
 }
-
+//Code From pad-rikuu
+function valueAt(level, maxLevel, curve) {
+    const f = maxLevel === 1 ? 1 : (level - 1) / (maxLevel - 1);
+    return curve.min + (curve.max - curve.min) * Math.pow(f, curve.scale);
+}
 //计算怪物的能力
 function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
 {
@@ -159,10 +164,11 @@ function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
 		[{index:3,scale:0.1},{index:12,scale:0.2},{index:27,scale:0.3}]
 	];
 	var abilitys = m.ability.map(function(ab,idx){
-		var n_base = Math.round((ab[1]-ab[0])*(level-1)/98+ab[0]); //99级以内的增加
+        var n_base = Math.round(valueAt(level,m.maxLv,ab));
+		//var n_base = Math.round((ab[1]-ab[0])*(level-1)/98+ab[0]); //99级以内的增加
 		if (level>99) //110级的增加
 		{ //100到110级有11级，将m.a110的成长比率平均分配到这11级内
-			n_base = Math.round(ab[1] + ab[1]*(m.a110/100)*(level-99)/11);
+			n_base = Math.round(ab.max + ab.max*(m.a110/100)*(level-99)/11);
 		}
         var n_plus = plus[idx]*plusAdd[idx]; //加值增加量
         var awokenList = m.awoken.slice(0,awoken); //储存生效的觉醒

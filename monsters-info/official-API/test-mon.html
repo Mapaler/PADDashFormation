@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>怪物代码测试</title>
 <script type="text/javascript">
-var card;
+var cards;
 var mid;
 var GM_xmlhttpRequest = function(GM_param) {
 	var xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
@@ -25,14 +25,96 @@ var GM_xmlhttpRequest = function(GM_param) {
 	}
 	xhr.send(GM_param.data ? GM_param.data : null);
 }
+
+function parseCard(data) {
+    const card = {
+        attrs: [],
+        types: []
+    };
+    let i = 0;
+    function readCurve() {
+        return {
+            min: data[i++],
+            max: data[i++],
+            scale: data[i++],
+        };
+	}
+    card.id = data[i++]; //ID
+    card.name = data[i++]; //名字
+    card.attrs.push(data[i++]); //属性1
+    card.attrs.push(data[i++]); //属性2
+    card.isUltEvo = data[i++] !== 0; //是否究极进化
+    card.types.push(data[i++]); //类型1
+    card.types.push(data[i++]); //类型2
+    card.rarity = data[i++]; //星级
+    card.cost = data[i++]; //cost
+    card.unk01 = data[i++]; //未知01
+    card.maxLevel = data[i++]; //最大等级
+    card.feedExp = data[i++]; //1级喂食经验，需要除以4
+    card.isEmpty = data[i++] === 1; //空卡片？
+    card.sellPrice = data[i++]; //1级卖钱，需要除以10
+    card.hp = readCurve(); //HP增长
+    card.atk = readCurve(); //攻击增长
+    card.rcv = readCurve(); //回复增长
+    card.exp = { min: 0, max: data[i++], scale: data[i++] }; //经验增长
+    card.activeSkillId = data[i++]; //主动技
+    card.leaderSkillId = data[i++]; //队长技
+    card.enemy = { //作为怪物的数值
+        countdown: data[i++],
+        hp: readCurve(),
+        atk: readCurve(),
+        def: readCurve(),
+        maxLevel: data[i++],
+        coin: data[i++],
+        exp: data[i++]
+    };
+    card.evoBaseId = data[i++]; //进化基础ID
+    card.evoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]]; //进化素材
+    card.unevoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]]; //退化素材
+    card.unk02 = data[i++]; //未知02
+    card.unk03 = data[i++]; //未知03
+    card.unk04 = data[i++]; //未知04
+    card.unk05 = data[i++]; //未知05
+    card.unk06 = data[i++]; //未知06
+    card.unk07 = data[i++]; //未知07
+    const numSkills = data[i++]; //几种敌人技能
+    card.enemy.skills = Array.from(new Array(numSkills)).map(() => ({
+        id: data[i++],
+        ai: data[i++],
+        rnd: data[i++]
+    }));
+    const numAwakening = data[i++]; //觉醒个数
+	card.awakenings = Array.from(new Array(numAwakening)).map(() => data[i++]);
+	const sAwakeningStr = data[i++];
+    card.superAwakenings = (sAwakeningStr.length>0?sAwakeningStr.split(','):[]).map(Number); //超觉醒
+    card.evoRootId = data[i++]; //进化链根ID
+    card.seriesId = data[i++]; //系列ID
+    card.types.push(data[i++]); //类型3
+    card.sellMP = data[i++]; //卖多少MP
+    card.latentAwakeningId = data[i++]; //潜在觉醒ID
+    card.collabId = data[i++]; //合作ID
+    const flags = data[i++]; //一个旗子？
+    card.unk08 = flags; //未知08
+    card.canAssist = (flags & 1) !== 0; //是否能当二技
+    card.altName = data[i++]; //替换名字
+    card.limitBreakIncr = data[i++]; //110级增长
+    card.unk08 = data[i++]; //未知08
+    card.unk09 = data[i++]; //未知09
+    card.specialAttribute = data[i++]; //特别属性，比如黄龙
+    if (i !== data.length)
+        console.log(`residue data for #${card.id}: ${i} ${data.length}`);
+    return card;
+}
+
 function g(id)
 {
-	var m = card[id];
+	let m = cards[id];
 	var pn = ["火","水","木","光","暗"];
 	var p = [pn[m[2]]||"无", pn[m[3]]||"无"];
 	var tn = ["0进化","1平衡","2体力","3回复","4龙","5神","6攻击","7恶魔","8机械","9","10","11","12觉醒","13","14强化","15卖钱"];
 
-
+	let mobj = parseCard(m);
+	console.log(mobj); //输出人家大佬的格式
 	//因为觉醒数量的不一样，所以需要制定序号
 	var awokenCIdx = 58+m[57]*3; //awoken Count Index，觉醒数量的序号
 	var superAwokenIdx = awokenCIdx+1+m[awokenCIdx]; //super awoken Index，超觉醒的序号
@@ -88,19 +170,7 @@ GM_xmlhttpRequest({
 	method: "GET",
 	url:"ja.json",
 	onload: function(response) {
-		card = JSON.parse(response.response).card;
-		/*
-		var ts = card.filter(function(m){
-			return [9,10,11,13].indexOf(m[5])>=0;
-		})
-		console.log(ts);
-		*/
-		/*
-		console.log(card.sort(function(a,b){
-			return  b[b.length-3] - a[a.length-3];
-		}));
-		g(0);
-		*/
+		cards = JSON.parse(response.response).card;
 	},
 	onerror: function(response) {
 		console.error("怪物数据获取错误",response);
