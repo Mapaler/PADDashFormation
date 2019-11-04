@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>智龙迷城队伍图制作工具</title>
+<meta name="viewport" content="width=664" />
+<link href="style.css" rel="stylesheet" type="text/css">
+<link href="style-monsterimages.css" rel="stylesheet" type="text/css">
+<link id="language-css" href="languages/en.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="languages/language-list.js"></script>
+<script type="text/javascript">
+	if (/d(?:ata)?=/ig.test(location.search)) //如果存在怪物数据
+	{
+		if (confirm("Multiplayer page has changed path, need to jump?"))
+			location.href = "multi.html" + location.search; //跳到多人模式
+	}
+
+	var browser_i18n = (navigator.language||navigator.userLanguage); //获取浏览器语言
+	var hasLanguage = languageList.filter(function(l){ //筛选出符合的语言
+		return browser_i18n.indexOf(l.i18n)>=0;
+	});
+	language = hasLanguage.length?hasLanguage[hasLanguage.length-1]:languageList[0]; //没有找到指定语言的情况下，自动用默认的语言
+	document.head.querySelector("#language-css").href = "languages/"+language.i18n+".css";
+</script>
+<style type="text/css">
+.title,.control-box{
+	text-align: center;
+}
+.control-box a{
+	font-size: 1.5em;
+}
+</style>
+</head>
+
+<body>
+	<h1 class="title">智龙迷城队伍图制作工具<br>Puzzle & Dragons Formation Maker</h1>
+	<ul class="control-box">
+		<li><a class="btn-solo-link" href="solo.html"><!--单人模式--></a></li>
+		<li><a class="btn-multi-link" href="multi.html"><!--多人模式--></a></li>
+	</ul>
+</body>
+</html>
