@@ -88,7 +88,7 @@ function parseCard(data) {
     card.altName = data[i++]; //替换名字
     card.limitBreakIncr = data[i++]; //110级增长
     card.unk08 = data[i++]; //未知08
-    card.unk09 = data[i++]; //未知09
+    card.blockSkinId = data[i++]; //珠子皮肤ID
     card.specialAttribute = data[i++]; //特别属性，比如黄龙
     if (i !== data.length)
         console.log(`residue data for #${card.id}: ${i} ${data.length}`);
