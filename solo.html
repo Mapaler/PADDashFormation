@@ -23,9 +23,15 @@ var formation = new Formation(1,6);
 
 <body>
 	<div class="control-box">
-		<label class="languages-label"><select class="languages"></select></label>
-		<label class="datasource-label"><select class="datasource"></select></label>
-		<button class="btn-show-mon-id" onclick="document.body.classList.toggle('not-show-mon-id');"></button><a href="index.html" class="multi-link"></a>
+		<div>
+			<label class="languages-label"><select class="languages"></select></label>
+			<label class="datasource-label"><select class="datasource"></select></label>
+		</div>
+		<div>
+			<button class="btn-clear-data" onclick="clearData();"></button>
+			<button class="btn-show-mon-id" onclick="toggleShowMonId();"></button>
+			<button class="btn-multi-link" onclick="swapSingleMulitple();"></button>
+		</div>
 	</div>
 	<div class="formation-box">
 		<div class="title-box"><input type="text" class="title" placeholder="输入阵型标题" /></div>

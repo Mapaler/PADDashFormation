@@ -138,17 +138,23 @@
 .control-box .datasource-label::before{
 	content: "Data source:";
 }
-.control-box .solo-link::before{
-	content: "Jump To Solo Mode";
+.control-box .btn-solo-link::before{
+	content: "🧑Jump To Solo Mode";
 }
-.control-box .multi-link::before{
-	content: "Jump To 2-Player Mode";
+.control-box .btn-multi-link::before{
+	content: "🧑‍🤝‍🧑Jump To 2-Player Mode";
+}
+.control-box .btn-clear-data::before{
+	content: "🗑️Clear data";
+}
+.control-box .btn-swap-AB-team::before{
+	content: "🔄Swap AB Team";
 }
 .control-box .btn-show-mon-id::before{
-	content: "Hide monster ID";
+	content: "⬜Hide monster ID";
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
-	content: "Show monster ID";
+	content: "🆔Show monster ID";
 }
 .team-info .tIf-total-hp::before{
 	content: "Total HP(Team Awoken & Badge): ";

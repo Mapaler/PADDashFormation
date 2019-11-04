@@ -134,17 +134,23 @@
 .control-box .datasource-label::before{
 	content: "數據來源：";
 }
-.control-box .solo-link::before{
-    content: "轉到單人遊戲";
+.control-box .btn-solo-link::before{
+    content: "🧑轉到單人遊戲";
 }
-.control-box .multi-link::before{
-    content: "轉到2人車隊";
+.control-box .btn-multi-link::before{
+    content: "🧑‍🤝‍🧑轉到2人車隊";
+}
+.control-box .btn-clear-data::before{
+	content: "🗑️清除數據";
+}
+.control-box .btn-swap-AB-team::before{
+	content: "🔄交換AB隊";
 }
 .control-box .btn-show-mon-id::before{
-    content: "隱藏怪物ID";
+    content: "⬜隱藏怪物ID";
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
-    content: "顯示怪物ID";
+    content: "🆔顯示怪物ID";
 }
 .team-info .tIf-total-hp::before{
 	content: "總HP(隊伍覺醒和徽章)：";

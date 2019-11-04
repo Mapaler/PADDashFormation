@@ -131,17 +131,23 @@
 .control-box .datasource-label::before{
 	content: "데이터 소스：";
 }
-.control-box .solo-link::before{
-	content: "싱글 플레이어 게임으로 이동";
+.control-box .btn-solo-link::before{
+	content: "🧑싱글 플레이어 게임으로 이동";
 }
-.control-box .multi-link::before{
-	content: "2인 게임으로 이동";
+.control-box .btn-multi-link::before{
+	content: "🧑‍🤝‍🧑2인 게임으로 이동";
+}
+.control-box .btn-clear-data::before{
+	content: "🗑️데이터 지우기";
+}
+.control-box .btn-swap-AB-team::before{
+	content: "🔄교환 AB 팀";
 }
 .control-box .btn-show-mon-id::before{
-	content: "숨겨진 몬스터 ID";
+	content: "⬜숨겨진 몬스터 ID";
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
-	content: "괴물 ID 표시";
+	content: "🆔괴물 ID 표시";
 }
 .team-info .tIf-total-hp::before{
 	content: "총 HP(팀의 각 성과 배지)：";
