@@ -118,6 +118,21 @@ Formation.prototype.loadObj= function(f){
 		})
 	});
 }
+//创建一个新的怪物头像
+function createCardHead(id)
+{
+	var cli = document.createElement("li");
+	var cdom = cli.mon = cli.appendChild(document.createElement("a"));
+	cdom.class = "monster";
+	var property = cdom.appendChild(document.createElement("div"));
+	property.className = "property";
+	var subproperty = cdom.appendChild(document.createElement("div"));
+	subproperty.className = "subproperty";
+	var cid = cdom.appendChild(document.createElement("div"));
+	cid.className = "id";
+	changeid({id:id},cdom);
+	return cli;
+}
 window.onload = function()
 {
 	var controlBox = document.body.querySelector(".control-box");
@@ -646,6 +661,7 @@ function initialize()
 function changeid(mon,monDom,latentDom)
 {
 	var md = ms[mon.id]; //怪物固定数据
+	monDom.setAttribute("data-cardid",mon.id); //设定新的id
 	if (mon.id<0) //如果是延迟
 	{
 		monDom.parentNode.classList.add("delay");
@@ -674,10 +690,10 @@ function changeid(mon,monDom,latentDom)
 		monDom.title = "No." + mon.id + " " + md.name[language.searchlist[0]] || md.name["ja"];
 		monDom.href = mon.id.toString().replace(/^(\d+)$/ig,language.guideURL);
 	}
-	var level = mon.level || 1;
 	var levelDom = monDom.querySelector(".level");
 	if (levelDom) //如果提供了等级
 	{
+		var level = mon.level || 1;
 		levelDom.innerHTML = level;
 		if (level == md.maxLv)
 		{ //如果等级刚好等于最大等级，则修改为“最大”的字
@@ -697,7 +713,7 @@ function changeid(mon,monDom,latentDom)
 	if (mon.awoken>-1) //如果提供了觉醒
 	{
 		var awokenIcon = monDom.querySelector(".awoken-count");
-		if (mon.awoken == 0 || md.awoken.length < 1) //没觉醒
+		if (mon.awoken == 0 || md.awoken.length < 1 || !awokenIcon) //没觉醒
 		{
 			awokenIcon.classList.add("display-none");
 			awokenIcon.innerHTML = "";
@@ -864,6 +880,8 @@ function editBoxChangeMonId(id)
 		md = ms[0]
 	}
 	var editBox = document.querySelector(".edit-box");
+	//id搜索
+	var monstersID = editBox.querySelector(".edit-box .m-id");
 	var monInfoBox = editBox.querySelector(".monsterinfo-box");
 	var me = monInfoBox.querySelector(".monster");
 	changeid({id:id,},me); //改变图像
@@ -873,6 +891,32 @@ function editBoxChangeMonId(id)
 	mRare.className = "monster-rare rare-" + md.rare;
 	var mName = monInfoBox.querySelector(".monster-name");
 	mName.innerHTML = returnMonsterNameArr(md,language.searchlist)[0];
+
+	var evoCardUl = document.querySelector(".edit-box .search-box .evo-card-list");
+	//var evoRootId = parseInt(evoCardUl.getAttribute("data-evoRootId")); //读取旧的id
+	//evoCardUl.setAttribute("data-evoRootId",md.evoRootId); //设定新的id
+	var evoLinkCardsId = ms.filter(function(m){
+		return m.evoRootId == md.evoRootId && m.id != md.id;
+	}).map(function(m){return m.id;});
+	for (var ci=evoCardUl.childNodes.length-1;ci>=0;ci--)
+	{ //删除所有旧内容
+		var childN = evoCardUl.childNodes[ci];
+		//if (evoLinkCardsId.indexOf(parseInt(childN.getAttribute("data-cardid")))<0)
+		//{
+		childN.remove();
+		childN = null;
+		//}
+	}
+	evoLinkCardsId.forEach(function(mid){
+		var cli = createCardHead(mid);
+		cli.mon.onclick = function(){
+			monstersID.value = this.getAttribute("data-cardid");
+			monstersID.onchange();
+			return false;
+		}
+		evoCardUl.appendChild(cli);
+	});
+
 	var mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (var ti=0;ti<mType.length;ti++)
 	{

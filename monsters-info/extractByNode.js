@@ -182,7 +182,7 @@ officialAPI.forEach(function(lang){
 	let outCards = lang.cards.map(function(m){
 		let sm = {
 			id : m.id,
-			name : {lcode : m.name},
+			name : {},
 			ppt : m.attrs,
 			type : m.types,
 			rare : m.rarity,
@@ -194,8 +194,9 @@ officialAPI.forEach(function(lang){
 				m.atk,
 				m.rcv
 			],
-			a110 : m.limitBreakIncr,
+			evoRootId : m.evoRootId,
 		}
+		sm.name[lang.code] = m.name;
 		sm.name = Object.assign(sm.name, m.otlName);
 		if (m.superAwakenings.length>0)
 			sm.sAwoken = m.superAwakenings;
@@ -203,6 +204,15 @@ officialAPI.forEach(function(lang){
 			sm.a110 = m.limitBreakIncr;
 		return sm;
 	})
+	//获取所有有链接的符卡
+	let linkCards = lang.cards.filter(m=>{return /link:(\d+)/.exec(m.specialAttribute);});
+	//每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
+	linkCards.forEach(m=>{
+		let regRes = /link:(\d+)/.exec(m.specialAttribute);
+		let _m = outCards[parseInt(regRes[1])];
+		_m.evoRootId = m.evoRootId;
+	})
+
 	let str = JSON.stringify(outCards);
 	fs.writeFile('./mon_'+lang.code+'.json',str,function(err){
 		if(err){
