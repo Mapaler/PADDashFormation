@@ -314,19 +314,33 @@ ul{
 	transform: translate(-22px,-8px) scale(0.63);
 }
 
-.latent-icon-1,
-.latent-icon-2,
-.latent-icon-3,
-.latent-icon-4,
-.latent-icon-5,
-.latent-icon-6,
-.latent-icon-7,
-.latent-icon-8,
-.latent-icon-9,
-.latent-icon-10,
-.latent-icon-11{
+.formation-latents .latent-icon{
 	margin-left: 3px;
 	margin-right: 3px;
+}
+.formation-latents .latent-icon-12,
+.formation-latents .latent-icon-13,
+.formation-latents .latent-icon-14,
+.formation-latents .latent-icon-15,
+.formation-latents .latent-icon-16,
+.formation-latents .latent-icon-17,
+.formation-latents .latent-icon-18,
+.formation-latents .latent-icon-19,
+.formation-latents .latent-icon-20,
+.formation-latents .latent-icon-21,
+.formation-latents .latent-icon-22,
+.formation-latents .latent-icon-23,
+.formation-latents .latent-icon-24,
+.formation-latents .latent-icon-25,
+.formation-latents .latent-icon-26,
+.formation-latents .latent-icon-27,
+.formation-latents .latent-icon-28,
+.formation-latents .latent-icon-29,
+.formation-latents .latent-icon-30,
+.formation-latents .latent-icon-31,
+.formation-latents .latent-icon-32,
+.formation-latents .latent-icon-33{
+	margin: 0;
 }
 /*队长的边框*/
 .formation-A-box .formation-team .team-leader .monster, .formation-B-box .formation-team .team-leader .monster{
