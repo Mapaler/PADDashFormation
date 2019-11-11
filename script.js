@@ -85,18 +85,17 @@ var Formation = function(teamCount,memberCount){
 	}
 }
 Formation.prototype.outObj= function(){
-	var obj = {
-		t:this.title,
-		d:this.detail,
-		f:this.team.map(function(t){
+	let obj = {};
+	if (this.title != undefined && this.title.length>0) obj.t = this.title;
+	if (this.detail != undefined && this.detail.length>0) obj.d = this.detail;
+	obj.f = this.team.map(function(t){
 			return t.map(function(st){
 				return st.map(function(m){
 					return m.outObj();
 				})
 			})
-		})
-	}
-	if (this.badge>0) obj.b = this.badge; //徽章
+		});
+	if (this.badge != undefined && this.badge>0) obj.b = this.badge; //徽章
 	return obj;
 }
 Formation.prototype.loadObj= function(f){
