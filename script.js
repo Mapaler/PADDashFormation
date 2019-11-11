@@ -224,60 +224,42 @@ window.onload = function()
 			return true;
 		}
 	});
-
+	//处理返回的数据
+	function dealIdata(responseText)
+	{
+		var idata;
+		try
+		{
+			ms = JSON.parse(responseText);
+			initialize();//初始化
+			var idataQer = getQueryString("d") || getQueryString("data");
+			if (idataQer)
+			{
+				idata = JSON.parse(idataQer);
+			}
+		}catch(e)
+		{
+			console.log("初始数据JSON解码出错",e);
+			return;
+		}
+		if (idata)
+		{
+			formation.loadObj(idata);
+			refreshAll(formation);
+		}
+	}
 	GM_xmlhttpRequest({
 		method: "GET",
 		url:"monsters-info/mon_"+dataSource.code+".json",
 		onload: function(response) {
-			ms = JSON.parse(response.response);
-			initialize();//初始化
-			var idata;
-			try
-			{
-				var idataQer = getQueryString("d") || getQueryString("data");
-				if (idataQer)
-				{
-					idata = JSON.parse(idataQer);
-				}
-			}catch(e)
-			{
-				console.log("初始数据JSON解码出错",e);
-				return;
-			}
-			if (idata)
-			{
-				//formation = idata;
-				formation.loadObj(idata);
-				refreshAll(formation);
-			}
+			dealIdata(response.response);
 		},
 		onerror: function(response) {
 			var isChrome = navigator.userAgent.indexOf("Chrome") >=0;
 			if (isChrome && location.host.length==0)
 			{
-				console.info("因为是Chrome本地打开，正在尝试读取XML");
-				var idata;
-				try
-				{
-					ms = JSON.parse(response.response);
-					initialize();//初始化
-	
-					var idataQer = getQueryString("d") || getQueryString("data");
-					if (idataQer)
-					{
-						idata = JSON.parse(idataQer);
-					}
-				}catch(e)
-				{
-					console.error("网络请求返回错误，尝试解码仍错误。",e);
-					return;
-				}
-				if (idata)
-				{
-					//formation = idata;
-					formation.loadObj(idata);
-					refreshAll(formation);
-				}
+				console.info("因为是Chrome本地打开，正在尝试读取JSON");
+				dealIdata(response.response);
 			}else
 			{
 				console.error("怪物数据获取错误",response);

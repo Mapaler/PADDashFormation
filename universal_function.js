@@ -150,8 +150,8 @@ function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
     if (awoken == undefined) awoken = 0;
     if (latent == undefined) latent = [];
     
-    if (monid<=0) return null;
 	var m = ms[monid]; //怪物数据
+    if (monid ==0 || m==undefined) return null;
 	var plusAdd = [10,5,3]; //加值的增加值
 	var awokenAdd = [ //对应加三维觉醒的序号与增加值
 		[{index:1,value:500},{index:65,value:-5000}],
@@ -162,7 +162,7 @@ function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
 		[{index:1,scale:0.015},{index:12,scale:0.03},{index:25,scale:0.045}],
 		[{index:2,scale:0.01},{index:12,scale:0.02},{index:26,scale:0.03}],
 		[{index:3,scale:0.1},{index:12,scale:0.2},{index:27,scale:0.3}]
-	];
+    ];
 	var abilitys = m.ability.map(function(ab,idx){
         var n_base = Math.round(valueAt(level,m.maxLv,ab));
 		//var n_base = Math.round((ab[1]-ab[0])*(level-1)/98+ab[0]); //99级以内的增加
