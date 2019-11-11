@@ -252,28 +252,35 @@ window.onload = function()
 			}
 		},
 		onerror: function(response) {
-			console.error("怪物数据获取错误",response);
-			var idata;
-			try
+			var isChrome = navigator.userAgent.indexOf("Chrome") >=0;
+			if (isChrome && location.host.length==0)
 			{
-				ms = JSON.parse(response.response);
-				initialize();//初始化
-
-				var idataQer = getQueryString("d") || getQueryString("data");
-				if (idataQer)
+				console.info("因为是Chrome本地打开，正在尝试读取XML");
+				var idata;
+				try
 				{
-					idata = JSON.parse(idataQer);
+					ms = JSON.parse(response.response);
+					initialize();//初始化
+	
+					var idataQer = getQueryString("d") || getQueryString("data");
+					if (idataQer)
+					{
+						idata = JSON.parse(idataQer);
+					}
+				}catch(e)
+				{
+					console.error("网络请求返回错误，尝试解码仍错误。",e);
+					return;
 				}
-			}catch(e)
+				if (idata)
+				{
+					//formation = idata;
+					formation.loadObj(idata);
+					refreshAll(formation);
+				}
+			}else
 			{
-				console.log("网络请求返回错误，尝试解码仍错误。",e);
-				return;
-			}
-			if (idata)
-			{
-				//formation = idata;
-				formation.loadObj(idata);
-				refreshAll(formation);
+				console.error("怪物数据获取错误",response);
 			}
 		}
 	});
