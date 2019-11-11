@@ -20,14 +20,12 @@ var Member = function(){
 }
 Member.prototype.outObj = function(){
 	var m = this;
-	var obj = [
-		m.id
-	];
-	if (m.level != undefined) obj.push(m.level);
-	if (m.awoken != undefined) obj.push(m.awoken);
-	if (m.plus != undefined) obj.push(m.plus);
-	if (m.latent != undefined) obj.push(m.latent);
-	if (m.sawoken != undefined) obj.push(m.sawoken);
+	var obj = [m.id];
+	if (m.level != undefined) obj[1] = m.level;
+	if (m.awoken != undefined) obj[2] = m.awoken;
+	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) obj[3] = m.plus;
+	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) obj[4] = m.latent;
+	if (m.sawoken != undefined) obj[5] = m.sawoken;
 	return obj;
 }
 Member.prototype.loadObj = function(m,dataVersion){
