@@ -56,4 +56,5 @@ node.exe extractByNode.js
 Extract information from several languages into one file  
 `mon.json`
 
-运行`提取中文数据.bat`，将战友网页面内容抽出，再使用Win64版exe`opencc`来繁转简。
+运行`提取中文数据.bat`，将战友网页面内容抽出，再使用Win64版 [OpenCC](https://github.com/BYVoid/OpenCC) 来繁转简。
+然后再运行一遍`提取整合怪物信息.bat`把中文插进去。
