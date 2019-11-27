@@ -118,7 +118,7 @@ Formation.prototype.loadObj= function(f){
 //获取最大潜觉数量
 function getMaxLatentCount(id)
 { //转生2和超转生3为8个格子
-	let m = ms[id],mEvoType = m.evoType;
+	let m = ms[id] || ms[0],mEvoType = m.evoType;
 	return  (mEvoType == 2 || mEvoType == 3) ? 8 : 6;
 }
 //创建一个新的怪物头像
@@ -706,7 +706,7 @@ function initialize()
 //改变一个怪物头像
 function changeid(mon,monDom,latentDom)
 {
-	var md = ms[mon.id]; //怪物固定数据
+	var md = ms[mon.id] || ms[0]; //怪物固定数据
 	monDom.setAttribute("data-cardid",mon.id); //设定新的id
 	if (mon.id<0) //如果是延迟
 	{
@@ -837,7 +837,6 @@ function changeid(mon,monDom,latentDom)
 		let maxLatentCount = getMaxLatentCount(mon.id); //最大潜觉数量
 		for (var ai=0;ai<latentDoms.length;ai++)
 		{
-			console.log(ai,maxLatentCount,usedHoleN,latent.length)
 			if (latent[ai])
 			{
 				latentDoms[ai].className = "latent-icon latent-icon-" + latent[ai];
@@ -1160,7 +1159,9 @@ function refreshAbility(dom,team,idx){
 	//基底三维，如果辅助是武器，还要加上辅助的觉醒
 	var mainAbility = calculateAbility(mainMD.id,mainMD.level,mainMD.plus,mainMD.awoken,mainMD.latent,assistMD.id,assistMD.awoken);
 	//辅助增加的三维，如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
-	var assistAbility = (assistMD.id > 0 && ms[mainMD.id].ppt[0]==ms[assistMD.id].ppt[0])
+	let mainCard = ms[mainMD.id] || ms[0];
+	let assistCard = ms[assistMD.id] || ms[0];
+	var assistAbility = (assistMD.id > 0 && mainCard.ppt[0]==assistCard.ppt[0])
 		?calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null)
 		:[0,0,0];
 	if (mainAbility && mainMD.ability)
