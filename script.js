@@ -857,7 +857,7 @@ function editMon(AorB,isAssist,tempIdx)
 {
 	//数据
 	var mD = formation.team[AorB][isAssist][tempIdx];
-	let card = ms[mD.id] || md[0];
+	let card = ms[mD.id] || ms[0];
 
 	//对应的Dom
 	var formationBox = AorB?document.querySelector(".formation-box .formation-B-box"):document.querySelector(".formation-box .formation-A-box");
