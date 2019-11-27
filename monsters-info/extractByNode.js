@@ -195,6 +195,7 @@ officialAPI.forEach(function(lang){
 				m.rcv
 			],
 			evoRootId : m.evoRootId,
+			evoType : m.isUltEvo? 1 : 0, //进化模式
 		}
 		sm.name[lang.code] = m.name;
 		sm.name = Object.assign(sm.name, m.otlName);
@@ -202,6 +203,18 @@ officialAPI.forEach(function(lang){
 			sm.sAwoken = m.superAwakenings;
 		if (m.limitBreakIncr>0)
 			sm.a110 = m.limitBreakIncr;
+		if (sm.id != sm.evoRootId && sm.evoType == 0) //不是究极进化的
+		{
+			let parentCard = lang.cards[m.evoBaseId]; //进化前的
+			if (parentCard.isUltEvo) //如果父级是究极进化
+			{
+				sm.evoType = 2; //那么这里是转生进化
+			}else if (parentCard.evoBaseId != parentCard.id //如果父级还有父级
+				&& lang.cards[parentCard.evoBaseId].isUltEvo) //父级的父级是究极进化
+			{
+				sm.evoType = 3; //那么这里是超转生进化
+			}
+		}
 		return sm;
 	})
 	//获取所有有链接的符卡
