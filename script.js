@@ -115,6 +115,12 @@ Formation.prototype.loadObj= function(f){
 		})
 	});
 }
+//获取最大潜觉数量
+function getMaxLatentCount(id)
+{ //转生2和超转生3为8个格子
+	let m = ms[id],mEvoType = m.evoType;
+	return  (mEvoType == 2 || mEvoType == 3) ? 8 : 6;
+}
 //创建一个新的怪物头像
 function createCardHead(id)
 {
@@ -497,18 +503,19 @@ function initialize()
 	var monEditLatents = Array.prototype.slice.call(monEditLatentUl.querySelectorAll("li"));
 	var monEditLatentAllowableUl = settingBox.querySelector(".m-latent-allowable-ul");
 	var monEditLatentsAllowable = Array.prototype.slice.call(monEditLatentAllowableUl.querySelectorAll("li"));
-	editBox.refreshLatent = function(latent) //刷新潜觉
+	editBox.refreshLatent = function(latent,monid) //刷新潜觉
 	{
 		if (this.value<0) return;
+		let maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
 		var usedHoleN = usedHole(latent);
-		for (var ai=0;ai<6;ai++)
+		for (var ai=0;ai<monEditLatents.length;ai++)
 		{
 			if (latent[ai])
 			{
 				monEditLatents[ai].className = "latent-icon latent-icon-" + latent[ai];
 				monEditLatents[ai].value = ai;
 			}
-			else if(ai<(6-usedHoleN+latent.length))
+			else if(ai<(maxLatentCount-usedHoleN+latent.length))
 			{
 				monEditLatents[ai].className = "latent-icon";
 				monEditLatents[ai].value = -1;
@@ -526,7 +533,7 @@ function initialize()
 			var aIdx = parseInt(this.value);
 			editBox.latent.splice(aIdx,1);
 			editBox.reCalculateAbility();
-			editBox.refreshLatent(editBox.latent);
+			editBox.refreshLatent(editBox.latent,editBox.mid);
 		}
 	})
 	//可选觉醒的添加
@@ -535,13 +542,14 @@ function initialize()
 			if (this.classList.contains("unselected-latent")) return;
 			var lIdx = parseInt(this.value);
 			var usedHoleN = usedHole(editBox.latent);
-			if (lIdx >= 12 && usedHoleN<=4)
+			let maxLatentCount = getMaxLatentCount(editBox.mid); //最大潜觉数量
+			if (lIdx >= 12 && usedHoleN<=(maxLatentCount-2))
 				editBox.latent.push(lIdx);
-			else if (lIdx < 12 && usedHoleN<=5)
+			else if (lIdx < 12 && usedHoleN<=(maxLatentCount-1))
 				editBox.latent.push(lIdx);
 
 			editBox.reCalculateAbility();
-			editBox.refreshLatent(editBox.latent);
+			editBox.refreshLatent(editBox.latent,editBox.mid);
 		}
 	})
 
@@ -826,13 +834,15 @@ function changeid(mon,monDom,latentDom)
 			latentDom.classList.remove("display-none");
 		var latentDoms = Array.prototype.slice.call(latentDom.querySelectorAll("li"));
 		var usedHoleN = usedHole(latent);
-		for (var ai=0;ai<6;ai++)
+		let maxLatentCount = getMaxLatentCount(mon.id); //最大潜觉数量
+		for (var ai=0;ai<latentDoms.length;ai++)
 		{
+			console.log(ai,maxLatentCount,usedHoleN,latent.length)
 			if (latent[ai])
 			{
 				latentDoms[ai].className = "latent-icon latent-icon-" + latent[ai];
 			}
-			else if(ai<(6-usedHoleN+latent.length))
+			else if(ai<(maxLatentCount-usedHoleN+latent.length))
 			{
 				latentDoms[ai].className = "latent-icon";
 			}
@@ -895,7 +905,7 @@ function editMon(AorB,isAssist,tempIdx)
 	if (!isAssist)
 	{
 		editBox.latent = mD.latent?mD.latent.concat():[];
-		editBox.refreshLatent(editBox.latent);
+		editBox.refreshLatent(editBox.latent,mD.id);
 		btnDelay.classList.add("display-none");
 		settingBox.querySelector(".row-mon-latent").classList.remove("display-none");
 		if (ms[mD.id].sAwoken)settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
@@ -1050,7 +1060,7 @@ function editBoxChangeMonId(id)
 		}
 	}
 	editBox.latent.length = 0;
-	editBox.refreshLatent(editBox.latent);
+	editBox.refreshLatent(editBox.latent,id);
 	editBox.reCalculateAbility();
 }
 //刷新整个队伍
