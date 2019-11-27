@@ -93,8 +93,10 @@ function awokenCountInTeam(team,ak,solo)
             { //如果是特殊情况的
                 return c;
             }
-            var mdAwoken = ms[m.id].awoken; //这个怪物的觉醒数据
-            var mdSAwoken = ms[m.id].sAwoken; //这个怪物的超觉醒数据
+            let card = ms[m.id];
+            if (!card) return c; //如果没有这个怪，返回原始数据
+            var mdAwoken = card.awoken; //这个怪物的觉醒数据
+            var mdSAwoken = card.sAwoken; //这个怪物的超觉醒数据
             if ((!mdAwoken && !mdSAwoken) || (isAssist && mdAwoken.indexOf(49)<0))
             { //如果没有觉醒和超觉醒 || （如果是辅助队 &&第一个不是武器觉醒）
                 return c;
@@ -174,7 +176,7 @@ function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
         var awokenList = m.awoken.slice(0,awoken); //储存生效的觉醒
         if (weaponId)
         {
-            var weapon = ms[weaponId]; //武器的怪物数据
+            var weapon = ms[weaponId] || ms[0]; //武器的怪物数据，没有这个怪的话，切换到0
             var weaponAwokenList = weapon.awoken.slice(0,weaponAwoken);
             if (weaponAwokenList.indexOf(49)>=0)
                 awokenList = awokenList.concat(weaponAwokenList);
