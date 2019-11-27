@@ -827,7 +827,11 @@ function changeid(mon,monDom,latentDom)
 	}
 	if (latentDom && mon.latent) //如果提供了潜觉
 	{
-		var latent = mon.latent.sort(function(a,b){return b-a;});
+		var latent = mon.latent.sort(function(a,b){
+			if(b>=12 && a<12) {return 1;} //如果大于12，就排到前面
+			else if(b<12 && a>=12) {return -1} //如果小于12就排到后面
+			else {return 0} //其他情况不变
+		});
 		if (latent.length < 1)
 			latentDom.classList.add("display-none");
 		else
