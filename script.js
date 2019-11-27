@@ -857,6 +857,7 @@ function editMon(AorB,isAssist,tempIdx)
 {
 	//数据
 	var mD = formation.team[AorB][isAssist][tempIdx];
+	let card = ms[mD.id] || md[0];
 
 	//对应的Dom
 	var formationBox = AorB?document.querySelector(".formation-box .formation-B-box"):document.querySelector(".formation-box .formation-A-box");
@@ -907,7 +908,7 @@ function editMon(AorB,isAssist,tempIdx)
 		editBox.refreshLatent(editBox.latent,mD.id);
 		btnDelay.classList.add("display-none");
 		settingBox.querySelector(".row-mon-latent").classList.remove("display-none");
-		if (ms[mD.id].sAwoken)settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
+		if (card.sAwoken)settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
 		editBox.querySelector(".edit-box-title").classList.remove("edit-box-title-assist");
 	}else
 	{
