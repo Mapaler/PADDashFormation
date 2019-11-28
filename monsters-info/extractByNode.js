@@ -186,45 +186,11 @@ for (let li = 0;li < officialAPI.length; li++)
 //最后批量保存
 officialAPI.forEach(function(lang){
 	let lcode = lang.code;
-	let outCards = lang.cards.map(function(m){
-		let sm = {
-			id : m.id,
-			name : {},
-			ppt : m.attrs,
-			type : m.types,
-			rare : m.rarity,
-			awoken : m.awakenings,
-			maxLv : m.maxLevel,
-			assist : m.canAssist?1:0,
-			ability : [
-				m.hp,
-				m.atk,
-				m.rcv
-			],
-			evoRootId : m.evoRootId,
-		}
-		sm.name[lang.code] = m.name;
-		sm.name = Object.assign(sm.name, m.otLangName);
-		if (m.superAwakenings.length>0)
-			sm.sAwoken = m.superAwakenings;
-		if (m.limitBreakIncr>0)
-			sm.a110 = m.limitBreakIncr;
-		return sm;
-	})
-	//获取所有有链接的符卡
-	let linkCards = lang.cards.filter(m=>{return /link:(\d+)/.exec(m.specialAttribute);});
-	//每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
-	linkCards.forEach(m=>{
-		let regRes = /link:(\d+)/.exec(m.specialAttribute);
-		let _m = outCards[parseInt(regRes[1])];
-		_m.evoRootId = m.evoRootId;
-	})
-
-	let str = JSON.stringify(outCards);
-	fs.writeFile('./mon_'+lang.code+'.json',str,function(err){
+	let str = JSON.stringify(lang.cards);
+	fs.writeFile('./mon_'+lcode+'.json',str,function(err){
 		if(err){
 			console.error(err);
 		}
-		console.log('mon_'+lang.code+'.json 导出成功');
+		console.log('mon_'+lcode+'.json 导出成功');
 	})
 })
