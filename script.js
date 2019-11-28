@@ -118,8 +118,17 @@ Formation.prototype.loadObj= function(f){
 //获取最大潜觉数量
 function getMaxLatentCount(id)
 { //转生2和超转生3为8个格子
-	let m = ms[id] || ms[0],mEvoType = m.evoType;
-	return  (mEvoType == 2 || mEvoType == 3) ? 8 : 6;
+	function is8Latent(id)
+	{
+		let m = ms[id] || ms[0],mEvoType = m.evoType;
+		if (mEvoType == 2 || mEvoType == 3){return true;}
+		if (mEvoType == 1) //判断究进之前是不是转生（三神面宙斯等）
+		{
+			
+		}
+		return false;
+	}
+	return is8Latent(id) ? 8 : 6;
 }
 //创建一个新的怪物头像
 function createCardHead(id)
