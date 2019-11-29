@@ -203,16 +203,28 @@ officialAPI.forEach(function(lang){
 			sm.sAwoken = m.superAwakenings;
 		if (m.limitBreakIncr>0)
 			sm.a110 = m.limitBreakIncr;
-		if (sm.id != sm.evoRootId && sm.evoType == 0) //不是究极进化的
+		if (sm.id != sm.evoRootId)
 		{
 			let parentCard = lang.cards[m.evoBaseId]; //进化前的
-			if (parentCard.isUltEvo) //如果父级是究极进化
+			let parentParentCard = parentCard?lang.cards[parentCard.evoBaseId]:null; //父级的父级
+			if (sm.evoType == 0) //不是究极进化的
 			{
-				sm.evoType = 2; //那么这里是转生进化
-			}else if (parentCard.evoBaseId != parentCard.id //如果父级还有父级
-				&& lang.cards[parentCard.evoBaseId].isUltEvo) //父级的父级是究极进化
+				if (parentCard.isUltEvo) //如果父级是究极进化
+				{
+					sm.evoType = 2; //那么这里是转生进化
+				}else if (parentCard.evoBaseId != parentCard.id //如果父级还有父级
+					&& parentParentCard.isUltEvo //父级的父级是究极进化
+					)
+				{
+					sm.evoType = 3; //那么这里是超转生进化
+				}
+			}else if (sm.evoType == 1 //是究极进化的
+				&& parentCard.evoBaseId != parentCard.id //如果父级还有父级
+				&& !parentCard.isUltEvo //父级不是究极进化
+				&& parentParentCard.isUltEvo //父级的父级是究极进化
+				) 
 			{
-				sm.evoType = 3; //那么这里是超转生进化
+				sm.evoType = 21; //那么这里是转生进化后的究进
 			}
 		}
 		return sm;
