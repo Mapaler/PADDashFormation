@@ -1,5 +1,5 @@
-var ms = null; //怪物数据
-var language = null; //当前语言
+var Cards = null; //怪物数据
+var currentLanguage = null; //当前语言
 const dataSourceList = [ //几个不同的游戏服务区
 	{
 		code:"ja",
@@ -119,7 +119,7 @@ Formation.prototype.loadObj= function(f){
 function createCardHead(id)
 {
 	var cli = document.createElement("li");
-	var cdom = cli.mon = cli.appendChild(document.createElement("a"));
+	var cdom = cli.head = cli.appendChild(document.createElement("a"));
 	cdom.class = "monster";
 	var property = cdom.appendChild(document.createElement("div"));
 	property.className = "property";
@@ -179,116 +179,113 @@ function swapSingleMulitple()
 }
 window.onload = function()
 {
-	var controlBox = document.body.querySelector(".control-box");
-	//添加语言列表
-	var langList = controlBox.querySelector(".languages");
+	let controlBox = document.body.querySelector(".control-box");
+
+	//▼添加语言列表开始
+	let langSelectDom = controlBox.querySelector(".languages");
 	languageList.forEach(function(l){
-		var langOpt = new Option(l.name,l.i18n);
-		langList.options.add(langOpt);
+		langSelectDom.options.add(new Option(l.name,l.i18n));
 	})
 
-	var language_i18n =  getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
-	var browser_i18n = (navigator.language||navigator.userLanguage); //获取浏览器语言
-	var hasLanguage = languageList.filter(function(l){ //筛选出符合的语言
-		if (language_i18n) //如果已指定就用指定的语言
-			return language_i18n.indexOf(l.i18n)>=0;
-		else
+	let parameter_i18n =  getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
+	let browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
+	let havingLanguage = languageList.filter(function(l){ //筛选出符合的语言
+		if (parameter_i18n) //如果已指定就用指定的语言
+			return parameter_i18n.indexOf(l.i18n)>=0;
+		else //否则筛选浏览器默认语言
 			return browser_i18n.indexOf(l.i18n)>=0;
 	});
-	language = hasLanguage.length?hasLanguage[hasLanguage.length-1]:languageList[0]; //没有找到指定语言的情况下，自动用默认的语言
-	document.head.querySelector("#language-css").href = "languages/"+language.i18n+".css";
-	Array.prototype.slice.call(langList.options).some(function(lOpt){
-		if (lOpt.value == language.i18n)
+	currentLanguage = havingLanguage.length
+					? havingLanguage.pop() //有语言使用最后一个
+					: languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
+	document.head.querySelector("#language-css").href = "languages/"+currentLanguage.i18n+".css";
+
+	let langOptionArray = Array.prototype.slice.call(langSelectDom.options);
+	langOptionArray.some(function(langOpt){
+		if (langOpt.value == currentLanguage.i18n)
 		{
-			lOpt.selected = true;
+			langOpt.selected = true;
 			return true;
 		}
 	});
-
-	//添加数据来源列表
-	let dataList = controlBox.querySelector(".datasource");
+	//▲添加语言列表结束
+	//▼添加数据来源列表开始
+	let dataSelectDom = controlBox.querySelector(".datasource");
 	dataSourceList.forEach(function(ds){
-		let dsOpt = new Option(ds.source,ds.code);
-		dataList.options.add(dsOpt);
+		dataSelectDom.options.add(new Option(ds.source,ds.code));
 	})
-	let dataSourceCode =  getQueryString("s"); //获取参数指定的数据来源
-	let hasDataSource = dataSourceList.filter(function(ds){ //筛选出符合的数据源
-		return ds.code == dataSourceCode;
+	let parameter_dsCode =  getQueryString("s"); //获取参数指定的数据来源
+	let havingDataSource = dataSourceList.filter(function(ds){ //筛选出符合的数据源
+		return ds.code == parameter_dsCode;
 	});
-	let dataSource = hasDataSource.length ? hasDataSource[0]: dataSourceList[0];
-	document.body.classList.add("ds-"+dataSource.code);
-	Array.prototype.slice.call(dataList.options).some(function(dOpt){
-		if (dOpt.value == dataSource.code)
+	let currentDataSource = havingDataSource.length ? havingDataSource[0]: dataSourceList[0];
+	document.body.classList.add("ds-"+currentDataSource.code);
+	let dataSourceOptionArray = Array.prototype.slice.call(dataSelectDom.options);
+	dataSourceOptionArray.some(function(dataOpt){
+		if (dataOpt.value == currentDataSource.code)
 		{
-			dOpt.selected = true;
+			dataOpt.selected = true;
 			return true;
 		}
 	});
 	//处理返回的数据
 	function dealIdata(responseText)
 	{
-		var idata;
 		try
 		{
-			ms = JSON.parse(responseText);
+			Cards = JSON.parse(responseText);
 			initialize();//初始化
-			var idataQer = getQueryString("d") || getQueryString("data");
-			if (idataQer)
-			{
-				idata = JSON.parse(idataQer);
-			}
 		}catch(e)
 		{
-			console.log("初始数据JSON解码出错",e);
+			console.log("Cards数据JSON解码出错",e);
 			return;
 		}
-		if (idata)
-		{
-			formation.loadObj(idata);
-			refreshAll(formation);
-		}
+		//如果通过的话就载入URL中的怪物数据
+		reloadFormationData();
 	}
 	GM_xmlhttpRequest({
 		method: "GET",
-		url:"monsters-info/mon_"+dataSource.code+".json",
+		url:`monsters-info/mon_${currentDataSource.code}.json`, //Cards数据文件
 		onload: function(response) {
 			dealIdata(response.response);
 		},
 		onerror: function(response) {
-			var isChrome = navigator.userAgent.indexOf("Chrome") >=0;
-			if (isChrome && location.host.length==0)
+			let isChrome = navigator.userAgent.indexOf("Chrome") >=0;
+			if (isChrome && location.host.length==0 && response.response.length>0)
 			{
 				console.info("因为是Chrome本地打开，正在尝试读取JSON");
 				dealIdata(response.response);
 			}else
 			{
-				console.error("怪物数据获取错误",response);
+				console.error("Cars JSON数据获取失败",response);
 			}
 		}
 	});
 }
-window.onpopstate = function()
-{ //前进后退时修改页面
-	var idata;
+//重新读取URL中的Data数据并刷新页面
+function reloadFormationData()
+{
+	let formationData;
 	try
 	{
-		var idataQer = getQueryString("d") || getQueryString("data");
-		if (idataQer)
+		var parameter_data = getQueryString("d") || getQueryString("data");
+		if (parameter_data)
 		{
-			idata = JSON.parse(idataQer);
+			formationData = JSON.parse(parameter_data);
 		}
 	}catch(e)
 	{
-		console.log("初始数据JSON解码出错",e);
+		console.log("URL中队伍数据JSON解码出错",e);
 		return;
 	}
-	if (idata)
+	if (formationData)
 	{
 		//formation = idata;
-		formation.loadObj(idata);
+		formation.loadObj(formationData);
 		refreshAll(formation);
 	}
 }
+window.onpopstate = reloadFormationData; //前进后退时修改页面
 //创建新的分享地址
 function creatNewUrl(arg){
 	if (arg == undefined) arg = {};
@@ -312,10 +309,10 @@ function creatNewUrl(arg){
 function initialize()
 {
 	var monstersList = document.querySelector("#monsters-list");
-	ms.forEach(function(m){
+	Cards.forEach(function(m){
 		var opt = monstersList.appendChild(document.createElement("option"));
 		opt.value = m.id;
-		opt.label = m.id + " - " +  returnMonsterNameArr(m,language.searchlist).join(" | ");
+		opt.label = m.id + " - " +  returnMonsterNameArr(m,currentLanguage.searchlist).join(" | ");
 	});
 	//控制框
 	var controlBox = document.querySelector(".control-box");
@@ -399,7 +396,7 @@ function initialize()
 	//刷新觉醒
 	editBox.refreshAwokens = function(){
 		monEditAwokens[0].innerHTML = editBox.awokenCount;
-		if (editBox.awokenCount>0 && editBox.awokenCount==(ms[editBox.mid].awoken.length))
+		if (editBox.awokenCount>0 && editBox.awokenCount==(Cards[editBox.mid].awoken.length))
 			monEditAwokens[0].classList.add("full-awoken");
 		else
 			monEditAwokens[0].classList.remove("full-awoken");
@@ -586,7 +583,7 @@ function initialize()
 		mD.id = parseInt(monstersID.value);
 		mD.level = parseInt(monEditLv.value);
 		mD.awoken = editBox.awokenCount;
-		if (ms[mD.id].sAwoken) //如果支持超觉醒
+		if (Cards[mD.id].sAwoken) //如果支持超觉醒
 		{
 			mD.sawoken = -1;
 			for (var sai = 0;sai<monEditSAwokens.length;sai++)
@@ -603,7 +600,7 @@ function initialize()
 			}
 		}
 		
-		if (ms[mD.id].type.some(function(t){return t == 0 || t == 12 || t == 14 || t == 15;}) && [303,305,307,600,602].indexOf(mD.id)<0)
+		if (Cards[mD.id].type.some(function(t){return t == 0 || t == 12 || t == 14 || t == 15;}) && [303,305,307,600,602].indexOf(mD.id)<0)
 		{ //当4种特殊type的时候是无法297和打觉醒的，但是5种小企鹅可以
 			mD.plus = [0,0,0]; 
 		}else
@@ -679,7 +676,7 @@ function initialize()
 	//语言选择
 	var langList = controlBox.querySelector(".languages");
 	langList.onchange = function(){
-		creatNewUrl({language:this.value});
+		creatNewUrl({"language":this.value});
 		history.go();
 	}
 	//数据源选择
@@ -693,12 +690,12 @@ function initialize()
 	var languageJS = document.head.appendChild(document.createElement("script"));
 	languageJS.id = "language-js";
 	languageJS.type = "text/javascript";
-	languageJS.src = "languages/"+language.i18n+".js";
+	languageJS.src = "languages/"+currentLanguage.i18n+".js";
 }
 //改变一个怪物头像
 function changeid(mon,monDom,latentDom)
 {
-	var md = ms[mon.id]; //怪物固定数据
+	var md = Cards[mon.id]; //怪物固定数据
 	monDom.setAttribute("data-cardid",mon.id); //设定新的id
 	if (mon.id<0) //如果是延迟
 	{
@@ -725,8 +722,8 @@ function changeid(mon,monDom,latentDom)
 		monDom.classList.add("pet-cards-index-y-" + parseInt(idxInPage / 10)); //添加Y方向序号
 		monDom.querySelector(".property").className = "property property-" + md.ppt[0]; //主属性
 		monDom.querySelector(".subproperty").className = "subproperty subproperty-" + md.ppt[1]; //副属性
-		monDom.title = "No." + mon.id + " " + md.name[language.searchlist[0]] || md.name["ja"];
-		monDom.href = mon.id.toString().replace(/^(\d+)$/ig,language.guideURL);
+		monDom.title = "No." + mon.id + " " + md.name[currentLanguage.searchlist[0]] || md.name["ja"];
+		monDom.href = mon.id.toString().replace(/^(\d+)$/ig,currentLanguage.guideURL);
 	}
 	var levelDom = monDom.querySelector(".level");
 	if (levelDom) //如果提供了等级
@@ -898,7 +895,7 @@ function editMon(AorB,isAssist,tempIdx)
 		editBox.refreshLatent(editBox.latent);
 		btnDelay.classList.add("display-none");
 		settingBox.querySelector(".row-mon-latent").classList.remove("display-none");
-		if (ms[mD.id].sAwoken)settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
+		if (Cards[mD.id].sAwoken)settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
 		editBox.querySelector(".edit-box-title").classList.remove("edit-box-title-assist");
 	}else
 	{
@@ -912,10 +909,10 @@ function editMon(AorB,isAssist,tempIdx)
 //编辑窗，修改怪物ID
 function editBoxChangeMonId(id)
 {
-	var md = ms[id]; //怪物固定数据
+	var md = Cards[id]; //怪物固定数据
 	if (!md){
 		id = 0;
-		md = ms[0]
+		md = Cards[0]
 	}
 	var editBox = document.querySelector(".edit-box");
 	//id搜索
@@ -928,12 +925,12 @@ function editBoxChangeMonId(id)
 	var mRare = monInfoBox.querySelector(".monster-rare");
 	mRare.className = "monster-rare rare-" + md.rare;
 	var mName = monInfoBox.querySelector(".monster-name");
-	mName.innerHTML = returnMonsterNameArr(md,language.searchlist)[0];
+	mName.innerHTML = returnMonsterNameArr(md,currentLanguage.searchlist)[0];
 
 	var evoCardUl = document.querySelector(".edit-box .search-box .evo-card-list");
 	//var evoRootId = parseInt(evoCardUl.getAttribute("data-evoRootId")); //读取旧的id
 	//evoCardUl.setAttribute("data-evoRootId",md.evoRootId); //设定新的id
-	var evoLinkCardsId = ms.filter(function(m){
+	var evoLinkCardsId = Cards.filter(function(m){
 		return m.evoRootId == md.evoRootId && m.id != md.id;
 	}).map(function(m){return m.id;});
 	for (var ci=evoCardUl.childNodes.length-1;ci>=0;ci--)
@@ -947,7 +944,7 @@ function editBoxChangeMonId(id)
 	}
 	evoLinkCardsId.forEach(function(mid){
 		var cli = createCardHead(mid);
-		cli.mon.onclick = function(){
+		cli.head.onclick = function(){
 			monstersID.value = this.getAttribute("data-cardid");
 			monstersID.onchange();
 			return false;
@@ -1008,7 +1005,7 @@ function editBoxChangeMonId(id)
 
 	var rowPlus =  settingBox.querySelector(".row-mon-plus");
 	var rowLatent =  settingBox.querySelector(".row-mon-latent");
-	if (ms[id].type.some(function(t){return t == 0 || t == 12 || t == 14 || t == 15;}) && [303,305,307,600,602].indexOf(id)<0)
+	if (Cards[id].type.some(function(t){return t == 0 || t == 12 || t == 14 || t == 15;}) && [303,305,307,600,602].indexOf(id)<0)
 	{ //当4种特殊type的时候是无法297和打觉醒的，但是5种小企鹅可以
 		rowPlus.classList.add("disabled"); 
 		rowLatent.classList.add("disabled"); 
@@ -1054,48 +1051,47 @@ function editBoxChangeMonId(id)
 	editBox.reCalculateAbility();
 }
 //刷新整个队伍
-function refreshAll(fmt){
-	var txtTitle = document.querySelector(".title-box .title");
-	var txtDetail = document.querySelector(".detail-box .detail");
-	txtTitle.value = fmt.title || "";
-	txtDetail.value = fmt.detail || "";
+function refreshAll(formationData){
+	let txtTitle = document.querySelector(".title-box .title");
+	let txtDetail = document.querySelector(".detail-box .detail");
+	txtTitle.value = formationData.title || "";
+	txtDetail.value = formationData.detail || "";
 	txtDetail.onblur();
 	
-	var badges = Array.prototype.slice.call(document.querySelectorAll(".formation-box .formation-badge .badge-bg"));
-	badges.forEach(function(b,idx){if (idx==fmt.badge) b.classList.remove("display-none"); else b.classList.add("display-none");})
+	let badges = Array.prototype.slice.call(document.querySelectorAll(".formation-box .formation-badge .badge-bg"));
+	badges.forEach(function(b,idx){if (idx==formationData.badge) b.classList.remove("display-none"); else b.classList.add("display-none");})
 
-	var formationA = document.querySelector(".formation-box .formation-A-box");
-	var formationB = document.querySelector(".formation-box .formation-B-box");
+	let formationA = document.querySelector(".formation-box .formation-A-box");
+	let formationB = document.querySelector(".formation-box .formation-B-box");
 	
-	var fATeam = formationA.querySelectorAll(".formation-team .monster");
-	var fALatents = formationA.querySelectorAll(".formation-latents .latent-ul");
-	var fAAssist = formationA.querySelectorAll(".formation-assist .monster");
-	if (formationB)
+	let fATeam = formationA.querySelectorAll(".formation-team .monster");
+	let fALatents = formationA.querySelectorAll(".formation-latents .latent-ul");
+	let fAAssist = formationA.querySelectorAll(".formation-assist .monster");
+	
+	let fBTeam = formationB.querySelectorAll(".formation-team .monster");
+	let fBLatents = formationB.querySelectorAll(".formation-latents .latent-ul");
+	let fBAssist = formationB.querySelectorAll(".formation-assist .monster");
+
+	let formationAbilityDom = document.querySelector(".formation-box .formation-ability");
+	for (let ti=0;ti<(formationB?5:6);ti++)
 	{
-		var fBTeam = formationB.querySelectorAll(".formation-team .monster");
-		var fBLatents = formationB.querySelectorAll(".formation-latents .latent-ul");
-		var fBAssist = formationB.querySelectorAll(".formation-assist .monster");
-	}
-	var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
-	for (var ti=0;ti<(formationB?5:6);ti++)
-	{
-		changeid(fmt.team[0][0][ti],fATeam[ti],fALatents[ti]);
-		changeid(fmt.team[0][1][ti],fAAssist[ti]);
+		changeid(formationData.team[0][0][ti],fATeam[ti],fALatents[ti]);
+		changeid(formationData.team[0][1][ti],fAAssist[ti]);
 		if (formationAbilityDom)
 		{
 			refreshAbility(
 				formationAbilityDom,
-				fmt.team[0],
+				formationData.team[0],
 				ti);
-			refreshTotalAbility(fmt.team[0]);
+			refreshTotalAbility(formationData.team[0]);
 		}
 		if (formationB)
 		{
-			changeid(fmt.team[1][0][ti],fBTeam[ti],fBLatents[ti]);
-			changeid(fmt.team[1][1][ti],fBAssist[ti]);
+			changeid(formationData.team[1][0][ti],fBTeam[ti],fBLatents[ti]);
+			changeid(formationData.team[1][1][ti],fBAssist[ti]);
 		}
 	}
-	refreshAwokenCount(fmt.team);
+	refreshAwokenCount(formationData.team);
 }
 //刷新觉醒总计
 function refreshAwokenCount(teams){
@@ -1150,7 +1146,7 @@ function refreshAbility(dom,team,idx){
 	//基底三维，如果辅助是武器，还要加上辅助的觉醒
 	var mainAbility = calculateAbility(mainMD.id,mainMD.level,mainMD.plus,mainMD.awoken,mainMD.latent,assistMD.id,assistMD.awoken);
 	//辅助增加的三维，如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
-	var assistAbility = (assistMD.id > 0 && ms[mainMD.id].ppt[0]==ms[assistMD.id].ppt[0])
+	var assistAbility = (assistMD.id > 0 && Cards[mainMD.id].ppt[0]==Cards[assistMD.id].ppt[0])
 		?calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null)
 		:[0,0,0];
 	if (mainAbility && mainMD.ability)

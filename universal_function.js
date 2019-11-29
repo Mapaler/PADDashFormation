@@ -17,38 +17,48 @@ var type_allowable_latent = {
 //仿GM_xmlhttpRequest函数v1.3
 if (typeof(GM_xmlhttpRequest) == "undefined") {
     var GM_xmlhttpRequest = function(GM_param) {
-
         var xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
         xhr.open(GM_param.method, GM_param.url, true);
         if (GM_param.responseType) xhr.responseType = GM_param.responseType;
         if (GM_param.overrideMimeType) xhr.overrideMimeType(GM_param.overrideMimeType);
         xhr.onreadystatechange = function() //设置回调函数
             {
-                if (xhr.readyState === xhr.DONE) {
-                    if (xhr.status === 200 && GM_param.onload)
+                if (xhr.readyState === xhr.DONE) { //请求完成时
+                    if (xhr.status === 200 && GM_param.onload) //正确加载时
+                    {
                         GM_param.onload(xhr);
-                    if (xhr.status !== 200 && GM_param.onerror)
+                    }
+                    if (xhr.status !== 200 && GM_param.onerror) //发生错误时
+                    {
                         GM_param.onerror(xhr);
+                    }
                 }
             }
-
+        //添加header
         for (var header in GM_param.headers) {
             xhr.setRequestHeader(header, GM_param.headers[header]);
         }
-
+        //发送数据
         xhr.send(GM_param.data ? GM_param.data : null);
     }
 }
-//数字补0
+//数字补前导0
 function PrefixInteger(num, length)
 {  
 	return (Array(length).join('0') + num).slice(-length); 
 }
 //获取URL参数
-function getQueryString(name) {
-	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-	var r = window.location.search.substr(1).match(reg);
-	if (r != null) return decodeURIComponent(r[2]); return null;
+function getQueryString(name,url) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var search = url || window.location.search.substr(1);
+	var r = search.match(reg);
+    if (r != null)
+    {
+        return decodeURIComponent(r[2]);
+    }else
+    {
+        return null;
+    }
 }
 
 //数组去重
@@ -85,26 +95,27 @@ function awokenCountInFormation(formationTeam,ak,solo)
     return allAwokenCount;
 }
 //计算队伍中有多少个该觉醒
-function awokenCountInTeam(team,ak,solo)
+function awokenCountInTeam(team,awokenIndex,solo)
 {
     var formationAwokenCount = team.reduce(function(tc,tm,isAssist){
         var teamAwokenCount = tm.reduce(function(c,m){
+            let Card = Cards[m.id];
             if (m.id<=0)
             { //如果是特殊情况的
                 return c;
             }
-            var mdAwoken = ms[m.id].awoken; //这个怪物的觉醒数据
-            var mdSAwoken = ms[m.id].sAwoken; //这个怪物的超觉醒数据
-            if ((!mdAwoken && !mdSAwoken) || (isAssist && mdAwoken.indexOf(49)<0))
+            let cdAwoken = Card.awakenings; //这个怪物的觉醒数据
+            let cdSAwoken = Card.superAwakenings; //这个怪物的超觉醒数据
+            if ((!cdAwoken && !cdSAwoken) || (isAssist && cdAwoken.indexOf(49)<0))
             { //如果没有觉醒和超觉醒 || （如果是辅助队 &&第一个不是武器觉醒）
                 return c;
             }
             //启用的觉醒数组片段
-            var enableAwoken = mdAwoken.slice(0,m.awoken);
+            let enableAwoken = cdAwoken.slice(0,m.awoken);
             //相同的觉醒数
-            var hasAwoken = enableAwoken.filter(function(a){return a == ak;}).length;
+            let hasAwoken = enableAwoken.filter(function(a){return a == awokenIndex;}).length;
             //如果是单人，有超觉醒，且超觉醒id和计数的id相同
-            if (solo && mdSAwoken && (mdSAwoken[m.sawoken] == ak))
+            if (solo && cdSAwoken && (cdSAwoken[m.sawoken] == awokenIndex))
             {
                 hasAwoken++;
             }
@@ -150,7 +161,7 @@ function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
     if (awoken == undefined) awoken = 0;
     if (latent == undefined) latent = [];
     
-	var m = ms[monid]; //怪物数据
+	let m = Cards[monid]; //怪物数据
     if (monid ==0 || m==undefined) return null;
 	var plusAdd = [10,5,3]; //加值的增加值
 	var awokenAdd = [ //对应加三维觉醒的序号与增加值
@@ -174,7 +185,7 @@ function calculateAbility(monid,level,plus,awoken,latent,weaponId,weaponAwoken)
         var awokenList = m.awoken.slice(0,awoken); //储存生效的觉醒
         if (weaponId)
         {
-            var weapon = ms[weaponId]; //武器的怪物数据
+            var weapon = Cards[weaponId]; //武器的怪物数据
             var weaponAwokenList = weapon.awoken.slice(0,weaponAwoken);
             if (weaponAwokenList.indexOf(49)>=0)
                 awokenList = awokenList.concat(weaponAwokenList);
