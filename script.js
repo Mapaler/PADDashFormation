@@ -121,11 +121,7 @@ function getMaxLatentCount(id)
 	function is8Latent(id)
 	{
 		let m = ms[id] || ms[0],mEvoType = m.evoType;
-		if (mEvoType == 2 || mEvoType == 3){return true;}
-		if (mEvoType == 1) //判断究进之前是不是转生（三神面宙斯等）
-		{
-			
-		}
+		if (mEvoType == 2 || mEvoType == 3 || mEvoType==21){return true;}
 		return false;
 	}
 	return is8Latent(id) ? 8 : 6;
