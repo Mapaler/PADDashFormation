@@ -235,7 +235,8 @@ officialAPI.forEach(function(lang){
 	linkCards.forEach(m=>{
 		let regRes = /link:(\d+)/.exec(m.specialAttribute);
 		let _m = outCards[parseInt(regRes[1])];
-		_m.evoRootId = m.evoRootId;
+		//目前这样做将变身的进化基底设置为同一个id，只适用于每个连续变身怪物id是顺序排列的，如果乱了就会出错。不按顺序的方式还没研究。
+		_m.evoRootId = outCards[m.id].evoRootId; // m.evoRootId;
 	})
 
 	let str = JSON.stringify(outCards);
