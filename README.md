@@ -41,14 +41,20 @@ Copy the URL directly to share the Formation, or add a Bookmark to archives. You
 * 使用后退即可撤销上一次修改  
 Use back to undo the last edit  
 ![撤銷修改](document/tips-undo.png)
+* 拖拽怪物头像即可快速切换位置  
+Drag monster avatars to quickly switch positions  
+![切换位置](document/tips-interchangeCard.png)
 * 点击编辑界面的怪物头像可以跳转到攻略网站  
 Click on the monster avatar in the editing interface to jump to the Guide.  
-![攻略網站](document/tips-guide.png)
+![攻略网站](document/tips-guide.png)  
+在队伍界面的怪物头像上点击鼠标中键也可以跳转到攻略网站  
+Or click the middle mouse button on the monster avatar of the formation interface to jump to the Guide.  
+![攻略网站2](document/tips-guide2.png)
 * 可以在编辑界面的怪物ID输入怪物名称来搜索怪物  
 You can search for monsters by entering the monster name in the monster ID of the editing interface.  
 ![搜索怪物](document/tips-search.png)
-* 车队模式只显示部分杀潜觉以及共用的觉醒的统计，单人则全部显示。  
-2-Player Multi Games Mode only show the killer latent and several common awoken statistics, but solo mode shows all.
+* 车队模式只显示部分共用的觉醒的统计，单人则全部显示。  
+2-Player Multi Games Mode only show several common awoken statistics, but solo mode shows all.
 
 # 翻译我 | TRANSLATE ME
 ## How to **Pull requests**
