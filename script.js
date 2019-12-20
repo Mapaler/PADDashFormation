@@ -14,6 +14,10 @@ const dataSourceList = [ //几个不同的游戏服务区
 		source:"퍼즐앤드래곤"
 	},
 ];
+var cardInterchange = { //记录DOM交换
+	from:null,
+	to:null
+};
 //队员基本的留空
 var Member = function(){
 	this.id=0;
@@ -58,6 +62,16 @@ var MemberAssist = function(){
 }
 MemberAssist.prototype = Object.create(Member.prototype);
 MemberAssist.prototype.constructor = MemberAssist
+MemberAssist.prototype.loadFromMember = function(m){
+	if (m == undefined) //如果没有提供数据，直接返回默认
+	{
+		return;
+	}
+	this.id = m.id;
+	if (m.level != undefined) this.level = m.level;
+	if (m.awoken != undefined) this.awoken = m.awoken;
+	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) this.plus = m.plus;
+}
 //正式队伍
 var MemberTeam = function(){
 	this.latent = [];
@@ -67,6 +81,19 @@ var MemberTeam = function(){
 }
 MemberTeam.prototype = Object.create(MemberAssist.prototype);
 MemberTeam.prototype.constructor = MemberTeam;
+MemberTeam.prototype.loadFromMember = function(m){
+	if (m == undefined) //如果没有提供数据，直接返回默认
+	{
+		return;
+	}
+	this.id = m.id;
+	if (m.level != undefined) this.level = m.level;
+	if (m.awoken != undefined) this.awoken = m.awoken;
+	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) this.plus = m.plus;
+	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) this.latent = m.latent;
+	if (m.sawoken != undefined) this.sawoken = m.sawoken;
+	if (m.ability != undefined && m.ability instanceof Array && m.plus.length>=3) this.ability = m.ability;
+}
 
 var Formation = function(teamCount,memberCount){
 	this.title = "",
@@ -349,7 +376,44 @@ function initialize()
 	//队伍框
 	var formationBox = document.querySelector(".formation-box");
 	formationBox.formation = formation;
+
+	var formationA = formationBox.querySelector(".formation-box .formation-A-box");
+	var formationB = formationBox.querySelector(".formation-box .formation-B-box");
 	
+	var fATeam = formationA.querySelectorAll(".formation-team .monster");
+	var fAAssist = formationA.querySelectorAll(".formation-assist .monster");
+	if (formationB)
+	{
+		var fBTeam = formationB.querySelectorAll(".formation-team .monster");
+		var fBAssist = formationB.querySelectorAll(".formation-assist .monster");
+	}
+	for (var ti=0;ti<fATeam.length;ti++)
+	{
+		fATeam[ti].onclick = clickMonHead;
+		fATeam[ti].ondragstart = dragStartMonHead;
+		fATeam[ti].ondragover = dropOverMonHead;
+		fATeam[ti].ondrop = dropMonHead;
+		fATeam[ti].draggable = true;
+		fAAssist[ti].onclick = clickMonHead;
+		fAAssist[ti].ondragstart = dragStartMonHead;
+		fAAssist[ti].ondrop = dropMonHead;
+		fAAssist[ti].ondragover = dropOverMonHead;
+		fAAssist[ti].draggable = true;
+		if (formationB)
+		{
+			fBTeam[ti].onclick = clickMonHead;
+			fBTeam[ti].ondragstart = dragStartMonHead;
+			fBTeam[ti].ondrop = dropMonHead;
+			fBTeam[ti].ondragover = dropOverMonHead;
+			fBTeam[ti].draggable = true;
+			fBAssist[ti].onclick = clickMonHead;
+			fBAssist[ti].ondragstart = dragStartMonHead;
+			fBAssist[ti].ondrop = dropMonHead;
+			fBAssist[ti].ondragover = dropOverMonHead;
+			fBAssist[ti].draggable = true;
+		}
+	}
+
 	//徽章
 	var badges = Array.prototype.slice.call(formationBox.querySelectorAll(".formation-badge .badge-bg"));
 	badges.forEach(function(badge,bidx){
@@ -707,6 +771,73 @@ function initialize()
 	languageJS.id = "language-js";
 	languageJS.type = "text/javascript";
 	languageJS.src = "languages/"+language.i18n+".js";
+}
+//编辑界面点击每个怪物的头像的处理
+function clickMonHead()
+{
+	let team = parseInt(this.getAttribute("data-team"),10);
+	let assist = parseInt(this.getAttribute("data-assist"),10);
+	let index = parseInt(this.getAttribute("data-index"),10);
+	editMon(team,assist,index);
+	return false; //没有false将会打开链接
+}
+//编辑界面每个怪物的头像的拖动
+function dragStartMonHead(e)
+{
+	let team = parseInt(this.getAttribute("data-team"),10);
+	let assist = parseInt(this.getAttribute("data-assist"),10);
+	let index = parseInt(this.getAttribute("data-index"),10);
+	e.dataTransfer.setData('from',[team,assist,index].join(","));
+}
+//编辑界面每个怪物的头像的经过，阻止事件发生
+function dropOverMonHead(e)
+{
+	e.preventDefault();
+}
+//编辑界面每个怪物的头像的放下
+function dropMonHead(e)
+{
+	let dataFrom = e.dataTransfer.getData('from').split(",").map((i)=>{return parseInt(i,10);});
+	let team = parseInt(this.getAttribute("data-team"),10);
+	let assist = parseInt(this.getAttribute("data-assist"),10);
+	let index = parseInt(this.getAttribute("data-index"),10);
+	let dataTo = [team,assist,index];
+
+	if ((dataTo[0] != dataFrom[0])
+	|| (dataTo[1] != dataFrom[1])
+	|| (dataTo[2] != dataFrom[2]))
+	{ //必须有所不同才继续交换
+		interchangeCard(dataFrom,dataTo);
+	}
+	return false; //没有false将会打开链接
+}
+function interchangeCard(formArr,toArr)
+{
+	function changeType(member,isAssist)
+	{
+		if (member.id == 0 || (isAssist && member.id == -1))
+		{
+			return new Member;
+		}else
+		{
+			let newMember = isAssist ? new MemberTeam() : new MemberAssist();
+			newMember.loadFromMember(member);
+			return newMember;
+		}
+	}
+	let from = formation.team[formArr[0]][formArr[1]][formArr[2]];
+	let to = formation.team[toArr[0]][toArr[1]][toArr[2]];
+	if(formArr[1] != toArr[1]) //从武器拖到非武器才改变类型
+	{
+		from = changeType(from,formArr[1]);
+		to = changeType(to,toArr[1]);
+	}
+	formation.team[toArr[0]][toArr[1]][toArr[2]] = from;
+	formation.team[formArr[0]][formArr[1]][formArr[2]] = to;
+	console.log(from,to)
+
+	creatNewUrl(); //刷新URL
+	refreshAll(formation); //刷新全部
 }
 //改变一个怪物头像
 function changeid(mon,monDom,latentDom)
