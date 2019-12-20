@@ -56,7 +56,7 @@ var formation = new Formation(1,6);
 				</ul>
 				<ul class="formation-assist">
 					<li class="member member-1 null">
-						<a class="monster" target="_blank" onclick="editMon(0,1,0);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="1" data-index="0">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -66,7 +66,7 @@ var formation = new Formation(1,6);
 						</a>
 					</li>
 					<li class="member member-2 null">
-						<a class="monster" target="_blank" onclick="editMon(0,1,1);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="1" data-index="1">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -76,7 +76,7 @@ var formation = new Formation(1,6);
 						</a>
 					</li>
 					<li class="member member-3 null">
-						<a class="monster" target="_blank" onclick="editMon(0,1,2);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="1" data-index="2">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -86,7 +86,7 @@ var formation = new Formation(1,6);
 						</a>
 					</li>
 					<li class="member member-4 null">
-						<a class="monster" target="_blank" onclick="editMon(0,1,3);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="1" data-index="3">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -96,7 +96,7 @@ var formation = new Formation(1,6);
 						</a>
 					</li>
 					<li class="member member-5 null">
-						<a class="monster" target="_blank" onclick="editMon(0,1,4);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="1" data-index="4">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -106,7 +106,7 @@ var formation = new Formation(1,6);
 						</a>
 					</li>
 					<li class="member member-6 null">
-						<a class="monster" target="_blank" onclick="editMon(0,1,5);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="1" data-index="5">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -192,7 +192,7 @@ var formation = new Formation(1,6);
 				</ul>
 				<ul class="formation-team">
 					<li class="member member-1 team-leader null">
-						<a class="monster" target="_blank" onclick="editMon(0,0,0);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="0" data-index="0">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -203,7 +203,7 @@ var formation = new Formation(1,6);
 						</a>
 					</li>
 					<li class="member member-2 null">
-						<a class="monster" target="_blank" onclick="editMon(0,0,1);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="0" data-index="1">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -214,7 +214,7 @@ var formation = new Formation(1,6);
 						</a>
 					</li>
 					<li class="member member-3 null">
-						<a class="monster" target="_blank" onclick="editMon(0,0,2);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="0" data-index="2">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -225,7 +225,7 @@ var formation = new Formation(1,6);
 						</a>
 					</li>
 					<li class="member member-4 null">
-						<a class="monster" target="_blank" onclick="editMon(0,0,3);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="0" data-index="3">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -236,7 +236,7 @@ var formation = new Formation(1,6);
 						</a>
 					</li>
 					<li class="member member-5 null">
-						<a class="monster" target="_blank" onclick="editMon(0,0,4);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="0" data-index="4">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -247,7 +247,7 @@ var formation = new Formation(1,6);
 						</a>
 					</li>
 					<li class="member member-6 team-leader null">
-						<a class="monster" target="_blank" onclick="editMon(0,0,5);return false;">
+						<a class="monster" target="_blank" data-team="0" data-assist="0" data-index="5">
 							<div class="property"></div>
 							<div class="subproperty"></div>
 							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
