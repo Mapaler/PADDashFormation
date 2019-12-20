@@ -834,7 +834,6 @@ function interchangeCard(formArr,toArr)
 	}
 	formation.team[toArr[0]][toArr[1]][toArr[2]] = from;
 	formation.team[formArr[0]][formArr[1]][formArr[2]] = to;
-	console.log(from,to)
 
 	creatNewUrl(); //刷新URL
 	refreshAll(formation); //刷新全部
