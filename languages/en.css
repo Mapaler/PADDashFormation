@@ -48,6 +48,9 @@
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼Monster Level";
 }
+.m-level-btn-min::before{
+	content: "Lv";
+}
 .m-level-btn-max::before{
 	content: "Max Lv";
 }

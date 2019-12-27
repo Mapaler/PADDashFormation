@@ -514,6 +514,9 @@ function initialize()
 	//等级
 	const monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.onchange = function(){editBox.reCalculateAbility();};
+	const monEditLvMin = settingBox.querySelector(".m-level-btn-min");
+	monEditLvMin.ipt = monEditLv;
+	monEditLvMin.onclick = setIptToMyValue;
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
 	monEditLvMax.ipt = monEditLv;
 	monEditLvMax.onclick = setIptToMyValue;
@@ -824,23 +827,25 @@ function interchangeCard(formArr,toArr)
 function changeid(mon,monDom,latentDom)
 {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+	const parentNode = monDom.parentNode;
+	fragment.appendChild(monDom);
 	const monId = mon.id;
 	const card = Cards[monId]; //怪物固定数据
 	monDom.setAttribute("data-cardid", monId); //设定新的id
 	if (monId<0) //如果是延迟
 	{
-		monDom.parentNode.classList.add("delay");
-		monDom.parentNode.classList.remove("null");
+		parentNode.classList.add("delay");
+		parentNode.classList.remove("null");
 		return;
 	}else if (monId==0) //如果是空
 	{
-		monDom.parentNode.classList.add("null");
-		monDom.parentNode.classList.remove("delay");
+		parentNode.classList.add("null");
+		parentNode.classList.remove("delay");
 		return;
 	}else (monId>-1) //如果提供了id
 	{
-		monDom.parentNode.classList.remove("null");
-		monDom.parentNode.classList.remove("delay");
+		parentNode.classList.remove("null");
+		parentNode.classList.remove("delay");
 		monDom.className = "monster";
 		monDom.classList.add("pet-cards-" + Math.ceil(monId/100)); //添加图片编号
 		const idxInPage = (monId-1) % 100; //获取当前页面的总序号
@@ -856,7 +861,7 @@ function changeid(mon,monDom,latentDom)
 	{
 		const level = mon.level || 1;
 		levelDom.innerHTML = level;
-		if (level == card.maxLv)
+		if (level == card.maxLevel)
 		{ //如果等级刚好等于最大等级，则修改为“最大”的字
 			levelDom.classList.add("max");
 		}else
@@ -970,23 +975,23 @@ function changeid(mon,monDom,latentDom)
 			}
 		}
 	}
-	
+	parentNode.appendChild(fragment);
 }
 //点击怪物头像，出现编辑窗
 function editMon(AorB,isAssist,tempIdx)
 {
 	//数据
-	var mD = formation.team[AorB][isAssist][tempIdx];
+	let mD = formation.team[AorB][isAssist][tempIdx];
 	let card = Cards[mD.id] || Cards[0];
 
 	//对应的Dom
-	var formationBox = AorB?document.querySelector(".formation-box .formation-B-box"):document.querySelector(".formation-box .formation-A-box");
+	const formationBox = document.querySelector(".formation-box .formation-"+(AorB?"B":"A")+"-box");
 	
-	var teamBox = isAssist?formationBox.querySelector(".formation-assist"):formationBox.querySelector(".formation-team");
-	var memberBox = teamBox.querySelector(".member-" + (tempIdx+1));
+	const teamBox = formationBox.querySelector(isAssist?".formation-assist":".formation-team");
+	const memberBox = teamBox.querySelector(".member-" + (tempIdx+1));
 
-	var editBox = document.querySelector(".edit-box");
-	var monsterBox = memberBox.querySelector(".monster");
+	const editBox = document.querySelector(".edit-box");
+	const monsterBox = memberBox.querySelector(".monster");
 
 	editBox.show();
 
@@ -1047,17 +1052,17 @@ function editBoxChangeMonId(id)
 		id = 0;
 		card = Cards[0]
 	}
-	var editBox = document.querySelector(".edit-box");
+	const editBox = document.querySelector(".edit-box");
 	//id搜索
-	var monstersID = editBox.querySelector(".edit-box .m-id");
-	var monInfoBox = editBox.querySelector(".monsterinfo-box");
-	var me = monInfoBox.querySelector(".monster");
-	changeid({id:id,},me); //改变图像
-	var mId = monInfoBox.querySelector(".monster-id");
+	const monstersID = editBox.querySelector(".edit-box .m-id");
+	const monInfoBox = editBox.querySelector(".monsterinfo-box");
+	const monHead = monInfoBox.querySelector(".monster");
+	changeid({id:id},monHead); //改变图像
+	const mId = monInfoBox.querySelector(".monster-id");
 	mId.innerHTML = id;
-	var mRare = monInfoBox.querySelector(".monster-rare");
+	const mRare = monInfoBox.querySelector(".monster-rare");
 	mRare.className = "monster-rare rare-" + card.rarity;
-	var mName = monInfoBox.querySelector(".monster-name");
+	const mName = monInfoBox.querySelector(".monster-name");
 	mName.innerHTML = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
 
 	var evoCardUl = document.querySelector(".edit-box .search-box .evo-card-list");
@@ -1173,7 +1178,7 @@ function editBoxChangeMonId(id)
 	if (editBox.assist)
 	{
 		var btnDone = editBox.querySelector(".button-done");
-		if (!md.assist)
+		if (!card.canAssist)
 		{
 			btnDone.classList.add("cant-assist");
 			btnDone.disabled = true;

@@ -398,10 +398,12 @@ var formation = new Formation(2,5);
 	<div class="edit-box display-none">
 		<div class="edit-box-title"><!--修改怪物--></div>
 		<div class="monsterinfo-box">
-			<a class="monster" target="_blank">
-				<div class="property"></div>
-				<div class="subproperty"></div>
-			</a>
+			<div class="monster-head">
+				<a class="monster" target="_blank">
+					<div class="property"></div>
+					<div class="subproperty"></div>
+				</a>
+			</div>
 			<div class="monster-id"></div>
 			<div class="monster-rare"></div>
 			<div class="monster-name"></div>
@@ -449,6 +451,7 @@ var formation = new Formation(2,5);
 			<div class="setting-row row-mon-level">
 				<!--怪物等级-->
 				<input type="number" class="m-level" min=1 max=110/>
+				<button class="m-level-btn-min" value="1">1</button>
 				<button class="m-level-btn-max" value="99">99</button>
 			</div>
 			<div class="setting-row row-mon-plus">

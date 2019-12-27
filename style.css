@@ -59,7 +59,6 @@ ul{
 	height: 100px;
 	margin: 0;
 	display: block;
-	float: left;
 	background-repeat: no-repeat;
 	position: relative;
 	cursor: pointer;
@@ -451,7 +450,8 @@ ul{
 .edit-box .setting-row{
 	width: 100%;
 }
-.monsterinfo-box .monster{
+.monsterinfo-box .monster-head{
+	float: left;
 	margin-right:5px;
 }
 .monsterinfo-box .monster-id{
@@ -508,14 +508,19 @@ ul{
 .edit-box .setting-box .m-level{
 	font-size: 25px;
 	height: 40px;
-	width: calc(100% - 150px);
+	width: calc(100% - 215px);
 	box-sizing: border-box;
 }
-.m-level-btn-max{
+.m-level-btn-min,.m-level-btn-max{
 	height: 40px;
-	width: 145px;
 	box-sizing: border-box;
 	font-size: 25px;
+}
+.m-level-btn-min{
+	width: 60px;
+}
+.m-level-btn-max{
+	width: 145px;
 }
 /*.m-level-btn-max::before{
 	content: "最高Lv";
