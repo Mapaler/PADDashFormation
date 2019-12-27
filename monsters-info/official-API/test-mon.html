@@ -95,7 +95,11 @@ function parseCard(data) {
     card.collabId = data[i++]; //合作ID
     const flags = data[i++]; //一个旗子？
     card.unk08 = flags; //未知08
-    card.canAssist = (flags & 1) !== 0; //是否能当二技
+	card.canAssist = (flags & parseInt("1",2)) !== 0; //是否能当二技
+	card.enabled = (flags & parseInt("10",2)) !== 0; //是否已启用
+    card.overlay = card.types.some(t => { //这步还是猜测，是否能合并
+		return t == 0 || t == 12 || t == 14; //0進化用;12能力覺醒用;14強化合成用;15販賣用
+	}) && (flags & parseInt("1000",2)) === 0; //進化用、能力覺醒用、強化合成用，且flag有1000时
     card.altName = data[i++]; //替换名字
     card.limitBreakIncr = data[i++]; //110级增长
     card.unk08 = data[i++]; //未知08
@@ -137,7 +141,7 @@ function g(id)
 		m[58+m[57]*3], //觉醒数
 		m[14]+"-"+m[15]+"/"+m[17]+"-"+m[18]+"/"+m[20]+"-"+m[21], //三维
 		m[superAwokenIdx+9], //110级增长
-		m[superAwokenIdx+7]>2?"能":"不能", //二技
+		m[superAwokenIdx+7] & 1?"能":"不能", //二技
 		Math.round(m[11]/4), //1级经验，每级，直接乘
 		Math.round(m[13]/10), //1级卖钱
 		m[superAwokenIdx+4], //MP
@@ -186,6 +190,6 @@ window.onload = function()
 	mid = document.querySelector("#mid");
 }
 </script>
-<input type="number" id="mid"><input type="button" value="获取怪物" onclick="g(parseInt(mid.value));">
+<input type="number" id="mid"><input type="button" value="获取怪物" onclick="g(parseInt(mid.value,10));">
 </body>
 </html>

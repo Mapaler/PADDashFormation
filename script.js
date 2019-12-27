@@ -14,6 +14,10 @@ const dataSourceList = [ //几个不同的游戏服务区
 		source:"퍼즐앤드래곤"
 	},
 ];
+var cardInterchange = { //记录DOM交换
+	from:null,
+	to:null
+};
 //队员基本的留空
 var Member = function(){
 	this.id=0;
@@ -58,6 +62,16 @@ var MemberAssist = function(){
 }
 MemberAssist.prototype = Object.create(Member.prototype);
 MemberAssist.prototype.constructor = MemberAssist
+MemberAssist.prototype.loadFromMember = function(m){
+	if (m == undefined) //如果没有提供数据，直接返回默认
+	{
+		return;
+	}
+	this.id = m.id;
+	if (m.level != undefined) this.level = m.level;
+	if (m.awoken != undefined) this.awoken = m.awoken;
+	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) this.plus = m.plus;
+}
 //正式队伍
 var MemberTeam = function(){
 	this.latent = [];
@@ -67,6 +81,19 @@ var MemberTeam = function(){
 }
 MemberTeam.prototype = Object.create(MemberAssist.prototype);
 MemberTeam.prototype.constructor = MemberTeam;
+MemberTeam.prototype.loadFromMember = function(m){
+	if (m == undefined) //如果没有提供数据，直接返回默认
+	{
+		return;
+	}
+	this.id = m.id;
+	if (m.level != undefined) this.level = m.level;
+	if (m.awoken != undefined) this.awoken = m.awoken;
+	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) this.plus = m.plus;
+	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) this.latent = m.latent;
+	if (m.sawoken != undefined) this.sawoken = m.sawoken;
+	if (m.ability != undefined && m.ability instanceof Array && m.plus.length>=3) this.ability = m.ability;
+}
 
 var Formation = function(teamCount,memberCount){
 	this.title = "",
@@ -114,6 +141,17 @@ Formation.prototype.loadObj= function(f){
 			})
 		})
 	});
+}
+//获取最大潜觉数量
+function getMaxLatentCount(id)
+{ //转生2和超转生3为8个格子
+	function is8Latent(id)
+	{
+		let m = ms[id] || ms[0],mEvoType = m.evoType;
+		if (mEvoType == 2 || mEvoType == 3 || mEvoType==21){return true;}
+		return false;
+	}
+	return is8Latent(id) ? 8 : 6;
 }
 //创建一个新的怪物头像
 function createCardHead(id)
@@ -335,7 +373,44 @@ function initialize()
 	//队伍框
 	var formationBox = document.querySelector(".formation-box");
 	formationBox.formation = formation;
+
+	var formationA = formationBox.querySelector(".formation-box .formation-A-box");
+	var formationB = formationBox.querySelector(".formation-box .formation-B-box");
 	
+	var fATeam = formationA.querySelectorAll(".formation-team .monster");
+	var fAAssist = formationA.querySelectorAll(".formation-assist .monster");
+	if (formationB)
+	{
+		var fBTeam = formationB.querySelectorAll(".formation-team .monster");
+		var fBAssist = formationB.querySelectorAll(".formation-assist .monster");
+	}
+	for (var ti=0;ti<fATeam.length;ti++)
+	{
+		fATeam[ti].onclick = clickMonHead;
+		fATeam[ti].ondragstart = dragStartMonHead;
+		fATeam[ti].ondragover = dropOverMonHead;
+		fATeam[ti].ondrop = dropMonHead;
+		fATeam[ti].draggable = true;
+		fAAssist[ti].onclick = clickMonHead;
+		fAAssist[ti].ondragstart = dragStartMonHead;
+		fAAssist[ti].ondrop = dropMonHead;
+		fAAssist[ti].ondragover = dropOverMonHead;
+		fAAssist[ti].draggable = true;
+		if (formationB)
+		{
+			fBTeam[ti].onclick = clickMonHead;
+			fBTeam[ti].ondragstart = dragStartMonHead;
+			fBTeam[ti].ondrop = dropMonHead;
+			fBTeam[ti].ondragover = dropOverMonHead;
+			fBTeam[ti].draggable = true;
+			fBAssist[ti].onclick = clickMonHead;
+			fBAssist[ti].ondragstart = dragStartMonHead;
+			fBAssist[ti].ondrop = dropMonHead;
+			fBAssist[ti].ondragover = dropOverMonHead;
+			fBAssist[ti].draggable = true;
+		}
+	}
+
 	//徽章
 	var badges = Array.prototype.slice.call(formationBox.querySelectorAll(".formation-badge .badge-bg"));
 	badges.forEach(function(badge,bidx){
@@ -494,18 +569,19 @@ function initialize()
 	var monEditLatents = Array.prototype.slice.call(monEditLatentUl.querySelectorAll("li"));
 	var monEditLatentAllowableUl = settingBox.querySelector(".m-latent-allowable-ul");
 	var monEditLatentsAllowable = Array.prototype.slice.call(monEditLatentAllowableUl.querySelectorAll("li"));
-	editBox.refreshLatent = function(latent) //刷新潜觉
+	editBox.refreshLatent = function(latent,monid) //刷新潜觉
 	{
 		if (this.value<0) return;
+		let maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
 		var usedHoleN = usedHole(latent);
-		for (var ai=0;ai<6;ai++)
+		for (var ai=0;ai<monEditLatents.length;ai++)
 		{
 			if (latent[ai])
 			{
 				monEditLatents[ai].className = "latent-icon latent-icon-" + latent[ai];
 				monEditLatents[ai].value = ai;
 			}
-			else if(ai<(6-usedHoleN+latent.length))
+			else if(ai<(maxLatentCount-usedHoleN+latent.length))
 			{
 				monEditLatents[ai].className = "latent-icon";
 				monEditLatents[ai].value = -1;
@@ -523,7 +599,7 @@ function initialize()
 			var aIdx = parseInt(this.value);
 			editBox.latent.splice(aIdx,1);
 			editBox.reCalculateAbility();
-			editBox.refreshLatent(editBox.latent);
+			editBox.refreshLatent(editBox.latent,editBox.mid);
 		}
 	})
 	//可选觉醒的添加
@@ -532,13 +608,14 @@ function initialize()
 			if (this.classList.contains("unselected-latent")) return;
 			var lIdx = parseInt(this.value);
 			var usedHoleN = usedHole(editBox.latent);
-			if (lIdx >= 12 && usedHoleN<=4)
+			let maxLatentCount = getMaxLatentCount(editBox.mid); //最大潜觉数量
+			if (lIdx >= 12 && usedHoleN<=(maxLatentCount-2))
 				editBox.latent.push(lIdx);
-			else if (lIdx < 12 && usedHoleN<=5)
+			else if (lIdx < 12 && usedHoleN<=(maxLatentCount-1))
 				editBox.latent.push(lIdx);
 
 			editBox.reCalculateAbility();
-			editBox.refreshLatent(editBox.latent);
+			editBox.refreshLatent(editBox.latent,editBox.mid);
 		}
 	})
 
@@ -692,6 +769,72 @@ function initialize()
 	languageJS.type = "text/javascript";
 	languageJS.src = "languages/"+currentLanguage.i18n+".js";
 }
+//编辑界面点击每个怪物的头像的处理
+function clickMonHead()
+{
+	let team = parseInt(this.getAttribute("data-team"),10);
+	let assist = parseInt(this.getAttribute("data-assist"),10);
+	let index = parseInt(this.getAttribute("data-index"),10);
+	editMon(team,assist,index);
+	return false; //没有false将会打开链接
+}
+//编辑界面每个怪物的头像的拖动
+function dragStartMonHead(e)
+{
+	let team = parseInt(this.getAttribute("data-team"),10);
+	let assist = parseInt(this.getAttribute("data-assist"),10);
+	let index = parseInt(this.getAttribute("data-index"),10);
+	e.dataTransfer.setData('from',[team,assist,index].join(","));
+}
+//编辑界面每个怪物的头像的经过，阻止事件发生
+function dropOverMonHead(e)
+{
+	e.preventDefault();
+}
+//编辑界面每个怪物的头像的放下
+function dropMonHead(e)
+{
+	let dataFrom = e.dataTransfer.getData('from').split(",").map((i)=>{return parseInt(i,10);});
+	let team = parseInt(this.getAttribute("data-team"),10);
+	let assist = parseInt(this.getAttribute("data-assist"),10);
+	let index = parseInt(this.getAttribute("data-index"),10);
+	let dataTo = [team,assist,index];
+
+	if ((dataTo[0] != dataFrom[0])
+	|| (dataTo[1] != dataFrom[1])
+	|| (dataTo[2] != dataFrom[2]))
+	{ //必须有所不同才继续交换
+		interchangeCard(dataFrom,dataTo);
+	}
+	return false; //没有false将会打开链接
+}
+function interchangeCard(formArr,toArr)
+{
+	function changeType(member,isAssist)
+	{
+		if (member.id == 0 || (isAssist && member.id == -1))
+		{
+			return new Member;
+		}else
+		{
+			let newMember = isAssist ? new MemberTeam() : new MemberAssist();
+			newMember.loadFromMember(member);
+			return newMember;
+		}
+	}
+	let from = formation.team[formArr[0]][formArr[1]][formArr[2]];
+	let to = formation.team[toArr[0]][toArr[1]][toArr[2]];
+	if(formArr[1] != toArr[1]) //从武器拖到非武器才改变类型
+	{
+		from = changeType(from,formArr[1]);
+		to = changeType(to,toArr[1]);
+	}
+	formation.team[toArr[0]][toArr[1]][toArr[2]] = from;
+	formation.team[formArr[0]][formArr[1]][formArr[2]] = to;
+
+	creatNewUrl(); //刷新URL
+	refreshAll(formation); //刷新全部
+}
 //改变一个怪物头像
 function changeid(mon,monDom,latentDom)
 {
@@ -816,20 +959,25 @@ function changeid(mon,monDom,latentDom)
 	}
 	if (latentDom && mon.latent) //如果提供了潜觉
 	{
-		var latent = mon.latent.sort(function(a,b){return b-a;});
+		var latent = mon.latent.sort(function(a,b){
+			if(b>=12 && a<12) {return 1;} //如果大于12，就排到前面
+			else if(b<12 && a>=12) {return -1} //如果小于12就排到后面
+			else {return 0} //其他情况不变
+		});
 		if (latent.length < 1)
 			latentDom.classList.add("display-none");
 		else
 			latentDom.classList.remove("display-none");
 		var latentDoms = Array.prototype.slice.call(latentDom.querySelectorAll("li"));
 		var usedHoleN = usedHole(latent);
-		for (var ai=0;ai<6;ai++)
+		let maxLatentCount = getMaxLatentCount(mon.id); //最大潜觉数量
+		for (var ai=0;ai<latentDoms.length;ai++)
 		{
 			if (latent[ai])
 			{
 				latentDoms[ai].className = "latent-icon latent-icon-" + latent[ai];
 			}
-			else if(ai<(6-usedHoleN+latent.length))
+			else if(ai<(maxLatentCount-usedHoleN+latent.length))
 			{
 				latentDoms[ai].className = "latent-icon";
 			}
@@ -845,6 +993,7 @@ function editMon(AorB,isAssist,tempIdx)
 {
 	//数据
 	var mD = formation.team[AorB][isAssist][tempIdx];
+	let card = ms[mD.id] || ms[0];
 
 	//对应的Dom
 	var formationBox = AorB?document.querySelector(".formation-box .formation-B-box"):document.querySelector(".formation-box .formation-A-box");
@@ -892,7 +1041,7 @@ function editMon(AorB,isAssist,tempIdx)
 	if (!isAssist)
 	{
 		editBox.latent = mD.latent?mD.latent.concat():[];
-		editBox.refreshLatent(editBox.latent);
+		editBox.refreshLatent(editBox.latent,mD.id);
 		btnDelay.classList.add("display-none");
 		settingBox.querySelector(".row-mon-latent").classList.remove("display-none");
 		if (Cards[mD.id].sAwoken)settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
@@ -1047,7 +1196,7 @@ function editBoxChangeMonId(id)
 		}
 	}
 	editBox.latent.length = 0;
-	editBox.refreshLatent(editBox.latent);
+	editBox.refreshLatent(editBox.latent,id);
 	editBox.reCalculateAbility();
 }
 //刷新整个队伍
@@ -1146,7 +1295,9 @@ function refreshAbility(dom,team,idx){
 	//基底三维，如果辅助是武器，还要加上辅助的觉醒
 	var mainAbility = calculateAbility(mainMD.id,mainMD.level,mainMD.plus,mainMD.awoken,mainMD.latent,assistMD.id,assistMD.awoken);
 	//辅助增加的三维，如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
-	var assistAbility = (assistMD.id > 0 && Cards[mainMD.id].ppt[0]==Cards[assistMD.id].ppt[0])
+	let mainCard = ms[mainMD.id] || ms[0];
+	let assistCard = ms[assistMD.id] || ms[0];
+	var assistAbility = (assistMD.id > 0 && mainCard.attrs[0]==assistCard.attrs[0])
 		?calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null)
 		:[0,0,0];
 	if (mainAbility && mainMD.ability)
