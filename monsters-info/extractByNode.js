@@ -143,17 +143,57 @@ for (let li = 0;li < officialAPI.length; li++)
 {
 	let otherLangs = officialAPI.concat(); //复制一份原始数组，储存其他语言
 	let lang = otherLangs.splice(li,1)[0]; //删掉并取得当前的语言
-	let monCard = lang.cards //储存输出内容
 
-	for (let mi=0; mi<monCard.length; mi++)
+	let langCard = lang.cards,langCardCount = langCard.length;
+	for (let mi=0; mi<langCardCount; mi++)
 	{
-		let m = monCard[mi];
+		let m = langCard[mi];
 		let name = m.name;
 
 		//名字对象
 		otherLangs.forEach(function(otLang){
 			let _m = otLang.cards[mi]; //获得这种语言的当前这个怪物数据
-			if (_m && sameCard(m,_m)) //如果有这个怪物，且与原语言怪物是同一只
+			let isSame = sameCard(m,_m); //与原语言怪物是否是同一只
+			let l1 = lang.code, l2 = otLang.code;
+			if (!isSame &&
+				(
+					l1 == 'ja' && (l2 == 'en' || l2 == 'ko') ||
+					l2 == 'ja' && (l1 == 'en' || l1 == 'ko')
+				) //当同id两者不同，日服和英韩服比较时的一些人工确认相同的特殊id差异卡片
+			)
+			{
+				let langIsJa = l1 == 'ja' ? true : false; //原始语言是否是日语
+				let diff = 0; //日语和其它语言的id差异
+				switch(true)
+				{
+					case (langIsJa && mi>=671 && mi<= 680) ||
+						 (!langIsJa && mi>=1049 && mi<= 1058):
+						//神罗 日服 671-680 等于英韩服 1049-1058
+						diff = 378;
+						break;
+					case (langIsJa && mi>=669 && mi<= 670) ||
+						 (!langIsJa && mi>=934 && mi<= 935):
+						//神罗 日服 669-670 等于英韩服 934-935
+						diff = 265;
+						break;
+					case (langIsJa && mi>=924 && mi<= 935) ||
+						 (!langIsJa && mi>=669 && mi<= 680):
+						//蝙蝠侠 日服 924-935 等于英韩服 669-680
+						diff = -255;
+						break;
+					case (langIsJa && mi>=1049 && mi<= 1058) ||
+						 (!langIsJa && mi>=924 && mi<= 933):
+						//蝙蝠侠 日服 1049-1058 等于英韩服 924-933
+						diff = -125;
+						break;
+				}
+				if (diff != 0)
+				{
+					_m = langIsJa ? otLang.cards[mi + diff] : otLang.cards[mi - diff];
+					isSame = true;
+				}
+			}
+			if (_m && isSame) //如果有这个怪物，且与原语言怪物是同一只
 			{
 				let otName = _m.name;
 				if (!/^\*+/.test(name) && //名字不是星号开头
