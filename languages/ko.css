@@ -38,6 +38,9 @@
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼몬스터 레벨";
 }
+.m-level-btn-min::before{
+	content: "Lv";
+}
 .m-level-btn-max::before{
 	content: "최고Lv";
 }

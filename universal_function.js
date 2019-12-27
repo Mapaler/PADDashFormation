@@ -183,7 +183,7 @@ function calculateAbility(monid = 0,level = 1,plus = [0,0,0],awoken = 0,latent =
 		const n_base = Math.round(curve(ab, card.maxLevel, card.limitBreakIncr)); //等级基础三维
 		const n_plus = plus[idx]*plusAdd[idx]; //加值增加量
 		let awokenList = card.awakenings.slice(0,awoken); //储存点亮的觉醒
-		if (weaponId) //如果有武器还要计算武器的觉醒
+		if (weaponId>0) //如果有武器还要计算武器的觉醒
 		{
 			const weaponAwokenList = Cards[weaponId].awakenings.slice(0,weaponAwoken); //储存武器点亮的觉醒
 			if (weaponAwokenList.indexOf(49)>=0) //49是武器觉醒，确认已经点亮了武器觉醒
