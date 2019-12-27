@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8">
 <title>怪物代码测试</title>
+<script type="text/javascript" src="parseCard.js" ></script>
 <script type="text/javascript">
 var cards;
+var pcards;
 var mid;
 var GM_xmlhttpRequest = function(GM_param) {
 	var xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
@@ -26,99 +28,15 @@ var GM_xmlhttpRequest = function(GM_param) {
 	xhr.send(GM_param.data ? GM_param.data : null);
 }
 
-function parseCard(data) {
-    const card = {
-        attrs: [],
-        types: []
-    };
-    let i = 0;
-    function readCurve() {
-        return {
-            min: data[i++],
-            max: data[i++],
-            scale: data[i++],
-        };
-	}
-    card.id = data[i++]; //ID
-    card.name = data[i++]; //名字
-    card.attrs.push(data[i++]); //属性1
-    card.attrs.push(data[i++]); //属性2
-    card.isUltEvo = data[i++] !== 0; //是否究极进化
-    card.types.push(data[i++]); //类型1
-    card.types.push(data[i++]); //类型2
-    card.rarity = data[i++]; //星级
-    card.cost = data[i++]; //cost
-    card.unk01 = data[i++]; //未知01
-    card.maxLevel = data[i++]; //最大等级
-    card.feedExp = data[i++]; //1级喂食经验，需要除以4
-    card.isEmpty = data[i++] === 1; //空卡片？
-    card.sellPrice = data[i++]; //1级卖钱，需要除以10
-    card.hp = readCurve(); //HP增长
-    card.atk = readCurve(); //攻击增长
-    card.rcv = readCurve(); //回复增长
-    card.exp = { min: 0, max: data[i++], scale: data[i++] }; //经验增长
-    card.activeSkillId = data[i++]; //主动技
-    card.leaderSkillId = data[i++]; //队长技
-    card.enemy = { //作为怪物的数值
-        countdown: data[i++],
-        hp: readCurve(),
-        atk: readCurve(),
-        def: readCurve(),
-        maxLevel: data[i++],
-        coin: data[i++],
-        exp: data[i++]
-    };
-    card.evoBaseId = data[i++]; //进化基础ID
-    card.evoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]]; //进化素材
-    card.unevoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]]; //退化素材
-    card.unk02 = data[i++]; //未知02
-    card.unk03 = data[i++]; //未知03
-    card.unk04 = data[i++]; //未知04
-    card.unk05 = data[i++]; //未知05
-    card.unk06 = data[i++]; //未知06
-    card.unk07 = data[i++]; //未知07
-    const numSkills = data[i++]; //几种敌人技能
-    card.enemy.skills = Array.from(new Array(numSkills)).map(() => ({
-        id: data[i++],
-        ai: data[i++],
-        rnd: data[i++]
-    }));
-    const numAwakening = data[i++]; //觉醒个数
-	card.awakenings = Array.from(new Array(numAwakening)).map(() => data[i++]);
-	const sAwakeningStr = data[i++];
-    card.superAwakenings = (sAwakeningStr.length>0?sAwakeningStr.split(','):[]).map(Number); //超觉醒
-    card.evoRootId = data[i++]; //进化链根ID
-    card.seriesId = data[i++]; //系列ID
-    card.types.push(data[i++]); //类型3
-    card.sellMP = data[i++]; //卖多少MP
-    card.latentAwakeningId = data[i++]; //潜在觉醒ID
-    card.collabId = data[i++]; //合作ID
-    const flags = data[i++]; //一个旗子？
-    card.unk08 = flags; //未知08
-	card.canAssist = (flags & parseInt("1",2)) !== 0; //是否能当二技
-	card.enabled = (flags & parseInt("10",2)) !== 0; //是否已启用
-    card.overlay = card.types.some(t => { //这步还是猜测，是否能合并
-		return t == 0 || t == 12 || t == 14; //0進化用;12能力覺醒用;14強化合成用;15販賣用
-	}) && (flags & parseInt("1000",2)) === 0; //進化用、能力覺醒用、強化合成用，且flag有1000时
-    card.altName = data[i++]; //替换名字
-    card.limitBreakIncr = data[i++]; //110级增长
-    card.unk08 = data[i++]; //未知08
-    card.blockSkinId = data[i++]; //珠子皮肤ID
-    card.specialAttribute = data[i++]; //特别属性，比如黄龙
-    if (i !== data.length)
-        console.log(`residue data for #${card.id}: ${i} ${data.length}`);
-    return card;
-}
-
 function g(id)
 {
+	console.log("已解析对象",pcards[id]); //输出人家大佬的格式
+
 	let m = cards[id];
 	var pn = ["火","水","木","光","暗"];
 	var p = [pn[m[2]]||"无", pn[m[3]]||"无"];
 	var tn = ["0进化","1平衡","2体力","3回复","4龙","5神","6攻击","7恶魔","8机械","9","10","11","12觉醒","13","14强化","15卖钱"];
 
-	let mobj = parseCard(m);
-	console.log(mobj); //输出人家大佬的格式
 	//因为觉醒数量的不一样，所以需要制定序号
 	var awokenCIdx = 58+m[57]*3; //awoken Count Index，觉醒数量的序号
 	var superAwokenIdx = awokenCIdx+1+m[awokenCIdx]; //super awoken Index，超觉醒的序号
@@ -130,7 +48,7 @@ function g(id)
 		type.push(tn[m[6]]);
 	if (m[superAwokenIdx+3]!=-1) //第三个type要倒着来
 		type.push(tn[m[superAwokenIdx+3]]);
-	console.log("No.%d %s [%s/%s]，Lv%d，类型：%s，%d星，COST%d，%s个觉醒，三维%s，110级增长%d%%，%s当二技，1级吃经验%d，1级卖￥%d，%dMP，成长类型%d，升2级经验%d，技能编号%d，队长%d，进化链根%d，%s究极退化为%d，进化素材ID[%d,%d,%d,%d,%d]\n%o",
+	console.log("No.%d %s [%s/%s]，Lv%d，类型：%s，%d星，COST%d，%s个觉醒，三维%s，110级增长%d%%，%s当二技，1级吃经验%d，1级卖￥%d，%dMP，成长类型%d，升2级经验%d，技能编号%d，队长%d，进化链根%d，%s究极退化为%d，进化素材ID[%d,%d,%d,%d,%d]",
 		m[0], //ID
 		m[1], //名字
 		p[0],p[1], //属性
@@ -153,8 +71,8 @@ function g(id)
 		m[4]?"可":"不可", //可退化？
 		m[40], //可退化？
 		m[41],m[42],m[43],m[44],m[45], //进化素材ID 1-5
-		m //原始对象
 	);
+	console.log("原始数组",m);
 	//if (m[57]>0) console.log("[57]="+m[57]);
 	/*
 	m[superAwokenIdx+1], //进化根编号
@@ -174,7 +92,21 @@ GM_xmlhttpRequest({
 	method: "GET",
 	url:"ja.json",
 	onload: function(response) {
-		cards = JSON.parse(response.response).card;
+		cards = JSON.parse(response.response).card.filter((c,idx)=>{return c[0]==idx;});
+		pcards = cards.map(c=>{
+			let card = new Card(c);
+			//将可能的flag显示为二进制
+			card.unk01bin = card.unk01.toString(2);
+			card.unk02bin = card.unk02.toString(2);
+			card.unk03bin = card.unk03.toString(2);
+			card.unk04bin = card.unk04.toString(2);
+			card.unk05bin = card.unk05.toString(2);
+			card.unk06bin = card.unk06.toString(2);
+			card.unk07bin = card.unk07.toString(2);
+			card.unk08bin = card.unk08.toString(2); //已知一些flag
+			card.unk09bin = card.unk09.toString(2);
+			return card;
+		});
 	},
 	onerror: function(response) {
 		console.error("怪物数据获取错误",response);
