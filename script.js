@@ -15,10 +15,14 @@ const dataSourceList = [ //几个不同的游戏服务区
 		source:"퍼즐앤드래곤"
 	},
 ];
-var cardInterchange = { //记录DOM交换
+var allMembers = [];
+var interchangeSvg; //储存划线的SVG
+var interchangePath; //储存划线的线
+/*var cardInterchange = { //记录DOM交换
 	from:null,
-	to:null
-};
+	to:null,
+	members:[]
+};*/
 //队员基本的留空
 var Member = function(){
 	this.id=0;
@@ -212,7 +216,9 @@ function swapSingleMulitple()
 }
 window.onload = function()
 {
-	let controlBox = document.body.querySelector(".control-box");
+	interchangeSVG = document.querySelector("#interchange-line");
+	interchangePath = interchangeSVG.querySelector("g line");
+	let controlBox = document.querySelector(".control-box");
 
 	//▼添加语言列表开始
 	let langSelectDom = controlBox.querySelector(".languages");
@@ -343,10 +349,18 @@ function initialize()
 {
 	let monstersList = document.querySelector("#monsters-list");
 	let fragment = document.createDocumentFragment();
+	const linkReg = "link:(\\d+)";
 	Cards.forEach(function(m){ //添加下拉框候选
-		let opt = fragment.appendChild(document.createElement("option"));
+		const opt = fragment.appendChild(document.createElement("option"));
 		opt.value = m.id;
 		opt.label = m.id + " - " +  returnMonsterNameArr(m, currentLanguage.searchlist, currentDataSource.code).join(" | ");
+
+		const linkRes = new RegExp(linkReg,"ig").exec(m.specialAttribute);
+		if (linkRes)
+		{//每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
+			let _m = Cards[parseInt(linkRes[1],10)];
+			_m.evoRootId = m.evoRootId;
+		}
 	});
 	monstersList.appendChild(fragment);
 
@@ -382,30 +396,28 @@ function initialize()
 
 	for (let ti=0;ti<fATeam.length;ti++)
 	{
-		fATeam[ti].onclick = clickMonHead;
-		fATeam[ti].ondragstart = dragStartMonHead;
-		fATeam[ti].ondragover = dropOverMonHead;
-		fATeam[ti].ondrop = dropMonHead;
-		fATeam[ti].draggable = true;
-		fAAssist[ti].onclick = clickMonHead;
-		fAAssist[ti].ondragstart = dragStartMonHead;
-		fAAssist[ti].ondrop = dropMonHead;
-		fAAssist[ti].ondragover = dropOverMonHead;
-		fAAssist[ti].draggable = true;
+		allMembers.push(fATeam[ti]);
+		allMembers.push(fAAssist[ti]);
 		if (formationB)
 		{
-			fBTeam[ti].onclick = clickMonHead;
-			fBTeam[ti].ondragstart = dragStartMonHead;
-			fBTeam[ti].ondrop = dropMonHead;
-			fBTeam[ti].ondragover = dropOverMonHead;
-			fBTeam[ti].draggable = true;
-			fBAssist[ti].onclick = clickMonHead;
-			fBAssist[ti].ondragstart = dragStartMonHead;
-			fBAssist[ti].ondrop = dropMonHead;
-			fBAssist[ti].ondragover = dropOverMonHead;
-			fBAssist[ti].draggable = true;
+			allMembers.push(fBTeam[ti]);
+			allMembers.push(fBAssist[ti]);
 		}
 	}
+	allMembers.forEach(m=>{
+		//点击
+		m.onclick = clickMonHead;
+		//拖动
+		m.draggable = true;
+		m.ondragstart = dragStartMonHead;
+		m.ondragover = dropOverMonHead;
+		m.ondrop = dropMonHead;
+		//触摸
+		m.ontouchstart = touchstartMonHead;
+		m.ontouchmove = touchmoveMonHead;
+		m.ontouchend = touchendMonHead;
+		m.ontouchcancel = touchcancelMonHead;
+	})
 
 	//徽章
 	let badges = Array.prototype.slice.call(formationBox.querySelectorAll(".formation-badge .badge-bg"));
@@ -758,12 +770,13 @@ function initialize()
 	languageJS.src = "languages/"+currentLanguage.i18n+".js";
 }
 //编辑界面点击每个怪物的头像的处理
-function clickMonHead()
+function clickMonHead(e)
 {
 	let team = parseInt(this.getAttribute("data-team"),10);
 	let assist = parseInt(this.getAttribute("data-assist"),10);
 	let index = parseInt(this.getAttribute("data-index"),10);
 	editMon(team,assist,index);
+	e.preventDefault();
 	return false; //没有false将会打开链接
 }
 //编辑界面每个怪物的头像的拖动
@@ -779,14 +792,20 @@ function dropOverMonHead(e)
 {
 	e.preventDefault();
 }
+//从怪物头像获取队员的队伍编号
+function getMemberArrayIndexFromMonHead(headDom)
+{
+	return [
+		parseInt(headDom.getAttribute("data-team"),10),
+		parseInt(headDom.getAttribute("data-assist"),10),
+		parseInt(headDom.getAttribute("data-index"),10),
+	];
+}
 //编辑界面每个怪物的头像的放下
 function dropMonHead(e)
 {
-	let dataFrom = e.dataTransfer.getData('from').split(",").map((i)=>{return parseInt(i,10);});
-	let team = parseInt(this.getAttribute("data-team"),10);
-	let assist = parseInt(this.getAttribute("data-assist"),10);
-	let index = parseInt(this.getAttribute("data-index"),10);
-	let dataTo = [team,assist,index];
+	const dataFrom = e.dataTransfer.getData('from').split(",").map((i)=>{return parseInt(i,10);});
+	const dataTo = getMemberArrayIndexFromMonHead(this);
 
 	if ((dataTo[0] != dataFrom[0])
 	|| (dataTo[1] != dataFrom[1])
@@ -795,6 +814,75 @@ function dropMonHead(e)
 		interchangeCard(dataFrom,dataTo);
 	}
 	return false; //没有false将会打开链接
+}
+//移动端编辑界面每个怪物的头像的放下
+function touchstartMonHead(e)
+{
+	e.stopPropagation();
+	//console.log("开始触摸",e,this);
+	const tc = e.changedTouches[0];
+	interchangeSVG.style.display = "none";
+	interchangePath.setAttribute("x1",tc.pageX);
+	interchangePath.setAttribute("y1",tc.pageY);
+	interchangePath.setAttribute("x2",tc.pageX);
+	interchangePath.setAttribute("y2",tc.pageY);
+}
+//移动端编辑界面每个怪物的头像的移动
+function touchmoveMonHead(e)
+{
+	//console.log("移动中",e,this);
+	const tc = e.changedTouches[0];
+	const pX = tc.pageX, pY = tc.pageY;
+	const rect = this.getBoundingClientRect();
+	const top = rect.top + document.documentElement.scrollTop;
+	const left = rect.left + document.documentElement.scrollLeft;
+	if ((pY < top) || (pY > (top + rect.height)) ||
+	(pX < left) || (pX > (left + rect.width)))
+	{
+		interchangeSVG.style.display = "block";
+		interchangePath.setAttribute("x2",tc.pageX);
+		interchangePath.setAttribute("y2",tc.pageY);
+	}else
+	{
+		interchangeSVG.style.display = "none";
+	}
+}
+//移动端编辑界面每个怪物的头像的结束
+function touchendMonHead(e)
+{
+	const tc = e.changedTouches[0];
+	const pX = tc.pageX, pY = tc.pageY;
+	//console.log("移动结束",pX,pY,e,this);
+	interchangeSVG.style.display = "none";
+	interchangePath.setAttribute("x2",pX);
+	interchangePath.setAttribute("y2",tc.pageY);
+	let targets = allMembers.filter(m=>{
+		const rect = m.getBoundingClientRect();
+		const top = rect.top + document.documentElement.scrollTop;
+		const left = rect.left + document.documentElement.scrollLeft;
+		const inRect = (pY > top) && (pY < (top + rect.height)) &&
+						(pX > left) && (pX < (left + rect.width));
+		return inRect;
+	});
+	const target = targets.length?targets[0]:null;
+	if (this != target)
+	{
+		//console.log("找到的对象",targets[0]);
+		let dataFrom = getMemberArrayIndexFromMonHead(this);
+		let dataTo = getMemberArrayIndexFromMonHead(target);
+	
+		if ((dataTo[0] != dataFrom[0])
+		|| (dataTo[1] != dataFrom[1])
+		|| (dataTo[2] != dataFrom[2]))
+		{ //必须有所不同才继续交换
+			interchangeCard(dataFrom,dataTo);
+		}
+	}
+}
+//移动端编辑界面每个怪物的头像的取消
+function touchcancelMonHead(e)
+{
+	console.log("移动取消",e,this);
 }
 function interchangeCard(formArr,toArr)
 {
