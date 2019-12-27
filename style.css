@@ -744,3 +744,9 @@ ul{
 .not-show-mon-id .control-box .btn-show-mon-id::before{
 	content: "显示怪物ID";
 }*/
+#interchange-line{
+	pointer-events: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
