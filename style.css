@@ -426,6 +426,10 @@ ul{
 	height: 40px;
 	width: 100%;
 }
+.edit-box .search-box .unable-monster{
+	opacity: 0.5;
+	pointer-events: none;
+}
 .edit-box .search-box .search-button{
 	width: 100%;
 	height: 40px;
