@@ -73,7 +73,7 @@ class Card{
 		card.overlay = card.types.some(t => { //这步还是猜测，是否能合并
 			return t == 0 || t == 12 || t == 14; //0進化用;12能力覺醒用;14強化合成用;15販賣用
 		}) && (flags & parseInt("1000",2)) === 0; //進化用、能力覺醒用、強化合成用，且flag有1000时
-		card.is8Latent = (flags & parseInt("10000",2)) !== 0; //是否支持8个潜觉
+		card.is8Latent = (flags & parseInt("100000",2)) !== 0; //是否支持8个潜觉
 		card.altName = data[i++]; //替换名字
 		card.limitBreakIncr = data[i++]; //110级增长
 		card.unk09 = data[i++]; //未知09
