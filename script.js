@@ -42,14 +42,7 @@ Member.prototype.outObj = function(){
 			obj[3] = m.plus;
 		}
 	}
-	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1)
-	{
-		//obj[4] = m.latent;
-		//潜觉为1-33，5位可以表示0-31，6位才能表示0-63
-		obj[4] = m.latent.reduce((previousValue, currentValue, idx) => {
-			return previousValue | currentValue << 6*idx;
-		},m.latent[0]);
-	}
+	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) obj[4] = m.latent;
 	if (m.sawoken != undefined && m.sawoken>=0) obj[5] = m.sawoken;
 	return obj;
 }
@@ -65,32 +58,7 @@ Member.prototype.loadObj = function(m,dataVersion){
 	const singlePlus = parseInt(m[3],10);//如果只有一个数字时，复制3份
 	this.plus = dataVersion>1 ? (isNaN(m[3])||m[3]==null ? m[3] : [singlePlus,singlePlus,singlePlus]) : m.plus;
 	if (!(this.plus instanceof Array)) this.plus = [0,0,0]; //如果加值不是数组，则改变
-	if (dataVersion>1)
-	{
-		if (isNaN(m[4]))
-		{
-			this.latent = m[4];
-		}
-		else if(m[4] != null)
-		{
-			const binNum = m[4].toString(2);
-			const latentCount = Math.ceil(binNum.length/6);
-			const startSubStr = binNum.length % 6;
-			let latentArray = [];
-			
-			latentArray.push(parseInt(binNum.substr(0,startSubStr),2)); //从最后一个潜觉开始添加
-			for (let i=0;i<(latentCount-1);i++)
-			{
-				latentArray.push(parseInt(binNum.substr(startSubStr+6*i,6),2));
-			}
-			latentArray.reverse(); //数组反向
-			this.latent = latentArray;
-		}
-	}else
-	{
-		this.latent = m.latent;
-	}
-	//this.latent = dataVersion>1 ? m[4] : m.latent;
+	this.latent = dataVersion>1 ? m[4] : m.latent;
 	if (!(this.latent instanceof Array)) this.latent = []; //如果潜觉不是数组，则改变
 	this.sawoken = dataVersion>1 ? m[5] : m.sawoken;
 }
