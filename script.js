@@ -1172,6 +1172,7 @@ function editBoxChangeMonId(id)
 	mName.innerHTML = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
 
 	const evoCardUl = searchBox.querySelector(".evo-card-list");
+	evoCardUl.style.display = "none";
 	//var evoRootId = parseInt(evoCardUl.getAttribute("data-evoRootId")); //读取旧的id
 	//evoCardUl.setAttribute("data-evoRootId",card.evoRootId); //设定新的id
 	let evoLinkCardsIdArray = Cards.filter(function(m){
@@ -1206,6 +1207,7 @@ function editBoxChangeMonId(id)
 		fragment.appendChild(cli);
 	});
 	evoCardUl.appendChild(fragment);
+	evoCardUl.style.display = "block";
 
 	var mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (let ti=0;ti<mType.length;ti++)
