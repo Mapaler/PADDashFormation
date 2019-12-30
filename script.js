@@ -162,21 +162,6 @@ function getMaxLatentCount(id)
 { //转生2和超转生3为8个格子
 	return Cards[id].is8Latent ? 8 : 6;
 }
-//创建一个新的怪物头像
-function createCardHead(id)
-{
-	var cli = document.createElement("li");
-	var cdom = cli.head = cli.appendChild(document.createElement("a"));
-	cdom.class = "monster";
-	var property = cdom.appendChild(document.createElement("div"));
-	property.className = "property";
-	var subproperty = cdom.appendChild(document.createElement("div"));
-	subproperty.className = "subproperty";
-	var cid = cdom.appendChild(document.createElement("div"));
-	cid.className = "id";
-	changeid({id:id},cdom);
-	return cli;
-}
 //切换怪物ID显示
 function toggleShowMonId()
 {
@@ -1173,41 +1158,48 @@ function editBoxChangeMonId(id)
 
 	const evoCardUl = searchBox.querySelector(".evo-card-list");
 	evoCardUl.style.display = "none";
-	//var evoRootId = parseInt(evoCardUl.getAttribute("data-evoRootId")); //读取旧的id
-	//evoCardUl.setAttribute("data-evoRootId",card.evoRootId); //设定新的id
+	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
+
 	let evoLinkCardsIdArray = Cards.filter(function(m){
 		return m.evoRootId == card.evoRootId;
-	}).map(function(m){return m.id;});
-	evoCardUl.innerHTML = "";
-	/* //据说直接清空HTML性能更好
-	for (var ci=evoCardUl.childNodes.length-1;ci>=0;ci--)
-	{ //删除所有旧内容
-		let childN = evoCardUl.childNodes[ci];
-		//if (evoLinkCardsIdArray.indexOf(parseInt(childN.getAttribute("data-cardid")))<0)
-		//{
-		childN.remove();
-		childN = null;
-		//}
-	}
-	*/
-	function clickHeadToNewMon()
+	}).map(function(m){return m.id;}); //筛选出相同进化链的
+
+	//创建一个新的怪物头像
+	function createCardHead(id)
 	{
-		monstersID.value = this.getAttribute("data-cardid");
-		monstersID.onchange();
-		return false;
-	}
-	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-	evoLinkCardsIdArray.forEach(function(mid){
-		const cli = createCardHead(mid);
-		if (mid == id)
+		function clickHeadToNewMon()
 		{
-			cli.classList.add("unable-monster");
+			monstersID.value = this.getAttribute("data-cardid");
+			monstersID.onchange();
+			return false;
 		}
-		cli.head.onclick = clickHeadToNewMon;
-		fragment.appendChild(cli);
-	});
-	evoCardUl.appendChild(fragment);
-	evoCardUl.style.display = "block";
+		const cli = document.createElement("li");
+		const cdom = cli.head = cli.appendChild(document.createElement("a"));
+		cdom.class = "monster";
+		cdom.onclick = clickHeadToNewMon;
+		const property = cdom.appendChild(document.createElement("div"));
+		property.className = "property";
+		const subproperty = cdom.appendChild(document.createElement("div"));
+		subproperty.className = "subproperty";
+		const cid = cdom.appendChild(document.createElement("div"));
+		cid.className = "id";
+		changeid({id:id},cdom);
+		return cli;
+	}
+	if (evoLinkCardsIdArray.length>1)
+	{
+		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+		evoLinkCardsIdArray.forEach(function(mid){
+			const cli = createCardHead(mid);
+			if (mid == id)
+			{
+				cli.classList.add("unable-monster");
+			}
+			fragment.appendChild(cli);
+		});
+		evoCardUl.appendChild(fragment);
+		evoCardUl.style.display = "block";
+	}
 
 	var mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (let ti=0;ti<mType.length;ti++)
