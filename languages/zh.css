@@ -162,6 +162,11 @@
 	content: "总回复(队伍觉醒和徽章)：";
 }
 
+.search-box .open-search::before{
+	content: "搜索怪物";
+}
+
+
 /*Some icons, style different from the Japanese version*/
 .awoken-46,
 .awoken-47
