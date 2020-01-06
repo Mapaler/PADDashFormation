@@ -59,11 +59,11 @@ Member.prototype.loadObj = function(m,dataVersion){
 	{
 		if (isNaN(m[3]) || m[3]==null)
 		{
-			const singlePlus = parseInt(m[3],10);//如果只有一个数字时，复制3份
-			this.plus = [singlePlus,singlePlus,singlePlus];
+			this.plus = m[3];
 		}else
 		{
-			this.plus = m[3];
+			const singlePlus = parseInt(m[3],10);//如果只有一个数字时，复制3份
+			this.plus = [singlePlus,singlePlus,singlePlus];
 		}
 	}else
 	{
