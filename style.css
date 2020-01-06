@@ -427,8 +427,9 @@ ul{
 	width: 100%;
 }
 .edit-box .search-box .unable-monster{
-	opacity: 0.5;
 	pointer-events: none;
+	opacity: 0.5;
+	filter: grayscale(100%);
 }
 .edit-box .search-box .search-button{
 	width: 100%;
