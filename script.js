@@ -55,8 +55,20 @@ Member.prototype.loadObj = function(m,dataVersion){
 	this.id = dataVersion>1 ? m[0] : m.id;
 	this.level = dataVersion>1 ? m[1] : m.level;
 	this.awoken = dataVersion>1 ? m[2] : m.awoken;
-	const singlePlus = parseInt(m[3],10);//如果只有一个数字时，复制3份
-	this.plus = dataVersion>1 ? (isNaN(m[3])||m[3]==null ? m[3] : [singlePlus,singlePlus,singlePlus]) : m.plus;
+	if (dataVersion>1)
+	{
+		if (isNaN(m[3]) || m[3]==null)
+		{
+			const singlePlus = parseInt(m[3],10);//如果只有一个数字时，复制3份
+			this.plus = [singlePlus,singlePlus,singlePlus];
+		}else
+		{
+			this.plus = m[3];
+		}
+	}else
+	{
+		this.plus = m.plus;
+	}
 	if (!(this.plus instanceof Array)) this.plus = [0,0,0]; //如果加值不是数组，则改变
 	this.latent = dataVersion>1 ? m[4] : m.latent;
 	if (!(this.latent instanceof Array)) this.latent = []; //如果潜觉不是数组，则改变
@@ -938,7 +950,7 @@ function changeid(mon,monDom,latentDom)
 		monDom.classList.add("pet-cards-index-y-" + parseInt(idxInPage / 10)); //添加Y方向序号
 		monDom.querySelector(".property").className = "property property-" + card.attrs[0]; //主属性
 		monDom.querySelector(".subproperty").className = "subproperty subproperty-" + card.attrs[1]; //副属性
-		monDom.title = "No." + monId + " " + card.otLangName[currentLanguage.searchlist[0]] || card.name;
+		monDom.title = "No." + monId + " " + (card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name);
 		monDom.href = monId.toString().replace(/^(\d+)$/ig,currentLanguage.guideURL);
 	}
 	const levelDom = monDom.querySelector(".level");
@@ -1231,7 +1243,8 @@ function editBoxChangeMonId(id)
 	//超觉醒
 	var mSAwokenRow = settingBox.querySelector(".row-mon-super-awoken");
 	var mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
-	if (!editBox.assist && card.superAwakenings.length>0)
+	//if (!editBox.assist && card.superAwakenings.length>0)
+	if (card.superAwakenings.length>0) //武器上也还是加入超觉醒吧
 	{
 		for (let ai=0;ai<mSAwoken.length;ai++)
 		{
