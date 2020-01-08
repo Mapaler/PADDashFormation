@@ -932,12 +932,14 @@ function changeid(mon,monDom,latentDom)
 		parentNode.classList.add("delay");
 		parentNode.classList.remove("null");
 		parentNode.appendChild(fragment);
+		if (latentDom) latentDom.classList.add("display-none");
 		return;
 	}else if (monId==0) //如果是空
 	{
 		parentNode.classList.add("null");
 		parentNode.classList.remove("delay");
 		parentNode.appendChild(fragment);
+		if (latentDom) latentDom.classList.add("display-none");
 		return;
 	}else (monId>-1) //如果提供了id
 	{
@@ -1042,34 +1044,43 @@ function changeid(mon,monDom,latentDom)
 			plusDom.classList.remove("has297");
 		}
 	}
-	if (latentDom && mon.latent) //如果提供了潜觉
+	if (latentDom)
 	{
-		var latent = mon.latent.sort(function(a,b){
-			if(b>=12 && a<12) {return 1;} //如果大于12，就排到前面
-			else if(b<12 && a>=12) {return -1} //如果小于12就排到后面
-			else {return 0} //其他情况不变
-		});
-		if (latent.length < 1)
-			latentDom.classList.add("display-none");
-		else
-			latentDom.classList.remove("display-none");
-		var latentDoms = Array.prototype.slice.call(latentDom.querySelectorAll("li"));
-		var usedHoleN = usedHole(latent);
-		let maxLatentCount = getMaxLatentCount(mon.id); //最大潜觉数量
-		for (var ai=0;ai<latentDoms.length;ai++)
+		let latentDoms = Array.prototype.slice.call(latentDom.querySelectorAll("li"));
+		if (mon.latent) //如果提供了潜觉
 		{
-			if (latent[ai])
+			let latent = mon.latent.sort(function(a,b){
+				if(b>=12 && a<12) {return 1;} //如果大于12，就排到前面
+				else if(b<12 && a>=12) {return -1} //如果小于12就排到后面
+				else {return 0} //其他情况不变
+			});
+			if (latent.length < 1)
 			{
-				latentDoms[ai].className = "latent-icon latent-icon-" + latent[ai];
-			}
-			else if(ai<(maxLatentCount-usedHoleN+latent.length))
+				latentDom.classList.add("display-none");
+			}else
 			{
-				latentDoms[ai].className = "latent-icon";
+				latentDom.classList.remove("display-none");
 			}
-			else
+			let usedHoleN = usedHole(latent); //使用的格子数
+			let maxLatentCount = getMaxLatentCount(mon.id); //最大潜觉数量
+			for (let ai=0;ai<latentDoms.length;ai++)
 			{
-				latentDoms[ai].className = "display-none";
+				if (latent[ai])
+				{
+					latentDoms[ai].className = "latent-icon latent-icon-" + latent[ai];
+				}
+				else if(ai<(maxLatentCount-usedHoleN+latent.length))
+				{
+					latentDoms[ai].className = "latent-icon";
+				}
+				else
+				{
+					latentDoms[ai].className = "display-none";
+				}
 			}
+		}else
+		{
+			latentDom.classList.add("display-none");
 		}
 	}
 	parentNode.appendChild(fragment);
