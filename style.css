@@ -429,7 +429,15 @@ ul{
 .edit-box .search-box .unable-monster{
 	pointer-events: none;
 	opacity: 0.5;
-	filter: grayscale(100%);
+}
+.edit-box .search-box .unable-monster .monster{
+	box-sizing: border-box;
+	border: 5px solid red;
+	border-radius: 10px;
+	overflow: hidden;
+}
+.edit-box .search-box .unable-monster .id{
+	display: none;
 }
 .edit-box .search-box .search-button{
 	width: 100%;
@@ -441,6 +449,8 @@ ul{
 }
 .edit-box .search-box .evo-card-list li{
 	display: inline-block;
+	vertical-align: top; 
+	top: 0;
 	width: 75px;
 	height: 75px;
 }
