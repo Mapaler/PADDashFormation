@@ -487,7 +487,7 @@ function initialize()
 	//刷新觉醒
 	editBox.refreshAwokens = function(){
 		monEditAwokens[0].innerHTML = editBox.awokenCount;
-		if (editBox.awokenCount>0 && editBox.awokenCount==(Cards[editBox.mid].awoken.length))
+		if (editBox.awokenCount>0 && editBox.awokenCount==(Cards[editBox.mid].awakenings.length))
 			monEditAwokens[0].classList.add("full-awoken");
 		else
 			monEditAwokens[0].classList.remove("full-awoken");
@@ -1242,7 +1242,7 @@ function editBoxChangeMonId(id)
 	mAwoken[0].innerHTML = editBox.awokenCount ? "★" : "0";
 	for (let ai=1;ai<mAwoken.length;ai++)
 	{
-		if (ai<card.awakenings.length)
+		if (ai<=card.awakenings.length)
 		{
 			mAwoken[ai].className = "awoken-icon awoken-" + card.awakenings[ai-1];
 		}else
