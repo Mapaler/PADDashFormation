@@ -55,15 +55,15 @@ You can search for monsters by entering the monster name in the monster ID of th
 ![搜索怪物](document/tips-search.png)
 * 车队模式只显示部分共用的觉醒的统计，单人则全部显示。  
 2-Player Multi Games Mode only show several common awoken statistics, but solo mode shows all.
-* 如果发现 BUG，请先按 Ctrl+F5 强制刷新后测试，如仍有问题可以在 [Issues](issues) 报告。  
-If a BUG is found, first test again after force refresh by Ctrl-F5, if there is still a problem, you can report it at the [Issues](issues).
+* 如果发现 BUG，请先按 Ctrl+F5 强制刷新后测试，如仍有问题可以在 [Issues](//github.com/Mapaler/PADDashFormation/issues) 报告。  
+If a BUG is found, first test again after force refresh by Ctrl-F5, if there is still a problem, you can report it at the [Issues](//github.com/Mapaler/PADDashFormation/issues).
 
 # 翻译我 | TRANSLATE ME
 ## How to **Pull requests**
 1. Click **Fork** In the page top right corner. Fork your own copy of this repository to your account.
 1. Use Git to clone/pull repository locally for modification (How to modify please see below).
 1. Use Git to commit and push changes to your repository on GitHub.
-1. Go to the **[Pull requests](//github.com/puzzled-dragon/pad-helper/pulls)** page in the top middle of this repository, and click the **New pull request** button.
+1. Go to the **[Pull requests](//github.com/Mapaler/PADDashFormation/pulls)** page in the top middle of this repository, and click the **New pull request** button.
 1. Click the **Compare Across Forks** button and select your fork, the page then displays the changes.
 1. Click the **Create pull request** button and enter the details of the modification, create your pull request.
 
