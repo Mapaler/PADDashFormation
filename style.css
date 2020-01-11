@@ -13,7 +13,7 @@ body{
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
 }
 .display-none{
-	display:none;
+	display:none !important;
 }
 .disabled{
 	cursor: not-allowed;
@@ -748,20 +748,23 @@ ul{
 .detail-box{
 	margin-top:5px;
 }
-.awoken-total-box .awoken-ul .awoken-count{
+.awoken-total-box .awoken-ul .awoken-count,
+.search-mon-control-box .awoken-list .awoken-count{
 	font-size: 16px;
 	line-height: 32px;
 	font-family: 'FOT-KurokaneStd-EB';
 	float: left;
 	margin-right: 3px;
 }
-.awoken-total-box .awoken-ul .count{
+.awoken-total-box .awoken-ul .count,
+.search-mon-control-box .awoken-list .count{
 	height: 32px;
 	width: 37px;
 	display: inline-block;
 	vertical-align: middle;
 }
-.awoken-total-box .awoken-ul .count::before{
+.awoken-total-box .awoken-ul .count::before,
+.search-mon-control-box .awoken-list .count::before{
 	content: "×";
 }
 /*控制框*/
