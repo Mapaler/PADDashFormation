@@ -585,7 +585,7 @@ function initialize()
 
 		searchMonList.classList.add("display-none");
 		searchMonList.innerHTML = "";
-		if (searchResult.length>1)
+		if (searchResult.length>0)
 		{
 			let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 			searchResult.forEach(function(card){
