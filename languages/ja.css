@@ -172,7 +172,7 @@
 	content: "属性 2";
 }
 .search-box .attrs .fix-main-color-label::after{
-	content: "制限 属性 1->主属性，属性 2->副属性";
+	content: "限定 属性 1->主属性，属性 2->副属性";
 }
 .attrs .attr-all::before{
 	content: "無制限";
