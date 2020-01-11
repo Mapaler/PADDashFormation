@@ -29,7 +29,7 @@
 .edit-box .edit-box-title.edit-box-title-assist::before{
 	content: "보조 수정";
 }
-.edit-box .search-box::before{
+.edit-box .setting-box .row-mon-id::before{
 	content: "▼몬스터 ID";
 }
 .monsterinfo-box .monster-id::before{
@@ -159,6 +159,45 @@
 	content: "총 회복(팀의 각 성과 배지)：";
 }
 
+.setting-box .row-mon-id .open-search::before{
+	content: "간단한 검색";
+}
+.search-box::before{
+	content: "▼몬스터 검색";
+}
+.search-box .attrs .attr-list-1::before{
+	content: "속성 1";
+}
+.search-box .attrs .attr-list-2::before{
+	content: "속성 1";
+}
+.search-box .attrs .fix-main-color-label::after{
+	content: "제한 속성 1은 기본 속성 이며 속성 2 하위 속성입니다.";
+}
+.attrs .attr-all::before{
+	content: "무제한";
+}
+.attrs .attr-none::before{
+	content: "없음";
+}
+.search-box .types-div::before{
+	content: "형식";
+}
+.search-box .awoken-div::before{
+	content: "각성";
+}
+.search-box .sawoken-div::before{
+	content: "슈퍼 각성";
+}
+.control-div .search-start::before{
+	content: "🔍검색 시작";
+}
+.control-div .search-clear::before{
+	content: "검색을 비우려면";
+}
+.control-div .search-close::before{
+	content: "찾기 닫기";
+}
 /*Some icons, style different from the Japanese version*/
 .awoken-40,
 .awoken-46,

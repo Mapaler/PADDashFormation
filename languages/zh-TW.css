@@ -23,13 +23,22 @@
 .formation-B-box .formation-assist .member::before{
 	content: "▲輔助";
 }
+.abilitys .hp::before{
+	content: "HP：";
+}
+.abilitys .atk::before{
+	content: "攻擊：";
+}
+.abilitys .rcv::before{
+	content: "回復：";
+}
 .edit-box .edit-box-title::before{
 	content: "修改隊員";
 }
 .edit-box .edit-box-title.edit-box-title-assist::before{
 	content: "修改輔助";
 }
-.edit-box .search-box::before{
+.edit-box .setting-box .row-mon-id::before{
 	content: "▼怪物ID";
 }
 .monsterinfo-box .monster-id::before{
@@ -43,15 +52,6 @@
 }
 .m-level-btn-max::before{
 	content: "最高Lv";
-}
-.abilitys .hp::before{
-	content: "HP：";
-}
-.abilitys .atk::before{
-	content: "攻擊：";
-}
-.abilitys .rcv::before{
-	content: "回復：";
 }
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼怪物覺醒";
@@ -160,6 +160,46 @@
 }
 .team-info .tIf-total-rcv::before{
 	content: "總回復(隊伍覺醒和徽章)：";
+}
+
+.setting-box .row-mon-id .open-search::before{
+	content: "簡易搜索";
+}
+.search-box::before{
+	content: "▼搜索怪物";
+}
+.search-box .attrs .attr-list-1::before{
+	content: "屬性 1";
+}
+.search-box .attrs .attr-list-2::before{
+	content: "屬性 2";
+}
+.search-box .attrs .fix-main-color-label::after{
+	content: "限制屬性 1 爲主屬性，屬性 2 爲副屬性";
+}
+.attrs .attr-all::before{
+	content: "不限";
+}
+.attrs .attr-none::before{
+	content: "無";
+}
+.search-box .types-div::before{
+	content: "類型";
+}
+.search-box .awoken-div::before{
+	content: "覺醒";
+}
+.search-box .sawoken-div::before{
+	content: "超覺醒";
+}
+.control-div .search-start::before{
+	content: "🔍開始搜索";
+}
+.control-div .search-clear::before{
+	content: "清空搜索";
+}
+.control-div .search-close::before{
+	content: "關閉搜索";
 }
 
 /*Some icons, style different from the Japanese version*/

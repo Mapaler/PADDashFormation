@@ -163,19 +163,19 @@
 }
 
 .setting-box .row-mon-id .open-search::before{
-	content: "搜索怪物";
+	content: "简易搜索";
 }
 .search-box::before{
-	content: "▼简易搜索";
+	content: "▼搜索怪物";
 }
 .search-box .attrs .attr-list-1::before{
-	content: "属性1";
+	content: "属性 1";
 }
 .search-box .attrs .attr-list-2::before{
-	content: "属性2";
+	content: "属性 2";
 }
 .search-box .attrs .fix-main-color-label::after{
-	content: "限制属性1为主属性，属性2为副属性";
+	content: "限制属性 1 为主属性，属性 2 为副属性";
 }
 .attrs .attr-all::before{
 	content: "不限";
@@ -196,7 +196,7 @@
 	content: "🔍开始搜索";
 }
 .control-div .search-clear::before{
-	content: "清空搜索条件";
+	content: "清空搜索";
 }
 .control-div .search-close::before{
 	content: "关闭搜索";
