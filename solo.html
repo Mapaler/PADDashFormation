@@ -359,7 +359,7 @@ var formation = new Formation(1,6);
 		</div>
 		<div class="detail-box"><textarea class="detail" placeholder="输入说明"></textarea></div>
 	</div>
-	<div class="edit-box display-none">
+	<div class="edit-box"><!--display-none-->
 		<div class="edit-box-title"><!--修改怪物--></div>
 		<div class="monsterinfo-box">
 			<div class="monster-head">
@@ -378,14 +378,47 @@ var formation = new Formation(1,6);
 			</ul>
 		</div>
 		<div class="search-box">
-			<a class="open-search"></a><!--搜索怪物-->
+			<a class="open-search"></a><!--搜索怪物按钮-->
 			<div class="search-mon-control-box">
-				<div></div><!--属性-->
-				<div></div><!--类型-->
+				<div class="attrs"><!--属性-->
+					<ul class="attr-list attr-list-1">
+						<li><input type="radio" name="attr-1" class="attr-radio" value="all" id="search-attr-1-all" /><label class="attr-all" for="search-attr-1-all"><!--全部--></label></li>
+						<li><input type="radio" name="attr-1" class="attr-radio" value="0" id="search-attr-1-0" /><label class="attr-t0" for="search-attr-1-0"><!--火--></label></li>
+						<li><input type="radio" name="attr-1" class="attr-radio" value="1" id="search-attr-1-1" /><label class="attr-t1" for="search-attr-1-1"><!--水--></label></li>
+						<li><input type="radio" name="attr-1" class="attr-radio" value="2" id="search-attr-1-2" /><label class="attr-t2" for="search-attr-1-2"><!--木--></label></li>
+						<li><input type="radio" name="attr-1" class="attr-radio" value="3" id="search-attr-1-3" /><label class="attr-t3" for="search-attr-1-3"><!--光--></label></li>
+						<li><input type="radio" name="attr-1" class="attr-radio" value="4" id="search-attr-1-4" /><label class="attr-t4" for="search-attr-1-4"><!--暗--></label></li>
+					</ul>
+					<ul class="attr-list attr-list-2">
+						<li><input type="radio" name="attr-2" class="attr-radio" value="all" id="search-attr-2-all" /><label class="attr-all" for="search-attr-2-all"><!--全部--></label></li>
+						<li><input type="radio" name="attr-2" class="attr-radio" value="0" id="search-attr-2-0" /><label class="attr-t0" for="search-attr-2-0"><!--火--></label></li>
+						<li><input type="radio" name="attr-2" class="attr-radio" value="1" id="search-attr-2-1" /><label class="attr-t1" for="search-attr-2-1"><!--水--></label></li>
+						<li><input type="radio" name="attr-2" class="attr-radio" value="2" id="search-attr-2-2" /><label class="attr-t2" for="search-attr-2-2"><!--木--></label></li>
+						<li><input type="radio" name="attr-2" class="attr-radio" value="3" id="search-attr-2-3" /><label class="attr-t3" for="search-attr-2-3"><!--光--></label></li>
+						<li><input type="radio" name="attr-2" class="attr-radio" value="4" id="search-attr-2-4" /><label class="attr-t4" for="search-attr-2-4"><!--暗--></label></li>
+						<li><input type="radio" name="attr-2" class="attr-radio" value="-1" id="search-attr-2-none" /><label class="attr-none" for="search-attr-2-none"><!--无--></label></li>
+					</ul>
+				</div>
+				<div class="types"><!--类型-->
+					<ul class="type-list">
+						<li><input type="checkbox" name="types" class="type-check" value="4" id="search-type-4" /><label class="type-icon type-icon-4" for="search-type-4"><!--龍--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="5" id="search-type-5" /><label class="type-icon type-icon-5" for="search-type-5"><!--神--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="7" id="search-type-7" /><label class="type-icon type-icon-7" for="search-type-7"><!--惡魔--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="8" id="search-type-8" /><label class="type-icon type-icon-8" for="search-type-8"><!--机械--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="1" id="search-type-1" /><label class="type-icon type-icon-1" for="search-type-1"><!--平衡--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="6" id="search-type-6" /><label class="type-icon type-icon-6" for="search-type-6"><!--攻撃--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="2" id="search-type-2" /><label class="type-icon type-icon-2" for="search-type-2"><!--体力--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="3" id="search-type-3" /><label class="type-icon type-icon-3" for="search-type-3"><!--回復--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="0" id="search-type-0" /><label class="type-icon type-icon-0" for="search-type-0"><!--進化用--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="12" id="search-type-12" /><label class="type-icon type-icon-12" for="search-type-12"><!--能力覺醒用--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="14" id="search-type-14" /><label class="type-icon type-icon-14" for="search-type-14"><!--強化合成用--></label></li>
+						<li><input type="checkbox" name="types" class="type-check" value="15" id="search-type-15" /><label class="type-icon type-icon-15" for="search-type-15"><!--販賣用--></label></li>
+					</ul>
+				</div>
 				<div></div><!--觉醒-->
 				<div></div><!--超觉醒-->
 				<div></div><!--控制栏，开始搜索，清空搜索条件，排序方式，关闭搜索-->
-				<ul class="search-mon-list"></ul>
+				<ul class="search-mon-list"></ul><!--搜索结果的显示列表-->
 			</div>
 			<input type="search" class="m-id" list="monsters-list"/>
 			<datalist id="monsters-list"></datalist>

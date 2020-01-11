@@ -462,6 +462,36 @@ ul{
 	bottom: 5px;
 	font-size: 20px;
 }
+/*
+.attr-radio{
+	display: none;
+}
+.attrs .attr-list li{
+	display: inline-block;
+}*/
+/*.attrs .attr-all::after{
+	content: "不限";
+}
+.attrs .attr-none::after{
+	content: "无";
+}*/
+.attrs .attr-t0::before{
+	content: url(images/orb-small-fire.png);
+}
+.attrs .attr-t1::before{
+	content: url(images/orb-small-water.png);
+}
+.attrs .attr-t2::before{
+	content: url(images/orb-small-wood.png);
+}
+.attrs .attr-t3::before{
+	content: url(images/orb-small-light.png);
+}
+.attrs .attr-t4::before{
+	content: url(images/orb-small-dark.png);
+}
+
+
 .edit-box .setting-row{
 	width: 100%;
 }

@@ -161,11 +161,16 @@
 .team-info .tIf-total-rcv::before{
 	content: "总回复(队伍觉醒和徽章)：";
 }
-/*
+
 .search-box .open-search::before{
 	content: "搜索怪物";
 }
-*/
+.attrs .attr-all::before{
+	content: "不限";
+}
+.attrs .attr-none::before{
+	content: "无";
+}
 
 /*Some icons, style different from the Japanese version*/
 .awoken-46,
