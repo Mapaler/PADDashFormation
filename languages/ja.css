@@ -29,7 +29,7 @@
 .edit-box .edit-box-title.edit-box-title-assist::before{
 	content: "変更継承";
 }
-.edit-box .search-box::before{
+.edit-box .setting-box .row-mon-id::before{
 	content: "▼モンスターID";
 }
 .monsterinfo-box .monster-id::before{
@@ -157,4 +157,44 @@
 }
 .team-info .tIf-total-rcv::before{
 	content: "合計回復(チーム覚醒とバッジ)：";
+}
+
+.setting-box .row-mon-id .open-search::before{
+	content: "簡単な検索";
+}
+.search-box::before{
+	content: "▼モンスターの検索";
+}
+.search-box .attrs .attr-list-1::before{
+	content: "属性 1";
+}
+.search-box .attrs .attr-list-2::before{
+	content: "属性 2";
+}
+.search-box .attrs .fix-main-color-label::after{
+	content: "制限 属性 1->主属性，属性 2->副属性";
+}
+.attrs .attr-all::before{
+	content: "無制限";
+}
+.attrs .attr-none::before{
+	content: "空";
+}
+.search-box .types-div::before{
+	content: "タイプ";
+}
+.search-box .awoken-div::before{
+	content: "覚醒";
+}
+.search-box .sawoken-div::before{
+	content: "超覚醒";
+}
+.control-div .search-start::before{
+	content: "🔍検索の開始";
+}
+.control-div .search-clear::before{
+	content: "検索を空にする";
+}
+.control-div .search-close::before{
+	content: "検索を閉じる";
 }

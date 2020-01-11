@@ -39,7 +39,7 @@
 .edit-box .edit-box-title.edit-box-title-assist::before{
 	content: "Edit Assist";
 }
-.edit-box .search-box::before{
+.edit-box .setting-box .row-mon-id::before{
 	content: "▼Monster ID";
 }
 .monsterinfo-box .monster-id::before{
@@ -164,6 +164,46 @@
 }
 .team-info .tIf-total-rcv::before{
 	content: "Total RCV(Team Awoken & Badge): ";
+}
+
+.setting-box .row-mon-id .open-search::before{
+	content: "Simple Search";
+}
+.search-box::before{
+	content: "▼Search Cards";
+}
+.search-box .attrs .attr-list-1::before{
+	content: "Attribute 1";
+}
+.search-box .attrs .attr-list-2::before{
+	content: "Attribute 2";
+}
+.search-box .attrs .fix-main-color-label::after{
+	content: "Fix attr-1 for main-attr, attr-2 for sub-attr.";
+}
+.attrs .attr-all::before{
+	content: "All";
+}
+.attrs .attr-none::before{
+	content: "None";
+}
+.search-box .types-div::before{
+	content: "Type";
+}
+.search-box .awoken-div::before{
+	content: "Awoken";
+}
+.search-box .sawoken-div::before{
+	content: "Super Awoken";
+}
+.control-div .search-start::before{
+	content: "🔍Start Search";
+}
+.control-div .search-clear::before{
+	content: "Clear Search";
+}
+.control-div .search-close::before{
+	content: "Close Search Panel";
 }
 
 /*Some icons, style different from the Japanese version*/
