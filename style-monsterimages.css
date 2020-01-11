@@ -867,3 +867,20 @@ var sawokens = [
 .badge-13{
 	background-position-y: -390px;
 }
+
+/*搜索框中用到的属性图片*/
+.attrs .attr-t0::before{
+	content: url(images/orb-small-fire.png);
+}
+.attrs .attr-t1::before{
+	content: url(images/orb-small-water.png);
+}
+.attrs .attr-t2::before{
+	content: url(images/orb-small-wood.png);
+}
+.attrs .attr-t3::before{
+	content: url(images/orb-small-light.png);
+}
+.attrs .attr-t4::before{
+	content: url(images/orb-small-dark.png);
+}

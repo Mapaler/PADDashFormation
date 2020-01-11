@@ -38,7 +38,7 @@
 .edit-box .edit-box-title.edit-box-title-assist::before{
 	content: "修改辅助";
 }
-.edit-box .search-box::before{
+.edit-box .setting-box .row-mon-id::before{
 	content: "▼怪物ID";
 }
 .monsterinfo-box .monster-id::before{
@@ -162,14 +162,44 @@
 	content: "总回复(队伍觉醒和徽章)：";
 }
 
-.search-box .open-search::before{
+.setting-box .row-mon-id .open-search::before{
 	content: "搜索怪物";
+}
+.search-box::before{
+	content: "▼简易搜索";
+}
+.search-box .attrs .attr-list-1::before{
+	content: "属性1";
+}
+.search-box .attrs .attr-list-2::before{
+	content: "属性2";
+}
+.search-box .attrs .fix-main-color-label::after{
+	content: "限制属性1为主属性，属性2为副属性";
 }
 .attrs .attr-all::before{
 	content: "不限";
 }
 .attrs .attr-none::before{
 	content: "无";
+}
+.search-box .types-div::before{
+	content: "类型";
+}
+.search-box .awoken-div::before{
+	content: "觉醒";
+}
+.search-box .sawoken-div::before{
+	content: "超觉醒";
+}
+.control-div .search-start::before{
+	content: "🔍开始搜索";
+}
+.control-div .search-clear::before{
+	content: "清空搜索条件";
+}
+.control-div .search-close::before{
+	content: "关闭搜索";
 }
 
 /*Some icons, style different from the Japanese version*/

@@ -9,8 +9,12 @@
 		 url("fonts/FOT-KurokaneStd-EB.eot") format('embedded-opentype'),
 		 url("fonts/FOT-KurokaneStd-EB.svg") format('svg');
 }
+
 body{
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
+	--search-list-title-width: 50px;
+	--search-list-title-font-size: 16px;
+	--search-icon-unchecked: 0.3;
 }
 .display-none{
 	display:none !important;
@@ -417,80 +421,210 @@ ul{
 	box-shadow: black 0 3px 3px;
 	padding: 5px 10px;
 }
-/*.edit-box .search-box::before{
+.edit-box .search-box,
+.edit-box .setting-box{
+	padding: 0 10px;
+}
+/*.edit-box .setting-box .row-mon-id::before{
 	content: "▼怪物ID";
 }*/
-.edit-box .search-box .m-id{
+.edit-box .setting-box .row-mon-id .m-id{
 	box-sizing: border-box;
 	font-size: 25px;
 	height: 40px;
 	width: 100%;
 }
-.edit-box .search-box .unable-monster{
+.edit-box .setting-box .row-mon-id .unable-monster{
 	pointer-events: none;
 	opacity: 0.5;
 }
-.edit-box .search-box .unable-monster .monster{
+.edit-box .setting-box .row-mon-id .unable-monster .monster{
 	box-sizing: border-box;
 	border: 5px solid red;
 	border-radius: 10px;
 	overflow: hidden;
 }
-.edit-box .search-box .unable-monster .id{
+.edit-box .setting-box .row-mon-id .unable-monster .id{
 	display: none;
 }
-.edit-box .search-box .search-button{
+.edit-box .setting-box .row-mon-id .search-button{
 	width: 100%;
 	height: 40px;
 	font-size: 25px;
 }
-.edit-box .search-box,.edit-box .setting-box{
-	padding: 0 10px;
-}
-.edit-box .search-box .evo-card-list li{
+.edit-box .setting-box .row-mon-id .evo-card-list li{
 	display: inline-block;
 	vertical-align: top; 
 	top: 0;
 	width: 75px;
 	height: 75px;
 }
-.edit-box .search-box .evo-card-list .monster{
+.edit-box .setting-box .row-mon-id .evo-card-list .monster{
 	float: none;
 	transform: scale(0.75) translate(-13px,-13px);
 }
-.edit-box .search-box .evo-card-list .monster .id{
+.edit-box .setting-box .row-mon-id .evo-card-list .monster .id{
 	bottom: 5px;
 	font-size: 20px;
 }
-/*
-.attr-radio{
-	display: none;
+/*.setting-box .row-mon-id .open-search::before{
+	content: "搜索怪物";
 }
-.attrs .attr-list li{
-	display: inline-block;
-}*/
-/*.attrs .attr-all::after{
+.search-box::before{
+	content: "▼简易搜索";
+}
+.attrs .attr-all::before{
 	content: "不限";
 }
-.attrs .attr-none::after{
+.attrs .attr-none::before{
 	content: "无";
 }*/
-.attrs .attr-t0::before{
-	content: url(images/orb-small-fire.png);
+.search-box>div{
+	margin-bottom: 5px;
 }
-.attrs .attr-t1::before{
-	content: url(images/orb-small-water.png);
+.search-box>div ul{
+	display: inline-block;
 }
-.attrs .attr-t2::before{
-	content: url(images/orb-small-wood.png);
+.search-box .attrs ul{
+	display: block;
 }
-.attrs .attr-t3::before{
-	content: url(images/orb-small-light.png);
+.search-box>div ul>li{
+	display: inline-block;
+	vertical-align: top;
+	font-size:16px;
+	overflow: hidden;
 }
-.attrs .attr-t4::before{
-	content: url(images/orb-small-dark.png);
+.search-box>div ul>li>label{
+	cursor: pointer;
+	display: block;
+	text-align: center;
 }
 
+.attrs .attr-list-1::before,
+.attrs .attr-list-2::before,
+.types-div::before,
+.awoken-div::before,
+.sawoken-div::before{
+	/*float: left;*/
+	font-size: 16px;
+	width: 55px;
+	display: inline-block;
+}
+/*.search-box .attrs .attr-list-1::before{
+	content: "属性1";
+}
+.search-box .attrs .attr-list-2::before{
+	content: "属性2";
+}
+.search-box .attrs .fix-main-color-label::after{
+	content: "限制属性1为主属性，属性2为副属性";
+}*/
+.attr-radio,.type-check,.sawoken-check{
+	display: none;
+}
+.attrs .attr-list{
+	font-size:0;
+}
+.attrs .attr-list li{
+	border: 1px solid white;
+	border-left: none;
+	background: #947244;
+}
+.attrs .attr-list li:hover{
+	background: #E9CB9E;
+}
+.attrs .attr-list li:first-of-type{
+	border-radius: 8px 0 0 8px;
+	border-left: 1px solid white;
+}
+.attrs .attr-list li:last-of-type{
+	border-radius: 0 8px 8px 0;
+}
+.attrs .attr-list li label{
+	line-height: 30px;
+	width: 55px;
+	height: 30px;
+}
+.attrs .attr-list input:checked~label{
+	background-color:#8C4242;
+	box-shadow: inset black 0 0 5px;
+	cursor: auto;
+}
+.attr-list-1{
+	margin-bottom: 5px;
+}
+/*.search-box .types-div::before{
+	content: "类型";
+}*/
+.types-div .type-list li label{
+	opacity: var(--search-icon-unchecked);
+}
+.types-div .type-list input:checked~label{
+	opacity: 1;
+}
+/*.search-box .awoken-div::before{
+	content: "觉醒";
+}*/
+.search-box .awoken-list .awoken-count{
+	float: none;
+}
+.search-box .awoken-list button{
+	border: none;
+	background-color: unset;
+	font-family: 'FOT-KurokaneStd-EB';
+	color: white;
+	line-height: 32px;
+	font-size: 16px;
+	padding: 0;
+}
+.search-box .awoken-list .awoken-count.zero{
+	opacity: var(--search-icon-unchecked);
+}
+.search-box .awoken-list .count{
+	width: 30px;
+}
+.search-box .awoken-list .awoken-count .awoken-icon{
+	cursor: pointer;
+}
+.search-box .awoken-list .awoken-count .count{
+	cursor: pointer;
+}
+.search-box .awoken-list .awoken-count.zero .count{
+	cursor: auto;
+}
+/*.search-box .sawoken-div::before{
+	content: "超觉醒";
+}*/
+.sawoken-div .sawoken-list li label{
+	opacity: var(--search-icon-unchecked);
+}
+.sawoken-div .sawoken-list input:checked~label{
+	opacity: 1;
+}
+
+.control-div button{
+	font-size: 20px;
+}
+.control-div .search-start{
+	float: right;
+	margin-left: 5px;
+}
+/*.control-div .search-start::before{
+	content: "开始搜索";
+}
+.control-div .search-clear::before{
+	content: "清空搜索条件";
+}
+.control-div .search-close::before{
+	content: "关闭搜索";
+}*/
+
+.search-box .search-mon-list{
+	border: 1px solid white;
+}
+.setting-box .row-mon-id .open-search{
+	float: right;
+}
 
 .edit-box .setting-row{
 	width: 100%;
@@ -749,7 +883,7 @@ ul{
 	margin-top:5px;
 }
 .awoken-total-box .awoken-ul .awoken-count,
-.search-mon-control-box .awoken-list .awoken-count{
+.search-box .awoken-list .awoken-count{
 	font-size: 16px;
 	line-height: 32px;
 	font-family: 'FOT-KurokaneStd-EB';
@@ -757,14 +891,14 @@ ul{
 	margin-right: 3px;
 }
 .awoken-total-box .awoken-ul .count,
-.search-mon-control-box .awoken-list .count{
+.search-box .awoken-list .count{
 	height: 32px;
 	width: 37px;
 	display: inline-block;
 	vertical-align: middle;
 }
 .awoken-total-box .awoken-ul .count::before,
-.search-mon-control-box .awoken-list .count::before{
+.search-box .awoken-list .count::before{
 	content: "×";
 }
 /*控制框*/
@@ -774,9 +908,7 @@ ul{
 .control-box .languages-label::before{
 	content: "Lanuage:";
 }
-.control-box .solo-link,.control-box .multi-link{
-	/*margin-left: 10px;*/
-}
+
 .control-box .solo-link::before{
 	content: "Jump To Solo Version";
 }

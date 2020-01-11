@@ -208,3 +208,7 @@ function calculateAbility(monid = 0,level = 1,plus = [0,0,0],awoken = 0,latent =
 	})
 	return abilitys;
 }
+function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens)
+{
+
+}

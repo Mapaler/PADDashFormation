@@ -464,9 +464,127 @@ function initialize()
 		controlBox.classList.remove("blur-bg");
 	}
 
+	const searchBox = editBox.querySelector(".search-box");
+	let s_attr1s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
+	let s_attr2s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
+	let s_fixMainColor = searchBox.querySelector(".attrs .fix-main-color");
+	let s_types = Array.prototype.slice.call(searchBox.querySelectorAll(".types-div .type-check"));
+	let s_awokensItem = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .awoken-count"));
+	let s_awokensIcon = s_awokensItem.map(it=>{
+		return it.querySelector(".awoken-icon");
+	})
+	let s_awokensCount = s_awokensItem.map(it=>{
+		return it.querySelector(".count");
+	})
+	/*let s_awokensIcon = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .awoken-icon"));
+	let s_awokensCount = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .count"));*/
+	let s_sawokens = Array.prototype.slice.call(searchBox.querySelectorAll(".sawoken-div .sawoken-check"));
+	s_awokensIcon.forEach((b,idx)=>{ //每种觉醒增加1
+		b.onclick = ()=>{
+			const countDom = s_awokensCount[idx];
+			let count = parseInt(countDom.innerHTML,10);
+			if (count<9)
+			{
+				count++;
+				countDom.innerHTML = count;
+				b.parentNode.classList.remove("zero");
+			}
+		};
+	})
+	function searchSubAwoken()
+	{
+		let count = parseInt(this.innerHTML,10);
+		if (count>0)
+		{
+			count--;
+			this.innerHTML = count;
+			if (count === 0)
+			{
+				this.parentNode.classList.add("zero");
+			}
+		}
+	}
+	s_awokensCount.forEach((b,idx)=>{ //每种觉醒减少1
+		b.onclick = searchSubAwoken;
+	})
+
+
+	const searchStart = searchBox.querySelector(".control-div .search-start");
+	const searchClose = searchBox.querySelector(".control-div .search-close");
+	const searchClear = searchBox.querySelector(".control-div .search-clear");
+	function returnCheckedInput(ipt)
+	{
+		return ipt.checked == true;
+	}
+	function returnInputValue(ipt)
+	{
+		return ipt.value;
+	}
+	function Str2Int(str)
+	{
+		return parseInt(str, 10);
+	}
+	searchStart.onclick = ()=>{
+		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
+		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
+		const fixMainColor = s_fixMainColor.checked;
+		let attr1,attr2;
+		if (attr1Filter.length>0)
+		{
+			if (!isNaN(attr1Filter[0]))
+			{
+				attr1 = parseInt(attr1Filter[0],10);
+			}else
+			{
+				attr1 = null;
+			}
+		}
+		if (attr2Filter.length>0)
+		{
+			if (!isNaN(attr2Filter[0]))
+			{
+				attr2 = parseInt(attr2Filter[0],10);
+			}else
+			{
+				attr2 = null;
+			}
+		}
+		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
+		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
+		const awokensFilter = s_awokensCount.filter(btn=>{return parseInt(btn.innerHTML,10)>0;}).map(btn=>{
+			return [parseInt(btn.value,10),parseInt(btn.innerHTML,10)];
+		});
+		let searchResult = searchCards(Cards,attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter);
+		//console.log(Cards,attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter)
+	}
+
+	searchClose.onclick = ()=>{
+		searchBox.classList.add("display-none");
+	}
+	searchClear.onclick = ()=>{ //清空搜索选项
+		s_attr1s[0].checked = true;
+		s_attr2s[0].checked = true;
+		s_types.forEach(t=>{
+			t.checked = false;
+		});
+		s_awokensCount.forEach(t=>{
+			t.innerHTML = 0;
+		});
+		s_awokensItem.forEach(t=>{
+			t.classList.add("zero");
+		});
+		s_sawokens.forEach(t=>{
+			t.checked = false;
+		});
+	}
 	const settingBox = editBox.querySelector(".setting-box")
+	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
+	searchOpen.onclick = ()=>{
+		searchBox.classList.remove("display-none");
+	}
+
 	//id搜索
-	const monstersID = editBox.querySelector(".edit-box .m-id");
+	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
 	monstersID.onchange = function(){
 		if (/^\d+$/.test(this.value))
 		{
@@ -1113,10 +1231,10 @@ function editMon(AorB,isAssist,tempIdx)
 		editBox.latentBox = latentBox;
 	}
 
-	var monstersID = editBox.querySelector(".search-box .m-id");
+	var settingBox = editBox.querySelector(".setting-box");
+	var monstersID = settingBox.querySelector(".row-mon-id .m-id");
 	monstersID.value = mon.id>0?mon.id:0;
 	monstersID.onchange();
-	var settingBox = editBox.querySelector(".setting-box");
 	//觉醒
 	var monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon");
 	if (mon.awoken>0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].onclick();
@@ -1169,7 +1287,7 @@ function editBoxChangeMonId(id)
 	const settingBox = editBox.querySelector(".setting-box");
 
 	//id搜索
-	const monstersID = searchBox.querySelector(".m-id");
+	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
 	const monHead = monInfoBox.querySelector(".monster");
 	changeid({id:id},monHead); //改变图像
 	const mId = monInfoBox.querySelector(".monster-id");
@@ -1179,7 +1297,7 @@ function editBoxChangeMonId(id)
 	const mName = monInfoBox.querySelector(".monster-name");
 	mName.innerHTML = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
 
-	const evoCardUl = searchBox.querySelector(".evo-card-list");
+	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");
 	evoCardUl.style.display = "none";
 	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
 
