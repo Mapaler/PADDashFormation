@@ -464,6 +464,29 @@ function initialize()
 		controlBox.classList.remove("blur-bg");
 	}
 
+	//创建一个新的怪物头像
+	editBox.createCardHead = function(id)
+	{
+		function clickHeadToNewMon()
+		{
+			monstersID.value = this.getAttribute("data-cardid");
+			monstersID.onchange();
+			return false;
+		}
+		const cli = document.createElement("li");
+		const cdom = cli.head = cli.appendChild(document.createElement("a"));
+		cdom.class = "monster";
+		cdom.onclick = clickHeadToNewMon;
+		const property = cdom.appendChild(document.createElement("div"));
+		property.className = "property";
+		const subproperty = cdom.appendChild(document.createElement("div"));
+		subproperty.className = "subproperty";
+		const cid = cdom.appendChild(document.createElement("div"));
+		cid.className = "id";
+		changeid({id:id},cdom);
+		return cli;
+	}
+
 	const searchBox = editBox.querySelector(".search-box");
 	let s_attr1s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
 	let s_attr2s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
@@ -512,6 +535,7 @@ function initialize()
 	const searchStart = searchBox.querySelector(".control-div .search-start");
 	const searchClose = searchBox.querySelector(".control-div .search-close");
 	const searchClear = searchBox.querySelector(".control-div .search-clear");
+	const searchMonList = searchBox.querySelector(".search-mon-list");
 	function returnCheckedInput(ipt)
 	{
 		return ipt.checked == true;
@@ -552,10 +576,25 @@ function initialize()
 		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const awokensFilter = s_awokensCount.filter(btn=>{return parseInt(btn.innerHTML,10)>0;}).map(btn=>{
-			return [parseInt(btn.value,10),parseInt(btn.innerHTML,10)];
+			return {id:parseInt(btn.value,10),num:parseInt(btn.innerHTML,10)};
 		});
+		console.log("搜索条件",attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter);
 		let searchResult = searchCards(Cards,attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter);
-		//console.log(Cards,attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter)
+		console.log("搜索结果",searchResult);
+		const createCardHead = editBox.createCardHead;
+
+		searchMonList.classList.add("display-none");
+		searchMonList.innerHTML = "";
+		if (searchResult.length>1)
+		{
+			let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+			searchResult.forEach(function(card){
+				const cli = createCardHead(card.id);
+				fragment.appendChild(cli);
+			});
+			searchMonList.appendChild(fragment);
+		}
+		searchMonList.classList.remove("display-none");
 	}
 
 	searchClose.onclick = ()=>{
@@ -576,6 +615,7 @@ function initialize()
 		s_sawokens.forEach(t=>{
 			t.checked = false;
 		});
+		searchMonList.innerHTML = "";
 	}
 	const settingBox = editBox.querySelector(".setting-box")
 	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
@@ -1305,28 +1345,7 @@ function editBoxChangeMonId(id)
 		return m.evoRootId == card.evoRootId;
 	}).map(function(m){return m.id;}); //筛选出相同进化链的
 
-	//创建一个新的怪物头像
-	function createCardHead(id)
-	{
-		function clickHeadToNewMon()
-		{
-			monstersID.value = this.getAttribute("data-cardid");
-			monstersID.onchange();
-			return false;
-		}
-		const cli = document.createElement("li");
-		const cdom = cli.head = cli.appendChild(document.createElement("a"));
-		cdom.class = "monster";
-		cdom.onclick = clickHeadToNewMon;
-		const property = cdom.appendChild(document.createElement("div"));
-		property.className = "property";
-		const subproperty = cdom.appendChild(document.createElement("div"));
-		subproperty.className = "subproperty";
-		const cid = cdom.appendChild(document.createElement("div"));
-		cid.className = "id";
-		changeid({id:id},cdom);
-		return cli;
-	}
+	const createCardHead = editBox.createCardHead;
 	if (evoLinkCardsIdArray.length>1)
 	{
 		let fragment = document.createDocumentFragment(); //创建节点用的临时空间

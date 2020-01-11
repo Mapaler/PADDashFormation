@@ -12,9 +12,7 @@
 
 body{
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
-	--search-list-title-width: 50px;
-	--search-list-title-font-size: 16px;
-	--search-icon-unchecked: 0.3;
+	--search-icon-unchecked: 0.4;
 }
 .display-none{
 	display:none !important;
@@ -452,18 +450,21 @@ ul{
 	height: 40px;
 	font-size: 25px;
 }
-.edit-box .setting-box .row-mon-id .evo-card-list li{
+.edit-box .setting-box .row-mon-id .evo-card-list li,
+.edit-box .search-box .search-mon-list li{
 	display: inline-block;
 	vertical-align: top; 
 	top: 0;
-	width: 75px;
-	height: 75px;
+	width: 78px;
+	height: 80px;
 }
-.edit-box .setting-box .row-mon-id .evo-card-list .monster{
+.edit-box .setting-box .row-mon-id .evo-card-list .monster,
+.edit-box .search-box .search-mon-list .monster{
 	float: none;
 	transform: scale(0.75) translate(-13px,-13px);
 }
-.edit-box .setting-box .row-mon-id .evo-card-list .monster .id{
+.edit-box .setting-box .row-mon-id .evo-card-list .monster .id,
+.edit-box .search-box .search-mon-list .monster .id{
 	bottom: 5px;
 	font-size: 20px;
 }
@@ -621,6 +622,8 @@ ul{
 
 .search-box .search-mon-list{
 	border: 1px solid white;
+	border-radius: 5px;
+	background: grey;
 }
 .setting-box .row-mon-id .open-search{
 	float: right;
@@ -721,7 +724,7 @@ ul{
 	cursor: pointer;
 }
 .awoken-ul .awoken-icon.unselected-awoken{
-	opacity: 0.3;
+	opacity: var(--search-icon-unchecked);
 }
 .row-mon-awoken .awoken-icon.awoken-count,
 .row-mon-awoken .awoken-icon.awoken-count.full-awoken::before
@@ -829,7 +832,7 @@ ul{
 }
 .m-latent-allowable-ul .latent-icon.unselected-latent{
 	cursor: default;
-	opacity: 0.3;
+	opacity: var(--search-icon-unchecked);
 }
 
 
