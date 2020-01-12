@@ -188,13 +188,13 @@
 	content: "None";
 }
 .search-box .types-div::before{
-	content: "Type";
+	content: "Type (OR)";
 }
 .search-box .awoken-div::before{
-	content: "Awoken";
+	content: "Awoken (AND) (Tips: Click on number to reduce value)";
 }
 .search-box .sawoken-div::before{
-	content: "Super Awoken";
+	content: "Super Awoken (OR)";
 }
 .control-div .search-start::before{
 	content: "🔍Start Search";

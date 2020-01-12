@@ -184,13 +184,13 @@
 	content: "无";
 }
 .search-box .types-div::before{
-	content: "类型";
+	content: "类型（OR）";
 }
 .search-box .awoken-div::before{
-	content: "觉醒";
+	content: "觉醒（AND）（提示：点击数字可减少数值）";
 }
 .search-box .sawoken-div::before{
-	content: "超觉醒";
+	content: "超觉醒（OR）";
 }
 .control-div .search-start::before{
 	content: "🔍开始搜索";

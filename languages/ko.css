@@ -181,13 +181,13 @@
 	content: "없음";
 }
 .search-box .types-div::before{
-	content: "형식";
+	content: "형식（OR）";
 }
 .search-box .awoken-div::before{
-	content: "각성";
+	content: "각성（AND）（번째：숫자를 누르면 숫자가 낮아집니다）";
 }
 .search-box .sawoken-div::before{
-	content: "슈퍼 각성";
+	content: "슈퍼 각성（OR）";
 }
 .control-div .search-start::before{
 	content: "🔍검색 시작";
