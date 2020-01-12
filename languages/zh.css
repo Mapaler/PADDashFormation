@@ -201,7 +201,10 @@
 .control-div .search-close::before{
 	content: "关闭搜索";
 }
-
+.edit-box .monsterinfo-box .monster-name{
+	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
+	font-weight: 900;
+}
 /*Some icons, style different from the Japanese version*/
 .awoken-46,
 .awoken-47
