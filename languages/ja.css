@@ -181,13 +181,13 @@
 	content: "空";
 }
 .search-box .types-div::before{
-	content: "タイプ";
+	content: "タイプ（OR）";
 }
 .search-box .awoken-div::before{
-	content: "覚醒";
+	content: "覚醒（AND）（しえ：数値をクリックすると数値が減少します）";
 }
 .search-box .sawoken-div::before{
-	content: "超覚醒";
+	content: "超覚醒（OR）";
 }
 .control-div .search-start::before{
 	content: "🔍検索の開始";

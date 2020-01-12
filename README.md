@@ -47,8 +47,8 @@ Drag monster avatars to quickly switch positions, also supports mobile touch scr
 * 点击编辑界面的怪物头像可以跳转到攻略网站。  
 Click on the monster avatar in the editing interface to jump to the Guide.  
 ![攻略网站](document/tips-guide.png)  
-在队伍界面的怪物头像上点击鼠标中键也可以跳转到攻略网站。  
-Or click the middle mouse button on the monster avatar of the formation interface to jump to the Guide.  
+在队伍界面的怪物头像上点击鼠标中键也可以跳转到攻略网站。在手机上则是长按怪物头像然后选择在新标签页打开。  
+Or click the middle mouse button on the monster avatar of the formation interface to jump to the Guide. On your phone, you're long-pressing the monster avatar and then selecting to open it in a new tab.  
 ![攻略网站2](document/tips-guide2.png)
 * 可以在编辑界面的怪物ID输入怪物名称来搜索怪物。  
 You can search for monsters by entering the monster name in the monster ID of the editing interface.  
