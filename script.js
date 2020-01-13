@@ -531,6 +531,21 @@ function initialize()
 		b.onclick = searchSubAwoken;
 	})
 
+	const awokenClear = searchBox.querySelector(".awoken-div .awoken-clear");
+	const sawokenClear = searchBox.querySelector(".sawoken-div .sawoken-clear");
+	awokenClear.onclick = ()=>{ //清空觉醒选项
+		s_awokensCount.forEach(t=>{
+			t.innerHTML = 0;
+		});
+		s_awokensItem.forEach(t=>{
+			t.classList.add("zero");
+		});
+	}
+	sawokenClear.onclick = ()=>{ //清空超觉醒选项
+		s_sawokens.forEach(t=>{
+			t.checked = false;
+		});
+	}
 
 	const searchStart = searchBox.querySelector(".control-div .search-start");
 	const searchClose = searchBox.querySelector(".control-div .search-close");

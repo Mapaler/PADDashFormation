@@ -211,40 +211,43 @@ function calculateAbility(monid = 0,level = 1,plus = [0,0,0],awoken = 0,latent =
 function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens)
 {
 	let res = cards;
-	if (fixMainColor || attr2 == -1) //如果固定了顺序，或者副属性选的是无
+	if (attr1 != null && attr1 ===  attr2)
+	{ //当两个颜色相同时，主副一样颜色的只需判断一次
+		res = res.filter(c=>{return c.attrs[0] == attr1 && c.attrs[1] == attr1;});
+	}else if (fixMainColor || attr2 == -1) //如果固定了顺序，或者副属性选的是无
 	{
 		if (attr1 != null)
 		{
-			res = res.filter(c=>{return c.attrs[0] == attr1;})
+			res = res.filter(c=>{return c.attrs[0] == attr1;});
 		}
 		if (attr2 != null)
 		{
-			res = res.filter(c=>{return c.attrs[1] == attr2;})
+			res = res.filter(c=>{return c.attrs[1] == attr2;});
 		}
-	}else
+	}else //不限定顺序时
 	{
 		if (attr1 != null)
 		{
-			res = res.filter(c=>{return c.attrs.indexOf(attr1)>=0;})
+			res = res.filter(c=>{return c.attrs.indexOf(attr1)>=0;});
 		}
 		if (attr2 != null)
 		{
-			res = res.filter(c=>{return c.attrs.indexOf(attr2)>=0;})
+			res = res.filter(c=>{return c.attrs.indexOf(attr2)>=0;});
 		}
 	}
 	if (types.length>0)
 	{
-		res = res.filter(c=>{return  types.some(t=>{return c.types.indexOf(t)>=0});})
+		res = res.filter(c=>{return  types.some(t=>{return c.types.indexOf(t)>=0});});
 	}
 	if (awokens.length>0)
 	{
 		res = res.filter(c=>{return  awokens.every(a=>{
-			return c.awakenings.filter(ca=>{return ca == a.id}).length >= a.num;
+			return c.awakenings.filter(ca=>{return ca == a.id;}).length >= a.num;
 		});});
 	}
 	if (sawokens.length>0)
 	{
-		res = res.filter(c=>{return  sawokens.some(sa=>{return c.superAwakenings.indexOf(sa)>=0});})
+		res = res.filter(c=>{return  sawokens.some(sa=>{return c.superAwakenings.indexOf(sa)>=0;});});
 	}
 	return res;
 }
