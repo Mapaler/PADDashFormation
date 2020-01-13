@@ -567,8 +567,16 @@ ul{
 /*.search-box .awoken-div::before{
 	content: "觉醒";
 }*/
-.search-box .awoken-list .awoken-count{
-	float: none;
+.search-box .awoken-div .awoken-clear::before,
+.search-box .sawoken-div .sawoken-clear::before
+{
+	content: "❌";
+}
+.search-box .awoken-div .awoken-clear,
+.search-box .sawoken-div .sawoken-clear
+{
+	padding: 0;
+	float: right;
 }
 .search-box .awoken-list button{
 	border: none;
