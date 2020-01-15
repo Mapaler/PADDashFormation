@@ -45,7 +45,7 @@ officialAPI.forEach(function(lang){
 	}
 	let monCards = lang.cards = oCards
 		.slice(0,maxCardIndex)  //切出前面id相等部分(id不等于索引时，都是敌人)
-		.map((oc)=>{return new Card(oc)}); //每一项生成分析对象
+		.map((oc)=>{return new Card(oc);}); //每一项生成分析对象
 
 	//加入自定义的语言
 	lang.customName.forEach(function(lcode){
@@ -62,7 +62,7 @@ officialAPI.forEach(function(lang){
 			}
 		});
 	});
-})
+});
 
 //加入其他服务器相同角色的名字
 for (let li = 0;li < officialAPI.length; li++)
@@ -77,7 +77,7 @@ for (let li = 0;li < officialAPI.length; li++)
 		let name = m.name; //当前语言的名字
 
 		//名字对象
-		otherLangs.forEach(function(otLang){
+		otherLangs.forEach((otLang)=>{
 			let _m = otLang.cards[mi]; //获得这种其他语言的当前这个怪物数据
 			let isSame = sameCard(m,_m); //与原语言怪物是否是同一只
 			let l1 = lang.code, l2 = otLang.code;
@@ -137,19 +137,23 @@ for (let li = 0;li < officialAPI.length; li++)
 						m.otLangName = Object.assign(m.otLangName, _m.otLangName); //增加储存当前语言的全部其他语言
 				}
 			}
-		})
-
+		});
 	}
 }
 
 //最后批量保存
 officialAPI.forEach(function(lang){
 	let lcode = lang.code;
+/*	//删除暂时无用的内容
+	lang.cards.forEach((card)=>{
+		delete card.enemy;
+	});
+*/
 	let str = JSON.stringify(lang.cards);
 	fs.writeFile('./mon_'+lcode+'.json',str,function(err){
 		if(err){
 			console.error(err);
 		}
 		console.log('mon_'+lcode+'.json 导出成功');
-	})
-})
+	});
+});
