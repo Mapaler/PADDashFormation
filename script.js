@@ -26,7 +26,7 @@ var interchangePath; //储存划线的线
 //队员基本的留空
 var Member = function(){
 	this.id=0;
-}
+};
 Member.prototype.outObj = function(){
 	var m = this;
 	var obj = [m.id];
@@ -45,7 +45,7 @@ Member.prototype.outObj = function(){
 	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) obj[4] = m.latent;
 	if (m.sawoken != undefined && m.sawoken>=0) obj[5] = m.sawoken;
 	return obj;
-}
+};
 Member.prototype.loadObj = function(m,dataVersion){
 	if (m == undefined) //如果没有提供数据，直接返回默认
 	{
@@ -73,11 +73,11 @@ Member.prototype.loadObj = function(m,dataVersion){
 	this.latent = dataVersion>1 ? m[4] : m.latent;
 	if (!(this.latent instanceof Array)) this.latent = []; //如果潜觉不是数组，则改变
 	this.sawoken = dataVersion>1 ? m[5] : m.sawoken;
-}
+};
 //只用来防坐的任何队员
 var MemberDelay = function(){
 	this.id=-1;
-}
+};
 MemberDelay.prototype = Object.create(Member.prototype);
 MemberDelay.prototype.constructor = MemberDelay;
 //辅助队员
@@ -86,9 +86,9 @@ var MemberAssist = function(){
 	this.awoken = 0;
 	this.plus = [0,0,0];
 	Member.call(this);
-}
+};
 MemberAssist.prototype = Object.create(Member.prototype);
-MemberAssist.prototype.constructor = MemberAssist
+MemberAssist.prototype.constructor = MemberAssist;
 MemberAssist.prototype.loadFromMember = function(m){
 	if (m == undefined) //如果没有提供数据，直接返回默认
 	{
@@ -98,14 +98,14 @@ MemberAssist.prototype.loadFromMember = function(m){
 	if (m.level != undefined) this.level = m.level;
 	if (m.awoken != undefined) this.awoken = m.awoken;
 	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) this.plus = m.plus;
-}
+};
 //正式队伍
 var MemberTeam = function(){
 	this.latent = [];
 	this.ability = [0,0,0];
 	MemberAssist.call(this);
 	//sawoken作为可选项目，默认不在内
-}
+};
 MemberTeam.prototype = Object.create(MemberAssist.prototype);
 MemberTeam.prototype.constructor = MemberTeam;
 MemberTeam.prototype.loadFromMember = function(m){
@@ -120,11 +120,11 @@ MemberTeam.prototype.loadFromMember = function(m){
 	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) this.latent = m.latent;
 	if (m.sawoken != undefined) this.sawoken = m.sawoken;
 	if (m.ability != undefined && m.ability instanceof Array && m.plus.length>=3) this.ability = m.ability;
-}
+};
 
 var Formation = function(teamCount,memberCount){
-	this.title = "",
-	this.detail = "",
+	this.title = "";
+	this.detail = "";
 	this.team = [];
 	this.badge = 0;
 	for (var ti=0;ti<teamCount;ti++)
@@ -137,7 +137,7 @@ var Formation = function(teamCount,memberCount){
 		}
 		this.team.push(team);
 	}
-}
+};
 Formation.prototype.outObj= function(){
 	let obj = {};
 	if (this.title != undefined && this.title.length>0) obj.t = this.title;
@@ -146,12 +146,12 @@ Formation.prototype.outObj= function(){
 			return t.map(function(st){
 				return st.map(function(m){
 					return m.outObj();
-				})
-			})
+				});
+			});
 		});
 	if (this.badge != undefined && this.badge>0) obj.b = this.badge; //徽章
 	return obj;
-}
+};
 Formation.prototype.loadObj= function(f){
 	var dataVeision = f.f?2:1; //是第几版格式
 	this.title = dataVeision>1 ? f.t : f.title;
@@ -165,10 +165,10 @@ Formation.prototype.loadObj= function(f){
 			st.forEach(function(m,mi){
 				var fm = fst[mi];
 				m.loadObj(fm,dataVeision);
-			})
-		})
+			});
+		});
 	});
-}
+};
 //获取最大潜觉数量
 function getMaxLatentCount(id)
 { //转生2和超转生3为8个格子
@@ -205,12 +205,12 @@ function swapSingleMulitple()
 	{
 		//创建第二支队伍，各4个空的
 		formation.team[1] = [
-			Array.from(new Array(4)).map(()=>{return new MemberTeam()}),
-			Array.from(new Array(4)).map(()=>{return new MemberAssist()})
+			Array.from(new Array(4)).map(()=>{return new MemberTeam();}),
+			Array.from(new Array(4)).map(()=>{return new MemberAssist();})
 		];
 		//把右边的队长加到第二支队伍最后面
-		formation.team[1][0].push(formation.team[0][0].splice(5,1)[0])
-		formation.team[1][1].push(formation.team[0][1].splice(5,1)[0])
+		formation.team[1][0].push(formation.team[0][0].splice(5,1)[0]);
+		formation.team[1][1].push(formation.team[0][1].splice(5,1)[0]);
 		formation.badge = 0;
 	}else
 	{
@@ -232,7 +232,7 @@ window.onload = function()
 	let langSelectDom = controlBox.querySelector(".languages");
 	languageList.forEach(function(l){
 		langSelectDom.options.add(new Option(l.name,l.i18n));
-	})
+	});
 
 	let parameter_i18n =  getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
 	let browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
@@ -242,9 +242,9 @@ window.onload = function()
 		else //否则筛选浏览器默认语言
 			return browser_i18n.indexOf(l.i18n)>=0;
 	});
-	currentLanguage = havingLanguage.length
-					? havingLanguage.pop() //有语言使用最后一个
-					: languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
+	currentLanguage = havingLanguage.length ?
+					havingLanguage.pop() : //有语言使用最后一个
+					languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
 	document.head.querySelector("#language-css").href = "languages/"+currentLanguage.i18n+".css";
 
 	let langOptionArray = Array.prototype.slice.call(langSelectDom.options);
@@ -260,7 +260,7 @@ window.onload = function()
 	let dataSelectDom = controlBox.querySelector(".datasource");
 	dataSourceList.forEach(function(ds){
 		dataSelectDom.options.add(new Option(ds.source,ds.code));
-	})
+	});
 	let parameter_dsCode =  getQueryString("s"); //获取参数指定的数据来源
 	let havingDataSource = dataSourceList.filter(function(ds){ //筛选出符合的数据源
 		return ds.code == parameter_dsCode;
@@ -308,7 +308,7 @@ window.onload = function()
 			}
 		}
 	});
-}
+};
 //重新读取URL中的Data数据并刷新页面
 function reloadFormationData()
 {
@@ -342,11 +342,11 @@ function creatNewUrl(arg){
 		let datasource = arg.datasource || getQueryString("s");
 		let outObj = formation.outObj();
 		
-		let newUrl = (arg.url?arg.url:"")
-		+ '?' 
-		+ (language_i18n?'l=' + language_i18n + '&':'') 
-		+ (datasource&&datasource!="ja"?'s=' + datasource + '&':'') 
-		+ 'd=' + encodeURIComponent(JSON.stringify(outObj));
+		let newUrl = (arg.url?arg.url:"") +
+			'?' +
+			(language_i18n?'l=' + language_i18n + '&':'') +
+			(datasource&&datasource!="ja"?'s=' + datasource + '&':'') +
+			'd=' + encodeURIComponent(JSON.stringify(outObj));
 
 		if (!arg.notPushState) history.pushState(null, null, newUrl);
 		return newUrl;
@@ -381,14 +381,14 @@ function initialize()
 	txtTitle.onchange = function(){
 		formation.title = this.value;
 		creatNewUrl();
-	}
+	};
 	txtDetail.onchange = function(){
 		formation.detail = this.value;
 		creatNewUrl();
-	}
+	};
 	txtDetail.onblur = function(){
 		this.style.height=this.scrollHeight+"px";
-	}
+	};
 
 	//队伍框
 	const formationBox = document.querySelector(".formation-box");
@@ -425,7 +425,7 @@ function initialize()
 		m.ontouchmove = touchmoveMonHead;
 		m.ontouchend = touchendMonHead;
 		m.ontouchcancel = touchcancelMonHead;
-	})
+	});
 
 	//徽章
 	let badges = Array.prototype.slice.call(formationBox.querySelectorAll(".formation-badge .badge-bg"));
@@ -433,16 +433,16 @@ function initialize()
 		badge.onclick = ()=>{
 			if (badges.some(b=>{return b.classList.contains("display-none");}))
 			{ //未展开时
-				badges.forEach((b,idx) => {if (idx!=bidx)b.classList.remove("display-none");})
+				badges.forEach((b,idx) => {if (idx!=bidx)b.classList.remove("display-none");});
 			}else
 			{ //展开时
-				badges.forEach((b,idx) => {if (idx!=bidx)b.classList.add("display-none");})
+				badges.forEach((b,idx) => {if (idx!=bidx)b.classList.add("display-none");});
 				formation.badge = bidx;
 				refreshTotalAbility(formation.team[0]);
 				creatNewUrl();
 			}
-		}
-	})
+		};
+	});
 
 	//编辑框
 	const editBox = document.querySelector(".edit-box");
@@ -457,12 +457,12 @@ function initialize()
 		editBox.classList.remove("display-none");
 		formationBox.classList.add("blur-bg");
 		controlBox.classList.add("blur-bg");
-	}
+	};
 	editBox.hide = function(){
 		editBox.classList.add("display-none");
 		formationBox.classList.remove("blur-bg");
 		controlBox.classList.remove("blur-bg");
-	}
+	};
 
 	//创建一个新的怪物头像
 	editBox.createCardHead = function(id)
@@ -485,7 +485,7 @@ function initialize()
 		cid.className = "id";
 		changeid({id:id},cdom);
 		return cli;
-	}
+	};
 
 	const searchBox = editBox.querySelector(".search-box");
 	let s_attr1s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
@@ -495,10 +495,10 @@ function initialize()
 	let s_awokensItem = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .awoken-count"));
 	let s_awokensIcon = s_awokensItem.map(it=>{
 		return it.querySelector(".awoken-icon");
-	})
+	});
 	let s_awokensCount = s_awokensItem.map(it=>{
 		return it.querySelector(".count");
-	})
+	});
 	/*let s_awokensIcon = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .awoken-icon"));
 	let s_awokensCount = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .count"));*/
 	let s_sawokens = Array.prototype.slice.call(searchBox.querySelectorAll(".sawoken-div .sawoken-check"));
@@ -513,7 +513,7 @@ function initialize()
 				b.parentNode.classList.remove("zero");
 			}
 		};
-	})
+	});
 	function searchSubAwoken()
 	{
 		let count = parseInt(this.innerHTML,10);
@@ -529,7 +529,7 @@ function initialize()
 	}
 	s_awokensCount.forEach((b,idx)=>{ //每种觉醒减少1
 		b.onclick = searchSubAwoken;
-	})
+	});
 
 	const awokenClear = searchBox.querySelector(".awoken-div .awoken-clear");
 	const sawokenClear = searchBox.querySelector(".sawoken-div .sawoken-clear");
@@ -540,12 +540,12 @@ function initialize()
 		s_awokensItem.forEach(t=>{
 			t.classList.add("zero");
 		});
-	}
+	};
 	sawokenClear.onclick = ()=>{ //清空超觉醒选项
 		s_sawokens.forEach(t=>{
 			t.checked = false;
 		});
-	}
+	};
 
 	const searchStart = searchBox.querySelector(".control-div .search-start");
 	const searchClose = searchBox.querySelector(".control-div .search-close");
@@ -610,11 +610,11 @@ function initialize()
 			searchMonList.appendChild(fragment);
 		}
 		searchMonList.classList.remove("display-none");
-	}
+	};
 
 	searchClose.onclick = ()=>{
 		searchBox.classList.add("display-none");
-	}
+	};
 	searchClear.onclick = ()=>{ //清空搜索选项
 		s_attr1s[0].checked = true;
 		s_attr2s[0].checked = true;
@@ -631,12 +631,12 @@ function initialize()
 			t.checked = false;
 		});
 		searchMonList.innerHTML = "";
-	}
-	const settingBox = editBox.querySelector(".setting-box")
+	};
+	const settingBox = editBox.querySelector(".setting-box");
 	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
 	searchOpen.onclick = ()=>{
 		searchBox.classList.remove("display-none");
-	}
+	};
 
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
@@ -646,7 +646,7 @@ function initialize()
 			editBox.mid = parseInt(this.value);
 			editBoxChangeMonId(editBox.mid);
 		}
-	}
+	};
 	monstersID.oninput = monstersID.onchange;
 	//觉醒
 	let monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon"));
@@ -675,7 +675,7 @@ function initialize()
 				monEditAwokens[ai].classList.add("unselected-awoken");
 			}
 		}
-	}
+	};
 
 	//超觉醒
 	let monEditSAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon"));
@@ -692,8 +692,8 @@ function initialize()
 					domArr[ai].classList.add("unselected-awoken");
 				}
 			}
-		}
-	})
+		};
+	});
 
 	//3个快速设置this.ipt为自己的value
 	function setIptToMyValue()
@@ -740,7 +740,7 @@ function initialize()
 		monEditAddAtk.value = 
 		monEditAddRcv.value = 99;
 		editBox.reCalculateAbility();
-	}
+	};
 	//三维的计算值
 	const monEditHpValue = monEditAddHpLi.querySelector(".ability-value");
 	const monEditAtkValue = monEditAddAtkLi.querySelector(".ability-value");
@@ -773,7 +773,7 @@ function initialize()
 				monEditLatents[ai].value = -1;
 			}
 		}
-	}
+	};
 
 	function deleteLatent(){
 		let aIdx = parseInt(this.value, 10);
@@ -784,7 +784,7 @@ function initialize()
 	//已有觉醒的去除
 	monEditLatents.forEach(function(l){
 		l.onclick = deleteLatent;
-	})
+	});
 	//可选觉醒的添加
 	monEditLatentsAllowable.forEach(function(la){
 		la.onclick = function(){
@@ -799,8 +799,8 @@ function initialize()
 
 			editBox.reCalculateAbility();
 			editBox.refreshLatent(editBox.latent,editBox.mid);
-		}
-	})
+		};
+	});
 
 	//重新计算怪物的能力
 	editBox.reCalculateAbility = function(){
@@ -818,7 +818,7 @@ function initialize()
 		monEditHpValue.innerHTML = abilitys[0];
 		monEditAtkValue.innerHTML = abilitys[1];
 		monEditRcvValue.innerHTML = abilitys[2];
-	}
+	};
 
 	const btnCancel = editBox.querySelector(".button-cancel");
 	const btnDone = editBox.querySelector(".button-done");
@@ -829,7 +829,7 @@ function initialize()
 		btnDone.disabled = false;
 		editBox.memberIdx = [];
 		editBox.hide();
-	}
+	};
 	btnDone.onclick = function(){
 		if (parseInt(monEditLv.value,10) == 0)
 		{
@@ -859,8 +859,8 @@ function initialize()
 			}
 		}
 		
-		if (card.types.some(t=>{return t == 0 || t == 12 || t == 14 || t == 15;})
-		&& (!card.overlay || mon.level>= card.maxLevel))
+		if (card.types.some(t=>{return t == 0 || t == 12 || t == 14 || t == 15;}) &&
+			(!card.overlay || mon.level>= card.maxLevel))
 		{ //当4种特殊type的时候是无法297和打觉醒的，但是不能叠加的在未满级时可以
 			mon.plus = [0,0,0]; 
 		}else
@@ -888,7 +888,7 @@ function initialize()
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
 		editBox.hide();
-	}
+	};
 	window.onkeydown = function(e){
 		if (!editBox.classList.contains("display-none"))
 		{
@@ -897,7 +897,7 @@ function initialize()
 				btnCancel.onclick();
 			}
 		}
-	}
+	};
 	btnNull.onclick = function(){
 		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = new Member();
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
@@ -913,7 +913,7 @@ function initialize()
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
 		editBox.hide();
-	}
+	};
 	btnDelay.onclick = function(){ //应对威吓
 		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = new MemberDelay();
 		changeid(mD,editBox.monsterBox,editBox.latentBox);
@@ -929,20 +929,20 @@ function initialize()
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
 		editBox.hide();
-	}
+	};
 	
 	//语言选择
 	const langList = controlBox.querySelector(".languages");
 	langList.onchange = function(){
 		creatNewUrl({"language":this.value});
 		history.go();
-	}
+	};
 	//数据源选择
 	const dataList = controlBox.querySelector(".datasource");
 	dataList.onchange = function(){
 		creatNewUrl({datasource:this.value});
 		history.go();
-	}
+	};
 
 	/*添对应语言执行的JS*/
 	const languageJS = document.head.appendChild(document.createElement("script"));
@@ -987,9 +987,9 @@ function dropMonHead(e)
 	const dataFrom = e.dataTransfer.getData('from').split(",").map((i)=>{return parseInt(i,10);});
 	const dataTo = getMemberArrayIndexFromMonHead(this);
 
-	if ((dataTo[0] != dataFrom[0])
-	|| (dataTo[1] != dataFrom[1])
-	|| (dataTo[2] != dataFrom[2]))
+	if ((dataTo[0] != dataFrom[0]) ||
+		(dataTo[1] != dataFrom[1]) ||
+		(dataTo[2] != dataFrom[2]))
 	{ //必须有所不同才继续交换
 		interchangeCard(dataFrom,dataTo);
 	}
@@ -1051,9 +1051,9 @@ function touchendMonHead(e)
 		let dataFrom = getMemberArrayIndexFromMonHead(this);
 		let dataTo = getMemberArrayIndexFromMonHead(target);
 	
-		if ((dataTo[0] != dataFrom[0])
-		|| (dataTo[1] != dataFrom[1])
-		|| (dataTo[2] != dataFrom[2]))
+		if ((dataTo[0] != dataFrom[0]) ||
+			(dataTo[1] != dataFrom[1]) ||
+			(dataTo[2] != dataFrom[2]))
 		{ //必须有所不同才继续交换
 			interchangeCard(dataFrom,dataTo);
 		}
@@ -1070,7 +1070,7 @@ function interchangeCard(formArr,toArr)
 	{
 		if (member.id == 0 || (isAssist && member.id == -1))
 		{
-			return new Member;
+			return new Member();
 		}else
 		{
 			let newMember = isAssist ? new MemberTeam() : new MemberAssist();
@@ -1114,7 +1114,7 @@ function changeid(mon,monDom,latentDom)
 		parentNode.appendChild(fragment);
 		if (latentDom) latentDom.classList.add("display-none");
 		return;
-	}else (monId>-1) //如果提供了id
+	}else if (monId>-1) //如果提供了id
 	{
 		parentNode.classList.remove("null");
 		parentNode.classList.remove("delay");
@@ -1224,8 +1224,8 @@ function changeid(mon,monDom,latentDom)
 		{
 			let latent = mon.latent.sort(function(a,b){
 				if(b>=12 && a<12) {return 1;} //如果大于12，就排到前面
-				else if(b<12 && a>=12) {return -1} //如果小于12就排到后面
-				else {return 0} //其他情况不变
+				else if(b<12 && a>=12) {return -1;} //如果小于12就排到后面
+				else {return 0;} //其他情况不变
 			});
 			if (latent.length < 1)
 			{
@@ -1331,10 +1331,10 @@ function editMon(AorB,isAssist,tempIdx)
 //编辑窗，修改怪物ID
 function editBoxChangeMonId(id)
 {
-	const card = Cards[id]; //怪物固定数据
+	let card = Cards[id]; //怪物固定数据
 	if (!card){
 		id = 0;
-		card = Cards[0]
+		card = Cards[0];
 	}
 	const editBox = document.querySelector(".edit-box");
 	const monInfoBox = editBox.querySelector(".monsterinfo-box");
@@ -1505,7 +1505,7 @@ function refreshAll(formationData){
 		{
 			b.classList.add("display-none");
 		}
-	})
+	});
 
 	const formationA = formationA_bigbox.querySelector(".formation-A-box");
 	const formationB = formationB_bigbox ? formationB_bigbox.querySelector(".formation-B-box") : null;
@@ -1598,9 +1598,9 @@ function refreshAbility(dom,team,idx){
 	//辅助增加的三维，如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
 	const mainCard = Cards[mainMD.id] || Cards[0];
 	const assistCard = Cards[assistMD.id] || Cards[0];
-	const assistAbility = (assistMD.id > 0 && mainCard.attrs[0]==assistCard.attrs[0])
-		?calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null)
-		:[0,0,0];
+	const assistAbility = (assistMD.id > 0 && mainCard.attrs[0]==assistCard.attrs[0]) ?
+			calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null) :
+			[0,0,0];
 	if (mainAbility && mainMD.ability)
 	{
 		for (let ai=0;ai<3;ai++)
@@ -1658,11 +1658,11 @@ function refreshTotalAbility(team){
 		badgeRCVScale = 1.35;
 	}
 	tHpDom.innerHTML = tHP.toString() + 
-		(teamHPAwoken>0||badgeHPScale>1 
-			? ("("+Math.round(tHP * (1 + 0.05 * teamHPAwoken)*badgeHPScale).toString()+")")
-			: "");
+		(teamHPAwoken>0||badgeHPScale>1 ?
+			("("+Math.round(tHP * (1 + 0.05 * teamHPAwoken)*badgeHPScale).toString()+")") :
+			"");
 	tRcvDom.innerHTML = tRCV.toString() + 
-		(teamRCVAwoken>0||badgeRCVScale>1 
-			? ("("+Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)*badgeRCVScale).toString()+")")
-			: "");
+		(teamRCVAwoken>0||badgeRCVScale>1 ?
+			("("+Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)*badgeRCVScale).toString()+")") :
+			"");
 }
