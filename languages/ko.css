@@ -1,4 +1,7 @@
 ﻿@charset "utf-8";
+.status.loading-mon-info .text::before{
+	content: "몬스터 데이터를 로드 하 고 있습니다.";
+}
 .delay .monster::before{
 	content: "지 연\A방 지";
 }

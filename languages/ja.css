@@ -1,4 +1,7 @@
 ﻿@charset "utf-8";
+.status.loading-mon-info .text::before{
+	content: "モンスターデータを読み込んでいます。";
+}
 .delay .monster::before{
 	content: "遅 延\A対 策";
 }

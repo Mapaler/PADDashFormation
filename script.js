@@ -226,16 +226,17 @@ window.onload = function()
 {
 	interchangeSVG = document.querySelector("#interchange-line");
 	interchangePath = interchangeSVG.querySelector("g line");
-	let controlBox = document.querySelector(".control-box");
+	const controlBox = document.querySelector(".control-box");
+	const statusLine = controlBox.querySelector(".status"); //显示当前状态的
 
 	//▼添加语言列表开始
-	let langSelectDom = controlBox.querySelector(".languages");
+	const langSelectDom = controlBox.querySelector(".languages");
 	languageList.forEach(function(l){
 		langSelectDom.options.add(new Option(l.name,l.i18n));
 	});
 
-	let parameter_i18n =  getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
-	let browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
+	const parameter_i18n =  getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
+	const browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
 	let havingLanguage = languageList.filter(function(l){ //筛选出符合的语言
 		if (parameter_i18n) //如果已指定就用指定的语言
 			return parameter_i18n.indexOf(l.i18n)>=0;
@@ -257,11 +258,11 @@ window.onload = function()
 	});
 	//▲添加语言列表结束
 	//▼添加数据来源列表开始
-	let dataSelectDom = controlBox.querySelector(".datasource");
+	const dataSelectDom = controlBox.querySelector(".datasource");
 	dataSourceList.forEach(function(ds){
 		dataSelectDom.options.add(new Option(ds.source,ds.code));
 	});
-	let parameter_dsCode =  getQueryString("s"); //获取参数指定的数据来源
+	const parameter_dsCode =  getQueryString("s"); //获取参数指定的数据来源
 	let havingDataSource = dataSourceList.filter(function(ds){ //筛选出符合的数据源
 		return ds.code == parameter_dsCode;
 	});
@@ -287,9 +288,11 @@ window.onload = function()
 			return;
 		}
 		initialize();//初始化
+		statusLine.classList.remove("loading-mon-info");
 		//如果通过的话就载入URL中的怪物数据
 		reloadFormationData();
 	}
+	statusLine.classList.add("loading-mon-info");
 	GM_xmlhttpRequest({
 		method: "GET",
 		url:`monsters-info/mon_${currentDataSource.code}.json`, //Cards数据文件
