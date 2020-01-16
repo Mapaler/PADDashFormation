@@ -1,4 +1,7 @@
 ﻿@charset "utf-8";
+.status.loading-mon-info .text::before{
+	content: "正在載入怪物數據，請稍候。";
+}
 .delay .monster::before{
 	content: "應 對\A威 嚇";
 }

@@ -9,7 +9,14 @@
 		 url("fonts/FOT-KurokaneStd-EB.eot") format('embedded-opentype'),
 		 url("fonts/FOT-KurokaneStd-EB.svg") format('svg');
 }
-
+@keyframes loading-animate{
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(3600deg);
+    }
+}
 body{
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
 	--search-icon-unchecked: 0.4;
@@ -42,6 +49,17 @@ body{
 	border: black solid 1px;;
 	background-color: #eee;
 	padding: 0;
+}
+/*.status.loading-mon-info .text::before{
+	content: "正在加载怪物数据";
+}*/
+.status.loading-mon-info .icon{
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background-image: url(images/loading.png);
+	background-size: cover;
+    animation: loading-animate 10s infinite linear;
 }
 ul{
 	margin: 0;
