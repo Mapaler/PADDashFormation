@@ -99,19 +99,19 @@ function awokenCountInTeam(team,awokenIndex,solo)
 {
 	var formationAwokenCount = team.reduce(function(tc,tm,isAssist){
 		var teamAwokenCount = tm.reduce(function(c,m){
-			let Card = Cards[m.id];
+			const Card = Cards[m.id] || Cards[0];
 			if (m.id<=0)
 			{ //如果是特殊情况的
 				return c;
 			}
-			let cdAwoken = Card.awakenings; //这个怪物的觉醒数据
-			let cdSAwoken = Card.superAwakenings; //这个怪物的超觉醒数据
+			const cdAwoken = Card.awakenings; //这个怪物的觉醒数据
+			const cdSAwoken = Card.superAwakenings; //这个怪物的超觉醒数据
 			if ((!cdAwoken && !cdSAwoken) || (isAssist && cdAwoken.indexOf(49)<0))
 			{ //如果没有觉醒和超觉醒 || （如果是辅助队 &&第一个不是武器觉醒）
 				return c;
 			}
 			//启用的觉醒数组片段
-			let enableAwoken = cdAwoken.slice(0,m.awoken);
+			const enableAwoken = cdAwoken.slice(0,m.awoken);
 			//相同的觉醒数
 			let hasAwoken = enableAwoken.filter(function(a){return a == awokenIndex;}).length;
 			//如果是单人，有超觉醒，且超觉醒id和计数的id相同

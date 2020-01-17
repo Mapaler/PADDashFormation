@@ -94,7 +94,7 @@ ul{
 .null .subproperty,.delay .subproperty
 {
 	box-sizing: border-box;
-	background-image: none;
+	background-image: none !important;
 }
 .null .monster{
 	background-color: rgba(230,230,230,0.5);
