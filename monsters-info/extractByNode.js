@@ -1,5 +1,6 @@
 ﻿const fs = require('fs');
 const Card = require('./official-API/parseCard');
+const Skill = require('./official-API/parseSkill');
 var officialAPI = [ //来源于官方API
 	{
 		code:"ja",
@@ -34,24 +35,23 @@ function sameCard(m1,m2)
  */
 officialAPI.forEach(function(lang){
 	console.log("正在读取官方 " + lang.code + " 信息");
-	let json = fs.readFileSync("official-API/" + lang.code +".json", 'utf-8'); //使用同步读取
-	let oCards = lang.cardOriginal = JSON.parse(json).card;//将字符串转换为json对象
-
+	const cardJson = fs.readFileSync("official-API/" + lang.code +".json", 'utf-8'); //使用同步读取怪物
+	const oCards = lang.cardOriginal = JSON.parse(cardJson).card;//将字符串转换为json对象
 
 	let maxCardIndex = 0;
 	while (oCards[maxCardIndex][0] == maxCardIndex)
 	{
 		maxCardIndex++;
 	}
-	let monCards = lang.cards = oCards
+	const monCards = lang.cards = oCards
 		.slice(0,maxCardIndex)  //切出前面id相等部分(id不等于索引时，都是敌人)
 		.map((oc)=>{return new Card(oc);}); //每一项生成分析对象
 
 	//加入自定义的语言
 	lang.customName.forEach(function(lcode){
 		console.log("正在读取自定义 " + lcode + " 信息");
-		let json = fs.readFileSync("custom/" + lcode +".json", 'utf-8'); //使用同步读取
-		let ccard = JSON.parse(json);//将字符串转换为json对象
+		const ljson = fs.readFileSync("custom/" + lcode +".json", 'utf-8'); //使用同步读取
+		const ccard = JSON.parse(ljson);//将字符串转换为json对象
 		ccard.forEach(function(cm,idx){ //每个文件内的名字循环
 			let m = monCards[cm.id];
 			if (m)
@@ -62,6 +62,10 @@ officialAPI.forEach(function(lang){
 			}
 		});
 	});
+
+	const skillJson = fs.readFileSync("official-API/" + lang.code +"-skill.json", 'utf-8'); //使用同步读取技能
+	const oSkills = lang.skillOriginal = JSON.parse(skillJson).skill;//将字符串转换为json对象
+	lang.skills = oSkills.map((oc,idx)=>{return new Skill(idx,oc);}); //每一项生成分析对象
 });
 
 //加入其他服务器相同角色的名字
@@ -150,11 +154,18 @@ officialAPI.forEach(function(lang){
 		delete card.enemy;
 	});
 */
-	let str = JSON.stringify(lang.cards);
-	fs.writeFile('./mon_'+lcode+'.json',str,function(err){
+	const cardStr = JSON.stringify(lang.cards);
+	fs.writeFile('./mon_'+lcode+'.json',cardStr,function(err){
 		if(err){
 			console.error(err);
 		}
 		console.log('mon_'+lcode+'.json 导出成功');
+	});
+	const skillStr = JSON.stringify(lang.skills);
+	fs.writeFile('./skill_'+lcode+'.json',skillStr,function(err){
+		if(err){
+			console.error(err);
+		}
+		console.log('skill_'+lcode+'.json 导出成功');
 	});
 });

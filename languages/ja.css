@@ -2,6 +2,9 @@
 .status.loading-mon-info .text::before{
 	content: "モンスターデータを読み込んでいます。";
 }
+.status.loading-skill-info .text::before{
+	content: "スキル データを読み込んでいます。";
+}
 .delay .monster::before{
 	content: "遅 延\A対 策";
 }

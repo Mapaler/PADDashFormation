@@ -1,4 +1,5 @@
 var Cards = null; //怪物数据
+var Skills = null; //技能数据
 var currentLanguage = null; //当前语言
 var currentDataSource = null; //当前数据
 const dataSourceList = [ //几个不同的游戏服务区
@@ -276,8 +277,27 @@ window.onload = function()
 			return true;
 		}
 	});
+	statusLine.classList.add("loading-mon-info");
+	GM_xmlhttpRequest({
+		method: "GET",
+		url:`monsters-info/mon_${currentDataSource.code}.json`, //Cards数据文件
+		onload: function(response) {
+			dealCardsData(response.response);
+		},
+		onerror: function(response) {
+			let isChrome = navigator.userAgent.indexOf("Chrome") >=0;
+			if (isChrome && location.host.length==0 && response.response.length>0)
+			{
+				console.info("因为是Chrome本地打开，正在尝试读取JSON");
+				dealCardsData(response.response);
+			}else
+			{
+				console.error("Cards JSON数据获取失败",response);
+			}
+		}
+	});
 	//处理返回的数据
-	function dealIdata(responseText)
+	function dealCardsData(responseText)
 	{
 		try
 		{
@@ -287,30 +307,42 @@ window.onload = function()
 			console.log("Cards数据JSON解码出错",e);
 			return;
 		}
-		initialize();//初始化
 		statusLine.classList.remove("loading-mon-info");
+		statusLine.classList.add("loading-skill-info");
+		GM_xmlhttpRequest({
+			method: "GET",
+			url:`monsters-info/skill_${currentDataSource.code}.json`, //Skills数据文件
+			onload: function(response) {
+				dealSkillData(response.response);
+			},
+			onerror: function(response) {
+				let isChrome = navigator.userAgent.indexOf("Chrome") >=0;
+				if (isChrome && location.host.length==0 && response.response.length>0)
+				{
+					console.info("因为是Chrome本地打开，正在尝试读取JSON");
+					dealSkillData(response.response);
+				}else
+				{
+					console.error("Skills JSON数据获取失败",response);
+				}
+			}
+		});
+	}
+	function dealSkillData(responseText)
+	{
+		try
+		{
+			Skills = JSON.parse(responseText);
+		}catch(e)
+		{
+			console.log("Skills数据JSON解码出错",e);
+			return;
+		}
+		initialize();//初始化
+		statusLine.classList.remove("loading-skill-info");
 		//如果通过的话就载入URL中的怪物数据
 		reloadFormationData();
 	}
-	statusLine.classList.add("loading-mon-info");
-	GM_xmlhttpRequest({
-		method: "GET",
-		url:`monsters-info/mon_${currentDataSource.code}.json`, //Cards数据文件
-		onload: function(response) {
-			dealIdata(response.response);
-		},
-		onerror: function(response) {
-			let isChrome = navigator.userAgent.indexOf("Chrome") >=0;
-			if (isChrome && location.host.length==0 && response.response.length>0)
-			{
-				console.info("因为是Chrome本地打开，正在尝试读取JSON");
-				dealIdata(response.response);
-			}else
-			{
-				console.error("Cars JSON数据获取失败",response);
-			}
-		}
-	});
 };
 //重新读取URL中的Data数据并刷新页面
 function reloadFormationData()

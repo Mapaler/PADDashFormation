@@ -50,16 +50,21 @@ body{
 	background-color: #eee;
 	padding: 0;
 }
+.status{
+	line-height: 16px;
+}
 /*.status.loading-mon-info .text::before{
 	content: "正在加载怪物数据";
 }*/
-.status.loading-mon-info .icon{
+.status.loading-mon-info .icon,
+.status.loading-skill-info .icon{
 	display: inline-block;
 	width: 16px;
 	height: 16px;
-	background-image: url(images/loading.png);
-	background-size: cover;
-    animation: loading-animate 10s infinite linear;
+	border: 4px SteelBlue dotted;
+	border-radius: 50%;
+	animation: loading-animate 50s infinite linear;
+	vertical-align: middle;
 }
 ul{
 	margin: 0;
