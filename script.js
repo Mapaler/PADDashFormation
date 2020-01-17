@@ -877,7 +877,7 @@ function initialize()
 			}
 		}
 
-		changeid(mon,editBox.monsterBox,editBox.latentBox);
+		changeid(mon,editBox.monsterBox,editBox.memberIdx[1] ? null : editBox.latentBox);
 
 		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 		if (formationAbilityDom)
@@ -1498,7 +1498,6 @@ function refreshAll(formationData){
 	const txtDetail = detailBox.querySelector(".detail");
 	txtTitle.value = formationData.title || "";
 	txtDetail.value = formationData.detail || "";
-	txtDetail.onblur();
 	
 	const badges = Array.prototype.slice.call(formationA_bigbox.querySelectorAll(".formation-badge .badge-bg"));
 	badges.forEach((b,idx)=>{
@@ -1543,6 +1542,7 @@ function refreshAll(formationData){
 	formationBox.appendChild(fragment);
 	refreshTotalAbility(formationData.team[0]);
 	refreshAwokenCount(formationData.team);
+	txtDetail.onblur(); //这个需要放在显示出来后再改才能生效
 }
 //刷新觉醒总计
 function refreshAwokenCount(teams){
