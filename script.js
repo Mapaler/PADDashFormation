@@ -45,7 +45,7 @@ Member.prototype.outObj = function(){
 	}
 	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) obj[4] = m.latent;
 	if (m.sawoken != undefined && m.sawoken>=0) obj[5] = m.sawoken;
-	const card = Cards[m.id]; //怪物固定数据
+	const card = Cards[m.id] || Cards[0]; //怪物固定数据
 	const skill = Skills[card.activeSkillId];
 	//有技能等级，并且技能等级低于最大等级时才记录技能
 	if (m.skilllevel != undefined && m.skilllevel < skill.maxLevel) obj[6] = m.skilllevel;
@@ -178,7 +178,13 @@ Formation.prototype.loadObj= function(f){
 //获取最大潜觉数量
 function getMaxLatentCount(id)
 { //转生2和超转生3为8个格子
-	return Cards[id].is8Latent ? 8 : 6;
+	if (Cards[id])
+	{
+		return Cards[id].is8Latent ? 8 : 6;
+	}else
+	{
+		return 6;
+	} 
 }
 //切换怪物ID显示
 function toggleShowMonId()
@@ -902,7 +908,7 @@ function initialize()
 		formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
 
 		mon.id = parseInt(monstersID.value,10);
-		const card = Cards[mon.id];
+		const card = Cards[mon.id] || Cards[0];
 		const skill = Skills[card.activeSkillId];
 
 		mon.level = parseInt(monEditLv.value,10);
@@ -1172,8 +1178,8 @@ function changeid(mon,monDom,latentDom)
 	const parentNode = monDom.parentNode;
 	fragment.appendChild(monDom);
 	const monId = mon.id;
-	const card = Cards[monId]; //怪物固定数据
-	const skill = Skills[card.activeSkillId];
+	const card = Cards[monId] || Cards[0]; //怪物固定数据
+	//const skill = Skills[card.activeSkillId];
 	monDom.setAttribute("data-cardid", monId); //设定新的id
 	if (monId<0) //如果是延迟
 	{
