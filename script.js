@@ -465,7 +465,7 @@ function initialize()
 	//徽章
 	let badges = Array.prototype.slice.call(formationBox.querySelectorAll(".formation-badge .badge-bg"));
 	badges.forEach((badge,bidx) => {
-		badge.onclick = ()=>{
+		badge.onclick = function(){
 			if (badges.some(b=>{return b.classList.contains("display-none");}))
 			{ //未展开时
 				badges.forEach((b,idx) => {if (idx!=bidx)b.classList.remove("display-none");});
@@ -538,7 +538,7 @@ function initialize()
 	let s_awokensCount = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .count"));*/
 	let s_sawokens = Array.prototype.slice.call(searchBox.querySelectorAll(".sawoken-div .sawoken-check"));
 	s_awokensIcon.forEach((b,idx)=>{ //每种觉醒增加1
-		b.onclick = ()=>{
+		b.onclick = function(){
 			const countDom = s_awokensCount[idx];
 			let count = parseInt(countDom.innerHTML,10);
 			if (count<9)
@@ -568,7 +568,7 @@ function initialize()
 
 	const awokenClear = searchBox.querySelector(".awoken-div .awoken-clear");
 	const sawokenClear = searchBox.querySelector(".sawoken-div .sawoken-clear");
-	awokenClear.onclick = ()=>{ //清空觉醒选项
+	awokenClear.onclick = function(){ //清空觉醒选项
 		s_awokensCount.forEach(t=>{
 			t.innerHTML = 0;
 		});
@@ -576,7 +576,7 @@ function initialize()
 			t.classList.add("zero");
 		});
 	};
-	sawokenClear.onclick = ()=>{ //清空超觉醒选项
+	sawokenClear.onclick = function(){ //清空超觉醒选项
 		s_sawokens.forEach(t=>{
 			t.checked = false;
 		});
@@ -598,7 +598,7 @@ function initialize()
 	{
 		return parseInt(str, 10);
 	}
-	searchStart.onclick = ()=>{
+	searchStart.onclick = function(){
 		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
 		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
 		const fixMainColor = s_fixMainColor.checked;
@@ -647,10 +647,10 @@ function initialize()
 		searchMonList.classList.remove("display-none");
 	};
 
-	searchClose.onclick = ()=>{
+	searchClose.onclick = function(){
 		searchBox.classList.add("display-none");
 	};
-	searchClear.onclick = ()=>{ //清空搜索选项
+	searchClear.onclick = function(){ //清空搜索选项
 		s_attr1s[0].checked = true;
 		s_attr2s[0].checked = true;
 		s_types.forEach(t=>{
@@ -669,23 +669,24 @@ function initialize()
 	};
 	const settingBox = editBox.querySelector(".setting-box");
 	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
-	searchOpen.onclick = ()=>{
+	searchOpen.onclick = function(){
 		searchBox.classList.remove("display-none");
 	};
 
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
 	monstersID.onchange = function(){
+		console.log(this.value);
 		if (/^\d+$/.test(this.value))
 		{
-			editBox.mid = parseInt(this.value);
+			editBox.mid = parseInt(this.value, 10);
 			editBoxChangeMonId(editBox.mid);
 		}
 	};
 	monstersID.oninput = monstersID.onchange;
 	//觉醒
 	let monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon"));
-	monEditAwokens.forEach(function(akDom,idx,domArr){
+	monEditAwokens.forEach((akDom,idx,domArr)=>{
 		akDom.onclick = function(){
 			editBox.awokenCount = idx;
 			editBox.reCalculateAbility();
@@ -693,13 +694,13 @@ function initialize()
 		};
 	});
 	//刷新觉醒
-	editBox.refreshAwokens = function(){
+	editBox.refreshAwokens = ()=>{
 		monEditAwokens[0].innerHTML = editBox.awokenCount;
 		if (editBox.awokenCount>0 && editBox.awokenCount==(Cards[editBox.mid].awakenings.length))
 			monEditAwokens[0].classList.add("full-awoken");
 		else
 			monEditAwokens[0].classList.remove("full-awoken");
-		for(var ai=1;ai<monEditAwokens.length;ai++)
+		for(let ai=1;ai<monEditAwokens.length;ai++)
 		{
 			if(ai<=editBox.awokenCount)
 			{
@@ -714,7 +715,7 @@ function initialize()
 
 	//超觉醒
 	let monEditSAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon"));
-	monEditSAwokens.forEach(function(akDom,idx,domArr){
+	monEditSAwokens.forEach((akDom,idx,domArr)=>{
 		akDom.onclick = function(){
 			for(var ai=0;ai<domArr.length;ai++)
 			{
@@ -741,7 +742,7 @@ function initialize()
 	}
 	//等级
 	const monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.onchange = function(){editBox.reCalculateAbility();};
+	monEditLv.onchange = editBox.reCalculateAbility;
 	const monEditLvMin = settingBox.querySelector(".m-level-btn-min");
 	monEditLvMin.ipt = monEditLv;
 	monEditLvMin.onclick = setIptToMyValue;
@@ -753,11 +754,11 @@ function initialize()
 	const monEditAddAtkLi = settingBox.querySelector(".row-mon-plus .m-plus-atk-li");
 	const monEditAddRcvLi = settingBox.querySelector(".row-mon-plus .m-plus-rcv-li");
 	const monEditAddHp = monEditAddHpLi.querySelector(".m-plus-hp");
-	monEditAddHp.onchange = function(){editBox.reCalculateAbility();};
+	monEditAddHp.onchange = editBox.reCalculateAbility;
 	const monEditAddAtk = monEditAddAtkLi.querySelector(".m-plus-atk");
-	monEditAddAtk.onchange = function(){editBox.reCalculateAbility();};
+	monEditAddAtk.onchange = editBox.reCalculateAbility;
 	const monEditAddRcv = monEditAddRcvLi.querySelector(".m-plus-rcv");
-	monEditAddRcv.onchange = function(){editBox.reCalculateAbility();};
+	monEditAddRcv.onchange = editBox.reCalculateAbility;
 	//3个快速设置按钮
 	const monEditAddHpBtn = monEditAddHpLi.querySelector(".m-plus-btn");
 	monEditAddHpBtn.ipt = monEditAddHp;
@@ -770,7 +771,7 @@ function initialize()
 	monEditAddRcvBtn.onclick = setIptToMyValue;
 	//297按钮
 	const monEditAdd297 = settingBox.querySelector(".row-mon-plus .m-plus-btn-297");
-	monEditAdd297.onclick = ()=>{
+	monEditAdd297.onclick = function(){
 		monEditAddHp.value = 
 		monEditAddAtk.value = 
 		monEditAddRcv.value = 99;
@@ -809,6 +810,23 @@ function initialize()
 			}
 		}
 	};
+
+	const rowSkill = settingBox.querySelector(".row-mon-skill");
+	const skillBox = rowSkill.querySelector(".skill-box");
+	const skillCD = skillBox.querySelector(".skill-cd");
+	const skillLevel = skillBox.querySelector(".m-skill-level");
+	const skillLevel_1 = skillBox.querySelector(".m-skill-lv-1");
+	const skillLevel_Max = skillBox.querySelector(".m-skill-lv-max");
+
+	skillLevel.onchange = function(){
+		const card = Cards[editBox.mid] || Cards[0]; //怪物固定数据
+		const skill = Skills[card.activeSkillId];
+		skillCD.innerHTML = skill.initialCooldown - this.value + 1;
+	};
+	skillLevel_1.ipt = skillLevel;
+	skillLevel_1.onclick = setIptToMyValue;
+	skillLevel_Max.ipt = skillLevel;
+	skillLevel_Max.onclick = setIptToMyValue;
 
 	function deleteLatent(){
 		let aIdx = parseInt(this.value, 10);
@@ -1367,11 +1385,15 @@ function editMon(AorB,isAssist,tempIdx)
 //编辑窗，修改怪物ID
 function editBoxChangeMonId(id)
 {
-	let card = Cards[id]; //怪物固定数据
-	if (!card){
+	const card = Cards[id] || Cards[0]; //怪物固定数据
+	if (card.id == 0){
 		id = 0;
-		card = Cards[0];
 	}
+	console.log(card)
+	const skill = Skills[card.activeSkillId];
+
+	let fragment = null;
+
 	const editBox = document.querySelector(".edit-box");
 	const monInfoBox = editBox.querySelector(".monsterinfo-box");
 	const searchBox = editBox.querySelector(".search-box");
@@ -1399,7 +1421,7 @@ function editBoxChangeMonId(id)
 	const createCardHead = editBox.createCardHead;
 	if (evoLinkCardsIdArray.length>1)
 	{
-		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+		fragment = document.createDocumentFragment(); //创建节点用的临时空间
 		evoLinkCardsIdArray.forEach(function(mid){
 			const cli = createCardHead(mid);
 			if (mid == id)
@@ -1412,7 +1434,7 @@ function editBoxChangeMonId(id)
 		evoCardUl.style.display = "block";
 	}
 
-	var mType = monInfoBox.querySelectorAll(".monster-type li");
+	let mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (let ti=0;ti<mType.length;ti++)
 	{
 		if (ti<card.types.length)
@@ -1425,7 +1447,7 @@ function editBoxChangeMonId(id)
 		}
 	}
 
-	var mAwoken = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul li");
+	const mAwoken = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul li");
 	editBox.awokenCount = card.awakenings.length;
 	mAwoken[0].innerHTML = editBox.awokenCount ? "★" : "0";
 	for (let ai=1;ai<mAwoken.length;ai++)
@@ -1440,8 +1462,8 @@ function editBoxChangeMonId(id)
 	}
 
 	//超觉醒
-	var mSAwokenRow = settingBox.querySelector(".row-mon-super-awoken");
-	var mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
+	const mSAwokenRow = settingBox.querySelector(".row-mon-super-awoken");
+	let mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
 	//if (!editBox.assist && card.superAwakenings.length>0)
 	if (card.superAwakenings.length>0) //武器上也还是加入超觉醒吧
 	{
@@ -1462,13 +1484,13 @@ function editBoxChangeMonId(id)
 		mSAwokenRow.classList.add("display-none");
 	}
 
-	var monEditLvMax = settingBox.querySelector(".m-level-btn-max");
+	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
 	monEditLvMax.innerHTML = monEditLvMax.value = card.maxLevel + (card.limitBreakIncr ? 11 : 0); //最大等级按钮
-	var monEditLv = settingBox.querySelector(".m-level");
+	const monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.value = card.maxLevel; //默认等级为最大等级而不是110
 
-	var rowPlus =  settingBox.querySelector(".row-mon-plus");
-	var rowLatent =  settingBox.querySelector(".row-mon-latent");
+	const rowPlus =  settingBox.querySelector(".row-mon-plus");
+	const rowLatent =  settingBox.querySelector(".row-mon-latent");
 	if (card.overlay)
 	{ //当可以叠加时，不能打297和潜觉
 		rowPlus.classList.add("disabled"); 
@@ -1478,12 +1500,12 @@ function editBoxChangeMonId(id)
 		rowPlus.classList.remove("disabled"); 
 		rowLatent.classList.remove("disabled"); 
 	}
-	var monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
+	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
 	//该宠Type允许的杀
-	var allowLatent = uniq(card.types.reduce(function (previous, t, index, array) {
+	let allowLatent = uniq(card.types.reduce(function (previous, t, index, array) {
 		return previous.concat(type_allowable_latent[t]);
 	},[]));
-	for(var li=17;li<=24;li++)
+	for(let li=17;li<=24;li++) //显示允许的杀，隐藏不允许的杀
 	{
 		var latentDom = monLatentAllowUl.querySelector(".latent-icon-" + li);
 		if (allowLatent.indexOf(li)>=0)
@@ -1496,6 +1518,30 @@ function editBoxChangeMonId(id)
 				latentDom.classList.add("unselected-latent");
 		}
 	}
+
+	const rowSkill = settingBox.querySelector(".row-mon-skill");
+	const skillBox = rowSkill.querySelector(".skill-box");
+	const skillTitle = skillBox.querySelector(".skill-name");
+	const skillCD = skillBox.querySelector(".skill-cd");
+	const skillLevel = skillBox.querySelector(".m-skill-level");
+	const skillLevel_1 = skillBox.querySelector(".m-skill-lv-1");
+	const skillLevel_Max = skillBox.querySelector(".m-skill-lv-max");
+	const skillDetail = skillBox.querySelector(".skill-datail");
+	
+	fragment = document.createDocumentFragment(); //创建节点用的临时空间
+	fragment.appendChild(skillBox);
+
+	skillTitle.innerHTML = "";
+	skillTitle.appendChild(document.createTextNode(skill.name));
+	skillDetail.innerHTML = "";
+	skillDetail.appendChild(document.createTextNode(skill.description));
+	skillLevel.max = skill.maxLevel;
+	skillLevel.value = skill.maxLevel;
+	skillLevel_Max.value = skill.maxLevel;
+	skillLevel_Max.innerHTML = skill.maxLevel;
+	skillCD.innerHTML = skill.initialCooldown - skill.maxLevel + 1;
+
+	rowSkill.appendChild(fragment);
 
 	if (editBox.assist)
 	{

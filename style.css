@@ -867,6 +867,71 @@ ul{
 	opacity: var(--search-icon-unchecked);
 }
 
+.edit-box .setting-box .row-mon-skill{
+	margin-top:5px;
+}
+.skill-box .skill-cd::before{
+	content: "冷却回合：";
+}
+.skill-box .skill-level-label::before{
+	content: "Lv";
+}
+.skill-box .m-skill-lv-1::before{
+	content: "Lv";
+}
+.skill-box .m-skill-lv-max::before{
+	content: "最高Lv";
+}
+.skill-box .m-skill-level {
+	font-size: 18px;
+	height: 30px;
+	width: 55px;
+	box-sizing: border-box;
+	border: none;
+	background: none;
+	font-family: 'FOT-KurokaneStd-EB';
+	color: white;
+}
+.skill-box .m-skill-lv-1,.skill-box .m-skill-lv-max{
+	height: 30px;
+	box-sizing: border-box;
+	font-size: 18px;
+}
+.skill-box{
+	font-family: 'FOT-KurokaneStd-EB';
+	text-shadow:black 2px 2px 0;
+	font-size: 20px;
+	border: #9C743E solid 3px;
+	border-radius: 10px;
+	background-color: #B1AAA0;
+	overflow: hidden;
+	box-shadow: inset black 0 0 5px;
+}
+.skill-title{
+	background-color: #39180F;
+	box-shadow: inset black 0 5px 5px;
+	padding: 0 10px 0 5px;
+}
+.skill-title::before{
+	content: "主動技能";
+	background-color: #774433;
+	border: #BB9944 solid 3px;
+	border-radius: 5px;
+	margin-right: 5px;
+	padding: 0 5px;
+}
+.skill-title .skill-name{
+	color: #84BAFC;
+}
+.skill-datail{
+	padding: 0 10px;
+}
+.skill-cd-control{
+	float: right;
+}
+.skill-cd{
+	margin-right: 20px;
+}
 
 .edit-box .button-box{
 	border-top: black solid 3px;
