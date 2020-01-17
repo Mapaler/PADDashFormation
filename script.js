@@ -1065,6 +1065,7 @@ function touchendMonHead(e)
 //移动端编辑界面每个怪物的头像的取消
 function touchcancelMonHead(e)
 {
+	interchangeSVG.style.display = "none";
 	console.log("移动取消",e,this);
 }
 function interchangeCard(formArr,toArr)
