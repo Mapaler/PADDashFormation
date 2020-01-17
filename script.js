@@ -29,8 +29,8 @@ var Member = function(){
 	this.id=0;
 };
 Member.prototype.outObj = function(){
-	var m = this;
-	var obj = [m.id];
+	const m = this;
+	let obj = [m.id];
 	if (m.level != undefined) obj[1] = m.level;
 	if (m.awoken != undefined) obj[2] = m.awoken;
 	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])!==0)
@@ -45,6 +45,10 @@ Member.prototype.outObj = function(){
 	}
 	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) obj[4] = m.latent;
 	if (m.sawoken != undefined && m.sawoken>=0) obj[5] = m.sawoken;
+	const card = Cards[m.id]; //怪物固定数据
+	const skill = Skills[card.activeSkillId];
+	//有技能等级，并且技能等级低于最大等级时才记录技能
+	if (m.skilllevel != undefined && m.skilllevel < skill.maxLevel) obj[6] = m.skilllevel;
 	return obj;
 };
 Member.prototype.loadObj = function(m,dataVersion){
@@ -74,6 +78,7 @@ Member.prototype.loadObj = function(m,dataVersion){
 	this.latent = dataVersion>1 ? m[4] : m.latent;
 	if (!(this.latent instanceof Array)) this.latent = []; //如果潜觉不是数组，则改变
 	this.sawoken = dataVersion>1 ? m[5] : m.sawoken;
+	if (m[6] != undefined) this.skilllevel = m[6];
 };
 //只用来防坐的任何队员
 var MemberDelay = function(){
@@ -179,6 +184,11 @@ function getMaxLatentCount(id)
 function toggleShowMonId()
 {
 	document.body.classList.toggle('not-show-mon-id');
+}
+//切换怪物技能CD显示
+function toggleShowMonSkillCd()
+{
+	document.body.classList.toggle('show-mon-skill-cd');
 }
 //清除数据
 function clearData()
@@ -676,7 +686,6 @@ function initialize()
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
 	monstersID.onchange = function(){
-		console.log(this.value);
 		if (/^\d+$/.test(this.value))
 		{
 			editBox.mid = parseInt(this.value, 10);
@@ -894,6 +903,8 @@ function initialize()
 
 		mon.id = parseInt(monstersID.value,10);
 		const card = Cards[mon.id];
+		const skill = Skills[card.activeSkillId];
+
 		mon.level = parseInt(monEditLv.value,10);
 		mon.awoken = editBox.awokenCount;
 		if (card.superAwakenings.length) //如果支持超觉醒
@@ -927,9 +938,14 @@ function initialize()
 			}
 		}
 
+		const skillLevelNum = parseInt(skillLevel.value,10);
+		if (skillLevelNum < skill.maxLevel)
+		{
+			mon.skilllevel = skillLevelNum;
+		}
 		changeid(mon,editBox.monsterBox,editBox.memberIdx[1] ? null : editBox.latentBox);
 
-		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
+		const formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 		if (formationAbilityDom)
 		{
 			refreshAbility(
@@ -939,6 +955,10 @@ function initialize()
 			refreshTotalAbility(formation.team[editBox.memberIdx[0]]);
 		}
 		refreshAwokenCount(formation.team);
+
+		//刷新改队员的CD
+		const teamDom = document.querySelector(".formation-box .formation-" + (editBox.memberIdx[0]?"B":"A") + "-box");
+		refreshSkillCD(teamDom,formation.team[editBox.memberIdx[0]],editBox.memberIdx[2]); 
 		creatNewUrl();
 		editBox.hide();
 	};
@@ -1153,6 +1173,7 @@ function changeid(mon,monDom,latentDom)
 	fragment.appendChild(monDom);
 	const monId = mon.id;
 	const card = Cards[monId]; //怪物固定数据
+	const skill = Skills[card.activeSkillId];
 	monDom.setAttribute("data-cardid", monId); //设定新的id
 	if (monId<0) //如果是延迟
 	{
@@ -1310,6 +1331,20 @@ function changeid(mon,monDom,latentDom)
 			latentDom.classList.add("display-none");
 		}
 	}
+	/*
+	const skillLv = monDom.querySelector(".skill");
+	if (skillLv) //如果存在超觉醒的DOM且提供了超觉醒
+	{
+		if (mon.skilllevel != undefined && mon.skilllevel < skill.maxLevel)
+		{
+			skillLv.classList.remove("display-none");
+			skillLv.innerHTML = skill.initialCooldown - mon.skilllevel + 1;
+		}else
+		{
+			skillLv.classList.add("display-none");
+		}
+	}
+	*/
 	parentNode.appendChild(fragment);
 }
 //点击怪物头像，出现编辑窗
@@ -1361,7 +1396,14 @@ function editMon(AorB,isAssist,tempIdx)
 		monEditAddAtk.value = mon.plus[1];
 		monEditAddRcv.value = mon.plus[2];
 	}
-	var btnDelay = editBox.querySelector(".button-delay");
+	const btnDelay = editBox.querySelector(".button-delay");
+	const skillLevel = editBox.querySelector(".row-mon-skill .skill-box .m-skill-level");
+	if (mon.skilllevel)
+	{
+		skillLevel.value = mon.skilllevel;
+	}
+	skillLevel.onchange();
+
 	if (!isAssist)
 	{
 		editBox.latent = mon.latent ? mon.latent.concat() : [];
@@ -1389,7 +1431,6 @@ function editBoxChangeMonId(id)
 	if (card.id == 0){
 		id = 0;
 	}
-	console.log(card)
 	const skill = Skills[card.activeSkillId];
 	const leaderSkill = Skills[card.leaderSkillId];
 
@@ -1522,7 +1563,6 @@ function editBoxChangeMonId(id)
 	//将怪物的文字介绍解析为HTML
 	function descriptionToHTML(str)
 	{
-		console.log(str);
 		str = str.replace("\n","<br>");
 		str = str.replace(/\^(\w+)\^(.+)\^p/igm,'<span style="color:#$1;">$2</span>');
 		return str;
@@ -1632,10 +1672,12 @@ function refreshAll(formationData){
 				formationData.team[0],
 				ti);
 		}
+		refreshSkillCD(formationA,formationData.team[0],ti);
 		if (formationB)
 		{
 			changeid(formationData.team[1][0][ti],fBTeam[ti],fBLatents[ti]);
 			changeid(formationData.team[1][1][ti],fBAssist[ti]);
+			refreshSkillCD(formationB,formationData.team[1],ti);
 		}
 	}
 	formationBox.appendChild(fragment);
@@ -1691,17 +1733,18 @@ function refreshAwokenCount(teams){
 	awokenTotalBox.appendChild(awokenUL);
 }
 //刷新能力值
-function refreshAbility(dom,team,idx){
-	const ali = dom.querySelector(".abilitys-" + (idx+1));
+function refreshAbility(abilityDom,team,idx){
+	const ali = abilityDom.querySelector(".abilitys-" + (idx+1));
 	const mainMD = team[0][idx];
 	const assistMD = team[1][idx];
 	const bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性倍率
 	//基底三维，如果辅助是武器，还要加上辅助的觉醒
 	const mainAbility = calculateAbility(mainMD.id,mainMD.level,mainMD.plus,mainMD.awoken,mainMD.latent,assistMD.id,assistMD.awoken);
 	//辅助增加的三维，如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
-	const mainCard = Cards[mainMD.id] || Cards[0];
+	const memberCard = Cards[mainMD.id] || Cards[0];
 	const assistCard = Cards[assistMD.id] || Cards[0];
-	const assistAbility = (assistMD.id > 0 && mainCard.attrs[0]==assistCard.attrs[0]) ?
+
+	const assistAbility = (assistMD.id > 0 && memberCard.attrs[0]==assistCard.attrs[0]) ?
 			calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null) :
 			[0,0,0];
 	if (mainAbility && mainMD.ability)
@@ -1768,4 +1811,96 @@ function refreshTotalAbility(team){
 		(teamRCVAwoken>0||badgeRCVScale>1 ?
 			("("+Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)*badgeRCVScale).toString()+")") :
 			"");
+}
+//刷新能力值合计
+function refreshTotalAbility(team){
+	//计算总的生命值
+	const formationBox = document.querySelector(".formation-box");
+	const teamInfo = formationBox.querySelector(".team-info");
+	if (!teamInfo) return;
+	const tHpDom = teamInfo.querySelector(".tIf-total-hp");
+	const tRcvDom = teamInfo.querySelector(".tIf-total-rcv");
+	const tHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
+		return value += mon.ability ? mon.ability[0] : 0;
+	},0);
+	const teamHPAwoken = awokenCountInTeam(team,46,solo); //全队血包个数
+	//let tHPwithAwoken = Math.round(tHP * (1 + awokenCountInTeam(team,46,solo) * 0.05)); //全队血包
+	let badgeHPScale = 1; //徽章倍率
+	if (formation.badge == 4)
+	{
+		badgeHPScale = 1.05;
+	}else if (formation.badge == 11)
+	{
+		badgeHPScale = 1.15;
+	}
+	const tRCV = team[0].reduce(function(value,mon){ //队伍计算的总回复
+		return value += mon.ability ? mon.ability[2] : 0;
+	},0);
+	const teamRCVAwoken = awokenCountInTeam(team,47,solo); //全队回复个数
+	//let tRCVwithAwoken = Math.round(tRCV * (1 + awokenCountInTeam(team,47,solo) * 0.10)); //全队回复
+	let badgeRCVScale = 1; //徽章倍率
+	if (formation.badge == 3)
+	{
+		badgeRCVScale = 1.25;
+	}else if (formation.badge == 10)
+	{
+		badgeRCVScale = 1.35;
+	}
+	tHpDom.innerHTML = tHP.toString() + 
+		(teamHPAwoken>0||badgeHPScale>1 ?
+			("("+Math.round(tHP * (1 + 0.05 * teamHPAwoken)*badgeHPScale).toString()+")") :
+			"");
+	tRcvDom.innerHTML = tRCV.toString() + 
+		(teamRCVAwoken>0||badgeRCVScale>1 ?
+			("("+Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)*badgeRCVScale).toString()+")") :
+			"");
+}
+//刷新技能CD
+function refreshSkillCD(teamDom,team,idx){
+	const memberMonDom = teamDom.querySelector(".formation-team .member-" + (idx+1) + " .monster");
+	const assistMonDom = teamDom.querySelector(".formation-assist .member-" + (idx+1) + " .monster");
+	const member = team[0][idx];
+	const assist = team[1][idx];
+
+	const memberCard = Cards[member.id] || Cards[0];
+	const memberSkill = Skills[memberCard.activeSkillId];
+	const assistCard = Cards[assist.id] || Cards[0];
+	const assistSkill = Skills[assistCard.activeSkillId];
+
+	const memberSkillCdDom = memberMonDom.querySelector(".skill");
+	const assistSkillCdDom = assistMonDom.querySelector(".skill");
+
+	const memberSkillCd = memberSkill ? (memberSkill.initialCooldown - (member.skilllevel||memberSkill.maxLevel) + 1) : 0;
+	const assistSkillCd = assistSkill ? (assistSkill.initialCooldown - (assist.skilllevel||assistSkill.maxLevel) + 1) : 0;
+	memberSkillCdDom.innerHTML = memberSkillCd;
+	assistSkillCdDom.innerHTML = memberSkillCd + assistSkillCd;
+
+	if (member.skilllevel < memberSkill.maxLevel)
+	{
+		memberSkillCdDom.classList.remove("max-skill");
+		assistSkillCdDom.classList.remove("max-skill");
+	}else if (assist.skilllevel < assistSkill.maxLevel){
+		memberSkillCdDom.classList.add("max-skill");
+		assistSkillCdDom.classList.remove("max-skill");
+	}else
+	{
+		memberSkillCdDom.classList.add("max-skill");
+		assistSkillCdDom.classList.add("max-skill");
+	}
+
+	//没有技能时
+	if (memberSkill.id == 0)
+	{
+		memberSkillCdDom.classList.add("display-none");
+	}else
+	{
+		memberSkillCdDom.classList.remove("display-none");
+	}
+	if (assistSkill.id == 0)
+	{
+		assistSkillCdDom.classList.add("display-none");
+	}else
+	{
+		assistSkillCdDom.classList.remove("display-none");
+	}
 }

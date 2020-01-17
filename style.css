@@ -143,7 +143,6 @@ ul{
 	position: absolute;
 	left:10px;
 }
-
 .null .monster>div,.delay .monster>div{
 	display:none;
 }
@@ -247,6 +246,25 @@ ul{
 /*.monster .id::before{
 	content: "No.";
 }*/
+.monster .skill::before{
+	content:"CD";
+	font-size: 10px;
+}
+.monster .skill{
+	font-size: 13px;
+	line-height: 13px;
+	color:white;
+	text-shadow: black 0 0 1px,black 0 0 2px, black 2px 2px 0;
+	position: absolute;
+	right:3px;
+	bottom:0;
+}
+.monster .skill.max-skill{
+	display: none;
+}
+.show-mon-skill-cd .monster .skill.max-skill{
+	display: block;
+}
 /*辅助和队伍的每一只框架*/
 .member, .acquisitus-awoken-icon{
 	display: block;
@@ -1035,9 +1053,16 @@ ul{
 /*.control-box .btn-show-mon-id::before{
 	content: "隐藏怪物ID";
 }
-.not-show-mon-id .control-box .btn-show-mon-id::before{
+.not-show-mon-id .control-box .btn-show-mon-skill-cd::before{
 	content: "显示怪物ID";
-}*/
+}
+*/
+.show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
+	content: "⬜隐藏已满技能CD";
+}
+.control-box .btn-show-mon-skill-cd::before{
+	content: "💿显示已满技能CD";
+}
 #interchange-line{
 	pointer-events: none;
 	position: absolute;
