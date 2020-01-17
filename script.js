@@ -1391,6 +1391,7 @@ function editBoxChangeMonId(id)
 	}
 	console.log(card)
 	const skill = Skills[card.activeSkillId];
+	const leaderSkill = Skills[card.leaderSkillId];
 
 	let fragment = null;
 
@@ -1518,7 +1519,15 @@ function editBoxChangeMonId(id)
 				latentDom.classList.add("unselected-latent");
 		}
 	}
-
+	//将怪物的文字介绍解析为HTML
+	function descriptionToHTML(str)
+	{
+		console.log(str);
+		str = str.replace("\n","<br>");
+		str = str.replace(/\^(\w+)\^(.+)\^p/igm,'<span style="color:#$1;">$2</span>');
+		return str;
+	}
+	//怪物主动技能
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
 	const skillBox = rowSkill.querySelector(".skill-box");
 	const skillTitle = skillBox.querySelector(".skill-name");
@@ -1531,10 +1540,8 @@ function editBoxChangeMonId(id)
 	fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	fragment.appendChild(skillBox);
 
-	skillTitle.innerHTML = "";
-	skillTitle.appendChild(document.createTextNode(skill.name));
-	skillDetail.innerHTML = "";
-	skillDetail.appendChild(document.createTextNode(skill.description));
+	skillTitle.innerHTML = descriptionToHTML(skill.name);
+	skillDetail.innerHTML = descriptionToHTML(skill.description);
 	skillLevel.max = skill.maxLevel;
 	skillLevel.value = skill.maxLevel;
 	skillLevel_Max.value = skill.maxLevel;
@@ -1542,6 +1549,20 @@ function editBoxChangeMonId(id)
 	skillCD.innerHTML = skill.initialCooldown - skill.maxLevel + 1;
 
 	rowSkill.appendChild(fragment);
+
+	//怪物队长技能
+	const rowLederSkill = settingBox.querySelector(".row-mon-leader-skill");
+	const lskillBox = rowLederSkill.querySelector(".skill-box");
+	const lskillTitle = lskillBox.querySelector(".skill-name");
+	const lskillDetail = lskillBox.querySelector(".skill-datail");
+	
+	fragment = document.createDocumentFragment(); //创建节点用的临时空间
+	fragment.appendChild(lskillBox);
+
+	lskillTitle.innerHTML = descriptionToHTML(leaderSkill.name);
+	lskillDetail.innerHTML = descriptionToHTML(leaderSkill.description);
+
+	rowLederSkill.appendChild(fragment);
 
 	if (editBox.assist)
 	{
