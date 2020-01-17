@@ -67,20 +67,21 @@ officialAPI.forEach(function(lang){
 //加入其他服务器相同角色的名字
 for (let li = 0;li < officialAPI.length; li++)
 {
-	let otherLangs = officialAPI.concat(); //复制一份原始数组，储存其他语言
-	let lang = otherLangs.splice(li,1)[0]; //删掉并取得当前的语言
+	const otherLangs = officialAPI.concat(); //复制一份原始数组，储存其他语言
+	const lang = otherLangs.splice(li,1)[0]; //删掉并取得当前的语言
 
-	let langCard = lang.cards,langCardCount = langCard.length;
+	const langCard = lang.cards;
+	const langCardCount = langCard.length;
 	for (let mi=0; mi<langCardCount; mi++)
 	{
-		let m = langCard[mi];
-		let name = m.name; //当前语言的名字
+		const m = langCard[mi];
+		const name = m.name; //当前语言的名字
 
 		//名字对象
 		otherLangs.forEach((otLang)=>{
 			let _m = otLang.cards[mi]; //获得这种其他语言的当前这个怪物数据
 			let isSame = sameCard(m,_m); //与原语言怪物是否是同一只
-			let l1 = lang.code, l2 = otLang.code;
+			const l1 = lang.code, l2 = otLang.code;
 			if (!isSame &&
 				(
 					l1 == 'ja' && (l2 == 'en' || l2 == 'ko') ||
@@ -88,7 +89,7 @@ for (let li = 0;li < officialAPI.length; li++)
 				) //当同id两者不同，日服和英韩服比较时的一些人工确认相同的特殊id差异卡片
 			)
 			{
-				let langIsJa = l1 == 'ja' ? true : false; //原始语言是否是日语
+				const langIsJa = l1 == 'ja' ? true : false; //原始语言是否是日语
 				let diff = 0; //日语和其它语言的id差异
 				switch(true)
 				{
@@ -121,7 +122,7 @@ for (let li = 0;li < officialAPI.length; li++)
 			}
 			if (_m && isSame) //如果有这个怪物，且与原语言怪物是同一只
 			{
-				let otName = _m.name;
+				const otName = _m.name;
 				if (!/^\*+/.test(name) && //名字不是星号开头
 					!/^\*+/.test(otName) && //另一个语言名字不是星号开头
 					!/^\?+/.test(name) && //名字不是问号开头

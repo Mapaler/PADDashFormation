@@ -13,7 +13,7 @@ const type_allowable_latent = {
 	"6":[19,23],//6攻击
 	"7":[17],//7恶魔
 	"8":[17,20,21,24],//8机械
-}
+};
 //仿GM_xmlhttpRequest函数v1.3
 if (typeof(GM_xmlhttpRequest) == "undefined") {
 	var GM_xmlhttpRequest = function(GM_param) {
@@ -33,14 +33,14 @@ if (typeof(GM_xmlhttpRequest) == "undefined") {
 						GM_param.onerror(xhr);
 					}
 				}
-			}
+			};
 		//添加header
 		for (var header in GM_param.headers) {
 			xhr.setRequestHeader(header, GM_param.headers[header]);
 		}
 		//发送数据
 		xhr.send(GM_param.data ? GM_param.data : null);
-	}
+	};
 }
 //数字补前导0
 function PrefixInteger(num, length)
@@ -91,7 +91,7 @@ function awokenCountInFormation(formationTeam,ak,solo)
 {
 	var allAwokenCount = formationTeam.reduce(function(fc,fm){
 		return fc + awokenCountInTeam(fm,ak,solo);
-	},0)
+	},0);
 	return allAwokenCount;
 }
 //计算队伍中有多少个该觉醒
@@ -122,7 +122,7 @@ function awokenCountInTeam(team,awokenIndex,solo)
 			return c + hasAwoken;
 		},0);
 		return tc + teamAwokenCount;
-	},0)
+	},0);
 	return formationAwokenCount;
 }
 //返回可用的怪物名称
@@ -144,7 +144,7 @@ function returnMonsterNameArr(card, lsList, defaultCode)
 	return monNameArr;
 }
 //计算怪物的能力
-function calculateAbility(monid = 0,level = 1,plus = [0,0,0],awoken = 0,latent = [],weaponId,weaponAwoken)
+function calculateAbility(monid = 0, level = 1, plus = [0,0,0], awoken = 0, latent = [], weaponId = null, weaponAwoken = null)
 {
 	const card = Cards[monid]; //怪物数据
 	if (monid == 0 || card == undefined) return null;
@@ -189,23 +189,23 @@ function calculateAbility(monid = 0,level = 1,plus = [0,0,0],awoken = 0,latent =
 			if (weaponAwokenList.indexOf(49)>=0) //49是武器觉醒，确认已经点亮了武器觉醒
 			{awokenList = awokenList.concat(weaponAwokenList);}
 		}
-		const n_awoken = awoken //觉醒增加的数值
-			?Math.round(awokenAdd[idx].reduce(function(previous,aw){
+		const n_awoken = awoken ? //觉醒增加的数值
+			Math.round(awokenAdd[idx].reduce(function(previous,aw){
 					const awokenCount = awokenList.filter(function(a){return a==aw.index;}).length; //每个潜觉的数量
 					return previous + aw.value * awokenCount; //无加值与觉醒的基础值，乘以那么多个潜觉的增加倍数
-				},0))
-			:0;
-		const n_latent = (latent && latent.length) //潜觉增加的数值
-			?Math.round(latentAdd[idx].reduce(function(previous,la){
+				},0)) :
+			0;
+		const n_latent = (latent && latent.length) ? //潜觉增加的数值
+			Math.round(latentAdd[idx].reduce(function(previous,la){
 					const latentCount = latent.filter(function(l){return l==la.index;}).length; //每个潜觉的数量
 					return previous + n_base * la.scale * latentCount; //无加值与觉醒的基础值，乘以那么多个潜觉的增加倍数
-				},0))
-			:0;
+				},0)) :
+			0;
 		//console.log("基础值：%d，加蛋值：%d，觉醒x%d增加：%d，潜觉增加：%d",n_base,n_plus,awokenCount,n_awoken,n_latent);
 		let reValue = n_base + n_plus + n_awoken + n_latent;
 		if (idx<2 && reValue<1) reValue = 1; //HP和ATK最低为1
 		return reValue;
-	})
+	});
 	return abilitys;
 }
 function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens)
@@ -237,7 +237,7 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens)
 	}
 	if (types.length>0)
 	{
-		res = res.filter(c=>{return  types.some(t=>{return c.types.indexOf(t)>=0});});
+		res = res.filter(c=>{return  types.some(t=>{return c.types.indexOf(t)>=0;});});
 	}
 	if (awokens.length>0)
 	{

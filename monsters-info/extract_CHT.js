@@ -1,16 +1,16 @@
-﻿var fs = require('fs');
-var sourceFolder = "Download-pad.skyozora.com/pad.skyozora.com";
-var outJSON = "custom/cht.json";
-var path = require('path');//解析需要遍历的文件夹
+﻿const fs = require('fs');
+const sourceFolder = "Download-pad.skyozora.com/pad.skyozora.com";
+const outJSON = "custom/cht.json";
+const path = require('path');//解析需要遍历的文件夹
 
 fs.access(outJSON,function(err){
-	var monArr;
+	let monArr;
 	if (err)
 	{
 		monArr = [];
 	}else
 	{
-		var monArr = JSON.parse(fs.readFileSync(outJSON, 'utf-8'));//读取繁体中文数据避免重复工作
+		monArr = JSON.parse(fs.readFileSync(outJSON, 'utf-8'));//读取繁体中文数据避免重复工作
 	}
 
 	//根据文件路径读取文件，返回文件列表
@@ -20,22 +20,22 @@ fs.access(outJSON,function(err){
 		}else{
 			//遍历读取到的文件列表
 			files.forEach(function(filename){
-				var searchID = /^(\d+)\.html$/i.exec(filename);
+				let searchID = /^(\d+)\.html$/i.exec(filename);
 				if (searchID && !monArr.some(function(cn){return cn.id == searchID[1];}))
 				{
-					var filepath = path.join(sourceFolder, filename);//合并当前文件的路径
-					var htmlText = fs.readFileSync(filepath, 'utf-8'); //使用同步读取
-					var searchName = /<h2 .+>\s*?([\s\S]*)\s*?<\/h2>/igm.exec(htmlText);
+					const filepath = path.join(sourceFolder, filename);//合并当前文件的路径
+					const htmlText = fs.readFileSync(filepath, 'utf-8'); //使用同步读取
+					let searchName = /<h2 .+>\s*?([\s\S]*)\s*?<\/h2>/igm.exec(htmlText);
 					try
 					{
-						var mname = searchName[1].trim();
+						let mname = searchName[1].trim();
 						mname = mname.replace("探偵","偵探"); //把日语的探侦都换成侦探
 						if (mname.length>0)
 						{
-							var m = {
+							const m = {
 								id:searchID[1],
 								name:mname,
-							}
+							};
 							monArr.push(m);
 							if (monArr.length % 100 == 0)
 							{
@@ -47,21 +47,21 @@ fs.access(outJSON,function(err){
 						}
 					}catch(e)
 					{
-						console.log(filename,e)
+						console.log(filename,e);
 					}
 				}
 			});
 			monArr.sort(function(a,b){
 				return a.id - b.id;
-			})
-			var str = JSON.stringify(monArr);
+			});
+			const str = JSON.stringify(monArr);
 			fs.writeFile(outJSON,str,function(err){
 				if(err){
 					console.error(err);
 				}
 				console.log("---繁体中文导出成功，共 " + monArr.length + " 个名称---");
-			})
+			});
 		}
 	});
-})
+});
 
