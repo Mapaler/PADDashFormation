@@ -867,7 +867,8 @@ ul{
 	opacity: var(--search-icon-unchecked);
 }
 
-.edit-box .setting-box .row-mon-skill{
+.edit-box .setting-box .row-mon-skill,
+.edit-box .setting-box .row-mon-leader-skill{
 	margin-top:5px;
 }
 .skill-box .skill-cd::before{
@@ -899,7 +900,6 @@ ul{
 }
 .skill-box{
 	font-family: 'FOT-KurokaneStd-EB';
-	text-shadow:black 2px 2px 0;
 	font-size: 20px;
 	border: #9C743E solid 3px;
 	border-radius: 10px;
@@ -911,20 +911,34 @@ ul{
 	background-color: #39180F;
 	box-shadow: inset black 0 5px 5px;
 	padding: 0 10px 0 5px;
+	text-shadow:black 3px 3px 0;
 }
 .skill-title::before{
-	content: "主動技能";
 	background-color: #774433;
 	border: #BB9944 solid 3px;
 	border-radius: 5px;
 	margin-right: 5px;
 	padding: 0 5px;
+	text-shadow:black 0 0 3px;
 }
-.skill-title .skill-name{
+.row-mon-skill .skill-title::before{
+	content: "主動技能";
+	color: #DDEEEE;
+}
+.row-mon-skill .skill-title .skill-name{
 	color: #84BAFC;
 }
+.row-mon-leader-skill .skill-title::before{
+	content: "隊長技能";
+	color: #FF9955;
+}
+.row-mon-leader-skill .skill-title .skill-name{
+	color: #85FD80;
+}
 .skill-datail{
-	padding: 0 10px;
+	color: black;
+	padding: 0 8px 6px 8px;
+	line-height: 25px;
 }
 .skill-cd-control{
 	float: right;
