@@ -86,7 +86,7 @@ function usedHole(latent)
 		return previous + (current>= 12?2:1);
 	},0);
 }
-//计算队伍中有多少个该觉醒
+//计算所有队伍中有多少个该觉醒
 function awokenCountInFormation(formationTeam,ak,solo)
 {
 	var allAwokenCount = formationTeam.reduce(function(fc,fm){
@@ -94,7 +94,7 @@ function awokenCountInFormation(formationTeam,ak,solo)
 	},0);
 	return allAwokenCount;
 }
-//计算队伍中有多少个该觉醒
+//计算单个队伍中有多少个该觉醒
 function awokenCountInTeam(team,awokenIndex,solo)
 {
 	var formationAwokenCount = team.reduce(function(tc,tm,isAssist){
@@ -250,4 +250,16 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens)
 		res = res.filter(c=>{return  sawokens.some(sa=>{return c.superAwakenings.indexOf(sa)>=0;});});
 	}
 	return res;
+}
+//将怪物的文字介绍解析为HTML
+function descriptionToHTML(str)
+{
+	str = str.replace("\n","<br>");
+	str = str.replace(/\^(\w+)\^(.+)\^p/igm,'<span style="color:#$1;">$2</span>');
+	return str;
+}
+//默认的技能解释的显示行为
+function parseSkillDescription(skill)
+{
+	return descriptionToHTML(skill.description);
 }

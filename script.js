@@ -1565,13 +1565,6 @@ function editBoxChangeMonId(id)
 				latentDom.classList.add("unselected-latent");
 		}
 	}
-	//将怪物的文字介绍解析为HTML
-	function descriptionToHTML(str)
-	{
-		str = str.replace("\n","<br>");
-		str = str.replace(/\^(\w+)\^(.+)\^p/igm,'<span style="color:#$1;">$2</span>');
-		return str;
-	}
 	//怪物主动技能
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
 	const skillBox = rowSkill.querySelector(".skill-box");
@@ -1586,7 +1579,7 @@ function editBoxChangeMonId(id)
 	fragment.appendChild(skillBox);
 
 	skillTitle.innerHTML = descriptionToHTML(skill.name);
-	skillDetail.innerHTML = descriptionToHTML(skill.description);
+	skillDetail.innerHTML = parseSkillDescription(skill);
 	skillLevel.max = skill.maxLevel;
 	skillLevel.value = skill.maxLevel;
 	skillLevel_Max.value = skill.maxLevel;
@@ -1605,7 +1598,7 @@ function editBoxChangeMonId(id)
 	fragment.appendChild(lskillBox);
 
 	lskillTitle.innerHTML = descriptionToHTML(leaderSkill.name);
-	lskillDetail.innerHTML = descriptionToHTML(leaderSkill.description);
+	lskillDetail.innerHTML = parseSkillDescription(leaderSkill);
 
 	rowLederSkill.appendChild(fragment);
 
