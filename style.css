@@ -1,7 +1,6 @@
 @charset "utf-8";
 @font-face {
 	font-family: 'FOT-KurokaneStd-EB';
-	font-weight: 100;
 	font-style: normal;
 	/*font-weight: 400;*/
 	src: url("fonts/FOT-KurokaneStd-EB.woff2") format('woff2'),
