@@ -1,6 +1,7 @@
 @charset "utf-8";
 @font-face {
 	font-family: 'FOT-KurokaneStd-EB';
+	font-weight: 100;
 	font-style: normal;
 	/*font-weight: 400;*/
 	src: url("fonts/FOT-KurokaneStd-EB.woff2") format('woff2'),
@@ -18,7 +19,7 @@
     }
 }
 body{
-	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
+	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--search-icon-unchecked: 0.4;
 }
 .display-none{
@@ -36,7 +37,7 @@ body{
 .detail{
 	min-height: 100px;
 	font-size: 1.5em;
-	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
+	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 }
 .title,.detail{
 	width:100%;
@@ -79,7 +80,7 @@ ul{
 
 /*单个怪物*/
 .monster{
-	font-family: 'FOT-KurokaneStd-EB',"Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
+	font-family: 'FOT-KurokaneStd-EB',"Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	width: 100px;
 	height: 100px;
 	margin: 0;
@@ -120,7 +121,7 @@ ul{
 	text-align: center;
 	font-weight: bold;
 	/*content: "应 对\A威 吓";*/
-	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
+	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	white-space: pre-wrap;
 	display: inline-block;
 }
@@ -231,7 +232,7 @@ ul{
 .monster .id{
 	display: block;
 	color: white;
-	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
+	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	font-size: 15px;
 	line-height: 17px;
 	height: 17px;
@@ -449,7 +450,7 @@ ul{
 	content: "修改辅助";
 }*/
 .edit-box .monsterinfo-box{
-	font-family: 'FOT-KurokaneStd-EB';
+	font-family: 'FOT-KurokaneStd-EB', "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	color: white;
 	text-shadow: black 2px 2px 0;
 	height: 100px;
@@ -622,7 +623,7 @@ ul{
 .search-box .awoken-list button{
 	border: none;
 	background-color: unset;
-	font-family: 'FOT-KurokaneStd-EB';
+	font-family: 'FOT-KurokaneStd-EB', "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	color: white;
 	line-height: 32px;
 	font-size: 16px;
@@ -740,16 +741,17 @@ ul{
 .edit-box .setting-box .m-level{
 	font-size: 25px;
 	height: 40px;
-	width: calc(100% - 215px);
+	width: calc(100% - 220px);
 	box-sizing: border-box;
 }
 .m-level-btn-min,.m-level-btn-max{
 	height: 40px;
 	box-sizing: border-box;
 	font-size: 25px;
+	padding: 0;
 }
 .m-level-btn-min{
-	width: 60px;
+	width: 65px;
 }
 .m-level-btn-max{
 	width: 145px;
@@ -889,7 +891,7 @@ ul{
 .edit-box .setting-box .row-mon-leader-skill{
 	margin-top:5px;
 }
-.skill-box .skill-cd::before{
+/*.skill-box .skill-cd::before{
 	content: "冷却回合：";
 }
 .skill-box .skill-level-label::before{
@@ -900,7 +902,7 @@ ul{
 }
 .skill-box .m-skill-lv-max::before{
 	content: "最高Lv";
-}
+}*/
 .skill-box .m-skill-level {
 	font-size: 18px;
 	height: 30px;
@@ -908,7 +910,7 @@ ul{
 	box-sizing: border-box;
 	border: none;
 	background: none;
-	font-family: 'FOT-KurokaneStd-EB';
+	font-family: 'FOT-KurokaneStd-EB', "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	color: white;
 }
 .skill-box .m-skill-lv-1,.skill-box .m-skill-lv-max{
@@ -917,9 +919,9 @@ ul{
 	font-size: 18px;
 }
 .skill-box{
-	font-family: 'FOT-KurokaneStd-EB';
+	font-family: 'FOT-KurokaneStd-EB', "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	font-size: 20px;
-	border: #9C743E solid 3px;
+	border: #9C743E solid 2px;
 	border-radius: 10px;
 	background-color: #B1AAA0;
 	overflow: hidden;
@@ -933,21 +935,23 @@ ul{
 }
 .skill-title::before{
 	background-color: #774433;
-	border: #BB9944 solid 3px;
-	border-radius: 5px;
+	border: #BBAA55 solid 2px;
+	border-radius: 10px;
 	margin-right: 5px;
 	padding: 0 5px;
 	text-shadow:black 0 0 3px;
+	line-height: 25px;
+	display: inline-block;
 }
 .row-mon-skill .skill-title::before{
-	content: "主動技能";
+	/*content: "主動技能";*/
 	color: #DDEEEE;
 }
 .row-mon-skill .skill-title .skill-name{
 	color: #84BAFC;
 }
 .row-mon-leader-skill .skill-title::before{
-	content: "隊長技能";
+	/*content: "隊長技能";*/
 	color: #FF9955;
 }
 .row-mon-leader-skill .skill-title .skill-name{
@@ -1018,7 +1022,8 @@ ul{
 .search-box .awoken-list .awoken-count{
 	font-size: 16px;
 	line-height: 32px;
-	font-family: 'FOT-KurokaneStd-EB';
+	font-family: 'FOT-KurokaneStd-EB',"Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
+
 	float: left;
 	margin-right: 3px;
 }
@@ -1056,13 +1061,13 @@ ul{
 .not-show-mon-id .control-box .btn-show-mon-skill-cd::before{
 	content: "显示怪物ID";
 }
-*/
 .show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
 	content: "⬜隐藏已满技能CD";
 }
 .control-box .btn-show-mon-skill-cd::before{
-	content: "💿显示已满技能CD";
+	content: "❄️显示已满技能CD";
 }
+*/
 #interchange-line{
 	pointer-events: none;
 	position: absolute;
