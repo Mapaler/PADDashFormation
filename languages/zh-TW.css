@@ -54,10 +54,10 @@
 	content: "▼怪物等級";
 }
 .m-level-btn-min::before{
-	content: "Lv";
+	content: "Lv.";
 }
 .m-level-btn-max::before{
-	content: "最高Lv";
+	content: "最高Lv.";
 }
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼怪物覺醒";
@@ -80,6 +80,26 @@
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼潛在覺醒";
 }
+
+.skill-box .skill-cd::before{
+	content: "冷卻回合:";
+}
+.skill-box .skill-level-label::before{
+	content: "Lv.";
+}
+.skill-box .m-skill-lv-1::before{
+	content: "Lv.";
+}
+.skill-box .m-skill-lv-max::before{
+	content: "最高Lv.";
+}
+.row-mon-skill .skill-title::before{
+	content: "主動技能";
+}
+.row-mon-leader-skill .skill-title::before{
+	content: "隊長技能";
+}
+
 .edit-box .button-box .button-null::after{
 	content: "留空格子";
 }
@@ -160,6 +180,12 @@
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
     content: "🆔顯示怪物ID";
+}
+.show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
+	content: "⬜隱藏已滿技能冷卻";
+}
+.control-box .btn-show-mon-skill-cd::before{
+	content: "❄️顯示已滿技能冷卻";
 }
 .team-info .tIf-total-hp::before{
 	content: "總HP(隊伍覺醒和徽章)：";

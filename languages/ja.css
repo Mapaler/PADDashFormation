@@ -45,10 +45,10 @@
 	content: "▼モンスターレベル";
 }
 .m-level-btn-min::before{
-	content: "Lv";
+	content: "Lv.";
 }
 .m-level-btn-max::before{
-	content: "最高Lv";
+	content: "最大Lv.";
 }
 .abilitys .hp::before{
 	content: "HP：";
@@ -80,6 +80,26 @@
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼モンスター潜在覚醒";
 }
+
+.skill-box .skill-cd::before{
+	content: "ターン:";
+}
+.skill-box .skill-level-label::before{
+	content: "Lv.";
+}
+.skill-box .m-skill-lv-1::before{
+	content: "Lv.";
+}
+.skill-box .m-skill-lv-max::before{
+	content: "最大Lv.";
+}
+.row-mon-skill .skill-title::before{
+	content: "スキル";
+}
+.row-mon-leader-skill .skill-title::before{
+	content: "リーダースキル";
+}
+
 .edit-box .button-box .button-null::after{
 	content: "空白のままに";
 }
@@ -157,6 +177,12 @@
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
 	content: "🆔モンスターIDを表示";
+}
+.show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
+	content: "⬜フル スキル クールを非表示";
+}
+.control-box .btn-show-mon-skill-cd::before{
+	content: "❄️フル スキル クールを表示";
 }
 .team-info .tIf-total-hp::before{
 	content: "合計HP(チーム覚醒とバッジ)：";

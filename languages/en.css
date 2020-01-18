@@ -55,10 +55,10 @@
 	content: "▼Monster Level";
 }
 .m-level-btn-min::before{
-	content: "Lv";
+	content: "Lv.";
 }
 .m-level-btn-max::before{
-	content: "Max Lv";
+	content: "Max Lv.";
 }
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼Monster Awoken";
@@ -81,6 +81,26 @@
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼Latent Awoken";
 }
+
+.skill-box .skill-cd::before{
+	content: "Turn(s):";
+}
+.skill-box .skill-level-label::before{
+	content: "Lv.";
+}
+.skill-box .m-skill-lv-1::before{
+	content: "Lv.";
+}
+.skill-box .m-skill-lv-max::before{
+	content: "Max Lv.";
+}
+.row-mon-skill .skill-title::before{
+	content: "Skill";
+}
+.row-mon-leader-skill .skill-title::before{
+	content: "Leader Skill";
+}
+
 .edit-box .button-box .button-null::after{
 	content: "Leave a blank";
 }
@@ -164,6 +184,12 @@
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
 	content: "🆔Show monster ID";
+}
+.show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
+	content: "⬜Hide full skill's cooldown";
+}
+.control-box .btn-show-mon-skill-cd::before{
+	content: "❄️Show full skill's cooldown";
 }
 .team-info .tIf-total-hp::before{
 	content: "Total HP(Team Awoken & Badge): ";

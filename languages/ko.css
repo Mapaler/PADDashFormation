@@ -45,10 +45,10 @@
 	content: "▼몬스터 레벨";
 }
 .m-level-btn-min::before{
-	content: "Lv";
+	content: "Lv.";
 }
 .m-level-btn-max::before{
-	content: "최고Lv";
+	content: "최대Lv.";
 }
 .abilitys .hp::before{
 	content: "HP：";
@@ -80,6 +80,26 @@
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼몬스터 숨어있는";
 }
+
+.skill-box .skill-cd::before{
+	content: "턴:";
+}
+.skill-box .skill-level-label::before{
+	content: "Lv.";
+}
+.skill-box .m-skill-lv-1::before{
+	content: "Lv.";
+}
+.skill-box .m-skill-lv-max::before{
+	content: "최대Lv.";
+}
+.row-mon-skill .skill-title::before{
+	content: "스킬";
+}
+.row-mon-leader-skill .skill-title::before{
+	content: "리더스킬";
+}
+
 .edit-box .button-box .button-null::after{
 	content: "비워 둡니다";
 }
@@ -153,10 +173,16 @@
 	content: "🔄교환 AB 팀";
 }
 .control-box .btn-show-mon-id::before{
-	content: "⬜숨겨진 몬스터 ID";
+	content: "⬜몬스터 ID 숨기기";
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
-	content: "🆔괴물 ID 표시";
+	content: "🆔⬜몬스터 ID 표시";
+}
+.show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
+	content: "⬜전체 스킬 쿨을 숨기기";
+}
+.control-box .btn-show-mon-skill-cd::before{
+	content: "❄️전체 스킬 쿨을 표시";
 }
 .team-info .tIf-total-hp::before{
 	content: "총 HP(팀의 각 성과 배지)：";
