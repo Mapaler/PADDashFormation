@@ -144,7 +144,7 @@ ul{
 	left:10px;
 }
 .null .monster>div,.delay .monster>div{
-	display:none;
+	display:none !important;
 }
 .monster .plus .hp::before,
 .monster .plus .atk::before,
@@ -210,7 +210,7 @@ ul{
 	text-shadow: black 0 0 2px, black 2px 2px 0;
 	position: absolute;
 	left: 5px;
-	bottom: 0px;
+	bottom: 0;
 	vertical-align: top;
 }
 .monster .level,.monster .level.max::before{
@@ -243,6 +243,9 @@ ul{
 .not-show-mon-id .monster .id{
 	display: none;
 }
+.monster .id::before{
+	font-size: 12px;
+}
 /*.monster .id::before{
 	content: "No.";
 }*/
@@ -256,7 +259,7 @@ ul{
 	color:white;
 	text-shadow: black 0 0 1px,black 0 0 2px, black 2px 2px 0;
 	position: absolute;
-	right:3px;
+	right:0;
 	bottom:0;
 }
 .monster .skill.max-skill{

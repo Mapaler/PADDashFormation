@@ -1179,7 +1179,6 @@ function changeid(mon,monDom,latentDom)
 	fragment.appendChild(monDom);
 	const monId = mon.id;
 	const card = Cards[monId] || Cards[0]; //怪物固定数据
-	//const skill = Skills[card.activeSkillId];
 	monDom.setAttribute("data-cardid", monId); //设定新的id
 	if (monId<0) //如果是延迟
 	{
@@ -1337,20 +1336,20 @@ function changeid(mon,monDom,latentDom)
 			latentDom.classList.add("display-none");
 		}
 	}
-	/*
-	const skillLv = monDom.querySelector(".skill");
-	if (skillLv) //如果存在超觉醒的DOM且提供了超觉醒
+
+	const skillCdDom = monDom.querySelector(".skill");
+	if (skillCdDom) //如果存在技能CD DOM
 	{
-		if (mon.skilllevel != undefined && mon.skilllevel < skill.maxLevel)
+		//const skill = Skills[card.activeSkillId];
+		if (card.activeSkillId == 0)
 		{
-			skillLv.classList.remove("display-none");
-			skillLv.innerHTML = skill.initialCooldown - mon.skilllevel + 1;
+			skillCdDom.classList.add("display-none");
 		}else
 		{
-			skillLv.classList.add("display-none");
+			skillCdDom.classList.remove("display-none");
 		}
 	}
-	*/
+
 	parentNode.appendChild(fragment);
 }
 //点击怪物头像，出现编辑窗
@@ -1892,21 +1891,5 @@ function refreshSkillCD(teamDom,team,idx){
 	{
 		memberSkillCdDom.classList.add("max-skill");
 		assistSkillCdDom.classList.add("max-skill");
-	}
-
-	//没有技能时
-	if (memberSkill.id == 0)
-	{
-		memberSkillCdDom.classList.add("display-none");
-	}else
-	{
-		memberSkillCdDom.classList.remove("display-none");
-	}
-	if (assistSkill.id == 0)
-	{
-		assistSkillCdDom.classList.add("display-none");
-	}else
-	{
-		assistSkillCdDom.classList.remove("display-none");
 	}
 }
