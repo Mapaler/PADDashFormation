@@ -242,6 +242,12 @@
 .spColor{
 	color: #ff3600;
 }
+.random-active-skill{
+	padding-left: 1em;
+}
+.random-active-skill>.active-skill-li{
+	list-style: decimal;
+}
 /*Some icons, style different from the Japanese version*/
 .awoken-46,
 .awoken-47
