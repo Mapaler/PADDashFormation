@@ -24,7 +24,7 @@ function parseSkillDescription(skill)
 	//类型名数组
 	const typeName = ["进化","平衡","体力","回复","龙","神","攻击","恶魔","机械","特别保护","10","11","觉醒","13","强化","卖钱"];
 	//觉醒名数组
-	const awokenName = ["HP+","攻击+","回复+","火盾","水盾","木盾","光盾","暗盾","自回","防封","防暗","防废","防毒","火+","水+","木+","光+","暗+","手指","心解","SB","火横","水横","木横","光横","暗横","U","SX","心+","协力","龙杀","神杀","恶魔杀","机杀","平衡杀","攻击杀","体力杀","回复杀","进化杀","觉醒杀","强化杀","卖钱杀","7c","5色破防","心追","全体HP","全体回复","破无效","武器觉醒","方块心追","5色溜","大防封","大手指","防云","防封条","大SB","满血强化","下半血强化","L盾","L解锁","10c","c珠","语音","奖励增加","HP-","攻击-","回复-","大防暗","大防废","大防毒","掉废","掉毒"];
+	const awokenName = ["HP+","攻击+","回复+","火盾","水盾","木盾","光盾","暗盾","自回","防封","防暗","防废","防毒","火+","水+","木+","光+","暗+","手指","心解","SB","火横","水横","木横","光横","暗横","U","SX","心+","协力","龙杀","神杀","恶魔杀","机杀","平衡杀","攻击杀","体力杀","回复杀","进化杀","觉醒杀","强化杀","卖钱杀","7c","5色破防","心追","全体 HP ","全体回复","破无效","武器觉醒","方块心追","5色溜","大防封","大手指","防云","防封条","大SB","满血强化","下半血强化","L盾","L解锁","10c","c珠","语音","奖励增加"," HP -","攻击-","回复-","大防暗","大防废","大防毒","掉废","掉毒"];
 	const ClumsN = ["左边第1竖列","左边第2竖列","左边第3竖列","右边第3竖列","右边第2竖列","右边第1竖列"];
 	const RowsN = ["最上1横行","上方第2横行","中间横行","下方第2横行","最下1横行"];
 	//返回属性名
@@ -73,16 +73,19 @@ function parseSkillDescription(skill)
 			str = `${sk[0]}回合内受到的伤害减少${sk[1]}%`;
 			break;
 		case 4:
-			str = `使敌方全体中毒，每回合损失宠物自身攻击力×${sk[0]/100}倍的HP`;
+			str = `使敌方全体中毒，每回合损失宠物自身攻击力×${sk[0]/100}倍的 HP `;
 			break;
 		case 5:
 			str = `${sk[0]}秒内时间停止，可以任意移动宝珠`;
 			break;
 		case 6:
-			str = `敌人的HP减少${sk[0]}%`;
+			str = `敌人的 HP 减少${sk[0]}%`;
+			break;
+		case 7:
+			str = `回复宠物自身回复力×${sk[0]/100}倍的 HP`;
 			break;
 		case 8:
-			str = `回复${sk[0]}HP`;
+			str = `回复${sk[0]} HP `;
 			break;
 		case 9:
 			str = `${attrN(sk[0])}宝珠变为${attrN(sk[1])}宝珠`;
@@ -97,10 +100,10 @@ function parseSkillDescription(skill)
 			str = `消除宝珠的回合，以自身攻击力×${sk[0]/100}倍的伤害追打敌人`;
 			break;
 		case 13:
-			str = `消除宝珠的回合，回复自身回复力×${sk[0]/100}倍的HP`;
+			str = `消除宝珠的回合，回复自身回复力×${sk[0]/100}倍的 HP `;
 			break;
 		case 14:
-			str = `如当前HP在HP上限的${sk[0]}%~${sk[1]}%的话，受到单一次致命攻击时，将会以1点HP生还`;
+			str = `如当前 HP 在 HP 上限的${sk[0]}%${sk[1]==100?"以上":`~${sk[1]}%`}的话，受到单一次致命攻击时，将会以1点 HP 生还`;
 			break;
 		case 15:
 			str = `操作时间演延长${sk[0]/100}秒`;
@@ -134,8 +137,65 @@ function parseSkillDescription(skill)
 		case 21:
 			str = `${sk[0]}回合内${attrN(sk[1])}属性的伤害减少${sk[2]}%`;
 			break;
+		case 22: case 31:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return typeN(t);}).join("、")}类型宠物的攻击力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 23: case 30:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return typeN(t);}).join("、")}类型宠物的 HP ×${sk[sk.length-1]/100}倍`;
+			break;
+		case 24:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return typeN(t);}).join("、")}类型宠物的回复力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 28:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的攻击力和回复力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 29: case 114:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的 HP、攻击力和回复力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 33:
+			str = `宝珠移动和消除的声音变成太鼓达人的音效`;
+			break;
+		case 35:
+			str = `对敌方1体造成自身攻击力×${sk[0]/100}倍的伤害，并回复${sk[1]}%的 HP`;
+			break;
 		case 36:
 			str = `受到的${attrN(sk[0])}属性${sk[1]>=0?`和${attrN(sk[1])}属性`:""}的伤害减少${sk[2]}%`;
+			break;
+		case 37:
+			str = `对敌方1体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害`;
+			break;
+		case 38:
+			str = `HP ${sk[0] == 100?"全满":`${sk[0]}%以下`}时${sk[1]<100?`有${sk[1]}的几率使`:""}受到的伤害减少${sk[2]}`;
+			if (sk[1]!=100) sk+=`未知的 参数1 ${sk[1]}`;
+			break;
+		case 39:
+			strArr = [sk[1],sk[2]].filter(s=>{return s>0;}).map(s=>{if(s==1) return "攻击"; else if(s==2) return "回复";})
+			str = `HP ${sk[0]==100?"全满":`${sk[0]}%以下`}时所有宠物的${strArr.join("和")}${sk[3]/100}倍`;
+			break;
+		case 40:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的攻击力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 41:
+			str = `受到敌人攻击时${sk[0]==100?"":`有${sk[0]}的几率`}进行受到伤害${sk[1]/100}倍的${attrN(sk[2])}属性反击`;
+			break;
+		case 42:
+			str = `对${attrN(sk[0])}属性敌人造成${sk[2]}点${attrN(sk[1])}属性伤害`;
+			break;
+		case 43:
+			str = `HP ${sk[0]==100 && sk[1]==100?"全满":`${sk[0]}%以上`}时${sk[1]<100?`有${sk[1]}的几率使`:""}受到的伤害减少${sk[2]}`;
+			break;
+		case 44:
+			strArr = [sk[1],sk[2]].filter(s=>{return s>0;}).map(s=>{if(s==1) return "攻击"; else if(s==2) return "回复";})
+			str = `HP ${sk[0]==100?"全满":`${sk[0]}%以上`}时所有宠物的${strArr.join("和")}${sk[3]/100}倍`;
+			break;
+		case 45:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的 HP 和攻击力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 46:case 48:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的 HP ${sk[sk.length-1]/100}倍`;
+			break;
+		case 49:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的回复力×${sk[sk.length-1]/100}倍`;
 			break;
 		case 50:
 			str = `${sk[0]}回合内${(sk[1]==5?"回复力":`${attrN(sk[1])}属性的攻击力`)}×${sk[2]/100}倍`;
@@ -146,6 +206,9 @@ function parseSkillDescription(skill)
 		case 52:
 			str = `${attrN(sk[0])}宝珠强化（每颗强化珠伤害/回复增加${sk[1]}%）`;
 			break;
+		case 54:
+			str = `进入地下城时为队长的话，获得的金币${sk[0]/100}倍`;
+			break;
 		case 55:
 			str = `对敌方1体造成${sk[0]}点无视防御的固定伤害`;
 			break;
@@ -155,8 +218,53 @@ function parseSkillDescription(skill)
 		case 58:
 			str = `对敌方全体造成自身攻击力×${sk[1]/100}~${sk[2]/100}倍的${attrN(sk[0])}属性伤害`;
 			break;
+		case 59:
+			str = `对敌方1体造成自身攻击力×${sk[1]/100}~${sk[2]/100}倍的${attrN(sk[0])}属性伤害`;
+			break;
 		case 60:
 			str = `${sk[0]}回合内，受到伤害时进行受到伤害${sk[1]/100+"倍的"+attrN(sk[2])}属性反击`;
+			break;
+		case 61:
+			let fullColor = nb(sk[0], attrsName);
+			let atSameTime = fullColor.length == sk[1];
+			if (sk[0] == 31) //31-11111
+			{ //单纯5色
+				str = '';
+			}else if((sk[0] & 31) == 31)
+			{ //5色加其他色
+				str = `5色+${nb(sk[0] ^ 31, attrsName).join("、")}`;
+				if (!atSameTime) str+="中";
+			}else
+			{
+				str = `${fullColor.join("、")}`;
+				if (!atSameTime) str+="中";
+			}
+			if (!atSameTime) str+=`${sk[1]}种属性以上`;
+			else if(sk[0] == 31) str += `5色`;
+			str += `同时攻击时，所有宠物的攻击力×${sk[2]/100}倍`;
+			if (sk[3])
+			{str += `，每多一种属性+${sk[3]/100}倍，最大${fullColor.length}种时${(sk[2]+sk[3]*(fullColor.length-sk[1]))/100}倍`;}
+			break;
+		case 62: case 77:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return typeN(t);}).join("、")}类型宠物的 HP 和攻击力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 63:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return typeN(t);}).join("、")}类型宠物的 HP 和回复力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 64: case 79:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return typeN(t);}).join("、")}类型宠物的攻击力和回复力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 65:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return typeN(t);}).join("、")}类型宠物的 HP、攻击力和回复力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 66:
+			str = `${sk[0]}连击以上所有宠物的攻击力${sk[1]/100}倍`;
+			break;
+		case 67:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的 HP 和回复力×${sk[sk.length-1]/100}倍`;
+			break;
+		case 69:
+			str = `${attrN(sk[0])}属性和${typeN(sk[1])}类型宠物的攻击力×${sk[2]/100}倍`;
 			break;
 		case 71:
 			//这个类型，所有颜色是直接显示的，但是最后一位有个-1表示结束
@@ -167,6 +275,9 @@ function parseSkillDescription(skill)
 			}
 			str = "全画面的宝珠变成" + strArr.map((o)=>{return attrN(o);}).join("、");
 			break;
+		case 75:
+			str = `${attrN(sk[0])}属性和${typeN(sk[1])}类型宠物的攻击力和回复力×${sk[2]/100}倍`;
+			break;
 		case 76:
 			atrArr = [];
 			if (sk[0]) {strArr.push(nb(sk[0],attrsName).join("、") + "属性");}
@@ -175,13 +286,16 @@ function parseSkillDescription(skill)
 			str += `全属性${sk[2]/100}倍`;
 			break;
 		case 84:
-			str = `HP${(sk[3]?(`减少${sk[3]}%`):"变为1")}，对敌方1体造成自身攻击力×${sk[1]/100}${sk[1]!=sk[2]?`~${+sk[2]/100}`:""}倍的${attrN(sk[0])}属性伤害`;
+			str = `HP ${(sk[3]?(`减少${sk[3]}%`):"变为1")}，对敌方1体造成自身攻击力×${sk[1]/100}${sk[1]!=sk[2]?`~${+sk[2]/100}`:""}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 85:
-			str = `HP减少${sk[3]}%，对敌方全体造成自身攻击力×${sk[1]/100}${sk[1]!=sk[2]?`~${+sk[2]/100}`:""}倍的${attrN(sk[0])}属性伤害`;
+			str = `HP 减少${sk[3]}%，对敌方全体造成自身攻击力×${sk[1]/100}${sk[1]!=sk[2]?`~${+sk[2]/100}`:""}倍的${attrN(sk[0])}属性伤害`;
+			break;
+		case 86:
+			str = `HP 变为1，，对敌方1体造成${sk[1]}点${attrN(sk[0])}属性伤害`;
 			break;
 		case 87:
-			str = `HP变为1，，对敌方全体造成${sk[1]}点${attrN(sk[0])}属性伤害`;
+			str = `HP 变为1，，对敌方全体造成${sk[1]}点${attrN(sk[0])}属性伤害`;
 			break;
 		case 88:
 			str = `${sk[0]}回合内${typeN(sk[1])}类型的攻击力×${sk[2]/100}倍`;
@@ -190,18 +304,48 @@ function parseSkillDescription(skill)
 			strArr = sk.slice(1,sk.length-1);
 			str = `${sk[0]}回合内${strArr.map(attrN).join("、")}属性的攻击力×${sk[sk.length-1]/100}倍`;
 			break;
+		case 91:
+			str = `${sk.slice(0,sk.length-1).map(attrN).join("、")}属性宝珠强化`;
+			if (sk[sk.length-1] != 6) str += `未知 参数${sk.length-1} ${sk[sk.length-1]}`;
+			break;
 		case 92:
 			strArr = sk.slice(1,sk.length-1);
 			str = `${sk[0]}回合内${strArr.map(typeN).join("、")}类型的攻击力×${sk[sk.length-1]/100}倍`;
 			break;
 		case 93:
-			str = `将自己换成队长，再次使用此技能则换为原来的队长。${sk[0]?`未知 参数0 ${sk[0]}`:""}`;
+			str = `将自己换成队长，再次使用此技能则换为原来的队长。`;
+			if (sk[0]) str += `未知 参数0 ${sk[0]}`;
+			break;
+		case 94:
+			strArr = [sk[2],sk[3]].filter(s=>{return s>0;}).map(s=>{if(s==1) return "攻击"; else if(s==2) return "回复";})
+			str = `HP ${sk[0]==100?"全满":`${sk[0]}%以下`}时${attrN(sk[1])}属性宠物的${strArr.join("和")}${sk[4]/100}倍`;
+			break;
+		case 95:
+			strArr = [sk[2],sk[3]].filter(s=>{return s>0;}).map(s=>{if(s==1) return "攻击"; else if(s==2) return "回复";})
+			str = `HP ${sk[0]==100?"全满":`${sk[0]}%以下`}时${typeN(sk[1])}类型宠物的${strArr.join("和")}${sk[4]/100}倍`;
+			break;
+		case 96:
+			strArr = [sk[2],sk[3]].filter(s=>{return s>0;}).map(s=>{if(s==1) return "攻击"; else if(s==2) return "回复";})
+			str = `HP ${sk[0]==100?"全满":`${sk[0]}%以上`}时${attrN(sk[1])}属性宠物的${strArr.join("和")}${sk[4]/100}倍`;
+			break;
+		case 97:
+			strArr = [sk[2],sk[3]].filter(s=>{return s>0;}).map(s=>{if(s==1) return "攻击"; else if(s==2) return "回复";})
+			str = `HP ${sk[0]==100?"全满":`${sk[0]}%以上`}时${typeN(sk[1])}类型宠物的${strArr.join("和")}${sk[4]/100}倍`;
+			break;
+		case 98:
+			str = `${sk[0]}连击时，所有宠物的攻击力${sk[1]/100}倍，每多1连击+${sk[2]/100}倍，最大${sk[3]}连击时${(sk[1]+sk[2]*(sk[3]-sk[0]))/100}倍`;
+			break;
+		case 108:
+			str = `HP 变为${sk[0]}%，${typeN(sk[1])}类型宠物的攻击力×${sk[2]/100}倍`;
 			break;
 		case 110:
-			str = `根据余下HP对敌方${sk[0]?"1":"全"}体造成${attrN(sk[1])}属性伤害（100%HP时为自身攻击力的${sk[2]/100}倍，1HP时为自身攻击力的${sk[3]/100}倍）`;
+			str = `根据余下 HP 对敌方${sk[0]?"1":"全"}体造成${attrN(sk[1])}属性伤害（100% HP 时为自身攻击力×${sk[2]/100}倍，1 HP 时为自身攻击力×${sk[3]/100}倍）`;
+			break;
+		case 111:
+			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的 HP 和攻击力×${sk[sk.length-1]/100}倍`;
 			break;
 		case 115:
-			str = `对敌方全体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害，并回复伤害${sk[2]}%的HP`;
+			str = `对敌方1体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害，并回复伤害${sk[2]}%的 HP `;
 			break;
 		case 116: //多内容主动技能，按顺序组合发动如下主动技能：
 			str = `<ul class="active-skill-ul">`;
@@ -219,18 +363,30 @@ function parseSkillDescription(skill)
 			str += `</ul>`;
 			break;
 		case 118: //随机内容主动技能
-			str = `随机发动以下技能：<ul class="active-skill-ul">`;
+			str = `随机发动以下技能：<ul class="active-skill-ul random-active-skill">`;
 			str += sk.map(subSkill => {return `<li class="active-skill-li">${parseSkillDescription(Skills[subSkill])}</li>`;}).join("");
 			str += `</ul>`;
 			break;
 		case 117:
 			strArr = [];
-			if(sk[1]>0) strArr.push(`回复宠物自身回复力x${sk[1]/100}倍的HP`);
-			if(sk[3]) strArr.push(`回复HP上限${sk[3]}%的HP`);
-			if(sk[2]) strArr.push(`回复${sk[2]}HP`);
+			if(sk[1]>0) strArr.push(`回复宠物自身回复力x${sk[1]/100}倍的 HP `);
+			if(sk[3]) strArr.push(`回复 HP 上限${sk[3]}%的 HP `);
+			if(sk[2]) strArr.push(`回复${sk[2]} HP `);
 			if(sk[0]>0) strArr.push(`封锁状态减少${sk[0]}回合`);
 			if(sk[4]>0) strArr.push(`觉醒无效状态减少${sk[4]}回合`);
 			str = strArr.join("，");
+			break;
+		case 121:
+			str = ``;
+			strArr =[];
+			if (sk[0]) {strArr.push(nb(sk[0],attrsName).join("、") + "属性");}
+			if (sk[1]) {strArr.push(nb(sk[1],typeName).join("、") + "类型");}
+			if (strArr.length) str += strArr.join("和") + "宠物的";
+			strArr =[];
+			if (sk[2]) {strArr.push(`HP ${sk[2]/100}倍`);}
+			if (sk[3]) {strArr.push(`攻击力 ${sk[3]/100}倍`);}
+			if (sk[4]) {strArr.push(`回复力 ${sk[4]/100}倍`);}
+			str += strArr.join("、");
 			break;
 		case 124:
 			strArr = sk.slice(0,5).filter(c=>{return c>0;}); //最多5串珠
@@ -314,6 +470,9 @@ function parseSkillDescription(skill)
 		case 146:
 			str = `自身以外的宠物技能冷却减少${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}回合`;
 			break;
+		case 148:
+			str = `进入地下城时为队长的话，获得的经验${sk[0]/100}倍`;
+			break;
 		case 152:
 			str = `将`;
 			if (sk[0] & 1023 == 1023) //parseInt("1111111111",2) == 1023
@@ -339,13 +498,16 @@ function parseSkillDescription(skill)
 			strArr = sk.slice(1,4);
 			str = `${sk[0]?`${sk[0]}回合内，`:""}根据队伍内觉醒技能${strArr.filter(s=>{return s>0;}).map(s=>{return awokenN(sk[1]);}).join("、")}的数目`;
 			if (sk[4]==1)
-				str += `回复HP，每个觉醒回复${sk[5]}点`;
+				str += `回复 HP ，每个觉醒回复${sk[5]}点`;
 			else if (sk[4]==2)
 				str += `提升所有属性的攻击力，每个觉醒可以提升${sk[5]-100}%`;
 			else if (sk[4]==3)
 				str += `减少收到的伤害，每个觉醒可以减少${sk[5]}%`;
 			else
 				str = `156宝石姬技能，未知buff类型 参数[4]：${sk[4]}`;
+			break;
+		case 157:
+			str = `以十字形式消除5个${attrN(sk[0])}宝珠，当消除N个十字时，所有宠物的攻击力×${sk[1]/100}<sup>N</sup>倍`;
 			break;
 		case 160:
 			str = `${sk[0]}回合内，结算时增加${sk[1]}COMBO`;
@@ -421,6 +583,19 @@ function parseSkillDescription(skill)
 		case 180:
 			str = `${sk[0]}回合内，${sk[1]}%概率掉落强化宝珠`;
 			break;
+		case 185: //ドラゴンと悪魔タイプの攻撃力が4倍、回復力は2.5倍。\nドロップ操作を3秒延長。
+			str = ``;
+			strArr =[];
+			if (sk[1]) {strArr.push(nb(sk[1],attrsName).join("、") + "属性");}
+			if (sk[2]) {strArr.push(nb(sk[2],typeName).join("、") + "类型");}
+			if (strArr.length) str += strArr.join("和") + "宠物的";
+			strArr =[];
+			if (sk[3]) {strArr.push(`HP ${sk[3]/100}倍`);}
+			if (sk[4]) {strArr.push(`攻击力 ${sk[4]/100}倍`);}
+			if (sk[5]) {strArr.push(`回复力 ${sk[5]/100}倍`);}
+			str += strArr.join("、");
+			if (sk[0]) str += `，操作时间演延长${sk[0]/100}秒`;
+			break;
 		case 186:
 			str = '<span class="spColor">版面变为【7×6】</span>';
 			strArr =[];
@@ -440,7 +615,7 @@ function parseSkillDescription(skill)
 			str = `${sk[0]}回合内可以贯穿伤害无效盾`;
 			break;
 		case 195:
-			str = `HP减少${sk[0]}%`;
+			str = `HP 减少${sk[0]}%`;
 			break;
 		case 196:
 			str = `无法消除宝珠状态减少${sk[0]}回合`;
@@ -448,10 +623,10 @@ function parseSkillDescription(skill)
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
 			//开发部分
-			const copySkill = JSON.parse(JSON.stringify(skill));
-			copySkill.params = copySkill.params.map(p=>{return [p,getBooleanFromBinary(p).join("")];});
-			console.log(`未知的技能类型${type}(No.${id})`,findFullSkill(skill),"转二进制",copySkill);
+			//const copySkill = JSON.parse(JSON.stringify(skill));
+			//copySkill.params = copySkill.params.map(p=>{return [p,getBooleanFromBinary(p).join("")];});
+			console.log(`未知的技能类型${type}(No.${id})`,findFullSkill(skill));
 			break;
 	}
-	return str;
+	return (skill.description.length?(descriptionToHTML(skill.description) + "<hr>"):"") + str;
 }
