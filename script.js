@@ -497,7 +497,7 @@ function initialize()
 
 	//编辑框
 	const editBox = document.querySelector(".edit-box");
-	editBox.mid = 0; //储存怪物id
+	editBox.mid = null; //储存怪物id
 	editBox.awokenCount = 0; //储存怪物潜觉数量
 	editBox.latent = []; //储存潜在觉醒
 	editBox.assist = false; //储存是否为辅助宠物
@@ -1362,7 +1362,6 @@ function editMon(AorB,isAssist,tempIdx)
 	//数据
 	const mon = formation.team[AorB][isAssist][tempIdx];
 	const card = Cards[mon.id] || Cards[0];
-
 	//对应的Dom
 	const formationBox = document.querySelector(".formation-box .formation-"+(AorB?"B":"A")+"-box");
 	
