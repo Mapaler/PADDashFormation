@@ -82,7 +82,7 @@
 }
 
 .skill-box .skill-cd::before{
-	content: "冷却回合:";
+	content: "回合:";
 }
 .skill-box .skill-level-label::before{
 	content: "Lv.";
@@ -233,7 +233,9 @@
 .control-div .search-close::before{
 	content: "关闭搜索";
 }
-.edit-box .monsterinfo-box .monster-name{
+.edit-box .monsterinfo-box .monster-name,
+.edit-box .skill-box .skill-datail
+{
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
 	font-weight: bold;
 }

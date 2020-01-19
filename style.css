@@ -906,14 +906,15 @@ ul{
 	content: "最高Lv";
 }*/
 .skill-box .m-skill-level {
-	font-size: 18px;
 	height: 30px;
-	width: 55px;
+	width: 50px;
 	box-sizing: border-box;
 	border: none;
 	background: none;
-	font-family: 'FOT-KurokaneStd-EB', "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
-	color: white;
+	font-size: inherit;
+	font-family: inherit;
+	color: inherit;
+	text-shadow: inherit;
 }
 .skill-box .m-skill-lv-1,.skill-box .m-skill-lv-max{
 	height: 30px;

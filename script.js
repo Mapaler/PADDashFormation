@@ -694,8 +694,12 @@ function initialize()
 	monstersID.onchange = function(){
 		if (/^\d+$/.test(this.value))
 		{
-			editBox.mid = parseInt(this.value, 10);
-			editBoxChangeMonId(editBox.mid);
+			const newId = parseInt(this.value, 10);
+			if (editBox.mid != newId) //避免多次运行oninput、onchange
+			{
+				editBox.mid = newId;
+				editBoxChangeMonId(editBox.mid);
+			}
 		}
 	};
 	monstersID.oninput = monstersID.onchange;
@@ -1538,15 +1542,6 @@ function editBoxChangeMonId(id)
 
 	const rowPlus =  settingBox.querySelector(".row-mon-plus");
 	const rowLatent =  settingBox.querySelector(".row-mon-latent");
-	if (card.overlay)
-	{ //当可以叠加时，不能打297和潜觉
-		rowPlus.classList.add("disabled"); 
-		rowLatent.classList.add("disabled"); 
-	}else
-	{
-		rowPlus.classList.remove("disabled"); 
-		rowLatent.classList.remove("disabled"); 
-	}
 	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
 	//该宠Type允许的杀
 	let allowLatent = uniq(card.types.reduce(function (previous, t, index, array) {
@@ -1580,9 +1575,9 @@ function editBoxChangeMonId(id)
 
 	skillTitle.innerHTML = descriptionToHTML(skill.name);
 	skillDetail.innerHTML = parseSkillDescription(skill);
-	skillLevel.max = skill.maxLevel;
-	skillLevel.value = skill.maxLevel;
-	skillLevel_Max.value = skill.maxLevel;
+	skillLevel.max = card.overlay ? 1 : skill.maxLevel;
+	skillLevel.value = card.overlay ? 1 : skill.maxLevel;
+	skillLevel_Max.value = card.overlay ? 1 : skill.maxLevel;
 	skillLevel_Max.innerHTML = skill.maxLevel;
 	skillCD.innerHTML = skill.initialCooldown - skill.maxLevel + 1;
 
@@ -1601,6 +1596,18 @@ function editBoxChangeMonId(id)
 	lskillDetail.innerHTML = parseSkillDescription(leaderSkill);
 
 	rowLederSkill.appendChild(fragment);
+
+	if (card.overlay)
+	{ //当可以叠加时，不能打297和潜觉
+		rowPlus.classList.add("disabled"); 
+		rowLatent.classList.add("disabled");
+		skillLevel.setAttribute("readonly",true);
+	}else
+	{
+		rowPlus.classList.remove("disabled"); 
+		rowLatent.classList.remove("disabled"); 
+		skillLevel.removeAttribute("readonly");
+	}
 
 	if (editBox.assist)
 	{
