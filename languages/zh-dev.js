@@ -85,7 +85,7 @@ function parseSkillDescription(skill)
 			str = `回复${sk[0]}HP`;
 			break;
 		case 9:
-			str = `${attrN(sk[0])}变为${attrN(sk[1])}`;
+			str = `${attrN(sk[0])}宝珠变为${attrN(sk[1])}宝珠`;
 			break;
 		case 10:
 			str = `全版刷新`;
