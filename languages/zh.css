@@ -82,7 +82,7 @@
 }
 
 .skill-box .skill-cd::before{
-	content: "冷却回合:";
+	content: "回合:";
 }
 .skill-box .skill-level-label::before{
 	content: "Lv.";
