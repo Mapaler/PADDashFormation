@@ -134,6 +134,9 @@ function parseSkillDescription(skill)
 		case 21:
 			str = `${sk[0]}回合内${attrN(sk[1])}属性的伤害减少${sk[2]}%`;
 			break;
+		case 36:
+			str = `受到的${attrN(sk[0])}属性${sk[1]>=0?`和${attrN(sk[1])}属性`:""}的伤害减少${sk[2]}%`;
+			break;
 		case 50:
 			str = `${sk[0]}回合内${(sk[1]==5?"回复力":`${attrN(sk[1])}属性的攻击力`)}×${sk[2]/100}倍`;
 			break;
@@ -228,6 +231,29 @@ function parseSkillDescription(skill)
 			if(sk[0]>0) strArr.push(`封锁状态减少${sk[0]}回合`);
 			if(sk[4]>0) strArr.push(`觉醒无效状态减少${sk[4]}回合`);
 			str = strArr.join("，");
+			break;
+		case 124:
+			strArr = sk.slice(0,5).filter(c=>{return c>0;}); //最多5串珠
+			let hasDiffOrbs = strArr.filter(s=>{return s!= strArr[0]}).length > 0; //是否存在不同色的珠子
+			if (sk[5] < strArr.length) //有阶梯的
+			{
+				if (hasDiffOrbs)
+				{//「光光火/光火火」組合的3COMBO時，所有寵物的攻擊力3.5倍；「光光火火」組合的4COMBO或以上時，所有寵物的攻擊力6倍 
+					str = `${strArr.map(a=>{return nb(a, attrsName);}).join("、")}中${sk[5]}串同时攻击时，所有宠物的攻击力${sk[6]/100}倍，每多1串+${sk[7]/100}倍，最大${strArr.length}串时${(sk[6]+sk[7]*(strArr.length-sk[5]))/100}倍`;
+				}else
+				{//木寶珠有2COMBO時，所有寵物的攻擊力3倍，每多1COMBO+4倍，最大5COMBO時15倍 
+					str = `${nb(strArr[0], attrsName).join("、")}宝珠有${strArr.length}串时，所有宠物的攻击力${sk[6]/100}倍，每多1串+${sk[7]/100}倍，最大${strArr.length}串时${(sk[6]+sk[7]*(strArr.length-sk[5]))/100}倍`;
+				}
+			}else
+			{
+				if (hasDiffOrbs)
+				{//火光同時攻擊時，所有寵物的攻擊力2倍
+					str = `${strArr.map(a=>{return nb(a, attrsName);}).join("、")}同时攻击时，所有宠物的攻击力${sk[6]/100}倍`;
+				}else
+				{//光寶珠有2COMBO或以上時，所有寵物的攻擊力3倍
+					str = `${nb(strArr[0], attrsName).join("、")}宝珠有${strArr.length}串或以上时，所有宠物的攻击力${sk[6]/100}倍`;
+				}
+			}
 			break;
 		case 126:
 			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内${nb(sk[0], attrsName).join("、")}珠的掉落率提高${sk[3]}%`;
