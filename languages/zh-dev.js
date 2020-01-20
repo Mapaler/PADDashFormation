@@ -103,7 +103,7 @@ function parseSkillDescription(skill)
 			str = `消除宝珠的回合，回复自身回复力×${sk[0]/100}倍的 HP `;
 			break;
 		case 14:
-			str = `如当前 HP 在 HP 上限的${sk[0]}%${sk[1]==100?"以上":`~${sk[1]}%`}的话，受到单一次致命攻击时，将会以1点 HP 生还`;
+			str = `如当前 HP 在 HP 上限的${sk[0]}%以上的话，受到单一次致命攻击时，${sk[1]<100?`有${sk[1]}的几率`:"将"}会以1点 HP 生还`;
 			break;
 		case 15:
 			str = `操作时间演延长${sk[0]/100}秒`;
@@ -166,7 +166,7 @@ function parseSkillDescription(skill)
 			break;
 		case 38:
 			str = `HP ${sk[0] == 100?"全满":`${sk[0]}%以下`}时${sk[1]<100?`有${sk[1]}的几率使`:""}受到的伤害减少${sk[2]}`;
-			if (sk[1]!=100) sk+=`未知的 参数1 ${sk[1]}`;
+			if (sk[1]!=100) str+=`未知的 参数1 ${sk[1]}`;
 			break;
 		case 39:
 			strArr = [sk[1],sk[2]].filter(s=>{return s>0;}).map(s=>{if(s==1) return "攻击"; else if(s==2) return "回复";})
@@ -182,7 +182,7 @@ function parseSkillDescription(skill)
 			str = `对${attrN(sk[0])}属性敌人造成${sk[2]}点${attrN(sk[1])}属性伤害`;
 			break;
 		case 43:
-			str = `HP ${sk[0]==100 && sk[1]==100?"全满":`${sk[0]}%以上`}时${sk[1]<100?`有${sk[1]}的几率使`:""}受到的伤害减少${sk[2]}`;
+			str = `HP ${sk[0]==100 ?"全满":`${sk[0]}%以上`}时${sk[1]<100?`有${sk[1]}的几率使`:""}受到的伤害减少${sk[2]}`;
 			break;
 		case 44:
 			strArr = [sk[1],sk[2]].filter(s=>{return s>0;}).map(s=>{if(s==1) return "攻击"; else if(s==2) return "回复";})
@@ -376,6 +376,17 @@ function parseSkillDescription(skill)
 			if(sk[4]>0) strArr.push(`觉醒无效状态减少${sk[4]}回合`);
 			str = strArr.join("，");
 			break;
+		case 119: //相連消除4個的水寶珠時，所有寵物的攻擊力2.5倍，每多1個+0.5倍，最大5個時3倍
+			str = `相连消除${sk[1]}个或以上${nb(sk[0],attrsName).join("或")}宝珠时，所有宠物的攻击力${sk[2]/100}倍`;
+			if (sk[3]>0)
+			{
+				str += `，每多1个+${sk[3]/100}倍`;
+			}
+			if (sk[4]>0)
+			{
+				str += `，最大${sk[4]}个时${(sk[2]+sk[3]*(sk[4]-sk[1]))/100}倍`;
+			}
+			break;
 		case 121:
 			str = ``;
 			strArr =[];
@@ -430,12 +441,29 @@ function parseSkillDescription(skill)
 			}
 			str = strArr.join("，");
 			break;
-		case 129:
+		case 139:
 			str = ``;
 			strArr =[];
 			if (sk[0]) {strArr.push(nb(sk[0],attrsName).join("、") + "属性");}
 			if (sk[1]) {strArr.push(nb(sk[1],typeName).join("、") + "类型");}
 			if (strArr.length) str += strArr.join("和") + "宠物的";
+			str += ` HP ${sk[2]==(sk[3]||100)?(sk[2]==100?"全满":`${sk[2]}%`):(sk[3]==0?`${sk[2]}%以上`:`${sk[2]}%~${sk[3]}%`)}时攻击力${sk[4]/100}倍`;
+			str += `，HP ${sk[5]==(sk[6]||sk[5])?(sk[5]==100?"全满":`${sk[6]}%`):(sk[6]<=1?`${sk[5]}%以下`:`${sk[5]}%~${sk[6]}%`)}时攻击力${sk[7]/100}倍`;
+			break;
+		case 132:
+			str = `${sk[0]}回合内，宝珠移动时间${sk[1]?`增加${sk[1]/10}秒`:""}${sk[2]?`变为${sk[2]/100}倍`:""}`;
+			break;
+		case 138: //多内容队长技能，按顺序组合发动如下队长技能：
+			str = `<ul class="leader-skill-ul">`;
+			str += sk.map(subSkill => {return `<li class="leader-skill-li">${parseSkillDescription(Skills[subSkill])}</li>`;}).join("");
+			str += `</ul>`;
+			break;
+		case 139:
+			str = ``;
+			strArr =[];
+			if (sk[0]) {strArr.push(nb(sk[0],attrsName).join("、") + "属性");}
+			if (sk[1]) {strArr.push(nb(sk[1],typeName).join("、") + "类型");}
+			if (strArr.length) str += strArr.join("和") + "宠物";
 			strArr =[];
 			if (sk[2]) {strArr.push(`HP ${sk[2]/100}倍`);}
 			if (sk[3]) {strArr.push(`攻击力 ${sk[3]/100}倍`);}
@@ -445,14 +473,6 @@ function parseSkillDescription(skill)
 				if (str.length)str += "，";
 				str += `受到的${nb(sk[5],attrsName).join("、")}属性伤害减少${sk[6]}%`;
 			}
-			break;
-		case 132:
-			str = `${sk[0]}回合内，宝珠移动时间${sk[1]?`增加${sk[1]/10}秒`:""}${sk[2]?`变为${sk[2]/100}倍`:""}`;
-			break;
-		case 138: //多内容队长技能，按顺序组合发动如下队长技能：
-			str = `<ul class="leader-skill-ul">`;
-			str += sk.map(subSkill => {return `<li class="leader-skill-li">${parseSkillDescription(Skills[subSkill])}</li>`;}).join("");
-			str += `</ul>`;
 			break;
 		case 140:
 			str = `${nb(sk[0],attrsName).join("、")}宝珠强化（每颗强化珠伤害/回复增加${sk[1]}%）`;
@@ -514,45 +534,48 @@ function parseSkillDescription(skill)
 			break;
 		case 167:
 			//"相連消除5個或以上的火寶珠或光寶珠時攻擊力和回復力4倍，每多1個+1倍，最大7個時6倍；"
-			str = `相连消除${sk[1]}个或以上${nb(sk[0],attrsName).join("或")}宝珠时`;
+			str = `相连消除${sk[1]}个或以上${nb(sk[0],attrsName).join("或")}宝珠时，所有宠物的`;
+			strArr = [];
 			if (sk[2]==sk[3] && sk[4] == sk[5])
 			{
-				str += `攻击力和回复力${sk[2]/100}倍`;
+				strArr.push(`攻击力和回复力${sk[2]/100}倍`);
 				if (sk[4]>0)
 				{
-					str += `，每多1个+${sk[4]/100}倍`;
+					strArr.push(`每多1个+${sk[4]/100}倍`);
 				}
 				if (sk[6]>0)
 				{
-					str += `，最大${sk[6]}个时${((sk[6]-sk[1])*sk[4]+sk[2])/100}倍`;
+					strArr.push(`最大${sk[6]}个时${((sk[6]-sk[1])*sk[4]+sk[2])/100}倍`);
 				}
 			}else
 			{
+
 				if (sk[2]>0)
 				{
-					str += `，攻击力${sk[2]/100}倍`;
+					strArr.push(`攻击力${sk[2]/100}倍`);
 					if (sk[4]>0)
 					{
-						str += `，每多1个+${sk[4]/100}倍`;
+						strArr.push(`每多1个+${sk[4]/100}倍`);
 					}
 					if (sk[6]>0)
 					{
-						str += `，最大${sk[6]}个时${((sk[6]-sk[1])*sk[4]+sk[2])/100}倍`;
+						strArr.push(`最大${sk[6]}个时${((sk[6]-sk[1])*sk[4]+sk[2])/100}倍`);
 					}
 				}
 				if (sk[3]>0)
 				{
-					str += `，回复力${sk[3]/100}倍`;
+					strArr.push(`回复力${sk[3]/100}倍`);
 					if (sk[5]>0)
 					{
-						str += `，每多1个+${sk[5]/100}倍`;
+						strArr.push(`每多1个+${sk[5]/100}倍`);
 					}
 					if (sk[6]>0)
 					{
-						str += `，最大${sk[6]}个时${((sk[6]-sk[1])*sk[5]+sk[3])/100}倍`;
+						strArr.push(`最大${sk[6]}个时${((sk[6]-sk[1])*sk[5]+sk[3])/100}倍`);
 					}
 				}
 			}
+			str += strArr.join("，");
 			break;
 		case 168: //宝石姬技能2
 			strArr = sk.slice(1,7); //目前只有2个，而且2-6都是0，不知道是不是真的都是觉醒
