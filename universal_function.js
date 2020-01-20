@@ -251,6 +251,20 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens)
 	}
 	return res;
 }
+//产生一个怪物头像
+function createCardA(id)
+{
+	const cdom = document.createElement("a");
+	cdom.class = "monster";
+	cdom.target = "_blank";
+	const property = cdom.appendChild(document.createElement("div"));
+	property.className = "property";
+	const subproperty = cdom.appendChild(document.createElement("div"));
+	subproperty.className = "subproperty";
+	const cid = cdom.appendChild(document.createElement("div"));
+	cid.className = "id";
+	return cdom;
+}
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)
 {
