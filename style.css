@@ -498,20 +498,26 @@ ul{
 	font-size: 25px;
 }
 .edit-box .setting-box .row-mon-id .evo-card-list li,
-.edit-box .search-box .search-mon-list li{
+.edit-box .search-box .search-mon-list li,
+.edit-box .setting-box .skill-box .detail-mon{
 	display: inline-block;
 	vertical-align: top; 
 	top: 0;
 	width: 78px;
 	height: 80px;
 }
+.edit-box .setting-box .skill-box .detail-mon{
+	vertical-align: bottom;
+}
 .edit-box .setting-box .row-mon-id .evo-card-list .monster,
-.edit-box .search-box .search-mon-list .monster{
+.edit-box .search-box .search-mon-list .monster,
+.edit-box .setting-box .skill-box .detail-mon .monster{
 	float: none;
 	transform: scale(0.75) translate(-13px,-13px);
 }
 .edit-box .setting-box .row-mon-id .evo-card-list .monster .id,
-.edit-box .search-box .search-mon-list .monster .id{
+.edit-box .search-box .search-mon-list .monster .id,
+.edit-box .setting-box .skill-box .detail-mon .monster .id{
 	bottom: 5px;
 	font-size: 20px;
 }

@@ -244,7 +244,13 @@ window.onload = function()
 	interchangeSVG = document.querySelector("#interchange-line");
 	interchangePath = interchangeSVG.querySelector("g line");
 	const controlBox = document.querySelector(".control-box");
+	const helpLink = document.querySelector(".help-link");
 	const statusLine = controlBox.querySelector(".status"); //显示当前状态的
+
+	if (location.hostname.indexOf("gitee")>=0)
+	{
+		helpLink.hostname = "gitee.com";
+	}
 
 	//▼添加语言列表开始
 	const langSelectDom = controlBox.querySelector(".languages");
@@ -525,16 +531,10 @@ function initialize()
 			return false;
 		}
 		const cli = document.createElement("li");
-		const cdom = cli.head = cli.appendChild(document.createElement("a"));
-		cdom.class = "monster";
-		cdom.onclick = clickHeadToNewMon;
-		const property = cdom.appendChild(document.createElement("div"));
-		property.className = "property";
-		const subproperty = cdom.appendChild(document.createElement("div"));
-		subproperty.className = "subproperty";
-		const cid = cdom.appendChild(document.createElement("div"));
-		cid.className = "id";
+		const cdom = cli.head = createCardA(id);
+		cli.appendChild(cdom);
 		changeid({id:id},cdom);
+		cdom.onclick = clickHeadToNewMon;
 		return cli;
 	};
 
