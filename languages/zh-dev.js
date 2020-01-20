@@ -575,7 +575,7 @@ function parseSkillDescription(skill)
 			}
 			break;
 		case 125: //隊伍中同時存在 時，所有寵物的攻擊力3.5倍
-			strArr = sk.slice(0,5).filter(s=>{return s>=0;});
+			strArr = sk.slice(0,5).filter(s=>{return s>0;});
 			str = `队伍中${strArr.length>1?"同时":""}存在`;
 			str += strArr.map(cardN).join("");
 			str += "时所有宠物的";
