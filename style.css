@@ -29,6 +29,9 @@ body{
 	pointer-events: none;
 	opacity: 0.5;
 }
+.help-link::before{
+	content: "帮助和提示";
+}
 .title{
 	font-size: 2em;
 	font-weight: bold;
