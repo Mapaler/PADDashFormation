@@ -796,7 +796,7 @@ function parseSkillDescription(skill)
 			if (sk[0]) strArr.push(`攻击力×${sk[0]/100}倍`);
 			if (sk[1]) strArr.push(`回复力×${sk[1]/100}倍`);
 			if (strArr.length) str += `，所有宠物的${strArr.join("，")}`;
-			if (sk[3]) str += `，受到的伤害减少${sk[3]}%`;
+			if (sk[2]) str += `，受到的伤害减少${sk[2]}%`;
 			break;
 		case 152:
 			str = `将`;
