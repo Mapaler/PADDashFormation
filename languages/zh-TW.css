@@ -5,6 +5,9 @@
 .status.loading-skill-info .text::before{
 	content: "正在載入技能数据，请稍候。";
 }
+.help-link::before{
+	content: "幫助和提示";
+}
 .delay .monster::before{
 	content: "應 對\A威 嚇";
 }
@@ -49,6 +52,9 @@
 }
 .monsterinfo-box .monster-id::before{
 	content: "No.";
+}
+.monsterinfo-box .monster-cost::before{
+	content: "消耗:";
 }
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼怪物等級";

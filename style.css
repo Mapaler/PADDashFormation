@@ -30,7 +30,7 @@ body{
 	opacity: 0.5;
 }
 .help-link::before{
-	content: "帮助和提示";
+	content: "Help & Tips";
 }
 .title{
 	font-size: 2em;
@@ -698,15 +698,21 @@ ul{
 	float: left;
 	margin-right:5px;
 }
-.monsterinfo-box .monster-id{
+.monsterinfo-box .monster-id,
+.monsterinfo-box .monster-rare,
+.monsterinfo-box .monster-cost
+{
 	display:inline-block;
+}
+.monsterinfo-box .monster-id{
 	width:150px;
 }
 /*.monsterinfo-box .monster-id::before{
 	content: "No.";
 }*/
+
 .monsterinfo-box .monster-rare{
-	display:inline-block;
+	width: 230px;
 }
 .monsterinfo-box .monster-rare::before{
 	color:gold;
@@ -722,7 +728,11 @@ ul{
 .rare-8::before{content: "★★★★★★★★";}
 .rare-9::before{content: "★★★★★★★★★";}
 .rare-10::before{content: "★★★★★★★★★★";}
-.monsterinfo-box .monster-id,.monsterinfo-box .monster-rare,.monsterinfo-box .monster-name{
+.monsterinfo-box .monster-id,
+.monsterinfo-box .monster-rare,
+.monsterinfo-box .monster-cost,
+.monsterinfo-box .monster-name
+{
 	vertical-align: top;
 	margin:0;
 	height: 34px;

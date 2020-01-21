@@ -41,6 +41,9 @@
 .monsterinfo-box .monster-id::before{
 	content: "No.";
 }
+.monsterinfo-box .monster-cost::before{
+	content: "코스트:";
+}
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼몬스터 레벨";
 }
