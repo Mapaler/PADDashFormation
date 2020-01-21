@@ -614,6 +614,23 @@ function initialize()
 	{
 		return parseInt(str, 10);
 	}
+	//将搜索结果显示出来（也可用于其他的搜索）
+	editBox.showSearch = function(searchArr){
+		const createCardHead = editBox.createCardHead;
+
+		searchMonList.classList.add("display-none");
+		searchMonList.innerHTML = "";
+		if (searchArr.length>0)
+		{
+			let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+			searchArr.forEach(function(card){
+				const cli = createCardHead(card.id);
+				fragment.appendChild(cli);
+			});
+			searchMonList.appendChild(fragment);
+		}
+		searchMonList.classList.remove("display-none");
+	};
 	searchStart.onclick = function(){
 		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
 		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
@@ -647,22 +664,8 @@ function initialize()
 		console.log("搜索条件",attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter);
 		let searchResult = searchCards(Cards,attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter);
 		console.log("搜索结果",searchResult);
-		const createCardHead = editBox.createCardHead;
-
-		searchMonList.classList.add("display-none");
-		searchMonList.innerHTML = "";
-		if (searchResult.length>0)
-		{
-			let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-			searchResult.forEach(function(card){
-				const cli = createCardHead(card.id);
-				fragment.appendChild(cli);
-			});
-			searchMonList.appendChild(fragment);
-		}
-		searchMonList.classList.remove("display-none");
+		editBox.showSearch(searchResult);
 	};
-
 	searchClose.onclick = function(){
 		searchBox.classList.add("display-none");
 	};

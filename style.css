@@ -974,6 +974,16 @@ ul{
 	padding: 0 8px 6px 8px;
 	line-height: 25px;
 }
+.skill-datail .spColor{
+	color: #ff3600;
+}
+.skill-datail .detail-search{
+	cursor: pointer;
+	color: blue;
+}
+.skill-datail .detail-search:hover::before{
+	content: "🔍";
+}
 .skill-cd-control{
 	float: right;
 }
