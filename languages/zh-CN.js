@@ -8,7 +8,7 @@ function findFullSkill(subSkill){
 	else
 		{return subSkill;}
 }
-document.querySelector(".edit-box .row-mon-id .m-id").type = "number";
+//document.querySelector(".edit-box .row-mon-id .m-id").type = "number";
 //Skills.filter(s=>{const sk = s.params; return s.type == 156;}).map(findFullSkill)
 
 //高级技能解释
