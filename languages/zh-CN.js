@@ -1264,7 +1264,7 @@ function parseSkillDescription(skill)
 			if (sk[3]) str += `，结算时增加${sk[3]}连击`;
 			break;
 		case 195:
-			str = `HP 减少${sk[0]}%`;
+			str = `HP 减` + (sk[0]?`少${sk[0]}%`:`为1`);
 			break;
 		case 196:
 			str = `无法消除宝珠状态减少${sk[0]}回合`;
