@@ -768,7 +768,7 @@ function initialize()
 	}
 	//等级
 	const monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.onchange = editBox.reCalculateAbility;
+	monEditLv.onchange = reCalculateAbility;
 	const monEditLvMin = settingBox.querySelector(".m-level-btn-min");
 	monEditLvMin.ipt = monEditLv;
 	monEditLvMin.onclick = setIptToMyValue;
@@ -780,11 +780,11 @@ function initialize()
 	const monEditAddAtkLi = settingBox.querySelector(".row-mon-plus .m-plus-atk-li");
 	const monEditAddRcvLi = settingBox.querySelector(".row-mon-plus .m-plus-rcv-li");
 	const monEditAddHp = monEditAddHpLi.querySelector(".m-plus-hp");
-	monEditAddHp.onchange = editBox.reCalculateAbility;
+	monEditAddHp.onchange = reCalculateAbility;
 	const monEditAddAtk = monEditAddAtkLi.querySelector(".m-plus-atk");
-	monEditAddAtk.onchange = editBox.reCalculateAbility;
+	monEditAddAtk.onchange = reCalculateAbility;
 	const monEditAddRcv = monEditAddRcvLi.querySelector(".m-plus-rcv");
-	monEditAddRcv.onchange = editBox.reCalculateAbility;
+	monEditAddRcv.onchange = reCalculateAbility;
 	//3个快速设置按钮
 	const monEditAddHpBtn = monEditAddHpLi.querySelector(".m-plus-btn");
 	monEditAddHpBtn.ipt = monEditAddHp;
@@ -798,8 +798,8 @@ function initialize()
 	//297按钮
 	const monEditAdd297 = settingBox.querySelector(".row-mon-plus .m-plus-btn-297");
 	monEditAdd297.onclick = function(){
-		monEditAddHp.value = 
-		monEditAddAtk.value = 
+		monEditAddHp.value = 99;
+		monEditAddAtk.value = 99;
 		monEditAddRcv.value = 99;
 		editBox.reCalculateAbility();
 	};
@@ -882,7 +882,7 @@ function initialize()
 	});
 
 	//重新计算怪物的能力
-	editBox.reCalculateAbility = function(){
+	function reCalculateAbility(){
 		const monid = parseInt(monstersID.value || 0, 10);
 		const level = parseInt(monEditLv.value || 0, 10);
 		const awoken = editBox.awokenCount;
@@ -898,6 +898,7 @@ function initialize()
 		monEditAtkValue.innerHTML = abilitys[1];
 		monEditRcvValue.innerHTML = abilitys[2];
 	};
+	editBox.reCalculateAbility = reCalculateAbility;
 
 	const btnCancel = editBox.querySelector(".button-cancel");
 	const btnDone = editBox.querySelector(".button-done");
