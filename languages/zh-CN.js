@@ -835,7 +835,20 @@ function parseSkillDescription(skill)
 				str = `156宝石姬技能，未知buff类型 参数[4]：${sk[4]}`;
 			break;
 		case 157:
-			str = `以十字形式消除5个${attrN(sk[0])}宝珠，当消除N个十字时，所有宠物的攻击力×${sk[1]/100}<sup>N</sup>倍`;
+			fullColor = [sk[0],sk[2],sk[4]].filter(s=>{return s!=null;});
+			strArr = [sk[1],sk[3],sk[5]].filter(s=>{return s>0;});
+			hasDiffOrbs = strArr.filter(c=>{return c != strArr[0];}).length > 0;
+			str = ``;
+			if (hasDiffOrbs)
+			{
+				if (sk[0] != null) str += `以十字形式消除5个${attrN(sk[0])}宝珠，当消除N个十字时，所有宠物的攻击力×${sk[1]/100}<sup>N</sup>倍`;
+				if (sk[2] != null) str += `以十字形式消除5个${attrN(sk[2])}宝珠，当消除N个十字时，所有宠物的攻击力×${sk[3]/100}<sup>N</sup>倍`;
+				if (sk[4] != null) str += `以十字形式消除5个${attrN(sk[4])}宝珠，当消除N个十字时，所有宠物的攻击力×${sk[5]/100}<sup>N</sup>倍`;
+			}else
+			{
+				str += `以十字形式消除5个${getAttrTypeString(fullColor)}宝珠，当消除N个十字时，所有宠物的攻击力×${sk[1]/100}<sup>N</sup>倍`;
+			}
+			console.log(str)
 			break;
 		case 158:
 			str = `<span class="spColor">每组${sk[0]-1}珠或以下无法消除</span>`;
@@ -1106,10 +1119,11 @@ function parseSkillDescription(skill)
 			break;
 		case 175: //隊員編成均為「マガジン」合作活動角色時，所有寵物的攻擊力8倍
 			str = `队员组成全是`;
-			str += sk.slice(0,3).filter(s=>{return s>0;}).map(s=>{
-				return `<a class="detail-search" onclick="showSearch(Cards.filter(card=>{return card.collabId == ${s};}));">【` + Cards.filter(card=>{return card.collabId == s;})[0].altName + `】</a>`;
+			strArr = sk.slice(0,3).filter(s=>{return s>0;}); //最多3种id
+			str += strArr.map(s=>{
+				return `<a class="detail-search" onclick="showSearch(Cards.filter(card=>{return card.collabId == ${s};}));">【No.${s}】</a>`;
 			}).join("、");
-			str += `合作角色时，所有宠物的${getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]})}`;
+			str += `系列角色时，所有宠物的${getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]})}`;
 			break;
 		case 176:
 		//●◉○◍◯
