@@ -308,8 +308,11 @@ function parseSkillDescription(skill)
 		case 52:
 			str = `${attrN(sk[0])}宝珠强化（每颗强化珠伤害/回复增加${sk[1]}%）`;
 			break;
+		case 53:
+			str = `进入地下城时为队长的话，掉落率×${sk[0]/100}倍（协力时无效）`;
+			break;
 		case 54:
-			str = `进入地下城时为队长的话，获得的金币${sk[0]/100}倍`;
+			str = `进入地下城时为队长的话，获得的金币×${sk[0]/100}倍`;
 			break;
 		case 55:
 			str = `对敌方1体造成${sk[0]}点无视防御的固定伤害`;
@@ -765,6 +768,9 @@ function parseSkillDescription(skill)
 		case 142:
 			str = `${sk[0]}回合内自身的属性变为${attrN(sk[1])}`;
 			break;
+		case 143:
+			str = `对敌方全体造成队伍总 HP×${sk[0]/100}倍的${attrN(sk[1])}属性伤害`;
+			break;
 		case 144:
 			str = `对敌方${sk[2]?sk[2]:"全"}体造成${nb(sk[0],attrsName).join("、")}属性总攻击力×${sk[1]/100}倍的${attrN(sk[3])}属性伤害`;
 			break;
@@ -1070,7 +1076,7 @@ function parseSkillDescription(skill)
 			}
 			if (!atSameTime) str+=`${sk[1]}种属性以上`;
 			else if(sk[0] == 31) str += `5色`;
-			str += `同时攻击时}`;
+			str += `同时攻击时`;
 			if (sk[2]) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			if (sk[3]) str += `，受到的伤害减少${sk[3]}%`;
 			break;
@@ -1099,9 +1105,9 @@ function parseSkillDescription(skill)
 			str = `${sk[0]}回合内敌人的${strArr.join("、")}无效化`;
 			break;
 		case 175: //隊員編成均為「マガジン」合作活動角色時，所有寵物的攻擊力8倍
-			str = `队员组成全是`
+			str = `队员组成全是`;
 			str += sk.slice(0,3).filter(s=>{return s>0;}).map(s=>{
-				return `<a class="detail-search" onclick="document.querySelector('.edit-box .row-mon-id .open-search').onclick();document.querySelector('.edit-box').showSearch(Cards.filter(card=>{return card.collabId == ${s};}));">【` + Cards.filter(card=>{return card.collabId == s;})[0].altName + `(No.${s})】</a>`;
+				return `<a class="detail-search" onclick="showSearch(Cards.filter(card=>{return card.collabId == ${s};}));">【` + Cards.filter(card=>{return card.collabId == s;})[0].altName + `】</a>`;
 			}).join("、");
 			str += `合作角色时，所有宠物的${getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]})}`;
 			break;
@@ -1134,6 +1140,14 @@ function parseSkillDescription(skill)
 					str += `消除宝珠后画面剩下${sk[5]}个或以下的宝珠时，${getFixedHpAtkRcvString({atk:sk[6]})}`;
 				}
 			}
+			break;
+		case 178:
+			str = `<span class="spColor">【操作时间固定${sk[0]}秒】</span>`;
+			if (sk[1] || sk[2]) str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
+			if (sk[3] || sk[4] || sk[5]) str += "的"+getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]});
+			break;
+		case 179:
+			str = `${sk[0]}回合内每回合回复${sk[1]?`${sk[1]}点`:` HP 上限 ${sk[2]}%`}的 HP`;
 			break;
 		case 183:
 			str = getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的";
@@ -1177,6 +1191,10 @@ function parseSkillDescription(skill)
 			break;
 		case 188:
 			str = `对敌方1体造成${sk[0]}点无视防御的固定伤害`;
+			break;
+		case 189: 
+		//解除寶珠的鎖定狀態；所有寶珠變成火、水、木、光；顯示3COMBO的轉珠路徑（只適用於普通地下城＆3個消除）
+			str = `解除宝珠的锁定状态；所有宝珠变成火、水、木、光；显示3连击的转珠路径（只适用于普通地下城 & 3珠消除）`;
 			break;
 		case 191:
 			str = `${sk[0]}回合内可以贯穿伤害无效盾`;
@@ -1227,7 +1245,8 @@ function parseSkillDescription(skill)
 			}
 			if (!atSameTime) str+=`${sk[1]}种属性以上`;
 			else if(sk[0] == 31) str += `5色`;
-			str += `同时攻击时，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
+			str += `同时攻击时`;
+			if (sk[2]) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			if (sk[3]) str += `，结算时增加${sk[3]}连击`;
 			break;
 		case 195:
@@ -1236,8 +1255,58 @@ function parseSkillDescription(skill)
 		case 196:
 			str = `无法消除宝珠状态减少${sk[0]}回合`;
 			break;
+		case 197: //消除毒/猛毒宝珠时不会受到毒伤害
+			str = `消除${getAttrTypeString([7,8])}宝珠时不会受到毒伤害`;
+			break;
+		case 198:
+			//以回復寶珠回復40000HP或以上時，受到的傷害減少50%
+			str = `以回复宝珠回复${sk[0]}或以上时`;
+			if (sk[1]) str += `所有宠物的${getFixedHpAtkRcvString({atk:sk[1]})}`;
+			if (sk[2]) str += `，受到的伤害减少${sk[2]}%`;
+			if (sk[3]) str += `，觉醒无效状态减少${sk[3]}回合`;
+			break;
+		case 199:
+			fullColor = nb(sk[0], attrsName);
+			atSameTime = fullColor.length == sk[1];
+			if (sk[0] == 31) //31-11111
+			{ //单纯5色
+				str = '';
+			}else if((sk[0] & 31) == 31)
+			{ //5色加其他色
+				str = `5色+${nb(sk[0] ^ 31, attrsName).join("、")}`;
+				if (!atSameTime) str+="中";
+			}else
+			{
+				str = `${fullColor.join("、")}`;
+				if (!atSameTime) str+="中";
+			}
+			if (!atSameTime) str+=`${sk[1]}种属性以上`;
+			else if(sk[0] == 31) str += `5色`;
+			str += `同时攻击时，追加${sk[2]}点固定伤害`;
+			break;
 		case 200:
 			str = `相连消除${sk[1]}个或以上${nb(sk[0],attrsName).join("或")}宝珠时，追加${sk[2]}点固定伤害`;
+			break;
+		case 201:
+			fullColor = sk.slice(0,4).filter(c=>{return c>0;}); //最多4串珠
+			hasDiffOrbs = fullColor.filter(s=>{return s!= fullColor[0];}).length > 0; //是否存在不同色的珠子
+			strArr = [];
+			if (hasDiffOrbs)
+			{//木暗同時攻擊時，所有寵物的攻擊力和回復力2倍
+				str = `${fullColor.map(a=>{return nb(a, attrsName);}).join("、")}${sk[4] < fullColor.length?`中有${sk[4]}串`:""}同时攻击时`;
+			}else
+			{//光寶珠有2COMBO或以上時，所有寵物的攻擊力3倍
+				str = `${nb(fullColor[0], attrsName).join("、")}宝珠有${sk[4]}串或以上时`;
+			}
+			if (sk[5]) str += `，追加${sk[5]}点固定伤害`;
+			break;
+		case 202:
+			str = `变身为${cardN(sk[0])}`;
+			break;
+		case 203:
+			str = `队员组成全是像素进化时，`;
+			if (sk[0]) str += getAttrTypeString(flags(sk[0]));
+			str += "宠物的" + getFixedHpAtkRcvString({hp:sk[1],atk:sk[2],rcv:sk[3]});
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
@@ -1247,5 +1316,6 @@ function parseSkillDescription(skill)
 			console.log(`未知的技能类型${type}(No.${id})`,findFullSkill(skill));
 			break;
 	}
-	return (skill.description.length?(descriptionToHTML(skill.description) + "<hr>"):"") + str;
+	//(skill.description.length?(descriptionToHTML(skill.description) + "<hr>"):"") + str
+	return str;
 }
