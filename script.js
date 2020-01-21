@@ -19,6 +19,7 @@ const dataSourceList = [ //几个不同的游戏服务区
 var allMembers = [];
 var interchangeSvg; //储存划线的SVG
 var interchangePath; //储存划线的线
+var showSearch = null; //整个程序都可以用的显示搜索
 /*var cardInterchange = { //记录DOM交换
 	from:null,
 	to:null,
@@ -539,6 +540,12 @@ function initialize()
 	};
 
 	const searchBox = editBox.querySelector(".search-box");
+	const settingBox = editBox.querySelector(".setting-box");
+	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
+	searchOpen.onclick = function(){
+		searchBox.classList.remove("display-none");
+	};
+
 	let s_attr1s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
 	let s_attr2s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
 	let s_fixMainColor = searchBox.querySelector(".attrs .fix-main-color");
@@ -615,7 +622,9 @@ function initialize()
 		return parseInt(str, 10);
 	}
 	//将搜索结果显示出来（也可用于其他的搜索）
-	editBox.showSearch = function(searchArr){
+	showSearch = function(searchArr){
+		editBox.show();
+		searchOpen.onclick();
 		const createCardHead = editBox.createCardHead;
 
 		searchMonList.classList.add("display-none");
@@ -664,7 +673,7 @@ function initialize()
 		console.log("搜索条件",attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter);
 		let searchResult = searchCards(Cards,attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter);
 		console.log("搜索结果",searchResult);
-		editBox.showSearch(searchResult);
+		showSearch(searchResult);
 	};
 	searchClose.onclick = function(){
 		searchBox.classList.add("display-none");
@@ -685,11 +694,6 @@ function initialize()
 			t.checked = false;
 		});
 		searchMonList.innerHTML = "";
-	};
-	const settingBox = editBox.querySelector(".setting-box");
-	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
-	searchOpen.onclick = function(){
-		searchBox.classList.remove("display-none");
 	};
 
 	//id搜索

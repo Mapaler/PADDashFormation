@@ -969,6 +969,12 @@ ul{
 .row-mon-leader-skill .skill-title .skill-name{
 	color: #85FD80;
 }
+.skill-cd-control{
+	float: right;
+}
+.skill-cd{
+	margin-right: 20px;
+}
 .skill-datail{
 	color: black;
 	padding: 0 8px 6px 8px;
@@ -981,14 +987,14 @@ ul{
 	cursor: pointer;
 	color: blue;
 }
-.skill-datail .detail-search:hover::before{
+.skill-datail .detail-search::before{
 	content: "🔍";
 }
-.skill-cd-control{
-	float: right;
+.skill-datail .random-active-skill{
+	padding-left: 1em;
 }
-.skill-cd{
-	margin-right: 20px;
+.skill-datail .random-active-skill>.active-skill-li{
+	list-style: decimal;
 }
 
 .edit-box .button-box{
