@@ -208,7 +208,7 @@ function parseSkillDescription(skill)
 			str = `如当前 HP 在 HP 上限的${sk[0]}%以上的话，受到单一次致命攻击时，${sk[1]<100?`有${sk[1]}的几率`:"将"}会以1点 HP 生还`;
 			break;
 		case 15:
-			str = `操作时间演延长${sk[0]/100}秒`;
+			str = `操作时间延长${sk[0]/100}秒`;
 			break;
 		case 16:
 			str = `受到的所有伤害减少${sk[0]}%`;
@@ -1183,7 +1183,7 @@ function parseSkillDescription(skill)
 			if (sk[4]) {strArr.push(`攻击力 ${sk[4]/100}倍`);}
 			if (sk[5]) {strArr.push(`回复力 ${sk[5]/100}倍`);}
 			str += strArr.join("、");
-			if (sk[0]) str += `，操作时间演延长${sk[0]/100}秒`;
+			if (sk[0]) str += `，操作时间延长${sk[0]/100}秒`;
 			break;
 		case 186:
 			str = '<span class="spColor">【7×6版面】</span>';
