@@ -4,7 +4,7 @@
         guideURL:"http://www.puzzledragonx.com/en/monster.asp?n=$1"
     },
     {
-        name:"中文（简体）",i18n:"zh",searchlist:["chs","ja"],
+        name:"中文（简体）原版技能",i18n:"zh",searchlist:["chs","ja"],
         guideURL:"http://pad.skyozora.com/pets/$1"
     },
     {
