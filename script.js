@@ -1465,6 +1465,8 @@ function editBoxChangeMonId(id)
 	mId.innerHTML = id;
 	const mRare = monInfoBox.querySelector(".monster-rare");
 	mRare.className = "monster-rare rare-" + card.rarity;
+	const mCost = monInfoBox.querySelector(".monster-cost");
+	mCost.innerHTML = card.cost;
 	const mName = monInfoBox.querySelector(".monster-name");
 	mName.innerHTML = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
 
