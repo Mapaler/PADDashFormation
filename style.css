@@ -928,7 +928,7 @@ ul{
 }*/
 .skill-box .m-skill-level {
 	height: 30px;
-	width: 50px;
+	width: 45px;
 	box-sizing: border-box;
 	border: none;
 	background: none;
@@ -937,7 +937,9 @@ ul{
 	color: inherit;
 	text-shadow: inherit;
 }
-.skill-box .m-skill-lv-1,.skill-box .m-skill-lv-max{
+.skill-box .m-skill-lv-1,
+.skill-box .m-skill-lv-max{
+	padding: 0 3px;
 	height: 30px;
 	box-sizing: border-box;
 	font-size: 18px;
@@ -981,11 +983,11 @@ ul{
 .row-mon-leader-skill .skill-title .skill-name{
 	color: #85FD80;
 }
-.skill-cd-control{
+.skill-box .skill-cd-control{
 	float: right;
 }
-.skill-cd{
-	margin-right: 20px;
+.skill-box .skill-cd{
+	margin-left: 10px;
 }
 .skill-datail{
 	color: black;
