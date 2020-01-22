@@ -522,6 +522,28 @@ function initialize()
 		controlBox.classList.remove("blur-bg");
 	};
 
+	const smonsterinfoBox = editBox.querySelector(".monsterinfo-box");
+	const mCollabId = smonsterinfoBox.querySelector(".monster-collabId");
+	mCollabId.onclick = function(){ //搜索合作
+		const collabId = parseInt(this.getAttribute('data-collabId'));
+		if (collabId>0);
+		{
+			searchColla(this.getAttribute('data-collabId'));
+		}
+	};
+	const mAltName = smonsterinfoBox.querySelector(".monster-altName");
+	mAltName.onclick = function(){ //搜索合作
+		const altName = this.getAttribute('data-altName');
+		const splitAltName = altName.split("|");
+		if (altName.length>0);
+		{
+			showSearch(Cards.filter(card=>{
+				return splitAltName.some(alt=>{
+					return card.altName.indexOf(alt)>=0;
+				});
+			}));
+		}
+	};
 	//创建一个新的怪物头像
 	editBox.createCardHead = function(id)
 	{
@@ -543,7 +565,7 @@ function initialize()
 	const settingBox = editBox.querySelector(".setting-box");
 	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
 	searchOpen.onclick = function(){
-		searchBox.classList.remove("display-none");
+		searchBox.classList.toggle("display-none");
 	};
 
 	let s_attr1s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
@@ -624,7 +646,7 @@ function initialize()
 	//将搜索结果显示出来（也可用于其他的搜索）
 	showSearch = function(searchArr){
 		editBox.show();
-		searchOpen.onclick();
+		searchBox.classList.remove("display-none");
 		const createCardHead = editBox.createCardHead;
 
 		searchMonList.classList.add("display-none");
@@ -1420,6 +1442,7 @@ function editMon(AorB,isAssist,tempIdx)
 	}
 	skillLevel.onchange();
 
+	const editBoxTitle = editBox.querySelector(".edit-box-title");
 	if (!isAssist)
 	{
 		editBox.latent = mon.latent ? mon.latent.concat() : [];
@@ -1430,13 +1453,13 @@ function editMon(AorB,isAssist,tempIdx)
 		//{
 		//	settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
 		//}
-		editBox.querySelector(".edit-box-title").classList.remove("edit-box-title-assist");
+		editBoxTitle.classList.remove("edit-box-title-assist");
 	}else
 	{
 		btnDelay.classList.remove("display-none");
 		settingBox.querySelector(".row-mon-latent").classList.add("display-none");
 		//settingBox.querySelector(".row-mon-super-awoken").classList.add("display-none");
-		editBox.querySelector(".edit-box-title").classList.add("edit-box-title-assist");
+		editBoxTitle.classList.add("edit-box-title-assist");
 	}
 	editBox.reCalculateAbility();
 }
@@ -1469,6 +1492,30 @@ function editBoxChangeMonId(id)
 	mCost.innerHTML = card.cost;
 	const mName = monInfoBox.querySelector(".monster-name");
 	mName.innerHTML = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
+	const mCollabId = monInfoBox.querySelector(".monster-collabId");
+	mCollabId.innerHTML = card.collabId;
+	mCollabId.setAttribute("data-collabId",card.collabId);
+	if (card.collabId == 0)
+	{
+		mCollabId.classList.add("display-none");
+	}else
+	{
+		mCollabId.classList.remove("display-none");
+	}
+	const mAltName = monInfoBox.querySelector(".monster-altName");
+	mAltName.innerHTML = card.altName;
+	mAltName.setAttribute("data-altName",card.altName);
+	/*const splitAltName = card.altName.split("|"); //取出分段的那种的第一段
+	const hasGroup = splitAltName.some(alt=>{ //自己的名称是否只有一个
+		return Cards.some(c=>{return c.id != card.id && c.altName.indexOf(alt)>=0;});
+	});*/
+	if (card.altName.length == 0)
+	{ //当没有合作名
+		mAltName.classList.add("display-none");
+	}else
+	{
+		mAltName.classList.remove("display-none");
+	}
 
 	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");
 	evoCardUl.style.display = "none";
@@ -1634,6 +1681,12 @@ function editBoxChangeMonId(id)
 	editBox.latent.length = 0;
 	editBox.refreshLatent(editBox.latent,id);
 	editBox.reCalculateAbility();
+}
+//搜索并显示合作
+function searchColla(collabId)
+{
+	if (typeof(collabId) == "string") collabId = parseInt(collabId,10);
+	showSearch(Cards.filter(card=>{return card.collabId == collabId;}));
 }
 //刷新整个队伍
 function refreshAll(formationData){

@@ -54,6 +54,12 @@
 .monsterinfo-box .monster-cost::before{
 	content: "COST:";
 }
+.monsterinfo-box .monster-collabId::before{
+	content: "Series ID：";
+}
+.monsterinfo-box .monster-altName::before{
+	content: "Series name：";
+}
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼Monster Level";
 }

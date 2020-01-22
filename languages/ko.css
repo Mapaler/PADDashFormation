@@ -44,6 +44,12 @@
 .monsterinfo-box .monster-cost::before{
 	content: "코스트:";
 }
+.monsterinfo-box .monster-collabId::before{
+	content: "시리즈 ID：";
+}
+.monsterinfo-box .monster-altName::before{
+	content: "시리즈 이름：";
+}
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼몬스터 레벨";
 }

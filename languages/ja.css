@@ -44,6 +44,12 @@
 .monsterinfo-box .monster-cost::before{
 	content: "コスト:";
 }
+.monsterinfo-box .monster-collabId::before{
+	content: "シリーズ ID：";
+}
+.monsterinfo-box .monster-altName::before{
+	content: "シリーズの名前：";
+}
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼モンスターレベル";
 }
