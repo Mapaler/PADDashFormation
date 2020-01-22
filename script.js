@@ -539,7 +539,7 @@ function initialize()
 		{
 			showSearch(Cards.filter(card=>{
 				return splitAltName.some(alt=>{
-					return card.altName.indexOf(alt)>=0;
+					return alt.length > 0 && card.altName.indexOf(alt)>=0;
 				});
 			}));
 		}
