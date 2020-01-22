@@ -9,15 +9,18 @@ Use back to undo the last edit.
 * 拖拽怪物头像即可快速切换位置，也支持手机触屏。  
 Drag monster avatars to quickly switch positions, also supports mobile touch screen.  
 ![切换位置](document/tips-interchangeCard.png)
+* 可以在编辑界面的怪物ID输入怪物名称来搜索怪物。  
+You can search for monsters by entering the monster name in the monster ID of the editing interface.  
+![搜索怪物名称](document/tips-search-name.png)  
+点击系列ID或系列名称，可搜索该系列  
+Clisk the **Series ID** or **Series Name** to search for series.  
+![搜索怪物系列](document/tips-search-series.png)  
 * 点击编辑界面的怪物头像可以跳转到攻略网站。  
 Click on the monster avatar in the editing interface to jump to the Guide.  
 ![攻略网站](document/tips-guide.png)  
-在队伍界面的怪物头像上点击鼠标中键也可以跳转到攻略网站。在手机上则是长按怪物头像然后选择在新标签页打开。  
-Or click the middle mouse button on the monster avatar of the formation interface to jump to the Guide. On your phone, you're long-pressing the monster avatar and then selecting to open it in a new tab.  
+在队伍界面和搜索结果的怪物头像上，点击鼠标中键也可以跳转到攻略网站。在手机上则是长按怪物头像然后选择在新标签页打开。  
+Or click the middle mouse button on the monster avatar of the formation interface and search results to jump to the Guide. On your phone, you're long-pressing the monster avatar and then selecting to open it in a new tab.  
 ![攻略网站2](document/tips-guide2.png)
-* 可以在编辑界面的怪物ID输入怪物名称来搜索怪物。  
-You can search for monsters by entering the monster name in the monster ID of the editing interface.  
-![搜索怪物](document/tips-search.png)
 * 车队模式只显示部分共用的觉醒的统计，单人则全部显示。  
 2-Player Multi Games Mode only show several common awoken statistics, but solo mode shows all.
 * 如果发现 BUG，请先按 Ctrl+F5 强制刷新后测试，如仍有问题可以在 [Issues](//github.com/Mapaler/PADDashFormation/issues) 报告。  

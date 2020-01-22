@@ -1121,7 +1121,7 @@ function parseSkillDescription(skill)
 			str = `队员组成全是`;
 			strArr = sk.slice(0,3).filter(s=>{return s>0;}); //最多3种id
 			str += strArr.map(s=>{
-				return `<a class="detail-search" onclick="showSearch(Cards.filter(card=>{return card.collabId == ${s};}));">【No.${s}】</a>`;
+				return `<a class="detail-search monster-collabId" data-collabId="${s}" onclick="searchColla(this.getAttribute('data-collabId'));">${s}</a>`;
 			}).join("、");
 			str += `系列角色时，所有宠物的${getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]})}`;
 			break;

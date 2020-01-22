@@ -56,6 +56,12 @@
 .monsterinfo-box .monster-cost::before{
 	content: "消耗:";
 }
+.monsterinfo-box .monster-collabId::before{
+	content: "系列ID：";
+}
+.monsterinfo-box .monster-altName::before{
+	content: "系列名称：";
+}
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼怪物等級";
 }

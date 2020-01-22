@@ -698,14 +698,27 @@ ul{
 	float: left;
 	margin-right:5px;
 }
-.monsterinfo-box .monster-id,
-.monsterinfo-box .monster-rare,
-.monsterinfo-box .monster-cost
+.monsterinfo-box .monsterinfo-line>div,
+.monsterinfo-box .monsterinfo-line>ul
 {
 	display:inline-block;
+	vertical-align: top;
+	font-size: 22px;
+	line-height: 22px;
 }
 .monsterinfo-box .monster-id{
 	width:150px;
+}
+.monsterinfo-box .monster-collabId,
+.monsterinfo-box .monster-altName{
+	cursor: pointer;
+	font-size: 14px;
+	line-height: 16px;
+	vertical-align: bottom;
+	max-width: 270px;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
 }
 /*.monsterinfo-box .monster-id::before{
 	content: "No.";
@@ -728,17 +741,6 @@ ul{
 .rare-8::before{content: "★★★★★★★★";}
 .rare-9::before{content: "★★★★★★★★★";}
 .rare-10::before{content: "★★★★★★★★★★";}
-.monsterinfo-box .monster-id,
-.monsterinfo-box .monster-rare,
-.monsterinfo-box .monster-cost,
-.monsterinfo-box .monster-name
-{
-	vertical-align: top;
-	margin:0;
-	height: 34px;
-	font-size: 22px;
-	line-height: 22px;
-}
 .monsterinfo-box .monster-type{
 	font-size: 0;
 }
