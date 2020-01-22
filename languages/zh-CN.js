@@ -799,7 +799,7 @@ function parseSkillDescription(skill)
 			str = `自身以外的宠物技能冷却减少${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}回合`;
 			break;
 		case 148:
-			str = `进入地下城时为队长的话，获得的经验${sk[0]/100}倍`;
+			str = `进入地下城时为队长的话，获得的等级经验值×${sk[0]/100}倍`;
 			break;
 		case 149: //相連消除4個回復寶珠時，所有寵物的回復力2.5倍；
 			str = `相连消除4粒${getOrbsAttrString(1<<5)}宝珠时，所有宠物的${getFixedHpAtkRcvString({rcv:sk[0]})}`;
@@ -834,7 +834,7 @@ function parseSkillDescription(skill)
 			else if (sk[4]==2)
 				str += `提升所有属性的攻击力，每个觉醒可以提升${sk[5]-100}%`;
 			else if (sk[4]==3)
-				str += `减少收到的伤害，每个觉醒可以减少${sk[5]}%`;
+				str += `减少受到的伤害，每个觉醒可以减少${sk[5]}%`;
 			else
 				str = `156宝石姬技能，未知buff类型 参数[4]：${sk[4]}`;
 			break;
@@ -1167,14 +1167,6 @@ function parseSkillDescription(skill)
 		case 179:
 			str = `${sk[0]}回合内每回合回复${sk[1]?`${sk[1]}点`:` HP 上限 ${sk[2]}%`}的 HP`;
 			break;
-		case 183:
-			str = getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的";
-			if (sk[3] || sk[4]) str+= ` HP ${sk[2]}%以上时${getFixedHpAtkRcvString([sk[3],sk[4]])}`;
-			if (sk[6] || sk[7]) str+= ` HP ${sk[5]||sk[2]}%以下时${getFixedHpAtkRcvString([sk[6],sk[7]])}`;
-			break;
-		case 184:
-			str = `${sk[0]}回合内，天降的宝珠不会产生COMBO`;
-			break;
 		case 180:
 			str = `${sk[0]}回合内，${sk[1]}%概率掉落强化宝珠`;
 			break;
@@ -1182,6 +1174,18 @@ function parseSkillDescription(skill)
 			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(flags(sk[0]))}宝珠时`;
 			if (sk[2]) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			if (sk[3]) str += `，受到的伤害减少${sk[3]}%`;
+			break;
+		case 183:
+			str = getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的";
+			if (sk[3] || sk[4]) str+= ` HP ${sk[2]}%以上时`; 
+			if (sk[3]) str+= `${getFixedHpAtkRcvString({atk:sk[3]})}`; 
+			if (sk[4]) str += `，受到的伤害减少${sk[4]}%`;
+			if (sk[6] || sk[7]) str+= ` HP ${sk[5]||sk[2]}%以下时`;
+			if (sk[6]) str+= `${getFixedHpAtkRcvString({atk:sk[6]})}`;
+			if (sk[7]) str+= `，受到的伤害减少${sk[7]}%`;
+			break;
+		case 184:
+			str = `${sk[0]}回合内，天降的宝珠不会产生COMBO`;
 			break;
 		case 185: //ドラゴンと悪魔タイプの攻撃力が4倍、回復力は2.5倍。\nドロップ操作を3秒延長。
 			str = ``;
