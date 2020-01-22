@@ -97,6 +97,24 @@ function parseSkillDescription(skill)
 		}
 		return outArr.join("和");
 	}
+	function getOrbsAttrString(orbFlag)
+	{
+		let outStr = ``;
+		if (orbFlag == 1023) //1023-1111111111
+		{ //单纯5色
+			outStr += '任何';
+		}else if (orbFlag == 31) //31-11111
+		{ //单纯5色
+			outStr += '5色';
+		}else if((orbFlag & 31) == 31)
+		{ //5色加其他色
+			outStr += `5色+${nb(orbFlag ^ 31, attrsName).join("、")}`;
+		}else
+		{
+			outStr += `${nb(orbFlag, attrsName).join("、")}`;
+		}
+		return outStr;
+	}
 	function stats(value, statTypes)
 	{
 		return [
@@ -477,7 +495,7 @@ function parseSkillDescription(skill)
 			str = `所有宠物的${getFixedHpAtkRcvString({hp:sk[0]})}，${typeN(sk[1])}类型宠物的攻击力×${sk[2]/100}倍`;
 			break;
 		case 109:
-			str = `相连消除${sk[1]}个或以上${nb(sk[0],attrsName).join("或")}宝珠时`;
+			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(sk[0])}宝珠时`;
 			if (sk[2]) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			break;
 		case 110:
@@ -516,7 +534,7 @@ function parseSkillDescription(skill)
 			str = strArr.join("，");
 			break;
 		case 119: //相連消除4個的水寶珠時，所有寵物的攻擊力2.5倍，每多1個+0.5倍，最大5個時3倍
-			str = `相连消除${sk[1]}个或以上${nb(sk[0],attrsName).join("或")}宝珠时，所有宠物的攻击力${sk[2]/100}倍`;
+			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(sk[0])}宝珠时，所有宠物的攻击力${sk[2]/100}倍`;
 			if (sk[3]>0)
 			{
 				str += `，每多1个+${sk[3]/100}倍`;
@@ -784,40 +802,26 @@ function parseSkillDescription(skill)
 			str = `进入地下城时为队长的话，获得的经验${sk[0]/100}倍`;
 			break;
 		case 149: //相連消除4個回復寶珠時，所有寵物的回復力2.5倍；
-			str = `相连消除4粒回复宝珠时，所有宠物的${getFixedHpAtkRcvString({rcv:sk[0]})}`;
+			str = `相连消除4粒${getOrbsAttrString(1<<5)}宝珠时，所有宠物的${getFixedHpAtkRcvString({rcv:sk[0]})}`;
 			break;
 		case 150: //相連消除5粒寶珠，而當中包含至少1粒強化寶珠時，該屬性的攻擊力1.5倍
 			str = `相连消除5粒宝珠，而当中包含至少1粒强化宝珠时，该属性的${getFixedHpAtkRcvString({atk:sk[1]})}`;
 			if (sk[0]) str += `未知的 参数0 ${sk[0]}`;
 			break;
 		case 151:
-			str = `以十字形式消除5个${attrN(5)}宝珠时`;
-			strArr = [];
-			if (sk[0]) strArr.push(`攻击力×${sk[0]/100}倍`);
-			if (sk[1]) strArr.push(`回复力×${sk[1]/100}倍`);
-			if (strArr.length) str += `，所有宠物的${strArr.join("，")}`;
+			str = `以十字形式消除5个${getOrbsAttrString(1<<5)}宝珠时`;
+			if (sk[0] || sk[1]) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[0],rcv:sk[1]})}`;
 			if (sk[2]) str += `，受到的伤害减少${sk[2]}%`;
 			break;
 		case 152:
-			str = `将`;
-			if (sk[0] & 1023 == 1023) //parseInt("1111111111",2) == 1023
-			{
-				str += `全部`;
-			}else if (sk[0] & 31 == 31) //parseInt("11111",2) == 31
-			{
-				str += `5色+${nb(sk[0] ^ 31,attrsName).join("、")}`;
-			}else
-			{
-				str += nb(sk[0],attrsName).join("、");
-			}
-			str += `宝珠锁定`;
+			str = `将${getOrbsAttrString(sk[0])}宝珠锁定`;
 			if (sk[1]!=42 && sk[1]!=99) str += `，还有未知 参数[1]：${sk[1]}`;
 			break;
 		case 153:
 			str = `敌人全体变为${attrN(sk[0])}属性。（${sk[1]?"不":""}受防护盾的影响）`;
 			break;
 		case 154:
-			str = `${nb(sk[0],attrsName).join("、")}珠变为${nb(sk[1],attrsName).join("、")}`;
+			str = `${getOrbsAttrString(sk[0])}宝珠变为${nb(sk[1],attrsName).join("、")}`;
 			break;
 		case 155:
 			str = `协力时${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]})}`;
@@ -857,7 +861,7 @@ function parseSkillDescription(skill)
 			break;
 		case 159:
 			//"相連消除5個或以上的火寶珠或光寶珠時攻擊力和回復力4倍，每多1個+1倍，最大7個時6倍；"
-			str = `相连消除${sk[1]}个或以上${nb(sk[0],attrsName).join("或")}宝珠时，所有宠物的`;
+			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(sk[0])}宝珠时，所有宠物的`;
 			strArr = [];
 			if (sk[2]>0)
 			{
@@ -1022,7 +1026,7 @@ function parseSkillDescription(skill)
 			break;
 		case 167:
 			//"相連消除5個或以上的火寶珠或光寶珠時攻擊力和回復力4倍，每多1個+1倍，最大7個時6倍；"
-			str = `相连消除${sk[1]}个或以上${nb(sk[0],attrsName).join("或")}宝珠时，所有宠物的`;
+			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(sk[0])}宝珠时，所有宠物的`;
 			strArr = [];
 			if (sk[2]==sk[3] && sk[4] == sk[5])
 			{
@@ -1175,8 +1179,7 @@ function parseSkillDescription(skill)
 			str = `${sk[0]}回合内，${sk[1]}%概率掉落强化宝珠`;
 			break;
 		case 182:
-			//"相連消除5個或以上的火寶珠或光寶珠時攻擊力和回復力4倍，每多1個+1倍，最大7個時6倍；"
-			str = `相连消除${sk[1]}个或以上${nb(sk[0],attrsName).join("或")}宝珠时`;
+			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(flags(sk[0]))}宝珠时`;
 			if (sk[2]) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			if (sk[3]) str += `，受到的伤害减少${sk[3]}%`;
 			break;
@@ -1218,27 +1221,13 @@ function parseSkillDescription(skill)
 			//同時消除光寶珠和水寶珠各4個或以上時攻擊力3倍、結算增加1COMBO；
 			fullColor = nb(sk[0], attrsName);
 			str = fullColor.length>1?"同时":"相连";
-			str += `消除${sk[1]}个或以上的${fullColor.join("、")}宝珠时`;
+			str += `消除${sk[1]}个或以上的${getOrbsAttrString(sk[0])}宝珠时`;
 			if (sk[2]) str += `，攻击力×${sk[2]/100}倍`;
 			if (sk[3]) str += `，结算时连击数+${sk[3]}`;
 			break;
 		case 193:
 			fullColor = nb(sk[0], attrsName);
-			str = `以L字形消除5个`;
-			if (sk[0] == 1023) //1023-1111111111
-			{ //单纯5色
-				str += '任何';
-			}else if (sk[0] == 31) //31-11111
-			{ //单纯5色
-				str += '5色';
-			}else if((sk[0] & 31) == 31)
-			{ //5色加其他色
-				str += `5色+${nb(sk[0] ^ 31, attrsName).join("、")}`;
-			}else
-			{
-				str += `${fullColor.join("、")}`;
-			}
-			str+=`宝珠时`;
+			str = `以L字形消除5个${getOrbsAttrString(sk[0])}宝珠时`;
 			if (sk[1] || sk[2]) str+=getFixedHpAtkRcvString({atk:sk[1],rcv:sk[2]});
 			if (sk[3]) str+=`，受到的伤害减少${sk[3]}%`;
 			break;
@@ -1270,7 +1259,7 @@ function parseSkillDescription(skill)
 			str = `无法消除宝珠状态减少${sk[0]}回合`;
 			break;
 		case 197: //消除毒/猛毒宝珠时不会受到毒伤害
-			str = `消除${getAttrTypeString([7,8])}宝珠时不会受到毒伤害`;
+			str = `消除${getOrbsAttrString(1<<7|1<<8)}宝珠时不会受到毒伤害`;
 			break;
 		case 198:
 			//以回復寶珠回復40000HP或以上時，受到的傷害減少50%
@@ -1299,7 +1288,7 @@ function parseSkillDescription(skill)
 			str += `同时攻击时，追加${sk[2]}点固定伤害`;
 			break;
 		case 200:
-			str = `相连消除${sk[1]}个或以上${nb(sk[0],attrsName).join("或")}宝珠时，追加${sk[2]}点固定伤害`;
+			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(sk[0])}宝珠时，追加${sk[2]}点固定伤害`;
 			break;
 		case 201:
 			fullColor = sk.slice(0,4).filter(c=>{return c>0;}); //最多4串珠
