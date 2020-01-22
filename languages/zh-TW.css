@@ -99,12 +99,6 @@
 .skill-box .skill-level-label::before{
 	content: "Lv.";
 }
-.skill-box .m-skill-lv-1::before{
-	content: "Lv.";
-}
-.skill-box .m-skill-lv-max::before{
-	content: "最高Lv.";
-}
 .row-mon-skill .skill-title::before{
 	content: "主動技能";
 }
