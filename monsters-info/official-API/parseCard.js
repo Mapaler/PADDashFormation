@@ -68,12 +68,12 @@ class Card{
 		card.collabId = data[i++]; //合作ID
 		const flags = data[i++]; //一个旗子？
 		card.unk08 = flags; //未知08
-		card.canAssist = (flags & parseInt("1",2)) !== 0; //是否能当二技
-		card.enabled = (flags & parseInt("10",2)) !== 0; //是否已启用
+		card.canAssist = (flags & 1) !== 0; //是否能当二技
+		card.enabled = (flags & 1<<1) !== 0; //是否已启用
 		card.overlay = card.types.some(t => { //这步还是猜测，是否能合并
 			return t == 0 || t == 12 || t == 14; //0進化用;12能力覺醒用;14強化合成用;15販賣用
-		}) && (flags & parseInt("1000",2)) === 0; //進化用、能力覺醒用、強化合成用，且flag有1000时
-		card.is8Latent = (flags & parseInt("100000",2)) !== 0; //是否支持8个潜觉
+		}) && (flags & 1<<3) === 0; //進化用、能力覺醒用、強化合成用，且flag有1000时
+		card.is8Latent = (flags & 1<<5) !== 0; //是否支持8个潜觉
 		card.altName = data[i++]; //替换名字
 		card.limitBreakIncr = data[i++]; //110级增长
 		card.unk09 = data[i++]; //未知09
