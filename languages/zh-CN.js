@@ -318,7 +318,7 @@ function parseSkillDescription(skill)
 			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的回复力×${sk[sk.length-1]/100}倍`;
 			break;
 		case 50:
-			str = `${sk[0]}回合内${(sk[1]==5?"回复力":`${attrN(sk[1])}属性的攻击力`)}×${sk[2]/100}倍`;
+			str = `${sk[0]}回合内${(sk[1]==5?"回复力":`${attrN(sk[1])}属性的攻击力`)}${sk[2]>0?`×${sk[2]/100}倍`:"变为0"}`;
 			break;
 		case 51:
 			str = `${sk[0]}回合内，所有攻击转为全体攻击`;
@@ -735,7 +735,9 @@ function parseSkillDescription(skill)
 			}
 			break;
 		case 132:
-			str = `${sk[0]}回合内，宝珠移动时间${sk[1]?`增加${sk[1]/10}秒`:""}${sk[2]?`变为${sk[2]/100}倍`:""}`;
+			str = `${sk[0]}回合内，宝珠移动时间`;
+			if (sk[1]) str += (sk[1]>0?`增加`:`减少`) + (-sk[1]/10) + `秒`;
+			if (sk[2]) str += sk[2]>100 ? `变为${sk[2]/100}倍` : `变为${sk[2]}%`;
 			break;
 		case 133:
 			str = `使用技能时，`;
