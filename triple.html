@@ -12,15 +12,10 @@
 <script type="text/javascript" src="universal_function.js"></script>
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript">
-const solo = true;
-const teamsNumber = 1;
+const solo = false;
+const teamsNumber = 3;
 var formation = new Formation(teamsNumber,6);
 </script>
-<style type="text/css">
-.formation-A-bigbox::after{
-	display: none;
-}
-</style>
 </head>
 
 <body>
@@ -34,7 +29,8 @@ var formation = new Formation(teamsNumber,6);
 			<button class="btn-clear-data" onclick="clearData();"></button>
 			<button class="btn-show-mon-id" onclick="toggleShowMonId();"></button>
 			<button class="btn-show-mon-skill-cd" onclick="toggleShowMonSkillCd();"></button>
-			<button class="btn-multi-link" onclick="swapSingleMulitple();"></button>
+			<button class="btn-solo-link" onclick="swapSingleMulitple();"></button>
+			<button class="btn-swap-AB-team" onclick="swapABteam();"></button>
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
 	</div>
@@ -42,23 +38,6 @@ var formation = new Formation(teamsNumber,6);
 		<div class="title-box"><input type="text" class="title" placeholder="输入队伍标题" /></div>
 		<div class="formation-A-bigbox">
 			<div class="formation-A-box">
-				<ul class="formation-badge">
-					<li class="badge-bg"><div class="badge badge-0"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-1"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-2"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-3"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-4"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-5"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-6"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-7"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-8"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-9"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-10"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-11"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-12"></div></li>
-					<li class="badge-bg display-none"><div class="badge badge-13"></div></li>
-					<div class="team-info"><div class="tIf-total-hp"></div><div class="tIf-total-rcv"></div></div>
-				</ul>
 				<ul class="formation-assist">
 					<li class="member member-1 null">
 						<a class="monster" target="_blank" data-team="0" data-assist="1" data-index="0">
@@ -275,104 +254,483 @@ var formation = new Formation(teamsNumber,6);
 						</a>
 					</li>
 				</ul>
-				<ul class="formation-ability">
-					<li class="abilitys abilitys-1">
-						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
-					</li>
-					<li class="abilitys abilitys-2">
-						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
-					</li>
-					<li class="abilitys abilitys-3">
-						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
-					</li>
-					<li class="abilitys abilitys-4">
-						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
-					</li>
-					<li class="abilitys abilitys-5">
-						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
-					</li>
-					<li class="abilitys abilitys-6">
-						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
-					</li>
+			</div>
+			<div class="awoken-total-box">
+				<!--怪物觉醒-->
+				<ul class="awoken-ul">
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-21"></span><span class="count"></span></li><!--SB-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-28"></span><span class="count"></span></li><!--SX-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-11"></span><span class="count"></span></li><!--防暗-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-12"></span><span class="count"></span></li><!--防废-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-13"></span><span class="count"></span></li><!--防毒-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-54"></span><span class="count"></span></li><!--防云-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-55"></span><span class="count"></span></li><!--防封条-->
 				</ul>
 			</div>
 		</div>
-		<div class="awoken-total-box">
-			<!--怪物觉醒-->
-			<ul class="awoken-ul">
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-1"></span><span class="count"></span></li><!--HP+-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-2"></span><span class="count"></span></li><!--攻击+-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-3"></span><span class="count"></span></li><!--回复+-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-4"></span><span class="count"></span></li><!--火盾-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-5"></span><span class="count"></span></li><!--水盾-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-6"></span><span class="count"></span></li><!--木盾-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-7"></span><span class="count"></span></li><!--光盾-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-8"></span><span class="count"></span></li><!--暗盾-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-9"></span><span class="count"></span></li><!--自回-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-10"></span><span class="count"></span></li><!--防封-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-11"></span><span class="count"></span></li><!--防暗-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-12"></span><span class="count"></span></li><!--防废-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-13"></span><span class="count"></span></li><!--防毒-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-14"></span><span class="count"></span></li><!--火+-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-15"></span><span class="count"></span></li><!--水+-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-16"></span><span class="count"></span></li><!--木+-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-17"></span><span class="count"></span></li><!--光+-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-18"></span><span class="count"></span></li><!--暗+-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-19"></span><span class="count"></span></li><!--手指-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-20"></span><span class="count"></span></li><!--心解-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-21"></span><span class="count"></span></li><!--SB-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-22"></span><span class="count"></span></li><!--火横-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-23"></span><span class="count"></span></li><!--水横-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-24"></span><span class="count"></span></li><!--木横-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-25"></span><span class="count"></span></li><!--光横-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-26"></span><span class="count"></span></li><!--暗横-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-27"></span><span class="count"></span></li><!--U-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-28"></span><span class="count"></span></li><!--SX-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-29"></span><span class="count"></span></li><!--心+-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-30"></span><span class="count"></span></li><!--协力-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-31"></span><span class="count"></span></li><!--龙杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-32"></span><span class="count"></span></li><!--神杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-33"></span><span class="count"></span></li><!--恶魔杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-34"></span><span class="count"></span></li><!--机杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-35"></span><span class="count"></span></li><!--平衡杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-36"></span><span class="count"></span></li><!--攻击杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-37"></span><span class="count"></span></li><!--体力杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-38"></span><span class="count"></span></li><!--回复杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-39"></span><span class="count"></span></li><!--进化杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-40"></span><span class="count"></span></li><!--觉醒杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-41"></span><span class="count"></span></li><!--强化杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-42"></span><span class="count"></span></li><!--卖钱杀-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-43"></span><span class="count"></span></li><!--7c-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-44"></span><span class="count"></span></li><!--5色破防-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-45"></span><span class="count"></span></li><!--心追-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-46"></span><span class="count"></span></li><!--全体HP-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-47"></span><span class="count"></span></li><!--全体回复-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-48"></span><span class="count"></span></li><!--破无效-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-49"></span><span class="count"></span></li><!--武器觉醒-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-50"></span><span class="count"></span></li><!--方块心追-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-51"></span><span class="count"></span></li><!--5色溜-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-52"></span><span class="count"></span></li><!--大防封-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-53"></span><span class="count"></span></li><!--大手指-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-54"></span><span class="count"></span></li><!--防云-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-55"></span><span class="count"></span></li><!--防封条-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-56"></span><span class="count"></span></li><!--大SB-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-57"></span><span class="count"></span></li><!--满血强化-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-58"></span><span class="count"></span></li><!--下半血强化-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-59"></span><span class="count"></span></li><!--L盾-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-60"></span><span class="count"></span></li><!--L解锁-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-61"></span><span class="count"></span></li><!--10c-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-62"></span><span class="count"></span></li><!--c珠-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-63"></span><span class="count"></span></li><!--语音-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-64"></span><span class="count"></span></li><!--奖励增加-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-65"></span><span class="count"></span></li><!--HP--->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-66"></span><span class="count"></span></li><!--攻击--->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-67"></span><span class="count"></span></li><!--回复--->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-68"></span><span class="count"></span></li><!--大防暗-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-69"></span><span class="count"></span></li><!--大防废-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-70"></span><span class="count"></span></li><!--大防毒-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-71"></span><span class="count"></span></li><!--掉废-->
-				<li class="awoken-count display-none"><span class="awoken-icon awoken-72"></span><span class="count"></span></li><!--掉毒-->
-			</ul>
+		<div class="formation-B-bigbox">
+			<div class="formation-B-box">
+				<ul class="formation-assist">
+					<li class="member member-1 null">
+						<a class="monster" target="_blank" data-team="1" data-assist="1" data-index="0">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-2 null">
+						<a class="monster" target="_blank" data-team="1" data-assist="1" data-index="1">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-3 null">
+						<a class="monster" target="_blank" data-team="1" data-assist="1" data-index="2">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-4 null">
+						<a class="monster" target="_blank" data-team="1" data-assist="1" data-index="3">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-5 null">
+						<a class="monster" target="_blank" data-team="1" data-assist="1" data-index="4">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-6 null">
+						<a class="monster" target="_blank" data-team="1" data-assist="1" data-index="5">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+				</ul>
+				<ul class="formation-latents">
+					<li class="latents latents-1">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-2">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-3">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-4">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-5">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-6">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="formation-team">
+					<li class="member member-1 team-leader null">
+						<a class="monster" target="_blank" data-team="1" data-assist="0" data-index="0">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-2 null">
+						<a class="monster" target="_blank" data-team="1" data-assist="0" data-index="1">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-3 null">
+						<a class="monster" target="_blank" data-team="1" data-assist="0" data-index="2">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-4 null">
+						<a class="monster" target="_blank" data-team="1" data-assist="0" data-index="3">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-5 null">
+						<a class="monster" target="_blank" data-team="1" data-assist="0" data-index="4">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-6 team-leader null">
+						<a class="monster" target="_blank" data-team="1" data-assist="0" data-index="5">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="awoken-total-box">
+				<!--怪物觉醒-->
+				<ul class="awoken-ul">
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-21"></span><span class="count"></span></li><!--SB-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-28"></span><span class="count"></span></li><!--SX-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-11"></span><span class="count"></span></li><!--防暗-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-12"></span><span class="count"></span></li><!--防废-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-13"></span><span class="count"></span></li><!--防毒-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-54"></span><span class="count"></span></li><!--防云-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-55"></span><span class="count"></span></li><!--防封条-->
+				</ul>
+			</div>
+		</div>
+		<div class="formation-C-bigbox">
+			<div class="formation-C-box">
+				<ul class="formation-assist">
+					<li class="member member-1 null">
+						<a class="monster" target="_blank" data-team="2" data-assist="1" data-index="0">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-2 null">
+						<a class="monster" target="_blank" data-team="2" data-assist="1" data-index="1">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-3 null">
+						<a class="monster" target="_blank" data-team="2" data-assist="1" data-index="2">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-4 null">
+						<a class="monster" target="_blank" data-team="2" data-assist="1" data-index="3">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-5 null">
+						<a class="monster" target="_blank" data-team="2" data-assist="1" data-index="4">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-6 null">
+						<a class="monster" target="_blank" data-team="2" data-assist="1" data-index="5">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+				</ul>
+				<ul class="formation-latents">
+					<li class="latents latents-1">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-2">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-3">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-4">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-5">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+					<li class="latents latents-6">
+						<ul class="latent-ul display-none">
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+							<li class="latent-icon"></li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="formation-team">
+					<li class="member member-1 team-leader null">
+						<a class="monster" target="_blank" data-team="2" data-assist="0" data-index="0">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-2 null">
+						<a class="monster" target="_blank" data-team="2" data-assist="0" data-index="1">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-3 null">
+						<a class="monster" target="_blank" data-team="2" data-assist="0" data-index="2">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-4 null">
+						<a class="monster" target="_blank" data-team="2" data-assist="0" data-index="3">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-5 null">
+						<a class="monster" target="_blank" data-team="2" data-assist="0" data-index="4">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+					<li class="member member-6 team-leader null">
+						<a class="monster" target="_blank" data-team="2" data-assist="0" data-index="5">
+							<div class="property"></div>
+							<div class="subproperty"></div>
+							<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+							<div class="awoken-count display-none"></div>
+							<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+							<div class="level"></div>
+							<div class="id"></div>
+							<div class="skill"></div>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="awoken-total-box">
+				<!--怪物觉醒-->
+				<ul class="awoken-ul">
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-21"></span><span class="count"></span></li><!--SB-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-28"></span><span class="count"></span></li><!--SX-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-11"></span><span class="count"></span></li><!--防暗-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-12"></span><span class="count"></span></li><!--防废-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-13"></span><span class="count"></span></li><!--防毒-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-54"></span><span class="count"></span></li><!--防云-->
+					<li class="awoken-count display-none"><span class="awoken-icon awoken-55"></span><span class="count"></span></li><!--防封条-->
+				</ul>
+			</div>
 		</div>
 		<div class="detail-box"><textarea class="detail" placeholder="输入说明"></textarea></div>
 	</div>
@@ -722,6 +1080,7 @@ var formation = new Formation(teamsNumber,6);
 					<div class="skill-datail"></div>
 				</div>
 			</div>
+			
 		</div>
 		<div class="button-box">
 			<button class="button-null"><!--留空格子--></button>
