@@ -20,6 +20,12 @@
 body{
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--search-icon-unchecked: 0.4;
+	--team-1-bgcolor : pink;
+	--team-2-bgcolor : lightblue;
+	--team-3-bgcolor : lightgreen;
+	--team-1-color : red;
+	--team-2-color : blue;
+	--team-3-color : green;
 }
 .display-none{
 	display:none !important;
@@ -76,7 +82,7 @@ ul{
 }
 /*队伍的整个盒子*/
 .formation-box{
-	width: 648px;
+	/*width: 648px;*/
 	min-width: 648px;
 }
 
@@ -281,25 +287,57 @@ ul{
 .formation-box .monster{
 	margin: 4px; /*留给队长边框的*/
 }
-.formation-assist, .formation-team,.formation-badge{
+.team-assist, .team-members,.team-badge{
+	display: inline-block;
+}
+/* 徽章，平时都隐藏 */
+.badge-bg{
+	display: none;
+	cursor: pointer;
+}
+.badge-radio{
+	display: none;
+}
+/* 显示所有徽章时则打开 */
+.show-all-badges .badge-bg{
+	display: inline-block;
+}
+/* 选中的徽章平时也打开 */
+.team-badge .badge-radio:checked+label{
 	display: inline-block;
 }
 /*队伍的背景色*/
-.formation-A-box .formation-team,.formation-A-box .formation-latents{
-	background-color:pink;
+.team-bigbox:nth-of-type(1) .team-menbers,
+.team-bigbox:nth-of-type(1) .team-latents,
+.team-bigbox:nth-of-type(1)::before,
+.team-bigbox:nth-of-type(1)::after
+{
+	background-color: var(--team-1-bgcolor);
 }
-.formation-B-box .formation-team,.formation-B-box .formation-latents{
-	background-color:lightblue;
+.team-bigbox:nth-of-type(2) .team-menbers,
+.team-bigbox:nth-of-type(2) .team-latents,
+.team-bigbox:nth-of-type(2)::before,
+.team-bigbox:nth-of-type(2)::after
+{
+	background-color: var(--team-2-bgcolor);
 }
-.formation-A-bigbox, .formation-B-bigbox{
+.team-bigbox:nth-of-type(3) .team-menbers,
+.team-bigbox:nth-of-type(3) .team-latents,
+.team-bigbox:nth-of-type(3)::before,
+.team-bigbox:nth-of-type(3)::after
+{
+	background-color: var(--team-3-bgcolor);
+}
+.team-bigbox{
 	position: relative;
 	font-size:0;
+	margin-bottom:15px;
 }
-.formation-B-bigbox{
-	margin-top:15px;
+.team-bigbox:last-of-type{
+	margin-bottom:0;
 }
 /*队伍A、B的文字*/
-.formation-A-bigbox::after, .formation-B-bigbox::before{
+.team-bigbox::after, .team-bigbox::before{
 	font-size: 30px;
 	font-weight: bold;
 	text-align: center;
@@ -309,37 +347,43 @@ ul{
 	width: 108px;
 	height: 108px;
 }
-.formation-A-bigbox::after{
-	color:red;
-	background-color:pink;
-	/*content: "队伍\A A";*/
+
+.team-bigbox:nth-of-type(1)::after,
+.team-bigbox:nth-of-type(1)::before,
+.team-bigbox:nth-of-type(1) .team-assist .member::after,
+.team-bigbox:nth-of-type(1) .team-assist .member::before
+{
+	color: var(--team-1-color);
 }
-.formation-B-bigbox::before{
-	color:blue;
-	background-color:lightblue;
-	/*content: "队伍\A B";*/
-	vertical-align:top;
+.team-bigbox:nth-of-type(2)::after,
+.team-bigbox:nth-of-type(2)::before,
+.team-bigbox:nth-of-type(2) .team-assist .member::after,
+.team-bigbox:nth-of-type(2) .team-assist .member::before
+{
+	color: var(--team-2-color);
+	/*vertical-align:top;*/
 }
-.formation-A-box, .formation-B-box{
+.team-bigbox:nth-of-type(3)::after,
+.team-bigbox:nth-of-type(3)::before,
+.team-bigbox:nth-of-type(3) .team-assist .member::after,
+.team-bigbox:nth-of-type(3) .team-assist .member::before
+{
+	color: var(--team-3-color);
+}
+.team-box{
 	display: inline-block;
 	vertical-align:bottom;
 }
 
-.formation-A-box .formation-assist .member::after, .formation-B-box .formation-assist .member::before{
+.team-box .team-assist .member::after,
+.team-box .team-assist .member::before
+{
 	width: 108px;
 	text-align: center;
 	font-size: 18px;
 	font-weight: bold;
 	display: inline-block;
 	position: relative;
-}
-.formation-A-box .formation-assist .member::after{
-	color:red;
-	/*content: "▼辅助";*/
-}
-.formation-B-box .formation-assist .member::before{
-	color:blue;
-	/*content: "▲辅助";*/
 }
 
 .formation-box .team-info{
@@ -350,59 +394,62 @@ ul{
 }
 
 /*队伍的潜觉*/
-.formation-latents .latents{
+.team-latents .latents{
 	width: 108px;
 	/*float:left;*/
 	margin-bottom: -20px;
 	display: inline-block;
 }
-.formation-latents .latent-ul{
+.team-latents .latent-ul{
 	font-size: 0;
 	width: 152px;
 	transform: translate(-22px,-8px) scale(0.63);
 }
 
-.formation-latents .latent-icon{
+.team-latents .latent-icon{
 	margin-left: 3px;
 	margin-right: 3px;
 }
-.formation-latents .latent-icon-12,
-.formation-latents .latent-icon-13,
-.formation-latents .latent-icon-14,
-.formation-latents .latent-icon-15,
-.formation-latents .latent-icon-16,
-.formation-latents .latent-icon-17,
-.formation-latents .latent-icon-18,
-.formation-latents .latent-icon-19,
-.formation-latents .latent-icon-20,
-.formation-latents .latent-icon-21,
-.formation-latents .latent-icon-22,
-.formation-latents .latent-icon-23,
-.formation-latents .latent-icon-24,
-.formation-latents .latent-icon-25,
-.formation-latents .latent-icon-26,
-.formation-latents .latent-icon-27,
-.formation-latents .latent-icon-28,
-.formation-latents .latent-icon-29,
-.formation-latents .latent-icon-30,
-.formation-latents .latent-icon-31,
-.formation-latents .latent-icon-32,
-.formation-latents .latent-icon-33{
+.team-latents .latent-icon-12,
+.team-latents .latent-icon-13,
+.team-latents .latent-icon-14,
+.team-latents .latent-icon-15,
+.team-latents .latent-icon-16,
+.team-latents .latent-icon-17,
+.team-latents .latent-icon-18,
+.team-latents .latent-icon-19,
+.team-latents .latent-icon-20,
+.team-latents .latent-icon-21,
+.team-latents .latent-icon-22,
+.team-latents .latent-icon-23,
+.team-latents .latent-icon-24,
+.team-latents .latent-icon-25,
+.team-latents .latent-icon-26,
+.team-latents .latent-icon-27,
+.team-latents .latent-icon-28,
+.team-latents .latent-icon-29,
+.team-latents .latent-icon-30,
+.team-latents .latent-icon-31,
+.team-latents .latent-icon-32,
+.team-latents .latent-icon-33{
 	margin: 0;
 }
 /*队长的边框*/
-.formation-A-box .formation-team .team-leader .monster, .formation-B-box .formation-team .team-leader .monster{
+.team-box .team-members .team-leader .monster{
 	border-radius: 10px;
 	border-width:4px;
 	border-style:solid;
 	box-sizing: initial;
 	margin: 0;
 }
-.formation-A-box .formation-team .team-leader .monster{
-	border-color: red;
+.team-bigbox:nth-of-type(1) .team-members .team-leader .monster{
+	border-color: var(--team-1-color);
 }
-.formation-B-box .formation-team .team-leader .monster{
-	border-color: blue;
+.team-bigbox:nth-of-type(2) .team-members .team-leader .monster{
+	border-color: var(--team-2-color);
+}
+.team-bigbox:nth-of-type(3) .team-members .team-leader .monster{
+	border-color: var(--team-3-color);
 }
 
 /*三维计算值*/
