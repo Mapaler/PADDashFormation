@@ -208,6 +208,7 @@ function calculateAbility(monid = 0, level = 1, plus = [0,0,0], awoken = 0, late
 	});
 	return abilitys;
 }
+//搜索卡片用
 function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens)
 {
 	let res = cards;

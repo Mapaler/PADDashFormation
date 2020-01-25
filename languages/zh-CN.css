@@ -132,8 +132,11 @@
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "不能辅助";
 }
-.awoken-total-box::before{
-	content: "觉醒总计：";
+.formation-awoken::before{
+	content: "阵型觉醒总计：";
+}
+.team-awoken::before{
+	content: "队伍觉醒总计：";
 }
 .type-name-4::after{
 	content: "龍";
@@ -204,10 +207,10 @@
 .control-box .btn-show-mon-skill-cd::before{
 	content: "❄️显示已满技能冷却";
 }
-.team-info .tIf-total-hp::before{
+.tIf-total-hp::before{
 	content: "总HP(队伍觉醒和徽章)：";
 }
-.team-info .tIf-total-rcv::before{
+.tIf-total-rcv::before{
 	content: "总回复(队伍觉醒和徽章)：";
 }
 

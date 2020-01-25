@@ -13,8 +13,8 @@
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript">
 const solo = false;
-const teamsNumber = 2;
-var formation = new Formation(teamsNumber,5);
+const teamsCount = 2;
+var formation = new Formation(teamsCount,5);
 </script>
 </head>
 
@@ -36,6 +36,7 @@ var formation = new Formation(teamsNumber,5);
 	</div>
 	<div class="formation-box">
 		<div class="title-box"><input type="text" class="title" placeholder="输入队伍标题" /></div>
+		<div class="formation-total-info"><div class="tIf-total-hp"></div><div class="tIf-total-rcv"></div></div>
 		<ul class="teams">
 			<li class="team-bigbox team-1 show-team-name-right">
 				<div class="team-box-name">
@@ -412,7 +413,7 @@ var formation = new Formation(teamsNumber,5);
 				</div>
 			</li>
 		</ul>
-		<div class="awoken-total-box">
+		<div class="formation-awoken">
 			<!--怪物觉醒-->
 			<ul class="awoken-ul">
 				<li class="awoken-count display-none"><span class="awoken-icon awoken-21"></span><span class="count"></span></li><!--SB-->
