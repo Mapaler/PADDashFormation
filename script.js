@@ -494,7 +494,7 @@ function initialize()
 				{
 					teamBadge.classList.remove(className_ChoseBadges);
 					formation.badge = bidx;
-					refreshTotalAbility(formation.team[0]);
+					refreshTotalHP(formation.team[0]);
 					creatNewUrl();
 				}else
 				{
@@ -941,7 +941,8 @@ function initialize()
 			return;
 		}
 		let mon = editBox.isAssist?new MemberAssist():new MemberTeam();
-		formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
+		const thisTeamData = formation.team[editBox.memberIdx[0]];
+		thisTeamData[editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
 
 		mon.id = parseInt(monstersID.value,10);
 		const card = Cards[mon.id] || Cards[0];
@@ -987,20 +988,25 @@ function initialize()
 		}
 		changeid(mon,editBox.monsterHead,editBox.memberIdx[1] ? null : editBox.latentBox);
 
-		const formationAbilityDom = document.querySelector(".formation-box .formation-ability");
-		if (formationAbilityDom)
+		const thisTeamData = formation.team[editBox.memberIdx[0]];
+		const thisTeamBBDom = teamBigBoxs[editBox.memberIdx[0]];
+		const teamAbilityDom = thisTeamBBDom.querySelector(".team-ability");
+		if (teamAbilityDom)
 		{
 			refreshAbility(
-				formationAbilityDom,
+				teamAbilityDom,
 				formation.team[editBox.memberIdx[0]],
 				editBox.memberIdx[2]);
-			refreshTotalAbility(formation.team[editBox.memberIdx[0]]);
+			const teamTotalInfoDom = thisTeamBBDom.querySelector(".team-total-info");
+			if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom,thisTeamData);
+			formation-total-info
+			refreshTeamTotalHP(formation.team[editBox.memberIdx[0]]);
 		}
 		refreshAwokenCount(formation.team);
 
 		//刷新改队员的CD
 		const teamDom = document.querySelector(".formation-box .formation-" + (editBox.memberIdx[0]?"B":"A") + "-box");
-		refreshSkillCD(teamDom,formation.team[editBox.memberIdx[0]],editBox.memberIdx[2]); 
+		refreshMemberSkillCD(teamDom,formation.team[editBox.memberIdx[0]],editBox.memberIdx[2]); 
 		creatNewUrl();
 		editBox.hide();
 	};
@@ -1023,7 +1029,7 @@ function initialize()
 				formationAbilityDom,
 				formation.team[editBox.memberIdx[0]],
 				editBox.memberIdx[2]);
-			refreshTotalAbility(formation.team[editBox.memberIdx[0]]);
+			refreshTotalHP(formation.team[editBox.memberIdx[0]]);
 		}
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
@@ -1039,7 +1045,7 @@ function initialize()
 				formationAbilityDom,
 				formation.team[editBox.memberIdx[0]],
 				editBox.memberIdx[2]);
-			refreshTotalAbility(formation.team[editBox.memberIdx[0]]);
+			refreshTotalHP(formation.team[editBox.memberIdx[0]]);
 		}
 		refreshAwokenCount(formation.team);
 		creatNewUrl();
@@ -1686,69 +1692,103 @@ function searchColla(collabId)
 //刷新整个队伍
 function refreshAll(formationData){
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-	const formationBox = document.querySelector(".formation-box");
 	const titleBox = fragment.appendChild(formationBox.querySelector(".title-box"));
-	const formationA_bigbox = fragment.appendChild(formationBox.querySelector(".formation-A-bigbox"));
-	const formationB_bigbox = formationBox.querySelector(".formation-B-bigbox");
-	if (formationB_bigbox)
-	{fragment.appendChild(formationB_bigbox);}
-	const awokenTotalBox = fragment.appendChild(formationBox.querySelector(".awoken-total-box"));
-	const detailBox = fragment.appendChild(formationBox.querySelector(".detail-box"));
+	const awokenTotalBox = formationBox.querySelector(".awoken-total-box");
+	const detailBox = formationBox.querySelector(".detail-box");
+
+	for (let ni=0; ni < formationBox.childNodes.length; ni++)
+	{
+		fragment.appendChild(formationBox.childNodes[ni]);
+	}
 
 	const txtTitle = titleBox.querySelector(".title");
 	const txtDetail = detailBox.querySelector(".detail");
 	txtTitle.value = formationData.title || "";
 	txtDetail.value = formationData.detail || "";
 	
-	const badges = Array.prototype.slice.call(formationA_bigbox.querySelectorAll(".formation-badge .badge-bg"));
-	badges.forEach((b,idx)=>{
-		if (idx==formationData.badge)
-		{
-			b.classList.remove("display-none");
-		}else
-		{
-			b.classList.add("display-none");
-		}
+	teamBigBoxs.forEach((teamBigBox,teamNum)=>{
+		const badgeBox = teamBigBox.querySelector(".team-badge");
+		//const badges = Array.prototype.slice.call(badgeBox.querySelectorAll(".badge-radio"));
+		const badge = badgeBox.querySelector(`#team-${teamNum}-badge-${formationData.badge}`);
+		badge.checked = true;
 	});
 
-	const formationA = formationA_bigbox.querySelector(".formation-A-box");
-	const formationB = formationB_bigbox ? formationB_bigbox.querySelector(".formation-B-box") : null;
-	
-	const fATeam = formationA.querySelectorAll(".formation-team .monster");
-	const fALatents = formationA.querySelectorAll(".formation-latents .latent-ul");
-	const fAAssist = formationA.querySelectorAll(".formation-assist .monster");
-	
-	const fBTeam = formationB ? formationB.querySelectorAll(".formation-team .monster") : null;
-	const fBLatents = formationB ? formationB.querySelectorAll(".formation-latents .latent-ul") : null;
-	const fBAssist = formationB ? formationB.querySelectorAll(".formation-assist .monster") : null;
+	teamBoxs.forEach((teamBox,teamNum)=>{
+		const members = teamBox.querySelectorAll(".team-members .monster");
+		const latents = teamBox.querySelectorAll(".team-latents .latent-ul");
+		const assist = teamBox.querySelectorAll(".team-assist .monster");
+		const teamAbilityDom = teamBox.querySelector(".team-ability");
+		for (let ti=0;ti<members.length;ti++)
+		{
+			changeid(formationData.team[teamNum][0][ti],members[ti],latents[ti]);
+			changeid(formationData.team[teamNum][1][ti],assist[ti]);
+			if (teamAbilityDom)
+			{
+				refreshAbility(teamAbilityDom,formationData.team[teamNum],ti);
+			}
+			refreshMemberSkillCD(teamBox,formationData.team[teamNum],ti);
+		}
+		const teamTotalInfoBox = teamBox.querySelector(".team-total-info");
+		if (teamTotalInfoBox) refreshTeamTotalHP(teamTotalInfoBox,formationData.team[teamNum]);
+		const awokenBox = teamBox.querySelector(".team-awoken");
+		if (awokenBox) refreshTeamAwokenCount(awokenBox,formationData.team[teamNum]);
+	});
 
-	const formationAbilityDom = formationA.querySelector(".formation-ability");
-	for (let ti=0;ti<(formationB?5:6);ti++)
-	{
-		changeid(formationData.team[0][0][ti],fATeam[ti],fALatents[ti]);
-		changeid(formationData.team[0][1][ti],fAAssist[ti]);
-		if (formationAbilityDom)
-		{
-			refreshAbility(
-				formationAbilityDom,
-				formationData.team[0],
-				ti);
-		}
-		refreshSkillCD(formationA,formationData.team[0],ti);
-		if (formationB)
-		{
-			changeid(formationData.team[1][0][ti],fBTeam[ti],fBLatents[ti]);
-			changeid(formationData.team[1][1][ti],fBAssist[ti]);
-			refreshSkillCD(formationB,formationData.team[1],ti);
-		}
-	}
 	formationBox.appendChild(fragment);
-	refreshTotalAbility(formationData.team[0]);
-	refreshAwokenCount(formationData.team);
+	const formationTotalInfoBox = formationBox.querySelector(".formation-total-info");
+	if (formationTotalInfoBox == 1) refreshFormationHP(formationData.team[0]);
+	const formationAwokenBox = formationBox.querySelector(".formation-awoken");
+	if (formationAwokenBox) refreshFormationAwokenCount(formationAwokenBox,formationData.team);
 	txtDetail.onblur(); //这个需要放在显示出来后再改才能生效
 }
-//刷新觉醒总计
-function refreshAwokenCount(teams){
+//刷新队伍觉醒统计
+function refreshTeamAwokenCount(awokenDom,team){
+	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+	const awokenUL = fragment.appendChild(awokenDom.querySelector(".awoken-ul"));
+	function setCount(idx,number){
+		var aicon = awokenUL.querySelector(".awoken-" + idx);
+		if (!aicon) return; //没有这个觉醒就撤回 
+		var ali = aicon.parentNode;
+		var countDom = ali.querySelector(".count");
+		countDom.innerHTML = number;
+		if (number)
+			ali.classList.remove("display-none");
+		else
+			ali.classList.add("display-none");
+	}
+	var bigAwoken = [52,53,56,68,69,70]; //等于几个小觉醒的大觉醒
+	for (var ai=1;ai<=72;ai++)
+	{
+		if (ai == 10) //防封
+		{
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,52,solo)*2);
+		}else if (ai == 11) //防暗
+		{
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,68,solo)*5);
+		}else if (ai == 12) //防废
+		{
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,69,solo)*5);
+		}else if (ai == 13) //防毒
+		{
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,70,solo)*5);
+		}else if (ai == 19) //手指
+		{
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,53,solo)*2);
+		}else if (ai == 21) //SB
+		{
+			setCount(ai,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,56,solo)*2);
+		}else if (bigAwoken.indexOf(ai)>=0) //属于大觉醒
+		{
+			continue;
+		}else
+		{
+			setCount(ai,awokenCountInFormation(teams,ai,solo));
+		}
+	}
+	awokenTotalBox.appendChild(awokenUL);
+}
+//刷新几个队伍觉醒统计
+function refreshFormationAwokenCount(teams){
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	const awokenTotalBox = formationBox.querySelector(".awoken-total-box");
 	const awokenUL = fragment.appendChild(awokenTotalBox.querySelector(".awoken-ul"));
@@ -1831,11 +1871,10 @@ function refreshAbility(abilityDom,team,idx){
 		}
 	});
 }
-//刷新能力值合计
-function refreshTotalAbility(team){
+//刷新队伍能力值合计
+function refreshTeamTotalHP(totalDom,team){
 	//计算总的生命值
-	const formationBox = document.querySelector(".formation-box");
-	const teamInfo = formationBox.querySelector(".team-info");
+	const teamInfo = formationBox.querySelector(".team-total-info");
 	if (!teamInfo) return;
 	const tHpDom = teamInfo.querySelector(".tIf-total-hp");
 	const tRcvDom = teamInfo.querySelector(".tIf-total-rcv");
@@ -1874,11 +1913,10 @@ function refreshTotalAbility(team){
 			("("+Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)*badgeRCVScale).toString()+")") :
 			"");
 }
-//刷新能力值合计
-function refreshTotalAbility(team){
+//刷新所有队伍能力值合计
+function refreshFormationTotalHP(teams){
 	//计算总的生命值
-	const formationBox = document.querySelector(".formation-box");
-	const teamInfo = formationBox.querySelector(".team-info");
+	const teamInfo = formationBox.querySelector(".team-total-info");
 	if (!teamInfo) return;
 	const tHpDom = teamInfo.querySelector(".tIf-total-hp");
 	const tRcvDom = teamInfo.querySelector(".tIf-total-rcv");
@@ -1917,10 +1955,10 @@ function refreshTotalAbility(team){
 			("("+Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)*badgeRCVScale).toString()+")") :
 			"");
 }
-//刷新技能CD
-function refreshSkillCD(teamDom,team,idx){
-	const memberMonDom = teamDom.querySelector(".formation-team .member-" + (idx+1) + " .monster");
-	const assistMonDom = teamDom.querySelector(".formation-assist .member-" + (idx+1) + " .monster");
+//刷新单人技能CD
+function refreshMemberSkillCD(teamDom,team,idx){
+	const memberMonDom = teamDom.querySelector(`.team-members .member-${idx+1} .monster`);
+	const assistMonDom = teamDom.querySelector(`.team-assist .member-${idx+1} .monster`);
 	const member = team[0][idx];
 	const assist = team[1][idx];
 

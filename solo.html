@@ -13,8 +13,8 @@
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript">
 const solo = true;
-const teamsNumber = 1;
-var formation = new Formation(teamsNumber,6);
+const teamsCount = 1;
+var formation = new Formation(teamsCount,6);
 </script>
 <style type="text/css">
 .formation-A-bigbox::after{
@@ -57,7 +57,7 @@ var formation = new Formation(teamsNumber,6);
 					<input type="radio" name="team-0-badge" class="badge-radio" value="11" id="team-0-badge-11"><label class="badge-bg" for="team-0-badge-11"><div class="badge badge-11"></div></label>
 					<input type="radio" name="team-0-badge" class="badge-radio" value="12" id="team-0-badge-12"><label class="badge-bg" for="team-0-badge-12"><div class="badge badge-12"></div></label>
 					<input type="radio" name="team-0-badge" class="badge-radio" value="13" id="team-0-badge-13"><label class="badge-bg" for="team-0-badge-13"><div class="badge badge-13"></div></label>
-					<div class="team-info"><div class="tIf-total-hp"></div><div class="tIf-total-rcv"></div></div>
+					<div class="team-total-info"><div class="tIf-total-hp"></div><div class="tIf-total-rcv"></div></div>
 				</ul>
 				<div class="team-box-name">
 					<div class="team-box">
@@ -299,7 +299,7 @@ var formation = new Formation(teamsNumber,6);
 						</ul>
 					</div>
 				</div>
-				<div class="awoken-box">
+				<div class="team-awoken">
 					<!--怪物觉醒-->
 					<ul class="awoken-ul">
 						<li class="awoken-count display-none"><span class="awoken-icon awoken-1"></span><span class="count"></span></li><!--HP+-->
