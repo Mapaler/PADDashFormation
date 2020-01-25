@@ -450,26 +450,20 @@ function initialize()
 
 	//队伍框
 	const formationBox = document.querySelector(".formation-box");
-
-	const formationA = formationBox.querySelector(".formation-box .formation-A-box");
-	const formationB = formationBox.querySelector(".formation-box .formation-B-box");
-	
-	const fATeam = formationA.querySelectorAll(".formation-team .monster");
-	const fAAssist = formationA.querySelectorAll(".formation-assist .monster");
-
-	const fBTeam = formationB ? formationB.querySelectorAll(".formation-team .monster") : null;
-	const fBAssist = formationB ? formationB.querySelectorAll(".formation-assist .monster") : null;
-
-	for (let ti=0;ti<fATeam.length;ti++)
-	{
-		allMembers.push(fATeam[ti]);
-		allMembers.push(fAAssist[ti]);
-		if (formationB)
-		{
-			allMembers.push(fBTeam[ti]);
-			allMembers.push(fBAssist[ti]);
-		}
-	}
+	const teamBigBox = Array.prototype.slice.call(formationBox.querySelectorAll(".team-bigbox"));
+	const teamBox = teamBigBox.map(tbb=>{return tbb.querySelector(".team-box");});
+	//将所有怪物头像添加到全局数组
+	teamBox.forEach(tb=>{
+		const menbers = Array.prototype.slice.call(tb.querySelectorAll(".team-menbers .monster"));
+		const assist = Array.prototype.slice.call(tb.querySelectorAll(".team-assist .monster"));
+		menbers.forEach(m=>{
+			allMembers.push(m);
+		});
+		assist.forEach(m=>{
+			allMembers.push(m);
+		});
+	});
+	//所有怪物头像，添加拖动交换的代码
 	allMembers.forEach(m=>{
 		//点击
 		m.onclick = clickMonHead;
@@ -485,21 +479,26 @@ function initialize()
 		m.ontouchcancel = touchcancelMonHead;
 	});
 
-	//徽章
-	let badges = Array.prototype.slice.call(formationBox.querySelectorAll(".formation-badge .badge-bg"));
-	badges.forEach((badge,bidx) => {
-		badge.onclick = function(){
-			if (badges.some(b=>{return b.classList.contains("display-none");}))
-			{ //未展开时
-				badges.forEach((b,idx) => {if (idx!=bidx)b.classList.remove("display-none");});
-			}else
-			{ //展开时
-				badges.forEach((b,idx) => {if (idx!=bidx)b.classList.add("display-none");});
-				formation.badge = bidx;
-				refreshTotalAbility(formation.team[0]);
-				creatNewUrl();
-			}
-		};
+	const className_ChoseBadges = "show-all-badges";
+	teamBox.forEach(tb=>{
+		//徽章
+		const teamBadge = tb.querySelector(".team-badge");
+		if (!teamBadge) return;
+		const badges = Array.prototype.slice.call(teamBadge.querySelectorAll(".badge-bg"));
+		badges.forEach((badge,bidx) => {
+			badge.onclick = function(){
+				if (teamBadge.classList.contains(className_ChoseBadges))
+				{
+					teamBadge.classList.remove(className_ChoseBadges);
+					formation.badge = bidx;
+					refreshTotalAbility(formation.team[0]);
+					creatNewUrl();
+				}else
+				{
+					teamBadge.classList.add(className_ChoseBadges);
+				}
+			};
+		});
 	});
 
 	//编辑框

@@ -812,13 +812,11 @@ var sawokens = [
 	width: 53px;
 	height: 41px;
 	line-height: 41px;
-	float: left;
 	text-align: center;
 	margin-right: 5px;
-	cursor: pointer;
 }
 .badge{
-	display:inline-block;
+	display: inline-block;
     vertical-align: middle;
 	background-repeat: no-repeat;
 	background-image: url(images/badge.png);

@@ -20,16 +20,27 @@
 .monster .id::before{
 	content: "No.";
 }
-.formation-A-bigbox::after{
+.team-bigbox:nth-of-type(1)::after,
+.team-bigbox:nth-of-type(1)::before
+{
 	content: "队伍\A A";
 }
-.formation-B-bigbox::before{
+.team-bigbox:nth-of-type(2)::after,
+.team-bigbox:nth-of-type(2)::before
+{
 	content: "队伍\A B";
 }
-.formation-A-box .formation-assist .member::after{
+.team-bigbox:nth-of-type(3)::after,
+.team-bigbox:nth-of-type(3)::before
+{
+	content: "队伍\A C";
+}
+.team-box .team-assist .member::after
+{
 	content: "▼辅助";
 }
-.formation-B-box .formation-assist .member::before{
+.team-box .team-assist .member::before
+{
 	content: "▲辅助";
 }
 .abilitys .hp::before{
