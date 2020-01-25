@@ -1,7 +1,3 @@
-var Cards = null; //怪物数据
-var Skills = null; //技能数据
-var currentLanguage = null; //当前语言
-var currentDataSource = null; //当前数据
 const dataSourceList = [ //几个不同的游戏服务区
 	{
 		code:"ja",
@@ -16,15 +12,21 @@ const dataSourceList = [ //几个不同的游戏服务区
 		source:"퍼즐앤드래곤"
 	},
 ];
-var allMembers = [];
+
+var Cards; //怪物数据
+var Skills; //技能数据
+var currentLanguage; //当前语言
+var currentDataSource; //当前数据
 var interchangeSvg; //储存划线的SVG
 var interchangePath; //储存划线的线
-var showSearch = null; //整个程序都可以用的显示搜索
-/*var cardInterchange = { //记录DOM交换
-	from:null,
-	to:null,
-	members:[]
-};*/
+var controlBox; //储存整个controlBox
+var formationBox; //储存整个formationBox
+var teamBigBoxs; //储存全部teamBigBox
+var teamBoxs; //储存全部teamBox
+var allMembers = []; //储存所有成员，包含辅助
+var editBox; //储存整个editBox
+var showSearch; //整个程序都可以用的显示搜索函数
+
 //队员基本的留空
 var Member = function(){
 	this.id=0;
@@ -413,7 +415,7 @@ function creatNewUrl(arg){
 //初始化
 function initialize()
 {
-	let monstersList = document.querySelector("#monsters-list");
+	let monstersList = document.body.querySelector("#monsters-name-list");
 	let fragment = document.createDocumentFragment();
 	const linkReg = "link:(\\d+)";
 	Cards.forEach(function(m){ //添加下拉框候选
@@ -431,11 +433,13 @@ function initialize()
 	monstersList.appendChild(fragment);
 
 	//控制框
-	const controlBox = document.querySelector(".control-box");
+	controlBox = document.body.querySelector(".control-box");
 
+	//队伍框
+	formationBox = document.body.querySelector(".formation-box");
 	//标题和介绍文本框
-	const txtTitle = document.querySelector(".title-box .title");
-	const txtDetail = document.querySelector(".detail-box .detail");
+	const txtTitle = formationBox.querySelector(".title-box .title");
+	const txtDetail = formationBox.querySelector(".detail-box .detail");
 	txtTitle.onchange = function(){
 		formation.title = this.value;
 		creatNewUrl();
@@ -448,13 +452,11 @@ function initialize()
 		this.style.height=this.scrollHeight+"px";
 	};
 
-	//队伍框
-	const formationBox = document.querySelector(".formation-box");
-	const teamBigBox = Array.prototype.slice.call(formationBox.querySelectorAll(".team-bigbox"));
-	const teamBox = teamBigBox.map(tbb=>{return tbb.querySelector(".team-box");});
+	teamBigBoxs = Array.prototype.slice.call(formationBox.querySelectorAll(".team-bigbox"));
+	teamBoxs = teamBigBoxs.map(tbb=>{return tbb.querySelector(".team-box");});
 	//将所有怪物头像添加到全局数组
-	teamBox.forEach(tb=>{
-		const menbers = Array.prototype.slice.call(tb.querySelectorAll(".team-menbers .monster"));
+	teamBoxs.forEach(tb=>{
+		const menbers = Array.prototype.slice.call(tb.querySelectorAll(".team-members .monster"));
 		const assist = Array.prototype.slice.call(tb.querySelectorAll(".team-assist .monster"));
 		menbers.forEach(m=>{
 			allMembers.push(m);
@@ -479,8 +481,9 @@ function initialize()
 		m.ontouchcancel = touchcancelMonHead;
 	});
 
+	//添加徽章
 	const className_ChoseBadges = "show-all-badges";
-	teamBigBox.forEach(tb=>{
+	teamBigBoxs.forEach(tb=>{
 		//徽章
 		const teamBadge = tb.querySelector(".team-badge");
 		if (!teamBadge) return;
@@ -502,21 +505,21 @@ function initialize()
 	});
 
 	//编辑框
-	const editBox = document.querySelector(".edit-box");
+	editBox = document.body.querySelector(".edit-box");
 	editBox.mid = null; //储存怪物id
 	editBox.awokenCount = 0; //储存怪物潜觉数量
 	editBox.latent = []; //储存潜在觉醒
-	editBox.assist = false; //储存是否为辅助宠物
-	editBox.monsterBox = null;
+	editBox.isAssist = false; //储存是否为辅助宠物
+	editBox.monsterHead = null;
 	editBox.latentBox = null;
 	editBox.memberIdx = []; //储存队伍数组下标
 	editBox.show = function(){
-		editBox.classList.remove("display-none");
+		this.classList.remove("display-none");
 		formationBox.classList.add("blur-bg");
 		controlBox.classList.add("blur-bg");
 	};
 	editBox.hide = function(){
-		editBox.classList.add("display-none");
+		this.classList.add("display-none");
 		formationBox.classList.remove("blur-bg");
 		controlBox.classList.remove("blur-bg");
 	};
@@ -937,7 +940,7 @@ function initialize()
 			btnNull.onclick();
 			return;
 		}
-		let mon = editBox.assist?new MemberAssist():new MemberTeam();
+		let mon = editBox.isAssist?new MemberAssist():new MemberTeam();
 		formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
 
 		mon.id = parseInt(monstersID.value,10);
@@ -971,7 +974,7 @@ function initialize()
 			mon.plus[0] = parseInt(monEditAddHp.value) || 0;
 			mon.plus[1] = parseInt(monEditAddAtk.value) || 0;
 			mon.plus[2] = parseInt(monEditAddRcv.value) || 0;
-			if (!editBox.assist)
+			if (!editBox.isAssist)
 			{ //如果不是辅助，则可以设定潜觉
 				mon.latent = editBox.latent.concat();
 			}
@@ -982,7 +985,7 @@ function initialize()
 		{
 			mon.skilllevel = skillLevelNum;
 		}
-		changeid(mon,editBox.monsterBox,editBox.memberIdx[1] ? null : editBox.latentBox);
+		changeid(mon,editBox.monsterHead,editBox.memberIdx[1] ? null : editBox.latentBox);
 
 		const formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 		if (formationAbilityDom)
@@ -1012,7 +1015,7 @@ function initialize()
 	};
 	btnNull.onclick = function(){
 		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = new Member();
-		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		changeid(mD,editBox.monsterHead,editBox.latentBox);
 		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 		if (formationAbilityDom)
 		{
@@ -1028,7 +1031,7 @@ function initialize()
 	};
 	btnDelay.onclick = function(){ //应对威吓
 		var mD = formation.team[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = new MemberDelay();
-		changeid(mD,editBox.monsterBox,editBox.latentBox);
+		changeid(mD,editBox.monsterHead,editBox.latentBox);
 		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 		if (formationAbilityDom)
 		{
@@ -1068,6 +1071,7 @@ function clickMonHead(e)
 	let team = parseInt(this.getAttribute("data-team"),10);
 	let assist = parseInt(this.getAttribute("data-assist"),10);
 	let index = parseInt(this.getAttribute("data-index"),10);
+	console.log(team,assist,index)
 	editMon(team,assist,index);
 	return false; //没有false将会打开链接
 }
@@ -1386,55 +1390,54 @@ function changeid(mon,monDom,latentDom)
 	parentNode.appendChild(fragment);
 }
 //点击怪物头像，出现编辑窗
-function editMon(AorB,isAssist,tempIdx)
+function editMon(teamNum,isAssist,indexInTeam)
 {
 	//数据
-	const mon = formation.team[AorB][isAssist][tempIdx];
+	const mon = formation.team[teamNum][isAssist][indexInTeam];
 	const card = Cards[mon.id] || Cards[0];
 	//对应的Dom
-	const formationBox = document.querySelector(".formation-box .formation-"+(AorB?"B":"A")+"-box");
-	
-	const teamBox = formationBox.querySelector(isAssist?".formation-assist":".formation-team");
-	const memberBox = teamBox.querySelector(".member-" + (tempIdx+1));
+	const formationBox = document.querySelector(".formation-box .formation-"+(teamNum?"B":"A")+"-box");
+	//const teamBigBox = 
+	const teamBox = teamBoxs[teamNum];
+	const memberBox = teamBox.querySelector(isAssist?".team-assist":".team-members");
+	const memberLi = memberBox.querySelector(`.member-${indexInTeam+1}`);
 
-	const editBox = document.querySelector(".edit-box");
-	const monsterBox = memberBox.querySelector(".monster");
+	const monsterHead = memberLi.querySelector(".monster");
 
 	editBox.show();
 
-	editBox.assist = isAssist;
-	editBox.monsterBox = monsterBox;
-	editBox.memberIdx = [AorB, isAssist, tempIdx]; //储存队伍数组下标
-	editBox.assist = isAssist;
+	editBox.isAssist = isAssist;
+	editBox.monsterHead = monsterHead;
+	editBox.memberIdx = [teamNum, isAssist, indexInTeam]; //储存队伍数组下标
 	if (!isAssist)
 	{
-		var latentBox = formationBox.querySelector(".formation-latents .latents-"+(tempIdx+1)+" .latent-ul");
+		const latentBox = teamBox.querySelector(".team-latents .latents-"+(indexInTeam+1)+" .latent-ul");
 		editBox.latentBox = latentBox;
 	}
 
-	var settingBox = editBox.querySelector(".setting-box");
-	var monstersID = settingBox.querySelector(".row-mon-id .m-id");
-	monstersID.value = mon.id>0?mon.id:0;
+	const settingBox = editBox.querySelector(".setting-box");
+	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
+	monstersID.value = mon.id > 0 ? mon.id : 0;
 	monstersID.onchange();
 	//觉醒
-	var monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon");
-	if (mon.awoken>0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].onclick();
+	const monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon");
+	if (mon.awoken > 0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].onclick();
 	//超觉醒
-	var monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon");
-	if (mon.sawoken>=0 && monEditSAwokens[mon.sawoken]) monEditSAwokens[mon.sawoken].onclick();
-	var monEditLv = settingBox.querySelector(".m-level");
+	const monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon");
+	if (mon.sawoken >= 0 && monEditSAwokens[mon.sawoken]) monEditSAwokens[mon.sawoken].onclick();
+	const monEditLv = settingBox.querySelector(".row-mon-level .m-level");
 	monEditLv.value = mon.level || 1;
-	var monEditAddHp = settingBox.querySelector(".m-plus-hp");
-	var monEditAddAtk = settingBox.querySelector(".m-plus-atk");
-	var monEditAddRcv = settingBox.querySelector(".m-plus-rcv");
+	const monEditAddHp = settingBox.querySelector(".row-mon-plus .m-plus-hp");
+	const monEditAddAtk = settingBox.querySelector(".row-mon-plus .m-plus-atk");
+	const monEditAddRcv = settingBox.querySelector(".row-mon-plus .m-plus-rcv");
 	if (mon.plus)
 	{
 		monEditAddHp.value = mon.plus[0];
 		monEditAddAtk.value = mon.plus[1];
 		monEditAddRcv.value = mon.plus[2];
 	}
-	const btnDelay = editBox.querySelector(".button-delay");
-	const skillLevel = editBox.querySelector(".row-mon-skill .skill-box .m-skill-level");
+	const rowMonLatent = settingBox.querySelector(".row-mon-latent");
+	const skillLevel = settingBox.querySelector(".row-mon-skill .skill-box .m-skill-level");
 	if (mon.skilllevel)
 	{
 		skillLevel.value = mon.skilllevel;
@@ -1442,22 +1445,18 @@ function editMon(AorB,isAssist,tempIdx)
 	skillLevel.onchange();
 
 	const editBoxTitle = editBox.querySelector(".edit-box-title");
+	const btnDelay = editBox.querySelector(".button-box .button-delay");
 	if (!isAssist)
 	{
 		editBox.latent = mon.latent ? mon.latent.concat() : [];
 		editBox.refreshLatent(editBox.latent, mon.id);
 		btnDelay.classList.add("display-none");
-		settingBox.querySelector(".row-mon-latent").classList.remove("display-none");
-		//if (card.superAwakenings.length)
-		//{
-		//	settingBox.querySelector(".row-mon-super-awoken").classList.remove("display-none");
-		//}
+		rowMonLatent.classList.remove("display-none");
 		editBoxTitle.classList.remove("edit-box-title-assist");
 	}else
 	{
 		btnDelay.classList.remove("display-none");
-		settingBox.querySelector(".row-mon-latent").classList.add("display-none");
-		//settingBox.querySelector(".row-mon-super-awoken").classList.add("display-none");
+		rowMonLatent.classList.add("display-none");
 		editBoxTitle.classList.add("edit-box-title-assist");
 	}
 	editBox.reCalculateAbility();
@@ -1474,13 +1473,10 @@ function editBoxChangeMonId(id)
 
 	let fragment = null;
 
-	const editBox = document.querySelector(".edit-box");
 	const monInfoBox = editBox.querySelector(".monsterinfo-box");
-	const searchBox = editBox.querySelector(".search-box");
 	const settingBox = editBox.querySelector(".setting-box");
 
 	//id搜索
-	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
 	const monHead = monInfoBox.querySelector(".monster");
 	changeid({id:id},monHead); //改变图像
 	const mId = monInfoBox.querySelector(".monster-id");
@@ -1570,7 +1566,7 @@ function editBoxChangeMonId(id)
 	//超觉醒
 	const mSAwokenRow = settingBox.querySelector(".row-mon-super-awoken");
 	let mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
-	//if (!editBox.assist && card.superAwakenings.length>0)
+	//if (!editBox.isAssist && card.superAwakenings.length>0)
 	if (card.superAwakenings.length>0) //武器上也还是加入超觉醒吧
 	{
 		for (let ai=0;ai<mSAwoken.length;ai++)
@@ -1664,7 +1660,7 @@ function editBoxChangeMonId(id)
 		skillLevel.removeAttribute("readonly");
 	}
 
-	if (editBox.assist)
+	if (editBox.isAssist)
 	{
 		var btnDone = editBox.querySelector(".button-done");
 		if (!card.canAssist)
@@ -1754,7 +1750,7 @@ function refreshAll(formationData){
 //刷新觉醒总计
 function refreshAwokenCount(teams){
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-	const awokenTotalBox = document.querySelector(".formation-box .awoken-total-box");
+	const awokenTotalBox = formationBox.querySelector(".awoken-total-box");
 	const awokenUL = fragment.appendChild(awokenTotalBox.querySelector(".awoken-ul"));
 	function setCount(idx,number){
 		var aicon = awokenUL.querySelector(".awoken-" + idx);
