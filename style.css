@@ -279,8 +279,7 @@ ul{
 }
 /*辅助和队伍的每一只框架*/
 .member, .acquisitus-awoken-icon{
-	display: block;
-	float: left;
+	display: inline-block;
 	position: relative;
 	width: 108px;
 }
@@ -307,24 +306,24 @@ ul{
 	display: inline-block;
 }
 /*队伍的背景色*/
-.team-bigbox:nth-of-type(1) .team-menbers,
+.team-bigbox:nth-of-type(1) .team-members,
 .team-bigbox:nth-of-type(1) .team-latents,
-.team-bigbox:nth-of-type(1)::before,
-.team-bigbox:nth-of-type(1)::after
+.team-bigbox:nth-of-type(1) .team-box-name::before,
+.team-bigbox:nth-of-type(1) .team-box-name::after
 {
 	background-color: var(--team-1-bgcolor);
 }
-.team-bigbox:nth-of-type(2) .team-menbers,
+.team-bigbox:nth-of-type(2) .team-members,
 .team-bigbox:nth-of-type(2) .team-latents,
-.team-bigbox:nth-of-type(2)::before,
-.team-bigbox:nth-of-type(2)::after
+.team-bigbox:nth-of-type(2) .team-box-name::before,
+.team-bigbox:nth-of-type(2) .team-box-name::after
 {
 	background-color: var(--team-2-bgcolor);
 }
-.team-bigbox:nth-of-type(3) .team-menbers,
+.team-bigbox:nth-of-type(3) .team-members,
 .team-bigbox:nth-of-type(3) .team-latents,
-.team-bigbox:nth-of-type(3)::before,
-.team-bigbox:nth-of-type(3)::after
+.team-bigbox:nth-of-type(3) .team-box-name::before,
+.team-bigbox:nth-of-type(3) .team-box-name::after
 {
 	background-color: var(--team-3-bgcolor);
 }
@@ -337,34 +336,46 @@ ul{
 	margin-bottom:0;
 }
 /*队伍A、B的文字*/
-.team-bigbox::after, .team-bigbox::before{
+.team-box-name::after,
+.team-box-name::before
+{
 	font-size: 30px;
 	font-weight: bold;
 	text-align: center;
 	line-height: 50px;
 	white-space: pre-wrap;
-	display: inline-block;
+	display: none;
 	width: 108px;
 	height: 108px;
 }
-
-.team-bigbox:nth-of-type(1)::after,
-.team-bigbox:nth-of-type(1)::before,
+.show-team-name-left .team-box-name::before{
+	display: inline-block;
+}
+.show-team-name-right .team-box-name::after{
+	display: inline-block;
+}
+.reverse-member-assist .team-box-name::after,
+.reverse-member-assist .team-box-name::before
+{
+	vertical-align:top;
+}
+.team-bigbox:nth-of-type(1) .team-box-name::after,
+.team-bigbox:nth-of-type(1) .team-box-name::before,
 .team-bigbox:nth-of-type(1) .team-assist .member::after,
 .team-bigbox:nth-of-type(1) .team-assist .member::before
 {
 	color: var(--team-1-color);
 }
-.team-bigbox:nth-of-type(2)::after,
-.team-bigbox:nth-of-type(2)::before,
+.team-bigbox:nth-of-type(2) .team-box-name::after,
+.team-bigbox:nth-of-type(2) .team-box-name::before,
 .team-bigbox:nth-of-type(2) .team-assist .member::after,
 .team-bigbox:nth-of-type(2) .team-assist .member::before
 {
 	color: var(--team-2-color);
 	/*vertical-align:top;*/
 }
-.team-bigbox:nth-of-type(3)::after,
-.team-bigbox:nth-of-type(3)::before,
+.team-bigbox:nth-of-type(3) .team-box-name::after,
+.team-bigbox:nth-of-type(3) .team-box-name::before,
 .team-bigbox:nth-of-type(3) .team-assist .member::after,
 .team-bigbox:nth-of-type(3) .team-assist .member::before
 {
@@ -382,9 +393,27 @@ ul{
 	text-align: center;
 	font-size: 18px;
 	font-weight: bold;
-	display: inline-block;
 	position: relative;
 }
+/*平时的显示*/
+.team-box .team-assist .member::after
+{
+	display: inline-block;
+}
+.team-box .team-assist .member::before
+{
+	display: none;
+}
+/*反向时的显示*/
+.reverse-member-assist .team-assist .member::after
+{
+	display: none;
+}
+.reverse-member-assist .team-assist .member::before
+{
+	display: inline-block;
+}
+
 
 .formation-box .team-info{
 	font-size: 15px;

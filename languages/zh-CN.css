@@ -20,18 +20,18 @@
 .monster .id::before{
 	content: "No.";
 }
-.team-bigbox:nth-of-type(1)::after,
-.team-bigbox:nth-of-type(1)::before
+.team-bigbox:nth-of-type(1) .team-box-name::after,
+.team-bigbox:nth-of-type(1) .team-box-name::before
 {
 	content: "队伍\A A";
 }
-.team-bigbox:nth-of-type(2)::after,
-.team-bigbox:nth-of-type(2)::before
+.team-bigbox:nth-of-type(2) .team-box-name::after,
+.team-bigbox:nth-of-type(2) .team-box-name::before
 {
 	content: "队伍\A B";
 }
-.team-bigbox:nth-of-type(3)::after,
-.team-bigbox:nth-of-type(3)::before
+.team-bigbox:nth-of-type(3) .team-box-name::after,
+.team-bigbox:nth-of-type(3) .team-box-name::before
 {
 	content: "队伍\A C";
 }
