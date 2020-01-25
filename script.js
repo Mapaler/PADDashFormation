@@ -480,7 +480,7 @@ function initialize()
 	});
 
 	const className_ChoseBadges = "show-all-badges";
-	teamBox.forEach(tb=>{
+	teamBigBox.forEach(tb=>{
 		//徽章
 		const teamBadge = tb.querySelector(".team-badge");
 		if (!teamBadge) return;
