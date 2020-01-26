@@ -374,14 +374,14 @@ function reloadFormationData()
 	let formationData;
 	try
 	{
-		var parameter_data = getQueryString("d") || getQueryString("data");
-		if (parameter_data)
+		const parameterDataString = getQueryString("d") || getQueryString("data");
+		if (parameterDataString)
 		{
-			formationData = JSON.parse(parameter_data);
+			formationData = JSON.parse(parameterDataString);
 		}
 	}catch(e)
 	{
-		console.log("URL中队伍数据JSON解码出错",e);
+		console.error("URL中队伍数据JSON解码出错",e);
 		return;
 	}
 	if (formationData)
@@ -1001,14 +1001,14 @@ function initialize()
 		refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
 
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom,teamData);
+		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData);
 		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
-		if (formationTotalInfoDom) refreshFormationTotalHP(formation.teams);
+		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 
 		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom,teamData);
 		const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
-		if (formationAwokenDom) refreshFormationAwokenCount(formation.teams);
+		if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
 
 		//刷新改队员的CD
 		refreshMemberSkillCD(teamBox,teamData,editBox.memberIdx[2]); 
@@ -1026,34 +1026,55 @@ function initialize()
 	};
 	btnNull.onclick = function(){ //空位置
 		const mon = new Member();
-		formation.teams[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
+		const teamBigBox = teamBigBoxs[editBox.memberIdx[0]];
+		const teamData = formation.teams[editBox.memberIdx[0]];
+		teamData[editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
+
 		changeid(mon ,editBox.monsterHead, editBox.latentBox);
-		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
-		if (formationAbilityDom)
-		{
-			refreshAbility(
-				formationAbilityDom,
-				formation.teams[editBox.memberIdx[0]],
-				editBox.memberIdx[2]);
-			refreshTotalHP(formation.teams[editBox.memberIdx[0]]);
-		}
-		refreshAwokenCount(formation.teams);
+		
+		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
+		refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
+
+		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
+		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData);
+		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
+		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
+
+		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
+		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom,teamData);
+		const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
+		if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
+
+		//刷新改队员的CD
+		refreshMemberSkillCD(teamBigBox,teamData,editBox.memberIdx[2]); 
+
 		creatNewUrl();
 		editBox.hide();
 	};
 	btnDelay.onclick = function(){ //应对威吓
 		const mon = new MemberDelay();
+		const teamBigBox = teamBigBoxs[editBox.memberIdx[0]];
+		const teamData = formation.teams[editBox.memberIdx[0]];
+		teamData[editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
+
 		changeid(mon, editBox.monsterHead, editBox.latentBox);
-		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
-		if (formationAbilityDom)
-		{
-			refreshAbility(
-				formationAbilityDom,
-				formation.teams[editBox.memberIdx[0]],
-				editBox.memberIdx[2]);
-			refreshTotalHP(formation.teams[editBox.memberIdx[0]]);
-		}
-		refreshAwokenCount(formation.teams);
+		
+		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
+		refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
+
+		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
+		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData);
+		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
+		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
+
+		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
+		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom,teamData);
+		const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
+		if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
+
+		//刷新改队员的CD
+		refreshMemberSkillCD(teamBigBox,teamData,editBox.memberIdx[2]); 
+
 		creatNewUrl();
 		editBox.hide();
 	};
@@ -1697,14 +1718,13 @@ function searchColla(collabId)
 function refreshAll(formationData){
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	const titleBox = fragment.appendChild(formationBox.querySelector(".title-box"));
-	const awokenTotalBox = formationBox.querySelector(".awoken-total-box");
 	const detailBox = formationBox.querySelector(".detail-box");
 	const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 	const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
 
-	for (let ni=0; ni < formationBox.childNodes.length; ni++)
+	while(formationBox.childNodes.length>0)
 	{
-		fragment.appendChild(formationBox.childNodes[ni]);
+		fragment.appendChild(formationBox.childNodes[0]);
 	}
 
 	const txtTitle = titleBox.querySelector(".title");
