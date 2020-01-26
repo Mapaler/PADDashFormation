@@ -905,7 +905,7 @@ function initialize()
 		};
 	});
 
-	//重新计算怪物的能力
+	//编辑界面重新计算怪物的能力
 	function reCalculateAbility(){
 		const monid = parseInt(monstersID.value || 0, 10);
 		const level = parseInt(monEditLv.value || 0, 10);
@@ -916,7 +916,14 @@ function initialize()
 			parseInt(monEditAddRcv.value || 0, 10)
 		];
 		const latent = editBox.latent;
-		const abilitys = calculateAbility(monid,level,plus,awoken,latent) || [0,0,0];
+		const tempMon = {
+			id:monid,
+			level:level,
+			plus:plus,
+			awoken:awoken,
+			latent:latent
+		}
+		const abilitys = calculateAbility(tempMon, null, true) || [0,0,0];
 
 		monEditHpValue.innerHTML = abilitys[0];
 		monEditAtkValue.innerHTML = abilitys[1];
@@ -943,6 +950,7 @@ function initialize()
 		const mon = editBox.isAssist?new MemberAssist():new MemberTeam();
 		const teamData = formation.teams[editBox.memberIdx[0]];
 		const teamBigBox = teamBigBoxs[editBox.memberIdx[0]];
+		const teamBox = teamBoxs[editBox.memberIdx[0]];
 
 		teamData[editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
 
@@ -993,7 +1001,7 @@ function initialize()
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
 		if (teamAbilityDom)
 		{
-			refreshAbility(teamAbilityDom, formation.teams[editBox.memberIdx[0]], editBox.memberIdx[2]); //本人能力值
+			refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
 
 			const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 			if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom,teamData);
@@ -1005,11 +1013,9 @@ function initialize()
 			const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
 			if (formationAwokenDom) refreshFormationAwokenCount(formation.teams);
 		}
-		refreshAwokenCount(formation.teams);
 
 		//刷新改队员的CD
-		const teamDom = document.querySelector(".formation-box .formation-" + (editBox.memberIdx[0]?"B":"A") + "-box");
-		refreshMemberSkillCD(teamDom,formation.teams[editBox.memberIdx[0]],editBox.memberIdx[2]); 
+		refreshMemberSkillCD(teamBox,teamData,editBox.memberIdx[2]); 
 		creatNewUrl();
 		editBox.hide();
 	};
@@ -1022,9 +1028,10 @@ function initialize()
 			}
 		}
 	};
-	btnNull.onclick = function(){
-		var mD = formation.teams[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = new Member();
-		changeid(mD,editBox.monsterHead,editBox.latentBox);
+	btnNull.onclick = function(){ //空位置
+		const mon = new Member();
+		formation.teams[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
+		changeid(mon ,editBox.monsterHead, editBox.latentBox);
 		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 		if (formationAbilityDom)
 		{
@@ -1039,8 +1046,8 @@ function initialize()
 		editBox.hide();
 	};
 	btnDelay.onclick = function(){ //应对威吓
-		var mD = formation.teams[editBox.memberIdx[0]][editBox.memberIdx[1]][editBox.memberIdx[2]] = new MemberDelay();
-		changeid(mD,editBox.monsterHead,editBox.latentBox);
+		const mon = new MemberDelay();
+		changeid(mon, editBox.monsterHead, editBox.latentBox);
 		var formationAbilityDom = document.querySelector(".formation-box .formation-ability");
 		if (formationAbilityDom)
 		{
@@ -1080,7 +1087,6 @@ function clickMonHead(e)
 	let team = parseInt(this.getAttribute("data-team"),10);
 	let assist = parseInt(this.getAttribute("data-assist"),10);
 	let index = parseInt(this.getAttribute("data-index"),10);
-	console.log(team,assist,index)
 	editMon(team,assist,index);
 	return false; //没有false将会打开链接
 }
@@ -1728,7 +1734,7 @@ function refreshAll(formationData){
 			refreshMemberSkillCD(teamBox,teamData,ti); //技能CD
 			if (teamAbilityDom) //角色能力值
 			{
-				refreshAbility(teamAbilityDom,teamData,ti); //本人能力值
+				refreshAbility(teamAbilityDom, teamData, ti); //本人能力值
 			}
 		}
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
@@ -1843,34 +1849,37 @@ function refreshFormationAwokenCount(teams){
 }
 //刷新能力值
 function refreshAbility(abilityDom,team,idx){
-	const ali = abilityDom.querySelector(".abilitys-" + (idx+1));
-	const mainMD = team[0][idx];
-	const assistMD = team[1][idx];
+	const memberData = team[0][idx];
+	const assistData = team[1][idx];
 	const bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性倍率
 	//基底三维，如果辅助是武器，还要加上辅助的觉醒
-	const mainAbility = calculateAbility(mainMD.id,mainMD.level,mainMD.plus,mainMD.awoken,mainMD.latent,assistMD.id,assistMD.awoken);
-	//辅助增加的三维，如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
-	const memberCard = Cards[mainMD.id] || Cards[0];
-	const assistCard = Cards[assistMD.id] || Cards[0];
-
-	const assistAbility = (assistMD.id > 0 && memberCard.attrs[0]==assistCard.attrs[0]) ?
-			calculateAbility(assistMD.id,assistMD.level,assistMD.plus,null,null) :
-			[0,0,0];
-	if (mainAbility && mainMD.ability)
+	const mainAbility = calculateAbility(memberData, assistData, solo);
+	if (mainAbility)
 	{
-		for (let ai=0;ai<3;ai++)
+		//辅助增加的三维，如果辅助的主属性相等，辅助宠物只计算等级和加值，不计算觉醒
+		const memberCard = Cards[memberData.id];
+		const assistCard = Cards[assistData.id];
+	
+		const assistAbility = (assistCard && assistCard.enabled && memberCard.attrs[0] === assistCard.attrs[0]) ?
+				calculateAbility(assistData, null, solo) : null;
+		if (mainAbility && memberData.ability)
 		{
-			mainMD.ability[ai] = mainAbility[ai] + Math.round(assistAbility[ai]*bonusScale[ai]);
+			for (let ai=0;ai<3;ai++)
+			{
+				memberData.ability[ai] = mainAbility[ai];
+				if (assistAbility) memberData.ability[ai] += Math.round(assistAbility[ai]*bonusScale[ai]);
+			}
 		}
 	}
-	const hpDom = ali.querySelector(".hp");
-	const atkDom = ali.querySelector(".atk");
-	const rcvDom = ali.querySelector(".rcv");
+	const abilityLi = abilityDom.querySelector(".abilitys-" + (idx+1));
+	const hpDom = abilityLi.querySelector(".hp");
+	const atkDom = abilityLi.querySelector(".atk");
+	const rcvDom = abilityLi.querySelector(".rcv");
 	[hpDom,atkDom,rcvDom].forEach(function(div,ai){
 		if (mainAbility)
 		{
 			div.classList.remove("display-none");
-			div.innerHTML = mainMD.ability[ai];
+			div.innerHTML = memberData.ability[ai];
 		}else
 		{
 			div.classList.add("display-none");
