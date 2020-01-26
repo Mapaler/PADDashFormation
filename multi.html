@@ -29,7 +29,8 @@ var formation = new Formation(teamsCount,5);
 			<button class="btn-clear-data" onclick="clearData();"></button>
 			<button class="btn-show-mon-id" onclick="toggleShowMonId();"></button>
 			<button class="btn-show-mon-skill-cd" onclick="toggleShowMonSkillCd();"></button>
-			<button class="btn-solo-link" onclick="swapSingleMulitple();"></button>
+			<button class="btn-solo-link" onclick="turnPage(1);"></button>
+			<button class="btn-triple-link" onclick="turnPage(3);"></button>
 			<button class="btn-swap-AB-team" onclick="swapABteam();"></button>
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
@@ -322,9 +323,6 @@ var formation = new Formation(teamsCount,5);
 			</li>
 			<li class="team-bigbox team-2 show-team-name-left reverse-member-assist">
 				<ul class="team-ability">
-					<li class="abilitys abilitys-1">
-						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
-					</li>
 					<li class="abilitys abilitys-2">
 						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
 					</li>
@@ -337,22 +335,13 @@ var formation = new Formation(teamsCount,5);
 					<li class="abilitys abilitys-5">
 						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
 					</li>
+					<li class="abilitys abilitys-1">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
 				</ul>
 				<div class="team-box-name">
 					<div class="team-box">
 						<ul class="team-members">
-							<li class="member member-1 null">
-								<a class="monster" target="_blank" data-team="1" data-assist="0" data-index="0">
-									<div class="property"></div>
-									<div class="subproperty"></div>
-									<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-									<div class="awoken-count display-none"></div>
-									<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
-									<div class="level"></div>
-									<div class="id"></div>
-									<div class="skill"></div>
-								</a>
-							</li>
 							<li class="member member-2 null">
 								<a class="monster" target="_blank" data-team="1" data-assist="0" data-index="1">
 									<div class="property"></div>
@@ -389,8 +378,20 @@ var formation = new Formation(teamsCount,5);
 									<div class="skill"></div>
 								</a>
 							</li>
-							<li class="member member-5 team-leader null">
+							<li class="member member-5 null">
 								<a class="monster" target="_blank" data-team="1" data-assist="0" data-index="4">
+									<div class="property"></div>
+									<div class="subproperty"></div>
+									<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+									<div class="awoken-count display-none"></div>
+									<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
+									<div class="level"></div>
+									<div class="id"></div>
+									<div class="skill"></div>
+								</a>
+							</li>
+							<li class="member member-1 team-leader null">
+								<a class="monster" target="_blank" data-team="1" data-assist="0" data-index="0">
 									<div class="property"></div>
 									<div class="subproperty"></div>
 									<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
@@ -403,18 +404,6 @@ var formation = new Formation(teamsCount,5);
 							</li>
 						</ul>
 						<ul class="team-latents">
-							<li class="latents latents-1">
-								<ul class="latent-ul display-none">
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-								</ul>
-							</li>
 							<li class="latents latents-2">
 								<ul class="latent-ul display-none">
 									<li class="latent-icon"></li>
@@ -463,19 +452,20 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 								</ul>
 							</li>
+							<li class="latents latents-1">
+								<ul class="latent-ul display-none">
+									<li class="latent-icon"></li>
+									<li class="latent-icon"></li>
+									<li class="latent-icon"></li>
+									<li class="latent-icon"></li>
+									<li class="latent-icon"></li>
+									<li class="latent-icon"></li>
+									<li class="latent-icon"></li>
+									<li class="latent-icon"></li>
+								</ul>
+							</li>
 						</ul>
 						<ul class="team-assist">
-							<li class="member member-1 null">
-								<a class="monster" target="_blank" data-team="1" data-assist="1" data-index="0">
-									<div class="property"></div>
-									<div class="subproperty"></div>
-									<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
-									<div class="awoken-count display-none"></div>
-									<div class="level"></div>
-									<div class="id"></div>
-									<div class="skill"></div>
-								</a>
-							</li>
 							<li class="member member-2 null">
 								<a class="monster" target="_blank" data-team="1" data-assist="1" data-index="1">
 									<div class="property"></div>
@@ -511,6 +501,17 @@ var formation = new Formation(teamsCount,5);
 							</li>
 							<li class="member member-5 null">
 								<a class="monster" target="_blank" data-team="1" data-assist="1" data-index="4">
+									<div class="property"></div>
+									<div class="subproperty"></div>
+									<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>
+									<div class="awoken-count display-none"></div>
+									<div class="level"></div>
+									<div class="id"></div>
+									<div class="skill"></div>
+								</a>
+							</li>
+							<li class="member member-1 null">
+								<a class="monster" target="_blank" data-team="1" data-assist="1" data-index="0">
 									<div class="property"></div>
 									<div class="subproperty"></div>
 									<div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div><div class="_297">297</div></div>

@@ -219,8 +219,17 @@ function swapABteam()
 	history.go();
 }
 //在单人和多人之间转移数据
-function swapSingleMulitple()
+function turnPage(toPage)
 {
+	switch(toPage)
+	{
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+	}
 	if (solo)
 	{
 		//创建第二支队伍，各4个空的
@@ -1743,14 +1752,17 @@ function refreshAll(formationData){
 			badge.checked = true;
 		}
 
-		const members = teamBox.querySelectorAll(".team-members .monster");
-		const latents = teamBox.querySelectorAll(".team-latents .latent-ul");
-		const assist = teamBox.querySelectorAll(".team-assist .monster");
+		const membersDom = teamBox.querySelector(".team-members");
+		const latentsDom = teamBox.querySelector(".team-latents");
+		const assistsDom = teamBox.querySelector(".team-assist");
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
-		for (let ti=0;ti<members.length;ti++)
+		for (let ti=0,ti_len=membersDom.querySelectorAll(".member").length;ti<ti_len;ti++)
 		{
-			changeid(teamData[0][ti],members[ti],latents[ti]); //队员
-			changeid(teamData[1][ti],assist[ti]); //辅助
+			const member = membersDom.querySelector(`.member-${ti+1} .monster`);
+			const latent = latentsDom.querySelector(`.latents-${ti+1} .latent-ul`);
+			const assist = assistsDom.querySelector(`.member-${ti+1} .monster`);
+			changeid(teamData[0][ti],member,latent); //队员
+			changeid(teamData[1][ti],assist); //辅助
 			refreshMemberSkillCD(teamBox,teamData,ti); //技能CD
 			refreshAbility(teamAbilityDom, teamData, ti); //本人能力值
 		}
@@ -1969,7 +1981,7 @@ function refreshFormationTotalHP(totalDom, teams){
 	const tRCV = tRCVArr.reduce(function(value, teamRCV){
 		return [value[0] + teamRCV[0], value[1] + Math.round(teamRCV[0] * (1 + 0.10 * teamRCV[1]))];
 	},[0,0]);
-	console.log(teams,tHPArr)
+
 	if (tHpDom)
 	{
 		tHpDom.innerHTML = tHP[0].toString() + 
