@@ -167,7 +167,7 @@ function calculateAbility(member = null, assist = null, solo = true)
 
 	//Code From pad-rikuu
 	function valueAt(level, maxLevel, curve) {
-		const f = maxLevel === 1 ? 1 : (level - 1) / (maxLevel - 1);
+		const f = (maxLevel === 1 || level >= maxLevel) ? 1 : ((level - 1) / (maxLevel - 1));
 		return curve.min + (curve.max - curve.min) * Math.pow(f, curve.scale);
 	}
 	//Code From pad-rikuu
@@ -206,6 +206,9 @@ function calculateAbility(member = null, assist = null, solo = true)
 		[{index:2,scale:0.01},{index:12,scale:0.02},{index:26,scale:0.03}], //ATK
 		[{index:3,scale:0.1},{index:12,scale:0.2},{index:27,scale:0.3}]  //RCV
 	];
+	
+	if (monid == 4691){console.log(curve(card.hp, card.maxLevel, card.limitBreakIncr))}
+
 	var abilitys = [card.hp, card.atk, card.rcv].map((ab, idx)=>{
 		const n_base = Math.round(curve(ab, card.maxLevel, card.limitBreakIncr)); //等级基础三维
 		const n_plus = plus[idx] * plusAdd[idx]; //加值增加量
