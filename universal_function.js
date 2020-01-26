@@ -153,6 +153,7 @@ function returnMonsterNameArr(card, lsList, defaultCode)
 function calculateAbility(member = null, assist = null, solo = true)
 {
 	if (!member) return null;
+	/*
 	const monid = member.id || 0;
 	const level = member.level || 1;
 	const plus = member.plus || [0,0,0];
@@ -161,9 +162,11 @@ function calculateAbility(member = null, assist = null, solo = true)
 	const sawoken = member.sawoken;
 	const weaponId = assist ? assist.id : null;
 	const weaponAwoken = assist ? assist.awoken : null;
-
 	const card = Cards[monid]; //怪物数据
-	if (monid == 0 || card == undefined || card.enabled == false) return null;
+*/
+	const memberCard = Cards[member.id];
+	const assistCard = assist ? Cards[assist.id] : null;
+	if (!memberCard || memberCard.id == 0 || !memberCard.enabled) return null;
 
 	//Code From pad-rikuu
 	function valueAt(level, maxLevel, curve) {
@@ -171,7 +174,7 @@ function calculateAbility(member = null, assist = null, solo = true)
 		return curve.min + (curve.max - curve.min) * Math.pow(f, curve.scale);
 	}
 	//Code From pad-rikuu
-	function curve(c, maxLevel, limitBreakIncr) {
+	function curve(c, level, maxLevel, limitBreakIncr) {
 		let value = valueAt(level, maxLevel, {
 			min: c.min,
 			max: c.max || (c.min * maxLevel),
@@ -184,6 +187,7 @@ function calculateAbility(member = null, assist = null, solo = true)
 		}
 		return value;
 	}
+	const bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性倍率
 	const plusAdd = [10,5,3]; //加值的增加值
 	const awokenAdd = [ //对应加三维觉醒的序号与增加值
 		[{index:1,value:500},{index:65,value:-5000}], //HP
@@ -206,45 +210,52 @@ function calculateAbility(member = null, assist = null, solo = true)
 		[{index:2,scale:0.01},{index:12,scale:0.02},{index:26,scale:0.03}], //ATK
 		[{index:3,scale:0.1},{index:12,scale:0.2},{index:27,scale:0.3}]  //RCV
 	];
-	
-	if (monid == 4691){console.log(curve(card.hp, card.maxLevel, card.limitBreakIncr))}
+	const memberCurves = [memberCard.hp, memberCard.atk, memberCard.rcv];
+	const assistCurves = assistCard ? [assistCard.hp, assistCard.atk, assistCard.rcv] : null;
 
-	var abilitys = [card.hp, card.atk, card.rcv].map((ab, idx)=>{
-		const n_base = Math.round(curve(ab, card.maxLevel, card.limitBreakIncr)); //等级基础三维
-		const n_plus = plus[idx] * plusAdd[idx]; //加值增加量
-		let awokenList = card.awakenings.slice(0,awoken); //储存点亮的觉醒
+	let abilitys = memberCurves.map((ab, idx)=>{
+		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr)); //等级基础三维
+		const n_plus = member.plus[idx] * plusAdd[idx]; //加值增加量
+		let n_assist_base = 0,n_assist_plus=0; //辅助的bonus
+		let awokenList = memberCard.awakenings.slice(0,member.awoken); //储存点亮的觉醒
 		//单人时增加超觉醒
-		if (solo && sawoken>=0)
+		if (solo && member.sawoken>=0)
 		{
-			awokenList = awokenList.concat(card.superAwakenings[sawoken]);
+			awokenList = awokenList.concat(memberCard.superAwakenings[member.sawoken]);
 		}
 		//如果有武器还要计算武器的觉醒
-		if (weaponId>0)
+		if (assistCard && assistCard.id > 0 && assistCard.enabled)
 		{
-			const weaponCard = Cards[weaponId]; //武器数据
-			if (weaponCard && weaponCard.enabled)
+			const assistAwokenList = assistCard.awakenings.slice(0, assist.awoken); //储存武器点亮的觉醒
+			if (assistAwokenList.indexOf(49)>=0) //49是武器觉醒，确认已经点亮了武器觉醒
 			{
-				const weaponAwokenList = weaponCard.awakenings.slice(0,weaponAwoken); //储存武器点亮的觉醒
-				if (weaponAwokenList.indexOf(49)>=0) //49是武器觉醒，确认已经点亮了武器觉醒
-				{awokenList = awokenList.concat(weaponAwokenList);}
+				awokenList = awokenList.concat(assistAwokenList);
+			}
+			if (memberCard.attrs[0] === assistCard.attrs[0])
+			{
+				n_assist_base = Math.round(curve(assistCurves[idx], assist.level, assistCard.maxLevel, assistCard.limitBreakIncr)); //辅助等级基础三维
+				n_assist_plus = assist.plus[idx] * plusAdd[idx]; //辅助加值增加量
 			}
 		}
 		//觉醒增加的数值
-		const n_awoken = awoken ?
+		const n_awoken = awokenList.length>0 ?
 			Math.round(awokenAdd[idx].reduce(function(previous,aw){
 					const awokenCount = awokenList.filter(function(a){return a==aw.index;}).length; //每个觉醒的数量
-					return previous + aw.value * awokenCount; //那么多个觉醒的增加
+					if (awokenCount>0)
+						return previous + aw.value * awokenCount;
+					else
+						return previous;
 				},0)) :
 			0;
 		//潜觉增加的倍率
-		const n_latent = (latent && latent.length) ? 
+		const n_latent = (member.latent && member.latent.length>0) ? 
 			Math.round(latentScale[idx].reduce(function(previous,la){
-					const latentCount = latent.filter(function(l){return l==la.index;}).length; //每个潜觉的数量
+					const latentCount = member.latent.filter(function(l){return l==la.index;}).length; //每个潜觉的数量
 					return previous + n_base * la.scale * latentCount; //无加值与觉醒的基础值，乘以那么多个潜觉的增加倍数
 				},0)) :
 			0;
 		//console.log("基础值：%d，加蛋值：%d，觉醒x%d增加：%d，潜觉增加：%d",n_base,n_plus,awokenCount,n_awoken,n_latent);
-		let reValue = n_base + n_plus + n_awoken + n_latent;
+		let reValue = n_base + n_plus + n_awoken + n_latent + (n_assist_base + n_assist_plus) * bonusScale[idx];
 		//协力觉醒的倍率
 		reValue = Math.round(awokenScale[idx].reduce(function(previous,aw){
 			const awokenCount = awokenList.filter(function(a){return a==aw.index;}).length; //每个协力觉醒的数量

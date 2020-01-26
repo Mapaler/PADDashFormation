@@ -115,13 +115,15 @@ ul{
 	border: none;
 	box-shadow: inset black 0 0 7px;
 }
+.member{
+	vertical-align: top;
+}
 .delay .monster{
 	background-color: yellow;
 	box-shadow: inset orange 0 0 7px;
 	border: 3px black solid;
 }
 .delay .monster::before{
-	display: block;
 	width: 94px;
 	height: 94px;
 	color: black;
