@@ -256,18 +256,20 @@ function calculateAbility(member = null, assist = null, solo = true)
 			0;
 		//console.log("基础值：%d，加蛋值：%d，觉醒x%d增加：%d，潜觉增加：%d",n_base,n_plus,awokenCount,n_awoken,n_latent);
 		let reValue = n_base + n_plus + n_awoken + n_latent + (n_assist_base + n_assist_plus) * bonusScale[idx];
+		if (awokenList.indexOf(30)>=0)console.log(member,reValue);
 		//协力觉醒的倍率
 		reValue = Math.round(awokenScale[idx].reduce(function(previous,aw){
 			const awokenCount = awokenList.filter(function(a){return a==aw.index;}).length; //每个协力觉醒的数量
 			if (awokenCount>0)
 			{
-				return previous * aw.scale * awokenCount;
+				return previous * Math.pow(aw.scale,awokenCount);
 			}
 			else
 			{
 				return previous;
 			}
 		},reValue));
+		if (awokenList.indexOf(30)>=0)console.log(reValue,awokenList.filter(function(a){return a==30;}).length);
 
 		if (idx<2 && reValue<1) reValue = 1; //HP和ATK最低为1
 		return reValue;
