@@ -221,35 +221,69 @@ function swapABteam()
 //在单人和多人之间转移数据
 function turnPage(toPage)
 {
+	let pagename = null;
 	switch(toPage)
 	{
 		case 1:
+			if (formation.teams[0][0].length<6)
+			{
+				//把第二支队伍的队长添加到最后方
+				formation.teams[0][0].push(formation.teams[1][0][0]);
+				formation.teams[0][1].push(formation.teams[1][1][0]);
+			}
+			//删掉第2支开始的队伍
+			formation.teams.splice(1);
+			pagename = "solo.html";
 			break;
 		case 2:
+			if (formation.teams.length<2)
+			{
+				//创建第二支队伍，各4个空的
+				/*formation.teams[1] = [
+					Array.from(new Array(4)).map(()=>{return new MemberTeam();}),
+					Array.from(new Array(4)).map(()=>{return new MemberAssist();})
+				];*/
+				formation.teams[1] = [[],[]];
+				//把右边的队长加到第二支队伍最后面
+				formation.teams[1][0].splice(0,0,formation.teams[0][0].splice(5,1)[0]);
+				formation.teams[1][1].splice(0,0,formation.teams[0][1].splice(5,1)[0]);
+			}else //三人则直接删除
+			{
+				//删掉第3支开始的队伍
+				formation.teams.splice(2);
+				//删掉前面两支队伍的战友
+				formation.teams[0][0].splice(5);
+				formation.teams[0][1].splice(5);
+				formation.teams[1][0].splice(5);
+				formation.teams[1][1].splice(5);
+			}
+			formation.badge = 0;
+			pagename = "multi.html";
 			break;
 		case 3:
+			if (formation.teams.length<2)
+			{
+				//创建第二支队伍，各4个空的
+				/*formation.teams[1] = [
+					Array.from(new Array(6)).map(()=>{return new MemberTeam();}),
+					Array.from(new Array(6)).map(()=>{return new MemberAssist();})
+				];
+				formation.teams[2] = [
+					Array.from(new Array(6)).map(()=>{return new MemberTeam();}),
+					Array.from(new Array(6)).map(()=>{return new MemberAssist();})
+				];*/
+			}else //2人
+			{
+				formation.teams[0][0].push(formation.teams[1][0][0]);
+				formation.teams[0][1].push(formation.teams[1][1][0]);
+				formation.teams[1][0].push(formation.teams[0][0][0]);
+				formation.teams[1][1].push(formation.teams[0][1][0]);
+			}
+			formation.badge = 0;
+			pagename = "triple.html";
 			break;
 	}
-	if (solo)
-	{
-		//创建第二支队伍，各4个空的
-		formation.teams[1] = [
-			Array.from(new Array(4)).map(()=>{return new MemberTeam();}),
-			Array.from(new Array(4)).map(()=>{return new MemberAssist();})
-		];
-		//把右边的队长加到第二支队伍最后面
-		formation.teams[1][0].push(formation.teams[0][0].splice(5,1)[0]);
-		formation.teams[1][1].push(formation.teams[0][1].splice(5,1)[0]);
-		formation.badge = 0;
-	}else
-	{
-		//把第二支队五的队长添加到最后方
-		formation.teams[0][0].push(formation.teams[1][0][4]);
-		formation.teams[0][1].push(formation.teams[1][1][4]);
-		//删掉第二支队伍
-		formation.teams.splice(1,1);
-	}
-	location.href = creatNewUrl({url:solo?"multi.html":"solo.html",notPushState:true});
+	location.href = creatNewUrl({url:pagename, notPushState:true});
 }
 window.onload = function()
 {
