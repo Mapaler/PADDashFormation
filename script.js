@@ -1419,10 +1419,10 @@ function editMon(AorB,isAssist,tempIdx)
 	monstersID.onchange();
 	//觉醒
 	var monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon");
-	if (mon.awoken>0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].onclick();
+	if (mon.awoken>0 && monEditAwokens[mon.awoken] && monEditAwokens[mon.awoken].classList.contains("unselected-awoken")) monEditAwokens[mon.awoken].onclick();
 	//超觉醒
 	var monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon");
-	if (mon.sawoken>=0 && monEditSAwokens[mon.sawoken]) monEditSAwokens[mon.sawoken].onclick();
+	if (mon.sawoken>=0 && monEditSAwokens[mon.sawoken] && monEditSAwokens[mon.sawoken].classList.contains("unselected-awoken")) monEditSAwokens[mon.sawoken].onclick();
 	var monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.value = mon.level || 1;
 	var monEditAddHp = settingBox.querySelector(".m-plus-hp");
