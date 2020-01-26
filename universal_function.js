@@ -151,7 +151,7 @@ function calculateAbility(monid = 0, level = 1, plus = [0,0,0], awoken = 0, late
 
 	//Code From pad-rikuu
 	function valueAt(level, maxLevel, curve) {
-		const f = maxLevel === 1 ? 1 : (level - 1) / (maxLevel - 1);
+		const f = (maxLevel === 1 || level >= maxLevel) ? 1 : ((level - 1) / (maxLevel - 1));
 		return curve.min + (curve.max - curve.min) * Math.pow(f, curve.scale);
 	}
 	//Code From pad-rikuu
