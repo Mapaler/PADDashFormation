@@ -1946,34 +1946,22 @@ function refreshTeamTotalHP(totalDom,team){
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
 	const tRcvDom = totalDom.querySelector(".tIf-total-rcv");
 
-	const tHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
-		return value += mon.ability ? mon.ability[0] : 0;
-	},0);
-	const teamHPAwoken = awokenCountInTeam(team,46,solo); //全队大血包个数
-	
-	let badgeHPScale = 1; //徽章倍率
-	if (formation.badge == 4 && solo)
-	{
-		badgeHPScale = 1.05;
-	}else if (formation.badge == 11 && solo)
-	{
-		badgeHPScale = 1.15;
-	}
-	const tRCV = team[0].reduce(function(value,mon){ //队伍计算的总回复
-		return value += mon.ability ? mon.ability[2] : 0;
-	},0);
-	const teamRCVAwoken = awokenCountInTeam(team,47,solo); //全队大回复个数
-	
-	let badgeRCVScale = 1; //徽章倍率
-	if (formation.badge == 3 && solo)
-	{
-		badgeRCVScale = 1.25;
-	}else if (formation.badge == 10 && solo)
-	{
-		badgeRCVScale = 1.35;
-	}
 	if (tHpDom)
 	{
+		const tHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
+			return value += mon.ability ? mon.ability[0] : 0;
+		},0);
+		const teamHPAwoken = awokenCountInTeam(team,46,solo); //全队大血包个数
+		
+		let badgeHPScale = 1; //徽章倍率
+		if (formation.badge == 4 && solo)
+		{
+			badgeHPScale = 1.05;
+		}else if (formation.badge == 11 && solo)
+		{
+			badgeHPScale = 1.15;
+		}
+
 		tHpDom.innerHTML = tHP.toString() + 
 			(teamHPAwoken>0||badgeHPScale!=1 ?
 				("("+Math.round(tHP * (1 + 0.05 * teamHPAwoken)*badgeHPScale).toString()+")") :
@@ -1981,6 +1969,20 @@ function refreshTeamTotalHP(totalDom,team){
 	}
 	if (tRcvDom)
 	{
+		const tRCV = team[0].reduce(function(value,mon){ //队伍计算的总回复
+			return value += mon.ability ? mon.ability[2] : 0;
+		},0);
+		const teamRCVAwoken = awokenCountInTeam(team,47,solo); //全队大回复个数
+		
+		let badgeRCVScale = 1; //徽章倍率
+		if (formation.badge == 3 && solo)
+		{
+			badgeRCVScale = 1.25;
+		}else if (formation.badge == 10 && solo)
+		{
+			badgeRCVScale = 1.35;
+		}
+		
 		tRcvDom.innerHTML = tRCV.toString() + 
 			(teamRCVAwoken>0||badgeRCVScale!=1 ?
 				("("+Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)*badgeRCVScale).toString()+")") :
@@ -1994,35 +1996,35 @@ function refreshFormationTotalHP(totalDom, teams){
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
 	const tRcvDom = totalDom.querySelector(".tIf-total-rcv");
 
-	const tHPArr = teams.map(function(team){
-		const teamTHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
-			return value += mon.ability ? mon.ability[0] : 0;
-		},0);
-		const teamHPAwoken = awokenCountInTeam(team,46,solo); //全队大血包个数
-		return [teamTHP,teamHPAwoken];
-	});
-	const tHP = tHPArr.reduce(function(value, teamHP){
-		return [value[0] + teamHP[0], value[1] + Math.round(teamHP[0] * (1 + 0.05 * teamHP[1]))];
-	},[0,0]);
-	
-	const tRCVArr = teams.map(function(team){
-		const teamTRCV = team[0].reduce(function(value,mon){ //队伍计算的总回复
-			return value += mon.ability ? mon.ability[2] : 0;
-		},0);
-		const teamRCVAwoken = awokenCountInTeam(team,47,solo); //全队大回复个数
-		return [teamTRCV,teamRCVAwoken];
-	},0);
-	const tRCV = tRCVArr.reduce(function(value, teamRCV){
-		return [value[0] + teamRCV[0], value[1] + Math.round(teamRCV[0] * (1 + 0.10 * teamRCV[1]))];
-	},[0,0]);
-
 	if (tHpDom)
 	{
+		const tHPArr = teams.map(function(team){
+			const teamTHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
+				return value += mon.ability ? mon.ability[0] : 0;
+			},0);
+			const teamHPAwoken = awokenCountInTeam(team,46,solo); //全队大血包个数
+			return [teamTHP,teamHPAwoken];
+		});
+		const tHP = tHPArr.reduce(function(value, teamHP){
+			return [value[0] + teamHP[0], value[1] + Math.round(teamHP[0] * (1 + 0.05 * teamHP[1]))];
+		},[0,0]);
+
 		tHpDom.innerHTML = tHP[0].toString() + 
 			(tHP[0] != tHP[1] ? `(${tHP[1]})` : "");
 	}
 	if (tRcvDom)
 	{
+		const tRCVArr = teams.map(function(team){
+			const teamTRCV = team[0].reduce(function(value,mon){ //队伍计算的总回复
+				return value += mon.ability ? mon.ability[2] : 0;
+			},0);
+			const teamRCVAwoken = awokenCountInTeam(team,47,solo); //全队大回复个数
+			return [teamTRCV,teamRCVAwoken];
+		},0);
+		const tRCV = tRCVArr.reduce(function(value, teamRCV){
+			return [value[0] + teamRCV[0], value[1] + Math.round(teamRCV[0] * (1 + 0.10 * teamRCV[1]))];
+		},[0,0]);
+
 		tRcvDom.innerHTML = tRCV[0].toString() + 
 			(tRCV[0] != tRCV[1] ? `(${tRCV[1]})` : "");
 	}
