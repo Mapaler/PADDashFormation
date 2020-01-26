@@ -1748,6 +1748,7 @@ function refreshAll(formationData){
 }
 //刷新队伍觉醒统计
 function refreshTeamAwokenCount(awokenDom,team){
+	return;
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	const awokenUL = fragment.appendChild(awokenDom.querySelector(".awoken-ul"));
 	function setCount(idx,number){
@@ -1794,6 +1795,7 @@ function refreshTeamAwokenCount(awokenDom,team){
 }
 //刷新几个队伍觉醒统计
 function refreshFormationAwokenCount(teams){
+	return;
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	const awokenTotalBox = formationBox.querySelector(".awoken-total-box");
 	const awokenUL = fragment.appendChild(awokenTotalBox.querySelector(".awoken-ul"));
@@ -1878,6 +1880,7 @@ function refreshAbility(abilityDom,team,idx){
 }
 //刷新队伍能力值合计
 function refreshTeamTotalHP(totalDom,team){
+	return;
 	//计算总的生命值
 	const teamInfo = formationBox.querySelector(".team-total-info");
 	if (!teamInfo) return;
@@ -1920,6 +1923,7 @@ function refreshTeamTotalHP(totalDom,team){
 }
 //刷新所有队伍能力值合计
 function refreshFormationTotalHP(teams){
+	return;
 	//计算总的生命值
 	const teamInfo = formationBox.querySelector(".team-total-info");
 	if (!teamInfo) return;
