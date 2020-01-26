@@ -29,6 +29,7 @@ var showSearch; //整个程序都可以用的显示搜索函数
 //队员基本的留空
 var Member = function(){
 	this.id=0;
+	this.ability = [0,0,0];
 };
 Member.prototype.outObj = function(){
 	const m = this;
@@ -51,7 +52,6 @@ Member.prototype.outObj = function(){
 	const skill = Skills[card.activeSkillId];
 	//有技能等级，并且技能等级低于最大等级时才记录技能
 	if (m.skilllevel != undefined && m.skilllevel < skill.maxLevel) obj[6] = m.skilllevel;
-	m.ability = [0,0,0];
 	return obj;
 };
 Member.prototype.loadObj = function(m,dataVersion){
@@ -947,7 +947,7 @@ function initialize()
 			btnNull.onclick();
 			return;
 		}
-		const mon = editBox.isAssist?new MemberAssist():new MemberTeam();
+		const mon = editBox.isAssist ? new MemberAssist() : new MemberTeam();
 		const teamData = formation.teams[editBox.memberIdx[0]];
 		const teamBigBox = teamBigBoxs[editBox.memberIdx[0]];
 		const teamBox = teamBigBox.querySelector(".team-box");
@@ -1969,7 +1969,7 @@ function refreshFormationTotalHP(totalDom, teams){
 	const tRCV = tRCVArr.reduce(function(value, teamRCV){
 		return [value[0] + teamRCV[0], value[1] + Math.round(teamRCV[0] * (1 + 0.10 * teamRCV[1]))];
 	},[0,0]);
-	
+	console.log(teams,tHPArr)
 	if (tHpDom)
 	{
 		tHpDom.innerHTML = tHP[0].toString() + 
