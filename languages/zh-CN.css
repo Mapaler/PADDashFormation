@@ -189,6 +189,9 @@
 .control-box .btn-multi-link::before{
 	content: "🧑‍🤝‍🧑转到2人车队";
 }
+.control-box .btn-triple-link::before{
+	content: "👪转到3人协力";
+}
 .control-box .btn-clear-data::before{
 	content: "🗑️清除数据";
 }
