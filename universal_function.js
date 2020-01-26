@@ -87,43 +87,48 @@ function usedHole(latent)
 	},0);
 }
 //计算所有队伍中有多少个该觉醒
-function awokenCountInFormation(formationTeam,ak,solo)
+function awokenCountInFormation(formationTeams,awokenIndex,solo)
 {
-	var allAwokenCount = formationTeam.reduce(function(fc,fm){
-		return fc + awokenCountInTeam(fm,ak,solo);
+	var formationAwokenCount = formationTeams.reduce(function(previous,team){
+		return previous + awokenCountInTeam(team,awokenIndex,solo);
 	},0);
-	return allAwokenCount;
+	return formationAwokenCount;
 }
 //计算单个队伍中有多少个该觉醒
 function awokenCountInTeam(team,awokenIndex,solo)
 {
-	var formationAwokenCount = team.reduce(function(tc,tm,isAssist){
-		var teamAwokenCount = tm.reduce(function(c,m){
-			const Card = Cards[m.id] || Cards[0];
-			if (m.id<=0)
-			{ //如果是特殊情况的
-				return c;
-			}
-			const cdAwoken = Card.awakenings; //这个怪物的觉醒数据
-			const cdSAwoken = Card.superAwakenings; //这个怪物的超觉醒数据
-			if ((!cdAwoken && !cdSAwoken) || (isAssist && cdAwoken.indexOf(49)<0))
-			{ //如果没有觉醒和超觉醒 || （如果是辅助队 &&第一个不是武器觉醒）
-				return c;
-			}
-			//启用的觉醒数组片段
-			const enableAwoken = cdAwoken.slice(0,m.awoken);
-			//相同的觉醒数
-			let hasAwoken = enableAwoken.filter(function(a){return a == awokenIndex;}).length;
-			//如果是单人，有超觉醒，且超觉醒id和计数的id相同
-			if (solo && cdSAwoken && (cdSAwoken[m.sawoken] == awokenIndex))
-			{
-				hasAwoken++;
-			}
-			return c + hasAwoken;
-		},0);
-		return tc + teamAwokenCount;
+	const memberArray = team[0];
+	const assistArray = team[1];
+
+	const teamAwokenCount = memberArray.reduce(function(previous,mon,idx){
+		if (mon.id<=0)
+		{ //如果是delay和null
+			return previous;
+		}
+		const card = Cards[mon.id];
+		if (!card || !card.enabled)
+		{ //如果卡片未启用
+			return previous;
+		}
+
+		const assist = assistArray[idx];
+		const assistCard = Cards[assist.id];
+		//启用的觉醒数组片段
+		let enableAwoken = card.awakenings.slice(0, mon.awoken);
+		if (solo) //单人增加超觉醒
+		{
+			enableAwoken = enableAwoken.concat(card.superAwakenings[mon.sawoken]);
+		}
+		if (assistCard && assistCard.enabled && assistCard.awakenings.indexOf(49)>=0)
+		{ //如果卡片未启用
+			enableAwoken = enableAwoken.concat(assistCard.awakenings);
+		}
+
+		//相同的觉醒数
+		const hasAwoken = enableAwoken.filter(ak=>{return ak == awokenIndex;}).length;
+		return previous + hasAwoken;
 	},0);
-	return formationAwokenCount;
+	return teamAwokenCount;
 }
 //返回可用的怪物名称
 function returnMonsterNameArr(card, lsList, defaultCode)

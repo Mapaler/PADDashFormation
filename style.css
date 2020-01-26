@@ -19,6 +19,7 @@
 }
 body{
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
+	--head-block-width: 108px;
 	--search-icon-unchecked: 0.4;
 	--team-1-bgcolor : pink;
 	--team-2-bgcolor : lightblue;
@@ -281,7 +282,7 @@ ul{
 .member, .acquisitus-awoken-icon{
 	display: inline-block;
 	position: relative;
-	width: 108px;
+	width: var(--head-block-width);
 }
 .formation-box .monster{
 	margin: 4px; /*留给队长边框的*/
@@ -345,8 +346,7 @@ ul{
 	line-height: 50px;
 	white-space: pre-wrap;
 	display: none;
-	width: 108px;
-	height: 108px;
+	width: var(--head-block-width);
 }
 .show-team-name-left .team-box-name::before{
 	display: inline-block;
@@ -389,7 +389,7 @@ ul{
 .team-box .team-assist .member::after,
 .team-box .team-assist .member::before
 {
-	width: 108px;
+	width: var(--head-block-width);
 	text-align: center;
 	font-size: 18px;
 	font-weight: bold;
@@ -431,7 +431,7 @@ ul{
 */
 /*队伍的潜觉*/
 .team-latents .latents{
-	width: 108px;
+	width: var(--head-block-width);
 	/*float:left;*/
 	margin-bottom: -20px;
 	display: inline-block;
@@ -489,14 +489,35 @@ ul{
 }
 
 /*三维计算值*/
-.team-ability .abilitys{
+.team-ability::after,
+.team-ability::before,
+.team-ability .abilitys
+{
 	padding-left: 5px;
 	box-sizing: border-box;
 	font-size: 15px;
-	width: 108px;
+	width: var(--head-block-width);
+}
+.team-ability .abilitys
+{
 	display: inline-block;
 }
-.abilitys .hp::before,.abilitys .atk::before,.abilitys .rcv::before{
+.team-ability::after,
+.team-ability::before
+{
+	display: none;
+	content: "";
+}
+.show-team-name-left .team-ability::before{
+	display: inline-block;
+}
+.show-team-name-right .team-ability::after{
+	display: inline-block;
+}
+.abilitys .hp::before,
+.abilitys .atk::before,
+.abilitys .rcv::before
+{
 	width: 45px;
 	display: inline-block;
 }
@@ -683,7 +704,7 @@ ul{
 	width: 55px;
 	height: 30px;
 }
-.attrs .attr-list input:checked~label{
+.attrs .attr-list input:checked+label{
 	background-color:#8C4242;
 	box-shadow: inset black 0 0 5px;
 	cursor: auto;
@@ -714,7 +735,7 @@ ul{
 	padding: 0;
 	float: right;
 }
-.search-box .awoken-list button{
+.search-box .awoken-ul button{
 	border: none;
 	background-color: unset;
 	font-family: 'FOT-KurokaneStd-EB', "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
@@ -723,28 +744,28 @@ ul{
 	font-size: 16px;
 	padding: 0;
 }
-.search-box .awoken-list .awoken-count.zero{
+.search-box .awoken-ul .awoken-count.zero{
 	opacity: var(--search-icon-unchecked);
 }
-.search-box .awoken-list .count{
+.search-box .awoken-ul .count{
 	width: 30px;
 }
-.search-box .awoken-list .awoken-count .awoken-icon{
+.search-box .awoken-ul .awoken-count .awoken-icon{
 	cursor: pointer;
 }
-.search-box .awoken-list .awoken-count .count{
+.search-box .awoken-ul .awoken-count .count{
 	cursor: pointer;
 }
-.search-box .awoken-list .awoken-count.zero .count{
+.search-box .awoken-ul .awoken-count.zero .count{
 	cursor: auto;
 }
 /*.search-box .sawoken-div::before{
 	content: "超觉醒";
 }*/
-.sawoken-div .sawoken-list li label{
+.sawoken-div .sawoken-ul li label{
 	opacity: var(--search-icon-unchecked);
 }
-.sawoken-div .sawoken-list input:checked~label{
+.sawoken-div .sawoken-ul input:checked+label{
 	opacity: 1;
 }
 
@@ -1145,24 +1166,23 @@ ul{
 .detail-box{
 	margin-top:5px;
 }
-.awoken-total-box .awoken-ul .awoken-count,
-.search-box .awoken-list .awoken-count{
+.awoken-ul .awoken-count
+{
 	font-size: 16px;
 	line-height: 32px;
 	font-family: 'FOT-KurokaneStd-EB',"Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 
-	float: left;
+	display: inline-block;
 	margin-right: 3px;
 }
-.awoken-total-box .awoken-ul .count,
-.search-box .awoken-list .count{
+.awoken-ul .count
+{
 	height: 32px;
 	width: 37px;
 	display: inline-block;
 	vertical-align: middle;
 }
-.awoken-total-box .awoken-ul .count::before,
-.search-box .awoken-list .count::before{
+.awoken-ul .count::before{
 	content: "×";
 }
 /*控制框*/

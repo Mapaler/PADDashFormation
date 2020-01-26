@@ -207,10 +207,16 @@
 .control-box .btn-show-mon-skill-cd::before{
 	content: "❄️显示已满技能冷却";
 }
-.tIf-total-hp::before{
+.team-total-info .tIf-total-hp::before{
+	content: "队伍HP(队伍觉醒和徽章)：";
+}
+.team-total-info .tIf-total-rcv::before{
+	content: "队伍回复(队伍觉醒和徽章)：";
+}
+.formation-total-info .tIf-total-hp::before{
 	content: "总HP(队伍觉醒和徽章)：";
 }
-.tIf-total-rcv::before{
+.formation-total-info .tIf-total-rcv::before{
 	content: "总回复(队伍觉醒和徽章)：";
 }
 
