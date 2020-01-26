@@ -20,6 +20,7 @@
 body{
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--head-block-width: 108px;
+	--head-block-height: 108px;
 	--search-icon-unchecked: 0.4;
 	--team-1-bgcolor : pink;
 	--team-2-bgcolor : lightblue;
@@ -349,6 +350,7 @@ ul{
 	white-space: pre-wrap;
 	display: none;
 	width: var(--head-block-width);
+	height: var(--head-block-height);
 }
 .show-team-name-left .team-box-name::before{
 	display: inline-block;
