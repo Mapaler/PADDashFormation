@@ -83,7 +83,7 @@ ul{
 }
 /*队伍的整个盒子*/
 .formation-box{
-	/*width: 648px;*/
+	width: 648px;
 	min-width: 648px;
 }
 
