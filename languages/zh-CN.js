@@ -190,7 +190,7 @@ function parseSkillDescription(skill)
 			str = `对敌方1体造成自身攻击力×${sk[0]/100}倍的伤害`;
 			break;
 		case 3:
-			str = `${sk[0]}回合内受到的伤害减少${sk[1]}%`;
+			str = `${sk[0]}回合内，受到的伤害减少${sk[1]}%`;
 			break;
 		case 4:
 			str = `使敌方全体中毒，每回合损失宠物自身攻击力×${sk[0]/100}倍的 HP `;
@@ -339,10 +339,10 @@ function parseSkillDescription(skill)
 			str = `对敌方全体造成${sk[0]}点无视防御的固定伤害`;
 			break;
 		case 58:
-			str = `对敌方全体造成自身攻击力×${sk[1]/100}~${sk[2]/100}倍的${attrN(sk[0])}属性伤害`;
+			str = `对敌方全体造成自身攻击力×${sk[1]==sk[2]?sk[1]/100:`${sk[1]/100}~${sk[2]/100}`}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 59:
-			str = `对敌方1体造成自身攻击力×${sk[1]/100}~${sk[2]/100}倍的${attrN(sk[0])}属性伤害`;
+			str = `对敌方1体造成自身攻击力×${sk[1]==sk[2]?sk[1]/100:`${sk[1]/100}~${sk[2]/100}`}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 60:
 			str = `${sk[0]}回合内，受到伤害时进行受到伤害${sk[1]/100+"倍的"+attrN(sk[2])}属性反击`;
@@ -736,7 +736,8 @@ function parseSkillDescription(skill)
 			break;
 		case 132:
 			str = `${sk[0]}回合内，宝珠移动时间`;
-			if (sk[1]) str += (sk[1]>0?`增加`:`减少`) + (-sk[1]/10) + `秒`;
+			console.log(sk[1],sk[1]>0)
+			if (sk[1]) str += (sk[1]>0?`增加`:`减少`) + Math.abs(sk[1]/10) + `秒`;
 			if (sk[2]) str += sk[2]>100 ? `变为${sk[2]/100}倍` : `变为${sk[2]}%`;
 			break;
 		case 133:
