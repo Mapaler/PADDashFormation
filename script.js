@@ -461,9 +461,17 @@ function creatNewUrl(arg){
 		return newUrl;
 	}
 }
+//截图
 function capture()
 {
 	statusLine.classList.add("prepare-cauture");
+	const titleBox = formationBox.querySelector(".title-box");
+	const detailBox = formationBox.querySelector(".detail-box");
+	const txtTitle = titleBox.querySelector(".title");
+	const txtDetail = detailBox.querySelector(".detail");
+	//去掉可能的空白文字的编辑状态
+	titleBox.classList.remove("edit");
+	detailBox.classList.remove("edit");
 	const downLink = controlBox.querySelector(".down-capture");
 	html2canvas(formationBox).then(canvas => {
 		canvas.toBlob(function(blob) {
@@ -472,6 +480,11 @@ function capture()
 			downLink.download = `${teamsCount}P formation cauture.png`;
 			downLink.click();
 			statusLine.classList.remove("prepare-cauture");
+			//如果是空白文字，加回编辑状态
+			if (txtTitle.value.length==0)
+				titleBox.classList.add("edit");
+			if (txtDetail.value.length==0)
+				detailBox.classList.add("edit");
 		  });
 		//document.body.appendChild(canvas);
 	});
@@ -511,7 +524,8 @@ function initialize()
 		creatNewUrl();
 	};
 	txtTitle.onblur = function(){
-		titleBox.classList.remove("edit");
+		if (this.value.length>0)
+			titleBox.classList.remove("edit");
 	};
 	txtDetail.onchange = function(){
 		formation.detail = this.value;
@@ -525,7 +539,8 @@ function initialize()
 		creatNewUrl();
 	};
 	txtDetail.onblur = function(){
-		detailBox.classList.remove("edit");
+		if (this.value.length>0)
+			detailBox.classList.remove("edit");
 		this.style.height = txtDetailDisplay.scrollHeight+"px";
 	};
 	txtTitleDisplay.onclick = function(){
@@ -1824,6 +1839,10 @@ function refreshAll(formationData){
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
 	txtTitleDisplay.innerHTML = descriptionToHTML(txtTitle.value);
 	txtDetailDisplay.innerHTML = descriptionToHTML(txtDetail.value);
+	if (txtTitle.value.length == 0)
+		titleBox.classList.add("edit");
+	if (txtDetail.value.length == 0)
+		detailBox.classList.add("edit");
 	/*txtTitleDisplay.innerHTML = "";
 	txtTitleDisplay.appendChild(document.createTextNode(txtTitle.value));
 	txtDetailDisplay.innerHTML = "";
