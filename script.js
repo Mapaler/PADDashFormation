@@ -497,19 +497,45 @@ function initialize()
 	monstersList.appendChild(fragment);
 
 	//标题和介绍文本框
-	const txtTitle = formationBox.querySelector(".title-box .title");
-	const txtDetail = formationBox.querySelector(".detail-box .detail");
+	const titleBox = formationBox.querySelector(".title-box");
+	const detailBox = formationBox.querySelector(".detail-box");
+	const txtTitle = titleBox.querySelector(".title");
+	const txtDetail = detailBox.querySelector(".detail");
+	const txtTitleDisplay = titleBox.querySelector(".title-display");
+	const txtDetailDisplay = detailBox.querySelector(".detail-display");
 	txtTitle.onchange = function(){
 		formation.title = this.value;
+		//txtTitleDisplay.innerHTML = "";
+		//txtTitleDisplay.appendChild(document.createTextNode(this.value));
+		txtTitleDisplay.innerHTML = descriptionToHTML(this.value);
 		creatNewUrl();
+	};
+	txtTitle.onblur = function(){
+		titleBox.classList.remove("edit");
 	};
 	txtDetail.onchange = function(){
 		formation.detail = this.value;
+		/*txtDetailDisplay.innerHTML = "";
+		const txtDetailLines = this.value.split("\n");
+		txtDetailLines.forEach((line,idx)=>{
+			if (idx>0) txtDetailDisplay.appendChild(document.createElement("br"));
+			txtDetailDisplay.appendChild(document.createTextNode(line));
+		});*/
+		txtDetailDisplay.innerHTML = descriptionToHTML(this.value);
 		creatNewUrl();
 	};
 	txtDetail.onblur = function(){
-		this.style.height=this.scrollHeight+"px";
+		detailBox.classList.remove("edit");
+		this.style.height = txtDetailDisplay.scrollHeight+"px";
 	};
+	txtTitleDisplay.onclick = function(){
+		titleBox.classList.add("edit");
+		txtTitle.focus();
+	}
+	txtDetailDisplay.onclick = function(){
+		detailBox.classList.add("edit");
+		txtDetail.focus();
+	}
 
 	for (let ti=0,ti_len=formationBox.querySelectorAll(".team-bigbox").length;ti<ti_len;ti++)
 	{
@@ -1794,6 +1820,18 @@ function refreshAll(formationData){
 	const txtDetail = detailBox.querySelector(".detail");
 	txtTitle.value = formationData.title || "";
 	txtDetail.value = formationData.detail || "";
+	const txtTitleDisplay = titleBox.querySelector(".title-display");
+	const txtDetailDisplay = detailBox.querySelector(".detail-display");
+	txtTitleDisplay.innerHTML = descriptionToHTML(txtTitle.value);
+	txtDetailDisplay.innerHTML = descriptionToHTML(txtDetail.value);
+	/*txtTitleDisplay.innerHTML = "";
+	txtTitleDisplay.appendChild(document.createTextNode(txtTitle.value));
+	txtDetailDisplay.innerHTML = "";
+	const txtDetailLines = txtDetail.value.split("\n");
+	txtDetailLines.forEach((line,idx)=>{
+		if (idx>0) txtDetailDisplay.appendChild(document.createElement("br"));
+		txtDetailDisplay.appendChild(document.createTextNode(line));
+	});*/
 	
 	teamBigBoxs.forEach((teamBigBox,teamNum)=>{
 		const teamBox = teamBigBox.querySelector(".team-box");

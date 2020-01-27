@@ -5,6 +5,9 @@
 .status.loading-skill-info .text::before{
 	content: "기술 데이터를 로드 하 고 있습니다.";
 }
+.status.prepare-cauture .text::before{
+	content: "스크린 샷을 준비 하 고 있습니다.";
+}
 .delay .monster::before{
 	content: "지 연\A방 지";
 }
@@ -188,6 +191,9 @@
 }
 .control-box .btn-clear-data::before{
 	content: "🗑️데이터 지우기";
+}
+.control-box .btn-capture::before{
+	content: "📷스크린샷";
 }
 .control-box .btn-swap-AB-team::before{
 	content: "🔄교환 AB 팀";
