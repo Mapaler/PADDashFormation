@@ -20,6 +20,7 @@ var currentDataSource; //当前数据
 var interchangeSvg; //储存划线的SVG
 var interchangePath; //储存划线的线
 var controlBox; //储存整个controlBox
+var statusLine; //储存状态栏
 var formationBox; //储存整个formationBox
 var teamBigBoxs = []; //储存全部teamBigBox
 var allMembers = []; //储存所有成员，包含辅助
@@ -287,11 +288,16 @@ function turnPage(toPage)
 }
 window.onload = function()
 {
-	interchangeSVG = document.querySelector("#interchange-line");
+	controlBox = document.body.querySelector(".control-box");
+	statusLine = controlBox.querySelector(".status"); //显示当前状态的
+	const helpLink = controlBox.querySelector(".help-link");
+
+	formationBox = document.body.querySelector(".formation-box");
+
+	editBox = document.body.querySelector(".edit-box");
+
+	interchangeSVG = document.body.querySelector("#interchange-line");
 	interchangePath = interchangeSVG.querySelector("g line");
-	const controlBox = document.querySelector(".control-box");
-	const helpLink = document.querySelector(".help-link");
-	const statusLine = controlBox.querySelector(".status"); //显示当前状态的
 
 	if (location.hostname.indexOf("gitee")>=0)
 	{
@@ -455,10 +461,25 @@ function creatNewUrl(arg){
 		return newUrl;
 	}
 }
+function capture()
+{
+	statusLine.classList.add("prepare-cauture");
+	const downLink = controlBox.querySelector(".down-capture");
+	html2canvas(formationBox).then(canvas => {
+		canvas.toBlob(function(blob) {
+			window.URL.revokeObjectURL(downLink.href);
+			downLink.href = URL.createObjectURL(blob);
+			downLink.download = `${teamsCount}P formation cauture.png`;
+			downLink.click();
+			statusLine.classList.remove("prepare-cauture");
+		  });
+		//document.body.appendChild(canvas);
+	});
+}
 //初始化
 function initialize()
 {
-	let monstersList = document.body.querySelector("#monsters-name-list");
+	const monstersList = editBox.querySelector("#monsters-name-list");
 	let fragment = document.createDocumentFragment();
 	const linkReg = "link:(\\d+)";
 	Cards.forEach(function(m){ //添加下拉框候选
@@ -475,11 +496,6 @@ function initialize()
 	});
 	monstersList.appendChild(fragment);
 
-	//控制框
-	controlBox = document.body.querySelector(".control-box");
-
-	//队伍框
-	formationBox = document.body.querySelector(".formation-box");
 	//标题和介绍文本框
 	const txtTitle = formationBox.querySelector(".title-box .title");
 	const txtDetail = formationBox.querySelector(".detail-box .detail");
@@ -552,7 +568,6 @@ function initialize()
 	});
 
 	//编辑框
-	editBox = document.body.querySelector(".edit-box");
 	editBox.mid = null; //储存怪物id
 	editBox.awokenCount = 0; //储存怪物潜觉数量
 	editBox.latent = []; //储存潜在觉醒

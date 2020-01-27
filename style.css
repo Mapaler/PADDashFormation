@@ -68,7 +68,9 @@ body{
 	content: "正在加载怪物数据";
 }*/
 .status.loading-mon-info .icon,
-.status.loading-skill-info .icon{
+.status.loading-skill-info .icon,
+.status.prepare-cauture .icon
+{
 	display: inline-block;
 	width: 16px;
 	height: 16px;
@@ -1202,9 +1204,6 @@ ul{
 }
 .control-box .multi-link::before{
 	content: "Jump To 2-Player Version";
-}
-.control-box .btn-show-mon-id{
-	margin-left: 5px;
 }
 /*.control-box .btn-show-mon-id::before{
 	content: "隐藏怪物ID";
