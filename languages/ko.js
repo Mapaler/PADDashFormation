@@ -1,5 +1,3 @@
-﻿document.title = solo?'퍼즐앤드래곤 솔로 팀 제작 도구':'퍼즐앤드래곤 멀티 팀 제작 도구';
-var txtTitle = document.querySelector(".title-box .title");
-var txtDetail = document.querySelector(".detail-box .detail");
-txtTitle.placeholder = "편대 칭호 입력";
-txtDetail.placeholder = "입력 내용";
+﻿document.title = `퍼즐앤드래곤 ${teamsCount} 명의 팀 다이어그램 작성 도구`;
+document.body.querySelector(".formation-box .title-box .title").placeholder = "입력 제목";
+document.body.querySelector(".formation-box .detail-box .detail").placeholder = "입력 내용";

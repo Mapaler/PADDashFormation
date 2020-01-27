@@ -20,16 +20,27 @@
 .monster .id::before{
 	content: "No.";
 }
-.formation-A-bigbox::after{
+.team-1 .team-box-name::after,
+.team-1 .team-box-name::before
+{
 	content: "隊伍\A A";
 }
-.formation-B-bigbox::before{
+.team-2 .team-box-name::after,
+.team-2 .team-box-name::before
+{
 	content: "隊伍\A B";
 }
-.formation-A-box .formation-assist .member::after{
+.team-3 .team-box-name::after,
+.team-3 .team-box-name::before
+{
+	content: "隊伍\A C";
+}
+.team-box .team-assist .member::after
+{
 	content: "▼輔助";
 }
-.formation-B-box .formation-assist .member::before{
+.team-box .team-assist .member::before
+{
 	content: "▲輔助";
 }
 .abilitys .hp::before{
@@ -121,8 +132,11 @@
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "不能輔助";
 }
-.awoken-total-box::before{
-	content: "覺醒總計：";
+.team-awoken::before{
+	content: "隊伍覺醒總計：";
+}
+.formation-awoken::before{
+	content: "陣型覺醒總計：";
 }
 .type-name-4::after{
 	content: "龍";
@@ -170,10 +184,13 @@
 	content: "數據來源：";
 }
 .control-box .btn-solo-link::before{
-    content: "🧑轉到單人遊戲";
+	content: "🧑轉到單人遊戲";
 }
 .control-box .btn-multi-link::before{
-    content: "🧑‍🤝‍🧑轉到2人車隊";
+	content: "🧑‍🤝‍🧑轉到2人車隊";
+}
+.control-box .btn-triple-link::before{
+	content: "👪轉到2人協力";
 }
 .control-box .btn-clear-data::before{
 	content: "🗑️清除數據";
@@ -182,10 +199,10 @@
 	content: "🔄交換AB隊";
 }
 .control-box .btn-show-mon-id::before{
-    content: "⬜隱藏怪物ID";
+	content: "⬜隱藏怪物ID";
 }
 .not-show-mon-id .control-box .btn-show-mon-id::before{
-    content: "🆔顯示怪物ID";
+	content: "🆔顯示怪物ID";
 }
 .show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
 	content: "⬜隱藏已滿技能冷卻";
@@ -193,11 +210,17 @@
 .control-box .btn-show-mon-skill-cd::before{
 	content: "❄️顯示已滿技能冷卻";
 }
-.team-info .tIf-total-hp::before{
-	content: "總HP(隊伍覺醒和徽章)：";
+.team-total-info .tIf-total-hp::before{
+	content: "隊伍HP(隊伍覺醒和徽章)：";
 }
-.team-info .tIf-total-rcv::before{
-	content: "總回復(隊伍覺醒和徽章)：";
+.team-total-info .tIf-total-rcv::before{
+	content: "隊伍回復(隊伍覺醒和徽章)：";
+}
+.formation-total-info .tIf-total-hp::before{
+	content: "總HP(隊伍覺醒)：";
+}
+.formation-total-info .tIf-total-rcv::before{
+	content: "總回復(隊伍覺醒)：";
 }
 
 .setting-box .row-mon-id .open-search::before{
@@ -239,7 +262,6 @@
 .control-div .search-close::before{
 	content: "關閉搜索";
 }
-
 /*Some icons, style different from the Japanese version*/
 .awoken-46,
 .awoken-47
