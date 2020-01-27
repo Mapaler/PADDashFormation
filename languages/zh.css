@@ -20,16 +20,27 @@
 .monster .id::before{
 	content: "No.";
 }
-.formation-A-bigbox::after{
+.team-1 .team-box-name::after,
+.team-1 .team-box-name::before
+{
 	content: "队伍\A A";
 }
-.formation-B-bigbox::before{
+.team-2 .team-box-name::after,
+.team-2 .team-box-name::before
+{
 	content: "队伍\A B";
 }
-.formation-A-box .formation-assist .member::after{
+.team-3 .team-box-name::after,
+.team-3 .team-box-name::before
+{
+	content: "队伍\A C";
+}
+.team-box .team-assist .member::after
+{
 	content: "▼辅助";
 }
-.formation-B-box .formation-assist .member::before{
+.team-box .team-assist .member::before
+{
 	content: "▲辅助";
 }
 .abilitys .hp::before{
@@ -121,8 +132,11 @@
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "不能辅助";
 }
-.awoken-total-box::before{
-	content: "觉醒总计：";
+.team-awoken::before{
+	content: "队伍觉醒总计：";
+}
+.formation-awoken::before{
+	content: "阵型觉醒总计：";
 }
 .type-name-4::after{
 	content: "龍";
@@ -175,6 +189,9 @@
 .control-box .btn-multi-link::before{
 	content: "🧑‍🤝‍🧑转到2人车队";
 }
+.control-box .btn-triple-link::before{
+	content: "👪转到3人协力";
+}
 .control-box .btn-clear-data::before{
 	content: "🗑️清除数据";
 }
@@ -193,10 +210,16 @@
 .control-box .btn-show-mon-skill-cd::before{
 	content: "❄️显示已满技能冷却";
 }
-.team-info .tIf-total-hp::before{
+.team-total-info .tIf-total-hp::before{
+	content: "队伍HP(队伍觉醒和徽章)：";
+}
+.team-total-info .tIf-total-rcv::before{
+	content: "队伍回复(队伍觉醒和徽章)：";
+}
+.formation-total-info .tIf-total-hp::before{
 	content: "总HP(队伍觉醒和徽章)：";
 }
-.team-info .tIf-total-rcv::before{
+.formation-total-info .tIf-total-rcv::before{
 	content: "总回复(队伍觉醒和徽章)：";
 }
 
@@ -238,12 +261,6 @@
 }
 .control-div .search-close::before{
 	content: "关闭搜索";
-}
-.edit-box .monsterinfo-box .monster-name,
-.edit-box .skill-box .skill-datail
-{
-	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
-	font-weight: bold;
 }
 /*Some icons, style different from the Japanese version*/
 .awoken-46,

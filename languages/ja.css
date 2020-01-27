@@ -17,17 +17,37 @@
 .monster .id::before{
 	content: "No.";
 }
-.formation-A-bigbox::after{
+.team-1 .team-box-name::after,
+.team-1 .team-box-name::before
+{
 	content: "チーム\A A";
 }
-.formation-B-bigbox::before{
+.team-2 .team-box-name::after,
+.team-2 .team-box-name::before
+{
 	content: "チーム\A B";
 }
-.formation-A-box .formation-assist .member::after{
+.team-3 .team-box-name::after,
+.team-3 .team-box-name::before
+{
+	content: "チーム\A C";
+}
+.team-box .team-assist .member::after
+{
 	content: "▼継承";
 }
-.formation-B-box .formation-assist .member::before{
+.team-box .team-assist .member::before
+{
 	content: "▲継承";
+}
+.abilitys .hp::before{
+	content: "HP:";
+}
+.abilitys .atk::before{
+	content: "攻撃:";
+}
+.abilitys .rcv::before{
+	content: "回復:";
 }
 .edit-box .edit-box-title::before{
 	content: "変更メンバー";
@@ -45,10 +65,10 @@
 	content: "コスト:";
 }
 .monsterinfo-box .monster-collabId::before{
-	content: "シリーズ ID：";
+	content: "シリーズ ID:";
 }
 .monsterinfo-box .monster-altName::before{
-	content: "シリーズの名前：";
+	content: "シリーズの名前:";
 }
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼モンスターレベル";
@@ -58,15 +78,6 @@
 }
 .m-level-btn-max::before{
 	content: "最大Lv.";
-}
-.abilitys .hp::before{
-	content: "HP：";
-}
-.abilitys .atk::before{
-	content: "攻撃：";
-}
-.abilitys .rcv::before{
-	content: "回復：";
 }
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼モンスター覚醒";
@@ -118,8 +129,11 @@
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "継承できない";
 }
-.awoken-total-box::before{
-	content: "覚醒合計：";
+.team-awoken::before{
+	content: "チーム覚醒:";
+}
+.formation-awoken::before{
+	content: "総覚醒:";
 }
 .type-name-4::after{
 	content: "ドラゴン";
@@ -161,13 +175,16 @@
 	content: "特別保護";
 }
 .control-box .datasource-label::before{
-	content: "データ ソース：";
+	content: "データ ソース:";
 }
 .control-box .btn-solo-link::before{
 	content: "🧑ソロゲームに移動";
 }
 .control-box .btn-multi-link::before{
 	content: "🧑‍🤝‍🧑2人協力のゲームに移動";
+}
+.control-box .btn-triple-link::before{
+	content: "👪3人協力のゲームに移動";
 }
 .control-box .btn-clear-data::before{
 	content: "🗑️データの消去";
@@ -187,11 +204,17 @@
 .control-box .btn-show-mon-skill-cd::before{
 	content: "❄️フル スキル クールを表示";
 }
-.team-info .tIf-total-hp::before{
-	content: "合計HP(チーム覚醒とバッジ)：";
+.team-total-info .tIf-total-hp::before{
+	content: "チームHP(チーム覚醒とバッジ):";
 }
-.team-info .tIf-total-rcv::before{
-	content: "合計回復(チーム覚醒とバッジ)：";
+.team-total-info .tIf-total-rcv::before{
+	content: "チーム回復(チーム覚醒とバッジ):";
+}
+.formation-total-info .tIf-total-hp::before{
+	content: "総HP(チーム覚醒):";
+}
+.formation-total-info .tIf-total-rcv::before{
+	content: "総回復(チーム覚醒):";
 }
 
 .setting-box .row-mon-id .open-search::before{
@@ -219,7 +242,7 @@
 	content: "タイプ（OR）";
 }
 .search-box .awoken-div::before{
-	content: "覚醒（AND）（しえ：数値をクリックすると数値が減少します）";
+	content: "覚醒（AND）（しえ:数値をクリックすると数値が減少します）";
 }
 .search-box .sawoken-div::before{
 	content: "超覚醒（OR）";

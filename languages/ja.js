@@ -1,5 +1,3 @@
-﻿document.title = solo?'パズル＆ドラゴンズソロチーム制作ツール':'パズル＆ドラゴンズ協力周回チーム制作ツール';
-var txtTitle = document.querySelector(".title-box .title");
-var txtDetail = document.querySelector(".detail-box .detail");
-txtTitle.placeholder = "入力フォーメーションのタイトル";
-txtDetail.placeholder = "入力詳細";
+﻿document.title = `パズル＆ドラゴンズ${teamsCount}人のチーム図作成ツール`;
+document.body.querySelector(".formation-box .title-box .title").placeholder = "入力タイトル";
+document.body.querySelector(".formation-box .detail-box .detail").placeholder = "入力詳細";

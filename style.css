@@ -310,24 +310,24 @@ ul{
 	display: inline-block;
 }
 /*队伍的背景色*/
-.team-bigbox:nth-of-type(1) .team-members,
-.team-bigbox:nth-of-type(1) .team-latents,
-.team-bigbox:nth-of-type(1) .team-box-name::before,
-.team-bigbox:nth-of-type(1) .team-box-name::after
+.team-1 .team-members,
+.team-1 .team-latents,
+.team-1 .team-box-name::before,
+.team-1 .team-box-name::after
 {
 	background-color: var(--team-1-bgcolor);
 }
-.team-bigbox:nth-of-type(2) .team-members,
-.team-bigbox:nth-of-type(2) .team-latents,
-.team-bigbox:nth-of-type(2) .team-box-name::before,
-.team-bigbox:nth-of-type(2) .team-box-name::after
+.team-2 .team-members,
+.team-2 .team-latents,
+.team-2 .team-box-name::before,
+.team-2 .team-box-name::after
 {
 	background-color: var(--team-2-bgcolor);
 }
-.team-bigbox:nth-of-type(3) .team-members,
-.team-bigbox:nth-of-type(3) .team-latents,
-.team-bigbox:nth-of-type(3) .team-box-name::before,
-.team-bigbox:nth-of-type(3) .team-box-name::after
+.team-3 .team-members,
+.team-3 .team-latents,
+.team-3 .team-box-name::before,
+.team-3 .team-box-name::after
 {
 	background-color: var(--team-3-bgcolor);
 }
@@ -346,7 +346,7 @@ ul{
 	font-size: 30px;
 	font-weight: bold;
 	text-align: center;
-	line-height: 50px;
+	line-height: 54px;
 	white-space: pre-wrap;
 	display: none;
 	width: var(--head-block-width);
@@ -363,25 +363,25 @@ ul{
 {
 	vertical-align:top;
 }
-.team-bigbox:nth-of-type(1) .team-box-name::after,
-.team-bigbox:nth-of-type(1) .team-box-name::before,
-.team-bigbox:nth-of-type(1) .team-assist .member::after,
-.team-bigbox:nth-of-type(1) .team-assist .member::before
+.team-1 .team-box-name::after,
+.team-1 .team-box-name::before,
+.team-1 .team-assist .member::after,
+.team-1 .team-assist .member::before
 {
 	color: var(--team-1-color);
 }
-.team-bigbox:nth-of-type(2) .team-box-name::after,
-.team-bigbox:nth-of-type(2) .team-box-name::before,
-.team-bigbox:nth-of-type(2) .team-assist .member::after,
-.team-bigbox:nth-of-type(2) .team-assist .member::before
+.team-2 .team-box-name::after,
+.team-2 .team-box-name::before,
+.team-2 .team-assist .member::after,
+.team-2 .team-assist .member::before
 {
 	color: var(--team-2-color);
 	/*vertical-align:top;*/
 }
-.team-bigbox:nth-of-type(3) .team-box-name::after,
-.team-bigbox:nth-of-type(3) .team-box-name::before,
-.team-bigbox:nth-of-type(3) .team-assist .member::after,
-.team-bigbox:nth-of-type(3) .team-assist .member::before
+.team-3 .team-box-name::after,
+.team-3 .team-box-name::before,
+.team-3 .team-assist .member::after,
+.team-3 .team-assist .member::before
 {
 	color: var(--team-3-color);
 }
@@ -482,13 +482,13 @@ ul{
 	box-sizing: initial;
 	margin: 0;
 }
-.team-bigbox:nth-of-type(1) .team-members .team-leader .monster{
+.team-1 .team-members .team-leader .monster{
 	border-color: var(--team-1-color);
 }
-.team-bigbox:nth-of-type(2) .team-members .team-leader .monster{
+.team-2 .team-members .team-leader .monster{
 	border-color: var(--team-2-color);
 }
-.team-bigbox:nth-of-type(3) .team-members .team-leader .monster{
+.team-3 .team-members .team-leader .monster{
 	border-color: var(--team-3-color);
 }
 

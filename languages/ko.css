@@ -17,17 +17,37 @@
 .monster .id::before{
 	content: "No.";
 }
-.formation-A-bigbox::after{
+.team-1 .team-box-name::after,
+.team-1 .team-box-name::before
+{
 	content: "팀\A A";
 }
-.formation-B-bigbox::before{
+.team-2 .team-box-name::after,
+.team-2 .team-box-name::before
+{
 	content: "팀\A B";
 }
-.formation-A-box .formation-assist .member::after{
+.team-3 .team-box-name::after,
+.team-3 .team-box-name::before
+{
+	content: "팀\A C";
+}
+.team-box .team-assist .member::after
+{
 	content: "▼돕다";
 }
-.formation-B-box .formation-assist .member::before{
+.team-box .team-assist .member::before
+{
 	content: "▲돕다";
+}
+.abilitys .hp::before{
+	content: "HP：";
+}
+.abilitys .atk::before{
+	content: "공격:";
+}
+.abilitys .rcv::before{
+	content: "회복:";
 }
 .edit-box .edit-box-title::before{
 	content: "회원 수정";
@@ -45,10 +65,10 @@
 	content: "코스트:";
 }
 .monsterinfo-box .monster-collabId::before{
-	content: "시리즈 ID：";
+	content: "시리즈 ID:";
 }
 .monsterinfo-box .monster-altName::before{
-	content: "시리즈 이름：";
+	content: "시리즈 이름:";
 }
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼몬스터 레벨";
@@ -58,15 +78,6 @@
 }
 .m-level-btn-max::before{
 	content: "최대Lv.";
-}
-.abilitys .hp::before{
-	content: "HP：";
-}
-.abilitys .atk::before{
-	content: "공격：";
-}
-.abilitys .rcv::before{
-	content: "회복：";
 }
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼몬스터 각성";
@@ -118,8 +129,11 @@
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "협조 할 수 없음";
 }
-.awoken-total-box::before{
-	content: "총 각성：";
+.team-awoken::before{
+	content: "팀 각성:";
+}
+.formation-awoken::before{
+	content: "총 각성:";
 }
 .type-name-4::after{
 	content: "드래곤";
@@ -161,13 +175,16 @@
 	content: "특별 보호";
 }
 .control-box .datasource-label::before{
-	content: "데이터 소스：";
+	content: "데이터 소스:";
 }
 .control-box .btn-solo-link::before{
 	content: "🧑싱글 플레이어 게임으로 이동";
 }
 .control-box .btn-multi-link::before{
 	content: "🧑‍🤝‍🧑2인 게임으로 이동";
+}
+.control-box .btn-triple-link::before{
+	content: "👪3인 게임으로 이동";
 }
 .control-box .btn-clear-data::before{
 	content: "🗑️데이터 지우기";
@@ -187,11 +204,17 @@
 .control-box .btn-show-mon-skill-cd::before{
 	content: "❄️전체 스킬 쿨을 표시";
 }
-.team-info .tIf-total-hp::before{
-	content: "총 HP(팀의 각 성과 배지)：";
+.team-total-info .tIf-total-hp::before{
+	content: "팀 HP(팀 각성 및 배지):";
 }
-.team-info .tIf-total-rcv::before{
-	content: "총 회복(팀의 각 성과 배지)：";
+.team-total-info .tIf-total-rcv::before{
+	content: "팀 회복(팀 각성 및 배지):";
+}
+.formation-total-info .tIf-total-hp::before{
+	content: "총 HP(팀 각성)：";
+}
+.formation-total-info .tIf-total-rcv::before{
+	content: "총 회복(팀 각성)：";
 }
 
 .setting-box .row-mon-id .open-search::before{
@@ -219,7 +242,7 @@
 	content: "형식（OR）";
 }
 .search-box .awoken-div::before{
-	content: "각성（AND）（번째：숫자를 누르면 숫자가 낮아집니다）";
+	content: "각성（AND）（번째:숫자를 누르면 숫자가 낮아집니다）";
 }
 .search-box .sawoken-div::before{
 	content: "슈퍼 각성（OR）";

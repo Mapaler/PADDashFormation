@@ -1,4 +1,4 @@
-﻿document.title = solo?'智龙迷城单人队伍图制作工具':'智龙迷城协力队伍图制作工具';
+﻿document.title = `智龙迷城${teamsCount}人队伍图制作工具`;
 
 //查找原先完整技能
 function findFullSkill(subSkill){

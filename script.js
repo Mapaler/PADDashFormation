@@ -21,7 +21,7 @@ var interchangeSvg; //储存划线的SVG
 var interchangePath; //储存划线的线
 var controlBox; //储存整个controlBox
 var formationBox; //储存整个formationBox
-var teamBigBoxs; //储存全部teamBigBox
+var teamBigBoxs = []; //储存全部teamBigBox
 var allMembers = []; //储存所有成员，包含辅助
 var editBox; //储存整个editBox
 var showSearch; //整个程序都可以用的显示搜索函数
@@ -495,7 +495,11 @@ function initialize()
 		this.style.height=this.scrollHeight+"px";
 	};
 
-	teamBigBoxs = Array.prototype.slice.call(formationBox.querySelectorAll(".team-bigbox"));
+	for (let ti=0,ti_len=formationBox.querySelectorAll(".team-bigbox").length;ti<ti_len;ti++)
+	{
+		teamBigBoxs.push(formationBox.querySelector(`.teams .team-${ti+1}`));
+	}
+	
 	//将所有怪物头像添加到全局数组
 	teamBigBoxs.forEach(teamBigBox=>{
 		const teamBox = teamBigBox.querySelector(".team-box");

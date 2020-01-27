@@ -18,16 +18,27 @@
 .monster .id::before{
 	content: "No.";
 }
-.formation-A-bigbox::after{
+.team-1 .team-box-name::after,
+.team-1 .team-box-name::before
+{
 	content: "Team\A A";
 }
-.formation-B-bigbox::before{
+.team-2 .team-box-name::after,
+.team-2 .team-box-name::before
+{
 	content: "Team\A B";
 }
-.formation-A-box .formation-assist .member::after{
+.team-3 .team-box-name::after,
+.team-3 .team-box-name::before
+{
+	content: "Team\A C";
+}
+.team-box .team-assist .member::after
+{
 	content: "▼Assist";
 }
-.formation-B-box .formation-assist .member::before{
+.team-box .team-assist .member::before
+{
 	content: "▲Assist";
 }
 .abilitys .hp::before{
@@ -125,8 +136,11 @@
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "Can't be Assist";
 }
-.awoken-total-box::before{
-	content: "Awoken Total:";
+.team-awoken::before{
+	content: "Team Awoken:";
+}
+.formation-awoken::before{
+	content: "Total Awoken:";
 }
 .type-name-4::after{
 	content: "Dragon";
@@ -176,6 +190,9 @@
 .control-box .btn-multi-link::before{
 	content: "🧑‍🤝‍🧑Jump To 2-Player Mode";
 }
+.control-box .btn-triple-link::before{
+	content: "👪Jump To 3-Player Mode";
+}
 .control-box .btn-clear-data::before{
 	content: "🗑️Clear data";
 }
@@ -194,11 +211,17 @@
 .control-box .btn-show-mon-skill-cd::before{
 	content: "❄️Show full skill's cooldown";
 }
-.team-info .tIf-total-hp::before{
-	content: "Total HP(Team Awoken & Badge): ";
+.team-total-info .tIf-total-hp::before{
+	content: "Team HP(Team Awoken & Badge): ";
 }
-.team-info .tIf-total-rcv::before{
-	content: "Total RCV(Team Awoken & Badge): ";
+.team-total-info .tIf-total-rcv::before{
+	content: "Team RCV(Team Awoken & Badge): ";
+}
+.formation-total-info .tIf-total-hp::before{
+	content: "Total HP(Team Awoken): ";
+}
+.formation-total-info .tIf-total-rcv::before{
+	content: "Total RCV(Team Awoken): ";
 }
 
 .setting-box .row-mon-id .open-search::before{
