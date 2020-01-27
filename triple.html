@@ -11,6 +11,7 @@
 <script type="text/javascript" src="languages/language-list.js"></script>
 <script type="text/javascript" src="universal_function.js"></script>
 <script type="text/javascript" src="script.js"></script>
+<script type="text/javascript" src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script type="text/javascript">
 const solo = false;
 const teamsCount = 3;
@@ -33,11 +34,13 @@ var formation = new Formation(teamsCount,6);
 		</div>
 		<div>
 			<button class="btn-clear-data" onclick="clearData();"></button>
+			<button class="btn-capture" onclick="capture();"></button>
 			<button class="btn-show-mon-id" onclick="toggleShowMonId();"></button>
 			<button class="btn-show-mon-skill-cd" onclick="toggleShowMonSkillCd();"></button>
 			<button class="btn-solo-link" onclick="turnPage(1);"></button>
 			<button class="btn-multi-link" onclick="turnPage(2);"></button>
 			<button class="btn-swap-AB-team" onclick="swapABteam();"></button>
+			<a class="down-capture display-none" target="_blank"></a>
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
 	</div>
