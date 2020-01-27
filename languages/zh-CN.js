@@ -33,22 +33,6 @@ function parseSkillDescription(skill)
 	function typeN(i){return typeName[i || 0] || ("未知类型" + i);}
 	//返回觉醒名
 	function awokenN(i){return awokenName[(i || 0)-1] || ("未知觉醒" + i);}
-	//返回怪物名
-	function cardN(id){
-		let card = Cards[id || 0];
-		if (!card)
-		{
-			return "没有该宠物 " + id;
-		}else
-		{
-			const monOuterDom = document.createElement("span");
-			monOuterDom.className = "detail-mon";
-			const monDom = createCardA(id);
-			monOuterDom.appendChild(monDom);
-			changeid({id:id},monDom);
-			return monOuterDom.outerHTML;
-		}
-	}
 	//从二进制的数字中获得布尔值数组
 	function getBooleanFromBinary(num,reverse=true)
 	{	/*num是输入的数字，2的N次方在2进制下表示1后面跟着N个0。

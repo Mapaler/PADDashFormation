@@ -1,9 +1,12 @@
 ﻿@charset "utf-8";
 .status.loading-mon-info .text::before{
-	content: "正在載入怪物數據，請稍候。";
+	content: "正在載入怪物數據，請稍候……";
 }
 .status.loading-skill-info .text::before{
-	content: "正在載入技能数据，请稍候。";
+	content: "正在載入技能数据，请稍候……";
+}
+.status.prepare-cauture .text::before{
+	content: "正在准備截圖，請稍後……";
 }
 .help-link::before{
 	content: "幫助和提示";
@@ -194,6 +197,9 @@
 }
 .control-box .btn-clear-data::before{
 	content: "🗑️清除數據";
+}
+.control-box .btn-capture::before{
+	content: "📷截圖";
 }
 .control-box .btn-swap-AB-team::before{
 	content: "🔄交換AB隊";

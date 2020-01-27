@@ -1,9 +1,12 @@
 @charset "utf-8";
 .status.loading-mon-info .text::before{
-	content: "Please wait while the monster data is being loaded.";
+	content: "Loading monster data, please wait...";
 }
 .status.loading-skill-info .text::before{
-	content: "Please wait while the skills data is being loaded.";
+	content: "Loading skill data, please wait...";
+}
+.status.prepare-cauture .text::before{
+	content: "Preparing a screenshot, please wait...";
 }
 .delay .monster::before{
 	content: "Prevent\A Delay";
@@ -195,6 +198,9 @@
 }
 .control-box .btn-clear-data::before{
 	content: "🗑️Clear data";
+}
+.control-box .btn-capture::before{
+	content: "📷Screenshot";
 }
 .control-box .btn-swap-AB-team::before{
 	content: "🔄Swap AB Team";

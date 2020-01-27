@@ -40,26 +40,50 @@ body{
 .help-link::before{
 	content: "Help & Tips";
 }
-.title{
+.title,
+.title-display
+{
 	font-size: 2em;
 	font-weight: bold;
 }
-.detail{
+.detail,
+.detail-display
+{
 	min-height: 100px;
 	font-size: 1.5em;
-	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 }
-.title,.detail{
+.title,
+.detail,
+.title-display,
+.detail-display
+{
+	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	width:100%;
 	border: none;
 	background: none;
 	box-sizing: border-box;
 	padding: 1px;
+	margin: 0;
 }
 .title:focus,.detail:focus{
 	border: black solid 1px;;
 	background-color: #eee;
 	padding: 0;
+}
+.title,
+.detail
+{
+	display: none;
+}
+.edit .title,
+.edit .detail
+{
+	display: block;
+}
+.edit .title-display,
+.edit .detail-display
+{
+	display: none;
 }
 .status{
 	line-height: 16px;
@@ -609,27 +633,42 @@ ul{
 }
 .edit-box .setting-box .row-mon-id .evo-card-list li,
 .edit-box .search-box .search-mon-list li,
-.edit-box .setting-box .skill-box .detail-mon{
+.detail-mon{
 	display: inline-block;
 	vertical-align: top; 
 	top: 0;
-	width: 78px;
-	height: 80px;
+	width: 80px;
+	height: 78px;
 }
-.edit-box .setting-box .skill-box .detail-mon{
+.detail-mon{
 	vertical-align: bottom;
 }
 .edit-box .setting-box .row-mon-id .evo-card-list .monster,
 .edit-box .search-box .search-mon-list .monster,
-.edit-box .setting-box .skill-box .detail-mon .monster{
+.detail-mon .monster{
 	float: none;
-	transform: scale(0.75) translate(-13px,-13px);
+	transform: scale(0.75) translate(-16px,-16px);
 }
 .edit-box .setting-box .row-mon-id .evo-card-list .monster .id,
 .edit-box .search-box .search-mon-list .monster .id,
-.edit-box .setting-box .skill-box .detail-mon .monster .id{
+.detail-mon .monster .id{
 	bottom: 5px;
 	font-size: 20px;
+}
+
+.detail-box .detail-mon{
+	width: 50px;
+	height: 50px;
+}
+.detail-box .detail-mon .monster{
+	transform: scale(0.5) translate(-58px,-58px);
+}
+.detail-box .detail-mon .monster .id{
+	font-weight: bold;
+	font-size: 23px;
+}
+.detail-box .detail-mon .monster .id::before {
+    font-size: 15px;
 }
 /*.setting-box .row-mon-id .open-search::before{
 	content: "搜索怪物";
