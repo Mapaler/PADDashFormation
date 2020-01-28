@@ -22,7 +22,7 @@ Click on the monster avatar in the editing interface to jump to the Guide.
 Or click the middle mouse button on the monster avatar of the formation interface and search results to jump to the Guide. On your phone, you're long-pressing the monster avatar and then selecting to open it in a new tab.  
 ![攻略网站2](document/tips-guide2.png)
 * 队伍标题与队伍说明可以使用`^16进制颜色代码^内容^p`来改变内容颜色；  
-Formation Title and Title、Detail can use the `^[Hex Color Code]^Content^p` to change the color of the Content.  
+Formation Title and Detail can use the `^[Hex Color Code]^Content^p` to change the color of the Content.  
 ![文字颜色](document/tips-advanced-color.png)  
 `%{m怪物ID}`可以显示怪物头像。  
 `%{m[Monster ID]}` can display the monster avatar.  
