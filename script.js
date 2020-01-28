@@ -1841,8 +1841,12 @@ function refreshAll(formationData){
 	txtDetailDisplay.innerHTML = descriptionToHTML(txtDetail.value);
 	if (txtTitle.value.length == 0)
 		titleBox.classList.add("edit");
+	else
+		titleBox.classList.remove("edit");
 	if (txtDetail.value.length == 0)
 		detailBox.classList.add("edit");
+	else
+		detailBox.classList.remove("edit");
 	/*txtTitleDisplay.innerHTML = "";
 	txtTitleDisplay.appendChild(document.createTextNode(txtTitle.value));
 	txtDetailDisplay.innerHTML = "";
