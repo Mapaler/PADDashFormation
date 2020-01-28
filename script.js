@@ -2128,17 +2128,18 @@ function refreshMemberSkillCD(teamDom,team,idx){
 	const assistSkillCd = assistSkill ? (assistSkill.initialCooldown - (assist.skilllevel||assistSkill.maxLevel) + 1) : 0;
 	memberSkillCdDom.innerHTML = memberSkillCd;
 	assistSkillCdDom.innerHTML = memberSkillCd + assistSkillCd;
-	
-	if (member.skilllevel && member.skilllevel < memberSkill.maxLevel)
+
+	if (member.skilllevel != undefined && member.skilllevel < memberSkill.maxLevel)
 	{
 		memberSkillCdDom.classList.remove("max-skill");
-		assistSkillCdDom.classList.remove("max-skill");
-	}else if (assist.skilllevel && assist.skilllevel < assistSkill.maxLevel){
-		memberSkillCdDom.classList.add("max-skill");
-		assistSkillCdDom.classList.remove("max-skill");
 	}else
 	{
 		memberSkillCdDom.classList.add("max-skill");
+	}
+	if (assist.skilllevel != undefined && assist.skilllevel < assistSkill.maxLevel){
+		assistSkillCdDom.classList.remove("max-skill");
+	}else
+	{
 		assistSkillCdDom.classList.add("max-skill");
 	}
 }
