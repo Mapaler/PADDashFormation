@@ -65,23 +65,25 @@ body{
 	padding: 1px;
 	margin: 0;
 }
-.title:focus,.detail:focus{
+.formation-box .title:focus,
+.formation-box .detail:focus
+{
 	border: black solid 1px;;
 	background-color: #eee;
 	padding: 0;
 }
-.title,
-.detail
+.formation-box .title,
+.formation-box .detail
 {
 	display: none;
 }
-.edit .title,
-.edit .detail
+.formation-box .edit .title,
+.formation-box .edit .detail
 {
 	display: block;
 }
-.edit .title-display,
-.edit .detail-display
+.formation-box .edit .title-display,
+.formation-box .edit .detail-display
 {
 	display: none;
 }
