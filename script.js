@@ -205,19 +205,15 @@ function clearData()
 {
 	location.href=location.href.replace(location.search,'');
 }
-//交换AB队
-function swapABteam()
+//轮换ABC队伍
+function swapABCteam()
 {
-	if (formation.teams.length>0)
+	if (formation.teams.length>1)
 	{
-		formation.teams[0][0].splice(4, 0, formation.teams[0][0].splice(0,1)[0]); //第1个数组基底删掉0并移动到4
-		formation.teams[0][1].splice(4, 0, formation.teams[0][1].splice(0,1)[0]); //第1个数组辅助删掉0并移动到4
-		formation.teams[1][0].splice(0, 0, formation.teams[1][0].splice(4,1)[0]); //第2个数组基底删掉4并移动到0
-		formation.teams[1][1].splice(0, 0, formation.teams[1][1].splice(4,1)[0]); //第2个数组辅助删掉4并移动到0
-		formation.teams.splice(0,0,formation.teams.splice(1,1)[0]); //交换AB队
+		formation.teams.push(formation.teams.splice(0,1)[0]); //将队伍1移动到最后
+		creatNewUrl();
+		refreshAll(formation);
 	}
-	creatNewUrl();
-	history.go();
 }
 //在单人和多人之间转移数据
 function turnPage(toPage)
