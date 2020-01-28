@@ -204,6 +204,9 @@
 .control-box .btn-swap-AB-team::before{
 	content: "🔄交换AB队";
 }
+.control-box .btn-swap-ABC-team::before{
+	content: "🔄轮换ABC队";
+}
 .control-box .btn-show-mon-id::before{
 	content: "⬜隐藏怪物ID";
 }

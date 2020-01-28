@@ -205,6 +205,9 @@
 .control-box .btn-swap-AB-team::before{
 	content: "🔄Swap AB Team";
 }
+.control-box .btn-swap-ABC-team::before{
+	content: "🔄Rotating ABC Team";
+}
 .control-box .btn-show-mon-id::before{
 	content: "⬜Hide monster ID";
 }

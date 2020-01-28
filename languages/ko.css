@@ -198,6 +198,9 @@
 .control-box .btn-swap-AB-team::before{
 	content: "🔄교환 AB 팀";
 }
+.control-box .btn-swap-AB-team::before{
+	content: "🔄로테이션 AB 팀";
+}
 .control-box .btn-show-mon-id::before{
 	content: "⬜몬스터 ID 숨기기";
 }
