@@ -210,7 +210,7 @@ function parseSkillDescription(skill)
 			str = `如当前 HP 在 HP 上限的${sk[0]}%以上的话，受到单一次致命攻击时，${sk[1]<100?`有${sk[1]}的几率`:"将"}会以1点 HP 生还`;
 			break;
 		case 15:
-			str = `操作时间延长${sk[0]/100}秒`;
+			str = `操作时间延长${sk[0]>0?`延长`:`减少`}${Math.abs(sk[0]/100)}秒`;
 			break;
 		case 16:
 			str = `受到的所有伤害减少${sk[0]}%`;
@@ -1175,23 +1175,10 @@ function parseSkillDescription(skill)
 			str = `${sk[0]}回合内，天降的宝珠不会产生COMBO`;
 			break;
 		case 185: //ドラゴンと悪魔タイプの攻撃力が4倍、回復力は2.5倍。\nドロップ操作を3秒延長。
-			str = ``;
-			strArr =[];
-			if (sk[1] & 31 == 31)
-			{
-				strArr.push("所有");
-			}else
-			{
-				if (sk[1]) {strArr.push(nb(sk[1],attrsName).join("、") + "属性");}
-				if (sk[2]) {strArr.push(nb(sk[2],typeName).join("、") + "类型");}
-			}
-			str += strArr.join("和") + "宠物的";
-			strArr =[];
-			if (sk[3]) {strArr.push(`HP ${sk[3]/100}倍`);}
-			if (sk[4]) {strArr.push(`攻击力 ${sk[4]/100}倍`);}
-			if (sk[5]) {strArr.push(`回复力 ${sk[5]/100}倍`);}
-			str += strArr.join("、");
-			if (sk[0]) str += `，操作时间延长${sk[0]/100}秒`;
+			str = "";
+			if (sk[1] || sk[2]) str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
+			if (sk[3] || sk[4] || sk[5]) str += "的"+getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]});
+			if (sk[0]) str += `，操作时间${sk[0]>0?`延长`:`减少`}${Math.abs(sk[0]/100)}秒`;
 			break;
 		case 186:
 			str = '<span class="spColor">【7×6版面】</span>';
