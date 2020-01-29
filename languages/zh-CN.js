@@ -1158,7 +1158,7 @@ function parseSkillDescription(skill)
 			str = `${sk[0]}回合内，${sk[1]}%概率掉落强化宝珠`;
 			break;
 		case 182:
-			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(flags(sk[0]))}宝珠时`;
+			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(sk[0])}宝珠时`;
 			if (sk[2]) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			if (sk[3]) str += `，受到的伤害减少${sk[3]}%`;
 			break;
