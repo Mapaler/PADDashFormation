@@ -1227,7 +1227,7 @@ function parseSkillDescription(skill)
 			if (!atSameTime) str+=`${sk[1]}种属性以上`;
 			else if(sk[0] == 31) str += `5色`;
 			str += `同时攻击时`;
-			if (sk[2]) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
+			if (sk[2] != 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			if (sk[3]) str += `，结算时增加${sk[3]}连击`;
 			break;
 		case 195:
