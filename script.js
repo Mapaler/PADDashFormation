@@ -37,7 +37,7 @@ Member.prototype.outObj = function(){
 	let obj = [m.id];
 	if (m.level != undefined) obj[1] = m.level;
 	if (m.awoken != undefined) obj[2] = m.awoken;
-	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])!==0)
+	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])!=0)
 	{
 		if (m.plus[0] === m.plus[1] && m.plus[0] === m.plus[2])
 		{ //当3个加值一样时只生成第一个减少长度
@@ -928,7 +928,7 @@ function initialize()
 		const usedHoleN = usedHole(latent);
 		for (let ai=0;ai<monEditLatents.length;ai++)
 		{
-			if (latent[ai] !== undefined)
+			if (latent[ai] != undefined)
 			{
 				monEditLatents[ai].className = "latent-icon latent-icon-" + latent[ai];
 			}
@@ -1408,7 +1408,7 @@ function changeid(mon,monDom,latentDom)
 	const sawoken = monDom.querySelector(".super-awoken");
 	if (sawoken) //如果存在超觉醒的DOM且提供了超觉醒
 	{
-		if (mon.sawoken !== undefined && mon.sawoken>=0 && card.superAwakenings.length)
+		if (mon.sawoken != undefined && mon.sawoken>=0 && card.superAwakenings.length)
 		{
 			const sawokenIcon = sawoken.querySelector(".awoken-icon");
 			sawoken.classList.remove("display-none");
