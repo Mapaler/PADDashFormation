@@ -1030,31 +1030,11 @@ ul{
 	margin-top: 5px;
 }
 .m-latent-allowable-ul .latent-icon,
-.m-latent-ul .latent-icon-1,
-.m-latent-ul .latent-icon-2,
-.m-latent-ul .latent-icon-3,
-.m-latent-ul .latent-icon-4,
-.m-latent-ul .latent-icon-5,
-.m-latent-ul .latent-icon-6,
-.m-latent-ul .latent-icon-7,
-.m-latent-ul .latent-icon-8,
-.m-latent-ul .latent-icon-9,
-.m-latent-ul .latent-icon-10,
-.m-latent-ul .latent-icon-11,
-.m-latent-ul .latent-icon-12,
-.m-latent-ul .latent-icon-13,
-.m-latent-ul .latent-icon-14,
-.m-latent-ul .latent-icon-15,
-.m-latent-ul .latent-icon-16,
-.m-latent-ul .latent-icon-17,
-.m-latent-ul .latent-icon-18,
-.m-latent-ul .latent-icon-19,
-.m-latent-ul .latent-icon-20,
-.m-latent-ul .latent-icon-21,
-.m-latent-ul .latent-icon-22,
-.m-latent-ul .latent-icon-23,
-.m-latent-ul .latent-icon-24{
+.m-latent-ul .latent-icon{
 	cursor: pointer;
+}
+.m-latent-ul .latent-icon[class="latent-icon"]{
+	cursor: default;
 }
 .m-latent-allowable-ul .latent-icon.unselected-latent{
 	cursor: default;
