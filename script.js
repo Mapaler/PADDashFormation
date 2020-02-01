@@ -933,29 +933,26 @@ function initialize()
 	
 	//潜觉
 	const monEditLatentUl = settingBox.querySelector(".m-latent-ul");
-	let monEditLatents = Array.prototype.slice.call(monEditLatentUl.querySelectorAll("li"));
+	const monEditLatents = Array.prototype.slice.call(monEditLatentUl.querySelectorAll("li"));
 	const monEditLatentAllowableUl = settingBox.querySelector(".m-latent-allowable-ul");
-	let monEditLatentsAllowable = Array.prototype.slice.call(monEditLatentAllowableUl.querySelectorAll("li"));
+	const monEditLatentsAllowable = Array.prototype.slice.call(monEditLatentAllowableUl.querySelectorAll("li"));
 	editBox.refreshLatent = function(latent,monid) //刷新潜觉
 	{
-		let maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
-		let usedHoleN = usedHole(latent);
-		for (var ai=0;ai<monEditLatents.length;ai++)
+		const maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
+		const usedHoleN = usedHole(latent);
+		for (let ai=0;ai<monEditLatents.length;ai++)
 		{
 			if (latent[ai] !== undefined)
 			{
 				monEditLatents[ai].className = "latent-icon latent-icon-" + latent[ai];
-				monEditLatents[ai].value = ai;
 			}
 			else if(ai<(maxLatentCount-usedHoleN+latent.length))
 			{
 				monEditLatents[ai].className = "latent-icon";
-				monEditLatents[ai].value = -1;
 			}
 			else
 			{
 				monEditLatents[ai].className = "display-none";
-				monEditLatents[ai].value = -1;
 			}
 		}
 	};
@@ -977,32 +974,28 @@ function initialize()
 	skillLevel_Max.ipt = skillLevel;
 	skillLevel_Max.onclick = setIptToMyValue;
 
+	//已有觉醒的去除
 	function deleteLatent(){
-		let aIdx = parseInt(this.value, 10);
+		const aIdx = parseInt(this.value, 10);
 		editBox.latent.splice(aIdx,1);
 		editBox.reCalculateAbility(); //重计算三维
 		editBox.refreshLatent(editBox.latent,editBox.mid); //刷新潜觉
 	}
-	//已有觉醒的去除
-	monEditLatents.forEach(function(l){
-		l.onclick = deleteLatent;
-	});
+	monEditLatents.forEach((la)=>{la.onclick = deleteLatent;});
 	//可选觉醒的添加
-	monEditLatentsAllowable.forEach(function(la){
-		la.onclick = function(){
-			if (this.classList.contains("unselected-latent")) return;
-			var lIdx = parseInt(this.value);
-			var usedHoleN = usedHole(editBox.latent);
-			let maxLatentCount = getMaxLatentCount(editBox.mid); //最大潜觉数量
-			if (lIdx >= 12 && usedHoleN<=(maxLatentCount-2))
-				editBox.latent.push(lIdx);
-			else if (lIdx < 12 && usedHoleN<=(maxLatentCount-1))
-				editBox.latent.push(lIdx);
-
-			editBox.reCalculateAbility();
-			editBox.refreshLatent(editBox.latent,editBox.mid);
-		};
-	});
+	function addLatent(){
+		if (this.classList.contains("unselected-latent")) return; //不能选的觉醒直接退出
+		const lIdx = parseInt(this.value); //潜觉的序号
+		const usedHoleN = usedHole(editBox.latent); //使用了的格子
+		const maxLatentCount = getMaxLatentCount(editBox.mid); //最大潜觉数量
+		if (lIdx >= 12 && usedHoleN<=(maxLatentCount-2) || //如果能添加2格的觉醒
+			lIdx < 12 && usedHoleN<=(maxLatentCount-1)) //如果能添加1格的觉醒
+		{editBox.latent.push(lIdx);}
+		else {return;}
+		editBox.reCalculateAbility();
+		editBox.refreshLatent(editBox.latent,editBox.mid);
+	}
+	monEditLatentsAllowable.forEach((la)=>{la.onclick = addLatent;});
 
 	//编辑界面重新计算怪物的能力
 	function reCalculateAbility(){
