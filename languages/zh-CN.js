@@ -383,23 +383,14 @@ function parseSkillDescription(skill)
 			str = "全画面的宝珠变成" + strArr.map((o)=>{return attrN(o);}).join("、");
 			break;
 		case 73:
-			str = `${attrN(sk[0])}属性和${typeN(sk[1])}类型宠物的 HP 和攻击力×${sk[2]/100}倍`;
+			str = `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[2]})}`;
 			break;
 		case 75:
-			str = `${attrN(sk[0])}属性和${typeN(sk[1])}类型宠物的攻击力和回复力×${sk[2]/100}倍`;
+			str = `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物的${getFixedHpAtkRcvString({atk:sk[2],rcv:sk[2]})}`;
 			break;
 		case 76:
-			strArr = [];
-			if (sk[0] & 31 == 31)
-			{
-				strArr.push("所有");
-			}else
-			{
-				if (sk[0]) {strArr.push(nb(sk[0],attrsName).join("、") + "属性");}
-				if (sk[1]) {strArr.push(nb(sk[1],typeName).join("、") + "类型");}
-			}
-			str += strArr.join("和") + "宠物的";
-			str += ` HP 、攻击力和回复力${sk[2]/100}倍`;
+			str = `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物`;
+			if (sk[2] || sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[2],rcv:sk[2]})}`;
 			break;
 		case 84:
 			str = `HP ${(sk[3]?(`减少${sk[3]}%`):"变为1")}，对敌方1体造成自身攻击力×${sk[1]/100}${sk[1]!=sk[2]?`~${+sk[2]/100}`:""}倍的${attrN(sk[0])}属性伤害`;
@@ -529,56 +520,18 @@ function parseSkillDescription(skill)
 			}
 			break;
 		case 121:
-			str = ``;
-			strArr =[];
-			if (sk[0] & 31 == 31)
-			{
-				strArr.push("所有");
-			}else
-			{
-				if (sk[0]) {strArr.push(nb(sk[0],attrsName).join("、") + "属性");}
-				if (sk[1]) {strArr.push(nb(sk[1],typeName).join("、") + "类型");}
-			}
-			str += strArr.join("和") + "宠物的";
-			strArr =[];
-			if (sk[2]) {strArr.push(`HP×${sk[2]/100}倍`);}
-			if (sk[3]) {strArr.push(`攻击力×${sk[3]/100}倍`);}
-			if (sk[4]) {strArr.push(`回复力×${sk[4]/100}倍`);}
-			str += strArr.join("、");
+			str = `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物`;
+			if (sk[2] || sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]})}`;
 			break;
 		case 122:
 			str = `HP ${sk[0]}%以下时`;
-			strArr =[];
-			if (sk[1] & 31 != 31)
-			{
-				if (sk[1]) {strArr.push(nb(sk[1],attrsName).join("、") + "属性");}
-				if (sk[2]) {strArr.push(nb(sk[2],typeName).join("、") + "类型");}
-			}else
-			{
-				strArr.push("所有");
-			}
-			str += strArr.join("和") + "宠物的";
-			strArr =[];
-			if (sk[3]) {strArr.push(`攻击力×${sk[3]/100}倍`);}
-			if (sk[4]) {strArr.push(`回复力×${sk[4]/100}倍`);}
-			str += strArr.join("、");
+			str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
+			if (sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]})}`;
 			break;
 		case 123:
-			str = `HP ${sk[0]}%以上时`;
-			strArr =[];
-			if (sk[1] & 31 != 31)
-			{
-				if (sk[1]) {strArr.push(nb(sk[1],attrsName).join("、") + "属性");}
-				if (sk[2]) {strArr.push(nb(sk[2],typeName).join("、") + "类型");}
-			}else
-			{
-				strArr.push("所有");
-			}
-			str += strArr.join("和") + "宠物的";
-			strArr =[];
-			if (sk[3]) {strArr.push(`攻击力×${sk[3]/100}倍`);}
-			if (sk[4]) {strArr.push(`回复力×${sk[4]/100}倍`);}
-			str += strArr.join("、");
+			str = `HP ${sk[0]==100?"全满":`${sk[0]}%以上`}时`;
+			str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
+			if (sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]})}`;
 			break;
 		case 124:
 			strArr = sk.slice(0,5).filter(c=>{return c>0;}); //最多5串珠
@@ -634,112 +587,31 @@ function parseSkillDescription(skill)
 			str = strArr.join("，");
 			break;
 		case 129:
-			str = ``;
-			strArr =[];
-			if (sk[0] & 31 == 31)
-			{
-				strArr.push("所有");
-			}else
-			{
-				if (sk[0]) {strArr.push(nb(sk[0],attrsName).join("、") + "属性");}
-				if (sk[1]) {strArr.push(nb(sk[1],typeName).join("、") + "类型");}
-			}
-			str += strArr.join("和") + "宠物的";
-
-			let hasArr = [sk[2],sk[3],sk[4]].filter(s=>{return s>0;}); //储存会增加的
-			let hasDiffScale = hasArr.filter(s=>{return s!=hasArr[0];}).length > 0; //判断是否有重复的
-			strArr = [];
-			if (hasDiffScale) //如果大家的值不一样，则不合并
-			{
-				if (sk[2]) {strArr.push(` HP ×${sk[2]/100}倍`);}
-				if (sk[3]) {strArr.push(`攻击力×${sk[3]/100}倍`);}
-				if (sk[4]) {strArr.push(`回复力×${sk[4]/100}倍`);}
-				str += strArr.join("、");
-			}else  //如果大家的值一样，则合并
-			{
-				if (sk[2]) {strArr.push(` HP `);}
-				if (sk[3]) {strArr.push(`攻击力`);}
-				if (sk[4]) {strArr.push(`回复力`);}
-				if (strArr.length)
-				{
-					if (strArr.length <= 2)
-					{
-						str += strArr.join("和") + `×${hasArr[0]/100}倍`;
-					}else
-					{
-						str += strArr.slice(0,strArr.length-1).join("、") + `和${strArr[strArr.length-1]}×${hasArr[0]/100}倍`;
-					}
-				}
-			}
-			if (sk[5]) {
-				if (strArr.length)str += "，";
-				str += `受到的${nb(sk[5],attrsName).join("、")}属性伤害减少${sk[6]}%`;
-			}
+			str = `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物`;
+			if (sk[2] || sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]})}`;
+			if (sk[5]) str += `，受到的${nb(sk[5],attrsName).join("、")}属性伤害减少${sk[6]}%`;
 			break;
 		case 130:
 			str = `HP ${sk[0]}%以下时`;
-			strArr =[];
-			if (sk[1] & 31 == 31)
-			{
-				strArr.push("所有");
-			}else
-			{
-				if (sk[1]) {strArr.push(nb(sk[1],attrsName).join("、") + "属性");}
-				if (sk[2]) {strArr.push(nb(sk[2],typeName).join("、") + "类型");}
-			}
-			str += strArr.join("和") + "宠物的";
-			strArr =[];
-			if (sk[3]) {strArr.push(`攻击力×${sk[3]/100}倍`);}
-			if (sk[4]) {strArr.push(`回复力×${sk[4]/100}倍`);}
-			str += strArr.join("、");
-			if (sk[5]) {
-				if (strArr.length)str += "，";
-				str += `受到的${nb(sk[5],attrsName).join("、")}属性伤害减少${sk[6]}%`;
-			}
+			str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
+			if (sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]})}`;
+			if (sk[5]) str += `，受到的${nb(sk[5],attrsName).join("、")}属性伤害减少${sk[6]}%`;
 			break;
 		case 131:
 			str = `HP ${sk[0]==100?"全满":`${sk[0]}%以上`}时`;
-			strArr =[];
-			if (sk[1] & 31 == 31)
-			{
-				strArr.push("所有");
-			}else
-			{
-				if (sk[1]) {strArr.push(nb(sk[1],attrsName).join("、") + "属性");}
-				if (sk[2]) {strArr.push(nb(sk[2],typeName).join("、") + "类型");}
-			}
-			str += strArr.join("和") + "宠物的";
-			strArr =[];
-			if (sk[3]) {strArr.push(`攻击力×${sk[3]/100}倍`);}
-			if (sk[4]) {strArr.push(`回复力×${sk[4]/100}倍`);}
-			str += strArr.join("、");
-			if (sk[5]) {
-				if (strArr.length)str += "，";
-				str += `受到的${nb(sk[5],attrsName).join("、")}属性伤害减少${sk[6]}%`;
-			}
+			str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
+			if (sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]})}`;
+			if (sk[5]) str += `，受到的${nb(sk[5],attrsName).join("、")}属性伤害减少${sk[6]}%`;
 			break;
 		case 132:
 			str = `${sk[0]}回合内，宝珠移动时间`;
-			console.log(sk[1],sk[1]>0)
 			if (sk[1]) str += (sk[1]>0?`增加`:`减少`) + Math.abs(sk[1]/10) + `秒`;
 			if (sk[2]) str += sk[2]>100 ? `变为${sk[2]/100}倍` : `变为${sk[2]}%`;
 			break;
 		case 133:
 			str = `使用技能时，`;
-			strArr =[];
-			if (sk[0] & 31 == 31)
-			{
-				strArr.push("所有");
-			}else
-			{
-				if (sk[0]) {strArr.push(nb(sk[0],attrsName).join("、") + "属性");}
-				if (sk[1]) {strArr.push(nb(sk[1],typeName).join("、") + "类型");}
-			}
-			str += strArr.join("和") + "宠物的";
-			strArr =[];
-			if (sk[2]) {strArr.push(`攻击力×${sk[2]/100}倍`);}
-			if (sk[3]) {strArr.push(`回复力×${sk[3]/100}倍`);}
-			str += strArr.join("、");
+			str += `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物`;
+			if (sk[2] || sk[3]) str += `的${getFixedHpAtkRcvString({atk:sk[2],rcv:sk[3]})}`;
 			break;
 		case 136:
 			str = "";
