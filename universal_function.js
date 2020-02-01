@@ -15,33 +15,32 @@ const type_allowable_latent = {
 	"8":[17,20,21,24],//8机械
 };
 //仿GM_xmlhttpRequest函数v1.3
-if (typeof(GM_xmlhttpRequest) == "undefined") {
-	var GM_xmlhttpRequest = function(GM_param) {
-		var xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
-		xhr.open(GM_param.method, GM_param.url, true);
-		if (GM_param.responseType) xhr.responseType = GM_param.responseType;
-		if (GM_param.overrideMimeType) xhr.overrideMimeType(GM_param.overrideMimeType);
-		xhr.onreadystatechange = function() //设置回调函数
-			{
-				if (xhr.readyState === xhr.DONE) { //请求完成时
-					if (xhr.status === 200 && GM_param.onload) //正确加载时
-					{
-						GM_param.onload(xhr);
-					}
-					if (xhr.status !== 200 && GM_param.onerror) //发生错误时
-					{
-						GM_param.onerror(xhr);
-					}
+const GM_xmlhttpRequest = function(GM_param) {
+	const xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
+	xhr.open(GM_param.method, GM_param.url, true);
+	if (GM_param.responseType) xhr.responseType = GM_param.responseType;
+	if (GM_param.overrideMimeType) xhr.overrideMimeType(GM_param.overrideMimeType);
+	xhr.onreadystatechange = function() //设置回调函数
+		{
+			if (xhr.readyState === xhr.DONE) { //请求完成时
+				if (xhr.status === 200 && GM_param.onload) //正确加载时
+				{
+					GM_param.onload(xhr);
 				}
-			};
-		//添加header
-		for (var header in GM_param.headers) {
-			xhr.setRequestHeader(header, GM_param.headers[header]);
-		}
-		//发送数据
-		xhr.send(GM_param.data ? GM_param.data : null);
-	};
-}
+				if (xhr.status !== 200 && GM_param.onerror) //发生错误时
+				{
+					GM_param.onerror(xhr);
+				}
+			}
+		};
+	//添加header
+	for (let header in GM_param.headers) {
+		xhr.setRequestHeader(header, GM_param.headers[header]);
+	}
+	//发送数据
+	xhr.send(GM_param.data ? GM_param.data : null);
+};
+
 //数字补前导0
 function PrefixInteger(num, length)
 {  
@@ -49,12 +48,12 @@ function PrefixInteger(num, length)
 }
 //获取URL参数
 function getQueryString(name,url) {
-	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-	var search = url || window.location.search.substr(1);
-	var r = search.match(reg);
+	const reg = new RegExp(`(?:^|&)${name}=([^&]*)(?:&|$)`, "i");
+	const searchStr = url || location.search.substr(1);
+	const r = searchStr.match(reg);
 	if (r != null)
 	{
-		return decodeURIComponent(r[2]);
+		return decodeURIComponent(r[1]);
 	}else
 	{
 		return null;
@@ -66,10 +65,10 @@ function getQueryString(name,url) {
 * 实现思路：获取没重复的最右一值放入新数组。
 * （检测到有重复值时终止当前循环同时进入顶层循环的下一轮判断）*/
 function uniq(array){
-	var temp = [];
-	var l = array.length;
-	for(var i = 0; i < l; i++) {
-		for(var j = i + 1; j < l; j++){
+	let temp = [];
+	const l = array.length;
+	for(let i = 0; i < l; i++) {
+		for(let j = i + 1; j < l; j++){
 			if (array[i] === array[j]){
 				i++;
 				j = i;
@@ -83,13 +82,13 @@ function uniq(array){
 function usedHole(latent)
 {
 	return latent.reduce(function(previous,current){
-		return previous + (current>= 12?2:1);
+		return previous + (current>= 12?2:1); //12号以后都是2格的潜觉
 	},0);
 }
 //计算所有队伍中有多少个该觉醒
 function awokenCountInFormation(formationTeams,awokenIndex,solo)
 {
-	var formationAwokenCount = formationTeams.reduce(function(previous,team){
+	const formationAwokenCount = formationTeams.reduce(function(previous,team){
 		return previous + awokenCountInTeam(team,awokenIndex,solo);
 	},0);
 	return formationAwokenCount;

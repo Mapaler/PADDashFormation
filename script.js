@@ -137,7 +137,7 @@ var Formation = function(teamCount,memberCount){
 	this.detail = "";
 	this.teams = [];
 	this.badge = 0;
-	for (var ti=0;ti<teamCount;ti++)
+	for (let ti=0;ti<teamCount;ti++)
 	{
 		const team = [[],[]];
 		for (let mi=0;mi<memberCount;mi++)
@@ -234,18 +234,13 @@ function turnPage(toPage)
 			break;
 		case 2:
 			if (formation.teams.length<2)
-			{
-				//创建第二支队伍，各4个空的
-				/*formation.teams[1] = [
-					Array.from(new Array(4)).map(()=>{return new MemberTeam();}),
-					Array.from(new Array(4)).map(()=>{return new MemberAssist();})
-				];*/
+			{ //从1人到2人
 				formation.teams[1] = [[],[]];
 				//把右边的队长加到第二支队伍最后面
 				formation.teams[1][0].splice(0,0,formation.teams[0][0].splice(5,1)[0]);
 				formation.teams[1][1].splice(0,0,formation.teams[0][1].splice(5,1)[0]);
-			}else //三人则直接删除
-			{
+			}else
+			{ //从3人到2人，直接删除后面两个队伍
 				//删掉第3支开始的队伍
 				formation.teams.splice(2);
 				//删掉前面两支队伍的战友
@@ -259,18 +254,9 @@ function turnPage(toPage)
 			break;
 		case 3:
 			if (formation.teams.length<2)
-			{
-				//创建第二支队伍，各4个空的
-				/*formation.teams[1] = [
-					Array.from(new Array(6)).map(()=>{return new MemberTeam();}),
-					Array.from(new Array(6)).map(()=>{return new MemberAssist();})
-				];
-				formation.teams[2] = [
-					Array.from(new Array(6)).map(()=>{return new MemberTeam();}),
-					Array.from(new Array(6)).map(()=>{return new MemberAssist();})
-				];*/
-			}else //2人
-			{
+			{ //从1人到3人
+			}else
+			{ //从2人到3人
 				formation.teams[0][0].push(formation.teams[1][0][0]);
 				formation.teams[0][1].push(formation.teams[1][1][0]);
 				formation.teams[1][0].push(formation.teams[0][0][0]);
@@ -319,7 +305,7 @@ window.onload = function()
 					languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
 	document.head.querySelector("#language-css").href = "languages/"+currentLanguage.i18n+".css";
 
-	let langOptionArray = Array.prototype.slice.call(langSelectDom.options);
+	const langOptionArray = Array.prototype.slice.call(langSelectDom.options);
 	langOptionArray.some(function(langOpt){
 		if (langOpt.value == currentLanguage.i18n)
 		{
@@ -1640,7 +1626,7 @@ function editBoxChangeMonId(id)
 	evoCardUl.style.display = "none";
 	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
 
-	let evoLinkCardsIdArray = Cards.filter(function(m){
+	const evoLinkCardsIdArray = Cards.filter(function(m){
 		return m.evoRootId == card.evoRootId;
 	}).map(function(m){return m.id;}); //筛选出相同进化链的
 
@@ -1660,7 +1646,7 @@ function editBoxChangeMonId(id)
 		evoCardUl.style.display = "block";
 	}
 
-	let mType = monInfoBox.querySelectorAll(".monster-type li");
+	const mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (let ti=0;ti<mType.length;ti++)
 	{
 		if (ti<card.types.length)
@@ -1689,7 +1675,7 @@ function editBoxChangeMonId(id)
 
 	//超觉醒
 	const mSAwokenRow = settingBox.querySelector(".row-mon-super-awoken");
-	let mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
+	const mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
 	//if (!editBox.isAssist && card.superAwakenings.length>0)
 	if (card.superAwakenings.length>0) //武器上也还是加入超觉醒吧
 	{
@@ -1718,13 +1704,13 @@ function editBoxChangeMonId(id)
 	const rowPlus =  settingBox.querySelector(".row-mon-plus");
 	const rowLatent =  settingBox.querySelector(".row-mon-latent");
 	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
-	//该宠Type允许的杀
-	let allowLatent = uniq(card.types.reduce(function (previous, t, index, array) {
+	//该宠Type允许的杀,uniq是去重的自定义函数
+	const allowLatent = uniq(card.types.reduce(function (previous, t, index, array) {
 		return previous.concat(type_allowable_latent[t]);
 	},[]));
 	for(let li=17;li<=24;li++) //显示允许的杀，隐藏不允许的杀
 	{
-		var latentDom = monLatentAllowUl.querySelector(".latent-icon-" + li);
+		const latentDom = monLatentAllowUl.querySelector(".latent-icon-" + li);
 		if (allowLatent.indexOf(li)>=0)
 		{
 			if(latentDom.classList.contains("unselected-latent"))
@@ -1786,7 +1772,7 @@ function editBoxChangeMonId(id)
 
 	if (editBox.isAssist)
 	{
-		var btnDone = editBox.querySelector(".button-done");
+		const btnDone = editBox.querySelector(".button-done");
 		if (!card.canAssist)
 		{
 			btnDone.classList.add("cant-assist");
@@ -1898,7 +1884,7 @@ function refreshTeamAwokenCount(awokenDom,team){
 			ali.classList.add("display-none");
 	}
 	const bigAwoken = [52,53,56,68,69,70]; //等于几个小觉醒的大觉醒
-	for (var ai=1;ai<=72;ai++)
+	for (let ai=1;ai<=72;ai++)
 	{
 		const aicon = awokenUL.querySelector(".awoken-" + ai);
 		if (!aicon) continue;
