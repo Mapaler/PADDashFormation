@@ -85,6 +85,9 @@
 .m-level-btn-max::before{
 	content: "最高Lv.";
 }
+.m-level-exp::before{
+	content: "需要經驗值：";
+}
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼怪物覺醒";
 }

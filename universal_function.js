@@ -147,6 +147,35 @@ function returnMonsterNameArr(card, lsList, defaultCode)
 	}
 	return monNameArr;
 }
+//Code From pad-rikuu
+function valueAt(level, maxLevel, curve) {
+	const f = (maxLevel === 1 || level >= maxLevel) ? 1 : ((level - 1) / (maxLevel - 1));
+	return curve.min + (curve.max - curve.min) * Math.pow(f, curve.scale);
+}
+//Code From pad-rikuu
+function curve(c, level, maxLevel, limitBreakIncr) {
+	let value = valueAt(level, maxLevel, {
+		min: c.min,
+		max: c.max || (c.min * maxLevel),
+		scale: c.scale || 1
+	});
+
+	if (level > maxLevel) {
+	const exceed = level - maxLevel;
+	value += c.max ? (c.max * (limitBreakIncr / 100) * (exceed / 11)) : c.min * exceed;
+	}
+	return value;
+}
+//计算怪物的经验值
+function calculateExp(member)
+{
+	if (!member) return null;
+	const memberCard = Cards[member.id];
+	if (!memberCard || memberCard.id == 0 || !memberCard.enabled) return null;
+	const v99Exp = valueAt(member.level, 99, memberCard.exp);
+	const v110Exp = member.level > 99 ? Math.max(0, member.level - memberCard.maxLevel - 1) * 5000000 : 0;
+	return [Math.round(v99Exp),v110Exp];
+}
 //计算怪物的能力
 //function calculateAbility(monid = 0, level = 1, plus = [0,0,0], awoken = 0, latent = [], weaponId = null, weaponAwoken = null, solo = true)
 function calculateAbility(member = null, assist = null, solo = true)
@@ -167,25 +196,6 @@ function calculateAbility(member = null, assist = null, solo = true)
 	const assistCard = assist ? Cards[assist.id] : null;
 	if (!memberCard || memberCard.id == 0 || !memberCard.enabled) return null;
 
-	//Code From pad-rikuu
-	function valueAt(level, maxLevel, curve) {
-		const f = (maxLevel === 1 || level >= maxLevel) ? 1 : ((level - 1) / (maxLevel - 1));
-		return curve.min + (curve.max - curve.min) * Math.pow(f, curve.scale);
-	}
-	//Code From pad-rikuu
-	function curve(c, level, maxLevel, limitBreakIncr) {
-		let value = valueAt(level, maxLevel, {
-			min: c.min,
-			max: c.max || (c.min * maxLevel),
-			scale: c.scale || 1
-		});
-
-		if (level > maxLevel) {
-		const exceed = level - maxLevel;
-		value += c.max ? (c.max * (limitBreakIncr / 100) * (exceed / 11)) : c.min * exceed;
-		}
-		return value;
-	}
 	const bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性倍率
 	const plusAdd = [10,5,3]; //加值的增加值
 	const awokenAdd = [ //对应加三维觉醒的序号与增加值
@@ -335,15 +345,9 @@ function createCardA(id)
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)
 {
-	str = str.replace(/\n/igm,"<br>");
-	str = str.replace(/\^([a-fA-F0-9]{6})\^([^\^]+)\^p/igm,'<span style="color:#$1;">$2</span>');
-	let monReg = /\%\{m([0-9]{1,4})\}/igm;
-	let monRegRes;
-
-	while((monRegRes = monReg.exec(str))!=null) {
-		str = str.replace(monRegRes[0],cardN(parseInt(monRegRes[1])));
-	}
-	//str = str.replace(/\%\{m([0-9]{1,4})\}/igm,cardN(`$1`));
+	str = str.replace(/\n/ig,"<br>"); //换行
+	str = str.replace(/\^([a-fA-F0-9]{6})\^([^\^]+)\^p/igm,'<span style="color:#$1;">$2</span>'); //文字颜色
+	str = str.replace(/\%\{m([0-9]{1,4})\}/g,function (str, p1, offset, s){return cardN(parseInt(p1,10));}); //怪物头像
 	return str;
 }
 //返回怪物名
@@ -366,4 +370,16 @@ function cardN(id){
 function parseSkillDescription(skill)
 {
 	return descriptionToHTML(skill.description);
+}
+//大数字缩短长度，默认返回本地定义字符串
+function parseBigNumber(number)
+{
+	/*	//千位分隔符
+	const res=number.toString().replace(/\d+/, function(n){ // 先提取整数部分
+		return n.replace(/(\d)(?=(\d{3})+$)/g,function($1){
+			return $1+",";
+		});
+	})
+	*/
+	return number.toLocaleString();
 }

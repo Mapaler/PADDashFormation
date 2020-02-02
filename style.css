@@ -910,7 +910,6 @@ ul{
 
 .edit-box .setting-box .row-mon-level::before{
 	/*content: "▼怪物等级";*/
-	display: block;
 }
 .edit-box .setting-box .m-level{
 	font-size: 25px;
@@ -918,7 +917,9 @@ ul{
 	width: calc(100% - 220px);
 	box-sizing: border-box;
 }
-.m-level-btn-min,.m-level-btn-max{
+.m-level-btn-min,
+.m-level-btn-max
+{
 	height: 40px;
 	box-sizing: border-box;
 	font-size: 25px;
@@ -930,12 +931,21 @@ ul{
 .m-level-btn-max{
 	width: 145px;
 }
-/*.m-level-btn-max::before{
+.m-level-exp{
+	margin-left: 10px;
+	display: inline-block;
+}
+/*
+.m-level-exp::before{
+	content: "需要经验：";
+}
+.m-level-btn-max::before{
 	content: "最高Lv";
 }
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼怪物觉醒";
-}*/
+}
+*/
 .row-mon-awoken .awoken-ul, .row-mon-super-awoken .awoken-ul{
 	font-size: 0;
 	height: 32px;

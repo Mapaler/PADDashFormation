@@ -82,6 +82,9 @@
 .m-level-btn-max::before{
 	content: "최대Lv.";
 }
+.m-level-exp::before{
+	content: "필요한 Exp:";
+}
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼몬스터 각성";
 }
