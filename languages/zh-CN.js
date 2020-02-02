@@ -1172,3 +1172,21 @@ function parseSkillDescription(skill)
 	//(skill.description.length?(descriptionToHTML(skill.description) + "<hr>"):"") + str
 	return str;
 }
+//大数字缩短长度
+function parseBigNumber(number)
+{
+	if (number === 0)
+	{
+		return number;
+	}else if (number % 1e8 === 0)
+	{
+		return number / 1e8 + "亿";
+	}else if (number % 1e4 === 0)
+	{
+		return number / 1e4 + "万";
+	}else
+	{
+		return number;
+	}
+	
+}

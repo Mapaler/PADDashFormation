@@ -83,6 +83,9 @@
 .m-level-btn-max::before{
 	content: "Max Lv.";
 }
+.m-level-exp::before{
+	content: "Need Exp:";
+}
 .edit-box .setting-box .row-mon-awoken::before{
 	content: "▼Monster Awoken";
 }

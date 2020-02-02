@@ -203,7 +203,7 @@ function toggleShowMonSkillCd()
 //清除数据
 function clearData()
 {
-	location.href=location.href.replace(location.search,'');
+	location.search = "";
 }
 //轮换ABC队伍
 function swapABCteam()
@@ -877,13 +877,29 @@ function initialize()
 	}
 	//等级
 	const monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.onchange = reCalculateAbility;
+	monEditLv.onchange = function(){
+		reCalculateExp();
+		reCalculateAbility();
+	};
 	const monEditLvMin = settingBox.querySelector(".m-level-btn-min");
+	const monLvExp = settingBox.querySelector(".m-level-exp");
 	monEditLvMin.ipt = monEditLv;
 	monEditLvMin.onclick = setIptToMyValue;
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
 	monEditLvMax.ipt = monEditLv;
 	monEditLvMax.onclick = setIptToMyValue;
+	//编辑界面重新计算怪物的经验值
+	function reCalculateExp(){
+		const monid = parseInt(monstersID.value || 0, 10);
+		const level = parseInt(monEditLv.value || 0, 10);
+		const tempMon = {
+			id:monid,
+			level:level
+		}
+		const needExp = calculateExp(tempMon);
+		monLvExp.innerHTML = needExp ? parseBigNumber(needExp[0]) + (level>99?` + ${parseBigNumber(needExp[1])}` : "") : "";
+	};
+	editBox.reCalculateExp = reCalculateExp;
 	//加蛋
 	const monEditAddHpLi = settingBox.querySelector(".row-mon-plus .m-plus-hp-li");
 	const monEditAddAtkLi = settingBox.querySelector(".row-mon-plus .m-plus-atk-li");
@@ -910,7 +926,7 @@ function initialize()
 		monEditAddHp.value = 99;
 		monEditAddAtk.value = 99;
 		monEditAddRcv.value = 99;
-		editBox.reCalculateAbility();
+		reCalculateAbility();
 	};
 	//三维的计算值
 	const monEditHpValue = monEditAddHpLi.querySelector(".ability-value");
@@ -1569,6 +1585,7 @@ function editMon(teamNum,isAssist,indexInTeam)
 		rowMonLatent.classList.add("display-none");
 		editBoxTitle.classList.add("edit-box-title-assist");
 	}
+	editBox.reCalculateExp();
 	editBox.reCalculateAbility();
 }
 //编辑窗，修改怪物ID
@@ -1595,6 +1612,8 @@ function editBoxChangeMonId(id)
 	mRare.className = "monster-rare rare-" + card.rarity;
 	const mCost = monInfoBox.querySelector(".monster-cost");
 	mCost.innerHTML = card.cost;
+	/*const mExp = monInfoBox.querySelector(".monster-exp");
+	mExp.innerHTML = card.exp.max;*/
 	const mName = monInfoBox.querySelector(".monster-name");
 	mName.innerHTML = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
 	const mCollabId = monInfoBox.querySelector(".monster-collabId");
@@ -1785,6 +1804,7 @@ function editBoxChangeMonId(id)
 	}
 	editBox.latent.length = 0;
 	editBox.refreshLatent(editBox.latent,id);
+	editBox.reCalculateExp();
 	editBox.reCalculateAbility();
 }
 //搜索并显示合作
