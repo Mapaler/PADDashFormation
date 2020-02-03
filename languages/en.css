@@ -211,17 +211,14 @@
 .control-box .btn-swap-ABC-team::before{
 	content: "🔄Rotating ABC Team";
 }
-.control-box .btn-show-mon-id::before{
-	content: "⬜Hide monster ID";
+.control-box .show-mon-id-lbl::after{
+	content:"🆔Show monster ID";
 }
-.not-show-mon-id .control-box .btn-show-mon-id::before{
-	content: "🆔Show monster ID";
+.control-box .btn-show-mon-skill-cd-lbl::after{
+	content:"❄️Show full skill's cooldown";
 }
-.show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
-	content: "⬜Hide full skill's cooldown";
-}
-.control-box .btn-show-mon-skill-cd::before{
-	content: "❄️Show full skill's cooldown";
+.control-box .change-swap-to-copy-lbl::after{
+	content:"Change \"Swap\" to \"Copy\" when dragging";
 }
 .team-total-info .tIf-total-hp::before{
 	content: "Team HP(Team Awoken & Badge): ";

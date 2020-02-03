@@ -41,12 +41,14 @@ var formation = new Formation(teamsCount,6);
 		<div>
 			<button class="btn-clear-data" onclick="clearData();"></button>
 			<button class="btn-capture" onclick="capture();"></button>
-			<button class="btn-show-mon-id" onclick="toggleShowMonId();"></button>
-			<button class="btn-show-mon-skill-cd" onclick="toggleShowMonSkillCd();"></button>
+			<a class="down-capture display-none" target="_blank"></a>
 			<button class="btn-solo-link" onclick="turnPage(1);"></button>
 			<button class="btn-multi-link" onclick="turnPage(2);"></button>
 			<button class="btn-swap-ABC-team" onclick="swapABCteam();"></button>
-			<a class="down-capture display-none" target="_blank"></a>
+			<br>
+			<input type="checkbox" name="show-mon-id" class="config-checkbox-ipt" id="show-mon-id" onclick="toggleShowMonId();" checked><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
+			<input type="checkbox" name="btn-show-mon-skill-cd" class="config-checkbox-ipt" id="btn-show-mon-skill-cd" onclick="toggleShowMonSkillCd();"><label class="config-checkbox-lbl btn-show-mon-skill-cd-lbl" for="btn-show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
+			<input type="checkbox" name="change-swap-to-copy" class="config-checkbox-ipt" id="change-swap-to-copy"><label class="config-checkbox-lbl" for="change-swap-to-copy"><div class="config-checkbox-lbl-cicle"></div></label>
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
 	</div>
