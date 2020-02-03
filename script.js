@@ -115,7 +115,7 @@ MemberAssist.prototype.loadFromMember = function(m){
 	this.id = m.id;
 	if (m.level != undefined) this.level = m.level;
 	if (m.awoken != undefined) this.awoken = m.awoken;
-	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) this.plus = m.plus;
+	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) this.plus = JSON.parse(JSON.stringify(m.plus));
 	if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 //正式队伍
@@ -135,10 +135,10 @@ MemberTeam.prototype.loadFromMember = function(m){
 	this.id = m.id;
 	if (m.level != undefined) this.level = m.level;
 	if (m.awoken != undefined) this.awoken = m.awoken;
-	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) this.plus = m.plus;
-	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) this.latent = m.latent;
+	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) this.plus = JSON.parse(JSON.stringify(m.plus));
+	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) this.latent = JSON.parse(JSON.stringify(m.latent));
 	if (m.sawoken != undefined) this.sawoken = m.sawoken;
-	if (m.ability != undefined && m.ability instanceof Array && m.plus.length>=3) this.ability = m.ability;
+	if (m.ability != undefined && m.ability instanceof Array && m.plus.length>=3) this.ability = JSON.parse(JSON.stringify(m.ability));
 	if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 
@@ -1363,8 +1363,9 @@ function interchangeCard(formArr,toArr)
 	formation.teams[toArr[0]][toArr[1]][toArr[2]] = from;
 	if (!isCopy) formation.teams[formArr[0]][formArr[1]][formArr[2]] = to;
 
-	const formationData = creatNewUrl({returnObj:true}); //刷新URL
-	formation.loadObj(formationData);
+	//const formationData = creatNewUrl({returnObj:true});
+	//formation.loadObj(formationData);
+	creatNewUrl(); //刷新URL
 	refreshAll(formation); //刷新全部
 }
 //改变一个怪物头像
@@ -2019,7 +2020,6 @@ function refreshFormationAwokenCount(awokenDom,teams){
 function refreshAbility(abilityDom,team,idx){
 	const memberData = team[0][idx];
 	const assistData = team[1][idx];
-	const bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性倍率
 	//基底三维，如果辅助是武器，还要加上辅助的觉醒
 	const mainAbility = calculateAbility(memberData, assistData, solo);
 		if (mainAbility && memberData.ability)
