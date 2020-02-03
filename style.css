@@ -87,6 +87,45 @@ body{
 {
 	display: none;
 }
+
+.config-checkbox-ipt{
+	display:none;
+}
+.config-checkbox-lbl .config-checkbox-lbl-cicle{
+	width: 28px;
+	height: 12px;
+	display: inline-block;
+	position: relative;
+	background-color: #8884;
+	border-radius: 16px;
+	margin-right: 5px;
+}
+.config-checkbox-lbl .config-checkbox-lbl-cicle::before{
+	content:"";
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	transition: .2s ease-out;
+	background-color: #c6c6c6;
+	box-shadow: 0 2px 4px 0 #0003;
+	border-radius: 50%;
+	left: -4px;
+	top: -4px;
+}
+.config-checkbox-ipt:checked+.config-checkbox-lbl .config-checkbox-lbl-cicle {
+    background: rgba(0,160,216,0.8);
+}
+.config-checkbox-ipt:checked+.config-checkbox-lbl .config-checkbox-lbl-cicle::before {
+    background: #00A0D8;
+    box-shadow: 0 2px 4px 0 rgba(0,160,216,0.4);
+    left: calc(100% - 16px);
+}
+.config-checkbox-lbl{
+	cursor: pointer;
+	line-height: 25px;
+	margin-right: 20px;
+}
+
 .status{
 	line-height: 16px;
 }
@@ -908,9 +947,9 @@ ul{
 	line-height: 22px;
 }
 
-.edit-box .setting-box .row-mon-level::before{
-	/*content: "▼怪物等级";*/
-}
+/*.edit-box .setting-box .row-mon-level::before{
+	content: "▼怪物等级";
+}*/
 .edit-box .setting-box .m-level{
 	font-size: 25px;
 	height: 40px;

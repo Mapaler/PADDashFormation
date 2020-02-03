@@ -6,8 +6,8 @@ Copy the URL directly to share the Formation, or add a Bookmark to archives. You
 * 使用后退即可撤销上一次修改。  
 Use back to undo the last edit.  
 ![撤銷修改](document/tips-undo.png)
-* 拖拽怪物头像即可快速切换位置，也支持手机触屏。  
-Drag monster avatars to quickly switch positions, also supports mobile touch screen.  
+* 拖拽怪物头像即可快速交换位置或复制怪物，也支持手机触屏。  
+Drag monster avatars to quickly swap positions or copy monster, also supports mobile touch screen.  
 ![切换位置](document/tips-interchangeCard.png)
 * 可以在编辑界面的怪物ID输入怪物名称来搜索怪物。  
 You can search for monsters by entering the monster name in the monster ID of the editing interface.  

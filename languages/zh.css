@@ -210,17 +210,14 @@
 .control-box .btn-swap-ABC-team::before{
 	content: "🔄轮换ABC队";
 }
-.control-box .btn-show-mon-id::before{
-	content: "⬜隐藏怪物ID";
+.control-box .show-mon-id-lbl::after{
+	content:"🆔显示怪物ID";
 }
-.not-show-mon-id .control-box .btn-show-mon-id::before{
-	content: "🆔显示怪物ID";
+.control-box .btn-show-mon-skill-cd-lbl::after{
+	content:"❄️显示已满技能冷却";
 }
-.show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
-	content: "⬜隐藏已满技能冷却";
-}
-.control-box .btn-show-mon-skill-cd::before{
-	content: "❄️显示已满技能冷却";
+.control-box .change-swap-to-copy-lbl::after{
+	content:"拖拽时使用“复制”而不是“替换”";
 }
 .team-total-info .tIf-total-hp::before{
 	content: "队伍HP(队伍觉醒和徽章)：";

@@ -204,17 +204,14 @@
 .control-box .btn-swap-AB-team::before{
 	content: "🔄로테이션 AB 팀";
 }
-.control-box .btn-show-mon-id::before{
-	content: "⬜몬스터 ID 숨기기";
+.control-box .show-mon-id-lbl::after{
+	content:"🆔몬스터 ID 표시";
 }
-.not-show-mon-id .control-box .btn-show-mon-id::before{
-	content: "🆔⬜몬스터 ID 표시";
+.control-box .btn-show-mon-skill-cd-lbl::after{
+	content:"❄️전체 스킬 쿨을 표시";
 }
-.show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
-	content: "⬜전체 스킬 쿨을 숨기기";
-}
-.control-box .btn-show-mon-skill-cd::before{
-	content: "❄️전체 스킬 쿨을 표시";
+.control-box .change-swap-to-copy-lbl::after{
+	content:"드래그할 때 \"바꾸기\"를 \"복사\"로 변경";
 }
 .team-total-info .tIf-total-hp::before{
 	content: "팀 HP(팀 각성 및 배지):";

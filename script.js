@@ -19,6 +19,7 @@ var currentLanguage; //当前语言
 var currentDataSource; //当前数据
 var interchangeSvg; //储存划线的SVG
 var interchangePath; //储存划线的线
+var changeSwapToCopy; //储存交换“复制”和“替换”
 var controlBox; //储存整个controlBox
 var statusLine; //储存状态栏
 var formationBox; //储存整个formationBox
@@ -84,6 +85,13 @@ Member.prototype.loadObj = function(m,dataVersion){
 	this.sawoken = dataVersion>1 ? m[5] : m.sawoken;
 	this.skilllevel = m[6] || null;
 };
+Member.prototype.loadFromMember = function(m){
+	if (m == undefined) //如果没有提供数据，直接返回默认
+	{
+		return;
+	}
+	this.id = m.id;
+};
 //只用来防坐的任何队员
 var MemberDelay = function(){
 	this.id=-1;
@@ -108,6 +116,7 @@ MemberAssist.prototype.loadFromMember = function(m){
 	if (m.level != undefined) this.level = m.level;
 	if (m.awoken != undefined) this.awoken = m.awoken;
 	if (m.plus != undefined && m.plus instanceof Array && m.plus.length>=3 && (m.plus[0]+m.plus[1]+m.plus[2])>0) this.plus = m.plus;
+	if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 //正式队伍
 var MemberTeam = function(){
@@ -130,6 +139,7 @@ MemberTeam.prototype.loadFromMember = function(m){
 	if (m.latent != undefined && m.latent instanceof Array && m.latent.length>=1) this.latent = m.latent;
 	if (m.sawoken != undefined) this.sawoken = m.sawoken;
 	if (m.ability != undefined && m.ability instanceof Array && m.plus.length>=3) this.ability = m.ability;
+	if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 
 var Formation = function(teamCount,memberCount){
@@ -193,12 +203,24 @@ function getMaxLatentCount(id)
 //切换怪物ID显示
 function toggleShowMonId()
 {
-	document.body.classList.toggle('not-show-mon-id');
+	if (controlBox.querySelector("#show-mon-id").checked)
+	{
+		document.body.classList.remove("not-show-mon-id");
+	}else
+	{
+		document.body.classList.add("not-show-mon-id");
+	}
 }
 //切换怪物技能CD显示
 function toggleShowMonSkillCd()
 {
-	document.body.classList.toggle('show-mon-skill-cd');
+	if (controlBox.querySelector("#btn-show-mon-skill-cd").checked)
+	{
+		document.body.classList.add("show-mon-skill-cd");
+	}else
+	{
+		document.body.classList.remove("show-mon-skill-cd");
+	}
 }
 //清除数据
 function clearData()
@@ -273,13 +295,16 @@ window.onload = function()
 	controlBox = document.body.querySelector(".control-box");
 	statusLine = controlBox.querySelector(".status"); //显示当前状态的
 	const helpLink = controlBox.querySelector(".help-link");
+	changeSwapToCopy = controlBox.querySelector("#change-swap-to-copy");
+	interchangeSVG = document.body.querySelector("#interchange-line");
+	interchangePath = interchangeSVG.querySelector("g line");
+	toggleShowMonId();
+	toggleShowMonSkillCd();
 
 	formationBox = document.body.querySelector(".formation-box");
 
 	editBox = document.body.querySelector(".edit-box");
 
-	interchangeSVG = document.body.querySelector("#interchange-line");
-	interchangePath = interchangeSVG.querySelector("g line");
 
 	if (location.hostname.indexOf("gitee")>=0)
 	{
@@ -418,7 +443,6 @@ function reloadFormationData()
 	}
 	if (formationData)
 	{
-		//formation = idata;
 		formation.loadObj(formationData);
 		refreshAll(formation);
 	}
@@ -440,7 +464,8 @@ function creatNewUrl(arg){
 			'd=' + encodeURIComponent(JSON.stringify(outObj));
 
 		if (!arg.notPushState) history.pushState(null, null, newUrl);
-		return newUrl;
+		if (arg.returnObj) return outObj;
+		else return newUrl;
 	}
 }
 //截图
@@ -528,11 +553,11 @@ function initialize()
 	txtTitleDisplay.onclick = function(){
 		titleBox.classList.add("edit");
 		txtTitle.focus();
-	}
+	};
 	txtDetailDisplay.onclick = function(){
 		detailBox.classList.add("edit");
 		txtDetail.focus();
-	}
+	};
 
 	for (let ti=0,ti_len=formationBox.querySelectorAll(".team-bigbox").length;ti<ti_len;ti++)
 	{
@@ -895,10 +920,10 @@ function initialize()
 		const tempMon = {
 			id:monid,
 			level:level
-		}
+		};
 		const needExp = calculateExp(tempMon);
 		monLvExp.innerHTML = needExp ? parseBigNumber(needExp[0]) + (level>99?` + ${parseBigNumber(needExp[1])}` : "") : "";
-	};
+	}
 	editBox.reCalculateExp = reCalculateExp;
 	//加蛋
 	const monEditAddHpLi = settingBox.querySelector(".row-mon-plus .m-plus-hp-li");
@@ -1016,13 +1041,13 @@ function initialize()
 			plus:plus,
 			awoken:awoken,
 			latent:latent
-		}
+		};
 		const abilitys = calculateAbility(tempMon, null, true) || [0,0,0];
 
 		monEditHpValue.innerHTML = abilitys[0];
 		monEditAtkValue.innerHTML = abilitys[1];
 		monEditRcvValue.innerHTML = abilitys[2];
-	};
+	}
 	editBox.reCalculateAbility = reCalculateAbility;
 
 	const btnCancel = editBox.querySelector(".button-cancel");
@@ -1317,22 +1342,29 @@ function interchangeCard(formArr,toArr)
 			return new Member();
 		}else
 		{
-			let newMember = isAssist ? new MemberTeam() : new MemberAssist();
+			const newMember = isAssist ? new MemberTeam() : new MemberAssist();
 			newMember.loadFromMember(member);
 			return newMember;
 		}
 	}
+	const isCopy = changeSwapToCopy.checked;
 	let from = formation.teams[formArr[0]][formArr[1]][formArr[2]];
 	let to = formation.teams[toArr[0]][toArr[1]][toArr[2]];
 	if(formArr[1] != toArr[1]) //从武器拖到非武器才改变类型
 	{
 		from = changeType(from,formArr[1]);
-		to = changeType(to,toArr[1]);
+		if (!isCopy) to = ichangeType(to,toArr[1]);
+	}else if (isCopy)
+	{
+		const newFrom = new from.constructor();
+		newFrom.loadFromMember(from);
+		from = newFrom;
 	}
 	formation.teams[toArr[0]][toArr[1]][toArr[2]] = from;
-	formation.teams[formArr[0]][formArr[1]][formArr[2]] = to;
+	if (!isCopy) formation.teams[formArr[0]][formArr[1]][formArr[2]] = to;
 
-	creatNewUrl(); //刷新URL
+	const formationData = creatNewUrl({returnObj:true}); //刷新URL
+	formation.loadObj(formationData);
 	refreshAll(formation); //刷新全部
 }
 //改变一个怪物头像
