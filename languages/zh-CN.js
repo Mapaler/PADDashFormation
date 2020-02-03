@@ -1177,16 +1177,16 @@ function parseBigNumber(number)
 {
 	if (number === 0)
 	{
-		return number;
+		return number.toLocaleString();
 	}else if (number % 1e8 === 0)
 	{
-		return number / 1e8 + "亿";
+		return (number / 1e8).toLocaleString() + " 亿";
 	}else if (number % 1e4 === 0)
 	{
-		return number / 1e4 + "万";
+		return (number / 1e4).toLocaleString() + " 万";
 	}else
 	{
-		return number;
+		return number.toLocaleString();
 	}
 	
 }
