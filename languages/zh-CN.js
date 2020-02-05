@@ -1055,7 +1055,7 @@ function parseSkillDescription(skill)
 			break;
 		case 186:
 			str = '<span class="spColor">【7×6版面】</span>';
-			str += getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的" + getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]});
+			if (sk[0] || sk[1]) str += getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的" + getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]});
 			break;
 		case 188:
 			str = `对敌方1体造成${sk[0]}点无视防御的固定伤害`;
