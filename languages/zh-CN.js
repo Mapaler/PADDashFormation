@@ -298,6 +298,7 @@ function parseSkillDescription(skill)
 		case 46:case 48:
 			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的 HP ${sk[sk.length-1]/100}倍`;
 			break;
+		//case 48:见上
 		case 49:
 			str = `${sk.slice(0,sk.length-1).map(t=>{return attrN(t);}).join("、")}属性宠物的回复力×${sk[sk.length-1]/100}倍`;
 			break;
@@ -476,6 +477,7 @@ function parseSkillDescription(skill)
 		case 110:
 			str = `根据余下 HP 对敌方${sk[0]?"1":"全"}体造成${attrN(sk[1])}属性伤害（100% HP 时为自身攻击力×${sk[2]/100}倍，1 HP 时为自身攻击力×${sk[3]/100}倍）`;
 			break;
+		//case 111: 在45
 		case 115:
 			str = `对敌方1体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害，并回复伤害${sk[2]}%的 HP `;
 			break;
@@ -494,11 +496,6 @@ function parseSkillDescription(skill)
 			}
 			str += `</ul>`;
 			break;
-		case 118: //随机内容主动技能
-			str = `随机发动以下技能：<ul class="active-skill-ul random-active-skill">`;
-			str += sk.map(subSkill => {return `<li class="active-skill-li">${parseSkillDescription(Skills[subSkill])}</li>`;}).join("");
-			str += `</ul>`;
-			break;
 		case 117:
 			strArr = [];
 			if(sk[1]>0) strArr.push(`回复宠物自身回复力x${sk[1]/100}倍的 HP `);
@@ -507,6 +504,11 @@ function parseSkillDescription(skill)
 			if(sk[0]>0) strArr.push(`封锁状态减少${sk[0]}回合`);
 			if(sk[4]>0) strArr.push(`觉醒无效状态减少${sk[4]}回合`);
 			str = strArr.join("，");
+			break;
+		case 118: //随机内容主动技能
+			str = `随机发动以下技能：<ul class="active-skill-ul random-active-skill">`;
+			str += sk.map(subSkill => {return `<li class="active-skill-li">${parseSkillDescription(Skills[subSkill])}</li>`;}).join("");
+			str += `</ul>`;
 			break;
 		case 119: //相連消除4個的水寶珠時，所有寵物的攻擊力2.5倍，每多1個+0.5倍，最大5個時3倍
 			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(sk[0])}宝珠时，所有宠物的攻击力${sk[2]/100}倍`;
@@ -687,7 +689,7 @@ function parseSkillDescription(skill)
 			break;
 		case 156: //宝石姬技能
 			strArr = sk.slice(1,4);
-			str = `${sk[0]?`${sk[0]}回合内，`:""}根据队伍内觉醒技能${strArr.filter(s=>{return s>0;}).map(s=>{return awokenN(sk[1]);}).join("、")}的数目`;
+			str = `${sk[0]?`${sk[0]}回合内，`:""}根据队伍内觉醒技能 ${strArr.filter(s=>{return s>0;}).map(s=>{return awokenN(s);}).join("、")} 的数目`;
 			if (sk[4]==1)
 				str += `回复 HP ，每个觉醒回复${sk[5]}点`;
 			else if (sk[4]==2)
@@ -711,7 +713,6 @@ function parseSkillDescription(skill)
 			{
 				str += `以十字形式消除5个${getAttrTypeString(fullColor)}宝珠，当消除N个十字时，所有宠物的攻击力×${sk[1]/100}<sup>N</sup>倍`;
 			}
-			console.log(str)
 			break;
 		case 158:
 			str = `<span class="spColor">每组${sk[0]-1}珠或以下无法消除</span>`;
@@ -737,7 +738,7 @@ function parseSkillDescription(skill)
 			str += strArr.join("，");
 			break;
 		case 160:
-			str = `${sk[0]}回合内，结算时增加${sk[1]}COMBO`;
+			str = `${sk[0]}回合内，结算时连击数+${sk[1]}`;
 			break;
 		case 161:
 			str = `造成敌人 HP 上限${sk[0]}%的伤害`;
@@ -1100,7 +1101,7 @@ function parseSkillDescription(skill)
 			else if(sk[0] == 31) str += `5色`;
 			str += `同时攻击时`;
 			if (sk[2] != 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
-			if (sk[3]) str += `，结算时增加${sk[3]}连击`;
+			if (sk[3]) str += `，结算时连击数+${sk[3]}`;
 			break;
 		case 195:
 			str = `HP 减` + (sk[0]?`少${sk[0]}%`:`为1`);
