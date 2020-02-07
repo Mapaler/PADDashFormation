@@ -930,7 +930,7 @@ function parseSkillDescription(skill)
 			break;
 		case 168: //宝石姬技能2
 			strArr = sk.slice(1,7); //目前只有2个，而且2-6都是0，不知道是不是真的都是觉醒
-			str = `${sk[0]?`${sk[0]}回合内，`:""}根据队伍内觉醒技能${strArr.filter(s=>{return s>0;}).map(s=>{return awokenN(sk[1]);}).join("、")}的数目`;
+			str = `${sk[0]?`${sk[0]}回合内，`:""}根据队伍内觉醒技能 ${strArr.filter(s=>{return s>0;}).map(s=>{return awokenN(sk[1]);}).join("、")} 的数目`;
 			str += `提升所有属性的攻击力，每个觉醒可以提升${sk[7]}%`;
 			break;
 		case 169: //5COMBO或以上時受到的傷害減少25%、攻擊力6倍；
