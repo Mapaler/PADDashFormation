@@ -23,6 +23,8 @@ const equivalent_awoken = [
 	{small:19,big:53,times:2}, //手指
 	{small:21,big:56,times:2}, //SB
 ];
+const equivalent_awoken_small = equivalent_awoken.map(eak=>{return eak.small;});
+const equivalent_awoken_big = equivalent_awoken.map(eak=>{return eak.big;});
 //仿GM_xmlhttpRequest函数v1.3
 const GM_xmlhttpRequest = function(GM_param) {
 	const xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
@@ -294,48 +296,66 @@ function calculateAbility(member = null, assist = null, solo = true)
 	return abilitys;
 }
 //搜索卡片用
-function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens)
+function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equalAk)
 {
-	let res = cards;
+	let cardsRange = cards;
+	//属性
 	if (attr1 != null && attr1 ===  attr2)
 	{ //当两个颜色相同时，主副一样颜色的只需判断一次
-		res = res.filter(c=>{return c.attrs[0] == attr1 && c.attrs[1] == attr1;});
+		cardsRange = cardsRange.filter(c=>{return c.attrs[0] == attr1 && c.attrs[1] == attr1;});
 	}else if (fixMainColor || attr2 == -1) //如果固定了顺序，或者副属性选的是无
 	{
 		if (attr1 != null)
 		{
-			res = res.filter(c=>{return c.attrs[0] == attr1;});
+			cardsRange = cardsRange.filter(c=>{return c.attrs[0] == attr1;});
 		}
 		if (attr2 != null)
 		{
-			res = res.filter(c=>{return c.attrs[1] == attr2;});
+			cardsRange = cardsRange.filter(c=>{return c.attrs[1] == attr2;});
 		}
 	}else //不限定顺序时
 	{
 		if (attr1 != null)
 		{
-			res = res.filter(c=>{return c.attrs.indexOf(attr1)>=0;});
+			cardsRange = cardsRange.filter(c=>{return c.attrs.indexOf(attr1)>=0;});
 		}
 		if (attr2 != null)
 		{
-			res = res.filter(c=>{return c.attrs.indexOf(attr2)>=0;});
+			cardsRange = cardsRange.filter(c=>{return c.attrs.indexOf(attr2)>=0;});
 		}
 	}
+	//类型
 	if (types.length>0)
 	{
-		res = res.filter(c=>{return  types.some(t=>{return c.types.indexOf(t)>=0;});});
+		cardsRange = cardsRange.filter(c=>{return types.some(t=>{return c.types.indexOf(t)>=0;});});
 	}
+	//觉醒
 	if (awokens.length>0)
 	{
-		res = res.filter(c=>{return  awokens.every(a=>{
-			return c.awakenings.filter(ca=>{return ca == a.id;}).length >= a.num;
+		cardsRange = cardsRange.filter(card=>{return awokens.every(ak=>{
+			if (equalAk) //如果开启等效觉醒
+			{
+				//搜索等效觉醒
+				if (equivalent_awoken_small.indexOf(ak.id) >= 0)
+				{
+					const equivalentAwoken = equivalent_awoken.filter((eak)=>{return eak.small == ak.id;})[0];
+					const totalNum = card.awakenings.filter(cak=>{return cak == equivalentAwoken.small;}).length + 
+									 card.awakenings.filter(cak=>{return cak == equivalentAwoken.big;}).length * equivalentAwoken.times;
+					return totalNum >= ak.num;
+				}else if(equivalent_awoken_big.indexOf(ak.id) >= 0)
+				{ //属于大觉醒，直接忽略
+					return true;
+				}
+			}
+			return card.awakenings.filter(cak=>{return cak == ak.id;}).length >= ak.num;
 		});});
 	}
+	//超觉醒
 	if (sawokens.length>0)
 	{
-		res = res.filter(c=>{return  sawokens.some(sa=>{return c.superAwakenings.indexOf(sa)>=0;});});
+		cardsRange = cardsRange.filter(card=>{return sawokens.some(sak=>{return card.superAwakenings.indexOf(sak)>=0;});});
 	}
-	return res;
+	return cardsRange;
 }
 //产生一个怪物头像
 function createCardA(id)

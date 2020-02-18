@@ -680,23 +680,25 @@ function initialize()
 		searchBox.classList.toggle("display-none");
 	};
 
-	let s_attr1s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
-	let s_attr2s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
-	let s_fixMainColor = searchBox.querySelector(".attrs .fix-main-color");
-	let s_types = Array.prototype.slice.call(searchBox.querySelectorAll(".types-div .type-check"));
-	let s_awokensItem = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .awoken-count"));
-	let s_awokensIcon = s_awokensItem.map(it=>{
+	const s_attr1s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
+	const s_attr2s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
+	const s_fixMainColor = searchBox.querySelector(".attrs #fix-main-color");
+	const s_types = Array.prototype.slice.call(searchBox.querySelectorAll(".types-div .type-check"));
+	const s_awokensItems = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .awoken-count"));
+	const s_awokensIcons = s_awokensItems.map(it=>{
 		return it.querySelector(".awoken-icon");
 	});
-	let s_awokensCount = s_awokensItem.map(it=>{
+	const s_awokensCounts = s_awokensItems.map(it=>{
 		return it.querySelector(".count");
 	});
-	/*let s_awokensIcon = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .awoken-icon"));
-	let s_awokensCount = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .count"));*/
-	let s_sawokens = Array.prototype.slice.call(searchBox.querySelectorAll(".sawoken-div .sawoken-check"));
-	s_awokensIcon.forEach((b,idx)=>{ //每种觉醒增加1
+	
+	const s_awokensEquivalent = searchBox.querySelector(".awoken-div #consider-equivalent-awoken"); //搜索等效觉醒
+
+	const s_sawokens = Array.prototype.slice.call(searchBox.querySelectorAll(".sawoken-div .sawoken-check"));
+
+	s_awokensIcons.forEach((b,idx)=>{ //每种觉醒增加1
 		b.onclick = function(){
-			const countDom = s_awokensCount[idx];
+			const countDom = s_awokensCounts[idx];
 			let count = parseInt(countDom.innerHTML,10);
 			if (count<9)
 			{
@@ -719,17 +721,17 @@ function initialize()
 			}
 		}
 	}
-	s_awokensCount.forEach((b,idx)=>{ //每种觉醒减少1
+	s_awokensCounts.forEach((b,idx)=>{ //每种觉醒减少1
 		b.onclick = searchSubAwoken;
 	});
 
 	const awokenClear = searchBox.querySelector(".awoken-div .awoken-clear");
 	const sawokenClear = searchBox.querySelector(".sawoken-div .sawoken-clear");
 	awokenClear.onclick = function(){ //清空觉醒选项
-		s_awokensCount.forEach(t=>{
+		s_awokensCounts.forEach(t=>{
 			t.innerHTML = 0;
 		});
-		s_awokensItem.forEach(t=>{
+		s_awokensItems.forEach(t=>{
 			t.classList.add("zero");
 		});
 	};
@@ -801,12 +803,12 @@ function initialize()
 		}
 		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
-		const awokensFilter = s_awokensCount.filter(btn=>{return parseInt(btn.innerHTML,10)>0;}).map(btn=>{
+		const awokensFilter = s_awokensCounts.filter(btn=>{return parseInt(btn.innerHTML,10)>0;}).map(btn=>{
 			return {id:parseInt(btn.value,10),num:parseInt(btn.innerHTML,10)};
 		});
-		console.log("搜索条件",attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter);
-		let searchResult = searchCards(Cards,attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter);
-		console.log("搜索结果",searchResult);
+		console.debug("搜索条件",attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter,s_awokensEquivalent.checked);
+		const searchResult = searchCards(Cards,attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter,s_awokensEquivalent.checked);
+		console.debug("搜索结果",searchResult);
 		showSearch(searchResult);
 	};
 	searchClose.onclick = function(){
@@ -818,10 +820,10 @@ function initialize()
 		s_types.forEach(t=>{
 			t.checked = false;
 		});
-		s_awokensCount.forEach(t=>{
+		s_awokensCounts.forEach(t=>{
 			t.innerHTML = 0;
 		});
-		s_awokensItem.forEach(t=>{
+		s_awokensItems.forEach(t=>{
 			t.classList.add("zero");
 		});
 		s_sawokens.forEach(t=>{
@@ -1989,17 +1991,15 @@ function refreshFormationAwokenCount(awokenDom,teams){
 		const aicon = awokenUL.querySelector(".awoken-" + ai);
 		if (!aicon) continue; //如果没有这个觉醒图，直接跳过
 		//搜索等效觉醒
-		const equivalentAwokens = equivalent_awoken.filter((ak)=>{return ak.small == ai || ak.big == ai;});
-		if (equivalentAwokens.length > 0)
+		if (equivalent_awoken_small.indexOf(ai) >= 0)
 		{
-			const equivalentAwoken = equivalentAwokens[0];
-			if (equivalentAwoken.small == ai)
-			{ //小觉醒
-				setCount(aicon, awokenCountInFormation(teams, equivalentAwoken.small, solo) + awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times);
-			}else
-			{ //属于大觉醒
-				continue;
-			}
+			const equivalentAwoken = equivalent_awoken.filter((ak)=>{return ak.small == ai;})[0];
+			const totalNum = awokenCountInFormation(teams, equivalentAwoken.small, solo) + 
+							 awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times;
+			setCount(aicon, totalNum);
+		}else if(equivalent_awoken_big.indexOf(ai) >= 0)
+		{
+			continue;
 		}else
 		{
 			setCount(aicon,awokenCountInFormation(teams,ai,solo));

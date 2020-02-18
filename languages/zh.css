@@ -247,6 +247,9 @@
 .search-box .attrs .fix-main-color-label::after{
 	content: "限制属性 1 为主属性，属性 2 为副属性";
 }
+.search-box .consider-equivalent-awoken-label::after{
+	content: "同时搜索等效觉醒";
+}
 .attrs .attr-all::before{
 	content: "不限";
 }
