@@ -865,6 +865,18 @@ var sawokens = [
 .badge-13{
 	background-position-y: -390px;
 }
+.badge-14{
+	background-position-y: -420px;
+}
+.badge-15{
+	background-position-y: -450px;
+}
+.badge-16{
+	background-position-y: -480px;
+}
+.badge-17{
+	background-position-y: -510px;
+}
 
 /*搜索框中用到的属性图片*/
 .attrs .attr-t0::before{
