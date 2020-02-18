@@ -247,6 +247,9 @@
 .search-box .attrs .fix-main-color-label::after{
 	content: "限制屬性 1 爲主屬性，屬性 2 爲副屬性";
 }
+.search-box .consider-equivalent-awoken-label::after{
+	content: "同時搜索等效覺醒";
+}
 .attrs .attr-all::before{
 	content: "不限";
 }

@@ -11,7 +11,7 @@
 <script type="text/javascript" src="languages/language-list.js"></script>
 <script type="text/javascript" src="universal_function.js"></script>
 <script type="text/javascript" src="script.js"></script>
-<script type="text/javascript" src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script type="text/javascript" src="html2canvas.min.js"></script>
 <script type="text/javascript">
 const solo = false;
 const teamsCount = 3;
@@ -22,6 +22,7 @@ var formation = new Formation(teamsCount,6);
 	width: 756px;
 	min-width: 756px;
 }
+/*队伍之间的分割线*/
 .team-bigbox{
 	border-top: 1px solid gray;
 }
@@ -48,7 +49,7 @@ var formation = new Formation(teamsCount,6);
 			<br>
 			<input type="checkbox" name="show-mon-id" class="config-checkbox-ipt" id="show-mon-id" onclick="toggleShowMonId();" checked><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
 			<input type="checkbox" name="btn-show-mon-skill-cd" class="config-checkbox-ipt" id="btn-show-mon-skill-cd" onclick="toggleShowMonSkillCd();"><label class="config-checkbox-lbl btn-show-mon-skill-cd-lbl" for="btn-show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" name="change-swap-to-copy" class="config-checkbox-ipt" id="change-swap-to-copy"><label class="config-checkbox-lbl" for="change-swap-to-copy"><div class="config-checkbox-lbl-cicle"></div></label>
+			<input type="checkbox" name="change-swap-to-copy" class="config-checkbox-ipt" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"><div class="config-checkbox-lbl-cicle"></div></label>
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
 	</div>
@@ -1066,7 +1067,7 @@ var formation = new Formation(teamsCount,6);
 					<li><input type="radio" name="attr-2" class="attr-radio" value="4" id="search-attr-2-4" /><label class="attr-t4" for="search-attr-2-4"><!--暗--></label></li>
 					<li><input type="radio" name="attr-2" class="attr-radio" value="-1" id="search-attr-2-none" /><label class="attr-none" for="search-attr-2-none"><!--无--></label></li>
 				</ul>
-				<label class="fix-main-color-label"><input type="checkbox" name="fix-main-color" class="fix-main-color" /></label>
+				<input type="checkbox" name="fix-main-color" class="config-checkbox-ipt" id="fix-main-color" checked><label class="config-checkbox-lbl fix-main-color-label" for="fix-main-color"><div class="config-checkbox-lbl-cicle"></div></label>
 			</div>
 			<div class="types-div"><!--类型-->
 				<ul class="type-list">
@@ -1086,6 +1087,7 @@ var formation = new Formation(teamsCount,6);
 			</div>
 			<div class="awoken-div"><!--觉醒-->
 				<button class="awoken-clear" ></button>
+				<input type="checkbox" name="consider-equivalent-awoken" class="config-checkbox-ipt" id="consider-equivalent-awoken"><label class="config-checkbox-lbl consider-equivalent-awoken-label" for="consider-equivalent-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
 				<ul class="awoken-ul">
 					<li class="awoken-count zero"><button class="awoken-icon awoken-1" value="1"></button><button class="count" value="1">0</button></li><!--HP+-->
 					<li class="awoken-count zero"><button class="awoken-icon awoken-2" value="2"></button><button class="count" value="2">0</button></li><!--攻击+-->

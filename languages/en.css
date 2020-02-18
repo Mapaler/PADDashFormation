@@ -248,6 +248,9 @@
 .search-box .attrs .fix-main-color-label::after{
 	content: "Fix attr-1 for main-attr, attr-2 for sub-attr.";
 }
+.search-box .consider-equivalent-awoken-label::after{
+	content: "Search for Equivalent Awoken";
+}
 .attrs .attr-all::before{
 	content: "All";
 }

@@ -23,8 +23,6 @@ const equivalent_awoken = [
 	{small:19,big:53,times:2}, //手指
 	{small:21,big:56,times:2}, //SB
 ];
-const equivalent_awoken_small = equivalent_awoken.map(eak=>{return eak.small;});
-const equivalent_awoken_big = equivalent_awoken.map(eak=>{return eak.big;});
 //仿GM_xmlhttpRequest函数v1.3
 const GM_xmlhttpRequest = function(GM_param) {
 	const xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
@@ -330,21 +328,36 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equal
 		cardsRange = cardsRange.filter(c=>{return types.some(t=>{return c.types.indexOf(t)>=0;});});
 	}
 	//觉醒
+	
+	//等效觉醒时，事先去除大觉醒
+	if (equalAk)
+	{
+		const bigEqualAwokens = awokens.filter(ak => equivalent_awoken.findIndex(eak => eak.big === ak.id) >= 0); //所有存在的大觉醒
+		bigEqualAwokens.forEach(bak=>{
+			const equivalentAwoken = equivalent_awoken.find(eak => eak.big === bak.id);
+			let smallEqualAwoken = awokens.find(ak => equivalentAwoken.small === ak.id);
+			if (!smallEqualAwoken)
+			{
+				smallEqualAwoken = {id:equivalentAwoken.small,num:0}; //如果没有就新建一个
+				awokens.push(smallEqualAwoken);
+			}
+			smallEqualAwoken.num += bak.num * equivalentAwoken.times; //小觉醒添加大觉醒的数字
+		});
+		awokens = awokens.filter(ak => equivalent_awoken.findIndex(eak => eak.big === ak.id) < 0); //去除大觉醒
+	}
+
 	if (awokens.length>0)
 	{
-		cardsRange = cardsRange.filter(card=>{return awokens.every(ak=>{
+		cardsRange = cardsRange.filter(card => {return awokens.every(ak=>{
 			if (equalAk) //如果开启等效觉醒
 			{
 				//搜索等效觉醒
-				if (equivalent_awoken_small.indexOf(ak.id) >= 0)
+				const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ak.id);
+				if (equivalentAwoken)
 				{
-					const equivalentAwoken = equivalent_awoken.filter((eak)=>{return eak.small == ak.id;})[0];
 					const totalNum = card.awakenings.filter(cak=>{return cak == equivalentAwoken.small;}).length + 
 									 card.awakenings.filter(cak=>{return cak == equivalentAwoken.big;}).length * equivalentAwoken.times;
 					return totalNum >= ak.num;
-				}else if(equivalent_awoken_big.indexOf(ak.id) >= 0)
-				{ //属于大觉醒，直接忽略
-					return true;
 				}
 			}
 			return card.awakenings.filter(cak=>{return cak == ak.id;}).length >= ak.num;
@@ -353,7 +366,11 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equal
 	//超觉醒
 	if (sawokens.length>0)
 	{
-		cardsRange = cardsRange.filter(card=>{return sawokens.some(sak=>{return card.superAwakenings.indexOf(sak)>=0;});});
+		cardsRange = cardsRange.filter(card=>{return sawokens.some(sak=>{
+			const equivalentAwoken = equivalent_awoken.find(eak => eak.small === sak);
+			return card.superAwakenings.indexOf(sak)>=0 || 
+				   equalAk && equivalentAwoken && card.superAwakenings.indexOf(equivalentAwoken.big)>=0; //如果开启等效觉醒
+		});});
 	}
 	return cardsRange;
 }
