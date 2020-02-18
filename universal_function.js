@@ -14,6 +14,15 @@ const type_allowable_latent = {
 	"7":[17],//7恶魔
 	"8":[17,20,21,24],//8机械
 };
+//等效觉醒列表
+const equivalent_awoken = [
+	{small:10,big:52,times:2}, //防封
+	{small:11,big:68,times:5}, //防暗
+	{small:12,big:69,times:5}, //防废
+	{small:13,big:70,times:5}, //防毒
+	{small:19,big:53,times:2}, //手指
+	{small:21,big:56,times:2}, //SB
+];
 //仿GM_xmlhttpRequest函数v1.3
 const GM_xmlhttpRequest = function(GM_param) {
 	const xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
