@@ -1812,7 +1812,7 @@ function editBoxChangeMonId(id)
 
 	rowLederSkill.appendChild(fragment);
 
-	if (card.overlay)
+	if (card.overlay || card.types[0] == 15 && card.types[1] == -1)
 	{ //当可以叠加时，不能打297和潜觉
 		rowPlus.classList.add("disabled"); 
 		rowLatent.classList.add("disabled");

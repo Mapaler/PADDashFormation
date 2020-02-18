@@ -127,7 +127,7 @@ function parseSkillDescription(skill)
 		}
 		const hasMul = mulArr.filter(m=>{return m != 1;}); //不是1的数值
 		let str = "";
-		if (hasMul)
+		if (hasMul.length>0)
 		{
 			const hasDiff = hasMul.filter(m=>{return m != hasMul[0];}).length > 0; //存在不一样的值
 			if (hasDiff)
@@ -149,7 +149,7 @@ function parseSkillDescription(skill)
 			}
 		}else
 		{
-			str += "没有变化";
+			str += "能力值没有变化";
 		}
 		return str;
 	}
@@ -638,11 +638,11 @@ function parseSkillDescription(skill)
 			str += `，HP ${sk[3]?(sk[6]?`${sk[2]}%~${sk[5]}%`:`${sk[5]}%以上`):(sk[6]?`${sk[5]}%以下`:(sk[2]==100?`${sk[5]}以上`:`${sk[5]}%~${sk[2]}%`))}时攻击力${getFixedHpAtkRcvString({atk:sk[7]})}`;
 			break;
 		case 140:
-			str = `${nb(sk[0],attrsName).join("、")}宝珠强化（每颗强化珠伤害/回复增加${sk[1]}%）`;
+			str = `${getOrbsAttrString(sk[0])}宝珠强化（每颗强化珠伤害/回复增加${sk[1]}%）`;
 			break;
 		case 141:
 			let otherAttrs = sk[1] ^ sk[2]; //异或，sk[2]表示在什么珠以外生成，平时等于sk[1]
-			str = `${otherAttrs?`${nb(otherAttrs,attrsName).join("、")}以外`:""}随机生成${nb(sk[1],attrsName).join("、")}珠各${sk[0]}个`;
+			str = `${otherAttrs?`${getOrbsAttrString(otherAttrs)}以外`:""}随机生成${getOrbsAttrString(sk[1])}宝珠各${sk[0]}个`;
 			break;
 		case 142:
 			str = `${sk[0]}回合内自身的属性变为${attrN(sk[1])}`;
@@ -968,7 +968,7 @@ function parseSkillDescription(skill)
 			{//光寶珠有2COMBO或以上時，所有寵物的攻擊力3倍
 				str = `${nb(fullColor[0], attrsName).join("、")}宝珠有${sk[4]}串或以上时`;
 			}
-			if (sk[5]) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[5]})}`;
+			if (sk[5] && sk[5] !== 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[5]})}`;
 			if (sk[6]) str += `，受到的伤害减少${sk[6]}%`;
 			break;
 		case 172:
@@ -1161,6 +1161,9 @@ function parseSkillDescription(skill)
 			str = `队员组成全是像素进化时，`;
 			if (sk[0]) str += getAttrTypeString(flags(sk[0]));
 			str += "宠物的" + getFixedHpAtkRcvString({hp:sk[1],atk:sk[2],rcv:sk[3]});
+			break;
+		case 205:
+			str = `${sk[0]}回合内，${getOrbsAttrString(sk[0])}宝珠会以锁定形式掉落`;
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
