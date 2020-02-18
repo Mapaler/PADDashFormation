@@ -1163,7 +1163,7 @@ function parseSkillDescription(skill)
 			str += "宠物的" + getFixedHpAtkRcvString({hp:sk[1],atk:sk[2],rcv:sk[3]});
 			break;
 		case 205:
-			str = `${sk[0]}回合内，${getOrbsAttrString(sk[0])}宝珠会以锁定形式掉落`;
+			str = `${sk[1]}回合内，${getOrbsAttrString(sk[0])}宝珠会以锁定形式掉落`;
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
