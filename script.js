@@ -1983,32 +1983,23 @@ function refreshFormationAwokenCount(awokenDom,teams){
 		else
 			ali.classList.add("display-none");
 	}
-	const bigAwoken = [52,53,56,68,69,70]; //等于几个小觉醒的大觉醒
+	
 	for (var ai=1;ai<=72;ai++)
 	{
 		const aicon = awokenUL.querySelector(".awoken-" + ai);
-		if (!aicon) continue;
-		if (ai == 10) //防封
+		if (!aicon) continue; //如果没有这个觉醒图，直接跳过
+		//搜索等效觉醒
+		const equivalentAwokens = equivalent_awoken.filter((ak)=>{return ak.small == ai || ak.big == ai;});
+		if (equivalentAwokens.length > 0)
 		{
-			setCount(aicon,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,52,solo)*2);
-		}else if (ai == 11) //防暗
-		{
-			setCount(aicon,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,68,solo)*5);
-		}else if (ai == 12) //防废
-		{
-			setCount(aicon,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,69,solo)*5);
-		}else if (ai == 13) //防毒
-		{
-			setCount(aicon,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,70,solo)*5);
-		}else if (ai == 19) //手指
-		{
-			setCount(aicon,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,53,solo)*2);
-		}else if (ai == 21) //SB
-		{
-			setCount(aicon,awokenCountInFormation(teams,ai,solo)+awokenCountInFormation(teams,56,solo)*2);
-		}else if (bigAwoken.indexOf(ai)>=0) //属于大觉醒
-		{
-			continue;
+			const equivalentAwoken = equivalentAwokens[0];
+			if (equivalentAwoken.small == ai)
+			{ //小觉醒
+				setCount(aicon, awokenCountInFormation(teams, equivalentAwoken.small, solo) + awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times);
+			}else
+			{ //属于大觉醒
+				continue;
+			}
 		}else
 		{
 			setCount(aicon,awokenCountInFormation(teams,ai,solo));
