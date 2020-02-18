@@ -241,6 +241,9 @@
 .search-box .attrs .fix-main-color-label::after{
 	content: "제한 속성 1은 기본 속성 이며 속성 2 하위 속성입니다.";
 }
+.search-box .consider-equivalent-awoken-label::after{
+	content: "동시에 해당 경계를 각성";
+}
 .attrs .attr-all::before{
 	content: "무제한";
 }

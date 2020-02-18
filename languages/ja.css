@@ -241,6 +241,9 @@
 .search-box .attrs .fix-main-color-label::after{
 	content: "限定 属性 1->主属性，属性 2->副属性";
 }
+.search-box .consider-equivalent-awoken-label::after{
+	content: "同時に同等の覚醒を検索";
+}
 .attrs .attr-all::before{
 	content: "無制限";
 }

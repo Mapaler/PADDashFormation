@@ -1991,15 +1991,19 @@ function refreshFormationAwokenCount(awokenDom,teams){
 		const aicon = awokenUL.querySelector(".awoken-" + ai);
 		if (!aicon) continue; //如果没有这个觉醒图，直接跳过
 		//搜索等效觉醒
-		if (equivalent_awoken_small.indexOf(ai) >= 0)
+		const equalIndex = equivalent_awoken.findIndex(eak=>eak.small === ai || eak.big === ai);
+		if (equalIndex >= 0)
 		{
-			const equivalentAwoken = equivalent_awoken.filter((ak)=>{return ak.small == ai;})[0];
-			const totalNum = awokenCountInFormation(teams, equivalentAwoken.small, solo) + 
-							 awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times;
-			setCount(aicon, totalNum);
-		}else if(equivalent_awoken_big.indexOf(ai) >= 0)
-		{
-			continue;
+			const equivalentAwoken = equivalent_awoken[equalIndex];
+			if (equivalentAwoken.small === ai)
+			{
+				const totalNum = awokenCountInFormation(teams, equivalentAwoken.small, solo) + 
+								 awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times;
+				setCount(aicon, totalNum);
+			}else
+			{
+				continue;
+			}
 		}else
 		{
 			setCount(aicon,awokenCountInFormation(teams,ai,solo));
