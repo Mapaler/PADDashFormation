@@ -1790,11 +1790,12 @@ function editBoxChangeMonId(id)
 
 	skillTitle.innerHTML = descriptionToHTML(skill.name);
 	skillDetail.innerHTML = parseSkillDescription(skill);
-	skillLevel.max = card.overlay ? 1 : skill.maxLevel;
-	skillLevel.value = card.overlay ? 1 : skill.maxLevel;
-	skillLevel_Max.value = card.overlay ? 1 : skill.maxLevel;
+	const t_maxLevel = card.overlay || card.types.indexOf(15)>=0 ? 1 : skill.maxLevel; //遇到不能升技的，最大等级强制为1
+	skillLevel.max = t_maxLevel;
+	skillLevel.value = t_maxLevel;
+	skillLevel_Max.value = t_maxLevel;
 	skillLevel_Max.innerHTML = skill.maxLevel;
-	skillCD.innerHTML = skill.initialCooldown - skill.maxLevel + 1;
+	skillCD.innerHTML = skill.initialCooldown - t_maxLevel + 1;
 
 	rowSkill.appendChild(fragment);
 
