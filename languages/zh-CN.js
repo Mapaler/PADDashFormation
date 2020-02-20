@@ -269,7 +269,7 @@ function parseSkillDescription(skill)
 			str = `对敌方1体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 38:
-			str = `HP ${sk[0] == 100?"全满":`${sk[0]}%以下`}时${sk[1]<100?`有${sk[1]}的几率使`:""}受到的伤害减少${sk[2]}`;
+			str = `HP ${sk[0] == 100?"全满":`${sk[0]}%以下`}时${sk[1]<100?`有${sk[1]}的几率使`:""}受到的伤害减少${sk[2]}%`;
 			if (sk[1]!=100) str+=`未知的 参数1 ${sk[1]}`;
 			break;
 		case 39:
@@ -397,7 +397,7 @@ function parseSkillDescription(skill)
 			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方1体造成自身攻击力×${sk[1]/100}${sk[1]!=sk[2]?`~${+sk[2]/100}`:""}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 85:
-			str = `HP 减少${sk[3]}%，对敌方全体造成自身攻击力×${sk[1]/100}${sk[1]!=sk[2]?`~${+sk[2]/100}`:""}倍的${attrN(sk[0])}属性伤害`;
+			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方全体造成自身攻击力×${sk[1]/100}${sk[1]!=sk[2]?`~${+sk[2]/100}`:""}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 86:
 			str = `HP 变为1，，对敌方1体造成${sk[1]}点${attrN(sk[0])}属性伤害`;
@@ -570,7 +570,7 @@ function parseSkillDescription(skill)
 			str += strArr.join("、");
 			break;
 		case 126:
-			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内${nb(sk[0], attrsName).join("、")}珠的掉落率提高${sk[3]}%`;
+			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内${nb(sk[0], attrsName).join("、")}宝珠的掉落率提高${sk[3]}%`;
 			break;
 		case 127: //生成竖列
 			strArr = [];
@@ -676,7 +676,8 @@ function parseSkillDescription(skill)
 			break;
 		case 152:
 			str = `将${getOrbsAttrString(sk[0])}宝珠锁定`;
-			if (sk[1]!=42 && sk[1]!=99) str += `，还有未知 参数[1]：${sk[1]}`;
+			//if (sk[1]!=42 && sk[1]!=99) str += `，还有未知 参数[1]：${sk[1]}`;
+			if (sk[1] < 42) str += `${sk[1]}个`;
 			break;
 		case 153:
 			str = `敌人全体变为${attrN(sk[0])}属性。（${sk[1]?"不":""}受防护盾的影响）`;
