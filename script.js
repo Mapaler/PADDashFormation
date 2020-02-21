@@ -677,6 +677,7 @@ function initialize()
 	const settingBox = editBox.querySelector(".setting-box");
 	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
 	searchOpen.onclick = function(){
+		s_includeSuperAwoken.onclick();
 		searchBox.classList.toggle("display-none");
 	};
 
@@ -694,21 +695,31 @@ function initialize()
 	
 	const s_awokensEquivalent = searchBox.querySelector(".awoken-div #consider-equivalent-awoken"); //搜索等效觉醒
 
-	const s_sawokens = Array.prototype.slice.call(searchBox.querySelectorAll(".sawoken-div .sawoken-check"));
+	const s_sawokenDiv = searchBox.querySelector(".sawoken-div");
+	const s_sawokens = Array.prototype.slice.call(s_sawokenDiv.querySelectorAll(".sawoken-check"));
+	const s_includeSuperAwoken = searchBox.querySelector(".awoken-div #include-super-awoken"); //搜索超觉醒
+	s_includeSuperAwoken.onclick = function(){
+		if (this.checked)
+			s_sawokenDiv.classList.add("display-none");
+		else
+			s_sawokenDiv.classList.remove("display-none");
+	}
 
+	function search_awokenAdd1()
+	{
+		const countDom = this.parentNode.querySelector(".count");
+		let count = parseInt(countDom.innerHTML,10);
+		if (count<9)
+		{
+			count++;
+			countDom.innerHTML = count;
+			this.parentNode.classList.remove("zero");
+		}
+	}
 	s_awokensIcons.forEach((b,idx)=>{ //每种觉醒增加1
-		b.onclick = function(){
-			const countDom = s_awokensCounts[idx];
-			let count = parseInt(countDom.innerHTML,10);
-			if (count<9)
-			{
-				count++;
-				countDom.innerHTML = count;
-				b.parentNode.classList.remove("zero");
-			}
-		};
+		b.onclick = search_awokenAdd1;
 	});
-	function searchSubAwoken()
+	function search_awokenSub1()
 	{
 		let count = parseInt(this.innerHTML,10);
 		if (count>0)
@@ -722,7 +733,7 @@ function initialize()
 		}
 	}
 	s_awokensCounts.forEach((b,idx)=>{ //每种觉醒减少1
-		b.onclick = searchSubAwoken;
+		b.onclick = search_awokenSub1;
 	});
 
 	const awokenClear = searchBox.querySelector(".awoken-div .awoken-clear");
@@ -779,7 +790,6 @@ function initialize()
 	searchStart.onclick = function(){
 		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
 		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
-		const fixMainColor = s_fixMainColor.checked;
 		let attr1,attr2;
 		if (attr1Filter.length>0)
 		{
@@ -803,12 +813,28 @@ function initialize()
 		}
 		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
-		const awokensFilter = s_awokensCounts.filter(btn=>{return parseInt(btn.innerHTML,10)>0;}).map(btn=>{
+		const awokensFilter = s_awokensCounts.filter(btn=>parseInt(btn.innerHTML,10)>0).map(btn=>{
 			return {id:parseInt(btn.value,10),num:parseInt(btn.innerHTML,10)};
 		});
-		console.debug("搜索条件",attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter,s_awokensEquivalent.checked);
-		const searchResult = searchCards(Cards,attr1,attr2,fixMainColor,typesFilter,awokensFilter,sawokensFilter,s_awokensEquivalent.checked);
-		console.debug("搜索结果",searchResult);
+		const searchResult = searchCards(Cards,
+			attr1,attr2,
+			s_fixMainColor.checked,
+			typesFilter,
+			awokensFilter,
+			sawokensFilter,
+			s_awokensEquivalent.checked,
+			s_includeSuperAwoken.checked
+			);
+		console.debug("搜索条件：属性[%d,%d]，固定主副%s，类型：%o，觉醒：%o，超觉醒：%o，等效觉醒%s，搜超觉醒%s。\n搜索结果：%o",
+			attr1,attr2,
+			s_fixMainColor.checked,
+			typesFilter,
+			awokensFilter,
+			sawokensFilter,
+			s_awokensEquivalent.checked,
+			s_includeSuperAwoken.checked,
+			searchResult
+			);
 		showSearch(searchResult);
 	};
 	searchClose.onclick = function(){
@@ -847,8 +873,8 @@ function initialize()
 	};
 	monstersID.oninput = monstersID.onchange;
 	//觉醒
-	let monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon"));
-	monEditAwokens.forEach((akDom,idx,domArr)=>{
+	const monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon"));
+	monEditAwokens.forEach((akDom,idx)=>{
 		akDom.onclick = function(){
 			editBox.awokenCount = idx;
 			editBox.reCalculateAbility();

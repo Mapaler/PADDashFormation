@@ -250,6 +250,9 @@
 .search-box .consider-equivalent-awoken-label::after{
 	content: "同时搜索等效觉醒";
 }
+.search-box .include-super-awoken-label::after{
+	content: "包括超觉醒";
+}
 .attrs .attr-all::before{
 	content: "不限";
 }
