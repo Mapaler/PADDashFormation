@@ -251,6 +251,9 @@
 .search-box .consider-equivalent-awoken-label::after{
 	content: "Search for Equivalent Awoken";
 }
+.search-box .include-super-awoken-label::after{
+	content: "Including Super Awoken";
+}
 .attrs .attr-all::before{
 	content: "All";
 }

@@ -294,38 +294,38 @@ function calculateAbility(member = null, assist = null, solo = true)
 	return abilitys;
 }
 //搜索卡片用
-function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equalAk)
+function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equalAk,incSawoken)
 {
 	let cardsRange = cards;
 	//属性
 	if (attr1 != null && attr1 ===  attr2)
 	{ //当两个颜色相同时，主副一样颜色的只需判断一次
-		cardsRange = cardsRange.filter(c=>{return c.attrs[0] == attr1 && c.attrs[1] == attr1;});
+		cardsRange = cardsRange.filter(c=>c.attrs[0] == attr1 && c.attrs[1] == attr1);
 	}else if (fixMainColor || attr2 == -1) //如果固定了顺序，或者副属性选的是无
 	{
 		if (attr1 != null)
 		{
-			cardsRange = cardsRange.filter(c=>{return c.attrs[0] == attr1;});
+			cardsRange = cardsRange.filter(c=>c.attrs[0] == attr1);
 		}
 		if (attr2 != null)
 		{
-			cardsRange = cardsRange.filter(c=>{return c.attrs[1] == attr2;});
+			cardsRange = cardsRange.filter(c=>c.attrs[1] == attr2);
 		}
 	}else //不限定顺序时
 	{
 		if (attr1 != null)
 		{
-			cardsRange = cardsRange.filter(c=>{return c.attrs.indexOf(attr1)>=0;});
+			cardsRange = cardsRange.filter(c=>c.attrs.indexOf(attr1)>=0);
 		}
 		if (attr2 != null)
 		{
-			cardsRange = cardsRange.filter(c=>{return c.attrs.indexOf(attr2)>=0;});
+			cardsRange = cardsRange.filter(c=>c.attrs.indexOf(attr2)>=0);
 		}
 	}
 	//类型
 	if (types.length>0)
 	{
-		cardsRange = cardsRange.filter(c=>{return types.some(t=>{return c.types.indexOf(t)>=0;});});
+		cardsRange = cardsRange.filter(c=>types.some(t=>c.types.indexOf(t)>=0));
 	}
 	//觉醒
 	
@@ -348,23 +348,36 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equal
 
 	if (awokens.length>0)
 	{
-		cardsRange = cardsRange.filter(card => {return awokens.every(ak=>{
-			if (equalAk) //如果开启等效觉醒
-			{
-				//搜索等效觉醒
-				const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ak.id);
-				if (equivalentAwoken)
-				{
-					const totalNum = card.awakenings.filter(cak=>{return cak == equivalentAwoken.small;}).length + 
-									 card.awakenings.filter(cak=>{return cak == equivalentAwoken.big;}).length * equivalentAwoken.times;
-					return totalNum >= ak.num;
-				}
+		cardsRange = cardsRange.filter(card => {
+			let cardAwakeningsArray = [];
+			if (incSawoken && card.superAwakenings.length > 0)
+			{ //如果搜索超觉醒，产生原始觉醒分别加上每个超觉醒的多个数组
+				cardAwakeningsArray = card.superAwakenings.map(sak=>card.awakenings.concat(sak));
+			}else
+			{ //单个原始觉醒数组
+				cardAwakeningsArray.push(card.awakenings);
 			}
-			return card.awakenings.filter(cak=>{return cak == ak.id;}).length >= ak.num;
-		});});
+
+			return cardAwakeningsArray.some(cardAwakening=>{ //重复每种包含超觉醒的觉醒数组，只要有一组符合要求就行
+				return awokens.every(ak=>{ //判断需要搜索的觉醒是不是全都在觉醒数组里
+					if (equalAk) //如果开启等效觉醒
+					{
+						//搜索等效觉醒
+						const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ak.id);
+						if (equivalentAwoken)
+						{
+							const totalNum = cardAwakening.filter(cak=>cak == equivalentAwoken.small).length + 
+											 cardAwakening.filter(cak=>cak == equivalentAwoken.big).length * equivalentAwoken.times;
+							return totalNum >= ak.num;
+						}
+					}
+					return cardAwakening.filter(cak=>cak == ak.id).length >= ak.num;
+				});
+			});
+		});
 	}
 	//超觉醒
-	if (sawokens.length>0)
+	if (sawokens.length>0 && !incSawoken)
 	{
 		cardsRange = cardsRange.filter(card=>{return sawokens.some(sak=>{
 			const equivalentAwoken = equivalent_awoken.find(eak => eak.small === sak);

@@ -244,6 +244,9 @@
 .search-box .consider-equivalent-awoken-label::after{
 	content: "同時に同等の覚醒を検索";
 }
+.search-box .include-super-awoken-label::after{
+	content: "超覚醒を含む";
+}
 .attrs .attr-all::before{
 	content: "無制限";
 }

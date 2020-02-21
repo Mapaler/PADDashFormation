@@ -244,6 +244,9 @@
 .search-box .consider-equivalent-awoken-label::after{
 	content: "동시에 해당 경계를 각성";
 }
+.search-box .include-super-awoken-label::after{
+	content: "슈퍼 각성 포함";
+}
 .attrs .attr-all::before{
 	content: "무제한";
 }
