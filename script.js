@@ -843,8 +843,8 @@ function initialize()
 			awokensFilter,
 			sawokensFilter,
 			s_awokensEquivalent.checked,
-			s_includeSuperAwoken.checked,
 			s_canAssist.checked,
+			s_includeSuperAwoken.checked,
 			searchResult
 			);
 		showSearch(searchResult);
