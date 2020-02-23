@@ -1337,7 +1337,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>{return subskill.type == searchType});
 			}
 		})},
-		{name:"临时的特所有生成3x3方块殊搜索",function:()=>Cards.filter(card=>{
+		{name:"所有生成3x3方块",function:()=>Cards.filter(card=>{
 			function is3x3(sk)
 			{
 				for (let si=0;si<3;si++)
