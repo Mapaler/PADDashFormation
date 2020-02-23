@@ -635,12 +635,20 @@ function initialize()
 	};
 
 	const smonsterinfoBox = editBox.querySelector(".monsterinfo-box");
+	const mSeriesId = smonsterinfoBox.querySelector(".monster-seriesId");
+	mSeriesId.onclick = function(){ //搜索系列
+		const seriesId = parseInt(this.getAttribute('data-seriesId'),10);
+		if (seriesId>0)
+		{
+			showSearch(Cards.filter(card=>{return card.seriesId == seriesId;}));
+		}
+	};
 	const mCollabId = smonsterinfoBox.querySelector(".monster-collabId");
 	mCollabId.onclick = function(){ //搜索合作
-		const collabId = parseInt(this.getAttribute('data-collabId'));
+		const collabId = parseInt(this.getAttribute('data-collabId'),10);
 		if (collabId>0);
 		{
-			searchColla(this.getAttribute('data-collabId'));
+			searchColla(collabId);
 		}
 	};
 	const mAltName = smonsterinfoBox.querySelector(".monster-altName");
@@ -683,7 +691,7 @@ function initialize()
 
 	const s_attr1s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
 	const s_attr2s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
-	const s_fixMainColor = searchBox.querySelector(".attrs #fix-main-color");
+	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
 	const s_types = Array.prototype.slice.call(searchBox.querySelectorAll(".types-div .type-check"));
 	const s_awokensItems = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .awoken-count"));
 	const s_awokensIcons = s_awokensItems.map(it=>{
@@ -693,16 +701,18 @@ function initialize()
 		return it.querySelector(".count");
 	});
 	
-	const s_awokensEquivalent = searchBox.querySelector(".awoken-div #consider-equivalent-awoken"); //搜索等效觉醒
+	const s_awokensEquivalent = searchBox.querySelector("#consider-equivalent-awoken"); //搜索等效觉醒
+	const s_canAssist = searchBox.querySelector("#can-assist"); //只搜索辅助
 
 	const s_sawokenDiv = searchBox.querySelector(".sawoken-div");
+	
 	const s_sawokens = Array.prototype.slice.call(s_sawokenDiv.querySelectorAll(".sawoken-check"));
-	const s_includeSuperAwoken = searchBox.querySelector(".awoken-div #include-super-awoken"); //搜索超觉醒
+	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onclick = function(){
 		if (this.checked)
-			s_sawokenDiv.classList.add("display-none");
+		s_sawokenDiv.classList.add("display-none");
 		else
-			s_sawokenDiv.classList.remove("display-none");
+		s_sawokenDiv.classList.remove("display-none");
 	}
 
 	function search_awokenAdd1()
@@ -823,9 +833,10 @@ function initialize()
 			awokensFilter,
 			sawokensFilter,
 			s_awokensEquivalent.checked,
+			s_canAssist.checked,
 			s_includeSuperAwoken.checked
 			);
-		console.debug("搜索条件：属性[%d,%d]，固定主副%s，类型：%o，觉醒：%o，超觉醒：%o，等效觉醒%s，搜超觉醒%s。\n搜索结果：%o",
+		console.debug("搜索条件：属性[%d,%d]，固定主副%s，类型：%o，觉醒：%o，超觉醒：%o，等效觉醒%s，可做辅助%s，搜超觉醒%s。\n搜索结果：%o",
 			attr1,attr2,
 			s_fixMainColor.checked,
 			typesFilter,
@@ -833,6 +844,7 @@ function initialize()
 			sawokensFilter,
 			s_awokensEquivalent.checked,
 			s_includeSuperAwoken.checked,
+			s_canAssist.checked,
 			searchResult
 			);
 		showSearch(searchResult);
@@ -1014,11 +1026,20 @@ function initialize()
 
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
 	const skillBox = rowSkill.querySelector(".skill-box");
+	const skillTitle = skillBox.querySelector(".skill-name");
 	const skillCD = skillBox.querySelector(".skill-cd");
 	const skillLevel = skillBox.querySelector(".m-skill-level");
 	const skillLevel_1 = skillBox.querySelector(".m-skill-lv-1");
 	const skillLevel_Max = skillBox.querySelector(".m-skill-lv-max");
 
+	skillTitle.onclick = function(){
+		const skillId = parseInt(this.getAttribute("data-skillid"),10); //获得当前技能ID
+		const s_cards = Cards.filter(card=>card.activeSkillId === skillId); //搜索同技能怪物
+		if (s_cards.length > 1)
+		{
+			showSearch(s_cards); //显示
+		}
+	}
 	skillLevel.onchange = function(){
 		const card = Cards[editBox.mid] || Cards[0]; //怪物固定数据
 		const skill = Skills[card.activeSkillId];
@@ -1381,7 +1402,7 @@ function interchangeCard(formArr,toArr)
 	if(formArr[1] != toArr[1]) //从武器拖到非武器才改变类型
 	{
 		from = changeType(from,formArr[1]);
-		if (!isCopy) to = ichangeType(to,toArr[1]);
+		if (!isCopy) to = changeType(to,toArr[1]);
 	}else if (isCopy)
 	{
 		const newFrom = new from.constructor();
@@ -1470,6 +1491,13 @@ function changeid(mon,monDom,latentDom)
 				if (card.canAssist)
 				{//可以辅助的满觉醒打黄色星星
 					awokenIcon.classList.add("allowable-assist");
+					if (card.awakenings.indexOf(49)>=0)
+					{//武器
+						awokenIcon.classList.add("wepon");
+					}else
+					{
+						awokenIcon.classList.remove("wepon");
+					}
 				}else 
 				{
 					awokenIcon.classList.remove("allowable-assist");
@@ -1478,6 +1506,7 @@ function changeid(mon,monDom,latentDom)
 			{
 				awokenIcon.classList.remove("full-awoken");
 				awokenIcon.classList.remove("allowable-assist");
+				awokenIcon.classList.remove("wepon");
 			}
 			
 		}
@@ -1677,6 +1706,16 @@ function editBoxChangeMonId(id)
 	mExp.innerHTML = card.exp.max;*/
 	const mName = monInfoBox.querySelector(".monster-name");
 	mName.innerHTML = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
+	const mSeriesId = monInfoBox.querySelector(".monster-seriesId");
+	mSeriesId.innerHTML = card.seriesId;
+	mSeriesId.setAttribute("data-seriesId",card.seriesId);
+	if (card.seriesId == 0)
+	{
+		mSeriesId.classList.add("display-none");
+	}else
+	{
+		mSeriesId.classList.remove("display-none");
+	}
 	const mCollabId = monInfoBox.querySelector(".monster-collabId");
 	mCollabId.innerHTML = card.collabId;
 	mCollabId.setAttribute("data-collabId",card.collabId);
@@ -1815,6 +1854,7 @@ function editBoxChangeMonId(id)
 	fragment.appendChild(skillBox);
 
 	skillTitle.innerHTML = descriptionToHTML(skill.name);
+	skillTitle.setAttribute("data-skillid", skill.id);
 	skillDetail.innerHTML = parseSkillDescription(skill);
 	const t_maxLevel = card.overlay || card.types.indexOf(15)>=0 ? 1 : skill.maxLevel; //遇到不能升技的，最大等级强制为1
 	skillLevel.max = t_maxLevel;

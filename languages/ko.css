@@ -67,11 +67,14 @@
 .monsterinfo-box .monster-cost::before{
 	content: "코스트:";
 }
+.monsterinfo-box .monster-seriesId::before{
+	content: "시리즈 ID：";
+}
 .monsterinfo-box .monster-collabId::before{
-	content: "시리즈 ID:";
+	content: "콜라보 ID:";
 }
 .monsterinfo-box .monster-altName::before{
-	content: "시리즈 이름:";
+	content: "대체 이름：";
 }
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼몬스터 레벨";
@@ -243,6 +246,9 @@
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "동시에 해당 경계를 각성";
+}
+.search-box .can-assist-label::after{
+	content: "지원 할 수 있습니다";
 }
 .search-box .include-super-awoken-label::after{
 	content: "슈퍼 각성 포함";

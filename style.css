@@ -105,7 +105,7 @@ body{
 	width: 20px;
 	height: 20px;
 	position: absolute;
-	transition: .2s ease-out;
+	transition: .3s ease-out;
 	background-color: #c6c6c6;
 	box-shadow: 0 2px 4px 0 #0003;
 	border-radius: 50%;
@@ -275,6 +275,14 @@ ul{
 	font-size: 0;
 	text-shadow: none;
 	background-position: 0 -38px;
+}
+/*武器*/
+.monster .awoken-count.allowable-assist.wepon{
+	transform: scale(0.80) translateY(4px);
+	width:32px;height:32px;
+    background-image: url(images/awoken.png);
+	background-position-x: 0;
+	background-position-y: -1568px;
 }
 /*怪物-超觉醒*/
 .monster .super-awoken{
@@ -633,7 +641,7 @@ ul{
 	font-family: 'FOT-KurokaneStd-EB', "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	color: white;
 	text-shadow: black 2px 2px 0;
-	height: 100px;
+	min-height: 100px;
 	margin: 5px 0;
 	background-image: linear-gradient(#798421,#394914);
 	border-top: #B1BB39 solid 4px;
@@ -899,16 +907,24 @@ ul{
 .monsterinfo-box .monster-id{
 	width:150px;
 }
+.monsterinfo-box .monster-seriesId,
 .monsterinfo-box .monster-collabId,
-.monsterinfo-box .monster-altName{
+.monsterinfo-box .monster-altName
+{
 	cursor: pointer;
 	font-size: 14px;
 	line-height: 16px;
 	vertical-align: bottom;
-	max-width: 270px;
+	/*max-width: 270px;*/
 	white-space:nowrap;
 	text-overflow:ellipsis;
 	overflow:hidden;
+}
+.monsterinfo-box .monster-seriesId:hover::after,
+.monsterinfo-box .monster-collabId:hover::after,
+.monsterinfo-box .monster-altName:hover::after
+{
+	content: "🔍";
 }
 /*.monsterinfo-box .monster-id::before{
 	content: "No.";
@@ -1155,6 +1171,10 @@ ul{
 }
 .row-mon-skill .skill-title .skill-name{
 	color: #84BAFC;
+	cursor: pointer;
+}
+.row-mon-skill .skill-title .skill-name:hover::after{
+	content: "🔍";
 }
 .row-mon-leader-skill .skill-title::before{
 	/*content: "隊長技能";*/
