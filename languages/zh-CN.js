@@ -210,7 +210,7 @@ function parseSkillDescription(skill)
 			str = `如当前 HP 在 HP 上限的${sk[0]}%以上的话，受到单一次致命攻击时，${sk[1]<100?`有${sk[1]}的几率`:"将"}会以1点 HP 生还`;
 			break;
 		case 15:
-			str = `操作时间延长${sk[0]>0?`延长`:`减少`}${Math.abs(sk[0]/100)}秒`;
+			str = `操作时间${sk[0]>0?`延长`:`减少`}${Math.abs(sk[0]/100)}秒`;
 			break;
 		case 16:
 			str = `受到的所有伤害减少${sk[0]}%`;
@@ -676,7 +676,6 @@ function parseSkillDescription(skill)
 			break;
 		case 152:
 			str = `将${getOrbsAttrString(sk[0])}宝珠锁定`;
-			//if (sk[1]!=42 && sk[1]!=99) str += `，还有未知 参数[1]：${sk[1]}`;
 			if (sk[1] < 42) str += `${sk[1]}个`;
 			break;
 		case 153:
@@ -1159,8 +1158,11 @@ function parseSkillDescription(skill)
 			str = `变身为${cardN(sk[0])}`;
 			break;
 		case 203:
-			str = `队员组成全是像素进化时，`;
-			if (sk[0]) str += getAttrTypeString(flags(sk[0]));
+			str = `队员组成全是`;
+			if (sk[0] === 0) str += "像素进化";
+			else if (sk[0] === 2)str += "转生或超转生";
+			else str += "未知新类型";
+			str += `时，`;
 			str += "宠物的" + getFixedHpAtkRcvString({hp:sk[1],atk:sk[2],rcv:sk[3]});
 			break;
 		case 205:
@@ -1297,6 +1299,16 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>{return subskill.type == searchType});
 			}
 		})},
+		{name:"所有上锁",function:()=>Cards.filter(card=>{
+			const searchType = 152;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
 		{name:"所有变身",function:()=>Cards.filter(card=>{
 			const searchType = 202;
 			const skill = Skills[card.activeSkillId];
@@ -1377,6 +1389,16 @@ function parseBigNumber(number)
 		}).sort((a,b)=>{//优先按技能排列，其次按进化树排列
 			return (a.activeSkillId - b.activeSkillId) || (a.evoRootId - b.evoRootId);
 		})},
+		{name:"所有99回合掉落",function:()=>Cards.filter(card=>{
+			const searchType = 126;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && skill.params[1] >= 99) // 960 = 二进制 1111000000
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType && subskill.params[1] >= 99});
+			}
+		})},
 		{name:"所有顶毒",function:()=>Cards.filter(card=>{
 			const searchType = 126;
 			const skill = Skills[card.activeSkillId];
@@ -1387,14 +1409,124 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>{return subskill.type == searchType && (subskill.params[0] & 960) > 0});
 			}
 		})},
-		{name:"所有99回合掉落",function:()=>Cards.filter(card=>{
-			const searchType = 126;
+		{name:"所有顶回复",function:()=>Cards.filter(card=>{
+			const searchType = 50;
 			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && skill.params[1] >= 99) // 960 = 二进制 1111000000
+			if (skill.type == searchType && skill.params[1] === 5)
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>{return Skills[id];});
-				return subskills.some(subskill=>{return subskill.type == searchType && subskill.params[1] >= 99});
+				return subskills.some(subskill=>{return subskill.type == searchType && subskill.params[1] === 5;});
+			}
+		})},
+		{name:"所有顶手指",function:()=>Cards.filter(card=>{
+			const searchType = 132;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有主动无天降",function:()=>Cards.filter(card=>{
+			const searchType = 184;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有溜",function:()=>Cards.filter(card=>{
+			const searchType = 146;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有威吓",function:()=>Cards.filter(card=>{
+			const searchType = 18;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有破防",function:()=>Cards.filter(card=>{
+			const searchType = 19;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有破防100%",function:()=>Cards.filter(card=>{
+			const searchType = 19;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && skill.params[1]>=100)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType && subskill.params[1]>=100});
+			}
+		})},
+		{name:"所有中毒",function:()=>Cards.filter(card=>{
+			const searchType = 4;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有减伤",function:()=>Cards.filter(card=>{
+			const searchType = 3;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有无敌（减伤100%）",function:()=>Cards.filter(card=>{
+			const searchType = 3;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && skill.params[1]>=100)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType && subskill.params[1]>=100});
+			}
+		})},
+		{name:"所有时间暂停",function:()=>Cards.filter(card=>{
+			const searchType = 5;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有刷版",function:()=>Cards.filter(card=>{
+			const searchType = 10;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
 			}
 		})},
 		{name:"====队长技====",function:()=>false},
@@ -1519,7 +1651,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>{return subskill.type == searchType;});
 			}
 		})},
-		{name:"指定队伍队员都是像素",function:()=>Cards.filter(card=>{
+		{name:"指定队伍队员类型",function:()=>Cards.filter(card=>{
 			const searchType = 203;
 			const skill = Skills[card.leaderSkillId];
 			if (skill.type == searchType)
@@ -1563,14 +1695,14 @@ function parseBigNumber(number)
 		{name:"全部像素进化",function:()=>Cards.filter(card=>{
 			return card.evoMaterials.indexOf(3826)>=0;
 		})},
+		{name:"全部8格潜觉（转生、超转生）",function:()=>Cards.filter(card=>{
+			return card.is8Latent;
+		})},
 		{name:"全部110级三维成长100%",function:()=>Cards.filter(card=>{
 			return card.limitBreakIncr>=100;
 		})},
 		{name:"全部珠子皮肤",function:()=>Cards.filter(card=>{
 			return card.blockSkinId>0;
-		})},
-		{name:"全部8格浅觉",function:()=>Cards.filter(card=>{
-			return card.is8Latent;
 		})},
 	];
 
@@ -1584,7 +1716,7 @@ function parseBigNumber(number)
 		specialSearch.options.add(new Option(sfunc.name,idx));
 	});
 	specialSearch.onchange = function(){
-		showSearch(specialSearchFunctions[parseInt(this.value,10)].function());
+		searchBox.startSearch(specialSearchFunctions[parseInt(this.value,10)].function());
 	}
 	controlDiv.appendChild(fragment);
 })();

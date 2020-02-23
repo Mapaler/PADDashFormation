@@ -797,7 +797,7 @@ function initialize()
 		}
 		searchMonList.classList.remove("display-none");
 	};
-	searchStart.onclick = function(){
+	const startSearch = function(cards){
 		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
 		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
 		let attr1,attr2;
@@ -826,7 +826,7 @@ function initialize()
 		const awokensFilter = s_awokensCounts.filter(btn=>parseInt(btn.innerHTML,10)>0).map(btn=>{
 			return {id:parseInt(btn.value,10),num:parseInt(btn.innerHTML,10)};
 		});
-		const searchResult = searchCards(Cards,
+		const searchResult = searchCards(cards,
 			attr1,attr2,
 			s_fixMainColor.checked,
 			typesFilter,
@@ -849,6 +849,10 @@ function initialize()
 			);
 		showSearch(searchResult);
 	};
+	searchBox.startSearch = startSearch;
+	searchStart.onclick = function(){
+		startSearch(Cards);
+	};
 	searchClose.onclick = function(){
 		searchBox.classList.add("display-none");
 	};
@@ -864,6 +868,10 @@ function initialize()
 		s_awokensItems.forEach(t=>{
 			t.classList.add("zero");
 		});
+		s_awokensEquivalent.checked = false;
+		s_canAssist.checked = false;
+		s_includeSuperAwoken.checked = false;
+		
 		s_sawokens.forEach(t=>{
 			t.checked = false;
 		});
