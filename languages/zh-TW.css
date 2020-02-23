@@ -70,11 +70,14 @@
 .monsterinfo-box .monster-cost::before{
 	content: "消耗:";
 }
-.monsterinfo-box .monster-collabId::before{
+.monsterinfo-box .monster-seriesId::before{
 	content: "系列ID：";
 }
+.monsterinfo-box .monster-collabId::before{
+	content: "合作ID：";
+}
 .monsterinfo-box .monster-altName::before{
-	content: "系列名称：";
+	content: "替代名稱：";
 }
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼怪物等級";
@@ -249,6 +252,9 @@
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "同時搜索等效覺醒";
+}
+.search-box .can-assist-label::after{
+	content: "可以作爲輔助";
 }
 .search-box .include-super-awoken-label::after{
 	content: "包括超覺醒";

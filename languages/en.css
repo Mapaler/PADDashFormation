@@ -68,11 +68,14 @@
 .monsterinfo-box .monster-cost::before{
 	content: "COST:";
 }
-.monsterinfo-box .monster-collabId::before{
+.monsterinfo-box .monster-seriesId::before{
 	content: "Series ID：";
 }
+.monsterinfo-box .monster-collabId::before{
+	content: "Collab ID：";
+}
 .monsterinfo-box .monster-altName::before{
-	content: "Series name：";
+	content: "Alternative Name：";
 }
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼Monster Level";
@@ -250,6 +253,9 @@
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "Search for Equivalent Awoken";
+}
+.search-box .can-assist-label::after{
+	content: "Can be assist";
 }
 .search-box .include-super-awoken-label::after{
 	content: "Including Super Awoken";
