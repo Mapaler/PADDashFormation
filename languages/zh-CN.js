@@ -11,6 +11,11 @@ function findFullSkill(subSkill){
 //document.querySelector(".edit-box .row-mon-id .m-id").type = "number";
 //Skills.filter(s=>{const sk = s.params; return s.type == 156;}).map(findFullSkill)
 
+//返回flag里值为true的数组，如[1,4,7]
+function flags(num){
+	return Array.from(new Array(32)).map((a,i)=>{return i;}).filter(i => num & (1 << i));
+}
+
 //高级技能解释
 function parseSkillDescription(skill)
 {
@@ -40,10 +45,6 @@ function parseSkillDescription(skill)
 		let arr = num.toString(2).split("").map(c=>{return parseInt(c);});
 		if (reverse) arr.reverse();
 		return arr;
-	}
-	//返回flag里值为true的数组，如[1,4,7]
-	function flags(num){
-		return Array.from(new Array(32)).map((a,i)=>{return i;}).filter(i => num & (1 << i));
 	}
 	//从二进制的数字中获得有哪些内容
 	function getNamesFromBinary(num,dataArr)
@@ -1389,6 +1390,72 @@ function parseBigNumber(number)
 		}).sort((a,b)=>{//优先按技能排列，其次按进化树排列
 			return (a.activeSkillId - b.activeSkillId) || (a.evoRootId - b.evoRootId);
 		})},
+		{name:"所有产竖",function:()=>Cards.filter(card=>{
+			const searchType = 127;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有产横",function:()=>Cards.filter(card=>{
+			const searchType = 128;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有解锁+产横",function:()=>Cards.filter(card=>{
+			const searchTypeArray = [172,128];
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return searchTypeArray.every(stype=>subskills.find(subskill=>subskill.type == stype));
+			}else return false;
+		})},
+		{name:"所有加C+产横",function:()=>Cards.filter(card=>{
+			const searchTypeArray = [160,128];
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return searchTypeArray.every(stype=>subskills.find(subskill=>subskill.type == stype));
+			}else return false;
+		})},
+		{name:"所有2横或以上",function:()=>Cards.filter(card=>{
+			const searchType = 128;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && (skill.params.length>=3 || flags(skill.params[0]).length>=2))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType && (subskill.params.length>=3 || flags(subskill.params[0]).length>=2);});
+			}
+		})},
+		{name:"所有2色横",function:()=>Cards.filter(card=>{
+			const searchType = 128;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && skill.params[3]>=0 && (skill.params[1] & skill.params[3]) != skill.params[1])
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType && subskill.params[3]>=0 && (subskill.params[1] & subskill.params[3]) != subskill.params[1]});
+			}
+		})},
+		{name:"所有非顶底横",function:()=>Cards.filter(card=>{
+			const searchType = 128;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && ((skill.params[0] | skill.params[2]) & 14))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType && ((subskill.params[0] | subskill.params[2]) & 14);});
+			}
+		})},
 		{name:"所有99回合掉落",function:()=>Cards.filter(card=>{
 			const searchType = 126;
 			const skill = Skills[card.activeSkillId];
@@ -1441,6 +1508,16 @@ function parseBigNumber(number)
 		})},
 		{name:"所有溜",function:()=>Cards.filter(card=>{
 			const searchType = 146;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType});
+			}
+		})},
+		{name:"所有加C",function:()=>Cards.filter(card=>{
+			const searchType = 160;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
 				return true;
