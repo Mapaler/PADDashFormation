@@ -1781,6 +1781,9 @@ function parseBigNumber(number)
 		{name:"全部珠子皮肤",function:()=>Cards.filter(card=>{
 			return card.blockSkinId>0;
 		})},
+		{name:"全部低于100mp",function:()=>Cards.filter(card=>{
+			return card.sellMP<100;
+		})},
 	];
 
 
