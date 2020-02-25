@@ -811,7 +811,7 @@ function parseSkillDescription(skill)
 				}
 				if (sk[6]>0)
 				{
-					strArr.push(`最大${sk[6]}种属性时×${((sk[6]-sk[1])*sk[4]+sk[2])/100}倍`);
+					strArr.push(`最大${sk[1]+sk[6]}种属性时×${(sk[2]+sk[4]*sk[6])/100}倍`);
 				}
 			}else
 			{
@@ -824,7 +824,7 @@ function parseSkillDescription(skill)
 					}
 					if (sk[6]>0)
 					{
-						strArr.push(`最大${sk[6]}种属性时×${((sk[6]-sk[1])*sk[4]+sk[2])/100}倍`);
+						strArr.push(`最大${sk[1]+sk[6]}种属性时×${(sk[2]+sk[4]*sk[6])/100}倍`);
 					}
 				}
 				if (sk[3]>0)
@@ -836,7 +836,7 @@ function parseSkillDescription(skill)
 					}
 					if (sk[6]>0)
 					{
-						strArr.push(`最大${sk[6]}种属性时×${((sk[6]-sk[1])*sk[5]+sk[3])/100}倍`);
+						strArr.push(`最大${sk[1]+sk[6]}种属性时×${(sk[3]+sk[5]*sk[6])/100}倍`);
 					}
 				}
 			}
