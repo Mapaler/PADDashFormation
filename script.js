@@ -1471,6 +1471,10 @@ function changeid(mon,monDom,latentDom)
 			monDom.classList.add("allowable-assist");
 		else
 			monDom.classList.remove("allowable-assist");
+		if (card.awakenings.indexOf(49)>=0)//武器
+			monDom.classList.add("wepon");
+		else
+			monDom.classList.remove("wepon");
 	}
 	const levelDom = monDom.querySelector(".level");
 	if (levelDom) //如果提供了等级
@@ -1509,13 +1513,6 @@ function changeid(mon,monDom,latentDom)
 			}else
 			{
 				awokenIcon.classList.remove("full-awoken");
-			}
-			if (card.awakenings.indexOf(49)>=0)
-			{//武器
-				awokenIcon.classList.add("wepon");
-			}else
-			{
-				awokenIcon.classList.remove("wepon");
 			}
 		}
 	}

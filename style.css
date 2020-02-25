@@ -277,7 +277,7 @@ ul{
 	content: none;
 }
 /*武器*/
-.monster.allowable-assist .awoken-count.full-awoken.wepon{
+.monster.wepon .awoken-count.full-awoken{
 	transform: scale(0.80) translateY(4px);
 	width:32px;height:32px;
     background-image: url(images/awoken.png);
@@ -886,7 +886,7 @@ ul{
 	background: grey;
 }
 .search-mon-list.only-display-can-assist .monster{
-	opacity: 0.3;
+	opacity: 0.25;
 }
 .search-mon-list.only-display-can-assist .monster.allowable-assist{
 	opacity: 1;
