@@ -875,7 +875,6 @@ function initialize()
 			t.classList.add("zero");
 		});
 		s_awokensEquivalent.checked = false;
-		s_canAssist.checked = false;
 		s_includeSuperAwoken.checked = false;
 		
 		s_sawokens.forEach(t=>{
