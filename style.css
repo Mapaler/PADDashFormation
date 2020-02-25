@@ -268,16 +268,16 @@ ul{
 .monster .awoken-count.full-awoken::before{
 	content: "★";
 }
-.monster .awoken-count.allowable-assist.full-awoken::before{
-	content: none;
-}
-.monster .awoken-count.allowable-assist{
+.monster.allowable-assist .awoken-count.full-awoken{
 	font-size: 0;
 	text-shadow: none;
 	background-position: 0 -38px;
 }
+.monster.allowable-assist .awoken-count.full-awoken::before{
+	content: none;
+}
 /*武器*/
-.monster .awoken-count.allowable-assist.wepon{
+.monster.allowable-assist .awoken-count.full-awoken.wepon{
 	transform: scale(0.80) translateY(4px);
 	width:32px;height:32px;
     background-image: url(images/awoken.png);
@@ -884,6 +884,12 @@ ul{
 	border: 1px solid white;
 	border-radius: 5px;
 	background: grey;
+}
+.search-mon-list.only-display-can-assist .monster{
+	opacity: 0.3;
+}
+.search-mon-list.only-display-can-assist .monster.allowable-assist{
+	opacity: 1;
 }
 .setting-box .row-mon-id .open-search{
 	float: right;
