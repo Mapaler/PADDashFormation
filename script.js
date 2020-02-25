@@ -686,6 +686,7 @@ function initialize()
 	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
 	searchOpen.onclick = function(){
 		s_includeSuperAwoken.onclick();
+		s_canAssist.onclick();
 		searchBox.classList.toggle("display-none");
 	};
 
@@ -701,8 +702,16 @@ function initialize()
 		return it.querySelector(".count");
 	});
 	
+	const searchMonList = searchBox.querySelector(".search-mon-list"); //搜索结果列表
+
 	const s_awokensEquivalent = searchBox.querySelector("#consider-equivalent-awoken"); //搜索等效觉醒
 	const s_canAssist = searchBox.querySelector("#can-assist"); //只搜索辅助
+	s_canAssist.onclick = function(){
+		if (this.checked)
+		searchMonList.classList.add("only-display-can-assist");
+		else
+		searchMonList.classList.remove("only-display-can-assist");
+	}
 
 	const s_sawokenDiv = searchBox.querySelector(".sawoken-div");
 	
@@ -765,7 +774,6 @@ function initialize()
 	const searchStart = searchBox.querySelector(".control-div .search-start");
 	const searchClose = searchBox.querySelector(".control-div .search-close");
 	const searchClear = searchBox.querySelector(".control-div .search-clear");
-	const searchMonList = searchBox.querySelector(".search-mon-list");
 	function returnCheckedInput(ipt)
 	{
 		return ipt.checked == true;
@@ -833,17 +841,15 @@ function initialize()
 			awokensFilter,
 			sawokensFilter,
 			s_awokensEquivalent.checked,
-			s_canAssist.checked,
 			s_includeSuperAwoken.checked
 			);
-		console.debug("搜索条件：属性[%d,%d]，固定主副%s，类型：%o，觉醒：%o，超觉醒：%o，等效觉醒%s，可做辅助%s，搜超觉醒%s。\n搜索结果：%o",
+		console.debug("搜索条件：属性[%d,%d]，固定主副%s，类型：%o，觉醒：%o，超觉醒：%o，等效觉醒%s，搜超觉醒%s。\n搜索结果：%o",
 			attr1,attr2,
 			s_fixMainColor.checked,
 			typesFilter,
 			awokensFilter,
 			sawokensFilter,
 			s_awokensEquivalent.checked,
-			s_canAssist.checked,
 			s_includeSuperAwoken.checked,
 			searchResult
 			);
@@ -1461,6 +1467,10 @@ function changeid(mon,monDom,latentDom)
 		monDom.querySelector(".subproperty").className = "subproperty subproperty-" + card.attrs[1]; //副属性
 		monDom.title = "No." + monId + " " + (card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name);
 		monDom.href = monId.toString().replace(/^(\d+)$/ig,currentLanguage.guideURL);
+		if (card.canAssist)
+			monDom.classList.add("allowable-assist");
+		else
+			monDom.classList.remove("allowable-assist");
 	}
 	const levelDom = monDom.querySelector(".level");
 	if (levelDom) //如果提供了等级
@@ -1496,27 +1506,17 @@ function changeid(mon,monDom,latentDom)
 			if (mon.awoken == card.awakenings.length)
 			{
 				awokenIcon.classList.add("full-awoken");
-				if (card.canAssist)
-				{//可以辅助的满觉醒打黄色星星
-					awokenIcon.classList.add("allowable-assist");
-					if (card.awakenings.indexOf(49)>=0)
-					{//武器
-						awokenIcon.classList.add("wepon");
-					}else
-					{
-						awokenIcon.classList.remove("wepon");
-					}
-				}else 
-				{
-					awokenIcon.classList.remove("allowable-assist");
-				}
 			}else
 			{
 				awokenIcon.classList.remove("full-awoken");
-				awokenIcon.classList.remove("allowable-assist");
+			}
+			if (card.awakenings.indexOf(49)>=0)
+			{//武器
+				awokenIcon.classList.add("wepon");
+			}else
+			{
 				awokenIcon.classList.remove("wepon");
 			}
-			
 		}
 	}
 	const sawoken = monDom.querySelector(".super-awoken");
