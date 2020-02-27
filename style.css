@@ -216,7 +216,7 @@ ul{
 	height: 100px;
 	background-repeat: no-repeat;
 	background-image: url(images/CARDFRAME2.PNG);
-	/*background-position: 100px 100px; /*默认都不显示*/
+	background-position: 100px 100px; /*默认都不显示*/
 }
 /*怪物-加值*/
 .monster .plus{
