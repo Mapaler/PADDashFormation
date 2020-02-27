@@ -1068,6 +1068,9 @@ ul{
 	line-height: 35px;
 	text-shadow: black 2px 2px 0;
 }
+.row-mon-plus{
+	width: 180px;
+}
 .row-mon-plus ul{
 	border-color: #A07740;
 	border-style: solid;
@@ -1083,13 +1086,13 @@ ul{
 /*.m-plus-hp-li::before{content: "HP";}
 .m-plus-atk-li::before{content: "攻击";}
 .m-plus-rcv-li::before{content: "回复";}*/
-.setting-box .plus-value{
+.row-mon-plus .plus-value{
 	color: yellow;
 }
-.setting-box .plus-value::before{content: "(+";}
-.setting-box .plus-value::after{content: ")";}
+.row-mon-plus .plus-value::before{content: "(+";}
+.row-mon-plus .plus-value::after{content: ")";}
 
-.setting-box .plus-value input
+.row-mon-plus .plus-value input
 {
 	color: inherit;
 	font-family: inherit;
@@ -1118,8 +1121,9 @@ ul{
 	box-sizing: border-box;
 	font-family: inherit;
 	height: 109px;
-	font-size: inherit;
+	font-size: 22px;
 	vertical-align: top;
+	writing-mode: vertical-lr;
 }
 .row-mon-plus ul,
 .m-plus-btn-297{
