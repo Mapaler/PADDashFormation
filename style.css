@@ -1068,9 +1068,6 @@ ul{
 	line-height: 35px;
 	text-shadow: black 2px 2px 0;
 }
-.row-mon-plus{
-	width: 180px;
-}
 .row-mon-plus ul{
 	border-color: #A07740;
 	border-style: solid;
@@ -1078,6 +1075,7 @@ ul{
 	border-radius: 8px;
 	background-color: #44392C;
 	box-shadow: inset black 0 3px 5px;
+	width: 145px;
 }
 .row-mon-plus li{
 	height: 35px;
@@ -1099,9 +1097,16 @@ ul{
 	font-size: inherit;
 	text-shadow: inherit;
 	box-sizing: border-box;
-	width: 50px;
+	width: 32px;
 	line-height: inherit;
 	height: 35px;
+	-moz-appearance: textfield; /*火狐去掉数字加减*/
+}
+ /*webkit去掉数字加减*/
+.row-mon-plus .plus-value input::-webkit-outer-spin-button,
+.row-mon-plus .plus-value input::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+    margin: 0;
 }
 .row-mon-plus .m-plus-btn::before,
 .row-mon-plus .m-plus-btn-297::before
@@ -1117,17 +1122,12 @@ ul{
 	height: 30px;
 }
 .m-plus-btn-297{
-	padding: 0 3px;
+	padding: 0;
 	box-sizing: border-box;
-	font-family: inherit;
-	height: 109px;
+	height: 105px;
 	font-size: 22px;
-	vertical-align: top;
 	writing-mode: vertical-lr;
-}
-.row-mon-plus ul,
-.m-plus-btn-297{
-	display:inline-block;
+	float: right;
 }
 /*.edit-box .setting-box .row-mon-level::before{
 	content: "▼怪物等级";
@@ -1186,10 +1186,9 @@ ul{
 	vertical-align: top;
 }
 .m-level,
-.m-plus-hp,.m-plus-atk,.m-plus-rcv,
-.ability-value
+.m-plus-hp,.m-plus-atk,.m-plus-rcv
 {
-	border: none;
+	border: 1px solid grey;
 	background: none;
 	color: white;
 }
