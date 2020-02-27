@@ -79,15 +79,6 @@
 .monsterinfo-box .monster-altName::before{
 	content: "替代名稱：";
 }
-.edit-box .setting-box .row-mon-level::before{
-	content: "▼怪物等級";
-}
-.m-level-btn-min::before{
-	content: "Lv.";
-}
-.m-level-btn-max::before{
-	content: "最高Lv.";
-}
 .m-level-exp::before{
 	content: "需要經驗值：";
 }
@@ -97,17 +88,32 @@
 .edit-box .setting-box .row-mon-super-awoken::before{
 	content: "▼超覺醒";
 }
+
+.edit-box .setting-box .row-mon-ability::before{
+	content: "▼怪物能力";
+}
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼怪物加值";
 }
-.m-plus-hp-li::before{
-	content: "HP";
+.row-mon-ability .m-hp-li::before{
+	content: "HP:";
 }
-.m-plus-atk-li::before{
-	content: "攻擊";
+.row-mon-ability .m-atk-li::before{
+	content: "攻撃:";
 }
-.m-plus-rcv-li::before{
-	content: "回復";
+.row-mon-ability .m-rcv-li::before{
+	content: "回復:";
+}
+
+.edit-box .setting-box .row-mon-level::before{
+	content: "▼怪物等級";
+}
+.row-mon-level .level-value::before,
+.row-mon-level .m-level-btn-min::before{
+	content: "Lv.";
+}
+.row-mon-level .m-level-btn-max::before{
+	content: "最高Lv.";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼潛在覺醒";
