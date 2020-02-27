@@ -388,7 +388,7 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equal
 	return cardsRange;
 }
 //产生一个怪物头像
-function createCardA(id)
+function createCardA()
 {
 	const cdom = document.createElement("a");
 	cdom.class = "monster";

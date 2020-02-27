@@ -77,15 +77,6 @@
 .monsterinfo-box .monster-altName::before{
 	content: "Alternative Name：";
 }
-.edit-box .setting-box .row-mon-level::before{
-	content: "▼Monster Level";
-}
-.m-level-btn-min::before{
-	content: "Lv.";
-}
-.m-level-btn-max::before{
-	content: "Max Lv.";
-}
 .m-level-exp::before{
 	content: "Need Exp:";
 }
@@ -95,17 +86,32 @@
 .edit-box .setting-box .row-mon-super-awoken::before{
 	content: "▼Super Awoken";
 }
+
+.edit-box .setting-box .row-mon-ability::before{
+	content: "▼Monster Abilitys";
+}
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼Monster Plus";
 }
-.m-plus-hp-li::before{
-	content: "HP";
+.row-mon-ability .m-hp-li::before{
+	content: "HP:";
 }
-.m-plus-atk-li::before{
-	content: "ATK";
+.row-mon-ability .m-atk-li::before{
+	content: "ATK:";
 }
-.m-plus-rcv-li::before{
-	content: "RCV";
+.row-mon-ability .m-rcv-li::before{
+	content: "RCV:";
+}
+
+.edit-box .setting-box .row-mon-level::before{
+	content: "▼Monster Level";
+}
+.row-mon-level .level-value::before,
+.row-mon-level .m-level-btn-min::before{
+	content: "Lv.";
+}
+.row-mon-level .m-level-btn-max::before{
+	content: "Max Lv.";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼Latent Awoken";

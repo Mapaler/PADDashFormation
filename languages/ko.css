@@ -76,15 +76,6 @@
 .monsterinfo-box .monster-altName::before{
 	content: "대체 이름：";
 }
-.edit-box .setting-box .row-mon-level::before{
-	content: "▼몬스터 레벨";
-}
-.m-level-btn-min::before{
-	content: "Lv.";
-}
-.m-level-btn-max::before{
-	content: "최대Lv.";
-}
 .m-level-exp::before{
 	content: "필요한 Exp:";
 }
@@ -94,17 +85,32 @@
 .edit-box .setting-box .row-mon-super-awoken::before{
 	content: "▼몬스터 슈퍼 각성";
 }
+
+.edit-box .setting-box .row-mon-ability::before{
+	content: "▼몬스터 능력";
+}
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼몬스터 플러스";
 }
-.m-plus-hp-li::before{
-	content: "HP";
+.row-mon-ability .m-hp-li::before{
+	content: "HP:";
 }
-.m-plus-atk-li::before{
-	content: "공격";
+.row-mon-ability .m-atk-li::before{
+	content: "공격:";
 }
-.m-plus-rcv-li::before{
-	content: "회복";
+.row-mon-ability .m-rcv-li::before{
+	content: "회복:";
+}
+
+.edit-box .setting-box .row-mon-level::before{
+	content: "▼몬스터 레벨";
+}
+.row-mon-level .level-value::before,
+.row-mon-level .m-level-btn-min::before{
+	content: "Lv.";
+}
+.row-mon-level .m-level-btn-max::before{
+	content: "최대Lv.";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼몬스터 숨어있는";

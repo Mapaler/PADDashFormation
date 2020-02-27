@@ -978,10 +978,16 @@ function initialize()
 		monLvExp.innerHTML = needExp ? parseBigNumber(needExp[0]) + (level>99?` + ${parseBigNumber(needExp[1])}` : "") : "";
 	}
 	editBox.reCalculateExp = reCalculateExp;
+	//三维
+	const rowMonAbility = settingBox.querySelector(".row-mon-ability");
+	const monEditHpValue = rowMonAbility.querySelector(".m-hp-li .ability-value");
+	const monEditAtkValue = rowMonAbility.querySelector(".m-atk-li .ability-value");
+	const monEditRcvValue = rowMonAbility.querySelector(".m-rcv-li .ability-value");
 	//加蛋
-	const monEditAddHpLi = settingBox.querySelector(".row-mon-plus .m-plus-hp-li");
-	const monEditAddAtkLi = settingBox.querySelector(".row-mon-plus .m-plus-atk-li");
-	const monEditAddRcvLi = settingBox.querySelector(".row-mon-plus .m-plus-rcv-li");
+	const rowMonPlus = settingBox.querySelector(".row-mon-plus");
+	const monEditAddHpLi = rowMonPlus.querySelector(".m-hp-li");
+	const monEditAddAtkLi = rowMonPlus.querySelector(".m-atk-li");
+	const monEditAddRcvLi = rowMonPlus.querySelector(".m-rcv-li");
 	const monEditAddHp = monEditAddHpLi.querySelector(".m-plus-hp");
 	monEditAddHp.onchange = reCalculateAbility;
 	const monEditAddAtk = monEditAddAtkLi.querySelector(".m-plus-atk");
@@ -999,17 +1005,13 @@ function initialize()
 	monEditAddRcvBtn.ipt = monEditAddRcv;
 	monEditAddRcvBtn.onclick = setIptToMyValue;
 	//297按钮
-	const monEditAdd297 = settingBox.querySelector(".row-mon-plus .m-plus-btn-297");
+	const monEditAdd297 = rowMonPlus.querySelector(".m-plus-btn-297");
 	monEditAdd297.onclick = function(){
 		monEditAddHp.value = 99;
 		monEditAddAtk.value = 99;
 		monEditAddRcv.value = 99;
 		reCalculateAbility();
 	};
-	//三维的计算值
-	const monEditHpValue = monEditAddHpLi.querySelector(".ability-value");
-	const monEditAtkValue = monEditAddAtkLi.querySelector(".ability-value");
-	const monEditRcvValue = monEditAddRcvLi.querySelector(".ability-value");
 	
 	//潜觉
 	const monEditLatentUl = settingBox.querySelector(".m-latent-ul");
@@ -1106,9 +1108,9 @@ function initialize()
 		};
 		const abilitys = calculateAbility(tempMon, null, true) || [0,0,0];
 
-		monEditHpValue.innerHTML = abilitys[0];
-		monEditAtkValue.innerHTML = abilitys[1];
-		monEditRcvValue.innerHTML = abilitys[2];
+		monEditHpValue.innerHTML = abilitys[0].toLocaleString();
+		monEditAtkValue.innerHTML = abilitys[1].toLocaleString();
+		monEditRcvValue.innerHTML = abilitys[2].toLocaleString();
 	}
 	editBox.reCalculateAbility = reCalculateAbility;
 
