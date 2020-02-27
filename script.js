@@ -659,7 +659,7 @@ function initialize()
 		{
 			showSearch(Cards.filter(card=>{
 				return splitAltName.some(alt=>{
-					return alt.length > 0 && card.altName.indexOf(alt)>=0;
+					return alt.length > 0 && (card.altName.indexOf(alt)>=0 || card.name.indexOf(alt)>=0);
 				});
 			}));
 		}
