@@ -294,14 +294,9 @@ function calculateAbility(member = null, assist = null, solo = true)
 	return abilitys;
 }
 //搜索卡片用
-function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equalAk,canAssist,incSawoken)
+function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equalAk,incSawoken)
 {
 	let cardsRange = cards;
-	//是否允许作为辅助
-	if (canAssist)
-	{
-		cardsRange = cardsRange.filter(c=>c.canAssist);
-	}
 	//属性
 	if (attr1 != null && attr1 ===  attr2)
 	{ //当两个颜色相同时，主副一样颜色的只需判断一次
