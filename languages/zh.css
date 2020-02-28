@@ -1,4 +1,7 @@
 @charset "utf-8";
+.status.loading-check-version .text::before{
+	content: "正在检查数据版本，请稍候……";
+}
 .status.loading-mon-info .text::before{
 	content: "正在加载怪物数据，请稍候……";
 }

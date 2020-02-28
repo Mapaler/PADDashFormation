@@ -136,6 +136,7 @@ body{
 /*.status.loading-mon-info .text::before{
 	content: "正在加载怪物数据";
 }*/
+.status.loading-check-version .icon,
 .status.loading-mon-info .icon,
 .status.loading-skill-info .icon,
 .status.prepare-cauture .icon
