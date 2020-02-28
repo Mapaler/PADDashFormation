@@ -4,15 +4,18 @@ const Skill = require('./official-API/parseSkill');
 var officialAPI = [ //来源于官方API
 	{
 		code:"ja",
-		customName:["cht","chs"]
+		customName:["cht","chs"],
+		ckey:{card:null,skill:null}
 	},
 	{
 		code:"en",
-		customName:[]
+		customName:[],
+		ckey:{card:null,skill:null}
 	},
 	{
 		code:"ko",
-		customName:[]
+		customName:[],
+		ckey:{card:null,skill:null}
 	}
 ];
 
@@ -34,9 +37,12 @@ function sameCard(m1,m2)
  * 正式流程
  */
 officialAPI.forEach(function(lang){
+	lang.ckey = {card:null,skill:null};
 	console.log("正在读取官方 " + lang.code + " 信息");
 	const cardJson = fs.readFileSync("official-API/" + lang.code +".json", 'utf-8'); //使用同步读取怪物
-	const oCards = lang.cardOriginal = JSON.parse(cardJson).card;//将字符串转换为json对象
+	const cardJsonObj = JSON.parse(cardJson);
+	lang.ckey.card = cardJsonObj.ckey;
+	const oCards = lang.cardOriginal = cardJsonObj.card;//将字符串转换为json对象
 
 	let maxCardIndex = 0;
 	while (oCards[maxCardIndex][0] == maxCardIndex)
@@ -64,7 +70,9 @@ officialAPI.forEach(function(lang){
 	});
 
 	const skillJson = fs.readFileSync("official-API/" + lang.code +"-skill.json", 'utf-8'); //使用同步读取技能
-	const oSkills = lang.skillOriginal = JSON.parse(skillJson).skill;//将字符串转换为json对象
+	const skillJsonObj = JSON.parse(skillJson);
+	lang.ckey.skill = skillJsonObj.ckey;
+	const oSkills = lang.skillOriginal = skillJsonObj.skill;//将字符串转换为json对象
 	lang.skills = oSkills.map((oc,idx)=>{return new Skill(idx,oc);}); //每一项生成分析对象
 });
 
@@ -127,25 +135,35 @@ for (let li = 0;li < officialAPI.length; li++)
 			if (_m && isSame) //如果有这个怪物，且与原语言怪物是同一只
 			{
 				const otName = _m.name;
-				if (!/^\*+/.test(name) && //名字不是星号开头
-					!/^\*+/.test(otName) && //另一个语言名字不是星号开头
-					!/^\?+/.test(name) && //名字不是问号开头
-					!/^\?+/.test(otName) && //另一个语言名字不是问号开头
-					!/^초월\s*\?+/.test(name) && //名字不是韩文的问号开头
-					!/^초월\s*\?+/.test(otName) //另一个语言名字不是韩文的问号开头
-				) //以上情况全符合才添加
+				const searchRegString = "^(?:\\?+|\\*+|초월\\s*\\?+)"; //名字以问号、星号、韩文的问号开头
+				if (!new RegExp(searchRegString,"i").test(name) &&
+					!new RegExp(searchRegString,"i").test(otName)
+				)
 				{
 					if (!m.otLangName) //如果没有其他语言名称属性，则添加一个对象属性
-						m.otLangName = {};
+					{m.otLangName = new Object();}
 					m.otLangName[otLang.code] = otName;
 					if (_m.otLangName)
-						m.otLangName = Object.assign(m.otLangName, _m.otLangName); //增加储存当前语言的全部其他语言
+					{m.otLangName = Object.assign(m.otLangName, _m.otLangName);} //增加储存当前语言的全部其他语言
 				}
 			}
 		});
 	}
 }
 
+var ckeyObj = officialAPI.map(lang=>{
+	const obj = {
+		code: lang.code,
+		ckey: lang.ckey,
+	};
+	return obj;
+})
+fs.writeFile('./ckey.json',JSON.stringify(ckeyObj),function(err){
+	if(err){
+		console.error(err);
+	}
+	console.log('ckey.json 导出成功');
+});
 //最后批量保存
 officialAPI.forEach(function(lang){
 	let lcode = lang.code;
