@@ -49,7 +49,41 @@ const GM_xmlhttpRequest = function(GM_param) {
 	//发送数据
 	xhr.send(GM_param.data ? GM_param.data : null);
 };
-
+//仿GM_getValue函数v1.0
+const GM_getValue = function(name, type){
+	let value = localStorage.getItem(name);
+	if (value == undefined) return value;
+	if ((/^(?:true|false)$/i.test(value) && type == undefined) || type == "boolean")
+	{
+		if (/^true$/i.test(value))
+			return true;
+		else if (/^false$/i.test(value))
+			return false;
+		else
+			return Boolean(value);
+	}
+	else if((/^\-?[\d\.]+$/i.test(value) && type == undefined) || type == "number")
+		return Number(value);
+	else
+		return value;
+}
+//仿GM_setValue函数v1.0
+const GM_setValue = function(name, value){
+	localStorage.setItem(name, value);
+}
+//仿GM_deleteValue函数v1.0
+const GM_deleteValue = function(name){
+	localStorage.removeItem(name);
+}
+//仿GM_listValues函数v1.0
+const GM_listValues = function(){
+	var keys = [];
+	for (let ki=0, kilen=localStorage.length; ki<kilen; ki++)
+	{
+		keys.push(localStorage.key(ki));
+	}
+	return keys;
+}
 //数字补前导0
 function PrefixInteger(num, length)
 {  
