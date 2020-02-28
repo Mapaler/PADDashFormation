@@ -925,7 +925,7 @@ ul{
 	font-size: 14px;
 	line-height: 16px;
 	vertical-align: bottom;
-	/*max-width: 270px;*/
+	max-width: 270px;
 	white-space:nowrap;
 	text-overflow:ellipsis;
 	overflow:hidden;
@@ -1098,7 +1098,7 @@ ul{
 	text-shadow: inherit;
 	box-sizing: border-box;
 	width: 32px;
-	line-height: inherit;
+	line-height: 33px;
 	height: 35px;
 	-moz-appearance: textfield; /*火狐去掉数字加减*/
 }
@@ -1109,7 +1109,7 @@ ul{
     margin: 0;
 }
 .row-mon-plus .m-plus-btn::before,
-.row-mon-plus .m-plus-btn-297::before
+.row-mon-plus .m-plus-btn-297 span::before
 {
 	content: "+";
 }
@@ -1126,15 +1126,19 @@ ul{
 	box-sizing: border-box;
 	height: 105px;
 	font-size: 22px;
-	writing-mode: vertical-lr;
 	float: right;
+	writing-mode: vertical-lr;
+}
+.m-plus-btn-297 span{
+	/*Chrome浏览器不支持按钮本身的纵向，只能加一层*/
+	-webkit-writing-mode: vertical-lr;
 }
 /*.edit-box .setting-box .row-mon-level::before{
 	content: "▼怪物等级";
 }*/
 .row-mon-level
 {
-	margin-left: 5px;
+	margin-left: 10px;
 }
 
 .row-mon-level .subrow
@@ -1154,7 +1158,7 @@ ul{
 	text-shadow: inherit;
 	box-sizing: border-box;
 	line-height: inherit;
-	width: 70px;
+	width: 100px;
 }
 .m-level-btn-min,
 .m-level-btn-max
@@ -1163,10 +1167,6 @@ ul{
 	font-size: inherit;
 	line-height: inherit;
 	padding: 0 3px;
-}
-.m-level-btn-min{
-}
-.m-level-btn-max{
 }
 /*
 .m-level-exp::before{
@@ -1186,11 +1186,11 @@ ul{
 	vertical-align: top;
 }
 .m-level,
-.m-plus-hp,.m-plus-atk,.m-plus-rcv
+.m-plus-hp,.m-plus-atk,.m-plus-rcv,
+.m-skill-level
 {
 	border: 1px solid grey;
 	background: none;
-	color: white;
 }
 /*.edit-box .setting-box .row-mon-latent::before{
 	content: "▼潜在觉醒";
@@ -1238,11 +1238,10 @@ ul{
 	content: "最高Lv";
 }*/
 .skill-box .m-skill-level {
-	height: 30px;
-	width: 45px;
+	/*height: 30px;*/
+	width: 50px;
+	line-height: 30px;
 	box-sizing: border-box;
-	border: none;
-	background: none;
 	font-size: inherit;
 	font-family: inherit;
 	color: inherit;
