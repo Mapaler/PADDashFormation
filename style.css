@@ -1068,14 +1068,14 @@ ul{
 	line-height: 35px;
 	text-shadow: black 2px 2px 0;
 }
-.row-mon-plus ul{
+.row-mon-plus .plus-box{
 	border-color: #A07740;
 	border-style: solid;
 	border-width: var(--border-width);
 	border-radius: 8px;
 	background-color: #44392C;
 	box-shadow: inset black 0 3px 5px;
-	width: 145px;
+	white-space: nowrap; /*避免纵向297跑到下一行*/
 }
 .row-mon-plus li{
 	height: 35px;
@@ -1097,9 +1097,9 @@ ul{
 	font-size: inherit;
 	text-shadow: inherit;
 	box-sizing: border-box;
-	width: 32px;
+	width: 2em;
 	line-height: 33px;
-	height: 35px;
+	padding: 0;
 	-moz-appearance: textfield; /*火狐去掉数字加减*/
 }
  /*webkit去掉数字加减*/
@@ -1126,12 +1126,18 @@ ul{
 	box-sizing: border-box;
 	height: 105px;
 	font-size: 22px;
-	float: right;
 	writing-mode: vertical-lr;
+	min-width: 32px; /*先给297一个默认宽度*/
 }
 .m-plus-btn-297 span{
 	/*Chrome浏览器不支持按钮本身的纵向，只能加一层*/
 	-webkit-writing-mode: vertical-lr;
+}
+.row-mon-plus .plus-box ul,
+.m-plus-btn-297
+{
+	display: inline-block;
+	vertical-align: top;
 }
 /*.edit-box .setting-box .row-mon-level::before{
 	content: "▼怪物等级";
@@ -1239,7 +1245,7 @@ ul{
 }*/
 .skill-box .m-skill-level {
 	/*height: 30px;*/
-	width: 50px;
+	width: 2.5em;
 	line-height: 30px;
 	box-sizing: border-box;
 	font-size: inherit;
