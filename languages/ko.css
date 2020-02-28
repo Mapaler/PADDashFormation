@@ -1,4 +1,7 @@
 ﻿@charset "utf-8";
+.status.loading-check-version .text::before{
+	content: "데이터 버전을 확인 합니다.";
+}
 .status.loading-mon-info .text::before{
 	content: "몬스터 데이터를 로드 하 고 있습니다.";
 }
