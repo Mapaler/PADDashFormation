@@ -17,7 +17,8 @@ var Cards; //怪物数据
 var Skills; //技能数据
 var currentLanguage; //当前语言
 var currentDataSource; //当前数据
-var currentCkey; //当前的Ckey
+var newCkeys; //当前的Ckey
+var lastCkeys; //以前Ckey们
 var interchangeSvg; //储存划线的SVG
 var interchangePath; //储存划线的线
 var changeSwapToCopy; //储存交换“复制”和“替换”
@@ -381,18 +382,17 @@ window.onload = function()
 	});
 	//处理返回的数据
 	function dealCkeyData(responseText)
-	{
-		let CkeysObj;
+	{ //处理数据版本
 		try
 		{
-			CkeysObj = JSON.parse(responseText);
+			newCkeys = JSON.parse(responseText);
 		}catch(e)
 		{
 			console.log("Ckey数据JSON解码出错",e);
 			return;
 		}
-		currentCkey = CkeysObj.find(ckey=>ckey.code = currentDataSource.code); //获取当前语言的ckey
-		let lastCkeys = GM_getValue("PADDF-ckey"); //读取本地储存的原来的ckey
+		const currentCkey = newCkeys.find(ckey=>ckey.code == currentDataSource.code); //获取当前语言的ckey
+		lastCkeys = GM_getValue("PADDF-ckey"); //读取本地储存的原来的ckey
 		try
 		{
 			lastCkeys = JSON.parse(lastCkeys);
@@ -403,7 +403,7 @@ window.onload = function()
 			console.log("上次的Ckey数据JSON解码出错",e);
 			return;
 		}
-		let lastCurrentCkeys = lastCkeys.find(ckey=>ckey.code = currentDataSource.code);
+		let lastCurrentCkeys = lastCkeys.find(ckey=>ckey.code == currentDataSource.code);
 		if (!lastCurrentCkeys)
 		{ //如果未找到上个ckey，则添加个新的
 			lastCurrentCkeys = {
@@ -413,13 +413,19 @@ window.onload = function()
 			lastCkeys.push(lastCurrentCkeys);
 		}
 
-		//GM_setValue("PADDF-ckey",JSON.stringify(CkeysObj));
 		statusLine.classList.remove("loading-check-version");
 		statusLine.classList.add("loading-mon-info");
 		if (currentCkey.ckey.card == lastCurrentCkeys.ckey.card)
 		{
 			console.log("Cards ckey相等，直接读取已有的数据",currentCkey.ckey.card);
-			dealCardsData(GM_getValue(`PADDF-${currentDataSource.code}-cards`));
+			localforage.getItem(`PADDF-${currentDataSource.code}-cards`).then(function(value) {
+				// This code runs once the value has been loaded
+				// from the offline store.
+				dealCardsData(value);
+			}).catch(function(err) {
+				// This code runs if there were any errors
+				console.log(err);
+			});
 		}else
 		{
 			GM_xmlhttpRequest({
@@ -427,11 +433,14 @@ window.onload = function()
 				url:`${sourceDataFolder}/mon_${currentDataSource.code}.json`, //Cards数据文件
 				onload: function(response) {
 					console.log("Cards ckey变化，储存新数据",currentCkey.ckey.card);
-					console.log(response.response.length)
-					GM_setValue(`PADDF-${currentDataSource.code}-cards`,response.response);
-					lastCurrentCkeys.ckey.card == currentCkey.ckey.card;
-					GM_setValue("PADDF-ckey", lastCkeys);
-					dealCardsData(response.response);
+					localforage.setItem(`PADDF-${currentDataSource.code}-cards`, response.response).then(function(){
+						lastCurrentCkeys.ckey.card = currentCkey.ckey.card;
+						GM_setValue("PADDF-ckey", JSON.stringify(lastCkeys));
+						dealCardsData(response.response);
+					}).catch(function(err) {
+						// This code runs if there were any errors
+						console.log(err);
+					});
 				},
 				onerror: function(response) {
 					let isChrome = navigator.userAgent.indexOf("Chrome") >=0;
@@ -458,25 +467,50 @@ window.onload = function()
 			return;
 		}
 		statusLine.classList.remove("loading-mon-info");
+
 		statusLine.classList.add("loading-skill-info");
-		GM_xmlhttpRequest({
-			method: "GET",
-			url:`${sourceDataFolder}/skill_${currentDataSource.code}.json`, //Skills数据文件
-			onload: function(response) {
-				dealSkillData(response.response);
-			},
-			onerror: function(response) {
-				let isChrome = navigator.userAgent.indexOf("Chrome") >=0;
-				if (isChrome && location.host.length==0 && response.response.length>0)
-				{
-					console.info("因为是Chrome本地打开，正在尝试读取JSON");
-					dealSkillData(response.response);
-				}else
-				{
-					console.error("Skills JSON数据获取失败",response);
+		const currentCkey = newCkeys.find(ckey=>ckey.code == currentDataSource.code); //获取当前语言的ckey
+		const lastCurrentCkeys = lastCkeys.find(ckey=>ckey.code == currentDataSource.code);
+		if (currentCkey.ckey.skill == lastCurrentCkeys.ckey.skill)
+		{
+			console.log("Skills ckey相等，直接读取已有的数据",currentCkey.ckey.skill);
+			localforage.getItem(`PADDF-${currentDataSource.code}-skills`).then(function(value) {
+				// This code runs once the value has been loaded
+				// from the offline store.
+				dealSkillData(value);
+			}).catch(function(err) {
+				// This code runs if there were any errors
+				console.log(err);
+			});
+		}else
+		{
+			GM_xmlhttpRequest({
+				method: "GET",
+				url:`${sourceDataFolder}/skill_${currentDataSource.code}.json`, //Skills数据文件
+				onload: function(response) {
+					console.log("Skills ckey变化，储存新数据",currentCkey.ckey.skill);
+					localforage.setItem(`PADDF-${currentDataSource.code}-skills`, response.response).then(function(){
+						lastCurrentCkeys.ckey.skill = currentCkey.ckey.skill;
+						GM_setValue("PADDF-ckey", JSON.stringify(lastCkeys));
+						dealSkillData(response.response);
+					}).catch(function(err) {
+						// This code runs if there were any errors
+						console.log(err);
+					});
+				},
+				onerror: function(response) {
+					let isChrome = navigator.userAgent.indexOf("Chrome") >=0;
+					if (isChrome && location.host.length==0 && response.response.length>0)
+					{
+						console.info("因为是Chrome本地打开，正在尝试读取JSON");
+						dealSkillData(response.response);
+					}else
+					{
+						console.error("Skills JSON数据获取失败",response);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 	function dealSkillData(responseText)
 	{
