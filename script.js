@@ -424,6 +424,8 @@ window.onload = function()
 				dealCardsData(value);
 			}).catch(function(err) {
 				// This code runs if there were any errors
+				alert("Local Database error. Please refresh.");
+				GM_deleteValue("PADDF-ckey");
 				console.log(err);
 			});
 		}else
@@ -480,6 +482,8 @@ window.onload = function()
 				dealSkillData(value);
 			}).catch(function(err) {
 				// This code runs if there were any errors
+				alert("Local Database error. Please refresh.");
+				GM_deleteValue("PADDF-ckey");
 				console.log(err);
 			});
 		}else
