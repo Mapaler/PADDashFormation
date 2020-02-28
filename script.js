@@ -451,21 +451,27 @@ window.onpopstate = reloadFormationData; //前进后退时修改页面
 //创建新的分享地址
 function creatNewUrl(arg){
 	if (arg == undefined) arg = {};
-	if (!!(window.history && history.pushState)) {
-		// 支持History API
-		let language_i18n = arg.language || getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
-		let datasource = arg.datasource || getQueryString("s");
-		let outObj = formation.outObj();
+	if (!!(window.history && history.pushState))
+	{ // 支持History API
+		const language_i18n = arg.language || getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
+		const datasource = arg.datasource || getQueryString("s");
+		const outObj = formation.outObj();
 		
-		let newUrl = (arg.url?arg.url:"") +
-			'?' +
-			(language_i18n?'l=' + language_i18n + '&':'') +
-			(datasource&&datasource!="ja"?'s=' + datasource + '&':'') +
-			'd=' + encodeURIComponent(JSON.stringify(outObj));
+		const newSearch = new URLSearchParams();
+		if (language_i18n) newSearch.set("l",language_i18n);
+		if (datasource && datasource!="ja") newSearch.set("s",datasource);
+		if (outObj) newSearch.set("d", JSON.stringify(outObj));
 
-		if (!arg.notPushState) history.pushState(null, null, newUrl);
-		if (arg.returnObj) return outObj;
-		else return newUrl;
+		const newUrl = (arg.url || "") + '?' + newSearch.toString();
+
+		if (!arg.notPushState)
+		{
+			history.pushState(null, null, newUrl);
+		}
+		else
+		{
+			return newUrl;
+		}
 	}
 }
 //截图
@@ -1427,8 +1433,6 @@ function interchangeCard(formArr,toArr)
 	formation.teams[toArr[0]][toArr[1]][toArr[2]] = from;
 	if (!isCopy) formation.teams[formArr[0]][formArr[1]][formArr[2]] = to;
 
-	//const formationData = creatNewUrl({returnObj:true});
-	//formation.loadObj(formationData);
 	creatNewUrl(); //刷新URL
 	refreshAll(formation); //刷新全部
 }

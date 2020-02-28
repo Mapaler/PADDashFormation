@@ -57,15 +57,22 @@ function PrefixInteger(num, length)
 }
 //获取URL参数
 function getQueryString(name,url) {
-	const reg = new RegExp(`(?:^|&)${name}=([^&]*)(?:&|$)`, "i");
-	const searchStr = url || location.search.substr(1);
-	const r = searchStr.match(reg);
-	if (r != null)
-	{
-		return decodeURIComponent(r[1]);
+	if (!!(window.URL && window.URLSearchParams))
+	{ //浏览器原生支持的API
+		const urlObj = new URL(url || document.location);
+		return urlObj.searchParams.get(name);
 	}else
 	{
-		return null;
+		const reg = new RegExp(`(?:^|&)${name}=([^&]*)(?:&|$)`, "i");
+		const searchStr = url || location.search.substr(1);
+		const r = searchStr.match(reg);
+		if (r != null)
+		{
+			return decodeURIComponent(r[1]);
+		}else
+		{
+			return null;
+		}
 	}
 }
 
