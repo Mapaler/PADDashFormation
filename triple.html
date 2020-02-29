@@ -9,6 +9,7 @@
 <link href="style-monsterimages.css" rel="stylesheet" type="text/css">
 <link id="language-css" href="languages/en.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="languages/language-list.js"></script>
+<script type="text/javascript" src="json_data.js"></script>
 <script type="text/javascript" src="universal_function.js"></script>
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript" src="library/localforage.min.js"></script>
@@ -1218,11 +1219,15 @@ var formation = new Formation(teamsCount,6);
 					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="72" id="search-awoken-72" /><label class="awoken-icon awoken-72" for="search-awoken-72"></label></li><!--掉毒-->
 				</ul>
 			</div>
-			<div class="control-div"><!--控制栏，排序方式暂时不做-->
+			<div class="control-div"><!--控制栏-->
 				<button class="search-start"><!--开始搜索--></button>
 				<button class="search-close"><!--关闭搜索--></button>
 				<button class="search-clear"><!--清空搜索条件--></button>
 				<input type="checkbox" name="can-assist" class="config-checkbox-ipt" id="can-assist"><label class="config-checkbox-lbl can-assist-label" for="can-assist"><div class="config-checkbox-lbl-cicle"></div></label>
+				<div class="sort-div">
+					<select class="sort-list"></select>
+					<input type="checkbox" name="sort-reverse" class="config-checkbox-ipt" id="sort-reverse"><label class="config-checkbox-lbl sort-reverse-label" for="sort-reverse"><div class="config-checkbox-lbl-cicle"></div></label>
+				</div><!--排序栏-->
 			</div>
 			<ul class="search-mon-list"></ul><!--搜索结果的显示列表-->
 		</div>
