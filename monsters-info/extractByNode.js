@@ -1,4 +1,5 @@
 ﻿const fs = require('fs');
+const crypto = require('crypto');
 const Card = require('./official-API/parseCard');
 const Skill = require('./official-API/parseSkill');
 var officialAPI = [ //来源于官方API
@@ -37,11 +38,9 @@ function sameCard(m1,m2)
  * 正式流程
  */
 officialAPI.forEach(function(lang){
-	lang.ckey = {card:null,skill:null};
 	console.log("正在读取官方 " + lang.code + " 信息");
 	const cardJson = fs.readFileSync("official-API/" + lang.code +".json", 'utf-8'); //使用同步读取怪物
 	const cardJsonObj = JSON.parse(cardJson);
-	lang.ckey.card = cardJsonObj.ckey;
 	const oCards = lang.cardOriginal = cardJsonObj.card;//将字符串转换为json对象
 
 	let maxCardIndex = 0;
@@ -71,7 +70,6 @@ officialAPI.forEach(function(lang){
 
 	const skillJson = fs.readFileSync("official-API/" + lang.code +"-skill.json", 'utf-8'); //使用同步读取技能
 	const skillJsonObj = JSON.parse(skillJson);
-	lang.ckey.skill = skillJsonObj.ckey;
 	const oSkills = lang.skillOriginal = skillJsonObj.skill;//将字符串转换为json对象
 	lang.skills = oSkills.map((oc,idx)=>{return new Skill(idx,oc);}); //每一项生成分析对象
 });
@@ -152,38 +150,42 @@ for (let li = 0;li < officialAPI.length; li++)
 }
 
 var ckeyObj = officialAPI.map(lang=>{
-	const obj = {
-		code: lang.code,
-		ckey: lang.ckey,
+	const lcode = lang.code;
+	const cardStr = JSON.stringify(lang.cards);
+	const skillStr = JSON.stringify(lang.skills);
+	
+	//写入Cards
+	fs.writeFile(`./mon_${lcode}.json`,cardStr,function(err){
+		if(err){
+			console.error(err);
+		}
+		console.log(`mon_${lcode}.json 导出成功`);
+	});
+	//写入Skills
+	fs.writeFile(`./skill_${lcode}.json`,skillStr,function(err){
+		if(err){
+			console.error(err);
+		}
+		console.log(`skill_${lcode}.json 导出成功`);
+	});
+
+	const cardHash = crypto.createHash('md5');
+	const skillHash = crypto.createHash('md5');
+	cardHash.update(cardStr, 'utf8');
+	skillHash.update(skillStr, 'utf8');
+
+	const ckeyOutObj = {
+		code: lcode,
+		ckey: {
+			card: cardHash.digest('hex'),
+			skill: skillHash.digest('hex'),
+		},
 	};
-	return obj;
+	return ckeyOutObj;
 })
 fs.writeFile('./ckey.json',JSON.stringify(ckeyObj),function(err){
 	if(err){
 		console.error(err);
 	}
 	console.log('ckey.json 导出成功');
-});
-//最后批量保存
-officialAPI.forEach(function(lang){
-	let lcode = lang.code;
-/*	//删除暂时无用的内容
-	lang.cards.forEach((card)=>{
-		delete card.enemy;
-	});
-*/
-	const cardStr = JSON.stringify(lang.cards);
-	fs.writeFile('./mon_'+lcode+'.json',cardStr,function(err){
-		if(err){
-			console.error(err);
-		}
-		console.log('mon_'+lcode+'.json 导出成功');
-	});
-	const skillStr = JSON.stringify(lang.skills);
-	fs.writeFile('./skill_'+lcode+'.json',skillStr,function(err){
-		if(err){
-			console.error(err);
-		}
-		console.log('skill_'+lcode+'.json 导出成功');
-	});
 });
