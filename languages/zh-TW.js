@@ -3,9 +3,16 @@
     title_blank: "輸入隊伍標題",
     detail_blank: "輸入說明",
     sort_name:{
-        sort_none: "Nope",
-        sort_id: "Cards Id",
-        sort_evoRootId: "Cards Evolution Root",
+        sort_none: "無",
+        sort_id: "怪物ID",
+        sort_evoRootId: "進化樹",
+        sort_skillLv1: "技能最大冷卻時間",
+        sort_skillLvMax: "技能最小冷卻時間",
+        sort_hpMax110: "最大HP(Lv110)",
+        sort_atkMax110: "最大攻擊(Lv110)",
+        sort_rcvMax110: "最大回復(Lv110)",
+        sort_rarity: "稀有度",
+        sort_cost: "消耗",
     },
 }
 

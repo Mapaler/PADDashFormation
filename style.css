@@ -899,6 +899,11 @@ ul{
 .setting-box .row-mon-id .open-search{
 	float: right;
 }
+.can-assist-label,
+.sort-reverse-label
+{
+	margin-left: 5px;
+}
 
 .edit-box .setting-row{
 	width: 100%;

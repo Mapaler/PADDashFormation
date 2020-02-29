@@ -312,7 +312,7 @@ function calculateAbility(member = null, assist = null, solo = true)
 //搜索卡片用
 function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equalAk,incSawoken)
 {
-	let cardsRange = cards;
+	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	//属性
 	if (attr1 != null && attr1 ===  attr2)
 	{ //当两个颜色相同时，主副一样颜色的只需判断一次
