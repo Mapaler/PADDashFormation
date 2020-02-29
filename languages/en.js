@@ -1,3 +1,12 @@
-﻿document.title = `P&D ${teamsCount}P Formation Maker`;
-document.body.querySelector(".formation-box .title-box .title").placeholder = "Input Formation Title";
-document.body.querySelector(".formation-box .detail-box .detail").placeholder = "Input Detail";
+﻿const localTranslating = {
+    webpage_title: `P&D ${teamsCount}P Formation Maker`,
+    title_blank: "Input Formation Title",
+    detail_blank: "Input Detail",
+    sort_name:{
+        sort_none: "Nope",
+        sort_id: "Cards Id",
+        sort_evoRootId: "Cards Evolution Root",
+    },
+}
+
+localisation(localTranslating);

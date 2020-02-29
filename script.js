@@ -791,6 +791,7 @@ function initialize()
 		cli.appendChild(cdom);
 		changeid({id:id},cdom);
 		cdom.onclick = clickHeadToNewMon;
+		cli.card = Cards[id];
 		return cli;
 	};
 
@@ -884,9 +885,10 @@ function initialize()
 		});
 	};
 
-	const searchStart = searchBox.querySelector(".control-div .search-start");
-	const searchClose = searchBox.querySelector(".control-div .search-close");
-	const searchClear = searchBox.querySelector(".control-div .search-clear");
+	const s_controlDiv = searchBox.querySelector(".control-div");
+	const searchStart = s_controlDiv.querySelector(".search-start");
+	const searchClose = s_controlDiv.querySelector(".search-close");
+	const searchClear = s_controlDiv.querySelector(".search-clear");
 	function returnCheckedInput(ipt)
 	{
 		return ipt.checked == true;
@@ -910,6 +912,14 @@ function initialize()
 		if (searchArr.length>0)
 		{
 			let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+			
+			const sortIndex = parseInt(s_sortList.value,10);
+			const reverse = s_sortReverse.checked;
+			searchArr.sort((card_a,card_b)=>{
+				let sortNumber = sort_function_list[sortIndex].function(card_a,card_b);
+				if (reverse) sortNumber *= -1;
+				return sortNumber;
+			});
 			searchArr.forEach(function(card){
 				const cli = createCardHead(card.id);
 				fragment.appendChild(cli);
@@ -993,8 +1003,37 @@ function initialize()
 		s_sawokens.forEach(t=>{
 			t.checked = false;
 		});
+
 		searchMonList.innerHTML = "";
 	};
+
+	const s_sortList = s_controlDiv.querySelector(".sort-list");
+	const s_sortReverse = s_controlDiv.querySelector("#sort-reverse");
+	//对搜索到的Cards重新排序
+	function reSortCards()
+	{
+		const sortIndex = parseInt(s_sortList.value,10);
+		const reverse = s_sortReverse.checked;
+
+		searchMonList.classList.add("display-none");
+		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+		let headsArray = Array.prototype.slice.call(searchMonList.children);
+		headsArray.sort((head_a,head_b)=>{
+			let sortNumber = sort_function_list[sortIndex].function(head_a.card,head_b.card);
+			if (reverse) sortNumber *= -1;
+			return sortNumber;
+		});
+		headsArray.forEach(h=>fragment.appendChild(h));
+		searchMonList.appendChild(fragment);
+		searchMonList.classList.remove("display-none");
+	}
+	s_sortList.onchange = reSortCards;
+	s_sortReverse.onchange = reSortCards;
+	sort_function_list.forEach((sfunc,idx)=>{
+		const newOpt = new Option(sfunc.name,idx);
+		newOpt.setAttribute("data-tag",sfunc.tag);
+		s_sortList.options.add(newOpt);
+	});
 
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
@@ -2341,4 +2380,22 @@ function refreshMemberSkillCD(teamDom,team,idx){
 	{
 		assistSkillCdDom.classList.add("max-skill");
 	}
+}
+function localisation($tra)
+{
+	if (!$tra) return;
+    document.title = $tra.webpage_title;
+    formationBox.querySelector(".title-box .title").placeholder = $tra.title_blank;
+    formationBox.querySelector(".detail-box .detail").placeholder = $tra.detail_blank;
+
+    const s_sortList = editBox.querySelector(".search-box .sort-div .sort-list");
+    const sortOptions = Array.prototype.slice.call(s_sortList.options);
+    sortOptions.forEach(opt=>{
+        const tag = opt.getAttribute("data-tag");
+        const trans = $tra.sort_name[tag];
+        if (trans)
+        {
+            opt.text = trans;
+        }
+    })
 }

@@ -1,29 +1,4 @@
-﻿//类型允许的潜觉杀，前面的数字是官方数据的类型编号，后面的杀是自己做的图片中的潜觉序号
-const type_allowable_latent = {
-	"0":[], //0进化
-	"12":[], //12觉醒
-	"14":[], //14强化
-	"15":[], //15卖钱
-	"9":[],//特殊保护
-	"1":[17,18,19,20,21,22,23,24], //1平衡
-	"2":[20,24],//2体力
-	"3":[18,22],//3回复
-	"4":[20,24],//4龙
-	"5":[19],//5神
-	"6":[19,23],//6攻击
-	"7":[17],//7恶魔
-	"8":[17,20,21,24],//8机械
-};
-//等效觉醒列表
-const equivalent_awoken = [
-	{small:10,big:52,times:2}, //防封
-	{small:11,big:68,times:5}, //防暗
-	{small:12,big:69,times:5}, //防废
-	{small:13,big:70,times:5}, //防毒
-	{small:19,big:53,times:2}, //手指
-	{small:21,big:56,times:2}, //SB
-];
-//仿GM_xmlhttpRequest函数v1.3
+﻿//仿GM_xmlhttpRequest函数v1.3
 const GM_xmlhttpRequest = function(GM_param) {
 	const xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
 	xhr.open(GM_param.method, GM_param.url, true);

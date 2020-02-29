@@ -262,6 +262,15 @@
 .search-box .include-super-awoken-label::after{
 	content: "超覚醒を含む";
 }
+.search-box .sort-div::before{
+	content: "並べ替え:";
+}
+.search-box .sort-reverse-label::after{
+	content: "正序";
+}
+.search-box #sort-reverse:checked+ .sort-reverse-label::after{
+	content: "逆序";
+}
 .attrs .attr-all::before{
 	content: "無制限";
 }

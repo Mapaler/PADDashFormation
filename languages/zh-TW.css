@@ -268,6 +268,15 @@
 .search-box .include-super-awoken-label::after{
 	content: "包括超覺醒";
 }
+.search-box .sort-div::before{
+	content: "排序：";
+}
+.search-box .sort-reverse-label::after{
+	content: "順序";
+}
+.search-box #sort-reverse:checked+ .sort-reverse-label::after{
+	content: "逆序";
+}
 .attrs .attr-all::before{
 	content: "不限";
 }
