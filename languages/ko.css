@@ -262,6 +262,15 @@
 .search-box .include-super-awoken-label::after{
 	content: "슈퍼 각성 포함";
 }
+.search-box .sort-div::before{
+	content: "정렬:";
+}
+.search-box .sort-reverse-label::after{
+	content: "양의";
+}
+.search-box #sort-reverse:checked+ .sort-reverse-label::after{
+	content: "역순";
+}
 .attrs .attr-all::before{
 	content: "무제한";
 }
