@@ -915,8 +915,9 @@ function initialize()
 			
 			const sortIndex = parseInt(s_sortList.value,10);
 			const reverse = s_sortReverse.checked;
+			const sortFunction = sort_function_list[sortIndex].function;
 			searchArr.sort((card_a,card_b)=>{
-				let sortNumber = sort_function_list[sortIndex].function(card_a,card_b);
+				let sortNumber = sortFunction(card_a,card_b);
 				if (reverse) sortNumber *= -1;
 				return sortNumber;
 			});

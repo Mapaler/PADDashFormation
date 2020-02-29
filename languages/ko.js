@@ -3,9 +3,16 @@
     title_blank: "입력 제목",
     detail_blank: "입력 내용",
     sort_name:{
-        sort_none: "Nope",
-        sort_id: "Cards Id",
-        sort_evoRootId: "Cards Evolution Root",
+        sort_none: "없음",
+        sort_id: "카드 ID",
+        sort_evoRootId: "카드 진화 루트",
+        sort_skillLv1: "최대 스킬 턴",
+        sort_skillLvMax: "최소 스킬 턴",
+        sort_hpMax110: "최대 HP (Lv110)",
+        sort_atkMax110: "최대 공격 (Lv110)",
+        sort_rcvMax110: "최대 회복 (Lv110)",
+        sort_rarity: "래리티",
+        sort_cost: "비용",
     },
 }
 
