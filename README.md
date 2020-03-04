@@ -11,8 +11,14 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 1. 한국어 (by google translate)
 
 ### 预览 \| Preview
-![单人界面预览](document/preview-capture-1p.png)![2人协力界面预览](document/preview-capture-2p.png)  
-![3人协力界面预览](document/preview-capture-3p.png)![手机端预览](document/preview-mobile.jpg)
+
+| **单人 \| Solo** | **2人协力 \| 2P** |
+| :---: | :---: |
+| ![单人界面预览](document/preview-capture-1p.png) | ![2人协力界面预览](document/preview-capture-2p.png) |
+| **3人协力 \| 3P** | **手机 \| Mobile**  |
+| ![3人协力界面预览](document/preview-capture-3p.png) | ![手机端预览](document/preview-mobile.jpg) |
+  
+
 
 # 如何使用 | HOW TO USE
 ## 快速使用在线版 | Online Quick Start  
