@@ -1027,6 +1027,14 @@ function parseSkillDescription(skill)
 			break;
 		case 179:
 			str = `${sk[0]}回合内每回合回复${sk[1]?`${sk[1]}点`:` HP 上限 ${sk[2]}%`}的 HP`;
+			if(sk[3] || sk[4])
+			{
+				str += `，并将`;
+				strArr = [];
+				if(sk[3]>0) strArr.push(`封锁状态减少${sk[3]}回合`);
+				if(sk[4]>0) strArr.push(`觉醒无效状态减少${sk[4]}回合`);
+				str += strArr.join("，");
+			}
 			break;
 		case 180:
 			str = `${sk[0]}回合内，${sk[1]}%概率掉落强化宝珠`;
