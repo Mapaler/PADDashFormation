@@ -2092,11 +2092,20 @@ function parseBigNumber(number)
 			return a_pC - b_pC;
 		})},
 		{name:"====其他搜索====",function:()=>false},
+		{name:"全部8格潜觉（转生、超转生）",function:()=>Cards.filter(card=>{
+			return card.is8Latent;
+		})},
 		{name:"全部像素进化",function:()=>Cards.filter(card=>{
 			return card.evoMaterials.indexOf(3826)>=0;
 		})},
-		{name:"全部8格潜觉（转生、超转生）",function:()=>Cards.filter(card=>{
-			return card.is8Latent;
+		{name:"全部用三神面进化",function:()=>Cards.filter(card=>{
+			return card.evoMaterials.indexOf(3795)>=0;
+		})},
+		{name:"全部用彩龙果进化",function:()=>Cards.filter(card=>{
+			return card.evoMaterials.indexOf(3971)>=0;
+		})},
+		{name:"全部由武器进化而来",function:()=>Cards.filter(card=>{
+			return card.isUltEvo && Cards[card.evoBaseId].awakenings.indexOf(49)>=0;
 		})},
 		{name:"全部110级三维成长100%",function:()=>Cards.filter(card=>{
 			return card.limitBreakIncr>=100;
@@ -2106,9 +2115,6 @@ function parseBigNumber(number)
 		})},
 		{name:"全部低于100mp",function:()=>Cards.filter(card=>{
 			return card.sellMP<100;
-		})},
-		{name:"全部由武器进化而来",function:()=>Cards.filter(card=>{
-			return card.isUltEvo && Cards[card.evoBaseId].awakenings.indexOf(49)>=0;
 		})},
 	];
 
