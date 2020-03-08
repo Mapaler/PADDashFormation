@@ -636,7 +636,7 @@ function parseSkillDescription(skill)
 			strArr =[];
 			str += getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的";
 			str += ` HP ${sk[3]?`${sk[2]}%以下`:(sk[2]==100?`全满`:`${sk[2]}%以上`)}时攻击力${getFixedHpAtkRcvString({atk:sk[4]})}`;
-			str += `，HP ${sk[3]?(sk[6]?`${sk[2]}%~${sk[5]}%`:`${sk[5]}%以上`):(sk[6]?`${sk[5]}%以下`:(sk[2]==100?`${sk[5]}以上`:`${sk[5]}%~${sk[2]}%`))}时攻击力${getFixedHpAtkRcvString({atk:sk[7]})}`;
+			if (sk[5] != undefined) str += `，HP ${sk[3]?(sk[6]?`${sk[2]}%~${sk[5]}%`:`${sk[5]}%以上`):(sk[6]?`${sk[5]}%以下`:(sk[2]==100?`${sk[5]}以上`:`${sk[5]}%~${sk[2]}%`))}时攻击力${getFixedHpAtkRcvString({atk:sk[7]})}`;
 			break;
 		case 140:
 			str = `${getOrbsAttrString(sk[0])}宝珠强化（每颗强化珠伤害/回复增加${sk[1]}%）`;
@@ -716,7 +716,7 @@ function parseSkillDescription(skill)
 			}
 			break;
 		case 158:
-			str = `<span class="spColor">每组${sk[0]-1}珠或以下无法消除</span>`;
+			str = `<span class="spColor">每组${sk[0]}珠或以上才能消除</span>`;
 			if (sk[1] || sk[2])
 			str += "，" + getAttrTypeString(flags(sk[1]),flags(sk[2])) + "宠物的" + getFixedHpAtkRcvString({atk:sk[3],hp:sk[4],rcv:sk[5]});
 			break;
@@ -1925,6 +1925,69 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>{return searchTypeArray.some(t=>{return subskill.type == t;});});
 			}
 		})},
+		{name:"所有队长技加/减秒（按秒数排序）",function:()=>Cards.filter(card=>{
+			const searchTypeArray = [15,185];
+			const skill = Skills[card.leaderSkillId];
+			if (searchTypeArray.some(t=>skill.type == t))
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
+			}
+		}).sort((a,b)=>{
+			const searchTypeArray = [15,185];
+			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (searchTypeArray.some(t=>a_s.type == t)) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.some(t=>subskill.type == t)).params[0];
+			b_pC = (searchTypeArray.some(t=>b_s.type == t)) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.some(t=>subskill.type == t)).params[0];
+			return a_pC - b_pC;
+		})},
+		{name:"所有固定时间（按时间排序）",function:()=>Cards.filter(card=>{
+			const searchType = 178;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType;});
+			}
+		}).sort((a,b)=>{
+			const searchType = 178;
+			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (a_s.type == searchType) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			b_pC = (b_s.type == searchType) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			return a_pC - b_pC;
+		})},
+		{name:"所有要求长串消除（按珠数排序）",function:()=>Cards.filter(card=>{
+			const searchType = 158;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>{return Skills[id];});
+				return subskills.some(subskill=>{return subskill.type == searchType;});
+			}
+		}).sort((a,b)=>{
+			const searchType = 158;
+			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (a_s.type == searchType) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			b_pC = (b_s.type == searchType) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			return a_pC - b_pC;
+		})},
 		{name:"所有根性",function:()=>Cards.filter(card=>{
 			const searchType = 14;
 			const skill = Skills[card.leaderSkillId];
@@ -2043,6 +2106,9 @@ function parseBigNumber(number)
 		})},
 		{name:"全部低于100mp",function:()=>Cards.filter(card=>{
 			return card.sellMP<100;
+		})},
+		{name:"全部由武器进化而来",function:()=>Cards.filter(card=>{
+			return card.isUltEvo && Cards[card.evoBaseId].awakenings.indexOf(49)>=0;
 		})},
 	];
 

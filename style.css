@@ -1249,10 +1249,22 @@ ul{
 .skill-box .m-skill-lv-max::before{
 	content: "最高Lv";
 }*/
+.skill-box{
+	font-family: var(--game-font-family);
+	font-size: 16px;
+	border: #9C743E solid 2px;
+	border-radius: 10px;
+	background-color: #B1AAA0;
+	overflow: hidden;
+	box-shadow: inset black 0 0 5px;
+}
+.row-mon-leader-skill .skill-box{
+	background-color: #D0CD81;
+}
 .skill-box .m-skill-level {
 	/*height: 30px;*/
-	width: 2.5em;
-	line-height: 30px;
+	width: 3em;
+	line-height: 25px;
 	box-sizing: border-box;
 	font-size: inherit;
 	font-family: inherit;
@@ -1262,26 +1274,17 @@ ul{
 .skill-box .m-skill-lv-1,
 .skill-box .m-skill-lv-max{
 	padding: 0 3px;
-	height: 30px;
+	/*height: 30px;*/
 	box-sizing: border-box;
 	font-size: 18px;
 }
-.skill-box{
-	font-family: var(--game-font-family);
-	font-size: 20px;
-	border: #9C743E solid 2px;
-	border-radius: 10px;
-	background-color: #B1AAA0;
-	overflow: hidden;
-	box-shadow: inset black 0 0 5px;
-}
-.skill-title{
+.skill-box .skill-title{
 	background-color: #39180F;
 	box-shadow: inset black 0 5px 5px;
 	padding: 0 10px 0 5px;
 	text-shadow:black 3px 3px 0;
 }
-.skill-title::before{
+.skill-box .skill-title::before{
 	background-color: #774433;
 	border: #BBAA55 solid 2px;
 	border-radius: 10px;
