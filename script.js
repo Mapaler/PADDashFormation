@@ -1119,6 +1119,9 @@ function initialize()
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
 	monEditLvMax.ipt = monEditLv;
 	monEditLvMax.onclick = setIptToMyValue;
+	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
+	monEditLv110.ipt = monEditLv;
+	monEditLv110.onclick = setIptToMyValue;
 	//编辑界面重新计算怪物的经验值
 	function reCalculateExp(){
 		const monid = parseInt(monstersID.value || 0, 10);
@@ -1973,10 +1976,18 @@ function editBoxChangeMonId(id)
 	}
 
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
-	monEditLvMax.innerHTML = monEditLvMax.value = card.maxLevel + (card.limitBreakIncr ? 11 : 0); //最大等级按钮
+	monEditLvMax.innerHTML = card.maxLevel;
+	monEditLvMax.value =  card.maxLevel;
 	const monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.value = card.maxLevel; //默认等级为最大等级而不是110
-
+	monEditLv.value = card.maxLevel + (card.limitBreakIncr ? 11 : 0); //默认等级为110
+	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
+	if (card.limitBreakIncr)
+	{
+		monEditLv110.classList.remove("display-none");
+	}else
+	{
+		monEditLv110.classList.add("display-none");
+	}
 	const rowPlus =  settingBox.querySelector(".row-mon-plus");
 	const rowLatent =  settingBox.querySelector(".row-mon-latent");
 	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");

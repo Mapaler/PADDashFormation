@@ -109,11 +109,11 @@
 	content: "▼몬스터 레벨";
 }
 .row-mon-level .level-value::before,
-.row-mon-level .m-level-btn-min::before{
+.row-mon-level .m-level-btn-min::before,
+.row-mon-level .m-level-btn-max::before,
+.row-mon-level .m-level-btn-110::before
+{
 	content: "Lv.";
-}
-.row-mon-level .m-level-btn-max::before{
-	content: "최대Lv.";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼몬스터 숨어있는";
