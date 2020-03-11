@@ -109,11 +109,11 @@
 	content: "▼モンスターレベル";
 }
 .row-mon-level .level-value::before,
-.row-mon-level .m-level-btn-min::before{
+.row-mon-level .m-level-btn-min::before,
+.row-mon-level .m-level-btn-max::before,
+.row-mon-level .m-level-btn-110::before
+{
 	content: "Lv.";
-}
-.row-mon-level .m-level-btn-max::before{
-	content: "最大Lv.";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼モンスター潜在覚醒";

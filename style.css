@@ -128,6 +128,7 @@ body{
 	cursor: pointer;
 	line-height: 25px;
 	margin-right: 20px;
+	display: inline-block;
 }
 
 .status{
@@ -1173,11 +1174,11 @@ ul{
 	width: 100px;
 }
 .m-level-btn-min,
-.m-level-btn-max
+.m-level-btn-max,
+.m-level-btn-110
 {
 	box-sizing: border-box;
-	font-size: inherit;
-	line-height: inherit;
+	font-size: 18px;
 	padding: 0 3px;
 }
 /*

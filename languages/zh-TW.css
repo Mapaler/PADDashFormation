@@ -112,11 +112,11 @@
 	content: "▼怪物等級";
 }
 .row-mon-level .level-value::before,
-.row-mon-level .m-level-btn-min::before{
+.row-mon-level .m-level-btn-min::before,
+.row-mon-level .m-level-btn-max::before,
+.row-mon-level .m-level-btn-110::before
+{
 	content: "Lv.";
-}
-.row-mon-level .m-level-btn-max::before{
-	content: "最高Lv.";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼潛在覺醒";
