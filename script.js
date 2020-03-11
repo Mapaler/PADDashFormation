@@ -1976,10 +1976,9 @@ function editBoxChangeMonId(id)
 	}
 
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
-	monEditLvMax.innerHTML = card.maxLevel;
-	monEditLvMax.value =  card.maxLevel;
+	monEditLvMax.innerHTML = monEditLvMax.value = card.maxLevel;
 	const monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.value = card.maxLevel + (card.limitBreakIncr ? 11 : 0); //默认等级为110
+	monEditLv.max = monEditLv.value = card.maxLevel + (card.limitBreakIncr ? 11 : 0); //默认等级为110
 	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
 	if (card.limitBreakIncr)
 	{

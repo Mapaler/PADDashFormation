@@ -1181,6 +1181,10 @@ ul{
 	font-size: 18px;
 	padding: 0 3px;
 }
+.m-level-btn-110
+{
+	color: blue;
+}
 /*
 .m-level-exp::before{
 	content: "需要经验：";
