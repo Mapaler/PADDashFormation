@@ -2,21 +2,19 @@
 const crypto = require('crypto');
 const Card = require('./official-API/parseCard');
 const Skill = require('./official-API/parseSkill');
+const runDate = new Date();
 var officialAPI = [ //来源于官方API
 	{
 		code:"ja",
-		customName:["cht","chs"],
-		ckey:{card:null,skill:null}
+		customName:["cht","chs"]
 	},
 	{
 		code:"en",
-		customName:[],
-		ckey:{card:null,skill:null}
+		customName:[]
 	},
 	{
 		code:"ko",
-		customName:[],
-		ckey:{card:null,skill:null}
+		customName:[]
 	}
 ];
 
@@ -37,8 +35,8 @@ function sameCard(m1,m2)
 /*
  * 正式流程
  */
-officialAPI.forEach(function(lang){
-	console.log("正在读取官方 " + lang.code + " 信息");
+officialAPI.forEach(function(lang) {
+	console.log("正在读取官方 %s 信息",lang.code);
 	const cardJson = fs.readFileSync("official-API/" + lang.code +".json", 'utf-8'); //使用同步读取怪物
 	const cardJsonObj = JSON.parse(cardJson);
 	const oCards = lang.cardOriginal = cardJsonObj.card;//将字符串转换为json对象
@@ -149,7 +147,7 @@ for (let li = 0;li < officialAPI.length; li++)
 	}
 }
 
-var ckeyObj = officialAPI.map(lang=>{
+var newCkeyObjs = officialAPI.map(lang=>{
 	const lcode = lang.code;
 	const cardStr = JSON.stringify(lang.cards);
 	const skillStr = JSON.stringify(lang.skills);
@@ -180,12 +178,32 @@ var ckeyObj = officialAPI.map(lang=>{
 			card: cardHash.digest('hex'),
 			skill: skillHash.digest('hex'),
 		},
+		updateTime: runDate.getTime(),
 	};
 	return ckeyOutObj;
 })
-fs.writeFile('./ckey.json',JSON.stringify(ckeyObj),function(err){
-	if(err){
-		console.error(err);
-	}
-	console.log('ckey.json 导出成功');
+//读取旧的ckeyObj
+var ckeyObjs;
+fs.readFile('./ckey.json','utf-8',function(err,data){
+	if(err)
+	{ //如果读取错误，直接使用全新ckey
+        ckeyObjs = newCkeyObjs;
+    } else
+	{ //如果读取正确，则读入JSON，并判断是否和旧有的一致
+		ckeyObjs = JSON.parse(data);
+		ckeyObjs.forEach(ockey=>{
+			const newCkey = newCkeyObjs.find(nckey=>nckey.code === ockey.code);
+			if (newCkey && (ockey.ckey.card != newCkey.ckey.card || ockey.ckey.skill != newCkey.ckey.skill))
+			{
+				ockey = newCkey;
+			}
+		})
+    }
+	fs.writeFile('./ckey.json',JSON.stringify(ckeyObjs),function(err){
+		if(err){
+			console.error(err);
+		}
+		console.log('ckey.json 导出成功');
+	});
 });
+
