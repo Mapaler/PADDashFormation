@@ -407,8 +407,9 @@ window.onload = function()
 		if (!lastCurrentCkeys)
 		{ //如果未找到上个ckey，则添加个新的
 			lastCurrentCkeys = {
-				code:currentDataSource.code,
-				ckey:{}
+				code: currentDataSource.code,
+				ckey: {},
+				updateTime: null
 			}
 			lastCkeys.push(lastCurrentCkeys);
 		}
@@ -437,6 +438,7 @@ window.onload = function()
 					console.log("Cards ckey变化，储存新数据",currentCkey.ckey.card);
 					localforage.setItem(`PADDF-${currentDataSource.code}-cards`, response.response).then(function(){
 						lastCurrentCkeys.ckey.card = currentCkey.ckey.card;
+						lastCurrentCkeys.updateTime = currentCkey.updateTime;
 						GM_setValue("PADDF-ckey", JSON.stringify(lastCkeys));
 						dealCardsData(response.response);
 					}).catch(function(err) {
@@ -495,6 +497,7 @@ window.onload = function()
 					console.log("Skills ckey变化，储存新数据",currentCkey.ckey.skill);
 					localforage.setItem(`PADDF-${currentDataSource.code}-skills`, response.response).then(function(){
 						lastCurrentCkeys.ckey.skill = currentCkey.ckey.skill;
+						lastCurrentCkeys.updateTime = currentCkey.updateTime;
 						GM_setValue("PADDF-ckey", JSON.stringify(lastCkeys));
 						dealSkillData(response.response);
 					}).catch(function(err) {
@@ -526,6 +529,10 @@ window.onload = function()
 			console.log("Skills数据JSON解码出错",e);
 			return;
 		}
+		const currentCkey = newCkeys.find(ckey=>ckey.code == currentDataSource.code); 
+		const updateTime = controlBox.querySelector(".datasource-updatetime");
+		updateTime.innerHTML = new Date(currentCkey.updateTime).toLocaleString();
+
 		initialize();//初始化
 		statusLine.classList.remove("loading-skill-info");
 		//如果通过的话就载入URL中的怪物数据

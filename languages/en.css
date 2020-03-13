@@ -202,6 +202,9 @@
 .control-box .datasource-label::before{
 	content: "Data source:";
 }
+.control-box .datasource-updatetime::before{
+	content: "Update Time:";
+}
 .control-box .btn-solo-link::before{
 	content: "🧑Jump To Solo Mode";
 }
