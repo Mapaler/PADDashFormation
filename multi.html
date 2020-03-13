@@ -26,7 +26,7 @@ var formation = new Formation(teamsCount,5);
 		<div>
 			<label class="languages-label"><select class="languages"></select></label>
 			<label class="datasource-label"><select class="datasource"></select></label>
-			<a class="help-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/blob/master/help.md"></a>
+			<span class="datasource-updatetime"></span>
 		</div>
 		<div>
 			<button class="btn-clear-data" onclick="clearData();"></button>
@@ -35,6 +35,7 @@ var formation = new Formation(teamsCount,5);
 			<button class="btn-solo-link" onclick="turnPage(1);"></button>
 			<button class="btn-triple-link" onclick="turnPage(3);"></button>
 			<button class="btn-swap-AB-team" onclick="swapABCteam();"></button>
+			<a class="help-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/blob/master/help.md"></a>
 		</div>
 		<div>
 			<input type="checkbox" name="show-mon-id" class="config-checkbox-ipt" id="show-mon-id" onclick="toggleShowMonId();" checked><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>

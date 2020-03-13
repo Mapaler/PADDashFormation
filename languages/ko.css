@@ -195,6 +195,9 @@
 .control-box .datasource-label::before{
 	content: "데이터 소스:";
 }
+.control-box .datasource-updatetime::before{
+	content: "업데이트 시간:";
+}
 .control-box .btn-solo-link::before{
 	content: "🧑싱글 플레이어 게임으로 이동";
 }

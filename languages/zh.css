@@ -201,6 +201,9 @@
 .control-box .datasource-label::before{
 	content: "数据来源：";
 }
+.control-box .datasource-updatetime::before{
+	content: "更新时间：";
+}
 .control-box .btn-solo-link::before{
 	content: "🧑转到单人游戏";
 }

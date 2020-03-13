@@ -195,6 +195,9 @@
 .control-box .datasource-label::before{
 	content: "データ ソース:";
 }
+.control-box .datasource-updatetime::before{
+	content: "更新時刻:";
+}
 .control-box .btn-solo-link::before{
 	content: "🧑ソロゲームに移動";
 }
