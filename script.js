@@ -531,7 +531,7 @@ window.onload = function()
 		}
 		const currentCkey = newCkeys.find(ckey=>ckey.code == currentDataSource.code); 
 		const updateTime = controlBox.querySelector(".datasource-updatetime");
-		updateTime.innerHTML = new Date(currentCkey.updateTime).toLocaleString();
+		updateTime.innerHTML = new Date(currentCkey.updateTime).toLocaleString(undefined,{hour12: false});
 
 		initialize();//初始化
 		statusLine.classList.remove("loading-skill-info");
