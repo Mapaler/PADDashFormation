@@ -436,7 +436,7 @@ window.onload = function()
 				url:`${sourceDataFolder}/mon_${currentDataSource.code}.json`, //Cards数据文件
 				onload: function(response) {
 					console.log("Cards ckey变化，储存新数据",currentCkey.ckey.card);
-					localforage.setItem(`PADDF-${currentDataSource.code}-cards`, response.response).then(function(){
+					localforage.setItem(`PADDF-${currentDataSource.code}-cards`, JSON.parse(response.response)).then(function(){
 						lastCurrentCkeys.ckey.card = currentCkey.ckey.card;
 						lastCurrentCkeys.updateTime = currentCkey.updateTime;
 						GM_setValue("PADDF-ckey", JSON.stringify(lastCkeys));
@@ -460,11 +460,14 @@ window.onload = function()
 			});
 		}
 	}
-	function dealCardsData(responseText)
+	function dealCardsData(response)
 	{
 		try
 		{
-			Cards = JSON.parse(responseText);
+			if (typeof(response) == "string")
+				Cards = JSON.parse(response);
+			else
+				Cards = response;
 		}catch(e)
 		{
 			console.log("Cards数据JSON解码出错",e);
@@ -495,7 +498,7 @@ window.onload = function()
 				url:`${sourceDataFolder}/skill_${currentDataSource.code}.json`, //Skills数据文件
 				onload: function(response) {
 					console.log("Skills ckey变化，储存新数据",currentCkey.ckey.skill);
-					localforage.setItem(`PADDF-${currentDataSource.code}-skills`, response.response).then(function(){
+					localforage.setItem(`PADDF-${currentDataSource.code}-skills`, JSON.parse(response.response)).then(function(){
 						lastCurrentCkeys.ckey.skill = currentCkey.ckey.skill;
 						lastCurrentCkeys.updateTime = currentCkey.updateTime;
 						GM_setValue("PADDF-ckey", JSON.stringify(lastCkeys));
@@ -519,11 +522,14 @@ window.onload = function()
 			});
 		}
 	}
-	function dealSkillData(responseText)
+	function dealSkillData(response)
 	{
 		try
 		{
-			Skills = JSON.parse(responseText);
+			if (typeof(response) == "string")
+				Skills = JSON.parse(response);
+			else
+				Skills = response;
 		}catch(e)
 		{
 			console.log("Skills数据JSON解码出错",e);
