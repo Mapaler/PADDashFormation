@@ -17,10 +17,7 @@ var Cards; //怪物数据
 var Skills; //技能数据
 var currentLanguage; //当前语言
 var currentDataSource; //当前数据
-var newCkeys; //当前的Ckey
-var lastCkeys; //以前Ckey们
 var interchangeSvg; //储存划线的SVG
-var interchangePath; //储存划线的线
 var changeSwapToCopy; //储存交换“复制”和“替换”
 var controlBox; //储存整个controlBox
 var statusLine; //储存状态栏
@@ -299,7 +296,18 @@ window.onload = function()
 	const helpLink = controlBox.querySelector(".help-link");
 	changeSwapToCopy = controlBox.querySelector("#change-swap-to-copy");
 	interchangeSVG = document.body.querySelector("#interchange-line");
-	interchangePath = interchangeSVG.querySelector("g line");
+	interchangeSVG.line = interchangeSVG.querySelector("g line");
+	interchangeSVG.changePoint = function(p1,p2){
+		const line = this.line;
+		if (p1 && p1.x != undefined)
+			line.setAttribute("x1",p1.x);
+		if (p1 && p1.y != undefined)
+			line.setAttribute("y1",p1.y);
+		if (p2 && p2.x != undefined)
+			line.setAttribute("x2",p2.x);
+		if (p2 && p2.y != undefined)
+			line.setAttribute("y2",p2.y);
+	};
 	toggleShowMonId();
 	toggleShowMonSkillCd();
 
@@ -361,6 +369,9 @@ window.onload = function()
 		}
 	});
 	const sourceDataFolder = "monsters-info";
+
+	var newCkeys; //当前的Ckey
+	var lastCkeys; //以前Ckey们
 	statusLine.classList.add("loading-check-version");
 	GM_xmlhttpRequest({
 		method: "GET",
@@ -1502,11 +1513,9 @@ function touchstartMonHead(e)
 	e.stopPropagation();
 	//console.log("开始触摸",e,this);
 	const tc = e.changedTouches[0];
+	const pX = tc.pageX, pY = tc.pageY;
 	interchangeSVG.style.display = "none";
-	interchangePath.setAttribute("x1",tc.pageX);
-	interchangePath.setAttribute("y1",tc.pageY);
-	interchangePath.setAttribute("x2",tc.pageX);
-	interchangePath.setAttribute("y2",tc.pageY);
+	interchangeSVG.changePoint({x:pX,y:pY},{x:pX,y:pY});
 }
 //移动端编辑界面每个怪物的头像的移动
 function touchmoveMonHead(e)
@@ -1521,8 +1530,7 @@ function touchmoveMonHead(e)
 	(pX < left) || (pX > (left + rect.width)))
 	{
 		interchangeSVG.style.display = "block";
-		interchangePath.setAttribute("x2",tc.pageX);
-		interchangePath.setAttribute("y2",tc.pageY);
+		interchangeSVG.changePoint(null,{x:pX,y:pY});
 	}else
 	{
 		interchangeSVG.style.display = "none";
@@ -1535,18 +1543,16 @@ function touchendMonHead(e)
 	const pX = tc.pageX, pY = tc.pageY;
 	//console.log("移动结束",pX,pY,e,this);
 	interchangeSVG.style.display = "none";
-	interchangePath.setAttribute("x2",pX);
-	interchangePath.setAttribute("y2",tc.pageY);
-	let targets = allMembers.filter(m=>{
+	interchangeSVG.changePoint(null,{x:pX,y:pY});
+	let target = allMembers.find(m=>{
 		const rect = m.getBoundingClientRect();
 		const top = rect.top + document.documentElement.scrollTop;
 		const left = rect.left + document.documentElement.scrollLeft;
-		const inRect = (pY > top) && (pY < (top + rect.height)) &&
+		const isInRect = (pY > top) && (pY < (top + rect.height)) &&
 						(pX > left) && (pX < (left + rect.width));
-		return inRect;
+		return isInRect;
 	});
-	const target = targets.length?targets[0]:null;
-	if (this != target)
+	if (target && this != target)
 	{
 		//console.log("找到的对象",targets[0]);
 		let dataFrom = getMemberArrayIndexFromMonHead(this);
