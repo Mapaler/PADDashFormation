@@ -2121,7 +2121,7 @@ function parseBigNumber(number)
 
 
 	const searchBox = editBox.querySelector(".search-box");
-	const controlDiv = searchBox.querySelector(".sawoken-div");
+	const controlDiv = searchBox.querySelector(".control-div .sort-div");
 	let fragment = document.createDocumentFragment();
 	const specialSearch = fragment.appendChild(document.createElement("select"));
 	specialSearchFunctions.forEach((sfunc,idx)=>{
