@@ -1,24 +1,9 @@
-const dataSourceList = [ //几个不同的游戏服务区
-	{
-		code:"ja",
-		source:"パズル＆ドラゴンズ"
-	},
-	{
-		code:"en",
-		source:"Puzzle & Dragons"
-	},
-	{
-		code:"ko",
-		source:"퍼즐앤드래곤"
-	},
-];
-
 var Cards; //怪物数据
 var Skills; //技能数据
 var currentLanguage; //当前语言
 var currentDataSource; //当前数据
+
 var interchangeSvg; //储存划线的SVG
-var changeSwapToCopy; //储存交换“复制”和“替换”
 var controlBox; //储存整个controlBox
 var statusLine; //储存状态栏
 var formationBox; //储存整个formationBox
@@ -27,6 +12,25 @@ var allMembers = []; //储存所有成员，包含辅助
 var editBox; //储存整个editBox
 var showSearch; //整个程序都可以用的显示搜索函数
 
+//数组去重
+/* https://www.cnblogs.com/baiyangyuanzi/p/6726258.html
+* 实现思路：获取没重复的最右一值放入新数组。
+* （检测到有重复值时终止当前循环同时进入顶层循环的下一轮判断）*/
+Array.prototype.uniq = function()
+{
+	let temp = [];
+	const l = this.length;
+	for(let i = 0; i < l; i++) {
+		for(let j = i + 1; j < l; j++){
+			if (this[i] === this[j]){
+				i++;
+				j = i;
+			}
+		}
+		temp.push(this[i]);
+	}
+	return temp;
+}
 //队员基本的留空
 var Member = function(){
 	this.id=0;
@@ -294,7 +298,6 @@ window.onload = function()
 	controlBox = document.body.querySelector(".control-box");
 	statusLine = controlBox.querySelector(".status"); //显示当前状态的
 	const helpLink = controlBox.querySelector(".help-link");
-	changeSwapToCopy = controlBox.querySelector("#change-swap-to-copy");
 	interchangeSVG = document.body.querySelector("#interchange-line");
 	interchangeSVG.line = interchangeSVG.querySelector("g line");
 	interchangeSVG.changePoint = function(p1,p2){
@@ -312,62 +315,45 @@ window.onload = function()
 	toggleShowMonSkillCd();
 
 	formationBox = document.body.querySelector(".formation-box");
-
 	editBox = document.body.querySelector(".edit-box");
 
-
-	if (location.hostname.indexOf("gitee")>=0)
-	{
-		helpLink.hostname = "gitee.com";
-	}
+	if (location.hostname.includes("gitee")) { helpLink.hostname = "gitee.com"; }
 
 	//▼添加语言列表开始
 	const langSelectDom = controlBox.querySelector(".languages");
-	languageList.forEach(function(l){
-		langSelectDom.options.add(new Option(l.name,l.i18n));
-	});
+	languageList.forEach(lang=>
+		langSelectDom.options.add(new Option(lang.name,lang.i18n))
+	);
 
 	const parameter_i18n =  getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
 	const browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
-	let havingLanguage = languageList.filter(function(l){ //筛选出符合的语言
-		if (parameter_i18n) //如果已指定就用指定的语言
-			return parameter_i18n.indexOf(l.i18n)>=0;
-		else //否则筛选浏览器默认语言
-			return browser_i18n.indexOf(l.i18n)>=0;
-	});
-	currentLanguage = havingLanguage.length ?
-					havingLanguage.pop() : //有语言使用最后一个
-					languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
+	currentLanguage = languageList.find(lang=>{ //筛选出符合的语言
+			if (parameter_i18n) //如果已指定就用指定的语言
+				return parameter_i18n.includes(lang.i18n);
+			else //否则筛选浏览器默认语言
+				return browser_i18n.includes(lang.i18n);
+		}) ||
+		languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
 	document.head.querySelector("#language-css").href = "languages/"+currentLanguage.i18n+".css";
 
-	const langOptionArray = Array.prototype.slice.call(langSelectDom.options);
-	langOptionArray.some(function(langOpt){
-		if (langOpt.value == currentLanguage.i18n)
-		{
-			langOpt.selected = true;
-			return true;
-		}
-	});
+	const langOptionArray = Array.from(langSelectDom.options);
+	langOptionArray.find(langOpt=>langOpt.value == currentLanguage.i18n).selected = true;
+
 	//▲添加语言列表结束
 	//▼添加数据来源列表开始
 	const dataSelectDom = controlBox.querySelector(".datasource");
-	dataSourceList.forEach(function(ds){
-		dataSelectDom.options.add(new Option(ds.source,ds.code));
-	});
+	dataSourceList.forEach(ds=>
+		dataSelectDom.options.add(new Option(ds.source,ds.code))
+	);
 	const parameter_dsCode =  getQueryString("s"); //获取参数指定的数据来源
-	let havingDataSource = dataSourceList.filter(function(ds){ //筛选出符合的数据源
-		return ds.code == parameter_dsCode;
-	});
-	currentDataSource = havingDataSource.length ? havingDataSource[0]: dataSourceList[0];
+	currentDataSource = parameter_dsCode? 
+						(dataSourceList.find(ds => ds.code == parameter_dsCode) || dataSourceList[0]) ://筛选出符合的数据源
+						dataSourceList[0]; //没有指定，直接使用日服
+
 	document.body.classList.add("ds-"+currentDataSource.code);
-	let dataSourceOptionArray = Array.prototype.slice.call(dataSelectDom.options);
-	dataSourceOptionArray.some(function(dataOpt){
-		if (dataOpt.value == currentDataSource.code)
-		{
-			dataOpt.selected = true;
-			return true;
-		}
-	});
+	const dataSourceOptionArray = Array.from(dataSelectDom.options);
+	dataSourceOptionArray.find(dataOpt=>dataOpt.value == currentDataSource.code).selected = true;
+
 	const sourceDataFolder = "monsters-info";
 
 	var newCkeys; //当前的Ckey
@@ -380,7 +366,7 @@ window.onload = function()
 			dealCkeyData(response.response);
 		},
 		onerror: function(response) {
-			let isChrome = navigator.userAgent.indexOf("Chrome") >=0;
+			const isChrome = navigator.userAgent.includes("Chrome");
 			if (isChrome && location.host.length==0 && response.response.length>0)
 			{
 				console.info("因为是Chrome本地打开，正在尝试读取JSON");
@@ -458,7 +444,7 @@ window.onload = function()
 					});
 				},
 				onerror: function(response) {
-					let isChrome = navigator.userAgent.indexOf("Chrome") >=0;
+					const isChrome = navigator.userAgent.includes("Chrome");
 					if (isChrome && location.host.length==0 && response.response.length>0)
 					{
 						console.info("因为是Chrome本地打开，正在尝试读取JSON");
@@ -520,7 +506,7 @@ window.onload = function()
 					});
 				},
 				onerror: function(response) {
-					let isChrome = navigator.userAgent.indexOf("Chrome") >=0;
+					let isChrome = navigator.userAgent.includes("Chrome");
 					if (isChrome && location.host.length==0 && response.response.length>0)
 					{
 						console.info("因为是Chrome本地打开，正在尝试读取JSON");
@@ -704,8 +690,8 @@ function initialize()
 	//将所有怪物头像添加到全局数组
 	teamBigBoxs.forEach(teamBigBox=>{
 		const teamBox = teamBigBox.querySelector(".team-box");
-		const menbers = Array.prototype.slice.call(teamBox.querySelectorAll(".team-members .monster"));
-		const assist = Array.prototype.slice.call(teamBox.querySelectorAll(".team-assist .monster"));
+		const menbers = Array.from(teamBox.querySelectorAll(".team-members .monster"));
+		const assist = Array.from(teamBox.querySelectorAll(".team-assist .monster"));
 		menbers.forEach(m=>{
 			allMembers.push(m);
 		});
@@ -735,7 +721,7 @@ function initialize()
 		//徽章
 		const teamBadge = tb.querySelector(".team-badge");
 		if (!teamBadge) return;
-		const badges = Array.prototype.slice.call(teamBadge.querySelectorAll(".badge-bg"));
+		const badges = Array.from(teamBadge.querySelectorAll(".badge-bg"));
 		badges.forEach((badge,bidx) => {
 			badge.onclick = function(){
 				if (teamBadge.classList.contains(className_ChoseBadges))
@@ -796,7 +782,7 @@ function initialize()
 		{
 			showSearch(Cards.filter(card=>{
 				return splitAltName.some(alt=>{
-					return alt.length > 0 && (card.altName.indexOf(alt)>=0 || card.name.indexOf(alt)>=0);
+					return alt.length > 0 && (card.altName.includes(alt) || card.name.includes(alt));
 				});
 			}));
 		}
@@ -828,11 +814,11 @@ function initialize()
 		searchBox.classList.toggle("display-none");
 	};
 
-	const s_attr1s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
-	const s_attr2s = Array.prototype.slice.call(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
+	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
+	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
 	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
-	const s_types = Array.prototype.slice.call(searchBox.querySelectorAll(".types-div .type-check"));
-	const s_awokensItems = Array.prototype.slice.call(searchBox.querySelectorAll(".awoken-div .awoken-count"));
+	const s_types = Array.from(searchBox.querySelectorAll(".types-div .type-check"));
+	const s_awokensItems = Array.from(searchBox.querySelectorAll(".awoken-div .awoken-count"));
 	const s_awokensIcons = s_awokensItems.map(it=>{
 		return it.querySelector(".awoken-icon");
 	});
@@ -853,7 +839,7 @@ function initialize()
 
 	const s_sawokenDiv = searchBox.querySelector(".sawoken-div");
 	
-	const s_sawokens = Array.prototype.slice.call(s_sawokenDiv.querySelectorAll(".sawoken-check"));
+	const s_sawokens = Array.from(s_sawokenDiv.querySelectorAll(".sawoken-check"));
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onclick = function(){
 		if (this.checked)
@@ -1042,7 +1028,7 @@ function initialize()
 
 		searchMonList.classList.add("display-none");
 		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-		let headsArray = Array.prototype.slice.call(searchMonList.children);
+		let headsArray = Array.from(searchMonList.children);
 		headsArray.sort((head_a,head_b)=>{
 			let sortNumber = sort_function_list[sortIndex].function(head_a.card,head_b.card);
 			if (reverse) sortNumber *= -1;
@@ -1075,7 +1061,7 @@ function initialize()
 	};
 	monstersID.oninput = monstersID.onchange;
 	//觉醒
-	const monEditAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon"));
+	const monEditAwokens = Array.from(settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon"));
 	monEditAwokens.forEach((akDom,idx)=>{
 		akDom.onclick = function(){
 			editBox.awokenCount = idx;
@@ -1104,7 +1090,7 @@ function initialize()
 	};
 
 	//超觉醒
-	let monEditSAwokens = Array.prototype.slice.call(settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon"));
+	let monEditSAwokens = Array.from(settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon"));
 	monEditSAwokens.forEach((akDom,idx,domArr)=>{
 		akDom.onclick = function(){
 			for(var ai=0;ai<domArr.length;ai++)
@@ -1195,9 +1181,9 @@ function initialize()
 	
 	//潜觉
 	const monEditLatentUl = settingBox.querySelector(".m-latent-ul");
-	const monEditLatents = Array.prototype.slice.call(monEditLatentUl.querySelectorAll("li"));
+	const monEditLatents = Array.from(monEditLatentUl.querySelectorAll("li"));
 	const monEditLatentAllowableUl = settingBox.querySelector(".m-latent-allowable-ul");
-	const monEditLatentsAllowable = Array.prototype.slice.call(monEditLatentAllowableUl.querySelectorAll("li"));
+	const monEditLatentsAllowable = Array.from(monEditLatentAllowableUl.querySelectorAll("li"));
 	editBox.refreshLatent = function(latent,monid) //刷新潜觉
 	{
 		const maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
@@ -1586,6 +1572,7 @@ function interchangeCard(formArr,toArr)
 			return newMember;
 		}
 	}
+	const changeSwapToCopy = controlBox.querySelector("#change-swap-to-copy");//储存交换“复制”和“替换”
 	const isCopy = changeSwapToCopy.checked;
 	let from = formation.teams[formArr[0]][formArr[1]][formArr[2]];
 	let to = formation.teams[toArr[0]][toArr[1]][toArr[2]];
@@ -1645,7 +1632,7 @@ function changeid(mon,monDom,latentDom)
 			monDom.classList.add("allowable-assist");
 		else
 			monDom.classList.remove("allowable-assist");
-		if (card.awakenings.indexOf(49)>=0)//武器
+		if (card.awakenings.includes(49))//武器
 			monDom.classList.add("wepon");
 		else
 			monDom.classList.remove("wepon");
@@ -1732,7 +1719,7 @@ function changeid(mon,monDom,latentDom)
 	}
 	if (latentDom)
 	{
-		let latentDoms = Array.prototype.slice.call(latentDom.querySelectorAll("li"));
+		let latentDoms = Array.from(latentDom.querySelectorAll("li"));
 		if (mon.latent) //如果提供了潜觉
 		{
 			let latent = mon.latent.sort(function(a,b){
@@ -1908,10 +1895,7 @@ function editBoxChangeMonId(id)
 	const mAltName = monInfoBox.querySelector(".monster-altName");
 	mAltName.innerHTML = card.altName;
 	mAltName.setAttribute("data-altName",card.altName);
-	/*const splitAltName = card.altName.split("|"); //取出分段的那种的第一段
-	const hasGroup = splitAltName.some(alt=>{ //自己的名称是否只有一个
-		return Cards.some(c=>{return c.id != card.id && c.altName.indexOf(alt)>=0;});
-	});*/
+
 	if (card.altName.length == 0)
 	{ //当没有合作名
 		mAltName.classList.add("display-none");
@@ -2010,13 +1994,13 @@ function editBoxChangeMonId(id)
 	const rowLatent =  settingBox.querySelector(".row-mon-latent");
 	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
 	//该宠Type允许的杀,uniq是去重的自定义函数
-	const allowLatent = uniq(card.types.reduce(function (previous, t, index, array) {
+	const allowLatent = card.types.reduce(function (previous, t, index, array) {
 		return previous.concat(type_allowable_latent[t]);
-	},[]));
+	},[]).uniq();
 	for(let li=17;li<=24;li++) //显示允许的杀，隐藏不允许的杀
 	{
 		const latentDom = monLatentAllowUl.querySelector(".latent-icon-" + li);
-		if (allowLatent.indexOf(li)>=0)
+		if (allowLatent.includes(li))
 		{
 			if(latentDom.classList.contains("unselected-latent"))
 				latentDom.classList.remove("unselected-latent");
@@ -2042,7 +2026,7 @@ function editBoxChangeMonId(id)
 	skillTitle.innerHTML = descriptionToHTML(skill.name);
 	skillTitle.setAttribute("data-skillid", skill.id);
 	skillDetail.innerHTML = parseSkillDescription(skill);
-	const t_maxLevel = card.overlay || card.types.indexOf(15)>=0 ? 1 : skill.maxLevel; //遇到不能升技的，最大等级强制为1
+	const t_maxLevel = card.overlay || card.types.includes(15) ? 1 : skill.maxLevel; //遇到不能升技的，最大等级强制为1
 	skillLevel.max = t_maxLevel;
 	skillLevel.value = t_maxLevel;
 	skillLevel_Max.value = t_maxLevel;
@@ -2419,7 +2403,7 @@ function localisation($tra)
     formationBox.querySelector(".detail-box .detail").placeholder = $tra.detail_blank;
 
     const s_sortList = editBox.querySelector(".search-box .sort-div .sort-list");
-    const sortOptions = Array.prototype.slice.call(s_sortList.options);
+    const sortOptions = Array.from(s_sortList.options);
     sortOptions.forEach(opt=>{
         const tag = opt.getAttribute("data-tag");
         const trans = $tra.sort_name[tag];

@@ -85,24 +85,6 @@ function getQueryString(name,url) {
 	}
 }
 
-//数组去重
-/* https://www.cnblogs.com/baiyangyuanzi/p/6726258.html
-* 实现思路：获取没重复的最右一值放入新数组。
-* （检测到有重复值时终止当前循环同时进入顶层循环的下一轮判断）*/
-function uniq(array){
-	let temp = [];
-	const l = array.length;
-	for(let i = 0; i < l; i++) {
-		for(let j = i + 1; j < l; j++){
-			if (array[i] === array[j]){
-				i++;
-				j = i;
-			}
-		}
-		temp.push(array[i]);
-	}
-	return temp;
-}
 //计算用了多少潜觉格子
 function usedHole(latent)
 {
@@ -143,7 +125,7 @@ function awokenCountInTeam(team,awokenIndex,solo)
 		{
 			enableAwoken = enableAwoken.concat(card.superAwakenings[mon.sawoken]);
 		}
-		if (assistCard && assistCard.enabled && assistCard.awakenings.indexOf(49)>=0)
+		if (assistCard && assistCard.enabled && assistCard.awakenings.includes(49))
 		{ //如果卡片未启用
 			enableAwoken = enableAwoken.concat(assistCard.awakenings);
 		}
@@ -163,7 +145,7 @@ function returnMonsterNameArr(card, lsList, defaultCode)
 		else if(card.otLangName)
 		{return card.otLangName[lc];}
 	}).filter(function(ln){ //去掉空值和问号
-		return (ln?(ln.length>0):false) && !/^(?:초월\s*)?\?+/.test(ln);
+		return typeof(ln) == "string" && ln.length>0 && !new RegExp("^(?:초월\\s*)?[\\?\\*]+","i").test(ln);
 	});
 
 	if (monNameArr.length < 1) //如果本来的列表里没有名字
@@ -261,7 +243,7 @@ function calculateAbility(member = null, assist = null, solo = true)
 		if (assistCard && assistCard.id > 0 && assistCard.enabled)
 		{
 			const assistAwokenList = assistCard.awakenings.slice(0, assist.awoken); //储存武器点亮的觉醒
-			if (assistAwokenList.indexOf(49)>=0) //49是武器觉醒，确认已经点亮了武器觉醒
+			if (assistAwokenList.includes(49)) //49是武器觉醒，确认已经点亮了武器觉醒
 			{
 				awokenList = awokenList.concat(assistAwokenList);
 			}
@@ -274,7 +256,7 @@ function calculateAbility(member = null, assist = null, solo = true)
 		//觉醒增加的数值
 		const n_awoken = awokenList.length>0 ?
 			Math.round(awokenAdd[idx].reduce(function(previous,aw){
-					const awokenCount = awokenList.filter(function(a){return a==aw.index;}).length; //每个觉醒的数量
+					const awokenCount = awokenList.filter(ak=>ak==aw.index).length; //每个觉醒的数量
 					if (awokenCount>0)
 						return previous + aw.value * awokenCount;
 					else
@@ -284,7 +266,7 @@ function calculateAbility(member = null, assist = null, solo = true)
 		//潜觉增加的倍率
 		const n_latent = (member.latent && member.latent.length>0) ? 
 			Math.round(latentScale[idx].reduce(function(previous,la){
-					const latentCount = member.latent.filter(function(l){return l==la.index;}).length; //每个潜觉的数量
+					const latentCount = member.latent.filter(l=>l==la.index).length; //每个潜觉的数量
 					return previous + n_base * la.scale * latentCount; //无加值与觉醒的基础值，乘以那么多个潜觉的增加倍数
 				},0)) :
 			0;
@@ -293,7 +275,7 @@ function calculateAbility(member = null, assist = null, solo = true)
 
 		//协力觉醒的倍率
 		reValue = Math.round(awokenScale[idx].reduce(function(previous,aw){
-			const awokenCount = awokenList.filter(function(a){return a==aw.index;}).length; //每个协力觉醒的数量
+			const awokenCount = awokenList.filter(ak=>ak==aw.index).length; //每个协力觉醒的数量
 			if (awokenCount>0)
 			{
 				return previous * Math.pow(aw.scale,awokenCount);
@@ -331,17 +313,17 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equal
 	{
 		if (attr1 != null)
 		{
-			cardsRange = cardsRange.filter(c=>c.attrs.indexOf(attr1)>=0);
+			cardsRange = cardsRange.filter(c=>c.attrs.includes(attr1));
 		}
 		if (attr2 != null)
 		{
-			cardsRange = cardsRange.filter(c=>c.attrs.indexOf(attr2)>=0);
+			cardsRange = cardsRange.filter(c=>c.attrs.includes(attr2));
 		}
 	}
 	//类型
 	if (types.length>0)
 	{
-		cardsRange = cardsRange.filter(c=>types.some(t=>c.types.indexOf(t)>=0));
+		cardsRange = cardsRange.filter(c=>types.some(t=>c.types.includes(t)));
 	}
 	//觉醒
 	//等效觉醒时，事先去除大觉醒
@@ -373,8 +355,8 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equal
 				cardAwakeningsArray.push(card.awakenings);
 			}
 
-			return cardAwakeningsArray.some(cardAwakening=>{ //重复每种包含超觉醒的觉醒数组，只要有一组符合要求就行
-				return awokens.every(ak=>{ //判断需要搜索的觉醒是不是全都在觉醒数组里
+			return cardAwakeningsArray.some(cardAwakening=> //重复每种包含超觉醒的觉醒数组，只要有一组符合要求就行
+				awokens.every(ak=>{ //判断需要搜索的觉醒是不是全都在觉醒数组里
 					if (equalAk) //如果开启等效觉醒
 					{
 						//搜索等效觉醒
@@ -387,19 +369,19 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equal
 						}
 					}
 					return cardAwakening.filter(cak=>cak == ak.id).length >= ak.num;
-				});
-			});
+				})
+			);
 		});
 	}
 
 	//超觉醒
 	if (sawokens.length>0 && !incSawoken)
 	{
-		cardsRange = cardsRange.filter(card=>{return sawokens.some(sak=>{
+		cardsRange = cardsRange.filter(card=> sawokens.some(sak=>{
 			const equivalentAwoken = equivalent_awoken.find(eak => eak.small === sak);
-			return card.superAwakenings.indexOf(sak)>=0 || 
-				   equalAk && equivalentAwoken && card.superAwakenings.indexOf(equivalentAwoken.big)>=0; //如果开启等效觉醒
-		});});
+			return card.superAwakenings.includes(sak) || 
+				   equalAk && equivalentAwoken && card.superAwakenings.includes(equivalentAwoken.big); //如果开启等效觉醒
+		}) );
 	}
 	return cardsRange;
 }
