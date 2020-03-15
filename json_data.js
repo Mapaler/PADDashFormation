@@ -1,4 +1,19 @@
-﻿//类型允许的潜觉杀，前面的数字是官方数据的类型编号，后面的杀是自己做的图片中的潜觉序号
+﻿const dataSourceList = [ //几个不同的游戏服务区
+	{
+		code:"ja",
+		source:"パズル＆ドラゴンズ"
+	},
+	{
+		code:"en",
+		source:"Puzzle & Dragons"
+	},
+	{
+		code:"ko",
+		source:"퍼즐앤드래곤"
+	},
+];
+
+//类型允许的潜觉杀，前面的数字是官方数据的类型编号，后面的杀是自己做的图片中的潜觉序号
 const type_allowable_latent = {
 	"0":[], //0进化
 	"12":[], //12觉醒
