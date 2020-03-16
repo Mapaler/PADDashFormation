@@ -184,21 +184,10 @@ function calculateExp(member)
 	return [Math.round(v99Exp),v110Exp];
 }
 //计算怪物的能力
-//function calculateAbility(monid = 0, level = 1, plus = [0,0,0], awoken = 0, latent = [], weaponId = null, weaponAwoken = null, solo = true)
 function calculateAbility(member = null, assist = null, solo = true)
 {
 	if (!member) return null;
-	/*
-	const monid = member.id || 0;
-	const level = member.level || 1;
-	const plus = member.plus || [0,0,0];
-	const awoken = member.awoken || 0;
-	const latent = member.latent || [];
-	const sawoken = member.sawoken;
-	const weaponId = assist ? assist.id : null;
-	const weaponAwoken = assist ? assist.awoken : null;
-	const card = Cards[monid]; //怪物数据
-*/
+
 	const memberCard = Cards[member.id];
 	const assistCard = assist ? Cards[assist.id] : null;
 	if (!memberCard || memberCard.id == 0 || !memberCard.enabled) return null;
@@ -407,7 +396,7 @@ function descriptionToHTML(str)
 	str = str.replace(/\%\{m([0-9]{1,4})\}/g,function (str, p1, offset, s){return cardN(parseInt(p1,10));}); //怪物头像
 	return str;
 }
-//返回怪物名
+//返回怪物Card的纯HTML
 function cardN(id){
 	let card = Cards[id || 0];
 	if (!card)
@@ -431,12 +420,5 @@ function parseSkillDescription(skill)
 //大数字缩短长度，默认返回本地定义字符串
 function parseBigNumber(number)
 {
-	/*	//千位分隔符
-	const res=number.toString().replace(/\d+/, function(n){ // 先提取整数部分
-		return n.replace(/(\d)(?=(\d{3})+$)/g,function($1){
-			return $1+",";
-		});
-	})
-	*/
 	return number.toLocaleString();
 }
