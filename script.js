@@ -1934,10 +1934,10 @@ function editBoxChangeMonId(id)
 			mAwoken[ai].className = mAwoken[ai].className.replace(/awoken\-\d+/,'');
 		}
 	}
+	mAwoken[card.awakenings.length].click(); //选择最后一个觉醒
 
 	//超觉醒
 	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
-	monEditSAwokensRow.querySelector("#sawoken-choice--1").checked = true; //选中隐藏的空超觉
 	const mSAwoken = monEditSAwokensRow.querySelectorAll(".awoken-ul .awoken-icon");
 	//if (!editBox.isAssist && card.superAwakenings.length>0)
 	if (card.superAwakenings.length>0) //辅助时也还是加入超觉醒吧
@@ -1960,6 +1960,7 @@ function editBoxChangeMonId(id)
 	{
 		monEditSAwokensRow.classList.add("display-none");
 	}
+	monEditSAwokensRow.querySelector("#sawoken-choice--1").click(); //选中隐藏的空超觉
 
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
 	monEditLvMax.innerHTML = monEditLvMax.value = card.maxLevel;
