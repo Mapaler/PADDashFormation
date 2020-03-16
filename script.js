@@ -740,7 +740,6 @@ function initialize()
 
 	//编辑框
 	editBox.mid = null; //储存怪物id
-	editBox.awokenCount = 0; //储存怪物潜觉数量
 	editBox.latent = []; //储存潜在觉醒
 	editBox.isAssist = false; //储存是否为辅助宠物
 	editBox.monsterHead = null;
@@ -1061,52 +1060,37 @@ function initialize()
 	};
 	monstersID.oninput = monstersID.onchange;
 	//觉醒
-	const monEditAwokens = Array.from(settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon"));
-	monEditAwokens.forEach((akDom,idx)=>{
-		akDom.onclick = function(){
-			editBox.awokenCount = idx;
-			editBox.reCalculateAbility();
-			editBox.refreshAwokens();
-		};
-	});
-	//刷新觉醒
-	editBox.refreshAwokens = ()=>{
-		monEditAwokens[0].innerHTML = editBox.awokenCount;
-		if (editBox.awokenCount>0 && editBox.awokenCount==(Cards[editBox.mid].awakenings.length))
-			monEditAwokens[0].classList.add("full-awoken");
+	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
+	const awokenCountLabel = monEditAwokensRow.querySelector(".awoken-count");
+	const monEditAwokens = Array.from(monEditAwokensRow.querySelectorAll(".awoken-ul input[name='awoken-number']"));
+	function checkAwoken(){
+		const value = parseInt(this.value,10);
+		awokenCountLabel.innerHTML = value;
+		if (value>0 && value==(Cards[editBox.mid].awakenings.length))
+			awokenCountLabel.classList.add("full-awoken");
 		else
-			monEditAwokens[0].classList.remove("full-awoken");
-		for(let ai=1;ai<monEditAwokens.length;ai++)
-		{
-			if(ai<=editBox.awokenCount)
-			{
-				monEditAwokens[ai].classList.remove("unselected-awoken");
-			}
-			else
-			{
-				monEditAwokens[ai].classList.add("unselected-awoken");
-			}
-		}
-	};
+			awokenCountLabel.classList.remove("full-awoken");
+		reCalculateAbility();
+	}
+	monEditAwokens.forEach(akDom=>akDom.onclick = checkAwoken);
 
 	//超觉醒
-	let monEditSAwokens = Array.from(settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon"));
-	monEditSAwokens.forEach((akDom,idx,domArr)=>{
-		akDom.onclick = function(){
-			for(var ai=0;ai<domArr.length;ai++)
-			{
-				if(ai==idx)
-				{
-					domArr[ai].classList.toggle("unselected-awoken");
-				}
-				else
-				{
-					domArr[ai].classList.add("unselected-awoken");
-				}
-			}
-		};
+	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
+	monEditSAwokensRow.swaokenIndex = -1;
+	const monEditSAwokens = Array.from(monEditSAwokensRow.querySelectorAll(".awoken-ul input[name='sawoken-choice']"));
+	function notCheckMyself(){
+		const value = parseInt(this.value,10);
+		if (value>=0 && monEditSAwokensRow.swaokenIndex === value)
+		{
+			monEditSAwokens[0].click();
+		}else
+		{
+			monEditSAwokensRow.swaokenIndex = value;
+		}
+	}
+	monEditSAwokens.forEach(akDom=>{
+		akDom.onclick = notCheckMyself;
 	});
-
 	//3个快速设置this.ipt为自己的value
 	function setIptToMyValue()
 	{
@@ -1258,7 +1242,9 @@ function initialize()
 	function reCalculateAbility(){
 		const monid = parseInt(monstersID.value || 0, 10);
 		const level = parseInt(monEditLv.value || 0, 10);
-		const awoken = editBox.awokenCount;
+		
+		const mAwokenNumIpt = monEditAwokensRow.querySelector("input[name='awoken-number']:checked");
+		const awoken = mAwokenNumIpt ? parseInt(mAwokenNumIpt.value,10) : 0;
 		const plus = [
 			parseInt(monEditAddHp.value || 0, 10),
 			parseInt(monEditAddAtk.value || 0, 10),
@@ -1308,21 +1294,13 @@ function initialize()
 		const skill = Skills[card.activeSkillId];
 
 		mon.level = parseInt(monEditLv.value,10);
-		mon.awoken = editBox.awokenCount;
+		
+		const mAwokenNumIpt = monEditAwokensRow.querySelector("input[name='awoken-number']:checked");
+		mon.awoken = mAwokenNumIpt ? parseInt(mAwokenNumIpt.value,10) : 0;
 		if (card.superAwakenings.length) //如果支持超觉醒
 		{
-			mon.sawoken = -1;
-			for (var sai = 0;sai<monEditSAwokens.length;sai++)
-			{
-				if (
-					!monEditSAwokens[sai].classList.contains("unselected-awoken") &&
-					!monEditSAwokens[sai].classList.contains("display-none")
-				)
-				{
-					mon.sawoken = sai;
-					break;
-				}
-			}
+			const mSAwokenChoIpt = monEditSAwokensRow.querySelector("input[name='sawoken-choice']:checked");
+			mon.sawoken = mSAwokenChoIpt ? parseInt(mSAwokenChoIpt.value,10) : -1;
 		}
 		
 		if (card.types.some(t=>{return t == 0 || t == 12 || t == 14 || t == 15;}) &&
@@ -1803,7 +1781,7 @@ function editMon(teamNum,isAssist,indexInTeam)
 	monstersID.onchange();
 	//觉醒
 	const monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon");
-	if (mon.awoken > 0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].onclick();
+	if (mon.awoken > 0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].click();
 	//超觉醒
 	const monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon");
 	if (mon.sawoken >= 0 && monEditSAwokens[mon.sawoken] && monEditSAwokens[mon.sawoken].classList.contains("unselected-awoken")) monEditSAwokens[mon.sawoken].onclick();
@@ -1941,41 +1919,46 @@ function editBoxChangeMonId(id)
 		}
 	}
 
-	const mAwoken = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul li");
-	editBox.awokenCount = card.awakenings.length;
-	mAwoken[0].innerHTML = editBox.awokenCount ? "★" : "0";
+	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
+	const mAwoken = monEditAwokensRow.querySelectorAll(".awoken-ul .awoken-icon");
+	mAwoken[0].innerHTML = card.awakenings.length;
 	for (let ai=1;ai<mAwoken.length;ai++)
 	{
 		if (ai<=card.awakenings.length)
 		{
-			mAwoken[ai].className = "awoken-icon awoken-" + card.awakenings[ai-1];
+			mAwoken[ai].classList.add(`awoken-${card.awakenings[ai-1]}`);
+			mAwoken[ai].classList.remove(`display-none`);
 		}else
 		{
-			mAwoken[ai].className = "display-none";
+			mAwoken[ai].classList.add(`display-none`);
+			mAwoken[ai].className = mAwoken[ai].className.replace(/awoken\-\d+/,'');
 		}
 	}
 
 	//超觉醒
-	const mSAwokenRow = settingBox.querySelector(".row-mon-super-awoken");
-	const mSAwoken = mSAwokenRow.querySelectorAll(".awoken-ul li");
+	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
+	monEditSAwokensRow.querySelector("#sawoken-choice--1").checked = true; //选中隐藏的空超觉
+	const mSAwoken = monEditSAwokensRow.querySelectorAll(".awoken-ul .awoken-icon");
 	//if (!editBox.isAssist && card.superAwakenings.length>0)
-	if (card.superAwakenings.length>0) //武器上也还是加入超觉醒吧
+	if (card.superAwakenings.length>0) //辅助时也还是加入超觉醒吧
 	{
 		for (let ai=0;ai<mSAwoken.length;ai++)
 		{
 			if (ai < card.superAwakenings.length)
 			{
-				mSAwoken[ai].className = "awoken-icon unselected-awoken awoken-" + card.superAwakenings[ai];
+				mSAwoken[ai].classList.add(`awoken-${card.superAwakenings[ai]}`);
+				mSAwoken[ai].classList.remove(`display-none`);
 			}
 			else
 			{
-				mSAwoken[ai].className = "display-none";
+				mSAwoken[ai].classList.add(`display-none`);
+				mSAwoken[ai].className = mSAwoken[ai].className.replace(/awoken\-\d+/,'');
 			}
 		}
-		mSAwokenRow.classList.remove("display-none");
+		monEditSAwokensRow.classList.remove("display-none");
 	}else
 	{
-		mSAwokenRow.classList.add("display-none");
+		monEditSAwokensRow.classList.add("display-none");
 	}
 
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");

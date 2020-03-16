@@ -637,6 +637,7 @@ ul{
 	font-size: 2em;
 	font-weight: bold;
 }
+
 /*.edit-box .edit-box-title::before{
 	content: "修改队员";
 }
@@ -835,6 +836,25 @@ ul{
 	padding: 0;
 	float: right;
 }
+.awoken-ul .awoken-count
+{
+	font-size: 16px;
+	line-height: 32px;
+	font-family: var(--game-font-family);
+
+	display: inline-block;
+	margin-right: 3px;
+}
+.awoken-ul .count
+{
+	height: 32px;
+	width: 37px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.awoken-ul .count::before{
+	content: "×";
+}
 .search-box .awoken-ul button{
 	border: none;
 	background-color: unset;
@@ -992,20 +1012,11 @@ ul{
 	font-size: 0;
 	height: 32px;
 }
-.awoken-ul li{
-	margin-right: 5px;
-}
-.awoken-ul li:last-of-type{
-	margin-right: 0;
-}
 .edit-box .awoken-ul .awoken-icon{
 	cursor: pointer;
 }
-.awoken-ul .awoken-icon.unselected-awoken{
-	opacity: var(--search-icon-unchecked);
-}
-.row-mon-awoken .awoken-icon.awoken-count,
-.row-mon-awoken .awoken-icon.awoken-count.full-awoken::before
+.row-mon-awoken .awoken-count,
+.row-mon-awoken .awoken-count.full-awoken::before
 {
 	color: yellow;
 	font-size: 22px;
@@ -1014,15 +1025,19 @@ ul{
 	text-shadow: black 0 0 4px;
 	text-align: center;
 }
-.row-mon-awoken .awoken-icon.awoken-count.full-awoken{
+.row-mon-awoken .awoken-count.full-awoken{
 	font-size: 0;
 }
-.row-mon-awoken .awoken-icon.awoken-count.full-awoken::before{
+.row-mon-awoken .awoken-count.full-awoken::before{
 	content: "★";
 }
-.row-mon-awoken .m-super-awoken-ul{
-	margin-top: 5px;
+/*选中的觉醒后面部分半透明，前面的不透明*/
+.row-mon-awoken .awoken-number{display:none;}
+.row-mon-awoken .awoken-number:checked~label
+{
+	opacity: var(--search-icon-unchecked);
 }
+
 /*.edit-box .setting-box .row-mon-super-awoken::before{
 	content: "▼超觉醒";
 }*/
@@ -1034,7 +1049,26 @@ ul{
 	box-sizing: border-box;
 	vertical-align: top;
 }
-
+.row-mon-awoken .awoken-icon,
+.row-mon-super-awoken .awoken-icon
+{
+	margin-left: 5px;
+}
+.row-mon-awoken .awoken-icon:first-of-type,
+.row-mon-super-awoken .awoken-icon:first-of-type
+{
+	margin-left: unset;
+}
+/*未选中的超觉醒半透明，选中的不透明*/
+.row-mon-super-awoken .sawoken-choice{display:none;}
+.row-mon-super-awoken .sawoken-choice+label
+{
+	opacity: var(--search-icon-unchecked);
+}
+.row-mon-super-awoken .sawoken-choice:checked+label
+{
+	opacity: unset;
+}
 /*怪物能力横条*/
 /*.row-ability{
 	border-color: #D5AF5B;
@@ -1224,14 +1258,24 @@ ul{
 }
 .m-latent-allowable-ul{
 	margin-top: 5px;
+	font-size: 0;
 }
+.m-latent-allowable-ul .latent-icon{
+	margin-right: 4.66px;
+}
+.m-latent-allowable-ul .latent-icon:last-of-type{
+	margin-right: unset;
+}
+
 .m-latent-allowable-ul .latent-icon,
 .m-latent-ul .latent-icon{
 	cursor: pointer;
 }
+/*没有打觉醒的空格，没有手指*/
 .m-latent-ul .latent-icon[class="latent-icon"]{
 	cursor: default;
 }
+/*不允许使用的潜觉，不是手指，半透明，灰度*/
 .m-latent-allowable-ul .latent-icon.unselected-latent{
 	cursor: default;
 	opacity: var(--search-icon-unchecked);
@@ -1395,25 +1439,6 @@ ul{
 }
 .detail-box{
 	margin-top:5px;
-}
-.awoken-ul .awoken-count
-{
-	font-size: 16px;
-	line-height: 32px;
-	font-family: var(--game-font-family);
-
-	display: inline-block;
-	margin-right: 3px;
-}
-.awoken-ul .count
-{
-	height: 32px;
-	width: 37px;
-	display: inline-block;
-	vertical-align: middle;
-}
-.awoken-ul .count::before{
-	content: "×";
 }
 /*控制框*/
 .control-box{
