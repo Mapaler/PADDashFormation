@@ -1925,12 +1925,13 @@ function editBoxChangeMonId(id)
 	{
 		if (ai<=card.awakenings.length)
 		{
+			mAwoken[ai].className = mAwoken[ai].className.replace(/awoken\-\d+/g,'');
 			mAwoken[ai].classList.add(`awoken-${card.awakenings[ai-1]}`);
 			mAwoken[ai].classList.remove(`display-none`);
 		}else
 		{
 			mAwoken[ai].classList.add(`display-none`);
-			mAwoken[ai].className = mAwoken[ai].className.replace(/awoken\-\d+/,'');
+			mAwoken[ai].className = mAwoken[ai].className.replace(/awoken\-\d+/g,'');
 		}
 	}
 	mAwoken[card.awakenings.length].click(); //选择最后一个觉醒
@@ -1944,13 +1945,14 @@ function editBoxChangeMonId(id)
 		{
 			if (ai < card.superAwakenings.length)
 			{
+				mSAwoken[ai].className = mSAwoken[ai].className.replace(/awoken\-\d+/g,'');
 				mSAwoken[ai].classList.add(`awoken-${card.superAwakenings[ai]}`);
 				mSAwoken[ai].classList.remove(`display-none`);
 			}
 			else
 			{
 				mSAwoken[ai].classList.add(`display-none`);
-				mSAwoken[ai].className = mSAwoken[ai].className.replace(/awoken\-\d+/,'');
+				mSAwoken[ai].className = mSAwoken[ai].className.replace(/awoken\-\d+/g,'');
 			}
 		}
 		monEditSAwokensRow.classList.remove("display-none");
