@@ -1921,7 +1921,6 @@ function editBoxChangeMonId(id)
 
 	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
 	const mAwoken = monEditAwokensRow.querySelectorAll(".awoken-ul .awoken-icon");
-	mAwoken[0].innerHTML = card.awakenings.length;
 	for (let ai=1;ai<mAwoken.length;ai++)
 	{
 		if (ai<=card.awakenings.length)
@@ -1939,7 +1938,6 @@ function editBoxChangeMonId(id)
 	//超觉醒
 	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
 	const mSAwoken = monEditSAwokensRow.querySelectorAll(".awoken-ul .awoken-icon");
-	//if (!editBox.isAssist && card.superAwakenings.length>0)
 	if (card.superAwakenings.length>0) //辅助时也还是加入超觉醒吧
 	{
 		for (let ai=0;ai<mSAwoken.length;ai++)
