@@ -41,15 +41,15 @@ const GM_getValue = function(name, type){
 		return Number(value);
 	else
 		return value;
-}
+};
 //仿GM_setValue函数v1.0
 const GM_setValue = function(name, value){
 	localStorage.setItem(name, value);
-}
+};
 //仿GM_deleteValue函数v1.0
 const GM_deleteValue = function(name){
 	localStorage.removeItem(name);
-}
+};
 //仿GM_listValues函数v1.0
 const GM_listValues = function(){
 	var keys = [];
@@ -58,7 +58,7 @@ const GM_listValues = function(){
 		keys.push(localStorage.key(ki));
 	}
 	return keys;
-}
+};
 //数字补前导0
 function PrefixInteger(num, length)
 {  
