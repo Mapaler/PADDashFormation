@@ -30,7 +30,7 @@ Array.prototype.uniq = function()
 		temp.push(this[i]);
 	}
 	return temp;
-}
+};
 //队员基本的留空
 var Member = function(){
 	this.id=0;
@@ -389,7 +389,7 @@ window.onload = function()
 			return;
 		}
 		const currentCkey = newCkeys.find(ckey=>ckey.code == currentDataSource.code); //获取当前语言的ckey
-		lastCkeys = GM_getValue("PADDF-ckey"); //读取本地储存的原来的ckey
+		lastCkeys = localStorage.getItem("PADDF-ckey"); //读取本地储存的原来的ckey
 		try
 		{
 			lastCkeys = JSON.parse(lastCkeys);
@@ -407,7 +407,7 @@ window.onload = function()
 				code: currentDataSource.code,
 				ckey: {},
 				updateTime: null
-			}
+			};
 			lastCkeys.push(lastCurrentCkeys);
 		}
 
@@ -423,7 +423,7 @@ window.onload = function()
 			}).catch(function(err) {
 				// This code runs if there were any errors
 				alert("Local Database error. Please refresh.");
-				GM_deleteValue("PADDF-ckey");
+				localStorage.removeItem("PADDF-ckey");
 				console.log(err);
 			});
 		}else
@@ -436,7 +436,7 @@ window.onload = function()
 					localforage.setItem(`PADDF-${currentDataSource.code}-cards`, JSON.parse(response.response)).then(function(){
 						lastCurrentCkeys.ckey.card = currentCkey.ckey.card;
 						lastCurrentCkeys.updateTime = currentCkey.updateTime;
-						GM_setValue("PADDF-ckey", JSON.stringify(lastCkeys));
+						localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys));
 						dealCardsData(response.response);
 					}).catch(function(err) {
 						// This code runs if there were any errors
@@ -485,7 +485,7 @@ window.onload = function()
 			}).catch(function(err) {
 				// This code runs if there were any errors
 				alert("Local Database error. Please refresh.");
-				GM_deleteValue("PADDF-ckey");
+				localStorage.removeItem("PADDF-ckey");
 				console.log(err);
 			});
 		}else
@@ -498,7 +498,7 @@ window.onload = function()
 					localforage.setItem(`PADDF-${currentDataSource.code}-skills`, JSON.parse(response.response)).then(function(){
 						lastCurrentCkeys.ckey.skill = currentCkey.ckey.skill;
 						lastCurrentCkeys.updateTime = currentCkey.updateTime;
-						GM_setValue("PADDF-ckey", JSON.stringify(lastCkeys));
+						localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys));
 						dealSkillData(response.response);
 					}).catch(function(err) {
 						// This code runs if there were any errors
@@ -834,7 +834,7 @@ function initialize()
 		searchMonList.classList.add("only-display-can-assist");
 		else
 		searchMonList.classList.remove("only-display-can-assist");
-	}
+	};
 
 	const s_sawokenDiv = searchBox.querySelector(".sawoken-div");
 	
@@ -845,7 +845,7 @@ function initialize()
 		s_sawokenDiv.classList.add("display-none");
 		else
 		s_sawokenDiv.classList.remove("display-none");
-	}
+	};
 
 	function search_awokenAdd1()
 	{
@@ -1204,7 +1204,7 @@ function initialize()
 		{
 			showSearch(s_cards); //显示
 		}
-	}
+	};
 	skillLevel.onchange = function(){
 		const card = Cards[editBox.mid] || Cards[0]; //怪物固定数据
 		const skill = Skills[card.activeSkillId];
@@ -1755,8 +1755,7 @@ function editMon(teamNum,isAssist,indexInTeam)
 {
 	//数据
 	const mon = formation.teams[teamNum][isAssist][indexInTeam];
-	const card = Cards[mon.id] || Cards[0];
-	//const teamBigBox = 
+
 	const teamBigBox = teamBigBoxs[teamNum];
 	const teamBox = teamBigBox.querySelector(".team-box");
 	const memberBox = teamBox.querySelector(isAssist?".team-assist":".team-members");
@@ -1780,11 +1779,12 @@ function editMon(teamNum,isAssist,indexInTeam)
 	monstersID.value = mon.id > 0 ? mon.id : 0;
 	monstersID.onchange();
 	//觉醒
-	const monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-icon");
-	if (mon.awoken > 0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].click();
+	const monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-number");
+	//if (mon.awoken > 0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下，为了减少计算次数，把这一条移动到了最后面
 	//超觉醒
-	const monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .awoken-icon");
-	if (mon.sawoken >= 0 && monEditSAwokens[mon.sawoken] && monEditSAwokens[mon.sawoken].classList.contains("unselected-awoken")) monEditSAwokens[mon.sawoken].onclick();
+	const monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .sawoken-choice"); //单选框，0号是隐藏的
+	monEditSAwokens[(mon.sawoken >= 0 && monEditSAwokens[mon.sawoken+1]) ? mon.sawoken+1 : 0].checked = true;
+
 	const monEditLv = settingBox.querySelector(".row-mon-level .m-level");
 	monEditLv.value = mon.level || 1;
 	const monEditAddHp = settingBox.querySelector(".row-mon-plus .m-plus-hp");
@@ -1820,7 +1820,10 @@ function editMon(teamNum,isAssist,indexInTeam)
 		editBoxTitle.classList.add("edit-box-title-assist");
 	}
 	editBox.reCalculateExp();
-	editBox.reCalculateAbility();
+	if (mon.awoken > 0 && monEditAwokens[mon.awoken])
+		monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下
+	else
+		editBox.reCalculateAbility();
 }
 //编辑窗，修改怪物ID
 function editBoxChangeMonId(id)
@@ -2098,14 +2101,6 @@ function refreshAll(formationData){
 		detailBox.classList.add("edit");
 	else
 		detailBox.classList.remove("edit");
-	/*txtTitleDisplay.innerHTML = "";
-	txtTitleDisplay.appendChild(document.createTextNode(txtTitle.value));
-	txtDetailDisplay.innerHTML = "";
-	const txtDetailLines = txtDetail.value.split("\n");
-	txtDetailLines.forEach((line,idx)=>{
-		if (idx>0) txtDetailDisplay.appendChild(document.createElement("br"));
-		txtDetailDisplay.appendChild(document.createTextNode(line));
-	});*/
 	
 	teamBigBoxs.forEach((teamBigBox,teamNum)=>{
 		const teamBox = teamBigBox.querySelector(".team-box");
@@ -2159,7 +2154,6 @@ function refreshTeamAwokenCount(awokenDom,team){
 		else
 			ali.classList.add("display-none");
 	}
-	const bigAwoken = [52,53,56,68,69,70]; //等于几个小觉醒的大觉醒
 	for (let ai=1;ai<=72;ai++)
 	{
 		const aicon = awokenUL.querySelector(".awoken-" + ai);
@@ -2185,7 +2179,7 @@ function refreshTeamAwokenCount(awokenDom,team){
 	}
 	awokenDom.appendChild(fragment);
 }
-//刷新几个队伍觉醒统计
+//刷新阵型觉醒统计
 function refreshFormationAwokenCount(awokenDom,teams){
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	const awokenUL = fragment.appendChild(awokenDom.querySelector(".awoken-ul"));
@@ -2200,7 +2194,7 @@ function refreshFormationAwokenCount(awokenDom,teams){
 			ali.classList.add("display-none");
 	}
 	
-	for (var ai=1;ai<=72;ai++)
+	for (let ai=1;ai<=72;ai++)
 	{
 		const aicon = awokenUL.querySelector(".awoken-" + ai);
 		if (!aicon) continue; //如果没有这个觉醒图，直接跳过
@@ -2395,5 +2389,5 @@ function localisation($tra)
         {
             opt.text = trans;
         }
-    })
+    });
 }

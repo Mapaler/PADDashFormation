@@ -46,7 +46,7 @@ const sort_function_list = [
 	{tag:"sort_skillLv1",name:"技能最大冷却时间",function:(a,b)=>Skills[a.activeSkillId].initialCooldown-Skills[b.activeSkillId].initialCooldown},
 	{tag:"sort_skillLvMax",name:"技能最小冷却时间",function:(a,b)=>{
 		const skill_a = Skills[a.activeSkillId],skill_b = Skills[b.activeSkillId];
-		return (skill_a.initialCooldown - skill_a.maxLevel) - (skill_b.initialCooldown - skill_b.maxLevel)
+		return (skill_a.initialCooldown - skill_a.maxLevel) - (skill_b.initialCooldown - skill_b.maxLevel);
 	}},
 	{tag:"sort_hpMax110",name:"最大HP(Lv110)",function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
 	{tag:"sort_atkMax110",name:"最大攻击(Lv110)",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
