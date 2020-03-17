@@ -969,16 +969,6 @@ function initialize()
 			s_awokensEquivalent.checked,
 			s_includeSuperAwoken.checked
 			);
-		console.debug("搜索条件：属性[%d,%d]，固定主副%s，类型：%o，觉醒：%o，超觉醒：%o，等效觉醒%s，搜超觉醒%s。\n搜索结果：%o",
-			attr1,attr2,
-			s_fixMainColor.checked,
-			typesFilter,
-			awokensFilter,
-			sawokensFilter,
-			s_awokensEquivalent.checked,
-			s_includeSuperAwoken.checked,
-			searchResult
-			);
 		showSearch(searchResult);
 	};
 	searchBox.startSearch = startSearch;

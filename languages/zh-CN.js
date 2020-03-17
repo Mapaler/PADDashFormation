@@ -1203,7 +1203,7 @@ function parseBigNumber(number)
 (function() {
     'use strict';
 	const specialSearchFunctions = [
-		{name:"临时的特殊搜索",function:()=>false},
+		{name:"临时的特殊搜索（求翻译）",function:()=>false},
 		{name:"====主动技====",function:()=>false},
 		{name:"所有 1 CD",function:()=>Cards.filter(card=>{
 			if (card.activeSkillId == 0) return false;
@@ -2119,6 +2119,18 @@ function parseBigNumber(number)
 	});
 	specialSearch.onchange = function(){
 		searchBox.startSearch(specialSearchFunctions[parseInt(this.value,10)].function());
+	};
+	//将搜索按钮强制改成特殊搜索
+	const searchStart = controlDiv.querySelector(".search-start");
+	searchStart.onclick = function(){
+		const specialSearchResualt = specialSearchFunctions[parseInt(specialSearch.value,10)].function();
+		if (specialSearchResualt)
+		{
+			searchBox.startSearch(specialSearchResualt)
+		}else
+		{
+			searchBox.startSearch(Cards);
+		}
 	};
 	controlDiv.insertBefore(fragment,controlDiv.querySelector(".sort-div"));
 })();
