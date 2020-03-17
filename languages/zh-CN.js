@@ -2110,10 +2110,8 @@ function parseBigNumber(number)
 		})},
 	];
 
-
-
 	const searchBox = editBox.querySelector(".search-box");
-	const controlDiv = searchBox.querySelector(".control-div .sort-div");
+	const controlDiv = searchBox.querySelector(".control-div");
 	let fragment = document.createDocumentFragment();
 	const specialSearch = fragment.appendChild(document.createElement("select"));
 	specialSearchFunctions.forEach((sfunc,idx)=>{
@@ -2121,6 +2119,6 @@ function parseBigNumber(number)
 	});
 	specialSearch.onchange = function(){
 		searchBox.startSearch(specialSearchFunctions[parseInt(this.value,10)].function());
-	}
-	controlDiv.appendChild(fragment);
+	};
+	controlDiv.insertBefore(fragment,controlDiv.querySelector(".sort-div"));
 })();
