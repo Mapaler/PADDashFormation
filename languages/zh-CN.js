@@ -13,7 +13,7 @@ function findFullSkill(subSkill){
 
 //返回flag里值为true的数组，如[1,4,7]
 function flags(num){
-	return Array.from(new Array(32)).map((a,i)=>{return i;}).filter(i => num & (1 << i));
+	return Array.from({length:10},(n,i)=>i).filter(i => num & (1 << i));
 }
 
 //高级技能解释
@@ -38,14 +38,6 @@ function parseSkillDescription(skill)
 	function typeN(i){return typeName[i || 0] || ("未知类型" + i);}
 	//返回觉醒名
 	function awokenN(i){return awokenName[(i || 0)-1] || ("未知觉醒" + i);}
-	//从二进制的数字中获得布尔值数组
-	function getBooleanFromBinary(num,reverse=true)
-	{	/*num是输入的数字，2的N次方在2进制下表示1后面跟着N个0。
-		如果num和2的N次方同时存在某位1，则返回这个数，逻辑上转换为true。*/
-		let arr = num.toString(2).split("").map(c=>{return parseInt(c);});
-		if (reverse) arr.reverse();
-		return arr;
-	}
 	//从二进制的数字中获得有哪些内容
 	function getNamesFromBinary(num,dataArr)
 	{	/*num是输入的数字，2的N次方在2进制下表示1后面跟着N个0。
