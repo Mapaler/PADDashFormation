@@ -826,6 +826,7 @@ function initialize()
 	});
 	
 	const searchMonList = searchBox.querySelector(".search-mon-list"); //搜索结果列表
+	searchMonList.originalHeads = null; //用于存放原始搜索结果
 
 	const s_awokensEquivalent = searchBox.querySelector("#consider-equivalent-awoken"); //搜索等效觉醒
 	const s_canAssist = searchBox.querySelector("#can-assist"); //只搜索辅助
@@ -842,9 +843,9 @@ function initialize()
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onclick = function(){
 		if (this.checked)
-		s_sawokenDiv.classList.add("display-none");
+			s_sawokenDiv.classList.add("display-none");
 		else
-		s_sawokenDiv.classList.remove("display-none");
+			s_sawokenDiv.classList.remove("display-none");
 	};
 
 	function search_awokenAdd1()
@@ -917,23 +918,15 @@ function initialize()
 		const createCardHead = editBox.createCardHead;
 
 		searchMonList.classList.add("display-none");
-		searchMonList.innerHTML = "";
+		searchMonList.innerHTML = ""; //清空旧的
 		if (searchArr.length>0)
 		{
 			let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-			
-			const sortIndex = parseInt(s_sortList.value,10);
-			const reverse = s_sortReverse.checked;
-			const sortFunction = sort_function_list[sortIndex].function;
-			searchArr.sort((card_a,card_b)=>{
-				let sortNumber = sortFunction(card_a,card_b);
-				if (reverse) sortNumber *= -1;
-				return sortNumber;
-			});
-			searchArr.forEach(function(card){
-				const cli = createCardHead(card.id);
-				fragment.appendChild(cli);
-			});
+			//获取原始排序的头像列表
+			searchMonList.originalHeads = searchArr.map(card=>createCardHead(card.id));
+			//对头像列表进行排序
+			const headsArray = sortHeadsArray(searchMonList.originalHeads);
+			headsArray.forEach(head=>fragment.appendChild(head));
 			searchMonList.appendChild(fragment);
 		}
 		searchMonList.classList.remove("display-none");
@@ -1014,26 +1007,35 @@ function initialize()
 			t.checked = false;
 		});
 
+		searchMonList.originalHeads = null;
 		searchMonList.innerHTML = "";
 	};
 
 	const s_sortList = s_controlDiv.querySelector(".sort-list");
 	const s_sortReverse = s_controlDiv.querySelector("#sort-reverse");
-	//对搜索到的Cards重新排序
-	function reSortCards()
+	//对heads重新排序
+	function sortHeadsArray(heads)
 	{
 		const sortIndex = parseInt(s_sortList.value,10);
 		const reverse = s_sortReverse.checked;
+		let headsArray = heads.concat();
 
-		searchMonList.classList.add("display-none");
-		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-		let headsArray = Array.from(searchMonList.children);
 		headsArray.sort((head_a,head_b)=>{
-			let sortNumber = sort_function_list[sortIndex].function(head_a.card,head_b.card);
+			const card_a = head_a.card,card_b = head_b.card;
+			let sortNumber = sort_function_list[sortIndex].function(card_a,card_b);
 			if (reverse) sortNumber *= -1;
 			return sortNumber;
 		});
-		headsArray.forEach(h=>fragment.appendChild(h));
+
+		return headsArray;
+	}
+	//对搜索到的Cards重新排序
+	function reSortCards()
+	{
+		searchMonList.classList.add("display-none");
+		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+		const headsArray = sortHeadsArray(searchMonList.originalHeads);
+		headsArray.forEach(head=>fragment.appendChild(head));
 		searchMonList.appendChild(fragment);
 		searchMonList.classList.remove("display-none");
 	}
