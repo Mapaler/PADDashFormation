@@ -633,7 +633,7 @@ function initialize()
 		const linkRes = new RegExp(linkReg,"ig").exec(m.specialAttribute);
 		if (linkRes)
 		{//每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
-			let _m = Cards[parseInt(linkRes[1],10)];
+			const _m = Cards[parseInt(linkRes[1],10)];
 			_m.evoRootId = m.evoRootId;
 		}
 	});
@@ -682,6 +682,7 @@ function initialize()
 		txtDetail.focus();
 	};
 
+	//这个写法的目的其实是为了确保添加顺序与1、2、3一致，即便打乱了顺序，也能正确添加
 	for (let ti=0,ti_len=formationBox.querySelectorAll(".team-bigbox").length;ti<ti_len;ti++)
 	{
 		teamBigBoxs.push(formationBox.querySelector(`.teams .team-${ti+1}`));
