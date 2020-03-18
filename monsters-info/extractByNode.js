@@ -137,7 +137,7 @@ for (let li = 0;li < officialAPI.length; li++)
 				)
 				{
 					if (!m.otLangName) //如果没有其他语言名称属性，则添加一个对象属性
-					{m.otLangName = new Object();}
+					{m.otLangName = {};}
 					m.otLangName[otLang.code] = otName;
 					if (_m.otLangName)
 					{m.otLangName = Object.assign(m.otLangName, _m.otLangName);} //增加储存当前语言的全部其他语言
@@ -181,7 +181,7 @@ var newCkeyObjs = officialAPI.map(lang=>{
 		updateTime: runDate.getTime(),
 	};
 	return ckeyOutObj;
-})
+});
 //读取旧的ckeyObj
 var ckeyObjs;
 fs.readFile('./ckey.json','utf-8',function(err,data){
@@ -191,13 +191,15 @@ fs.readFile('./ckey.json','utf-8',function(err,data){
     } else
 	{ //如果读取正确，则读入JSON，并判断是否和旧有的一致
 		ckeyObjs = JSON.parse(data);
-		ckeyObjs.forEach(ockey=>{
-			const newCkey = newCkeyObjs.find(nckey=>nckey.code === ockey.code);
-			if (newCkey && (ockey.ckey.card != newCkey.ckey.card || ockey.ckey.skill != newCkey.ckey.skill))
+		for (let ci=0;ci<ckeyObjs.length;ci++)
+		{
+			const oldCkey = ckeyObjs[ci];
+			const newCkey = newCkeyObjs.find(nckey=>nckey.code === oldCkey.code);
+			if (newCkey && (oldCkey.ckey.card != newCkey.ckey.card || oldCkey.ckey.skill != newCkey.ckey.skill))
 			{
-				ockey = newCkey;
+				ckeyObjs[ci] = newCkey;
 			}
-		})
+		}
     }
 	fs.writeFile('./ckey.json',JSON.stringify(ckeyObjs),function(err){
 		if(err){
