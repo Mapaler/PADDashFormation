@@ -717,25 +717,25 @@ function initialize()
 
 	//添加徽章
 	const className_ChoseBadges = "show-all-badges";
-	teamBigBoxs.forEach(tb=>{
+	teamBigBoxs.forEach(teamBigBox=>{
 		//徽章
-		const teamBadge = tb.querySelector(".team-badge");
+		const teamBadge = teamBigBox.querySelector(".team-badge");
 		if (!teamBadge) return;
-		const badges = Array.from(teamBadge.querySelectorAll(".badge-bg"));
-		badges.forEach((badge,bidx) => {
-			badge.onclick = function(){
-				if (teamBadge.classList.contains(className_ChoseBadges))
-				{
-					teamBadge.classList.remove(className_ChoseBadges);
-					formation.badge = bidx;
-					refreshTotalHP(formation.teams[0]);
-					creatNewUrl();
-				}else
-				{
-					teamBadge.classList.add(className_ChoseBadges);
-				}
-			};
-		});
+		const badges = Array.from(teamBadge.querySelectorAll(".badge-radio"));
+		function setBadge(){
+			if (teamBadge.classList.contains(className_ChoseBadges))
+			{
+				teamBadge.classList.remove(className_ChoseBadges);
+				formation.badge = parseInt(this.value,10); //如果将来改成每队有徽章，就修改这里的设定
+				const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
+				refreshTeamTotalHP(teamTotalInfoDom, formation.teams[0]);
+				creatNewUrl();
+			}else
+			{
+				teamBadge.classList.add(className_ChoseBadges);
+			}
+		}
+		badges.forEach(badge => badge.onclick = setBadge);
 	});
 
 	//编辑框

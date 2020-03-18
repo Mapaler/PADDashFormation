@@ -310,11 +310,8 @@
 {
 	background-position-x: -64px;
 }
-.badge-0
-{
-	background-position-x: -72px;
-}
-.badge-17
+.badge[data-badge='0']::before,
+.badge[data-badge='17']::before
 {
 	background-position-x: -72px;
 }

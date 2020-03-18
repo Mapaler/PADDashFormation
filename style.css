@@ -375,19 +375,22 @@ ul{
 	display: inline-block;
 }
 /* 徽章，平时都隐藏 */
-.badge-bg{
-	display: none;
-	cursor: pointer;
+.team-badge li{
+	display: inline-block;
 }
 .badge-radio{
 	display: none;
 }
+.badge{
+	display: none;
+	cursor: pointer;
+}
 /* 显示所有徽章时则打开 */
-.show-all-badges .badge-bg{
+.show-all-badges .badge{
 	display: inline-block;
 }
 /* 选中的徽章平时也打开 */
-.team-badge .badge-radio:checked+label{
+.team-badge .badge-radio:checked+.badge{
 	display: inline-block;
 }
 /*队伍的背景色*/
