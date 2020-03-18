@@ -156,43 +156,43 @@
 .formation-awoken::before{
 	content: "陣型覺醒總計：";
 }
-.type-name-4::after{
+.type-name[data-type-name='4']::after{
 	content: "龍";
 }
-.type-name-5::after{
+.type-name[data-type-name='5']::after{
 	content: "神";
 }
-.type-name-7::after{
+.type-name[data-type-name='7']::after{
 	content: "惡魔";
 }
-.type-name-8::after{
+.type-name[data-type-name='8']::after{
 	content: "機械";
 }
-.type-name-1::after{
+.type-name[data-type-name='1']::after{
 	content: "平衡";
 }
-.type-name-6::after{
+.type-name[data-type-name='6']::after{
 	content: "攻撃";
 }
-.type-name-2::after{
+.type-name[data-type-name='2']::after{
 	content: "體力";
 }
-.type-name-3::after{
+.type-name[data-type-name='3']::after{
 	content: "回復";
 }
-.type-name-0::after{
+.type-name[data-type-name='0']::after{
 	content: "進化用";
 }
-.type-name-12::after{
+.type-name[data-type-name='12']::after{
 	content: "能力覺醒用";
 }
-.type-name-14::after{
+.type-name[data-type-name='14']::after{
 	content: "強化合成用";
 }
-.type-name-15::after{
+.type-name[data-type-name='15']::after{
 	content: "販賣用";
 }
-.type-name-9::after{
+.type-name[data-type-name='9']::after{
 	content: "特別保護";
 }
 .control-box .languages-label::before{
@@ -310,8 +310,8 @@
 {
 	background-position-x: -64px;
 }
-.badge[data-badge='0']::before,
-.badge[data-badge='17']::before
+.badge[data-badge-icon='0']::before,
+.badge[data-badge-icon='17']::before
 {
 	background-position-x: -72px;
 }

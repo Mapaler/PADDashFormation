@@ -160,43 +160,43 @@
 .formation-awoken::before{
 	content: "Total Awoken:";
 }
-.type-name-4::after{
+.type-name[data-type-name='4']::after{
 	content: "Dragon";
 }
-.type-name-5::after{
+.type-name[data-type-name='5']::after{
 	content: "God";
 }
-.type-name-7::after{
+.type-name[data-type-name='7']::after{
 	content: "Devil";
 }
-.type-name-8::after{
+.type-name[data-type-name='8']::after{
 	content: "Machine";
 }
-.type-name-1::after{
+.type-name[data-type-name='1']::after{
 	content: "Balanced";
 }
-.type-name-6::after{
+.type-name[data-type-name='6']::after{
 	content: "Attacker";
 }
-.type-name-2::after{
+.type-name[data-type-name='2']::after{
 	content: "Physical";
 }
-.type-name-3::after{
+.type-name[data-type-name='3']::after{
 	content: "Healer";
 }
-.type-name-0::after{
+.type-name[data-type-name='0']::after{
 	content: "Evo Material";
 }
-.type-name-12::after{
+.type-name[data-type-name='12']::after{
 	content: "Awaken";
 }
-.type-name-14::after{
+.type-name[data-type-name='14']::after{
 	content: "Enhance Material";
 }
-.type-name-15::after{
+.type-name[data-type-name='15']::after{
 	content: "Redeemable";
 }
-.type-name-9::after{
+.type-name[data-type-name='9']::after{
 	content: "Special Protection";
 }
 .control-box .datasource-label::before{
@@ -311,8 +311,8 @@
 .awoken-46,
 .awoken-47,
 .awoken-48,
-.type-icon-12,
-.type-icon-9
+.type-icon[data-type-icon='12'],
+.type-icon[data-type-icon='9']
 {
 	background-position-x: -32px;
 }
@@ -320,8 +320,8 @@
 {
 	background-position-x: -76px;
 }
-.badge[data-badge='0']::before,
-.badge[data-badge='2']::before
+.badge[data-badge-icon='0']::before,
+.badge[data-badge-icon='2']::before
 {
 	background-position-x: -36px;
 }
