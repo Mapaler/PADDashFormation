@@ -153,43 +153,43 @@
 .formation-awoken::before{
 	content: "総覚醒:";
 }
-.type-name-4::after{
+.type-name[data-type-name='4']::after{
 	content: "ドラゴン";
 }
-.type-name-5::after{
+.type-name[data-type-name='5']::after{
 	content: "神";
 }
-.type-name-7::after{
+.type-name[data-type-name='7']::after{
 	content: "悪魔";
 }
-.type-name-8::after{
+.type-name[data-type-name='8']::after{
 	content: "マシン";
 }
-.type-name-1::after{
+.type-name[data-type-name='1']::after{
 	content: "バランス";
 }
-.type-name-6::after{
+.type-name[data-type-name='6']::after{
 	content: "攻撃";
 }
-.type-name-2::after{
+.type-name[data-type-name='2']::after{
 	content: "体力";
 }
-.type-name-3::after{
+.type-name[data-type-name='3']::after{
 	content: "回復";
 }
-.type-name-0::after{
+.type-name[data-type-name='0']::after{
 	content: "進化用";
 }
-.type-name-12::after{
+.type-name[data-type-name='12']::after{
 	content: "能力覚醒用";
 }
-.type-name-14::after{
+.type-name[data-type-name='14']::after{
 	content: "強化合成用";
 }
-.type-name-15::after{
+.type-name[data-type-name='15']::after{
 	content: "売却用";
 }
-.type-name-9::after{
+.type-name[data-type-name='9']::after{
 	content: "特別保護";
 }
 .control-box .datasource-label::before{

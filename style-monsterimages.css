@@ -602,43 +602,43 @@
 	background-position-x: 0;
 	background-position-y: 32px; /*默认不显示*/
 }
-.type-icon-4{/*龙*/
+.type-icon[data-type-icon='4']{/*龙*/
 	background-position-y: 0px;
 }
-.type-icon-5{/*神*/
+.type-icon[data-type-icon='5']{/*神*/
 	background-position-y: -32px;
 }
-.type-icon-7{/*恶魔*/
+.type-icon[data-type-icon='7']{/*恶魔*/
 	background-position-y: -64px;
 }
-.type-icon-8{/*机械*/
+.type-icon[data-type-icon='8']{/*机械*/
 	background-position-y: -96px;
 }
-.type-icon-1{/*平衡*/
+.type-icon[data-type-icon='1']{/*平衡*/
 	background-position-y: -128px;
 }
-.type-icon-6{/*攻击*/
+.type-icon[data-type-icon='6']{/*攻击*/
 	background-position-y: -160px;
 }
-.type-icon-2{/*体力*/
+.type-icon[data-type-icon='2']{/*体力*/
 	background-position-y: -192px;
 }
-.type-icon-3{/*回复*/
+.type-icon[data-type-icon='3']{/*回复*/
 	background-position-y: -224px;
 }
-.type-icon-0{/*进化用*/
+.type-icon[data-type-icon='0']{/*进化用*/
 	background-position-y: -256px;
 }
-.type-icon-12{/*能力觉醒用*/
+.type-icon[data-type-icon='12']{/*能力觉醒用*/
 	background-position-y: -288px;
 }
-.type-icon-14{/*强化合成用*/
+.type-icon[data-type-icon='14']{/*强化合成用*/
 	background-position-y: -320px;
 }
-.type-icon-15{/*贩卖用*/
+.type-icon[data-type-icon='15']{/*贩卖用*/
 	background-position-y: -352px;
 }
-.type-icon-9{/*特别保护*/
+.type-icon[data-type-icon='9']{/*特别保护*/
 	background-position-y: -384px;
 }
 /*潜在觉醒*/
@@ -824,58 +824,58 @@ var sawokens = [
 	width: 36px; height: 30px;
 	background-position-x: 0;
 }
-.badge[data-badge='0']::before{
+.badge[data-badge-icon='0']::before{
 	background-position-y: 0px;
 }
-.badge[data-badge='1']::before{
+.badge[data-badge-icon='1']::before{
 	background-position-y: -30px;
 }
-.badge[data-badge='2']::before{
+.badge[data-badge-icon='2']::before{
 	background-position-y: -60px;
 }
-.badge[data-badge='3']::before{
+.badge[data-badge-icon='3']::before{
 	background-position-y: -90px;
 }
-.badge[data-badge='4']::before{
+.badge[data-badge-icon='4']::before{
 	background-position-y: -120px;
 }
-.badge[data-badge='5']::before{
+.badge[data-badge-icon='5']::before{
 	background-position-y: -150px;
 }
-.badge[data-badge='6']::before{
+.badge[data-badge-icon='6']::before{
 	background-position-y: -180px;
 }
-.badge[data-badge='7']::before{
+.badge[data-badge-icon='7']::before{
 	background-position-y: -210px;
 }
-.badge[data-badge='8']::before{
+.badge[data-badge-icon='8']::before{
 	background-position-y: -240px;
 }
-.badge[data-badge='9']::before{
+.badge[data-badge-icon='9']::before{
 	background-position-y: -270px;
 }
-.badge[data-badge='10']::before{
+.badge[data-badge-icon='10']::before{
 	background-position-y: -300px;
 }
-.badge[data-badge='11']::before{
+.badge[data-badge-icon='11']::before{
 	background-position-y: -330px;
 }
-.badge[data-badge='12']::before{
+.badge[data-badge-icon='12']::before{
 	background-position-y: -360px;
 }
-.badge[data-badge='13']::before{
+.badge[data-badge-icon='13']::before{
 	background-position-y: -390px;
 }
-.badge[data-badge='14']::before{
+.badge[data-badge-icon='14']::before{
 	background-position-y: -420px;
 }
-.badge[data-badge='15']::before{
+.badge[data-badge-icon='15']::before{
 	background-position-y: -450px;
 }
-.badge[data-badge='16']::before{
+.badge[data-badge-icon='16']::before{
 	background-position-y: -480px;
 }
-.badge[data-badge='17']::before{
+.badge[data-badge-icon='17']::before{
 	background-position-y: -510px;
 }
 

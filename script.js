@@ -1907,11 +1907,12 @@ function editBoxChangeMonId(id)
 	{
 		if (ti<card.types.length)
 		{
-			mType[ti].className = "type-name type-name-" + card.types[ti];
-			mType[ti].firstChild.className = "type-icon type-icon-" + card.types[ti];
+			mType[ti].setAttribute("data-type-name",card.types[ti]);
+			mType[ti].querySelector(".type-icon").setAttribute("data-type-icon",card.types[ti]);
+			mType[ti].classList.remove("display-none");
 		}else
 		{
-			mType[ti].className = "display-none";
+			mType[ti].classList.add("display-none");
 		}
 	}
 
