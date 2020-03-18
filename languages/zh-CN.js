@@ -2,18 +2,27 @@
 
 //查找原先完整技能
 function findFullSkill(subSkill){
-	let search = Skills.filter(ss=>{return (ss.type == 116 || ss.type == 118 || ss.type == 138) && ss.params.indexOf(subSkill.id)>=0;});
-	if(search.length)
-		{return [search[0],subSkill];}
-	else
-		{return subSkill;}
+	const parentSkill = Skills.find(ss=>(ss.type === 116 || ss.type === 118 || ss.type === 138) && ss.params.includes(subSkill.id));
+	return parentSkill || subSkill;
 }
 //document.querySelector(".edit-box .row-mon-id .m-id").type = "number";
 //Skills.filter(s=>{const sk = s.params; return s.type == 156;}).map(findFullSkill)
 
 //返回flag里值为true的数组，如[1,4,7]
 function flags(num){
-	return Array.from({length:10},(n,i)=>i).filter(i => num & (1 << i));
+	/*
+	return Array.from(new Array(32),(i,n)=>n).filter(n => num & (1 << n)); //性能太差
+	return new Array(32).fill(null).map((i,n)=>n).filter(n => num & (1 << n)); //性能比上者好，但还是不够快
+	*/
+	const arr = [];
+	for (let i = 0; i<32;i++)
+	{
+		if (num & (1<<i))
+		{
+			arr.push(i);
+		}
+	}
+	return arr;
 }
 
 //高级技能解释
