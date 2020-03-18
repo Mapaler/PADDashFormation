@@ -807,7 +807,7 @@ var sawokens = [
 ];
 */
 /* 徽章背景 */
-.badge-bg{
+.badge{
 	background-image: url(images/badge-bg.png);
 	width: 53px;
 	height: 41px;
@@ -815,7 +815,8 @@ var sawokens = [
 	text-align: center;
 	margin-right: 5px;
 }
-.badge{
+.badge::before{
+	content: "";
 	display: inline-block;
     vertical-align: middle;
 	background-repeat: no-repeat;
@@ -823,58 +824,58 @@ var sawokens = [
 	width: 36px; height: 30px;
 	background-position-x: 0;
 }
-.badge-0{
+.badge[data-badge='0']::before{
 	background-position-y: 0px;
 }
-.badge-1{
+.badge[data-badge='1']::before{
 	background-position-y: -30px;
 }
-.badge-2{
+.badge[data-badge='2']::before{
 	background-position-y: -60px;
 }
-.badge-3{
+.badge[data-badge='3']::before{
 	background-position-y: -90px;
 }
-.badge-4{
+.badge[data-badge='4']::before{
 	background-position-y: -120px;
 }
-.badge-5{
+.badge[data-badge='5']::before{
 	background-position-y: -150px;
 }
-.badge-6{
+.badge[data-badge='6']::before{
 	background-position-y: -180px;
 }
-.badge-7{
+.badge[data-badge='7']::before{
 	background-position-y: -210px;
 }
-.badge-8{
+.badge[data-badge='8']::before{
 	background-position-y: -240px;
 }
-.badge-9{
+.badge[data-badge='9']::before{
 	background-position-y: -270px;
 }
-.badge-10{
+.badge[data-badge='10']::before{
 	background-position-y: -300px;
 }
-.badge-11{
+.badge[data-badge='11']::before{
 	background-position-y: -330px;
 }
-.badge-12{
+.badge[data-badge='12']::before{
 	background-position-y: -360px;
 }
-.badge-13{
+.badge[data-badge='13']::before{
 	background-position-y: -390px;
 }
-.badge-14{
+.badge[data-badge='14']::before{
 	background-position-y: -420px;
 }
-.badge-15{
+.badge[data-badge='15']::before{
 	background-position-y: -450px;
 }
-.badge-16{
+.badge[data-badge='16']::before{
 	background-position-y: -480px;
 }
-.badge-17{
+.badge[data-badge='17']::before{
 	background-position-y: -510px;
 }
 

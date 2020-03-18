@@ -320,8 +320,8 @@
 {
 	background-position-x: -76px;
 }
-.badge-0,
-.badge-2
+.badge[data-badge='0']::before,
+.badge[data-badge='2']::before
 {
 	background-position-x: -36px;
 }
