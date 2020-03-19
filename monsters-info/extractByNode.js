@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const Card = require('./official-API/parseCard');
 const Skill = require('./official-API/parseSkill');
 const runDate = new Date();
-var officialAPI = [ //来源于官方API
+const officialAPI = [ //来源于官方API
 	{
 		code:"ja",
 		customName:["cht","chs"]
@@ -41,14 +41,11 @@ officialAPI.forEach(function(lang) {
 	const cardJsonObj = JSON.parse(cardJson);
 	const oCards = lang.cardOriginal = cardJsonObj.card;//将字符串转换为json对象
 
-	let maxCardIndex = 0;
-	while (oCards[maxCardIndex][0] == maxCardIndex)
+	const monCards = lang.cards = [];
+	for (let cardIndex = 0; oCards[cardIndex][0] === maxCardIndex; cardIndex++)
 	{
-		maxCardIndex++;
+		monCards.push(new Card(oCards[cardIndex]));
 	}
-	const monCards = lang.cards = oCards
-		.slice(0,maxCardIndex)  //切出前面id相等部分(id不等于索引时，都是敌人)
-		.map((oc)=>{return new Card(oc);}); //每一项生成分析对象
 
 	//加入自定义的语言
 	lang.customName.forEach(function(lcode){
@@ -69,7 +66,7 @@ officialAPI.forEach(function(lang) {
 	const skillJson = fs.readFileSync("official-API/" + lang.code +"-skill.json", 'utf-8'); //使用同步读取技能
 	const skillJsonObj = JSON.parse(skillJson);
 	const oSkills = lang.skillOriginal = skillJsonObj.skill;//将字符串转换为json对象
-	lang.skills = oSkills.map((oc,idx)=>{return new Skill(idx,oc);}); //每一项生成分析对象
+	lang.skills = oSkills.map((oc,idx)=>new Skill(idx,oc)); //每一项生成分析对象
 });
 
 //加入其他服务器相同角色的名字
@@ -90,13 +87,13 @@ for (let li = 0;li < officialAPI.length; li++)
 			let _m = otLang.cards[mi]; //获得这种其他语言的当前这个怪物数据
 			let isSame = sameCard(m,_m); //与原语言怪物是否是同一只
 			const l1 = lang.code, l2 = otLang.code;
-			if (!isSame &&
+			if (!isSame && //如果不同时，判断特殊情况
 				(
 					l1 == 'ja' && (l2 == 'en' || l2 == 'ko') ||
 					l2 == 'ja' && (l1 == 'en' || l1 == 'ko')
-				) //当同id两者不同，日服和英韩服比较时的一些人工确认相同的特殊id差异卡片
+				)
 			)
-			{
+			{ //当同id两者不同，日服和英韩服比较时的一些人工确认相同的特殊id差异卡片
 				const langIsJa = l1 == 'ja' ? true : false; //原始语言是否是日语
 				let diff = 0; //日语和其它语言的id差异
 				switch(true)
