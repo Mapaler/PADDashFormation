@@ -995,8 +995,9 @@ function initialize()
 		s_awokensItems.forEach(t=>{
 			t.classList.add("zero");
 		});
-		s_awokensEquivalent.checked = false;
-		s_includeSuperAwoken.checked = false;
+		// 这些觉醒的选项干脆都不清楚
+		//s_awokensEquivalent.checked = false;
+		//if (s_includeSuperAwoken.checked) s_includeSuperAwoken.click();
 		
 		s_sawokens.forEach(t=>{
 			t.checked = false;
