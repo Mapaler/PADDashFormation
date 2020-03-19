@@ -235,19 +235,18 @@ ul{
 .monster .plus .hp::before,
 .monster .plus .atk::before,
 .monster .plus .rcv::before,
-.monster .plus ._297::before{
+.monster .plus.has297::before
+{
 	content: "+";
 }
-.monster .plus ._297{ /*297默认不显示*/
-	display:none;
+.monster .plus.has297::after{
+	content: "297";
 }
-.monster .plus.has297 .hp,.monster .plus.zero .hp,
-.monster .plus.has297 .atk,.monster .plus.zero .atk,
-.monster .plus.has297 .rcv,.monster .plus.zero .rcv{ /*当是297时隐藏3维*/
+.monster .plus.has297 .hp,
+.monster .plus.has297 .atk,
+.monster .plus.has297 .rcv
+{ /*当是297时隐藏3维*/
 	display:none;
-}
-.monster .plus.has297 ._297{ /*当是297时显示297*/
-	display:block;
 }
 /*怪物-觉醒*/
 .monster .awoken-count{
@@ -946,7 +945,7 @@ ul{
 	line-height: 22px;
 }
 .monsterinfo-box .monster-id{
-	width:150px;
+	width:120px;
 }
 .monsterinfo-box .monster-seriesId,
 .monsterinfo-box .monster-collabId,
@@ -972,22 +971,40 @@ ul{
 }*/
 
 .monsterinfo-box .monster-rare{
-	width: 230px;
+	width: 260px;
 }
-.monsterinfo-box .monster-rare::before{
+.monsterinfo-box .monster-rare::before,
+.monsterinfo-box .monster-rare::after
+{
 	color:gold;
 	text-shadow: black 0 0 3px,black 0 2px 3px;
 }
-.rare-1::before{content: "★";}
-.rare-2::before{content: "★★";}
-.rare-3::before{content: "★★★";}
-.rare-4::before{content: "★★★★";}
-.rare-5::before{content: "★★★★★";}
-.rare-6::before{content: "★★★★★★";}
-.rare-7::before{content: "★★★★★★★";}
-.rare-8::before{content: "★★★★★★★★";}
-.rare-9::before{content: "★★★★★★★★★";}
-.rare-10::before{content: "★★★★★★★★★★";}
+.monsterinfo-box .monster-rare::before
+{
+	display: inline-block;
+	width: 30px;
+	text-align: right;
+}
+.monster-rare[data-rarity='1']::after{content: "★";}
+.monster-rare[data-rarity='2']::after{content: "★★";}
+.monster-rare[data-rarity='3']::after{content: "★★★";}
+.monster-rare[data-rarity='4']::after{content: "★★★★";}
+.monster-rare[data-rarity='5']::after{content: "★★★★★";}
+.monster-rare[data-rarity='6']::after{content: "★★★★★★";}
+.monster-rare[data-rarity='7']::after{content: "★★★★★★★";}
+.monster-rare[data-rarity='8']::after{content: "★★★★★★★★";}
+.monster-rare[data-rarity='9']::after{content: "★★★★★★★★★";}
+.monster-rare[data-rarity='10']::after{content: "★★★★★★★★★★";}
+.monster-rare[data-rarity='1']::before{content: "1";}
+.monster-rare[data-rarity='2']::before{content: "2";}
+.monster-rare[data-rarity='3']::before{content: "3";}
+.monster-rare[data-rarity='4']::before{content: "4";}
+.monster-rare[data-rarity='5']::before{content: "5";}
+.monster-rare[data-rarity='6']::before{content: "6";}
+.monster-rare[data-rarity='7']::before{content: "7";}
+.monster-rare[data-rarity='8']::before{content: "8";}
+.monster-rare[data-rarity='9']::before{content: "9";}
+.monster-rare[data-rarity='10']::before{content: "10";}
 .monsterinfo-box .monster-type{
 	font-size: 0;
 }

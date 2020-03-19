@@ -1673,22 +1673,21 @@ function changeid(mon,monDom,latentDom)
 	const plusDom = monDom.querySelector(".plus");
 	if (plusArr && plusDom) //如果提供了加值，且怪物头像内有加值
 	{
-		plusDom.querySelector(".hp").innerHTML = plusArr[0];
-		plusDom.querySelector(".atk").innerHTML = plusArr[1];
-		plusDom.querySelector(".rcv").innerHTML = plusArr[2];
-		var plusCount = plusArr[0]+plusArr[1]+plusArr[2];
-		if (plusCount >= 297)
+		const plusCount = plusArr[0]+plusArr[1]+plusArr[2];
+		if (plusCount <= 0)
+		{
+			plusDom.classList.add("display-none");
+		}else if (plusCount >= 297)
 		{
 			plusDom.classList.add("has297");
-			plusDom.classList.remove("zero");
-		}else if (plusCount <= 0)
-		{
-			plusDom.classList.add("zero");
-			plusDom.classList.remove("has297");
+			plusDom.classList.remove("display-none");
 		}else
 		{
-			plusDom.classList.remove("zero");
+			plusDom.querySelector(".hp").innerHTML = plusArr[0];
+			plusDom.querySelector(".atk").innerHTML = plusArr[1];
+			plusDom.querySelector(".rcv").innerHTML = plusArr[2];
 			plusDom.classList.remove("has297");
+			plusDom.classList.remove("display-none");
 		}
 	}
 	if (latentDom)
@@ -1707,7 +1706,7 @@ function changeid(mon,monDom,latentDom)
 			}else
 			{
 				latentDom.classList.remove("display-none");
-				
+
 				const usedHoleN = usedHole(latent); //使用的格子数
 				const maxLatentCount = getMaxLatentCount(mon.id); //最大潜觉数量
 				const showLatentCount = maxLatentCount-usedHoleN+latent.length; //显示的潜觉个数（包含空格）
@@ -1846,7 +1845,7 @@ function editBoxChangeMonId(id)
 	const mId = monInfoBox.querySelector(".monster-id");
 	mId.innerHTML = id;
 	const mRare = monInfoBox.querySelector(".monster-rare");
-	mRare.className = "monster-rare rare-" + card.rarity;
+	mRare.setAttribute("data-rarity",card.rarity);
 	const mCost = monInfoBox.querySelector(".monster-cost");
 	mCost.innerHTML = card.cost;
 	/*const mExp = monInfoBox.querySelector(".monster-exp");
@@ -1912,7 +1911,7 @@ function editBoxChangeMonId(id)
 	const mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (let ti=0;ti<mType.length;ti++)
 	{
-		if (ti<card.types.length)
+		if (ti<card.types.length && card.types[ti]>= 0)
 		{
 			mType[ti].setAttribute("data-type-name",card.types[ti]);
 			mType[ti].querySelector(".type-icon").setAttribute("data-type-icon",card.types[ti]);
