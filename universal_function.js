@@ -378,7 +378,7 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equal
 function createCardA()
 {
 	const cdom = document.createElement("a");
-	cdom.class = "monster";
+	cdom.className = "monster";
 	cdom.target = "_blank";
 	const property = cdom.appendChild(document.createElement("div"));
 	property.className = "property";

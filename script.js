@@ -3,14 +3,17 @@ var Skills; //技能数据
 var currentLanguage; //当前语言
 var currentDataSource; //当前数据
 
+const teamBigBoxs = []; //储存全部teamBigBox
+const allMembers = []; //储存所有成员，包含辅助
+
 var interchangeSvg; //储存划线的SVG
 var controlBox; //储存整个controlBox
 var statusLine; //储存状态栏
 var formationBox; //储存整个formationBox
-var teamBigBoxs = []; //储存全部teamBigBox
-var allMembers = []; //储存所有成员，包含辅助
 var editBox; //储存整个editBox
 var showSearch; //整个程序都可以用的显示搜索函数
+
+const className_displayNone = "display-none";
 
 //数组去重
 /* https://www.cnblogs.com/baiyangyuanzi/p/6726258.html
@@ -747,12 +750,12 @@ function initialize()
 	editBox.latentBox = null;
 	editBox.memberIdx = []; //储存队伍数组下标
 	editBox.show = function(){
-		this.classList.remove("display-none");
+		this.classList.remove(className_displayNone);
 		formationBox.classList.add("blur-bg");
 		controlBox.classList.add("blur-bg");
 	};
 	editBox.hide = function(){
-		this.classList.add("display-none");
+		this.classList.add(className_displayNone);
 		formationBox.classList.remove("blur-bg");
 		controlBox.classList.remove("blur-bg");
 	};
@@ -811,7 +814,7 @@ function initialize()
 	searchOpen.onclick = function(){
 		s_includeSuperAwoken.onclick();
 		s_canAssist.onclick();
-		searchBox.classList.toggle("display-none");
+		searchBox.classList.toggle(className_displayNone);
 	};
 
 	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
@@ -844,9 +847,9 @@ function initialize()
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onclick = function(){
 		if (this.checked)
-			s_sawokenDiv.classList.add("display-none");
+			s_sawokenDiv.classList.add(className_displayNone);
 		else
-			s_sawokenDiv.classList.remove("display-none");
+			s_sawokenDiv.classList.remove(className_displayNone);
 	};
 
 	function search_awokenAdd1()
@@ -915,10 +918,10 @@ function initialize()
 	//将搜索结果显示出来（也可用于其他的搜索）
 	showSearch = function(searchArr){
 		editBox.show();
-		searchBox.classList.remove("display-none");
+		searchBox.classList.remove(className_displayNone);
 		const createCardHead = editBox.createCardHead;
 
-		searchMonList.classList.add("display-none");
+		searchMonList.classList.add(className_displayNone);
 		searchMonList.innerHTML = ""; //清空旧的
 		if (searchArr.length>0)
 		{
@@ -930,7 +933,7 @@ function initialize()
 			headsArray.forEach(head=>fragment.appendChild(head));
 			searchMonList.appendChild(fragment);
 		}
-		searchMonList.classList.remove("display-none");
+		searchMonList.classList.remove(className_displayNone);
 	};
 	const startSearch = function(cards){
 		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
@@ -959,7 +962,8 @@ function initialize()
 		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const awokensFilter = s_awokensCounts.filter(btn=>parseInt(btn.innerHTML,10)>0).map(btn=>{
-			return {id:parseInt(btn.value,10),num:parseInt(btn.innerHTML,10)};
+			const awokenIndex = parseInt(btn.parentNode.querySelector(".awoken-icon").getAttribute("data-awoken-icon"),10);
+			return {id:awokenIndex,num:parseInt(btn.innerHTML,10)};
 		});
 		const searchResult = searchCards(cards,
 			attr1,attr2,
@@ -977,7 +981,7 @@ function initialize()
 		startSearch(Cards);
 	};
 	searchClose.onclick = function(){
-		searchBox.classList.add("display-none");
+		searchBox.classList.add(className_displayNone);
 	};
 	searchClear.onclick = function(){ //清空搜索选项
 		s_attr1s[0].checked = true;
@@ -1023,12 +1027,12 @@ function initialize()
 	//对搜索到的Cards重新排序
 	function reSortCards()
 	{
-		searchMonList.classList.add("display-none");
+		searchMonList.classList.add(className_displayNone);
 		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 		const headsArray = sortHeadsArray(searchMonList.originalHeads);
 		headsArray.forEach(head=>fragment.appendChild(head));
 		searchMonList.appendChild(fragment);
-		searchMonList.classList.remove("display-none");
+		searchMonList.classList.remove(className_displayNone);
 	}
 	s_sortList.onchange = reSortCards;
 	s_sortReverse.onchange = reSortCards;
@@ -1171,16 +1175,16 @@ function initialize()
 			if (latent[ai] != undefined) //有的潜觉
 			{
 				monEditLatents[ai].setAttribute("data-latent-icon", latent[ai]);
-				monEditLatents[ai].classList.remove("display-none");
+				monEditLatents[ai].classList.remove(className_displayNone);
 			}
 			else if(ai < showLatentCount) //空格
 			{
 				monEditLatents[ai].removeAttribute("data-latent-icon");
-				monEditLatents[ai].classList.remove("display-none");
+				monEditLatents[ai].classList.remove(className_displayNone);
 			}
 			else //不显示的部分
 			{
-				monEditLatents[ai].classList.add("display-none");
+				monEditLatents[ai].classList.add(className_displayNone);
 			}
 		}
 	};
@@ -1222,7 +1226,7 @@ function initialize()
 	//可选觉醒的添加
 	function addLatent(){
 		if (this.classList.contains("unselected-latent")) return; //不能选的觉醒直接退出
-		const lIdx = parseInt(this.value); //潜觉的序号
+		const lIdx = parseInt(this.getAttribute("data-latent-icon"),10); //潜觉的序号
 		const usedHoleN = usedHole(editBox.latent); //使用了的格子
 		const maxLatentCount = getMaxLatentCount(editBox.mid); //最大潜觉数量
 		if (lIdx >= 12 && usedHoleN<=(maxLatentCount-2) || //如果能添加2格的觉醒
@@ -1340,7 +1344,7 @@ function initialize()
 		editBox.hide();
 	};
 	window.onkeydown = function(e){
-		if (!editBox.classList.contains("display-none"))
+		if (!editBox.classList.contains(className_displayNone))
 		{
 			if (e.keyCode == 27)
 			{ //按下ESC时，自动关闭编辑窗
@@ -1580,28 +1584,30 @@ function changeid(mon,monDom,latentDom)
 		parentNode.classList.add("delay");
 		parentNode.classList.remove("null");
 		parentNode.appendChild(fragment);
-		if (latentDom) latentDom.classList.add("display-none");
+		if (latentDom) latentDom.classList.add(className_displayNone);
 		return;
 	}else if (monId==0) //如果是空
 	{
 		parentNode.classList.add("null");
 		parentNode.classList.remove("delay");
 		parentNode.appendChild(fragment);
-		if (latentDom) latentDom.classList.add("display-none");
+		if (latentDom) latentDom.classList.add(className_displayNone);
 		return;
 	}else if (monId>-1) //如果提供了id
 	{
 		parentNode.classList.remove("null");
 		parentNode.classList.remove("delay");
-		monDom.className = "monster";
-		monDom.classList.add("pet-cards-" + Math.ceil(monId/100)); //添加图片编号
+
+		monDom.setAttribute("data-cards-pic-idx",Math.ceil(monId/100)); //添加图片编号
 		const idxInPage = (monId-1) % 100; //获取当前页面的总序号
-		monDom.classList.add("pet-cards-index-x-" + idxInPage % 10); //添加X方向序号
-		monDom.classList.add("pet-cards-index-y-" + parseInt(idxInPage / 10)); //添加Y方向序号
-		monDom.querySelector(".property").className = "property property-" + card.attrs[0]; //主属性
-		monDom.querySelector(".subproperty").className = "subproperty subproperty-" + card.attrs[1]; //副属性
+		monDom.setAttribute("data-cards-pic-x", idxInPage % 10); //添加X方向序号
+		monDom.setAttribute("data-cards-pic-y", Math.floor(idxInPage / 10)); //添加Y方向序号
+
+		monDom.querySelector(".property").setAttribute("data-property", card.attrs[0]); //主属性
+		monDom.querySelector(".subproperty").setAttribute("data-property", card.attrs[1]); //副属性
+
 		monDom.title = "No." + monId + " " + (card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name);
-		monDom.href = monId.toString().replace(/^(\d+)$/ig,currentLanguage.guideURL);
+		monDom.href = currentLanguage.guideURL(monId, card.name);
 		if (card.canAssist)
 			monDom.classList.add("allowable-assist");
 		else
@@ -1636,11 +1642,11 @@ function changeid(mon,monDom,latentDom)
 		const awokenIcon = monDom.querySelector(".awoken-count");
 		if (mon.awoken == 0 || card.awakenings.length < 1 || !awokenIcon) //没觉醒
 		{
-			awokenIcon.classList.add("display-none");
+			awokenIcon.classList.add(className_displayNone);
 			awokenIcon.innerHTML = "";
 		}else
 		{
-			awokenIcon.classList.remove("display-none");
+			awokenIcon.classList.remove(className_displayNone);
 			awokenIcon.innerHTML = mon.awoken;
 			if (mon.awoken == card.awakenings.length)
 			{
@@ -1656,12 +1662,12 @@ function changeid(mon,monDom,latentDom)
 	{
 		if (mon.sawoken != undefined && mon.sawoken>=0 && card.superAwakenings.length)
 		{
-			sawoken.classList.remove("display-none");
+			sawoken.classList.remove(className_displayNone);
 			const sawokenIcon = sawoken.querySelector(".awoken-icon");
 			sawokenIcon.setAttribute("data-awoken-icon",card.superAwakenings[mon.sawoken]);
 		}else
 		{
-			sawoken.classList.add("display-none");
+			sawoken.classList.add(className_displayNone);
 		}
 	}
 	const m_id = monDom.querySelector(".id");
@@ -1676,18 +1682,18 @@ function changeid(mon,monDom,latentDom)
 		const plusCount = plusArr[0]+plusArr[1]+plusArr[2];
 		if (plusCount <= 0)
 		{
-			plusDom.classList.add("display-none");
+			plusDom.classList.add(className_displayNone);
 		}else if (plusCount >= 297)
 		{
 			plusDom.classList.add("has297");
-			plusDom.classList.remove("display-none");
+			plusDom.classList.remove(className_displayNone);
 		}else
 		{
 			plusDom.querySelector(".hp").innerHTML = plusArr[0];
 			plusDom.querySelector(".atk").innerHTML = plusArr[1];
 			plusDom.querySelector(".rcv").innerHTML = plusArr[2];
 			plusDom.classList.remove("has297");
-			plusDom.classList.remove("display-none");
+			plusDom.classList.remove(className_displayNone);
 		}
 	}
 	if (latentDom)
@@ -1702,10 +1708,10 @@ function changeid(mon,monDom,latentDom)
 			});
 			if (latent.length < 1)
 			{
-				latentDom.classList.add("display-none");
+				latentDom.classList.add(className_displayNone);
 			}else
 			{
-				latentDom.classList.remove("display-none");
+				latentDom.classList.remove(className_displayNone);
 
 				const usedHoleN = usedHole(latent); //使用的格子数
 				const maxLatentCount = getMaxLatentCount(mon.id); //最大潜觉数量
@@ -1715,22 +1721,22 @@ function changeid(mon,monDom,latentDom)
 					if (latent[ai]) //有的潜觉
 					{
 						latentDoms[ai].setAttribute("data-latent-icon", latent[ai]);
-						latentDoms[ai].classList.remove("display-none");
+						latentDoms[ai].classList.remove(className_displayNone);
 					}
 					else if(ai<showLatentCount) //空格
 					{
 						latentDoms[ai].removeAttribute("data-latent-icon");
-						latentDoms[ai].classList.remove("display-none");
+						latentDoms[ai].classList.remove(className_displayNone);
 					}
 					else //不显示的部分
 					{
-						latentDoms[ai].classList.add("display-none");
+						latentDoms[ai].classList.add(className_displayNone);
 					}
 				}
 			}
 		}else
 		{
-			latentDom.classList.add("display-none");
+			latentDom.classList.add(className_displayNone);
 		}
 	}
 
@@ -1740,10 +1746,10 @@ function changeid(mon,monDom,latentDom)
 		//const skill = Skills[card.activeSkillId];
 		if (card.activeSkillId == 0)
 		{
-			skillCdDom.classList.add("display-none");
+			skillCdDom.classList.add(className_displayNone);
 		}else
 		{
-			skillCdDom.classList.remove("display-none");
+			skillCdDom.classList.remove(className_displayNone);
 		}
 	}
 
@@ -1809,13 +1815,13 @@ function editMon(teamNum,isAssist,indexInTeam)
 	{
 		editBox.latent = mon.latent ? mon.latent.concat() : [];
 		editBox.refreshLatent(editBox.latent, mon.id);
-		btnDelay.classList.add("display-none");
-		rowMonLatent.classList.remove("display-none");
+		btnDelay.classList.add(className_displayNone);
+		rowMonLatent.classList.remove(className_displayNone);
 		editBoxTitle.classList.remove("edit-box-title-assist");
 	}else
 	{
-		btnDelay.classList.remove("display-none");
-		rowMonLatent.classList.add("display-none");
+		btnDelay.classList.remove(className_displayNone);
+		rowMonLatent.classList.add(className_displayNone);
 		editBoxTitle.classList.add("edit-box-title-assist");
 	}
 	editBox.reCalculateExp();
@@ -1857,20 +1863,20 @@ function editBoxChangeMonId(id)
 	mSeriesId.setAttribute("data-seriesId",card.seriesId);
 	if (card.seriesId == 0)
 	{
-		mSeriesId.classList.add("display-none");
+		mSeriesId.classList.add(className_displayNone);
 	}else
 	{
-		mSeriesId.classList.remove("display-none");
+		mSeriesId.classList.remove(className_displayNone);
 	}
 	const mCollabId = monInfoBox.querySelector(".monster-collabId");
 	mCollabId.innerHTML = card.collabId;
 	mCollabId.setAttribute("data-collabId",card.collabId);
 	if (card.collabId == 0)
 	{
-		mCollabId.classList.add("display-none");
+		mCollabId.classList.add(className_displayNone);
 	}else
 	{
-		mCollabId.classList.remove("display-none");
+		mCollabId.classList.remove(className_displayNone);
 	}
 	const mAltName = monInfoBox.querySelector(".monster-altName");
 	mAltName.innerHTML = card.altName;
@@ -1878,10 +1884,10 @@ function editBoxChangeMonId(id)
 
 	if (card.altName.length == 0)
 	{ //当没有合作名
-		mAltName.classList.add("display-none");
+		mAltName.classList.add(className_displayNone);
 	}else
 	{
-		mAltName.classList.remove("display-none");
+		mAltName.classList.remove(className_displayNone);
 	}
 
 	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");
@@ -1915,10 +1921,10 @@ function editBoxChangeMonId(id)
 		{
 			mType[ti].setAttribute("data-type-name",card.types[ti]);
 			mType[ti].querySelector(".type-icon").setAttribute("data-type-icon",card.types[ti]);
-			mType[ti].classList.remove("display-none");
+			mType[ti].classList.remove(className_displayNone);
 		}else
 		{
-			mType[ti].classList.add("display-none");
+			mType[ti].classList.add(className_displayNone);
 		}
 	}
 
@@ -1962,10 +1968,10 @@ function editBoxChangeMonId(id)
 				mSAwoken[ai].classList.add(`display-none`);
 			}
 		}
-		monEditSAwokensRow.classList.remove("display-none");
+		monEditSAwokensRow.classList.remove(className_displayNone);
 	}else
 	{
-		monEditSAwokensRow.classList.add("display-none");
+		monEditSAwokensRow.classList.add(className_displayNone);
 	}
 	monEditSAwokensRow.querySelector("#sawoken-choice--1").click(); //选中隐藏的空超觉
 
@@ -1976,10 +1982,10 @@ function editBoxChangeMonId(id)
 	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
 	if (card.limitBreakIncr)
 	{
-		monEditLv110.classList.remove("display-none");
+		monEditLv110.classList.remove(className_displayNone);
 	}else
 	{
-		monEditLv110.classList.add("display-none");
+		monEditLv110.classList.add(className_displayNone);
 	}
 	const rowPlus =  settingBox.querySelector(".row-mon-plus");
 	const rowLatent =  settingBox.querySelector(".row-mon-latent");
@@ -2150,9 +2156,9 @@ function refreshTeamAwokenCount(awokenDom,team){
 		const countDom = ali.querySelector(".count");
 		countDom.innerHTML = number;
 		if (number)
-			ali.classList.remove("display-none");
+			ali.classList.remove(className_displayNone);
 		else
-			ali.classList.add("display-none");
+			ali.classList.add(className_displayNone);
 	}
 	for (let ai=1;ai<=72;ai++)
 	{
@@ -2189,9 +2195,9 @@ function refreshFormationAwokenCount(awokenDom,teams){
 		const countDom = ali.querySelector(".count");
 		countDom.innerHTML = number;
 		if (number)
-			ali.classList.remove("display-none");
+			ali.classList.remove(className_displayNone);
 		else
-			ali.classList.add("display-none");
+			ali.classList.add(className_displayNone);
 	}
 	
 	for (let ai=1;ai<=72;ai++)
@@ -2240,11 +2246,11 @@ function refreshAbility(abilityDom,team,idx){
 	[hpDom,atkDom,rcvDom].forEach(function(div,ai){
 		if (mainAbility)
 		{
-			div.classList.remove("display-none");
+			div.classList.remove(className_displayNone);
 			div.innerHTML = memberData.ability[ai];
 		}else
 		{
-			div.classList.add("display-none");
+			div.classList.add(className_displayNone);
 			div.innerHTML = 0;
 		}
 	});

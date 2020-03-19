@@ -516,7 +516,7 @@ ul{
 }
 .formation-box .team-badge .team-total-info
 {
-	display:inline-block;
+	display: inline-block;
 }
 /*
 .team-info .tIf-total-hp,.team-info .tIf-total-rcv{
@@ -526,14 +526,14 @@ ul{
 /*队伍的潜觉*/
 .team-latents .latents{
 	width: var(--head-block-width);
-	/*float:left;*/
-	margin-bottom: -20px;
 	display: inline-block;
 }
 .team-latents .latent-ul{
 	font-size: 0;
 	width: 152px;
-	transform: translate(-22px,-8px) scale(0.63);
+	transform: scale(0.63);
+	margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);
+	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
 }
 
 .team-latents .latent-icon{
@@ -698,22 +698,24 @@ ul{
 	font-size: 25px;
 }
 .edit-box .setting-box .row-mon-id .evo-card-list li,
-.edit-box .search-box .search-mon-list li,
-.detail-mon{
+.edit-box .search-box .search-mon-list li
+{
 	display: inline-block;
 	vertical-align: top; 
-	top: 0;
-	width: 80px;
-	height: 78px;
+	margin-right: 5px;
+	margin-bottom: 5px;
 }
 .detail-mon{
+	display: inline-block;
 	vertical-align: bottom;
 }
 .edit-box .setting-box .row-mon-id .evo-card-list .monster,
 .edit-box .search-box .search-mon-list .monster,
-.detail-mon .monster{
+.detail-mon .monster
+{
 	float: none;
-	transform: scale(0.75) translate(-16px,-16px);
+	transform: scale(0.75);
+	margin: calc(-100px * (1 - 0.75) / 2);
 }
 .edit-box .setting-box .row-mon-id .evo-card-list .monster .id,
 .edit-box .search-box .search-mon-list .monster .id,
@@ -727,7 +729,8 @@ ul{
 	height: 50px;
 }
 .detail-box .detail-mon .monster{
-	transform: scale(0.5) translate(-58px,-58px);
+	transform: scale(0.5);
+	margin: calc(-100px * (1 - 0.5) / 2);
 }
 .detail-box .detail-mon .monster .id{
 	font-weight: bold;
