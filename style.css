@@ -534,28 +534,29 @@ ul{
 	margin-left: 3px;
 	margin-right: 3px;
 }
-.team-latents .latent-icon-12,
-.team-latents .latent-icon-13,
-.team-latents .latent-icon-14,
-.team-latents .latent-icon-15,
-.team-latents .latent-icon-16,
-.team-latents .latent-icon-17,
-.team-latents .latent-icon-18,
-.team-latents .latent-icon-19,
-.team-latents .latent-icon-20,
-.team-latents .latent-icon-21,
-.team-latents .latent-icon-22,
-.team-latents .latent-icon-23,
-.team-latents .latent-icon-24,
-.team-latents .latent-icon-25,
-.team-latents .latent-icon-26,
-.team-latents .latent-icon-27,
-.team-latents .latent-icon-28,
-.team-latents .latent-icon-29,
-.team-latents .latent-icon-30,
-.team-latents .latent-icon-31,
-.team-latents .latent-icon-32,
-.team-latents .latent-icon-33{
+.team-latents .latent-icon[data-latent-icon='12'],
+.team-latents .latent-icon[data-latent-icon='13'],
+.team-latents .latent-icon[data-latent-icon='14'],
+.team-latents .latent-icon[data-latent-icon='15'],
+.team-latents .latent-icon[data-latent-icon='16'],
+.team-latents .latent-icon[data-latent-icon='17'],
+.team-latents .latent-icon[data-latent-icon='18'],
+.team-latents .latent-icon[data-latent-icon='19'],
+.team-latents .latent-icon[data-latent-icon='20'],
+.team-latents .latent-icon[data-latent-icon='21'],
+.team-latents .latent-icon[data-latent-icon='22'],
+.team-latents .latent-icon[data-latent-icon='23'],
+.team-latents .latent-icon[data-latent-icon='24'],
+.team-latents .latent-icon[data-latent-icon='25'],
+.team-latents .latent-icon[data-latent-icon='26'],
+.team-latents .latent-icon[data-latent-icon='27'],
+.team-latents .latent-icon[data-latent-icon='28'],
+.team-latents .latent-icon[data-latent-icon='29'],
+.team-latents .latent-icon[data-latent-icon='30'],
+.team-latents .latent-icon[data-latent-icon='31'],
+.team-latents .latent-icon[data-latent-icon='32'],
+.team-latents .latent-icon[data-latent-icon='33']
+{
 	margin: 0;
 }
 /*队长的边框*/
@@ -1270,13 +1271,13 @@ ul{
 	margin-right: unset;
 }
 
-.m-latent-allowable-ul .latent-icon,
-.m-latent-ul .latent-icon{
-	cursor: pointer;
-}
 /*没有打觉醒的空格，没有手指*/
-.m-latent-ul .latent-icon[class="latent-icon"]{
+.m-latent-ul .latent-icon{
 	cursor: default;
+}
+.m-latent-allowable-ul .latent-icon,
+.m-latent-ul .latent-icon[data-latent-icon]{
+	cursor: pointer;
 }
 /*不允许使用的潜觉，不是手指，半透明，灰度*/
 .m-latent-allowable-ul .latent-icon.unselected-latent{

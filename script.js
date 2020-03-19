@@ -1165,19 +1165,22 @@ function initialize()
 	{
 		const maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
 		const usedHoleN = usedHole(latent);
-		for (let ai=0;ai<monEditLatents.length;ai++)
+		const showLatentCount = maxLatentCount-usedHoleN+latent.length; //显示的潜觉个数（包含空格）
+		for (let ai = 0; ai<monEditLatents.length; ai++)
 		{
-			if (latent[ai] != undefined)
+			if (latent[ai] != undefined) //有的潜觉
 			{
-				monEditLatents[ai].className = "latent-icon latent-icon-" + latent[ai];
+				monEditLatents[ai].setAttribute("data-latent-icon", latent[ai]);
+				monEditLatents[ai].classList.remove("display-none");
 			}
-			else if(ai<(maxLatentCount-usedHoleN+latent.length))
+			else if(ai < showLatentCount) //空格
 			{
-				monEditLatents[ai].className = "latent-icon";
+				monEditLatents[ai].removeAttribute("data-latent-icon");
+				monEditLatents[ai].classList.remove("display-none");
 			}
-			else
+			else //不显示的部分
 			{
-				monEditLatents[ai].className = "display-none";
+				monEditLatents[ai].classList.add("display-none");
 			}
 		}
 	};
@@ -1690,10 +1693,10 @@ function changeid(mon,monDom,latentDom)
 	}
 	if (latentDom)
 	{
-		let latentDoms = Array.from(latentDom.querySelectorAll("li"));
+		const latentDoms = Array.from(latentDom.querySelectorAll("li"));
 		if (mon.latent) //如果提供了潜觉
 		{
-			let latent = mon.latent.sort(function(a,b){
+			const latent = mon.latent.sort(function(a,b){
 				if(b>=12 && a<12) {return 1;} //如果大于12，就排到前面
 				else if(b<12 && a>=12) {return -1;} //如果小于12就排到后面
 				else {return 0;} //其他情况不变
@@ -1704,22 +1707,26 @@ function changeid(mon,monDom,latentDom)
 			}else
 			{
 				latentDom.classList.remove("display-none");
-			}
-			let usedHoleN = usedHole(latent); //使用的格子数
-			let maxLatentCount = getMaxLatentCount(mon.id); //最大潜觉数量
-			for (let ai=0;ai<latentDoms.length;ai++)
-			{
-				if (latent[ai])
+				
+				const usedHoleN = usedHole(latent); //使用的格子数
+				const maxLatentCount = getMaxLatentCount(mon.id); //最大潜觉数量
+				const showLatentCount = maxLatentCount-usedHoleN+latent.length; //显示的潜觉个数（包含空格）
+				for (let ai=0;ai<latentDoms.length;ai++)
 				{
-					latentDoms[ai].className = "latent-icon latent-icon-" + latent[ai];
-				}
-				else if(ai<(maxLatentCount-usedHoleN+latent.length))
-				{
-					latentDoms[ai].className = "latent-icon";
-				}
-				else
-				{
-					latentDoms[ai].className = "display-none";
+					if (latent[ai]) //有的潜觉
+					{
+						latentDoms[ai].setAttribute("data-latent-icon", latent[ai]);
+						latentDoms[ai].classList.remove("display-none");
+					}
+					else if(ai<showLatentCount) //空格
+					{
+						latentDoms[ai].removeAttribute("data-latent-icon");
+						latentDoms[ai].classList.remove("display-none");
+					}
+					else //不显示的部分
+					{
+						latentDoms[ai].classList.add("display-none");
+					}
 				}
 			}
 		}else
@@ -1975,20 +1982,16 @@ function editBoxChangeMonId(id)
 	const rowLatent =  settingBox.querySelector(".row-mon-latent");
 	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
 	//该宠Type允许的杀,uniq是去重的自定义函数
-	const allowLatent = card.types.reduce(function (previous, t, index, array) {
-		return previous.concat(type_allowable_latent[t]);
-	},[]).uniq();
+	const allowLatent = [].concat(...card.types.filter(i=>i>=0).map(type=>type_allowable_latent[type])).uniq();
 	for(let li=17;li<=24;li++) //显示允许的杀，隐藏不允许的杀
 	{
-		const latentDom = monLatentAllowUl.querySelector(".latent-icon-" + li);
+		const latentDom = monLatentAllowUl.querySelector(`.latent-icon[data-latent-icon='${li}']`);
 		if (allowLatent.includes(li))
 		{
-			if(latentDom.classList.contains("unselected-latent"))
-				latentDom.classList.remove("unselected-latent");
+			latentDom.classList.remove("unselected-latent");
 		}else
 		{
-			if(!latentDom.classList.contains("unselected-latent"))
-				latentDom.classList.add("unselected-latent");
+			latentDom.classList.add("unselected-latent");
 		}
 	}
 	//怪物主动技能
@@ -1997,7 +2000,7 @@ function editBoxChangeMonId(id)
 	const skillTitle = skillBox.querySelector(".skill-name");
 	const skillCD = skillBox.querySelector(".skill-cd");
 	const skillLevel = skillBox.querySelector(".m-skill-level");
-	const skillLevel_1 = skillBox.querySelector(".m-skill-lv-1");
+	//const skillLevel_1 = skillBox.querySelector(".m-skill-lv-1");
 	const skillLevel_Max = skillBox.querySelector(".m-skill-lv-max");
 	const skillDetail = skillBox.querySelector(".skill-datail");
 	
