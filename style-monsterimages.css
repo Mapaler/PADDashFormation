@@ -377,223 +377,223 @@
     background-image: url(images/awoken.png);
 	background-position-x: 0;
 }
-.awoken-0{/*问号*/
+.awoken-icon[data-awoken-icon='0']{/*问号*/
 	background-position-y: 0;
 }
-.awoken-1{/*HP+*/
+.awoken-icon[data-awoken-icon='1']{/*HP+*/
 	background-position-y: -32px;
 }
-.awoken-2{/*攻击+*/
+.awoken-icon[data-awoken-icon='2']{/*攻击+*/
 	background-position-y: -64px;
 }
-.awoken-3{/*回复+*/
+.awoken-icon[data-awoken-icon='3']{/*回复+*/
 	background-position-y: -96px;
 }
-.awoken-4{/*火盾*/
+.awoken-icon[data-awoken-icon='4']{/*火盾*/
 	background-position-y: -128px;
 }
-.awoken-5{/*水盾*/
+.awoken-icon[data-awoken-icon='5']{/*水盾*/
 	background-position-y: -160px;
 }
-.awoken-6{/*木盾*/
+.awoken-icon[data-awoken-icon='6']{/*木盾*/
 	background-position-y: -192px;
 }
-.awoken-7{/*光盾*/
+.awoken-icon[data-awoken-icon='7']{/*光盾*/
 	background-position-y: -224px;
 }
-.awoken-8{/*暗盾*/
+.awoken-icon[data-awoken-icon='8']{/*暗盾*/
 	background-position-y: -256px;
 }
-.awoken-9{/*自回*/
+.awoken-icon[data-awoken-icon='9']{/*自回*/
 	background-position-y: -288px;
 }
-.awoken-10{/*防封*/
+.awoken-icon[data-awoken-icon='10']{/*防封*/
 	background-position-y: -320px;
 }
-.awoken-11{/*防暗*/
+.awoken-icon[data-awoken-icon='11']{/*防暗*/
 	background-position-y: -352px;
 }
-.awoken-12{/*防废*/
+.awoken-icon[data-awoken-icon='12']{/*防废*/
 	background-position-y: -384px;
 }
-.awoken-13{/*防毒*/
+.awoken-icon[data-awoken-icon='13']{/*防毒*/
 	background-position-y: -416px;
 }
-.awoken-14{/*火+*/
+.awoken-icon[data-awoken-icon='14']{/*火+*/
 	background-position-y: -448px;
 }
-.awoken-15{/*水+*/
+.awoken-icon[data-awoken-icon='15']{/*水+*/
 	background-position-y: -480px;
 }
-.awoken-16{/*木+*/
+.awoken-icon[data-awoken-icon='16']{/*木+*/
 	background-position-y: -512px;
 }
-.awoken-17{/*光+*/
+.awoken-icon[data-awoken-icon='17']{/*光+*/
 	background-position-y: -544px;
 }
-.awoken-18{/*暗+*/
+.awoken-icon[data-awoken-icon='18']{/*暗+*/
 	background-position-y: -576px;
 }
-.awoken-19{/*手指*/
+.awoken-icon[data-awoken-icon='19']{/*手指*/
 	background-position-y: -608px;
 }
-.awoken-20{/*心解*/
+.awoken-icon[data-awoken-icon='20']{/*心解*/
 	background-position-y: -640px;
 }
-.awoken-21{/*SB*/
+.awoken-icon[data-awoken-icon='21']{/*SB*/
 	background-position-y: -672px;
 }
-.awoken-22{/*火横*/
+.awoken-icon[data-awoken-icon='22']{/*火横*/
 	background-position-y: -704px;
 }
-.awoken-23{/*水横*/
+.awoken-icon[data-awoken-icon='23']{/*水横*/
 	background-position-y: -736px;
 }
-.awoken-24{/*木横*/
+.awoken-icon[data-awoken-icon='24']{/*木横*/
 	background-position-y: -768px;
 }
-.awoken-25{/*光横*/
+.awoken-icon[data-awoken-icon='25']{/*光横*/
 	background-position-y: -800px;
 }
-.awoken-26{/*暗横*/
+.awoken-icon[data-awoken-icon='26']{/*暗横*/
 	background-position-y: -832px;
 }
-.awoken-27{/*U*/
+.awoken-icon[data-awoken-icon='27']{/*U*/
 	background-position-y: -864px;
 }
-.awoken-28{/*SX*/
+.awoken-icon[data-awoken-icon='28']{/*SX*/
 	background-position-y: -896px;
 }
-.awoken-29{/*心+*/
+.awoken-icon[data-awoken-icon='29']{/*心+*/
 	background-position-y: -928px;
 }
-.awoken-30{/*协力*/
+.awoken-icon[data-awoken-icon='30']{/*协力*/
 	background-position-y: -960px;
 }
-.awoken-31{/*龙杀*/
+.awoken-icon[data-awoken-icon='31']{/*龙杀*/
 	background-position-y: -992px;
 }
-.awoken-32{/*神杀*/
+.awoken-icon[data-awoken-icon='32']{/*神杀*/
 	background-position-y: -1024px;
 }
-.awoken-33{/*恶魔杀*/
+.awoken-icon[data-awoken-icon='33']{/*恶魔杀*/
 	background-position-y: -1056px;
 }
-.awoken-34{/*机杀*/
+.awoken-icon[data-awoken-icon='34']{/*机杀*/
 	background-position-y: -1088px;
 }
-.awoken-35{/*平衡杀*/
+.awoken-icon[data-awoken-icon='35']{/*平衡杀*/
 	background-position-y: -1120px;
 }
-.awoken-36{/*攻击杀*/
+.awoken-icon[data-awoken-icon='36']{/*攻击杀*/
 	background-position-y: -1152px;
 }
-.awoken-37{/*体力杀*/
+.awoken-icon[data-awoken-icon='37']{/*体力杀*/
 	background-position-y: -1184px;
 }
-.awoken-38{/*回复杀*/
+.awoken-icon[data-awoken-icon='38']{/*回复杀*/
 	background-position-y: -1216px;
 }
-.awoken-39{/*进化杀*/
+.awoken-icon[data-awoken-icon='39']{/*进化杀*/
 	background-position-y: -1248px;
 }
-.awoken-40{/*觉醒杀*/
+.awoken-icon[data-awoken-icon='40']{/*觉醒杀*/
 	background-position-y: -1280px;
 }
-.awoken-41{/*强化杀*/
+.awoken-icon[data-awoken-icon='41']{/*强化杀*/
 	background-position-y: -1312px;
 }
-.awoken-42{/*卖钱杀*/
+.awoken-icon[data-awoken-icon='42']{/*卖钱杀*/
 	background-position-y: -1344px;
 }
-.awoken-43{/*7c*/
+.awoken-icon[data-awoken-icon='43']{/*7c*/
 	background-position-y: -1376px;
 }
-.awoken-44{/*5色破防*/
+.awoken-icon[data-awoken-icon='44']{/*5色破防*/
 	background-position-y: -1408px;
 }
-.awoken-45{/*心追*/
+.awoken-icon[data-awoken-icon='45']{/*心追*/
 	background-position-y: -1440px;
 }
-.awoken-46{/*全体HP*/
+.awoken-icon[data-awoken-icon='46']{/*全体HP*/
 	background-position-y: -1472px;
 }
-.awoken-47{/*全体回复*/
+.awoken-icon[data-awoken-icon='47']{/*全体回复*/
 	background-position-y: -1504px;
 }
-.awoken-48{/*破无效*/
+.awoken-icon[data-awoken-icon='48']{/*破无效*/
 	background-position-y: -1536px;
 }
-.awoken-49{/*武器觉醒*/
+.awoken-icon[data-awoken-icon='49']{/*武器觉醒*/
 	background-position-y: -1568px;
 }
-.awoken-50{/*方块心追*/
+.awoken-icon[data-awoken-icon='50']{/*方块心追*/
 	background-position-y: -1600px;
 }
-.awoken-51{/*5色溜*/
+.awoken-icon[data-awoken-icon='51']{/*5色溜*/
 	background-position-y: -1632px;
 }
-.awoken-52{/*大防封*/
+.awoken-icon[data-awoken-icon='52']{/*大防封*/
 	background-position-y: -1664px;
 }
-.awoken-53{/*大手指*/
+.awoken-icon[data-awoken-icon='53']{/*大手指*/
 	background-position-y: -1696px;
 }
-.awoken-54{/*防云*/
+.awoken-icon[data-awoken-icon='54']{/*防云*/
 	background-position-y: -1728px;
 }
-.awoken-55{/*防封条*/
+.awoken-icon[data-awoken-icon='55']{/*防封条*/
 	background-position-y: -1760px;
 }
-.awoken-56{/*大SB*/
+.awoken-icon[data-awoken-icon='56']{/*大SB*/
 	background-position-y: -1792px;
 }
-.awoken-57{/*满血强化*/
+.awoken-icon[data-awoken-icon='57']{/*满血强化*/
 	background-position-y: -1824px;
 }
-.awoken-58{/*下半血强化*/
+.awoken-icon[data-awoken-icon='58']{/*下半血强化*/
 	background-position-y: -1856px;
 }
-.awoken-59{/*L盾*/
+.awoken-icon[data-awoken-icon='59']{/*L盾*/
 	background-position-y: -1888px;
 }
-.awoken-60{/*L解锁*/
+.awoken-icon[data-awoken-icon='60']{/*L解锁*/
 	background-position-y: -1920px;
 }
-.awoken-61{/*10c*/
+.awoken-icon[data-awoken-icon='61']{/*10c*/
 	background-position-y: -1952px;
 }
-.awoken-62{/*c珠*/
+.awoken-icon[data-awoken-icon='62']{/*c珠*/
 	background-position-y: -1984px;
 }
-.awoken-63{/*语音*/
+.awoken-icon[data-awoken-icon='63']{/*语音*/
 	background-position-y: -2016px;
 }
-.awoken-64{/*奖励增加*/
+.awoken-icon[data-awoken-icon='64']{/*奖励增加*/
 	background-position-y: -2048px;
 }
-.awoken-65{/*HP-*/
+.awoken-icon[data-awoken-icon='65']{/*HP-*/
 	background-position-y: -2080px;
 }
-.awoken-66{/*攻击-*/
+.awoken-icon[data-awoken-icon='66']{/*攻击-*/
 	background-position-y: -2112px;
 }
-.awoken-67{/*回复-*/
+.awoken-icon[data-awoken-icon='67']{/*回复-*/
 	background-position-y: -2144px;
 }
-.awoken-68{/*大防暗*/
+.awoken-icon[data-awoken-icon='68']{/*大防暗*/
 	background-position-y: -2176px;
 }
-.awoken-69{/*大防废*/
+.awoken-icon[data-awoken-icon='69']{/*大防废*/
 	background-position-y: -2208px;
 }
-.awoken-70{/*大防毒*/
+.awoken-icon[data-awoken-icon='70']{/*大防毒*/
 	background-position-y: -2240px;
 }
-.awoken-71{/*掉废*/
+.awoken-icon[data-awoken-icon='71']{/*掉废*/
 	background-position-y: -2272px;
 }
-.awoken-72{/*掉毒*/
+.awoken-icon[data-awoken-icon='72']{/*掉毒*/
 	background-position-y: -2304px;
 }
 /*类型*/
