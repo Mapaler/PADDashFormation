@@ -1656,9 +1656,9 @@ function changeid(mon,monDom,latentDom)
 	{
 		if (mon.sawoken != undefined && mon.sawoken>=0 && card.superAwakenings.length)
 		{
-			const sawokenIcon = sawoken.querySelector(".awoken-icon");
 			sawoken.classList.remove("display-none");
-			sawokenIcon.className = "awoken-icon awoken-" + card.superAwakenings[mon.sawoken];
+			const sawokenIcon = sawoken.querySelector(".awoken-icon");
+			sawokenIcon.setAttribute("data-awoken-icon",card.superAwakenings[mon.sawoken]);
 		}else
 		{
 			sawoken.classList.add("display-none");
@@ -1778,10 +1778,10 @@ function editMon(teamNum,isAssist,indexInTeam)
 	monstersID.value = mon.id > 0 ? mon.id : 0;
 	monstersID.onchange();
 	//觉醒
-	const monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul .awoken-number");
+	const monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul input[name='awoken-number']");
 	//if (mon.awoken > 0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下，为了减少计算次数，把这一条移动到了最后面
 	//超觉醒
-	const monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul .sawoken-choice"); //单选框，0号是隐藏的
+	const monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul input[name='sawoken-choice']"); //单选框，0号是隐藏的
 	monEditSAwokens[(mon.sawoken >= 0 && monEditSAwokens[mon.sawoken+1]) ? mon.sawoken+1 : 0].checked = true;
 
 	const monEditLv = settingBox.querySelector(".row-mon-level .m-level");
@@ -1922,22 +1922,28 @@ function editBoxChangeMonId(id)
 		}
 	}
 
-	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
-	const mAwoken = monEditAwokensRow.querySelectorAll(".awoken-ul .awoken-icon");
-	for (let ai=1;ai<mAwoken.length;ai++)
+	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken .awoken-ul");
+	const mAwokenIcon = monEditAwokensRow.querySelectorAll(".awoken-icon");
+	const mAwokenIpt = monEditAwokensRow.querySelectorAll("input[name='awoken-number']");
+	if (card.canAssist)
 	{
-		if (ai<=card.awakenings.length)
+		monEditAwokensRow.classList.add("allowable-assist");
+	}else
+	{
+		monEditAwokensRow.classList.remove("allowable-assist");
+	}
+	for (let ai=0;ai<mAwokenIcon.length;ai++)
+	{
+		if (ai<card.awakenings.length)
 		{
-			mAwoken[ai].className = mAwoken[ai].className.replace(/awoken\-\d+/g,'');
-			mAwoken[ai].classList.add(`awoken-${card.awakenings[ai-1]}`);
-			mAwoken[ai].classList.remove(`display-none`);
+			mAwokenIcon[ai].setAttribute("data-awoken-icon",card.awakenings[ai]);
+			mAwokenIcon[ai].classList.remove(`display-none`);
 		}else
 		{
-			mAwoken[ai].classList.add(`display-none`);
-			mAwoken[ai].className = mAwoken[ai].className.replace(/awoken\-\d+/g,'');
+			mAwokenIcon[ai].classList.add(`display-none`);
 		}
 	}
-	mAwoken[card.awakenings.length].click(); //选择最后一个觉醒
+	mAwokenIpt[card.awakenings.length].click(); //选择最后一个觉醒
 
 	//超觉醒
 	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
@@ -1948,14 +1954,12 @@ function editBoxChangeMonId(id)
 		{
 			if (ai < card.superAwakenings.length)
 			{
-				mSAwoken[ai].className = mSAwoken[ai].className.replace(/awoken\-\d+/g,'');
-				mSAwoken[ai].classList.add(`awoken-${card.superAwakenings[ai]}`);
+				mSAwoken[ai].setAttribute("data-awoken-icon",card.superAwakenings[ai]);
 				mSAwoken[ai].classList.remove(`display-none`);
 			}
 			else
 			{
 				mSAwoken[ai].classList.add(`display-none`);
-				mSAwoken[ai].className = mSAwoken[ai].className.replace(/awoken\-\d+/g,'');
 			}
 		}
 		monEditSAwokensRow.classList.remove("display-none");
@@ -2152,7 +2156,7 @@ function refreshTeamAwokenCount(awokenDom,team){
 	}
 	for (let ai=1;ai<=72;ai++)
 	{
-		const aicon = awokenUL.querySelector(".awoken-" + ai);
+		const aicon = awokenUL.querySelector(`.awoken-icon[data-awoken-icon='${ai}']`);
 		if (!aicon) continue; //如果没有这个觉醒图，直接跳过
 		//搜索等效觉醒
 		const equalIndex = equivalent_awoken.findIndex(eak=>eak.small === ai || eak.big === ai);
@@ -2192,7 +2196,7 @@ function refreshFormationAwokenCount(awokenDom,teams){
 	
 	for (let ai=1;ai<=72;ai++)
 	{
-		const aicon = awokenUL.querySelector(".awoken-" + ai);
+		const aicon = awokenUL.querySelector(`.awoken-icon[data-awoken-icon='${ai}']`);
 		if (!aicon) continue; //如果没有这个觉醒图，直接跳过
 		//搜索等效觉醒
 		const equalIndex = equivalent_awoken.findIndex(eak=>eak.small === ai || eak.big === ai);

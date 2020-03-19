@@ -249,7 +249,9 @@ ul{
 	display:none;
 }
 /*怪物-觉醒*/
-.monster .awoken-count{
+.monster .awoken-count,
+.row-mon-awoken .awoken-count
+{
 	color: yellow;
 	text-shadow: black 0 0 4px;
 	text-align: center;
@@ -257,28 +259,33 @@ ul{
 	background-repeat: no-repeat;
 	width: 34px;
 	height: 38px;
+}
+.monster .awoken-count{
 	position: absolute;
 	top: -4px;
 	right: 0;
 	transform: scale(0.75) translateX(4px);
 }
 .monster .awoken-count,
-.monster .awoken-count.full-awoken::before{
+.monster .awoken-count.full-awoken::before,
+.row-mon-awoken .awoken-count,
+.row-mon-awoken .awoken-count.full-awoken::before
+{
 	font-size: 20px;
 	line-height: 28px;
 }
-.monster .awoken-count.full-awoken{
+.awoken-count.full-awoken{
 	font-size: 0;
 }
-.monster .awoken-count.full-awoken::before{
+.awoken-count.full-awoken::before{
 	content: "★";
 }
-.monster.allowable-assist .awoken-count.full-awoken{
+.allowable-assist .awoken-count.full-awoken{
 	font-size: 0;
 	text-shadow: none;
-	background-position: 0 -38px;
+	background-position-y: -38px;
 }
-.monster.allowable-assist .awoken-count.full-awoken::before{
+.allowable-assist .awoken-count.full-awoken::before{
 	content: none;
 }
 /*武器*/
@@ -1033,25 +1040,30 @@ ul{
 	font-size: 0;
 	height: 32px;
 }
-.edit-box .awoken-ul .awoken-icon{
-	cursor: pointer;
-}
-.row-mon-awoken .awoken-count,
-.row-mon-awoken .awoken-count.full-awoken::before
+.edit-box .awoken-ul .awoken-icon,
+.edit-box .awoken-count
 {
-	color: yellow;
-	font-size: 22px;
-	line-height: 28px;
-	font-weight: bold;
-	text-shadow: black 0 0 4px;
-	text-align: center;
+	cursor: pointer;
 }
 .row-mon-awoken .awoken-count.full-awoken{
 	font-size: 0;
 }
-.row-mon-awoken .awoken-count.full-awoken::before{
-	content: "★";
+.row-mon-awoken .awoken-count,
+.row-mon-awoken .awoken-count.full-awoken::before
+{
+	font-size: 22px;
+	line-height: 28px;
 }
+.row-mon-awoken .awoken-count{
+	transform: scale(0.84) translateY(-2px);
+}
+.row-mon-awoken .awoken-count,
+.row-mon-awoken .awoken-icon
+{
+	vertical-align: top;
+}
+
+
 /*选中的觉醒后面部分半透明，前面的不透明*/
 .row-mon-awoken .awoken-number{display:none;}
 .row-mon-awoken .awoken-number:checked~label
@@ -1073,10 +1085,10 @@ ul{
 .row-mon-awoken .awoken-icon,
 .row-mon-super-awoken .awoken-icon
 {
-	margin-left: 5px;
+	margin-right: 5px;
 }
-.row-mon-awoken .awoken-icon:first-of-type,
-.row-mon-super-awoken .awoken-icon:first-of-type
+.row-mon-awoken .awoken-icon:last-of-type,
+.row-mon-super-awoken .awoken-icon:last-of-type
 {
 	margin-left: unset;
 }
