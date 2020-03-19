@@ -1,26 +1,26 @@
 ﻿var languageList = [
     {
         name:"English",i18n:"en",searchlist:["en","ja"],
-        guideURL:"http://www.puzzledragonx.com/en/monster.asp?n=$1"
+        guideURL:id=>`http://www.puzzledragonx.com/en/monster.asp?n=${id}` //or (id,name)=>`http://www.puzzledragonx.com/en/search.asp?q=${name}`
     },
     {
         name:"中文（繁體）",i18n:"zh-TW",searchlist:["cht","ja"],
-        guideURL:"http://pad.skyozora.com/pets/$1"
+        guideURL:id=>`http://pad.skyozora.com/pets/${id}`
     },
     {
         name:"中文（简体）技能解析",i18n:"zh-CN",searchlist:["chs","ja"],
-        guideURL:"http://pad.skyozora.com/pets/$1"
+        guideURL:id=>`http://pad.skyozora.com/pets/${id}`
     },
     {
         name:"中文（简体）原版技能",i18n:"zh",searchlist:["chs","ja"],
-        guideURL:"http://pad.skyozora.com/pets/$1"
+        guideURL:id=>`http://pad.skyozora.com/pets/${id}`
     },
     {
         name:"日本語",i18n:"ja",searchlist:["ja"],
-        guideURL:"https://pd.appbank.net/m$1" //or https://altema.jp/pazudora/monster/$1
+        guideURL:id=>`https://pd.appbank.net/m${id}` //or id=>`https://pd.appbank.net/m${id}`
     },
     {
         name:"한국어",i18n:"ko",searchlist:["ko","ja"],
-        guideURL:"http://www.thisisgame.com/pad/info/monster/detail.php?code=$1"
+        guideURL:id=>`http://www.thisisgame.com/pad/info/monster/detail.php?code=${id}`
     },
 ];
