@@ -38,9 +38,9 @@ var formation = new Formation(teamsCount,5);
 			<a class="help-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/blob/master/help.md"></a>
 		</div>
 		<div>
-			<input type="checkbox" name="show-mon-id" class="config-checkbox-ipt" id="show-mon-id" onclick="toggleShowMonId();" checked><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" name="btn-show-mon-skill-cd" class="config-checkbox-ipt" id="btn-show-mon-skill-cd" onclick="toggleShowMonSkillCd();"><label class="config-checkbox-lbl btn-show-mon-skill-cd-lbl" for="btn-show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" name="change-swap-to-copy" class="config-checkbox-ipt" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"><div class="config-checkbox-lbl-cicle"></div></label>
+			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-id" id="show-mon-id" onclick="toggleDomClassName(this,'not-show-mon-id',false);" checked><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
+			<input type="checkbox" class="config-checkbox-ipt" name="btn-show-mon-skill-cd" id="btn-show-mon-skill-cd" onclick="toggleDomClassName(this,'show-mon-skill-cd');"><label class="config-checkbox-lbl btn-show-mon-skill-cd-lbl" for="btn-show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
+			<input type="checkbox" class="config-checkbox-ipt" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"><div class="config-checkbox-lbl-cicle"></div></label>
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
 	</div>
@@ -458,29 +458,29 @@ var formation = new Formation(teamsCount,5);
 					<li><input type="radio" name="attr-2" class="attr-radio" value="4" id="search-attr-2-4" /><label class="attr-t4" for="search-attr-2-4"><!--暗--></label></li>
 					<li><input type="radio" name="attr-2" class="attr-radio" value="-1" id="search-attr-2-none" /><label class="attr-none" for="search-attr-2-none"><!--无--></label></li>
 				</ul>
-				<input type="checkbox" name="fix-main-color" class="config-checkbox-ipt" id="fix-main-color" checked><label class="config-checkbox-lbl fix-main-color-label" for="fix-main-color"><div class="config-checkbox-lbl-cicle"></div></label>
+				<input type="checkbox" class="config-checkbox-ipt" name="fix-main-color" id="fix-main-color" checked><label class="config-checkbox-lbl fix-main-color-label" for="fix-main-color"><div class="config-checkbox-lbl-cicle"></div></label>
 			</div>
 			<div class="types-div"><!--类型-->
 				<ul class="type-list">
-					<li><input type="checkbox" name="types" class="type-check" value="4" id="search-type-4" /><label class="type-icon" data-type-icon="4" for="search-type-4"><!--龍--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="5" id="search-type-5" /><label class="type-icon" data-type-icon="5" for="search-type-5"><!--神--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="7" id="search-type-7" /><label class="type-icon" data-type-icon="7" for="search-type-7"><!--惡魔--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="8" id="search-type-8" /><label class="type-icon" data-type-icon="8" for="search-type-8"><!--机械--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="1" id="search-type-1" /><label class="type-icon" data-type-icon="1" for="search-type-1"><!--平衡--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="6" id="search-type-6" /><label class="type-icon" data-type-icon="6" for="search-type-6"><!--攻撃--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="2" id="search-type-2" /><label class="type-icon" data-type-icon="2" for="search-type-2"><!--体力--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="3" id="search-type-3" /><label class="type-icon" data-type-icon="3" for="search-type-3"><!--回復--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="0" id="search-type-0" /><label class="type-icon" data-type-icon="0" for="search-type-0"><!--進化用--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="12" id="search-type-12" /><label class="type-icon" data-type-icon="12" for="search-type-12"><!--能力覺醒用--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="14" id="search-type-14" /><label class="type-icon" data-type-icon="14" for="search-type-14"><!--強化合成用--></label></li>
-					<li><input type="checkbox" name="types" class="type-check" value="15" id="search-type-15" /><label class="type-icon" data-type-icon="15" for="search-type-15"><!--販賣用--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="4" id="search-type-4" /><label class="type-icon" data-type-icon="4" for="search-type-4"><!--龍--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="5" id="search-type-5" /><label class="type-icon" data-type-icon="5" for="search-type-5"><!--神--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="7" id="search-type-7" /><label class="type-icon" data-type-icon="7" for="search-type-7"><!--惡魔--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="8" id="search-type-8" /><label class="type-icon" data-type-icon="8" for="search-type-8"><!--机械--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="1" id="search-type-1" /><label class="type-icon" data-type-icon="1" for="search-type-1"><!--平衡--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="6" id="search-type-6" /><label class="type-icon" data-type-icon="6" for="search-type-6"><!--攻撃--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="2" id="search-type-2" /><label class="type-icon" data-type-icon="2" for="search-type-2"><!--体力--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="3" id="search-type-3" /><label class="type-icon" data-type-icon="3" for="search-type-3"><!--回復--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="0" id="search-type-0" /><label class="type-icon" data-type-icon="0" for="search-type-0"><!--進化用--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="12" id="search-type-12" /><label class="type-icon" data-type-icon="12" for="search-type-12"><!--能力覺醒用--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="14" id="search-type-14" /><label class="type-icon" data-type-icon="14" for="search-type-14"><!--強化合成用--></label></li>
+					<li><input type="checkbox" class="type-check" name="types" value="15" id="search-type-15" /><label class="type-icon" data-type-icon="15" for="search-type-15"><!--販賣用--></label></li>
 				</ul>
 			</div>
 			<div class="awoken-div"><!--觉醒-->
 				<button class="awoken-clear" ></button>
 				<div>
-					<input type="checkbox" name="consider-equivalent-awoken" class="config-checkbox-ipt" id="consider-equivalent-awoken" checked><label class="config-checkbox-lbl consider-equivalent-awoken-label" for="consider-equivalent-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" name="include-super-awoken" class="config-checkbox-ipt" id="include-super-awoken"><label class="config-checkbox-lbl include-super-awoken-label" for="include-super-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" class="config-checkbox-ipt" name="consider-equivalent-awoken" id="consider-equivalent-awoken" checked><label class="config-checkbox-lbl consider-equivalent-awoken-label" for="consider-equivalent-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" class="config-checkbox-ipt" name="include-super-awoken" id="include-super-awoken"><label class="config-checkbox-lbl include-super-awoken-label" for="include-super-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
 				</div>
 				<ul class="awoken-ul">
 					<li class="awoken-count zero"><button class="awoken-icon" data-awoken-icon="43"></button><button class="count">0</button></li><!--7c-->
@@ -560,78 +560,78 @@ var formation = new Formation(teamsCount,5);
 			<div class="sawoken-div"><!--超觉醒-->
 				<button class="sawoken-clear" ></button>
 				<ul class="sawoken-ul">
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="43" id="search-awoken-43" /><label class="awoken-icon" data-awoken-icon="43" for="search-awoken-43"></label></li><!--7c-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="61" id="search-awoken-61" /><label class="awoken-icon" data-awoken-icon="61" for="search-awoken-61"></label></li><!--10c-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="58" id="search-awoken-58" /><label class="awoken-icon" data-awoken-icon="58" for="search-awoken-58"></label></li><!--下半血强化-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="48" id="search-awoken-48" /><label class="awoken-icon" data-awoken-icon="48" for="search-awoken-48"></label></li><!--破无效-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="45" id="search-awoken-45" /><label class="awoken-icon" data-awoken-icon="45" for="search-awoken-45"></label></li><!--心追-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="52" id="search-awoken-52" /><label class="awoken-icon" data-awoken-icon="52" for="search-awoken-52"></label></li><!--大防封-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="68" id="search-awoken-68" /><label class="awoken-icon" data-awoken-icon="68" for="search-awoken-68"></label></li><!--大防暗-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="69" id="search-awoken-69" /><label class="awoken-icon" data-awoken-icon="69" for="search-awoken-69"></label></li><!--大防废-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="70" id="search-awoken-70" /><label class="awoken-icon" data-awoken-icon="70" for="search-awoken-70"></label></li><!--大防毒-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="54" id="search-awoken-54" /><label class="awoken-icon" data-awoken-icon="54" for="search-awoken-54"></label></li><!--防云-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="55" id="search-awoken-55" /><label class="awoken-icon" data-awoken-icon="55" for="search-awoken-55"></label></li><!--防封条-->
-					<!--<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="1" id="search-awoken-1" /><label class="awoken-icon" data-awoken-icon="1" for="search-awoken-1"></label></li>--><!--HP+-->
-					<!--<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="2" id="search-awoken-2" /><label class="awoken-icon" data-awoken-icon="2" for="search-awoken-2"></label></li>--><!--攻击+-->
-					<!--<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="3" id="search-awoken-3" /><label class="awoken-icon" data-awoken-icon="3" for="search-awoken-3"></label></li>--><!--回复+-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="4" id="search-awoken-4" /><label class="awoken-icon" data-awoken-icon="4" for="search-awoken-4"></label></li><!--火盾-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="5" id="search-awoken-5" /><label class="awoken-icon" data-awoken-icon="5" for="search-awoken-5"></label></li><!--水盾-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="6" id="search-awoken-6" /><label class="awoken-icon" data-awoken-icon="6" for="search-awoken-6"></label></li><!--木盾-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="7" id="search-awoken-7" /><label class="awoken-icon" data-awoken-icon="7" for="search-awoken-7"></label></li><!--光盾-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="8" id="search-awoken-8" /><label class="awoken-icon" data-awoken-icon="8" for="search-awoken-8"></label></li><!--暗盾-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="9" id="search-awoken-9" /><label class="awoken-icon" data-awoken-icon="9" for="search-awoken-9"></label></li><!--自回-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="10" id="search-awoken-10" /><label class="awoken-icon" data-awoken-icon="10" for="search-awoken-10"></label></li><!--防封-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="11" id="search-awoken-11" /><label class="awoken-icon" data-awoken-icon="11" for="search-awoken-11"></label></li><!--防暗-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="12" id="search-awoken-12" /><label class="awoken-icon" data-awoken-icon="12" for="search-awoken-12"></label></li><!--防废-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="13" id="search-awoken-13" /><label class="awoken-icon" data-awoken-icon="13" for="search-awoken-13"></label></li><!--防毒-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="14" id="search-awoken-14" /><label class="awoken-icon" data-awoken-icon="14" for="search-awoken-14"></label></li><!--火+-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="15" id="search-awoken-15" /><label class="awoken-icon" data-awoken-icon="15" for="search-awoken-15"></label></li><!--水+-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="16" id="search-awoken-16" /><label class="awoken-icon" data-awoken-icon="16" for="search-awoken-16"></label></li><!--木+-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="17" id="search-awoken-17" /><label class="awoken-icon" data-awoken-icon="17" for="search-awoken-17"></label></li><!--光+-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="18" id="search-awoken-18" /><label class="awoken-icon" data-awoken-icon="18" for="search-awoken-18"></label></li><!--暗+-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="19" id="search-awoken-19" /><label class="awoken-icon" data-awoken-icon="19" for="search-awoken-19"></label></li><!--手指-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="20" id="search-awoken-20" /><label class="awoken-icon" data-awoken-icon="20" for="search-awoken-20"></label></li><!--心解-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="21" id="search-awoken-21" /><label class="awoken-icon" data-awoken-icon="21" for="search-awoken-21"></label></li><!--SB-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="22" id="search-awoken-22" /><label class="awoken-icon" data-awoken-icon="22" for="search-awoken-22"></label></li><!--火横-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="23" id="search-awoken-23" /><label class="awoken-icon" data-awoken-icon="23" for="search-awoken-23"></label></li><!--水横-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="24" id="search-awoken-24" /><label class="awoken-icon" data-awoken-icon="24" for="search-awoken-24"></label></li><!--木横-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="25" id="search-awoken-25" /><label class="awoken-icon" data-awoken-icon="25" for="search-awoken-25"></label></li><!--光横-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="26" id="search-awoken-26" /><label class="awoken-icon" data-awoken-icon="26" for="search-awoken-26"></label></li><!--暗横-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="27" id="search-awoken-27" /><label class="awoken-icon" data-awoken-icon="27" for="search-awoken-27"></label></li><!--U-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="28" id="search-awoken-28" /><label class="awoken-icon" data-awoken-icon="28" for="search-awoken-28"></label></li><!--SX-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="29" id="search-awoken-29" /><label class="awoken-icon" data-awoken-icon="29" for="search-awoken-29"></label></li><!--心+-->
-					<!--<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="30" id="search-awoken-30" /><label class="awoken-icon" data-awoken-icon="30" for="search-awoken-30"></label></li>--><!--协力-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="31" id="search-awoken-31" /><label class="awoken-icon" data-awoken-icon="31" for="search-awoken-31"></label></li><!--龙杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="32" id="search-awoken-32" /><label class="awoken-icon" data-awoken-icon="32" for="search-awoken-32"></label></li><!--神杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="33" id="search-awoken-33" /><label class="awoken-icon" data-awoken-icon="33" for="search-awoken-33"></label></li><!--恶魔杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="34" id="search-awoken-34" /><label class="awoken-icon" data-awoken-icon="34" for="search-awoken-34"></label></li><!--机杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="35" id="search-awoken-35" /><label class="awoken-icon" data-awoken-icon="35" for="search-awoken-35"></label></li><!--平衡杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="36" id="search-awoken-36" /><label class="awoken-icon" data-awoken-icon="36" for="search-awoken-36"></label></li><!--攻击杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="37" id="search-awoken-37" /><label class="awoken-icon" data-awoken-icon="37" for="search-awoken-37"></label></li><!--体力杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="38" id="search-awoken-38" /><label class="awoken-icon" data-awoken-icon="38" for="search-awoken-38"></label></li><!--回复杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="39" id="search-awoken-39" /><label class="awoken-icon" data-awoken-icon="39" for="search-awoken-39"></label></li><!--进化杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="40" id="search-awoken-40" /><label class="awoken-icon" data-awoken-icon="40" for="search-awoken-40"></label></li><!--觉醒杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="41" id="search-awoken-41" /><label class="awoken-icon" data-awoken-icon="41" for="search-awoken-41"></label></li><!--强化杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="42" id="search-awoken-42" /><label class="awoken-icon" data-awoken-icon="42" for="search-awoken-42"></label></li><!--卖钱杀-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="44" id="search-awoken-44" /><label class="awoken-icon" data-awoken-icon="44" for="search-awoken-44"></label></li><!--5色破防-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="46" id="search-awoken-46" /><label class="awoken-icon" data-awoken-icon="46" for="search-awoken-46"></label></li><!--全体HP-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="47" id="search-awoken-47" /><label class="awoken-icon" data-awoken-icon="47" for="search-awoken-47"></label></li><!--全体回复-->
-					<!--<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="49" id="search-awoken-49" /><label class="awoken-icon" data-awoken-icon="49" for="search-awoken-49"></label></li>--><!--武器觉醒-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="50" id="search-awoken-50" /><label class="awoken-icon" data-awoken-icon="50" for="search-awoken-50"></label></li><!--方块心追-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="51" id="search-awoken-51" /><label class="awoken-icon" data-awoken-icon="51" for="search-awoken-51"></label></li><!--5色溜-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="53" id="search-awoken-53" /><label class="awoken-icon" data-awoken-icon="53" for="search-awoken-53"></label></li><!--大手指-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="56" id="search-awoken-56" /><label class="awoken-icon" data-awoken-icon="56" for="search-awoken-56"></label></li><!--大SB-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="57" id="search-awoken-57" /><label class="awoken-icon" data-awoken-icon="57" for="search-awoken-57"></label></li><!--满血强化-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="59" id="search-awoken-59" /><label class="awoken-icon" data-awoken-icon="59" for="search-awoken-59"></label></li><!--L盾-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="60" id="search-awoken-60" /><label class="awoken-icon" data-awoken-icon="60" for="search-awoken-60"></label></li><!--L解锁-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="62" id="search-awoken-62" /><label class="awoken-icon" data-awoken-icon="62" for="search-awoken-62"></label></li><!--c珠-->
-					<!--<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="63" id="search-awoken-63" /><label class="awoken-icon" data-awoken-icon="63" for="search-awoken-63"></label></li>--><!--语音-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="64" id="search-awoken-64" /><label class="awoken-icon" data-awoken-icon="64" for="search-awoken-64"></label></li><!--奖励增加-->
-					<!--<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="65" id="search-awoken-65" /><label class="awoken-icon" data-awoken-icon="65" for="search-awoken-65"></label></li>--><!--HP- -->
-					<!--<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="66" id="search-awoken-66" /><label class="awoken-icon" data-awoken-icon="66" for="search-awoken-66"></label></li>--><!--攻击- -->
-					<!--<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="67" id="search-awoken-67" /><label class="awoken-icon" data-awoken-icon="67" for="search-awoken-67"></label></li>--><!--回复- -->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="71" id="search-awoken-71" /><label class="awoken-icon" data-awoken-icon="71" for="search-awoken-71"></label></li><!--掉废-->
-					<li class="awoken-count"><input type="checkbox" name="types" class="sawoken-check" value="72" id="search-awoken-72" /><label class="awoken-icon" data-awoken-icon="72" for="search-awoken-72"></label></li><!--掉毒-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="43" id="search-awoken-43" /><label class="awoken-icon" data-awoken-icon="43" for="search-awoken-43"></label></li><!--7c-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="61" id="search-awoken-61" /><label class="awoken-icon" data-awoken-icon="61" for="search-awoken-61"></label></li><!--10c-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="58" id="search-awoken-58" /><label class="awoken-icon" data-awoken-icon="58" for="search-awoken-58"></label></li><!--下半血强化-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="48" id="search-awoken-48" /><label class="awoken-icon" data-awoken-icon="48" for="search-awoken-48"></label></li><!--破无效-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="45" id="search-awoken-45" /><label class="awoken-icon" data-awoken-icon="45" for="search-awoken-45"></label></li><!--心追-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="52" id="search-awoken-52" /><label class="awoken-icon" data-awoken-icon="52" for="search-awoken-52"></label></li><!--大防封-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="68" id="search-awoken-68" /><label class="awoken-icon" data-awoken-icon="68" for="search-awoken-68"></label></li><!--大防暗-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="69" id="search-awoken-69" /><label class="awoken-icon" data-awoken-icon="69" for="search-awoken-69"></label></li><!--大防废-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="70" id="search-awoken-70" /><label class="awoken-icon" data-awoken-icon="70" for="search-awoken-70"></label></li><!--大防毒-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="54" id="search-awoken-54" /><label class="awoken-icon" data-awoken-icon="54" for="search-awoken-54"></label></li><!--防云-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="55" id="search-awoken-55" /><label class="awoken-icon" data-awoken-icon="55" for="search-awoken-55"></label></li><!--防封条-->
+					<!--<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="1" id="search-awoken-1" /><label class="awoken-icon" data-awoken-icon="1" for="search-awoken-1"></label></li>--><!--HP+-->
+					<!--<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="2" id="search-awoken-2" /><label class="awoken-icon" data-awoken-icon="2" for="search-awoken-2"></label></li>--><!--攻击+-->
+					<!--<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="3" id="search-awoken-3" /><label class="awoken-icon" data-awoken-icon="3" for="search-awoken-3"></label></li>--><!--回复+-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="4" id="search-awoken-4" /><label class="awoken-icon" data-awoken-icon="4" for="search-awoken-4"></label></li><!--火盾-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="5" id="search-awoken-5" /><label class="awoken-icon" data-awoken-icon="5" for="search-awoken-5"></label></li><!--水盾-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="6" id="search-awoken-6" /><label class="awoken-icon" data-awoken-icon="6" for="search-awoken-6"></label></li><!--木盾-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="7" id="search-awoken-7" /><label class="awoken-icon" data-awoken-icon="7" for="search-awoken-7"></label></li><!--光盾-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="8" id="search-awoken-8" /><label class="awoken-icon" data-awoken-icon="8" for="search-awoken-8"></label></li><!--暗盾-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="9" id="search-awoken-9" /><label class="awoken-icon" data-awoken-icon="9" for="search-awoken-9"></label></li><!--自回-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="10" id="search-awoken-10" /><label class="awoken-icon" data-awoken-icon="10" for="search-awoken-10"></label></li><!--防封-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="11" id="search-awoken-11" /><label class="awoken-icon" data-awoken-icon="11" for="search-awoken-11"></label></li><!--防暗-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="12" id="search-awoken-12" /><label class="awoken-icon" data-awoken-icon="12" for="search-awoken-12"></label></li><!--防废-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="13" id="search-awoken-13" /><label class="awoken-icon" data-awoken-icon="13" for="search-awoken-13"></label></li><!--防毒-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="14" id="search-awoken-14" /><label class="awoken-icon" data-awoken-icon="14" for="search-awoken-14"></label></li><!--火+-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="15" id="search-awoken-15" /><label class="awoken-icon" data-awoken-icon="15" for="search-awoken-15"></label></li><!--水+-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="16" id="search-awoken-16" /><label class="awoken-icon" data-awoken-icon="16" for="search-awoken-16"></label></li><!--木+-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="17" id="search-awoken-17" /><label class="awoken-icon" data-awoken-icon="17" for="search-awoken-17"></label></li><!--光+-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="18" id="search-awoken-18" /><label class="awoken-icon" data-awoken-icon="18" for="search-awoken-18"></label></li><!--暗+-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="19" id="search-awoken-19" /><label class="awoken-icon" data-awoken-icon="19" for="search-awoken-19"></label></li><!--手指-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="20" id="search-awoken-20" /><label class="awoken-icon" data-awoken-icon="20" for="search-awoken-20"></label></li><!--心解-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="21" id="search-awoken-21" /><label class="awoken-icon" data-awoken-icon="21" for="search-awoken-21"></label></li><!--SB-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="22" id="search-awoken-22" /><label class="awoken-icon" data-awoken-icon="22" for="search-awoken-22"></label></li><!--火横-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="23" id="search-awoken-23" /><label class="awoken-icon" data-awoken-icon="23" for="search-awoken-23"></label></li><!--水横-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="24" id="search-awoken-24" /><label class="awoken-icon" data-awoken-icon="24" for="search-awoken-24"></label></li><!--木横-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="25" id="search-awoken-25" /><label class="awoken-icon" data-awoken-icon="25" for="search-awoken-25"></label></li><!--光横-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="26" id="search-awoken-26" /><label class="awoken-icon" data-awoken-icon="26" for="search-awoken-26"></label></li><!--暗横-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="27" id="search-awoken-27" /><label class="awoken-icon" data-awoken-icon="27" for="search-awoken-27"></label></li><!--U-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="28" id="search-awoken-28" /><label class="awoken-icon" data-awoken-icon="28" for="search-awoken-28"></label></li><!--SX-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="29" id="search-awoken-29" /><label class="awoken-icon" data-awoken-icon="29" for="search-awoken-29"></label></li><!--心+-->
+					<!--<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="30" id="search-awoken-30" /><label class="awoken-icon" data-awoken-icon="30" for="search-awoken-30"></label></li>--><!--协力-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="31" id="search-awoken-31" /><label class="awoken-icon" data-awoken-icon="31" for="search-awoken-31"></label></li><!--龙杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="32" id="search-awoken-32" /><label class="awoken-icon" data-awoken-icon="32" for="search-awoken-32"></label></li><!--神杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="33" id="search-awoken-33" /><label class="awoken-icon" data-awoken-icon="33" for="search-awoken-33"></label></li><!--恶魔杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="34" id="search-awoken-34" /><label class="awoken-icon" data-awoken-icon="34" for="search-awoken-34"></label></li><!--机杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="35" id="search-awoken-35" /><label class="awoken-icon" data-awoken-icon="35" for="search-awoken-35"></label></li><!--平衡杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="36" id="search-awoken-36" /><label class="awoken-icon" data-awoken-icon="36" for="search-awoken-36"></label></li><!--攻击杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="37" id="search-awoken-37" /><label class="awoken-icon" data-awoken-icon="37" for="search-awoken-37"></label></li><!--体力杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="38" id="search-awoken-38" /><label class="awoken-icon" data-awoken-icon="38" for="search-awoken-38"></label></li><!--回复杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="39" id="search-awoken-39" /><label class="awoken-icon" data-awoken-icon="39" for="search-awoken-39"></label></li><!--进化杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="40" id="search-awoken-40" /><label class="awoken-icon" data-awoken-icon="40" for="search-awoken-40"></label></li><!--觉醒杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="41" id="search-awoken-41" /><label class="awoken-icon" data-awoken-icon="41" for="search-awoken-41"></label></li><!--强化杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="42" id="search-awoken-42" /><label class="awoken-icon" data-awoken-icon="42" for="search-awoken-42"></label></li><!--卖钱杀-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="44" id="search-awoken-44" /><label class="awoken-icon" data-awoken-icon="44" for="search-awoken-44"></label></li><!--5色破防-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="46" id="search-awoken-46" /><label class="awoken-icon" data-awoken-icon="46" for="search-awoken-46"></label></li><!--全体HP-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="47" id="search-awoken-47" /><label class="awoken-icon" data-awoken-icon="47" for="search-awoken-47"></label></li><!--全体回复-->
+					<!--<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="49" id="search-awoken-49" /><label class="awoken-icon" data-awoken-icon="49" for="search-awoken-49"></label></li>--><!--武器觉醒-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="50" id="search-awoken-50" /><label class="awoken-icon" data-awoken-icon="50" for="search-awoken-50"></label></li><!--方块心追-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="51" id="search-awoken-51" /><label class="awoken-icon" data-awoken-icon="51" for="search-awoken-51"></label></li><!--5色溜-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="53" id="search-awoken-53" /><label class="awoken-icon" data-awoken-icon="53" for="search-awoken-53"></label></li><!--大手指-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="56" id="search-awoken-56" /><label class="awoken-icon" data-awoken-icon="56" for="search-awoken-56"></label></li><!--大SB-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="57" id="search-awoken-57" /><label class="awoken-icon" data-awoken-icon="57" for="search-awoken-57"></label></li><!--满血强化-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="59" id="search-awoken-59" /><label class="awoken-icon" data-awoken-icon="59" for="search-awoken-59"></label></li><!--L盾-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="60" id="search-awoken-60" /><label class="awoken-icon" data-awoken-icon="60" for="search-awoken-60"></label></li><!--L解锁-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="62" id="search-awoken-62" /><label class="awoken-icon" data-awoken-icon="62" for="search-awoken-62"></label></li><!--c珠-->
+					<!--<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="63" id="search-awoken-63" /><label class="awoken-icon" data-awoken-icon="63" for="search-awoken-63"></label></li>--><!--语音-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="64" id="search-awoken-64" /><label class="awoken-icon" data-awoken-icon="64" for="search-awoken-64"></label></li><!--奖励增加-->
+					<!--<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="65" id="search-awoken-65" /><label class="awoken-icon" data-awoken-icon="65" for="search-awoken-65"></label></li>--><!--HP- -->
+					<!--<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="66" id="search-awoken-66" /><label class="awoken-icon" data-awoken-icon="66" for="search-awoken-66"></label></li>--><!--攻击- -->
+					<!--<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="67" id="search-awoken-67" /><label class="awoken-icon" data-awoken-icon="67" for="search-awoken-67"></label></li>--><!--回复- -->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="71" id="search-awoken-71" /><label class="awoken-icon" data-awoken-icon="71" for="search-awoken-71"></label></li><!--掉废-->
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="72" id="search-awoken-72" /><label class="awoken-icon" data-awoken-icon="72" for="search-awoken-72"></label></li><!--掉毒-->
 				</ul>
 			</div>
 			<div class="control-div"><!--控制栏-->
@@ -640,8 +640,8 @@ var formation = new Formation(teamsCount,5);
 				<button class="search-clear"><!--清空搜索条件--></button>
 				<div class="sort-div">
 					<select class="sort-list"></select>
-					<input type="checkbox" name="sort-reverse" class="config-checkbox-ipt" id="sort-reverse"><label class="config-checkbox-lbl sort-reverse-label" for="sort-reverse"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" name="can-assist" class="config-checkbox-ipt" id="can-assist"><label class="config-checkbox-lbl can-assist-label" for="can-assist"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" class="config-checkbox-ipt" name="sort-reverse" id="sort-reverse"><label class="config-checkbox-lbl sort-reverse-label" for="sort-reverse"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" class="config-checkbox-ipt" name="can-assist" id="can-assist"><label class="config-checkbox-lbl can-assist-label" for="can-assist"><div class="config-checkbox-lbl-cicle"></div></label>
 				</div><!--排序栏-->
 			</div>
 			<ul class="search-mon-list"></ul><!--搜索结果的显示列表-->

@@ -225,6 +225,9 @@
 .control-box .btn-show-mon-skill-cd-lbl::after{
 	content:"❄️전체 스킬 쿨을 표시";
 }
+.control-box .btn-show-awoken-count-lbl::after{
+	content:"⚔️각성 통계 및 기능 값 표시";
+}
 .control-box .change-swap-to-copy-lbl::after{
 	content:"드래그할 때 \"바꾸기\"를 \"복사\"로 변경";
 }

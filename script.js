@@ -206,26 +206,17 @@ function getMaxLatentCount(id)
 		return 6;
 	} 
 }
-//切换怪物ID显示
-function toggleShowMonId()
+//切换通用的切换className显示的函数
+function toggleDomClassName(checkBox, className, checkedAdd = true, dom = document.body)
 {
-	if (controlBox.querySelector("#show-mon-id").checked)
+	if (!checkBox) return;
+	const checked = checkBox.checked;
+	if (checked && checkedAdd || !checked && !checkedAdd)
 	{
-		document.body.classList.remove("not-show-mon-id");
+		dom.classList.add(className);
 	}else
 	{
-		document.body.classList.add("not-show-mon-id");
-	}
-}
-//切换怪物技能CD显示
-function toggleShowMonSkillCd()
-{
-	if (controlBox.querySelector("#btn-show-mon-skill-cd").checked)
-	{
-		document.body.classList.add("show-mon-skill-cd");
-	}else
-	{
-		document.body.classList.remove("show-mon-skill-cd");
+		dom.classList.remove(className);
 	}
 }
 //清除数据
@@ -314,8 +305,10 @@ window.onload = function()
 		if (p2 && p2.y != undefined)
 			line.setAttribute("y2",p2.y);
 	};
-	toggleShowMonId();
-	toggleShowMonSkillCd();
+	//设定初始的显示设置
+	toggleDomClassName(controlBox.querySelector("#show-mon-id"),'not-show-mon-id',false);
+	toggleDomClassName(controlBox.querySelector("#btn-show-mon-skill-cd"),'show-mon-skill-cd');
+	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"),'not-show-awoken-count',false);
 
 	formationBox = document.body.querySelector(".formation-box");
 	editBox = document.body.querySelector(".edit-box");

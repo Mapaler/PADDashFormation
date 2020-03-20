@@ -225,6 +225,9 @@
 .control-box .btn-show-mon-skill-cd-lbl::after{
 	content:"❄️フル スキル クールを表示";
 }
+.control-box .btn-show-awoken-count-lbl::after{
+	content:"⚔️総覚醒と能力値の表示";
+}
 .control-box .change-swap-to-copy-lbl::after{
 	content:"ドラッグ時に「スワップ」を「コピー」に変更";
 }

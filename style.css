@@ -369,6 +369,16 @@ ul{
 .show-mon-skill-cd .monster .skill.max-skill{
 	display: block;
 }
+.not-show-awoken-count .formation-box .team-total-info, /*单个队伍血量统计*/
+.not-show-awoken-count .formation-box .team-ability, /*单个队伍三维*/
+.not-show-awoken-count .formation-box .team-awoken /*单个队伍觉醒统计*/
+{
+	display: none;
+}
+.not-show-awoken-count .team-bigbox
+{
+	margin-bottom: unset;
+}
 /*辅助和队伍的每一只框架*/
 .member, .acquisitus-awoken-icon{
 	display: inline-block;

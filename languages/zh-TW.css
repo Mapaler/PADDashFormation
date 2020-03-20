@@ -231,6 +231,9 @@
 .control-box .btn-show-mon-skill-cd-lbl::after{
 	content:"❄️顯示已滿技能冷卻";
 }
+.control-box .btn-show-awoken-count-lbl::after{
+	content:"⚔️顯示覺醒統計和能力值";
+}
 .control-box .change-swap-to-copy-lbl::after{
 	content:"拖拽時使用“複製”而不是“替換”";
 }
