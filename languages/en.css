@@ -232,6 +232,9 @@
 .control-box .btn-show-mon-skill-cd-lbl::after{
 	content:"❄️Show full skill's cooldown";
 }
+.control-box .btn-show-awoken-count-lbl::after{
+	content:"⚔️Show awoken count and ability";
+}
 .control-box .change-swap-to-copy-lbl::after{
 	content:"Change \"Swap\" to \"Copy\" when dragging";
 }
