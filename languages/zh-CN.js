@@ -1323,46 +1323,70 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
+		{name:"所有解封（按解封回合排序）",function:cards=>{
+			const JieFeng_ParamsIndex = type=>type == 179 ? 3 : 0;
+			return cards.filter(card=>{
+				const searchTypeArray = [117,179];
+				const skill = Skills[card.activeSkillId];
+				if (searchTypeArray.includes(skill.type) && skill.params[JieFeng_ParamsIndex(skill.type)])
+					return true;
+				else if (skill.type == 116 || skill.type == 118){
+					const subskills = skill.params.map(id=>Skills[id]);
+					return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && subskill.params[JieFeng_ParamsIndex(subskill.type)]);
+				}
+			}).sort((a,b)=>{
+				const searchTypeArray = [117,179];
+				const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+				let a_pC = 0,b_pC = 0;
+				a_pC = (searchTypeArray.includes(a_s.type)) ?
+					a_s :
+					a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type));
+				b_pC = (searchTypeArray.includes(b_s.type)) ?
+					b_s :
+					b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type));
+				return a_pC.params[JieFeng_ParamsIndex(a_pC.type)] - b_pC.params[JieFeng_ParamsIndex(b_pC.type)];
+			});
+		}},
 		{name:"所有解觉醒（按解觉回合排序）",function:cards=>cards.filter(card=>{
-			const searchType = 117;
+			const searchTypeArray = [117,179];
 			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && skill.params[4])
+			if (searchTypeArray.includes(skill.type) && skill.params[4])
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>{return Skills[id];});
-				return subskills.some(subskill=>{return subskill.type == searchType && subskill.params[4]});
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && subskill.params[4]);
 			}
 		}).sort((a,b)=>{
-			const searchType = 117;
+			const searchTypeArray = [117,179];
 			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
 			let a_pC = 0,b_pC = 0;
-			a_pC = (a_s.type == searchType) ?
+			a_pC = (searchTypeArray.includes(a_s.type)) ?
 				a_s.params[4] :
-				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[4];
-			b_pC = (b_s.type == searchType) ?
+				a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
+			b_pC = (searchTypeArray.includes(b_s.type)) ?
 				b_s.params[4] :
-				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[4];
+				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
 			return a_pC - b_pC;
 		})},
-		{name:"所有解封+觉醒（按解封回合排序）",function:cards=>cards.filter(card=>{
-			const searchType = 117;
+		{name:"所有解封+觉醒（按解觉醒回合排序）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [117,179];
 			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && skill.params[0] && skill.params[4])
+			if (searchTypeArray.includes(skill.type) && skill.params[4] && skill.params[skill.type == 179 ? 3 : 0])
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>{return Skills[id];});
-				return subskills.some(subskill=>{return subskill.type == searchType && subskill.params[0] && subskill.params[4]});
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && subskill.params[4] && subskill.params[skill.type == 179 ? 3 : 0]);
 			}
 		}).sort((a,b)=>{
-			const searchType = 117;
+			const searchTypeArray = [117,179];
 			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
 			let a_pC = 0,b_pC = 0;
-			a_pC = (a_s.type == searchType) ?
-				a_s.params[0] :
-				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			b_pC = (b_s.type == searchType) ?
-				b_s.params[0] :
-				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			a_pC = (searchTypeArray.includes(a_s.type)) ?
+				a_s.params[4] :
+				a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
+			b_pC = (searchTypeArray.includes(b_s.type)) ?
+				b_s.params[4] :
+				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
 			return a_pC - b_pC;
 		})},
 		{name:"所有解锁",function:cards=>cards.filter(card=>{
