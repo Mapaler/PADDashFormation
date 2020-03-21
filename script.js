@@ -869,7 +869,7 @@ function initialize()
 	const sawokenClear = searchBox.querySelector(".sawoken-div .sawoken-clear");
 	awokenClear.onclick = function(){ //清空觉醒选项
 		s_awokensCounts.forEach(t=>{
-			t.innerHTML = 0;
+			t.value = 0;
 		});
 		s_awokensItems.forEach(t=>{
 			t.classList.add("zero");
@@ -973,7 +973,7 @@ function initialize()
 			t.checked = false;
 		});
 		s_awokensCounts.forEach(t=>{
-			t.innerHTML = 0;
+			t.value = 0;
 		});
 		s_awokensItems.forEach(t=>{
 			t.classList.add("zero");

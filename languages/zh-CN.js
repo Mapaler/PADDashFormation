@@ -1927,6 +1927,16 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && subskill.params[3]);
 			}
 		})},
+		{name:"所有十字",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [151,157];
+			const skill = Skills[card.leaderSkillId];
+			if (searchTypeArray.some(t=>skill.type == t))
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
+			}
+		})},
 		{name:"所有76版",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [162,186];
 			const skill = Skills[card.leaderSkillId];
@@ -1945,6 +1955,16 @@ function parseBigNumber(number)
 			else if (skill.type == 138){
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
+			}
+		})},
+		{name:"所有剩珠倍率",function:cards=>cards.filter(card=>{
+			const searchType = 177;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
 		{name:"所有队长技加/减秒（按秒数排序）",function:cards=>cards.filter(card=>{
