@@ -13,6 +13,7 @@ var formationBox; //储存整个formationBox
 var editBox; //储存整个editBox
 var showSearch; //整个程序都可以用的显示搜索函数
 
+const dataStructure = 3; //阵型输出数据的结构版本
 const className_displayNone = "display-none";
 
 //数组去重
@@ -87,6 +88,7 @@ Member.prototype.loadObj = function(m,dataVersion){
 	}
 	if (!(this.plus instanceof Array)) this.plus = [0,0,0]; //如果加值不是数组，则改变
 	this.latent = dataVersion>1 ? m[4] : m.latent;
+	if (this.latent && dataVersion<=2) this.latent = this.latent.map(l=>l>=13?l+3:l); //修复以前自己编的潜觉编号为官方编号
 	if (!(this.latent instanceof Array)) this.latent = []; //如果潜觉不是数组，则改变
 	this.sawoken = dataVersion>1 ? m[5] : m.sawoken;
 	this.skilllevel = m[6] || null;
@@ -165,31 +167,32 @@ var Formation = function(teamCount,memberCount){
 	}
 };
 Formation.prototype.outObj= function(){
-	let obj = {};
+	const obj = {};
 	if (this.title != undefined && this.title.length>0) obj.t = this.title;
 	if (this.detail != undefined && this.detail.length>0) obj.d = this.detail;
-	obj.f = this.teams.map(function(t){
-			return t.map(function(st){
-				return st.map(function(m){
-					return m.outObj();
-				});
-			});
-		});
+	obj.f = this.teams.map(t=>
+		t.map(st=>
+			st.map(m=>
+				m.outObj()
+			)
+		)
+	);
 	if (this.badge != undefined && this.badge>0) obj.b = this.badge; //徽章
+	obj.v = dataStructure;
 	return obj;
 };
 Formation.prototype.loadObj= function(f){
-	const dataVeision = f.f?2:1; //是第几版格式
+	const dataVeision = f.v?f.v:(f.f?2:1); //是第几版格式
 	this.title = dataVeision>1 ? f.t : f.title;
 	this.detail = dataVeision>1 ? f.d : f.detail;
 	this.badge = f.b ? f.b : 0; //徽章
 	const teamArr = dataVeision>1 ? f.f : f.team;
 	this.teams.forEach(function(t,ti){
-		let tf = teamArr[ti] || [];
+		const tf = teamArr[ti] || [];
 		t.forEach(function(st,sti){
-			let fst = tf[sti] || [];
+			const fst = tf[sti] || [];
 			st.forEach(function(m,mi){
-				let fm = fst[mi];
+				const fm = fst[mi];
 				m.loadObj(fm,dataVeision);
 			});
 		});
@@ -1977,17 +1980,18 @@ function editBoxChangeMonId(id)
 	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
 	//该宠Type允许的杀,uniq是去重的自定义函数
 	const allowLatent = [].concat(...card.types.filter(i=>i>=0).map(type=>type_allowable_latent[type])).uniq();
-	for(let li=17;li<=24;li++) //显示允许的杀，隐藏不允许的杀
-	{
-		const latentDom = monLatentAllowUl.querySelector(`.latent-icon[data-latent-icon='${li}']`);
-		if (allowLatent.includes(li))
+	typekiller_for_type.forEach(type=>{ //显示允许的杀，隐藏不允许的杀
+		const latentDom = monLatentAllowUl.querySelector(`.latent-icon[data-latent-icon='${type.latent}']`);
+		if (!latentDom) return;
+		if (allowLatent.includes(type.latent))
 		{
-			latentDom.classList.remove("unselected-latent");
+			latentDom.classList.remove("unallowable-latent");
 		}else
 		{
-			latentDom.classList.add("unselected-latent");
+			latentDom.classList.add("unallowable-latent");
 		}
-	}
+	})
+
 	//怪物主动技能
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
 	const skillBox = rowSkill.querySelector(".skill-box");
