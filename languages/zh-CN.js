@@ -2147,8 +2147,10 @@ function parseBigNumber(number)
 		{name:"3个type",function:cards=>cards.filter(card=>card.types.filter(t=>t>=0).length>=3)},
 		{name:"9个觉醒",function:cards=>cards.filter(card=>card.awakenings.length>=9)},
 		{name:"满级不是1级（可强化）",function:cards=>cards.filter(card=>card.maxLevel>1)},
-		{name:"不是武器",function:cards=>cards.filter(card=>!card.awakenings.includes(49))},
 		{name:"所有潜觉蛋龙",function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)},
+		{name:"不是武器",function:cards=>cards.filter(card=>!card.awakenings.includes(49))},
+		{name:"有副属性",function:cards=>cards.filter(card=>card.attrs[1]>=0)},
+		{name:"有副属性且主副属性不一致",function:cards=>cards.filter(card=>card.attrs[0]>=0 && card.attrs[1]>=0 && card.attrs[0] != card.attrs[1])},
 		{name:"3个相同杀觉醒，或2个杀觉醒并可打相同潜觉",function:cards=>cards.filter(card=>{
 			const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length>=2);
 			if (hasAwokenKiller)
@@ -2224,6 +2226,7 @@ function parseBigNumber(number)
 	const controlDiv = searchBox.querySelector(".control-div");
 	let fragment = document.createDocumentFragment();
 	const specialSearchDiv = fragment.appendChild(document.createElement("ul"))
+	specialSearchDiv.style.display = "block";
 	const specialSearchArray = new Array(4).fill(null).map((i,n)=>{
 		const specialSearchLabel = specialSearchDiv.appendChild(document.createElement("li"));
 		specialSearchLabel.innerHTML = `筛选${n+1}:`;
