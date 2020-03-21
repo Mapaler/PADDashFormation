@@ -876,10 +876,14 @@ ul{
 	display: inline-block;
 	vertical-align: middle;
 }
-.awoken-ul .count::before{
+.awoken-ul .count::before,
+.search-box .awoken-div .count-symbol::before
+{
 	content: "×";
 }
-.search-box .awoken-ul button{
+.search-box .awoken-ul button,
+.search-box .awoken-ul input[type='button']
+{
 	border: none;
 	background-color: unset;
 	font-family: var(--game-font-family);
@@ -887,20 +891,26 @@ ul{
 	line-height: 32px;
 	font-size: 16px;
 	padding: 0;
+	text-align: left;
 }
 .search-box .awoken-ul .awoken-count.zero{
 	opacity: var(--search-icon-unchecked);
 }
 .search-box .awoken-ul .count{
-	width: 30px;
+	width: 1em;
+	height: auto;
 }
-.search-box .awoken-ul .awoken-count .awoken-icon{
+.search-box .awoken-ul .awoken-count .awoken-icon,
+.search-box .awoken-ul .awoken-count .count-symbol,
+.search-box .awoken-ul .awoken-count .count-symbol .count
+{
 	cursor: pointer;
+	display: inline-block;
+	vertical-align: bottom;
 }
-.search-box .awoken-ul .awoken-count .count{
-	cursor: pointer;
-}
-.search-box .awoken-ul .awoken-count.zero .count{
+.search-box .awoken-ul .awoken-count.zero .count-symbol,
+.search-box .awoken-ul .awoken-count.zero .count-symbol .count
+{
 	cursor: auto;
 }
 /*.search-box .sawoken-div::before{

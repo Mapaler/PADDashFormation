@@ -814,12 +814,8 @@ function initialize()
 	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
 	const s_types = Array.from(searchBox.querySelectorAll(".types-div .type-check"));
 	const s_awokensItems = Array.from(searchBox.querySelectorAll(".awoken-div .awoken-count"));
-	const s_awokensIcons = s_awokensItems.map(it=>{
-		return it.querySelector(".awoken-icon");
-	});
-	const s_awokensCounts = s_awokensItems.map(it=>{
-		return it.querySelector(".count");
-	});
+	const s_awokensIcons = s_awokensItems.map(it=>it.querySelector(".awoken-icon"));
+	const s_awokensCounts = s_awokensItems.map(it=>it.querySelector(".count"));
 	
 	const searchMonList = searchBox.querySelector(".search-mon-list"); //搜索结果列表
 	searchMonList.originalHeads = null; //用于存放原始搜索结果
@@ -841,11 +837,11 @@ function initialize()
 	function search_awokenAdd1()
 	{
 		const countDom = this.parentNode.querySelector(".count");
-		let count = parseInt(countDom.innerHTML,10);
+		let count = parseInt(countDom.value,10);
 		if (count<9)
 		{
 			count++;
-			countDom.innerHTML = count;
+			countDom.value = count;
 			this.parentNode.classList.remove("zero");
 		}
 	}
@@ -854,14 +850,14 @@ function initialize()
 	});
 	function search_awokenSub1()
 	{
-		let count = parseInt(this.innerHTML,10);
+		let count = parseInt(this.value,10);
 		if (count>0)
 		{
 			count--;
-			this.innerHTML = count;
+			this.value = count;
 			if (count === 0)
 			{
-				this.parentNode.classList.add("zero");
+				this.parentNode.parentNode.classList.add("zero");
 			}
 		}
 	}
@@ -947,9 +943,9 @@ function initialize()
 		}
 		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
-		const awokensFilter = s_awokensCounts.filter(btn=>parseInt(btn.innerHTML,10)>0).map(btn=>{
-			const awokenIndex = parseInt(btn.parentNode.querySelector(".awoken-icon").getAttribute("data-awoken-icon"),10);
-			return {id:awokenIndex,num:parseInt(btn.innerHTML,10)};
+		const awokensFilter = s_awokensCounts.filter(btn=>parseInt(btn.value,10)>0).map(btn=>{
+			const awokenIndex = parseInt(btn.parentNode.parentNode.querySelector(".awoken-icon").getAttribute("data-awoken-icon"),10);
+			return {id:awokenIndex,num:parseInt(btn.value,10)};
 		});
 		const searchResult = searchCards(cards,
 			attr1,attr2,
