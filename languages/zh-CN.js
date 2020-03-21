@@ -2114,39 +2114,29 @@ function parseBigNumber(number)
 			return a_pC - b_pC;
 		})},
 		{name:"====其他搜索====",function:cards=>cards},
-		{name:"全部8格潜觉（转生、超转生）",function:cards=>cards.filter(card=>{
-			return card.is8Latent;
-		})},
-		{name:"全部像素进化",function:cards=>cards.filter(card=>{
-			return card.evoMaterials.indexOf(3826)>=0;
-		})},
-		{name:"全部用三神面进化",function:cards=>cards.filter(card=>{
-			return card.evoMaterials.indexOf(3795)>=0;
-		})},
-		{name:"全部用彩龙果进化",function:cards=>cards.filter(card=>{
-			return card.evoMaterials.indexOf(3971)>=0;
-		})},
-		{name:"全部由武器进化而来",function:cards=>cards.filter(card=>{
-			return card.isUltEvo && Cards[card.evoBaseId].awakenings.indexOf(49)>=0;
-		})},
-		{name:"全部110级三维成长100%",function:cards=>cards.filter(card=>{
-			return card.limitBreakIncr>=100;
-		})},
-		{name:"全部珠子皮肤",function:cards=>cards.filter(card=>{
-			return card.blockSkinId>0;
-		})},
-		{name:"全部低于100mp",function:cards=>cards.filter(card=>{
-			return card.sellMP<100;
-		})},
+		{name:"全部8格潜觉（转生、超转生）",function:cards=>cards.filter(card=>card.is8Latent)},
+		{name:"全部像素进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))},
+		{name:"全部用三神面进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3795))},
+		{name:"全部用彩龙果进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3971))},
+		{name:"全部由武器进化而来",function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))},
+		{name:"全部110级三维成长100%",function:cards=>cards.filter(card=>card.limitBreakIncr>=100)},
+		{name:"有110，但没有超觉醒",function:cards=>cards.filter(card=>card.limitBreakIncr>0 && card.superAwakenings.length<1)},
+		{name:"全部珠子皮肤",function:cards=>cards.filter(card=>card.blockSkinId>0)},
+		{name:"全部低于100mp",function:cards=>cards.filter(card=>card.sellMP<100)},
+		{name:"只显示可以做辅助",function:cards=>cards.filter(card=>card.canAssist)},
+		{name:"3个type",function:cards=>cards.filter(card=>card.types.filter(t=>t>=0).length>=3)},
+		{name:"9个觉醒",function:cards=>cards.filter(card=>card.awakenings.length>=9)},
+		{name:"所有潜觉蛋龙",function:cards=>cards.filter(card=>card.latentAwakeningId>0)},
 	];
 
 	const searchBox = editBox.querySelector(".search-box");
 	const controlDiv = searchBox.querySelector(".control-div");
 	let fragment = document.createDocumentFragment();
+	const specialSearchDiv = fragment.appendChild(document.createElement("div"))
 	const specialSearch1 = document.createElement("select");
 	const specialSearch2 = document.createElement("select");
-	const specialSearch1Label = fragment.appendChild(document.createElement("label"));
-	const specialSearch2Label = fragment.appendChild(document.createElement("label"));
+	const specialSearch1Label = specialSearchDiv.appendChild(document.createElement("label"));
+	const specialSearch2Label = specialSearchDiv.appendChild(document.createElement("label"));
 	specialSearch1Label.innerHTML = "筛选1：";
 	specialSearch2Label.innerHTML = "筛选2：";
 	specialSearch1Label.appendChild(specialSearch1);
@@ -2164,7 +2154,7 @@ function parseBigNumber(number)
 		result = specialSearchFunctions[parseInt(specialSearch2.value,10)].function(result); //第二遍搜索
 		searchBox.startSearch(result);
 	};
-	controlDiv.insertBefore(fragment,controlDiv.querySelector(".sort-div"));
+	controlDiv.insertBefore(fragment,controlDiv.firstElementChild);
 	const searchClear = controlDiv.querySelector(".search-clear");
 	searchClear.addEventListener("click",function(e){
 		specialSearch1.selectedIndex = 0;
