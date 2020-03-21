@@ -790,14 +790,14 @@ function initialize()
 		{
 			monstersID.value = this.getAttribute("data-cardid");
 			monstersID.onchange();
-			return false;
+			return false; //取消链接的默认操作
 		}
 		const cli = document.createElement("li");
 		const cdom = cli.head = createCardA(id);
 		cli.appendChild(cdom);
 		changeid({id:id},cdom);
-		cdom.onclick = clickHeadToNewMon;
 		cli.card = Cards[id];
+		cdom.onclick = clickHeadToNewMon;
 		return cli;
 	};
 
@@ -828,10 +828,7 @@ function initialize()
 	const s_awokensEquivalent = searchBox.querySelector("#consider-equivalent-awoken"); //搜索等效觉醒
 	const s_canAssist = searchBox.querySelector("#can-assist"); //只搜索辅助
 	s_canAssist.onclick = function(){
-		if (this.checked)
-		searchMonList.classList.add("only-display-can-assist");
-		else
-		searchMonList.classList.remove("only-display-can-assist");
+		toggleDomClassName(this, "only-display-can-assist", true, searchMonList);
 	};
 
 	const s_sawokenDiv = searchBox.querySelector(".sawoken-div");
@@ -839,10 +836,7 @@ function initialize()
 	const s_sawokens = Array.from(s_sawokenDiv.querySelectorAll(".sawoken-check"));
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onclick = function(){
-		if (this.checked)
-			s_sawokenDiv.classList.add(className_displayNone);
-		else
-			s_sawokenDiv.classList.remove(className_displayNone);
+		toggleDomClassName(this, className_displayNone, true, s_sawokenDiv);
 	};
 
 	function search_awokenAdd1()
@@ -898,7 +892,7 @@ function initialize()
 	const searchClear = s_controlDiv.querySelector(".search-clear");
 	function returnCheckedInput(ipt)
 	{
-		return ipt.checked == true;
+		return ipt.checked;
 	}
 	function returnInputValue(ipt)
 	{
@@ -988,7 +982,7 @@ function initialize()
 		s_awokensItems.forEach(t=>{
 			t.classList.add("zero");
 		});
-		// 这些觉醒的选项干脆都不清楚
+		// 这些觉醒的选项干脆都不清除
 		//s_awokensEquivalent.checked = false;
 		//if (s_includeSuperAwoken.checked) s_includeSuperAwoken.click();
 		
@@ -1012,9 +1006,10 @@ function initialize()
 		headsArray.sort((head_a,head_b)=>{
 			const card_a = head_a.card,card_b = head_b.card;
 			let sortNumber = sort_function_list[sortIndex].function(card_a,card_b);
-			if (reverse) sortNumber *= -1;
+			//if (reverse) sortNumber *= -1; //会导致默认情况无法逆序
 			return sortNumber;
 		});
+		if (reverse) headsArray.reverse();
 
 		return headsArray;
 	}
@@ -1030,11 +1025,6 @@ function initialize()
 	}
 	s_sortList.onchange = reSortCards;
 	s_sortReverse.onchange = reSortCards;
-	sort_function_list.forEach((sfunc,idx)=>{
-		const newOpt = new Option(sfunc.name,idx);
-		newOpt.setAttribute("data-tag",sfunc.tag);
-		s_sortList.options.add(newOpt);
-	});
 
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
