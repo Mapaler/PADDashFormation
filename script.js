@@ -620,13 +620,12 @@ function initialize()
 {
 	const monstersList = editBox.querySelector("#monsters-name-list");
 	let fragment = document.createDocumentFragment();
-	const linkReg = "link:(\\d+)";
 	Cards.forEach(function(m){ //添加下拉框候选
 		const opt = fragment.appendChild(document.createElement("option"));
 		opt.value = m.id;
 		opt.label = m.id + " - " +  returnMonsterNameArr(m, currentLanguage.searchlist, currentDataSource.code).join(" | ");
 
-		const linkRes = new RegExp(linkReg,"ig").exec(m.specialAttribute);
+		const linkRes = new RegExp("link:(\\d+)","ig").exec(m.specialAttribute);
 		if (linkRes)
 		{//每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
 			const _m = Cards[parseInt(linkRes[1],10)];
@@ -961,6 +960,7 @@ function initialize()
 			s_awokensEquivalent.checked,
 			s_includeSuperAwoken.checked
 			);
+		console.log("搜索结果",searchResult);
 		showSearch(searchResult);
 	};
 	searchBox.startSearch = startSearch;
@@ -1025,6 +1025,11 @@ function initialize()
 	}
 	s_sortList.onchange = reSortCards;
 	s_sortReverse.onchange = reSortCards;
+	sort_function_list.forEach((sfunc,idx)=>{
+		const newOpt = new Option(sfunc.name,idx);
+		newOpt.setAttribute("data-tag",sfunc.tag);
+		s_sortList.options.add(newOpt);
+	});
 
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
