@@ -388,29 +388,22 @@ function createCardA()
 	cid.className = "id";
 	return cdom;
 }
+//返回文字说明内怪物Card的纯HTML
+function cardN(id){
+	const monOuterDom = document.createElement("span");
+	monOuterDom.className = "detail-mon";
+	const monDom = createCardA(id);
+	monOuterDom.appendChild(monDom);
+	changeid({id:id},monDom);
+	return monOuterDom.outerHTML;
+}
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)
 {
 	str = str.replace(/\n/ig,"<br>"); //换行
-	str = str.replace(/\^([a-fA-F0-9]{6})\^([^\^]+)\^p/igm,'<span style="color:#$1;">$2</span>'); //文字颜色
+	str = str.replace(/\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm,'<span style="color:#$1;">$2</span>'); //文字颜色
 	str = str.replace(/\%\{m([0-9]{1,4})\}/g,function (str, p1, offset, s){return cardN(parseInt(p1,10));}); //怪物头像
 	return str;
-}
-//返回怪物Card的纯HTML
-function cardN(id){
-	let card = Cards[id || 0];
-	if (!card)
-	{
-		return "没有该宠物 " + id;
-	}else
-	{
-		const monOuterDom = document.createElement("span");
-		monOuterDom.className = "detail-mon";
-		const monDom = createCardA(id);
-		monOuterDom.appendChild(monDom);
-		changeid({id:id},monDom);
-		return monOuterDom.outerHTML;
-	}
 }
 //默认的技能解释的显示行为
 function parseSkillDescription(skill)
