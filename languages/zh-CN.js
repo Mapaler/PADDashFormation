@@ -2146,38 +2146,107 @@ function parseBigNumber(number)
 		{name:"只显示可以做辅助",function:cards=>cards.filter(card=>card.canAssist)},
 		{name:"3个type",function:cards=>cards.filter(card=>card.types.filter(t=>t>=0).length>=3)},
 		{name:"9个觉醒",function:cards=>cards.filter(card=>card.awakenings.length>=9)},
-		{name:"所有潜觉蛋龙",function:cards=>cards.filter(card=>card.latentAwakeningId>0)},
+		{name:"满级不是1级（可强化）",function:cards=>cards.filter(card=>card.maxLevel>1)},
+		{name:"不是武器",function:cards=>cards.filter(card=>!card.awakenings.includes(49))},
+		{name:"所有潜觉蛋龙",function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)},
+		{name:"3个相同杀觉醒，或2个杀觉醒并可打相同潜觉",function:cards=>cards.filter(card=>{
+			const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length>=2);
+			if (hasAwokenKiller)
+			{ //大于2个杀的进行判断
+				if (card.awakenings.filter(ak=>ak===hasAwokenKiller.awoken).length>=3)
+				{ //大于3个杀的直接过
+					return true;
+				}else
+				{ //2个杀的
+					const isAllowLatent = card.types.filter(i=>
+							i>=0 //去掉-1的type
+						).map(type=>
+							type_allowable_latent[type] //得到允许打的潜觉杀
+						).some(ls=>
+							ls.includes(hasAwokenKiller.latent) //判断是否有这个潜觉杀
+						);
+					return isAllowLatent
+				}
+			}else
+			{
+				return false;
+			}
+		})},
+		{name:"3个相同杀觉醒（含超觉），或相同潜觉",function:cards=>cards.filter(card=>{
+			const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length+(card.superAwakenings.includes(type.awoken)?1:0)>=2);
+			if (hasAwokenKiller)
+			{ //大于2个杀的进行判断
+				if (card.awakenings.filter(ak=>ak===hasAwokenKiller.awoken).length+(card.superAwakenings.includes(hasAwokenKiller.awoken)?1:0)>=3)
+				{ //大于3个杀的直接过
+					return true;
+				}else
+				{ //2个杀的
+					const isAllowLatent = card.types.filter(i=>
+							i>=0 //去掉-1的type
+						).map(type=>
+							type_allowable_latent[type] //得到允许打的潜觉杀
+						).some(ls=>
+							ls.includes(hasAwokenKiller.latent) //判断是否有这个潜觉杀
+						);
+					return isAllowLatent
+				}
+			}else
+			{
+				return false;
+			}
+		})},
+		{name:"4个相同杀觉醒（含超觉），或相同潜觉",function:cards=>cards.filter(card=>{
+			const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length+(card.superAwakenings.includes(type.awoken)?1:0)>=3);
+			if (hasAwokenKiller)
+			{ //大于2个杀的进行判断
+				if (card.awakenings.filter(ak=>ak===hasAwokenKiller.awoken).length+(card.superAwakenings.includes(hasAwokenKiller.awoken)?1:0)>=4)
+				{ //大于3个杀的直接过
+					return true;
+				}else
+				{ //2个杀的
+					const isAllowLatent = card.types.filter(i=>
+							i>=0 //去掉-1的type
+						).map(type=>
+							type_allowable_latent[type] //得到允许打的潜觉杀
+						).some(ls=>
+							ls.includes(hasAwokenKiller.latent) //判断是否有这个潜觉杀
+						);
+					return isAllowLatent
+				}
+			}else
+			{
+				return false;
+			}
+		})},
 	];
 
 	const searchBox = editBox.querySelector(".search-box");
 	const controlDiv = searchBox.querySelector(".control-div");
 	let fragment = document.createDocumentFragment();
-	const specialSearchDiv = fragment.appendChild(document.createElement("div"))
-	const specialSearch1 = document.createElement("select");
-	const specialSearch2 = document.createElement("select");
-	const specialSearch1Label = specialSearchDiv.appendChild(document.createElement("label"));
-	const specialSearch2Label = specialSearchDiv.appendChild(document.createElement("label"));
-	specialSearch1Label.innerHTML = "筛选1：";
-	specialSearch2Label.innerHTML = "筛选2：";
-	specialSearch1Label.appendChild(specialSearch1);
-	specialSearch2Label.appendChild(specialSearch2);
-
-	specialSearchFunctions.forEach((sfunc,idx)=>{
-		specialSearch1.options.add(new Option(sfunc.name,idx));
-		specialSearch2.options.add(new Option(sfunc.name,idx));
+	const specialSearchDiv = fragment.appendChild(document.createElement("ul"))
+	const specialSearchArray = new Array(4).fill(null).map((i,n)=>{
+		const specialSearchLabel = specialSearchDiv.appendChild(document.createElement("li"));
+		specialSearchLabel.innerHTML = `筛选${n+1}:`;
+		const specialSearch = specialSearchLabel.appendChild(document.createElement("select"));
+		specialSearchFunctions.forEach((sfunc,idx)=>{
+			specialSearch.options.add(new Option(sfunc.name,idx));
+		});
+		return specialSearch;
 	});
 	//将搜索按钮强制改成特殊搜索
 	const searchStart = controlDiv.querySelector(".search-start");
 	searchStart.onclick = function(){
 		let result = Cards;
-		result = specialSearchFunctions[parseInt(specialSearch1.value,10)].function(result); //第一遍搜索
-		result = specialSearchFunctions[parseInt(specialSearch2.value,10)].function(result); //第二遍搜索
+		specialSearchArray.forEach(ss=>
+			result = specialSearchFunctions[parseInt(ss.value,10)].function(result)
+		);
 		searchBox.startSearch(result);
 	};
 	controlDiv.insertBefore(fragment,controlDiv.firstElementChild);
 	const searchClear = controlDiv.querySelector(".search-clear");
 	searchClear.addEventListener("click",function(e){
-		specialSearch1.selectedIndex = 0;
-		specialSearch2.selectedIndex = 0;
+		specialSearchArray.forEach(ss=>
+			ss.selectedIndex = 0
+		);
 	});
 })();

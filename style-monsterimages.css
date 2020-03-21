@@ -646,129 +646,134 @@
 	background-image: url(images/latent.png);
 	background-position-x: 0;
 }
-.latent-icon[data-latent-icon='1']{ /*HP*/
-	background-position-y: -32px;
-}
-.latent-icon[data-latent-icon='2']{ /*攻击*/
-	background-position-y: -64px;
-}
-.latent-icon[data-latent-icon='3']{ /*回复*/
-	background-position-y: -96px;
-}
-.latent-icon[data-latent-icon='4']{ /*手指*/
-	background-position-y: -128px;
-}
-.latent-icon[data-latent-icon='5']{ /*自回*/
-	background-position-y: -160px;
-}
-.latent-icon[data-latent-icon='6']{ /*火盾*/
-	background-position-y: -192px;
-}
-.latent-icon[data-latent-icon='7']{ /*水盾*/
-	background-position-y: -224px;
-}
-.latent-icon[data-latent-icon='8']{ /*木盾*/
-	background-position-y: -256px;
-}
-.latent-icon[data-latent-icon='9']{ /*光盾*/
-	background-position-y: -288px;
-}
-.latent-icon[data-latent-icon='10']{ /*暗盾*/
-	background-position-y: -320px;
-}
-.latent-icon[data-latent-icon='11']{ /*防坐*/
-	background-position-y: -352px;
-}
-.latent-icon[data-latent-icon='12']{ /*三维*/
-	background-position-y: -384px;
-}
-.latent-icon[data-latent-icon='13']{ /*进化杀*/
-	background-position-y: -416px;
-}
-.latent-icon[data-latent-icon='14']{ /*觉醒杀*/
-	background-position-y: -448px;
-}
-.latent-icon[data-latent-icon='15']{ /*强化杀*/
-	background-position-y: -480px;
-}
-.latent-icon[data-latent-icon='16']{ /*卖钱杀*/
-	background-position-y: -512px;
-}
-.latent-icon[data-latent-icon='17']{ /*神杀*/
-	background-position-y: -544px;
-}
-.latent-icon[data-latent-icon='18']{ /*龙杀*/
-	background-position-y: -576px;
-}
-.latent-icon[data-latent-icon='19']{ /*恶魔杀*/
-	background-position-y: -608px;
-}
-.latent-icon[data-latent-icon='20']{ /*机械杀*/
-	background-position-y: -640px;
-}
-.latent-icon[data-latent-icon='21']{ /*平衡杀*/
-	background-position-y: -672px;
-}
-.latent-icon[data-latent-icon='22']{ /*攻击杀*/
-	background-position-y: -704px;
-}
-.latent-icon[data-latent-icon='23']{ /*体力杀*/
-	background-position-y: -736px;
-}
-.latent-icon[data-latent-icon='24']{ /*回复杀*/
-	background-position-y: -768px;
-}
-.latent-icon[data-latent-icon='25']{ /*大HP*/
-	background-position-y: -800px;
-}
-.latent-icon[data-latent-icon='26']{ /*大攻击*/
-	background-position-y: -832px;
-}
-.latent-icon[data-latent-icon='27']{ /*大回复*/
-	background-position-y: -864px;
-}
-.latent-icon[data-latent-icon='28']{ /*大手指*/
-	background-position-y: -896px;
-}
-.latent-icon[data-latent-icon='29']{ /*大火盾*/
-	background-position-y: -928px;
-}
-.latent-icon[data-latent-icon='30']{ /*大水盾*/
-	background-position-y: -960px;
-}
-.latent-icon[data-latent-icon='31']{ /*大木盾*/
-	background-position-y: -992px;
-}
-.latent-icon[data-latent-icon='32']{ /*大光盾*/
-	background-position-y: -1024px;
-}
-.latent-icon[data-latent-icon='33']{ /*大暗盾*/
-	background-position-y: -1056px;
-}
-.latent-icon[data-latent-icon='12'],
-.latent-icon[data-latent-icon='13'],
-.latent-icon[data-latent-icon='14'],
-.latent-icon[data-latent-icon='15'],
-.latent-icon[data-latent-icon='16'],
-.latent-icon[data-latent-icon='17'],
-.latent-icon[data-latent-icon='18'],
-.latent-icon[data-latent-icon='19'],
-.latent-icon[data-latent-icon='20'],
-.latent-icon[data-latent-icon='21'],
-.latent-icon[data-latent-icon='22'],
-.latent-icon[data-latent-icon='23'],
-.latent-icon[data-latent-icon='24'],
-.latent-icon[data-latent-icon='25'],
-.latent-icon[data-latent-icon='26'],
-.latent-icon[data-latent-icon='27'],
-.latent-icon[data-latent-icon='28'],
-.latent-icon[data-latent-icon='29'],
-.latent-icon[data-latent-icon='30'],
-.latent-icon[data-latent-icon='31'],
-.latent-icon[data-latent-icon='32'],
-.latent-icon[data-latent-icon='33']{
+.latent-icon[data-latent-icon]{
 	width: 76px;
 }
+.latent-icon[data-latent-icon='1'],
+.latent-icon[data-latent-icon='2'],
+.latent-icon[data-latent-icon='3'],
+.latent-icon[data-latent-icon='4'],
+.latent-icon[data-latent-icon='5'],
+.latent-icon[data-latent-icon='6'],
+.latent-icon[data-latent-icon='7'],
+.latent-icon[data-latent-icon='8'],
+.latent-icon[data-latent-icon='9'],
+.latent-icon[data-latent-icon='10'],
+.latent-icon[data-latent-icon='11']
+{
+	width: 32px;
+}
+.latent-icon[data-latent-icon='1']{ /*HP*/
+	background-position-y: calc(-32px * 1);
+}
+.latent-icon[data-latent-icon='2']{ /*攻击*/
+	background-position-y: calc(-32px * 2);
+}
+.latent-icon[data-latent-icon='3']{ /*回复*/
+	background-position-y: calc(-32px * 3);
+}
+.latent-icon[data-latent-icon='4']{ /*手指*/
+	background-position-y: calc(-32px * 4);
+}
+.latent-icon[data-latent-icon='5']{ /*自回*/
+	background-position-y: calc(-32px * 5);
+}
+.latent-icon[data-latent-icon='6']{ /*火盾*/
+	background-position-y: calc(-32px * 6);
+}
+.latent-icon[data-latent-icon='7']{ /*水盾*/
+	background-position-y: calc(-32px * 7);
+}
+.latent-icon[data-latent-icon='8']{ /*木盾*/
+	background-position-y: calc(-32px * 8);
+}
+.latent-icon[data-latent-icon='9']{ /*光盾*/
+	background-position-y: calc(-32px * 9);
+}
+.latent-icon[data-latent-icon='10']{ /*暗盾*/
+	background-position-y: calc(-32px * 10);
+}
+.latent-icon[data-latent-icon='11']{ /*防坐*/
+	background-position-y: calc(-32px * 11);
+}
+.latent-icon[data-latent-icon='12']{ /*三维*/
+	background-position-y: calc(-32px * 12);
+}
+/* 目前暂未启用的潜觉
+.latent-icon[data-latent-icon='13']{
+	background-position-y: calc(-32px * 13);
+}
+.latent-icon[data-latent-icon='14']{
+	background-position-y: calc(-32px * 14);
+}
+.latent-icon[data-latent-icon='15']{
+	background-position-y: calc(-32px * 15);
+}
+*/
+.latent-icon[data-latent-icon='16']{ /*进化杀*/
+	background-position-y: calc(-32px * 16);
+}
+.latent-icon[data-latent-icon='17']{ /*觉醒杀*/
+	background-position-y: calc(-32px * 17);
+}
+.latent-icon[data-latent-icon='18']{ /*强化杀*/
+	background-position-y: calc(-32px * 18);
+}
+.latent-icon[data-latent-icon='19']{ /*卖钱杀*/
+	background-position-y: calc(-32px * 19);
+}
+.latent-icon[data-latent-icon='20']{ /*神杀*/
+	background-position-y: calc(-32px * 20);
+}
+.latent-icon[data-latent-icon='21']{ /*龙杀*/
+	background-position-y: calc(-32px * 21);
+}
+.latent-icon[data-latent-icon='22']{ /*恶魔杀*/
+	background-position-y: calc(-32px * 22);
+}
+.latent-icon[data-latent-icon='23']{ /*机械杀*/
+	background-position-y: calc(-32px * 23);
+}
+.latent-icon[data-latent-icon='24']{ /*平衡杀*/
+	background-position-y: calc(-32px * 24);
+}
+.latent-icon[data-latent-icon='25']{ /*攻击杀*/
+	background-position-y: calc(-32px * 25);
+}
+.latent-icon[data-latent-icon='26']{ /*体力杀*/
+	background-position-y: calc(-32px * 26);
+}
+.latent-icon[data-latent-icon='27']{ /*回复杀*/
+	background-position-y: calc(-32px * 27);
+}
+.latent-icon[data-latent-icon='28']{ /*大HP*/
+	background-position-y: calc(-32px * 28);
+}
+.latent-icon[data-latent-icon='29']{ /*大攻击*/
+	background-position-y: calc(-32px * 29);
+}
+.latent-icon[data-latent-icon='30']{ /*大回复*/
+	background-position-y: calc(-32px * 30);
+}
+.latent-icon[data-latent-icon='31']{ /*大手指*/
+	background-position-y: calc(-32px * 31);
+}
+.latent-icon[data-latent-icon='32']{ /*大火盾*/
+	background-position-y: calc(-32px * 32);
+}
+.latent-icon[data-latent-icon='33']{ /*大水盾*/
+	background-position-y: calc(-32px * 33);
+}
+.latent-icon[data-latent-icon='34']{ /*大木盾*/
+	background-position-y: calc(-32px * 34);
+}
+.latent-icon[data-latent-icon='35']{ /*大光盾*/
+	background-position-y: calc(-32px * 35);
+}
+.latent-icon[data-latent-icon='36']{ /*大暗盾*/
+	background-position-y: calc(-32px * 36);
+}
+
 /*
 var sawokens = [
 	"HP",
@@ -783,6 +788,9 @@ var sawokens = [
 	"暗盾",
 	"防坐",
 	"三维",
+	null,
+	null,
+	null,
 	"进化杀",
 	"觉醒杀",
 	"强化杀",
