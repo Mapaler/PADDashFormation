@@ -2,8 +2,9 @@
 
 //查找原先完整技能
 function findFullSkill(subSkill){
-	const parentSkill = Skills.find(ss=>(ss.type === 116 || ss.type === 118 || ss.type === 138) && ss.params.includes(subSkill.id));
-	return parentSkill || subSkill;
+	const parentSkill = Skills.find(ss=>(ss.type === 116 || ss.type === 118 || ss.type === 138) && ss.params.includes(subSkill.id)) || subSkill;
+	const aCard = Cards.find(card=>card.activeSkillId == parentSkill.id || card.leaderSkillId == parentSkill.id);
+	return {skill:parentSkill,card:aCard};
 }
 //document.querySelector(".edit-box .row-mon-id .m-id").type = "number";
 //Skills.filter(s=>{const sk = s.params; return s.type == 156;}).map(findFullSkill)
@@ -409,15 +410,15 @@ function parseSkillDescription(skill)
 			str = `${sk[0]}回合内${typeN(sk[1])}类型的攻击力×${sk[2]/100}倍`;
 			break;
 		case 90:
-			strArr = sk.slice(1,sk.length-1);
-			str = `${sk[0]}回合内${strArr.map(attrN).join("、")}属性的攻击力×${sk[sk.length-1]/100}倍`;
+			strArr = sk.slice(1,-1);
+			str = `${sk[0]}回合内${strArr.filter(sk=>sk<5).map(attrN).join("、")}属性的攻击力${strArr.includes(5)?'、回复力':''}×${sk[sk.length-1]/100}倍`;
 			break;
 		case 91:
-			str = `${sk.slice(0,sk.length-1).map(attrN).join("、")}属性宝珠强化`;
+			str = `${sk.slice(0,-1).map(attrN).join("、")}属性宝珠强化`;
 			if (sk[sk.length-1] != 6) str += `未知 参数${sk.length-1} ${sk[sk.length-1]}`;
 			break;
 		case 92:
-			strArr = sk.slice(1,sk.length-1);
+			strArr = sk.slice(1,-1);
 			str = `${sk[0]}回合内${strArr.map(typeN).join("、")}类型的攻击力×${sk[sk.length-1]/100}倍`;
 			break;
 		case 93:
@@ -1615,14 +1616,37 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 960) > 0);
 			}
 		})},
-		{name:"所有顶回复",function:cards=>cards.filter(card=>{
-			const searchType = 50;
+		{name:"所有顶回复力",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [50,90];
 			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && skill.params[1] === 5)
+			if (searchTypeArray.includes(skill.type) && skill.params.slice(1,-1).includes(5))
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && subskill.params[1] === 5);
+				return subskills.some(subskill=>
+					searchTypeArray.includes(subskill.type) && subskill.params.slice(1,-1).includes(5)
+				);
+			}
+		})},
+		{name:"所有顶攻击力",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [
+				88,91, //类型的
+				50,90, //属性的，要排除回复力
+				156,168, //宝石姬
+			];
+			const skill = Skills[card.activeSkillId];
+			if ((skill.type==88 || skill.type==91) || //类型的
+				(skill.type==50 || skill.type==90) && skill.params.slice(1,-1).some(sk=>sk!=5) || //属性的，要排除回复力
+				skill.type==156 && skill.params[4] == 2 || skill.type==168 //宝石姬的
+			)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>
+					(subskill.type==88 || subskill.type==91) || //类型的
+					(subskill.type==50 || subskill.type==90) && subskill.params.slice(1,-1).some(sk=>sk!=5) || //属性的，要排除回复力
+					subskill.type==156 && subskill.params[4] == 2 || subskill.type==168 //宝石姬的
+				);
 			}
 		})},
 		{name:"所有顶手指",function:cards=>cards.filter(card=>{
@@ -1771,28 +1795,49 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有减伤（按减伤比率排序）",function:cards=>cards.filter(card=>{
-			const searchType = 3;
+		{name:"所有减伤（含宝石姬类，按减伤比率排序）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [3,156];
 			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType)
+			if (skill.type == 3 ||
+				skill.type == 156 && skill.params[4]==3
+			)
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
+				return subskills.some(subskill=>
+					subskill.type == 3 ||
+					subskill.type == 156 && subskill.params[4]==3
+				);
 			}
 		}).sort((a,b)=>{
-			const searchType = 3;
+			const searchTypeArray = [3,156];
 			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = (a_s.type == searchType) ?
-				a_s.params[1] :
-				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
-			b_pC = (b_s.type == searchType) ?
-				b_s.params[1] :
-				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
-			return a_pC - b_pC;
+			
+			//找到真正生效的子技能			
+			const a_ss = searchTypeArray.includes(a_s.type) ?
+				a_s :
+				a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type));
+			const b_ss = searchTypeArray.includes(b_s.type) ?
+				b_s :
+				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type));
+			let sortNum = b_ss.type - a_ss.type; //先分开宝石姬与非宝石姬
+			if (!sortNum)
+			{
+				let a_pC = 0,b_pC = 0;
+				if (a_ss.type == 3)
+				{
+					a_pC = a_ss.params[1];
+					b_pC = b_ss.params[1];
+				}else
+				{
+					a_pC = a_ss.params[5];
+					b_pC = b_ss.params[5];
+				}
+				sortNum = a_pC - b_pC;
+			}
+			return sortNum;
 		})},
-		{name:"所有无敌-减伤100%（按无敌回合数排序）",function:cards=>cards.filter(card=>{
+		{name:"所有无敌-减伤100%（不含宝石姬，按无敌回合数排序）",function:cards=>cards.filter(card=>{
 			const searchType = 3;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && skill.params[1]>=100)
@@ -1844,6 +1889,37 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
+		{name:"所有受伤反击",function:cards=>cards.filter(card=>{
+			const searchType = 60;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		})},
+		{name:"所有变为全体攻击（按回合数排序）",function:cards=>cards.filter(card=>{
+			const searchType = 51;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		}).sort((a,b)=>{
+			const searchType = 5;
+			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (a_s.type == searchType) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			b_pC = (b_s.type == searchType) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			return a_pC - b_pC;
+		})},
 		{name:"====队长技====",function:cards=>cards},
 		{name:"所有普通追打（按追打比率排序）",function:cards=>cards.filter(card=>{
 			const searchType = 12;
@@ -1869,11 +1945,11 @@ function parseBigNumber(number)
 		{name:"所有固伤追击",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [199,200,201];
 			const skill = Skills[card.leaderSkillId];
-			if (searchTypeArray.some(t=>skill.type == t))
+			if (searchTypeArray.includes(skill.type))
 				return true;
 			else if (skill.type == 138){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
 		})},
 		{name:"所有队长+C（按+C数排序）",function:cards=>cards.filter(card=>{
