@@ -1606,7 +1606,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && subskill.params[1] >= 99);
 			}
 		})},
-		{name:"所有顶毒",function:cards=>cards.filter(card=>{
+		{name:"所有顶毒（掉毒、掉废）",function:cards=>cards.filter(card=>{
 			const searchType = 126;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && (skill.params[0] & 960) > 0) // 960 = 二进制 1111000000
@@ -1616,7 +1616,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 960) > 0);
 			}
 		})},
-		{name:"所有顶回复力",function:cards=>cards.filter(card=>{
+		{name:"所有回复力buff（顶降回复）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [50,90];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type) && skill.params.slice(1,-1).includes(5))
@@ -1628,7 +1628,7 @@ function parseBigNumber(number)
 				);
 			}
 		})},
-		{name:"所有顶攻击力",function:cards=>cards.filter(card=>{
+		{name:"所有攻击力buff（顶降攻击）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [
 				88,91, //类型的
 				50,90, //属性的，要排除回复力
@@ -1649,7 +1649,7 @@ function parseBigNumber(number)
 				);
 			}
 		})},
-		{name:"所有顶手指",function:cards=>cards.filter(card=>{
+		{name:"所有操作时间buff（顶减手指）",function:cards=>cards.filter(card=>{
 			const searchType = 132;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1690,7 +1690,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有加C（按C数排列）",function:cards=>cards.filter(card=>{
+		{name:"所有加C buff（按C数排列）",function:cards=>cards.filter(card=>{
 			const searchType = 160;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1795,7 +1795,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有减伤（含宝石姬类，按减伤比率排序）",function:cards=>cards.filter(card=>{
+		{name:"所有减伤buff（含宝石姬类，按减伤比率排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [3,156];
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == 3 ||
@@ -1889,7 +1889,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有受伤反击",function:cards=>cards.filter(card=>{
+		{name:"所有受伤反击buff",function:cards=>cards.filter(card=>{
 			const searchType = 60;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1950,6 +1950,16 @@ function parseBigNumber(number)
 			else if (skill.type == 138){
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"所有受伤反击队长",function:cards=>cards.filter(card=>{
+			const searchType = 41;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
 		{name:"所有队长+C（按+C数排序）",function:cards=>cards.filter(card=>{
