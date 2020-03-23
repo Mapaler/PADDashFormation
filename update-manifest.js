@@ -56,15 +56,15 @@ cardsLang.forEach(lang=>{
 	files.forEach(function (filename) {
 		if (new RegExp(cardsReg,"i").test(filename))
 		{
-			list.push(path.join(langPath, filename))
+			list.push(path.join(langPath, filename));
 		}
-	})
+	});
 	const newType = {
 		typeName:lang.name,
 		list:list,
 	};
 	cacheList.push(newType);
-})
+});
 
 const outTextArray = cacheList.map(type=>{
 	const typeTextArray = [];
