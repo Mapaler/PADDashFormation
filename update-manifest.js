@@ -76,7 +76,7 @@ const outTextArray = cacheList.map(type=>{
 		const fsHash = crypto.createHash('md5');
 		fsHash.update(buffer);
 		const md5 = fsHash.digest('hex');
-		typeTextArray.push(`# ${md5}`);
+		typeTextArray.push(`# ▼${md5}`);
 		typeTextArray.push(path);
 	});
 	return typeTextArray.join('\n');

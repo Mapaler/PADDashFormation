@@ -2,417 +2,417 @@ CACHE MANIFEST
 
 CACHE:
 # JS库
-# 892c162d4f6b83e21b6be3f04eb2a76f
+# ▼892c162d4f6b83e21b6be3f04eb2a76f
 library/html2canvas.min.js
-# 6de1bf1f7f98328eba5295e0e8a00110
+# ▼6de1bf1f7f98328eba5295e0e8a00110
 library/localforage.min.js
 
 # 语言表
-# 3f06e66566808a6fbc21177e9e66d574
+# ▼3f06e66566808a6fbc21177e9e66d574
 languages/language-list.js
 
 # 字体
-# 989604f44342b48af3a3e8c438af6ff0
+# ▼989604f44342b48af3a3e8c438af6ff0
 fonts/FOT-KurokaneStd-EB.woff2
-# c4045fd1571d89c931f2a8350500cdad
+# ▼c4045fd1571d89c931f2a8350500cdad
 fonts/FOT-KurokaneStd-EB.woff
-# dc602c41d0db70233ece29b8fb04cd1c
+# ▼dc602c41d0db70233ece29b8fb04cd1c
 fonts/FOT-KurokaneStd-EB.ttf
-# 56ae2cfc47ba5351ccc9527ea85a0ac4
+# ▼56ae2cfc47ba5351ccc9527ea85a0ac4
 fonts/FOT-KurokaneStd-EB.eot
-# 902dd1aa696823cca0a84df404abcabb
+# ▼902dd1aa696823cca0a84df404abcabb
 fonts/FOT-KurokaneStd-EB.svg
 
 # UI图片
-# fc1c43a0101d8361478a00671f4c7ae1
+# ▼fc1c43a0101d8361478a00671f4c7ae1
 images/awoken.png
-# d23c5fb81faaf720e35ca7b05b341c1b
+# ▼d23c5fb81faaf720e35ca7b05b341c1b
 images/awoken-count-bg.png
-# f562595ab824f7e7e180bb996d723e69
+# ▼f562595ab824f7e7e180bb996d723e69
 images/badge.png
-# 5bc57234ecedf767452d279b9210d96f
+# ▼5bc57234ecedf767452d279b9210d96f
 images/badge-bg.png
-# 2f744d67fba0e3fcfdcb1222daf2d95f
+# ▼2f744d67fba0e3fcfdcb1222daf2d95f
 images/CARDFRAME2.PNG
-# 5e6359d908e471761726c927a8376dbf
+# ▼5e6359d908e471761726c927a8376dbf
 images/icon.png
-# 94778fba136b0146b8d5c79619406e87
+# ▼92ca89addb2eca9d37202be22e48a6ff
 images/latent.png
-# 34c5c75f31e3532ca97b8c73e68f33a9
+# ▼34c5c75f31e3532ca97b8c73e68f33a9
 images/orb-small-dark.png
-# 66716a20fed21e66f25e4694b6ae2e84
+# ▼66716a20fed21e66f25e4694b6ae2e84
 images/orb-small-fire.png
-# 8360d56dcf24c64c8d9e5c1e855c3bad
+# ▼8360d56dcf24c64c8d9e5c1e855c3bad
 images/orb-small-light.png
-# b82834dac97340205d9d125fc1433430
+# ▼b82834dac97340205d9d125fc1433430
 images/orb-small-water.png
-# 57890110271c075cdf2b4dab162db56e
+# ▼57890110271c075cdf2b4dab162db56e
 images/orb-small-wood.png
-# 86cefa5663172384ef4922b437dcb393
+# ▼86cefa5663172384ef4922b437dcb393
 images/type.png
 
 # 日服、港台服图片
-# 5b7ccbd3cf31ee412799c0dd9bb2f783
+# ▼5b7ccbd3cf31ee412799c0dd9bb2f783
 images\cards_ja\CARDS_001.PNG
-# dda6009b1e8593729d9161785c206831
+# ▼dda6009b1e8593729d9161785c206831
 images\cards_ja\CARDS_002.PNG
-# 9c7ff1cfd728dbfa98a7986734064048
+# ▼9c7ff1cfd728dbfa98a7986734064048
 images\cards_ja\CARDS_003.PNG
-# d1cfb56a54254ca6f19b795d0933adc2
+# ▼d1cfb56a54254ca6f19b795d0933adc2
 images\cards_ja\CARDS_004.PNG
-# e93e4e16cffcbf81c7815b325669c6e9
+# ▼e93e4e16cffcbf81c7815b325669c6e9
 images\cards_ja\CARDS_005.PNG
-# 204d8226b9b76b0bfb78b1da96b877f7
+# ▼204d8226b9b76b0bfb78b1da96b877f7
 images\cards_ja\CARDS_006.PNG
-# 692ff5610947f9c9db8b223e3bedb441
+# ▼692ff5610947f9c9db8b223e3bedb441
 images\cards_ja\CARDS_007.PNG
-# 8db922e409770654c54f39579e5638c0
+# ▼8db922e409770654c54f39579e5638c0
 images\cards_ja\CARDS_008.PNG
-# a67c65cab1784a592db1ddbeab51b08f
+# ▼a67c65cab1784a592db1ddbeab51b08f
 images\cards_ja\CARDS_009.PNG
-# 0879e34f54354d2945ad7f4644005bb1
+# ▼0879e34f54354d2945ad7f4644005bb1
 images\cards_ja\CARDS_010.PNG
-# 71ef6c7088b05930a3c9901f57320dd1
+# ▼71ef6c7088b05930a3c9901f57320dd1
 images\cards_ja\CARDS_011.PNG
-# 8c8fe741df28e17310ff294b9a5b62dc
+# ▼8c8fe741df28e17310ff294b9a5b62dc
 images\cards_ja\CARDS_012.PNG
-# ba6b248497cd5c26d3b31cda239acff1
+# ▼ba6b248497cd5c26d3b31cda239acff1
 images\cards_ja\CARDS_013.PNG
-# fa3c34388bb74198971edf8b355cef24
+# ▼fa3c34388bb74198971edf8b355cef24
 images\cards_ja\CARDS_014.PNG
-# 7936c448d8056215d80108d0d18857c4
+# ▼7936c448d8056215d80108d0d18857c4
 images\cards_ja\CARDS_015.PNG
-# cff7d4eb4aec33a84e09c8c07da65e52
+# ▼cff7d4eb4aec33a84e09c8c07da65e52
 images\cards_ja\CARDS_016.PNG
-# d91e0b03df1a5032e8da8c568775acb9
+# ▼d91e0b03df1a5032e8da8c568775acb9
 images\cards_ja\CARDS_017.PNG
-# 619a7d1f5e37b38dae7adad1fc0eb343
+# ▼619a7d1f5e37b38dae7adad1fc0eb343
 images\cards_ja\CARDS_018.PNG
-# 5969ad3360b698adc960fdef8b635349
+# ▼5969ad3360b698adc960fdef8b635349
 images\cards_ja\CARDS_019.PNG
-# 38c5af427d98328a0c5d3b74560faa99
+# ▼38c5af427d98328a0c5d3b74560faa99
 images\cards_ja\CARDS_020.PNG
-# 304b621fef842ad67b003569dce96636
+# ▼304b621fef842ad67b003569dce96636
 images\cards_ja\CARDS_021.PNG
-# 88499e92c88b9cb2db4d46cef49b41bd
+# ▼88499e92c88b9cb2db4d46cef49b41bd
 images\cards_ja\CARDS_022.PNG
-# 6abf5f22d4a088915579f54f88b35953
+# ▼6abf5f22d4a088915579f54f88b35953
 images\cards_ja\CARDS_023.PNG
-# 9ecaec089a49305af136b9df3441f186
+# ▼9ecaec089a49305af136b9df3441f186
 images\cards_ja\CARDS_024.PNG
-# 661b53233ebf1d52ded6e30357650e36
+# ▼661b53233ebf1d52ded6e30357650e36
 images\cards_ja\CARDS_025.PNG
-# 28682bd35e6c42741793313c79d16674
+# ▼28682bd35e6c42741793313c79d16674
 images\cards_ja\CARDS_026.PNG
-# 7ba6d4f6704155535f7a05b2907a86eb
+# ▼7ba6d4f6704155535f7a05b2907a86eb
 images\cards_ja\CARDS_027.PNG
-# 746fca7768fcbbe3b46a5aa847f50d8c
+# ▼746fca7768fcbbe3b46a5aa847f50d8c
 images\cards_ja\CARDS_028.PNG
-# e0b72a4622f6426d762a18aabe4c1a5f
+# ▼e0b72a4622f6426d762a18aabe4c1a5f
 images\cards_ja\CARDS_029.PNG
-# 422098a1dc6f0a8d6d3ed7ed1fdb765b
+# ▼422098a1dc6f0a8d6d3ed7ed1fdb765b
 images\cards_ja\CARDS_030.PNG
-# 650c43ac44ee82ee5572fd5868affc6f
+# ▼650c43ac44ee82ee5572fd5868affc6f
 images\cards_ja\CARDS_031.PNG
-# 0f2463ab95d394f8a6465c61f1a76b75
+# ▼0f2463ab95d394f8a6465c61f1a76b75
 images\cards_ja\CARDS_032.PNG
-# 6bac6db0b5b436151c42d251fadd024e
+# ▼6bac6db0b5b436151c42d251fadd024e
 images\cards_ja\CARDS_033.PNG
-# e01605a3c999ae06de12a7d85a2d9cb3
+# ▼e01605a3c999ae06de12a7d85a2d9cb3
 images\cards_ja\CARDS_034.PNG
-# c591a5eaae769e3567fe13c24deea810
+# ▼c591a5eaae769e3567fe13c24deea810
 images\cards_ja\CARDS_035.PNG
-# f26a279731e60cdae7abf689ca204ed5
+# ▼f26a279731e60cdae7abf689ca204ed5
 images\cards_ja\CARDS_036.PNG
-# b041c293b1ea8e539d4b844087d3a2f2
+# ▼b041c293b1ea8e539d4b844087d3a2f2
 images\cards_ja\CARDS_037.PNG
-# da852ee24debdc6d5a52b5071de12a48
+# ▼da852ee24debdc6d5a52b5071de12a48
 images\cards_ja\CARDS_038.PNG
-# 46f18829dd72a28b0302eb1f2dc7f92f
+# ▼46f18829dd72a28b0302eb1f2dc7f92f
 images\cards_ja\CARDS_039.PNG
-# 89092299b4899fdfde580d0a6119da0b
+# ▼89092299b4899fdfde580d0a6119da0b
 images\cards_ja\CARDS_040.PNG
-# 064dfc2514abb549927b2b7c8494320e
+# ▼064dfc2514abb549927b2b7c8494320e
 images\cards_ja\CARDS_041.PNG
-# 6ef32b0658c3aeedfa2bab7bd008b75b
+# ▼6ef32b0658c3aeedfa2bab7bd008b75b
 images\cards_ja\CARDS_042.PNG
-# 5408f70121d2a5fde401476f32b40718
+# ▼5408f70121d2a5fde401476f32b40718
 images\cards_ja\CARDS_043.PNG
-# 349ba175c8be9ac6a21f9d15e323b5c5
+# ▼349ba175c8be9ac6a21f9d15e323b5c5
 images\cards_ja\CARDS_044.PNG
-# 4c7c3f307803e6fea97011d5fe87a4be
+# ▼4c7c3f307803e6fea97011d5fe87a4be
 images\cards_ja\CARDS_045.PNG
-# ec023f73334438aea2d5b0e537d57406
+# ▼ec023f73334438aea2d5b0e537d57406
 images\cards_ja\CARDS_046.PNG
-# c82c1f1fcec702bfe74ae3d7a8be4231
+# ▼c82c1f1fcec702bfe74ae3d7a8be4231
 images\cards_ja\CARDS_047.PNG
-# a95b7fbba057219479ac98a5462d665e
+# ▼a95b7fbba057219479ac98a5462d665e
 images\cards_ja\CARDS_048.PNG
-# 1a71a5c7fdb4713e21cac7a9b96b4010
+# ▼1a71a5c7fdb4713e21cac7a9b96b4010
 images\cards_ja\CARDS_049.PNG
-# 7648f28e2ef37573943dd5aaccce07a8
+# ▼7648f28e2ef37573943dd5aaccce07a8
 images\cards_ja\CARDS_050.PNG
-# 9dcd89b3038401b9bb904ae419dbeb39
+# ▼9dcd89b3038401b9bb904ae419dbeb39
 images\cards_ja\CARDS_051.PNG
-# a46d33e86299fbaa98da1ab404841295
+# ▼a46d33e86299fbaa98da1ab404841295
 images\cards_ja\CARDS_052.PNG
-# ab4f5eb8bdc8b0eeaf3abc2e74fa60f4
+# ▼ab4f5eb8bdc8b0eeaf3abc2e74fa60f4
 images\cards_ja\CARDS_053.PNG
-# fc28384a71dfbfce343f88e072f9a24f
+# ▼fc28384a71dfbfce343f88e072f9a24f
 images\cards_ja\CARDS_054.PNG
-# 53401a4e8e55244a9bfe63f48ca03b87
+# ▼53401a4e8e55244a9bfe63f48ca03b87
 images\cards_ja\CARDS_055.PNG
-# a680257e91dbc4e83656299cd53fe8ba
+# ▼a680257e91dbc4e83656299cd53fe8ba
 images\cards_ja\CARDS_056.PNG
-# 95e5c5bcc8323abbb327d70ad8bf2e86
+# ▼95e5c5bcc8323abbb327d70ad8bf2e86
 images\cards_ja\CARDS_057.PNG
-# 8360c15d23fb421dc69d7df1a240f0e6
+# ▼8360c15d23fb421dc69d7df1a240f0e6
 images\cards_ja\CARDS_058.PNG
-# 38a6751d4a088b8f0fd9e8fc87a40518
+# ▼38a6751d4a088b8f0fd9e8fc87a40518
 images\cards_ja\CARDS_059.PNG
-# 5d878a2d6ccdf88bcb8135df84a5b55d
+# ▼5d878a2d6ccdf88bcb8135df84a5b55d
 images\cards_ja\CARDS_060.PNG
-# 2bd1c8c7dd0251d715d85da9c6c59a88
+# ▼2bd1c8c7dd0251d715d85da9c6c59a88
 images\cards_ja\CARDS_061.PNG
 
 # 国际服图片
-# 5b7ccbd3cf31ee412799c0dd9bb2f783
+# ▼5b7ccbd3cf31ee412799c0dd9bb2f783
 images\cards_en\CARDS_001.PNG
-# dda6009b1e8593729d9161785c206831
+# ▼dda6009b1e8593729d9161785c206831
 images\cards_en\CARDS_002.PNG
-# 9c7ff1cfd728dbfa98a7986734064048
+# ▼9c7ff1cfd728dbfa98a7986734064048
 images\cards_en\CARDS_003.PNG
-# d1cfb56a54254ca6f19b795d0933adc2
+# ▼d1cfb56a54254ca6f19b795d0933adc2
 images\cards_en\CARDS_004.PNG
-# e93e4e16cffcbf81c7815b325669c6e9
+# ▼e93e4e16cffcbf81c7815b325669c6e9
 images\cards_en\CARDS_005.PNG
-# c500283dc2034e78bf771baae892b25f
+# ▼c500283dc2034e78bf771baae892b25f
 images\cards_en\CARDS_006.PNG
-# a156e5f96e09b80913548d612ce30587
+# ▼a156e5f96e09b80913548d612ce30587
 images\cards_en\CARDS_007.PNG
-# 8db922e409770654c54f39579e5638c0
+# ▼8db922e409770654c54f39579e5638c0
 images\cards_en\CARDS_008.PNG
-# 88ec63897da59bdfe65a2bf71c0b0c0e
+# ▼88ec63897da59bdfe65a2bf71c0b0c0e
 images\cards_en\CARDS_009.PNG
-# d4fa6a0676270295636954fe3f837ab8
+# ▼d4fa6a0676270295636954fe3f837ab8
 images\cards_en\CARDS_010.PNG
-# 05c72630452da25b414b27bea47534db
+# ▼05c72630452da25b414b27bea47534db
 images\cards_en\CARDS_011.PNG
-# 84a5fc5fefb32c3864deea9648f76819
+# ▼84a5fc5fefb32c3864deea9648f76819
 images\cards_en\CARDS_012.PNG
-# ba6b248497cd5c26d3b31cda239acff1
+# ▼ba6b248497cd5c26d3b31cda239acff1
 images\cards_en\CARDS_013.PNG
-# 5f2ace9bea62c93391cdb13370add1d8
+# ▼5f2ace9bea62c93391cdb13370add1d8
 images\cards_en\CARDS_014.PNG
-# 3413290021f97e2b8f452bd83afd9d0b
+# ▼3413290021f97e2b8f452bd83afd9d0b
 images\cards_en\CARDS_015.PNG
-# 1bd6ae438eda93c9eafb3bf3dc66d243
+# ▼1bd6ae438eda93c9eafb3bf3dc66d243
 images\cards_en\CARDS_016.PNG
-# a052c6cb9f2261e1c1928c7a39c6fa39
+# ▼a052c6cb9f2261e1c1928c7a39c6fa39
 images\cards_en\CARDS_017.PNG
-# 222903f6efded002c1945103b0d90656
+# ▼222903f6efded002c1945103b0d90656
 images\cards_en\CARDS_018.PNG
-# a71ab788243179333dc6e5275e999d0b
+# ▼a71ab788243179333dc6e5275e999d0b
 images\cards_en\CARDS_019.PNG
-# a96bb1f60f7434c4fe0d653bbb7c072a
+# ▼a96bb1f60f7434c4fe0d653bbb7c072a
 images\cards_en\CARDS_020.PNG
-# 83881384dba320e720b99b9841f284bb
+# ▼83881384dba320e720b99b9841f284bb
 images\cards_en\CARDS_021.PNG
-# d250b21252794c7b4ee11fff8bad9426
+# ▼d250b21252794c7b4ee11fff8bad9426
 images\cards_en\CARDS_022.PNG
-# 9fd5641370d862b0798cae0117392e22
+# ▼9fd5641370d862b0798cae0117392e22
 images\cards_en\CARDS_023.PNG
-# 834d895f01e8464fe27a74959c810216
+# ▼834d895f01e8464fe27a74959c810216
 images\cards_en\CARDS_024.PNG
-# 512b46d21a70aedf08b2998e5fecf235
+# ▼512b46d21a70aedf08b2998e5fecf235
 images\cards_en\CARDS_025.PNG
-# 013af73f463cf29aea65ef9b5387ad03
+# ▼013af73f463cf29aea65ef9b5387ad03
 images\cards_en\CARDS_026.PNG
-# 3ba70d5a8484a733e57f76c007f97666
+# ▼3ba70d5a8484a733e57f76c007f97666
 images\cards_en\CARDS_027.PNG
-# 12b8671de47c4627d5e018435c8ec392
+# ▼12b8671de47c4627d5e018435c8ec392
 images\cards_en\CARDS_028.PNG
-# 3a36a5a2e0868bcd591d3e3eabe347c4
+# ▼3a36a5a2e0868bcd591d3e3eabe347c4
 images\cards_en\CARDS_029.PNG
-# b1a084aefbc944e172117d9623896a3d
+# ▼b1a084aefbc944e172117d9623896a3d
 images\cards_en\CARDS_030.PNG
-# c51ce8edd9aeb96594a89439241fb550
+# ▼c51ce8edd9aeb96594a89439241fb550
 images\cards_en\CARDS_031.PNG
-# c0f0702bcc5cc3d398e3cd3e03927afb
+# ▼c0f0702bcc5cc3d398e3cd3e03927afb
 images\cards_en\CARDS_032.PNG
-# 046f74ab723e4e980b65c54dcf40bbd5
+# ▼046f74ab723e4e980b65c54dcf40bbd5
 images\cards_en\CARDS_033.PNG
-# a35980b59d2d179bf6080fa44ca70b99
+# ▼a35980b59d2d179bf6080fa44ca70b99
 images\cards_en\CARDS_034.PNG
-# d1ed31e70668230ed6bf9e8507e60db8
+# ▼d1ed31e70668230ed6bf9e8507e60db8
 images\cards_en\CARDS_035.PNG
-# 4eff6d8f41d60d9b7c572551510d7362
+# ▼4eff6d8f41d60d9b7c572551510d7362
 images\cards_en\CARDS_036.PNG
-# 5ec58a5ce9037456bb7d8279a07f6d7d
+# ▼5ec58a5ce9037456bb7d8279a07f6d7d
 images\cards_en\CARDS_037.PNG
-# 524928ab722394c575996655a3a1e5ac
+# ▼524928ab722394c575996655a3a1e5ac
 images\cards_en\CARDS_038.PNG
-# 22a80d6841b6795529bd78e211ae51e1
+# ▼22a80d6841b6795529bd78e211ae51e1
 images\cards_en\CARDS_039.PNG
-# 58ea7d6ad2bf834c991ec6a4809c125f
+# ▼58ea7d6ad2bf834c991ec6a4809c125f
 images\cards_en\CARDS_040.PNG
-# 5c12df0e96c3b9819fe4e101d6ce797b
+# ▼5c12df0e96c3b9819fe4e101d6ce797b
 images\cards_en\CARDS_041.PNG
-# 0ca169298a1aa3483175ab07a667f708
+# ▼0ca169298a1aa3483175ab07a667f708
 images\cards_en\CARDS_042.PNG
-# cbeb025d52b07e276f8d2b9dc12b3a40
+# ▼cbeb025d52b07e276f8d2b9dc12b3a40
 images\cards_en\CARDS_043.PNG
-# 349ba175c8be9ac6a21f9d15e323b5c5
+# ▼349ba175c8be9ac6a21f9d15e323b5c5
 images\cards_en\CARDS_044.PNG
-# 889240443075a3e101004b7ef675d733
+# ▼889240443075a3e101004b7ef675d733
 images\cards_en\CARDS_045.PNG
-# 6e6e76d0d74e01d77ea36ad5b062dd13
+# ▼6e6e76d0d74e01d77ea36ad5b062dd13
 images\cards_en\CARDS_046.PNG
-# 9868c2691e1904f08257bf31b68f0943
+# ▼9868c2691e1904f08257bf31b68f0943
 images\cards_en\CARDS_047.PNG
-# 56cf1e42904fdf645f115d2ce150a1fa
+# ▼56cf1e42904fdf645f115d2ce150a1fa
 images\cards_en\CARDS_048.PNG
-# 6994d0695e11caf14ba7805bd845850e
+# ▼6994d0695e11caf14ba7805bd845850e
 images\cards_en\CARDS_049.PNG
-# 3f3d8f1f42f1180fa6943de869fc3dc0
+# ▼3f3d8f1f42f1180fa6943de869fc3dc0
 images\cards_en\CARDS_050.PNG
-# 9dcd89b3038401b9bb904ae419dbeb39
+# ▼9dcd89b3038401b9bb904ae419dbeb39
 images\cards_en\CARDS_051.PNG
-# 5c439a200b5db73b2e1a524d4d92769a
+# ▼5c439a200b5db73b2e1a524d4d92769a
 images\cards_en\CARDS_052.PNG
-# 9e997a50c667ce628817a180e68b6b5e
+# ▼9e997a50c667ce628817a180e68b6b5e
 images\cards_en\CARDS_053.PNG
-# 40771c9f21d766a45530ba5cbb080d59
+# ▼40771c9f21d766a45530ba5cbb080d59
 images\cards_en\CARDS_054.PNG
-# ab072dee8d39dcbbfcea30de6621f001
+# ▼ab072dee8d39dcbbfcea30de6621f001
 images\cards_en\CARDS_055.PNG
-# 101405df6e9d4c835693bf4b1c6fe576
+# ▼101405df6e9d4c835693bf4b1c6fe576
 images\cards_en\CARDS_056.PNG
-# d95ed1a92a747386bf0e55651009f835
+# ▼d95ed1a92a747386bf0e55651009f835
 images\cards_en\CARDS_057.PNG
-# d9bf83af412979db5472900676184009
+# ▼d9bf83af412979db5472900676184009
 images\cards_en\CARDS_058.PNG
-# d1f1b55a2d50886f79549c32f602ad5e
+# ▼d1f1b55a2d50886f79549c32f602ad5e
 images\cards_en\CARDS_059.PNG
 
 # 韩服图片
-# 5b7ccbd3cf31ee412799c0dd9bb2f783
+# ▼5b7ccbd3cf31ee412799c0dd9bb2f783
 images\cards_ko\CARDS_001.PNG
-# dda6009b1e8593729d9161785c206831
+# ▼dda6009b1e8593729d9161785c206831
 images\cards_ko\CARDS_002.PNG
-# 9c7ff1cfd728dbfa98a7986734064048
+# ▼9c7ff1cfd728dbfa98a7986734064048
 images\cards_ko\CARDS_003.PNG
-# d1cfb56a54254ca6f19b795d0933adc2
+# ▼d1cfb56a54254ca6f19b795d0933adc2
 images\cards_ko\CARDS_004.PNG
-# c0d83464923f378cf230e118b4ecfc72
+# ▼c0d83464923f378cf230e118b4ecfc72
 images\cards_ko\CARDS_005.PNG
-# c500283dc2034e78bf771baae892b25f
+# ▼c500283dc2034e78bf771baae892b25f
 images\cards_ko\CARDS_006.PNG
-# a156e5f96e09b80913548d612ce30587
+# ▼a156e5f96e09b80913548d612ce30587
 images\cards_ko\CARDS_007.PNG
-# 8db922e409770654c54f39579e5638c0
+# ▼8db922e409770654c54f39579e5638c0
 images\cards_ko\CARDS_008.PNG
-# 88ec63897da59bdfe65a2bf71c0b0c0e
+# ▼88ec63897da59bdfe65a2bf71c0b0c0e
 images\cards_ko\CARDS_009.PNG
-# d4fa6a0676270295636954fe3f837ab8
+# ▼d4fa6a0676270295636954fe3f837ab8
 images\cards_ko\CARDS_010.PNG
-# 05c72630452da25b414b27bea47534db
+# ▼05c72630452da25b414b27bea47534db
 images\cards_ko\CARDS_011.PNG
-# 84a5fc5fefb32c3864deea9648f76819
+# ▼84a5fc5fefb32c3864deea9648f76819
 images\cards_ko\CARDS_012.PNG
-# ba6b248497cd5c26d3b31cda239acff1
+# ▼ba6b248497cd5c26d3b31cda239acff1
 images\cards_ko\CARDS_013.PNG
-# 5f2ace9bea62c93391cdb13370add1d8
+# ▼5f2ace9bea62c93391cdb13370add1d8
 images\cards_ko\CARDS_014.PNG
-# 3413290021f97e2b8f452bd83afd9d0b
+# ▼3413290021f97e2b8f452bd83afd9d0b
 images\cards_ko\CARDS_015.PNG
-# 1bd6ae438eda93c9eafb3bf3dc66d243
+# ▼1bd6ae438eda93c9eafb3bf3dc66d243
 images\cards_ko\CARDS_016.PNG
-# a052c6cb9f2261e1c1928c7a39c6fa39
+# ▼a052c6cb9f2261e1c1928c7a39c6fa39
 images\cards_ko\CARDS_017.PNG
-# 222903f6efded002c1945103b0d90656
+# ▼222903f6efded002c1945103b0d90656
 images\cards_ko\CARDS_018.PNG
-# a71ab788243179333dc6e5275e999d0b
+# ▼a71ab788243179333dc6e5275e999d0b
 images\cards_ko\CARDS_019.PNG
-# a96bb1f60f7434c4fe0d653bbb7c072a
+# ▼a96bb1f60f7434c4fe0d653bbb7c072a
 images\cards_ko\CARDS_020.PNG
-# 83881384dba320e720b99b9841f284bb
+# ▼83881384dba320e720b99b9841f284bb
 images\cards_ko\CARDS_021.PNG
-# d250b21252794c7b4ee11fff8bad9426
+# ▼d250b21252794c7b4ee11fff8bad9426
 images\cards_ko\CARDS_022.PNG
-# 9fd5641370d862b0798cae0117392e22
+# ▼9fd5641370d862b0798cae0117392e22
 images\cards_ko\CARDS_023.PNG
-# 834d895f01e8464fe27a74959c810216
+# ▼834d895f01e8464fe27a74959c810216
 images\cards_ko\CARDS_024.PNG
-# 512b46d21a70aedf08b2998e5fecf235
+# ▼512b46d21a70aedf08b2998e5fecf235
 images\cards_ko\CARDS_025.PNG
-# 013af73f463cf29aea65ef9b5387ad03
+# ▼013af73f463cf29aea65ef9b5387ad03
 images\cards_ko\CARDS_026.PNG
-# ef13d0c4773ee1802689874b17e6ac5e
+# ▼ef13d0c4773ee1802689874b17e6ac5e
 images\cards_ko\CARDS_027.PNG
-# 12b8671de47c4627d5e018435c8ec392
+# ▼12b8671de47c4627d5e018435c8ec392
 images\cards_ko\CARDS_028.PNG
-# 3a36a5a2e0868bcd591d3e3eabe347c4
+# ▼3a36a5a2e0868bcd591d3e3eabe347c4
 images\cards_ko\CARDS_029.PNG
-# b1a084aefbc944e172117d9623896a3d
+# ▼b1a084aefbc944e172117d9623896a3d
 images\cards_ko\CARDS_030.PNG
-# c51ce8edd9aeb96594a89439241fb550
+# ▼c51ce8edd9aeb96594a89439241fb550
 images\cards_ko\CARDS_031.PNG
-# c0f0702bcc5cc3d398e3cd3e03927afb
+# ▼c0f0702bcc5cc3d398e3cd3e03927afb
 images\cards_ko\CARDS_032.PNG
-# 046f74ab723e4e980b65c54dcf40bbd5
+# ▼046f74ab723e4e980b65c54dcf40bbd5
 images\cards_ko\CARDS_033.PNG
-# a35980b59d2d179bf6080fa44ca70b99
+# ▼a35980b59d2d179bf6080fa44ca70b99
 images\cards_ko\CARDS_034.PNG
-# d1ed31e70668230ed6bf9e8507e60db8
+# ▼d1ed31e70668230ed6bf9e8507e60db8
 images\cards_ko\CARDS_035.PNG
-# 4eff6d8f41d60d9b7c572551510d7362
+# ▼4eff6d8f41d60d9b7c572551510d7362
 images\cards_ko\CARDS_036.PNG
-# 5ec58a5ce9037456bb7d8279a07f6d7d
+# ▼5ec58a5ce9037456bb7d8279a07f6d7d
 images\cards_ko\CARDS_037.PNG
-# 524928ab722394c575996655a3a1e5ac
+# ▼524928ab722394c575996655a3a1e5ac
 images\cards_ko\CARDS_038.PNG
-# 22a80d6841b6795529bd78e211ae51e1
+# ▼22a80d6841b6795529bd78e211ae51e1
 images\cards_ko\CARDS_039.PNG
-# 58ea7d6ad2bf834c991ec6a4809c125f
+# ▼58ea7d6ad2bf834c991ec6a4809c125f
 images\cards_ko\CARDS_040.PNG
-# 5c12df0e96c3b9819fe4e101d6ce797b
+# ▼5c12df0e96c3b9819fe4e101d6ce797b
 images\cards_ko\CARDS_041.PNG
-# 0ca169298a1aa3483175ab07a667f708
+# ▼0ca169298a1aa3483175ab07a667f708
 images\cards_ko\CARDS_042.PNG
-# 848d5ea12afdc259abce69ec5357782c
+# ▼848d5ea12afdc259abce69ec5357782c
 images\cards_ko\CARDS_043.PNG
-# 349ba175c8be9ac6a21f9d15e323b5c5
+# ▼349ba175c8be9ac6a21f9d15e323b5c5
 images\cards_ko\CARDS_044.PNG
-# 889240443075a3e101004b7ef675d733
+# ▼889240443075a3e101004b7ef675d733
 images\cards_ko\CARDS_045.PNG
-# 6e6e76d0d74e01d77ea36ad5b062dd13
+# ▼6e6e76d0d74e01d77ea36ad5b062dd13
 images\cards_ko\CARDS_046.PNG
-# 9868c2691e1904f08257bf31b68f0943
+# ▼9868c2691e1904f08257bf31b68f0943
 images\cards_ko\CARDS_047.PNG
-# 56cf1e42904fdf645f115d2ce150a1fa
+# ▼56cf1e42904fdf645f115d2ce150a1fa
 images\cards_ko\CARDS_048.PNG
-# 6994d0695e11caf14ba7805bd845850e
+# ▼6994d0695e11caf14ba7805bd845850e
 images\cards_ko\CARDS_049.PNG
-# 602fc2f5a01d7bad63566efca87df29f
+# ▼602fc2f5a01d7bad63566efca87df29f
 images\cards_ko\CARDS_050.PNG
-# 9dcd89b3038401b9bb904ae419dbeb39
+# ▼9dcd89b3038401b9bb904ae419dbeb39
 images\cards_ko\CARDS_051.PNG
-# 5c439a200b5db73b2e1a524d4d92769a
+# ▼5c439a200b5db73b2e1a524d4d92769a
 images\cards_ko\CARDS_052.PNG
-# 9e997a50c667ce628817a180e68b6b5e
+# ▼9e997a50c667ce628817a180e68b6b5e
 images\cards_ko\CARDS_053.PNG
-# f338198d440d1470d1e1f6654753aeed
+# ▼f338198d440d1470d1e1f6654753aeed
 images\cards_ko\CARDS_054.PNG
-# ab072dee8d39dcbbfcea30de6621f001
+# ▼ab072dee8d39dcbbfcea30de6621f001
 images\cards_ko\CARDS_055.PNG
-# 101405df6e9d4c835693bf4b1c6fe576
+# ▼101405df6e9d4c835693bf4b1c6fe576
 images\cards_ko\CARDS_056.PNG
-# d95ed1a92a747386bf0e55651009f835
+# ▼d95ed1a92a747386bf0e55651009f835
 images\cards_ko\CARDS_057.PNG
-# d9bf83af412979db5472900676184009
+# ▼d9bf83af412979db5472900676184009
 images\cards_ko\CARDS_058.PNG
-# d1f1b55a2d50886f79549c32f602ad5e
+# ▼d1f1b55a2d50886f79549c32f602ad5e
 images\cards_ko\CARDS_059.PNG
-# c10070124aee14fdba149383add3dc22
+# ▼c10070124aee14fdba149383add3dc22
 images\cards_ko\CARDS_060.PNG
