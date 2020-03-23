@@ -37,12 +37,12 @@ function sameCard(m1,m2)
  */
 officialAPI.forEach(function(lang) {
 	console.log("正在读取官方 %s 信息",lang.code);
-	const cardJson = fs.readFileSync("official-API/" + lang.code +".json", 'utf-8'); //使用同步读取怪物
+	const cardJson = fs.readFileSync("official-API/" + lang.code +"-card.json", 'utf-8'); //使用同步读取怪物
 	const cardJsonObj = JSON.parse(cardJson);
 	const oCards = lang.cardOriginal = cardJsonObj.card;//将字符串转换为json对象
 
 	const monCards = lang.cards = [];
-	for (let cardIndex = 0; oCards[cardIndex][0] === maxCardIndex; cardIndex++)
+	for (let cardIndex = 0; oCards[cardIndex][0] === cardIndex; cardIndex++)
 	{
 		monCards.push(new Card(oCards[cardIndex]));
 	}
