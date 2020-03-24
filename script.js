@@ -1569,6 +1569,8 @@ function changeid(mon,monDom,latentDom)
 	monDom.setAttribute("data-cardid", monId); //设定新的id
 	if (monId<0) //如果是延迟
 	{
+		monDom.removeAttribute("href");
+		monDom.removeAttribute("title");
 		parentNode.classList.add("delay");
 		parentNode.classList.remove("null");
 		parentNode.appendChild(fragment);
@@ -1576,6 +1578,8 @@ function changeid(mon,monDom,latentDom)
 		return;
 	}else if (monId==0) //如果是空
 	{
+		monDom.removeAttribute("href");
+		monDom.removeAttribute("title");
 		parentNode.classList.add("null");
 		parentNode.classList.remove("delay");
 		parentNode.appendChild(fragment);
