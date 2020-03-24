@@ -54,17 +54,30 @@ Chrome browser need start with the additional argument `--allow-file-access-from
 This is an Object for a language list item.
     ```js
     {
-        name:"English",
-        i18n:"en",
-        searchlist:["en","ja"],
-        guideURL:"http://www.puzzledragonx.com/en/awokenskill.asp?n=$1"
+      name:"English",
+      i18n:"en",
+      searchlist:["en","ja"],
+      guideURL:id=>`http://www.puzzledragonx.com/en/monster.asp?n=${id}`
     }
     ```
     * `name` is the name shown in the list.
     * `i18n` is the language-tag for your language.
     * `searchlist` is the search candidate list string order when you search monster in edit window.  
     Currently only `ja`,`en`,`ko`,`cht`,`chs` languages.(See [monsters-info](monsters-info))
-    * `guideURL` is the game guide URL for your language, `$1` means monster ID.
+    * `guideURL` is a **Function(cardId,cardName)** to return game guide URL for your language.
+    ```js
+    //Full writing
+    guideURL:function(cardId,cardName)
+    {
+      return "http://sample.com/pad/search.php?id=" + cardId + "&name=" + cardName;
+    }
+
+    //In ES6 be equivalent to
+    guideURL:(cardId,cardName)=>`http://sample.com/pad/search.php?id=${cardId}&name=${cardName}`
+
+    //If you only need cardId, can write to
+    guideURL:cardId=>`http://sample.com/pad/search.php?id=${cardId}`
+    ```
 1. Create your language's Localisation file `[i18n].css` and `[i18n].js`.  
 Please refer to existing files.
 
