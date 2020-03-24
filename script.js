@@ -633,6 +633,7 @@ function initialize()
 		{//每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
 			const _m = Cards[parseInt(linkRes[1],10)];
 			_m.evoRootId = m.evoRootId;
+			_m.henshined = true;
 		}
 	});
 	monstersList.appendChild(fragment);

@@ -310,16 +310,16 @@
 }
 
 /*Some icons, style different from the Japanese version*/
-.awoken-40,
-.awoken-46,
-.awoken-47,
-.awoken-48,
+.awoken-icon[data-awoken-icon='40'],
+.awoken-icon[data-awoken-icon='46'],
+.awoken-icon[data-awoken-icon='47'],
+.awoken-icon[data-awoken-icon='48'],
 .type-icon[data-type-icon='12'],
 .type-icon[data-type-icon='9']
 {
 	background-position-x: -32px;
 }
-.latent-icon-14
+.latent-icon[data-latent-icon='14']
 {
 	background-position-x: -76px;
 }
