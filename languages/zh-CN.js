@@ -1407,7 +1407,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有变身",function:cards=>cards.filter(card=>{
+		{name:"所有变身技能",function:cards=>cards.filter(card=>{
 			const searchType = 202;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1417,6 +1417,8 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
+		{name:"所有变身后",function:cards=>cards.filter(card=>card.henshinTo)},
+		{name:"所有非变身",function:cards=>cards.filter(card=>!card.henshinFrom && !card.henshinTo)},
 		{name:"所有普通重力（按比例排序）",function:cards=>cards.filter(card=>{
 			const searchType = 6;
 			const skill = Skills[card.activeSkillId];
