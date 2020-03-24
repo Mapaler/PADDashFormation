@@ -962,8 +962,7 @@ ul{
 	float: left;
 	margin-right:5px;
 }
-.monsterinfo-box .monsterinfo-line>div,
-.monsterinfo-box .monsterinfo-line>ul
+.monsterinfo-box .monsterinfo-line>div
 {
 	display:inline-block;
 	vertical-align: top;
@@ -1031,8 +1030,8 @@ ul{
 .monster-rare[data-rarity='8']::before{content: "8";}
 .monster-rare[data-rarity='9']::before{content: "9";}
 .monster-rare[data-rarity='10']::before{content: "10";}
-.monsterinfo-box .monster-type{
-	font-size: 0;
+.monsterinfo-box .monster-type {
+	display: inline;
 }
 .monsterinfo-box .monster-type .type-name{
 	display:inline-block;

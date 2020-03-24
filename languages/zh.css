@@ -308,13 +308,13 @@
 	content: "关闭搜索";
 }
 /*Some icons, style different from the Japanese version*/
-.awoken-46,
-.awoken-47
+.awoken-icon[data-awoken-icon='46'],
+.awoken-icon[data-awoken-icon='47']
 {
-	background-position-x: -64px;
+	background-position-x: calc(-32px * 2);
 }
 .badge[data-badge-icon='0']::before,
-.badge[data-badge-icon='17']::before
+.badge[data-badge-icon='14']::before
 {
-	background-position-x: -72px;
+	background-position-x: calc(-36px * 2);
 }
