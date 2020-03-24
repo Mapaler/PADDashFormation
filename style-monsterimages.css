@@ -7,19 +7,19 @@
 	background: none; /*无*/
 }
 .property[data-property='0']{
-	background-position-x: 0; /*火*/
+	background-position-x: calc(-102px * 0); /*火*/
 }
 .property[data-property='1']{
-	background-position-x: -102px; /*水*/
+	background-position-x: calc(-102px * 1); /*水*/
 }
 .property[data-property='2']{
-	background-position-x: -204px; /*木*/
+	background-position-x: calc(-102px * 2); /*木*/
 }
 .property[data-property='3']{
-	background-position-x: -306px; /*光*/
+	background-position-x: calc(-102px * 3); /*光*/
 }
 .property[data-property='4']{
-	background-position-x: -408px; /*暗*/
+	background-position-x: calc(-102px * 4); /*暗*/
 }
 .subproperty{ /*副属性*/
 	background-position-y: -104px;
@@ -28,19 +28,19 @@
 	background: none; /*无*/
 }
 .subproperty[data-property='0']{
-	background-position-x: 0; /*火*/
+	background-position-x: calc(-102px * 0); /*火*/
 }
 .subproperty[data-property='1']{
-	background-position-x: -102px; /*水*/
+	background-position-x: calc(-102px * 1); /*水*/
 }
 .subproperty[data-property='2']{
-	background-position-x: -204px; /*木*/
+	background-position-x: calc(-102px * 2); /*木*/
 }
 .subproperty[data-property='3']{
-	background-position-x: -306px; /*光*/
+	background-position-x: calc(-102px * 3); /*光*/
 }
 .subproperty[data-property='4']{
-	background-position-x: -408px; /*暗*/
+	background-position-x: calc(-102px * 4); /*暗*/
 }
 /*宠物头像所用的图片*/
 .monster[data-cards-pic-idx='1']{background-image: url(images/cards_ja/CARDS_001.PNG);}
@@ -345,26 +345,26 @@
 /*.en-only.monster[data-cards-pic-idx='54']{background-image: url(images/cards/en/CARDS_054.PNG);}
 .en-only.monster[data-cards-pic-idx='55']{background-image: url(images/cards/en/CARDS_055.PNG);}*/
 /*宠物在图中编号对应的坐标*/
-.monster[data-cards-pic-x='0']{background-position-x:0px;}
-.monster[data-cards-pic-x='1']{background-position-x:-102px;}
-.monster[data-cards-pic-x='2']{background-position-x:-204px;}
-.monster[data-cards-pic-x='3']{background-position-x:-306px;}
-.monster[data-cards-pic-x='4']{background-position-x:-408px;}
-.monster[data-cards-pic-x='5']{background-position-x:-510px;}
-.monster[data-cards-pic-x='6']{background-position-x:-612px;}
-.monster[data-cards-pic-x='7']{background-position-x:-714px;}
-.monster[data-cards-pic-x='8']{background-position-x:-816px;}
-.monster[data-cards-pic-x='9']{background-position-x:-918px;}
-.monster[data-cards-pic-y='0']{background-position-y:0px;}
-.monster[data-cards-pic-y='1']{background-position-y:-102px;}
-.monster[data-cards-pic-y='2']{background-position-y:-204px;}
-.monster[data-cards-pic-y='3']{background-position-y:-306px;}
-.monster[data-cards-pic-y='4']{background-position-y:-408px;}
-.monster[data-cards-pic-y='5']{background-position-y:-510px;}
-.monster[data-cards-pic-y='6']{background-position-y:-612px;}
-.monster[data-cards-pic-y='7']{background-position-y:-714px;}
-.monster[data-cards-pic-y='8']{background-position-y:-816px;}
-.monster[data-cards-pic-y='9']{background-position-y:-918px;}
+.monster[data-cards-pic-x='0']{background-position-x:calc(-102px * 0);}
+.monster[data-cards-pic-x='1']{background-position-x:calc(-102px * 1);}
+.monster[data-cards-pic-x='2']{background-position-x:calc(-102px * 2);}
+.monster[data-cards-pic-x='3']{background-position-x:calc(-102px * 3);}
+.monster[data-cards-pic-x='4']{background-position-x:calc(-102px * 4);}
+.monster[data-cards-pic-x='5']{background-position-x:calc(-102px * 5);}
+.monster[data-cards-pic-x='6']{background-position-x:calc(-102px * 6);}
+.monster[data-cards-pic-x='7']{background-position-x:calc(-102px * 7);}
+.monster[data-cards-pic-x='8']{background-position-x:calc(-102px * 8);}
+.monster[data-cards-pic-x='9']{background-position-x:calc(-102px * 9);}
+.monster[data-cards-pic-y='0']{background-position-y:calc(-102px * 0);}
+.monster[data-cards-pic-y='1']{background-position-y:calc(-102px * 1);}
+.monster[data-cards-pic-y='2']{background-position-y:calc(-102px * 2);}
+.monster[data-cards-pic-y='3']{background-position-y:calc(-102px * 3);}
+.monster[data-cards-pic-y='4']{background-position-y:calc(-102px * 4);}
+.monster[data-cards-pic-y='5']{background-position-y:calc(-102px * 5);}
+.monster[data-cards-pic-y='6']{background-position-y:calc(-102px * 6);}
+.monster[data-cards-pic-y='7']{background-position-y:calc(-102px * 7);}
+.monster[data-cards-pic-y='8']{background-position-y:calc(-102px * 8);}
+.monster[data-cards-pic-y='9']{background-position-y:calc(-102px * 9);}
 /*觉醒、类型、潜觉*/
 .awoken-icon,.type-icon,.latent-icon{
 	display:inline-block;
@@ -378,223 +378,223 @@
 	background-position-x: 0;
 }
 .awoken-icon[data-awoken-icon='0']{/*问号*/
-	background-position-y: 0;
+	background-position-y:calc(-32px * 0);
 }
 .awoken-icon[data-awoken-icon='1']{/*HP+*/
-	background-position-y: -32px;
+	background-position-y:calc(-32px * 1);
 }
 .awoken-icon[data-awoken-icon='2']{/*攻击+*/
-	background-position-y: -64px;
+	background-position-y:calc(-32px * 2);
 }
 .awoken-icon[data-awoken-icon='3']{/*回复+*/
-	background-position-y: -96px;
+	background-position-y:calc(-32px * 3);
 }
 .awoken-icon[data-awoken-icon='4']{/*火盾*/
-	background-position-y: -128px;
+	background-position-y:calc(-32px * 4);
 }
 .awoken-icon[data-awoken-icon='5']{/*水盾*/
-	background-position-y: -160px;
+	background-position-y:calc(-32px * 5);
 }
 .awoken-icon[data-awoken-icon='6']{/*木盾*/
-	background-position-y: -192px;
+	background-position-y:calc(-32px * 6);
 }
 .awoken-icon[data-awoken-icon='7']{/*光盾*/
-	background-position-y: -224px;
+	background-position-y:calc(-32px * 7);
 }
 .awoken-icon[data-awoken-icon='8']{/*暗盾*/
-	background-position-y: -256px;
+	background-position-y:calc(-32px * 8);
 }
 .awoken-icon[data-awoken-icon='9']{/*自回*/
-	background-position-y: -288px;
+	background-position-y:calc(-32px * 9);
 }
 .awoken-icon[data-awoken-icon='10']{/*防封*/
-	background-position-y: -320px;
+	background-position-y:calc(-32px * 10);
 }
 .awoken-icon[data-awoken-icon='11']{/*防暗*/
-	background-position-y: -352px;
+	background-position-y:calc(-32px * 11);
 }
 .awoken-icon[data-awoken-icon='12']{/*防废*/
-	background-position-y: -384px;
+	background-position-y:calc(-32px * 12);
 }
 .awoken-icon[data-awoken-icon='13']{/*防毒*/
-	background-position-y: -416px;
+	background-position-y:calc(-32px * 13);
 }
 .awoken-icon[data-awoken-icon='14']{/*火+*/
-	background-position-y: -448px;
+	background-position-y:calc(-32px * 14);
 }
 .awoken-icon[data-awoken-icon='15']{/*水+*/
-	background-position-y: -480px;
+	background-position-y:calc(-32px * 15);
 }
 .awoken-icon[data-awoken-icon='16']{/*木+*/
-	background-position-y: -512px;
+	background-position-y:calc(-32px * 16);
 }
 .awoken-icon[data-awoken-icon='17']{/*光+*/
-	background-position-y: -544px;
+	background-position-y:calc(-32px * 17);
 }
 .awoken-icon[data-awoken-icon='18']{/*暗+*/
-	background-position-y: -576px;
+	background-position-y:calc(-32px * 18);
 }
 .awoken-icon[data-awoken-icon='19']{/*手指*/
-	background-position-y: -608px;
+	background-position-y:calc(-32px * 19);
 }
 .awoken-icon[data-awoken-icon='20']{/*心解*/
-	background-position-y: -640px;
+	background-position-y:calc(-32px * 20);
 }
 .awoken-icon[data-awoken-icon='21']{/*SB*/
-	background-position-y: -672px;
+	background-position-y:calc(-32px * 21);
 }
 .awoken-icon[data-awoken-icon='22']{/*火横*/
-	background-position-y: -704px;
+	background-position-y:calc(-32px * 22);
 }
 .awoken-icon[data-awoken-icon='23']{/*水横*/
-	background-position-y: -736px;
+	background-position-y:calc(-32px * 23);
 }
 .awoken-icon[data-awoken-icon='24']{/*木横*/
-	background-position-y: -768px;
+	background-position-y:calc(-32px * 24);
 }
 .awoken-icon[data-awoken-icon='25']{/*光横*/
-	background-position-y: -800px;
+	background-position-y:calc(-32px * 25);
 }
 .awoken-icon[data-awoken-icon='26']{/*暗横*/
-	background-position-y: -832px;
+	background-position-y:calc(-32px * 26);
 }
 .awoken-icon[data-awoken-icon='27']{/*U*/
-	background-position-y: -864px;
+	background-position-y:calc(-32px * 27);
 }
 .awoken-icon[data-awoken-icon='28']{/*SX*/
-	background-position-y: -896px;
+	background-position-y:calc(-32px * 28);
 }
 .awoken-icon[data-awoken-icon='29']{/*心+*/
-	background-position-y: -928px;
+	background-position-y:calc(-32px * 29);
 }
 .awoken-icon[data-awoken-icon='30']{/*协力*/
-	background-position-y: -960px;
+	background-position-y:calc(-32px * 30);
 }
 .awoken-icon[data-awoken-icon='31']{/*龙杀*/
-	background-position-y: -992px;
+	background-position-y:calc(-32px * 31);
 }
 .awoken-icon[data-awoken-icon='32']{/*神杀*/
-	background-position-y: -1024px;
+	background-position-y:calc(-32px * 32);
 }
 .awoken-icon[data-awoken-icon='33']{/*恶魔杀*/
-	background-position-y: -1056px;
+	background-position-y:calc(-32px * 33);
 }
 .awoken-icon[data-awoken-icon='34']{/*机杀*/
-	background-position-y: -1088px;
+	background-position-y:calc(-32px * 34);
 }
 .awoken-icon[data-awoken-icon='35']{/*平衡杀*/
-	background-position-y: -1120px;
+	background-position-y:calc(-32px * 35);
 }
 .awoken-icon[data-awoken-icon='36']{/*攻击杀*/
-	background-position-y: -1152px;
+	background-position-y:calc(-32px * 36);
 }
 .awoken-icon[data-awoken-icon='37']{/*体力杀*/
-	background-position-y: -1184px;
+	background-position-y:calc(-32px * 37);
 }
 .awoken-icon[data-awoken-icon='38']{/*回复杀*/
-	background-position-y: -1216px;
+	background-position-y:calc(-32px * 38);
 }
 .awoken-icon[data-awoken-icon='39']{/*进化杀*/
-	background-position-y: -1248px;
+	background-position-y:calc(-32px * 39);
 }
 .awoken-icon[data-awoken-icon='40']{/*觉醒杀*/
-	background-position-y: -1280px;
+	background-position-y:calc(-32px * 40);
 }
 .awoken-icon[data-awoken-icon='41']{/*强化杀*/
-	background-position-y: -1312px;
+	background-position-y:calc(-32px * 41);
 }
 .awoken-icon[data-awoken-icon='42']{/*卖钱杀*/
-	background-position-y: -1344px;
+	background-position-y:calc(-32px * 42);
 }
 .awoken-icon[data-awoken-icon='43']{/*7c*/
-	background-position-y: -1376px;
+	background-position-y:calc(-32px * 43);
 }
 .awoken-icon[data-awoken-icon='44']{/*5色破防*/
-	background-position-y: -1408px;
+	background-position-y:calc(-32px * 44);
 }
 .awoken-icon[data-awoken-icon='45']{/*心追*/
-	background-position-y: -1440px;
+	background-position-y:calc(-32px * 45);
 }
 .awoken-icon[data-awoken-icon='46']{/*全体HP*/
-	background-position-y: -1472px;
+	background-position-y:calc(-32px * 46);
 }
 .awoken-icon[data-awoken-icon='47']{/*全体回复*/
-	background-position-y: -1504px;
+	background-position-y:calc(-32px * 47);
 }
 .awoken-icon[data-awoken-icon='48']{/*破无效*/
-	background-position-y: -1536px;
+	background-position-y:calc(-32px * 48);
 }
 .awoken-icon[data-awoken-icon='49']{/*武器觉醒*/
-	background-position-y: -1568px;
+	background-position-y:calc(-32px * 49);
 }
 .awoken-icon[data-awoken-icon='50']{/*方块心追*/
-	background-position-y: -1600px;
+	background-position-y:calc(-32px * 50);
 }
 .awoken-icon[data-awoken-icon='51']{/*5色溜*/
-	background-position-y: -1632px;
+	background-position-y:calc(-32px * 51);
 }
 .awoken-icon[data-awoken-icon='52']{/*大防封*/
-	background-position-y: -1664px;
+	background-position-y:calc(-32px * 52);
 }
 .awoken-icon[data-awoken-icon='53']{/*大手指*/
-	background-position-y: -1696px;
+	background-position-y:calc(-32px * 53);
 }
 .awoken-icon[data-awoken-icon='54']{/*防云*/
-	background-position-y: -1728px;
+	background-position-y:calc(-32px * 54);
 }
 .awoken-icon[data-awoken-icon='55']{/*防封条*/
-	background-position-y: -1760px;
+	background-position-y:calc(-32px * 55);
 }
 .awoken-icon[data-awoken-icon='56']{/*大SB*/
-	background-position-y: -1792px;
+	background-position-y:calc(-32px * 56);
 }
 .awoken-icon[data-awoken-icon='57']{/*满血强化*/
-	background-position-y: -1824px;
+	background-position-y:calc(-32px * 57);
 }
 .awoken-icon[data-awoken-icon='58']{/*下半血强化*/
-	background-position-y: -1856px;
+	background-position-y:calc(-32px * 58);
 }
 .awoken-icon[data-awoken-icon='59']{/*L盾*/
-	background-position-y: -1888px;
+	background-position-y:calc(-32px * 59);
 }
 .awoken-icon[data-awoken-icon='60']{/*L解锁*/
-	background-position-y: -1920px;
+	background-position-y:calc(-32px * 60);
 }
 .awoken-icon[data-awoken-icon='61']{/*10c*/
-	background-position-y: -1952px;
+	background-position-y:calc(-32px * 61);
 }
 .awoken-icon[data-awoken-icon='62']{/*c珠*/
-	background-position-y: -1984px;
+	background-position-y:calc(-32px * 62);
 }
 .awoken-icon[data-awoken-icon='63']{/*语音*/
-	background-position-y: -2016px;
+	background-position-y:calc(-32px * 63);
 }
 .awoken-icon[data-awoken-icon='64']{/*奖励增加*/
-	background-position-y: -2048px;
+	background-position-y:calc(-32px * 64);
 }
 .awoken-icon[data-awoken-icon='65']{/*HP-*/
-	background-position-y: -2080px;
+	background-position-y:calc(-32px * 65);
 }
 .awoken-icon[data-awoken-icon='66']{/*攻击-*/
-	background-position-y: -2112px;
+	background-position-y:calc(-32px * 66);
 }
 .awoken-icon[data-awoken-icon='67']{/*回复-*/
-	background-position-y: -2144px;
+	background-position-y:calc(-32px * 67);
 }
 .awoken-icon[data-awoken-icon='68']{/*大防暗*/
-	background-position-y: -2176px;
+	background-position-y:calc(-32px * 68);
 }
 .awoken-icon[data-awoken-icon='69']{/*大防废*/
-	background-position-y: -2208px;
+	background-position-y:calc(-32px * 69);
 }
 .awoken-icon[data-awoken-icon='70']{/*大防毒*/
-	background-position-y: -2240px;
+	background-position-y:calc(-32px * 70);
 }
 .awoken-icon[data-awoken-icon='71']{/*掉废*/
-	background-position-y: -2272px;
+	background-position-y:calc(-32px * 71);
 }
 .awoken-icon[data-awoken-icon='72']{/*掉毒*/
-	background-position-y: -2304px;
+	background-position-y:calc(-32px * 72);
 }
 /*类型*/
 .type-icon{
@@ -602,44 +602,44 @@
 	background-position-x: 0;
 	background-position-y: 32px; /*默认不显示*/
 }
-.type-icon[data-type-icon='4']{/*龙*/
-	background-position-y: 0px;
-}
-.type-icon[data-type-icon='5']{/*神*/
-	background-position-y: -32px;
-}
-.type-icon[data-type-icon='7']{/*恶魔*/
-	background-position-y: -64px;
-}
-.type-icon[data-type-icon='8']{/*机械*/
-	background-position-y: -96px;
+.type-icon[data-type-icon='0']{/*进化用*/
+	background-position-y:calc(-32px * 0);
 }
 .type-icon[data-type-icon='1']{/*平衡*/
-	background-position-y: -128px;
-}
-.type-icon[data-type-icon='6']{/*攻击*/
-	background-position-y: -160px;
+	background-position-y:calc(-32px * 1);
 }
 .type-icon[data-type-icon='2']{/*体力*/
-	background-position-y: -192px;
+	background-position-y:calc(-32px * 2);
 }
 .type-icon[data-type-icon='3']{/*回复*/
-	background-position-y: -224px;
+	background-position-y:calc(-32px * 3);
 }
-.type-icon[data-type-icon='0']{/*进化用*/
-	background-position-y: -256px;
+.type-icon[data-type-icon='4']{/*龙*/
+	background-position-y:calc(-32px * 4);
 }
-.type-icon[data-type-icon='12']{/*能力觉醒用*/
-	background-position-y: -288px;
+.type-icon[data-type-icon='5']{/*神*/
+	background-position-y:calc(-32px * 5);
 }
-.type-icon[data-type-icon='14']{/*强化合成用*/
-	background-position-y: -320px;
+.type-icon[data-type-icon='6']{/*攻击*/
+	background-position-y:calc(-32px * 6);
 }
-.type-icon[data-type-icon='15']{/*贩卖用*/
-	background-position-y: -352px;
+.type-icon[data-type-icon='7']{/*恶魔*/
+	background-position-y:calc(-32px * 7);
+}
+.type-icon[data-type-icon='8']{/*机械*/
+	background-position-y:calc(-32px * 8);
 }
 .type-icon[data-type-icon='9']{/*特别保护*/
-	background-position-y: -384px;
+	background-position-y:calc(-32px * 9);
+}
+.type-icon[data-type-icon='12']{/*能力觉醒用*/
+	background-position-y:calc(-32px * 12);
+}
+.type-icon[data-type-icon='14']{/*强化合成用*/
+	background-position-y:calc(-32px * 14);
+}
+.type-icon[data-type-icon='15']{/*贩卖用*/
+	background-position-y:calc(-32px * 15);
 }
 /*潜在觉醒*/
 .latent-icon{
@@ -833,58 +833,58 @@ var sawokens = [
 	background-position-x: 0;
 }
 .badge[data-badge-icon='0']::before{
-	background-position-y: 0px;
+	background-position-y:calc(-30px * 0);
 }
 .badge[data-badge-icon='1']::before{
-	background-position-y: -30px;
+	background-position-y:calc(-30px * 1);
 }
 .badge[data-badge-icon='2']::before{
-	background-position-y: -60px;
+	background-position-y:calc(-30px * 2);
 }
 .badge[data-badge-icon='3']::before{
-	background-position-y: -90px;
+	background-position-y:calc(-30px * 3);
 }
 .badge[data-badge-icon='4']::before{
-	background-position-y: -120px;
+	background-position-y:calc(-30px * 4);
 }
 .badge[data-badge-icon='5']::before{
-	background-position-y: -150px;
+	background-position-y:calc(-30px * 5);
 }
 .badge[data-badge-icon='6']::before{
-	background-position-y: -180px;
+	background-position-y:calc(-30px * 6);
 }
 .badge[data-badge-icon='7']::before{
-	background-position-y: -210px;
+	background-position-y:calc(-30px * 7);
 }
 .badge[data-badge-icon='8']::before{
-	background-position-y: -240px;
+	background-position-y:calc(-30px * 8);
 }
 .badge[data-badge-icon='9']::before{
-	background-position-y: -270px;
+	background-position-y:calc(-30px * 9);
 }
 .badge[data-badge-icon='10']::before{
-	background-position-y: -300px;
+	background-position-y:calc(-30px * 10);
 }
 .badge[data-badge-icon='11']::before{
-	background-position-y: -330px;
+	background-position-y:calc(-30px * 11);
 }
 .badge[data-badge-icon='12']::before{
-	background-position-y: -360px;
+	background-position-y:calc(-30px * 12);
 }
 .badge[data-badge-icon='13']::before{
-	background-position-y: -390px;
+	background-position-y:calc(-30px * 13);
 }
 .badge[data-badge-icon='14']::before{
-	background-position-y: -420px;
+	background-position-y:calc(-30px * 14);
 }
 .badge[data-badge-icon='15']::before{
-	background-position-y: -450px;
+	background-position-y:calc(-30px * 15);
 }
 .badge[data-badge-icon='16']::before{
-	background-position-y: -480px;
+	background-position-y:calc(-30px * 16);
 }
 .badge[data-badge-icon='17']::before{
-	background-position-y: -510px;
+	background-position-y:calc(-30px * 17);
 }
 
 /*搜索框中用到的属性图片*/
