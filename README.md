@@ -7,8 +7,8 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 1. 中文（简体）
 1. 中文（繁體）
 1. English
-1. 日本語 (by google translate)
-1. 한국어 (by google translate)
+1. 日本語 (by Bing Microsoft Translator)
+1. 한국어 (by Bing Microsoft Translator)
 
 ### 预览 \| Preview
 
@@ -65,19 +65,19 @@ This is an Object for a language list item.
     * `searchlist` is the search candidate list string order when you search monster in edit window.  
     Currently only `ja`,`en`,`ko`,`cht`,`chs` languages.(See [monsters-info](monsters-info))
     * `guideURL` is a **Function(cardId,cardName)** to return game guide URL for your language.
-    ```js
-    //Full writing
-    guideURL:function(cardId,cardName)
-    {
-      return "http://sample.com/pad/search.php?id=" + cardId + "&name=" + cardName;
-    }
+      ```js
+      //Full writing
+      guideURL:function(cardId,cardName)
+      {
+        return "http://sample.com/pad/search.php?id=" + cardId + "&name=" + cardName;
+      }
 
-    //In ES6 be equivalent to
-    guideURL:(cardId,cardName)=>`http://sample.com/pad/search.php?id=${cardId}&name=${cardName}`
+      //In ES6 be equivalent to
+      guideURL:(cardId,cardName)=>`http://sample.com/pad/search.php?id=${cardId}&name=${cardName}`
 
-    //If you only need cardId, can write to
-    guideURL:cardId=>`http://sample.com/pad/search.php?id=${cardId}`
-    ```
+      //If you only need cardId, can write to
+      guideURL:cardId=>`http://sample.com/pad/search.php?id=${cardId}`
+      ```
 1. Create your language's Localisation file `[i18n].css` and `[i18n].js`.  
 Please refer to existing files.
 
