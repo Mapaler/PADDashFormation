@@ -1051,7 +1051,6 @@ function initialize()
 			let decoder = new Adpcm(adpcm_wasm, pcmImportObj);
 			decoder.resetDecodeState(new Adpcm.State(0, 0));
 			decodeAudio(`sound/voice/jp/padv${PrefixInteger(card.voiceId,3)}.wav`, decoder.decode.bind(decoder));
-			console.log(`sound/voice/jp/padv${PrefixInteger(card.voiceId,3)}.wav`);
 		}
 	}
 	monEditAwokensLabel.forEach(akDom=>akDom.onclick = playVoiceAwoken);
