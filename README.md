@@ -96,6 +96,7 @@ Please refer to existing files.
 * [퍼즐앤드래곤](https://pad.neocyon.com/W/)
 
 # 使用开源软件 | Open source software used
-* [localforage](//github.com/localForage/localForage) //Easy IndexedDB
+* [pad-rikuu](//github.com/kiootic/pad-rikuu) //Parse data
 * [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
-* [jy4340132/aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
+* [localforage](//github.com/localForage/localForage) //Easy IndexedDB
+* [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
