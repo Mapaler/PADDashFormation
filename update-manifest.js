@@ -7,6 +7,12 @@ const cacheList = [
 		'library/html2canvas.min.js',
 		'library/localforage.min.js',
 	]},
+	{typeName:"ADPCM播放库",list:[
+		'library/jy4340132-aaa/std.js',
+		'library/jy4340132-aaa/pcm_player.js',
+		'library/jy4340132-aaa/adpcm.js',
+		'library/jy4340132-aaa/adpcm.wasm',
+	]},
 	{typeName:"语言表",list:[
 		'languages/language-list.js',
 	]},
@@ -26,12 +32,12 @@ const cacheList = [
 		'fonts/FOT-KurokaneStd-EB.svg',
 	]},
 	{typeName:"UI图片",list:[
+		'images/icon.png',
 		'images/awoken.png',
 		'images/awoken-count-bg.png',
 		'images/badge.png',
 		'images/badge-bg.png',
 		'images/CARDFRAME2.PNG',
-		'images/icon.png',
 		'images/latent.png',
 		'images/orb-small-dark.png',
 		'images/orb-small-fire.png',
@@ -55,6 +61,28 @@ cardsLang.forEach(lang=>{
 	const files = fs.readdirSync(langPath);
 	files.forEach(function (filename) {
 		if (new RegExp(cardsReg,"i").test(filename))
+		{
+			list.push(path.join(langPath, filename));
+		}
+	});
+	const newType = {
+		typeName:lang.name,
+		list:list,
+	};
+	cacheList.push(newType);
+});
+
+const csoundLang = [
+	{name:"日服、港台服语音",path:"sound/voice/jp"},
+];
+const soundsReg = "padv\\d+\\.wav";
+csoundLang.forEach(lang=>{
+	console.log('正在添加 %s',lang.name);
+	const list = [];
+	const langPath = lang.path;
+	const files = fs.readdirSync(langPath);
+	files.forEach(function (filename) {
+		if (new RegExp(soundsReg,"i").test(filename))
 		{
 			list.push(path.join(langPath, filename));
 		}
