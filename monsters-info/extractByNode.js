@@ -129,9 +129,7 @@ for (let li = 0;li < officialAPI.length; li++)
 			{
 				const otName = _m.name;
 				const searchRegString = "^(?:\\?+|\\*+|초월\\s*\\?+)"; //名字以问号、星号、韩文的问号开头
-				if (!new RegExp(searchRegString,"i").test(name) &&
-					!new RegExp(searchRegString,"i").test(otName)
-				)
+				if (!new RegExp(searchRegString,"i").test(otName))
 				{
 					if (!m.otLangName) //如果没有其他语言名称属性，则添加一个对象属性
 					{m.otLangName = {};}

@@ -32,7 +32,7 @@ typekiller_for_type.forEach(t=>
 	t.typeKiller = t.typeKiller.concat(0,12,14,15) //补充4种特殊杀
 );
 //类型允许的潜觉杀
-const type_allowable_latent = {};
+const type_allowable_latent = [];
 typekiller_for_type.forEach(t=>
 	type_allowable_latent[t.type] = t.typeKiller.map(tn=>
 		typekiller_for_type.find(_t=>_t.type == tn).latent
