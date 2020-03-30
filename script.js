@@ -1050,7 +1050,7 @@ function initialize()
 		{
 			let decoder = new Adpcm(adpcm_wasm, pcmImportObj);
 			decoder.resetDecodeState(new Adpcm.State(0, 0));
-			decodeAudio(`sound/voice/jp/padv${PrefixInteger(card.voiceId,3)}.wav`, decoder.decode.bind(decoder));
+			decodeAudio(`sound/voice/${currentDataSource.code}/padv${PrefixInteger(card.voiceId,3)}.wav`, decoder.decode.bind(decoder));
 		}
 	}
 	monEditAwokensLabel.forEach(akDom=>akDom.onclick = playVoiceAwoken);

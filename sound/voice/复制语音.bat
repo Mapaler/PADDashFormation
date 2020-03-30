@@ -1,0 +1,3 @@
+C:\ProgramFree\FastCopy\FastCopy.exe /cmd=diff /open_window /auto_close D:\Games\÷«¡˙√‘≥«\Puzzle-and-Dragons-Data-Files\mon2\padv*.wav /to=.\ja
+C:\ProgramFree\FastCopy\FastCopy.exe /cmd=diff /open_window /auto_close D:\Games\÷«¡˙√‘≥«\Puzzle-and-Dragons-Data-Files\cards_EN\padv*.wav /to=.\en
+C:\ProgramFree\FastCopy\FastCopy.exe /cmd=diff /open_window /auto_close D:\Games\÷«¡˙√‘≥«\Puzzle-and-Dragons-Data-Files\cards_KO\padv*.wav /to=.\ko

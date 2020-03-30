@@ -29,7 +29,7 @@ const typekiller_for_type = [
 	{type:9,awoken:null,latent:null,typeKiller:[]}, //特殊保护
 ];
 typekiller_for_type.forEach(t=>
-	t.typeKiller = t.typeKiller.concat(0,12,14,15) //补充4种特殊杀
+	t.typeKiller.push(0,12,14,15) //补充4种特殊杀
 );
 //类型允许的潜觉杀
 const type_allowable_latent = [];
