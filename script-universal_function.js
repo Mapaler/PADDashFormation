@@ -85,6 +85,75 @@ function getQueryString(name,url) {
 	}
 }
 
+//数组去重
+/* https://www.cnblogs.com/baiyangyuanzi/p/6726258.html
+* 实现思路：获取没重复的最右一值放入新数组。
+* （检测到有重复值时终止当前循环同时进入顶层循环的下一轮判断）*/
+Array.prototype.uniq = function()
+{
+	let temp = [];
+	const l = this.length;
+	for(let i = 0; i < l; i++) {
+		for(let j = i + 1; j < l; j++){
+			if (this[i] === this[j]){
+				i++;
+				j = i;
+			}
+		}
+		temp.push(this[i]);
+	}
+	return temp;
+};
+//▼ADPCM播放相关，来自 https://github.com/jy4340132/aaa
+const pcmMemory = new WebAssembly.Memory({initial: 256, maximum: 256});
+
+const pcmImportObj = {
+    env: {
+        abortStackOverflow: () => { throw new Error("overflow"); },
+        table: new WebAssembly.Table({ initial: 0, maximum: 0, element: "anyfunc" }),
+        tableBase: 0,
+        memory: pcmMemory,
+        memoryBase: 102400,
+        STACKTOP: 0,
+        STACK_MAX: pcmMemory.buffer.byteLength,
+    }
+};
+
+let pcmPlayer = null;
+let adpcm_wasm = null;
+
+function decodeAudio(fileName, decodeCallback)
+{
+    if(pcmPlayer != null)
+    {
+        pcmPlayer.close();
+    }
+    pcmPlayer = new PCMPlayer(1, 44100);
+    fetch(fileName).then((response) => response.arrayBuffer())
+    .then((bytes) => {
+        let audioData = new Uint8Array(bytes);
+        let step = 160;
+        for(let i = 0; i < audioData.byteLength; i += step)
+        {
+            let pcm16BitData = decodeCallback(audioData.slice(i, i + step));
+            let pcmFloat32Data = Std.shortToFloatData(pcm16BitData);
+            pcmPlayer.feed(pcmFloat32Data);
+        }
+    });
+}
+
+fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffer())
+.then((bytes) => WebAssembly.instantiate(bytes, pcmImportObj))
+.then((wasm) => {
+	adpcm_wasm = wasm;
+    /*addButton("adpcm").onclick = function () {
+        let decoder = new Adpcm(wasm, pcmImportObj);
+        decoder.resetDecodeState(new Adpcm.State(0, 0));
+        decodeAudio("demo.adpcm", decoder.decode.bind(decoder));
+    }*/
+});
+//▲ADPCM播放相关
+
 //计算用了多少潜觉格子
 function usedHole(latent)
 {

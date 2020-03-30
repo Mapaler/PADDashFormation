@@ -16,25 +16,6 @@ var showSearch; //整个程序都可以用的显示搜索函数
 const dataStructure = 3; //阵型输出数据的结构版本
 const className_displayNone = "display-none";
 
-//数组去重
-/* https://www.cnblogs.com/baiyangyuanzi/p/6726258.html
-* 实现思路：获取没重复的最右一值放入新数组。
-* （检测到有重复值时终止当前循环同时进入顶层循环的下一轮判断）*/
-Array.prototype.uniq = function()
-{
-	let temp = [];
-	const l = this.length;
-	for(let i = 0; i < l; i++) {
-		for(let j = i + 1; j < l; j++){
-			if (this[i] === this[j]){
-				i++;
-				j = i;
-			}
-		}
-		temp.push(this[i]);
-	}
-	return temp;
-};
 //队员基本的留空
 var Member = function(){
 	this.id=0;
@@ -1051,15 +1032,29 @@ function initialize()
 	const awokenCountLabel = monEditAwokensRow.querySelector(".awoken-count");
 	const monEditAwokens = Array.from(monEditAwokensRow.querySelectorAll(".awoken-ul input[name='awoken-number']"));
 	function checkAwoken(){
+		const card = Cards[editBox.mid];
 		const value = parseInt(this.value,10);
 		awokenCountLabel.innerHTML = value;
-		if (value>0 && value==(Cards[editBox.mid].awakenings.length))
+		if (value>0 && value==(card.awakenings.length))
 			awokenCountLabel.classList.add("full-awoken");
 		else
 			awokenCountLabel.classList.remove("full-awoken");
 		reCalculateAbility();
 	}
 	monEditAwokens.forEach(akDom=>akDom.onclick = checkAwoken);
+
+	const monEditAwokensLabel = Array.from(monEditAwokensRow.querySelectorAll(".awoken-ul .awoken-icon"));
+	function playVoiceAwoken(){ //点击label才播放语音
+		const card = Cards[editBox.mid];
+		if (parseInt(this.getAttribute("data-awoken-icon"),10) === 63)
+		{
+			let decoder = new Adpcm(adpcm_wasm, pcmImportObj);
+			decoder.resetDecodeState(new Adpcm.State(0, 0));
+			decodeAudio(`sound/voice/jp/padv${PrefixInteger(card.voiceId,3)}.wav`, decoder.decode.bind(decoder));
+			console.log(`sound/voice/jp/padv${PrefixInteger(card.voiceId,3)}.wav`);
+		}
+	}
+	monEditAwokensLabel.forEach(akDom=>akDom.onclick = playVoiceAwoken);
 
 	//超觉醒
 	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
