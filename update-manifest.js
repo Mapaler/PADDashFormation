@@ -73,7 +73,9 @@ cardsLang.forEach(lang=>{
 });
 
 const csoundLang = [
-	{name:"日服、港台服语音",path:"sound/voice/jp"},
+	{name:"日服、港台服语音",path:"sound/voice/ja"},
+	{name:"国际服语音",path:"sound/voice/en"},
+	{name:"韩服语音",path:"sound/voice/ko"},
 ];
 const soundsReg = "padv\\d+\\.wav";
 csoundLang.forEach(lang=>{
