@@ -76,7 +76,7 @@ class Card{
 		card.is8Latent = (flags & 1<<5) !== 0; //是否支持8个潜觉
 		card.altName = data[i++]; //替换名字
 		card.limitBreakIncr = data[i++]; //110级增长
-		card.unk09 = data[i++]; //未知09
+		card.voiceId = data[i++]; //语音觉醒的ID
 		card.blockSkinId = data[i++]; //珠子皮肤ID
 		card.specialAttribute = data[i++]; //特别属性，比如黄龙
 		if (i !== data.length)
