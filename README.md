@@ -94,3 +94,8 @@ Please refer to existing files.
 * [龍族拼圖](https://pad.gungho.jp/hktw/pad/)
 * [Puzzle & Dragons](https://www.puzzleanddragons.us/)
 * [퍼즐앤드래곤](https://pad.neocyon.com/W/)
+
+# 使用开源软件 | Open source software used
+* [localforage](//github.com/localForage/localForage) //Easy IndexedDB
+* [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
+* [jy4340132/aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
