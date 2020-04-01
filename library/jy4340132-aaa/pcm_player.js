@@ -10,7 +10,7 @@ class PCMPlayer
         this._flush = this._flush.bind(this);
         this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this._gainNode = this._audioCtx.createGain();
-        this._gainNode.gain.value = 1;
+        this._gainNode.gain.value = 0.3;
         this._gainNode.connect(this._audioCtx.destination);
         this._startTime = this._audioCtx.currentTime;
         this._interval = setInterval(this._flush, this._flushingTime);
