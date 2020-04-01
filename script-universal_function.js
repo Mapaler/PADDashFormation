@@ -1,22 +1,25 @@
-﻿//仿GM_xmlhttpRequest函数v1.3
+﻿//仿GM_xmlhttpRequest函数v1.4
 const GM_xmlhttpRequest = function(GM_param) {
 	const xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
 	xhr.open(GM_param.method, GM_param.url, true);
 	if (GM_param.responseType) xhr.responseType = GM_param.responseType;
 	if (GM_param.overrideMimeType) xhr.overrideMimeType(GM_param.overrideMimeType);
-	xhr.onreadystatechange = function() //设置回调函数
+	xhr.onreadystatechange = function(e) //设置回调函数
 		{
-			if (xhr.readyState === xhr.DONE) { //请求完成时
-				if (xhr.status === 200 && GM_param.onload) //正确加载时
+			const _xhr = e.target;
+			if (_xhr.readyState === _xhr.DONE) { //请求完成时
+				if (_xhr.status === 200 && GM_param.onload) //正确加载时
 				{
-					GM_param.onload(xhr);
+					GM_param.onload(_xhr);
 				}
-				if (xhr.status !== 200 && GM_param.onerror) //发生错误时
+				if (_xhr.status !== 200 && GM_param.onerror) //发生错误时
 				{
-					GM_param.onerror(xhr);
+					GM_param.onerror(_xhr);
 				}
 			}
 		};
+	if (GM_param.onprogress)
+		xhr.upload.onprogress = function(e){GM_param.onprogress(e.target)};
 	//添加header
 	for (let header in GM_param.headers) {
 		xhr.setRequestHeader(header, GM_param.headers[header]);
