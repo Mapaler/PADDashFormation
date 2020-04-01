@@ -1,0 +1,16 @@
+{
+	"name": "P&D Dash Formation",
+	"short_name": "P&D-DF",
+	"start_url": "./index.html",
+	"display": "standalone",
+	"background_color": "#52351E",
+	"description": "Puzzle & Dragons Formation Image Maker.",
+	"icons": [{
+	  "src": "images/icon.png",
+	  "sizes": "72x72",
+	  "type": "image/png"
+	}],
+	"related_applications": [{
+	  "platform": "web"
+	}]
+}
