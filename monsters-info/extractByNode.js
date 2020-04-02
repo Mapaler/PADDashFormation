@@ -132,10 +132,18 @@ for (let li = 0;li < officialAPI.length; li++)
 				if (!new RegExp(searchRegString,"i").test(otName))
 				{
 					if (!m.otLangName) //如果没有其他语言名称属性，则添加一个对象属性
-					{m.otLangName = {};}
+						m.otLangName = {};
+
 					m.otLangName[otLang.code] = otName;
+
 					if (_m.otLangName)
-					{m.otLangName = Object.assign(m.otLangName, _m.otLangName);} //增加储存当前语言的全部其他语言
+					{ //增加储存当前语言的全部其他语言
+						Object.entries(_m.otLangName).forEach(entry=>{
+							const lcode = entry[0];
+							if (lcode != l1 && !Object.keys(m.otLangName).includes(lcode)) //如果不是本来的的语言
+								m.otLangName[lcode] = entry[1];
+						});
+					}
 				}
 			}
 		});
