@@ -1,14 +1,9 @@
 const fs = require('fs');
 const path = require('path');//解析需要遍历的文件夹
 const crypto = require('crypto');
-//const runDate = new Date();
+
+//需要缓存的部分
 const cacheList = [
-	{typeName:"HTML自身，免得改了他们，manifest却没更新",list:[
-		'index.html',
-		'solo.html',
-		'multi.html',
-		'triple.html',
-	]},
 	{typeName:"JS库",list:[
 		'library/html2canvas.min.js',
 		'library/localforage.min.js',
@@ -42,7 +37,8 @@ const cacheList = [
 		'images/type.png',
 	]},
 ];
-
+/* //还是不要缓存图片和语音了，不用韩服、美服的话浪费流量
+//需要缓存的cards图片
 const cardsLang = [
 	{name:"日服、港台服图片",path:"images/cards_ja"},
 	{name:"国际服图片",path:"images/cards_en"},
@@ -68,7 +64,7 @@ cardsLang.forEach(lang=>{
 	};
 	cacheList.push(newType);
 });
-
+//需要缓存的语音
 const csoundLang = [
 	{name:"日服、港台服语音",path:"sound/voice/ja"},
 	{name:"国际服语音",path:"sound/voice/en"},
@@ -92,8 +88,19 @@ csoundLang.forEach(lang=>{
 	};
 	cacheList.push(newType);
 });
+*/
 
-const outTextArray = cacheList.map(type=>{
+//需要添加Hash但是不添加cache的
+const checkHtmlList = [
+	{typeName:"HTML自身，免得改了他们，manifest却没更新",list:[
+		'index.html',
+		'solo.html',
+		'multi.html',
+		'triple.html',
+	]},
+];
+
+const cacheTextArray = cacheList.map(type=>{
 	const typeTextArray = [];
 	typeTextArray.push(`# ${type.typeName}`);
 	type.list.forEach(path=>{
@@ -108,13 +115,30 @@ const outTextArray = cacheList.map(type=>{
 	});
 	return typeTextArray.join('\n');
 });
+const checkTextArray = checkHtmlList.map(type=>{
+	const typeTextArray = [];
+	typeTextArray.push(`# ${type.typeName}`);
+	type.list.forEach(path=>{
+		console.log('正在添加 %s',path);
+		//读取一个Buffer
+		const buffer = fs.readFileSync(path);
+		const fsHash = crypto.createHash('md5');
+		fsHash.update(buffer);
+		const md5 = fsHash.digest('hex');
+		typeTextArray.push(`# ▼${md5}`);
+		typeTextArray.push('# ' + path);
+	});
+	return typeTextArray.join('\n');
+});
+
 const outText = `CACHE MANIFEST
 
 NETWORK:
 *
+${checkTextArray.join('\n\n')}
 
 CACHE:
-${outTextArray.join('\n\n')}
+${cacheTextArray.join('\n\n')}
 `;
 
 fs.writeFile('./manifest.appcache',outText,function(err){
