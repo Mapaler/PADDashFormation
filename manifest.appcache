@@ -4,6 +4,16 @@ NETWORK:
 *
 
 CACHE:
+# HTML自身，免得改了他们，manifest却没更新
+# ▼813b41e63fe6b14f7492de23f8abd2d8
+index.html
+# ▼cfbc6ea09c4eadd5c10aec01f8723ef7
+solo.html
+# ▼754bb4c38b95abe38e7f4f04d14af97b
+multi.html
+# ▼96cd0a407c6fdca3eb0c2f081635c0a6
+triple.html
+
 # JS库
 # ▼892c162d4f6b83e21b6be3f04eb2a76f
 library/html2canvas.min.js

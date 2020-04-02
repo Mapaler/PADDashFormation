@@ -3,6 +3,12 @@ const path = require('path');//解析需要遍历的文件夹
 const crypto = require('crypto');
 //const runDate = new Date();
 const cacheList = [
+	{typeName:"HTML自身，免得改了他们，manifest却没更新",list:[
+		'index.html',
+		'solo.html',
+		'multi.html',
+		'triple.html',
+	]},
 	{typeName:"JS库",list:[
 		'library/html2canvas.min.js',
 		'library/localforage.min.js',
