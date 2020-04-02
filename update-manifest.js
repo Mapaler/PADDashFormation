@@ -13,17 +13,6 @@ const cacheList = [
 		'library/jy4340132-aaa/adpcm.js',
 		'library/jy4340132-aaa/adpcm.wasm',
 	]},
-	{typeName:"语言表",list:[
-		'languages/language-list.js',
-	]},
-	/*{typeName:"怪物数据",list:[
-		'monsters-info/mon_ja.json',
-		'monsters-info/mon_en.json',
-		'monsters-info/mon_ko.json',
-		'monsters-info/skill_ja.json',
-		'monsters-info/skill_en.json',
-		'monsters-info/skill_ko.json',
-	]},*/
 	{typeName:"字体",list:[
 		'fonts/FOT-KurokaneStd-EB.woff2',
 		'fonts/FOT-KurokaneStd-EB.woff',
@@ -53,16 +42,18 @@ const cardsLang = [
 	{name:"国际服图片",path:"images/cards_en"},
 	{name:"韩服图片",path:"images/cards_ko"},
 ];
-const cardsReg = "CARDS_\\d+\\.PNG";
+const cardsReg = "CARDS_(\\d+)\\.PNG";
 cardsLang.forEach(lang=>{
 	console.log('正在添加 %s',lang.name);
 	const list = [];
 	const langPath = lang.path;
 	const files = fs.readdirSync(langPath);
 	files.forEach(function (filename) {
-		if (new RegExp(cardsReg,"i").test(filename))
+		let regRes = false;
+		if (regRes = new RegExp(cardsReg,"i").exec(filename))
 		{
-			list.push(path.join(langPath, filename));
+			if (parseInt(regRes[1],10) <60) //59及以前的基本上不会经常变化了
+				list.push(path.join(langPath, filename));
 		}
 	});
 	const newType = {
@@ -113,8 +104,12 @@ const outTextArray = cacheList.map(type=>{
 });
 const outText = `CACHE MANIFEST
 
+NETWORK:
+*
+
 CACHE:
-${outTextArray.join('\n\n')}`;
+${outTextArray.join('\n\n')}
+`;
 
 fs.writeFile('./manifest.appcache',outText,function(err){
 	if(err){

@@ -1,5 +1,8 @@
 CACHE MANIFEST
 
+NETWORK:
+*
+
 CACHE:
 # JS库
 # ▼892c162d4f6b83e21b6be3f04eb2a76f
@@ -10,16 +13,12 @@ library/localforage.min.js
 # ADPCM播放库
 # ▼7379056107dcfb5db0c24850e5dbd082
 library/jy4340132-aaa/std.js
-# ▼25554e5e71e1478abfa8a6332ecaa098
+# ▼f1fcb9cddcdde1d6e716089c9f2fb68f
 library/jy4340132-aaa/pcm_player.js
 # ▼0b630a0642376a0c54b908b04122dc0e
 library/jy4340132-aaa/adpcm.js
 # ▼684c87e14175b63772422d877423d275
 library/jy4340132-aaa/adpcm.wasm
-
-# 语言表
-# ▼3f06e66566808a6fbc21177e9e66d574
-languages/language-list.js
 
 # 字体
 # ▼989604f44342b48af3a3e8c438af6ff0
@@ -180,12 +179,6 @@ images\cards_ja\CARDS_057.PNG
 images\cards_ja\CARDS_058.PNG
 # ▼38a6751d4a088b8f0fd9e8fc87a40518
 images\cards_ja\CARDS_059.PNG
-# ▼5d878a2d6ccdf88bcb8135df84a5b55d
-images\cards_ja\CARDS_060.PNG
-# ▼754ce3d90ca41954dfee79b86b899ae9
-images\cards_ja\CARDS_061.PNG
-# ▼198d04acc1565a3466cd31d646d3ca42
-images\cards_ja\CARDS_062.PNG
 
 # 国际服图片
 # ▼5b7ccbd3cf31ee412799c0dd9bb2f783
@@ -306,10 +299,6 @@ images\cards_en\CARDS_057.PNG
 images\cards_en\CARDS_058.PNG
 # ▼67e5529a8e258b7776379f5b5f0d74eb
 images\cards_en\CARDS_059.PNG
-# ▼f9de8e11185c4c53a1bcc11135e17b78
-images\cards_en\CARDS_060.PNG
-# ▼a6fb4019bbf33ab6f545dec0c6ef1209
-images\cards_en\CARDS_061.PNG
 
 # 韩服图片
 # ▼5b7ccbd3cf31ee412799c0dd9bb2f783
@@ -430,10 +419,6 @@ images\cards_ko\CARDS_057.PNG
 images\cards_ko\CARDS_058.PNG
 # ▼67e5529a8e258b7776379f5b5f0d74eb
 images\cards_ko\CARDS_059.PNG
-# ▼3e4d9f4211481da31d2ff7450b98eac4
-images\cards_ko\CARDS_060.PNG
-# ▼a6fb4019bbf33ab6f545dec0c6ef1209
-images\cards_ko\CARDS_061.PNG
 
 # 日服、港台服语音
 # ▼5d5cfc2aea6aa9e69299e2fd8f5657d2
