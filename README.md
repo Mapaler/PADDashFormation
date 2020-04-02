@@ -17,13 +17,15 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 | ![单人界面预览](document/preview-capture-1p.png) | ![2人协力界面预览](document/preview-capture-2p.png) |
 | **3人协力 \| 3P** | **手机 \| Mobile**  |
 | ![3人协力界面预览](document/preview-capture-3p.png) | ![手机端预览](document/preview-mobile.jpg) |
-  
 
 
 # 如何使用 | HOW TO USE
-## 快速使用在线版 | Online Quick Start  
-* https://mapaler.github.io/PADDashFormation/ (Github Pages)
-* http://mapaler.gitee.io/paddashformation/ (码云的镜象，国内用这个更快 | Chinese mirror)
+## 快速使用在线版 | Online Quick Start
+* <https://mapaler.github.io/PADDashFormation/> (Github Pages)  
+[![](https://www.mozilla.org/media/img/firefox/favicon.ico)Firefox](https://www.mozilla.org/firefox/new/) is recommended on your phone for better performance. Chrome is very slow when searching for a large number of cards
+* http://mapaler.gitee.io/paddashformation/ (码云的镜象，国内用这个更快 | Chinese mirror)  
+手机上使用 [![](https://www.mozilla.org/media/img/firefox/favicon.ico)火狐浏览器](https://www.mozilla.org/firefox/new/) 具有更好的性能，Chrome 卡死了。
+
 ### 示例链接 | Sample Link
   * [单人示例](http://mapaler.gitee.io/paddashformation/solo.html?d={"t"%3A"千鸟^ff3600^【7×6版面】^p换队长打里·异形"%2C"d"%3A"%25{m5537}可以换%25{m3524}"%2C"f"%3A[[[[5537%2C110%2C9%2C99%2C[18%2C11%2C11%2C10%2C11]%2C1]%2C[5141%2C110%2C9%2C99%2C[11%2C11%2C11%2C11%2C11%2C10]%2C2]%2C[5004%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C0]%2C[5658%2C110%2C9%2C99%2C[19%2C11%2C11%2C11%2C11]%2C0]%2C[3898%2C110%2C9%2C99%2C[25%2C11%2C11%2C11%2C11]%2C0]%2C[5658%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C2]]%2C[[5573%2C1%2C7%2C99]%2C[5591%2C1%2C6%2C99]%2C[5582%2C1%2C6]%2C[5656%2C1%2C6]%2C[4897%2C99%2C5%2C99]%2C[5420%2C99%2C5%2Cnull%2Cnull%2Cnull%2C1]]]]%2C"b"%3A13}) | [Solo Sample](//mapaler.github.io/PADDashFormation/solo.html?d={"t"%3A"千鸟^ff3600^【7×6版面】^p换队长打里·异形"%2C"d"%3A"%25{m5537}可以换%25{m3524}"%2C"f"%3A[[[[5537%2C110%2C9%2C99%2C[18%2C11%2C11%2C10%2C11]%2C1]%2C[5141%2C110%2C9%2C99%2C[11%2C11%2C11%2C11%2C11%2C10]%2C2]%2C[5004%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C0]%2C[5658%2C110%2C9%2C99%2C[19%2C11%2C11%2C11%2C11]%2C0]%2C[3898%2C110%2C9%2C99%2C[25%2C11%2C11%2C11%2C11]%2C0]%2C[5658%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C2]]%2C[[5573%2C1%2C7%2C99]%2C[5591%2C1%2C6%2C99]%2C[5582%2C1%2C6]%2C[5656%2C1%2C6]%2C[4897%2C99%2C5%2C99]%2C[5420%2C99%2C5%2Cnull%2Cnull%2Cnull%2C1]]]]%2C"b"%3A13})
   * [2P车队示例](http://mapaler.gitee.io/paddashformation/multi.html?d={"t"%3A"我的^2288FF^水^p车队%20|%20My%20^2288FF^Water^p%20Swip%20Formation"%2C"d"%3A"%25{m2186}最好换%25{m4877}\n%25{m4877}%20is%20better%20than%20%25{m2186}"%2C"f"%3A[[[[4691%2C104%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[2186%2C101%2C8%2C99%2C[20%2C20%2C20]%2C0]%2C[4877%2C101%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4793%2C99%2C7%2C99]%2C[4877%2C101%2C9%2C99%2C[23%2C23%2C11%2C11]]]%2C[[4252%2C38%2C9]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]]]%2C[[[4691%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[4877%2C102%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4877%2C101%2C9%2C99%2C[23%2C23%2C11%2C11]]%2C[4793%2C99%2C7%2C99%2C[21%2C21%2C21]]%2C[2186%2C101%2C8%2C99%2Cnull%2C0]]%2C[[4394%2C12%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2C99%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]]]]}) | [2P Multi Formation Sample](//mapaler.github.io/PADDashFormation/multi.html?d={"t"%3A"我的^2288FF^水^p车队%20|%20My%20^2288FF^Water^p%20Swip%20Formation"%2C"d"%3A"%25{m2186}最好换%25{m4877}\n%25{m4877}%20is%20better%20than%20%25{m2186}"%2C"f"%3A[[[[4691%2C104%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[2186%2C101%2C8%2C99%2C[20%2C20%2C20]%2C0]%2C[4877%2C101%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4793%2C99%2C7%2C99]%2C[4877%2C101%2C9%2C99%2C[23%2C23%2C11%2C11]]]%2C[[4252%2C38%2C9]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]]]%2C[[[4691%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[4877%2C102%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4877%2C101%2C9%2C99%2C[23%2C23%2C11%2C11]]%2C[4793%2C99%2C7%2C99%2C[21%2C21%2C21]]%2C[2186%2C101%2C8%2C99%2Cnull%2C0]]%2C[[4394%2C12%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2C99%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]]]]})
@@ -44,7 +46,7 @@ Chrome browser need start with the additional argument `--allow-file-access-from
 1. Click **Fork** In the page top right corner. Fork your own copy of this repository to your account.
 1. Use Git to clone/pull repository locally for modification (How to modify please see below).
 1. Use Git to commit and push changes to your repository on GitHub.
-1. Go to the **[Pull requests](//github.com/Mapaler/PADDashFormation/pulls)** page in the top middle of this repository, and click the **New pull request** button.
+1. Go to the **[Pull requests](../../pulls)** page in the top middle of this repository, and click the **New pull request** button.
 1. Click the **Compare Across Forks** button and select your fork, the page then displays the changes.
 1. Click the **Create pull request** button and enter the details of the modification, create your pull request.
 
@@ -82,8 +84,8 @@ This is an Object for a language list item.
 Please refer to existing files.
 
 # 权利归属 | Copyright
-> 本软件灵感来源于[PDC 智龙迷城伤害计算器](https://play.google.com/store/apps/details?id=com.corombo13.paddamagecal)  
-> This software is inspired by [PDC パズドラダメージ計算](https://play.google.com/store/apps/details?id=com.corombo13.paddamagecal)
+> 本软件灵感来源于[PDC 智龙迷城伤害计算器](//play.google.com/store/apps/details?id=com.corombo13.paddamagecal)  
+> This software is inspired by [PDC パズドラダメージ計算](//play.google.com/store/apps/details?id=com.corombo13.paddamagecal)
 
 © GungHo Online Entertainment Inc. All Right Reserved.  
 所有图片素材版权与怪物信息归属于GungHo在线娱乐有限公司。  
