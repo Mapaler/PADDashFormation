@@ -1,3 +1,16 @@
-C:\ProgramFree\FastCopy\FastCopy.exe /cmd=diff /open_window /auto_close D:\Games\÷«¡˙√‘≥«\Puzzle-and-Dragons-Data-Files\mon2\padv*.wav /to=.\ja
-C:\ProgramFree\FastCopy\FastCopy.exe /cmd=diff /open_window /auto_close D:\Games\÷«¡˙√‘≥«\Puzzle-and-Dragons-Data-Files\cards_EN\padv*.wav /to=.\en
-C:\ProgramFree\FastCopy\FastCopy.exe /cmd=diff /open_window /auto_close D:\Games\÷«¡˙√‘≥«\Puzzle-and-Dragons-Data-Files\cards_KO\padv*.wav /to=.\ko
+@echo off
+if not exist variables.txt copy variables_default.txt variables.txt
+:0
+for /f "skip=1 delims=" %%a in (variables.txt) do (
+set fastcopypath=%%~a
+goto :1
+)
+:1
+for /f "skip=3 delims=" %%a in (variables.txt) do (
+set datapath=%%~a
+goto :2
+)
+:2
+"%fastcopypath%" /cmd=diff /open_window /auto_close "%datapath%\mon2\padv*.wav" /to=.\ja
+"%fastcopypath%" /cmd=diff /open_window /auto_close "%datapath%\cards_EN\padv*.wav" /to=.\en
+"%fastcopypath%" /cmd=diff /open_window /auto_close "%datapath%\cards_KO\padv*.wav" /to=.\ko
