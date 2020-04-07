@@ -642,7 +642,7 @@ function parseSkillDescription(skill)
 			str = `${getOrbsAttrString(sk[0])}宝珠强化（每颗强化珠伤害/回复增加${sk[1]}%）`;
 			break;
 		case 141:
-			let otherAttrs = sk[1] ^ sk[2]; //异或，sk[2]表示在什么珠以外生成，平时等于sk[1]
+			let otherAttrs = sk[2] && (sk[1] ^ sk[2]); //异或，sk[2]表示在什么珠以外生成，平时等于sk[1]
 			str = `${otherAttrs?`${getOrbsAttrString(otherAttrs)}以外`:""}随机生成${getOrbsAttrString(sk[1])}宝珠各${sk[0]}个`;
 			break;
 		case 142:
@@ -1505,21 +1505,109 @@ function parseBigNumber(number)
 			}
 		})},
 		{name:"所有花火（按进化树排列）",function:cards=>cards.filter(card=>{
-			function isOnly1(sk)
+			function isOnlyColor(sk, colorTypeCount)
 			{
-				if (sk.length<2 || sk.indexOf(-1)==1) return true;
-				else return false;
+				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+				return color.length == colorTypeCount;
 			}
 			const searchType = 71;
 			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && isOnly1(skill.params))
+			if (skill.type == searchType && isOnlyColor(skill.params, 1))
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && isOnly1(subskill.params));
+				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 1));
 			}
 		}).sort((a,b)=>{//优先按技能排列，其次按进化树排列
 			return (a.activeSkillId - b.activeSkillId) || (a.evoRootId - b.evoRootId);
+		})},
+		{name:"所有2色版",function:cards=>cards.filter(card=>{
+			function isOnlyColor(sk, colorTypeCount)
+			{
+				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+				return color.length == colorTypeCount;
+			}
+			const searchType = 71;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && isOnlyColor(skill.params, 2))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 2));
+			}
+		})},
+		{name:"所有2色版（含心）",function:cards=>cards.filter(card=>{
+			function isOnlyColor(sk, colorTypeCount)
+			{
+				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+				return color.length == colorTypeCount && color.includes(5);
+			}
+			const searchType = 71;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && isOnlyColor(skill.params, 2))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 2));
+			}
+		})},
+		{name:"所有3色版",function:cards=>cards.filter(card=>{
+			function isOnlyColor(sk, colorTypeCount)
+			{
+				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+				return color.length == colorTypeCount;
+			}
+			const searchType = 71;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && isOnlyColor(skill.params, 3))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 3));
+			}
+		})},
+		{name:"所有3色版（含心）",function:cards=>cards.filter(card=>{
+			function isOnlyColor(sk, colorTypeCount)
+			{
+				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+				return color.length == colorTypeCount && color.includes(5);
+			}
+			const searchType = 71;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && isOnlyColor(skill.params, 3))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 3));
+			}
+		})},
+		{name:"所有固定30个产珠",function:cards=>cards.filter(card=>{
+			function is30(sk)
+			{
+				return Boolean(flags(sk[1]).length * sk[0] == 30);
+			}
+			const searchType = 141;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && is30(skill.params))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && is30(subskill.params));
+			}
+		})},
+		{name:"所有15×2产珠",function:cards=>cards.filter(card=>{
+			function is1515(sk)
+			{
+				return Boolean(flags(sk[1]).length == 2 && sk[0] == 15);
+			}
+			const searchType = 141;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && is1515(skill.params))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && is1515(subskill.params));
+			}
 		})},
 		{name:"所有产竖",function:cards=>cards.filter(card=>{
 			const searchType = 127;
@@ -1529,6 +1617,26 @@ function parseBigNumber(number)
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		})},
+		{name:"所有产竖（含心）",function:cards=>cards.filter(card=>{
+			function isHeart(sk)
+			{
+				for (let i=1;i<sk.length;i+=2)
+				{
+					if (sk[i] & 32)
+					{
+						return true;
+					}
+				}
+			}
+			const searchType = 127;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && isHeart(skill.params))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && isHeart(subskill.params));
 			}
 		})},
 		{name:"所有产横",function:cards=>cards.filter(card=>{
