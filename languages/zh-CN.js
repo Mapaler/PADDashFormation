@@ -378,7 +378,7 @@ function parseSkillDescription(skill)
 		case 71:
 			//这个类型，所有颜色是直接显示的，但是最后一位有个-1表示结束
 			strArr = sk;
-			if (sk.indexOf(-1)>=0)
+			if (sk.includes(-1))
 			{
 				strArr = sk.slice(0,sk.indexOf(-1));
 			}
@@ -2078,7 +2078,7 @@ function parseBigNumber(number)
 			return a_pC - b_pC;
 		})},
 		{name:"======队长技======",function:cards=>cards},
-		{name:"所有普通追打（按追打比率排序）",function:cards=>cards.filter(card=>{
+		{name:"所有消除宝珠时追打（按追打比率排序）",function:cards=>cards.filter(card=>{
 			const searchType = 12;
 			const skill = Skills[card.leaderSkillId];
 			if (skill.type == searchType)
@@ -2138,6 +2138,27 @@ function parseBigNumber(number)
 			b_pC = searchTypeArray.includes(b_s.type) ?
 				b_s.params[3] :
 				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[3];
+			return a_pC - b_pC;
+		})},
+		{name:"所有消除宝珠时回血（按回复比率排序）",function:cards=>cards.filter(card=>{
+			const searchType = 13;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		}).sort((a,b)=>{
+			const searchType = 13;
+			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (a_s.type == searchType) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			b_pC = (b_s.type == searchType) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
 		{name:"所有毒无效",function:cards=>cards.filter(card=>{
