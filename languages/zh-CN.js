@@ -1407,6 +1407,27 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
+		{name:"所有掉锁（按回合排序）",function:cards=>cards.filter(card=>{
+			const searchType = 205;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		}).sort((a,b)=>{
+			const searchType = 205;
+			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (a_s.type == searchType) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
+			b_pC = (b_s.type == searchType) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
+			return a_pC - b_pC;
+		})},
 		{name:"所有变身技能",function:cards=>cards.filter(card=>{
 			const searchType = 202;
 			const skill = Skills[card.activeSkillId];
