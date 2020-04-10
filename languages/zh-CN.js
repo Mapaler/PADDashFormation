@@ -2436,6 +2436,7 @@ function parseBigNumber(number)
 		{name:"不是武器",function:cards=>cards.filter(card=>!card.awakenings.includes(49))},
 		{name:"有副属性",function:cards=>cards.filter(card=>card.attrs[1]>=0)},
 		{name:"有副属性且主副属性不一致",function:cards=>cards.filter(card=>card.attrs[0]>=0 && card.attrs[1]>=0 && card.attrs[0] != card.attrs[1])},
+		{name:"龙契士&龙唤士（10001）",function:cards=>cards.filter(card=>card.collabId==10001)},
 		{name:"3个相同杀觉醒，或2个杀觉醒并可打相同潜觉",function:cards=>cards.filter(card=>{
 			const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length>=2);
 			if (hasAwokenKiller)
