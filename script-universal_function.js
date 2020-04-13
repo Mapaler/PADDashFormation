@@ -458,6 +458,8 @@ function createCardA()
 	subproperty.className = "subproperty";
 	const cid = cdom.appendChild(document.createElement("div"));
 	cid.className = "id";
+	const cawoken = cdom.appendChild(document.createElement("div"));
+	cawoken.className = "awoken-count full-awoken";
 	return cdom;
 }
 //返回文字说明内怪物Card的纯HTML
