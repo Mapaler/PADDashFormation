@@ -219,8 +219,9 @@ function swapABCteam()
 	}
 }
 //在单人和多人之间转移数据
-function turnPage(toPage)
+function turnPage(toPage,e = null)
 {
+	console.log(e)
 	let pagename = null;
 	switch(toPage)
 	{
@@ -269,7 +270,14 @@ function turnPage(toPage)
 			pagename = "triple.html";
 			break;
 	}
-	location.href = creatNewUrl({url:pagename, notPushState:true});
+	const newURL = creatNewUrl({url:pagename, notPushState:true});
+	if (e && e.ctrlKey)
+	{
+		window.open(newURL);
+	}else
+	{
+		location.href = newURL;
+	}
 }
 window.onload = function()
 {
