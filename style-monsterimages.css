@@ -663,6 +663,10 @@
 {
 	width: 32px;
 }
+.latent-icon[data-latent-icon='37']
+{
+	width: 252px;
+}
 .latent-icon[data-latent-icon='1']{ /*HP*/
 	background-position-y: calc(-32px * 1);
 }
@@ -773,47 +777,10 @@
 .latent-icon[data-latent-icon='36']{ /*大暗盾*/
 	background-position-y: calc(-32px * 36);
 }
+.latent-icon[data-latent-icon='37']{ /*6色破无效*/
+	background-position-y: calc(-32px * 37);
+}
 
-/*
-var sawokens = [
-	"HP",
-	"攻击",
-	"回复",
-	"手指",
-	"自回",
-	"火盾",
-	"水盾",
-	"木盾",
-	"光盾",
-	"暗盾",
-	"防坐",
-	"三维",
-	null,
-	null,
-	null,
-	"进化杀",
-	"觉醒杀",
-	"强化杀",
-	"卖钱杀",
-	"神杀",
-	"龙杀",
-	"恶魔杀",
-	"机械杀",
-	"平衡杀",
-	"攻击杀",
-	"体力杀",
-	"回复杀",
-	"大HP",
-	"大攻击",
-	"大回复",
-	"大手指",
-	"大火盾",
-	"大水盾",
-	"大木盾",
-	"大光盾",
-	"大暗盾",
-];
-*/
 /* 徽章背景 */
 .badge{
 	background-image: url(images/badge-bg.png);

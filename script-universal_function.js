@@ -160,7 +160,9 @@ fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffe
 //计算用了多少潜觉格子
 function usedHole(latents)
 {
-	return latents.reduce((usedHole, latentId) => usedHole + (latentId>= 12 ? 2 : 1), 0); //12号以后都是2格的潜觉
+	return latents.reduce((usedHole, latentId) => usedHole + 
+		(latentId == 37 ? 6 : (latentId>= 12 ? 2 : 1)) //12号以后都是2格的潜觉
+		, 0);
 }
 //计算所有队伍中有多少个该觉醒
 function awokenCountInFormation(formationTeams,awokenIndex,solo,teamsCount)
