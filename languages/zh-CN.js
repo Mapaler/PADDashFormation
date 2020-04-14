@@ -1819,12 +1819,12 @@ function parseBigNumber(number)
 		})},
 		{name:"所有攻击力buff（顶降攻击）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [
-				88,91, //类型的
+				88,92, //类型的
 				50,90, //属性的，要排除回复力
 				156,168, //宝石姬
 			];
 			const skill = Skills[card.activeSkillId];
-			if ((skill.type==88 || skill.type==91) || //类型的
+			if ((skill.type==88 || skill.type==92) || //类型的
 				(skill.type==50 || skill.type==90) && skill.params.slice(1,-1).some(sk=>sk!=5) || //属性的，要排除回复力
 				skill.type==156 && skill.params[4] == 2 || skill.type==168 //宝石姬的
 			)
@@ -1832,7 +1832,7 @@ function parseBigNumber(number)
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>
-					(subskill.type==88 || subskill.type==91) || //类型的
+					(subskill.type==88 || subskill.type==92) || //类型的
 					(subskill.type==50 || subskill.type==90) && subskill.params.slice(1,-1).some(sk=>sk!=5) || //属性的，要排除回复力
 					subskill.type==156 && subskill.params[4] == 2 || subskill.type==168 //宝石姬的
 				);
