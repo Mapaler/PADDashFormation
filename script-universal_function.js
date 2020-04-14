@@ -158,22 +158,20 @@ fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffe
 //▲ADPCM播放相关
 
 //计算用了多少潜觉格子
-function usedHole(latent)
+function usedHole(latents)
 {
-	return latent.reduce(function(previous,current){
-		return previous + (current>= 12?2:1); //12号以后都是2格的潜觉
-	},0);
+	return latents.reduce((usedHole, latentId) => usedHole + (latentId>= 12 ? 2 : 1), 0); //12号以后都是2格的潜觉
 }
 //计算所有队伍中有多少个该觉醒
-function awokenCountInFormation(formationTeams,awokenIndex,solo)
+function awokenCountInFormation(formationTeams,awokenIndex,solo,teamsCount)
 {
 	const formationAwokenCount = formationTeams.reduce(function(previous,team){
-		return previous + awokenCountInTeam(team,awokenIndex,solo);
+		return previous + awokenCountInTeam(team,awokenIndex,solo,teamsCount);
 	},0);
 	return formationAwokenCount;
 }
 //计算单个队伍中有多少个该觉醒
-function awokenCountInTeam(team,awokenIndex,solo)
+function awokenCountInTeam(team,awokenIndex,solo,teamsCount)
 {
 	const memberArray = team[0];
 	const assistArray = team[1];
@@ -193,7 +191,7 @@ function awokenCountInTeam(team,awokenIndex,solo)
 		const assistCard = Cards[assist.id];
 		//启用的觉醒数组片段
 		let enableAwoken = card.awakenings.slice(0, mon.awoken);
-		if (solo) //单人增加超觉醒
+		if (solo || (teamsCount === 3 && currentDataSource.code === 'ja')) //单人、3人日服增加超觉醒
 		{
 			enableAwoken = enableAwoken.concat(card.superAwakenings[mon.sawoken]);
 		}
