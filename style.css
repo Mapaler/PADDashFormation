@@ -371,13 +371,19 @@ ul{
 }
 .not-show-awoken-count .formation-box .team-total-info, /*单个队伍血量统计*/
 .not-show-awoken-count .formation-box .team-ability, /*单个队伍三维*/
-.not-show-awoken-count .formation-box .team-awoken /*单个队伍觉醒统计*/
+.not-show-awoken-count .formation-box .team-awoken, /*单个队伍觉醒统计*/
+.not-show-awoken-count .formation-box .team-total-info /*单个队伍血量统计*/
 {
-	display: none;
+	display: none !important;
 }
-.not-show-awoken-count .team-bigbox
+.not-show-awoken-count .formation-box .team-bigbox
 {
-	margin-bottom: unset;
+	margin-bottom: 5px;
+}
+.not-show-awoken-count .formation-box .team-badge
+{
+	position: absolute;
+	z-index: 10;
 }
 /*辅助和队伍的每一只框架*/
 .member, .acquisitus-awoken-icon{
@@ -435,7 +441,7 @@ ul{
 .team-bigbox{
 	position: relative;
 	font-size:0;
-	margin-bottom:15px;
+	margin-bottom:10px;
 }
 .team-bigbox:last-of-type{
 	margin-bottom:0;
