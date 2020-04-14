@@ -1049,8 +1049,8 @@ function parseSkillDescription(skill)
 			if (sk[3]) str+= `${getFixedHpAtkRcvString({atk:sk[3]})}`; 
 			if (sk[4]) str += `，受到的伤害减少${sk[4]}%`;
 			if (sk[6] || sk[7]) str+= ` HP ${sk[5]||sk[2]}%以下时`;
-			if (sk[6]) str+= `${getFixedHpAtkRcvString({atk:sk[6]})}`;
-			if (sk[7]) str+= `，受到的伤害减少${sk[7]}%`;
+			if (sk[6] || sk[7]) str+= `${getFixedHpAtkRcvString({atk:sk[6],rcv:sk[7]})}`;
+			//if (sk[7]) str+= `，受到的伤害减少${sk[7]}%`;
 			break;
 		case 184:
 			str = `${sk[0]}回合内，天降的宝珠不会产生COMBO`;
