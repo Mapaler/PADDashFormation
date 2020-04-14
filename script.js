@@ -1231,9 +1231,8 @@ function initialize()
 		const lIdx = parseInt(this.getAttribute("data-latent-icon"),10); //潜觉的序号
 		const usedHoleN = usedHole(editBox.latent); //使用了的格子
 		const maxLatentCount = getMaxLatentCount(editBox.mid); //最大潜觉数量
-		console.log(lIdx,usedHoleN<=(maxLatentCount-6))
 		if (lIdx == 37 && usedHoleN<=(maxLatentCount-6) || //如果能添加6格的觉醒
-			lIdx >= 12 && usedHoleN<=(maxLatentCount-2) || //如果能添加2格的觉醒
+			lIdx >= 12 && lIdx <37 && usedHoleN<=(maxLatentCount-2) || //如果能添加2格的觉醒
 			lIdx < 12 && usedHoleN<=(maxLatentCount-1)) //如果能添加1格的觉醒
 		{editBox.latent.push(lIdx);}
 		else {return;}
