@@ -544,12 +544,17 @@ ul{
 .team-latents .latents{
 	width: var(--head-block-width);
 	display: inline-block;
+	vertical-align: top;
 }
 .team-latents .latent-ul{
 	font-size: 0;
 	width: 152px;
-	transform: scale(0.63);
-	margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);
+	transform: scale(0.65);
+	transform-origin: left top;
+	margin-left: 5px;
+	margin-top: 3px;
+	margin-bottom: calc(-64px * (1 - 0.65) + 3px);
+	/*margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);*/
 	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
 }
 
