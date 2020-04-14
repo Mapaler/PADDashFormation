@@ -1,0 +1,4 @@
+# path to FastCopy:
+C:\ProgramFree\FastCopy\FastCopy.exe
+# path to Puzzle-and-Dragons-Data-Files:
+D:\Games\÷«¡˙√‘≥«\Puzzle-and-Dragons-Data-Files\
