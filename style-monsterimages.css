@@ -663,10 +663,6 @@
 {
 	width: 32px;
 }
-.latent-icon[data-latent-icon='37']
-{
-	width: 252px;
-}
 .latent-icon[data-latent-icon='1']{ /*HP*/
 	background-position-y: calc(-32px * 1);
 }
@@ -778,7 +774,20 @@
 	background-position-y: calc(-32px * 36);
 }
 .latent-icon[data-latent-icon='37']{ /*6色破无效*/
+	width: 252px;
 	background-position-y: calc(-32px * 37);
+}
+.team-latents .latent-ul .latent-icon[data-latent-icon='37']{ /*6色破无效*/
+	width: calc(152px - 5px * 2);
+	height: calc(32px - 3px * 2);
+	background-position-y: calc(-32px * 37 - 3px);
+	background-position-x: -55px;
+	border-style: solid;
+	border-color: transparent;
+	border-width: 3px 5px;
+	border-image-source: url(images/latent-bg.png);
+	border-image-slice: 3 5;
+	background-clip: padding-box;
 }
 
 /* 徽章背景 */
