@@ -2111,7 +2111,7 @@ function refreshAll(formationData){
 		const badgeBox = teamBigBox.querySelector(".team-badge");
 		if (badgeBox)
 		{
-			const badge = badgeBox.querySelector(`#team-${teamNum}-badge-${formationData.badge}`);
+			const badge = badgeBox.querySelector(`#team-${teamNum+1}-badge-${formationData.badge}`);
 			badge.checked = true;
 		}
 
@@ -2168,8 +2168,8 @@ function refreshTeamAwokenCount(awokenDom,team){
 			const equivalentAwoken = equivalent_awoken[equalIndex];
 			if (equivalentAwoken.small === ai)
 			{
-				const totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) + 
-								 awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+				const totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo) + 
+								 awokenCountInTeam(team, equivalentAwoken.big, solo) * equivalentAwoken.times;
 				setCount(aicon, totalNum);
 			}else
 			{
@@ -2177,7 +2177,7 @@ function refreshTeamAwokenCount(awokenDom,team){
 			}
 		}else
 		{
-			setCount(aicon,awokenCountInTeam(team,ai,solo, teamsCount));
+			setCount(aicon,awokenCountInTeam(team,ai,solo));
 		}
 	}
 	awokenDom.appendChild(fragment);
@@ -2208,8 +2208,8 @@ function refreshFormationAwokenCount(awokenDom,teams){
 			const equivalentAwoken = equivalent_awoken[equalIndex];
 			if (equivalentAwoken.small === ai)
 			{
-				const totalNum = awokenCountInFormation(teams, equivalentAwoken.small, solo, teamsCount) + 
-								 awokenCountInFormation(teams, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+				const totalNum = awokenCountInFormation(teams, equivalentAwoken.small, solo) + 
+								 awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times;
 				setCount(aicon, totalNum);
 			}else
 			{
@@ -2217,7 +2217,7 @@ function refreshFormationAwokenCount(awokenDom,teams){
 			}
 		}else
 		{
-			setCount(aicon,awokenCountInFormation(teams,ai,solo, teamsCount));
+			setCount(aicon,awokenCountInFormation(teams,ai,solo));
 		}
 	}
 	awokenDom.appendChild(fragment);
@@ -2264,7 +2264,7 @@ function refreshTeamTotalHP(totalDom,team){
 		const tHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
 			return value += mon.ability ? mon.ability[0] : 0;
 		},0);
-		const teamHPAwoken = awokenCountInTeam(team,46,solo, teamsCount); //全队大血包个数
+		const teamHPAwoken = awokenCountInTeam(team,46,solo); //全队大血包个数
 		
 		let badgeHPScale = 1; //徽章倍率
 		if (formation.badge == 4 && solo)
@@ -2285,7 +2285,7 @@ function refreshTeamTotalHP(totalDom,team){
 		const tRCV = team[0].reduce(function(value,mon){ //队伍计算的总回复
 			return value += mon.ability ? mon.ability[2] : 0;
 		},0);
-		const teamRCVAwoken = awokenCountInTeam(team,47,solo, teamsCount); //全队大回复个数
+		const teamRCVAwoken = awokenCountInTeam(team,47,solo); //全队大回复个数
 		
 		let badgeRCVScale = 1; //徽章倍率
 		if (formation.badge == 3 && solo)
@@ -2315,7 +2315,7 @@ function refreshFormationTotalHP(totalDom, teams){
 			const teamTHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
 				return value += mon.ability ? mon.ability[0] : 0;
 			},0);
-			const teamHPAwoken = awokenCountInTeam(team,46,solo, teamsCount); //全队大血包个数
+			const teamHPAwoken = awokenCountInTeam(team,46,solo); //全队大血包个数
 			return [teamTHP,teamHPAwoken];
 		});
 		const tHP = tHPArr.reduce(function(value, teamHP){
@@ -2331,7 +2331,7 @@ function refreshFormationTotalHP(totalDom, teams){
 			const teamTRCV = team[0].reduce(function(value,mon){ //队伍计算的总回复
 				return value += mon.ability ? mon.ability[2] : 0;
 			},0);
-			const teamRCVAwoken = awokenCountInTeam(team,47,solo, teamsCount); //全队大回复个数
+			const teamRCVAwoken = awokenCountInTeam(team,47,solo); //全队大回复个数
 			return [teamTRCV,teamRCVAwoken];
 		},0);
 		const tRCV = tRCVArr.reduce(function(value, teamRCV){
