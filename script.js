@@ -1224,7 +1224,7 @@ function initialize()
 		editBox.reCalculateAbility(); //重计算三维
 		editBox.refreshLatent(editBox.latent,editBox.mid); //刷新潜觉
 	}
-	monEditLatents.forEach((la)=>{la.onclick = deleteLatent;});
+	monEditLatents.forEach(la=>la.onclick = deleteLatent);
 	//可选觉醒的添加
 	function addLatent(){
 		if (this.classList.contains("unselected-latent")) return; //不能选的觉醒直接退出
