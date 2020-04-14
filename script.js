@@ -135,10 +135,9 @@ var Formation = function(teamCount,memberCount){
 	this.title = "";
 	this.detail = "";
 	this.teams = [];
-	this.badge = 0;
 	for (let ti=0;ti<teamCount;ti++)
 	{
-		const team = [[],[]];
+		const team = [[],[],0]; //第三个是徽章
 		for (let mi=0;mi<memberCount;mi++)
 		{
 			team[0].push(new MemberTeam());
@@ -152,13 +151,17 @@ Formation.prototype.outObj= function(){
 	if (this.title != undefined && this.title.length>0) obj.t = this.title;
 	if (this.detail != undefined && this.detail.length>0) obj.d = this.detail;
 	obj.f = this.teams.map(t=>
-		t.map(st=>
-			st.map(m=>
+		{
+			const teamArr = [];
+			teamArr[0] = t[0].map(m=>
 				m.outObj()
-			)
-		)
-	);
-	if (this.badge != undefined && this.badge>0) obj.b = this.badge; //徽章
+			);
+			teamArr[1] = t[1].map(m=>
+				m.outObj()
+			);
+			if (t[2]) teamArr[2] = t[2];
+			return teamArr;
+		});
 	obj.v = dataStructure;
 	return obj;
 };
@@ -166,18 +169,24 @@ Formation.prototype.loadObj= function(f){
 	const dataVeision = f.v?f.v:(f.f?2:1); //是第几版格式
 	this.title = dataVeision>1 ? f.t : f.title;
 	this.detail = dataVeision>1 ? f.d : f.detail;
-	this.badge = f.b ? f.b : 0; //徽章
-	const teamArr = dataVeision>1 ? f.f : f.team;
+	const loadTeamArr = dataVeision>1 ? f.f : f.team;
 	this.teams.forEach(function(t,ti){
-		const tf = teamArr[ti] || [];
-		t.forEach(function(st,sti){
-			const fst = tf[sti] || [];
-			st.forEach(function(m,mi){
-				const fm = fst[mi];
+		const tf = loadTeamArr[ti];
+		if (tf)
+		{
+			t[0].forEach(function(m,mi){
+				const fm = tf[0][mi];
 				m.loadObj(fm,dataVeision);
 			});
-		});
+			t[1].forEach(function(m,mi){
+				const fm = tf[1][mi];
+				m.loadObj(fm,dataVeision);
+			});
+			if (tf[2] != undefined) t[2] = tf[2]; //徽章
+		}
 	});
+	if (f.b)
+		this.teams[2] = f.b; //原来模式的徽章
 };
 //获取最大潜觉数量
 function getMaxLatentCount(id)
@@ -707,7 +716,7 @@ function initialize()
 
 	//添加徽章
 	const className_ChoseBadges = "show-all-badges";
-	teamBigBoxs.forEach(teamBigBox=>{
+	teamBigBoxs.forEach((teamBigBox,teamIdx)=>{
 		//徽章
 		const teamBadge = teamBigBox.querySelector(".team-badge");
 		if (!teamBadge) return;
@@ -715,10 +724,11 @@ function initialize()
 		function setBadge(){
 			if (teamBadge.classList.contains(className_ChoseBadges))
 			{
+				const team = formation.teams[teamIdx];
 				teamBadge.classList.remove(className_ChoseBadges);
-				formation.badge = parseInt(this.value,10); //如果将来改成每队有徽章，就修改这里的设定
+				team[2] = parseInt(this.value,10);
 				const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-				refreshTeamTotalHP(teamTotalInfoDom, formation.teams[0]);
+				refreshTeamTotalHP(teamTotalInfoDom, team);
 				creatNewUrl();
 			}else
 			{
@@ -2111,7 +2121,7 @@ function refreshAll(formationData){
 		const badgeBox = teamBigBox.querySelector(".team-badge");
 		if (badgeBox)
 		{
-			const badge = badgeBox.querySelector(`#team-${teamNum+1}-badge-${formationData.badge}`);
+			const badge = badgeBox.querySelector(`#team-${teamNum+1}-badge-${teamData[2] || 0}`);
 			badge.checked = true;
 		}
 
@@ -2168,8 +2178,8 @@ function refreshTeamAwokenCount(awokenDom,team){
 			const equivalentAwoken = equivalent_awoken[equalIndex];
 			if (equivalentAwoken.small === ai)
 			{
-				const totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo) + 
-								 awokenCountInTeam(team, equivalentAwoken.big, solo) * equivalentAwoken.times;
+				const totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) + 
+								 awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 				setCount(aicon, totalNum);
 			}else
 			{
@@ -2177,7 +2187,7 @@ function refreshTeamAwokenCount(awokenDom,team){
 			}
 		}else
 		{
-			setCount(aicon,awokenCountInTeam(team,ai,solo));
+			setCount(aicon,awokenCountInTeam(team,ai,solo, teamsCount));
 		}
 	}
 	awokenDom.appendChild(fragment);
@@ -2264,13 +2274,13 @@ function refreshTeamTotalHP(totalDom,team){
 		const tHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
 			return value += mon.ability ? mon.ability[0] : 0;
 		},0);
-		const teamHPAwoken = awokenCountInTeam(team,46,solo); //全队大血包个数
+		const teamHPAwoken = awokenCountInTeam(team,46,solo, teamsCount); //全队大血包个数
 		
 		let badgeHPScale = 1; //徽章倍率
-		if (formation.badge == 4 && solo)
+		if (team[2] == 4 && (solo || (teamsCount === 3 && currentDataSource.code === 'ja')))
 		{
 			badgeHPScale = 1.05;
-		}else if (formation.badge == 11 && solo)
+		}else if (team[2] == 11 && (solo || (teamsCount === 3 && currentDataSource.code === 'ja')))
 		{
 			badgeHPScale = 1.15;
 		}
@@ -2285,13 +2295,13 @@ function refreshTeamTotalHP(totalDom,team){
 		const tRCV = team[0].reduce(function(value,mon){ //队伍计算的总回复
 			return value += mon.ability ? mon.ability[2] : 0;
 		},0);
-		const teamRCVAwoken = awokenCountInTeam(team,47,solo); //全队大回复个数
+		const teamRCVAwoken = awokenCountInTeam(team,47,solo, teamsCount); //全队大回复个数
 		
 		let badgeRCVScale = 1; //徽章倍率
-		if (formation.badge == 3 && solo)
+		if (team[2] == 3 && (solo || (teamsCount === 3 && currentDataSource.code === 'ja')))
 		{
 			badgeRCVScale = 1.25;
-		}else if (formation.badge == 10 && solo)
+		}else if (team[2] == 10 && (solo || (teamsCount === 3 && currentDataSource.code === 'ja')))
 		{
 			badgeRCVScale = 1.35;
 		}
@@ -2315,7 +2325,7 @@ function refreshFormationTotalHP(totalDom, teams){
 			const teamTHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
 				return value += mon.ability ? mon.ability[0] : 0;
 			},0);
-			const teamHPAwoken = awokenCountInTeam(team,46,solo); //全队大血包个数
+			const teamHPAwoken = awokenCountInTeam(team,46,solo, teamsCount); //全队大血包个数
 			return [teamTHP,teamHPAwoken];
 		});
 		const tHP = tHPArr.reduce(function(value, teamHP){
@@ -2331,7 +2341,7 @@ function refreshFormationTotalHP(totalDom, teams){
 			const teamTRCV = team[0].reduce(function(value,mon){ //队伍计算的总回复
 				return value += mon.ability ? mon.ability[2] : 0;
 			},0);
-			const teamRCVAwoken = awokenCountInTeam(team,47,solo); //全队大回复个数
+			const teamRCVAwoken = awokenCountInTeam(team,47,solo, teamsCount); //全队大回复个数
 			return [teamTRCV,teamRCVAwoken];
 		},0);
 		const tRCV = tRCVArr.reduce(function(value, teamRCV){
