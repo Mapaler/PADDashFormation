@@ -558,7 +558,7 @@ ul{
 	transform: scale(0.65);
 	transform-origin: left top;
 	margin-left: 5px;
-	margin-bottom: calc(-64px * (1 - 0.65) + 3px);
+	margin-bottom: calc(-64px * (1 - 0.65) + 1px);
 	/*margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);*/
 	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
 }
@@ -603,7 +603,7 @@ ul{
 	width: 152px;
 	background-position-y: calc(-32px * 37 - 3px);
 	margin-left: -50px;
-	margin-right: 50px;
+	margin-right: 47px;
 }
 /*队长的边框*/
 .team-box .team-members .team-leader .monster{
@@ -791,6 +791,10 @@ ul{
 .attrs .attr-none::before{
 	content: "无";
 }*/
+.search-box::before{
+	font-weight: bold;
+	font-size: 1.2em;
+}
 .search-box>div{
 	margin-bottom: 5px;
 }
