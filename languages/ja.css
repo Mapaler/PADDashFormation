@@ -248,13 +248,13 @@
 	content: "簡単な検索";
 }
 .search-box::before{
-	content: "▼モンスターの検索";
+	content: "モンスターの検索";
 }
 .search-box .attrs .attr-list-1::before{
-	content: "属性 1";
+	content: "属性 1:";
 }
 .search-box .attrs .attr-list-2::before{
-	content: "属性 2";
+	content: "属性 2:";
 }
 .search-box .attrs .fix-main-color-label::after{
 	content: "限定 属性 1->主属性，属性 2->副属性";
@@ -274,7 +274,7 @@
 .search-box .sort-reverse-label::after{
 	content: "正序";
 }
-.search-box #sort-reverse:checked+ .sort-reverse-label::after{
+.search-box input:checked+ .sort-reverse-label::after{
 	content: "逆序";
 }
 .attrs .attr-all::before{
@@ -284,13 +284,13 @@
 	content: "空";
 }
 .search-box .types-div::before{
-	content: "タイプ（OR）";
+	content: "タイプ:";
 }
 .search-box .awoken-div::before{
-	content: "覚醒（AND）（しえ:数値をクリックすると数値が減少します）";
+	content: "▼覚醒（AND）（しえ:数値をクリックすると数値が減少します）";
 }
 .search-box .sawoken-div::before{
-	content: "超覚醒（OR）";
+	content: "▼超覚醒（OR）";
 }
 .control-div .search-start::before{
 	content: "🔍検索の開始";

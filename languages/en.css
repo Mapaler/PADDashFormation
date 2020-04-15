@@ -255,13 +255,13 @@
 	content: "Simple Search";
 }
 .search-box::before{
-	content: "▼Search Cards";
+	content: "Search Cards";
 }
 .search-box .attrs .attr-list-1::before{
-	content: "Attribute 1";
+	content: "Attribute 1:";
 }
 .search-box .attrs .attr-list-2::before{
-	content: "Attribute 2";
+	content: "Attribute 2:";
 }
 .search-box .attrs .fix-main-color-label::after{
 	content: "Fix attr-1 for main-attr, attr-2 for sub-attr.";
@@ -281,7 +281,7 @@
 .search-box .sort-reverse-label::after{
 	content: "Same";
 }
-.search-box #sort-reverse:checked+ .sort-reverse-label::after{
+.search-box input:checked+ .sort-reverse-label::after{
 	content: "Reverse";
 }
 .attrs .attr-all::before{
@@ -291,13 +291,13 @@
 	content: "None";
 }
 .search-box .types-div::before{
-	content: "Type (OR)";
+	content: "Type:";
 }
 .search-box .awoken-div::before{
-	content: "Awoken (AND) (Tips: Click on number to reduce value)";
+	content: "▼Awoken (AND) (Tips: Click on number to reduce value)";
 }
 .search-box .sawoken-div::before{
-	content: "Super Awoken (OR)";
+	content: "▼Super Awoken (OR)";
 }
 .control-div .search-start::before{
 	content: "🔍Start Search";
