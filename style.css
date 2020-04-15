@@ -130,6 +130,12 @@ body{
 	margin-right: 20px;
 	display: inline-block;
 }
+.config-checkbox-lbl[for$=and-or]::after{
+	content: "OR";
+}
+input:checked+ .config-checkbox-lbl[for$=and-or]::after{
+	content: "AND";
+}
 
 .status{
 	line-height: 16px;
@@ -840,6 +846,10 @@ ul{
 }
 .types-div .type-list input:checked~label{
 	opacity: 1;
+}
+.types-div .type-and-or-label{
+	margin-left: 10px;
+	margin-right: 0;
 }
 /*.search-box .awoken-div::before{
 	content: "觉醒";

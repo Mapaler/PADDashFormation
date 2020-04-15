@@ -248,13 +248,13 @@
 	content: "간단한 검색";
 }
 .search-box::before{
-	content: "▼몬스터 검색";
+	content: "몬스터 검색";
 }
 .search-box .attrs .attr-list-1::before{
-	content: "속성 1";
+	content: "속성 1:";
 }
 .search-box .attrs .attr-list-2::before{
-	content: "속성 1";
+	content: "속성 1:";
 }
 .search-box .attrs .fix-main-color-label::after{
 	content: "제한 속성 1은 기본 속성 이며 속성 2 하위 속성입니다.";
@@ -274,7 +274,7 @@
 .search-box .sort-reverse-label::after{
 	content: "양의";
 }
-.search-box #sort-reverse:checked+ .sort-reverse-label::after{
+.search-box input:checked+ .sort-reverse-label::after{
 	content: "역순";
 }
 .attrs .attr-all::before{
@@ -284,13 +284,13 @@
 	content: "없음";
 }
 .search-box .types-div::before{
-	content: "형식（OR）";
+	content: "형식:";
 }
 .search-box .awoken-div::before{
-	content: "각성（AND）（번째:숫자를 누르면 숫자가 낮아집니다）";
+	content: "▼각성（AND）（번째:숫자를 누르면 숫자가 낮아집니다）";
 }
 .search-box .sawoken-div::before{
-	content: "슈퍼 각성（OR）";
+	content: "▼슈퍼 각성（OR）";
 }
 .control-div .search-start::before{
 	content: "🔍검색 시작";
