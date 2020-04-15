@@ -311,9 +311,10 @@
 {
 	background-position-x: -32px;
 }
-.latent-icon[data-latent-icon='14']
+.latent-icon[data-latent-icon='17']::before,
+.latent-icon[data-latent-icon='37']::before
 {
-	background-position-x: -76px;
+	background-position-x: -252px;
 }
 .badge[data-badge-icon='0']::before,
 .badge[data-badge-icon='2']::before
