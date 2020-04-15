@@ -126,10 +126,14 @@
 .skill-box .skill-level-label::before{
 	content: "Lv.";
 }
-.row-mon-skill .skill-title::before{
+.row-mon-skill .type-title::before,
+.row-mon-skill .type-title::after
+{
 	content: "Skill";
 }
-.row-mon-leader-skill .skill-title::before{
+.row-mon-leader-skill .type-title::before,
+.row-mon-leader-skill .type-title::after
+{
 	content: "Leader Skill";
 }
 
