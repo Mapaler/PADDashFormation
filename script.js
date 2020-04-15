@@ -1636,13 +1636,13 @@ function changeid(mon,monDom,latentDom)
 		}
 	}
 	const awokenIcon = monDom.querySelector(".awoken-count");
-	if (mon.awoken>-1) //如果提供了觉醒
+	if (awokenIcon)
 	{
-		if (mon.awoken == 0 || card.awakenings.length < 1 || !awokenIcon) //没觉醒
+		if (card.awakenings.length < 1 || mon.awoken == 0) //没觉醒
 		{
 			awokenIcon.classList.add(className_displayNone);
 			awokenIcon.innerHTML = "";
-		}else
+		}else if (mon.awoken > 1) //如果提供了觉醒
 		{
 			awokenIcon.classList.remove(className_displayNone);
 			awokenIcon.innerHTML = mon.awoken;
@@ -1654,9 +1654,6 @@ function changeid(mon,monDom,latentDom)
 				awokenIcon.classList.remove("full-awoken");
 			}
 		}
-	}else if (card.awakenings.length < 1)
-	{
-		awokenIcon.classList.add("display-none");
 	}
 	const sawoken = monDom.querySelector(".super-awoken");
 	if (sawoken) //如果存在超觉醒的DOM且提供了超觉醒
