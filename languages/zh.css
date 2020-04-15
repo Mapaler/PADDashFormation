@@ -254,13 +254,13 @@
 	content: "简易搜索";
 }
 .search-box::before{
-	content: "▼搜索怪物";
+	content: "搜索怪物";
 }
 .search-box .attrs .attr-list-1::before{
-	content: "属性 1";
+	content: "属性 1：";
 }
 .search-box .attrs .attr-list-2::before{
-	content: "属性 2";
+	content: "属性 2：";
 }
 .search-box .attrs .fix-main-color-label::after{
 	content: "限制属性 1 为主属性，属性 2 为副属性";
@@ -280,7 +280,7 @@
 .search-box .sort-reverse-label::after{
 	content: "顺序";
 }
-.search-box #sort-reverse:checked+ .sort-reverse-label::after{
+.search-box input:checked+ .sort-reverse-label::after{
 	content: "逆序";
 }
 .attrs .attr-all::before{
@@ -290,13 +290,13 @@
 	content: "无";
 }
 .search-box .types-div::before{
-	content: "类型（OR）";
+	content: "类型：";
 }
 .search-box .awoken-div::before{
-	content: "觉醒（AND）（提示：点击数字可减少数值）";
+	content: "▼觉醒（AND）（提示：点击数字可减少数值）";
 }
 .search-box .sawoken-div::before{
-	content: "超觉醒（OR）";
+	content: "▼超觉醒（OR）";
 }
 .control-div .search-start::before{
 	content: "🔍开始搜索";
