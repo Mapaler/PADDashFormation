@@ -558,7 +558,6 @@ ul{
 	transform: scale(0.65);
 	transform-origin: left top;
 	margin-left: 5px;
-	margin-top: 3px;
 	margin-bottom: calc(-64px * (1 - 0.65) + 3px);
 	/*margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);*/
 	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
@@ -566,27 +565,44 @@ ul{
 
 .team-latents .latent-icon
 {
+	margin-top: 3px;
 	margin-left: 3px;
 	margin-right: 3px;
 }
-.team-latents .latent-icon[data-latent-icon]
+.team-latents .latent-icon[data-latent-icon='12'],
+.team-latents .latent-icon[data-latent-icon='13'],
+.team-latents .latent-icon[data-latent-icon='14'],
+.team-latents .latent-icon[data-latent-icon='15'],
+.team-latents .latent-icon[data-latent-icon='16'],
+.team-latents .latent-icon[data-latent-icon='17'],
+.team-latents .latent-icon[data-latent-icon='18'],
+.team-latents .latent-icon[data-latent-icon='19'],
+.team-latents .latent-icon[data-latent-icon='20'],
+.team-latents .latent-icon[data-latent-icon='21'],
+.team-latents .latent-icon[data-latent-icon='22'],
+.team-latents .latent-icon[data-latent-icon='23'],
+.team-latents .latent-icon[data-latent-icon='24'],
+.team-latents .latent-icon[data-latent-icon='25'],
+.team-latents .latent-icon[data-latent-icon='26'],
+.team-latents .latent-icon[data-latent-icon='27'],
+.team-latents .latent-icon[data-latent-icon='28'],
+.team-latents .latent-icon[data-latent-icon='29'],
+.team-latents .latent-icon[data-latent-icon='30'],
+.team-latents .latent-icon[data-latent-icon='31'],
+.team-latents .latent-icon[data-latent-icon='32'],
+.team-latents .latent-icon[data-latent-icon='33'],
+.team-latents .latent-icon[data-latent-icon='34'],
+.team-latents .latent-icon[data-latent-icon='35'],
+.team-latents .latent-icon[data-latent-icon='36'],
+.team-latents .latent-icon[data-latent-icon='37']
 {
-	margin: 0;
+	margin-left: 0;
+	margin-right: 0;
 }
-.team-latents .latent-icon[data-latent-icon='1'],
-.team-latents .latent-icon[data-latent-icon='2'],
-.team-latents .latent-icon[data-latent-icon='3'],
-.team-latents .latent-icon[data-latent-icon='4'],
-.team-latents .latent-icon[data-latent-icon='5'],
-.team-latents .latent-icon[data-latent-icon='6'],
-.team-latents .latent-icon[data-latent-icon='7'],
-.team-latents .latent-icon[data-latent-icon='8'],
-.team-latents .latent-icon[data-latent-icon='9'],
-.team-latents .latent-icon[data-latent-icon='10'],
-.team-latents .latent-icon[data-latent-icon='11']
-{
-	margin-left: 3px;
-	margin-right: 3px;
+.team-latents .latent-ul .latent-icon[data-latent-icon='37']::before{ /*6色破无效*/
+	width: 152px;
+	background-position-y: calc(-32px * 37 - 3px);
+	background-position-x: -50px;
 }
 /*队长的边框*/
 .team-box .team-members .team-leader .monster{
@@ -1334,6 +1350,7 @@ ul{
 }
 .m-latent-allowable-ul .latent-icon{
 	margin-right: 4.66px;
+	margin-bottom: 4px;
 }
 .m-latent-allowable-ul .latent-icon:last-of-type{
 	margin-right: unset;
