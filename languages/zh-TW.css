@@ -128,10 +128,14 @@
 .skill-box .skill-level-label::before{
 	content: "Lv.";
 }
-.row-mon-skill .skill-title::before{
+.row-mon-skill .type-title::before,
+.row-mon-skill .type-title::after
+{
 	content: "主動技能";
 }
-.row-mon-leader-skill .skill-title::before{
+.row-mon-leader-skill .type-title::before,
+.row-mon-leader-skill .type-title::after
+{
 	content: "隊長技能";
 }
 

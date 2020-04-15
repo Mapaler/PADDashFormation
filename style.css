@@ -1424,33 +1424,61 @@ ul{
 .skill-box .skill-title{
 	background-color: #39180F;
 	box-shadow: inset black 0 5px 5px;
-	padding: 0 10px 0 5px;
+	padding: 0 10px 0 2px;
 	text-shadow:black 3px 3px 0;
 }
-.skill-box .skill-title::before{
+
+.skill-title .type-title{
 	background-color: #774433;
 	border: #BBAA55 solid 2px;
-	border-radius: 10px;
+	border-radius: 8px;
 	margin-right: 5px;
 	padding: 0 5px;
-	text-shadow:black 0 0 3px;
-	line-height: 25px;
+	line-height: 24px;
 	display: inline-block;
+	position: relative;
 }
-.row-mon-skill .skill-title::before{
-	/*content: "主動技能";*/
-	color: #DDEEEE;
+
+.skill-title .type-title::after{
+	background-clip: text;
+	color: transparent;
+	text-shadow: none;
+	position: absolute;
+	left: 5px;
 }
+
+.skill-title .type-title::before{
+	text-shadow: none;
+	-webkit-text-stroke: 3px black;
+	text-stroke: 3px black;
+}
+/*.row-mon-skill .type-title::before,
+.row-mon-skill .type-title::after
+{
+	content: "主動技能";
+}*/
+.row-mon-skill .type-title::after
+{
+	background-image: linear-gradient(white 25%, #3377AA 80%);
+}
+
+/*.row-mon-leader-skill .type-title::before,
+.row-mon-leader-skill .type-title::after
+{
+	content: "隊長技能";
+}*/
+.row-mon-leader-skill .type-title::after
+{
+	background-image: linear-gradient(#FFFF99 25%, #EE7744 80%);
+}
+
+
 .row-mon-skill .skill-title .skill-name{
 	color: #84BAFC;
 	cursor: pointer;
 }
 .row-mon-skill .skill-title .skill-name:hover::after{
 	content: "🔍";
-}
-.row-mon-leader-skill .skill-title::before{
-	/*content: "隊長技能";*/
-	color: #FF9955;
 }
 .row-mon-leader-skill .skill-title .skill-name{
 	color: #85FD80;
