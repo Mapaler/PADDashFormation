@@ -150,8 +150,10 @@ Formation.prototype.outObj= function(){
 	const obj = {};
 	if (this.title != undefined && this.title.length>0) obj.t = this.title;
 	if (this.detail != undefined && this.detail.length>0) obj.d = this.detail;
+	console.log(this.teams);
 	obj.f = this.teams.map(t=>
 		{
+			console.log(t);
 			const teamArr = [];
 			teamArr[0] = t[0].map(m=>
 				m.outObj()
