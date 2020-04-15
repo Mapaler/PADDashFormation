@@ -645,6 +645,7 @@
 .latent-icon{
 	background-image: url(images/latent.png);
 	background-position-x: 0;
+	background-repeat: no-repeat;
 }
 .latent-icon[data-latent-icon]{
 	width: 76px;
