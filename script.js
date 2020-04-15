@@ -150,10 +150,8 @@ Formation.prototype.outObj= function(){
 	const obj = {};
 	if (this.title != undefined && this.title.length>0) obj.t = this.title;
 	if (this.detail != undefined && this.detail.length>0) obj.d = this.detail;
-	console.log(this.teams);
 	obj.f = this.teams.map(t=>
 		{
-			console.log(t);
 			const teamArr = [];
 			teamArr[0] = t[0].map(m=>
 				m.outObj()
@@ -188,7 +186,7 @@ Formation.prototype.loadObj= function(f){
 		}
 	});
 	if (f.b)
-		this.teams[2] = f.b; //原来模式的徽章
+		this.teams[0][2] = f.b; //原来模式的徽章
 };
 //获取最大潜觉数量
 function getMaxLatentCount(id)

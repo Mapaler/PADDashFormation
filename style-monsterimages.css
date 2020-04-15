@@ -366,7 +366,7 @@
 .monster[data-cards-pic-y='8']{background-position-y:calc(-102px * 8);}
 .monster[data-cards-pic-y='9']{background-position-y:calc(-102px * 9);}
 /*觉醒、类型、潜觉*/
-.awoken-icon,.type-icon,.latent-icon{
+.awoken-icon,.type-icon{
 	display:inline-block;
 	width:32px;height:32px;
     vertical-align: middle;
@@ -643,152 +643,168 @@
 }
 /*潜在觉醒*/
 .latent-icon{
+	display:inline-block;
+	background: linear-gradient(#777 33%, #555 80%);
+	border: 2px ridge #ddd;
+	border-radius: 5px;
+	box-sizing: border-box;
+	box-shadow: black 1px 1px 1px;
+}
+.latent-icon::before{ /*HP*/
+	content: "";
+	display: inline-block;
+	margin: -2px;
+	width: 32px;
+	height: 32px;
 	background-image: url(images/latent.png);
 	background-position-x: 0;
 	background-repeat: no-repeat;
 }
 .latent-icon[data-latent-icon]{
+	background: linear-gradient(#4499EE 33%,  #2277EE 80%);
+	border-color: #CCEEFF;
+}
+.latent-icon[data-latent-icon='12']::before,
+.latent-icon[data-latent-icon='13']::before,
+.latent-icon[data-latent-icon='14']::before,
+.latent-icon[data-latent-icon='15']::before,
+.latent-icon[data-latent-icon='16']::before,
+.latent-icon[data-latent-icon='17']::before,
+.latent-icon[data-latent-icon='18']::before,
+.latent-icon[data-latent-icon='19']::before,
+.latent-icon[data-latent-icon='20']::before,
+.latent-icon[data-latent-icon='21']::before,
+.latent-icon[data-latent-icon='22']::before,
+.latent-icon[data-latent-icon='23']::before,
+.latent-icon[data-latent-icon='24']::before,
+.latent-icon[data-latent-icon='25']::before,
+.latent-icon[data-latent-icon='26']::before,
+.latent-icon[data-latent-icon='27']::before,
+.latent-icon[data-latent-icon='28']::before,
+.latent-icon[data-latent-icon='29']::before,
+.latent-icon[data-latent-icon='30']::before,
+.latent-icon[data-latent-icon='31']::before,
+.latent-icon[data-latent-icon='32']::before,
+.latent-icon[data-latent-icon='33']::before,
+.latent-icon[data-latent-icon='34']::before,
+.latent-icon[data-latent-icon='35']::before,
+.latent-icon[data-latent-icon='36']::before
+{
 	width: 76px;
 }
-.latent-icon[data-latent-icon='1'],
-.latent-icon[data-latent-icon='2'],
-.latent-icon[data-latent-icon='3'],
-.latent-icon[data-latent-icon='4'],
-.latent-icon[data-latent-icon='5'],
-.latent-icon[data-latent-icon='6'],
-.latent-icon[data-latent-icon='7'],
-.latent-icon[data-latent-icon='8'],
-.latent-icon[data-latent-icon='9'],
-.latent-icon[data-latent-icon='10'],
-.latent-icon[data-latent-icon='11']
-{
-	width: 32px;
-}
-.latent-icon[data-latent-icon='1']{ /*HP*/
+.latent-icon[data-latent-icon='1']::before{ /*HP*/
 	background-position-y: calc(-32px * 1);
 }
-.latent-icon[data-latent-icon='2']{ /*攻击*/
+.latent-icon[data-latent-icon='2']::before{ /*攻击*/
 	background-position-y: calc(-32px * 2);
 }
-.latent-icon[data-latent-icon='3']{ /*回复*/
+.latent-icon[data-latent-icon='3']::before{ /*回复*/
 	background-position-y: calc(-32px * 3);
 }
-.latent-icon[data-latent-icon='4']{ /*手指*/
+.latent-icon[data-latent-icon='4']::before{ /*手指*/
 	background-position-y: calc(-32px * 4);
 }
-.latent-icon[data-latent-icon='5']{ /*自回*/
+.latent-icon[data-latent-icon='5']::before{ /*自回*/
 	background-position-y: calc(-32px * 5);
 }
-.latent-icon[data-latent-icon='6']{ /*火盾*/
+.latent-icon[data-latent-icon='6']::before{ /*火盾*/
 	background-position-y: calc(-32px * 6);
 }
-.latent-icon[data-latent-icon='7']{ /*水盾*/
+.latent-icon[data-latent-icon='7']::before{ /*水盾*/
 	background-position-y: calc(-32px * 7);
 }
-.latent-icon[data-latent-icon='8']{ /*木盾*/
+.latent-icon[data-latent-icon='8']::before{ /*木盾*/
 	background-position-y: calc(-32px * 8);
 }
-.latent-icon[data-latent-icon='9']{ /*光盾*/
+.latent-icon[data-latent-icon='9']::before{ /*光盾*/
 	background-position-y: calc(-32px * 9);
 }
-.latent-icon[data-latent-icon='10']{ /*暗盾*/
+.latent-icon[data-latent-icon='10']::before{ /*暗盾*/
 	background-position-y: calc(-32px * 10);
 }
-.latent-icon[data-latent-icon='11']{ /*防坐*/
+.latent-icon[data-latent-icon='11']::before{ /*防坐*/
 	background-position-y: calc(-32px * 11);
 }
-.latent-icon[data-latent-icon='12']{ /*三维*/
+.latent-icon[data-latent-icon='12']::before{ /*三维*/
 	background-position-y: calc(-32px * 12);
 }
 /* 目前暂未启用的潜觉
-.latent-icon[data-latent-icon='13']{
+.latent-icon[data-latent-icon='13']::before{
 	background-position-y: calc(-32px * 13);
 }
-.latent-icon[data-latent-icon='14']{
+.latent-icon[data-latent-icon='14']::before{
 	background-position-y: calc(-32px * 14);
 }
-.latent-icon[data-latent-icon='15']{
+.latent-icon[data-latent-icon='15']::before{
 	background-position-y: calc(-32px * 15);
 }
 */
-.latent-icon[data-latent-icon='16']{ /*进化杀*/
+.latent-icon[data-latent-icon='16']::before{ /*进化杀*/
 	background-position-y: calc(-32px * 16);
 }
-.latent-icon[data-latent-icon='17']{ /*觉醒杀*/
+.latent-icon[data-latent-icon='17']::before{ /*觉醒杀*/
 	background-position-y: calc(-32px * 17);
 }
-.latent-icon[data-latent-icon='18']{ /*强化杀*/
+.latent-icon[data-latent-icon='18']::before{ /*强化杀*/
 	background-position-y: calc(-32px * 18);
 }
-.latent-icon[data-latent-icon='19']{ /*卖钱杀*/
+.latent-icon[data-latent-icon='19']::before{ /*卖钱杀*/
 	background-position-y: calc(-32px * 19);
 }
-.latent-icon[data-latent-icon='20']{ /*神杀*/
+.latent-icon[data-latent-icon='20']::before{ /*神杀*/
 	background-position-y: calc(-32px * 20);
 }
-.latent-icon[data-latent-icon='21']{ /*龙杀*/
+.latent-icon[data-latent-icon='21']::before{ /*龙杀*/
 	background-position-y: calc(-32px * 21);
 }
-.latent-icon[data-latent-icon='22']{ /*恶魔杀*/
+.latent-icon[data-latent-icon='22']::before{ /*恶魔杀*/
 	background-position-y: calc(-32px * 22);
 }
-.latent-icon[data-latent-icon='23']{ /*机械杀*/
+.latent-icon[data-latent-icon='23']::before{ /*机械杀*/
 	background-position-y: calc(-32px * 23);
 }
-.latent-icon[data-latent-icon='24']{ /*平衡杀*/
+.latent-icon[data-latent-icon='24']::before{ /*平衡杀*/
 	background-position-y: calc(-32px * 24);
 }
-.latent-icon[data-latent-icon='25']{ /*攻击杀*/
+.latent-icon[data-latent-icon='25']::before{ /*攻击杀*/
 	background-position-y: calc(-32px * 25);
 }
-.latent-icon[data-latent-icon='26']{ /*体力杀*/
+.latent-icon[data-latent-icon='26']::before{ /*体力杀*/
 	background-position-y: calc(-32px * 26);
 }
-.latent-icon[data-latent-icon='27']{ /*回复杀*/
+.latent-icon[data-latent-icon='27']::before{ /*回复杀*/
 	background-position-y: calc(-32px * 27);
 }
-.latent-icon[data-latent-icon='28']{ /*大HP*/
+.latent-icon[data-latent-icon='28']::before{ /*大HP*/
 	background-position-y: calc(-32px * 28);
 }
-.latent-icon[data-latent-icon='29']{ /*大攻击*/
+.latent-icon[data-latent-icon='29']::before{ /*大攻击*/
 	background-position-y: calc(-32px * 29);
 }
-.latent-icon[data-latent-icon='30']{ /*大回复*/
+.latent-icon[data-latent-icon='30']::before{ /*大回复*/
 	background-position-y: calc(-32px * 30);
 }
-.latent-icon[data-latent-icon='31']{ /*大手指*/
+.latent-icon[data-latent-icon='31']::before{ /*大手指*/
 	background-position-y: calc(-32px * 31);
 }
-.latent-icon[data-latent-icon='32']{ /*大火盾*/
+.latent-icon[data-latent-icon='32']::before{ /*大火盾*/
 	background-position-y: calc(-32px * 32);
 }
-.latent-icon[data-latent-icon='33']{ /*大水盾*/
+.latent-icon[data-latent-icon='33']::before{ /*大水盾*/
 	background-position-y: calc(-32px * 33);
 }
-.latent-icon[data-latent-icon='34']{ /*大木盾*/
+.latent-icon[data-latent-icon='34']::before{ /*大木盾*/
 	background-position-y: calc(-32px * 34);
 }
-.latent-icon[data-latent-icon='35']{ /*大光盾*/
+.latent-icon[data-latent-icon='35']::before{ /*大光盾*/
 	background-position-y: calc(-32px * 35);
 }
-.latent-icon[data-latent-icon='36']{ /*大暗盾*/
+.latent-icon[data-latent-icon='36']::before{ /*大暗盾*/
 	background-position-y: calc(-32px * 36);
 }
-.latent-icon[data-latent-icon='37']{ /*6色破无效*/
+.latent-icon[data-latent-icon='37']::before{ /*6色破无效*/
 	width: 252px;
 	background-position-y: calc(-32px * 37);
-}
-.team-latents .latent-ul .latent-icon[data-latent-icon='37']{ /*6色破无效*/
-	width: calc(152px - 5px * 2);
-	height: calc(32px - 3px * 2);
-	background-position-y: calc(-32px * 37 - 3px);
-	background-position-x: -55px;
-	border-style: solid;
-	border-color: transparent;
-	border-width: 3px 5px;
-	border-image-source: url(images/latent-bg.png);
-	border-image-slice: 3 5;
-	background-clip: padding-box;
 }
 
 /* 徽章背景 */
