@@ -807,6 +807,7 @@ function initialize()
 	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
 	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
 	const s_types = Array.from(searchBox.querySelectorAll(".types-div .type-check"));
+	const s_typeAndOr = searchBox.querySelector("#type-and-or");
 	const s_awokensItems = Array.from(searchBox.querySelectorAll(".awoken-div .awoken-count"));
 	const s_awokensIcons = s_awokensItems.map(it=>it.querySelector(".awoken-icon"));
 	const s_awokensCounts = s_awokensItems.map(it=>it.querySelector(".count"));
@@ -945,6 +946,7 @@ function initialize()
 			attr1,attr2,
 			s_fixMainColor.checked,
 			typesFilter,
+			s_typeAndOr.checked,
 			awokensFilter,
 			sawokensFilter,
 			s_awokensEquivalent.checked,
@@ -1633,9 +1635,9 @@ function changeid(mon,monDom,latentDom)
 			levelDom.classList.remove("_110");
 		}
 	}
+	const awokenIcon = monDom.querySelector(".awoken-count");
 	if (mon.awoken>-1) //如果提供了觉醒
 	{
-		const awokenIcon = monDom.querySelector(".awoken-count");
 		if (mon.awoken == 0 || card.awakenings.length < 1 || !awokenIcon) //没觉醒
 		{
 			awokenIcon.classList.add(className_displayNone);
@@ -1652,6 +1654,9 @@ function changeid(mon,monDom,latentDom)
 				awokenIcon.classList.remove("full-awoken");
 			}
 		}
+	}else if (card.awakenings.length < 1)
+	{
+		awokenIcon.classList.add("display-none");
 	}
 	const sawoken = monDom.querySelector(".super-awoken");
 	if (sawoken) //如果存在超觉醒的DOM且提供了超觉醒

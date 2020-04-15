@@ -353,7 +353,7 @@ function calculateAbility(member = null, assist = null, solo = true)
 	return abilitys;
 }
 //搜索卡片用
-function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equalAk,incSawoken)
+function searchCards(cards,attr1,attr2,fixMainColor,types,typeAndOr,awokens,sawokens,equalAk,incSawoken)
 {
 	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	//属性
@@ -384,7 +384,10 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,awokens,sawokens,equal
 	//类型
 	if (types.length>0)
 	{
-		cardsRange = cardsRange.filter(c=>types.some(t=>c.types.includes(t)));
+		cardsRange = cardsRange.filter(c=>typeAndOr ?
+			types.every(t=>c.types.includes(t)) : //所有type都满足
+			types.some(t=>c.types.includes(t))  //只需要满足一个type
+			);
 	}
 	//觉醒
 	//等效觉醒时，事先去除大觉醒
