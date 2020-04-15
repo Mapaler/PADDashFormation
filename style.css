@@ -602,7 +602,8 @@ ul{
 .team-latents .latent-ul .latent-icon[data-latent-icon='37']::before{ /*6色破无效*/
 	width: 152px;
 	background-position-y: calc(-32px * 37 - 3px);
-	background-position-x: -50px;
+	margin-left: -50px;
+	margin-right: 50px;
 }
 /*队长的边框*/
 .team-box .team-members .team-leader .monster{
