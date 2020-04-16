@@ -215,7 +215,10 @@ function toggleDomClassName(checkBox, className, checkedAdd = true, dom = docume
 //清除数据
 function clearData()
 {
-	location.search = "";
+	const locationURL = new URL(location);
+	locationURL.searchParams.delete('d'); //删除数据
+	locationURL.searchParams.delete('l'); //删除语言
+	location = locationURL.toString();
 }
 //轮换ABC队伍
 function swapABCteam()
