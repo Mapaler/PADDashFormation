@@ -1171,26 +1171,7 @@ function initialize()
 	const monEditLatentsAllowable = Array.from(monEditLatentAllowableUl.querySelectorAll("li"));
 	editBox.refreshLatent = function(latent,monid) //刷新潜觉
 	{
-		const maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
-		const usedHoleN = usedHole(latent);
-		const showLatentCount = maxLatentCount-usedHoleN+latent.length; //显示的潜觉个数（包含空格）
-		for (let ai = 0; ai<monEditLatents.length; ai++)
-		{
-			if (latent[ai] != undefined) //有的潜觉
-			{
-				monEditLatents[ai].setAttribute("data-latent-icon", latent[ai]);
-				monEditLatents[ai].classList.remove(className_displayNone);
-			}
-			else if(ai < showLatentCount) //空格
-			{
-				monEditLatents[ai].removeAttribute("data-latent-icon");
-				monEditLatents[ai].classList.remove(className_displayNone);
-			}
-			else //不显示的部分
-			{
-				monEditLatents[ai].classList.add(className_displayNone);
-			}
-		}
+		refreshLatent(latent,monid,monEditLatents);
 	};
 
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
@@ -1221,7 +1202,7 @@ function initialize()
 
 	//已有觉醒的去除
 	function deleteLatent(){
-		const aIdx = parseInt(this.value, 10);
+		const aIdx = monEditLatents.filter(l=>!l.classList.contains(className_displayNone)).findIndex(l=>l==this);
 		editBox.latent.splice(aIdx,1);
 		editBox.reCalculateAbility(); //重计算三维
 		editBox.refreshLatent(editBox.latent,editBox.mid); //刷新潜觉
@@ -1241,7 +1222,7 @@ function initialize()
 		editBox.reCalculateAbility();
 		editBox.refreshLatent(editBox.latent,editBox.mid);
 	}
-	monEditLatentsAllowable.forEach((la)=>{la.onclick = addLatent;});
+	monEditLatentsAllowable.forEach(la=>la.onclick = addLatent);
 
 	//编辑界面重新计算怪物的能力
 	function reCalculateAbility(){
@@ -1721,27 +1702,7 @@ function changeid(mon,monDom,latentDom)
 			}else
 			{
 				latentDom.classList.remove(className_displayNone);
-
-				const usedHoleN = usedHole(latent); //使用的格子数
-				const maxLatentCount = getMaxLatentCount(mon.id); //最大潜觉数量
-				const showLatentCount = maxLatentCount-usedHoleN+latent.length; //显示的潜觉个数（包含空格）
-				for (let ai=0;ai<latentDoms.length;ai++)
-				{
-					if (latent[ai]) //有的潜觉
-					{
-						latentDoms[ai].setAttribute("data-latent-icon", latent[ai]);
-						latentDoms[ai].classList.remove(className_displayNone);
-					}
-					else if(ai<showLatentCount) //空格
-					{
-						latentDoms[ai].removeAttribute("data-latent-icon");
-						latentDoms[ai].classList.remove(className_displayNone);
-					}
-					else //不显示的部分
-					{
-						latentDoms[ai].classList.add(className_displayNone);
-					}
-				}
+				refreshLatent(latent,mon.id,latentDoms);
 			}
 		}else
 		{
@@ -1764,6 +1725,35 @@ function changeid(mon,monDom,latentDom)
 
 	parentNode.appendChild(fragment);
 }
+function refreshLatent(latent,monid,iconArr) //刷新潜觉
+{
+	const maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
+	let latentIndex = 0,usedHoleN = 0;
+	for (let ai = 0; ai<iconArr.length; ai++)
+	{
+		const icon = iconArr[ai];
+		if (latent[latentIndex] != undefined && ai >= usedHoleN) //有潜觉
+		{
+			icon.setAttribute("data-latent-icon", latent[latentIndex]);
+			icon.classList.remove(className_displayNone);
+			usedHoleN += latent[latentIndex] == 37 ? 6 : (latent[latentIndex]>= 12 ? 2 : 1);
+			latentIndex++;
+		}
+		else if(ai < usedHoleN) //多格潜觉后方隐藏
+		{
+			icon.classList.add(className_displayNone);
+		}
+		else if(ai < maxLatentCount) //没有使用的空格觉醒
+		{
+			icon.removeAttribute("data-latent-icon");
+			icon.classList.remove(className_displayNone);
+		}
+		else //不需要显示的部分
+		{
+			icon.classList.add(className_displayNone);
+		}
+	}
+};
 //点击怪物头像，出现编辑窗
 function editMon(teamNum,isAssist,indexInTeam)
 {
