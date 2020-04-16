@@ -1988,12 +1988,17 @@ function editBoxChangeMonId(id)
 	const rowPlus =  settingBox.querySelector(".row-mon-plus");
 	const rowLatent =  settingBox.querySelector(".row-mon-latent");
 	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
-	//该宠Type允许的杀,uniq是去重的自定义函数
-	const allowLatent = [].concat(...card.types.filter(i=>i>=0).map(type=>type_allowable_latent[type])).uniq();
+	//该宠Type允许的杀，set不会出现重复的
+	const allowLatent = new Set();
+	card.types
+	.filter(i=>i>=0)
+	.map(type=>type_allowable_latent[type])
+	.forEach(tA => tA.forEach(t=>allowLatent.add(t)));
+
 	typekiller_for_type.forEach(type=>{ //显示允许的杀，隐藏不允许的杀
 		const latentDom = monLatentAllowUl.querySelector(`.latent-icon[data-latent-icon='${type.latent}']`);
 		if (!latentDom) return;
-		if (allowLatent.includes(type.latent))
+		if (allowLatent.has(type.latent))
 		{
 			latentDom.classList.remove("unallowable-latent");
 		}else
