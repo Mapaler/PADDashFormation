@@ -123,8 +123,8 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
+									<li class="latent-icon latent-lock"></li>
+									<li class="latent-icon latent-lock"></li>
 								</ul>
 							</li>
 							<li class="latents latents-2">
@@ -135,8 +135,8 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
+									<li class="latent-icon latent-lock"></li>
+									<li class="latent-icon latent-lock"></li>
 								</ul>
 							</li>
 							<li class="latents latents-3">
@@ -147,8 +147,8 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
+									<li class="latent-icon latent-lock"></li>
+									<li class="latent-icon latent-lock"></li>
 								</ul>
 							</li>
 							<li class="latents latents-4">
@@ -159,8 +159,8 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
+									<li class="latent-icon latent-lock"></li>
+									<li class="latent-icon latent-lock"></li>
 								</ul>
 							</li>
 							<li class="latents latents-5">
@@ -171,8 +171,8 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
+									<li class="latent-icon latent-lock"></li>
+									<li class="latent-icon latent-lock"></li>
 								</ul>
 							</li>
 						</ul>
@@ -315,8 +315,8 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
+									<li class="latent-icon latent-lock"></li>
+									<li class="latent-icon latent-lock"></li>
 								</ul>
 							</li>
 							<li class="latents latents-3">
@@ -327,8 +327,8 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
+									<li class="latent-icon latent-lock"></li>
+									<li class="latent-icon latent-lock"></li>
 								</ul>
 							</li>
 							<li class="latents latents-4">
@@ -339,8 +339,8 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
+									<li class="latent-icon latent-lock"></li>
+									<li class="latent-icon latent-lock"></li>
 								</ul>
 							</li>
 							<li class="latents latents-5">
@@ -351,8 +351,8 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
+									<li class="latent-icon latent-lock"></li>
+									<li class="latent-icon latent-lock"></li>
 								</ul>
 							</li>
 							<li class="latents latents-1">
@@ -363,8 +363,8 @@ var formation = new Formation(teamsCount,5);
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
 									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
-									<li class="latent-icon"></li>
+									<li class="latent-icon latent-lock"></li>
+									<li class="latent-icon latent-lock"></li>
 								</ul>
 							</li>
 						</ul>
@@ -754,16 +754,18 @@ var formation = new Formation(teamsCount,5);
 			</div>
 			<div class="setting-row row-mon-latent">
 				<!--潜在觉醒-->
-				<ul class="m-latent-ul">
-					<li class="latent-icon" value="0"></li>
-					<li class="latent-icon" value="1"></li>
-					<li class="latent-icon" value="2"></li>
-					<li class="latent-icon" value="3"></li>
-					<li class="latent-icon" value="4"></li>
-					<li class="latent-icon" value="5"></li>
-					<li class="latent-icon" value="6"></li>
-					<li class="latent-icon" value="7"></li>
-				</ul>
+				<div class="m-latent-ul-div">
+					<ul class="m-latent-ul">
+						<li class="latent-icon" value="0"></li>
+						<li class="latent-icon" value="1"></li>
+						<li class="latent-icon" value="2"></li>
+						<li class="latent-icon" value="3"></li>
+						<li class="latent-icon" value="4"></li>
+						<li class="latent-icon" value="5"></li>
+						<li class="latent-icon latent-lock" value="6"></li>
+						<li class="latent-icon latent-lock" value="7"></li>
+					</ul>
+				</div>
 				<ul class="m-latent-allowable-ul">
 					<li class="latent-icon" data-latent-icon="1"></li><!--HP-->
 					<li class="latent-icon" data-latent-icon="2"></li><!--攻击-->

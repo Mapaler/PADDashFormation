@@ -1339,9 +1339,16 @@ ul{
 /*.edit-box .setting-box .row-mon-latent::before{
 	content: "▼潜在觉醒";
 }*/
-.m-latent-ul{
+.m-latent-ul-div{
 	text-align: center;
+}
+.m-latent-ul{
 	font-size: 0;
+	display: inline-block;
+	background: rgba(88,75,56,154);
+	border: 2px ridge #94733f;
+	border-radius: 7px;
+	padding: 2px;
 }
 .m-latent-ul .latent-icon{
 	margin-left: 12px;

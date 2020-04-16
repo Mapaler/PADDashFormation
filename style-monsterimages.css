@@ -644,25 +644,31 @@
 /*潜在觉醒*/
 .latent-icon{
 	display:inline-block;
-	background: linear-gradient(#777 33%, #555 80%);
-	border: 2px ridge #ddd;
+    background: rgba(33,28,21,0.5);
+    border: 2px ridge rgba(82,82,60,0.5);
 	border-radius: 5px;
 	box-sizing: border-box;
-	box-shadow: black 1px 1px 1px;
+	box-shadow:inset 0 2px 1px -1px rgba(0,0,0,0.5);
 }
-.latent-icon::before{ /*HP*/
+.latent-icon::before{
 	content: "";
 	display: inline-block;
 	margin: -2px;
 	width: 32px;
 	height: 32px;
 	background-image: url(images/latent.png);
-	background-position-x: 0;
 	background-repeat: no-repeat;
+}
+.latent-icon.latent-lock::before{
+	background-position-x: -32px;
 }
 .latent-icon[data-latent-icon]{
 	background: linear-gradient(#4499EE 33%,  #2277EE 80%);
 	border-color: #CCEEFF;
+	box-shadow: black 1px 1px 1px;
+}
+.latent-icon[data-latent-icon]::before{
+	background-position-x: 0;
 }
 .latent-icon[data-latent-icon='12']::before,
 .latent-icon[data-latent-icon='13']::before,
