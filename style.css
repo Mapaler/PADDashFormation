@@ -561,6 +561,7 @@ ul{
 	margin-bottom: calc(-64px * (1 - 0.65) + 1px);
 	/*margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);*/
 	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
+	min-height: 47px; /* 为了防止只有一层6格大潜觉的时候，被缩减太多的问题*/
 }
 
 .team-latents .latent-icon
