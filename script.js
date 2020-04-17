@@ -2,6 +2,7 @@ var Cards; //怪物数据
 var Skills; //技能数据
 var currentLanguage; //当前语言
 var currentDataSource; //当前数据
+var isGuideMod; //是否以图鉴模式启动
 
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
@@ -313,9 +314,15 @@ window.onload = function()
 	toggleDomClassName(controlBox.querySelector("#show-mon-id"),'not-show-mon-id',false);
 	toggleDomClassName(controlBox.querySelector("#btn-show-mon-skill-cd"),'show-mon-skill-cd');
 	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"),'not-show-awoken-count',false);
+	isGuideMod = Boolean(parseInt(getQueryString("guide")));
 
 	formationBox = document.body.querySelector(".formation-box");
 	editBox = document.body.querySelector(".edit-box");
+	if (isGuideMod)
+	{
+		console.log('现在是 怪物图鉴 模式');
+		document.body.classList.add('guide-mod');
+	}
 
 	if (location.hostname.includes("gitee")) { helpLink.hostname = "gitee.com"; }
 
@@ -1424,6 +1431,9 @@ function initialize()
 	languageJS.id = "language-js";
 	languageJS.type = "text/javascript";
 	languageJS.src = "languages/"+currentLanguage.i18n+".js";
+
+	if (isGuideMod) //图鉴模式直接打开搜索框
+		showSearch([]);
 }
 //编辑界面点击每个怪物的头像的处理
 function clickMonHead(e)
