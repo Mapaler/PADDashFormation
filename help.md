@@ -31,6 +31,8 @@ Formation Title and Detail can use the `^[Hex Color Code]^Content^p` to change t
 The 2P, 3P Multi Games Mode shows only the statistics of general awakening (excluding super-awakening), and 2P only show several common awoken statistics, but the Solo Mode shows all.
 * 内建的截图按钮依靠 [html2canvas](https://github.com/niklasvh/html2canvas/)，会有一些绘制错误，浏览器的截图扩展能够更加还原显示的真实样子。  
 Built-in screenshot button relies on [html2canvas](https://github.com/niklasvh/html2canvas/), there will be some drawing errors, browser screenshot extension can be more restore the real appearance of the display.
+* 如果你只是希望将本程序当作简单图鉴使用，可以在参数里加上`guide=1`，如`http://mapaler.gitee.io/paddashformation/solo.html?guide=1`。图鉴模式下进入网页时，会直接打开怪物修改界面，并且背景不透明。  
+If you just want to use this program as a simple guide, you can add `guide=1` to the parameters, such as `https://mapaler.github.io/PADDashFormation/solo.html?guide=1`. When you enter the page in guide mode, the monster modification interface opens directly and the background is opaque.
 
 ## 报告BUG | Report BUG
 如果发现 BUG，请先按 Ctrl+F5 强制刷新后测试，如仍有问题可以在 [Issues](//github.com/Mapaler/PADDashFormation/issues) 报告。  

@@ -681,6 +681,10 @@ ul{
 	filter:blur(5px);
 	pointer-events: none;
 }
+.guide-mod .blur-bg{
+	filter: unset;
+}
+
 .edit-box{
 	background-color: rgba(82, 53, 30, 0.8);
 	color: white;
@@ -690,6 +694,9 @@ ul{
 	width:100%;
 	box-sizing: border-box;
 	min-width:664px;
+}
+.guide-mod .edit-box{
+	background-color: rgb(102, 73, 50);
 }
 .edit-box-title{
 	text-align: center;
