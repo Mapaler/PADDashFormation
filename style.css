@@ -594,14 +594,22 @@ ul{
 .team-latents .latent-icon[data-latent-icon='34'],
 .team-latents .latent-icon[data-latent-icon='35'],
 .team-latents .latent-icon[data-latent-icon='36'],
-.team-latents .latent-icon[data-latent-icon='37']
+.team-latents .latent-icon[data-latent-icon='37'],
+.team-latents .latent-icon[data-latent-icon='38'],
+.team-latents .latent-icon[data-latent-icon='39'],
+.team-latents .latent-icon[data-latent-icon='40'],
+.team-latents .latent-icon[data-latent-icon='41']
 {
 	margin-left: 0;
 	margin-right: 0;
 }
-.team-latents .latent-ul .latent-icon[data-latent-icon='37']::before{ /*6色破无效*/
+.team-latents .latent-ul .latent-icon[data-latent-icon='37']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='38']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='39']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='40']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='41']::before
+{ /*6格的潜觉*/
 	width: 152px;
-	background-position-y: calc(-32px * 37 - 3px);
 	margin-left: -50px;
 	margin-right: 47px;
 }

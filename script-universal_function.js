@@ -156,13 +156,15 @@ fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffe
     }*/
 });
 //▲ADPCM播放相关
-
+function latentUseHole(latentId)
+{
+	//12号以后都是2格的潜觉，37号后是6格的潜觉
+	return latentId >= 37 ? 6 : (latentId>= 12 ? 2 : 1);
+}
 //计算用了多少潜觉格子
 function usedHole(latents)
 {
-	return latents.reduce((usedHole, latentId) => usedHole + 
-		(latentId == 37 ? 6 : (latentId>= 12 ? 2 : 1)) //12号以后都是2格的潜觉
-		, 0);
+	return latents.reduce((usedHole, latentId) => usedHole + latentUseHole(latentId), 0);
 }
 //计算所有队伍中有多少个该觉醒
 function awokenCountInFormation(formationTeams,awokenIndex,solo,teamsCount)

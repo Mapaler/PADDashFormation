@@ -698,6 +698,14 @@
 {
 	width: 76px;
 }
+.latent-icon[data-latent-icon='37']::before,
+.latent-icon[data-latent-icon='38']::before,
+.latent-icon[data-latent-icon='39']::before,
+.latent-icon[data-latent-icon='40']::before,
+.latent-icon[data-latent-icon='41']::before
+{
+	width: 252px;
+}
 .latent-icon[data-latent-icon='1']::before{ /*HP*/
 	background-position-y: calc(-32px * 1);
 }
@@ -808,9 +816,20 @@
 .latent-icon[data-latent-icon='36']::before{ /*大暗盾*/
 	background-position-y: calc(-32px * 36);
 }
-.latent-icon[data-latent-icon='37']::before{ /*6色破无效*/
-	width: 252px;
+.latent-icon[data-latent-icon='37']::before{ /*6色破属吸*/
 	background-position-y: calc(-32px * 37);
+}
+.latent-icon[data-latent-icon='38']::before{ /*6色破无效*/
+	background-position-y: calc(-32px * 38);
+}
+.latent-icon[data-latent-icon='39']::before{ /*不掉毒*/
+	background-position-y: calc(-32px * 39);
+}
+.latent-icon[data-latent-icon='40']::before{ /*不掉废*/
+	background-position-y: calc(-32px * 40);
+}
+.latent-icon[data-latent-icon='41']::before{ /*不被换队长*/
+	background-position-y: calc(-32px * 41);
 }
 
 /* 徽章背景 */

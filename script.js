@@ -1215,13 +1215,15 @@ function initialize()
 	function addLatent(){
 		if (this.classList.contains("unselected-latent")) return; //不能选的觉醒直接退出
 		const lIdx = parseInt(this.getAttribute("data-latent-icon"),10); //潜觉的序号
-		const usedHoleN = usedHole(editBox.latent); //使用了的格子
 		const maxLatentCount = getMaxLatentCount(editBox.mid); //最大潜觉数量
-		if (lIdx == 37 && usedHoleN<=(maxLatentCount-6) || //如果能添加6格的觉醒
-			lIdx >= 12 && lIdx <37 && usedHoleN<=(maxLatentCount-2) || //如果能添加2格的觉醒
-			lIdx < 12 && usedHoleN<=(maxLatentCount-1)) //如果能添加1格的觉醒
-		{editBox.latent.push(lIdx);}
-		else {return;}
+		const usedHoleN = usedHole(editBox.latent); //已经使用了的格子
+		const enabledHole = maxLatentCount - usedHoleN; //还剩余的格子
+		
+		if (latentUseHole(lIdx) <= enabledHole)
+			editBox.latent.push(lIdx);
+		else
+			return;
+
 		editBox.reCalculateAbility();
 		editBox.refreshLatent(editBox.latent,editBox.mid);
 	}
@@ -1739,7 +1741,7 @@ function refreshLatent(latent,monid,iconArr) //刷新潜觉
 		{
 			icon.setAttribute("data-latent-icon", latent[latentIndex]);
 			icon.classList.remove(className_displayNone);
-			usedHoleN += latent[latentIndex] == 37 ? 6 : (latent[latentIndex]>= 12 ? 2 : 1);
+			usedHoleN += latentUseHole(latent[latentIndex]);
 			latentIndex++;
 		}
 		else if(ai < usedHoleN) //多格潜觉后方隐藏
