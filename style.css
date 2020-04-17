@@ -1376,7 +1376,15 @@ ul{
 .m-latent-allowable-ul .latent-icon:last-of-type{
 	margin-right: unset;
 }
-
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon{
+	display: none;
+}
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon.frequent{
+	display: inline-block;
+}
+.hide-less-use-latent-label{
+	margin-left: 5px;
+}
 /*没有打觉醒的空格，没有手指*/
 .m-latent-ul .latent-icon{
 	cursor: default;
@@ -1392,10 +1400,15 @@ ul{
 	filter: grayscale(100%);
 }
 
-.edit-box .setting-box .row-mon-skill,
-.edit-box .setting-box .row-mon-leader-skill{
-	margin-top:5px;
+.edit-box .setting-box .row-mon-skill
+{
+	margin-bottom:5px;
 }
+/*.edit-box .setting-box .row-mon-skill,
+.edit-box .setting-box .row-mon-leader-skill
+{
+	margin-top:5px;
+}*/
 /*.skill-box .skill-cd::before{
 	content: "冷却回合：";
 }
