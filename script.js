@@ -1793,7 +1793,7 @@ function editMon(teamNum,isAssist,indexInTeam)
 	const monEditAddHp = settingBox.querySelector(".row-mon-plus .m-plus-hp");
 	const monEditAddAtk = settingBox.querySelector(".row-mon-plus .m-plus-atk");
 	const monEditAddRcv = settingBox.querySelector(".row-mon-plus .m-plus-rcv");
-	if (mon.plus)
+	if (mon.plus && mon.id>0)
 	{
 		monEditAddHp.value = mon.plus[0];
 		monEditAddAtk.value = mon.plus[1];
