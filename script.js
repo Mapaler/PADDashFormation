@@ -1192,6 +1192,9 @@ function initialize()
 	s_hideLessUseLetent.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + hideClassName)));
 	s_hideLessUseLetent.onchange();
 
+	if (isGuideMod)
+		monEditLatentAllowableUl.querySelector('.latent-icon[data-latent-icon="11"]').classList.remove('frequent');
+
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
 	const skillBox = rowSkill.querySelector(".skill-box");
 	const skillTitle = skillBox.querySelector(".skill-name");
