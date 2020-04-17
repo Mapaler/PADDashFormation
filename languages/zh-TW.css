@@ -121,6 +121,9 @@
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼潛在覺醒";
 }
+.edit-box .setting-box .hide-less-use-latent-label::after{
+	content: "隱藏少用的潛覺";
+}
 
 .skill-box .skill-cd::before{
 	content: "回合:";

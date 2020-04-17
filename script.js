@@ -1176,6 +1176,14 @@ function initialize()
 	{
 		refreshLatent(latent,monid,monEditLatents);
 	};
+	const s_hideLessUseLetent = settingBox.querySelector("#hide-less-use-latent");
+	const hideClassName = 'hide-less-use-latent';
+	s_hideLessUseLetent.onchange = function(){
+		toggleDomClassName(this, hideClassName, true, monEditLatentAllowableUl);
+		localStorage.setItem("PADDF-" + hideClassName, this.checked ? 1 : 0);
+	}
+	s_hideLessUseLetent.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + hideClassName)));
+	s_hideLessUseLetent.onchange();
 
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
 	const skillBox = rowSkill.querySelector(".skill-box");
