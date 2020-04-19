@@ -221,6 +221,9 @@
 .control-box .btn-triple-link::before{
 	content: "👪Jump To 3-Player Mode";
 }
+.control-box .btn-guide-link::before{
+	content: "📓Guide Mode";
+}
 .control-box .btn-clear-data::before{
 	content: "🗑️Clear data";
 }

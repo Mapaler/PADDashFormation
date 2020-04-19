@@ -195,7 +195,7 @@ function awokenCountInTeam(team,awokenIndex,solo,teamsCount)
 		const assistCard = Cards[assist.id];
 		//启用的觉醒数组片段
 		let enableAwoken = card.awakenings.slice(0, mon.awoken);
-		if (solo || (teamsCount === 3 && currentDataSource.code === 'ja')) //单人、3人日服增加超觉醒
+		if (solo || teamsCount === 3) //单人、3人日服增加超觉醒
 		{
 			enableAwoken = enableAwoken.concat(card.superAwakenings[mon.sawoken]);
 		}
@@ -258,7 +258,7 @@ function calculateExp(member)
 	return [Math.round(v99Exp),v110Exp];
 }
 //计算怪物的能力
-function calculateAbility(member = null, assist = null, solo = true)
+function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 {
 	if (!member) return null;
 
@@ -297,8 +297,8 @@ function calculateAbility(member = null, assist = null, solo = true)
 		const n_plus = member.plus[idx] * plusAdd[idx]; //加值增加量
 		let n_assist_base = 0,n_assist_plus=0; //辅助的bonus
 		let awokenList = memberCard.awakenings.slice(0,member.awoken); //储存点亮的觉醒
-		//单人时增加超觉醒
-		if (solo && member.sawoken>=0)
+		//单人、3人时增加超觉醒
+		if ((solo || teamsCount === 3) && member.sawoken>=0)
 		{
 			awokenList = awokenList.concat(memberCard.superAwakenings[member.sawoken]);
 		}
