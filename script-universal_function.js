@@ -291,7 +291,6 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 	];
 	const memberCurves = [memberCard.hp, memberCard.atk, memberCard.rcv];
 	const assistCurves = assistCard ? [assistCard.hp, assistCard.atk, assistCard.rcv] : null;
-	console.log(member.latent);
 
 	let abilitys = memberCurves.map((ab, idx)=>{
 		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr)); //等级基础三维
