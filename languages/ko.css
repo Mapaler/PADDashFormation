@@ -206,13 +206,16 @@
 	content: "업데이트 시간:";
 }
 .control-box .btn-solo-link::before{
-	content: "🧑싱글 플레이어 게임으로 이동";
+	content: "🧑1인 모드 이동";
 }
 .control-box .btn-multi-link::before{
-	content: "🧑‍🤝‍🧑2인 게임으로 이동";
+	content: "🧑‍🤝‍🧑2인 모드 이동";
 }
 .control-box .btn-triple-link::before{
-	content: "👪3인 게임으로 이동";
+	content: "👪3인 모드 이동";
+}
+.control-box .btn-guide-link::before{
+	content: "📓사진 모드";
 }
 .control-box .btn-clear-data::before{
 	content: "🗑️데이터 지우기";

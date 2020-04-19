@@ -220,6 +220,9 @@
 .control-box .btn-triple-link::before{
 	content: "👪轉到2人協力";
 }
+.control-box .btn-guide-link::before{
+	content: "📓圖鑒模式";
+}
 .control-box .btn-clear-data::before{
 	content: "🗑️清除數據";
 }

@@ -206,13 +206,16 @@
 	content: "更新時刻:";
 }
 .control-box .btn-solo-link::before{
-	content: "🧑ソロゲームに移動";
+	content: "🧑ソロモードに移動";
 }
 .control-box .btn-multi-link::before{
-	content: "🧑‍🤝‍🧑2人協力のゲームに移動";
+	content: "🧑‍🤝‍🧑2人協力モードムに移動";
 }
 .control-box .btn-triple-link::before{
-	content: "👪3人協力のゲームに移動";
+	content: "👪3人協力モードに移動";
+}
+.control-box .btn-guide-link::before{
+	content: "📓図鑑モード";
 }
 .control-box .btn-clear-data::before{
 	content: "🗑️データの消去";

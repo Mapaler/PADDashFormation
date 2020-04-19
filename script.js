@@ -1267,7 +1267,7 @@ function initialize()
 			awoken:awoken,
 			latent:latent
 		};
-		const abilitys = calculateAbility(tempMon, null, true) || [0,0,0];
+		const abilitys = calculateAbility(tempMon, null, solo, teamsCount) || [0,0,0];
 
 		monEditHpValue.innerHTML = abilitys[0].toLocaleString();
 		monEditAtkValue.innerHTML = abilitys[1].toLocaleString();
@@ -2261,7 +2261,7 @@ function refreshAbility(abilityDom,team,idx){
 	const memberData = team[0][idx];
 	const assistData = team[1][idx];
 	//基底三维，如果辅助是武器，还要加上辅助的觉醒
-	const mainAbility = calculateAbility(memberData, assistData, solo);
+	const mainAbility = calculateAbility(memberData, assistData, solo, teamsCount);
 		if (mainAbility && memberData.ability)
 		{
 			for (let ai=0;ai<3;ai++)
@@ -2301,10 +2301,10 @@ function refreshTeamTotalHP(totalDom,team){
 		const teamHPAwoken = awokenCountInTeam(team,46,solo, teamsCount); //全队大血包个数
 		
 		let badgeHPScale = 1; //徽章倍率
-		if (team[2] == 4 && (solo || (teamsCount === 3 && currentDataSource.code === 'ja')))
+		if (team[2] == 4 && (solo || teamsCount === 3))
 		{
 			badgeHPScale = 1.05;
-		}else if (team[2] == 11 && (solo || (teamsCount === 3 && currentDataSource.code === 'ja')))
+		}else if (team[2] == 11 && (solo || teamsCount === 3))
 		{
 			badgeHPScale = 1.15;
 		}
@@ -2322,10 +2322,10 @@ function refreshTeamTotalHP(totalDom,team){
 		const teamRCVAwoken = awokenCountInTeam(team,47,solo, teamsCount); //全队大回复个数
 		
 		let badgeRCVScale = 1; //徽章倍率
-		if (team[2] == 3 && (solo || (teamsCount === 3 && currentDataSource.code === 'ja')))
+		if (team[2] == 3 && (solo || teamsCount === 3))
 		{
 			badgeRCVScale = 1.25;
-		}else if (team[2] == 10 && (solo || (teamsCount === 3 && currentDataSource.code === 'ja')))
+		}else if (team[2] == 10 && (solo || teamsCount === 3))
 		{
 			badgeRCVScale = 1.35;
 		}
