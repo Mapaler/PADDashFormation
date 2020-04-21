@@ -671,9 +671,6 @@
 	background-position-x: 0;
 }
 .latent-icon[data-latent-icon='12']::before,
-.latent-icon[data-latent-icon='13']::before,
-.latent-icon[data-latent-icon='14']::before,
-.latent-icon[data-latent-icon='15']::before,
 .latent-icon[data-latent-icon='16']::before,
 .latent-icon[data-latent-icon='17']::before,
 .latent-icon[data-latent-icon='18']::before,
@@ -698,11 +695,11 @@
 {
 	width: 76px;
 }
+.latent-icon[data-latent-icon='13']::before,
+.latent-icon[data-latent-icon='14']::before,
+.latent-icon[data-latent-icon='15']::before,
 .latent-icon[data-latent-icon='37']::before,
-.latent-icon[data-latent-icon='38']::before,
-.latent-icon[data-latent-icon='39']::before,
-.latent-icon[data-latent-icon='40']::before,
-.latent-icon[data-latent-icon='41']::before
+.latent-icon[data-latent-icon='38']::before
 {
 	width: 252px;
 }
@@ -742,17 +739,15 @@
 .latent-icon[data-latent-icon='12']::before{ /*三维*/
 	background-position-y: calc(-32px * 12);
 }
-/* 目前暂未启用的潜觉
-.latent-icon[data-latent-icon='13']::before{
+.latent-icon[data-latent-icon='13']::before{ /*不被换队长*/
 	background-position-y: calc(-32px * 13);
 }
-.latent-icon[data-latent-icon='14']::before{
+.latent-icon[data-latent-icon='14']::before{ /*不掉废*/
 	background-position-y: calc(-32px * 14);
 }
-.latent-icon[data-latent-icon='15']::before{
+.latent-icon[data-latent-icon='15']::before{ /*不掉毒*/
 	background-position-y: calc(-32px * 15);
 }
-*/
 .latent-icon[data-latent-icon='16']::before{ /*进化杀*/
 	background-position-y: calc(-32px * 16);
 }
@@ -816,20 +811,11 @@
 .latent-icon[data-latent-icon='36']::before{ /*大暗盾*/
 	background-position-y: calc(-32px * 36);
 }
-.latent-icon[data-latent-icon='37']::before{ /*6色破属吸*/
+.latent-icon[data-latent-icon='37']::before{ /*6色破无效*/
 	background-position-y: calc(-32px * 37);
 }
-.latent-icon[data-latent-icon='38']::before{ /*6色破无效*/
+.latent-icon[data-latent-icon='38']::before{ /*6色破属吸*/
 	background-position-y: calc(-32px * 38);
-}
-.latent-icon[data-latent-icon='39']::before{ /*不掉毒*/
-	background-position-y: calc(-32px * 39);
-}
-.latent-icon[data-latent-icon='40']::before{ /*不掉废*/
-	background-position-y: calc(-32px * 40);
-}
-.latent-icon[data-latent-icon='41']::before{ /*不被换队长*/
-	background-position-y: calc(-32px * 41);
 }
 
 /* 徽章背景 */
