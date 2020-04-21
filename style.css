@@ -597,18 +597,16 @@ ul{
 .team-latents .latent-icon[data-latent-icon='36'],
 .team-latents .latent-icon[data-latent-icon='37'],
 .team-latents .latent-icon[data-latent-icon='38'],
-.team-latents .latent-icon[data-latent-icon='39'],
-.team-latents .latent-icon[data-latent-icon='40'],
-.team-latents .latent-icon[data-latent-icon='41']
+.team-latents .latent-icon[data-latent-icon='39']
 {
 	margin-left: 0;
 	margin-right: 0;
 }
+.team-latents .latent-ul .latent-icon[data-latent-icon='13']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='14']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='15']::before,
 .team-latents .latent-ul .latent-icon[data-latent-icon='37']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='38']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='39']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='40']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='41']::before
+.team-latents .latent-ul .latent-icon[data-latent-icon='38']::before
 { /*6格的潜觉*/
 	width: 152px;
 	margin-left: -50px;
@@ -1377,7 +1375,7 @@ ul{
 	font-size: 0;
 }
 .m-latent-allowable-ul .latent-icon{
-	margin-right: 4.66px;
+	margin-right: 4px;
 	margin-bottom: 4px;
 }
 .m-latent-allowable-ul .latent-icon:last-of-type{

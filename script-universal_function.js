@@ -158,8 +158,19 @@ fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffe
 //▲ADPCM播放相关
 function latentUseHole(latentId)
 {
-	//12号以后都是2格的潜觉，37号后是6格的潜觉
-	return latentId >= 37 ? 6 : (latentId>= 12 ? 2 : 1);
+	if (latentId < 12)
+	{
+		return 1;
+	}else if (latentId === 12 || latentId >= 16 && latentId <= 36)
+	{
+		return 2;
+	}else if (latentId >= 13 && latentId <= 15 || latentId >= 37 && latentId <= 38)
+	{
+		return 6;
+	}else
+	{
+		return 1;
+	}
 }
 //计算用了多少潜觉格子
 function usedHole(latents)
