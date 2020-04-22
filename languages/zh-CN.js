@@ -1154,10 +1154,10 @@ function parseSkillDescription(skill)
 			hasDiffOrbs = fullColor.filter(s=>s!= fullColor[0]).length > 0; //是否存在不同色的珠子
 			strArr = [];
 			if (hasDiffOrbs)
-			{//木暗同時攻擊時，所有寵物的攻擊力和回復力2倍
+			{//木暗同時攻擊時
 				str = `${fullColor.map(a=>nb(a, attrsName)).join("、")}${sk[4] < fullColor.length?`中有${sk[4]}串`:""}同时攻击时`;
 			}else
-			{//光寶珠有2COMBO或以上時，所有寵物的攻擊力3倍
+			{//光寶珠有2COMBO或以上時
 				str = `${nb(fullColor[0], attrsName).join("、")}宝珠有${sk[4]}串或以上时`;
 			}
 			if (sk[5]) str += `，追加${sk[5]}点固定伤害`;
@@ -1175,6 +1175,19 @@ function parseSkillDescription(skill)
 			break;
 		case 205:
 			str = `${sk[1]}回合内，${getOrbsAttrString(sk[0])}宝珠会以锁定形式掉落`;
+			break;
+		case 206:
+			fullColor = sk.slice(0,5).filter(c=>c>0); //最多5串珠
+			hasDiffOrbs = fullColor.filter(s=>s!= fullColor[0]).length > 0; //是否存在不同色的珠子
+			strArr = [];
+			if (hasDiffOrbs)
+			{//木暗同時攻擊時
+				str = `${fullColor.map(a=>nb(a, attrsName)).join("、")}${sk[5] < fullColor.length?`中有${sk[5]}串`:""}同时攻击时`;
+			}else
+			{//光寶珠有2COMBO或以上時
+				str = `${nb(fullColor[0], attrsName).join("、")}宝珠有${sk[5]}串或以上时`;
+			}
+			if (sk[6]) str += `，结算时连击数+${sk[6]}`;
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
@@ -1387,7 +1400,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
 			return a_pC - b_pC;
 		})},
-		{name:"所有解锁",function:cards=>cards.filter(card=>{
+		{name:"解锁",function:cards=>cards.filter(card=>{
 			const searchType = 172;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1407,7 +1420,17 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有掉锁（按回合排序）",function:cards=>cards.filter(card=>{
+		{name:"上锁5色+心或全部",function:cards=>cards.filter(card=>{
+			const searchType = 152;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && (skill.params[0] & 63) === 63)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 63) === 63);
+			}
+		})},
+		{name:"掉锁（按回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 205;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1428,7 +1451,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
 			return a_pC - b_pC;
 		})},
-		{name:"所有变身技能",function:cards=>cards.filter(card=>{
+		{name:"变身主动技能",function:cards=>cards.filter(card=>{
 			const searchType = 202;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1438,9 +1461,9 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有变身后",function:cards=>cards.filter(card=>card.henshinTo)},
-		{name:"所有非变身",function:cards=>cards.filter(card=>!card.henshinFrom && !card.henshinTo)},
-		{name:"所有普通重力（按比例排序）",function:cards=>cards.filter(card=>{
+		{name:"变身后",function:cards=>cards.filter(card=>card.henshinTo)},
+		{name:"非变身",function:cards=>cards.filter(card=>!card.henshinFrom && !card.henshinTo)},
+		{name:"普通重力（按比例排序）",function:cards=>cards.filter(card=>{
 			const searchType = 6;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1461,7 +1484,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有最大值重力（按比例排序）",function:cards=>cards.filter(card=>{
+		{name:"最大值重力（按比例排序）",function:cards=>cards.filter(card=>{
 			const searchType = 161;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1482,7 +1505,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有宝石姬类技能",function:cards=>cards.filter(card=>{
+		{name:"宝石姬类技能",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [156,168];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.some(t=>skill.type == t))
@@ -1492,7 +1515,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
 			}
 		})},
-		{name:"所有生成特殊形状的（单独方块见下）",function:cards=>cards.filter(card=>{
+		{name:"生成特殊形状的",function:cards=>cards.filter(card=>{
 			const searchType = 176;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1502,7 +1525,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有生成3x3方块",function:cards=>cards.filter(card=>{
+		{name:"生成3x3方块",function:cards=>cards.filter(card=>{
 			function is3x3(sk)
 			{
 				for (let si=0;si<3;si++)
@@ -1525,7 +1548,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && is3x3(subskill.params));
 			}
 		})},
-		{name:"所有普通洗版-含心",function:cards=>cards.filter(card=>{
+		{name:"普通洗版-含心",function:cards=>cards.filter(card=>{
 			function includeHeart(sk)
 			{
 				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
@@ -1540,7 +1563,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && includeHeart(subskill.params));
 			}
 		})},
-		{name:"所有普通洗版-不含心",function:cards=>cards.filter(card=>{
+		{name:"普通洗版-不含心",function:cards=>cards.filter(card=>{
 			function excludeHeart(sk)
 			{
 				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
@@ -1555,7 +1578,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && excludeHeart(subskill.params));
 			}
 		})},
-		{name:"所有普通洗版-含毒废",function:cards=>cards.filter(card=>{
+		{name:"普通洗版-含毒废",function:cards=>cards.filter(card=>{
 			function includeHeart(sk)
 			{
 				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
@@ -1570,7 +1593,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && includeHeart(subskill.params));
 			}
 		})},
-		{name:"所有普通洗版1色（花火）",function:cards=>cards.filter(card=>{
+		{name:"普通洗版1色（花火）",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
 				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
@@ -1585,7 +1608,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 1));
 			}
 		})},
-		{name:"所有普通洗版2色",function:cards=>cards.filter(card=>{
+		{name:"普通洗版2色",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
 				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
@@ -1600,7 +1623,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 2));
 			}
 		})},
-		{name:"所有普通洗版3色",function:cards=>cards.filter(card=>{
+		{name:"普通洗版3色",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
 				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
@@ -1615,7 +1638,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 3));
 			}
 		})},
-		{name:"所有普通洗版4色",function:cards=>cards.filter(card=>{
+		{name:"普通洗版4色",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
 				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
@@ -1630,7 +1653,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 4));
 			}
 		})},
-		{name:"所有普通洗版5色",function:cards=>cards.filter(card=>{
+		{name:"普通洗版5色",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
 				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
@@ -1645,7 +1668,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 5));
 			}
 		})},
-		{name:"所有普通洗版6色以上",function:cards=>cards.filter(card=>{
+		{name:"普通洗版6色以上",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
 				const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
@@ -1660,7 +1683,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 6));
 			}
 		})},
-		{name:"所有固定30个产珠",function:cards=>cards.filter(card=>{
+		{name:"固定30个产珠",function:cards=>cards.filter(card=>{
 			function is30(sk)
 			{
 				return Boolean(flags(sk[1]).length * sk[0] == 30);
@@ -1674,7 +1697,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && is30(subskill.params));
 			}
 		})},
-		{name:"所有固定15×2产珠",function:cards=>cards.filter(card=>{
+		{name:"固定15×2产珠",function:cards=>cards.filter(card=>{
 			function is1515(sk)
 			{
 				return Boolean(flags(sk[1]).length == 2 && sk[0] == 15);
@@ -1688,7 +1711,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && is1515(subskill.params));
 			}
 		})},
-		{name:"所有产竖",function:cards=>cards.filter(card=>{
+		{name:"产竖",function:cards=>cards.filter(card=>{
 			const searchType = 127;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1698,7 +1721,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有产竖（含心）",function:cards=>cards.filter(card=>{
+		{name:"产竖（含心）",function:cards=>cards.filter(card=>{
 			function isHeart(sk)
 			{
 				for (let i=1;i<sk.length;i+=2)
@@ -1718,7 +1741,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && isHeart(subskill.params));
 			}
 		})},
-		{name:"所有产横",function:cards=>cards.filter(card=>{
+		{name:"产横",function:cards=>cards.filter(card=>{
 			const searchType = 128;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1728,34 +1751,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有解锁+产横",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [172,128];
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return searchTypeArray.every(stype=>subskills.find(subskill=>subskill.type == stype));
-			}else return false;
-		})},
-		{name:"所有加C+产横（按C数排列）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [160,128];
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return searchTypeArray.every(stype=>subskills.find(subskill=>subskill.type == stype));
-			}else return false;
-		}).sort((a,b)=>{
-			const searchType = 160;
-			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = (a_s.type == searchType) ?
-				a_s.params[1] :
-				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
-			b_pC = (b_s.type == searchType) ?
-				b_s.params[1] :
-				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
-			return a_pC - b_pC;
-		})},
-		{name:"所有2横或以上",function:cards=>cards.filter(card=>{
+		{name:"2横或以上",function:cards=>cards.filter(card=>{
 			const searchType = 128;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && (skill.params.length>=3 || flags(skill.params[0]).length>=2))
@@ -1765,7 +1761,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && (subskill.params.length>=3 || flags(subskill.params[0]).length>=2));
 			}
 		})},
-		{name:"所有2色横",function:cards=>cards.filter(card=>{
+		{name:"2色横",function:cards=>cards.filter(card=>{
 			const searchType = 128;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && skill.params[3]>=0 && (skill.params[1] & skill.params[3]) != skill.params[1])
@@ -1775,7 +1771,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && subskill.params[3]>=0 && (subskill.params[1] & subskill.params[3]) != subskill.params[1]);
 			}
 		})},
-		{name:"所有非顶底横",function:cards=>cards.filter(card=>{
+		{name:"非顶底横",function:cards=>cards.filter(card=>{
 			const searchType = 128;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && ((skill.params[0] | skill.params[2]) & 14))
@@ -1785,7 +1781,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && ((subskill.params[0] | subskill.params[2]) & 14));
 			}
 		})},
-		{name:"所有99回合掉落",function:cards=>cards.filter(card=>{
+		{name:"99回合掉落",function:cards=>cards.filter(card=>{
 			const searchType = 126;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && skill.params[1] >= 99) // 960 = 二进制 1111000000
@@ -1795,7 +1791,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && subskill.params[1] >= 99);
 			}
 		})},
-		{name:"所有顶毒（掉毒、掉废）",function:cards=>cards.filter(card=>{
+		{name:"掉毒、掉废（顶毒）",function:cards=>cards.filter(card=>{
 			const searchType = 126;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && (skill.params[0] & 960) > 0) // 960 = 二进制 1111000000
@@ -1805,7 +1801,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 960) > 0);
 			}
 		})},
-		{name:"所有回复力buff（顶降回复）",function:cards=>cards.filter(card=>{
+		{name:"回复力buff（顶降回复）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [50,90];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type) && skill.params.slice(1,-1).includes(5))
@@ -1817,7 +1813,7 @@ function parseBigNumber(number)
 				);
 			}
 		})},
-		{name:"所有攻击力buff（顶降攻击）",function:cards=>cards.filter(card=>{
+		{name:"攻击力buff（顶降攻击）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [
 				88,92, //类型的
 				50,90, //属性的，要排除回复力
@@ -1838,7 +1834,7 @@ function parseBigNumber(number)
 				);
 			}
 		})},
-		{name:"所有操作时间buff（顶减手指）",function:cards=>cards.filter(card=>{
+		{name:"操作时间buff（顶减手指）",function:cards=>cards.filter(card=>{
 			const searchType = 132;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1848,7 +1844,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有主动无天降",function:cards=>cards.filter(card=>{
+		{name:"无天降 buff",function:cards=>cards.filter(card=>{
 			const searchType = 184;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1858,7 +1854,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有溜（按溜数排序，有范围的取小）",function:cards=>cards.filter(card=>{
+		{name:"溜（按溜数排序，有范围的取小）",function:cards=>cards.filter(card=>{
 			const searchType = 146;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1879,7 +1875,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有加C buff（按C数排列）",function:cards=>cards.filter(card=>{
+		{name:"加C buff（按C数排列）",function:cards=>cards.filter(card=>{
 			const searchType = 160;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1900,7 +1896,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
 			return a_pC - b_pC;
 		})},
-		{name:"所有威吓（按威吓回合排序）",function:cards=>cards.filter(card=>{
+		{name:"威吓（按威吓回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 18;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1921,7 +1917,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有破防（按破防比例排序）",function:cards=>cards.filter(card=>{
+		{name:"破防（按破防比例排序）",function:cards=>cards.filter(card=>{
 			const searchType = 19;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1942,7 +1938,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
 			return a_pC - b_pC;
 		})},
-		{name:"所有破防100%（按破防回合排序）",function:cards=>cards.filter(card=>{
+		{name:"破防100%（按破防回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 19;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && skill.params[1]>=100)
@@ -1963,7 +1959,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有中毒（按毒伤比率排序）",function:cards=>cards.filter(card=>{
+		{name:"中毒（按毒伤比率排序）",function:cards=>cards.filter(card=>{
 			const searchType = 4;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -1984,7 +1980,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有减伤buff（含宝石姬类，按减伤比率排序）",function:cards=>cards.filter(card=>{
+		{name:"减伤buff（含宝石姬类，按减伤比率排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [3,156];
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == 3 ||
@@ -2026,7 +2022,7 @@ function parseBigNumber(number)
 			}
 			return sortNum;
 		})},
-		{name:"所有无敌-减伤100%（不含宝石姬，按无敌回合数排序）",function:cards=>cards.filter(card=>{
+		{name:"无敌-减伤100%（不含宝石姬，按无敌回合数排序）",function:cards=>cards.filter(card=>{
 			const searchType = 3;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && skill.params[1]>=100)
@@ -2047,7 +2043,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有时间暂停（按停止时间排序）",function:cards=>cards.filter(card=>{
+		{name:"时间暂停（按停止时间排序）",function:cards=>cards.filter(card=>{
 			const searchType = 5;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2068,7 +2064,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有刷版",function:cards=>cards.filter(card=>{
+		{name:"刷版",function:cards=>cards.filter(card=>{
 			const searchType = 10;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2078,7 +2074,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有受伤反击buff",function:cards=>cards.filter(card=>{
+		{name:"受伤反击buff",function:cards=>cards.filter(card=>{
 			const searchType = 60;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2088,7 +2084,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"所有变为全体攻击（按回合数排序）",function:cards=>cards.filter(card=>{
+		{name:"变为全体攻击（按回合数排序）",function:cards=>cards.filter(card=>{
 			const searchType = 51;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2109,7 +2105,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有全体固伤（按伤害数排序）",function:cards=>cards.filter(card=>{
+		{name:"全体固伤（按伤害数排序）",function:cards=>cards.filter(card=>{
 			const searchType = 56;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2130,7 +2126,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有单体固伤（按总伤害排序）",function:cards=>cards.filter(card=>{
+		{name:"单体固伤（按总伤害排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [55,188];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type))
@@ -2157,28 +2153,7 @@ function parseBigNumber(number)
 			return a_pC - b_pC;
 		})},
 		{name:"======队长技======",function:cards=>cards},
-		{name:"所有消除宝珠时追打（按追打比率排序）",function:cards=>cards.filter(card=>{
-			const searchType = 12;
-			const skill = Skills[card.leaderSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 138){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
-			}
-		}).sort((a,b)=>{
-			const searchType = 12;
-			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = (a_s.type == searchType) ?
-				a_s.params[0] :
-				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			b_pC = (b_s.type == searchType) ?
-				b_s.params[0] :
-				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			return a_pC - b_pC;
-		})},
-		{name:"所有固伤追击",function:cards=>cards.filter(card=>{
+		{name:"队长技固伤追击",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [199,200,201];
 			const skill = Skills[card.leaderSkillId];
 			if (searchTypeArray.includes(skill.type))
@@ -2188,18 +2163,8 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
 		})},
-		{name:"所有受伤反击队长",function:cards=>cards.filter(card=>{
-			const searchType = 41;
-			const skill = Skills[card.leaderSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 138){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
-			}
-		})},
-		{name:"所有队长+C（按+C数排序）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [192,194];
+		{name:"队长技+C（按+C数排序）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [192,194,206];
 			const skill = Skills[card.leaderSkillId];
 			if (searchTypeArray.some(t=>skill.type == t && skill.params[3]>0))
 				return true;
@@ -2219,68 +2184,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[3];
 			return a_pC - b_pC;
 		})},
-		{name:"所有消除宝珠时回血（按回复比率排序）",function:cards=>cards.filter(card=>{
-			const searchType = 13;
-			const skill = Skills[card.leaderSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 138){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
-			}
-		}).sort((a,b)=>{
-			const searchType = 13;
-			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = (a_s.type == searchType) ?
-				a_s.params[0] :
-				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			b_pC = (b_s.type == searchType) ?
-				b_s.params[0] :
-				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			return a_pC - b_pC;
-		})},
-		{name:"所有毒无效",function:cards=>cards.filter(card=>{
-			const searchType = 197;
-			const skill = Skills[card.leaderSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 138){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
-			}
-		})},
-		{name:"所有回血加盾",function:cards=>cards.filter(card=>{
-			const searchType = 198;
-			const skill = Skills[card.leaderSkillId];
-			if (skill.type == searchType && skill.params[2])
-				return true;
-			else if (skill.type == 138){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && subskill.params[2]);
-			}
-		})},
-		{name:"所有回血解觉",function:cards=>cards.filter(card=>{
-			const searchType = 198;
-			const skill = Skills[card.leaderSkillId];
-			if (skill.type == searchType && skill.params[3])
-				return true;
-			else if (skill.type == 138){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && subskill.params[3]);
-			}
-		})},
-		{name:"所有十字",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [151,157];
-			const skill = Skills[card.leaderSkillId];
-			if (searchTypeArray.some(t=>skill.type == t))
-				return true;
-			else if (skill.type == 138){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
-			}
-		})},
-		{name:"所有76版",function:cards=>cards.filter(card=>{
+		{name:"7×6版面",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [162,186];
 			const skill = Skills[card.leaderSkillId];
 			if (searchTypeArray.some(t=>skill.type == t))
@@ -2290,7 +2194,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
 			}
 		})},
-		{name:"所有无天降",function:cards=>cards.filter(card=>{
+		{name:"队长技无天降",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [163,177];
 			const skill = Skills[card.leaderSkillId];
 			if (searchTypeArray.some(t=>skill.type == t))
@@ -2300,17 +2204,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
 			}
 		})},
-		{name:"所有剩珠倍率",function:cards=>cards.filter(card=>{
-			const searchType = 177;
-			const skill = Skills[card.leaderSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 138){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
-			}
-		})},
-		{name:"所有队长技加/减秒（按秒数排序）",function:cards=>cards.filter(card=>{
+		{name:"队长技加/减秒（按秒数排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [15,185];
 			const skill = Skills[card.leaderSkillId];
 			if (searchTypeArray.some(t=>skill.type == t))
@@ -2331,7 +2225,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.some(t=>subskill.type == t)).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有固定时间（按时间排序）",function:cards=>cards.filter(card=>{
+		{name:"固定时间（按时间排序）",function:cards=>cards.filter(card=>{
 			const searchType = 178;
 			const skill = Skills[card.leaderSkillId];
 			if (skill.type == searchType)
@@ -2352,7 +2246,109 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有要求长串消除（按珠数排序）",function:cards=>cards.filter(card=>{
+		{name:"消除宝珠时追打（按追打比率排序）",function:cards=>cards.filter(card=>{
+			const searchType = 12;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		}).sort((a,b)=>{
+			const searchType = 12;
+			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (a_s.type == searchType) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			b_pC = (b_s.type == searchType) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			return a_pC - b_pC;
+		})},
+		{name:"消除宝珠时回血（按回复比率排序）",function:cards=>cards.filter(card=>{
+			const searchType = 13;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		}).sort((a,b)=>{
+			const searchType = 13;
+			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (a_s.type == searchType) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			b_pC = (b_s.type == searchType) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			return a_pC - b_pC;
+		})},
+		{name:"队长技受伤反击",function:cards=>cards.filter(card=>{
+			const searchType = 41;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		})},
+		{name:"毒无效",function:cards=>cards.filter(card=>{
+			const searchType = 197;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		})},
+		{name:"回血加盾",function:cards=>cards.filter(card=>{
+			const searchType = 198;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType && skill.params[2])
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && subskill.params[2]);
+			}
+		})},
+		{name:"回血解觉",function:cards=>cards.filter(card=>{
+			const searchType = 198;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType && skill.params[3])
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && subskill.params[3]);
+			}
+		})},
+		{name:"十字",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [151,157];
+			const skill = Skills[card.leaderSkillId];
+			if (searchTypeArray.some(t=>skill.type == t))
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
+			}
+		})},
+		{name:"剩珠倍率",function:cards=>cards.filter(card=>{
+			const searchType = 177;
+			const skill = Skills[card.leaderSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 138){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		})},
+		{name:"要求长串消除（按珠数排序）",function:cards=>cards.filter(card=>{
 			const searchType = 158;
 			const skill = Skills[card.leaderSkillId];
 			if (skill.type == searchType)
@@ -2373,7 +2369,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"所有根性",function:cards=>cards.filter(card=>{
+		{name:"根性",function:cards=>cards.filter(card=>{
 			const searchType = 14;
 			const skill = Skills[card.leaderSkillId];
 			if (skill.type == searchType)
@@ -2477,18 +2473,19 @@ function parseBigNumber(number)
 			return a_pC - b_pC;
 		})},
 		{name:"======其他搜索======",function:cards=>cards},
-		{name:"全部8格潜觉（转生、超转生）",function:cards=>cards.filter(card=>card.is8Latent)},
-		{name:"全部像素进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))},
-		{name:"全部用三神面进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3795))},
-		{name:"全部用彩龙果进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3971))},
-		{name:"全部由武器进化而来",function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))},
-		{name:"全部110级三维成长100%",function:cards=>cards.filter(card=>card.limitBreakIncr>=100)},
+		{name:"转生、超转生（8格潜觉）",function:cards=>cards.filter(card=>card.is8Latent)},
+		{name:"非转生、超转生",function:cards=>cards.filter(card=>!card.is8Latent)},
+		{name:"像素进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))},
+		{name:"用三神面进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3795))},
+		{name:"用彩龙果进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3971))},
+		{name:"由武器进化而来",function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))},
+		{name:"110级三维成长100%",function:cards=>cards.filter(card=>card.limitBreakIncr>=100)},
 		{name:"有超觉醒",function:cards=>cards.filter(card=>card.superAwakenings.length > 0)},
 		{name:"有110，但没有超觉醒",function:cards=>cards.filter(card=>card.limitBreakIncr>0 && card.superAwakenings.length<1)},
-		{name:"没有110",function:cards=>cards.filter(card=>card.limitBreakIncr===0)},
-		{name:"全部珠子皮肤",function:cards=>cards.filter(card=>card.blockSkinId>0)},
-		{name:"全部低于100mp",function:cards=>cards.filter(card=>card.sellMP<100)},
-		{name:"只显示可以做辅助",function:cards=>cards.filter(card=>card.canAssist)},
+		{name:"不能破除等级限制",function:cards=>cards.filter(card=>card.limitBreakIncr===0)},
+		{name:"能获得珠子皮肤",function:cards=>cards.filter(card=>card.blockSkinId>0)},
+		{name:"低于100mp",function:cards=>cards.filter(card=>card.sellMP<100)},
+		{name:"可以做辅助",function:cards=>cards.filter(card=>card.canAssist)},
 		{name:"3个type",function:cards=>cards.filter(card=>card.types.filter(t=>t>=0).length>=3)},
 		{name:"9个觉醒",function:cards=>cards.filter(card=>card.awakenings.length>=9)},
 		{name:"满级不是1级（可强化）",function:cards=>cards.filter(card=>card.maxLevel>1)},
