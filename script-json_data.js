@@ -51,7 +51,18 @@ const equivalent_awoken = [
 const sort_function_list = [
 	{tag:"sort_none",name:"无",function:()=>0},
 	{tag:"sort_id",name:"怪物ID",function:(a,b)=>a.id-b.id},
+	{tag:"sort_attrs",name:"属性",function:(a,b)=>{
+		let num = a.attrs[0] - b.attrs[0];
+		if (num === 0) num = a.attrs[1] - b.attrs[1];
+		return num;
+	}},
 	{tag:"sort_evoRootId",name:"进化树",function:(a,b)=>a.evoRootId-b.evoRootId},
+	{tag:"sort_evoRoot_Attrs",name:"进化根怪物的属性",function:(a,b)=>{
+		const card_a = Cards[a.evoRootId],card_b = Cards[b.evoRootId];
+		let num = card_a.attrs[0] - card_b.attrs[0];
+		if (num === 0) num = card_a.attrs[1] - card_b.attrs[1];
+		return num;
+	}},
 	{tag:"sort_skillLv1",name:"技能最大冷却时间",function:(a,b)=>Skills[a.activeSkillId].initialCooldown-Skills[b.activeSkillId].initialCooldown},
 	{tag:"sort_skillLvMax",name:"技能最小冷却时间",function:(a,b)=>{
 		const skill_a = Skills[a.activeSkillId],skill_b = Skills[b.activeSkillId];
@@ -60,6 +71,18 @@ const sort_function_list = [
 	{tag:"sort_hpMax110",name:"最大HP(Lv110)",function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
 	{tag:"sort_atkMax110",name:"最大攻击(Lv110)",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
 	{tag:"sort_rcvMax110",name:"最大回复(Lv110)",function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_hpMax110_Multi",name:"最大协力攻击(Lv110)",function:(a,b)=>
+		a.atk.max * (1 + a.limitBreakIncr/100) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
+		b.atk.max * (1 + b.limitBreakIncr/100) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
+	},
+	{tag:"sort_hpMax110_Multi",name:"最大协力HP(Lv110)",function:(a,b)=>
+		a.hp.max * (1 + a.limitBreakIncr/100) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
+		b.hp.max * (1 + b.limitBreakIncr/100) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
+	},
+	{tag:"sort_hpMax110_Multi",name:"最大协力回复(Lv110)",function:(a,b)=>
+		a.rcv.max * (1 + a.limitBreakIncr/100) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
+		b.rcv.max * (1 + b.limitBreakIncr/100) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
+	},
 	{tag:"sort_rarity",name:"稀有度",function:(a,b)=>a.rarity-b.rarity},
 	{tag:"sort_cost",name:"消耗",function:(a,b)=>a.cost-b.cost},
 ];
