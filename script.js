@@ -1011,6 +1011,7 @@ function initialize()
 	//对heads重新排序
 	function sortHeadsArray(heads)
 	{
+		if (!heads || heads.length === 0) return; //没有数据时，直接返回
 		const sortIndex = parseInt(s_sortList.value,10);
 		const reverse = s_sortReverse.checked;
 		let headsArray = heads.concat();
@@ -1028,9 +1029,10 @@ function initialize()
 	//对搜索到的Cards重新排序
 	function reSortCards()
 	{
+		const headsArray = sortHeadsArray(searchMonList.originalHeads);
+		if (!headsArray || headsArray.length === 0) return; //没有数据时，直接返回
 		searchMonList.classList.add(className_displayNone);
 		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-		const headsArray = sortHeadsArray(searchMonList.originalHeads);
 		headsArray.forEach(head=>fragment.appendChild(head));
 		searchMonList.appendChild(fragment);
 		searchMonList.classList.remove(className_displayNone);
