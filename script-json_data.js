@@ -63,6 +63,8 @@ const sort_function_list = [
 		if (num === 0) num = card_a.attrs[1] - card_b.attrs[1];
 		return num;
 	}},
+	{tag:"sort_rarity",name:"稀有度",function:(a,b)=>a.rarity-b.rarity},
+	{tag:"sort_cost",name:"消耗",function:(a,b)=>a.cost-b.cost},
 	{tag:"sort_skillLv1",name:"技能最大冷却时间",function:(a,b)=>Skills[a.activeSkillId].initialCooldown-Skills[b.activeSkillId].initialCooldown},
 	{tag:"sort_skillLvMax",name:"技能最小冷却时间",function:(a,b)=>{
 		const skill_a = Skills[a.activeSkillId],skill_b = Skills[b.activeSkillId];
@@ -71,18 +73,22 @@ const sort_function_list = [
 	{tag:"sort_hpMax110",name:"最大HP(Lv110)",function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
 	{tag:"sort_atkMax110",name:"最大攻击(Lv110)",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
 	{tag:"sort_rcvMax110",name:"最大回复(Lv110)",function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
-	{tag:"sort_hpMax110_Multi",name:"最大协力攻击(Lv110)",function:(a,b)=>
-		a.atk.max * (1 + a.limitBreakIncr/100) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
-		b.atk.max * (1 + b.limitBreakIncr/100) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
-	},
-	{tag:"sort_hpMax110_Multi",name:"最大协力HP(Lv110)",function:(a,b)=>
-		a.hp.max * (1 + a.limitBreakIncr/100) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
-		b.hp.max * (1 + b.limitBreakIncr/100) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
-	},
-	{tag:"sort_hpMax110_Multi",name:"最大协力回复(Lv110)",function:(a,b)=>
-		a.rcv.max * (1 + a.limitBreakIncr/100) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
-		b.rcv.max * (1 + b.limitBreakIncr/100) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
-	},
-	{tag:"sort_rarity",name:"稀有度",function:(a,b)=>a.rarity-b.rarity},
-	{tag:"sort_cost",name:"消耗",function:(a,b)=>a.cost-b.cost},
 ];
+if (!solo)
+{
+	const multiSort = [
+		{tag:"sort_hpMax110_Multi",name:"最大协力攻击(Lv110)",function:(a,b)=>
+			a.atk.max * (1 + a.limitBreakIncr/100) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
+			b.atk.max * (1 + b.limitBreakIncr/100) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
+		},
+		{tag:"sort_hpMax110_Multi",name:"最大协力HP(Lv110)",function:(a,b)=>
+			a.hp.max * (1 + a.limitBreakIncr/100) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
+			b.hp.max * (1 + b.limitBreakIncr/100) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
+		},
+		{tag:"sort_hpMax110_Multi",name:"最大协力回复(Lv110)",function:(a,b)=>
+			a.rcv.max * (1 + a.limitBreakIncr/100) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
+			b.rcv.max * (1 + b.limitBreakIncr/100) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
+		},
+	];
+	sort_function_list.push(...multiSort);
+}

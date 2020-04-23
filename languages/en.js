@@ -8,6 +8,8 @@
         sort_attrs : "Attribute",
         sort_evoRootId: "Cards Evolution Root",
         sort_evoRoot_Attrs : "Cards Evolution Root's Attribute",
+        sort_rarity: "Rarity",
+        sort_cost: "Cost",
         sort_skillLv1: "Maximum Skill Turn",
         sort_skillLvMax: "Minimum Skill Turn",
         sort_hpMax110: "Max HP (Lv110)",
@@ -16,8 +18,6 @@
         sort_hpMax110_Multi: "Max Multi HP (Lv110)",
         sort_atkMax110_Multi: "Max Multi ATK (Lv110)",
         sort_rcvMax110_Multi: "Max Multi RCV (Lv110)",
-        sort_rarity: "Rarity",
-        sort_cost: "Cost",
     },
 }
 
