@@ -169,7 +169,7 @@ function parseSkillDescription(skill)
 			str = `对敌方全体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 1:
-			str = `对敌方全体造成${sk[1]}的${attrN(sk[0])}属性攻击`;
+			str = `对敌方全体造成${sk[1]}点${attrN(sk[0])}属性伤害`;
 			break;
 		case 2:
 			str = `对敌方1体造成自身攻击力×${sk[0]/100}${sk[1]&&sk[1]!=sk[0]?'~'+sk[1]/100:''}倍的自身属性伤害`;
@@ -325,10 +325,10 @@ function parseSkillDescription(skill)
 			str = `对敌方全体造成${sk[0]}点无视防御的固定伤害`;
 			break;
 		case 58:
-			str = `对敌方全体造成自身攻击力×${sk[1]==sk[2]?sk[1]/100:`${sk[1]/100}~${sk[2]/100}`}倍的${attrN(sk[0])}属性伤害`;
+			str = `对敌方全体造成自身攻击力×${sk[1]/100}${sk[2]&&sk[2]!=sk[1]?'~'+sk[2]/100:''}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 59:
-			str = `对敌方1体造成自身攻击力×${sk[1]==sk[2]?sk[1]/100:`${sk[1]/100}~${sk[2]/100}`}倍的${attrN(sk[0])}属性伤害`;
+			str = `对敌方1体造成自身攻击力×${sk[1]/100}${sk[2]&&sk[2]!=sk[1]?'~'+sk[2]/100:''}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 60:
 			str = `${sk[0]}回合内，受到伤害时进行受到伤害${sk[1]/100+"倍的"+attrN(sk[2])}属性反击`;
@@ -395,10 +395,10 @@ function parseSkillDescription(skill)
 			if (sk[2] || sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[2],rcv:sk[2]})}`;
 			break;
 		case 84:
-			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方1体造成自身攻击力×${sk[1]/100}${sk[1]!=sk[2]?`~${+sk[2]/100}`:""}倍的${attrN(sk[0])}属性伤害`;
+			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方1体造成自身攻击力×${sk[1]/100}${sk[2]&&sk[2]!=sk[1]?'~'+sk[2]/100:''}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 85:
-			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方全体造成自身攻击力×${sk[1]/100}${sk[1]!=sk[2]?`~${+sk[2]/100}`:""}倍的${attrN(sk[0])}属性伤害`;
+			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方全体造成自身攻击力×${sk[1]/100}${sk[2]&&sk[2]!=sk[1]?'~'+sk[2]/100:''}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 86:
 			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方1体造成${sk[1]}点${attrN(sk[0])}属性伤害`;
@@ -1989,7 +1989,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"-----对队员生效类-----",function:cards=>cards},
+		{name:"-----对自身队伍生效类-----",function:cards=>cards},
 		{name:"溜（按溜数排序，有范围的取小）",function:cards=>cards.filter(card=>{
 			const searchType = 146;
 			const skill = Skills[card.activeSkillId];
@@ -2175,7 +2175,7 @@ function parseBigNumber(number)
 			}
 		})},
 		{name:"-----对敌伤害类-----",function:cards=>cards},
-		{name:"普通重力（按比例排序）",function:cards=>cards.filter(card=>{
+		{name:"重力-敌人当前血量（按比例排序）",function:cards=>cards.filter(card=>{
 			const searchType = 6;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2196,7 +2196,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"最大值重力（按比例排序）",function:cards=>cards.filter(card=>{
+		{name:"重力-敌人最大血量（按比例排序）",function:cards=>cards.filter(card=>{
 			const searchType = 161;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2217,7 +2217,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"单体固伤（按总伤害排序）",function:cards=>cards.filter(card=>{
+		{name:"无视防御固伤-单体（按总伤害排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [55,188];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type))
@@ -2243,7 +2243,7 @@ function parseBigNumber(number)
 				totalDamage(b_s);
 			return a_pC - b_pC;
 		})},
-		{name:"全体固伤（按伤害数排序）",function:cards=>cards.filter(card=>{
+		{name:"无视防御固伤-全体（按伤害数排序）",function:cards=>cards.filter(card=>{
 			const searchType = 56;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2264,7 +2264,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"单体大炮",function:cards=>cards.filter(card=>{
+		{name:"大炮-敌方-单体",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [2,35,37,59,84,86,110,115,144];
 			const skill = Skills[card.activeSkillId];
 			function isSingle(skill)
@@ -2283,12 +2283,11 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && isSingle(subskill));
 			}
 		})},
-		{name:"全体大炮",function:cards=>cards.filter(card=>{
+		{name:"大炮-敌方-全体",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [0,1,58,85,87,110,143,144];
 			const skill = Skills[card.activeSkillId];
 			function isAll(skill)
 			{
-				if (skill.id == 0 ) return false;
 				if (skill.type == 110)
 					return !Boolean(skill.params[0]);
 				else if (skill.type == 114)
@@ -2296,15 +2295,221 @@ function parseBigNumber(number)
 				else
 					return true;
 			}
-			if (searchTypeArray.includes(skill.type) && isAll(skill))
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && isAll(skill))
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && isAll(subskill));
 			}
 		})},
-		{name:"自身攻击倍率指定属性伤害（全体）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [0,58,85];
+		{name:"大炮-敌方-指定属性敌人",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [42];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && isAll(subskill));
+			}
+		})},
+
+		{name:"大炮-属性-不限",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [0,1,2,35,37,42,58,59,84,85,86,87,110,115,143,144];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type) && skill.id!=0)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"大炮-属性-火",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
+			const skill = Skills[card.activeSkillId];
+			function getAttr(skill)
+			{
+				const sk = skill.params;
+				switch(skill.type)
+				{
+					case 0:
+					case 1:
+					case 37:
+					case 58:
+					case 59:
+					case 84:
+					case 85:
+					case 86:
+					case 87:
+					case 115:
+						return sk[0];
+					case 110:
+					case 143:
+						return sk[1];
+					case 42:
+						return sk[1];
+					case 144:
+						return sk[3];
+					default:
+						return -1;
+				}
+			}
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getAttr(skill) == 0)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getAttr(subskill) == 0);
+			}
+		})},
+		{name:"大炮-属性-水",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
+			const skill = Skills[card.activeSkillId];
+			function getAttr(skill)
+			{
+				const sk = skill.params;
+				switch(skill.type)
+				{
+					case 0:
+					case 1:
+					case 37:
+					case 58:
+					case 59:
+					case 84:
+					case 85:
+					case 86:
+					case 87:
+					case 115:
+						return sk[0];
+					case 110:
+					case 143:
+						return sk[1];
+					case 42:
+						return sk[1];
+					case 144:
+						return sk[3];
+					default:
+						return -1;
+				}
+			}
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getAttr(skill) == 1)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getAttr(subskill) == 1);
+			}
+		})},
+		{name:"大炮-属性-木",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
+			const skill = Skills[card.activeSkillId];
+			function getAttr(skill)
+			{
+				const sk = skill.params;
+				switch(skill.type)
+				{
+					case 0:
+					case 1:
+					case 37:
+					case 58:
+					case 59:
+					case 84:
+					case 85:
+					case 86:
+					case 87:
+					case 115:
+						return sk[0];
+					case 110:
+					case 143:
+						return sk[1];
+					case 42:
+						return sk[1];
+					case 144:
+						return sk[3];
+					default:
+						return -1;
+				}
+			}
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getAttr(skill) == 2)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getAttr(subskill) == 2);
+			}
+		})},
+		{name:"大炮-属性-光",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
+			const skill = Skills[card.activeSkillId];
+			function getAttr(skill)
+			{
+				const sk = skill.params;
+				switch(skill.type)
+				{
+					case 0:
+					case 1:
+					case 37:
+					case 58:
+					case 59:
+					case 84:
+					case 85:
+					case 86:
+					case 87:
+					case 115:
+						return sk[0];
+					case 110:
+					case 143:
+						return sk[1];
+					case 42:
+						return sk[1];
+					case 144:
+						return sk[3];
+					default:
+						return -1;
+				}
+			}
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getAttr(skill) == 3)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getAttr(subskill) == 3);
+			}
+		})},
+		{name:"大炮-属性-暗",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
+			const skill = Skills[card.activeSkillId];
+			function getAttr(skill)
+			{
+				const sk = skill.params;
+				switch(skill.type)
+				{
+					case 0:
+					case 1:
+					case 37:
+					case 58:
+					case 59:
+					case 84:
+					case 85:
+					case 86:
+					case 87:
+					case 115:
+						return sk[0];
+					case 110:
+					case 143:
+						return sk[1];
+					case 42:
+						return sk[1];
+					case 144:
+						return sk[3];
+					default:
+						return -1;
+				}
+			}
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getAttr(skill) == 4)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getAttr(subskill) == 4);
+			}
+		})},
+		{name:"大炮-属性-释放者自身",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [2,35];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type))
 				return true;
@@ -2313,8 +2518,53 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
 		})},
-		{name:"固定值指定属性伤害（全体）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [1,87];
+
+		{name:"大炮-伤害-自身攻击倍率（按倍率排序，范围取小）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [0,2,35,37,58,59,84,85,115];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type) && skill.id!=0)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		}).sort((a,b)=>{
+			const searchTypeArray = [0,2,35,37,58,59,84,85,115];
+			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+			function getSkillOrSub(skill)
+			{
+				if (searchTypeArray.includes(skill.type))
+					return skill;
+				else
+					return skill.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type));
+			}
+			function getNumber(skill)
+			{
+				const sk = skill.params;
+				switch(skill.type)
+				{
+					case 0:
+					case 37:
+					case 58:
+					case 59:
+					case 84:
+					case 85:
+					case 115:
+						return sk[1];
+					case 2:
+					case 35:
+						return sk[0];
+					default:
+						return 0;
+				}
+			}
+			let a_pC = 0,b_pC = 0;
+			a_pC = getNumber(getSkillOrSub(a_s));
+			b_pC = getNumber(getSkillOrSub(b_s));
+			return a_pC - b_pC;
+		})},
+		{name:"大炮-伤害-指定属性数值（按数值排序）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [1,42,86,87];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type))
 				return true;
@@ -2322,9 +2572,59 @@ function parseBigNumber(number)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
+		}).sort((a,b)=>{
+			const searchTypeArray = [1,42,86,87];
+			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+			function getSkillOrSub(skill)
+			{
+				if (searchTypeArray.includes(skill.type))
+					return skill;
+				else
+					return skill.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type));
+			}
+			function getNumber(skill)
+			{
+				const sk = skill.params;
+				switch(skill.type)
+				{
+					case 1:
+					case 86:
+					case 87:
+						return sk[1];
+					case 42:
+						return sk[2];
+					default:
+						return 0;
+				}
+			}
+			let a_pC = 0,b_pC = 0;
+			a_pC = getNumber(getSkillOrSub(a_s));
+			b_pC = getNumber(getSkillOrSub(b_s));
+			return a_pC - b_pC;
 		})},
-		{name:"固定值指定属性伤害（单体）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [86];
+		{name:"大炮-伤害-根据剩余血量（按 1 HP 时倍率排序）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [110];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type) && skill.id!=0)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		}).sort((a,b)=>{
+			const searchTypeArray = [110];
+			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (searchTypeArray.includes(a_s.type)) ?
+				a_s.params[3] :
+				a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[3];
+			b_pC = (searchTypeArray.includes(b_s.type)) ?
+				b_s.params[3] :
+				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[3];
+			return a_pC - b_pC;
+		})},
+		{name:"大炮-伤害-队伍总 HP（按倍率排序）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [143];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type))
 				return true;
@@ -2332,9 +2632,20 @@ function parseBigNumber(number)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
+		}).sort((a,b)=>{
+			const searchTypeArray = [143];
+			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (searchTypeArray.includes(a_s.type)) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[0];
+			b_pC = (searchTypeArray.includes(b_s.type)) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[0];
+			return a_pC - b_pC;
 		})},
-		{name:"自身攻击倍率自身属性伤害（单体）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [2];
+		{name:"大炮-伤害-队伍某属性总攻击（按倍率排序）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [144];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type))
 				return true;
@@ -2342,8 +2653,20 @@ function parseBigNumber(number)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
+		}).sort((a,b)=>{
+			const searchTypeArray = [144];
+			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (searchTypeArray.includes(a_s.type)) ?
+				a_s.params[1] :
+				a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[1];
+			b_pC = (searchTypeArray.includes(b_s.type)) ?
+				b_s.params[1] :
+				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[1];
+			return a_pC - b_pC;
 		})},
-		{name:"造成敌方伤害后吸血",function:cards=>cards.filter(card=>{
+
+		{name:"大炮-特殊-吸血",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [35,115];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type))
@@ -2353,77 +2676,6 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
 		})},
-		{name:"自身攻击倍率自身属性伤害并吸血（单体）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [35];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
-			}
-		})},
-		{name:"自身攻击倍率指定属性伤害（单体）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [37,59,84];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
-			}
-		})},
-		{name:"自身攻击倍率指定属性伤害并吸血（单体）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [115];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
-			}
-		})},
-		{name:"对指定属性造成固定值指定属性伤害",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [42];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
-			}
-		})},
-		{name:"根据血量造成指定属性伤害",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [110];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
-			}
-		})},
-		{name:"根据队伍总血量造成指定属性伤害",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [143];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
-			}
-		})},
-		{name:"根据队伍属性总攻击造成指定属性伤害",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [144];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
-			}
-		})},
-		{name:"-----大炮有些复杂我没空做-----",function:cards=>cards},
 		{name:"======队长技======",function:cards=>cards},
 		{name:"队长技固伤追击",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [199,200,201];
