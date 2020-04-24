@@ -172,7 +172,7 @@ function parseSkillDescription(skill)
 			str = `对敌方全体造成${sk[1]}的${attrN(sk[0])}属性攻击`;
 			break;
 		case 2:
-			str = `对敌方1体造成自身攻击力×${sk[0]/100}倍的伤害`;
+			str = `对敌方1体造成自身攻击力×${sk[0]/100}${sk[1]&&sk[1]!=sk[0]?'~'+sk[1]/100:''}倍的自身属性伤害`;
 			break;
 		case 3:
 			str = `${sk[0]}回合内，受到的伤害减少${sk[1]}%`;
@@ -261,7 +261,7 @@ function parseSkillDescription(skill)
 			str = `宝珠移动和消除的声音变成太鼓达人的音效`;
 			break;
 		case 35:
-			str = `对敌方1体造成自身攻击力×${sk[0]/100}倍的伤害，并回复${sk[1]}%的 HP`;
+			str = `对敌方1体造成自身攻击力×${sk[0]/100}倍的自身属性伤害，并回复伤害${sk[1]}%的 HP`;
 			break;
 		case 36:
 			str = `受到的${attrN(sk[0])}属性${sk[1]>=0?`和${attrN(sk[1])}属性`:""}的伤害减少${sk[2]}%`;
@@ -478,7 +478,7 @@ function parseSkillDescription(skill)
 			if (sk[2]) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			break;
 		case 110:
-			str = `根据余下 HP 对敌方${sk[0]?"1":"全"}体造成${attrN(sk[1])}属性伤害（100% HP 时为自身攻击力×${sk[2]/100}倍，1 HP 时为自身攻击力×${sk[3]/100}倍）`;
+			str = `根据余下 HP 对敌方${sk[0] || "全"}体造成${attrN(sk[1])}属性伤害（100% HP 时为自身攻击力×${sk[2]/100}倍，1 HP 时为自身攻击力×${sk[3]/100}倍）`;
 			break;
 		//case 111: 在45
 		case 115:
@@ -654,7 +654,7 @@ function parseSkillDescription(skill)
 			str = `对敌方全体造成队伍总 HP×${sk[0]/100}倍的${attrN(sk[1])}属性伤害`;
 			break;
 		case 144:
-			str = `对敌方${sk[2]?sk[2]:"全"}体造成${nb(sk[0],attrsName).join("、")}属性总攻击力×${sk[1]/100}倍的${attrN(sk[3])}属性伤害`;
+			str = `对敌方${sk[2] || "全"}体造成${nb(sk[0],attrsName).join("、")}属性总攻击力×${sk[1]/100}倍的${attrN(sk[3])}属性伤害`;
 			break;
 		case 145:
 			str = `回复队伍总回复力×${sk[0]/100}倍的 HP`;
@@ -2217,27 +2217,6 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"全体固伤（按伤害数排序）",function:cards=>cards.filter(card=>{
-			const searchType = 56;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
-			}
-		}).sort((a,b)=>{
-			const searchType = 56;
-			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = (a_s.type == searchType) ?
-				a_s.params[0] :
-				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			b_pC = (b_s.type == searchType) ?
-				b_s.params[0] :
-				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			return a_pC - b_pC;
-		})},
 		{name:"单体固伤（按总伤害排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [55,188];
 			const skill = Skills[card.activeSkillId];
@@ -2263,6 +2242,186 @@ function parseBigNumber(number)
 				b_s.params[0] :
 				totalDamage(b_s);
 			return a_pC - b_pC;
+		})},
+		{name:"全体固伤（按伤害数排序）",function:cards=>cards.filter(card=>{
+			const searchType = 56;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		}).sort((a,b)=>{
+			const searchType = 56;
+			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (a_s.type == searchType) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			b_pC = (b_s.type == searchType) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			return a_pC - b_pC;
+		})},
+		{name:"单体大炮",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [2,35,37,59,84,86,110,115,144];
+			const skill = Skills[card.activeSkillId];
+			function isSingle(skill)
+			{
+				if (skill.type == 110)
+					return Boolean(skill.params[0]);
+				else if (skill.type == 114)
+					return Boolean(skill.params[2]);
+				else
+					return true;
+			}
+			if (searchTypeArray.includes(skill.type) && isSingle(skill))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && isSingle(subskill));
+			}
+		})},
+		{name:"全体大炮",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [0,1,58,85,87,110,143,144];
+			const skill = Skills[card.activeSkillId];
+			function isAll(skill)
+			{
+				if (skill.id == 0 ) return false;
+				if (skill.type == 110)
+					return !Boolean(skill.params[0]);
+				else if (skill.type == 114)
+					return !Boolean(skill.params[2]);
+				else
+					return true;
+			}
+			if (searchTypeArray.includes(skill.type) && isAll(skill))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && isAll(subskill));
+			}
+		})},
+		{name:"自身攻击倍率指定属性伤害（全体）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [0,58,85];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"固定值指定属性伤害（全体）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [1,87];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"固定值指定属性伤害（单体）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [86];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"自身攻击倍率自身属性伤害（单体）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [2];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"造成敌方伤害后吸血",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [35,115];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"自身攻击倍率自身属性伤害并吸血（单体）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [35];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"自身攻击倍率指定属性伤害（单体）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [37,59,84];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"自身攻击倍率指定属性伤害并吸血（单体）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [115];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"对指定属性造成固定值指定属性伤害",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [42];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"根据血量造成指定属性伤害",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [110];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"根据队伍总血量造成指定属性伤害",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [143];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
+		{name:"根据队伍属性总攻击造成指定属性伤害",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [144];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
 		})},
 		{name:"-----大炮有些复杂我没空做-----",function:cards=>cards},
 		{name:"======队长技======",function:cards=>cards},
