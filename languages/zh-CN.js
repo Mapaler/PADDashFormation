@@ -1794,11 +1794,21 @@ function parseBigNumber(number)
 		{name:"99回合掉落",function:cards=>cards.filter(card=>{
 			const searchType = 126;
 			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && skill.params[1] >= 99) // 960 = 二进制 1111000000
+			if (skill.type == searchType && skill.params[1] >= 99)
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType && subskill.params[1] >= 99);
+			}
+		})},
+		{name:"100% 掉落",function:cards=>cards.filter(card=>{
+			const searchType = 126;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && skill.params[3] >= 100)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && subskill.params[3] >= 100);
 			}
 		})},
 		{name:"掉毒、掉废（顶毒）",function:cards=>cards.filter(card=>{
@@ -1854,7 +1864,7 @@ function parseBigNumber(number)
 				);
 			}
 		})},
-		{name:"操作时间buff（顶减手指）",function:cards=>cards.filter(card=>{
+		{name:"操作时间 buff（顶减手指）",function:cards=>cards.filter(card=>{
 			const searchType = 132;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
