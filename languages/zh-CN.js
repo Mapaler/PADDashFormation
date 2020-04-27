@@ -1790,6 +1790,33 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && ((subskill.params[0] | subskill.params[2]) & 14));
 			}
 		})},
+		{name:"泛产横（包含花火与四周一圈等）",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [128,71,176];
+			function isRow(skill)
+			{
+				const sk = skill.params;
+				if (skill.type === 128) //普通横
+				{return true;}
+				else if (skill.type === 71) //花火
+				{return sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined).length === 1}
+				else if (skill.type === 176) //特殊形状
+				{
+					for (let si=0;si<5;si++)
+					{
+						if ((sk[si] & 63) === 63)
+							return true;
+					}
+				}
+				return false;
+			}
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type) && isRow(skill))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && isRow(subskill));
+			}
+		})},
 		{name:"----- buff 类-----",function:cards=>cards},
 		{name:"掉落率提升 99回合",function:cards=>cards.filter(card=>{
 			const searchType = 126;
@@ -1824,11 +1851,11 @@ function parseBigNumber(number)
 		{name:"以觉醒数量为倍率类技能（宝石姬）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [156,168];
 			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.some(t=>skill.type == t))
+			if (searchTypeArray.includes(skill.type))
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
 		})},
 		{name:"回复力 buff（顶降回复）",function:cards=>cards.filter(card=>{
