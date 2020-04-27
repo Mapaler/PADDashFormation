@@ -17,6 +17,48 @@ var showSearch; //整个程序都可以用的显示搜索函数
 const dataStructure = 3; //阵型输出数据的结构版本
 const className_displayNone = "display-none";
 
+class Member2
+{
+	constructor(oldMenber = null,isAssist = false)
+	{
+		if (oldMenber)
+		{ //Copy一个
+			this.id = oldMenber.id;
+			this.level = oldMenber.level;
+			this.plus = [...oldMenber.plus];
+			this.awoken = oldMenber.awoken;
+			this.sAwoken = oldMenber.sAwoken;
+			this.latent = [...oldMenber.latent];
+			this.skilllevel = oldMenber.sAwoken;
+			this.assist = oldMenber.assist;
+		}else
+		{ //全新的
+			this.id = 0;
+			this.level = 1;
+			this.plus = [0,0,0];
+			this.awoken = 0;
+			this.sAwoken = null;
+			this.latent = [];
+			this.skilllevel = null;
+			this.assist = null;
+		}
+		this.isAssist = isAssist;
+	}
+	calculateAbility(solo,teamCount){
+		const card = Cards[this.id];
+		let bonus = null;
+		if (!this.isAssist &&
+			this.assist &&
+			this.assist.id>0 &&
+			Cards[this.assist.id].attrs[0] === card.attrs[0]
+		){
+			bonus = this.assist.calculateAbility(solo,teamCount);
+		}
+	}
+	toJSON(){
+
+	}
+}
 //队员基本的留空
 var Member = function(){
 	this.id=0;
