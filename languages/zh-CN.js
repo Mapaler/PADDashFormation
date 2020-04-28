@@ -385,13 +385,13 @@ function parseSkillDescription(skill)
 			str = "全画面的宝珠变成" + strArr.map(o=>attrN(o)).join("、");
 			break;
 		case 73:
-			str = `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[2]})}`;
+			str = `${getAttrTypeString([sk[0]],[sk[1]])}宠物的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[2]})}`;
 			break;
 		case 75:
-			str = `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物的${getFixedHpAtkRcvString({atk:sk[2],rcv:sk[2]})}`;
+			str = `${getAttrTypeString([sk[0]],[sk[1]])}宠物的${getFixedHpAtkRcvString({atk:sk[2],rcv:sk[2]})}`;
 			break;
 		case 76:
-			str = `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物`;
+			str = `${getAttrTypeString([sk[0]],[sk[1]])}宠物`;
 			if (sk[2] || sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[2],rcv:sk[2]})}`;
 			break;
 		case 84:
@@ -481,6 +481,7 @@ function parseSkillDescription(skill)
 			str = `根据余下 HP 对敌方${sk[0] || "全"}体造成${attrN(sk[1])}属性伤害（100% HP 时为自身攻击力×${sk[2]/100}倍，1 HP 时为自身攻击力×${sk[3]/100}倍）`;
 			break;
 		//case 111: 在45
+		//case 114: 在29
 		case 115:
 			str = `对敌方1体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害，并回复伤害${sk[2]}%的 HP `;
 			break;
