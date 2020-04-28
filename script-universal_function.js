@@ -505,3 +505,111 @@ function parseBigNumber(number)
 {
 	return number.toLocaleString();
 }
+//计算队伍中有多少血量
+function countTeamHp(memberArr, leader1id, leader2id, solo)
+{
+	const ls1 = Skills[Cards[leader1id].leaderSkillId];
+	const ls2 = Skills[Cards[leader2id].leaderSkillId];
+	const mHpArr = memberArr.map(m=>{
+		let hp = m.ability ? m.ability[0] : 0;
+		if (!hp) return 0;
+		const card = Cards[m.id];
+		hp *= memberHpMul(card,ls1,memberArr,solo);
+		hp *= memberHpMul(card,ls2,memberArr,solo);
+		return hp;
+	});
+
+	console.log(mHpArr);
+
+	function memberHpMul(card,ls,memberArr,solo)
+	{
+		function flags(num){
+			const arr = [];
+			for (let i = 0; i<32;i++)
+			{
+				if (num & (1<<i))
+				{
+					arr.push(i);
+				}
+			}
+			return arr;
+		}
+		function hpMul(parm,scale)
+		{
+			if (scale == undefined || scale == 0) return 1;
+			if (parm.attrs && card.attrs.some(a => parm.attrs.includes(a)))
+			{
+				return scale / 100;
+			}
+			if (parm.types && card.types.some(t => parm.types.includes(t)))
+			{
+				return scale / 100;
+			}
+			return 1;
+		}
+		const sk = ls.params;
+		let scale = 1;
+		switch (ls.type)
+		{
+			case 23: case 30: case 62: case 77: case 63: case 65:
+				scale = hpMul({types:sk.slice(0,sk.length-1)}, sk[sk.length-1]);
+				break;
+			case 29: case 114: case 45: case 111: case 46: case 48: case 67:
+				scale = hpMul({attrs:sk.slice(0,sk.length-1)}, sk[sk.length-1]);
+				break;
+			case 73: case 76:
+				scale = hpMul({attrs:sk[0],types:sk[1]}, sk[2]);
+				break;
+			case 106: case 107: case 108:
+				scale = sk[0] / 100;
+				break;
+			case 121: case 129: case 163: case 186:
+				scale = hpMul({attrs:flags(sk[0]),types:flags(sk[1])}, sk[2]);
+				break;
+			case 125: //队伍中必须有指定队员
+				const needMonIdArr = sk.slice(0,5).filter(s=>s>0);
+				const memberIdArr = memberArr.map(m=>m.id);
+				scale = needMonIdArr.every(mid=>memberIdArr.includes(mid)) ? sk[5]/100 : 1;
+				break;
+			case 136:
+				scale = hpMul({attrs:flags(sk[0])}, sk[1]) *
+				sk[4]? hpMul({attrs:flags(sk[4])}, sk[5]) : 1;
+				break;
+			case 137:
+				scale = hpMul({types:flags(sk[0])}, sk[1]) *
+				sk[4]? hpMul({types:flags(sk[4])}, sk[5]) : 1;
+				break;
+			case 155:
+				scale = solo ? 1 : hpMul({attrs:flags(sk[0]),types:flags(sk[1])}, sk[2]);
+				break;
+			case 158:
+				scale = hpMul({attrs:flags(sk[1]),types:flags(sk[2])}, sk[4]);
+				break;
+			case 175: //队伍组成全为合作
+				const needCollabIdIdArr = sk.slice(0,3).filter(s=>s>0);
+				const memberCollabIdArr = memberArr.map(m=>Cards[m.id].collabId);
+				scale = memberCollabIdArr.every(cid=>needCollabIdIdArr.includes(cid)) ? sk[3]/100 : 1;
+				break;
+			case 178: case 185:
+				scale = hpMul({attrs:flags(sk[1]),types:flags(sk[2])}, sk[3]);
+				break;
+			case 203:
+				switch (sk[0])
+				{
+					case 0: //全是像素进化
+						scale = memberArr.map(m=>Cards[m.id].evoMaterials).every(ems=>ems.includes(3826)) ? sk[1]/100 : 1;
+						break;
+					case 2: //全是转生、超转生（8格潜觉）
+						scale = memberArr.map(m=>Cards[m.id].is8Latent).every(is8=>is8) ? sk[1]/100 : 1;
+						break;
+				}
+				break;
+			case 138: //调用其他队长技
+				scale = sk.reduce((pmul,skid)=>pmul * memberHpMul(card,Skills[skid],memberArr,solo),1)
+				break;
+			default:
+		}
+		return scale || 1;
+	}
+	return mHpArr;
+}
