@@ -2339,9 +2339,14 @@ function refreshTeamTotalHP(totalDom,team){
 
 	if (tHpDom)
 	{
-		const tHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
-			return value += mon.ability ? mon.ability[0] : 0;
-		},0);
+		//因为目前仅用于1P、3P，所以直接固定写了
+		const leader1id = team[0][0].id;
+		//const leader2 = teamsCount==2 ? Cards[team2[0][0].id] : Cards[team[0][5].id]; //这个写法无法获得队伍2的队长
+		const leader2id = team[0][5].id;
+
+		const teamHPArr = countTeamHp(team[0],leader1id,leader2id,solo);
+		
+		const tHP = teamHPArr.reduce((pv,v)=>pv+v); //队伍计算的总HP
 		const teamHPAwoken = awokenCountInTeam(team,46,solo, teamsCount); //全队大血包个数
 		
 		let badgeHPScale = 1; //徽章倍率
@@ -2389,10 +2394,13 @@ function refreshFormationTotalHP(totalDom, teams){
 
 	if (tHpDom)
 	{
+		//因为目前仅用于2P，所以直接在外面固定写了
+		const leader1id = teams[0][0][0].id;
+		const leader2id = teams[1][0][0].id;
 		const tHPArr = teams.map(function(team){
-			const teamTHP = team[0].reduce(function(value,mon){ //队伍计算的总HP
-				return value += mon.ability ? mon.ability[0] : 0;
-			},0);
+			const teamHPArr = countTeamHp(team[0],leader1id,leader2id,solo);
+
+			const teamTHP = teamHPArr.reduce((pv,v)=>pv+v); //队伍计算的总HP
 			const teamHPAwoken = awokenCountInTeam(team,46,solo, teamsCount); //全队大血包个数
 			return [teamTHP,teamHPAwoken];
 		});

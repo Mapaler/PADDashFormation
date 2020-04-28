@@ -546,6 +546,10 @@ ul{
 	display:inline-block;
 }
 */
+.formation-box::before {
+	content: "▼Calculate HP with leader skills, in test. Please give feedback.";
+	color : red;
+}
 /*队伍的潜觉*/
 .team-latents .latents{
 	width: var(--head-block-width);
