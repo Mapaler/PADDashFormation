@@ -597,9 +597,14 @@ function reloadFormationData()
 	let formationData;
 	try
 	{
-		const parameterDataString = getQueryString("d") || getQueryString("data");
+		let parameterDataString = getQueryString("d") || getQueryString("data");
 		if (parameterDataString)
 		{
+			if (parameterDataString.charAt(0) != '{')
+			{
+				parameterDataString = pako.inflate(parameterDataString,{to:'string'})
+				console.log('数据字符串解压结果：',parameterDataString);
+			}
 			formationData = JSON.parse(parameterDataString);
 		}
 	}catch(e)
@@ -626,7 +631,14 @@ function creatNewUrl(arg){
 		const newSearch = new URLSearchParams();
 		if (language_i18n) newSearch.set("l",language_i18n);
 		if (datasource && datasource!="ja") newSearch.set("s",datasource);
-		if (outObj) newSearch.set("d", JSON.stringify(outObj));
+
+		const dataJsonStr = JSON.stringify(outObj); //数据部分的字符串
+		const deflate = pako.deflate(dataJsonStr,{to:'string'});
+		
+		if (outObj) newSearch.set("d",
+			deflate.length < dataJsonStr.length ? //压缩后长度小于压缩前长度
+			deflate : //使用压缩字符串
+			dataJsonStr); //使用原始字符串
 
 		const newUrl = (arg.url || "") + '?' + newSearch.toString();
 
