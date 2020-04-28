@@ -88,6 +88,13 @@ function getQueryString(name,url) {
 	}
 }
 
+function Uint8ArrayToString(fileData){
+	return Array.from(fileData).map(int=>String.fromCharCode(int)).join('');
+}
+function stringToUint8Array(str){
+	const codeArr = Array.from(str).map(chr=>chr.charCodeAt(0));
+	return new Uint8Array(codeArr);
+}
 //数组去重
 /* https://www.cnblogs.com/baiyangyuanzi/p/6726258.html
 * 实现思路：获取没重复的最右一值放入新数组。
@@ -111,15 +118,15 @@ Array.prototype.uniq = function()
 const pcmMemory = new WebAssembly.Memory({initial: 256, maximum: 256});
 
 const pcmImportObj = {
-    env: {
-        abortStackOverflow: () => { throw new Error("overflow"); },
-        table: new WebAssembly.Table({ initial: 0, maximum: 0, element: "anyfunc" }),
-        tableBase: 0,
-        memory: pcmMemory,
-        memoryBase: 102400,
-        STACKTOP: 0,
-        STACK_MAX: pcmMemory.buffer.byteLength,
-    }
+	env: {
+		abortStackOverflow: () => { throw new Error("overflow"); },
+		table: new WebAssembly.Table({ initial: 0, maximum: 0, element: "anyfunc" }),
+		tableBase: 0,
+		memory: pcmMemory,
+		memoryBase: 102400,
+		STACKTOP: 0,
+		STACK_MAX: pcmMemory.buffer.byteLength,
+	}
 };
 
 let pcmPlayer = null;
@@ -127,33 +134,33 @@ let adpcm_wasm = null;
 
 function decodeAudio(fileName, decodeCallback)
 {
-    if(pcmPlayer != null)
-    {
-        pcmPlayer.close();
-    }
-    pcmPlayer = new PCMPlayer(1, 44100);
-    fetch(fileName).then((response) => response.arrayBuffer())
-    .then((bytes) => {
-        let audioData = new Uint8Array(bytes);
-        let step = 160;
-        for(let i = 0; i < audioData.byteLength; i += step)
-        {
-            let pcm16BitData = decodeCallback(audioData.slice(i, i + step));
-            let pcmFloat32Data = Std.shortToFloatData(pcm16BitData);
-            pcmPlayer.feed(pcmFloat32Data);
-        }
-    });
+	if(pcmPlayer != null)
+	{
+		pcmPlayer.close();
+	}
+	pcmPlayer = new PCMPlayer(1, 44100);
+	fetch(fileName).then((response) => response.arrayBuffer())
+	.then((bytes) => {
+		let audioData = new Uint8Array(bytes);
+		let step = 160;
+		for(let i = 0; i < audioData.byteLength; i += step)
+		{
+			let pcm16BitData = decodeCallback(audioData.slice(i, i + step));
+			let pcmFloat32Data = Std.shortToFloatData(pcm16BitData);
+			pcmPlayer.feed(pcmFloat32Data);
+		}
+	});
 }
 
 fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffer())
 .then((bytes) => WebAssembly.instantiate(bytes, pcmImportObj))
 .then((wasm) => {
 	adpcm_wasm = wasm;
-    /*addButton("adpcm").onclick = function () {
-        let decoder = new Adpcm(wasm, pcmImportObj);
-        decoder.resetDecodeState(new Adpcm.State(0, 0));
-        decodeAudio("demo.adpcm", decoder.decode.bind(decoder));
-    }*/
+	/*addButton("adpcm").onclick = function () {
+		let decoder = new Adpcm(wasm, pcmImportObj);
+		decoder.resetDecodeState(new Adpcm.State(0, 0));
+		decodeAudio("demo.adpcm", decoder.decode.bind(decoder));
+	}*/
 });
 //▲ADPCM播放相关
 function latentUseHole(latentId)
@@ -519,7 +526,7 @@ function countTeamHp(memberArr, leader1id, leader2id, solo)
 		return hp;
 	});
 
-	console.log(mHpArr);
+	console.log('单个队伍血量：',mHpArr);
 
 	function memberHpMul(card,ls,memberArr,solo)
 	{
