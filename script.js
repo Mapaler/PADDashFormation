@@ -1856,8 +1856,10 @@ function editMon(teamNum,isAssist,indexInTeam)
 	const monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul input[name='awoken-number']");
 	//if (mon.awoken > 0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下，为了减少计算次数，把这一条移动到了最后面
 	//超觉醒
-	const monEditSAwokens = settingBox.querySelectorAll(".row-mon-super-awoken .awoken-ul input[name='sawoken-choice']"); //单选框，0号是隐藏的
+	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
+	const monEditSAwokens = monEditSAwokensRow.querySelectorAll(".awoken-ul input[name='sawoken-choice']"); //单选框，0号是隐藏的
 	monEditSAwokens[(mon.sawoken >= 0 && monEditSAwokens[mon.sawoken+1]) ? mon.sawoken+1 : 0].checked = true;
+	monEditSAwokensRow.swaokenIndex = mon.sawoken;
 
 	const monEditLv = settingBox.querySelector(".row-mon-level .m-level");
 	monEditLv.value = mon.level || 1;
@@ -2358,7 +2360,7 @@ function refreshTeamTotalHP(totalDom,team){
 			badgeHPScale = 1.15;
 		}
 
-		tHpDom.innerHTML = tHP.toString() + 
+		tHpDom.innerHTML = Math.round(tHP).toString() + 
 			(teamHPAwoken>0||badgeHPScale!=1 ?
 				("("+Math.round(tHP * (1 + 0.05 * teamHPAwoken)*badgeHPScale).toString()+")") :
 				"");
@@ -2408,7 +2410,7 @@ function refreshFormationTotalHP(totalDom, teams){
 			return [value[0] + teamHP[0], value[1] + Math.round(teamHP[0] * (1 + 0.05 * teamHP[1]))];
 		},[0,0]);
 
-		tHpDom.innerHTML = tHP[0].toString() + 
+		tHpDom.innerHTML = Math.round(tHP[0]).toString() + 
 			(tHP[0] != tHP[1] ? `(${tHP[1]})` : "");
 	}
 	if (tRcvDom)
