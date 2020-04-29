@@ -759,9 +759,8 @@ ul{
 .edit-box .search-box .search-mon-list li
 {
 	display: inline-block;
-	vertical-align: top; 
-	margin-right: 5px;
-	margin-bottom: 5px;
+	vertical-align: top;
+	margin: 2px;
 }
 .detail-mon{
 	display: inline-block;
@@ -999,6 +998,10 @@ ul{
 	border: 1px solid white;
 	border-radius: 5px;
 	background: grey;
+}
+.guide-mod .search-box .search-mon-list{
+	max-height: 790px;
+	overflow: auto;
 }
 .search-mon-list.only-display-can-assist .monster{
 	opacity: 0.25;
