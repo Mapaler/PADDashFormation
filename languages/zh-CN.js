@@ -1233,6 +1233,22 @@ function parseBigNumber(number)
 			const skill = Skills[card.activeSkillId];
 			return skill.initialCooldown - (skill.maxLevel - 1) <= 1;
 		})},
+		{name:"除 1 CD 外，4 个以下能永动开",function:cards=>cards.filter(card=>{
+			if (card.activeSkillId == 0) return false;
+			const skill = Skills[card.activeSkillId];
+			const minCD = skill.initialCooldown - (skill.maxLevel - 1); //主动技最小的CD
+			let realCD = minCD;
+
+			const searchType = 146;
+			if (skill.type == searchType)
+				realCD -= skill.params[0] * 3;
+			else if (skill.type == 116){
+				const subskills = skill.params.map(id=>Skills[id]);
+				const subskill = subskills.find(subs=>subs.type == searchType);
+				if (subskill) realCD -= subskill.params[0] * 3;
+			}
+			return minCD > 1 && realCD <= 4;
+		})},
 		{name:"时间暂停（按停止时间排序）",function:cards=>cards.filter(card=>{
 			const searchType = 5;
 			const skill = Skills[card.activeSkillId];
@@ -1254,18 +1270,6 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"变身前",function:cards=>cards.filter(card=>{
-			const searchType = 202;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
-			}
-		})},
-		{name:"变身后",function:cards=>cards.filter(card=>card.henshinTo)},
-		{name:"非变身",function:cards=>cards.filter(card=>!card.henshinFrom && !card.henshinTo)},
 		{name:"-----破吸类-----",function:cards=>cards},
 		{name:"破属吸 buff（按破吸回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 173;
@@ -1686,7 +1690,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"-----转珠类有些复杂我没空做-----",function:cards=>cards},
+		{name:"~~~转珠类有些复杂我没空做~~~",function:cards=>cards},
 		{name:"-----固定产珠类-----",function:cards=>cards},
 		{name:"生成特殊形状的",function:cards=>cards.filter(card=>{
 			const searchType = 176;
@@ -2337,7 +2341,7 @@ function parseBigNumber(number)
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && isAll(subskill));
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
 		})},
 
@@ -3034,6 +3038,36 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
+		{name:"======进化类型======",function:cards=>cards},
+		{name:"转生、超转生（8格潜觉）",function:cards=>cards.filter(card=>card.is8Latent)},
+		{name:"仅限超转生",function:cards=>cards.filter(card=>!card.isUltEvo && !card.awakenings.includes(49) && card.evoBaseId != card.id && Cards[card.evoBaseId].is8Latent)},
+		{name:"非转生、超转生",function:cards=>cards.filter(card=>!card.is8Latent)},
+		{name:"像素进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))},
+		{name:"变身前",function:cards=>cards.filter(card=>{
+			const searchType = 202;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		})},
+		{name:"变身后",function:cards=>cards.filter(card=>card.henshinTo)},
+		{name:"变身前后队长技不变",function:cards=>cards.filter(card=>{
+			const searchType = 202;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && card.leaderSkillId == Cards[skill.params[0]].leaderSkillId)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && card.leaderSkillId == Cards[subskill.params[0]].leaderSkillId);
+			}
+		})},
+		{name:"非变身",function:cards=>cards.filter(card=>!card.henshinFrom && !card.henshinTo)},
+		{name:"用三神面进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3795))},
+		{name:"用彩龙果进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3971))},
+		{name:"由武器进化而来",function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))},
 		{name:"======其他搜索======",function:cards=>cards},
 		{name:"不能破除等级限制",function:cards=>cards.filter(card=>card.limitBreakIncr===0)},
 		{name:"110级三维成长100%",function:cards=>cards.filter(card=>card.limitBreakIncr>=100)},
@@ -3045,13 +3079,6 @@ function parseBigNumber(number)
 		{name:"能获得珠子皮肤",function:cards=>cards.filter(card=>card.blockSkinId>0)},
 		{name:"所有潜觉蛋龙",function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)},
 		{name:"龙契士&龙唤士（10001）",function:cards=>cards.filter(card=>card.collabId==10001)},
-		{name:"-----进化类型类-----",function:cards=>cards},
-		{name:"转生、超转生（8格潜觉）",function:cards=>cards.filter(card=>card.is8Latent)},
-		{name:"非转生、超转生",function:cards=>cards.filter(card=>!card.is8Latent)},
-		{name:"像素进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))},
-		{name:"用三神面进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3795))},
-		{name:"用彩龙果进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3971))},
-		{name:"由武器进化而来",function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))},
 		{name:"-----觉醒类-----",function:cards=>cards},
 		{name:"有9个觉醒",function:cards=>cards.filter(card=>card.awakenings.length>=9)},
 		{name:"可以做辅助",function:cards=>cards.filter(card=>card.canAssist)},
