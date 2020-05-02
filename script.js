@@ -1379,7 +1379,8 @@ function initialize()
 			mon.plus[2] = parseInt(monEditAddRcv.value) || 0;
 			if (!editBox.isAssist)
 			{ //如果不是辅助，则可以设定潜觉
-				mon.latent = editBox.latent.concat();
+				mon.latent = editBox.latent.concat()
+				.sort((a,b)=>latentUseHole(b) - latentUseHole(a)); //并排序
 			}
 		}
 
@@ -1770,21 +1771,17 @@ function changeid(mon,monDom,latentDom)
 	}
 	if (latentDom)
 	{
-		const latentDoms = Array.from(latentDom.querySelectorAll("li"));
 		if (mon.latent) //如果提供了潜觉
 		{
-			const latent = mon.latent.sort(function(a,b){
-				if(b>=12 && a<12) {return 1;} //如果大于12，就排到前面
-				else if(b<12 && a>=12) {return -1;} //如果小于12就排到后面
-				else {return 0;} //其他情况不变
-			});
+			const latent = mon.latent;
 			if (latent.length < 1)
 			{
 				latentDom.classList.add(className_displayNone);
 			}else
 			{
-				latentDom.classList.remove(className_displayNone);
+				const latentDoms = Array.from(latentDom.querySelectorAll("li"));
 				refreshLatent(latent,mon.id,latentDoms);
+				latentDom.classList.remove(className_displayNone);
 			}
 		}else
 		{
@@ -1807,7 +1804,8 @@ function changeid(mon,monDom,latentDom)
 
 	parentNode.appendChild(fragment);
 }
-function refreshLatent(latent,monid,iconArr) //刷新潜觉
+//刷新潜觉
+function refreshLatent(latent,monid,iconArr)
 {
 	const maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
 	let latentIndex = 0,usedHoleN = 0;
