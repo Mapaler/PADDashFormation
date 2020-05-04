@@ -13,6 +13,7 @@ var statusLine; //储存状态栏
 var formationBox; //储存整个formationBox
 var editBox; //储存整个editBox
 var showSearch; //整个程序都可以用的显示搜索函数
+var zipURL; //储存是否压缩网址数据
 
 const dataStructure = 3; //阵型输出数据的结构版本
 const className_displayNone = "display-none";
@@ -338,6 +339,15 @@ window.onload = function()
 {
 	controlBox = document.body.querySelector(".control-box");
 	statusLine = controlBox.querySelector(".status"); //显示当前状态的
+	const zipClassName = 'zip-data';
+	const zipData = controlBox.querySelector(`#${zipClassName}`);
+	zipData.onchange = function(){
+		localStorage.setItem("PADDF-" + zipClassName, this.checked ? 1 : 0);
+		zipURL = this.checked;
+	}
+	zipData.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + zipClassName)));
+	zipData.onchange();
+
 	const helpLink = controlBox.querySelector(".help-link");
 	interchangeSVG = document.body.querySelector("#interchange-line");
 	interchangeSVG.line = interchangeSVG.querySelector("g line");
@@ -602,8 +612,9 @@ function reloadFormationData()
 		{
 			if (parameterDataString.charAt(0) != '{')
 			{
+				console.log('数据字符串：',parameterDataString.length,parameterDataString);
 				parameterDataString = pako.inflate(parameterDataString,{to:'string'})
-				console.log('数据字符串解压结果：',parameterDataString);
+				console.log('数据字符串解压结果：',parameterDataString.length,parameterDataString);
 			}
 			formationData = JSON.parse(parameterDataString);
 		}
@@ -633,12 +644,21 @@ function creatNewUrl(arg){
 		if (datasource && datasource!="ja") newSearch.set("s",datasource);
 
 		const dataJsonStr = JSON.stringify(outObj); //数据部分的字符串
-		const deflate = pako.deflate(dataJsonStr,{to:'string'});
-		
-		if (outObj) newSearch.set("d",
-			deflate.length < dataJsonStr.length ? //压缩后长度小于压缩前长度
-			deflate : //使用压缩字符串
-			dataJsonStr); //使用原始字符串
+		if (zipURL.checked)
+		{
+			const deflate = pako.deflate(dataJsonStr,{to:'string'});
+			const teamSearch1 = new URLSearchParams();
+			const teamSearch2 = new URLSearchParams();
+			teamSearch1.set('d',dataJsonStr);
+			teamSearch2.set('d',deflate);
+			if (outObj) newSearch.set("d",
+				teamSearch2.length < teamSearch1.length ? //压缩后长度小于压缩前长度
+				deflate : //使用压缩字符串
+				dataJsonStr); //使用原始字符串
+		}else
+		{
+			newSearch.set("d", dataJsonStr);
+		}
 
 		const newUrl = (arg.url || "") + '?' + newSearch.toString();
 
@@ -1239,8 +1259,8 @@ function initialize()
 	{
 		refreshLatent(latent,monid,monEditLatents);
 	};
-	const s_hideLessUseLetent = settingBox.querySelector("#hide-less-use-latent");
 	const hideClassName = 'hide-less-use-latent';
+	const s_hideLessUseLetent = settingBox.querySelector(`#${hideClassName}`);
 	s_hideLessUseLetent.onchange = function(){
 		toggleDomClassName(this, hideClassName, true, monEditLatentAllowableUl);
 		localStorage.setItem("PADDF-" + hideClassName, this.checked ? 1 : 0);

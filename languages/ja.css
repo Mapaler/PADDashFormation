@@ -241,6 +241,9 @@
 .control-box .change-swap-to-copy-lbl::after{
 	content:"ドラッグ時に「スワップ」を「コピー」に変更";
 }
+.control-box .zip-data-lbl::after{
+	content:"URL 内のフォーメーション データを自動圧縮する";
+}
 .team-total-info .tIf-total-hp::before{
 	content: "チームHP(チーム覚醒とバッジ):";
 }

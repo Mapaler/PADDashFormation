@@ -241,6 +241,9 @@
 .control-box .change-swap-to-copy-lbl::after{
 	content:"드래그할 때 \"바꾸기\"를 \"복사\"로 변경";
 }
+.control-box .zip-data-lbl::after{
+	content:"URL에서 형성 데이터를 자동 압축";
+}
 .team-total-info .tIf-total-hp::before{
 	content: "팀 HP(팀 각성 및 배지):";
 }
