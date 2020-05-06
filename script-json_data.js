@@ -78,16 +78,16 @@ if (!solo)
 {
 	const multiSort = [
 		{tag:"sort_hpMax110_Multi",name:"最大协力攻击(Lv110)",function:(a,b)=>
-			(a.atk.max * (1 + a.limitBreakIncr/100) + 495) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
-			(b.atk.max * (1 + b.limitBreakIncr/100) + 495) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
+			(a.atk.max * (1 + a.limitBreakIncr/100) + (a.overlay || a.types[0] == 15 && a.types[1] == -1) ? 0 : 495) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
+			(b.atk.max * (1 + b.limitBreakIncr/100) + (b.overlay || b.types[0] == 15 && b.types[1] == -1) ? 0 : 495) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
 		},
 		{tag:"sort_hpMax110_Multi",name:"最大协力HP(Lv110)",function:(a,b)=>
-			(a.hp.max * (1 + a.limitBreakIncr/100) + 990) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
-			(b.hp.max * (1 + b.limitBreakIncr/100) + 990) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
+			(a.hp.max * (1 + a.limitBreakIncr/100) + (a.overlay || a.types[0] == 15 && a.types[1] == -1) ? 0 : 990) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
+			(b.hp.max * (1 + b.limitBreakIncr/100) + (b.overlay || b.types[0] == 15 && b.types[1] == -1) ? 0 : 990) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
 		},
 		{tag:"sort_hpMax110_Multi",name:"最大协力回复(Lv110)",function:(a,b)=>
-			(a.rcv.max * (1 + a.limitBreakIncr/100) + 99) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
-			(b.rcv.max * (1 + b.limitBreakIncr/100) + 99) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
+			(a.rcv.max * (1 + a.limitBreakIncr/100) + ((a.overlay || a.types[0] == 15 && a.types[1] == -1) ? 0 : 297)) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
+			(b.rcv.max * (1 + b.limitBreakIncr/100) + ((b.overlay || b.types[0] == 15 && b.types[1] == -1) ? 0 : 297)) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
 		},
 	];
 	sort_function_list.push(...multiSort);
