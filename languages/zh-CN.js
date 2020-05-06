@@ -1084,7 +1084,7 @@ function parseSkillDescription(skill)
 			fullColor = nb(sk[0], attrsName);
 			str = fullColor.length>1?"同时":"相连";
 			str += `消除${sk[1]}个或以上的${getOrbsAttrString(sk[0])}宝珠时`;
-			if (sk[2]) str += `，攻击力×${sk[2]/100}倍`;
+			if (sk[2] && sk[2] != 100) str += `，攻击力×${sk[2]/100}倍`;
 			if (sk[3]) str += `，结算时连击数+${sk[3]}`;
 			break;
 		case 193:
@@ -1111,7 +1111,7 @@ function parseSkillDescription(skill)
 			if (!atSameTime) str+=`${sk[1]}种属性以上`;
 			else if(sk[0] == 31) str += `5色`;
 			str += `同时攻击时`;
-			if (sk[2] != 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
+			if (sk[2] && sk[2] != 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			if (sk[3]) str += `，结算时连击数+${sk[3]}`;
 			break;
 		case 195:
@@ -1150,7 +1150,7 @@ function parseSkillDescription(skill)
 			str += `同时攻击时，追加${sk[2]}点固定伤害`;
 			break;
 		case 200:
-			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(sk[0],true)}宝珠时，追加${sk[2]}点固定伤害`;
+			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0],true)}宝珠时，追加${sk[2]}点固定伤害`;
 			break;
 		case 201:
 			fullColor = sk.slice(0,4).filter(c=>c>0); //最多4串珠
