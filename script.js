@@ -2134,6 +2134,10 @@ function editBoxChangeMonId(id)
 	if (card.overlay || card.types[0] == 15 && card.types[1] == -1)
 	{ //当可以叠加时，不能打297和潜觉
 		rowPlus.classList.add("disabled"); 
+		rowPlus.querySelector(".m-plus-hp").value = 0;
+		rowPlus.querySelector(".m-plus-atk").value = 0;
+		rowPlus.querySelector(".m-plus-rcv").value = 0;
+
 		rowLatent.classList.add("disabled");
 		skillLevel.setAttribute("readonly",true);
 	}else
