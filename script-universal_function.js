@@ -179,6 +179,17 @@ function latentUseHole(latentId)
 		return 1;
 	}
 }
+//获取最大潜觉数量
+function getMaxLatentCount(id)
+{ //转生2和超转生3为8个格子
+	if (Cards[id])
+	{
+		return Cards[id].is8Latent ? 8 : 6;
+	}else
+	{
+		return 6;
+	} 
+}
 //计算用了多少潜觉格子
 function usedHole(latents)
 {

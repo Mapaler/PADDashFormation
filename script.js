@@ -232,17 +232,6 @@ Formation.prototype.loadObj= function(f){
 	if (f.b)
 		this.teams[0][2] = f.b; //原来模式的徽章
 };
-//获取最大潜觉数量
-function getMaxLatentCount(id)
-{ //转生2和超转生3为8个格子
-	if (Cards[id])
-	{
-		return Cards[id].is8Latent ? 8 : 6;
-	}else
-	{
-		return 6;
-	} 
-}
 //切换通用的切换className显示的函数
 function toggleDomClassName(checkBox, className, checkedAdd = true, dom = document.body)
 {
@@ -1832,7 +1821,7 @@ function refreshLatent(latent,monid,iconArr)
 	for (let ai = 0; ai<iconArr.length; ai++)
 	{
 		const icon = iconArr[ai];
-		if (latent[latentIndex] != undefined && ai >= usedHoleN) //有潜觉
+		if (latent[latentIndex] != undefined && ai >= usedHoleN && ai < maxLatentCount) //有潜觉
 		{
 			icon.setAttribute("data-latent-icon", latent[latentIndex]);
 			icon.classList.remove(className_displayNone);
@@ -2178,7 +2167,12 @@ function editBoxChangeMonId(id)
 			btnDone.disabled = false;
 		}
 	}
-	editBox.latent.length = 0;
+
+	const allKillerLatent = typekiller_for_type.map(type=>type.latent);
+	//去除所有不能再打的潜觉
+	editBox.latent = editBox.latent.filter(lat=>
+		!allKillerLatent.includes(lat) ||
+		allKillerLatent.includes(lat) && allowLatent.has(lat));
 	editBox.refreshLatent(editBox.latent,id);
 	editBox.reCalculateExp();
 	editBox.reCalculateAbility();
@@ -2396,7 +2390,7 @@ function refreshTeamTotalHP(totalDom,team){
 
 		tHpDom.innerHTML = Math.round(tHP).toString() + 
 			(teamHPAwoken>0||badgeHPScale!=1 ?
-				("("+Math.round(tHP * (1 + 0.05 * teamHPAwoken)*badgeHPScale).toString()+")") :
+				("("+Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken))*badgeHPScale).toString()+")") :
 				"");
 	}
 	if (tRcvDom)
@@ -2417,7 +2411,7 @@ function refreshTeamTotalHP(totalDom,team){
 		
 		tRcvDom.innerHTML = tRCV.toString() + 
 			(teamRCVAwoken>0||badgeRCVScale!=1 ?
-				("("+Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)*badgeRCVScale).toString()+")") :
+				("("+Math.round(Math.round(tRCV * (1 + 0.10 * teamRCVAwoken))*badgeRCVScale).toString()+")") :
 				"");
 	}
 }
