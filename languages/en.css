@@ -248,9 +248,7 @@
 .control-box .change-swap-to-copy-lbl::after{
 	content:"Change \"Swap\" to \"Copy\" when dragging";
 }
-.control-box .zip-data-lbl::after{
-	content:"Auto compress formation data in the URL";
-}
+
 .team-total-info .tIf-total-hp::before{
 	content: "Team HP(Team Awoken & Badge): ";
 }
