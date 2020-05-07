@@ -247,9 +247,7 @@
 .control-box .change-swap-to-copy-lbl::after{
 	content:"拖拽時使用“複製”而不是“替換”";
 }
-.control-box .zip-data-lbl::after{
-	content:"自動壓縮URL中的隊伍數據";
-}
+
 .team-total-info .tIf-total-hp::before{
 	content: "隊伍HP(隊伍覺醒和徽章)：";
 }
