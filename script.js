@@ -18,7 +18,12 @@ var zipURL; //储存是否压缩网址数据
 const dataStructure = 3; //阵型输出数据的结构版本
 const className_displayNone = "display-none";
 
-class Member2
+if (location.search.includes('&amp;'))
+{
+	location.search = location.search.replace(/&amp;/ig,'&');
+}
+
+/*class Member2
 {
 	constructor(oldMenber = null,isAssist = false)
 	{
@@ -59,7 +64,7 @@ class Member2
 	toJSON(){
 
 	}
-}
+}*/
 //队员基本的留空
 var Member = function(){
 	this.id=0;
