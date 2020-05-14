@@ -1321,6 +1321,7 @@ ul{
 	box-sizing: border-box;
 	line-height: inherit;
 	width: 100px;
+	height: 40px;
 }
 .m-level-btn-min,
 .m-level-btn-max,
@@ -1447,7 +1448,7 @@ ul{
 	background-color: #D0CD81;
 }
 .skill-box .m-skill-level {
-	/*height: 30px;*/
+	height: 30px;
 	width: 3em;
 	line-height: 25px;
 	box-sizing: border-box;
