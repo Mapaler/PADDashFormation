@@ -1253,7 +1253,8 @@ ul{
 	text-shadow: inherit;
 	box-sizing: border-box;
 	width: 2em;
-	line-height: 33px;
+	line-height: 30px;
+	height: 30px;
 	padding: 0;
 	-moz-appearance: textfield; /*火狐去掉数字加减*/
 }
