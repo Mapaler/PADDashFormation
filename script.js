@@ -1277,7 +1277,7 @@ function initialize()
 	monEditLatents.forEach(la=>la.onclick = deleteLatent);
 	//可选觉醒的添加
 	function addLatent(){
-		if (this.classList.contains("unselected-latent")) return; //不能选的觉醒直接退出
+		if (this.classList.contains("unallowable-latent")) return; //不能选的觉醒直接退出
 		const lIdx = parseInt(this.getAttribute("data-latent-icon"),10); //潜觉的序号
 		const maxLatentCount = getMaxLatentCount(editBox.mid); //最大潜觉数量
 		const usedHoleN = usedHole(editBox.latent); //已经使用了的格子
