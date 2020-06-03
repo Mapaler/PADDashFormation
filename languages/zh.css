@@ -260,9 +260,6 @@
 .formation-total-info .tIf-total-rcv::before{
 	content: "总回复(队伍觉醒和徽章)：";
 }
-.formation-box::before {
-    content: "▼HP计算队长技倍率能功能测试中，请反馈";
-}
 
 .setting-box .row-mon-id .open-search::before{
 	content: "简易搜索";
