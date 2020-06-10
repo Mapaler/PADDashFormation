@@ -593,16 +593,7 @@ function reloadFormationData()
 	try
 	{
 		let parameterDataString = getQueryString("d") || getQueryString("data");
-		if (parameterDataString)
-		{
-			if (parameterDataString.charAt(0) != '{')
-			{
-				console.log('数据字符串：',parameterDataString.length,parameterDataString);
-				parameterDataString = pako.inflate(parameterDataString,{to:'string'})
-				console.log('数据字符串解压结果：',parameterDataString.length,parameterDataString);
-			}
-			formationData = JSON.parse(parameterDataString);
-		}
+		formationData = JSON.parse(parameterDataString);
 	}catch(e)
 	{
 		console.error("URL中队伍数据JSON解码出错",e);

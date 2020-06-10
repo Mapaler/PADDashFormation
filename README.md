@@ -101,5 +101,4 @@ Please refer to existing files.
 * [pad-rikuu](//github.com/kiootic/pad-rikuu) //Parse data
 * [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
 * [localforage](//github.com/localForage/localForage) //Easy IndexedDB
-* [pako](//github.com/nodeca/pako) //Deflate URL length
 * [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
