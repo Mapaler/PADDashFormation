@@ -1192,6 +1192,26 @@ function parseSkillDescription(skill)
 			}
 			if (sk[6]) str += `，结算时连击数+${sk[6]}`;
 			break;
+		case 207:
+			str = `${sk[0]}回合内，`;
+			if (sk[7])
+			{
+				str += `随机${sk[7]}个位置上的宝珠，`;
+			}else
+			{
+				str += `以下位置上的宝珠，`;
+			}
+			str += `每隔${Math.abs(sk[1]/100)}秒不断转换`;
+			if (!sk[7])
+			{
+				str += `<br>`;
+				var table = [sk[2],sk[3],sk[4],sk[5],sk[6]];
+				str += table.map(r=>{
+					const line = new Array(6).fill(null).map((a,i)=> (1<<i & r) ? "●":"○");
+					return line.join("");
+				}).join("<br>");
+			}
+			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
 			//开发部分
