@@ -1936,6 +1936,16 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
+		{name:"生成变换位",function:cards=>cards.filter(card=>{
+			const searchType = 207;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		})},
 		{name:"加C buff（按C数排列）",function:cards=>cards.filter(card=>{
 			const searchType = 160;
 			const skill = Skills[card.activeSkillId];
