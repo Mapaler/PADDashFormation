@@ -405,7 +405,7 @@ window.onload = function()
 	statusLine.classList.add("loading-check-version");
 	GM_xmlhttpRequest({
 		method: "GET",
-		url: `${sourceDataFolder}/ckey.json`, //版本文件
+		url: `${sourceDataFolder}/ckey.json?t=` + new Date().getTime(), //版本文件
 		onload: function(response) {
 			dealCkeyData(response.response);
 		},
@@ -474,7 +474,7 @@ window.onload = function()
 		{
 			GM_xmlhttpRequest({
 				method: "GET",
-				url:`${sourceDataFolder}/mon_${currentDataSource.code}.json`, //Cards数据文件
+				url:`${sourceDataFolder}/mon_${currentDataSource.code}.json?t=` + new Date().getTime(), //Cards数据文件
 				onload: function(response) {
 					console.log("Cards ckey变化，储存新数据",currentCkey.ckey.card);
 					localforage.setItem(`PADDF-${currentDataSource.code}-cards`, JSON.parse(response.response)).then(function(){
@@ -536,7 +536,7 @@ window.onload = function()
 		{
 			GM_xmlhttpRequest({
 				method: "GET",
-				url:`${sourceDataFolder}/skill_${currentDataSource.code}.json`, //Skills数据文件
+				url:`${sourceDataFolder}/skill_${currentDataSource.code}.json?t=` + new Date().getTime(), //Skills数据文件
 				onload: function(response) {
 					console.log("Skills ckey变化，储存新数据",currentCkey.ckey.skill);
 					localforage.setItem(`PADDF-${currentDataSource.code}-skills`, JSON.parse(response.response)).then(function(){
