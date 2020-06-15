@@ -695,7 +695,7 @@ function parseSkillDescription(skill)
 			strArr = sk.slice(1,4);
 			str = `${sk[0]?`${sk[0]}回合内，`:""}根据队伍内觉醒技能 ${strArr.filter(s=>s>0).map(s=>awokenN(s)).join("、")} 的数目`;
 			if (sk[4]==1)
-				str += `回复 HP ，每个觉醒回复${sk[5]}点`;
+				str += `回复 HP ，每个觉醒回复自身回复力的${sk[5]/100}倍`;
 			else if (sk[4]==2)
 				str += `提升所有属性的攻击力，每个觉醒可以提升${sk[5]-100}%`;
 			else if (sk[4]==3)
