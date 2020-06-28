@@ -2226,6 +2226,27 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
+		{name:"改变敌人属性（按属性排序）",function:cards=>cards.filter(card=>{
+			const searchType = 153;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
+		}).sort((a,b)=>{
+			const searchType = 153;
+			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+			let a_pC = 0,b_pC = 0;
+			a_pC = (a_s.type == searchType) ?
+				a_s.params[0] :
+				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			b_pC = (b_s.type == searchType) ?
+				b_s.params[0] :
+				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			return a_pC - b_pC;
+		})},
 		{name:"受伤反击 buff",function:cards=>cards.filter(card=>{
 			const searchType = 60;
 			const skill = Skills[card.activeSkillId];
