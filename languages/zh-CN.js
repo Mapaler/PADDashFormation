@@ -469,6 +469,8 @@ function parseSkillDescription(skill)
 			break;
 		case 107:
 			str = `所有宠物的${getFixedHpAtkRcvString({hp:sk[0]})}`;
+			if (sk[1])
+			str += `，${getAttrTypeString(flags(sk[1]),null)}宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			break;
 		case 108:
 			str = `所有宠物的${getFixedHpAtkRcvString({hp:sk[0]})}，${typeN(sk[1])}类型宠物的攻击力×${sk[2]/100}倍`;
