@@ -1837,6 +1837,9 @@ function editMon(teamNum,isAssist,indexInTeam)
 	{
 		const latentBox = teamBox.querySelector(".team-latents .latents-"+(indexInTeam+1)+" .latent-ul");
 		editBox.latentBox = latentBox;
+	}else
+	{
+		editBox.latentBox = null;
 	}
 
 	const settingBox = editBox.querySelector(".setting-box");
