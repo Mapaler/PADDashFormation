@@ -3092,9 +3092,11 @@ function parseBigNumber(number)
 			return a_pC - b_pC;
 		})},
 		{name:"======进化类型======",function:cards=>cards},
-		{name:"转生、超转生（8格潜觉）",function:cards=>cards.filter(card=>card.is8Latent)},
-		{name:"仅限超转生",function:cards=>cards.filter(card=>!card.isUltEvo && !card.awakenings.includes(49) && card.evoBaseId != card.id && Cards[card.evoBaseId].is8Latent)},
-		{name:"非转生、超转生",function:cards=>cards.filter(card=>!card.is8Latent)},
+		{name:"8格潜觉",function:cards=>cards.filter(card=>card.is8Latent)},
+		{name:"8格潜觉-转生、超转生",function:cards=>cards.filter(card=>card.is8Latent && !card.isUltEvo && !card.awakenings.includes(49))},
+		{name:"8格潜觉-超究极进化",function:cards=>cards.filter(card=>card.is8Latent && card.isUltEvo && !card.awakenings.includes(49))},
+		{name:"仅限超转生",function:cards=>cards.filter(card=>!card.isUltEvo && !card.awakenings.includes(49) && card.evoBaseId != card.id && Cards[card.evoBaseId].is8Latent && !Cards[card.evoBaseId].isUltEvo)},
+		{name:"非8格潜觉",function:cards=>cards.filter(card=>!card.is8Latent)},
 		{name:"像素进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))},
 		{name:"变身前",function:cards=>cards.filter(card=>{
 			const searchType = 202;
