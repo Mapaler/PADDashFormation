@@ -3124,6 +3124,7 @@ function parseBigNumber(number)
 		{name:"用彩龙果进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3971))},
 		{name:"由武器进化而来",function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))},
 		{name:"======其他搜索======",function:cards=>cards},
+		{name:"稀有度小于等于5星",function:cards=>cards.filter(card=>card.rarity<=5)},
 		{name:"不能破除等级限制",function:cards=>cards.filter(card=>card.limitBreakIncr===0)},
 		{name:"110级三维成长100%",function:cards=>cards.filter(card=>card.limitBreakIncr>=100)},
 		{name:"满级不是1级（可强化）",function:cards=>cards.filter(card=>card.maxLevel>1)},
