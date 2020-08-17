@@ -3226,6 +3226,12 @@ function parseBigNumber(number)
 		});
 		return specialSearch;
 	});
+	const specialSearchClear = specialSearchDiv.insertBefore(document.createElement("button"),specialSearchArray[0].parentNode);
+	specialSearchClear.className = "specialSearch-clear";
+	specialSearchClear.onclick = function(){
+		specialSearchArray.forEach(ss=>ss.selectedIndex = 0);
+	};
+
 	//将搜索按钮强制改成特殊搜索
 	const searchStart = controlDiv.querySelector(".search-start");
 	searchStart.onclick = function(){
