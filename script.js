@@ -773,9 +773,9 @@ function initialize() {
         }
     };
     //创建一个新的怪物头像
-    editBox.createCardHead = function(id, showAwoken) {
+    editBox.createCardHead = function(id, showAwoken = false) {
         function clickHeadToNewMon() {
-            monstersID.value = this.getAttribute("data-cardid");
+            monstersID.value = this.card.id;
             monstersID.onchange();
             return false; //取消链接的默认操作
         }
@@ -811,7 +811,7 @@ function initialize() {
                 sakUl.classList.add("awoken-preview-superAwakenings");
             }
         }
-        cdom.onclick = clickHeadToNewMon;
+        cli.onclick = clickHeadToNewMon;
         return cli;
     };
 
