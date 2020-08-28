@@ -792,6 +792,27 @@ ul{
 .detail-box .detail-mon .monster .id::before {
     font-size: 15px;
 }
+
+/*搜索结果显示觉醒列表的相关css*/
+.awoken-preview .awoken-ul{
+	width: 75px;
+}
+.awoken-preview .awoken-preview-superAwakenings{
+	margin-top:3px;
+	background-color: #432;
+}
+.awoken-preview .awoken-preview-superAwakenings .awoken-icon{
+	opacity: 0.6;
+}
+.awoken-preview .awoken-ul li{
+	margin: 0.5px !important;
+}
+.awoken-preview .awoken-icon{
+    filter: unset;
+		transform: scale(0.75);
+		margin: calc(-32px * (1 - 0.75) / 2);
+}
+
 /*.setting-box .row-mon-id .open-search::before{
 	content: "搜索怪物";
 }

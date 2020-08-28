@@ -288,6 +288,9 @@
 .search-box input:checked+ .sort-reverse-label::after{
 	content: "역순";
 }
+.search-box .show-awoken-label::after{
+	content: "각성 목록 표시(성능 소비)";
+}
 .attrs .attr-all::before{
 	content: "무제한";
 }

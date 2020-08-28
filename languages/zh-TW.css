@@ -294,6 +294,9 @@
 .search-box input:checked+ .sort-reverse-label::after{
 	content: "逆序";
 }
+.search-box .show-awoken-label::after{
+	content: "顯示覺醒清單(消耗效能)";
+}
 .attrs .attr-all::before{
 	content: "不限";
 }

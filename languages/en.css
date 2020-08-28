@@ -295,6 +295,9 @@
 .search-box input:checked+ .sort-reverse-label::after{
 	content: "Reverse";
 }
+.search-box .show-awoken-label::after{
+	content: "Show Awoken list (consume performance)";
+}
 .attrs .attr-all::before{
 	content: "All";
 }
