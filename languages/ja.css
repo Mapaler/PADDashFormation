@@ -288,6 +288,9 @@
 .search-box input:checked+ .sort-reverse-label::after{
 	content: "逆序";
 }
+.search-box .show-awoken-label::after{
+	content: "覚醒リストの表示(消費性能)";
+}
 .attrs .attr-all::before{
 	content: "無制限";
 }
