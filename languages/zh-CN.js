@@ -2356,7 +2356,7 @@ function parseBigNumber(number)
 			{
 				if (skill.type == 110)
 					return Boolean(skill.params[0]);
-				else if (skill.type == 114)
+				else if (skill.type == 144)
 					return Boolean(skill.params[2]);
 				else
 					return true;
@@ -2375,7 +2375,7 @@ function parseBigNumber(number)
 			{
 				if (skill.type == 110)
 					return !Boolean(skill.params[0]);
-				else if (skill.type == 114)
+				else if (skill.type == 144)
 					return !Boolean(skill.params[2]);
 				else
 					return true;
