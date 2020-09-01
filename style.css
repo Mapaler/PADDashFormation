@@ -612,6 +612,32 @@ ul{
 	margin-left: -50px;
 	margin-right: 47px;
 }
+.team-latents .latent-ul .latent-icon[data-latent-icon='13'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='14'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='15'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='37'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='38']
+{
+	border-right:none;
+	border-radius: 5px 0 0 5px;
+	box-shadow: black 0px 1px 1px;
+}
+.team-latents .latent-icon[data-latent-icon='13']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='14']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='15']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='37']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='38']+.latent-icon
+{
+	width: 76px;
+	margin-left: 0;
+	margin-right: 0;
+	display: inline-block !important;
+	background: linear-gradient(#4499EE 33%,  #2277EE 80%);
+	border-color: #CCEEFF;
+	box-shadow: black 1px 1px 1px;
+	border-left:none;
+	border-radius: 0 5px 5px 0;
+}
 /*队长的边框*/
 .team-box .team-members .team-leader .monster{
 	border-radius: 10px;
