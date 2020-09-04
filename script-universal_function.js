@@ -523,6 +523,11 @@ function parseBigNumber(number)
 {
 	return number.toLocaleString();
 }
+//判断是否是转生和超转生
+function isReincarnated(card)
+{
+	return card.is8Latent && !card.isUltEvo && (card.evoBaseId || card.evoRootId) != card.id && (card.awakenings.includes(49) ? isReincarnated(Cards[card.evoBaseId]) : true);
+}
 //计算队伍中有多少血量
 function countTeamHp(memberArr, leader1id, leader2id, solo)
 {
@@ -532,12 +537,13 @@ function countTeamHp(memberArr, leader1id, leader2id, solo)
 		let hp = m.ability ? m.ability[0] : 0;
 		if (!hp) return 0;
 		const card = Cards[m.id];
-		hp *= memberHpMul(card,ls1,memberArr,solo);
-		hp *= memberHpMul(card,ls2,memberArr,solo);
+		hp = Math.round(hp * memberHpMul(card,ls2,memberArr,solo));
+		hp = Math.round(hp * memberHpMul(card,ls1,memberArr,solo));
 		return hp;
+		
 	});
 
-	console.log('单个队伍血量：',mHpArr);
+	console.log('单个队伍血量：',mHpArr,mHpArr.reduce((p,c)=>p+c));
 
 	function memberHpMul(card,ls,memberArr,solo)
 	{
@@ -586,7 +592,7 @@ function countTeamHp(memberArr, leader1id, leader2id, solo)
 				break;
 			case 125: //队伍中必须有指定队员
 				const needMonIdArr = sk.slice(0,5).filter(s=>s>0);
-				const memberIdArr = memberArr.map(m=>m.id);
+				const memberIdArr = memberArr.map(m=>m.id); //包括队长，所以不需要筛选出队员
 				scale = needMonIdArr.every(mid=>memberIdArr.includes(mid)) ? sk[5]/100 : 1;
 				break;
 			case 136:
@@ -605,20 +611,22 @@ function countTeamHp(memberArr, leader1id, leader2id, solo)
 				break;
 			case 175: //队伍组成全为合作
 				const needCollabIdIdArr = sk.slice(0,3).filter(s=>s>0);
-				const memberCollabIdArr = memberArr.map(m=>Cards[m.id].collabId);
+				const memberCollabIdArr = memberArr.slice(1,5).filter(m=>m.id>0).map(m=>Cards[m.id].collabId);
 				scale = memberCollabIdArr.every(cid=>needCollabIdIdArr.includes(cid)) ? sk[3]/100 : 1;
 				break;
 			case 178: case 185:
 				scale = hpMul({attrs:flags(sk[1]),types:flags(sk[2])}, sk[3]);
 				break;
-			case 203:
+			case 203: //队员为指定类型，不包括双方队长，且队员数大于0
+				let trueMemberCardsArr = memberArr.slice(1,5).filter(m=>m.id>0).map(m=>Cards[m.id]);
 				switch (sk[0])
 				{
 					case 0: //全是像素进化
-						scale = memberArr.map(m=>Cards[m.id].evoMaterials).every(ems=>ems.includes(3826)) ? sk[1]/100 : 1;
+						scale = (trueMemberCardsArr.length>0 && trueMemberCardsArr.every(card=>card.evoMaterials.includes(3826))) ? sk[1]/100 : 1;
 						break;
 					case 2: //全是转生、超转生（8格潜觉）
-						scale = memberArr.map(m=>Cards[m.id].is8Latent).every(is8=>is8) ? sk[1]/100 : 1;
+						scale = (trueMemberCardsArr.length>0 && trueMemberCardsArr.every(card=>isReincarnated(card))) ? sk[1]/100 : 1;
+						console.log(trueMemberCardsArr,scale)
 						break;
 				}
 				break;
