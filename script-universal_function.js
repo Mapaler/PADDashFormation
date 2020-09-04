@@ -537,13 +537,22 @@ function countTeamHp(memberArr, leader1id, leader2id, solo)
 		let hp = m.ability ? m.ability[0] : 0;
 		if (!hp) return 0;
 		const card = Cards[m.id];
-		hp = Math.round(hp * memberHpMul(card,ls2,memberArr,solo));
-		hp = Math.round(hp * memberHpMul(card,ls1,memberArr,solo));
+		hp = hp1 = Math.round(hp * memberHpMul(card,ls2,memberArr,solo));//战友队长技
+		hp = hp2 = Math.round(hp * memberHpMul(card,ls1,memberArr,solo));//我方队长技
+
+/* 演示用代码
+		let hp1,hp2;
+		hp1 = hp * memberHpMul(card,ls2,memberArr,solo); 
+		hp = Math.round(hp1);
+		hp2 = hp * memberHpMul(card,ls1,memberArr,solo); 
+		hp = Math.round(hp2);
+		console.log("%s 第1次倍率血量：%s(%s)，第2次倍率血量：%s(%s)",Cards[m.id].otLangName["chs"],Math.round(hp1),hp1,Math.round(hp2),hp2);
+		*/
 		return hp;
-		
+
 	});
 
-	console.log('单个队伍血量：',mHpArr,mHpArr.reduce((p,c)=>p+c));
+	//console.log('单个队伍血量：',mHpArr,mHpArr.reduce((p,c)=>p+c));
 
 	function memberHpMul(card,ls,memberArr,solo)
 	{
@@ -626,7 +635,6 @@ function countTeamHp(memberArr, leader1id, leader2id, solo)
 						break;
 					case 2: //全是转生、超转生（8格潜觉）
 						scale = (trueMemberCardsArr.length>0 && trueMemberCardsArr.every(card=>isReincarnated(card))) ? sk[1]/100 : 1;
-						console.log(trueMemberCardsArr,scale)
 						break;
 				}
 				break;
