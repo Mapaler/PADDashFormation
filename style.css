@@ -618,9 +618,8 @@ ul{
 .team-latents .latent-ul .latent-icon[data-latent-icon='37'],
 .team-latents .latent-ul .latent-icon[data-latent-icon='38']
 {
-	border-right:none;
-	border-radius: 5px 0 0 5px;
-	box-shadow: black 0px 1px 1px;
+	border-radius: 5px 5px 5px 0;
+	box-shadow: black 1px 1px 1px;
 }
 .team-latents .latent-icon[data-latent-icon='13']+.latent-icon,
 .team-latents .latent-icon[data-latent-icon='14']+.latent-icon,
@@ -635,8 +634,34 @@ ul{
 	background: linear-gradient(#4499EE 33%,  #2277EE 80%);
 	border-color: #CCEEFF;
 	box-shadow: black 1px 1px 1px;
-	border-left:none;
-	border-radius: 0 5px 5px 0;
+	border-radius: 0 0 5px 5px;
+}
+.team-latents .latent-icon[data-latent-icon='13']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='14']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='15']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='37']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='38']+.latent-icon::before
+{
+	background: none;
+}
+.team-latents .latent-icon[data-latent-icon='13']+.latent-icon::after,
+.team-latents .latent-icon[data-latent-icon='14']+.latent-icon::after,
+.team-latents .latent-icon[data-latent-icon='15']+.latent-icon::after,
+.team-latents .latent-icon[data-latent-icon='37']+.latent-icon::after,
+.team-latents .latent-icon[data-latent-icon='38']+.latent-icon::after
+{
+	border-left: 2px ridge #CCEEFF;
+	border-right: 2px ridge #CCEEFF;
+	box-shadow: black 1px 0px 0px;
+	width: 76px;
+	height: 10px;
+	transform: translatey(-35px);
+	background: linear-gradient(#2277EE 33%,  #4499EE 80%);
+	content: " ";
+	box-sizing: border-box;
+	position: absolute;
+	left: 0;
+	display: block;
 }
 /*队长的边框*/
 .team-box .team-members .team-leader .monster{
