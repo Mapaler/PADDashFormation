@@ -1888,12 +1888,12 @@ function parseBigNumber(number)
 		{name:"回复力 buff（顶降回复）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [50,90];
 			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type) && skill.params.slice(1,skill.params.length>2?undefined:-1).includes(5))
+			if (searchTypeArray.includes(skill.type) && skill.params.slice(1,skill.params.length>2?-1:undefined).includes(5))
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>
-					searchTypeArray.includes(subskill.type) && subskill.params.slice(1,skill.params.length>2?undefined:-1).includes(5)
+					searchTypeArray.includes(subskill.type) && subskill.params.slice(1,subskill.params.length>2?-1:undefined).includes(5)
 				);
 			}
 		})},
@@ -1905,7 +1905,7 @@ function parseBigNumber(number)
 			];
 			const skill = Skills[card.activeSkillId];
 			if ((skill.type==88 || skill.type==92) || //类型的
-				(skill.type==50 || skill.type==90) && skill.params.slice(1,skill.params.length>2?undefined:-1).some(sk=>sk!=5) || //属性的，要排除回复力
+				(skill.type==50 || skill.type==90) && skill.params.slice(1,skill.params.length>2?-1:undefined).some(sk=>sk!=5) || //属性的，要排除回复力
 				skill.type==156 && skill.params[4] == 2 || skill.type==168 //宝石姬的
 			)
 				return true;
@@ -1913,7 +1913,7 @@ function parseBigNumber(number)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>
 					(subskill.type==88 || subskill.type==92) || //类型的
-					(subskill.type==50 || subskill.type==90) && subskill.params.slice(1,subskill.params.length>2?undefined:-1).some(sk=>sk!=5) || //属性的，要排除回复力
+					(subskill.type==50 || subskill.type==90) && subskill.params.slice(1,subskill.params.length>2?-1:undefined).some(sk=>sk!=5) || //属性的，要排除回复力
 					subskill.type==156 && subskill.params[4] == 2 || subskill.type==168 //宝石姬的
 				);
 			}
