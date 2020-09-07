@@ -1845,7 +1845,77 @@ function parseBigNumber(number)
 			}
 		})},
 		{name:"----- buff 类-----",function:cards=>cards},
-		{name:"掉落率提升 99回合",function:cards=>cards.filter(card=>{
+		{name:"掉落率提升-属性-火",function:cards=>cards.filter(card=>{
+			const searchType = 126;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && (skill.params[0] & 1))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 1));
+			}
+		})},
+		{name:"掉落率提升-属性-水",function:cards=>cards.filter(card=>{
+			const searchType = 126;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && (skill.params[0] & 2))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 2));
+			}
+		})},
+		{name:"掉落率提升-属性-木",function:cards=>cards.filter(card=>{
+			const searchType = 126;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && (skill.params[0] & 4))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 4));
+			}
+		})},
+		{name:"掉落率提升-属性-光",function:cards=>cards.filter(card=>{
+			const searchType = 126;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && (skill.params[0] & 8))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 8));
+			}
+		})},
+		{name:"掉落率提升-属性-暗",function:cards=>cards.filter(card=>{
+			const searchType = 126;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && (skill.params[0] & 16))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 16));
+			}
+		})},
+		{name:"掉落率提升-属性-心",function:cards=>cards.filter(card=>{
+			const searchType = 126;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && (skill.params[0] & 32))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 32));
+			}
+		})},
+		{name:"掉落率提升-属性-毒、废（顶毒）",function:cards=>cards.filter(card=>{
+			const searchType = 126;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType && (skill.params[0] & 960)) // 960 = 二进制 1111000000
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 960));
+			}
+		})},
+		{name:"掉落率提升-持续99回合",function:cards=>cards.filter(card=>{
 			const searchType = 126;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && skill.params[1] >= 99)
@@ -1855,7 +1925,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType && subskill.params[1] >= 99);
 			}
 		})},
-		{name:"掉落率增加 100%",function:cards=>cards.filter(card=>{
+		{name:"掉落率提升-100%几率",function:cards=>cards.filter(card=>{
 			const searchType = 126;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && skill.params[3] >= 100)
@@ -1863,16 +1933,6 @@ function parseBigNumber(number)
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType && subskill.params[3] >= 100);
-			}
-		})},
-		{name:"掉毒、掉废（顶毒）",function:cards=>cards.filter(card=>{
-			const searchType = 126;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && (skill.params[0] & 960) > 0) // 960 = 二进制 1111000000
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 960) > 0);
 			}
 		})},
 		{name:"以觉醒数量为倍率类技能（宝石姬）",function:cards=>cards.filter(card=>{
