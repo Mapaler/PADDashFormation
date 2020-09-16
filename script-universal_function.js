@@ -297,8 +297,9 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 
 	const bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性倍率
 	const plusAdd = [10,5,3]; //加值的增加值
+	console.log(currentDataSource.code)
 	const awokenAdd = [ //对应加三维觉醒的序号与增加值
-		[{index:1,value:500},{index:65,value:-5000}], //HP
+		[{index:1,value:500},{index:65,value:currentDataSource.code=="ja"?-2500:-5000}], //HP
 		[{index:2,value:100},{index:66,value:-1000}], //ATK
 		[{index:3,value:200},{index:67,value:-2000}]  //RCV
 	];
