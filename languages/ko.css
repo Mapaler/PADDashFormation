@@ -248,6 +248,15 @@
 .team-total-info .tIf-total-rcv::before{
 	content: "팀 회복(팀 각성 및 배지):";
 }
+.team-total-info .tIf-total-move::before{
+	content: "팀 운영 시간입니다:";
+}
+.team-total-info .tIf-total-move::after{
+	content: "초";
+}
+.team-total-info .tIf-total-move.fixed-move-time::after{
+	content: "초 (고정합니다)";
+}
 .formation-total-info .tIf-total-hp::before{
 	content: "총 HP(팀 각성)：";
 }

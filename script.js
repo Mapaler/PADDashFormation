@@ -718,7 +718,7 @@ function initialize() {
                 teamBadge.classList.remove(className_ChoseBadges);
                 team[2] = parseInt(this.value, 10);
                 const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-                refreshTeamTotalHP(teamTotalInfoDom, team);
+                refreshTeamTotalHP(teamTotalInfoDom, team, teamIdx);
                 creatNewUrl();
             } else {
                 teamBadge.classList.add(className_ChoseBadges);
@@ -1322,7 +1322,7 @@ function initialize() {
         refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
 
         const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-        if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData);
+        if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
         const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
         if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 
@@ -1355,7 +1355,7 @@ function initialize() {
         refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
 
         const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-        if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData);
+        if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
         const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
         if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 
@@ -1382,7 +1382,7 @@ function initialize() {
         refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
 
         const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-        if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData);
+        if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
         const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
         if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 
@@ -2077,7 +2077,7 @@ function refreshAll(formationData) {
             refreshAbility(teamAbilityDom, teamData, ti); //本人能力值
         }
         const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-        if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData);
+        if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, teamNum);
 
         const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
         if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
@@ -2188,17 +2188,19 @@ function refreshAbility(abilityDom, team, idx) {
     });
 }
 //刷新队伍能力值合计
-function refreshTeamTotalHP(totalDom, team) {
+function refreshTeamTotalHP(totalDom, team, teamIdx) {
     //计算总的生命值
     if (!totalDom) return;
     const tHpDom = totalDom.querySelector(".tIf-total-hp");
     const tRcvDom = totalDom.querySelector(".tIf-total-rcv");
+    const tMoveDom = totalDom.querySelector(".tIf-total-move");
+
+    const teams = formation.teams;
+
+    const leader1id = team[0][0].id;
+    const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][0].id : teams[1][0][0].id) : team[0][5].id;
 
     if (tHpDom) {
-        //因为目前仅用于1P、3P，所以直接固定写了
-        const leader1id = team[0][0].id;
-        //const leader2 = teamsCount==2 ? Cards[team2[0][0].id] : Cards[team[0][5].id]; //这个写法无法获得队伍2的队长
-        const leader2id = team[0][5].id;
 
         const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
 
@@ -2234,6 +2236,15 @@ function refreshTeamTotalHP(totalDom, team) {
             (teamRCVAwoken > 0 || badgeRCVScale != 1 ?
                 ("(" + Math.round(Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)) * badgeRCVScale).toString() + ")") :
                 "");
+    }
+    if (tMoveDom) {
+        const moveTime = countMoveTime(team, leader1id, leader2id, teamIdx);
+        //tMoveDom.innerHTML = moveTime.fixed ? moveTime.duration : (moveTime.duration + badgeMoveTime);
+        tMoveDom.innerHTML = moveTime.duration;
+        if (moveTime.fixed)
+            tMoveDom.classList.add("fixed-move-time");
+        else
+            tMoveDom.classList.remove("fixed-move-time");
     }
 }
 //刷新所有队伍能力值合计

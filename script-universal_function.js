@@ -297,7 +297,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 
 	const bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性倍率
 	const plusAdd = [10,5,3]; //加值的增加值
-	console.log(currentDataSource.code)
+	
 	const awokenAdd = [ //对应加三维觉醒的序号与增加值
 		[{index:1,value:500},{index:65,value:currentDataSource.code=="ja"?-2500:-5000}], //HP
 		[{index:2,value:100},{index:66,value:-1000}], //ATK
@@ -647,4 +647,99 @@ function countTeamHp(memberArr, leader1id, leader2id, solo)
 		return scale || 1;
 	}
 	return mHpArr;
+}
+//计算队伍操作时间
+function countMoveTime(team, leader1id, leader2id, teamIdx)
+{
+	const ls1 = Skills[Cards[leader1id].leaderSkillId];
+	const ls2 = Skills[Cards[leader2id].leaderSkillId];
+	const time1 = leaderSkillMoveTime(ls1);
+	const time2 = leaderSkillMoveTime(ls2);
+
+	let moveTime = {fixed:false,duration:5}; //基础5秒
+	//固定操作时间的直接返回
+	if (time1.fixed || time2.fixed)
+	{
+		moveTime.fixed = true;
+		moveTime.duration = time1.fixed ?
+		(time2.fixed && time2.duration < time1.duration ? time2.duration : time1.duration) :
+		time2.duration;
+	} else
+	{
+		moveTime.duration += time1.duration + time2.duration
+		//2人协力时的特殊处理
+		if (teamsCount === 2)
+		{
+			const teams = formation.teams;
+			const team2 = teamIdx === 1 ? teams[0] : teams[1]; //获取队伍2
+			//复制队伍1
+			team = [
+				team[0].concat(),
+				team[1].concat()
+			];
+			//把队伍2的队长和武器添加到复制的队伍1里面
+			team[0].push(team2[0][0]);
+			team[1].push(team2[1][0]);
+		}
+
+		//徽章部分
+        if (team[2] == 1 && (solo || teamsCount === 3)) {
+            moveTime.duration += 1;
+        } else if (team[2] == 13 && (solo || teamsCount === 3)) {
+            moveTime.duration += 2;
+        }
+
+		//觉醒
+		const awokenMoveTime = [
+			{index:19,value:0.5}, //小手指
+			{index:53,value:1}, //大手指
+		];
+		moveTime.duration += awokenMoveTime.reduce((duration,aw)=>
+			duration + awokenCountInTeam(team, aw.index, solo, teamsCount) * aw.value
+		,0);
+		//潜觉
+		const latentMoveTime = [
+			{index:4,value:0.05}, //小手指潜觉
+			{index:31,value:0.12}, //大手指潜觉
+		];
+
+		moveTime.duration += latentMoveTime.reduce((duration,la)=>
+			duration + team[0].reduce((count,menber)=>
+				count + (menber.latent ? menber.latent.filter(l=>l==la.index).length : 0)
+			,0) * la.value
+		,0);
+
+	}
+	
+	function leaderSkillMoveTime(ls)
+	{
+		let moveTime = {fixed:false,duration:0};
+		const sk = ls.params;
+		switch (ls.type)
+		{
+			case 178: //固定操作时间
+				moveTime.fixed = true;
+				moveTime.duration = sk[0];
+				break;
+			case 15: case 185:
+				moveTime.duration += sk[0]/100;
+				break;
+			case 138: //调用其他队长技
+				return sk.reduce((pmul,skid)=>{
+					const subMoveTime = leaderSkillMoveTime(Skills[skid]);
+					if (subMoveTime.fixed)
+					{
+						pmul.fixed = true;
+						pmul.duration = subMoveTime.duration
+					}else
+					{
+						pmul.duration += subMoveTime.duration;
+					}
+					return pmul;
+				},moveTime);
+			default:
+		}
+		return moveTime;
+	}
+	return moveTime;
 }
