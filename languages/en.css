@@ -255,6 +255,15 @@
 .team-total-info .tIf-total-rcv::before{
 	content: "Team RCV(Team Awoken & Badge): ";
 }
+.team-total-info .tIf-total-move::before{
+	content: "Team Move Time: ";
+}
+.team-total-info .tIf-total-move::after{
+	content: "s";
+}
+.team-total-info .tIf-total-move.fixed-move-time::after{
+	content: "s (Fiexd)";
+}
 .formation-total-info .tIf-total-hp::before{
 	content: "Total HP(Team Awoken): ";
 }

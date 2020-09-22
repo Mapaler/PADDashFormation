@@ -248,6 +248,15 @@
 .team-total-info .tIf-total-rcv::before{
 	content: "チーム回復(チーム覚醒とバッジ):";
 }
+.team-total-info .tIf-total-move::before{
+	content: "チーム操作時間:";
+}
+.team-total-info .tIf-total-move::after{
+	content: "秒";
+}
+.team-total-info .tIf-total-move.fixed-move-time::after{
+	content: "秒 (固定)";
+}
 .formation-total-info .tIf-total-hp::before{
 	content: "総HP(チーム覚醒):";
 }

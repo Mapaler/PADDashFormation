@@ -254,6 +254,15 @@
 .team-total-info .tIf-total-rcv::before{
 	content: "隊伍回復(隊伍覺醒和徽章)：";
 }
+.team-total-info .tIf-total-move::before{
+	content: "隊伍移動時間：";
+}
+.team-total-info .tIf-total-move::after{
+	content: " 秒";
+}
+.team-total-info .tIf-total-move.fixed-move-time::after{
+	content: " 秒（固定）";
+}
 .formation-total-info .tIf-total-hp::before{
 	content: "總HP(隊伍覺醒)：";
 }
