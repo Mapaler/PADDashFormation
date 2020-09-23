@@ -2224,7 +2224,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
                 ("(" + Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale).toString() + ")") :
                 "");*/
         tHpDom.innerHTML = Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale) +
-            ` (${Math.round(tHPNoAwoken)})`;
+            ` (${Math.round(Math.round(tHPNoAwoken) * badgeHPScale)})`;
     }
 
     if (tMoveDom) {
