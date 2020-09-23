@@ -1622,7 +1622,7 @@ function changeid(mon, monDom, latentDom) {
         {
             awokenIcon.classList.add(className_displayNone);
             awokenIcon.innerHTML = "";
-        } else if (mon.awoken > 1) //如果提供了觉醒
+        } else if (mon.awoken > 0) //如果提供了觉醒
         {
             awokenIcon.classList.remove(className_displayNone);
             awokenIcon.innerHTML = mon.awoken;
@@ -1790,7 +1790,7 @@ function editMon(teamNum, isAssist, indexInTeam) {
         editBoxTitle.classList.add("edit-box-title-assist");
     }
     editBox.reCalculateExp();
-    if (mon.awoken > 0 && monEditAwokens[mon.awoken])
+    if (mon.awoken !== undefined && monEditAwokens[mon.awoken])
         monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下
     else
         editBox.reCalculateAbility();

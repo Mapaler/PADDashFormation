@@ -230,7 +230,7 @@ function awokenCountInTeam(team,awokenIndex,solo,teamsCount)
 		}
 		if (assistCard && assistCard.enabled && assistCard.awakenings.includes(49))
 		{ //如果卡片未启用
-			enableAwoken = enableAwoken.concat(assistCard.awakenings);
+			enableAwoken = enableAwoken.concat(assistCard.awakenings.slice(0, assist.awoken));
 		}
 
 		//相同的觉醒数
