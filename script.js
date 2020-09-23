@@ -67,6 +67,7 @@ if (location.search.includes('&amp;')) {
 var Member = function() {
     this.id = 0;
     this.ability = [0, 0, 0];
+    this.abilityNoAwoken = [0, 0, 0];
 };
 Member.prototype.outObj = function() {
     const m = this;
@@ -150,7 +151,6 @@ MemberAssist.prototype.loadFromMember = function(m) {
 //正式队伍
 var MemberTeam = function() {
     this.latent = [];
-    this.ability = [0, 0, 0];
     MemberAssist.call(this);
     //sawoken作为可选项目，默认不在内
 };
@@ -168,6 +168,7 @@ MemberTeam.prototype.loadFromMember = function(m) {
     if (m.latent != undefined && m.latent instanceof Array && m.latent.length >= 1) this.latent = JSON.parse(JSON.stringify(m.latent));
     if (m.sawoken != undefined) this.sawoken = m.sawoken;
     if (m.ability != undefined && m.ability instanceof Array && m.plus.length >= 3) this.ability = JSON.parse(JSON.stringify(m.ability));
+    if (m.abilityNoAwoken != undefined && m.abilityNoAwoken instanceof Array && m.plus.length >= 3) this.abilityNoAwoken = JSON.parse(JSON.stringify(m.abilityNoAwoken));
     if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 
@@ -1255,11 +1256,11 @@ function initialize() {
             awoken: awoken,
             latent: latent
         };
-        const abilitys = calculateAbility(tempMon, null, solo, teamsCount) || [0, 0, 0];
+        const abilitys = calculateAbility(tempMon, null, solo, teamsCount);
 
-        monEditHpValue.innerHTML = abilitys[0].toLocaleString();
-        monEditAtkValue.innerHTML = abilitys[1].toLocaleString();
-        monEditRcvValue.innerHTML = abilitys[2].toLocaleString();
+        monEditHpValue.innerHTML = abilitys ? abilitys[0][0].toLocaleString() : 0;
+        monEditAtkValue.innerHTML = abilitys ? abilitys[1][0].toLocaleString() : 0;
+        monEditRcvValue.innerHTML = abilitys ? abilitys[2][0].toLocaleString() : 0;
     }
     editBox.reCalculateAbility = reCalculateAbility;
 
@@ -2169,7 +2170,8 @@ function refreshAbility(abilityDom, team, idx) {
     const mainAbility = calculateAbility(memberData, assistData, solo, teamsCount);
     if (mainAbility && memberData.ability) {
         for (let ai = 0; ai < 3; ai++) {
-            memberData.ability[ai] = mainAbility[ai];
+            memberData.ability[ai] = mainAbility[ai][0];
+            memberData.abilityNoAwoken[ai] = mainAbility[ai][1];
         }
     }
     if (!abilityDom) return; //如果没有dom，直接跳过
@@ -2203,8 +2205,11 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
     if (tHpDom) {
 
         const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
+        const teamHPNoAwokenArr = countTeamHp(team[0], leader1id, leader2id, solo, true);
 
         const tHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
+        const tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v) => pv + v); //队伍计算的总HP无觉醒
+
         const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
 
         let badgeHPScale = 1; //徽章倍率
@@ -2214,29 +2219,14 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
             badgeHPScale = 1.15;
         }
 
-        tHpDom.innerHTML = Math.round(tHP).toString() +
+        /*tHpDom.innerHTML = Math.round(tHP).toString() +
             (teamHPAwoken > 0 || badgeHPScale != 1 ?
                 ("(" + Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale).toString() + ")") :
-                "");
+                "");*/
+        tHpDom.innerHTML = Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale) +
+            ` (${Math.round(tHPNoAwoken)})`;
     }
-    if (tRcvDom) {
-        const tRCV = team[0].reduce(function(value, mon) { //队伍计算的总回复
-            return value += mon.ability ? mon.ability[2] : 0;
-        }, 0);
-        const teamRCVAwoken = awokenCountInTeam(team, 47, solo, teamsCount); //全队大回复个数
 
-        let badgeRCVScale = 1; //徽章倍率
-        if (team[2] == 3 && (solo || teamsCount === 3)) {
-            badgeRCVScale = 1.25;
-        } else if (team[2] == 10 && (solo || teamsCount === 3)) {
-            badgeRCVScale = 1.35;
-        }
-
-        tRcvDom.innerHTML = tRCV.toString() +
-            (teamRCVAwoken > 0 || badgeRCVScale != 1 ?
-                ("(" + Math.round(Math.round(tRCV * (1 + 0.10 * teamRCVAwoken)) * badgeRCVScale).toString() + ")") :
-                "");
-    }
     if (tMoveDom) {
         const moveTime = countMoveTime(team, leader1id, leader2id, teamIdx);
         //tMoveDom.innerHTML = moveTime.fixed ? moveTime.duration : (moveTime.duration + badgeMoveTime);
@@ -2263,29 +2253,20 @@ function refreshFormationTotalHP(totalDom, teams) {
 
             const teamTHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
             const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
-            return [teamTHP, teamHPAwoken];
+
+            return Math.round(teamTHP * (1 + 0.05 * teamHPAwoken));
         });
-        const tHP = tHPArr.reduce(function(value, teamHP) {
-            return [value[0] + teamHP[0], value[1] + Math.round(teamHP[0] * (1 + 0.05 * teamHP[1]))];
-        }, [0, 0]);
+        const tHPNoAwokenArr = teams.map(function(team) {
+            const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo, true);
 
-        tHpDom.innerHTML = Math.round(tHP[0]).toString() +
-            (tHP[0] != tHP[1] ? `(${tHP[1]})` : "");
-    }
-    if (tRcvDom) {
-        const tRCVArr = teams.map(function(team) {
-            const teamTRCV = team[0].reduce(function(value, mon) { //队伍计算的总回复
-                return value += mon.ability ? mon.ability[2] : 0;
-            }, 0);
-            const teamRCVAwoken = awokenCountInTeam(team, 47, solo, teamsCount); //全队大回复个数
-            return [teamTRCV, teamRCVAwoken];
-        }, 0);
-        const tRCV = tRCVArr.reduce(function(value, teamRCV) {
-            return [value[0] + teamRCV[0], value[1] + Math.round(teamRCV[0] * (1 + 0.10 * teamRCV[1]))];
-        }, [0, 0]);
+            const teamTHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
+            return Math.round(teamTHP);
+        });
+        const tHP = tHPArr.reduce((pv, v) => pv + v);
+        const tHPNoAwoken = tHPNoAwokenArr.reduce((pv, v) => pv + v);
 
-        tRcvDom.innerHTML = tRCV[0].toString() +
-            (tRCV[0] != tRCV[1] ? `(${tRCV[1]})` : "");
+        tHpDom.innerHTML = tHP.toString() +
+            ` (${tHPNoAwoken})`;
     }
 }
 //刷新单人技能CD
