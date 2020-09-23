@@ -243,10 +243,7 @@
 }
 
 .team-total-info .tIf-total-hp::before{
-	content: "チームHP(チーム覚醒とバッジ):";
-}
-.team-total-info .tIf-total-rcv::before{
-	content: "チーム回復(チーム覚醒とバッジ):";
+	content: "チームHP (覚醒無効):";
 }
 .team-total-info .tIf-total-move::before{
 	content: "チーム操作時間:";
@@ -258,10 +255,7 @@
 	content: "秒 (固定)";
 }
 .formation-total-info .tIf-total-hp::before{
-	content: "総HP(チーム覚醒):";
-}
-.formation-total-info .tIf-total-rcv::before{
-	content: "総回復(チーム覚醒):";
+	content: "総HP (覚醒無効):";
 }
 
 .setting-box .row-mon-id .open-search::before{

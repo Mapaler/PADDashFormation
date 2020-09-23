@@ -243,10 +243,7 @@
 }
 
 .team-total-info .tIf-total-hp::before{
-	content: "팀 HP(팀 각성 및 배지):";
-}
-.team-total-info .tIf-total-rcv::before{
-	content: "팀 회복(팀 각성 및 배지):";
+	content: "팀 HP (각성은 없습니다):";
 }
 .team-total-info .tIf-total-move::before{
 	content: "팀 운영 시간입니다:";
@@ -258,10 +255,7 @@
 	content: "초 (고정합니다)";
 }
 .formation-total-info .tIf-total-hp::before{
-	content: "총 HP(팀 각성)：";
-}
-.formation-total-info .tIf-total-rcv::before{
-	content: "총 회복(팀 각성)：";
+	content: "총 HP (각성은 없습니다)：";
 }
 
 .setting-box .row-mon-id .open-search::before{

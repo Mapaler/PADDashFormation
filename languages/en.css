@@ -250,10 +250,7 @@
 }
 
 .team-total-info .tIf-total-hp::before{
-	content: "Team HP(Team Awoken & Badge): ";
-}
-.team-total-info .tIf-total-rcv::before{
-	content: "Team RCV(Team Awoken & Badge): ";
+	content: "Team HP (No Awoken): ";
 }
 .team-total-info .tIf-total-move::before{
 	content: "Team Move Time: ";
@@ -265,10 +262,7 @@
 	content: "s (Fiexd)";
 }
 .formation-total-info .tIf-total-hp::before{
-	content: "Total HP(Team Awoken): ";
-}
-.formation-total-info .tIf-total-rcv::before{
-	content: "Total RCV(Team Awoken): ";
+	content: "Total HP (No Awoken): ";
 }
 
 .setting-box .row-mon-id .open-search::before{
