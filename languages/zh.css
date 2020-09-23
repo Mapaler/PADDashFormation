@@ -249,10 +249,7 @@
 }
 
 .team-total-info .tIf-total-hp::before{
-	content: "队伍HP(队伍觉醒和徽章)：";
-}
-.team-total-info .tIf-total-rcv::before{
-	content: "队伍回复(队伍觉醒和徽章)：";
+	content: "队伍HP (无觉醒)：";
 }
 .team-total-info .tIf-total-move::before{
 	content: "队伍操作时间：";
@@ -264,10 +261,7 @@
 	content: " 秒（固定）";
 }
 .formation-total-info .tIf-total-hp::before{
-	content: "总HP(队伍觉醒和徽章)：";
-}
-.formation-total-info .tIf-total-rcv::before{
-	content: "总回复(队伍觉醒和徽章)：";
+	content: "总HP (无觉醒)：";
 }
 
 .setting-box .row-mon-id .open-search::before{
