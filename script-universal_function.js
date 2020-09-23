@@ -308,6 +308,13 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 		[], //ATK
 		[]  //RCV
 	];
+	
+	/* //将来的语音觉醒
+	
+	awokenScale.forEach(ab=>{
+		ab.push({index:63,scale:1.1});
+	});*/
+
 	if (!solo)
 	{ //协力时计算协力觉醒
 		awokenScale.forEach(ab=>{
@@ -322,7 +329,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 	const memberCurves = [memberCard.hp, memberCard.atk, memberCard.rcv];
 	const assistCurves = assistCard ? [assistCard.hp, assistCard.atk, assistCard.rcv] : null;
 
-	let abilitys = memberCurves.map((ab, idx)=>{
+	const abilitys = memberCurves.map((ab, idx)=>{
 		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr)); //等级基础三维
 		const n_plus = member.plus[idx] * plusAdd[idx]; //加值增加量
 		let n_assist_base = 0,n_assist_plus=0; //辅助的bonus
@@ -365,6 +372,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 			0;
 		//console.log("基础值：%d，加蛋值：%d，觉醒x%d增加：%d，潜觉增加：%d",n_base,n_plus,awokenCount,n_awoken,n_latent);
 		let reValue = n_base + n_plus + n_awoken + n_latent + (n_assist_base + n_assist_plus) * bonusScale[idx];
+		let reValueNoAwoken = Math.round(n_base + n_plus + (n_assist_base + n_assist_plus) * bonusScale[idx]);
 
 		//协力觉醒的倍率
 		reValue = Math.round(awokenScale[idx].reduce(function(previous,aw){
@@ -380,7 +388,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 		},reValue));
 
 		if (idx<2 && reValue<1) reValue = 1; //HP和ATK最低为1
-		return reValue;
+		return [reValue,reValueNoAwoken];
 	});
 	return abilitys;
 }
@@ -530,12 +538,13 @@ function isReincarnated(card)
 	return card.is8Latent && !card.isUltEvo && (card.evoBaseId || card.evoRootId) != card.id && (card.awakenings.includes(49) ? isReincarnated(Cards[card.evoBaseId]) : true);
 }
 //计算队伍中有多少血量
-function countTeamHp(memberArr, leader1id, leader2id, solo)
+function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken=false)
 {
 	const ls1 = Skills[Cards[leader1id].leaderSkillId];
 	const ls2 = Skills[Cards[leader2id].leaderSkillId];
 	const mHpArr = memberArr.map(m=>{
-		let hp = m.ability ? m.ability[0] : 0;
+		const ability = noAwoken ? m.abilityNoAwoken : m.ability;
+		let hp = ability ? ability[0] : 0;
 		if (!hp) return 0;
 		const card = Cards[m.id];
 		hp = hp1 = Math.round(hp * memberHpMul(card,ls2,memberArr,solo));//战友队长技
