@@ -255,7 +255,7 @@
 	content: "队伍回复(队伍觉醒和徽章)：";
 }
 .team-total-info .tIf-total-move::before{
-	content: "队伍移动时间：";
+	content: "队伍操作时间：";
 }
 .team-total-info .tIf-total-move::after{
 	content: " 秒";

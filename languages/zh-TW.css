@@ -255,7 +255,7 @@
 	content: "隊伍回復(隊伍覺醒和徽章)：";
 }
 .team-total-info .tIf-total-move::before{
-	content: "隊伍移動時間：";
+	content: "隊伍操作時間：";
 }
 .team-total-info .tIf-total-move::after{
 	content: " 秒";

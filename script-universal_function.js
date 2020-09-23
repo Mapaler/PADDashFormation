@@ -266,13 +266,13 @@ function valueAt(level, maxLevel, curve) {
 function curve(c, level, maxLevel, limitBreakIncr) {
 	let value = valueAt(level, maxLevel, {
 		min: c.min,
-		max: c.max || (c.min * maxLevel),
+		max: c.max!==undefined ? c.max : (c.min * maxLevel),
 		scale: c.scale || 1
 	});
 
 	if (level > maxLevel) {
-	const exceed = level - maxLevel;
-	value += c.max ? (c.max * (limitBreakIncr / 100) * (exceed / 11)) : c.min * exceed;
+		const exceed = level - maxLevel;
+		value += c.max!==undefined ? (c.max * (limitBreakIncr / 100) * (exceed / 11)) : c.min * exceed;
 	}
 	return value;
 }
