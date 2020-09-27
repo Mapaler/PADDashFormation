@@ -110,7 +110,7 @@ Member.prototype.loadObj = function(m, dataVersion) {
     }
     if (!(this.plus instanceof Array)) this.plus = [0, 0, 0]; //如果加值不是数组，则改变
     this.latent = dataVersion > 1 ? m[4] : m.latent;
-    if (this.latent && dataVersion <= 2) this.latent = this.latent.map(l => l >= 13 ? l + 3 : l); //修复以前自己编的潜觉编号为官方编号
+    if (this.latent instanceof Array && dataVersion <= 2) this.latent = this.latent.map(l => l >= 13 ? l + 3 : l); //修复以前自己编的潜觉编号为官方编号
     if (!(this.latent instanceof Array)) this.latent = []; //如果潜觉不是数组，则改变
     this.sawoken = dataVersion > 1 ? m[5] : m.sawoken;
     this.skilllevel = m[6] || null;
