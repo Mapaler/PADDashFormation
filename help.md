@@ -27,8 +27,8 @@ Formation Title and Detail can use the `^[Hex Color Code]^Content^p` to change t
 `%{m怪物ID}`可以显示怪物头像。  
 `%{m[Monster ID]}` can display the monster avatar.  
 ![怪物头像](document/tips-advanced-card.png)
-* 2人、3人模式只显示普通觉醒的统计（不包括超觉醒），并且2人只显示部分共用的觉醒的统计，单人则全部显示。  
-The 2P, 3P Multi Games Mode shows only the statistics of general awakening (excluding super-awakening), and 2P only show several common awoken statistics, but the Solo Mode shows all.
+* 2人只显示部分共用的觉醒的统计（不包括超觉醒），单人和三人则全部显示。  
+The 2P Multi Games Mode shows only several common awoken statistics (excluding super-awakening), but the Solo and 3P Mode shows all.
 * 内建的截图按钮依靠 [html2canvas](https://github.com/niklasvh/html2canvas/)，会有一些绘制错误，浏览器的截图扩展能够更加还原显示的真实样子。  
 Built-in screenshot button relies on [html2canvas](https://github.com/niklasvh/html2canvas/), there will be some drawing errors, browser screenshot extension can be more restore the real appearance of the display.
 * 如果你只是希望将本程序当作简单图鉴使用，可以在参数里加上`guide=1`，如`http://mapaler.gitee.io/paddashformation/solo.html?guide=1`。图鉴模式下进入网页时，会直接打开怪物修改界面，并且背景不透明。  
