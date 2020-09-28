@@ -3002,7 +3002,7 @@ function parseBigNumber(number)
 			}
 		})},
 		{name:"十字心",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [151];
+			const searchTypeArray = [151,209];
 			const skill = Skills[card.leaderSkillId];
 			if (searchTypeArray.some(t=>skill.type == t))
 				return true;
