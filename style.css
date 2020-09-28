@@ -952,6 +952,43 @@ ul{
 	margin-left: 10px;
 	margin-right: 0;
 }
+.types-div .type-list li
+{
+	position: relative;
+}
+.types-div .type-list li:after
+{
+	content: "⚔️";
+	font-size: 10px;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	display: none;
+	pointer-events:none;
+}
+.types-div .type-list.type-killer-5 li[data-type-icon="7"]:after,
+.types-div .type-list.type-killer-4 li[data-type-icon="8"]:after,
+.types-div .type-list.type-killer-4 li[data-type-icon="3"]:after,
+.types-div .type-list.type-killer-7 li[data-type-icon="5"]:after,
+.types-div .type-list.type-killer-8 li[data-type-icon="5"]:after,
+.types-div .type-list.type-killer-8 li[data-type-icon="1"]:after,
+.types-div .type-list.type-killer-1 li[data-type-icon="5"]:after,
+.types-div .type-list.type-killer-1 li[data-type-icon="4"]:after,
+.types-div .type-list.type-killer-1 li[data-type-icon="7"]:after,
+.types-div .type-list.type-killer-1 li[data-type-icon="8"]:after,
+.types-div .type-list.type-killer-1 li[data-type-icon="1"]:after,
+.types-div .type-list.type-killer-1 li[data-type-icon="6"]:after,
+.types-div .type-list.type-killer-1 li[data-type-icon="2"]:after,
+.types-div .type-list.type-killer-1 li[data-type-icon="3"]:after,
+.types-div .type-list.type-killer-6 li[data-type-icon="7"]:after,
+.types-div .type-list.type-killer-6 li[data-type-icon="2"]:after,
+.types-div .type-list.type-killer-2 li[data-type-icon="8"]:after,
+.types-div .type-list.type-killer-2 li[data-type-icon="3"]:after,
+.types-div .type-list.type-killer-3 li[data-type-icon="4"]:after,
+.types-div .type-list.type-killer-3 li[data-type-icon="6"]:after
+{
+	display: block;
+}
 /*.search-box .awoken-div::before{
 	content: "觉醒";
 }*/

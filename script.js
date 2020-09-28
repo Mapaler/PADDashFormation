@@ -828,8 +828,26 @@ function initialize() {
     const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
     const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
     const s_fixMainColor = searchBox.querySelector("#fix-main-color");
-    const s_types = Array.from(searchBox.querySelectorAll(".types-div .type-check"));
-    const s_typeAndOr = searchBox.querySelector("#type-and-or");
+    const s_typesDiv = searchBox.querySelector(".types-div");
+    const s_types = Array.from(s_typesDiv.querySelectorAll(".type-check"));
+    const s_typeAndOr = s_typesDiv.querySelector("#type-and-or");
+    const s_typesUl = s_typesDiv.querySelector(".type-list");
+    const s_typesLi = Array.from(s_typesUl.querySelectorAll("li"));
+    const s_typesCheckBox = s_typesLi.map(li=>li.querySelector(".type-check"));
+    s_typesCheckBox.forEach(checkBox=>
+        checkBox.onchange = function(){
+            const newClassName = `type-killer-${this.value}`;
+            if (this.checked && s_typeAndOr.checked)
+                s_typesUl.classList.add(newClassName);
+            else
+                s_typesUl.classList.remove(newClassName);
+        }
+    );
+    s_typeAndOr.onchange = function(){
+        s_typesCheckBox.forEach(checkBox=>checkBox.onchange());
+    };
+    s_typeAndOr.onchange();
+
     const s_awokensItems = Array.from(searchBox.querySelectorAll(".awoken-div .awoken-count"));
     const s_awokensIcons = s_awokensItems.map(it => it.querySelector(".awoken-icon"));
     const s_awokensCounts = s_awokensItems.map(it => it.querySelector(".count"));
