@@ -1264,17 +1264,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
 		})},
-		{name:"队长技+C（按+C数排序）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [192,194,206,209];
-			const skill = Skills[card.leaderSkillId];
-			if (searchTypeArray.some(t=>skill.type == t && skill.params[3]>0))
-				return true;
-			else if (skill.type == 138){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t && subskill.params[3]>0));
-			}
-		}).sort((a,b)=>{
-			const searchTypeArray = [192,194,206,209];
+		{name:"队长技+C（按+C数排序）",function:cards=>{
 			function getSkillAddCombo(skill)
 			{
 				switch (skill.type)
@@ -1287,16 +1277,28 @@ function parseBigNumber(number)
 						return skill.params[0];
 				}
 			}
-			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = searchTypeArray.includes(a_s.type) ?
-				getSkillAddCombo(a_s) :
-				getSkillAddCombo(a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
-			b_pC = searchTypeArray.includes(b_s.type) ?
-				getSkillAddCombo(b_s) :
-				getSkillAddCombo(b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
-			return a_pC - b_pC;
-		})},
+			return cards.filter(card=>{
+				const searchTypeArray = [192,194,206,209];
+				const skill = Skills[card.leaderSkillId];
+				if (searchTypeArray.some(t=>skill.type == t && getSkillAddCombo(skill)>0))
+					return true;
+				else if (skill.type == 138){
+					const subskills = skill.params.map(id=>Skills[id]);
+					return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t && getSkillAddCombo(subskill)>0));
+				}
+			}).sort((a,b)=>{
+				const searchTypeArray = [192,194,206,209];
+				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+				let a_pC = 0,b_pC = 0;
+				a_pC = searchTypeArray.includes(a_s.type) ?
+					getSkillAddCombo(a_s) :
+					getSkillAddCombo(a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
+				b_pC = searchTypeArray.includes(b_s.type) ?
+					getSkillAddCombo(b_s) :
+					getSkillAddCombo(b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
+				return a_pC - b_pC;
+			});
+		}},
 		{name:"7×6 版面",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [162,186];
 			const skill = Skills[card.leaderSkillId];
