@@ -835,16 +835,55 @@ function initialize() {
     const s_typesLi = Array.from(s_typesUl.querySelectorAll("li"));
     const s_typesCheckBox = s_typesLi.map(li=>li.querySelector(".type-check"));
     s_typesCheckBox.forEach(checkBox=>
-        checkBox.onchange = function(){
-            const newClassName = `type-killer-${this.value}`;
-            if (this.checked && s_typeAndOr.checked)
-                s_typesUl.classList.add(newClassName);
-            else
-                s_typesUl.classList.remove(newClassName);
+        {
+            checkBox.onchange = function(){
+                const newClassName = `type-killer-${this.value}`;
+                if (this.checked && s_typeAndOr.checked) //and的时候才生效
+                    s_typesUl.classList.add(newClassName);
+                else
+                    s_typesUl.classList.remove(newClassName);
+            }
         }
     );
+
+    const s_types_latentUl = s_typesDiv.querySelector(".latent-list");
+    const s_types_latentli = Array.from(s_types_latentUl.querySelectorAll("li"));
+    s_types_latentli.forEach(latent=>
+    {
+        latent.onclick = function(){
+            const latenttype = parseInt(this.getAttribute("data-latent-icon"));
+            const killerTypes = typekiller_for_type.filter(o=>o.allowableLatent.includes(latenttype)).map(o=>o.type);
+            s_typesCheckBox.forEach(checkbox=>{
+                const type = parseInt(checkbox.value);
+                checkbox.checked = killerTypes.includes(type);
+            });
+        };
+    });
+/*    const s_typesCheckBoxIcon = s_typesLi.map(li=>li.querySelector(".type-icon"));
+    s_typesCheckBoxIcon.forEach(icon=>
+        {
+            icon.onclick = function(e){
+                console.log(e,s_typeAndOr.checked);
+                if (!s_typeAndOr.checked) //or的时候才生效
+                {
+                    const type = parseInt(this.getAttribute("data-type-icon"));
+                    const killerTypes = typekiller_for_type.filter(o=>o.typeKiller.includes(type)).map(o=>o.type);
+                    console.log(killerTypes);
+                    s_typesCheckBox.forEach(checkbox=>{
+                        const type = parseInt(checkbox.value);
+                        checkbox.checked = killerTypes.includes(type);
+                    });
+                }
+            }
+        }
+    );
+*/
     s_typeAndOr.onchange = function(){
         s_typesCheckBox.forEach(checkBox=>checkBox.onchange());
+        if (this.checked)
+            s_types_latentUl.classList.add(className_displayNone);
+        else
+            s_types_latentUl.classList.remove(className_displayNone);
     };
     s_typeAndOr.onchange();
 
