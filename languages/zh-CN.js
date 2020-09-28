@@ -1214,6 +1214,10 @@ function parseSkillDescription(skill)
 				}).join("<br>");
 			}
 			break;
+		case 209:
+			str = `以十字形式消除5个${attrN(5)}宝珠时`;
+			if(sk[0]) str += `，结算时连击数+${sk[0]}`;
+			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
 			//开发部分
