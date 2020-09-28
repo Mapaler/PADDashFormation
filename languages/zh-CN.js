@@ -2336,7 +2336,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"无天降 buff",function:cards=>cards.filter(card=>{
+		{name:"无天降 buff（顶无天降）",function:cards=>cards.filter(card=>{
 			const searchType = 184;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2346,7 +2346,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"生成变换位",function:cards=>cards.filter(card=>{
+		{name:"生成变换位（顶变换珠）",function:cards=>cards.filter(card=>{
 			const searchType = 207;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2514,7 +2514,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"玩家 HP 减少（按减少比率排序）",function:cards=>cards.filter(card=>{
+		{name:"玩家自残（HP 减少，按减少比率排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [84,85,86,87,195];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type))
@@ -2552,7 +2552,7 @@ function parseBigNumber(number)
 			return b_pC - a_pC;
 		})},
 		{name:"-----对敌 buff 类-----",function:cards=>cards},
-		{name:"推迟行动（按威吓回合排序）",function:cards=>cards.filter(card=>{
+		{name:"威吓（按推迟回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 18;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2573,7 +2573,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"减少防御（按破防比例排序）",function:cards=>cards.filter(card=>{
+		{name:"破防（按防御减少比例排序）",function:cards=>cards.filter(card=>{
 			const searchType = 19;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType)
@@ -2594,7 +2594,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
 			return a_pC - b_pC;
 		})},
-		{name:"减少 100% 防御（按破防回合排序）",function:cards=>cards.filter(card=>{
+		{name:"100% 破防（按回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 19;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && skill.params[1]>=100)
@@ -2757,7 +2757,7 @@ function parseBigNumber(number)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
-		{name:"大炮-敌方-单体",function:cards=>cards.filter(card=>{
+		{name:"大炮-对象-敌方单体",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [2,35,37,59,84,86,110,115,144];
 			const skill = Skills[card.activeSkillId];
 			function isSingle(skill)
@@ -2776,7 +2776,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && isSingle(subskill));
 			}
 		})},
-		{name:"大炮-敌方-全体",function:cards=>cards.filter(card=>{
+		{name:"大炮-对象-敌方全体",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [0,1,58,85,87,110,143,144];
 			const skill = Skills[card.activeSkillId];
 			function isAll(skill)
@@ -2795,7 +2795,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && isAll(subskill));
 			}
 		})},
-		{name:"大炮-敌方-指定属性敌人",function:cards=>cards.filter(card=>{
+		{name:"大炮-对象-指定属性敌人",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [42];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type))
@@ -3171,11 +3171,11 @@ function parseBigNumber(number)
 		})},
 		{name:"======进化类型======",function:cards=>cards},
 		{name:"8格潜觉",function:cards=>cards.filter(card=>card.is8Latent)},
-		{name:"8格潜觉-转生、超转生",function:cards=>cards.filter(card=>isReincarnated(card))}, //evoBaseId可能为0
-		{name:"8格潜觉-超究极进化",function:cards=>cards.filter(card=>card.is8Latent && card.isUltEvo && !card.awakenings.includes(49))},
-		{name:"仅限超转生",function:cards=>cards.filter(card=>isReincarnated(card) && !Cards[card.evoBaseId].isUltEvo)},
 		{name:"非8格潜觉",function:cards=>cards.filter(card=>!card.is8Latent)},
 		{name:"像素进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))},
+		{name:"转生、超转生进化",function:cards=>cards.filter(card=>isReincarnated(card))}, //evoBaseId可能为0
+		{name:"仅超转生进化",function:cards=>cards.filter(card=>isReincarnated(card) && !Cards[card.evoBaseId].isUltEvo)},
+		{name:"超究极进化",function:cards=>cards.filter(card=>card.is8Latent && card.isUltEvo && !card.awakenings.includes(49))},
 		{name:"变身前",function:cards=>cards.filter(card=>{
 			const searchType = 202;
 			const skill = Skills[card.activeSkillId];
@@ -3187,7 +3187,7 @@ function parseBigNumber(number)
 			}
 		})},
 		{name:"变身后",function:cards=>cards.filter(card=>card.henshinTo)},
-		{name:"变身前后队长技不变",function:cards=>cards.filter(card=>{
+		{name:"变身前后队长技保持不变",function:cards=>cards.filter(card=>{
 			const searchType = 202;
 			const skill = Skills[card.activeSkillId];
 			if (skill.type == searchType && card.leaderSkillId == Cards[skill.params[0]].leaderSkillId)
