@@ -28,15 +28,16 @@ const typekiller_for_type = [
 	{type:3,awoken:38,latent:27,typeKiller:[4,6]}, //3回复
 	{type:9,awoken:null,latent:null,typeKiller:[]}, //特殊保护
 ];
-typekiller_for_type.forEach(t=>
-	t.typeKiller.push(0,12,14,15) //补充4种特殊杀
-);
 //类型允许的潜觉杀
 const type_allowable_latent = [];
 typekiller_for_type.forEach(t=>
-	type_allowable_latent[t.type] = t.typeKiller.map(tn=>
-		typekiller_for_type.find(_t=>_t.type == tn).latent
-	)
+	{
+		t.allowableLatent = t.typeKiller.concat([0,12,14,15]) //补充4种特殊杀
+		.map(tn=>
+			typekiller_for_type.find(_t=>_t.type == tn).latent
+		);
+		type_allowable_latent[t.type] = t.allowableLatent;
+	}
 );
 //等效觉醒列表
 const equivalent_awoken = [
