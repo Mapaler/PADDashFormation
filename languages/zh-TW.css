@@ -70,9 +70,6 @@
 .monsterinfo-box .monster-id::before{
 	content: "No.";
 }
-.monsterinfo-box .monster-cost::before{
-	content: "消耗:";
-}
 .monsterinfo-box .monster-seriesId::before{
 	content: "系列ID：";
 }
@@ -117,6 +114,9 @@
 .row-mon-level .m-level-btn-110::before
 {
 	content: "Lv.";
+}
+.edit-box .setting-box .monster-cost::before{
+	content: "消耗:";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼潛在覺醒";

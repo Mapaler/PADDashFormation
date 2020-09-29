@@ -1317,7 +1317,8 @@ ul{
 
 .row-mon-ability ul,
 .row-mon-plus ul,
-.row-mon-level .level-value
+.row-mon-level .level-value,
+.row-mon-level .monster-cost
 {
 	font-family: var(--game-font-family );
 	font-size: 22px;

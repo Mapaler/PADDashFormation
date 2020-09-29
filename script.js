@@ -1873,10 +1873,6 @@ function editBoxChangeMonId(id) {
     mId.innerHTML = id;
     const mRare = monInfoBox.querySelector(".monster-rare");
     mRare.setAttribute("data-rarity", card.rarity);
-    const mCost = monInfoBox.querySelector(".monster-cost");
-    mCost.innerHTML = card.cost;
-    /*const mExp = monInfoBox.querySelector(".monster-exp");
-    mExp.innerHTML = card.exp.max;*/
     const mName = monInfoBox.querySelector(".monster-name");
     mName.innerHTML = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
     const mSeriesId = monInfoBox.querySelector(".monster-seriesId");
@@ -1985,6 +1981,9 @@ function editBoxChangeMonId(id) {
     } else {
         monEditLv110.classList.add(className_displayNone);
     }
+    const mCost = settingBox.querySelector(".monster-cost");
+    mCost.innerHTML = card.cost;
+
     const rowPlus = settingBox.querySelector(".row-mon-plus");
     const rowLatent = settingBox.querySelector(".row-mon-latent");
     const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
