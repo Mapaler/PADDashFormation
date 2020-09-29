@@ -68,9 +68,6 @@
 .monsterinfo-box .monster-id::before{
 	content: "No.";
 }
-.monsterinfo-box .monster-cost::before{
-	content: "COST:";
-}
 .monsterinfo-box .monster-seriesId::before{
 	content: "Series ID：";
 }
@@ -115,6 +112,9 @@
 .row-mon-level .m-level-btn-110::before
 {
 	content: "Lv.";
+}
+.edit-box .setting-box .monster-cost::before{
+	content: "COST:";
 }
 .edit-box .setting-box .row-mon-latent::before{
 	content: "▼Latent Awoken";
