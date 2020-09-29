@@ -226,6 +226,10 @@ ul{
 	background-image: url(images/CARDFRAME2.PNG);
 	background-position: 100px 100px; /*默认都不显示*/
 }
+.property[data-property='6']{
+	background-image: url(images/CARDFRAMEW.PNG);
+	background-position: 0 0;
+}
 /*怪物-加值*/
 .monster .plus{
 	color: yellow;
@@ -1194,6 +1198,18 @@ ul{
 .monster-rare[data-rarity='8']::before{content: "8";}
 .monster-rare[data-rarity='9']::before{content: "9";}
 .monster-rare[data-rarity='10']::before{content: "10";}
+
+.monsterinfo-box .monster-mp::before
+{
+	content: " ";
+	background-image: url(images/icon-MP.png);
+	background-size: cover;
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	vertical-align: top;
+}
+
 .monsterinfo-box .monster-type {
 	display: inline;
 }

@@ -1103,6 +1103,7 @@ var formation = new Formation(teamsCount,6);
 					<li><input type="radio" name="attr-1" class="attr-radio" value="2" id="search-attr-1-2" /><label class="attr-t2" for="search-attr-1-2"><!--木--></label></li>
 					<li><input type="radio" name="attr-1" class="attr-radio" value="3" id="search-attr-1-3" /><label class="attr-t3" for="search-attr-1-3"><!--光--></label></li>
 					<li><input type="radio" name="attr-1" class="attr-radio" value="4" id="search-attr-1-4" /><label class="attr-t4" for="search-attr-1-4"><!--暗--></label></li>
+					<li><input type="radio" name="attr-1" class="attr-radio" value="6" id="search-attr-1-none" /><label class="attr-none" for="search-attr-1-none"><!--无--></label></li>
 				</ul>
 				<ul class="attr-list attr-list-2">
 					<li><input type="radio" name="attr-2" class="attr-radio" value="all" id="search-attr-2-all" /><label class="attr-all" for="search-attr-2-all"><!--全部--></label></li>
@@ -1324,7 +1325,7 @@ var formation = new Formation(teamsCount,6);
 			<div class="monsterinfo-line">
 				<div class="monster-id"></div>
 				<div class="monster-rare"></div>
-				<div class="monster-cost"></div>
+				<div class="monster-mp"></div>
 			</div>
 			<div class="monsterinfo-line">
 				<div class="monster-name"></div>
@@ -1404,6 +1405,7 @@ var formation = new Formation(teamsCount,6);
 					<!--怪物等级-->
 					<div class="subrow">
 						<span class="level-value"><input type="number" class="m-level" min=1 max=110/></span>
+						<span class="monster-cost"></span>
 					</div>
 					<div class="subrow">
 						<button class="m-level-btn-min" value="1">1</button>~<button class="m-level-btn-max" value="99">99</button>

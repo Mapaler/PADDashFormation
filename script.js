@@ -1873,6 +1873,8 @@ function editBoxChangeMonId(id) {
     mId.innerHTML = id;
     const mRare = monInfoBox.querySelector(".monster-rare");
     mRare.setAttribute("data-rarity", card.rarity);
+    const mMP = monInfoBox.querySelector(".monster-mp");
+    mMP.innerHTML = card.sellMP.toLocaleString();
     const mName = monInfoBox.querySelector(".monster-name");
     mName.innerHTML = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
     const mSeriesId = monInfoBox.querySelector(".monster-seriesId");
