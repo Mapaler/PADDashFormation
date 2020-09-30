@@ -1240,9 +1240,6 @@ function initialize() {
     s_hideLessUseLetent.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + hideClassName)));
     s_hideLessUseLetent.onchange();
 
-    if (isGuideMod)
-        monEditLatentAllowableUl.querySelector('.latent-icon[data-latent-icon="11"]').classList.remove('frequent');
-
     const rowSkill = settingBox.querySelector(".row-mon-skill");
     const skillBox = rowSkill.querySelector(".skill-box");
     const skillTitle = skillBox.querySelector(".skill-name");
@@ -1477,7 +1474,10 @@ function initialize() {
     languageJS.src = "languages/" + currentLanguage.i18n + ".js";
 
     if (isGuideMod) //图鉴模式直接打开搜索框
+    {
         showSearch([]);
+        if (monstersID.value.length == 0) editBoxChangeMonId(0);
+    }
 }
 //编辑界面点击每个怪物的头像的处理
 function clickMonHead(e) {
