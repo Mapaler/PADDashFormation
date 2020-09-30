@@ -1108,10 +1108,14 @@ ul{
 	max-height: 790px;
 	overflow: auto;
 }
-.search-mon-list.only-display-can-assist .monster{
+.search-mon-list.only-display-can-assist .monster,
+.search-mon-list.only-display-can-assist .awoken-preview
+{
 	opacity: 0.25;
 }
-.search-mon-list.only-display-can-assist .monster.allowable-assist{
+.search-mon-list.only-display-can-assist .monster.allowable-assist,
+.search-mon-list.only-display-can-assist .allowable-assist+.awoken-preview
+{
 	opacity: 1;
 }
 .setting-box .row-mon-id .open-search{
