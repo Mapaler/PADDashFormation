@@ -1037,6 +1037,7 @@ function initialize() {
         s_types.forEach(t => {
             t.checked = false;
         });
+        s_typeAndOr.onchange();
         s_awokensCounts.forEach(t => {
             t.value = 0;
         });
