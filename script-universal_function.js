@@ -399,8 +399,8 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,typeAndOr,awokens,sawo
 	//属性
 	if (attr1 != null && attr1 ===  attr2)
 	{ //当两个颜色相同时，主副一样颜色的只需判断一次
-		cardsRange = cardsRange.filter(c=>c.attrs[0] == attr1 && c.attrs[1] == attr1);
-	}else if (fixMainColor || attr2 == -1) //如果固定了顺序，或者副属性选的是无
+		cardsRange = cardsRange.filter(c=>c.attrs[0] === attr1 && c.attrs[1] === attr1);
+	}else if (fixMainColor || attr1 === 6 || attr2 === -1) //如果固定了顺序，或者主副属性选的是无
 	{
 		if (attr1 != null)
 		{
