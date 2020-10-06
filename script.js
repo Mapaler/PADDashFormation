@@ -311,34 +311,21 @@ function turnPage(toPage, e = null) {
 window.onload = function() {
     controlBox = document.body.querySelector(".control-box");
     statusLine = controlBox.querySelector(".status"); //显示当前状态的
+    formationBox = document.body.querySelector(".formation-box");
+    editBox = document.body.querySelector(".edit-box");
 
-    const helpLink = controlBox.querySelector(".help-link");
-    interchangeSVG = document.body.querySelector("#interchange-line");
-    interchangeSVG.line = interchangeSVG.querySelector("g line");
-    interchangeSVG.changePoint = function(p1, p2) {
-        const line = this.line;
-        if (p1 && p1.x != undefined)
-            line.setAttribute("x1", p1.x);
-        if (p1 && p1.y != undefined)
-            line.setAttribute("y1", p1.y);
-        if (p2 && p2.x != undefined)
-            line.setAttribute("x2", p2.x);
-        if (p2 && p2.y != undefined)
-            line.setAttribute("y2", p2.y);
-    };
     //设定初始的显示设置
     toggleDomClassName(controlBox.querySelector("#show-mon-id"), 'not-show-mon-id', false);
     toggleDomClassName(controlBox.querySelector("#btn-show-mon-skill-cd"), 'show-mon-skill-cd');
     toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
     isGuideMod = Boolean(parseInt(getQueryString("guide")));
 
-    formationBox = document.body.querySelector(".formation-box");
-    editBox = document.body.querySelector(".edit-box");
     if (isGuideMod) {
-        console.log('现在是 怪物图鉴 模式');
+        console.info('现在是 怪物图鉴 模式');
         document.body.classList.add('guide-mod');
     }
 
+    const helpLink = controlBox.querySelector(".help-link");
     if (location.hostname.includes("gitee")) { helpLink.hostname = "gitee.com"; }
 
     //▼添加语言列表开始
@@ -634,6 +621,21 @@ function capture() {
 }
 //初始化
 function initialize() {
+
+    //触屏使用的切换显示的线条
+    interchangeSVG = document.body.querySelector("#interchange-line");
+    interchangeSVG.line = interchangeSVG.querySelector("g line");
+    interchangeSVG.changePoint = function(p1, p2) {
+        const line = this.line;
+        if (p1 && p1.x != undefined)
+            line.setAttribute("x1", p1.x);
+        if (p1 && p1.y != undefined)
+            line.setAttribute("y1", p1.y);
+        if (p2 && p2.x != undefined)
+            line.setAttribute("x2", p2.x);
+        if (p2 && p2.y != undefined)
+            line.setAttribute("y2", p2.y);
+    };
 
     //标题和介绍文本框
     const titleBox = formationBox.querySelector(".title-box");
@@ -1485,41 +1487,36 @@ function initialize() {
         //if (monstersID.value.length == 0) editBoxChangeMonId(0);
     }
 }
+//从怪物头像获取队员的队伍编号
+function getMemberArrayIndexFromMonHead(headDom) {
+    return [
+        parseInt(headDom.getAttribute("data-team"), 10), //team
+        parseInt(headDom.getAttribute("data-assist"), 10), //assist
+        parseInt(headDom.getAttribute("data-index"), 10), //index
+    ];
+}
 //编辑界面点击每个怪物的头像的处理
 function clickMonHead(e) {
-    let team = parseInt(this.getAttribute("data-team"), 10);
-    let assist = parseInt(this.getAttribute("data-assist"), 10);
-    let index = parseInt(this.getAttribute("data-index"), 10);
-    editMon(team, assist, index);
+    const arr = getMemberArrayIndexFromMonHead(this);
+    editMon(arr[0], arr[1], arr[2]);
     return false; //没有false将会打开链接
 }
 //编辑界面每个怪物的头像的拖动
 function dragStartMonHead(e) {
-    let team = parseInt(this.getAttribute("data-team"), 10);
-    let assist = parseInt(this.getAttribute("data-assist"), 10);
-    let index = parseInt(this.getAttribute("data-index"), 10);
-    e.dataTransfer.setData('from', [team, assist, index].join(","));
+    e.dataTransfer.setData('from', JSON.stringify(getMemberArrayIndexFromMonHead(this)));
 }
 //编辑界面每个怪物的头像的经过，阻止事件发生
 function dropOverMonHead(e) {
     e.preventDefault();
 }
-//从怪物头像获取队员的队伍编号
-function getMemberArrayIndexFromMonHead(headDom) {
-    return [
-        parseInt(headDom.getAttribute("data-team"), 10),
-        parseInt(headDom.getAttribute("data-assist"), 10),
-        parseInt(headDom.getAttribute("data-index"), 10),
-    ];
-}
 //编辑界面每个怪物的头像的放下
 function dropMonHead(e) {
-    const dataFrom = e.dataTransfer.getData('from').split(",").map((i) => { return parseInt(i, 10); });
+    const dataFrom = JSON.parse(e.dataTransfer.getData('from'));
     const dataTo = getMemberArrayIndexFromMonHead(this);
 
-    if ((dataTo[0] != dataFrom[0]) ||
-        (dataTo[1] != dataFrom[1]) ||
-        (dataTo[2] != dataFrom[2])) { //必须有所不同才继续交换
+    if ((dataTo[0] !== dataFrom[0]) ||
+        (dataTo[1] !== dataFrom[1]) ||
+        (dataTo[2] !== dataFrom[2])) { //必须有所不同才继续交换
         interchangeCard(dataFrom, dataTo);
     }
     return false; //没有false将会打开链接
@@ -1559,7 +1556,7 @@ function touchendMonHead(e) {
     //console.log("移动结束",pX,pY,e,this);
     interchangeSVG.style.display = "none";
     interchangeSVG.changePoint(null, { x: pX, y: pY });
-    let target = allMembers.find(m => {
+    const target = allMembers.find(m => {
         const rect = m.getBoundingClientRect();
         const top = rect.top + document.documentElement.scrollTop;
         const left = rect.left + document.documentElement.scrollLeft;
@@ -1569,8 +1566,8 @@ function touchendMonHead(e) {
     });
     if (target && this != target) {
         //console.log("找到的对象",targets[0]);
-        let dataFrom = getMemberArrayIndexFromMonHead(this);
-        let dataTo = getMemberArrayIndexFromMonHead(target);
+        const dataFrom = getMemberArrayIndexFromMonHead(this);
+        const dataTo = getMemberArrayIndexFromMonHead(target);
 
         if ((dataTo[0] != dataFrom[0]) ||
             (dataTo[1] != dataFrom[1]) ||
