@@ -375,7 +375,11 @@ window.onload = function() {
     document.body.classList.add("ds-" + currentDataSource.code);
     const dataSourceOptionArray = Array.from(dataSelectDom.options);
     dataSourceOptionArray.find(dataOpt => dataOpt.value == currentDataSource.code).selected = true;
+    //▼添加数据来源列表结束
 
+    initialize(); //界面初始化
+
+    //开始读取解析怪物数据
     const sourceDataFolder = "monsters-info";
 
     var newCkeys; //当前的Ckey
@@ -479,6 +483,24 @@ window.onload = function() {
             return;
         }
         statusLine.classList.remove("loading-mon-info");
+        
+        const monstersList = editBox.querySelector("#monsters-name-list");
+        let fragment = document.createDocumentFragment();
+        Cards.forEach(function(m) { //添加下拉框候选
+            const opt = fragment.appendChild(document.createElement("option"));
+            opt.value = m.id;
+            opt.label = m.id + " - " + returnMonsterNameArr(m, currentLanguage.searchlist, currentDataSource.code).join(" | ");
+
+            const linkRes = new RegExp("link:(\\d+)", "ig").exec(m.specialAttribute);
+            if (linkRes) { //每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
+                const _m = Cards[parseInt(linkRes[1], 10)];
+                _m.evoRootId = m.evoRootId;
+                m.henshinFrom = true;
+                _m.henshinTo = true;
+            }
+        });
+        monstersList.appendChild(fragment);
+
 
         statusLine.classList.add("loading-skill-info");
         const currentCkey = newCkeys.find(ckey => ckey.code == currentDataSource.code); //获取当前语言的ckey
@@ -538,7 +560,7 @@ window.onload = function() {
         const updateTime = controlBox.querySelector(".datasource-updatetime");
         updateTime.innerHTML = new Date(currentCkey.updateTime).toLocaleString(undefined, { hour12: false });
 
-        initialize(); //初始化
+        //initialize(); //初始化
         statusLine.classList.remove("loading-skill-info");
         //如果通过的话就载入URL中的怪物数据
         reloadFormationData();
@@ -612,22 +634,6 @@ function capture() {
 }
 //初始化
 function initialize() {
-    const monstersList = editBox.querySelector("#monsters-name-list");
-    let fragment = document.createDocumentFragment();
-    Cards.forEach(function(m) { //添加下拉框候选
-        const opt = fragment.appendChild(document.createElement("option"));
-        opt.value = m.id;
-        opt.label = m.id + " - " + returnMonsterNameArr(m, currentLanguage.searchlist, currentDataSource.code).join(" | ");
-
-        const linkRes = new RegExp("link:(\\d+)", "ig").exec(m.specialAttribute);
-        if (linkRes) { //每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
-            const _m = Cards[parseInt(linkRes[1], 10)];
-            _m.evoRootId = m.evoRootId;
-            m.henshinFrom = true;
-            _m.henshinTo = true;
-        }
-    });
-    monstersList.appendChild(fragment);
 
     //标题和介绍文本框
     const titleBox = formationBox.querySelector(".title-box");
@@ -1476,7 +1482,7 @@ function initialize() {
     if (isGuideMod) //图鉴模式直接打开搜索框
     {
         showSearch([]);
-        if (monstersID.value.length == 0) editBoxChangeMonId(0);
+        //if (monstersID.value.length == 0) editBoxChangeMonId(0);
     }
 }
 //编辑界面点击每个怪物的头像的处理
