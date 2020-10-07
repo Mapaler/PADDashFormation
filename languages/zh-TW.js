@@ -19,6 +19,7 @@
         sort_atkMax110_Multi: "最大協力攻擊(Lv110)",
         sort_rcvMax110_Multi: "最大協力回復(Lv110)",
     },
+    force_reload_data: "強制刷新數據",
 }
 
 localisation(localTranslating);

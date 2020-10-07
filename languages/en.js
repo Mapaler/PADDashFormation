@@ -19,6 +19,7 @@
         sort_atkMax110_Multi: "Max Multi ATK (Lv110)",
         sort_rcvMax110_Multi: "Max Multi RCV (Lv110)",
     },
+    force_reload_data: "Force refresh data",
 }
 
 localisation(localTranslating);
