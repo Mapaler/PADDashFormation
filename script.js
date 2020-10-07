@@ -365,16 +365,19 @@ window.onload = function() {
 		langSelectDom.options.add(new Option(lang.name, lang.i18n))
 	);
 
-	const parameter_i18n = getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
-	const browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
-	currentLanguage = languageList.find(lang => { //筛选出符合的语言
-			if (parameter_i18n) //如果已指定就用指定的语言
-				return parameter_i18n.includes(lang.i18n);
-			else //否则筛选浏览器默认语言
-				return browser_i18n.includes(lang.i18n);
-		}) ||
-		languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
-	document.head.querySelector("#language-css").href = "languages/" + currentLanguage.i18n + ".css";
+	if (currentLanguage == undefined)
+	{
+		const parameter_i18n = getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
+		const browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
+		currentLanguage = languageList.find(lang => { //筛选出符合的语言
+				if (parameter_i18n) //如果已指定就用指定的语言
+					return parameter_i18n.includes(lang.i18n);
+				else //否则筛选浏览器默认语言
+					return browser_i18n.includes(lang.i18n);
+			}) ||
+			languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
+		document.head.querySelector("#language-css").href = "languages/" + currentLanguage.i18n + ".css";
+	}
 
 	const langOptionArray = Array.from(langSelectDom.options);
 	langOptionArray.find(langOpt => langOpt.value == currentLanguage.i18n).selected = true;
@@ -385,12 +388,16 @@ window.onload = function() {
 	dataSourceList.forEach(ds =>
 		dataSelectDom.options.add(new Option(ds.source, ds.code))
 	);
-	const parameter_dsCode = getQueryString("s"); //获取参数指定的数据来源
-	currentDataSource = parameter_dsCode ?
-		(dataSourceList.find(ds => ds.code == parameter_dsCode) || dataSourceList[0]) : //筛选出符合的数据源
-		dataSourceList[0]; //没有指定，直接使用日服
+	
+	if (currentDataSource == undefined)
+	{
+		const parameter_dsCode = getQueryString("s"); //获取参数指定的数据来源
+		currentDataSource = parameter_dsCode ?
+			(dataSourceList.find(ds => ds.code == parameter_dsCode) || dataSourceList[0]) : //筛选出符合的数据源
+			dataSourceList[0]; //没有指定，直接使用日服
+		document.body.classList.add("ds-" + currentDataSource.code);
+	}
 
-	document.body.classList.add("ds-" + currentDataSource.code);
 	const dataSourceOptionArray = Array.from(dataSelectDom.options);
 	dataSourceOptionArray.find(dataOpt => dataOpt.value == currentDataSource.code).selected = true;
 	//▼添加数据来源列表结束
@@ -403,6 +410,30 @@ function loadData(force = false)
 	if (force)
 		console.info('强制更新数据');
 	const _time = new Date().getTime();
+
+	if (currentLanguage == undefined)
+	{
+		const parameter_i18n = getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
+		const browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
+		currentLanguage = languageList.find(lang => { //筛选出符合的语言
+				if (parameter_i18n) //如果已指定就用指定的语言
+					return parameter_i18n.includes(lang.i18n);
+				else //否则筛选浏览器默认语言
+					return browser_i18n.includes(lang.i18n);
+			}) ||
+			languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
+		document.head.querySelector("#language-css").href = "languages/" + currentLanguage.i18n + ".css";
+	}
+	
+	if (currentDataSource == undefined)
+	{ //解决首次运行时，页面加载不如数据加载快的问题
+		const parameter_dsCode = getQueryString("s"); //获取参数指定的数据来源
+		currentDataSource = parameter_dsCode ?
+			(dataSourceList.find(ds => ds.code == parameter_dsCode) || dataSourceList[0]) : //筛选出符合的数据源
+			dataSourceList[0]; //没有指定，直接使用日服
+		document.body.classList.add("ds-" + currentDataSource.code);
+	}
+
 	//开始读取解析怪物数据
 	const sourceDataFolder = "monsters-info";
 
