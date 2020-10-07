@@ -1195,11 +1195,11 @@ function initialize() {
 	const monEditAwokensLabel = Array.from(monEditAwokensRow.querySelectorAll(".awoken-ul .awoken-icon"));
 
 	function playVoiceAwoken() { //点击label才播放语音
-		const card = Cards[editBox.mid];
 		if (parseInt(this.getAttribute("data-awoken-icon"), 10) === 63) {
-			let decoder = new Adpcm(adpcm_wasm, pcmImportObj);
+			const card = Cards[editBox.mid];
+			const decoder = new Adpcm(adpcm_wasm, pcmImportObj);
 			decoder.resetDecodeState(new Adpcm.State(0, 0));
-			decodeAudio(`sound/voice/${currentDataSource.code}/padv${PrefixInteger(card.voiceId,3)}.wav`, decoder.decode.bind(decoder));
+			decodeAudio(`sound/voice/${currentDataSource.code}/padv${card.voiceId.PrefixInteger(3)}.wav`, decoder.decode.bind(decoder));
 		}
 	}
 	monEditAwokensLabel.forEach(akDom => akDom.onclick = playVoiceAwoken);
