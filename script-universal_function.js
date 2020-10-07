@@ -27,46 +27,7 @@ const GM_xmlhttpRequest = function(GM_param) {
 	//发送数据
 	xhr.send(GM_param.data ? GM_param.data : null);
 };
-//仿GM_getValue函数v1.0
-const GM_getValue = function(name, type){
-	let value = localStorage.getItem(name);
-	if (value == undefined) return value;
-	if ((/^(?:true|false)$/i.test(value) && type == undefined) || type == "boolean")
-	{
-		if (/^true$/i.test(value))
-			return true;
-		else if (/^false$/i.test(value))
-			return false;
-		else
-			return Boolean(value);
-	}
-	else if((/^\-?[\d\.]+$/i.test(value) && type == undefined) || type == "number")
-		return Number(value);
-	else
-		return value;
-};
-//仿GM_setValue函数v1.0
-const GM_setValue = function(name, value){
-	localStorage.setItem(name, value);
-};
-//仿GM_deleteValue函数v1.0
-const GM_deleteValue = function(name){
-	localStorage.removeItem(name);
-};
-//仿GM_listValues函数v1.0
-const GM_listValues = function(){
-	var keys = [];
-	for (let ki=0, kilen=localStorage.length; ki<kilen; ki++)
-	{
-		keys.push(localStorage.key(ki));
-	}
-	return keys;
-};
-//数字补前导0
-function PrefixInteger(num, length)
-{  
-	return (Array(length).join('0') + num).slice(-length); 
-}
+
 //获取URL参数
 function getQueryString(name,url) {
 	if (!!(window.URL && window.URLSearchParams))
@@ -88,32 +49,12 @@ function getQueryString(name,url) {
 	}
 }
 
-function Uint8ArrayToString(fileData){
-	return Array.from(fileData).map(int=>String.fromCharCode(int)).join('');
+//数字补前导0
+Number.prototype.PrefixInteger = function(length)
+{  
+	return (Array(length).join('0') + this).slice(-length); 
 }
-function stringToUint8Array(str){
-	const codeArr = Array.from(str).map(chr=>chr.charCodeAt(0));
-	return new Uint8Array(codeArr);
-}
-//数组去重
-/* https://www.cnblogs.com/baiyangyuanzi/p/6726258.html
-* 实现思路：获取没重复的最右一值放入新数组。
-* （检测到有重复值时终止当前循环同时进入顶层循环的下一轮判断）*/
-Array.prototype.uniq = function()
-{
-	let temp = [];
-	const l = this.length;
-	for(let i = 0; i < l; i++) {
-		for(let j = i + 1; j < l; j++){
-			if (this[i] === this[j]){
-				i++;
-				j = i;
-			}
-		}
-		temp.push(this[i]);
-	}
-	return temp;
-};
+
 //▼ADPCM播放相关，来自 https://github.com/jy4340132/aaa
 const pcmMemory = new WebAssembly.Memory({initial: 256, maximum: 256});
 
@@ -242,14 +183,14 @@ function awokenCountInTeam(team,awokenIndex,solo,teamsCount)
 //返回可用的怪物名称
 function returnMonsterNameArr(card, lsList, defaultCode)
 {
-	let monNameArr = lsList.map(function(lc){ //取出每种语言
+	const monNameArr = lsList.map(lc=>{ //取出每种语言
 		if (lc == defaultCode)
-		{return card.name;}
+			return card.name;
 		else if(card.otLangName)
-		{return card.otLangName[lc];}
-	}).filter(function(ln){ //去掉空值和问号
-		return typeof(ln) == "string" && ln.length>0 && !new RegExp("^(?:초월\\s*)?[\\?\\*]+","i").test(ln);
-	});
+			return card.otLangName[lc];
+	}).filter(ln=> //去掉空值和问号
+		typeof(ln) == "string" && ln.length>0 && !new RegExp("^(?:초월\\s*)?[\\?\\*]+","i").test(ln)
+	);
 
 	if (monNameArr.length < 1) //如果本来的列表里没有名字
 	{
