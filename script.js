@@ -1,5 +1,5 @@
-var Cards; //怪物数据
-var Skills; //技能数据
+var Cards = []; //怪物数据
+var Skills = []; //技能数据
 var currentLanguage; //当前语言
 var currentDataSource; //当前数据
 var isGuideMod; //是否以图鉴模式启动
@@ -20,6 +20,39 @@ const className_displayNone = "display-none";
 if (location.search.includes('&amp;')) {
     location.search = location.search.replace(/&amp;/ig, '&');
 }
+
+const dbName = "PADDF";
+var db;
+const DBOpenRequest = indexedDB.open(dbName);
+
+DBOpenRequest.onsuccess = function(event) {
+    db = event.target.result; //DBOpenRequest.result;
+    console.log("PADDF：数据库已可使用");
+    loadData();
+};
+DBOpenRequest.onerror = function(event) {
+    // 错误处理
+    console.log("PADDF：数据库无法启用",event);
+};
+DBOpenRequest.onupgradeneeded = function(event) {
+    let db = event.target.result;
+
+    let store;
+    // 建立一个对象仓库来存储用户的相关信息，我们选择 id 作为键路径（key path）
+    // 因为 id 可以保证是不重复的
+    store = db.createObjectStore("cards_ja", { keyPath: "id" });
+    store = db.createObjectStore("cards_en", { keyPath: "id" });
+    store = db.createObjectStore("cards_ko", { keyPath: "id" });
+
+    store = db.createObjectStore("skills_ja", { keyPath: "id" });
+    store = db.createObjectStore("skills_en", { keyPath: "id" });
+    store = db.createObjectStore("skills_ko", { keyPath: "id" });
+
+    // 使用事务的 oncomplete 事件确保在插入数据前对象仓库已经创建完毕
+    store.transaction.oncomplete = function(event) {
+        console.log("PADDF：数据库建立完毕");
+    };
+};
 
 /*class Member2
 {
@@ -365,194 +398,193 @@ window.onload = function() {
     //▼添加数据来源列表结束
 
     initialize(); //界面初始化
-
-    //开始读取解析怪物数据
-    const sourceDataFolder = "monsters-info";
-
-    var newCkeys; //当前的Ckey
-    var lastCkeys; //以前Ckey们
-    statusLine.classList.add("loading-check-version");
-    GM_xmlhttpRequest({
-        method: "GET",
-        url: `${sourceDataFolder}/ckey.json?t=` + new Date().getTime(), //版本文件
-        onload: function(response) {
-            dealCkeyData(response.response);
-        },
-        onerror: function(response) {
-            const isChrome = navigator.userAgent.includes("Chrome");
-            if (isChrome && location.host.length == 0 && response.response.length > 0) {
-                console.info("因为是Chrome本地打开，正在尝试读取JSON");
-                dealCkeyData(response.response);
-            } else {
-                console.error("Ckey JSON数据获取失败", response);
-            }
-        }
-    });
-    //处理返回的数据
-    function dealCkeyData(responseText) { //处理数据版本
-        try {
-            newCkeys = JSON.parse(responseText);
-        } catch (e) {
-            console.log("Ckey数据JSON解码出错", e);
-            return;
-        }
-        const currentCkey = newCkeys.find(ckey => ckey.code == currentDataSource.code); //获取当前语言的ckey
-        lastCkeys = localStorage.getItem("PADDF-ckey"); //读取本地储存的原来的ckey
-        try {
-            lastCkeys = JSON.parse(lastCkeys);
-            if (lastCkeys == null || !(lastCkeys instanceof Array))
-                lastCkeys = [];
-        } catch (e) {
-            console.log("上次的Ckey数据JSON解码出错", e);
-            return;
-        }
-        let lastCurrentCkeys = lastCkeys.find(ckey => ckey.code == currentDataSource.code);
-        if (!lastCurrentCkeys) { //如果未找到上个ckey，则添加个新的
-            lastCurrentCkeys = {
-                code: currentDataSource.code,
-                ckey: {},
-                updateTime: null
-            };
-            lastCkeys.push(lastCurrentCkeys);
-        }
-
-        statusLine.classList.remove("loading-check-version");
-        statusLine.classList.add("loading-mon-info");
-        if (currentCkey.ckey.card == lastCurrentCkeys.ckey.card) {
-            console.log("Cards ckey相等，直接读取已有的数据", currentCkey.ckey.card);
-            localforage.getItem(`PADDF-${currentDataSource.code}-cards`).then(function(value) {
-                // This code runs once the value has been loaded
-                // from the offline store.
-                dealCardsData(value);
-            }).catch(function(err) {
-                // This code runs if there were any errors
-                alert("Local Database error. Please refresh.");
-                localStorage.removeItem("PADDF-ckey");
-                console.log(err);
-            });
-        } else {
-            GM_xmlhttpRequest({
-                method: "GET",
-                url: `${sourceDataFolder}/mon_${currentDataSource.code}.json?t=` + new Date().getTime(), //Cards数据文件
-                onload: function(response) {
-                    console.log("Cards ckey变化，储存新数据", currentCkey.ckey.card);
-                    localforage.setItem(`PADDF-${currentDataSource.code}-cards`, JSON.parse(response.response)).then(function() {
-                        lastCurrentCkeys.ckey.card = currentCkey.ckey.card;
-                        lastCurrentCkeys.updateTime = currentCkey.updateTime;
-                        localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys));
-                        dealCardsData(response.response);
-                    }).catch(function(err) {
-                        // This code runs if there were any errors
-                        console.log(err);
-                    });
-                },
-                onerror: function(response) {
-                    const isChrome = navigator.userAgent.includes("Chrome");
-                    if (isChrome && location.host.length == 0 && response.response.length > 0) {
-                        console.info("因为是Chrome本地打开，正在尝试读取JSON");
-                        dealCardsData(response.response);
-                    } else {
-                        console.error("Cards JSON数据获取失败", response);
-                    }
-                }
-            });
-        }
-    }
-
-    function dealCardsData(response) {
-        try {
-            if (typeof(response) == "string")
-                Cards = JSON.parse(response);
-            else
-                Cards = response;
-        } catch (e) {
-            console.log("Cards数据JSON解码出错", e);
-            return;
-        }
-        statusLine.classList.remove("loading-mon-info");
-        
-        const monstersList = editBox.querySelector("#monsters-name-list");
-        let fragment = document.createDocumentFragment();
-        Cards.forEach(function(m) { //添加下拉框候选
-            const opt = fragment.appendChild(document.createElement("option"));
-            opt.value = m.id;
-            opt.label = m.id + " - " + returnMonsterNameArr(m, currentLanguage.searchlist, currentDataSource.code).join(" | ");
-
-            const linkRes = new RegExp("link:(\\d+)", "ig").exec(m.specialAttribute);
-            if (linkRes) { //每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
-                const _m = Cards[parseInt(linkRes[1], 10)];
-                _m.evoRootId = m.evoRootId;
-                m.henshinFrom = true;
-                _m.henshinTo = true;
-            }
-        });
-        monstersList.appendChild(fragment);
-
-
-        statusLine.classList.add("loading-skill-info");
-        const currentCkey = newCkeys.find(ckey => ckey.code == currentDataSource.code); //获取当前语言的ckey
-        const lastCurrentCkeys = lastCkeys.find(ckey => ckey.code == currentDataSource.code);
-        if (currentCkey.ckey.skill == lastCurrentCkeys.ckey.skill) {
-            console.log("Skills ckey相等，直接读取已有的数据", currentCkey.ckey.skill);
-            localforage.getItem(`PADDF-${currentDataSource.code}-skills`).then(function(value) {
-                // This code runs once the value has been loaded
-                // from the offline store.
-                dealSkillData(value);
-            }).catch(function(err) {
-                // This code runs if there were any errors
-                alert("Local Database error. Please refresh.");
-                localStorage.removeItem("PADDF-ckey");
-                console.log(err);
-            });
-        } else {
-            GM_xmlhttpRequest({
-                method: "GET",
-                url: `${sourceDataFolder}/skill_${currentDataSource.code}.json?t=` + new Date().getTime(), //Skills数据文件
-                onload: function(response) {
-                    console.log("Skills ckey变化，储存新数据", currentCkey.ckey.skill);
-                    localforage.setItem(`PADDF-${currentDataSource.code}-skills`, JSON.parse(response.response)).then(function() {
-                        lastCurrentCkeys.ckey.skill = currentCkey.ckey.skill;
-                        lastCurrentCkeys.updateTime = currentCkey.updateTime;
-                        localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys));
-                        dealSkillData(response.response);
-                    }).catch(function(err) {
-                        // This code runs if there were any errors
-                        console.log(err);
-                    });
-                },
-                onerror: function(response) {
-                    let isChrome = navigator.userAgent.includes("Chrome");
-                    if (isChrome && location.host.length == 0 && response.response.length > 0) {
-                        console.info("因为是Chrome本地打开，正在尝试读取JSON");
-                        dealSkillData(response.response);
-                    } else {
-                        console.error("Skills JSON数据获取失败", response);
-                    }
-                }
-            });
-        }
-    }
-
-    function dealSkillData(response) {
-        try {
-            if (typeof(response) == "string")
-                Skills = JSON.parse(response);
-            else
-                Skills = response;
-        } catch (e) {
-            console.log("Skills数据JSON解码出错", e);
-            return;
-        }
-        const currentCkey = newCkeys.find(ckey => ckey.code == currentDataSource.code);
-        const updateTime = controlBox.querySelector(".datasource-updatetime");
-        updateTime.innerHTML = new Date(currentCkey.updateTime).toLocaleString(undefined, { hour12: false });
-
-        //initialize(); //初始化
-        statusLine.classList.remove("loading-skill-info");
-        //如果通过的话就载入URL中的怪物数据
-        reloadFormationData();
-    }
 };
+
+function loadData()
+{
+   //开始读取解析怪物数据
+   const sourceDataFolder = "monsters-info";
+
+   if (statusLine) statusLine.classList.add("loading-check-version");
+   GM_xmlhttpRequest({
+       method: "GET",
+       url: `${sourceDataFolder}/ckey.json?t=` + new Date().getTime(), //版本文件
+       onload: function(response) {
+           dealCkeyData(response.response);
+       },
+       onerror: function(response) {
+           const isChrome = navigator.userAgent.includes("Chrome");
+           if (isChrome && location.host.length == 0 && response.response.length > 0) {
+               console.info("因为是Chrome本地打开，正在尝试读取JSON");
+               dealCkeyData(response.response);
+           } else {
+               console.error("Ckey JSON数据获取失败", response);
+           }
+       }
+   });
+   //处理返回的数据
+   function dealCkeyData(responseText) { //处理数据版本
+       let newCkeys; //当前的Ckey们
+       let lastCkeys; //以前Ckey们
+       let currentCkey; //获取当前语言的ckey
+       let lastCurrentCkey; //以前的当前语言的ckey
+
+       try {
+           newCkeys = JSON.parse(responseText);
+       } catch (e) {
+           console.log("Ckey数据JSON解码出错", e);
+           return;
+       }
+       currentCkey = newCkeys.find(ckey => ckey.code == currentDataSource.code); //获取当前语言的ckey
+       lastCkeys = localStorage.getItem("PADDF-ckey"); //读取本地储存的原来的ckey
+       try {
+           lastCkeys = JSON.parse(lastCkeys);
+           if (lastCkeys == null || !(lastCkeys instanceof Array))
+               lastCkeys = [];
+       } catch (e) {
+           console.log("上次的Ckey数据JSON解码出错", e);
+           return;
+       }
+       lastCurrentCkey = lastCkeys.find(ckey => ckey.code == currentDataSource.code);
+       if (!lastCurrentCkey) { //如果未找到上个ckey，则添加个新的
+           lastCurrentCkey = {
+               code: currentDataSource.code,
+               ckey: {},
+               updateTime: null
+           };
+           lastCkeys.push(lastCurrentCkey);
+       }
+
+       if (statusLine) statusLine.classList.remove("loading-check-version");
+       if (statusLine) statusLine.classList.add("loading-mon-info");
+       if (currentCkey.ckey.card == lastCurrentCkey.ckey.card) {
+           console.log(`cards_${currentDataSource.code} ckey相等，直接读取已有的数据`, currentCkey.ckey.card);
+           const transaction = db.transaction([`cards_${currentDataSource.code}`]);
+           const objectStore = transaction.objectStore(`cards_${currentDataSource.code}`);
+           objectStore.openCursor().onsuccess = function(event) {
+               const cursor = event.target.result;
+               if (cursor)
+               {
+                   Cards.push(cursor.value);
+                   //console.log("Name for SSN " + cursor.key + " is %o" ,cursor.value);
+                   cursor.continue();
+               } else
+               {
+                   Cards.sort((a,b)=>a.id-b.id); //用于保证输出的数据顺序一致
+                   //console.log(Cards);
+                   dealCardsData(Cards);
+               }
+           };
+       } else {
+           GM_xmlhttpRequest({
+               method: "GET",
+               url: `${sourceDataFolder}/mon_${currentDataSource.code}.json?t=` + new Date().getTime(), //Cards数据文件
+               onload: function(response) {
+                   console.log(`cards_${currentDataSource.code} ckey变化，储存新数据`, currentCkey.ckey.card);
+                   try {
+                       Cards = JSON.parse(response.response);
+                   } catch (e) {
+                       console.log("Cards数据JSON解码出错", e);
+                       return;
+                   }
+                   const transaction = db.transaction([`cards_${currentDataSource.code}`], "readwrite");
+                   transaction.oncomplete = function(event) {
+                       console.log(`cards_${currentDataSource.code} 写入完毕`);
+                       lastCurrentCkey.ckey.card = currentCkey.ckey.card;
+                       lastCurrentCkey.updateTime = currentCkey.updateTime;
+                       localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys)); //储存新的ckey
+                       dealCardsData(Cards);
+                   };
+                   const objectStore = transaction.objectStore(`cards_${currentDataSource.code}`);
+                   Cards.forEach(card=>objectStore.put(card));
+               },
+               onerror: function(response) {
+                       console.error("Cards JSON数据获取失败", response);
+               }
+           });
+       }
+       
+       function dealCardsData() {
+           
+           const monstersList = editBox.querySelector("#monsters-name-list");
+           let fragment = document.createDocumentFragment();
+           Cards.forEach(function(m) { //添加下拉框候选
+               const opt = fragment.appendChild(document.createElement("option"));
+               opt.value = m.id;
+               opt.label = m.id + " - " + returnMonsterNameArr(m, currentLanguage.searchlist, currentDataSource.code).join(" | ");
+
+               const linkRes = new RegExp("link:(\\d+)", "ig").exec(m.specialAttribute);
+               if (linkRes) { //每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
+                   const _m = Cards[parseInt(linkRes[1], 10)];
+                   _m.evoRootId = m.evoRootId;
+                   m.henshinFrom = true;
+                   _m.henshinTo = true;
+               }
+           });
+           monstersList.appendChild(fragment);
+
+           if (statusLine) statusLine.classList.remove("loading-mon-info");
+
+           if (statusLine) statusLine.classList.add("loading-skill-info");
+           if (currentCkey.ckey.skill == lastCurrentCkey.ckey.skill) {
+               console.log(`skills_${currentDataSource.code} ckey相等，直接读取已有的数据`, currentCkey.ckey.card);
+               const transaction = db.transaction([`skills_${currentDataSource.code}`]);
+               const objectStore = transaction.objectStore(`skills_${currentDataSource.code}`);
+               objectStore.openCursor().onsuccess = function(event) {
+                   const cursor = event.target.result;
+                   if (cursor)
+                   {
+                       Skills.push(cursor.value);
+                       //console.log("Name for SSN " + cursor.key + " is %o" ,cursor.value);
+                       cursor.continue();
+                   } else
+                   {
+                       Skills.sort((a,b)=>a.id-b.id); //用于保证输出的数据顺序一致
+                       //console.log(Skills);
+                       dealSkillData(Skills);
+                   }
+               };
+           } else {
+               GM_xmlhttpRequest({
+                   method: "GET",
+                   url: `${sourceDataFolder}/skill_${currentDataSource.code}.json?t=` + new Date().getTime(), //Skills数据文件
+                   onload: function(response) {
+                       console.log(`skills_${currentDataSource.code} ckey变化，储存新数据`, currentCkey.ckey.skill);
+                       try {
+                           Skills = JSON.parse(response.response);
+                       } catch (e) {
+                           console.log("Cards数据JSON解码出错", e);
+                           return;
+                       }
+                       const transaction = db.transaction([`skills_${currentDataSource.code}`], "readwrite");
+                       transaction.oncomplete = function(event) {
+                           console.log(`skills_${currentDataSource.code} 写入完毕`);
+                           lastCurrentCkey.ckey.skill = currentCkey.ckey.skill;
+                           lastCurrentCkey.updateTime = currentCkey.updateTime;
+                           localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys)); //储存新的ckey
+                           dealSkillData(Cards);
+                       };
+                       const objectStore = transaction.objectStore(`skills_${currentDataSource.code}`);
+                       Skills.forEach(skill=>objectStore.put(skill));
+                   },
+                   onerror: function(response) {
+                       console.error("Skills JSON数据获取失败", response);
+                   }
+               });
+           }
+       }
+
+       function dealSkillData(response) {
+           const updateTime = controlBox.querySelector(".datasource-updatetime");
+           updateTime.innerHTML = new Date(currentCkey.updateTime).toLocaleString(undefined, { hour12: false });
+   
+           //initialize(); //初始化
+           if (statusLine) statusLine.classList.remove("loading-skill-info");
+           //如果通过的话就载入URL中的怪物数据
+           reloadFormationData();
+       }
+   }
+}
 //重新读取URL中的Data数据并刷新页面
 function reloadFormationData() {
     let formationData;
