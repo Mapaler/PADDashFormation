@@ -19,6 +19,7 @@
         sort_atkMax110_Multi: "최대 멀티 공격 (Lv110)",
         sort_rcvMax110_Multi: "최대 멀티 회복 (Lv110)",
     },
+    force_reload_data: "데이터 강제 새로 고침",
 }
 
 localisation(localTranslating);
