@@ -288,7 +288,6 @@ function swapABCteam() {
 }
 //在单人和多人之间转移数据
 function turnPage(toPage, e = null) {
-	console.log(e)
 	let pagename = null;
 	switch (toPage) {
 		case 1:
@@ -613,7 +612,7 @@ function loadData(force = false)
 						try {
 							Skills = JSON.parse(response.response);
 						} catch (e) {
-							console.log("Cards数据JSON解码出错", e);
+							console.log("Skills数据JSON解码出错", e);
 							return;
 						}
 						if (db)
@@ -666,6 +665,15 @@ function reloadFormationData() {
 	if (formationData) {
 		formation.loadObj(formationData);
 		refreshAll(formation);
+	}
+	if (isGuideMod)
+	{
+		const mid = parseInt(getQueryString("id"));
+		if (!isNaN(mid))
+		{
+			editBox.mid = mid;
+			editBoxChangeMonId(mid);
+		}
 	}
 }
 window.onpopstate = reloadFormationData; //前进后退时修改页面
@@ -972,25 +980,7 @@ function initialize() {
 			});
 		};
 	});
-/*    const s_typesCheckBoxIcon = s_typesLi.map(li=>li.querySelector(".type-icon"));
-	s_typesCheckBoxIcon.forEach(icon=>
-		{
-			icon.onclick = function(e){
-				console.log(e,s_typeAndOr.checked);
-				if (!s_typeAndOr.checked) //or的时候才生效
-				{
-					const type = parseInt(this.getAttribute("data-type-icon"));
-					const killerTypes = typekiller_for_type.filter(o=>o.typeKiller.includes(type)).map(o=>o.type);
-					console.log(killerTypes);
-					s_typesCheckBox.forEach(checkbox=>{
-						const type = parseInt(checkbox.value);
-						checkbox.checked = killerTypes.includes(type);
-					});
-				}
-			}
-		}
-	);
-*/
+
 	s_typeAndOr.onchange = function(){
 		s_typesCheckBox.forEach(checkBox=>checkBox.onchange());
 		if (this.checked)
@@ -1134,7 +1124,7 @@ function initialize() {
 			s_awokensEquivalent.checked,
 			s_includeSuperAwoken.checked
 		);
-		console.log("搜索结果", searchResult);
+		//console.log("搜索结果", searchResult);
 		showSearch(searchResult);
 	};
 	searchBox.startSearch = startSearch;
@@ -1215,7 +1205,21 @@ function initialize() {
 			if (editBox.mid != newId) //避免多次运行oninput、onchange
 			{
 				editBox.mid = newId;
-				editBoxChangeMonId(editBox.mid);
+				
+				if (isGuideMod)
+				{
+					const locationURL = new URL(location);
+					if (newId === 0) {
+						locationURL.searchParams.delete('id');
+						history.pushState(null, null, locationURL);
+					}else
+					{
+						locationURL.searchParams.set('id', newId);
+						history.pushState(null, null, locationURL);
+					}
+				}
+
+				editBoxChangeMonId(newId);
 			}
 		}
 	};
