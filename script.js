@@ -2,7 +2,6 @@ var Cards = []; //怪物数据
 var Skills = []; //技能数据
 var currentLanguage; //当前语言
 var currentDataSource; //当前数据
-var isGuideMod; //是否以图鉴模式启动
 
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
@@ -16,9 +15,35 @@ var showSearch; //整个程序都可以用的显示搜索函数
 
 const dataStructure = 3; //阵型输出数据的结构版本
 const className_displayNone = "display-none";
+const isGuideMod = Boolean(parseInt(getQueryString("guide"))); //是否以图鉴模式启动
 
 if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
+}
+
+//一开始就加载当前语言
+if (currentLanguage == undefined)
+{
+	const parameter_i18n = getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
+	const browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
+	currentLanguage = languageList.find(lang => { //筛选出符合的语言
+			if (parameter_i18n) //如果已指定就用指定的语言
+				return parameter_i18n.includes(lang.i18n);
+			else //否则筛选浏览器默认语言
+				return browser_i18n.includes(lang.i18n);
+		}) ||
+		languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
+	//因为Script在Head里面，所以可以这里head已经加载好可以使用
+	document.head.querySelector("#language-css").href = `languages/${currentLanguage.i18n}.css`;
+}
+
+//一开始就加载当前数据
+if (currentDataSource == undefined)
+{
+	const parameter_dsCode = getQueryString("s"); //获取参数指定的数据来源
+	currentDataSource = parameter_dsCode ?
+		(dataSourceList.find(ds => ds.code == parameter_dsCode) || dataSourceList[0]) : //筛选出符合的数据源
+		dataSourceList[0]; //没有指定，直接使用日服
 }
 
 const dbName = "PADDF";
@@ -346,12 +371,6 @@ window.onload = function() {
 	formationBox = document.body.querySelector(".formation-box");
 	editBox = document.body.querySelector(".edit-box");
 
-	//设定初始的显示设置
-	toggleDomClassName(controlBox.querySelector("#show-mon-id"), 'not-show-mon-id', false);
-	toggleDomClassName(controlBox.querySelector("#btn-show-mon-skill-cd"), 'show-mon-skill-cd');
-	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
-	isGuideMod = Boolean(parseInt(getQueryString("guide")));
-
 	if (isGuideMod) {
 		console.info('现在是 怪物图鉴 模式');
 		document.body.classList.add('guide-mod');
@@ -366,20 +385,6 @@ window.onload = function() {
 		langSelectDom.options.add(new Option(lang.name, lang.i18n))
 	);
 
-	if (currentLanguage == undefined)
-	{
-		const parameter_i18n = getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
-		const browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
-		currentLanguage = languageList.find(lang => { //筛选出符合的语言
-				if (parameter_i18n) //如果已指定就用指定的语言
-					return parameter_i18n.includes(lang.i18n);
-				else //否则筛选浏览器默认语言
-					return browser_i18n.includes(lang.i18n);
-			}) ||
-			languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
-		document.head.querySelector("#language-css").href = "languages/" + currentLanguage.i18n + ".css";
-	}
-
 	const langOptionArray = Array.from(langSelectDom.options);
 	langOptionArray.find(langOpt => langOpt.value == currentLanguage.i18n).selected = true;
 
@@ -390,18 +395,16 @@ window.onload = function() {
 		dataSelectDom.options.add(new Option(ds.source, ds.code))
 	);
 	
-	if (currentDataSource == undefined)
-	{
-		const parameter_dsCode = getQueryString("s"); //获取参数指定的数据来源
-		currentDataSource = parameter_dsCode ?
-			(dataSourceList.find(ds => ds.code == parameter_dsCode) || dataSourceList[0]) : //筛选出符合的数据源
-			dataSourceList[0]; //没有指定，直接使用日服
-		document.body.classList.add("ds-" + currentDataSource.code);
-	}
-
 	const dataSourceOptionArray = Array.from(dataSelectDom.options);
 	dataSourceOptionArray.find(dataOpt => dataOpt.value == currentDataSource.code).selected = true;
-	//▼添加数据来源列表结束
+	//添加数据class
+	document.body.classList.add("ds-" + currentDataSource.code);
+	//▲添加数据来源列表结束
+
+	//设定初始的显示设置
+	toggleDomClassName(controlBox.querySelector("#show-mon-id"), 'not-show-mon-id', false);
+	toggleDomClassName(controlBox.querySelector("#btn-show-mon-skill-cd"), 'show-mon-skill-cd');
+	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
 
 	initialize(); //界面初始化
 };
@@ -411,29 +414,6 @@ function loadData(force = false)
 	if (force)
 		console.info('强制更新数据');
 	const _time = new Date().getTime();
-
-	if (currentLanguage == undefined)
-	{
-		const parameter_i18n = getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
-		const browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
-		currentLanguage = languageList.find(lang => { //筛选出符合的语言
-				if (parameter_i18n) //如果已指定就用指定的语言
-					return parameter_i18n.includes(lang.i18n);
-				else //否则筛选浏览器默认语言
-					return browser_i18n.includes(lang.i18n);
-			}) ||
-			languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
-		document.head.querySelector("#language-css").href = "languages/" + currentLanguage.i18n + ".css";
-	}
-	
-	if (currentDataSource == undefined)
-	{ //解决首次运行时，页面加载不如数据加载快的问题
-		const parameter_dsCode = getQueryString("s"); //获取参数指定的数据来源
-		currentDataSource = parameter_dsCode ?
-			(dataSourceList.find(ds => ds.code == parameter_dsCode) || dataSourceList[0]) : //筛选出符合的数据源
-			dataSourceList[0]; //没有指定，直接使用日服
-		document.body.classList.add("ds-" + currentDataSource.code);
-	}
 
 	//开始读取解析怪物数据
 	const sourceDataFolder = "monsters-info";
