@@ -940,7 +940,9 @@ function parseSkillDescription(skill)
 			str += `提升所有属性的攻击力，每个觉醒可以提升${sk[7]}%`;
 			break;
 		case 169: //5COMBO或以上時受到的傷害減少25%、攻擊力6倍；
-			str = `${sk[0]}连击或以上时，所有宠物的攻击力×${sk[1]/100}倍，受到的伤害减少${sk[2]}%`;
+			str = `${sk[0]}连击或以上时`;
+			if (sk[1] && sk[1] !== 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[1]})}`;
+			if (sk[2]) str += `，受到的伤害减少${sk[2]}%`;
 			break;
 		case 170:
 			fullColor = nb(sk[0], attrsName);
