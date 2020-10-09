@@ -471,7 +471,7 @@ function loadData(force = false)
 
 		if (statusLine) statusLine.classList.remove("loading-check-version");
 		if (statusLine) statusLine.classList.add("loading-mon-info");
-		if (db && currentCkey.ckey.card == lastCurrentCkey.ckey.card) {
+		if (!force && db && currentCkey.ckey.card == lastCurrentCkey.ckey.card) {
 			console.log(`cards_${currentDataSource.code} ckey相等，直接读取已有的数据`, currentCkey.ckey.card);
 			const transaction = db.transaction([`cards`]);
 			const objectStore = transaction.objectStore(`cards`);
@@ -500,7 +500,7 @@ function loadData(force = false)
 		{
 			GM_xmlhttpRequest({
 				method: "GET",
-				url: `${sourceDataFolder}/mon_${currentDataSource.code}.json${force?`?t=${_time}`:''}`, //Cards数据文件
+				url: `${sourceDataFolder}/mon_${currentDataSource.code}.json?t=${_time}`, //Cards数据文件
 				onload: function(response) {
 					console.log(`cards_${currentDataSource.code} ckey变化，储存新数据`, currentCkey.ckey.card);
 					try {
@@ -557,7 +557,7 @@ function loadData(force = false)
 			if (statusLine) statusLine.classList.remove("loading-mon-info");
 
 			if (statusLine) statusLine.classList.add("loading-skill-info");
-			if (db && currentCkey.ckey.skill == lastCurrentCkey.ckey.skill) {
+			if (!force && db && currentCkey.ckey.skill == lastCurrentCkey.ckey.skill) {
 				console.log(`skills_${currentDataSource.code} ckey相等，直接读取已有的数据`, currentCkey.ckey.card);
 				const transaction = db.transaction([`skills`]);
 				const objectStore = transaction.objectStore(`skills`);
@@ -586,7 +586,7 @@ function loadData(force = false)
 			{
 				GM_xmlhttpRequest({
 					method: "GET",
-					url: `${sourceDataFolder}/skill_${currentDataSource.code}.json${force?`?t=${_time}`:''}`, //Skills数据文件
+					url: `${sourceDataFolder}/skill_${currentDataSource.code}.json?t=${_time}`, //Skills数据文件
 					onload: function(response) {
 						console.log(`skills_${currentDataSource.code} ckey变化，储存新数据`, currentCkey.ckey.skill);
 						try {
