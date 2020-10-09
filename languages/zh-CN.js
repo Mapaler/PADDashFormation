@@ -1094,7 +1094,7 @@ function parseSkillDescription(skill)
 		case 193:
 			fullColor = nb(sk[0], attrsName);
 			str = `以L字形消除5个${getOrbsAttrString(sk[0])}宝珠时`;
-			if (sk[1] || sk[2]) str+=getFixedHpAtkRcvString({atk:sk[1],rcv:sk[2]});
+			if (sk[1] && sk[1] != 100 || sk[2] && sk[2] != 100) str+=`，所有宠物的${getFixedHpAtkRcvString({atk:sk[1],rcv:sk[2]})}`;
 			if (sk[3]) str+=`，受到的伤害减少${sk[3]}%`;
 			break;
 		case 194:
