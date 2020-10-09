@@ -22,7 +22,7 @@ if (location.search.includes('&amp;')) {
 }
 
 const dbName = "PADDF";
-var db;
+var db = null;
 const DBOpenRequest = indexedDB.open(dbName,2);
 
 DBOpenRequest.onsuccess = function(event) {
@@ -32,9 +32,11 @@ DBOpenRequest.onsuccess = function(event) {
 };
 DBOpenRequest.onerror = function(event) {
 	// 错误处理
-	console.log("PADDF：数据库无法启用，数据全部重置。",event);
+	console.log("PADDF：数据库无法启用，删除可能存在的异常数据库。",event);
 	indexedDB.deleteDatabase(dbName); //直接把整个数据库删掉
-	alert('Some errors have occurred, please refresh the page.');
+	console.log("也可能是隐私模式导致无法启用数据库，于是尝试不保存的情况下读取数据。");
+	loadData();
+	//alert('Some errors have occurred, please refresh the page.');
 	//history.go(); //直接强制刷新
 };
 DBOpenRequest.onupgradeneeded = function(event) {
@@ -490,7 +492,7 @@ function loadData(force = false)
 
 		if (statusLine) statusLine.classList.remove("loading-check-version");
 		if (statusLine) statusLine.classList.add("loading-mon-info");
-		if (currentCkey.ckey.card == lastCurrentCkey.ckey.card) {
+		if (db && currentCkey.ckey.card == lastCurrentCkey.ckey.card) {
 			console.log(`cards_${currentDataSource.code} ckey相等，直接读取已有的数据`, currentCkey.ckey.card);
 			const transaction = db.transaction([`cards`]);
 			const objectStore = transaction.objectStore(`cards`);
@@ -528,16 +530,22 @@ function loadData(force = false)
 						console.log("Cards数据JSON解码出错", e);
 						return;
 					}
-					const transaction = db.transaction([`cards`], "readwrite");
-					transaction.oncomplete = function(event) {
-						console.log(`cards_${currentDataSource.code} 写入完毕`);
-						lastCurrentCkey.ckey.card = currentCkey.ckey.card;
-						lastCurrentCkey.updateTime = currentCkey.updateTime;
-						localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys)); //储存新的ckey
+					if (db)
+					{
+						const transaction = db.transaction([`cards`], "readwrite");
+						transaction.oncomplete = function(event) {
+							console.log(`cards_${currentDataSource.code} 写入完毕`);
+							lastCurrentCkey.ckey.card = currentCkey.ckey.card;
+							lastCurrentCkey.updateTime = currentCkey.updateTime;
+							localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys)); //储存新的ckey
+							dealCardsData(Cards);
+						};
+						const objectStore = transaction.objectStore(`cards`);
+						objectStore.put(Cards,currentDataSource.code);
+					}else //隐私模式无法启动数据库
+					{
 						dealCardsData(Cards);
-					};
-					const objectStore = transaction.objectStore(`cards`);
-					objectStore.put(Cards,currentDataSource.code);
+					}
 				},
 				onerror: function(response) {
 						console.error("Cards JSON数据获取失败", response);
@@ -570,7 +578,7 @@ function loadData(force = false)
 			if (statusLine) statusLine.classList.remove("loading-mon-info");
 
 			if (statusLine) statusLine.classList.add("loading-skill-info");
-			if (currentCkey.ckey.skill == lastCurrentCkey.ckey.skill) {
+			if (db && currentCkey.ckey.skill == lastCurrentCkey.ckey.skill) {
 				console.log(`skills_${currentDataSource.code} ckey相等，直接读取已有的数据`, currentCkey.ckey.card);
 				const transaction = db.transaction([`skills`]);
 				const objectStore = transaction.objectStore(`skills`);
@@ -608,16 +616,22 @@ function loadData(force = false)
 							console.log("Cards数据JSON解码出错", e);
 							return;
 						}
-						const transaction = db.transaction([`skills`], "readwrite");
-						transaction.oncomplete = function(event) {
-							console.log(`skills_${currentDataSource.code} 写入完毕`);
-							lastCurrentCkey.ckey.skill = currentCkey.ckey.skill;
-							lastCurrentCkey.updateTime = currentCkey.updateTime;
-							localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys)); //储存新的ckey
+						if (db)
+						{
+							const transaction = db.transaction([`skills`], "readwrite");
+							transaction.oncomplete = function(event) {
+								console.log(`skills_${currentDataSource.code} 写入完毕`);
+								lastCurrentCkey.ckey.skill = currentCkey.ckey.skill;
+								lastCurrentCkey.updateTime = currentCkey.updateTime;
+								localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys)); //储存新的ckey
+								dealSkillData(Skills);
+							};
+							const objectStore = transaction.objectStore(`skills`);
+							objectStore.put(Skills,currentDataSource.code);
+						}else //隐私模式无法启动数据库
+						{
 							dealSkillData(Skills);
-						};
-						const objectStore = transaction.objectStore(`skills`);
-						objectStore.put(Skills,currentDataSource.code);
+						}
 					},
 					onerror: function(response) {
 						console.error("Skills JSON数据获取失败", response);
