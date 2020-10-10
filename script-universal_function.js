@@ -1,4 +1,4 @@
-﻿//仿GM_xmlhttpRequest函数v1.4
+﻿//仿GM_xmlhttpRequest函数v1.5
 const GM_xmlhttpRequest = function(GM_param) {
 	const xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
 	xhr.open(GM_param.method, GM_param.url, true);
@@ -8,11 +8,11 @@ const GM_xmlhttpRequest = function(GM_param) {
 		{
 			const _xhr = e.target;
 			if (_xhr.readyState === _xhr.DONE) { //请求完成时
-				if (_xhr.status === 200 && GM_param.onload) //正确加载时
+				console.debug("http状态码：",_xhr.status);
+				if ((_xhr.status === 200 || (location.host === "" && _xhr.status === 0)) && GM_param.onload) //正确加载时
 				{
 					GM_param.onload(_xhr);
-				}
-				if (_xhr.status !== 200 && GM_param.onerror) //发生错误时
+				}else if (_xhr.status !== 200 && GM_param.onerror) //发生错误时
 				{
 					GM_param.onerror(_xhr);
 				}

@@ -412,7 +412,7 @@ window.onload = function() {
 function loadData(force = false)
 {
 	if (force)
-		console.info('强制更新数据');
+		console.info('强制更新数据。');
 	const _time = new Date().getTime();
 
 	//开始读取解析怪物数据
@@ -426,13 +426,8 @@ function loadData(force = false)
 			dealCkeyData(response.response);
 		},
 		onerror: function(response) {
-			const isChrome = navigator.userAgent.includes("Chrome");
-			if (isChrome && location.host.length == 0 && response.response.length > 0) {
-				console.info("因为是Chrome本地打开，正在尝试读取JSON");
-				dealCkeyData(response.response);
-			} else {
-				console.error("Ckey JSON数据获取失败", response);
-			}
+			console.error("新的 Ckey JSON 数据获取失败。", response);
+			return;
 		}
 	});
 	//处理返回的数据
@@ -446,9 +441,11 @@ function loadData(force = false)
 		try {
 			newCkeys = JSON.parse(responseText);
 		} catch (e) {
-			console.log("Ckey数据JSON解码出错", e);
+			console.error("新的 Ckey 数据 JSON 解码出错。", e);
 			return;
 		}
+		console.debug("目前使用的数据区服是 %s。", currentDataSource.code);
+		
 		currentCkey = newCkeys.find(ckey => ckey.code == currentDataSource.code); //获取当前语言的ckey
 		lastCkeys = localStorage.getItem("PADDF-ckey"); //读取本地储存的原来的ckey
 		try {
@@ -456,7 +453,7 @@ function loadData(force = false)
 			if (lastCkeys == null || !(lastCkeys instanceof Array))
 				lastCkeys = [];
 		} catch (e) {
-			console.log("上次的Ckey数据JSON解码出错", e);
+			console.error("旧的 Ckey 数据 JSON 解码出错。", e);
 			return;
 		}
 		lastCurrentCkey = lastCkeys.find(ckey => ckey.code == currentDataSource.code);
@@ -472,27 +469,26 @@ function loadData(force = false)
 		if (statusLine) statusLine.classList.remove("loading-check-version");
 		if (statusLine) statusLine.classList.add("loading-mon-info");
 		if (!force && db && currentCkey.ckey.card == lastCurrentCkey.ckey.card) {
-			console.log(`cards_${currentDataSource.code} ckey相等，直接读取已有的数据`, currentCkey.ckey.card);
+			console.debug("Cards ckey相等，直接读取已有的数据。");
 			const transaction = db.transaction([`cards`]);
 			const objectStore = transaction.objectStore(`cards`);
 			const request = objectStore.get(currentDataSource.code);
 			request.onerror = function(event) {
-				// 错误处理!
-				console.error(`cards_${currentDataSource.code} 数据库内容读取失败`);
+				console.error("Cards 数据库内容读取失败。");
 			};
 			request.onsuccess = function(event) {
-				// 对 request.result 做些操作！
 				if (request.result instanceof Array)
 				{
 					Cards = request.result;
 					dealCardsData(Cards);
 				}else
 				{
-					console.error(`cards_${currentDataSource.code} 数据库内容不存在，需重新下载`);
+					console.info("Cards 数据库内容不存在，需重新下载。");
 					downloadCardsData();
 				}
 			};
 		} else {
+			console.log("Cards 需重新下载。");
 			downloadCardsData();
 		}
 		
@@ -502,18 +498,17 @@ function loadData(force = false)
 				method: "GET",
 				url: `${sourceDataFolder}/mon_${currentDataSource.code}.json?t=${_time}`, //Cards数据文件
 				onload: function(response) {
-					console.log(`cards_${currentDataSource.code} ckey变化，储存新数据`, currentCkey.ckey.card);
 					try {
 						Cards = JSON.parse(response.response);
 					} catch (e) {
-						console.log("Cards数据JSON解码出错", e);
+						console.error("Cards 数据 JSON 解码出错。", e);
 						return;
 					}
 					if (db)
 					{
 						const transaction = db.transaction([`cards`], "readwrite");
 						transaction.oncomplete = function(event) {
-							console.log(`cards_${currentDataSource.code} 写入完毕`);
+							console.log("Cards 数据库写入完毕。");
 							lastCurrentCkey.ckey.card = currentCkey.ckey.card;
 							lastCurrentCkey.updateTime = currentCkey.updateTime;
 							localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys)); //储存新的ckey
@@ -527,7 +522,7 @@ function loadData(force = false)
 					}
 				},
 				onerror: function(response) {
-						console.error("Cards JSON数据获取失败", response);
+					console.error("Cards JSON 数据获取失败。", response);
 				}
 			});
 		}
@@ -558,27 +553,26 @@ function loadData(force = false)
 
 			if (statusLine) statusLine.classList.add("loading-skill-info");
 			if (!force && db && currentCkey.ckey.skill == lastCurrentCkey.ckey.skill) {
-				console.log(`skills_${currentDataSource.code} ckey相等，直接读取已有的数据`, currentCkey.ckey.card);
+				console.debug("Skills ckey相等，直接读取已有的数据。");
 				const transaction = db.transaction([`skills`]);
 				const objectStore = transaction.objectStore(`skills`);
 				const request = objectStore.get(currentDataSource.code);
 				request.onerror = function(event) {
-					// 错误处理!
-					console.error(`skills_${currentDataSource.code} 数据库内容读取失败`);
+					console.error("Skills 数据库内容读取失败。");
 				};
 				request.onsuccess = function(event) {
-					// 对 request.result 做些操作！
 					if (request.result instanceof Array)
 					{
 						Skills = request.result;
 						dealSkillData(Skills);
 					}else
 					{
-						console.error(`skills_${currentDataSource.code} 数据库内容不存在，需重新下载`);
+						console.info("Skills 数据库内容不存在，需重新下载。");
 						downloadSkillData();
 					}
 				};
 			} else {
+				console.log("Skills 需重新下载。");
 				downloadSkillData();
 			}
 
@@ -588,18 +582,17 @@ function loadData(force = false)
 					method: "GET",
 					url: `${sourceDataFolder}/skill_${currentDataSource.code}.json?t=${_time}`, //Skills数据文件
 					onload: function(response) {
-						console.log(`skills_${currentDataSource.code} ckey变化，储存新数据`, currentCkey.ckey.skill);
 						try {
 							Skills = JSON.parse(response.response);
 						} catch (e) {
-							console.log("Skills数据JSON解码出错", e);
+							console.log("Skills 数据 JSON 解码出错", e);
 							return;
 						}
 						if (db)
 						{
 							const transaction = db.transaction([`skills`], "readwrite");
 							transaction.oncomplete = function(event) {
-								console.log(`skills_${currentDataSource.code} 写入完毕`);
+								console.log("Skills 数据库写入完毕。");
 								lastCurrentCkey.ckey.skill = currentCkey.ckey.skill;
 								lastCurrentCkey.updateTime = currentCkey.updateTime;
 								localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys)); //储存新的ckey
@@ -613,7 +606,7 @@ function loadData(force = false)
 						}
 					},
 					onerror: function(response) {
-						console.error("Skills JSON数据获取失败", response);
+						console.error("Skills JSON 数据获取失败", response);
 					}
 				});
 			}
