@@ -1813,3 +1813,120 @@ ul{
 	stroke-width: 5;
 	stroke-dasharray: 10;
 }
+
+/*面板相关*/
+.board
+{
+	cursor: pointer;
+}
+.board td
+{
+	width: 20px;
+	height: 20px;
+	border: 1px black solid;
+	border-radius: 50%;
+	padding: 0;
+	text-align: center;
+}
+.board td::before
+{
+	font-size: 13px;
+	line-height: 13px;
+	display: block;
+	max-height: 100%;
+	max-width: 100%;
+}
+.board .orb-0
+{ /*火*/
+	background-color: #ef3535;
+}
+.board .orb-0::before
+{
+	content: "🔥";
+}
+.board .orb-1
+{ /*水*/
+	background-color: #258bed;
+}
+.board .orb-1::before
+{
+	content: "🌊";
+}
+.board .orb-2
+{ /*木*/
+	background-color: #28c031;
+}
+.board .orb-2::before
+{
+	content: "🍃";
+}
+.board .orb-3
+{ /*光*/
+	background-color: #eded29;
+}
+.board .orb-3::before
+{
+	content: "🌞";
+}
+.board .orb-4
+{ /*暗*/
+	background-color: #972ecb;
+}
+.board .orb-4::before
+{
+	content: "🦇";
+}
+.board .orb-5
+{ /*心*/
+	background-color: #f8baba;
+	border-radius: 3px;
+}
+.board .orb-5::before
+{
+	content: "💗";
+}
+.board .orb-6
+{ /*废*/
+	background-color: #d3d3d3;
+}
+.board .orb-6::before
+{
+	content: "😈";
+}
+.board .orb-7
+{ /*毒*/
+	background-color: #e831f3;
+}
+.board .orb-7::before
+{
+	content: "💀";
+}
+.board .orb-8
+{ /*剧毒*/
+	background-color: #670181;
+}
+.board .orb-8::before
+{
+	content: "☠️";
+}
+.board .orb-9
+{ /*炸弹*/
+	background-color: #7c7c7c;
+}
+.board .orb-9::before
+{
+	content: "💣";
+}
+.board .board-row4,
+.board .board-cell5
+{
+	display: none;
+}
+.board-76 .board-row4
+{
+	display: table-row;
+}
+.board-76 .board-cell5
+{
+	display: table-cell;
+}
