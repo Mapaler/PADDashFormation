@@ -850,6 +850,7 @@ function parseSkillDescription(skill)
 		case 166:
 			str = `${sk[0]}连击时，所有宠物的`;
 			strArr = [];
+			let scale_diff = sk[5] - sk[0];
 			if (sk[1]==sk[2] && sk[3] == sk[4])
 			{
 				strArr.push(`攻击力和回复力×${sk[1]/100}倍`);
@@ -857,34 +858,34 @@ function parseSkillDescription(skill)
 				{
 					strArr.push(`每多1种属性+${sk[3]/100}倍`);
 				}
-				if (sk[5]>sk[0])
+				if (scale_diff)
 				{
-					strArr.push(`最大${sk[5]}种属性时×${((sk[5]-sk[0])*sk[1]+sk[3])/100}倍`);
+					strArr.push(`最大${sk[5]}种属性时×${(scale_diff*sk[1]+sk[3])/100}倍`);
 				}
 			}else
 			{
-				if (sk[1]>0)
+				if (sk[1] && sk[1] !== 100)
 				{
 					strArr.push(`攻击力×${sk[1]/100}倍`);
 					if (sk[3]>0)
 					{
 						strArr.push(`每多1种属性+${sk[3]/100}倍`);
 					}
-					if (sk[5]>sk[0])
+					if (scale_diff)
 					{
-						strArr.push(`最大${sk[5]}种属性时×${((sk[5]-sk[0])*sk[1]+sk[3])/100}倍`);
+						strArr.push(`最大${sk[5]}种属性时×${(scale_diff*sk[1]+sk[3])/100}倍`);
 					}
 				}
-				if (sk[2]>0)
+				if (sk[2] && sk[2] !== 100)
 				{
 					strArr.push(`回复力×${sk[2]/100}倍`);
 					if (sk[4]>0)
 					{
 						strArr.push(`每多1种属性+${sk[4]/100}倍`);
 					}
-					if (sk[5]>sk[0])
+					if (scale_diff)
 					{
-						strArr.push(`最大${sk[5]}种属性时×${((sk[5]-sk[0])*sk[2]+sk[4])/100}倍`);
+						strArr.push(`最大${sk[5]}种属性时×${(scale_diff*sk[2]+sk[4])/100}倍`);
 					}
 				}
 			}
@@ -907,7 +908,7 @@ function parseSkillDescription(skill)
 				}
 			}else
 			{
-				if (sk[2]>0)
+				if (sk[2] && sk[2] !== 100)
 				{
 					strArr.push(`攻击力×${sk[2]/100}倍`);
 					if (sk[4]>0)
@@ -919,7 +920,7 @@ function parseSkillDescription(skill)
 						strArr.push(`最大${sk[6]}个时×${(sk[2]+sk[4]*(sk[6]-sk[1]))/100}倍`);
 					}
 				}
-				if (sk[3]>0)
+				if (sk[3] && sk[3] !== 100)
 				{
 					strArr.push(`回复力×${sk[3]/100}倍`);
 					if (sk[5]>0)
