@@ -35,7 +35,44 @@ function fastShowSkill(event)
 		console.log(Skills[skillId]);
 	}
 }
+//技能介绍里的头像的切换
+function changeToIdInSkillDetail(event)
+{
+	const settingBox = editBox.querySelector(".setting-box");
+	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
+	const mid = this.getAttribute("data-cardid");
+	monstersID.value = mid;
+	monstersID.onchange();
+	return false; //取消链接的默认操作
+}
 
+//技能介绍里的头像的切换
+function createBoard(boardData, orbType = 0)
+{
+	boardData.splice(3,0,boardData[2]); //将第2行复制插入为第3行
+	const table = document.createElement("table");
+	table.className = "board fixed-shape-orb";
+	boardData.forEach((flag,ri) => {
+		const row = table.insertRow();
+		if (ri == 3)
+			row.classList.add("board-row4");
+		boolArr = new Array(6).fill(null).map((a,i)=> (1<<i & flag) ? true:false);
+		boolArr.splice(4,0,boolArr[3]); //将第3个复制插入为第4个
+
+		boolArr.forEach((has,ci)=>{
+			const cell = row.insertCell();
+			if (has) cell.className = `has-orb orb-${orbType}`;
+			if (ci == 4)
+				cell.classList.add("board-cell5");
+		});
+	});
+	table.onclick = function(){
+		this.classList.toggle("board-76");
+	};
+	return table;
+}
+
+//insertAdjacentHTML 可以只增加部分 HTML
 //高级技能解释
 function parseSkillDescription(skill)
 {
@@ -600,20 +637,33 @@ function parseSkillDescription(skill)
 			}
 			break;
 		case 125: //隊伍中同時存在 時，所有寵物的攻擊力3.5倍
-			strArr = sk.slice(0,5).filter(s=>s>0);
-			str = `队伍中${strArr.length>1?"同时":""}存在`;
-			str += strArr.map(cardN).join("");
-			str += "时所有宠物的";
-			strArr =[];
-			if (sk[5]) {strArr.push(`HP×${sk[5]/100}倍`);}
-			if (sk[6]) {strArr.push(`攻击力×${sk[6]/100}倍`);}
-			if (sk[7]) {strArr.push(`回复力×${sk[7]/100}倍`);}
-			str += strArr.join("、");
+			let needMons = sk.slice(0,5).filter(s=>s>0);
+			fragment.appendChild(document.createTextNode(`队伍中${needMons.length>1?"同时":""}存在`));
+			needMons.forEach(mid=>{
+				let cardDom = cardN(mid);
+				cardDom.monDom.onclick = changeToIdInSkillDetail;
+				fragment.appendChild(cardDom);
+			});
+			fragment.appendChild(document.createTextNode(`时，所有宠物的${getFixedHpAtkRcvString({hp:sk[5],atk:sk[6],rcv:sk[7]})}`));
+			return fragment;
 			break;
 		case 126:
 			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内${nb(sk[0], attrsName).join("、")}宝珠的掉落率提高${sk[3]}%`;
 			break;
 		case 127: //生成竖列
+			strArr = [];
+			for (let ai=0;ai<sk.length;ai+=2)
+			{
+				strArr.push(`${nb(sk[ai],ClumsN).join("、")}的宝珠变为${nb(sk[ai+1],attrsName).join("、")}`);
+			}
+			fragment.appendChild(document.createTextNode(strArr.join("，")));
+/*
+			var table = createBoard([sk[0],sk[1],sk[2],sk[3],sk[4]], sk[5]);
+			table.classList.add("fixed-shape-orb");
+			fragment.appendChild(table);*/
+			return fragment;
+			break;
+
 			strArr = [];
 			for (let ai=0;ai<sk.length;ai+=2)
 			{
@@ -736,7 +786,25 @@ function parseSkillDescription(skill)
 			str = `协力时${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]})}`;
 			break;
 		case 156: //宝石姬技能
-			strArr = sk.slice(1,4);
+			awokenArr = sk.slice(1,4).filter(s=>s>0);
+			fragment.appendChild(document.createTextNode(`${sk[0]?`${sk[0]}回合内，`:""}根据队伍内觉醒技能`));
+			awokenArr.forEach((aid,idx,arr)=>{
+				const icon = fragment.appendChild(document.createElement("icon"));
+				icon.className ="awoken-icon";
+				icon.setAttribute("data-awoken-icon",aid);
+				icon.title = awokenN(aid);
+				if (idx < arr.length-1) icon.insertAdjacentText('afterend', "、");;
+			});
+			fragment.appendChild(document.createTextNode(`的数目`));
+			if (sk[4]==1)
+				fragment.appendChild(document.createTextNode(`回复 HP ，每个觉醒回复自身回复力的${sk[5]/100}倍`));
+			else if (sk[4]==2)
+				fragment.appendChild(document.createTextNode(`提升所有属性的攻击力，每个觉醒可以提升${sk[5]-100}%`));
+			else if (sk[4]==3)
+				fragment.appendChild(document.createTextNode(`减少受到的伤害，每个觉醒可以减少${sk[5]}%`));
+			else
+				fragment.appendChild(document.createTextNode(`宝石姬技能，未知buff类型 参数[4]：${sk[4]}`));
+			return fragment;
 			str = `${sk[0]?`${sk[0]}回合内，`:""}根据队伍内觉醒技能 ${strArr.filter(s=>s>0).map(s=>awokenN(s)).join("、")} 的数目`;
 			if (sk[4]==1)
 				str += `回复 HP ，每个觉醒回复自身回复力的${sk[5]/100}倍`;
@@ -1033,21 +1101,34 @@ function parseSkillDescription(skill)
 			str = `${sk[0]}回合内敌人的${strArr.join("、")}无效化`;
 			break;
 		case 175: //隊員編成均為「マガジン」合作活動角色時，所有寵物的攻擊力8倍
-			str = `队员组成全是`;
-			strArr = sk.slice(0,3).filter(s=>s>0); //最多3种id
-			str += strArr.map(s=>{
-				return `<a class="detail-search monster-collabId" data-collabId="${s}" onclick="searchColla(this.getAttribute('data-collabId'));">${s}</a>`;
-			}).join("、");
-			str += `合作角色时，所有宠物的${getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]})}`;
+			let needCollabs = sk.slice(0,3).filter(s=>s>0); //最多3种id
+			fragment.appendChild(document.createTextNode(`队员组成全是`));
+			
+			//搜索并显示合作
+			function searchCollab(event) {
+				const collabId = parseInt(this.getAttribute('data-collabId'), 10);
+				showSearch(Cards.filter(card => card.collabId == collabId));
+			}
+
+			needCollabs.forEach((cid,idx,arr)=>{
+				const lnk = fragment.appendChild(document.createElement("a"));
+				lnk.className ="detail-search monster-collabId";
+				lnk.setAttribute("data-collabId",cid);
+				lnk.onclick = searchCollab;
+				lnk.textContent = cid;
+				if (idx < arr.length-1) lnk.insertAdjacentText('afterend', "、");;
+			});
+			fragment.appendChild(document.createTextNode(`合作角色时，所有宠物的${getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]})}`));
+			return fragment;
 			break;
 		case 176:
 		//●◉○◍◯
-			var table = [sk[0],sk[1],sk[2],sk[3],sk[4]];
-			str = `以如下形状生成${attrN(sk[5])}宝珠<br>`;
-			str += table.map(r=>{
-				const line = new Array(6).fill(null).map((a,i)=> (1<<i & r) ? "●":"○");
-				return line.join("");
-			}).join("<br>");
+			//var data = [sk[0],sk[1],sk[2],sk[3],sk[4]].map(flag=>new Array(6).fill(null).map((a,i)=> (1<<i & flag) ? sk[5] : null));
+			//var table = createBoard([sk[0],sk[1],sk[2],sk[3],sk[4]], sk[5]);
+			var table = createBoard([sk[0],sk[1],sk[2],sk[3],sk[4]], sk[5]);
+			table.classList.add("fixed-shape-orb");
+			fragment.appendChild(table);
+			return fragment;
 			break;
 		case 177:
 /*
@@ -1213,15 +1294,33 @@ function parseSkillDescription(skill)
 			if (sk[5]) str += `，追加${sk[5]}点固定伤害`;
 			break;
 		case 202:
-			str = `变身为${cardN(sk[0])}`;
+			fragment.appendChild(document.createTextNode("变身为"));
+			let cardDom = cardN(sk[0]);
+			cardDom.monDom.onclick = changeToIdInSkillDetail;
+			fragment.appendChild(cardDom);
+			return fragment;
 			break;
 		case 203:
-			str = `队员组成全是`;
-			if (sk[0] === 0) str += "像素进化";
-			else if (sk[0] === 2)str += "转生或超转生";
-			else str += "未知新类型";
-			str += `时，`;
-			str += "宠物的" + getFixedHpAtkRcvString({hp:sk[1],atk:sk[2],rcv:sk[3]});
+			fragment.appendChild(document.createTextNode(`队员组成全是`));
+			const lnk = fragment.appendChild(document.createElement("a"));
+			lnk.className ="detail-search";
+			if (sk[0] === 0)
+			{
+				lnk.textContent = "像素进化";
+				lnk.onclick = function(){
+					showSearch(Cards.filter(card=>card.evoMaterials.includes(3826)));
+				};
+			}else if (sk[0] === 2)
+			{
+				lnk.textContent = "转生或超转生";
+				lnk.onclick = function(){
+					showSearch(Cards.filter(card=>isReincarnated(card)));
+				};
+			}else
+				lnk.textContent = "未知新类型";
+
+			fragment.appendChild(document.createTextNode(`时，所有宠物的${getFixedHpAtkRcvString({hp:sk[1],atk:sk[2],rcv:sk[3]})}`));
+			return fragment;
 			break;
 		case 205:
 			str = `${sk[1]}回合内，${getOrbsAttrString(sk[0])}宝珠会以锁定形式掉落`;
@@ -3235,7 +3334,7 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"变身后",function:cards=>cards.filter(card=>card.henshinTo)},
+		{name:"变身后",function:cards=>cards.filter(card=>card.henshinFrom)},
 		{name:"变身前后队长技保持不变",function:cards=>cards.filter(card=>{
 			const searchType = 202;
 			const skill = Skills[card.activeSkillId];

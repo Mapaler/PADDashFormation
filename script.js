@@ -297,16 +297,79 @@ function toggleDomClassName(checkBox, className, checkedAdd = true, dom = docume
 	}
 }
 //清除数据
-function clearData() {
+function clearData()
+{
 	const locationURL = new URL(location);
 	locationURL.searchParams.delete('d'); //删除数据
 	locationURL.searchParams.delete('l'); //删除语言
 	location = locationURL.toString();
 }
 //轮换ABC队伍
-function swapABCteam() {
+function swapABCteam()
+{
 	if (formation.teams.length > 1) {
 		formation.teams.push(formation.teams.splice(0, 1)[0]); //将队伍1移动到最后
+		creatNewUrl();
+		refreshAll(formation);
+	}
+}
+function swapHenshin(self)
+{
+	const backClassName = "henshin-back";
+	const back = self.classList.contains(backClassName);
+	let shouldChange = formation.teams.some(team=>
+		team[0].some(member=>{
+			const mid = member.id;
+			const card = Cards[mid];
+			return card.henshinFrom || card.henshinTo;
+		})
+	);
+	//获得最终变身
+	function finalHenshin(card)
+	{
+		if (card.henshinTo)
+		{ //是变身的则返回
+			if (card.evoRootId === card.henshinTo)
+			{ //应对无限循环变身的问题
+				return card;
+			}
+			return finalHenshin(Cards[card.henshinTo]);
+		}
+		return card;
+	}
+	if (shouldChange)
+	{
+		if (back)
+		{ //回到变身前
+			formation.teams.forEach(team=>{
+				team[0].forEach(member=>{
+					const mid = member.id;
+					const card = Cards[mid];
+					if (card.henshinFrom && member.level <= 99)
+					{ //要变身后的才进行操作
+						const _card = Cards[card.evoRootId];
+						member.id = card.evoRootId;
+						member.awoken = _card.awakenings.length;
+					}
+				});
+			});
+			self.classList.remove(backClassName);
+		}else
+		{ //跑到变身后
+			formation.teams.forEach(team=>{
+				team[0].forEach(member=>{
+					const mid = member.id;
+					const card = Cards[mid];
+					if (card.henshinTo)
+					{ //要变身前的才进行操作
+						const _card = finalHenshin(card);
+						member.id = _card.id;
+						member.awoken = _card.awakenings.length;
+					}
+				});
+			});
+			self.classList.add(backClassName);
+		}
 		creatNewUrl();
 		refreshAll(formation);
 	}
@@ -540,10 +603,11 @@ function loadData(force = false)
 	
 					const linkRes = new RegExp("link:(\\d+)", "ig").exec(m.specialAttribute);
 					if (linkRes) { //每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
-						const _m = Cards[parseInt(linkRes[1], 10)];
+						const toId = parseInt(linkRes[1], 10);
+						const _m = Cards[toId];
 						_m.evoRootId = m.evoRootId;
-						m.henshinFrom = true;
-						_m.henshinTo = true;
+						m.henshinTo = toId;
+						_m.henshinFrom = m.id;
 					}
 				});
 				monstersList.appendChild(fragment);
@@ -837,26 +901,28 @@ function initialize() {
 	mSeriesId.onclick = function() { //搜索系列
 		const seriesId = parseInt(this.getAttribute('data-seriesId'), 10);
 		if (seriesId > 0) {
-			showSearch(Cards.filter(card => { return card.seriesId == seriesId; }));
+			showSearch(Cards.filter(card => card.seriesId == seriesId));
 		}
 	};
 	const mCollabId = smonsterinfoBox.querySelector(".monster-collabId");
 	mCollabId.onclick = function() { //搜索合作
 		const collabId = parseInt(this.getAttribute('data-collabId'), 10);
 		if (collabId > 0); {
-			searchColla(collabId);
+			showSearch(Cards.filter(card => card.collabId == collabId));
 		}
 	};
 	const mAltName = smonsterinfoBox.querySelector(".monster-altName");
 	mAltName.onclick = function() { //搜索合作
 		const altName = this.getAttribute('data-altName');
-		const splitAltName = altName.split("|");
-		if (altName.length > 0); {
-			showSearch(Cards.filter(card => {
-				return splitAltName.some(alt => {
-					return alt.length > 0 && (card.altName.includes(alt) || card.name.includes(alt));
-				});
-			}));
+		if (altName.length > 0)
+		{
+			const splitAltName = altName.split("|");
+			showSearch(Cards.filter(card =>
+				splitAltName.some(alt =>
+					alt.length > 0 &&
+					(card.altName.includes(alt) || card.name.includes(alt))
+				)
+			));
 		}
 	};
 	//创建一个新的怪物头像
@@ -2163,11 +2229,6 @@ function editBoxChangeMonId(id) {
 	editBox.refreshLatent(editBox.latent, id);
 	editBox.reCalculateExp();
 	editBox.reCalculateAbility();
-}
-//搜索并显示合作
-function searchColla(collabId) {
-	if (typeof(collabId) == "string") collabId = parseInt(collabId, 10);
-	showSearch(Cards.filter(card => { return card.collabId == collabId; }));
 }
 //刷新整个队伍
 function refreshAll(formationData) {

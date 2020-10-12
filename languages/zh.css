@@ -235,6 +235,12 @@
 .control-box .btn-swap-ABC-team::before{
 	content: "🔄轮换ABC队";
 }
+.control-box .btn-swap-henshin::before{
+	content: "🐱➡️🐯最终变身";
+}
+.control-box .btn-swap-henshin.henshin-back::before{
+	content: "🐱↩️🐯变身前";
+}
 .control-box .show-mon-id-lbl::after{
 	content:"🆔显示怪物ID";
 }
