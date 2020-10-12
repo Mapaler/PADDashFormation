@@ -560,7 +560,7 @@ function parseSkillDescription(skill)
 			){
 				const li = ul.appendChild(document.createElement("li"))
 				li.className = "active-skill-li";
-				li.setAttribute("data-skillid", subSkill);
+				li.setAttribute("data-skillid", repeatSkill[0]);
 				li.addEventListener("click",fastShowSkill);
 				li.appendChild(parseSkillDescription(Skills[repeatSkill[0]]));
 				li.appendChild(document.createTextNode(`×${repeatSkill.length}次`));
@@ -825,15 +825,6 @@ function parseSkillDescription(skill)
 			else
 				fragment.appendChild(document.createTextNode(`宝石姬技能，未知buff类型 参数[4]：${sk[4]}`));
 			return fragment;
-			str = `${sk[0]?`${sk[0]}回合内，`:""}根据队伍内觉醒技能 ${strArr.filter(s=>s>0).map(s=>awokenN(s)).join("、")} 的数目`;
-			if (sk[4]==1)
-				str += `回复 HP ，每个觉醒回复自身回复力的${sk[5]/100}倍`;
-			else if (sk[4]==2)
-				str += `提升所有属性的攻击力，每个觉醒可以提升${sk[5]-100}%`;
-			else if (sk[4]==3)
-				str += `减少受到的伤害，每个觉醒可以减少${sk[5]}%`;
-			else
-				str = `156宝石姬技能，未知buff类型 参数[4]：${sk[4]}`;
 			break;
 		case 157:
 			fullColor = [sk[0],sk[2],sk[4]].filter(s=>s!=null);
