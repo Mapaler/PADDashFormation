@@ -233,7 +233,13 @@
 	content: "🔄交換AB隊";
 }
 .control-box .btn-swap-ABC-team::before{
-	content: "🔄輪換AB隊";
+	content: "🔄輪換ABC隊";
+}
+.control-box .btn-swap-henshin::before{
+	content: "🐱➡️🐯最終變身";
+}
+.control-box .btn-swap-henshin.henshin-back::before{
+	content: "🐱↩️🐯變身前";
 }
 .control-box .show-mon-id-lbl::after{
 	content:"🆔顯示怪物ID";

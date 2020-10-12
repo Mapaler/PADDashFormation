@@ -236,6 +236,12 @@
 .control-box .btn-swap-ABC-team::before{
 	content: "🔄Rotating ABC Team";
 }
+.control-box .btn-swap-henshin::before{
+	content: "🐱➡️🐯Finally Henshin";
+}
+.control-box .btn-swap-henshin.henshin-back::before{
+	content: "🐱↩️🐯Before Henshin";
+}
 .control-box .show-mon-id-lbl::after{
 	content:"🆔Show monster ID";
 }
