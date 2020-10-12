@@ -650,6 +650,14 @@ function parseSkillDescription(skill)
 			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内${nb(sk[0], attrsName).join("、")}宝珠的掉落率提高${sk[3]}%`;
 			break;
 		case 127: //生成竖列
+			function boardData_line(data,lineFlag,orbTypeFlag)
+			{
+				const orbType = flags(orbTypeFlag)[0];
+				flags(lineFlag).forEach(=>
+					data.forEach(row=>row[line] = orbType)
+				);
+				return data;
+			}
 			strArr = [];
 			var data = new Array(5).fill(null).map(()=>new Array(6).fill(null));
 			for (let ai=0;ai<sk.length;ai+=2)
@@ -1127,6 +1135,15 @@ function parseSkillDescription(skill)
 			break;
 		case 176:
 		//●◉○◍◯
+			function boardData_fixed(dataArr,orbType)
+			{
+				const data = dataArr.map(flag=>new Array(6).fill(null).map((a,i)=> (1<<i & flag) ? (orbType || 0) : null));
+				data.splice(3,0,data[2].concat()); //将第2行复制插入为第3行
+				data.forEach(rowData => 
+					rowData.splice(4,0,rowData[3]) //将第3个复制插入为第4个
+				);
+				return data;
+			}
 			fragment.appendChild(document.createTextNode(`以如下形状生成${attrN(sk[5])}宝珠`));
 			var data = [sk[0],sk[1],sk[2],sk[3],sk[4]].map(flag=>new Array(6).fill(null).map((a,i)=> (1<<i & flag) ? (sk[5] || 0) : null));
 			var table = createBoard(data);
