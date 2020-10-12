@@ -1264,7 +1264,7 @@ function parseSkillDescription(skill)
 			break;
 		case 198:
 			//以回復寶珠回復40000HP或以上時，受到的傷害減少50%
-			str = `以回复宝珠回复${sk[0]}或以上时`;
+			str = `以回复宝珠回复${parseBigNumber(sk[0])}点或以上时`;
 			if (sk[1] && sk[1] != 100) str += `所有宠物的${getFixedHpAtkRcvString({atk:sk[1]})}`;
 			if (sk[2]) str += `，受到的伤害减少${sk[2]}%`;
 			if (sk[3]) str += `，觉醒无效状态减少${sk[3]}回合`;
