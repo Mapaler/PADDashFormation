@@ -26,11 +26,22 @@ function flags(num){
 	return arr;
 }
 
+//按住Ctrl点击技能在控制台输出技能的对象
+function fastShowSkill(event)
+{
+	if (event.ctrlKey)
+	{
+		const skillId = parseInt(this.getAttribute("data-skillid"), 10);
+		console.log(Skills[skillId]);
+	}
+}
+
 //高级技能解释
 function parseSkillDescription(skill)
 {
 	const id = skill.id;
-	if (id == 0) return "";
+	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+	if (id == 0) return fragment;
 	const type = skill.type;
 	const sk = skill.params;
 	
@@ -488,19 +499,35 @@ function parseSkillDescription(skill)
 			str = `对敌方1体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害，并回复伤害${sk[2]}%的 HP `;
 			break;
 		case 116: //多内容主动技能，按顺序组合发动如下主动技能：
-			str = `<ul class="active-skill-ul">`;
+			var ul = fragment.appendChild(document.createElement("ul"));
+			ul.className = "active-skill-ul";
 			//处理多次单人固伤
-			let repeatDamage = sk.filter(subSkill => Skills[subSkill].type == 188);
-			if (repeatDamage.length>1)
-			{
-				strArr = sk.filter(subSkill =>  Skills[subSkill].type != 188).map(subSkill => `<li class="active-skill-li">${parseSkillDescription(Skills[subSkill])}</li>`);
-				strArr.splice(sk.indexOf(repeatDamage[0]),0,`<li class="active-skill-li">${parseSkillDescription(Skills[repeatDamage[0]])}×${repeatDamage.length}次</li>`);
-				str += strArr.join("");
+			let repeatSkill = sk.filter(subSkill => Skills[subSkill].type == 188);
+			let repeatDamage = repeatSkill.map(subSkill => Skills[subSkill].params[0]);
+			let noRepeatSk;
+			if (repeatSkill.length>1 &&
+				repeatDamage.every((dmg,idx,arr) => dmg === arr[0])
+			){
+				const li = ul.appendChild(document.createElement("li"))
+				li.className = "active-skill-li";
+				li.setAttribute("data-skillid", subSkill);
+				li.addEventListener("click",fastShowSkill);
+				li.appendChild(parseSkillDescription(Skills[repeatSkill[0]]));
+				li.appendChild(document.createTextNode(`×${repeatSkill.length}次`));
+				noRepeatSk = sk.filter(subSkill => Skills[subSkill].type !== 188);
 			}else
 			{
-				str += sk.map(subSkill => `<li class="active-skill-li">${parseSkillDescription(Skills[subSkill])}</li>`).join("");
+				noRepeatSk = sk;
 			}
-			str += `</ul>`;
+
+			noRepeatSk.forEach(subSkill => {
+				const li = ul.appendChild(document.createElement("li"))
+				li.className = "active-skill-li";
+				li.setAttribute("data-skillid", subSkill);
+				li.addEventListener("click",fastShowSkill);
+				li.appendChild(parseSkillDescription(Skills[subSkill]));
+			});
+			return fragment;
 			break;
 		case 117:
 			strArr = [];
@@ -512,9 +539,17 @@ function parseSkillDescription(skill)
 			str = strArr.join("，");
 			break;
 		case 118: //随机内容主动技能
-			str = `随机发动以下技能：<ul class="active-skill-ul random-active-skill">`;
-			str += sk.map(subSkill => {return `<li class="active-skill-li">${parseSkillDescription(Skills[subSkill])}</li>`;}).join("");
-			str += `</ul>`;
+			fragment.appendChild(document.createTextNode("随机发动以下技能："));
+			var ul = fragment.appendChild(document.createElement("ul"));
+			ul.className = "active-skill-ul random-active-skill";
+			sk.forEach(subSkill => {
+				const li = ul.appendChild(document.createElement("li"))
+				li.className = "active-skill-li";
+				li.setAttribute("data-skillid", subSkill);
+				li.addEventListener("click",fastShowSkill);
+				li.appendChild(parseSkillDescription(Skills[subSkill]));
+			});
+			return fragment;
 			break;
 		case 119: //相連消除4個的水寶珠時，所有寵物的攻擊力2.5倍，每多1個+0.5倍，最大5個時3倍
 			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0],true)}宝珠时，所有宠物的攻击力${sk[2]/100}倍`;
@@ -632,9 +667,16 @@ function parseSkillDescription(skill)
 			if (sk[4]) str += `，${getAttrTypeString(null,flags(sk[4]))}宠物的${getFixedHpAtkRcvString({hp:sk[5],atk:sk[6],rcv:sk[7]})}`;
 			break;
 		case 138: //多内容队长技能，按顺序组合发动如下队长技能：
-			str = `<ul class="leader-skill-ul">`;
-			str += sk.map(subSkill => {return `<li class="leader-skill-li">${parseSkillDescription(Skills[subSkill])}</li>`;}).join("");
-			str += `</ul>`;
+			var ul = fragment.appendChild(document.createElement("ul"));
+			ul.className = "leader-skill-ul";
+			sk.forEach(subSkill => {
+				const li = ul.appendChild(document.createElement("li"))
+				li.className = "leader-skill-li";
+				li.setAttribute("data-skillid", subSkill);
+				li.addEventListener("click",fastShowSkill);
+				li.appendChild(parseSkillDescription(Skills[subSkill]));
+			});
+			return fragment;
 			break;
 		case 139:
 			str = ``;
@@ -1229,8 +1271,10 @@ function parseSkillDescription(skill)
 			console.log(`未知的技能类型${type}(No.${id})`,findFullSkill(skill));
 			break;
 	}
+	const span = fragment.appendChild(document.createElement("span"));
+	span.innerHTML = str;
 	//(skill.description.length?(descriptionToHTML(skill.description) + "<hr>"):"") + str
-	return str;
+	return fragment;
 }
 //大数字缩短长度
 function parseBigNumber(number)
@@ -3331,4 +3375,16 @@ function parseBigNumber(number)
 			ss.selectedIndex = 0
 		);
 	});
+
+	const settingBox = editBox.querySelector(".setting-box");
+	const rowSkill = settingBox.querySelector(".row-mon-skill");
+	const skillBox = rowSkill.querySelector(".skill-box");
+	const skillTitle = skillBox.querySelector(".skill-name");
+
+	const rowLederSkill = settingBox.querySelector(".row-mon-leader-skill");
+	const lskillBox = rowLederSkill.querySelector(".skill-box");
+	const lskillTitle = lskillBox.querySelector(".skill-name");
+
+	skillTitle.addEventListener("click",fastShowSkill);
+	lskillTitle.addEventListener("click",fastShowSkill);
 })();

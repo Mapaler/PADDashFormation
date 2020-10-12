@@ -466,7 +466,9 @@ function descriptionToHTML(str)
 //默认的技能解释的显示行为
 function parseSkillDescription(skill)
 {
-	return descriptionToHTML(skill.description);
+	const span = document.createElement("span");
+	span.innerHTML = descriptionToHTML(skill.description);
+	return span;
 }
 //大数字缩短长度，默认返回本地定义字符串
 function parseBigNumber(number)
