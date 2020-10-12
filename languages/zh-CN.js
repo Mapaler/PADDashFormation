@@ -284,7 +284,7 @@ function parseSkillDescription(skill)
 			str = `将敌人的攻击延迟${sk[0]}回合`;
 			break;
 		case 19:
-			str = `${sk[0]}回合内敌方防御力减少${sk[1]}%`;
+			str = `${sk[0]}回合内，敌方防御力减少${sk[1]}%`;
 			break;
 		case 20: //单色A转B，C转D
 			strArr = [];
@@ -301,7 +301,7 @@ function parseSkillDescription(skill)
 			}
 			break;
 		case 21:
-			str = `${sk[0]}回合内${attrN(sk[1])}属性的伤害减少${sk[2]}%`;
+			str = `${sk[0]}回合内，${attrN(sk[1])}属性的伤害减少${sk[2]}%`;
 			break;
 		case 22: case 31:
 			str = `${sk.slice(0,sk.length-1).map(t=>typeN(t)).join("、")}类型宠物的攻击力×${sk[sk.length-1]/100}倍`;
@@ -365,7 +365,7 @@ function parseSkillDescription(skill)
 			str = `${sk.slice(0,sk.length-1).map(t=>attrN(t)).join("、")}属性宠物的回复力×${sk[sk.length-1]/100}倍`;
 			break;
 		case 50:
-			str = `${sk[0]}回合内${(sk[1]==5?"回复力":`${attrN(sk[1])}属性的攻击力`)}${sk[2]>0?`×${sk[2]/100}倍`:"变为0"}`;
+			str = `${sk[0]}回合内，${(sk[1]==5?"回复力":`${attrN(sk[1])}属性的攻击力`)}${sk[2]>0?`×${sk[2]/100}倍`:"变为0"}`;
 			break;
 		case 51:
 			str = `${sk[0]}回合内，所有攻击转为全体攻击`;
@@ -470,11 +470,11 @@ function parseSkillDescription(skill)
 			if (sk[2]) str += `未知 参数2 ${sk[2]}`;
 			break;
 		case 88:
-			str = `${sk[0]}回合内${typeN(sk[1])}类型的攻击力×${sk[2]/100}倍`;
+			str = `${sk[0]}回合内，${typeN(sk[1])}类型的攻击力×${sk[2]/100}倍`;
 			break;
 		case 90:
 			strArr = sk.slice(1,-1);
-			str = `${sk[0]}回合内${strArr.filter(sk=>sk<5).map(attrN).join("、")}属性的攻击力${strArr.includes(5)?'、回复力':''}×${sk[sk.length-1]/100}倍`;
+			str = `${sk[0]}回合内，${strArr.filter(sk=>sk<5).map(attrN).join("、")}属性的攻击力${strArr.includes(5)?'、回复力':''}×${sk[sk.length-1]/100}倍`;
 			break;
 		case 91:
 			str = `${sk.slice(0,-1).map(attrN).join("、")}属性宝珠强化`;
@@ -482,7 +482,7 @@ function parseSkillDescription(skill)
 			break;
 		case 92:
 			strArr = sk.slice(1,-1);
-			str = `${sk[0]}回合内${strArr.map(typeN).join("、")}类型的攻击力×${sk[sk.length-1]/100}倍`;
+			str = `${sk[0]}回合内，${strArr.map(typeN).join("、")}类型的攻击力×${sk[sk.length-1]/100}倍`;
 			break;
 		case 93:
 			str = `将自己换成队长，再次使用此技能则换为原来的队长。`;
@@ -661,7 +661,7 @@ function parseSkillDescription(skill)
 			return fragment;
 			break;
 		case 126:
-			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内${nb(sk[0], attrsName).join("、")}宝珠的掉落率提高${sk[3]}%`;
+			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内，${nb(sk[0], attrsName).join("、")}宝珠的掉落率提高${sk[3]}%`;
 			break;
 		case 127: //生成竖列
 			strArr = [];
@@ -763,7 +763,7 @@ function parseSkillDescription(skill)
 			str = `${otherAttrs?`${getOrbsAttrString(otherAttrs)}以外`:""}随机生成${getOrbsAttrString(sk[1])}宝珠各${sk[0]}个`;
 			break;
 		case 142:
-			str = `${sk[0]}回合内自身的属性变为${attrN(sk[1])}`;
+			str = `${sk[0]}回合内，自身的属性变为${attrN(sk[1])}`;
 			break;
 		case 143:
 			str = `对敌方全体造成队伍总 HP×${sk[0]/100}倍的${attrN(sk[1])}属性伤害`;
@@ -1118,7 +1118,7 @@ function parseSkillDescription(skill)
 			if (sk[1]) strArr.push("属性吸收");
 			if (sk[2]) strArr.push("连击吸收？目前是猜测");
 			if (sk[3]) strArr.push("伤害吸收");
-			str = `${sk[0]}回合内敌人的${strArr.join("、")}无效化`;
+			str = `${sk[0]}回合内，敌人的${strArr.join("、")}无效化`;
 			break;
 		case 175: //隊員編成均為「マガジン」合作活動角色時，所有寵物的攻擊力8倍
 			let needCollabs = sk.slice(0,3).filter(s=>s>0); //最多3种id
@@ -1185,7 +1185,7 @@ function parseSkillDescription(skill)
 			if (sk[3] || sk[4] || sk[5]) str += "的"+getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]});
 			break;
 		case 179:
-			str = `${sk[0]}回合内每回合回复${sk[1]?`${sk[1]}点`:` HP 上限 ${sk[2]}%`}的 HP`;
+			str = `${sk[0]}回合内，每回合回复${sk[1]?`${sk[1]}点`:` HP 上限 ${sk[2]}%`}的 HP`;
 			if(sk[3] || sk[4])
 			{
 				str += `，并将`;
@@ -1225,7 +1225,7 @@ function parseSkillDescription(skill)
 			str = '<span class="spColor">【7×6版面】</span>';
 			if (sk[0] || sk[1]) str += getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的" + getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]});
 			break;
-		case 188:
+		case 188: //多次单体固伤
 			str = `对敌方1体造成${sk[0]}点无视防御的固定伤害`;
 			break;
 		case 189: 
@@ -1233,7 +1233,7 @@ function parseSkillDescription(skill)
 			str = `解除宝珠的锁定状态；所有宝珠变成火、水、木、光；显示3连击的转珠路径（只适用于普通地下城 & 3珠消除）`;
 			break;
 		case 191:
-			str = `${sk[0]}回合内可以贯穿伤害无效盾`;
+			str = `${sk[0]}回合内，可以贯穿伤害无效盾`;
 			break;
 		case 192:
 			//相連消除9個或以上的火寶珠時攻擊力4倍、結算增加2COMBO
