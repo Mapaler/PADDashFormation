@@ -517,7 +517,7 @@ function parseSkillDescription(skill)
 			str += `</ul>`;
 			break;
 		case 119: //相連消除4個的水寶珠時，所有寵物的攻擊力2.5倍，每多1個+0.5倍，最大5個時3倍
-			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(sk[0],true)}宝珠时，所有宠物的攻击力${sk[2]/100}倍`;
+			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0],true)}宝珠时，所有宠物的攻击力${sk[2]/100}倍`;
 			if (sk[3]>0)
 			{
 				str += `，每多1个+${sk[3]/100}倍`;
