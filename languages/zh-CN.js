@@ -47,25 +47,23 @@ function changeToIdInSkillDetail(event)
 }
 
 //技能介绍里的头像的切换
-function createBoard(boardData, orbType = 0)
+function createBoard(boardData)
 {
-	boardData.splice(3,0,boardData[2]); //将第2行复制插入为第3行
+	boardData.splice(3,0,boardData[2].concat()); //将第2行复制插入为第3行
 	const table = document.createElement("table");
 	table.className = "board fixed-shape-orb";
-	boardData.forEach((flag,ri) => {
+	console.table(boardData);
+	boardData.forEach((rowData,ri) => {
 		const row = table.insertRow();
-		if (ri == 3)
-			row.classList.add("board-row4");
-		boolArr = new Array(6).fill(null).map((a,i)=> (1<<i & flag) ? true:false);
-		boolArr.splice(4,0,boolArr[3]); //将第3个复制插入为第4个
+		if (ri == 3) row.classList.add("board-row4");
+		rowData.splice(4,0,rowData[3]); //将第3个复制插入为第4个
 
-		boolArr.forEach((has,ci)=>{
+		rowData.forEach((orbType,ci)=>{
 			const cell = row.insertCell();
-			if (has) cell.className = `has-orb orb-${orbType}`;
-			if (ci == 4)
-				cell.classList.add("board-cell5");
+			if (orbType != null) cell.className = `has-orb orb-${orbType}`;
+			if (ci == 4) cell.classList.add("board-cell5");
 		});
-	});
+	});	
 	table.onclick = function(){
 		this.classList.toggle("board-76");
 	};
@@ -109,6 +107,7 @@ function parseSkillDescription(skill)
 		});
 		return results;
 	}
+	
 	const nb = getNamesFromBinary; //化简名称
 
 	function getAttrTypeString(attrsArray = [],typesArray = [])
@@ -652,32 +651,37 @@ function parseSkillDescription(skill)
 			break;
 		case 127: //生成竖列
 			strArr = [];
+			var data = new Array(5).fill(null).map(()=>new Array(6).fill(null));
 			for (let ai=0;ai<sk.length;ai+=2)
 			{
 				strArr.push(`${nb(sk[ai],ClumsN).join("、")}的宝珠变为${nb(sk[ai+1],attrsName).join("、")}`);
+
+				const orbType = flags(sk[ai+1])[0];
+				flags(sk[ai]).forEach(line=>
+					data.forEach(row=>row[line] = orbType)
+				);
 			}
 			fragment.appendChild(document.createTextNode(strArr.join("，")));
-/*
-			var table = createBoard([sk[0],sk[1],sk[2],sk[3],sk[4]], sk[5]);
-			table.classList.add("fixed-shape-orb");
-			fragment.appendChild(table);*/
+			var table = createBoard(data);
+			fragment.appendChild(table);
 			return fragment;
-			break;
-
-			strArr = [];
-			for (let ai=0;ai<sk.length;ai+=2)
-			{
-				strArr.push(`${nb(sk[ai],ClumsN).join("、")}的宝珠变为${nb(sk[ai+1],attrsName).join("、")}`);
-			}
-			str = strArr.join("，");
 			break;
 		case 128: //生成横
 			strArr = [];
+			var data = new Array(5).fill(null).map(()=>new Array(6).fill(null));
 			for (let ai=0;ai<sk.length;ai+=2)
 			{
 				strArr.push(`${nb(sk[ai],RowsN).join("、")}的宝珠变为${nb(sk[ai+1],attrsName).join("、")}`);
+
+				const orbType = flags(sk[ai+1])[0];
+				flags(sk[ai]).forEach(row=>
+					data[row] = new Array(6).fill(orbType)
+				);
 			}
-			str = strArr.join("，");
+			fragment.appendChild(document.createTextNode(strArr.join("，")));
+			var table = createBoard(data);
+			fragment.appendChild(table);
+			return fragment;
 			break;
 		case 129:
 			str = `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物`;
@@ -1123,9 +1127,9 @@ function parseSkillDescription(skill)
 			break;
 		case 176:
 		//●◉○◍◯
-			//var data = [sk[0],sk[1],sk[2],sk[3],sk[4]].map(flag=>new Array(6).fill(null).map((a,i)=> (1<<i & flag) ? sk[5] : null));
-			//var table = createBoard([sk[0],sk[1],sk[2],sk[3],sk[4]], sk[5]);
-			var table = createBoard([sk[0],sk[1],sk[2],sk[3],sk[4]], sk[5]);
+			fragment.appendChild(document.createTextNode(`以如下形状生成${attrN(sk[5])}宝珠`));
+			var data = [sk[0],sk[1],sk[2],sk[3],sk[4]].map(flag=>new Array(6).fill(null).map((a,i)=> (1<<i & flag) ? (sk[5] || 0) : null));
+			var table = createBoard(data);
 			table.classList.add("fixed-shape-orb");
 			fragment.appendChild(table);
 			return fragment;
