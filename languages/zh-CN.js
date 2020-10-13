@@ -702,19 +702,19 @@ function parseSkillDescription(skill)
 			str = "";
 			if (sk[0] || sk[1]) str += `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物`;
 			if (sk[2] || sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]})}`;
-			if (sk[5]) str += `${str.length>0?"，":""}受到的${nb(sk[5],attrsName).join("、")}属性伤害减少${sk[6]}%`;
+			if (sk[5]) str += `${str.length>0?"，":""}受到的${getAttrTypeString(flags(sk[5]))}属性伤害减少${sk[6]}%`;
 			break;
 		case 130:
 			str = `HP ${sk[0]}%以下时`;
 			if (sk[1] || sk[2]) str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
 			if (sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]})}`;
-			if (sk[5]) str += `，受到的${nb(sk[5],attrsName).join("、")}属性伤害减少${sk[6]}%`;
+			if (sk[5]) str += `，受到的${getAttrTypeString(flags(sk[5]))}属性伤害减少${sk[6]}%`;
 			break;
 		case 131:
 			str = `HP ${sk[0]==100?"全满":`${sk[0]}%以上`}时`;
 			if (sk[1] || sk[2]) str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
 			if (sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]})}`;
-			if (sk[5]) str += `，受到的${nb(sk[5],attrsName).join("、")}属性伤害减少${sk[6]}%`;
+			if (sk[5]) str += `，受到的${getAttrTypeString(flags(sk[5]))}属性伤害减少${sk[6]}%`;
 			break;
 		case 132:
 			str = `${sk[0]}回合内，宝珠移动时间`;
@@ -1187,7 +1187,7 @@ function parseSkillDescription(skill)
 			break;
 		case 183:
 			str = getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的";
-			if (sk[3] || sk[4]) str+= ` HP ${sk[2]}%以上时`; 
+			if (sk[3] || sk[4]) str+= ` HP ${sk[2]==100?"全满":`${sk[2]}%以上`}时`; 
 			if (sk[3]) str+= `${getFixedHpAtkRcvString({atk:sk[3]})}`; 
 			if (sk[4]) str += `，受到的伤害减少${sk[4]}%`;
 			if (sk[6] || sk[7]) str+= ` HP ${sk[5]||sk[2]}%以下时`;
@@ -1468,7 +1468,7 @@ function parseBigNumber(number)
 				break;
 			case 38: //血线下 + 几率
 			case 43: //血线上 + 几率
-				scale = (noHPneed || allAttr && sk[1]<100) ? 0 : sk[2]/100;
+				scale = (noHPneed || allAttr) ? 0 : sk[2]/100;
 				break;
 			case 129: //无条件盾，属性个数不固定
 			case 163: //无条件盾，属性个数不固定
@@ -1874,10 +1874,15 @@ function parseBigNumber(number)
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getHPScale(a_s) - getHPScale(b_s);
 		})},
+		{name:"队长血倍率 == 1",function:cards=>cards.filter(card=>{
+			const skill = Skills[card.leaderSkillId];
+			const HPscale = getHPScale(skill);
+			return HPscale === 1;
+		})},
 		{name:"队长血倍率[0, 1)（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const HPscale = getHPScale(skill);
-			return HPscale<1;
+			return HPscale < 1;
 		}).sort((a,b)=>{
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getHPScale(a_s) - getHPScale(b_s);
@@ -1886,7 +1891,7 @@ function parseBigNumber(number)
 		{name:"队长盾减伤[75%, 100%]（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const reduceScale = getReduceScale(skill);
-			return reduceScale>=0.75;
+			return reduceScale >= 0.75;
 		}).sort((a,b)=>{
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getReduceScale(a_s) - getReduceScale(b_s);
@@ -1894,7 +1899,7 @@ function parseBigNumber(number)
 		{name:"队长盾减伤[50%, 75%)（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const reduceScale = getReduceScale(skill);
-			return reduceScale>=0.5 && reduceScale < 0.75;
+			return reduceScale >= 0.5 && reduceScale < 0.75;
 		}).sort((a,b)=>{
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getReduceScale(a_s) - getReduceScale(b_s);
@@ -1902,7 +1907,7 @@ function parseBigNumber(number)
 		{name:"队长盾减伤[25%, 50%)（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const reduceScale = getReduceScale(skill);
-			return reduceScale>=0.25 && reduceScale < 0.5;
+			return reduceScale >= 0.25 && reduceScale < 0.5;
 		}).sort((a,b)=>{
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getReduceScale(a_s) - getReduceScale(b_s);
@@ -1910,10 +1915,15 @@ function parseBigNumber(number)
 		{name:"队长盾减伤(0%, 25%)（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const reduceScale = getReduceScale(skill);
-			return reduceScale>0 && reduceScale < 0.25;
+			return reduceScale > 0 && reduceScale < 0.25;
 		}).sort((a,b)=>{
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getReduceScale(a_s) - getReduceScale(b_s);
+		})},
+		{name:"队长盾减伤 == 0",function:cards=>cards.filter(card=>{
+			const skill = Skills[card.leaderSkillId];
+			const reduceScale = getReduceScale(skill);
+			return reduceScale === 0;
 		})},
 		{name:"队长盾减伤-必须全属性减伤",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
@@ -1930,6 +1940,32 @@ function parseBigNumber(number)
 		}).sort((a,b)=>{
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getReduceScale(a_s) - getReduceScale(b_s);
+		})},
+		{name:"队长盾减伤-无条件盾",function:cards=>cards.filter(card=>{
+			//获取盾减伤比例
+			function getReduceScale_unconditional(ls)
+			{
+				const sk = ls.params;
+				let scale = 0;
+				switch (ls.type)
+				{
+					case 16: //无条件盾
+						scale = sk[0]/100;
+						break;
+					case 129: //无条件盾，属性个数不固定
+					case 163: //无条件盾，属性个数不固定
+						scale = (sk[5] & 31) != 31 ? 0 : sk[6]/100;
+						break;
+		
+					case 138: //调用其他队长技
+						scale = sk.reduce((pmul,skid)=> 1 - (1-pmul) * (1-getReduceScale_unconditional(Skills[skid])),0);
+						break;
+					default:
+				}
+				return scale || 0;
+			}
+			const skill = Skills[card.leaderSkillId];
+			return getReduceScale_unconditional(skill) > 0;
 		})},
 
 		{name:"======主动技======",function:cards=>cards},
