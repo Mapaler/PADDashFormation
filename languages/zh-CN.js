@@ -3663,7 +3663,6 @@ function parseBigNumber(number)
 
 	addNewList(); //增加第1个
 	addNewList(); //增加第2个
-	addNewList(); //增加第3个
 
 	//将搜索按钮强制改成特殊搜索
 	const searchStart = controlDiv.querySelector(".search-start");
