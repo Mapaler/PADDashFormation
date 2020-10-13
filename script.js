@@ -350,6 +350,9 @@ function swapHenshin(self)
 						const _card = Cards[card.evoRootId];
 						member.id = card.evoRootId;
 						member.awoken = _card.awakenings.length;
+						member.sawoken = null;
+						const allowLatent = getAllowLatent(_card.types);
+						member.latent = filterAllowLatent(member.latent,allowLatent);
 					}
 				});
 			});
@@ -2138,16 +2141,12 @@ function editBoxChangeMonId(id) {
 	const rowLatent = settingBox.querySelector(".row-mon-latent");
 	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
 	//该宠Type允许的杀，set不会出现重复的
-	const allowLatent = new Set();
-	card.types
-		.filter(i => i >= 0)
-		.map(type => type_allowable_latent[type])
-		.forEach(tA => tA.forEach(t => allowLatent.add(t)));
+	const allowLatent = getAllowLatent(card.types);
 
 	typekiller_for_type.forEach(type => { //显示允许的杀，隐藏不允许的杀
 		const latentDom = monLatentAllowUl.querySelector(`.latent-icon[data-latent-icon='${type.latent}']`);
 		if (!latentDom) return;
-		if (allowLatent.has(type.latent)) {
+		if (allowLatent.includes(type.latent)) {
 			latentDom.classList.remove("unallowable-latent");
 		} else {
 			latentDom.classList.add("unallowable-latent");
@@ -2221,11 +2220,8 @@ function editBoxChangeMonId(id) {
 		}
 	}
 
-	const allKillerLatent = typekiller_for_type.map(type => type.latent);
 	//去除所有不能再打的潜觉
-	editBox.latent = editBox.latent.filter(lat =>
-		!allKillerLatent.includes(lat) ||
-		allKillerLatent.includes(lat) && allowLatent.has(lat));
+	editBox.latent = filterAllowLatent(editBox.latent,allowLatent);
 	editBox.refreshLatent(editBox.latent, id);
 	editBox.reCalculateExp();
 	editBox.reCalculateAbility();

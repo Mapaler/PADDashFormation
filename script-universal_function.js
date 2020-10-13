@@ -481,6 +481,23 @@ function isReincarnated(card)
 {
 	return card.is8Latent && !card.isUltEvo && (card.evoBaseId || card.evoRootId) != card.id && (card.awakenings.includes(49) ? isReincarnated(Cards[card.evoBaseId]) : true);
 }
+//获取类型允许的潜觉
+function getAllowLatent(types)
+{
+	const latentSet = new Set();
+	types.filter(i => i >= 0)
+		.map(type => type_allowable_latent[type])
+		.forEach(tA => tA.forEach(t => latentSet.add(t)));
+	return Array.from(latentSet);
+}
+//筛选出允许的潜觉
+function filterAllowLatent(latent, allowLatent)
+{
+	const allKillerLatent = typekiller_for_type.map(type => type.latent);
+	return latent.filter(lat =>
+		!allKillerLatent.includes(lat) || //保留不属于杀的潜觉
+		allKillerLatent.includes(lat) && allowLatent.includes(lat)); //属于杀的潜觉则只保留允许的
+}
 //计算队伍中有多少血量
 function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken=false)
 {
