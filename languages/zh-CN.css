@@ -14,3 +14,6 @@
 .search-box .control-div .specialSearch-clear::before {
     content: "❌";
 }
+.specialSearch {
+	display: block;
+}

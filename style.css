@@ -1888,6 +1888,7 @@ ul{
 .board .orb-6
 { /*废*/
 	background-color: #d3d3d3;
+	border-radius: 5px;
 }
 .board .orb-6::before
 {
@@ -1896,6 +1897,7 @@ ul{
 .board .orb-7
 { /*毒*/
 	background-color: #e831f3;
+	border-radius: 5px;
 }
 .board .orb-7::before
 {
@@ -1904,6 +1906,7 @@ ul{
 .board .orb-8
 { /*剧毒*/
 	background-color: #670181;
+	border-radius: 5px;
 }
 .board .orb-8::before
 {
