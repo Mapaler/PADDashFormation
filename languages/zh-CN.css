@@ -6,14 +6,20 @@
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
 	font-weight: bold;
 }
-.search-box .control-div .specialSearch-clear {
+.specialSearch {
+	display: block !important;
+	min-height: 28px;
+}
+.specialSearch .specialSearch-clear,
+.specialSearch .specialSearch-add
+ {
 	float: right;
 	font-size: unset;
 	padding: 0;
 }
-.search-box .control-div .specialSearch-clear::before {
+.specialSearch .specialSearch-clear::before {
     content: "❌";
 }
-.specialSearch {
-	display: block;
+.specialSearch .specialSearch-add::before {
+    content: "➕";
 }
