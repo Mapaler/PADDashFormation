@@ -1503,7 +1503,7 @@ function parseBigNumber(number)
 		return scale || 0;
 	}
 	const specialSearchFunctions = [
-		{name:"暂时仅中文有的特殊搜索",function:cards=>cards},
+		{name:"不做筛选",function:cards=>cards},
 		{name:"======队长技======",function:cards=>cards},
 		{name:"队长技固伤追击",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [199,200,201];
@@ -1923,7 +1923,7 @@ function parseBigNumber(number)
 			const skill = Skills[card.leaderSkillId];
 			return getReduceScale(skill, undefined, true) > 0;
 		})},
-		{name:"满血99重力不下半血-队长盾减伤[29%, 100%)（按倍率排序）",function:cards=>cards.filter(card=>{
+		{name:"满血99重力不下半血-队长盾减伤[29%, 100%)",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const reduceScale = getReduceScale(skill);
 			return reduceScale>=0.29;
@@ -1938,7 +1938,7 @@ function parseBigNumber(number)
 			const skill = Skills[card.activeSkillId];
 			return skill.initialCooldown - (skill.maxLevel - 1) <= 1;
 		})},
-		{name:"除 1 CD 外，4 个以下能永动开",function:cards=>cards.filter(card=>{
+		{name:"除 1 CD 外，4 个以下能永动开（可能不精确）",function:cards=>cards.filter(card=>{
 			if (card.activeSkillId == 0) return false;
 			const skill = Skills[card.activeSkillId];
 			const minCD = skill.initialCooldown - (skill.maxLevel - 1); //主动技最小的CD
@@ -3633,9 +3633,9 @@ function parseBigNumber(number)
 	function newSearchList(index)
 	{
 		const searchLi = document.createElement("li");
-		const searchLabel = searchLi.appendChild(document.createElement("label"));
-		searchLabel.appendChild(document.createTextNode(`筛选${index}:`));
-		const specialSearch = searchLabel.appendChild(document.createElement("select"));
+		//const searchLabel = searchLi.appendChild(document.createElement("label"));
+		//searchLabel.appendChild(document.createTextNode(`筛选${index}:`));
+		const specialSearch = searchLi.appendChild(document.createElement("select"));
 		specialSearchFunctions.forEach((sfunc,idx)=>{
 			specialSearch.options.add(new Option(sfunc.name,idx));
 		});
