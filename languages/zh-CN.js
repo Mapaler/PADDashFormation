@@ -3630,20 +3630,40 @@ function parseBigNumber(number)
 	let fragment = document.createDocumentFragment();
 	const specialSearchDiv = fragment.appendChild(document.createElement("ul"))
 	specialSearchDiv.className = "specialSearch";
-	const specialSearchArray = new Array(6).fill(null).map((i,n)=>{
-		const specialSearchLabel = specialSearchDiv.appendChild(document.createElement("li"));
-		specialSearchLabel.innerHTML = `筛选${n+1}:`;
-		const specialSearch = specialSearchLabel.appendChild(document.createElement("select"));
+	function newSearchList(index)
+	{
+		const searchLi = document.createElement("li");
+		const searchLabel = searchLi.appendChild(document.createElement("label"));
+		searchLabel.appendChild(document.createTextNode(`筛选${index}:`));
+		const specialSearch = searchLabel.appendChild(document.createElement("select"));
 		specialSearchFunctions.forEach((sfunc,idx)=>{
 			specialSearch.options.add(new Option(sfunc.name,idx));
 		});
-		return specialSearch;
-	});
-	const specialSearchClear = specialSearchDiv.insertBefore(document.createElement("button"),specialSearchArray[0].parentNode);
+		return {dom:searchLi,list:specialSearch};
+	}
+	const specialSearchArray = []; //储存多个搜索列表的数组
+	function addNewList()
+	{
+		const newSearch = newSearchList(specialSearchArray.length + 1);
+		specialSearchDiv.appendChild(newSearch.dom);
+		specialSearchArray.push(newSearch.list);
+	}
+
+	const specialSearchClear = specialSearchDiv.appendChild(document.createElement("button"));
 	specialSearchClear.className = "specialSearch-clear";
+	specialSearchClear.title = "筛选框全部归零";
 	specialSearchClear.onclick = function(){
 		specialSearchArray.forEach(ss=>ss.selectedIndex = 0);
 	};
+
+	const specialSearchAdd = specialSearchDiv.appendChild(document.createElement("button"));
+	specialSearchAdd.className = "specialSearch-add";
+	specialSearchAdd.title = "增加筛选框个数";
+	specialSearchAdd.onclick = addNewList;
+
+	addNewList(); //增加第1个
+	addNewList(); //增加第2个
+	addNewList(); //增加第3个
 
 	//将搜索按钮强制改成特殊搜索
 	const searchStart = controlDiv.querySelector(".search-start");
