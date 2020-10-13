@@ -1451,7 +1451,7 @@ function parseBigNumber(number)
 		return scale || 1;
 	}
 	//获取盾减伤比例
-	function getReduceScale(ls, allAttr = false)
+	function getReduceScale(ls, allAttr = false, noHPneed = false)
 	{
 		const sk = ls.params;
 		let scale = 0;
@@ -1466,11 +1466,17 @@ function parseBigNumber(number)
 			case 36: //2个属性盾
 				scale = allAttr ? 0 : sk[2]/100;
 				break;
-			case 38: case 43: //血线盾 + 几率盾
-				scale = (allAttr && sk[1]<100) ? 0 : sk[2]/100;
+			case 38: //血线下 + 几率
+			case 43: //血线上 + 几率
+				scale = (noHPneed || allAttr && sk[1]<100) ? 0 : sk[2]/100;
 				break;
-			case 129: case 130: case 131: case 163: //属性个数不固定
+			case 129: //无条件盾，属性个数不固定
+			case 163: //无条件盾，属性个数不固定
 				scale = (allAttr && (sk[5] & 31) != 31) ? 0 : sk[6]/100;
+				break;
+			case 130: //血线下 + 属性个数不固定
+			case 131: //血线上 + 属性个数不固定
+				scale = (noHPneed || allAttr && (sk[5] & 31) != 31) ? 0 : sk[6]/100;
 				break;
 			case 151: //十字心触发
 			case 169: //C触发
@@ -1486,11 +1492,11 @@ function parseBigNumber(number)
 				scale = sk[6]/100;
 				break;
 			case 183: //又是个有两段血线的队长技
-				scale = sk[4]/100;
+				scale = noHPneed ? 0 : sk[4]/100;
 				break;
 
 			case 138: //调用其他队长技
-				scale = sk.reduce((pmul,skid)=> 1 - (1-pmul) * (1-getReduceScale(Skills[skid], allAttr)),0);
+				scale = sk.reduce((pmul,skid)=> 1 - (1-pmul) * (1-getReduceScale(Skills[skid], allAttr, noHPneed)),0);
 				break;
 			default:
 		}
@@ -1860,10 +1866,10 @@ function parseBigNumber(number)
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getHPScale(a_s) - getHPScale(b_s);
 		})},
-		{name:"队长血倍率[1, 1.5)（按倍率排序）",function:cards=>cards.filter(card=>{
+		{name:"队长血倍率(1, 1.5)（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const HPscale = getHPScale(skill);
-			return HPscale >= 1 && HPscale < 1.5;
+			return HPscale > 1 && HPscale < 1.5;
 		}).sort((a,b)=>{
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getHPScale(a_s) - getHPScale(b_s);
@@ -1877,10 +1883,6 @@ function parseBigNumber(number)
 			return getHPScale(a_s) - getHPScale(b_s);
 		})},
 		{name:"-----减伤盾-----",function:cards=>cards},
-		{name:"队长盾减伤-必须全属性减伤",function:cards=>cards.filter(card=>{
-			const skill = Skills[card.leaderSkillId];
-			return getReduceScale(skill, true) > 0;
-		})},
 		{name:"队长盾减伤[75%, 100%]（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const reduceScale = getReduceScale(skill);
@@ -1913,7 +1915,15 @@ function parseBigNumber(number)
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getReduceScale(a_s) - getReduceScale(b_s);
 		})},
-		{name:"99重力不下半血-队长盾减伤[29%, 100%)（按倍率排序）",function:cards=>cards.filter(card=>{
+		{name:"队长盾减伤-必须全属性减伤",function:cards=>cards.filter(card=>{
+			const skill = Skills[card.leaderSkillId];
+			return getReduceScale(skill, true) > 0;
+		})},
+		{name:"队长盾减伤-排除血线盾",function:cards=>cards.filter(card=>{
+			const skill = Skills[card.leaderSkillId];
+			return getReduceScale(skill, undefined, true) > 0;
+		})},
+		{name:"满血99重力不下半血-队长盾减伤[29%, 100%)（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const reduceScale = getReduceScale(skill);
 			return reduceScale>=0.29;
@@ -3619,8 +3629,8 @@ function parseBigNumber(number)
 	const controlDiv = searchBox.querySelector(".control-div");
 	let fragment = document.createDocumentFragment();
 	const specialSearchDiv = fragment.appendChild(document.createElement("ul"))
-	specialSearchDiv.style.display = "block";
-	const specialSearchArray = new Array(4).fill(null).map((i,n)=>{
+	specialSearchDiv.className = "specialSearch";
+	const specialSearchArray = new Array(6).fill(null).map((i,n)=>{
 		const specialSearchLabel = specialSearchDiv.appendChild(document.createElement("li"));
 		specialSearchLabel.innerHTML = `筛选${n+1}:`;
 		const specialSearch = specialSearchLabel.appendChild(document.createElement("select"));
