@@ -848,7 +848,7 @@ function parseSkillDescription(skill)
 			break;
 		case 159:
 			//"相連消除5個或以上的火寶珠或光寶珠時攻擊力和回復力4倍，每多1個+1倍，最大7個時6倍；"
-			str = `相连消除${sk[1]}个或以上${getOrbsAttrString(sk[0])}宝珠时，所有宠物的`;
+			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0])}宝珠时，所有宠物的`;
 			strArr = [];
 			if (sk[2]>0)
 			{
