@@ -1368,9 +1368,13 @@ function parseSkillDescription(skill)
 			}
 			return fragment;
 			break;
-		case 209:
+		case 209: //十字心+C
 			str = `以十字形式消除5个${attrN(5)}宝珠时`;
 			if(sk[0]) str += `，结算时连击数+${sk[0]}`;
+			break;
+		case 210: //十字属性珠+C
+			str = `以十字形式消除5个${getOrbsAttrString(sk[0])}属性宝珠，当消除N个十字时，结算时连击数+${sk[2]>1?sk[2]:""}N`;
+			if (sk[1]) str += `未知的参数${sk[1]}`;
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
@@ -1516,6 +1520,7 @@ function parseBigNumber(number)
 			}
 		})},
 		{name:"队长技+C（按+C数排序）",function:cards=>{
+			const searchTypeArray = [192,194,206,209,210];
 			function getSkillAddCombo(skill)
 			{
 				switch (skill.type)
@@ -1526,10 +1531,11 @@ function parseBigNumber(number)
 						return skill.params[6];
 					case 209:
 						return skill.params[0];
+					case 210:
+						return skill.params[2];
 				}
 			}
 			return cards.filter(card=>{
-				const searchTypeArray = [192,194,206,209];
 				const skill = Skills[card.leaderSkillId];
 				if (searchTypeArray.some(t=>skill.type == t && getSkillAddCombo(skill)>0))
 					return true;
@@ -1538,7 +1544,6 @@ function parseBigNumber(number)
 					return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t && getSkillAddCombo(subskill)>0));
 				}
 			}).sort((a,b)=>{
-				const searchTypeArray = [192,194,206,209];
 				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 				let a_pC = 0,b_pC = 0;
 				a_pC = searchTypeArray.includes(a_s.type) ?
