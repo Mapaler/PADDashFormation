@@ -1167,6 +1167,7 @@ function initialize() {
 	const s_add_show_CD = searchBox.querySelector("#add-show-CD"); //是否显示CD
 	const s_add_show_abilities = searchBox.querySelector("#add-show-abilities"); //是否显示三维
 	const s_add_show_abilities_with_awoken = searchBox.querySelector("#add-show-abilities-with-awoken"); //是否显示计算觉醒的三维
+	
 	showSearch = function(searchArr) {
 		editBox.show();
 		searchBox.classList.remove(className_displayNone);
@@ -1191,6 +1192,17 @@ function initialize() {
 		}
 		searchMonList.classList.remove(className_displayNone);
 	};
+	//对已经搜索到的Cards重新附加显示
+	function reShowSearch()
+	{
+		const oldArr = searchMonList.originalHeads.map(head=>head.card);
+		showSearch(oldArr);
+	}
+	s_add_show_awoken.onchange = reShowSearch;
+	s_add_show_CD.onchange = reShowSearch;
+	s_add_show_abilities.onchange = reShowSearch;
+	s_add_show_abilities_with_awoken.onchange = reShowSearch;
+
 	const startSearch = function(cards) {
 		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
 		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
@@ -1280,7 +1292,7 @@ function initialize() {
 
 		return headsArray;
 	}
-	//对搜索到的Cards重新排序
+	//对已经搜索到的Cards重新排序
 	function reSortCards() {
 		const headsArray = sortHeadsArray(searchMonList.originalHeads);
 		if (!headsArray || headsArray.length === 0) return; //没有数据时，直接返回
