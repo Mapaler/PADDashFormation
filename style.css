@@ -883,18 +883,26 @@ ul{
 {
 	content: "-";
 }
-.abilities-preview>li,
-.abilities-with-awoken-preview>li
+.cd-preview,
+.add-show-CD-label
+{
+	color: lightblue;
+}
+.abilities-preview>li
 {
 	font-size: 14px;
 }
 .cd-preview::before,
-.abilities-preview>li::before,
-.abilities-with-awoken-preview>li::before
+.abilities-preview>li::before
 {
 	font-size: 10px;
 	display: inline-block;
 	width: 25px;
+}
+.add-show-abilities-with-awoken-label,
+.abilities-with-awoken-preview>li
+{
+	color: #dfd;
 }
 
 
