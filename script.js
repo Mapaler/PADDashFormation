@@ -151,6 +151,7 @@ Member.prototype.outObj = function() {
 Member.prototype.loadObj = function(m, dataVersion) {
 	if (m == undefined) //如果没有提供数据，直接返回默认
 	{
+		this.id = 0;
 		return;
 	}
 	if (dataVersion == undefined) dataVersion = 1;
@@ -263,9 +264,28 @@ Formation.prototype.outObj = function() {
 		return teamArr;
 	});
 	obj.v = dataStructure;
+	/*if (obj.f.every(team=>team[0].length == 0 && team[1].length == 0 && team[2] == undefined) &&
+	!obj.t &&
+	!obj.d)
+		return null;*/
 	return obj;
 };
 Formation.prototype.loadObj = function(f) {
+	if (f == undefined) //如果没有提供数据，要返回空的
+	{
+		this.title = "";
+		this.detail = "";
+		this.teams.forEach(function(t, ti) {
+				t[0].forEach(function(m, mi) {
+					m.loadObj(null);
+				});
+				t[1].forEach(function(m, mi) {
+					m.loadObj(null);
+				});
+				if (t[2] != undefined) t.splice(2);
+		});
+		return;
+	}
 	const dataVeision = f.v ? f.v : (f.f ? 2 : 1); //是第几版格式
 	this.title = dataVeision > 1 ? f.t : f.title;
 	this.detail = dataVeision > 1 ? f.d : f.detail;
@@ -432,7 +452,7 @@ function turnPage(toPage, e = null) {
 		location.href = newURL;
 	}
 }
-window.onload = function() {
+window.onload = function(event) {
 	controlBox = document.body.querySelector(".control-box");
 	statusLine = controlBox.querySelector(".status"); //显示当前状态的
 	formationBox = document.body.querySelector(".formation-box");
@@ -694,30 +714,55 @@ function loadData(force = false)
 	}
 }
 //重新读取URL中的Data数据并刷新页面
-function reloadFormationData() {
+function reloadFormationData(event) {
 	let formationData;
-	try {
-		let parameterDataString = getQueryString("d") || getQueryString("data");
-		formationData = JSON.parse(parameterDataString);
-	} catch (e) {
-		console.error("URL中队伍数据JSON解码出错", e);
-		return;
+	if (event && event.state && event.state.outForm)
+	{
+		//直接使用现有数据
+		formationData = event.state.outForm;
+		//console.log("直接读取",formationData);
+	}else
+	{
+		try {
+			const parameterDataString = getQueryString("d") || getQueryString("data");
+			formationData = JSON.parse(parameterDataString);
+			//console.log("从URL读取",formationData);
+
+		} catch (e) {
+			console.error("URL中队伍数据JSON解码出错", e);
+			return;
+		}
 	}
-	if (formationData) {
+
+	if (formationData)
+	{
 		formation.loadObj(formationData);
 		refreshAll(formation);
 	}
+
 	if (isGuideMod)
 	{
-		const mid = parseInt(getQueryString("id"));
+		let mid;
+		if (event && event.state && event.state.mid)
+		{
+			mid = event.state.mid;
+		}else
+		{
+			mid = parseInt(getQueryString("id"),10);
+		}
+
 		if (!isNaN(mid))
 		{
 			editBox.mid = mid;
 			editBoxChangeMonId(mid);
 		}
+		if (event && event.state && event.state.searchArr)
+		{
+			showSearch(event.state.searchArr.map(id=>Cards[id]));
+		}
 	}
 }
-window.onpopstate = reloadFormationData; //前进后退时修改页面
+window.addEventListener('popstate',reloadFormationData); //前进后退时修改页面
 //创建新的分享地址
 function creatNewUrl(arg) {
 	if (arg == undefined) arg = {};
@@ -729,13 +774,16 @@ function creatNewUrl(arg) {
 		const newSearch = new URLSearchParams();
 		if (language_i18n) newSearch.set("l", language_i18n);
 		if (datasource && datasource != "ja") newSearch.set("s", datasource);
-		const dataJsonStr = JSON.stringify(outObj); //数据部分的字符串
-		newSearch.set("d", dataJsonStr);
+		if (outObj)
+		{
+			const dataJsonStr = JSON.stringify(outObj); //数据部分的字符串
+			newSearch.set("d", dataJsonStr);
+		}
 
-		const newUrl = (arg.url || "") + '?' + newSearch.toString();
+		const newUrl = (arg.url || "") + (newSearch.toString().length > 0 ? '?' + newSearch.toString() : "");
 
 		if (!arg.notPushState) {
-			history.pushState(null, null, newUrl);
+			history.pushState({outForm: outObj}, null, newUrl.length > 0 ? newUrl : location.pathname);
 		} else {
 			return newUrl;
 		}
@@ -1321,14 +1369,16 @@ function initialize() {
 				
 				if (isGuideMod)
 				{
+					const idArr = searchMonList.originalHeads.map(head=>head.card.id);
+					const state = {searchArr:idArr,mid:newId};
 					const locationURL = new URL(location);
 					if (newId === 0) {
 						locationURL.searchParams.delete('id');
-						history.pushState(null, null, locationURL);
+						history.pushState(state, null, locationURL);
 					}else
 					{
 						locationURL.searchParams.set('id', newId);
-						history.pushState(null, null, locationURL);
+						history.pushState(state, null, locationURL);
 					}
 				}
 
