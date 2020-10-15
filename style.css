@@ -73,11 +73,7 @@ body{
 	padding: 1px;
 	margin: 0;
 }
-.guide-mod .formation-box,
-.guide-mod .control-box>div
-{
-	display: none;
-}
+
 .guide-mod .control-box>div.status
 {
 	display: block;
@@ -755,7 +751,9 @@ ul{
 	font-weight: bold;
 }
 .guide-mod .edit-box-title,
-.guide-mod .button-box
+.guide-mod .button-box .button-null,
+.guide-mod .button-box .button-delay,
+.guide-mod .button-box .button-done
 {
 	display: none;
 }
