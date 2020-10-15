@@ -935,18 +935,6 @@ function initialize() {
 			monstersID.onchange();
 			return false; //取消链接的默认操作
 		}
-		//产生一个觉醒列表
-		function creatAwokenList(awokens) {
-			const ul = document.createElement("ul");
-			ul.className = "awoken-ul";
-			awokens.forEach(ak=>{
-				const li = ul.appendChild(document.createElement("li"));
-				const icon = li.appendChild(document.createElement("icon"));
-				icon.className = "awoken-icon";
-				icon.setAttribute("data-awoken-icon",ak);
-			});
-			return ul;
-		}
 		const cli = document.createElement("li");
 		const cdom = cli.head = createCardA(id);
 		cli.appendChild(cdom);
@@ -976,39 +964,45 @@ function initialize() {
 				CD_MaxDom.textContent = CD_Max;
 			}
 		}
+		//产生一个能力值列表
+		function creatAbilitiesList(abilities) {
+			const abilitiesPreview = document.createElement("ul");
+			abilitiesPreview.className = "abilities-preview";
+			const hpDom = abilitiesPreview.appendChild(document.createElement("li"));
+			hpDom.className = "hp-preview";
+			hpDom.textContent = abilities.hp;
+			const atkDom = abilitiesPreview.appendChild(document.createElement("li"));
+			atkDom.className = "atk-preview";
+			atkDom.textContent = abilities.atk;
+			const rcvDom = abilitiesPreview.appendChild(document.createElement("li"));
+			rcvDom.className = "rcv-preview";
+			rcvDom.textContent = abilities.rcv;
+			return abilitiesPreview;
+		}
 		if (options.showAbilities || options.showAbilitiesWithAwoken)
 		{
 			const abilities_2status = calculateAbility_max(id, solo, teamsCount);
 			if (options.showAbilities && abilities_2status)
 			{
-				const abilitiesPreview = cli.appendChild(document.createElement("ul"));
-				abilitiesPreview.className = "abilities-preview";
-				const abilities = abilities_2status.noAwoken;
-				const hpDom = abilitiesPreview.appendChild(document.createElement("li"));
-				hpDom.className = "hp-preview";
-				hpDom.textContent = abilities.hp;
-				const atkDom = abilitiesPreview.appendChild(document.createElement("li"));
-				atkDom.className = "atk-preview";
-				atkDom.textContent = abilities.atk;
-				const rcvDom = abilitiesPreview.appendChild(document.createElement("li"));
-				rcvDom.className = "rcv-preview";
-				rcvDom.textContent = abilities.rcv;
+				const abilitiesPreview = cli.appendChild(creatAbilitiesList(abilities_2status.noAwoken));
 			} 
 			if (options.showAbilitiesWithAwoken && abilities_2status)
 			{
-				const abilitiesPreview = cli.appendChild(document.createElement("ul"));
-				abilitiesPreview.className = "abilities-with-awoken-preview";
-				const abilities = abilities_2status.withAwoken;
-				const hpDom = abilitiesPreview.appendChild(document.createElement("li"));
-				hpDom.className = "hp-preview";
-				hpDom.textContent = abilities.hp;
-				const atkDom = abilitiesPreview.appendChild(document.createElement("li"));
-				atkDom.className = "atk-preview";
-				atkDom.textContent = abilities.atk;
-				const rcvDom = abilitiesPreview.appendChild(document.createElement("li"));
-				rcvDom.className = "rcv-preview";
-				rcvDom.textContent = abilities.rcv;
+				const abilitiesPreview = cli.appendChild(creatAbilitiesList(abilities_2status.withAwoken));
+				abilitiesPreview.classList.add("abilities-with-awoken-preview");
 			}
+		}
+		//产生一个觉醒列表
+		function creatAwokenList(awokens) {
+			const ul = document.createElement("ul");
+			ul.className = "awoken-ul";
+			awokens.forEach(ak=>{
+				const li = ul.appendChild(document.createElement("li"));
+				const icon = li.appendChild(document.createElement("icon"));
+				icon.className = "awoken-icon";
+				icon.setAttribute("data-awoken-icon",ak);
+			});
+			return ul;
 		}
 		if (options.showAwoken)
 		{
@@ -1195,8 +1189,11 @@ function initialize() {
 	//对已经搜索到的Cards重新附加显示
 	function reShowSearch()
 	{
-		const oldArr = searchMonList.originalHeads.map(head=>head.card);
-		showSearch(oldArr);
+		if (Array.isArray(searchMonList.originalHeads))
+		{
+			const oldArr = searchMonList.originalHeads.map(head=>head.card);
+			showSearch(oldArr);
+		}
 	}
 	s_add_show_awoken.onchange = reShowSearch;
 	s_add_show_CD.onchange = reShowSearch;
