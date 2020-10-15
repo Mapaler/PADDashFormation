@@ -49,13 +49,19 @@
 {
 	content: "▲輔助";
 }
-.abilitys .hp::before{
+.abilitys .hp::before,
+.search-mon-list .hp-preview::before
+{
 	content: "HP：";
 }
-.abilitys .atk::before{
+.abilitys .atk::before,
+.search-mon-list .atk-preview::before
+{
 	content: "攻擊：";
 }
-.abilitys .rcv::before{
+.abilitys .rcv::before,
+.search-mon-list .rcv-preview::before
+{
 	content: "回復：";
 }
 .edit-box .edit-box-title::before{
@@ -125,7 +131,9 @@
 	content: "隱藏少用的潛覺";
 }
 
-.skill-box .skill-cd::before{
+.skill-box .skill-cd::before,
+.search-mon-list .cd-preview::before
+{
 	content: "回合:";
 }
 .skill-box .skill-level-label::before{
@@ -303,8 +311,20 @@
 .search-box input:checked+ .sort-reverse-label::after{
 	content: "逆序";
 }
-.search-box .show-awoken-label::after{
-	content: "顯示覺醒清單(消耗效能)";
+.search-box .additional-div::before{
+	content: "附加顯示：";
+}
+.search-box .add-show-awoken-label::after{
+	content: "覺醒清單";
+}
+.search-box .add-show-CD-label::after{
+	content: "技能回合";
+}
+.search-box .add-show-abilities-label::after{
+	content: "能力值";
+}
+.search-box .add-show-abilities-with-awoken-label::after{
+	content: "能力值（+覺醒）";
 }
 .attrs .attr-all::before{
 	content: "不限";
