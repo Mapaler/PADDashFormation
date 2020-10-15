@@ -978,42 +978,36 @@ function initialize() {
 		}
 		if (options.showAbilities || options.showAbilitiesWithAwoken)
 		{
-			const tempMon = {
-				id: id,
-				level: card.maxLevel + (card.limitBreakIncr ? 11 : 0),
-				plus: [99,99,99],
-				awoken: card.awakenings.length,
-			};
-			const abilities = calculateAbility(tempMon, null, solo, teamsCount);
-			if (options.showAbilities && abilities)
+			const abilities_2status = calculateAbility_max(id, solo, teamsCount);
+			if (options.showAbilities && abilities_2status)
 			{
-				const abilitiesPreview1 = cli.appendChild(document.createElement("ul"));
-				abilitiesPreview1.className = "abilities-preview";
-				const abilities1 = abilities.map(ab=>ab[1]);
-				const hpDom = abilitiesPreview1.appendChild(document.createElement("li"));
+				const abilitiesPreview = cli.appendChild(document.createElement("ul"));
+				abilitiesPreview.className = "abilities-preview";
+				const abilities = abilities_2status.noAwoken;
+				const hpDom = abilitiesPreview.appendChild(document.createElement("li"));
 				hpDom.className = "hp-preview";
-				hpDom.textContent = abilities1[0];
-				const atkDom = abilitiesPreview1.appendChild(document.createElement("li"));
+				hpDom.textContent = abilities.hp;
+				const atkDom = abilitiesPreview.appendChild(document.createElement("li"));
 				atkDom.className = "atk-preview";
-				atkDom.textContent = abilities1[1];
-				const rcvDom = abilitiesPreview1.appendChild(document.createElement("li"));
+				atkDom.textContent = abilities.atk;
+				const rcvDom = abilitiesPreview.appendChild(document.createElement("li"));
 				rcvDom.className = "rcv-preview";
-				rcvDom.textContent = abilities1[2];
-			}
-			if (options.showAbilitiesWithAwoken && abilities)
+				rcvDom.textContent = abilities.rcv;
+			} 
+			if (options.showAbilitiesWithAwoken && abilities_2status)
 			{
-				const abilitiesPreview2 = cli.appendChild(document.createElement("ul"));
-				abilitiesPreview2.className = "abilities-with-awoken-preview";
-				const abilities2 = abilities.map(ab=>ab[0]);
-				const hpDom = abilitiesPreview2.appendChild(document.createElement("li"));
+				const abilitiesPreview = cli.appendChild(document.createElement("ul"));
+				abilitiesPreview.className = "abilities-with-awoken-preview";
+				const abilities = abilities_2status.withAwoken;
+				const hpDom = abilitiesPreview.appendChild(document.createElement("li"));
 				hpDom.className = "hp-preview";
-				hpDom.textContent = abilities2[0];
-				const atkDom = abilitiesPreview2.appendChild(document.createElement("li"));
+				hpDom.textContent = abilities.hp;
+				const atkDom = abilitiesPreview.appendChild(document.createElement("li"));
 				atkDom.className = "atk-preview";
-				atkDom.textContent = abilities2[1];
-				const rcvDom = abilitiesPreview2.appendChild(document.createElement("li"));
+				atkDom.textContent = abilities.atk;
+				const rcvDom = abilitiesPreview.appendChild(document.createElement("li"));
 				rcvDom.className = "rcv-preview";
-				rcvDom.textContent = abilities2[2];
+				rcvDom.textContent = abilities.rcv;
 			}
 		}
 		if (options.showAwoken)

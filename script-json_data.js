@@ -74,22 +74,32 @@ const sort_function_list = [
 	{tag:"sort_hpMax110",name:"最大HP(Lv110)",function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
 	{tag:"sort_atkMax110",name:"最大攻击(Lv110)",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
 	{tag:"sort_rcvMax110",name:"最大回复(Lv110)",function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
+	
+	{tag:"sort_hpMax110_awoken",name:"最大攻击(Lv110+觉醒)",function:(a,b)=>
+		{
+			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
+				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
+			const abA = abilities_2statusA ? abilities_2statusA.withAwoken.atk : 0,
+				  abB = abilities_2statusB ? abilities_2statusB.withAwoken.atk : 0;
+			return abA - abB;
+		}
+	},
+	{tag:"sort_hpMax110_awoken",name:"最大HP(Lv110+觉醒)",function:(a,b)=>
+		{
+			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
+				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
+			const abA = abilities_2statusA ? abilities_2statusA.withAwoken.hp : 0,
+				abB = abilities_2statusB ? abilities_2statusB.withAwoken.hp : 0;
+			return abA - abB;
+		}
+	},
+	{tag:"sort_hpMax110_awoken",name:"最大回复(Lv110+觉醒)",function:(a,b)=>
+		{
+			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
+				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
+			const abA = abilities_2statusA ? abilities_2statusA.withAwoken.rcv : 0,
+				abB = abilities_2statusB ? abilities_2statusB.withAwoken.rcv : 0;
+			return abA - abB;
+		}
+	},
 ];
-if (!solo)
-{
-	const multiSort = [
-		{tag:"sort_hpMax110_Multi",name:"最大协力攻击(Lv110+297)",function:(a,b)=>
-			(a.atk.max * (1 + a.limitBreakIncr/100) + ((a.overlay || a.types[0] == 15 && a.types[1] == -1) ? 0 : 495)) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
-			(b.atk.max * (1 + b.limitBreakIncr/100) + ((b.overlay || b.types[0] == 15 && b.types[1] == -1) ? 0 : 495)) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
-		},
-		{tag:"sort_hpMax110_Multi",name:"最大协力HP(Lv110+297)",function:(a,b)=>
-			(a.hp.max * (1 + a.limitBreakIncr/100) + ((a.overlay || a.types[0] == 15 && a.types[1] == -1) ? 0 : 990)) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
-			(b.hp.max * (1 + b.limitBreakIncr/100) + ((b.overlay || b.types[0] == 15 && b.types[1] == -1) ? 0 : 990)) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
-		},
-		{tag:"sort_hpMax110_Multi",name:"最大协力回复(Lv110+297)",function:(a,b)=>
-			(a.rcv.max * (1 + a.limitBreakIncr/100) + ((a.overlay || a.types[0] == 15 && a.types[1] == -1) ? 0 : 297)) * Math.pow(1.5, a.awakenings.filter(ak=>ak===30).length) -
-			(b.rcv.max * (1 + b.limitBreakIncr/100) + ((b.overlay || b.types[0] == 15 && b.types[1] == -1) ? 0 : 297)) * Math.pow(1.5, b.awakenings.filter(ak=>ak===30).length)
-		},
-	];
-	sort_function_list.push(...multiSort);
-}
