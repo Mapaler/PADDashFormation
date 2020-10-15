@@ -54,6 +54,20 @@ Number.prototype.PrefixInteger = function(length)
 {  
 	return (Array(length).join('0') + this).slice(-length); 
 }
+//数组删除自己尾部的空元素
+Array.prototype.DeleteLatter = function(item = null)
+{
+	let index = this.length - 1;
+	for (; index>=0; index--)
+	{
+		if (this[index] !== item)
+		{
+			break;
+		}
+	}
+	this.splice(index + 1);
+	return this;
+}
 
 //▼ADPCM播放相关，来自 https://github.com/jy4340132/aaa
 const pcmMemory = new WebAssembly.Memory({initial: 256, maximum: 256});
