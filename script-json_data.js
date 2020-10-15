@@ -71,11 +71,11 @@ const sort_function_list = [
 		const skill_a = Skills[a.activeSkillId],skill_b = Skills[b.activeSkillId];
 		return (skill_a.initialCooldown - skill_a.maxLevel) - (skill_b.initialCooldown - skill_b.maxLevel);
 	}},
-	{tag:"sort_hpMax110",name:"最大HP(Lv110)",function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
-	{tag:"sort_atkMax110",name:"最大攻击(Lv110)",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
-	{tag:"sort_rcvMax110",name:"最大回复(Lv110)",function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_hpMax110",name:"最大HP",function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_atkMax110",name:"最大攻击",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_rcvMax110",name:"最大回复",function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
 	
-	{tag:"sort_hpMax110_awoken",name:"最大攻击(Lv110+觉醒)",function:(a,b)=>
+	{tag:"sort_hpMax110_awoken",name:"最大攻击(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
@@ -84,7 +84,7 @@ const sort_function_list = [
 			return abA - abB;
 		}
 	},
-	{tag:"sort_hpMax110_awoken",name:"最大HP(Lv110+觉醒)",function:(a,b)=>
+	{tag:"sort_hpMax110_awoken",name:"最大HP(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
@@ -93,7 +93,7 @@ const sort_function_list = [
 			return abA - abB;
 		}
 	},
-	{tag:"sort_hpMax110_awoken",name:"最大回复(Lv110+觉醒)",function:(a,b)=>
+	{tag:"sort_hpMax110_awoken",name:"最大回复(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
