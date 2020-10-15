@@ -333,6 +333,35 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 	});
 	return abilitys;
 }
+function calculateAbility_max(id,solo, teamsCount)
+{
+	const card = Cards[id];
+	const tempMon = {
+		id: id,
+		level: card.maxLevel + (card.limitBreakIncr ? 11 : 0),
+		plus: [99,99,99],
+		awoken: card.awakenings.length,
+	};
+	const abilities = calculateAbility(tempMon, null, solo, teamsCount);
+	if (abilities)
+	{
+		return {
+			noAwoken:{
+				hp:abilities[0][1],
+				atk:abilities[1][1],
+				rcv:abilities[2][1],
+			},
+			withAwoken:{
+				hp:abilities[0][0],
+				atk:abilities[1][0],
+				rcv:abilities[2][0],
+			},
+		};
+	}else
+	{
+		return null;
+	}
+}
 //搜索卡片用
 function searchCards(cards,attr1,attr2,fixMainColor,types,typeAndOr,awokens,sawokens,equalAk,incSawoken)
 {
@@ -653,11 +682,11 @@ function countMoveTime(team, leader1id, leader2id, teamIdx)
 		}
 
 		//徽章部分
-        if (team[2] == 1 && (solo || teamsCount === 3)) {
-            moveTime.duration += 1;
-        } else if (team[2] == 13 && (solo || teamsCount === 3)) {
-            moveTime.duration += 2;
-        }
+		if (team[2] == 1 && (solo || teamsCount === 3)) {
+			moveTime.duration += 1;
+		} else if (team[2] == 13 && (solo || teamsCount === 3)) {
+			moveTime.duration += 2;
+		}
 
 		//觉醒
 		const awokenMoveTime = [
