@@ -10,12 +10,12 @@
 		 url("fonts/FOT-KurokaneStd-EB.svg") format('svg');
 }
 @keyframes loading-animate{
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(3600deg);
-    }
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(3600deg);
+	}
 }
 body{
 	--head-block-width: 108px;
@@ -130,12 +130,12 @@ body{
 	top: -4px;
 }
 .config-checkbox-ipt:checked+.config-checkbox-lbl .config-checkbox-lbl-cicle {
-    background: rgba(0,160,216,0.8);
+	background: rgba(0,160,216,0.8);
 }
 .config-checkbox-ipt:checked+.config-checkbox-lbl .config-checkbox-lbl-cicle::before {
-    background: #00A0D8;
-    box-shadow: 0 2px 4px 0 rgba(0,160,216,0.4);
-    left: calc(100% - 16px);
+	background: #00A0D8;
+	box-shadow: 0 2px 4px 0 rgba(0,160,216,0.4);
+	left: calc(100% - 16px);
 }
 .config-checkbox-lbl{
 	cursor: pointer;
@@ -315,7 +315,7 @@ ul{
 .monster.wepon .awoken-count.full-awoken{
 	transform: scale(0.79) translateY(4px);
 	width:32px;height:32px;
-    background-image: url(images/awoken.png);
+	background-image: url(images/awoken.png);
 	background-position-x: 0;
 	background-position-y: -1568px;
 }
@@ -652,9 +652,9 @@ ul{
 	border-color: #CCEEFF;
 	box-shadow: black 1px 1px 1px;
 	border-radius: 0 0 5px 5px;
-    border-top: none;
-    margin-top: 4px;;
-    transform: translatey(-4px) scaley(1.2);
+	border-top: none;
+	margin-top: 4px;;
+	transform: translatey(-4px) scaley(1.2);
 }
 .team-latents .latent-icon[data-latent-icon='13']+.latent-icon::before,
 .team-latents .latent-icon[data-latent-icon='14']+.latent-icon::before,
@@ -809,8 +809,8 @@ ul{
 	height: 40px;
 	font-size: 25px;
 }
-.edit-box .setting-box .row-mon-id .evo-card-list li,
-.edit-box .search-box .search-mon-list li
+.edit-box .setting-box .row-mon-id .evo-card-list>li,
+.edit-box .search-box .search-mon-list>li
 {
 	display: inline-block;
 	vertical-align: top;
@@ -848,12 +848,15 @@ ul{
 	font-size: 23px;
 }
 .detail-box .detail-mon .monster .id::before {
-    font-size: 15px;
+	font-size: 15px;
 }
 
 /*搜索结果显示觉醒列表的相关css*/
 .awoken-preview .awoken-ul{
 	width: 75px;
+}
+.awoken-preview .awoken-ul>li{
+	display: inline-block;
 }
 .awoken-preview .awoken-preview-superAwakenings{
 	margin-top:3px;
@@ -866,10 +869,34 @@ ul{
 	margin: 0.5px !important;
 }
 .awoken-preview .awoken-icon{
-    filter: unset;
+	filter: unset;
 		transform: scale(0.75);
 		margin: calc(-32px * (1 - 0.75) / 2);
 }
+
+.cd-preview .cd-max,
+.cd-preview .cd-min
+{
+	font-size: 14px;
+}
+.cd-preview .cd-min::after
+{
+	content: "-";
+}
+.abilities-preview>li,
+.abilities-with-awoken-preview>li
+{
+	font-size: 14px;
+}
+.cd-preview::before,
+.abilities-preview>li::before,
+.abilities-with-awoken-preview>li::before
+{
+	font-size: 10px;
+	display: inline-block;
+	width: 25px;
+}
+
 
 /*.setting-box .row-mon-id .open-search::before{
 	content: "搜索怪物";
@@ -1014,15 +1041,15 @@ ul{
 }
 .types-div .latent-list .latent-icon
 {
-    cursor: pointer;
-    box-shadow: none;
+	cursor: pointer;
+	box-shadow: none;
 }
 .types-div .latent-list .latent-icon:before
 {
-    margin-left: -23px;
-    margin-right: -25px;
-    margin-top: -3px;
-    margin-bottom: -5px;
+	margin-left: -23px;
+	margin-right: -25px;
+	margin-top: -3px;
+	margin-bottom: -5px;
 }
 /*.search-box .awoken-div::before{
 	content: "觉醒";
@@ -1411,8 +1438,8 @@ ul{
  /*webkit去掉数字加减*/
 .row-mon-plus .plus-value input::-webkit-outer-spin-button,
 .row-mon-plus .plus-value input::-webkit-inner-spin-button{
-    -webkit-appearance: none !important;
-    margin: 0;
+	-webkit-appearance: none !important;
+	margin: 0;
 }
 .row-mon-plus .m-plus-btn::before,
 .row-mon-plus .m-plus-btn-297 span::before

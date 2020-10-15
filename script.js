@@ -929,7 +929,7 @@ function initialize() {
 		}
 	};
 	//创建一个新的怪物头像
-	editBox.createCardHead = function(id, showAwoken = false) {
+	editBox.createCardHead = function(id, options = {}) {
 		function clickHeadToNewMon() {
 			monstersID.value = this.card.id;
 			monstersID.onchange();
@@ -951,19 +951,83 @@ function initialize() {
 		const cdom = cli.head = createCardA(id);
 		cli.appendChild(cdom);
 		changeid({ id: id }, cdom);
-		cli.card = Cards[id];
-		if (showAwoken)
+		const card = Cards[id];
+		cli.card = card;
+		if (options.showCD)
+		{
+			const CDPreview = cli.appendChild(document.createElement("div"));
+			CDPreview.className = "cd-preview";
+			if (card.activeSkillId>0)
+			{
+				const skill = Skills[card.activeSkillId];
+				const CD_Max = skill.initialCooldown;
+				const CD_Min = skill.initialCooldown - skill.maxLevel + 1;
+				const CD_MinDom = CDPreview.appendChild(document.createElement("span"));
+				CD_MinDom.className = "cd-min";
+				if (CD_Max !== CD_Min)
+				{	
+					CD_MinDom.textContent = CD_Min;
+				}else
+				{
+					CD_MinDom.classList.add(className_displayNone);
+				}
+				const CD_MaxDom = CDPreview.appendChild(document.createElement("span"));
+				CD_MaxDom.className = "cd-max";
+				CD_MaxDom.textContent = CD_Max;
+			}
+		}
+		if (options.showAbilities || options.showAbilitiesWithAwoken)
+		{
+			const tempMon = {
+				id: id,
+				level: card.maxLevel + (card.limitBreakIncr ? 11 : 0),
+				plus: [99,99,99],
+				awoken: card.awakenings.length,
+			};
+			const abilities = calculateAbility(tempMon, null, solo, teamsCount);
+			if (options.showAbilities && abilities)
+			{
+				const abilitiesPreview1 = cli.appendChild(document.createElement("ul"));
+				abilitiesPreview1.className = "abilities-preview";
+				const abilities1 = abilities.map(ab=>ab[1]);
+				const hpDom = abilitiesPreview1.appendChild(document.createElement("li"));
+				hpDom.className = "hp-preview";
+				hpDom.textContent = abilities1[0];
+				const atkDom = abilitiesPreview1.appendChild(document.createElement("li"));
+				atkDom.className = "atk-preview";
+				atkDom.textContent = abilities1[1];
+				const rcvDom = abilitiesPreview1.appendChild(document.createElement("li"));
+				rcvDom.className = "rcv-preview";
+				rcvDom.textContent = abilities1[2];
+			}
+			if (options.showAbilitiesWithAwoken && abilities)
+			{
+				const abilitiesPreview2 = cli.appendChild(document.createElement("ul"));
+				abilitiesPreview2.className = "abilities-with-awoken-preview";
+				const abilities2 = abilities.map(ab=>ab[0]);
+				const hpDom = abilitiesPreview2.appendChild(document.createElement("li"));
+				hpDom.className = "hp-preview";
+				hpDom.textContent = abilities2[0];
+				const atkDom = abilitiesPreview2.appendChild(document.createElement("li"));
+				atkDom.className = "atk-preview";
+				atkDom.textContent = abilities2[1];
+				const rcvDom = abilitiesPreview2.appendChild(document.createElement("li"));
+				rcvDom.className = "rcv-preview";
+				rcvDom.textContent = abilities2[2];
+			}
+		}
+		if (options.showAwoken)
 		{
 			const awokenPreview = cli.appendChild(document.createElement("div"));
 			awokenPreview.className = "awoken-preview";
-			if (cli.card.awakenings.length)
+			if (card.awakenings.length)
 			{
-				const akUl = awokenPreview.appendChild(creatAwokenList(cli.card.awakenings)); //添加觉醒
+				const akUl = awokenPreview.appendChild(creatAwokenList(card.awakenings)); //添加觉醒
 				akUl.classList.add("awoken-preview-awakenings");
 			}
-			if (cli.card.superAwakenings.length)
+			if (card.superAwakenings.length)
 			{
-				const sakUl = awokenPreview.appendChild(creatAwokenList(cli.card.superAwakenings)); //添加超觉醒
+				const sakUl = awokenPreview.appendChild(creatAwokenList(card.superAwakenings)); //添加超觉醒
 				sakUl.classList.add("awoken-preview-superAwakenings");
 			}
 		}
@@ -1105,7 +1169,10 @@ function initialize() {
 		return parseInt(str, 10);
 	}
 	//将搜索结果显示出来（也可用于其他的搜索）
-	const s_showAwoken = searchBox.querySelector("#show-awoken"); //是否显示觉醒
+	const s_add_show_awoken = searchBox.querySelector("#add-show-awoken"); //是否显示觉醒
+	const s_add_show_CD = searchBox.querySelector("#add-show-CD"); //是否显示CD
+	const s_add_show_abilities = searchBox.querySelector("#add-show-abilities"); //是否显示三维
+	const s_add_show_abilities_with_awoken = searchBox.querySelector("#add-show-abilities-with-awoken"); //是否显示计算觉醒的三维
 	showSearch = function(searchArr) {
 		editBox.show();
 		searchBox.classList.remove(className_displayNone);
@@ -1116,7 +1183,13 @@ function initialize() {
 		if (searchArr.length > 0) {
 			let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 			//获取原始排序的头像列表
-			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, s_showAwoken.checked));
+			additionalOption = { //搜索列表的额外选项
+				showAwoken: s_add_show_awoken.checked,
+				showCD: s_add_show_CD.checked,
+				showAbilities: s_add_show_abilities.checked,
+				showAbilitiesWithAwoken: s_add_show_abilities_with_awoken.checked,
+			};
+			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, additionalOption));
 			//对头像列表进行排序
 			const headsArray = sortHeadsArray(searchMonList.originalHeads);
 			headsArray.forEach(head => fragment.appendChild(head));
@@ -2098,9 +2171,9 @@ function editBoxChangeMonId(id) {
 	for (let ai = 0; ai < mAwokenIcon.length; ai++) {
 		if (ai < card.awakenings.length) {
 			mAwokenIcon[ai].setAttribute("data-awoken-icon", card.awakenings[ai]);
-			mAwokenIcon[ai].classList.remove(`display-none`);
+			mAwokenIcon[ai].classList.remove(className_displayNone);
 		} else {
-			mAwokenIcon[ai].classList.add(`display-none`);
+			mAwokenIcon[ai].classList.add(className_displayNone);
 		}
 	}
 	mAwokenIpt[card.awakenings.length].click(); //选择最后一个觉醒
@@ -2113,9 +2186,9 @@ function editBoxChangeMonId(id) {
 		for (let ai = 0; ai < mSAwoken.length; ai++) {
 			if (ai < card.superAwakenings.length) {
 				mSAwoken[ai].setAttribute("data-awoken-icon", card.superAwakenings[ai]);
-				mSAwoken[ai].classList.remove(`display-none`);
+				mSAwoken[ai].classList.remove(className_displayNone);
 			} else {
-				mSAwoken[ai].classList.add(`display-none`);
+				mSAwoken[ai].classList.add(className_displayNone);
 			}
 		}
 		monEditSAwokensRow.classList.remove(className_displayNone);

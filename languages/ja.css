@@ -46,13 +46,19 @@
 {
 	content: "▲継承";
 }
-.abilitys .hp::before{
+.abilitys .hp::before,
+.search-mon-list .hp-preview::before
+{
 	content: "HP:";
 }
-.abilitys .atk::before{
+.abilitys .atk::before,
+.search-mon-list .atk-preview::before
+{
 	content: "攻撃:";
 }
-.abilitys .rcv::before{
+.abilitys .rcv::before,
+.search-mon-list .rcv-preview::before
+{
 	content: "回復:";
 }
 .edit-box .edit-box-title::before{
@@ -122,8 +128,14 @@
 	content: "使用の少ない潜在覚醒を隠す";
 }
 
-.skill-box .skill-cd::before{
+.skill-box .skill-cd::before,
+.search-mon-list .cd-preview::before
+{
 	content: "ターン:";
+}
+.search-mon-list .cd-preview::before
+{
+	width: 34px;
 }
 .skill-box .skill-level-label::before{
 	content: "Lv.";
@@ -255,10 +267,10 @@
 	content: "チーム操作時間:";
 }
 .team-total-info .tIf-total-move::after{
-	content: "秒";
+	content: " 秒";
 }
 .team-total-info .tIf-total-move.fixed-move-time::after{
-	content: "秒 (固定)";
+	content: " 秒 (固定)";
 }
 .formation-total-info .tIf-total-hp::before{
 	content: "総HP (覚醒無効):";
@@ -297,8 +309,20 @@
 .search-box input:checked+ .sort-reverse-label::after{
 	content: "逆序";
 }
-.search-box .show-awoken-label::after{
-	content: "覚醒リストの表示(消費性能)";
+.search-box .additional-div::before{
+	content: "追加の表示:";
+}
+.search-box .add-show-awoken-label::after{
+	content: "覚醒リスト";
+}
+.search-box .add-show-CD-label::after{
+	content: "スキルターン";
+}
+.search-box .add-show-abilities-label::after{
+	content: "能力値";
+}
+.search-box .add-show-abilities-with-awoken-label::after{
+	content: "能力値 (+覚醒)";
 }
 .attrs .attr-all::before{
 	content: "無制限";

@@ -47,13 +47,19 @@
 {
 	content: "▲Assist";
 }
-.abilitys .hp::before{
+.abilitys .hp::before,
+.search-mon-list .hp-preview::before
+{
 	content: "HP:";
 }
-.abilitys .atk::before{
+.abilitys .atk::before,
+.search-mon-list .atk-preview::before
+{
 	content: "ATK:";
 }
-.abilitys .rcv::before{
+.abilitys .rcv::before,
+.search-mon-list .rcv-preview::before
+{
 	content: "RCV:";
 }
 .edit-box .edit-box-title::before{
@@ -123,8 +129,14 @@
 	content: "Hide less used latents";
 }
 
-.skill-box .skill-cd::before{
+.skill-box .skill-cd::before,
+.search-mon-list .cd-preview::before
+{
 	content: "Turn(s):";
+}
+.search-mon-list .cd-preview::before
+{
+	width: 36px;
 }
 .skill-box .skill-level-label::before{
 	content: "Lv.";
@@ -304,8 +316,20 @@
 .search-box input:checked+ .sort-reverse-label::after{
 	content: "Reverse";
 }
-.search-box .show-awoken-label::after{
-	content: "Show Awoken list (consume performance)";
+.search-box .additional-div::before{
+	content: "Additional display:";
+}
+.search-box .add-show-awoken-label::after{
+	content: "Awoken list";
+}
+.search-box .add-show-CD-label::after{
+	content: "Cooldown";
+}
+.search-box .add-show-abilities-label::after{
+	content: "Abilities";
+}
+.search-box .add-show-abilities-with-awoken-label::after{
+	content: "Abilities(+Awoken)";
 }
 .attrs .attr-all::before{
 	content: "All";

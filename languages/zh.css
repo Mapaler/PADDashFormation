@@ -49,14 +49,20 @@
 {
 	content: "▲辅助";
 }
-.abilitys .hp::before{
-	content: "HP：";
+.abilitys .hp::before,
+.search-mon-list .hp-preview::before
+{
+	content: "HP:";
 }
-.abilitys .atk::before{
-	content: "攻击：";
+.abilitys .atk::before,
+.search-mon-list .atk-preview::before
+{
+	content: "攻击:";
 }
-.abilitys .rcv::before{
-	content: "回复：";
+.abilitys .rcv::before,
+.search-mon-list .rcv-preview::before
+{
+	content: "回复:";
 }
 .edit-box .edit-box-title::before{
 	content: "修改队员";
@@ -125,7 +131,9 @@
 	content: "隐藏少用的潜觉";
 }
 
-.skill-box .skill-cd::before{
+.skill-box .skill-cd::before,
+.search-mon-list .cd-preview::before
+{
 	content: "回合:";
 }
 .skill-box .skill-level-label::before{
@@ -264,7 +272,7 @@
 	content: " 秒";
 }
 .team-total-info .tIf-total-move.fixed-move-time::after{
-	content: " 秒（固定）";
+	content: " 秒 (固定)";
 }
 .formation-total-info .tIf-total-hp::before{
 	content: "总HP (无觉醒)：";
@@ -303,8 +311,20 @@
 .search-box input:checked+ .sort-reverse-label::after{
 	content: "逆序";
 }
-.search-box .show-awoken-label::after{
-	content: "显示觉醒列表(消耗性能)";
+.search-box .additional-div::before{
+	content: "附加显示：";
+}
+.search-box .add-show-awoken-label::after{
+	content: "觉醒列表";
+}
+.search-box .add-show-CD-label::after{
+	content: "冷却回合";
+}
+.search-box .add-show-abilities-label::after{
+	content: "能力值";
+}
+.search-box .add-show-abilities-with-awoken-label::after{
+	content: "能力值（+觉醒）";
 }
 .attrs .attr-all::before{
 	content: "不限";

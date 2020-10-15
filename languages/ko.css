@@ -46,13 +46,19 @@
 {
 	content: "▲돕다";
 }
-.abilitys .hp::before{
+.abilitys .hp::before,
+.search-mon-list .hp-preview::before
+{
 	content: "HP：";
 }
-.abilitys .atk::before{
+.abilitys .atk::before,
+.search-mon-list .atk-preview::before
+{
 	content: "공격:";
 }
-.abilitys .rcv::before{
+.abilitys .rcv::before,
+.search-mon-list .rcv-preview::before
+{
 	content: "회복:";
 }
 .edit-box .edit-box-title::before{
@@ -122,7 +128,9 @@
 	content: "덜 사용되는 숨어있는 숨기기";
 }
 
-.skill-box .skill-cd::before{
+.skill-box .skill-cd::before,
+.search-mon-list .cd-preview::before
+{
 	content: "턴:";
 }
 .skill-box .skill-level-label::before{
@@ -297,8 +305,20 @@
 .search-box input:checked+ .sort-reverse-label::after{
 	content: "역순";
 }
-.search-box .show-awoken-label::after{
-	content: "각성 목록 표시(성능 소비)";
+.search-box .additional-div::before{
+	content: "추가 표시:";
+}
+.search-box .add-show-awoken-label::after{
+	content: "각성 목록";
+}
+.search-box .add-show-CD-label::after{
+	content: "스킬 턴";
+}
+.search-box .add-show-abilities-label::after{
+	content: "능력";
+}
+.search-box .add-show-abilities-with-awoken-label::after{
+	content: "능력 (+각성)";
 }
 .attrs .attr-all::before{
 	content: "무제한";
