@@ -129,6 +129,7 @@ var Member = function() {
 };
 Member.prototype.outObj = function() {
 	const m = this;
+	if (m.id == 0) return null;
 	let obj = [m.id];
 	if (m.level != undefined) obj[1] = m.level;
 	if (m.awoken != undefined) obj[2] = m.awoken;
@@ -254,10 +255,10 @@ Formation.prototype.outObj = function() {
 		const teamArr = [];
 		teamArr[0] = t[0].map(m =>
 			m.outObj()
-		);
+		).DeleteLatter();
 		teamArr[1] = t[1].map(m =>
 			m.outObj()
-		);
+		).DeleteLatter();
 		if (t[2]) teamArr[2] = t[2];
 		return teamArr;
 	});
