@@ -941,6 +941,8 @@ function initialize() {
 		changeid({ id: id }, cdom);
 		const card = Cards[id];
 		cli.card = card;
+		if (card.canAssist)
+			cli.classList.add("allowable-assist");
 		if (options.showCD)
 		{
 			const CDPreview = cli.appendChild(document.createElement("div"));
@@ -1027,8 +1029,8 @@ function initialize() {
 	const settingBox = editBox.querySelector(".setting-box");
 	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
 	searchOpen.onclick = function() {
-		s_includeSuperAwoken.onclick();
-		s_canAssist.onclick();
+		s_includeSuperAwoken.onchange();
+		s_canAssist.onchange();
 		searchBox.classList.toggle(className_displayNone);
 	};
 
@@ -1085,7 +1087,7 @@ function initialize() {
 
 	const s_awokensEquivalent = searchBox.querySelector("#consider-equivalent-awoken"); //搜索等效觉醒
 	const s_canAssist = searchBox.querySelector("#can-assist"); //只搜索辅助
-	s_canAssist.onclick = function() {
+	s_canAssist.onchange = function() {
 		toggleDomClassName(this, "only-display-can-assist", true, searchMonList);
 	};
 
@@ -1093,7 +1095,7 @@ function initialize() {
 
 	const s_sawokens = Array.from(s_sawokenDiv.querySelectorAll(".sawoken-check"));
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
-	s_includeSuperAwoken.onclick = function() {
+	s_includeSuperAwoken.onchange = function() {
 		toggleDomClassName(this, className_displayNone, true, s_sawokenDiv);
 	};
 
@@ -1705,6 +1707,8 @@ function initialize() {
 
 	if (isGuideMod) //图鉴模式直接打开搜索框
 	{
+		s_includeSuperAwoken.onchange();
+		s_canAssist.onchange();
 		showSearch([]);
 		//if (monstersID.value.length == 0) editBoxChangeMonId(0);
 	}

@@ -1162,13 +1162,11 @@ ul{
 	max-height: 790px;
 	overflow: auto;
 }
-.search-mon-list.only-display-can-assist .monster,
-.search-mon-list.only-display-can-assist .awoken-preview
+.search-mon-list.only-display-can-assist>li
 {
 	opacity: 0.25;
 }
-.search-mon-list.only-display-can-assist .monster.allowable-assist,
-.search-mon-list.only-display-can-assist .allowable-assist+.awoken-preview
+.search-mon-list.only-display-can-assist>li.allowable-assist
 {
 	opacity: 1;
 }
