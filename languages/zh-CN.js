@@ -1377,7 +1377,7 @@ function parseSkillDescription(skill)
 			if (sk[1]) str += `未知的参数${sk[1]}`;
 			break;
 		case 214: //封自己的技能
-			str = `${sk[0]}回合内，玩家自身队伍无法使用技能`;
+			str = `${sk[0]}回合内，玩家自身队伍无法使用主动技能`;
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
