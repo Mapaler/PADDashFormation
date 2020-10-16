@@ -1369,7 +1369,7 @@ function initialize() {
 				
 				if (isGuideMod)
 				{
-					const idArr = searchMonList.originalHeads.map(head=>head.card.id);
+					const idArr = searchMonList.originalHeads ? searchMonList.originalHeads.map(head=>head.card.id) : [];
 					const state = {searchArr:idArr,mid:newId};
 					const locationURL = new URL(location);
 					if (newId === 0) {
