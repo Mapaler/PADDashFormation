@@ -1376,6 +1376,9 @@ function parseSkillDescription(skill)
 			str = `以十字形式消除5个${getOrbsAttrString(sk[0])}属性宝珠，当消除N个十字时，结算时连击数+${sk[2]>1?sk[2]:""}N`;
 			if (sk[1]) str += `未知的参数${sk[1]}`;
 			break;
+		case 214: //封自己的技能
+			str = `${sk[0]}回合内，玩家自身队伍无法使用技能`;
+			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
 			//开发部分
@@ -2836,6 +2839,16 @@ function parseBigNumber(number)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
+		})},
+		{name:"自封技能（能干啥？）",function:cards=>cards.filter(card=>{
+			const searchType = 214;
+			const skill = Skills[card.activeSkillId];
+			if (skill.type == searchType)
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>subskill.type == searchType);
+			}
 		})},
 		{name:"-----对自身队伍生效类-----",function:cards=>cards},
 		{name:"减少CD（按溜数排序，有范围的取小）",function:cards=>cards.filter(card=>{
