@@ -1188,7 +1188,7 @@ function parseSkillDescription(skill)
 		case 183:
 			str = getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的";
 			if (sk[3] || sk[4]) str+= ` HP ${sk[2]==100?"全满":`${sk[2]}%以上`}时`; 
-			if (sk[3]) str+= `${getFixedHpAtkRcvString({atk:sk[3]})}`; 
+			if (sk[3] && sk[3] !== 100) str+= `${getFixedHpAtkRcvString({atk:sk[3]})}`; 
 			if (sk[4]) str += `，受到的伤害减少${sk[4]}%`;
 			if (sk[6] || sk[7]) str+= ` HP ${sk[5]||sk[2]}%以下时`;
 			if (sk[6] || sk[7]) str+= `${getFixedHpAtkRcvString({atk:sk[6],rcv:sk[7]})}`;
