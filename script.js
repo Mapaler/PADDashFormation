@@ -1213,17 +1213,24 @@ function initialize() {
 	const s_add_show_abilities = searchBox.querySelector("#add-show-abilities"); //是否显示三维
 	const s_add_show_abilities_with_awoken = searchBox.querySelector("#add-show-abilities-with-awoken"); //是否显示计算觉醒的三维
 	
-	showSearch = function(searchArr) {
+	showSearch = function(searchArr)
+	{
 		editBox.show();
 		searchBox.classList.remove(className_displayNone);
 		const createCardHead = editBox.createCardHead;
 
 		searchMonList.classList.add(className_displayNone);
 		searchMonList.innerHTML = ""; //清空旧的
+		if (Array.isArray(searchMonList.originalHeads))
+		{
+			searchMonList.originalHeads.forEach(item=>item = null);
+			searchMonList.originalHeads = null;
+		}
+
 		if (searchArr.length > 0) {
-			let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+			const fragment = document.createDocumentFragment(); //创建节点用的临时空间
 			//获取原始排序的头像列表
-			additionalOption = { //搜索列表的额外选项
+			const additionalOption = { //搜索列表的额外选项
 				showAwoken: s_add_show_awoken.checked,
 				showCD: s_add_show_CD.checked,
 				showAbilities: s_add_show_abilities.checked,
@@ -1234,6 +1241,11 @@ function initialize() {
 			const headsArray = sortHeadsArray(searchMonList.originalHeads);
 			headsArray.forEach(head => fragment.appendChild(head));
 			searchMonList.appendChild(fragment);
+
+			//目前这里添加会导致无限循环，无法后退
+			//const idArr = searchMonList.originalHeads.map(head=>head.card.id);
+			//const state = {searchArr:idArr,mid:editBox.mid};
+			//history.pushState(state, null, location);
 		}
 		searchMonList.classList.remove(className_displayNone);
 	};
@@ -1675,13 +1687,13 @@ function initialize() {
 		creatNewUrl();
 		editBox.hide();
 	};
-	window.onkeydown = function(e) {
+	window.addEventListener("keydown",function(event) {
 		if (!editBox.classList.contains(className_displayNone)) {
-			if (e.keyCode == 27) { //按下ESC时，自动关闭编辑窗
+			if (event.key === "Escape") { //按下ESC时，自动关闭编辑窗
 				btnCancel.onclick();
 			}
 		}
-	};
+	});
 	btnNull.onclick = function() { //空位置
 		const mon = new Member();
 		const teamBigBox = teamBigBoxs[editBox.memberIdx[0]];
