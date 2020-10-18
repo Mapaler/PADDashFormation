@@ -1223,7 +1223,7 @@ function parseSkillDescription(skill)
 			fullColor = nb(sk[0], attrsName);
 			str = fullColor.length>1?"同时":"相连";
 			str += `消除${sk[1]}个或以上的${getOrbsAttrString(sk[0])}宝珠时`;
-			if (sk[2] && sk[2] != 100) str += `，攻击力×${sk[2]/100}倍`;
+			if (sk[2] && sk[2] != 100) str += `，所有宠物的攻击力×${sk[2]/100}倍`;
 			if (sk[3]) str += `，结算时连击数+${sk[3]}`;
 			break;
 		case 193:
