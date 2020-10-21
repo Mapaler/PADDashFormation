@@ -120,30 +120,24 @@ fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffe
 //▲ADPCM播放相关
 function latentUseHole(latentId)
 {
-	if (latentId < 12)
+	switch (true)
 	{
-		return 1;
-	}else if (latentId === 12 || latentId >= 16 && latentId <= 36)
-	{
-		return 2;
-	}else if (latentId >= 13 && latentId <= 15 || latentId >= 37 && latentId <= 38)
-	{
-		return 6;
-	}else
-	{
-		return 1;
+		case (latentId === 12):
+		case (latentId >= 16 && latentId <= 36):
+			return 2;
+		case (latentId >= 13 && latentId <= 15):
+		case (latentId >= 37):
+			return 6;
+		case (latentId < 12):
+		default:
+			return 1;
 	}
 }
 //获取最大潜觉数量
 function getMaxLatentCount(id)
 { //转生2和超转生3为8个格子
-	if (Cards[id])
-	{
-		return Cards[id].is8Latent ? 8 : 6;
-	}else
-	{
-		return 6;
-	} 
+	const card = Cards[id];
+	return card && card.is8Latent ? 8 : 6;
 }
 //计算用了多少潜觉格子
 function usedHole(latents)
