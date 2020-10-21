@@ -329,36 +329,27 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 			0;
 		//console.log("基础值：%d，加蛋值：%d，觉醒x%d增加：%d，潜觉增加：%d",n_base,n_plus,awokenCount,n_awoken,n_latent);
 		let reValue = n_base + n_plus + n_awoken + n_latent + (n_assist_base + n_assist_plus) * bonusScale[idx];
-		let reValueNoAwoken = Math.round(n_base + n_plus + (n_assist_base + n_assist_plus) * bonusScale[idx]);
+		let reValueNoAwoken = n_base + n_plus + (n_assist_base + n_assist_plus) * bonusScale[idx];
 
-		//觉醒生效时的倍率
-		reValue = Math.round(awokenScale[idx].reduce((previous,aw)=>{
+
+		function calculateAwokenScale(previous,aw)
+		{
 			const awokenCount = awokenList.filter(ak=>ak==aw.index).length; //每个倍率觉醒的数量
-			if (awokenCount>0)
-			{
-				return previous * Math.pow(aw.scale,awokenCount);
-			}
-			else
-			{
-				return previous;
-			}
-		},reValue));
+			return previous * Math.pow(aw.scale,awokenCount);
+		}
 
-		//觉醒无效时的倍率 —— 计算顺序可能不对，这里只作为初步设置
+		//觉醒生效时的协力、语音觉醒等的倍率
+		reValue = Math.round(awokenScale[idx].reduce(calculateAwokenScale,reValue));
+
+		//觉醒无效时的倍率 —— 语音觉醒的计算顺序可能不对，这里只作为初步设置
 		const awokenScale_noAwoken = awokenScale.map(arr=>arr.filter(obj=>obj.index == 63)); //筛选出在无觉醒情况下依然生效的倍率觉醒，目前只有63语音觉醒
-		reValueNoAwoken = Math.round(awokenScale_noAwoken[idx].reduce((previous,aw)=>{
-			const awokenCount = awokenList.filter(ak=>ak==aw.index).length; //每个倍率觉醒的数量
-			if (awokenCount>0)
-			{
-				return previous * Math.pow(aw.scale,awokenCount);
-			}
-			else
-			{
-				return previous;
-			}
-		},reValueNoAwoken));
+		reValueNoAwoken = Math.round(awokenScale_noAwoken[idx].reduce(calculateAwokenScale,reValueNoAwoken));
 
-		if (idx<2 && reValue<1) reValue = 1; //HP和ATK最低为1
+		if (idx<2) //idx顺序为HP、ATK、RCV
+		{ //HP和ATK最低为1
+			reValue = Math.max(reValue,1);
+			reValueNoAwoken = Math.max(reValueNoAwoken,1);
+		}
 		return [reValue,reValueNoAwoken];
 	});
 	return abilitys;
