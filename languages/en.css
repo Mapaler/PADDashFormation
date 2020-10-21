@@ -367,7 +367,8 @@
 	background-position-x: -32px;
 }
 .latent-icon[data-latent-icon='17']::before,
-.latent-icon[data-latent-icon='38']::before
+.latent-icon[data-latent-icon='37']::before,
+.latent-icon[data-latent-icon='41']::before
 {
 	background-position-x: -252px;
 }
