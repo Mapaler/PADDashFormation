@@ -259,11 +259,18 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 		[{index:3,value:200},{index:67,value:-2000}]  //RCV
 	];
 	const awokenScale = [ //对应比例加三维觉醒的序号与倍率值
-		//63 语音觉醒
-		[{index:63,scale:1.1}], //HP
-		[{index:63,scale:1.1}], //ATK
-		[{index:63,scale:1.1}]  //RCV
+		[], //HP
+		[], //ATK
+		[]  //RCV
 	];
+
+	if (currentDataSource.code=="ja")
+	{
+		//63 语音觉醒
+		awokenScale.forEach(ab=>{
+			ab.push({index:63,scale:1.1});
+		});
+	}
 
 	if (!solo)
 	{ //协力时计算协力觉醒
@@ -337,22 +344,19 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 			}
 		},reValue));
 
-		if (currentDataSource.code=="ja")
-		{
-			//觉醒无效时的倍率 —— 计算顺序可能不对，这里只作为初步设置
-			const awokenScale_noAwoken = awokenScale.map(arr=>arr.filter(obj=>obj.index == 63)); //筛选出在无觉醒情况下依然生效的倍率觉醒，目前只有63语音觉醒
-			reValueNoAwoken = Math.round(awokenScale_noAwoken[idx].reduce((previous,aw)=>{
-				const awokenCount = awokenList.filter(ak=>ak==aw.index).length; //每个倍率觉醒的数量
-				if (awokenCount>0)
-				{
-					return previous * Math.pow(aw.scale,awokenCount);
-				}
-				else
-				{
-					return previous;
-				}
-			},reValueNoAwoken));
-		}
+		//觉醒无效时的倍率 —— 计算顺序可能不对，这里只作为初步设置
+		const awokenScale_noAwoken = awokenScale.map(arr=>arr.filter(obj=>obj.index == 63)); //筛选出在无觉醒情况下依然生效的倍率觉醒，目前只有63语音觉醒
+		reValueNoAwoken = Math.round(awokenScale_noAwoken[idx].reduce((previous,aw)=>{
+			const awokenCount = awokenList.filter(ak=>ak==aw.index).length; //每个倍率觉醒的数量
+			if (awokenCount>0)
+			{
+				return previous * Math.pow(aw.scale,awokenCount);
+			}
+			else
+			{
+				return previous;
+			}
+		},reValueNoAwoken));
 
 		if (idx<2 && reValue<1) reValue = 1; //HP和ATK最低为1
 		return [reValue,reValueNoAwoken];
