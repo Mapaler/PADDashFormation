@@ -63,7 +63,7 @@ function parseSkillDescription(skill)
 	//觉醒名数组
 	const awokenName = ["HP+","攻击+","回复+","火盾","水盾","木盾","光盾","暗盾","自回","防封","防暗","防废","防毒","火+","水+","木+","光+","暗+","手指","心解","SB","火横","水横","木横","光横","暗横","U","SX","心+","协力","龙杀","神杀","恶魔杀","机杀","平衡杀","攻击杀","体力杀","回复杀","进化杀","觉醒杀","强化杀","卖钱杀","7c","5色破防","心追","全体 HP ","全体回复","破无效","武器觉醒","方块心追","5色溜","大防封","大手指","防云","防封条","大SB","满血强化","下半血强化","L盾","L解锁","10c","c珠","语音","奖励增加"," HP -","攻击-","回复-","大防暗","大防废","大防毒","掉废","掉毒"];
 	const ClumsN = ["左边第1竖列","左边第2竖列","左边第3竖列","右边第3竖列","右边第2竖列","右边第1竖列"];
-	const RowsN = ["最上1横行","上方第2横行","中间横行","下方第2横行","最下1横行"];
+	const RowsN = ["最上1横行","上方第2横行","下方第3横行","下方第2横行","最下1横行"];
 	//返回属性名
 	function attrN(i){return attrsName[i || 0] || ("未知属性" + i);}
 	//返回类型名
@@ -1188,7 +1188,7 @@ function parseSkillDescription(skill)
 		case 183:
 			str = getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的";
 			if (sk[3] || sk[4]) str+= ` HP ${sk[2]==100?"全满":`${sk[2]}%以上`}时`; 
-			if (sk[3]) str+= `${getFixedHpAtkRcvString({atk:sk[3]})}`; 
+			if (sk[3] && sk[3] !== 100) str+= `${getFixedHpAtkRcvString({atk:sk[3]})}`; 
 			if (sk[4]) str += `，受到的伤害减少${sk[4]}%`;
 			if (sk[6] || sk[7]) str+= ` HP ${sk[5]||sk[2]}%以下时`;
 			if (sk[6] || sk[7]) str+= `${getFixedHpAtkRcvString({atk:sk[6],rcv:sk[7]})}`;
@@ -1223,7 +1223,7 @@ function parseSkillDescription(skill)
 			fullColor = nb(sk[0], attrsName);
 			str = fullColor.length>1?"同时":"相连";
 			str += `消除${sk[1]}个或以上的${getOrbsAttrString(sk[0])}宝珠时`;
-			if (sk[2] && sk[2] != 100) str += `，攻击力×${sk[2]/100}倍`;
+			if (sk[2] && sk[2] != 100) str += `，所有宠物的攻击力×${sk[2]/100}倍`;
 			if (sk[3]) str += `，结算时连击数+${sk[3]}`;
 			break;
 		case 193:
