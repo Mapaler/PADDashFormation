@@ -259,16 +259,11 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 		[{index:3,value:200},{index:67,value:-2000}]  //RCV
 	];
 	const awokenScale = [ //对应比例加三维觉醒的序号与倍率值
-		[], //HP
-		[], //ATK
-		[]  //RCV
+		//63 语音觉醒
+		[{index:63,scale:1.1}], //HP
+		[{index:63,scale:1.1}], //ATK
+		[{index:63,scale:1.1}]  //RCV
 	];
-	
-	/* //将来的语音觉醒
-	
-	awokenScale.forEach(ab=>{
-		ab.push({index:63,scale:1.1});
-	});*/
 
 	if (!solo)
 	{ //协力时计算协力觉醒
@@ -310,7 +305,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 		}
 		//觉醒增加的数值
 		const n_awoken = awokenList.length>0 ?
-			Math.round(awokenAdd[idx].reduce(function(previous,aw){
+			Math.round(awokenAdd[idx].reduce((previous,aw)=>{
 					const awokenCount = awokenList.filter(ak=>ak==aw.index).length; //每个觉醒的数量
 					if (awokenCount>0)
 						return previous + aw.value * awokenCount;
@@ -320,7 +315,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 			0;
 		//潜觉增加的倍率
 		const n_latent = (member.latent && member.latent.length>0) ? 
-			Math.round(latentScale[idx].reduce(function(previous,la){
+			Math.round(latentScale[idx].reduce((previous,la)=>{
 					const latentCount = member.latent.filter(l=>l==la.index).length; //每个潜觉的数量
 					return previous + n_base * la.scale * latentCount; //无加值与觉醒的基础值，乘以那么多个潜觉的增加倍数
 				},0)) :
@@ -329,9 +324,9 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 		let reValue = n_base + n_plus + n_awoken + n_latent + (n_assist_base + n_assist_plus) * bonusScale[idx];
 		let reValueNoAwoken = Math.round(n_base + n_plus + (n_assist_base + n_assist_plus) * bonusScale[idx]);
 
-		//协力觉醒的倍率
-		reValue = Math.round(awokenScale[idx].reduce(function(previous,aw){
-			const awokenCount = awokenList.filter(ak=>ak==aw.index).length; //每个协力觉醒的数量
+		//觉醒生效时的倍率
+		reValue = Math.round(awokenScale[idx].reduce((previous,aw)=>{
+			const awokenCount = awokenList.filter(ak=>ak==aw.index).length; //每个倍率觉醒的数量
 			if (awokenCount>0)
 			{
 				return previous * Math.pow(aw.scale,awokenCount);
@@ -341,6 +336,23 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 				return previous;
 			}
 		},reValue));
+
+		if (currentDataSource.code=="ja")
+		{
+			//觉醒无效时的倍率 —— 计算顺序可能不对，这里只作为初步设置
+			const awokenScale_noAwoken = awokenScale.map(arr=>arr.filter(obj=>obj.index == 63)); //筛选出在无觉醒情况下依然生效的倍率觉醒，目前只有63语音觉醒
+			reValueNoAwoken = Math.round(awokenScale_noAwoken[idx].reduce((previous,aw)=>{
+				const awokenCount = awokenList.filter(ak=>ak==aw.index).length; //每个倍率觉醒的数量
+				if (awokenCount>0)
+				{
+					return previous * Math.pow(aw.scale,awokenCount);
+				}
+				else
+				{
+					return previous;
+				}
+			},reValueNoAwoken));
+		}
 
 		if (idx<2 && reValue<1) reValue = 1; //HP和ATK最低为1
 		return [reValue,reValueNoAwoken];
