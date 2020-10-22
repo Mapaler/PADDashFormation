@@ -903,10 +903,9 @@
 	background-position-y:calc(-30px * 17);
 }
 
-/*搜索框中用到的属性图片*/
-.attr::before
+/*属性图片*/
+.attr
 {
-	content:"";
 	display: inline-block;
 	width: 32px;
 	height: 32px;
@@ -914,36 +913,40 @@
 	background-position-y:calc(32px);
 	background-repeat: no-repeat;
 }
-.attr[data-attr-icon='any']::before
+.attr[data-attr-icon='any']
 {
 	background-position-x: -32px;
 	background-position-y:calc(-32px * 0);
 }
-.attr[data-attr-icon='0']::before
+.attr[data-attr-icon='-1']
+{
+	width: auto;
+}
+.attr[data-attr-icon='0']
 {
 	background-position-y:calc(-32px * 0);
 }
-.attr[data-attr-icon='1']::before
+.attr[data-attr-icon='1']
 {
 	background-position-y:calc(-32px * 1);
 }
-.attr[data-attr-icon='2']::before
+.attr[data-attr-icon='2']
 {
 	background-position-y:calc(-32px * 2);
 }
-.attr[data-attr-icon='3']::before
+.attr[data-attr-icon='3']
 {
 	background-position-y:calc(-32px * 3);
 }
-.attr[data-attr-icon='4']::before
+.attr[data-attr-icon='4']
 {
 	background-position-y:calc(-32px * 4);
 }
-.attr[data-attr-icon='5']::before
+.attr[data-attr-icon='5']
 {
 	background-position-y:calc(-32px * 5);
 }
-.attr[data-attr-icon='6']::before
+.attr[data-attr-icon='6']
 {
 	background-position-y:calc(-32px * 6);
 }
