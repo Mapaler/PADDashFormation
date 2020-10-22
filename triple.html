@@ -1094,24 +1094,24 @@ var formation = new Formation(teamsCount,6);
 	<div class="edit-box display-none">
 		<div class="edit-box-title"><!--修改怪物--></div>
 		<div class="search-box display-none">
-			<div class="attrs"><!--属性-->
+			<div class="attrs-div"><!--属性-->
 				<ul class="attr-list attr-list-1">
-					<li><input type="radio" name="attr-1" class="attr-radio" value="all" id="search-attr-1-all" /><label class="attr-all" for="search-attr-1-all"><!--全部--></label></li>
-					<li><input type="radio" name="attr-1" class="attr-radio" value="0" id="search-attr-1-0" /><label class="attr-t0" for="search-attr-1-0"><!--火--></label></li>
-					<li><input type="radio" name="attr-1" class="attr-radio" value="1" id="search-attr-1-1" /><label class="attr-t1" for="search-attr-1-1"><!--水--></label></li>
-					<li><input type="radio" name="attr-1" class="attr-radio" value="2" id="search-attr-1-2" /><label class="attr-t2" for="search-attr-1-2"><!--木--></label></li>
-					<li><input type="radio" name="attr-1" class="attr-radio" value="3" id="search-attr-1-3" /><label class="attr-t3" for="search-attr-1-3"><!--光--></label></li>
-					<li><input type="radio" name="attr-1" class="attr-radio" value="4" id="search-attr-1-4" /><label class="attr-t4" for="search-attr-1-4"><!--暗--></label></li>
-					<li><input type="radio" name="attr-1" class="attr-radio" value="6" id="search-attr-1-none" /><label class="attr-none" for="search-attr-1-none"><!--无--></label></li>
+					<li><input type="radio" name="attr-1" class="attr-radio" value="all" id="search-attr-1-any" checked/><label class="attr" data-attr-icon="any" for="search-attr-1-any"><!--任意--></label></li>
+					<li><input type="radio" name="attr-1" class="attr-radio" value="0" id="search-attr-1-0" /><label class="attr" data-attr-icon="0" for="search-attr-1-0"><!--火--></label></li>
+					<li><input type="radio" name="attr-1" class="attr-radio" value="1" id="search-attr-1-1" /><label class="attr" data-attr-icon="1" for="search-attr-1-1"><!--水--></label></li>
+					<li><input type="radio" name="attr-1" class="attr-radio" value="2" id="search-attr-1-2" /><label class="attr" data-attr-icon="2" for="search-attr-1-2"><!--木--></label></li>
+					<li><input type="radio" name="attr-1" class="attr-radio" value="3" id="search-attr-1-3" /><label class="attr" data-attr-icon="3" for="search-attr-1-3"><!--光--></label></li>
+					<li><input type="radio" name="attr-1" class="attr-radio" value="4" id="search-attr-1-4" /><label class="attr" data-attr-icon="4" for="search-attr-1-4"><!--暗--></label></li>
+					<li><input type="radio" name="attr-1" class="attr-radio" value="6" id="search-attr-1-6" /><label class="attr" data-attr-icon="6" for="search-attr-1-6"><!--无主属性--></label></li>
 				</ul>
 				<ul class="attr-list attr-list-2">
-					<li><input type="radio" name="attr-2" class="attr-radio" value="all" id="search-attr-2-all" /><label class="attr-all" for="search-attr-2-all"><!--全部--></label></li>
-					<li><input type="radio" name="attr-2" class="attr-radio" value="0" id="search-attr-2-0" /><label class="attr-t0" for="search-attr-2-0"><!--火--></label></li>
-					<li><input type="radio" name="attr-2" class="attr-radio" value="1" id="search-attr-2-1" /><label class="attr-t1" for="search-attr-2-1"><!--水--></label></li>
-					<li><input type="radio" name="attr-2" class="attr-radio" value="2" id="search-attr-2-2" /><label class="attr-t2" for="search-attr-2-2"><!--木--></label></li>
-					<li><input type="radio" name="attr-2" class="attr-radio" value="3" id="search-attr-2-3" /><label class="attr-t3" for="search-attr-2-3"><!--光--></label></li>
-					<li><input type="radio" name="attr-2" class="attr-radio" value="4" id="search-attr-2-4" /><label class="attr-t4" for="search-attr-2-4"><!--暗--></label></li>
-					<li><input type="radio" name="attr-2" class="attr-radio" value="-1" id="search-attr-2-none" /><label class="attr-none" for="search-attr-2-none"><!--无--></label></li>
+					<li><input type="radio" name="attr-2" class="attr-radio" value="all" id="search-attr-2-any" checked/><label class="attr" data-attr-icon="any" for="search-attr-2-any"><!--任意--></label></li>
+					<li><input type="radio" name="attr-2" class="attr-radio" value="0" id="search-attr-2-0" /><label class="attr" data-attr-icon="0" for="search-attr-2-0"><!--火--></label></li>
+					<li><input type="radio" name="attr-2" class="attr-radio" value="1" id="search-attr-2-1" /><label class="attr" data-attr-icon="1" for="search-attr-2-1"><!--水--></label></li>
+					<li><input type="radio" name="attr-2" class="attr-radio" value="2" id="search-attr-2-2" /><label class="attr" data-attr-icon="2" for="search-attr-2-2"><!--木--></label></li>
+					<li><input type="radio" name="attr-2" class="attr-radio" value="3" id="search-attr-2-3" /><label class="attr" data-attr-icon="3" for="search-attr-2-3"><!--光--></label></li>
+					<li><input type="radio" name="attr-2" class="attr-radio" value="4" id="search-attr-2-4" /><label class="attr" data-attr-icon="4" for="search-attr-2-4"><!--暗--></label></li>
+					<li><input type="radio" name="attr-2" class="attr-radio" value="-1" id="search-attr-2-none" /><label class="attr" data-attr-icon="-1" for="search-attr-2-none"><!--无--></label></li>
 				</ul>
 				<input type="checkbox" class="config-checkbox-ipt" name="fix-main-color" id="fix-main-color" checked><label class="config-checkbox-lbl fix-main-color-label" for="fix-main-color"><div class="config-checkbox-lbl-cicle"></div></label>
 			</div>
@@ -1144,8 +1144,8 @@ var formation = new Formation(teamsCount,6);
 				</ul>
 			</div>
 			<div class="awoken-div"><!--觉醒-->
-				<button class="awoken-clear" ></button>
-				<div>
+				<button class="awoken-clear"></button>
+				<div class="awoken-option">
 					<input type="checkbox" class="config-checkbox-ipt" name="consider-equivalent-awoken" id="consider-equivalent-awoken" checked><label class="config-checkbox-lbl consider-equivalent-awoken-label" for="consider-equivalent-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
 					<input type="checkbox" class="config-checkbox-ipt" name="include-super-awoken" id="include-super-awoken"><label class="config-checkbox-lbl include-super-awoken-label" for="include-super-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
 				</div>

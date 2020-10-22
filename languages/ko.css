@@ -279,13 +279,13 @@
 .search-box::before{
 	content: "몬스터 검색";
 }
-.search-box .attrs .attr-list-1::before{
+.search-box .attrs-div .attr-list-1::before{
 	content: "속성 1:";
 }
-.search-box .attrs .attr-list-2::before{
+.search-box .attrs-div .attr-list-2::before{
 	content: "속성 1:";
 }
-.search-box .attrs .fix-main-color-label::after{
+.search-box .attrs-div .fix-main-color-label::after{
 	content: "제한 속성 1은 기본 속성 이며 속성 2 하위 속성입니다.";
 }
 .search-box .consider-equivalent-awoken-label::after{
@@ -321,10 +321,7 @@
 .search-box .add-show-abilities-with-awoken-label::after{
 	content: "능력 (+각성)";
 }
-.attrs .attr-all::before{
-	content: "무제한";
-}
-.attrs .attr-none::before{
+.attrs-div .attr[data-attr-icon='-1']::before{
 	content: "없음";
 }
 .search-box .types-div::before{

@@ -1086,8 +1086,8 @@ function initialize() {
 		searchBox.classList.toggle(className_displayNone);
 	};
 
-	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs .attr-list-1 .attr-radio"));
-	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs .attr-list-2 .attr-radio"));
+	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-1 .attr-radio"));
+	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-2 .attr-radio"));
 	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
 	const s_typesDiv = searchBox.querySelector(".types-div");
 	const s_types = Array.from(s_typesDiv.querySelectorAll(".type-check"));
