@@ -1,17 +1,17 @@
-var Cards = []; //怪物数据
-var Skills = []; //技能数据
-var currentLanguage; //当前语言
-var currentDataSource; //当前数据
+let Cards = []; //怪物数据
+let Skills = []; //技能数据
+let currentLanguage; //当前语言
+let currentDataSource; //当前数据
 
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
 
-var interchangeSvg; //储存划线的SVG
-var controlBox; //储存整个controlBox
-var statusLine; //储存状态栏
-var formationBox; //储存整个formationBox
-var editBox; //储存整个editBox
-var showSearch; //整个程序都可以用的显示搜索函数
+let interchangeSvg; //储存划线的SVG
+let controlBox; //储存整个controlBox
+let statusLine; //储存状态栏
+let formationBox; //储存整个formationBox
+let editBox; //储存整个editBox
+let showSearch; //整个程序都可以用的显示搜索函数
 
 const dataStructure = 3; //阵型输出数据的结构版本
 const className_displayNone = "display-none";
@@ -701,8 +701,11 @@ function loadData(force = false)
 	
 			function dealSkillData()
 			{
-				const updateTime = controlBox.querySelector(".datasource-updatetime");
-				updateTime.textContent = new Date(currentCkey.updateTime).toLocaleString(undefined, { hour12: false });
+				if (controlBox)
+				{
+					const updateTime = controlBox.querySelector(".datasource-updatetime");
+					updateTime.textContent = new Date(currentCkey.updateTime).toLocaleString(undefined, { hour12: false });
+				}
 	
 				//initialize(); //初始化
 				if (statusLine) statusLine.classList.remove("loading-skill-info");
