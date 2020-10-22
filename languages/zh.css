@@ -1,4 +1,5 @@
 @charset "utf-8";
+@import "icon-zh.css";
 .status.loading-check-version .text::before{
 	content: "正在检查数据版本，请稍候……";
 }
@@ -349,15 +350,4 @@
 }
 .control-div .search-close::before{
 	content: "关闭搜索";
-}
-/*Some icons, style different from the Japanese version*/
-.awoken-icon[data-awoken-icon='46'],
-.awoken-icon[data-awoken-icon='47']
-{
-	background-position-x: calc(-32px * 2);
-}
-.badge[data-badge-icon='0']::before,
-.badge[data-badge-icon='14']::before
-{
-	background-position-x: calc(-36px * 2);
 }
