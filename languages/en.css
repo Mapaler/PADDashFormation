@@ -290,13 +290,13 @@
 .search-box::before{
 	content: "Search Cards";
 }
-.search-box .attrs .attr-list-1::before{
+.search-box .attrs-div .attr-list-1::before{
 	content: "Attribute 1:";
 }
-.search-box .attrs .attr-list-2::before{
+.search-box .attrs-div .attr-list-2::before{
 	content: "Attribute 2:";
 }
-.search-box .attrs .fix-main-color-label::after{
+.search-box .attrs-div .fix-main-color-label::after{
 	content: "Fix attr-1 for main-attr, attr-2 for sub-attr.";
 }
 .search-box .consider-equivalent-awoken-label::after{
@@ -332,10 +332,7 @@
 .search-box .add-show-abilities-with-awoken-label::after{
 	content: "Abilities(+Awoken)";
 }
-.attrs .attr-all::before{
-	content: "All";
-}
-.attrs .attr-none::before{
+.attrs-div .attr[data-attr-icon='-1']::before{
 	content: "None";
 }
 .search-box .types-div::before{

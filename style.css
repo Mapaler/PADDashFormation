@@ -909,12 +909,7 @@ ul{
 .search-box::before{
 	content: "▼简易搜索";
 }
-.attrs .attr-all::before{
-	content: "不限";
-}
-.attrs .attr-none::before{
-	content: "无";
-}*/
+*/
 .search-box::before{
 	font-weight: bold;
 	font-size: 1.2em;
@@ -922,26 +917,23 @@ ul{
 .search-box>div{
 	margin-bottom: 5px;
 }
-.search-box>div ul{
-	display: inline-block;
-}
-.search-box .attrs ul{
+.search-box .attrs-div-div>ul{
 	display: block;
 }
-.search-box>div ul>li{
+.search-box>div>ul>li{
 	display: inline-block;
 	vertical-align: top;
 	font-size:16px;
 	overflow: hidden;
 }
-.search-box>div ul>li>label{
+.search-box>div>ul>li>label{
 	cursor: pointer;
 	display: block;
 	text-align: center;
 }
 
-.attrs .attr-list-1::before,
-.attrs .attr-list-2::before,
+.attrs-div .attr-list-1::before,
+.attrs-div .attr-list-2::before,
 .types-div::before,
 .awoken-div::before,
 .sawoken-div::before{
@@ -951,53 +943,61 @@ ul{
 	margin-right: 3px;
 	display: inline-block;
 }
-/*.search-box .attrs .attr-list-1::before{
+/*.search-box .attrs-div-div .attr-list-1::before{
 	content: "属性1";
 }
-.search-box .attrs .attr-list-2::before{
+.search-box .attrs-div-div .attr-list-2::before{
 	content: "属性2";
 }
-.search-box .attrs .fix-main-color-label::after{
+.search-box .attrs-div-div .fix-main-color-label::after{
 	content: "限制属性1为主属性，属性2为副属性";
 }*/
 .attr-radio,.type-check,.sawoken-check{
 	display: none;
 }
-.attrs .attr-list{
+.attrs-div .attr-list{
 	font-size:0;
 }
-.attrs .attr-list li{
+.attrs-div .attr-list>li{
 	border: 1px solid white;
 	border-left: none;
 	background: #947244;
 }
-.attrs .attr-list li:hover{
+.attrs-div .attr-list>li:hover{
 	background: #E9CB9E;
 }
-.attrs .attr-list li:first-of-type{
+.attrs-div .attr-list>li:first-of-type{
 	border-radius: 8px 0 0 8px;
 	border-left: 1px solid white;
 }
-.attrs .attr-list li:last-of-type{
+.attrs-div .attr-list>li:last-of-type{
 	border-radius: 0 8px 8px 0;
 }
-.attrs .attr-list li label{
-	line-height: 30px;
+.attrs-div .attr-list .attr
+{
 	width: 55px;
-	height: 30px;
+	height: 32px;
+	line-height:32px;
+	text-align: center;
+	vertical-align: middle;
 }
-.attrs .attr-list input:checked+label{
+.attrs-div .attr-list input:checked+label{
 	background-color:#8C4242;
 	box-shadow: inset black 0 0 5px;
 	cursor: auto;
 }
+
 .attr-list-1{
 	margin-bottom: 5px;
 }
 /*.search-box .types-div::before{
 	content: "类型";
 }*/
-.types-div .type-list li label{
+.types-div .type-list
+{
+	display: inline-block;
+}
+.types-div .type-list>li label{
 	opacity: var(--search-icon-unchecked);
 }
 .types-div .type-list input:checked~label{
@@ -1007,11 +1007,11 @@ ul{
 	margin-left: 10px;
 	margin-right: 0;
 }
-.types-div .type-list li
+.types-div .type-list>li
 {
 	position: relative;
 }
-.types-div .type-list li:after
+.types-div .type-list>li:after
 {
 	content: "⚔️";
 	font-size: 10px;
@@ -1059,6 +1059,10 @@ ul{
 /*.search-box .awoken-div::before{
 	content: "觉醒";
 }*/
+.search-box .awoken-div .awoken-option
+{
+	display: inline-block;
+}
 .search-box .awoken-div .awoken-clear::before,
 .search-box .sawoken-div .sawoken-clear::before
 {

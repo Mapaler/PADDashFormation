@@ -285,13 +285,13 @@
 .search-box::before{
 	content: "搜索怪物";
 }
-.search-box .attrs .attr-list-1::before{
+.search-box .attrs-div .attr-list-1::before{
 	content: "属性 1：";
 }
-.search-box .attrs .attr-list-2::before{
+.search-box .attrs-div .attr-list-2::before{
 	content: "属性 2：";
 }
-.search-box .attrs .fix-main-color-label::after{
+.search-box .attrs-div .fix-main-color-label::after{
 	content: "限制属性 1 为主属性，属性 2 为副属性";
 }
 .search-box .consider-equivalent-awoken-label::after{
@@ -327,10 +327,7 @@
 .search-box .add-show-abilities-with-awoken-label::after{
 	content: "能力值（+觉醒）";
 }
-.attrs .attr-all::before{
-	content: "不限";
-}
-.attrs .attr-none::before{
+.attrs-div .attr[data-attr-icon='-1']::before{
 	content: "无";
 }
 .search-box .types-div::before{

@@ -904,18 +904,46 @@
 }
 
 /*搜索框中用到的属性图片*/
-.attrs .attr-t0::before{
-	content: url(images/orb-small-fire.png);
+.attr::before
+{
+	content:"";
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background-image: url(images/attrs.png);
+	background-position-y:calc(32px);
+	background-repeat: no-repeat;
 }
-.attrs .attr-t1::before{
-	content: url(images/orb-small-water.png);
+.attr[data-attr-icon='any']::before
+{
+	background-position-x: -32px;
+	background-position-y:calc(-32px * 0);
 }
-.attrs .attr-t2::before{
-	content: url(images/orb-small-wood.png);
+.attr[data-attr-icon='0']::before
+{
+	background-position-y:calc(-32px * 0);
 }
-.attrs .attr-t3::before{
-	content: url(images/orb-small-light.png);
+.attr[data-attr-icon='1']::before
+{
+	background-position-y:calc(-32px * 1);
 }
-.attrs .attr-t4::before{
-	content: url(images/orb-small-dark.png);
+.attr[data-attr-icon='2']::before
+{
+	background-position-y:calc(-32px * 2);
+}
+.attr[data-attr-icon='3']::before
+{
+	background-position-y:calc(-32px * 3);
+}
+.attr[data-attr-icon='4']::before
+{
+	background-position-y:calc(-32px * 4);
+}
+.attr[data-attr-icon='5']::before
+{
+	background-position-y:calc(-32px * 5);
+}
+.attr[data-attr-icon='6']::before
+{
+	background-position-y:calc(-32px * 6);
 }
