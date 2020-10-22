@@ -1,4 +1,5 @@
 @charset "utf-8";
+@import "icon-en.css";
 .status.loading-check-version .text::before{
 	content: "Checking the data version, please wait...";
 }
@@ -354,26 +355,4 @@
 }
 .control-div .search-close::before{
 	content: "Close Search Panel";
-}
-
-/*Some icons, style different from the Japanese version*/
-.awoken-icon[data-awoken-icon='40'],
-.awoken-icon[data-awoken-icon='46'],
-.awoken-icon[data-awoken-icon='47'],
-.awoken-icon[data-awoken-icon='48'],
-.type-icon[data-type-icon='12'],
-.type-icon[data-type-icon='9']
-{
-	background-position-x: -32px;
-}
-.latent-icon[data-latent-icon='17']::before,
-.latent-icon[data-latent-icon='37']::before,
-.latent-icon[data-latent-icon='41']::before
-{
-	background-position-x: -252px;
-}
-.badge[data-badge-icon='0']::before,
-.badge[data-badge-icon='2']::before
-{
-	background-position-x: -36px;
 }
