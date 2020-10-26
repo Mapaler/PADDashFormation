@@ -14,7 +14,7 @@ The current acquisition API is
 目前夜神安卓5无法运行智龙迷城，需要使用安卓7，但是安卓7无法信任用户证书，所以需要把证书添加到安卓系统储存区。  
 参考 https://www.jianshu.com/p/035f7d7a0f7e
 1. 将 Fidder 证书导出成文件，在电脑上找一个 openssl.exe 程序
-1. 执行`openssl x509 -inform DER -in cacert.der -out cacert.pem`将证书转换为pem格式
+1. 执行`openssl x509 -inform DER -in cacert.cer -out cacert.pem`将证书转换为pem格式
 1. 执行`openssl x509 -inform PEM -subject_hash_old -in cacert.pem`获取证书的hash（第一行）
 1. 将证书重命名为`[hash].0`
 1. 将证书复制到`/system/etc/security/cacerts/`，并修改为 644 权限
