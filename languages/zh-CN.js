@@ -759,8 +759,7 @@ function parseSkillDescription(skill)
 			str = `${getOrbsAttrString(sk[0])}宝珠强化（每颗强化珠伤害/回复增加${sk[1]}%）`;
 			break;
 		case 141:
-			let otherAttrs = sk[2] && (sk[1] ^ sk[2]); //异或，sk[2]表示在什么珠以外生成，平时等于sk[1]
-			str = `${otherAttrs?`${getOrbsAttrString(otherAttrs)}以外`:""}随机生成${getOrbsAttrString(sk[1])}宝珠各${sk[0]}个`;
+			str = `${sk[2]?`${getOrbsAttrString(sk[2])}以外`:""}随机生成${getOrbsAttrString(sk[1])}宝珠各${sk[0]}个`;
 			break;
 		case 142:
 			str = `${sk[0]}回合内，自身的属性变为${attrN(sk[1])}`;
