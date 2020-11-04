@@ -1511,16 +1511,40 @@ function parseBigNumber(number)
 	const specialSearchFunctions = [
 		{name:"不做筛选",function:cards=>cards},
 		{name:"======队长技======",function:cards=>cards},
-		{name:"队长技固伤追击",function:cards=>cards.filter(card=>{
+		{name:"队长技固伤追击（按伤害排序）",function:cards=>{
 			const searchTypeArray = [199,200,201];
-			const skill = Skills[card.leaderSkillId];
-			if (searchTypeArray.includes(skill.type))
-				return true;
-			else if (skill.type == 138){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			function getSkillFixedDamage(skill)
+			{
+				switch (skill.type)
+				{
+					case 199: case 200:
+						return skill.params[2];
+					case 201:
+						return skill.params[5];
+					default:
+						return 0;
+				}
 			}
-		})},
+			return cards.filter(card=>{
+				const skill = Skills[card.leaderSkillId];
+				if (searchTypeArray.some(t=>skill.type == t && getSkillFixedDamage(skill)>0))
+					return true;
+				else if (skill.type == 138){
+					const subskills = skill.params.map(id=>Skills[id]);
+					return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t && getSkillFixedDamage(subskill)>0));
+				}
+			}).sort((a,b)=>{
+				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+				let a_pC = 0,b_pC = 0;
+				a_pC = searchTypeArray.includes(a_s.type) ?
+					getSkillFixedDamage(a_s) :
+					getSkillFixedDamage(a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
+				b_pC = searchTypeArray.includes(b_s.type) ?
+					getSkillFixedDamage(b_s) :
+					getSkillFixedDamage(b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
+				return a_pC - b_pC;
+			});
+		}},
 		{name:"队长技+C（按+C数排序）",function:cards=>{
 			const searchTypeArray = [192,194,206,209,210];
 			function getSkillAddCombo(skill)
@@ -1535,6 +1559,8 @@ function parseBigNumber(number)
 						return skill.params[0];
 					case 210:
 						return skill.params[2];
+					default:
+						return 0;
 				}
 			}
 			return cards.filter(card=>{
