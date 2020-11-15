@@ -102,4 +102,13 @@ const sort_function_list = [
 			return abA - abB;
 		}
 	},
+	{tag:"sort_abilityIndex_awoken",name:"最大加权能力指数(+觉醒)",function:(a,b)=>
+		{
+			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
+				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
+			const abA = abilities_2statusA ? abilities_2statusA.withAwoken.hp / 10 + abilities_2statusA.withAwoken.atk / 5 + abilities_2statusA.withAwoken.rcv / 3 : 0,
+				abB = abilities_2statusB ? abilities_2statusB.withAwoken.hp / 10 + abilities_2statusB.withAwoken.atk / 5 + abilities_2statusB.withAwoken.rcv / 3 : 0;
+			return abA - abB;
+		}
+	},
 ];

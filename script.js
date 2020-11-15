@@ -1031,6 +1031,9 @@ function initialize() {
 			const rcvDom = abilitiesPreview.appendChild(document.createElement("li"));
 			rcvDom.className = "rcv-preview";
 			rcvDom.textContent = abilities.rcv;
+			const indexDom = abilitiesPreview.appendChild(document.createElement("li"));
+			indexDom.className = "index-preview";
+			indexDom.textContent = Math.round(abilities.hp/10 + abilities.atk/5 + abilities.rcv/3);
 			return abilitiesPreview;
 		}
 		if (options.showAbilities || options.showAbilitiesWithAwoken)

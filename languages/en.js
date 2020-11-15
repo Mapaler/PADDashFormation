@@ -18,6 +18,7 @@
         sort_hpMax110_awoken: "Max HP (+Awoken)",
         sort_atkMax110_awoken: "Max ATK (+Awoken)",
         sort_rcvMax110_awoken: "Max RCV (+Awoken)",
+        sort_abilityIndex_awoken: "Maximum Weighted Ability Index (+Awakening)",
     },
     force_reload_data: "Force refresh data",
 }

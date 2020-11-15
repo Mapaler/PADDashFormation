@@ -62,6 +62,10 @@
 {
 	content: "회복:";
 }
+.search-mon-list .index-preview::before
+{
+	content: "가중:";
+}
 .edit-box .edit-box-title::before{
 	content: "회원 수정";
 }

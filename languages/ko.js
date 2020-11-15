@@ -18,6 +18,7 @@
         sort_hpMax110_awoken: "최대 HP (+각성)",
         sort_atkMax110_awoken: "최대 공격 (+각성)",
         sort_rcvMax110_awoken: "최대 회복 (+각성)",
+        sort_abilityIndex_awoken: "최대 가중 능력 지수 (+각성)",
     },
     force_reload_data: "데이터 강제 새로 고침",
 }

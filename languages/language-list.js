@@ -9,7 +9,8 @@
     },
     {
         name:"中文（简体）技能解析",i18n:"zh-CN",searchlist:["chs","ja"],
-        guideURL:id=>{const url = new URL(location);url.search = '';url.searchParams.set("guide",1);url.searchParams.set("id",id); return url;}
+        guideURL:id=>`http://pad.skyozora.com/pets/${id}`
+        //guideURL:id=>{const url = new URL(location);url.search = '';url.searchParams.set("guide",1);url.searchParams.set("id",id); return url;}
     },
     {
         name:"中文（简体）原版技能",i18n:"zh",searchlist:["chs","ja"],
