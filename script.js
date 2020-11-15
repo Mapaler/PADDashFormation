@@ -1093,45 +1093,46 @@ function initialize() {
 	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-2 .attr-radio"));
 	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
 	const s_typesDiv = searchBox.querySelector(".types-div");
-	const s_types = Array.from(s_typesDiv.querySelectorAll(".type-check"));
 	const s_typeAndOr = s_typesDiv.querySelector("#type-and-or");
 	const s_typesUl = s_typesDiv.querySelector(".type-list");
 	const s_typesLi = Array.from(s_typesUl.querySelectorAll("li"));
-	const s_typesCheckBox = s_typesLi.map(li=>li.querySelector(".type-check"));
-	s_typesCheckBox.forEach(checkBox=>
-		{
-			checkBox.onchange = function(){
-				const newClassName = `type-killer-${this.value}`;
-				if (this.checked && s_typeAndOr.checked) //and的时候才生效
-					s_typesUl.classList.add(newClassName);
-				else
-					s_typesUl.classList.remove(newClassName);
-			}
-		}
-	);
+	const s_types = s_typesLi.map(li=>li.querySelector(".type-check")); //checkbox集合
+
+	function s_types_onchange(){
+		const newClassName = `type-killer-${this.value}`;
+		if (this.checked && s_typeAndOr.checked) //and的时候才生效
+			s_typesUl.classList.add(newClassName);
+		else
+			s_typesUl.classList.remove(newClassName);
+	}
+	s_types.forEach(checkBox=>checkBox.onchange = s_types_onchange);
 
 	const s_types_latentUl = s_typesDiv.querySelector(".latent-list");
 	const s_types_latentli = Array.from(s_types_latentUl.querySelectorAll("li"));
-	s_types_latentli.forEach(latent=>
-	{
-		latent.onclick = function(){
-			const latenttype = parseInt(this.getAttribute("data-latent-icon"));
-			const killerTypes = typekiller_for_type.filter(o=>o.allowableLatent.includes(latenttype)).map(o=>o.type);
-			s_typesCheckBox.forEach(checkbox=>{
-				const type = parseInt(checkbox.value);
-				checkbox.checked = killerTypes.includes(type);
-			});
-		};
-	});
+	function s_types_latentli_onclick(){
+		const latenttype = parseInt(this.getAttribute("data-latent-icon"));
+		const killerTypes = typekiller_for_type.filter(o=>o.allowableLatent.includes(latenttype)).map(o=>o.type);
+		s_types.forEach(checkbox=>{
+			const type = parseInt(checkbox.value);
+			checkbox.checked = killerTypes.includes(type);
+		});
+	}
+	s_types_latentli.forEach(latent=>latent.onclick = s_types_latentli_onclick);
 
 	s_typeAndOr.onchange = function(){
-		s_typesCheckBox.forEach(checkBox=>checkBox.onchange());
+		s_types.forEach(checkBox=>checkBox.onchange());
 		if (this.checked)
 			s_types_latentUl.classList.add(className_displayNone);
 		else
 			s_types_latentUl.classList.remove(className_displayNone);
 	};
 	s_typeAndOr.onchange();
+
+	//稀有度筛选
+	const s_rareDiv = searchBox.querySelector(".rare-div");
+	const s_rareUl = s_rareDiv.querySelector(".rare-list");
+	const s_rareLi = Array.from(s_rareUl.querySelectorAll("li"));
+	const s_rare = s_rareLi.map(li=>li.querySelector(".rare-check"));  //checkbox集合
 
 	const s_awokensItems = Array.from(searchBox.querySelectorAll(".awoken-div .awoken-count"));
 	const s_awokensIcons = s_awokensItems.map(it => it.querySelector(".awoken-icon"));
@@ -1288,6 +1289,7 @@ function initialize() {
 			}
 		}
 		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
+		const rareFilter = s_rare.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const awokensFilter = s_awokensCounts.filter(btn => parseInt(btn.value, 10) > 0).map(btn => {
 			const awokenIndex = parseInt(btn.parentNode.parentNode.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10);
@@ -1298,6 +1300,7 @@ function initialize() {
 			s_fixMainColor.checked,
 			typesFilter,
 			s_typeAndOr.checked,
+			rareFilter,
 			awokensFilter,
 			sawokensFilter,
 			s_awokensEquivalent.checked,
@@ -1317,6 +1320,9 @@ function initialize() {
 		s_attr1s[0].checked = true;
 		s_attr2s[0].checked = true;
 		s_types.forEach(t => {
+			t.checked = false;
+		});
+		s_rare.forEach(t => {
 			t.checked = false;
 		});
 		s_typeAndOr.onchange();
@@ -1594,7 +1600,7 @@ function initialize() {
 
 	//编辑界面重新计算怪物的能力
 	function reCalculateAbility() {
-		const monid = parseInt(monstersID.value || 0, 10);
+		const monid = editBox.mid;
 		const level = parseInt(monEditLv.value || 0, 10);
 
 		const mAwokenNumIpt = monEditAwokensRow.querySelector("input[name='awoken-number']:checked");

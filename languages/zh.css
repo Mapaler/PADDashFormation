@@ -337,6 +337,9 @@
 .search-box .types-div::before{
 	content: "类型：";
 }
+.search-box .rare-div::before{
+	content: "稀有（OR）：";
+}
 .search-box .awoken-div::before{
 	content: "▼觉醒（AND）（提示：点击数字可减少数值）";
 }

@@ -334,6 +334,9 @@
 .search-box .types-div::before{
 	content: "タイプ:";
 }
+.search-box .rare-div::before{
+	content: "希少性（OR）：";
+}
 .search-box .awoken-div::before{
 	content: "▼覚醒（AND）（しえ:数値をクリックすると数値が減少します）";
 }

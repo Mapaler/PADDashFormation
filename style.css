@@ -952,7 +952,11 @@ ul{
 .search-box .attrs-div-div .fix-main-color-label::after{
 	content: "限制属性1为主属性，属性2为副属性";
 }*/
-.attr-radio,.type-check,.sawoken-check{
+.attr-radio,
+.type-check,
+.rare-check,
+.sawoken-check
+{
 	display: none;
 }
 .attrs-div .attr-list{
@@ -993,14 +997,19 @@ ul{
 /*.search-box .types-div::before{
 	content: "类型";
 }*/
-.types-div .type-list
+.types-div .type-list,
+.rare-div .rare-list
 {
 	display: inline-block;
 }
-.types-div .type-list>li label{
+.types-div .type-list input~label,
+.rare-div .rare-list input~label
+{
 	opacity: var(--search-icon-unchecked);
 }
-.types-div .type-list input:checked~label{
+.types-div .type-list input:checked~label,
+.rare-div .rare-list input:checked~label
+{
 	opacity: 1;
 }
 .types-div .type-and-or-label{
@@ -1021,6 +1030,7 @@ ul{
 	display: none;
 	pointer-events:none;
 }
+/*不同type允许的杀*/
 .types-div .type-list.type-killer-5 li[data-type-icon="7"]:after,
 .types-div .type-list.type-killer-4 li[data-type-icon="8"]:after,
 .types-div .type-list.type-killer-4 li[data-type-icon="3"]:after,
@@ -1056,6 +1066,76 @@ ul{
 	margin-top: -3px;
 	margin-bottom: -5px;
 }
+.rare-div .rare-icon
+{
+	font-family: var(--game-font-family);
+	color: white;
+	width: 26px;
+	height: 26px;
+	box-sizing: border-box;
+	line-height: 26px;
+	position: relative;
+}
+.rare-div .rare-icon::before
+{
+	content: "★";
+	color: gold;
+	text-shadow: goldenrod 0 0 2px;
+	position: absolute;
+	font-size: 26px;
+	left: 0;
+	top: 0;
+}
+.rare-div .rare-icon::after
+{
+	color: white;
+	text-shadow: black 0 0 4px;
+	font-size: 18px;
+	position: relative;
+	left: 0;
+	top: 0;
+}
+.rare-icon[data-rare-icon="1"]::after
+{
+	content: "1";
+}
+.rare-icon[data-rare-icon="2"]::after
+{
+	content: "2";
+}
+.rare-icon[data-rare-icon="3"]::after
+{
+	content: "3";
+}
+.rare-icon[data-rare-icon="4"]::after
+{
+	content: "4";
+}
+.rare-icon[data-rare-icon="5"]::after
+{
+	content: "5";
+}
+.rare-icon[data-rare-icon="6"]::after
+{
+	content: "6";
+}
+.rare-icon[data-rare-icon="7"]::after
+{
+	content: "7";
+}
+.rare-icon[data-rare-icon="8"]::after
+{
+	content: "8";
+}
+.rare-icon[data-rare-icon="9"]::after
+{
+	content: "9";
+}
+.rare-icon[data-rare-icon="10"]::after
+{
+	content: "10";
+}
+
 /*.search-box .awoken-div::before{
 	content: "觉醒";
 }*/
