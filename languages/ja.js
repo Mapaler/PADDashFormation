@@ -18,6 +18,7 @@
         sort_hpMax110_awoken: "最大 HP (+覚醒)",
         sort_atkMax110_awoken: "最大攻撃 (+覚醒)",
         sort_rcvMax110_awoken: "最大回復 (+覚醒)",
+        sort_abilityIndex_awoken: "最大加重能力指数 (+覚醒)",
     },
     force_reload_data: "データの強制更新",
 }

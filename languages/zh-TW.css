@@ -65,6 +65,10 @@
 {
 	content: "回復：";
 }
+.search-mon-list .index-preview::before
+{
+	content: "加權:";
+}
 .edit-box .edit-box-title::before{
 	content: "修改隊員";
 }

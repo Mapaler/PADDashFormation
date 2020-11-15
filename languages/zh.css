@@ -65,6 +65,10 @@
 {
 	content: "回复:";
 }
+.search-mon-list .index-preview::before
+{
+	content: "加权:";
+}
 .edit-box .edit-box-title::before{
 	content: "修改队员";
 }

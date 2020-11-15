@@ -345,8 +345,11 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 		let reValueNoAwoken = n_base * n_awokenScale + n_plus + (n_assist_base + n_assist_plus) * bonusScale[idx];
 
 		//觉醒生效时的协力、语音觉醒等的倍率
-		reValue = Math.round(reValue * latterAwokenScale[idx].reduce(calculateAwokenScale,1));
+		reValue = reValue * latterAwokenScale[idx].reduce(calculateAwokenScale,1);
 
+		//都要做四舍五入
+		reValue = Math.round(reValue);
+		reValueNoAwoken = Math.round(reValueNoAwoken);
 		if (idx<2) //idx顺序为HP、ATK、RCV
 		{ //HP和ATK最低为1
 			reValue = Math.max(reValue,1);
