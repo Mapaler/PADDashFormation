@@ -342,6 +342,9 @@
 .search-box .types-div::before{
 	content: "Type:";
 }
+.search-box .rare-div::before{
+	content: "Rarity (OR):";
+}
 .search-box .awoken-div::before{
 	content: "▼Awoken (AND) (Tips: Click on number to reduce value)";
 }

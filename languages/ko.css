@@ -331,6 +331,9 @@
 .search-box .types-div::before{
 	content: "형식:";
 }
+.search-box .rare-div::before{
+	content: "희귀（OR）：";
+}
 .search-box .awoken-div::before{
 	content: "▼각성（AND）（번째:숫자를 누르면 숫자가 낮아집니다）";
 }
