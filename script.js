@@ -1385,10 +1385,10 @@ function initialize() {
 		s_types.forEach(t => {
 			t.checked = false;
 		});
-		s_rare.forEach(t => {
-			t.checked = false;
-		});
+		s_rareLows[0].checked = true;
+		s_rareHighs[9].checked = true;
 		s_typeAndOr.onchange();
+		
 		s_awokensCounts.forEach(t => {
 			t.value = 0;
 		});
