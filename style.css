@@ -1002,16 +1002,15 @@ ul{
 {
 	display: inline-block;
 }
-.types-div .type-list input~label,
-.rare-div .rare-list input~label
+.types-div .type-list input+label
 {
 	opacity: var(--search-icon-unchecked);
 }
-.types-div .type-list input:checked~label,
-.rare-div .rare-list input:checked~label
+.types-div .type-list input:checked+label
 {
 	opacity: 1;
 }
+
 .types-div .type-and-or-label{
 	margin-left: 10px;
 	margin-right: 0;
@@ -1075,7 +1074,22 @@ ul{
 	box-sizing: border-box;
 	line-height: 26px;
 	position: relative;
+	text-align: center;
+	display: inline-block;
 }
+.rare-radio[name="rare-low"]+.rare-icon
+{
+	opacity: var(--search-icon-unchecked);
+}
+.rare-radio[name="rare-low"]:checked~.rare-icon
+{
+	opacity: 1;
+}
+.rare-radio[name="rare-high"]:checked~.rare-icon
+{
+	opacity: var(--search-icon-unchecked);
+}
+
 .rare-div .rare-icon::before
 {
 	content: "★";
