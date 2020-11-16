@@ -1076,6 +1076,11 @@ ul{
 	position: relative;
 	text-align: center;
 	display: inline-block;
+	cursor: pointer;
+}
+.rare-radio
+{
+	display: none;
 }
 .rare-radio[name="rare-low"]+.rare-icon
 {
