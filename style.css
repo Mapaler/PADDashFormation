@@ -1160,7 +1160,7 @@ ul{
 }*/
 .search-box .awoken-div .awoken-option
 {
-	display: inline-block;
+	display: inline;
 }
 .search-box .awoken-div .awoken-clear::before,
 .search-box .sawoken-div .sawoken-clear::before
@@ -1172,6 +1172,10 @@ ul{
 {
 	padding: 0;
 	float: right;
+}
+.awoken-div .awoken-ul.official-awoken-sorting
+{
+	width: 620px;
 }
 .awoken-ul .awoken-count
 {
@@ -1229,11 +1233,20 @@ ul{
 /*.search-box .sawoken-div::before{
 	content: "超觉醒";
 }*/
+.sawoken-div .sawoken-ul.official-awoken-sorting
+{
+	width: 350px;
+}
 .sawoken-div .sawoken-ul li label{
 	opacity: var(--search-icon-unchecked);
 }
 .sawoken-div .sawoken-ul input:checked+label{
 	opacity: 1;
+}
+.sawoken-div .sawoken-ul .awoken-count
+{
+	margin-right: 5px;
+	margin-bottom: 5px;
 }
 
 .control-div button{
