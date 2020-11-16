@@ -1155,9 +1155,12 @@ function initialize() {
 
 	//const s_rare = s_rareLi.map(li=>li.querySelector(".rare-check"));  //checkbox集合
 
-	const s_awokensItems = Array.from(searchBox.querySelectorAll(".awoken-div .awoken-count"));
-	const s_awokensIcons = s_awokensItems.map(it => it.querySelector(".awoken-icon"));
-	const s_awokensCounts = s_awokensItems.map(it => it.querySelector(".count"));
+	const s_awokensDiv = searchBox.querySelector(".awoken-div");
+	const s_awokensUl = s_awokensDiv.querySelector(".awoken-ul");
+	const s_awokensLi = Array.from(s_awokensUl.querySelectorAll(".awoken-count"));
+	const s_awokensIcons = s_awokensLi.map(li => li.querySelector(".awoken-icon"));
+	s_awokensUl.originalSorting = s_awokensIcons.map(icon => parseInt(icon.getAttribute("data-awoken-icon"), 10));
+	const s_awokensCounts = s_awokensLi.map(li => li.querySelector(".count"));
 
 	const searchMonList = searchBox.querySelector(".search-mon-list"); //搜索结果列表
 	searchMonList.originalHeads = null; //用于存放原始搜索结果
@@ -1168,13 +1171,47 @@ function initialize() {
 		toggleDomClassName(this, "only-display-can-assist", true, searchMonList);
 	};
 
-	const s_sawokenDiv = searchBox.querySelector(".sawoken-div");
 
-	const s_sawokens = Array.from(s_sawokenDiv.querySelectorAll(".sawoken-check"));
+	const s_sawokensDiv = searchBox.querySelector(".sawoken-div");
+	const s_sawokensUl = s_sawokensDiv.querySelector(".sawoken-ul");
+	const s_sawokensLi = Array.from(s_sawokensUl.querySelectorAll(".awoken-count"));
+	s_sawokensUl.originalSorting = s_sawokensLi.map(li => parseInt(li.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10));
+
+	const s_sawokens = s_sawokensLi.map(li => li.querySelector(".sawoken-check"));
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onchange = function() {
-		toggleDomClassName(this, className_displayNone, true, s_sawokenDiv);
+		toggleDomClassName(this, className_displayNone, true, s_sawokensDiv);
 	};
+
+
+	const s_showOfficialAwokenSorting = searchBox.querySelector("#show-official-awoken-sorting"); //显示官方排序的觉醒
+	s_showOfficialAwokenSorting.onchange = function(){
+		let fragmentAwoken = document.createDocumentFragment();
+		let fragmentSawoken = document.createDocumentFragment();
+		const awokenSorting = this.checked ? official_awoken_sorting : s_awokensUl.originalSorting;
+		const sawokenSorting = this.checked ? official_awoken_sorting : s_sawokensUl.originalSorting;
+		awokenSorting.forEach(id=>fragmentAwoken.appendChild(
+			s_awokensLi.find(li=>parseInt(li.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10) == id)
+		));
+		sawokenSorting.forEach(id=>fragmentSawoken.appendChild(
+			s_sawokensLi.find(li=>parseInt(li.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10) == id)
+		));
+		
+		const officialAwokenSorting_className = "official-awoken-sorting";
+		if (this.checked)
+		{
+			s_awokensUl.classList.add(officialAwokenSorting_className);
+			s_sawokensUl.classList.add(officialAwokenSorting_className);
+		}else
+		{
+			s_awokensUl.classList.remove(officialAwokenSorting_className);
+			s_sawokensUl.classList.remove(officialAwokenSorting_className);
+		}
+		s_awokensUl.appendChild(fragmentAwoken);
+		s_sawokensUl.appendChild(fragmentSawoken);
+	};
+	s_showOfficialAwokenSorting.onchange();
+
 
 	function search_awokenAdd1() {
 		const countDom = this.parentNode.querySelector(".count");
@@ -1209,7 +1246,7 @@ function initialize() {
 		s_awokensCounts.forEach(t => {
 			t.value = 0;
 		});
-		s_awokensItems.forEach(t => {
+		s_awokensLi.forEach(t => {
 			t.classList.add("zero");
 		});
 	};
@@ -1353,7 +1390,7 @@ function initialize() {
 		s_awokensCounts.forEach(t => {
 			t.value = 0;
 		});
-		s_awokensItems.forEach(t => {
+		s_awokensLi.forEach(t => {
 			t.classList.add("zero");
 		});
 		// 这些觉醒的选项干脆都不清除
