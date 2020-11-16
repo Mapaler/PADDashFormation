@@ -1082,7 +1082,7 @@ ul{
 {
 	display: none;
 }
-.rare-radio[name="rare-low"]+.rare-icon
+.rare-radio[name="rare-low"]~.rare-icon
 {
 	opacity: var(--search-icon-unchecked);
 }
