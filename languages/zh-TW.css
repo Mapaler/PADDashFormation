@@ -307,6 +307,9 @@
 .search-box .include-super-awoken-label::after{
 	content: "包括超覺醒";
 }
+.search-box .show-official-awoken-sorting-label::after{
+	content: "使用官方覺醒排序";
+}
 .search-box .sort-div::before{
 	content: "排序：";
 }

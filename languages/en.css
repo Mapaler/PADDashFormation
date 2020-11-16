@@ -312,6 +312,9 @@
 .search-box .include-super-awoken-label::after{
 	content: "Including Super Awoken";
 }
+.search-box .show-official-awoken-sorting-label::after{
+	content: "Use the official Awoken sorting";
+}
 .search-box .sort-div::before{
 	content: "Sort by:";
 }
