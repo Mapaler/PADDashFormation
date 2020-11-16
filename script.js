@@ -772,11 +772,13 @@ function creatNewUrl(arg) {
 	if (!!(window.history && history.pushState)) { // 支持History API
 		const language_i18n = arg.language || getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
 		const datasource = arg.datasource || getQueryString("s");
-		const outObj = formation.outObj();
+		const outObj = getQueryString("d") ? formation.outObj() : null;
 
 		const newSearch = new URLSearchParams();
 		if (language_i18n) newSearch.set("l", language_i18n);
 		if (datasource && datasource != "ja") newSearch.set("s", datasource);
+		if (getQueryString("guide")) newSearch.set("guide", getQueryString("guide"));
+		if (getQueryString("id")) newSearch.set("id", getQueryString("id"));
 		if (outObj)
 		{
 			const dataJsonStr = JSON.stringify(outObj); //数据部分的字符串

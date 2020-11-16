@@ -301,6 +301,9 @@
 .search-box .include-super-awoken-label::after{
 	content: "슈퍼 각성 포함";
 }
+.search-box .show-official-awoken-sorting-label::after{
+	content: "공식 각성 순서를 사용합니다";
+}
 .search-box .sort-div::before{
 	content: "정렬:";
 }

@@ -304,6 +304,9 @@
 .search-box .include-super-awoken-label::after{
 	content: "超覚醒を含む";
 }
+.search-box .show-official-awoken-sorting-label::after{
+	content: "公式の覚醒ソートを使用";
+}
 .search-box .sort-div::before{
 	content: "並べ替え:";
 }
