@@ -1131,16 +1131,25 @@ function initialize() {
 	//稀有度筛选
 	const s_rareDiv = searchBox.querySelector(".rare-div");
 	const s_rareLst = s_rareDiv.querySelector(".rare-list");
-	const s_rareIcons = Array.from(s_rareLst.querySelectorAll("rare-icon"));
+	const s_rareIcons = Array.from(s_rareLst.querySelectorAll(".rare-icon"));
+	const s_rareLows = Array.from(s_rareLst.querySelectorAll("input[name='rare-low']"));
+	const s_rareHighs = Array.from(s_rareLst.querySelectorAll("input[name='rare-high']"));
 	function s_rareIcons_onclick()
 	{
 		const thisValue = parseInt(this.getAttribute("data-rare-icon"),10);
-		const radioLow = s_rareLst.querySelector("input[name='rare-low']:checked");
-		const radioHigh = s_rareLst.querySelector("input[name='rare-high']:checked");
-		const range = [
-			radioLow ? parseInt(radioLow.value,10) : 1,
-			radioHigh ? parseInt(radioHigh.value,10) : 10
-		];
+		const radioLow = s_rareLows.find(radio=>radio.checked);
+		const radioHigh = s_rareHighs.find(radio=>radio.checked);
+		const rangeLow = radioLow ? parseInt(radioLow.value,10) : 1;
+		const rangeHigh = radioHigh ? parseInt(radioHigh.value,10) : 10;
+		if (rangeLow == rangeHigh)
+		{
+			s_rareLows.find(radio=>parseInt(radio.value,10) == Math.min(thisValue,rangeLow)).checked = true;
+			s_rareHighs.find(radio=>parseInt(radio.value,10) == Math.max(thisValue,rangeLow)).checked = true;
+		}else
+		{
+			s_rareLows.find(radio=>parseInt(radio.value,10) == thisValue).checked = true;
+			s_rareHighs.find(radio=>parseInt(radio.value,10) == thisValue).checked = true;
+		}
 	}
 	s_rareIcons.forEach(icon=>icon.onclick = s_rareIcons_onclick);
 
@@ -1301,7 +1310,10 @@ function initialize() {
 			}
 		}
 		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
-		//const rareFilter = s_rare.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
+		const rareFilter = [
+			s_rareLows.filter(returnCheckedInput).map(returnInputValue).map(Str2Int)[0],
+			s_rareHighs.filter(returnCheckedInput).map(returnInputValue).map(Str2Int)[0],
+		];
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const awokensFilter = s_awokensCounts.filter(btn => parseInt(btn.value, 10) > 0).map(btn => {
 			const awokenIndex = parseInt(btn.parentNode.parentNode.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10);
@@ -1312,7 +1324,7 @@ function initialize() {
 			s_fixMainColor.checked,
 			typesFilter,
 			s_typeAndOr.checked,
-			[],//rareFilter,
+			rareFilter,
 			awokensFilter,
 			sawokensFilter,
 			s_awokensEquivalent.checked,

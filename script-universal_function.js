@@ -426,9 +426,9 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,typeAndOr,rares,awoken
 			);
 	}
 	//稀有度
-	if (rares.length>0)
+	if (rares.length>1)
 	{
-		cardsRange = cardsRange.filter(c=>rares.includes(c.rarity));
+		cardsRange = cardsRange.filter(c=>c.rarity >= rares[0] && c.rarity <= rares[1]);
 	}
 	//觉醒
 	//等效觉醒时，事先去除大觉醒
