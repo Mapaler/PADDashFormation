@@ -1130,9 +1130,21 @@ function initialize() {
 
 	//稀有度筛选
 	const s_rareDiv = searchBox.querySelector(".rare-div");
-	const s_rareUl = s_rareDiv.querySelector(".rare-list");
-	const s_rareLi = Array.from(s_rareUl.querySelectorAll("li"));
-	const s_rare = s_rareLi.map(li=>li.querySelector(".rare-check"));  //checkbox集合
+	const s_rareLst = s_rareDiv.querySelector(".rare-list");
+	const s_rareIcons = Array.from(s_rareLst.querySelectorAll("rare-icon"));
+	function s_rareIcons_onclick()
+	{
+		const thisValue = parseInt(this.getAttribute("data-rare-icon"),10);
+		const radioLow = s_rareLst.querySelector("input[name='rare-low']:checked");
+		const radioHigh = s_rareLst.querySelector("input[name='rare-high']:checked");
+		const range = [
+			radioLow ? parseInt(radioLow.value,10) : 1,
+			radioHigh ? parseInt(radioHigh.value,10) : 10
+		];
+	}
+	s_rareIcons.forEach(icon=>icon.onclick = s_rareIcons_onclick);
+
+	//const s_rare = s_rareLi.map(li=>li.querySelector(".rare-check"));  //checkbox集合
 
 	const s_awokensItems = Array.from(searchBox.querySelectorAll(".awoken-div .awoken-count"));
 	const s_awokensIcons = s_awokensItems.map(it => it.querySelector(".awoken-icon"));
@@ -1289,7 +1301,7 @@ function initialize() {
 			}
 		}
 		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
-		const rareFilter = s_rare.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
+		//const rareFilter = s_rare.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
 		const awokensFilter = s_awokensCounts.filter(btn => parseInt(btn.value, 10) > 0).map(btn => {
 			const awokenIndex = parseInt(btn.parentNode.parentNode.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10);
@@ -1300,7 +1312,7 @@ function initialize() {
 			s_fixMainColor.checked,
 			typesFilter,
 			s_typeAndOr.checked,
-			rareFilter,
+			[],//rareFilter,
 			awokensFilter,
 			sawokensFilter,
 			s_awokensEquivalent.checked,
