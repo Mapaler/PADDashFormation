@@ -998,6 +998,7 @@ ul{
 	content: "类型";
 }*/
 .types-div .type-list,
+.types-div .latent-list,
 .rare-div .rare-list
 {
 	display: inline-block;

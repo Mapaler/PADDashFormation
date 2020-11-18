@@ -1183,8 +1183,10 @@ function initialize() {
 	};
 
 
-	const s_showOfficialAwokenSorting = searchBox.querySelector("#show-official-awoken-sorting"); //显示官方排序的觉醒
+	const officialSortingClassName = 'show-official-awoken-sorting';
+	const s_showOfficialAwokenSorting = searchBox.querySelector(`#${officialSortingClassName}`); //显示官方排序的觉醒
 	s_showOfficialAwokenSorting.onchange = function(){
+		localStorage.setItem("PADDF-" + officialSortingClassName, this.checked ? 1 : 0);
 		let fragmentAwoken = document.createDocumentFragment();
 		let fragmentSawoken = document.createDocumentFragment();
 		const awokenSorting = this.checked ? official_awoken_sorting : s_awokensUl.originalSorting;
@@ -1209,6 +1211,7 @@ function initialize() {
 		s_awokensUl.appendChild(fragmentAwoken);
 		s_sawokensUl.appendChild(fragmentSawoken);
 	};
+	s_showOfficialAwokenSorting.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + officialSortingClassName)));
 	s_showOfficialAwokenSorting.onchange();
 
 
