@@ -737,11 +737,8 @@ function reloadFormationData(event) {
 		}
 	}
 
-	if (formationData)
-	{
-		formation.loadObj(formationData);
-		refreshAll(formation);
-	}
+	formation.loadObj(formationData);
+	refreshAll(formation);
 
 	if (isGuideMod)
 	{
@@ -772,7 +769,7 @@ function creatNewUrl(arg) {
 	if (!!(window.history && history.pushState)) { // 支持History API
 		const language_i18n = arg.language || getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
 		const datasource = arg.datasource || getQueryString("s");
-		const outObj = getQueryString("d") ? formation.outObj() : null;
+		const outObj = formation.outObj();
 
 		const newSearch = new URLSearchParams();
 		if (language_i18n) newSearch.set("l", language_i18n);

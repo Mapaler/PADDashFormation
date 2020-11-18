@@ -2965,6 +2965,16 @@ function parseBigNumber(number)
 				getReduceScale(getSubskill(b_s));
 			return b_pC - a_pC;
 		})},
+		{name:"玩家回血",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [7,8,35,115];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type) || skill.type == 117 && (skill.params[1] || skill.params[2] || skill.params[3]))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) || subskill.type == 117 && (subskill.params[1] || subskill.params[2] || subskill.params[3]));
+			}
+		})},
 		{name:"-----对敌 buff 类-----",function:cards=>cards},
 		{name:"威吓（按推迟回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 18;
