@@ -1296,6 +1296,9 @@ function initialize() {
 
 		if (searchArr.length > 0) {
 			const fragment = document.createDocumentFragment(); //创建节点用的临时空间
+			const listLength = fragment.appendChild(document.createElement("div"));
+			listLength.className = "search-list-length";
+			listLength.textContent = searchArr.length;
 			//获取原始排序的头像列表
 			const additionalOption = { //搜索列表的额外选项
 				showAwoken: s_add_show_awoken.checked,
