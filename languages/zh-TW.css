@@ -310,6 +310,9 @@
 .search-box .show-official-awoken-sorting-label::after{
 	content: "使用官方覺醒排序";
 }
+.search-mon-list .search-list-length::before{
+    content: "結果數量：";
+}
 .search-box .sort-div::before{
 	content: "排序：";
 }

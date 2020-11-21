@@ -307,6 +307,9 @@
 .search-box .show-official-awoken-sorting-label::after{
 	content: "公式の覚醒ソートを使用";
 }
+.search-mon-list .search-list-length::before{
+    content: "結果の数:";
+}
 .search-box .sort-div::before{
 	content: "並べ替え:";
 }

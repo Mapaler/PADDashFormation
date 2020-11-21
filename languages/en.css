@@ -315,6 +315,9 @@
 .search-box .show-official-awoken-sorting-label::after{
 	content: "Use the official Awoken sorting";
 }
+.search-mon-list .search-list-length::before{
+    content: "Number of results:";
+}
 .search-box .sort-div::before{
 	content: "Sort by:";
 }

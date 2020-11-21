@@ -1271,6 +1271,10 @@ ul{
 	border-radius: 5px;
 	background: grey;
 }
+.search-mon-list .search-list-length::before
+{
+    margin-left:4px;
+}
 .guide-mod .search-box .search-mon-list{
 	max-height: 790px;
 	overflow: auto;
