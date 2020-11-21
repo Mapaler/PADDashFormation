@@ -393,29 +393,25 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,typeAndOr,rares,awoken
 {
 	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	//属性
-	if (attr1 != null && attr1 ===  attr2)
+	if (attr1 != null && attr1 ===  attr2 || //主副属性一致并不为空
+		(attr1 === 6 && attr2 === -1)) //主副属性都为“无”
 	{ //当两个颜色相同时，主副一样颜色的只需判断一次
 		cardsRange = cardsRange.filter(c=>c.attrs[0] === attr1 && c.attrs[1] === attr1);
-	}else if (fixMainColor || attr1 === 6 || attr2 === -1) //如果固定了顺序，或者主副属性选的是无
+	}else if (fixMainColor) //如果固定了顺序
 	{
-		if (attr1 != null)
-		{
-			cardsRange = cardsRange.filter(c=>c.attrs[0] == attr1);
-		}
-		if (attr2 != null)
-		{
-			cardsRange = cardsRange.filter(c=>c.attrs[1] == attr2);
-		}
+		const a1null = attr1 === null, a2null = attr2 === null;
+		cardsRange = cardsRange.filter(c=>
+			(a1null ? true : c.attrs[0] === attr1) &&
+			(a2null ? true : c.attrs[1] === attr2)
+		);
 	}else //不限定顺序时
 	{
-		if (attr1 != null)
-		{
-			cardsRange = cardsRange.filter(c=>c.attrs.includes(attr1));
-		}
-		if (attr2 != null)
-		{
-			cardsRange = cardsRange.filter(c=>c.attrs.includes(attr2));
-		}
+		const search_attrs = [attr1, attr2].filter(a => a !== null && a >= 0 && a<=5); //所有非空属性
+		const anone = attr1 === 6 || attr2 === -1; //是否有“无”属性
+		cardsRange = cardsRange.filter(c=>
+			search_attrs.every(a=>c.attrs.includes(a)) &&
+			(anone ? (c.attrs.includes(6) || c.attrs.includes(-1)) : true)
+		);
 	}
 	//类型
 	if (types.length>0)
