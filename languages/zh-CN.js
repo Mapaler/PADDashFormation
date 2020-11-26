@@ -2875,6 +2875,16 @@ function parseBigNumber(number)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
+		{name:"回血 buff",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [179];
+			const skill = Skills[card.activeSkillId];
+			if (searchTypeArray.includes(skill.type))
+				return true;
+			else if (skill.type == 116 || skill.type == 118){
+				const subskills = skill.params.map(id=>Skills[id]);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
+			}
+		})},
 		{name:"-----对自身队伍生效类-----",function:cards=>cards},
 		{name:"减少CD（按溜数排序，有范围的取小）",function:cards=>cards.filter(card=>{
 			const searchType = 146;
