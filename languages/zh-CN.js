@@ -1508,6 +1508,34 @@ function parseBigNumber(number)
 		}
 		return scale || 0;
 	}
+	
+	function getCannonAttr(skill)
+	{
+		const sk = skill.params;
+		switch(skill.type)
+		{
+			case 0:
+			case 1:
+			case 37:
+			case 58:
+			case 59:
+			case 84:
+			case 85:
+			case 86:
+			case 87:
+			case 115:
+				return sk[0];
+			case 110:
+			case 143:
+				return sk[1];
+			case 42:
+				return sk[1];
+			case 144:
+				return sk[3];
+			default:
+				return -1;
+		}
+	}
 	const specialSearchFunctions = [
 		{name:"不做筛选",function:cards=>cards},
 		{name:"======队长技======",function:cards=>cards},
@@ -3253,186 +3281,51 @@ function parseBigNumber(number)
 		{name:"大炮-属性-火",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
 			const skill = Skills[card.activeSkillId];
-			function getAttr(skill)
-			{
-				const sk = skill.params;
-				switch(skill.type)
-				{
-					case 0:
-					case 1:
-					case 37:
-					case 58:
-					case 59:
-					case 84:
-					case 85:
-					case 86:
-					case 87:
-					case 115:
-						return sk[0];
-					case 110:
-					case 143:
-						return sk[1];
-					case 42:
-						return sk[1];
-					case 144:
-						return sk[3];
-					default:
-						return -1;
-				}
-			}
-			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getAttr(skill) == 0)
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getCannonAttr(skill) == 0)
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getAttr(subskill) == 0);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getCannonAttr(subskill) == 0);
 			}
 		})},
 		{name:"大炮-属性-水",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
 			const skill = Skills[card.activeSkillId];
-			function getAttr(skill)
-			{
-				const sk = skill.params;
-				switch(skill.type)
-				{
-					case 0:
-					case 1:
-					case 37:
-					case 58:
-					case 59:
-					case 84:
-					case 85:
-					case 86:
-					case 87:
-					case 115:
-						return sk[0];
-					case 110:
-					case 143:
-						return sk[1];
-					case 42:
-						return sk[1];
-					case 144:
-						return sk[3];
-					default:
-						return -1;
-				}
-			}
-			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getAttr(skill) == 1)
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getCannonAttr(skill) == 1)
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getAttr(subskill) == 1);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getCannonAttr(subskill) == 1);
 			}
 		})},
 		{name:"大炮-属性-木",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
 			const skill = Skills[card.activeSkillId];
-			function getAttr(skill)
-			{
-				const sk = skill.params;
-				switch(skill.type)
-				{
-					case 0:
-					case 1:
-					case 37:
-					case 58:
-					case 59:
-					case 84:
-					case 85:
-					case 86:
-					case 87:
-					case 115:
-						return sk[0];
-					case 110:
-					case 143:
-						return sk[1];
-					case 42:
-						return sk[1];
-					case 144:
-						return sk[3];
-					default:
-						return -1;
-				}
-			}
-			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getAttr(skill) == 2)
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getCannonAttr(skill) == 2)
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getAttr(subskill) == 2);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getCannonAttr(subskill) == 2);
 			}
 		})},
 		{name:"大炮-属性-光",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
 			const skill = Skills[card.activeSkillId];
-			function getAttr(skill)
-			{
-				const sk = skill.params;
-				switch(skill.type)
-				{
-					case 0:
-					case 1:
-					case 37:
-					case 58:
-					case 59:
-					case 84:
-					case 85:
-					case 86:
-					case 87:
-					case 115:
-						return sk[0];
-					case 110:
-					case 143:
-						return sk[1];
-					case 42:
-						return sk[1];
-					case 144:
-						return sk[3];
-					default:
-						return -1;
-				}
-			}
-			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getAttr(skill) == 3)
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getCannonAttr(skill) == 3)
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getAttr(subskill) == 3);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getCannonAttr(subskill) == 3);
 			}
 		})},
 		{name:"大炮-属性-暗",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
 			const skill = Skills[card.activeSkillId];
-			function getAttr(skill)
-			{
-				const sk = skill.params;
-				switch(skill.type)
-				{
-					case 0:
-					case 1:
-					case 37:
-					case 58:
-					case 59:
-					case 84:
-					case 85:
-					case 86:
-					case 87:
-					case 115:
-						return sk[0];
-					case 110:
-					case 143:
-						return sk[1];
-					case 42:
-						return sk[1];
-					case 144:
-						return sk[3];
-					default:
-						return -1;
-				}
-			}
-			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getAttr(skill) == 4)
+			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getCannonAttr(skill) == 4)
 				return true;
 			else if (skill.type == 116 || skill.type == 118){
 				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getAttr(subskill) == 4);
+				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getCannonAttr(subskill) == 4);
 			}
 		})},
 		{name:"大炮-属性-释放者自身",function:cards=>cards.filter(card=>{
@@ -3636,7 +3529,8 @@ function parseBigNumber(number)
 		{name:"用彩龙果进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3971))},
 		{name:"由武器进化而来",function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))},
 		{name:"======其他搜索======",function:cards=>cards},
-		{name:"稀有度小于等于5星",function:cards=>cards.filter(card=>card.rarity<=5)},
+		{name:"攻击型或水属性（炭治郎队员）",function:cards=>cards.filter(card=>card.attrs.includes(1) || card.types.includes(6))},
+		{name:"火属性或水属性（火车队员）",function:cards=>cards.filter(card=>card.attrs.includes(0) || card.attrs.includes(1))},
 		{name:"不能破除等级限制",function:cards=>cards.filter(card=>card.limitBreakIncr===0)},
 		{name:"110级三维成长100%",function:cards=>cards.filter(card=>card.limitBreakIncr>=100)},
 		{name:"满级不是1级（可强化）",function:cards=>cards.filter(card=>card.maxLevel>1)},
