@@ -174,9 +174,9 @@ function awokenCountInTeam(team,awokenIndex,solo,teamsCount)
 		//启用的觉醒数组片段
 		let enableAwoken = card.awakenings.slice(0, mon.awoken);
 		//单人、3人时,大于等于100级时增加超觉醒
-		if (solo || teamsCount === 3 && member.sawoken>=0 && member.level>=100)
+		if ((solo || teamsCount === 3) && mon.sawoken>=0 && mon.level>=100)
 		{
-			const sAwokenT = memberCard.superAwakenings[mon.sawoken];
+			const sAwokenT = card.superAwakenings[mon.sawoken];
 			if (sAwokenT >= 0)
 				enableAwoken = enableAwoken.concat(sAwokenT);
 		}
