@@ -361,3 +361,11 @@
 .control-div .search-close::before{
 	content: "关闭搜索";
 }
+.dialog-search-string .dialog-title::before
+{
+	content: "以字符串搜索";
+}
+.dialog-close::before
+{
+	content: "关闭";
+}

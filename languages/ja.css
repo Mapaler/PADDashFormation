@@ -358,3 +358,11 @@
 .control-div .search-close::before{
 	content: "検索を閉じる";
 }
+.dialog-search-string .dialog-title::before
+{
+	content: "文字列で検索します";
+}
+.dialog-close::before
+{
+	content: "閉じる";
+}

@@ -366,3 +366,11 @@
 .control-div .search-close::before{
 	content: "Close Search Panel";
 }
+.dialog-search-string .dialog-title::before
+{
+	content: "Search By String";
+}
+.dialog-close::before
+{
+	content: "Close";
+}

@@ -355,3 +355,11 @@
 .control-div .search-close::before{
 	content: "찾기 닫기";
 }
+.dialog-search-string .dialog-title::before
+{
+	content: "문자열로 검색합니다";
+}
+.dialog-close::before
+{
+	content: "가까이";
+}

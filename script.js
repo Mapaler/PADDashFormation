@@ -951,6 +951,9 @@ function initialize() {
 	};
 
 	const smonsterinfoBox = editBox.querySelector(".monsterinfo-box");
+	const searchBox = editBox.querySelector(".search-box");
+	const settingBox = editBox.querySelector(".setting-box");
+
 	const mSeriesId = smonsterinfoBox.querySelector(".monster-seriesId");
 	mSeriesId.onclick = function() { //搜索系列
 		const seriesId = parseInt(this.getAttribute('data-seriesId'), 10);
@@ -965,18 +968,76 @@ function initialize() {
 			showSearch(Cards.filter(card => card.collabId == collabId));
 		}
 	};
+	//以字符串搜索窗口
+	const stringSearchDialog = settingBox.querySelector(".dialog-search-string");
+	function searchByString(str)
+	{
+		showSearch(Cards.filter(card =>
+			{
+				const altNames = card.altName.split("|");
+				const names = [card.name];
+				if (card.otLangName)
+				{
+					names.push(...Object.values(card.otLangName));
+				}
+				return altNames.some(astr=>astr.includes(str)) || names.some(astr=>astr.includes(str));
+			}
+		));
+	}
+	function copyString(input)
+	{
+		input.focus(); //设input为焦点
+		input.select(); //选择全部
+		if (document.execCommand('copy')) {
+			document.execCommand('copy');
+		}
+		//input.blur(); //取消焦点
+	}
+	stringSearchDialog.show = function(strArr)
+	{
+		const stringSearchContent = this.querySelector(".dialog-content");
+		const ul = document.createElement("ul");
+		if (strArr.length > 0 && strArr[0].length > 0)
+		{
+			strArr.forEach(str=>{
+				const li = ul.appendChild(document.createElement("li"));
+				const ipt = li.appendChild(document.createElement("input"));
+				ipt.className = "string-value";
+				ipt.value = str;
+				ipt.readOnly = true;
+				const copyBtn = li.appendChild(document.createElement("button"));
+				copyBtn.className = "string-copy";
+				copyBtn.onclick = function(){copyString(ipt)};
+				const searchBtn = li.appendChild(document.createElement("button"));
+				searchBtn.className = "string-search";
+				searchBtn.onclick = function(){searchByString(ipt.value)};
+			});
+		}
+		stringSearchContent.innerHTML = "";
+		stringSearchContent.appendChild(ul);
+		this.classList.remove(className_displayNone);
+	}
+	stringSearchDialog.close = function()
+	{
+		this.classList.add(className_displayNone);
+	}
+	const stringSearchDialog_Close = stringSearchDialog.querySelector(".dialog-close");
+	stringSearchDialog_Close.onclick = function(){stringSearchDialog.close();};
+
 	const mAltName = smonsterinfoBox.querySelector(".monster-altName");
 	mAltName.onclick = function() { //搜索合作
 		const altName = this.getAttribute('data-altName');
 		if (altName.length > 0)
 		{
-			const splitAltName = altName.split("|");
+			stringSearchDialog.show(altName.split("|"));
+			/*
 			showSearch(Cards.filter(card =>
 				splitAltName.some(alt =>
 					alt.length > 0 &&
 					(card.altName.includes(alt) || card.name.includes(alt))
 				)
 			));
+			*/
 		}
 	};
 	//创建一个新的怪物头像
@@ -1079,8 +1140,6 @@ function initialize() {
 		return cli;
 	};
 
-	const searchBox = editBox.querySelector(".search-box");
-	const settingBox = editBox.querySelector(".setting-box");
 	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
 	searchOpen.onclick = function() {
 		s_includeSuperAwoken.onchange();
@@ -2267,6 +2326,7 @@ function editBoxChangeMonId(id) {
 	}
 	const mAltName = monInfoBox.querySelector(".monster-altName");
 	mAltName.textContent = card.altName;
+	
 	mAltName.setAttribute("data-altName", card.altName);
 
 	if (card.altName.length == 0) { //当没有合作名
