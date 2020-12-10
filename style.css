@@ -2101,9 +2101,9 @@ ul{
 {
 	position: absolute;
 	padding: 5px;
-	border: 3px ridge #D1D398;
+	border: 2px ridge #D1D398;
 	top: 0;
-	background-image: linear-gradient(to bottom,#788321,#3E4D14);
+	background-image: linear-gradient(to bottom,#788321f0,#3E4D14f0);
 	border-radius: 6px;
 	box-shadow: black 2px 0px 1px,black 0px 2px 1px,black -2px 0px 1px,black 0px -2px 1px;
 	width: 260px;
@@ -2147,7 +2147,7 @@ ul{
 	background-image: linear-gradient(to bottom,#C38E5F,#2F2008);
 	border: none;
 	border-radius: 5px;
-	padding: 3px;
+	padding: 2px;
 }
 .dialog .dialog-control button::before
 {
