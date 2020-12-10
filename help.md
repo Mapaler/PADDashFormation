@@ -9,11 +9,11 @@ Use back to undo the last edit.
 * 拖拽怪物头像即可快速交换位置或复制怪物，也支持手机触屏。  
 Drag monster avatars to quickly swap positions or copy monster, also supports mobile touch screen.  
 ![切换位置](document/tips-interchangeCard.png)
-* 可以在编辑界面的怪物ID输入怪物名称来搜索怪物。  
-You can search for monsters by entering the monster name in the monster ID of the editing interface.  
+* 可以在编辑界面的怪物ID输入**怪物名称**或**标签**来搜索怪物。  
+You can search for monsters by entering the **Monster Name** or **Tags** in the monster ID of the editing interface.  
 ![搜索怪物名称](document/tips-search-name.png)  
-点击系列ID或系列名称，可搜索该系列  
-Clisk the **Series ID** or **Series Name** to search for series.  
+点击**系列ID**或**标签**，可搜索该系列  
+Clisk the **Series ID** or **Tags** to search for series.  
 ![搜索怪物系列](document/tips-search-series.png)  
 * 点击编辑界面的怪物头像可以跳转到攻略网站。  
 Click on the monster avatar in the editing interface to jump to the Guide.  
