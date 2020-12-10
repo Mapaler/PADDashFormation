@@ -363,3 +363,7 @@
 {
 	content: "가까이";
 }
+.dialog .dialog-content .additional-string::before
+{
+	content: "다른 언어";
+}

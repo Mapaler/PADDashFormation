@@ -974,11 +974,15 @@ function initialize() {
 	{
 		showSearch(Cards.filter(card =>
 			{
-				const altNames = card.altName.split("|");
 				const names = [card.name];
 				if (card.otLangName)
 				{
 					names.push(...Object.values(card.otLangName));
+				}
+				const altNames = card.altName;
+				if (card.otTags)
+				{
+					altNames.push(...card.otTags);
 				}
 				return altNames.some(astr=>astr.includes(str)) || names.some(astr=>astr.includes(str));
 			}
@@ -993,14 +997,16 @@ function initialize() {
 		}
 		//input.blur(); //取消焦点
 	}
-	stringSearchDialog.show = function(strArr)
+	stringSearchDialog.show = function(originalStrArr = [], additionalStrArr = [])
 	{
 		const stringSearchContent = this.querySelector(".dialog-content");
-		const ul = document.createElement("ul");
-		if (strArr.length > 0 && strArr[0].length > 0)
+		const fragment = document.createDocumentFragment();
+		if (originalStrArr.length > 0 && originalStrArr[0].length > 0)
 		{
-			strArr.forEach(str=>{
-				const li = ul.appendChild(document.createElement("li"));
+			const ul_original = document.createElement("ul");
+			ul_original.className = "original-string";
+			originalStrArr.forEach(str=>{
+				const li = ul_original.appendChild(document.createElement("li"));
 				const ipt = li.appendChild(document.createElement("input"));
 				ipt.className = "string-value";
 				ipt.value = str;
@@ -1012,9 +1018,26 @@ function initialize() {
 				searchBtn.className = "string-search";
 				searchBtn.onclick = function(){searchByString(ipt.value)};
 			});
+			fragment.appendChild(ul_original);
+		}
+		if (additionalStrArr.length > 0 && additionalStrArr[0].length > 0)
+		{
+			const ul_additional = document.createElement("ul");
+			ul_additional.className = "additional-string";
+			additionalStrArr.forEach(str=>{
+				const li = ul_additional.appendChild(document.createElement("li"));
+				const ipt = li.appendChild(document.createElement("input"));
+				ipt.className = "string-value";
+				ipt.value = str;
+				ipt.readOnly = true;
+				const searchBtn = li.appendChild(document.createElement("button"));
+				searchBtn.className = "string-search";
+				searchBtn.onclick = function(){searchByString(ipt.value)};
+			});
+			fragment.appendChild(ul_additional);
 		}
 		stringSearchContent.innerHTML = "";
-		stringSearchContent.appendChild(ul);
+		stringSearchContent.appendChild(fragment);
 		this.classList.remove(className_displayNone);
 	}
 	stringSearchDialog.close = function()
@@ -1026,18 +1049,11 @@ function initialize() {
 
 	const mAltName = smonsterinfoBox.querySelector(".monster-altName");
 	mAltName.onclick = function() { //搜索合作
-		const altName = this.getAttribute('data-altName');
-		if (altName.length > 0)
+		//const mid = parseInt(this.getAttribute('data-monId'));
+		const card = Cards[editBox.mid];
+		if (card)
 		{
-			stringSearchDialog.show(altName.split("|"));
-			/*
-			showSearch(Cards.filter(card =>
-				splitAltName.some(alt =>
-					alt.length > 0 &&
-					(card.altName.includes(alt) || card.name.includes(alt))
-				)
-			));
-			*/
+			stringSearchDialog.show(card.altName, card.otTags);
 		}
 	};
 	//创建一个新的怪物头像
@@ -2325,9 +2341,9 @@ function editBoxChangeMonId(id) {
 		mCollabId.classList.remove(className_displayNone);
 	}
 	const mAltName = monInfoBox.querySelector(".monster-altName");
-	mAltName.textContent = card.altName;
+	mAltName.textContent = card.altName.join("|");
 	
-	mAltName.setAttribute("data-altName", card.altName);
+	//mAltName.setAttribute("data-monId", card.id);
 
 	if (card.altName.length == 0) { //当没有合作名
 		mAltName.classList.add(className_displayNone);

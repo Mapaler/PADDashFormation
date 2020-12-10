@@ -366,3 +366,7 @@
 {
 	content: "閉じる";
 }
+.dialog .dialog-content .additional-string::before
+{
+	content: "他の言語";
+}

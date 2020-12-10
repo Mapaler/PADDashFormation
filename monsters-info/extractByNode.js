@@ -52,13 +52,19 @@ officialAPI.forEach(function(lang) {
 		console.log("正在读取自定义 " + lcode + " 信息");
 		const ljson = fs.readFileSync("custom/" + lcode +".json", 'utf-8'); //使用同步读取
 		const ccard = JSON.parse(ljson);//将字符串转换为json对象
-		ccard.forEach(function(cm,idx){ //每个文件内的名字循环
+		ccard.forEach(function(cm){ //每个文件内的名字循环
 			let m = monCards[cm.id];
 			if (m)
 			{
 				if (!m.otLangName) //如果没有其他语言名称属性，则添加一个对象属性
 					m.otLangName = {};
 				m.otLangName[lcode] = cm.name;
+				if (!m.otTags) //如果没有其他语言名称属性，则添加一个对象属性
+					m.otTags = [];
+				
+				let newTags = Array.from(new Set(cm.tags));
+				newTags = newTags.filter(tag=>!m.altName.includes(tag) && !m.otTags.includes(tag));
+				m.otTags.push(...newTags);
 			}
 		});
 	});
@@ -128,8 +134,10 @@ for (let li = 0;li < officialAPI.length; li++)
 			if (_m && isSame) //如果有这个怪物，且与原语言怪物是同一只
 			{
 				const otName = _m.name;
-				const searchRegString = "^(?:\\?+|\\*+|초월\\s*\\?+)"; //名字以问号、星号、韩文的问号开头
-				if (!new RegExp(searchRegString,"i").test(otName))
+				if (/^(?:\?+|\*+|초월\s*\?+)/i.test(otName)) //名字以问号、星号、韩文的问号开头
+				{
+					return; //跳过
+				}else
 				{
 					if (!m.otLangName) //如果没有其他语言名称属性，则添加一个对象属性
 						m.otLangName = {};
@@ -145,6 +153,13 @@ for (let li = 0;li < officialAPI.length; li++)
 						});
 					}
 				}
+
+				if (!m.otTags) //如果没有其他语言标签属性，则添加一个数组属性
+					m.otTags = [];
+
+				let otTags = Array.from(new Set(_m.otTags ? _m.altName.concat(_m.otTags) : _m.altName));
+				otTags = otTags.filter(tag=>!m.altName.includes(tag) && !m.otTags.includes(tag));
+				m.otTags.push(...otTags);
 			}
 		});
 	}

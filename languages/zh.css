@@ -369,3 +369,7 @@
 {
 	content: "关闭";
 }
+.dialog .dialog-content .additional-string::before
+{
+	content: "其他語言";
+}

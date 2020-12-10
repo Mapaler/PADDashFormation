@@ -74,7 +74,7 @@ class Card{
 			return t == 0 || t == 12 || t == 14; //0進化用;12能力覺醒用;14強化合成用;15販賣用
 		}) && (flags & 1<<3) === 0; //進化用、能力覺醒用、強化合成用，且flag有1000时
 		card.is8Latent = (flags & 1<<5) !== 0; //是否支持8个潜觉
-		card.altName = data[i++]; //替换名字
+		card.altName = data[i++].split("|").filter(str=>str.length); //替换名字（分类标签）
 		card.limitBreakIncr = data[i++]; //110级增长
 		card.voiceId = data[i++]; //语音觉醒的ID
 		card.blockSkinId = data[i++]; //珠子皮肤ID

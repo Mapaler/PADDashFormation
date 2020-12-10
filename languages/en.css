@@ -374,3 +374,7 @@
 {
 	content: "Close";
 }
+.dialog .dialog-content .additional-string::before
+{
+	content: "Other Languages";
+}

@@ -2117,8 +2117,14 @@ ul{
 {
 	transform: scale(1.1);
 }
-.dialog .dialog-content input
+.dialog .dialog-content .additional-string
 {
+	border-top: 2px solid white;
+	margin-top: 5px;
+}
+.dialog .dialog-content .additional-string::before
+{
+	content: "其他語言";
 }
 .dialog .dialog-control
 {
@@ -2185,4 +2191,9 @@ ul{
 {
 	box-sizing: border-box;
 	width: calc(100% - 50px * 2);
+}
+.dialog-search-string .additional-string .string-value
+{
+	box-sizing: border-box;
+	width: calc(100% - 50px * 1);
 }
