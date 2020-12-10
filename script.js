@@ -1552,6 +1552,11 @@ function initialize() {
 		}
 	};
 	monstersID.oninput = monstersID.onchange;
+	//字符串搜索
+	const btnSearchByString = settingBox.querySelector(".row-mon-id .search-by-string");
+	btnSearchByString.onclick = function() {
+		searchByString(monstersID.value);
+	};
 	//觉醒
 	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
 	const awokenCountLabel = monEditAwokensRow.querySelector(".awoken-count");

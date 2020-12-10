@@ -787,7 +787,18 @@ ul{
 	box-sizing: border-box;
 	font-size: 25px;
 	height: 40px;
-	width: 100%;
+	width: calc(100% - 50px);
+}
+.edit-box .setting-box .row-mon-id .search-by-string{
+	box-sizing: border-box;
+	font-size: 25px;
+	height: 40px;
+	width: 45px;
+	margin-left: 5px;
+	padding: 0;
+}
+.edit-box .setting-box .row-mon-id .search-by-string::before{
+	content: "🔍";
 }
 .edit-box .setting-box .row-mon-id .unable-monster{
 	pointer-events: none;
@@ -2176,16 +2187,15 @@ ul{
 	border: 2px solid #FFCC88;
 	box-shadow: black 1px 0 1px,black -1px 0 1px,black 0 -1px 1px,black 0 3px 2px;
 	border-radius: 5px;
+	padding: 0;
 }
 .dialog-search-string .string-copy::before
 {
 	content: "📋";
-	padding: 0 3px;
 }
 .dialog-search-string .string-search::before
 {
 	content: "🔍";
-	padding: 0 3px;
 }
 .dialog-search-string .string-value
 {
