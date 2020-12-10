@@ -972,21 +972,25 @@ function initialize() {
 	const stringSearchDialog = settingBox.querySelector(".dialog-search-string");
 	function searchByString(str)
 	{
-		showSearch(Cards.filter(card =>
-			{
-				const names = [card.name];
-				if (card.otLangName)
+		str = str.trim();
+		if (str.length>0)
+		{
+			showSearch(Cards.filter(card =>
 				{
-					names.push(...Object.values(card.otLangName));
+					const names = [card.name];
+					if (card.otLangName)
+					{
+						names.push(...Object.values(card.otLangName));
+					}
+					const altNames = card.altName.concat();
+					if (card.otTags)
+					{
+						altNames.push(...card.otTags);
+					}
+					return altNames.some(astr=>astr.toLowerCase().includes(str.toLowerCase())) || names.some(astr=>astr.toLowerCase().includes(str.toLowerCase()));
 				}
-				const altNames = card.altName;
-				if (card.otTags)
-				{
-					altNames.push(...card.otTags);
-				}
-				return altNames.some(astr=>astr.includes(str)) || names.some(astr=>astr.includes(str));
-			}
-		));
+			));
+		}
 	}
 	function copyString(input)
 	{
@@ -2346,14 +2350,14 @@ function editBoxChangeMonId(id) {
 		mCollabId.classList.remove(className_displayNone);
 	}
 	const mAltName = monInfoBox.querySelector(".monster-altName");
-	mAltName.textContent = card.altName.join("|");
+	//mAltName.textContent = card.altName.join("|");
 	
 	//mAltName.setAttribute("data-monId", card.id);
 
-	if (card.altName.length == 0) { //当没有合作名
-		mAltName.classList.add(className_displayNone);
-	} else {
+	if (card.altName.length >= 0 || card.otTags && card.otTags.length >= 0) { //当没有合作名
 		mAltName.classList.remove(className_displayNone);
+	} else {
+		mAltName.classList.add(className_displayNone);
 	}
 
 	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");

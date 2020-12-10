@@ -85,7 +85,7 @@
 	content: "콜라보 ID:";
 }
 .monsterinfo-box .monster-altName::before{
-	content: "대체 이름：";
+	content: "태그로";
 }
 .m-level-exp::before{
 	content: "필요한 Exp:";

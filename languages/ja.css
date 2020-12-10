@@ -84,7 +84,7 @@
 	content: "コラボ ID:";
 }
 .monsterinfo-box .monster-altName::before{
-	content: "別名：";
+	content: "タグで";
 }
 .m-level-exp::before{
 	content: "必要な経験値:";

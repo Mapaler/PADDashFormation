@@ -86,7 +86,7 @@
 	content: "Collab ID：";
 }
 .monsterinfo-box .monster-altName::before{
-	content: "Alternative Name：";
+	content: "Tags";
 }
 .m-level-exp::before{
 	content: "Need Exp:";

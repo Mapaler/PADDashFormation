@@ -88,7 +88,7 @@
 	content: "合作ID：";
 }
 .monsterinfo-box .monster-altName::before{
-	content: "替代名称：";
+	content: "标签";
 }
 .m-level-exp::before{
 	content: "需要经验值：";
