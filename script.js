@@ -970,8 +970,8 @@ function initialize() {
 	};
 	//以字符串搜索窗口
 	const stringSearchDialog = settingBox.querySelector(".dialog-search-string");
-	function searchByString(str, onlyInTag = false)
-	{
+	function searchByString(str)
+	{ // 考虑了一下onlyInTag被废弃了，因为和游戏内搜索不符
 		str = str.trim();
 		if (str.length>0)
 		{
@@ -988,7 +988,7 @@ function initialize() {
 						tags.push(...card.otTags);
 					}
 					return tags.some(astr=>astr.toLowerCase().includes(str.toLowerCase())) ||
-					(!onlyInTag && names.some(astr=>astr.toLowerCase().includes(str.toLowerCase())));
+					names.some(astr=>astr.toLowerCase().includes(str.toLowerCase()));
 				}
 			));
 		}
@@ -1021,7 +1021,7 @@ function initialize() {
 				copyBtn.onclick = function(){copyString(ipt)};
 				const searchBtn = li.appendChild(document.createElement("button"));
 				searchBtn.className = "string-search";
-				searchBtn.onclick = function(){searchByString(ipt.value, true)};
+				searchBtn.onclick = function(){searchByString(ipt.value)};
 			});
 			fragment.appendChild(ul_original);
 		}
@@ -1037,7 +1037,7 @@ function initialize() {
 				ipt.readOnly = true;
 				const searchBtn = li.appendChild(document.createElement("button"));
 				searchBtn.className = "string-search";
-				searchBtn.onclick = function(){searchByString(ipt.value, true)};
+				searchBtn.onclick = function(){searchByString(ipt.value)};
 			});
 			fragment.appendChild(ul_additional);
 		}
