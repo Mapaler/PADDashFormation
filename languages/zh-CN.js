@@ -1367,6 +1367,10 @@ function parseSkillDescription(skill)
 			}
 			return fragment;
 			break;
+		case 208:
+			str = `${sk[2]?`${getOrbsAttrString(sk[2])}以外`:""}随机生成${getOrbsAttrString(sk[1])}宝珠各${sk[0]}个`;
+			str += `，${sk[5]?`${getOrbsAttrString(sk[5])}以外`:""}随机生成${getOrbsAttrString(sk[4])}宝珠各${sk[3]}个`;
+			break;
 		case 209: //十字心+C
 			str = `以十字形式消除5个${attrN(5)}宝珠时`;
 			if(sk[0]) str += `，结算时连击数+${sk[0]}`;
