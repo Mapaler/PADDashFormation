@@ -368,7 +368,7 @@
 }
 .dialog-search-string .dialog-title::before
 {
-	content: "Search By String";
+	content: "Search By Tags";
 }
 .dialog-close::before
 {

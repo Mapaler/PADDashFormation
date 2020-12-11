@@ -360,7 +360,7 @@
 }
 .dialog-search-string .dialog-title::before
 {
-	content: "文字列で検索します";
+	content: "タグで検索";
 }
 .dialog-close::before
 {

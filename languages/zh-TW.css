@@ -363,7 +363,7 @@
 }
 .dialog-search-string .dialog-title::before
 {
-	content: "以字符串搜索";
+	content: "以標簽搜索";
 }
 .dialog-close::before
 {

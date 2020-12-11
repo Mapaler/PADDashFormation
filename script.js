@@ -970,7 +970,7 @@ function initialize() {
 	};
 	//以字符串搜索窗口
 	const stringSearchDialog = settingBox.querySelector(".dialog-search-string");
-	function searchByString(str)
+	function searchByString(str, onlyInTag = false)
 	{
 		str = str.trim();
 		if (str.length>0)
@@ -982,12 +982,13 @@ function initialize() {
 					{
 						names.push(...Object.values(card.otLangName));
 					}
-					const altNames = card.altName.concat();
+					const tags = card.altName.concat();
 					if (card.otTags)
 					{
-						altNames.push(...card.otTags);
+						tags.push(...card.otTags);
 					}
-					return altNames.some(astr=>astr.toLowerCase().includes(str.toLowerCase())) || names.some(astr=>astr.toLowerCase().includes(str.toLowerCase()));
+					return tags.some(astr=>astr.toLowerCase().includes(str.toLowerCase())) ||
+					(!onlyInTag && names.some(astr=>astr.toLowerCase().includes(str.toLowerCase())));
 				}
 			));
 		}
@@ -1020,7 +1021,7 @@ function initialize() {
 				copyBtn.onclick = function(){copyString(ipt)};
 				const searchBtn = li.appendChild(document.createElement("button"));
 				searchBtn.className = "string-search";
-				searchBtn.onclick = function(){searchByString(ipt.value)};
+				searchBtn.onclick = function(){searchByString(ipt.value, true)};
 			});
 			fragment.appendChild(ul_original);
 		}
@@ -1036,7 +1037,7 @@ function initialize() {
 				ipt.readOnly = true;
 				const searchBtn = li.appendChild(document.createElement("button"));
 				searchBtn.className = "string-search";
-				searchBtn.onclick = function(){searchByString(ipt.value)};
+				searchBtn.onclick = function(){searchByString(ipt.value, true)};
 			});
 			fragment.appendChild(ul_additional);
 		}
@@ -1529,7 +1530,9 @@ function initialize() {
 
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
-	monstersID.onchange = function() {
+	const btnSearchByString = settingBox.querySelector(".row-mon-id .search-by-string");
+	monstersID.onchange = function(e)
+	{
 		if (/^\d+$/.test(this.value)) {
 			const newId = parseInt(this.value, 10);
 			if (editBox.mid != newId) //避免多次运行oninput、onchange
@@ -1553,11 +1556,23 @@ function initialize() {
 
 				editBoxChangeMonId(newId);
 			}
+			return true;
+		}else
+		{
+			return false;
 		}
-	};
+	}
 	monstersID.oninput = monstersID.onchange;
+	monstersID.onkeydown = function(e) {
+		if (e.key == "Enter")
+		{
+			if (!/^\d+$/.test(this.value) && this.value.length > 0) //如果不是数字，且字符串长度大于0，则进行字符串搜索
+			{
+				btnSearchByString.onclick();
+			}
+		}
+	}
 	//字符串搜索
-	const btnSearchByString = settingBox.querySelector(".row-mon-id .search-by-string");
 	btnSearchByString.onclick = function() {
 		searchByString(monstersID.value);
 	};
