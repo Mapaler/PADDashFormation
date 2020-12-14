@@ -2280,6 +2280,7 @@ ul{
     border-bottom-left-radius: unset;
     border-left: none;
     background-image: url(images/slate.svg);
+    background-size: 200px;
 }
 .evo-panel-right .monster-name
 {
