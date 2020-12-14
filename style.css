@@ -1957,7 +1957,18 @@ ul{
 .control-box .btn-show-mon-skill-cd::before{
 	content: "❄️显示已满技能CD";
 }
+.control-box .lbl-henshen-change::before{
+	content: "🕴️变身";
+}
 */
+
+.control-box .btn-henshin-back::before{
+	content: "◀️";
+}
+.control-box .btn-henshin-forward::before{
+	content: "▶️";
+}
+
 #interchange-line{
 	pointer-events: none;
 	position: absolute;

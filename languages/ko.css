@@ -242,11 +242,8 @@
 .control-box .btn-swap-ABC-team::before{
 	content: "🔄로테이션 ABC 팀";
 }
-.control-box .btn-swap-henshin::before{
-	content: "🐱➡️🐯최종 변신";
-}
-.control-box .btn-swap-henshin.henshin-back::before{
-	content: "🐱↩️🐯변신 전";
+.control-box .lbl-henshen-change::before{
+	content: "🕴️변신";
 }
 .control-box .show-mon-id-lbl::after{
 	content:"🆔몬스터 ID 표시";

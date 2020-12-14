@@ -54,7 +54,7 @@ var formation = new Formation(teamsCount,6);
 			<button class="btn-solo-link" onclick="turnPage(1,arguments[0]);"></button>
 			<button class="btn-multi-link" onclick="turnPage(2,arguments[0]);"></button>
 			<button class="btn-swap-ABC-team" onclick="swapABCteam();"></button>
-			<button class="btn-swap-henshin" onclick="swapHenshin(this);"></button>
+			<span class="lbl-henshen-change"></span><button class="btn-henshin-back" onclick="henshinStep(-1);"></button><button class="btn-henshin-forward" onclick="henshinStep(+1);"></button>
 			<a class="help-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/blob/master/help.md"></a>
 		</div>
 		<div>

@@ -468,70 +468,40 @@ function swapABCteam()
 		refreshAll(formation);
 	}
 }
-function swapHenshin(self)
+function henshinStep(step)
 {
-	const backClassName = "henshin-back";
-	const back = self.classList.contains(backClassName);
-	let shouldChange = formation.teams.some(team=>
-		team[0].some(member=>{
+	if (step == 0) return;
+
+	function gotoHenshin(card, nstep)
+	{
+		if (nstep > 0 && card.henshinTo)
+		{ //是变身的则返回
+			return gotoHenshin(Cards[card.henshinTo], --nstep);
+		}
+		else if (nstep < 0 && card.henshinFrom)
+		{
+			return gotoHenshin(Cards[card.henshinFrom], ++nstep);
+		}
+		else
+		{
+			return card;
+		}
+	}
+	formation.teams.forEach(team=>{
+		team[0].forEach(member=>{
 			const mid = member.id;
 			const card = Cards[mid];
-			return card.henshinFrom || card.henshinTo;
-		})
-	);
-	//获得最终变身
-	function finalHenshin(card)
-	{
-		if (card.henshinTo)
-		{ //是变身的则返回
-			if (card.evoRootId === card.henshinTo)
-			{ //应对无限循环变身的问题
-				return card;
+			if (step > 0 ? card.henshinTo : (card.henshinFrom && member.level <= 99))
+			{ //要变身前的才进行操作
+				const _card = gotoHenshin(card, step);
+				member.id = _card.id;
+				member.awoken = _card.awakenings.length;
 			}
-			return finalHenshin(Cards[card.henshinTo]);
-		}
-		return card;
-	}
-	if (shouldChange)
-	{
-		if (back)
-		{ //回到变身前
-			formation.teams.forEach(team=>{
-				team[0].forEach(member=>{
-					const mid = member.id;
-					const card = Cards[mid];
-					console.log(card.henshinFrom && member.level <= 99)
-					if (card.henshinFrom && member.level <= 99)
-					{ //要变身后的才进行操作
-						const _card = Cards[card.evoRootId];
-						member.id = card.evoRootId;
-						member.awoken = _card.awakenings.length;
-						member.sawoken = null;
-						const allowLatent = getAllowLatent(_card.types);
-						member.latent = filterAllowLatent(member.latent,allowLatent);
-					}
-				});
-			});
-			self.classList.remove(backClassName);
-		}else
-		{ //跑到变身后
-			formation.teams.forEach(team=>{
-				team[0].forEach(member=>{
-					const mid = member.id;
-					const card = Cards[mid];
-					if (card.henshinTo)
-					{ //要变身前的才进行操作
-						const _card = finalHenshin(card);
-						member.id = _card.id;
-						member.awoken = _card.awakenings.length;
-					}
-				});
-			});
-			self.classList.add(backClassName);
-		}
-		creatNewUrl();
-		refreshAll(formation);
-	}
+		});
+	});
+	
+	creatNewUrl();
+	refreshAll(formation);
 }
 //在单人和多人之间转移数据
 function turnPage(toPage, e = null) {
