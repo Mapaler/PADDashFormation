@@ -42,11 +42,7 @@ body{
 	opacity: 0.5;
 }
 .help-link::before{
-	content: "Help & Tips";
-}
-.datasource-updatetime
-{
-	cursor: pointer;
+	content: "ℹ️Help & Tips";
 }
 .title,
 .title-display
@@ -1940,7 +1936,7 @@ ul{
 	margin-bottom: 10px;
 }
 .control-box .languages-label::before{
-	content: "Lanuage:";
+	content: "🌐Lanuage:";
 }
 
 .control-box .solo-link::before{

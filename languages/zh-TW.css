@@ -13,7 +13,7 @@
 	content: "正在准備截圖，請稍後……";
 }
 .help-link::before{
-	content: "幫助和提示";
+	content: "ℹ️幫助和提示";
 }
 .delay .monster::before{
 	content: "應 對\A威 嚇";
@@ -216,13 +216,13 @@
 	content: "特別保護";
 }
 .control-box .languages-label::before{
-	content: "語言：";
+	content: "🌐語言：";
 }
 .control-box .datasource-label::before{
-	content: "數據來源：";
+	content: "🕹️數據來源：";
 }
 .control-box .datasource-updatetime::before{
-	content: "更新時間：";
+	content: "⌚更新時間：";
 }
 .control-box .btn-solo-link::before{
 	content: "🧑轉到單人遊戲";

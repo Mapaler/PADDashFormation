@@ -32,7 +32,7 @@ var formation = new Formation(teamsCount,6);
 		<div>
 			<label class="languages-label"><select class="languages"></select></label>
 			<label class="datasource-label"><select class="datasource"></select></label>
-			<span class="datasource-updatetime" title="强制刷新数据"></span>
+			<button onclick="loadData(true);" class="datasource-updatetime" title="强制刷新数据"></button>
 		</div>
 		<div>
 			<button class="btn-clear-data" onclick="clearData();"></button>

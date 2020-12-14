@@ -836,10 +836,10 @@ function initialize() {
 			line.setAttribute("y2", p2.y);
 	};
 
-	const updateTime = controlBox.querySelector(".datasource-updatetime");
+	/*const updateTime = controlBox.querySelector(".datasource-updatetime");
 	updateTime.onclick = function(){
 		loadData(true);
-	};
+	};*/
 
 	//标题和介绍文本框
 	const titleBox = formationBox.querySelector(".title-box");

@@ -216,10 +216,10 @@
 	content: "特別保護";
 }
 .control-box .datasource-label::before{
-	content: "データ ソース:";
+	content: "🕹️データ ソース:";
 }
 .control-box .datasource-updatetime::before{
-	content: "更新時刻:";
+	content: "⌚更新時刻:";
 }
 .control-box .btn-solo-link::before{
 	content: "🧑ソロモードに移動";
