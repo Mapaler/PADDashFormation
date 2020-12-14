@@ -2203,3 +2203,10 @@ ul{
 	box-sizing: border-box;
 	width: calc(100% - 50px * 1);
 }
+.open-evolutionary-tree
+{
+}
+.open-evolutionary-tree::before
+{
+	content: "⛓️进化链";
+}

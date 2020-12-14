@@ -836,11 +836,6 @@ function initialize() {
 			line.setAttribute("y2", p2.y);
 	};
 
-	/*const updateTime = controlBox.querySelector(".datasource-updatetime");
-	updateTime.onclick = function(){
-		loadData(true);
-	};*/
-
 	//标题和介绍文本框
 	const titleBox = formationBox.querySelector(".title-box");
 	const detailBox = formationBox.querySelector(".detail-box");
@@ -2364,11 +2359,10 @@ function editBoxChangeMonId(id) {
 	evoCardUl.style.display = "none";
 	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
 
-	const evoLinkCardsIdArray = Cards.filter(function(m) {
-		return m.evoRootId == card.evoRootId;
-	}).map(function(m) { return m.id; }); //筛选出相同进化链的
+	const evoLinkCardsIdArray = Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id); //筛选出相同进化链的
 
 	const createCardHead = editBox.createCardHead;
+	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	if (evoLinkCardsIdArray.length > 1) {
 		fragment = document.createDocumentFragment(); //创建节点用的临时空间
 		evoLinkCardsIdArray.forEach(function(mid) {
@@ -2380,6 +2374,10 @@ function editBoxChangeMonId(id) {
 		});
 		evoCardUl.appendChild(fragment);
 		evoCardUl.style.display = "block";
+		openEvolutionaryTree.classList.remove(className_displayNone);
+	}else
+	{
+		openEvolutionaryTree.classList.add(className_displayNone);
 	}
 
 	const mType = monInfoBox.querySelectorAll(".monster-type li");

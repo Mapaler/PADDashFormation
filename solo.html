@@ -669,6 +669,7 @@ var formation = new Formation(teamsCount,6);
 		</div>
 		<div class="setting-box">
 			<div class="setting-row row-mon-id">
+				<button class="open-evolutionary-tree"></button>
 				<button class="open-search"></button><!--搜索怪物按钮-->
 				<input type="search" class="m-id" list="monsters-name-list"/><button class="search-by-string"></button>
 				<datalist id="monsters-name-list"></datalist>
@@ -821,6 +822,10 @@ var formation = new Formation(teamsCount,6);
 				<div class="dialog-title"></div>
 				<div class="dialog-content"></div>
 				<div class="dialog-control"><button class="dialog-close"></button></div>
+			</div>
+			<div class="mask mask-evolutionary-tree display-none">
+				<div class="mask-content"></div>
+				<button class="mask-close"></button>
 			</div>
 		</div>
 		<div class="button-box">
