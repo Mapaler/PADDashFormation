@@ -88,7 +88,7 @@
 	content: "合作ID：";
 }
 .monsterinfo-box .monster-altName::before{
-	content: "标签";
+	content: "標簽";
 }
 .m-level-exp::before{
 	content: "需要经验值：";
@@ -363,7 +363,7 @@
 }
 .dialog-search-string .dialog-title::before
 {
-	content: "以字符串搜索";
+	content: "以標簽搜索";
 }
 .dialog-close::before
 {
