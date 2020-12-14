@@ -121,6 +121,7 @@ DBOpenRequest.onupgradeneeded = function(event) {
 
 	}
 }*/
+
 //队员基本的留空
 var Member = function() {
 	this.id = 0;
@@ -307,6 +308,97 @@ Formation.prototype.loadObj = function(f) {
 	if (f.b)
 		this.teams[0][2] = f.b; //原来模式的徽章
 };
+
+//进化树
+class EvoTree 
+{
+	constructor(mid, parent = null)
+	{
+		const _this = this;
+		if (parent == null)
+		{
+			mid = Cards[mid].evoRootId;
+		}
+		const card = Cards[mid];
+		
+		this.id = mid;
+		this.card = card;
+		if (parent == null)
+		{
+			this.evoType = "Base";
+		}else
+		{
+			if (card.evoMaterials.includes(3826)) //像素进化
+			{
+				this.evoType = "Pixel Evo";
+			}else if (card.awakenings.includes(49)) //武器
+			{
+				this.evoType = "Assist Evo";
+			}else if (card.isUltEvo) //究进
+			{
+				if (parent.card.isUltEvo) //超究进
+				{
+					this.evoType = "Super Ult Evo";
+				}else
+				{
+					this.evoType = "Ult Evo";
+				}
+			}else
+			{
+				if (parent.card.isUltEvo) //转生
+				{
+					this.evoType = "Reincarnation";
+				}else if(parent.evoType == "Reincarnation")
+				{
+					this.evoType = "Super Reincarnation";
+				}else
+				{
+					this.evoType = "Evolution";
+				}
+			}
+		}
+		this.children = Cards.filter(scard=>scard.evoBaseId == mid && scard.id != mid).map(scard=>new EvoTree(scard.id,_this));
+	};
+	toListNode()
+	{
+		const createCardHead = editBox.createCardHead;
+		const tBox = document.createElement("div");
+		tBox.className = "evo-box";
+		const evoPanel = tBox.appendChild(document.createElement("div"));
+		evoPanel.className = "evo-panel " + this.evoType.toLowerCase().replace(/\s/g,"-");
+		const evotPanel_L = evoPanel.appendChild(document.createElement("div"));
+		evotPanel_L.className = "evo-panel-left";
+		const evotPanel_R = evoPanel.appendChild(document.createElement("div"));
+		evotPanel_R.className = "evo-panel-right";
+
+		const evoTypeDiv = evotPanel_L.appendChild(document.createElement("div"));
+		evoTypeDiv.className = "evo-type-div";
+		const evoType = evoTypeDiv.appendChild(document.createElement("span"));
+		evoType.className = "evo-type";
+		const monHead = evotPanel_L.appendChild(createCardHead(this.id));
+		monHead.className = "monster-head";
+
+		const monName = evotPanel_R.appendChild(document.createElement("div"));
+		monName.className = "monster-name";
+		monName.textContent = returnMonsterNameArr(this.card, currentLanguage.searchlist, currentDataSource.code)[0];
+
+		const evotMaterials = evotPanel_R.appendChild(document.createElement("ul"));
+		evotMaterials.className = "evo-materials";
+		this.card.evoMaterials.forEach(mid=>{
+			//const li = evotMaterials.appendChild(document.createElement("li"));
+			evotMaterials.appendChild(createCardHead(mid));
+		});
+
+		const evoSubEvo = tBox.appendChild(document.createElement("ul"));
+		evoSubEvo.className = "evo-subevo";
+		this.children.forEach(subEvo=>{
+			const li = evoSubEvo.appendChild(document.createElement("li"));
+			li.appendChild(subEvo.toListNode());
+		});
+		return tBox;
+	};
+}
+
 //切换通用的切换className显示的函数
 function toggleDomClassName(checkBox, className, checkedAdd = true, dom = document.body) {
 	if (!checkBox) return;
@@ -1156,6 +1248,29 @@ function initialize() {
 		return cli;
 	};
 
+	//显示进化树
+	const evolutionaryTreeMask = settingBox.querySelector(".mask-evolutionary-tree");
+
+	evolutionaryTreeMask.show = function(monid)
+	{
+		const maskContent = this.querySelector(".mask-content");
+		const fragment = document.createDocumentFragment();
+		const evoTree = new EvoTree(monid);
+
+		fragment.appendChild(evoTree.toListNode());
+		maskContent.innerHTML = "";
+		maskContent.appendChild(fragment);
+		this.classList.remove(className_displayNone);
+	}
+	evolutionaryTreeMask.close = function()
+	{
+		this.classList.add(className_displayNone);
+	}
+	const evolutionaryTreeMask_Close = evolutionaryTreeMask.querySelector(".mask-close");
+	evolutionaryTreeMask_Close.onclick = function(){evolutionaryTreeMask.close();};
+	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
+	openEvolutionaryTree.onclick = function() {evolutionaryTreeMask.show(editBox.mid)};
+
 	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
 	searchOpen.onclick = function() {
 		s_includeSuperAwoken.onchange();
@@ -1525,7 +1640,6 @@ function initialize() {
 
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
-	const btnSearchByString = settingBox.querySelector(".row-mon-id .search-by-string");
 	monstersID.onchange = function(e)
 	{
 		if (/^\d+$/.test(this.value)) {
@@ -1559,18 +1673,16 @@ function initialize() {
 	}
 	monstersID.oninput = monstersID.onchange;
 	monstersID.onkeydown = function(e) {
+		//如果键入回车，则执行字符串搜索
 		if (e.key == "Enter")
 		{
 			if (!/^\d+$/.test(this.value) && this.value.length > 0) //如果不是数字，且字符串长度大于0，则进行字符串搜索
 			{
-				btnSearchByString.onclick();
+				searchByString(monstersID.value);
 			}
 		}
 	}
-	//字符串搜索
-	btnSearchByString.onclick = function() {
-		searchByString(monstersID.value);
-	};
+
 	//觉醒
 	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
 	const awokenCountLabel = monEditAwokensRow.querySelector(".awoken-count");
@@ -2371,7 +2483,7 @@ function editBoxChangeMonId(id) {
 	}
 
 	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");
-	evoCardUl.style.display = "none";
+	evoCardUl.classList.add(className_displayNone);
 	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
 
 	const evoLinkCardsIdArray = Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id); //筛选出相同进化链的
@@ -2388,7 +2500,7 @@ function editBoxChangeMonId(id) {
 			fragment.appendChild(cli);
 		});
 		evoCardUl.appendChild(fragment);
-		evoCardUl.style.display = "block";
+		evoCardUl.classList.remove(className_displayNone);
 		openEvolutionaryTree.classList.remove(className_displayNone);
 	}else
 	{

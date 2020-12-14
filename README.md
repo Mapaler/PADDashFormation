@@ -101,3 +101,5 @@ Please refer to existing files.
 * [pad-rikuu](//github.com/kiootic/pad-rikuu) //Parse data
 * [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
 * [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
+* [Zpix (最像素)](//github.com/SolidZORO/zpix-pixel-font) //Pixel Font
+* [font-spider](//github.com/aui/font-spider) //Compression Font file

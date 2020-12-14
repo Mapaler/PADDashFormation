@@ -365,11 +365,56 @@
 {
 	content: "以標簽搜索";
 }
-.dialog-close::before
+.dialog-close::before,
+.mask-close::before
 {
 	content: "关闭";
 }
 .dialog .dialog-content .additional-string::before
 {
 	content: "其他語言";
+}
+.open-evolutionary-tree::before
+{
+	content: "⛓️进化链";
+}
+.base .evo-type::before,
+.base .evo-type::after
+{
+    content: "基礎";
+}
+.evolution .evo-type::before,
+.evolution .evo-type::after
+{
+    content: "進化";
+}
+.ult-evo .evo-type::before,
+.ult-evo .evo-type::after
+{
+    content: "究極進化";
+}
+.reincarnation .evo-type::before,
+.reincarnation .evo-type::after
+{
+    content: "轉生進化";
+}
+.pixel-evo .evo-type::before,
+.pixel-evo .evo-type::after
+{
+    content: "像素進化";
+}
+.assist-evo .evo-type::before,
+.assist-evo .evo-type::after
+{
+    content: "輔助進化";
+}
+.super-reincarnation .evo-type::before,
+.super-reincarnation .evo-type::after
+{
+    content: "超轉生進化";
+}
+.super-ult-evo .evo-type::before,
+.super-ult-evo .evo-type::after
+{
+    content: "超究極進化";
 }

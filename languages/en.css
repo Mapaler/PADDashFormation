@@ -370,11 +370,87 @@
 {
 	content: "Search By Tags";
 }
-.dialog-close::before
+.dialog-close::before,
+.mask-close::before
 {
 	content: "Close";
 }
 .dialog .dialog-content .additional-string::before
 {
 	content: "Other Languages";
+}
+.open-evolutionary-tree::before
+{
+	content: "⛓️Evo Search";
+}
+.base .evo-type::before,
+.base .evo-type::after
+{
+    content: "Base";
+}
+.evolution .evo-type::before,
+.evolution .evo-type::after
+{
+    content: "Evolution";
+}
+.ult-evo .evo-type::before,
+.ult-evo .evo-type::after
+{
+    content: "Ult Evo";
+}
+.reincarnation .evo-type::before,
+.reincarnation .evo-type::after
+{
+    content: "Reincarnation";
+}
+.pixel-evo .evo-type::before,
+.pixel-evo .evo-type::after
+{
+    content: "Pixel Evo";
+}
+.assist-evo .evo-type::before,
+.assist-evo .evo-type::after
+{
+    content: "Assist Evo";
+}
+.super-reincarnation .evo-type::before,
+.super-reincarnation .evo-type::after
+{
+    content: "Super Reincarnation";
+}
+.super-ult-evo .evo-type::before,
+.super-ult-evo .evo-type::after
+{
+	content: "Super Ult Evo";
+}
+
+.evolution .evo-type
+{
+	transform: scaleX(0.90);
+    margin: calc(-100px * (1 - 0.90) / 2);
+}
+.pixel-evo .evo-type
+{
+	transform: scaleX(0.95);
+    margin: calc(-100px * (1 - 0.95) / 2);
+}
+.super-ult-evo .evo-type
+{
+	transform: scaleX(0.65);
+    margin: calc(-100px * (1 - 0.63) / 2);
+}
+.reincarnation .evo-type
+{
+	transform: scaleX(0.60);
+    margin: calc(-100px * (1 - 0.55) / 2);
+}
+.assist-evo .evo-type
+{
+	transform: scaleX(0.85);
+    margin: calc(-100px * (1 - 0.85) / 2);
+}
+.super-reincarnation .evo-type
+{
+	transform: scaleX(0.43);
+    margin: calc(-100px * 1 / 2);
 }

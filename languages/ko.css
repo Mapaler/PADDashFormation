@@ -359,11 +359,60 @@
 {
 	content: "태그로 검색";
 }
-.dialog-close::before
+.dialog-close::before,
+.mask-close::before
 {
 	content: "가까이";
 }
 .dialog .dialog-content .additional-string::before
 {
 	content: "다른 언어";
+}
+.open-evolutionary-tree::before
+{
+	content: "⛓️진화 계통";
+}
+.base .evo-type::before,
+.base .evo-type::after
+{
+    content: "베이스";
+}
+.evolution .evo-type::before,
+.evolution .evo-type::after
+{
+    content: "진 화";
+}
+.ult-evo .evo-type::before,
+.ult-evo .evo-type::after
+{
+    content: "궁극진화";
+}
+.reincarnation .evo-type::before,
+.reincarnation .evo-type::after
+{
+    content: "환생 진와";
+}
+.pixel-evo .evo-type::before,
+.pixel-evo .evo-type::after
+{
+    content: "도트 진화";
+}
+.assist-evo .evo-type::before,
+.assist-evo .evo-type::after
+{
+    content: "어시스트 진화";
+}
+.super-reincarnation .evo-type::before,
+.super-reincarnation .evo-type::after
+{
+    content: "초 환색진화";
+}
+.super-ult-evo .evo-type::before,
+.super-ult-evo .evo-type::after
+{
+    content: "초 궁극진화";
+}
+.evo-type
+{
+	font-weight: bold;
 }

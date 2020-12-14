@@ -9,6 +9,17 @@
 		 url("fonts/FOT-KurokaneStd-EB.eot") format('embedded-opentype'),
 		 url("fonts/FOT-KurokaneStd-EB.svg") format('svg');
 }
+@font-face {
+	font-family: 'zpix';
+	src:
+	  url("fonts/zpix.woff2") format('woff2'),
+	  url("fonts/zpix.woff") format('woff'),
+	  url("fonts/zpix.ttf") format('truetype'),
+	  url("fonts/zpix.eot?#font-spider") format('embedded-opentype'),
+	  url("fonts/zpix.svg") format('svg');
+	font-weight: normal;
+	font-style: normal;
+  }
 @keyframes loading-animate{
 	from {
 		transform: rotate(0deg);
@@ -764,7 +775,6 @@ ul{
 	color: white;
 	text-shadow: black 2px 2px 0;
 	min-height: 100px;
-	margin: 5px 0;
 	background-image: linear-gradient(#798421,#394914);
 	border-top: #B1BB39 solid 4px;
 	border-bottom: #72941D ridge 7px;
@@ -773,7 +783,7 @@ ul{
 }
 .edit-box .search-box,
 .edit-box .setting-box{
-	padding: 0 10px;
+	padding: 10px;
 	position: relative;
 }
 /*.edit-box .setting-box .row-mon-id::before{
@@ -783,18 +793,8 @@ ul{
 	box-sizing: border-box;
 	font-size: 25px;
 	height: 40px;
-	width: calc(100% - 50px);
-}
-.edit-box .setting-box .row-mon-id .search-by-string{
-	box-sizing: border-box;
-	font-size: 25px;
-	height: 40px;
-	width: 45px;
-	margin-left: 5px;
-	padding: 0;
-}
-.edit-box .setting-box .row-mon-id .search-by-string::before{
-	content: "🔍";
+	width: 100%;
+	display: block;
 }
 .edit-box .setting-box .row-mon-id .unable-monster{
 	pointer-events: none;
@@ -827,7 +827,8 @@ ul{
 }
 .edit-box .setting-box .row-mon-id .evo-card-list .monster,
 .edit-box .search-box .search-mon-list .monster,
-.detail-mon .monster
+.detail-mon .monster,
+.mask-evolutionary-tree .evo-panel-left>.monster-head>.monster
 {
 	float: none;
 	transform: scale(0.75);
@@ -1883,7 +1884,6 @@ ul{
 .edit-box .button-box{
 	border-top: black solid 3px;
 	background-color: rgba(0,0,0,0.5);
-	margin-top: 10px;
 	padding: 5px;
 	height: 50px;
 }
@@ -2115,15 +2115,6 @@ ul{
 	text-align: center;
 	margin-bottom: 5px;
 }
-.dialog button
-{
-	cursor: pointer;
-	transition: transform 0.1s;
-}
-.dialog button:active
-{
-	transform: scale(1.1);
-}
 .dialog .dialog-content .additional-string
 {
 	border-top: 2px solid white;
@@ -2138,14 +2129,20 @@ ul{
 	text-align: center;
 	margin-top:10px;
 }
-.dialog .dialog-control button
+.brown-button
 {
 	background-image: linear-gradient(to bottom,#C38E5F,#2F2008);
 	border: none;
 	border-radius: 5px;
 	padding: 2px;
+	cursor: pointer;
+	transition: transform 0.1s;
 }
-.dialog .dialog-control button::before
+.brown-button:active
+{
+	transform: scale(1.1);
+}
+.brown-button::before
 {
 	display: inline-block;
 	box-sizing: border-box;
@@ -2203,10 +2200,337 @@ ul{
 	box-sizing: border-box;
 	width: calc(100% - 50px * 1);
 }
-.open-evolutionary-tree
-{
-}
-.open-evolutionary-tree::before
+
+/*.open-evolutionary-tree::before
 {
 	content: "⛓️进化链";
+}*/
+
+.mask-evolutionary-tree
+{
+	position: absolute;
+	width: 100%;
+	left: 0;
+	top: 0;
+	background-color: rgba(0,0,0,0.8);
+}
+.mask-content
+{
+    text-align: center;
+}
+.evo-box
+{
+    display: inline-block;
+    text-align: left;
+}
+.evo-panel,
+.evo-panel-left,
+.evo-panel-right
+{
+    display: inline-block;
+}
+.mask-evolutionary-tree .evo-panel-left>.monster-head
+{
+    display: inline-block;
+}
+.evo-materials>li
+{
+    display: inline-block;
+}
+.mask-evolutionary-tree .evo-materials .monster
+{
+    transform: scale(0.60);
+    margin: calc(-100px * (1 - 0.60) / 2);
+}
+.mask-evolutionary-tree .evo-panel-left>.monster-head>.monster .id
+{
+    bottom: 5px;
+    font-size: 20px;
+}
+.mask-evolutionary-tree .evo-materials .monster .id
+{
+    bottom: 5px;
+    font-size: 22px;
+}
+.evo-panel
+{
+    border:black 2px solid;
+    border-radius: 7px;
+}
+.evo-panel-left,
+.evo-panel-right
+{
+    border:#D19635 2px solid;
+    border-radius: 4px;
+    height: 100px;
+    vertical-align: top;
+}
+.evo-panel-left
+{
+    border-top-right-radius: unset;
+    border-bottom-right-radius: unset;
+    border-right: none;
+    background-image: linear-gradient(#A16928, #5F3D16);
+    padding: 0 2px;
+    text-align: center;
+}
+.evo-panel-right
+{
+    border-top-left-radius: unset;
+    border-bottom-left-radius: unset;
+    border-left: none;
+    background-image: url(images/slate.svg);
+}
+.evo-panel-right .monster-name
+{
+	font-family: var(--game-font-family);
+    font-size: 15px;
+    line-height: 15px;
+    background: #42341F;
+    border: 2px inset #F4F18E;
+    border-radius: 5px;
+    margin: 4px;
+    padding: 5px;
+}
+.evo-materials
+{
+    margin: 0 4px;
+}
+
+.evo-materials .null .monster
+{
+    opacity: 0.5;
+}
+.evo-materials>li
+{
+    margin: 1px; 
+}
+.evo-subevo
+{
+    padding-left: 35px;
+    padding-top: 5px; 
+}
+.evo-subevo>li
+{
+    position:relative;
+}
+
+.evo-subevo>li::before
+{
+    content:' ';
+    position:absolute;
+    top:0;
+    left:-20px;
+    width:15px;
+    height:100%;
+    border-left:3px solid #E88230;
+}
+.evo-subevo>li::after
+{
+    content:' ';
+    position:absolute;
+    top:43px;
+    left:-10px;
+	width:0;
+	height:0;
+	border-top: 8px solid transparent;
+	border-left: 10px solid #FFEE71;
+	border-bottom: 8px solid transparent;
+}
+.evo-subevo>li:last-child::before
+{
+    border-bottom: 3px solid #F3B750;
+    border-bottom-left-radius: 8px;
+    height:50px;
+}
+.evo-subevo>li:last-child>.evo-box::before
+{
+    display: none;
+}
+.evo-subevo>li>.evo-box::before
+{
+    content:' ';
+    position:absolute;
+    top:50px;
+    left:-20px;
+    width:18px;
+    border:none;
+    border-top:3px solid #E88230;
+
+}
+
+.evo-panel-left .evo-type
+{
+	font-family: var(--game-font-family);
+    font-size: 15px;
+    line-height: 15px;
+    display: inline-block;
+    position: relative;
+}
+.evo-panel-left .evo-type::before,
+.evo-panel-left .evo-type::after
+{
+}
+.evo-panel-left .evo-type::after
+{
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	font-family: var(--game-font-family);
+    font-size: 15px;
+    line-height: 15px;
+    position: absolute;
+    left: 0;
+}
+.evo-panel-left .evo-type::before
+{
+	/*text-shadow: black 1px 1px 0,black -1px 1px 0,black 1px -1px 0,black -1px -1px 0;*/
+	-webkit-text-stroke: 3px black;
+	text-stroke: 3px black;
+}
+
+/*.base .evo-type::before,
+.base .evo-type::after
+{
+    content: "基礎";
+}
+.evolution .evo-type::before,
+.evolution .evo-type::after
+{
+    content: "進化";
+}
+.ult-evo .evo-type::before,
+.ult-evo .evo-type::after
+{
+    content: "究極進化";
+}
+.reincarnation .evo-type::before,
+.reincarnation .evo-type::after
+{
+    content: "轉生進化";
+}
+.pixel-evo .evo-type::before,
+.pixel-evo .evo-type::after
+{
+    content: "像素進化";
+    font-family: "zpix";
+    font-weight: bold;
+}
+.assist-evo .evo-type::before,
+.assist-evo .evo-type::after
+{
+    content: "輔助進化";
+}
+.super-reincarnation .evo-type::before,
+.super-reincarnation .evo-type::after
+{
+    content: "超轉生進化";
+}
+.super-ult-evo .evo-type::before,
+.super-ult-evo .evo-type::after
+{
+    content: "超究極進化";
+}*/
+.pixel-evo .evo-type::before,
+.pixel-evo .evo-type::after
+{
+    font-family: "zpix";
+    font-weight: bold;
+}
+
+.base .evo-type::after
+{ /*基礎*/
+	background-image: linear-gradient(#FFFFBB, #FFFF88);
+}
+.base
+{
+    background-color: #DCB476;
+}
+.base .evo-panel-right
+{
+    border-color: #FDC686;
+}
+.evolution .evo-type::after
+{ /*進化*/
+	background-image: linear-gradient(#CCFF33, #88EE22);
+}
+.evolution
+{
+    background-color: #C49669;
+}
+.evolution .evo-panel-right
+{
+    border-color: #DEAA76;
+}
+.ult-evo .evo-type::after
+{ /*究極進化*/
+	background-image: linear-gradient(#FFFFAA 20%,#BB8800, #FFFFAA 80%);
+}
+.ult-evo
+{
+    background-color: #DDD844;
+}
+.ult-evo .evo-panel-right
+{
+    border-color: #FEF84F;
+}
+.reincarnation .evo-type::after
+{ /*轉生進化*/
+	background-image: linear-gradient(#00CCCC, #EEFFFF 50%,#AA8800 51%,#FFFFAA);
+}
+.reincarnation
+{
+    background-color: #579889;
+}
+.reincarnation .evo-panel-right
+{
+    border-color: #78B89A;
+}
+.pixel-evo .evo-type::after
+{ /*像素進化*/
+	background-image: linear-gradient(#FFDD77 33%, #EEBB33 34%, #EEBB33 66%, #BB7700 67%);
+}
+.pixel-evo
+{
+    background-color: #B1AB94;
+}
+.pixel-evo .evo-panel-right
+{
+    border-color: #CBC4AA;
+}
+.assist-evo .evo-type::after
+{ /*輔助進化*/
+	background-image: linear-gradient(#AAFF66, #557700);
+}
+.assist-evo
+{
+    background-color: #607F38;
+}
+.assist-evo .evo-panel-right
+{
+    border-color: #6F9241;
+}
+.super-reincarnation .evo-type::after
+{ /*超轉生進化*/
+	background-image: linear-gradient(#EE7700 ,#FFFF88 40%, #1155AA);
+}
+.super-reincarnation
+{
+    background-color: #C15644;
+}
+.super-reincarnation .evo-panel-right
+{
+    border-color: #DE634F;
+}
+.super-ult-evo .evo-type::after
+{ /*超究極進化*/
+	background-image: linear-gradient(#553300,#FFCC00 45%, #FFFF99 55%, #771100);
+}
+.super-ult-evo
+{
+	background-image: linear-gradient(#C1D515,#DD7003);
+}
+.super-ult-evo .evo-panel-right
+{
+    border-color: #DBE721;
 }

@@ -362,11 +362,66 @@
 {
 	content: "タグで検索";
 }
-.dialog-close::before
+.dialog-close::before,
+.mask-close::before
 {
 	content: "閉じる";
 }
 .dialog .dialog-content .additional-string::before
 {
 	content: "他の言語";
+}
+.open-evolutionary-tree::before
+{
+	content: "⛓️進化サーチ";
+}
+.base .evo-type::before,
+.base .evo-type::after
+{
+    content: "ベース";
+}
+.evolution .evo-type::before,
+.evolution .evo-type::after
+{
+    content: "進化";
+}
+.ult-evo .evo-type::before,
+.ult-evo .evo-type::after
+{
+    content: "究極進化";
+}
+.reincarnation .evo-type::before,
+.reincarnation .evo-type::after
+{
+    content: "転生進化";
+}
+.pixel-evo .evo-type::before,
+.pixel-evo .evo-type::after
+{
+    content: "ドット進化";
+}
+.assist-evo .evo-type::before,
+.assist-evo .evo-type::after
+{
+    content: "アシスト進化";
+}
+.super-reincarnation .evo-type::before,
+.super-reincarnation .evo-type::after
+{
+    content: "超転生進化";
+}
+.super-ult-evo .evo-type::before,
+.super-ult-evo .evo-type::after
+{
+    content: "超究極進化";
+}
+.pixel-evo .evo-type
+{
+	transform: scaleX(0.90);
+    margin: calc(-100px * (1 - 0.90) / 2);
+}
+.assist-evo .evo-type
+{
+	transform: scaleX(0.80);
+    margin: calc(-100px * (1 - 0.80) / 2);
 }
