@@ -425,3 +425,8 @@
 	transform: scaleX(0.80);
     margin: calc(-100px * (1 - 0.80) / 2);
 }
+.henshin .evo-type::before,
+.henshin .evo-type::after
+{
+    content: "変身";
+}

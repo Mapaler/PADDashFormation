@@ -416,3 +416,8 @@
 {
 	font-weight: bold;
 }
+.henshin .evo-type::before,
+.henshin .evo-type::after
+{
+    content: "화장";
+}

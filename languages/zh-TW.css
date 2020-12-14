@@ -418,3 +418,8 @@
 {
     content: "超究極進化";
 }
+.henshin .evo-type::before,
+.henshin .evo-type::after
+{
+    content: "變身";
+}

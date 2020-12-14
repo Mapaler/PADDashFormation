@@ -2535,3 +2535,15 @@ ul{
 {
     border-color: #DBE721;
 }
+.henshin .evo-type::after
+{ /*變身*/
+	background-image: linear-gradient(#FFFF00 30%, #FF00FF);
+}
+.henshin
+{
+	background-image: linear-gradient(#BFFFCF,#FFFFBF,#FFBFBF);
+}
+.henshin .evo-panel-right
+{
+    border-color: #7F00FF;
+}
