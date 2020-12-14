@@ -73,6 +73,25 @@ officialAPI.forEach(function(lang) {
 	const skillJsonObj = JSON.parse(skillJson);
 	const oSkills = lang.skillOriginal = skillJsonObj.skill;//将字符串转换为json对象
 	lang.skills = oSkills.map((oc,idx)=>new Skill(idx,oc)); //每一项生成分析对象
+
+	
+	lang.cards.forEach((m,idx,arr)=>{
+		const skill = lang.skills[m.activeSkillId];
+		let henshinTo = null;
+		const searchType = 202;
+		if (skill.type == searchType)
+			henshinTo = skill.params[0];
+		else if (skill.type == 116 || skill.type == 118){
+			const subskill = skill.params.map(id=>lang.skills[id]).find(subskill=>subskill.type == searchType);
+			if (subskill)
+				henshinTo = subskill.params[0];
+		}
+		if (henshinTo)
+		{
+			m.henshinTo = henshinTo;
+			arr[henshinTo].henshinFrom = idx;
+		}
+	});
 });
 
 //加入其他服务器相同角色的名字

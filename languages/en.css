@@ -459,3 +459,13 @@
 {
     content: "Henshin";
 }
+.henshin-loop .evo-type::before,
+.henshin-loop .evo-type::after
+{
+    content: "Loop Henshin";
+}
+.henshin-loop  .evo-type
+{
+	transform: scaleX(0.6);
+    margin: calc(-100px * (1 - 0.6) / 2);
+}

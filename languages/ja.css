@@ -430,3 +430,8 @@
 {
     content: "変身";
 }
+.henshin-loop .evo-type::before,
+.henshin-loop .evo-type::after
+{
+    content: "ループ変身";
+}

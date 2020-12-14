@@ -318,12 +318,27 @@ class EvoTree
 		this.parent = parent;
 		if (parent == null)
 		{
-			mid = Cards[mid].evoRootId;
+			//mid = Cards[mid].evoRootId;
+			function returnRootId(mid)
+			{
+				mid = Cards[mid].evoRootId;
+				const m = Cards[mid];
+				if (m.henshinFrom && m.henshinFrom < m.id)
+				{ //只有变身来源小于目前id的，才继续找base
+					mid = returnRootId(m.henshinFrom);
+				}
+				return mid;
+			}
+			mid = returnRootId(mid);
 		}
 		const card = Cards[mid];
 		
 		this.id = mid;
+		this.idArr = parent ? parent.idArr : [];
 		this.card = card;
+		this.children = [];
+		this.evoType = null;
+
 		if (parent == null)
 		{
 			this.evoType = "Base";
@@ -366,8 +381,19 @@ class EvoTree
 				}
 			}
 		}
-		this.children = [];
-		if (card.henshinTo && card.henshinTo != card.evoRootId)
+		
+		if (this.idArr.includes(mid))
+		{
+			if (card.henshinFrom == parent.id)
+			{
+				this.evoType = "Henshin Loop";
+			}
+			return this;
+		}else
+		{
+			this.idArr.push(mid);
+		}
+		if (card.henshinTo)
 			this.children.push(new EvoTree(card.henshinTo,_this));
 		if (this.evoType != "Henshin")
 			this.children.push(...Cards.filter(scard=>scard.evoBaseId == mid && scard.id != mid).map(scard=>new EvoTree(scard.id,_this)));
@@ -395,6 +421,7 @@ class EvoTree
 		const monName = evotPanel_R.appendChild(document.createElement("div"));
 		monName.className = "monster-name";
 		monName.textContent = returnMonsterNameArr(this.card, currentLanguage.searchlist, currentDataSource.code)[0];
+		console.log(monName.offsetWidth);
 
 		const evotMaterials = evotPanel_R.appendChild(document.createElement("ul"));
 		evotMaterials.className = "evo-materials";
@@ -409,6 +436,7 @@ class EvoTree
 			const li = evoSubEvo.appendChild(document.createElement("li"));
 			li.appendChild(subEvo.toListNode());
 		});
+		console.log(monName.scrollWidth);
 		return tBox;
 	};
 }
@@ -472,6 +500,7 @@ function swapHenshin(self)
 				team[0].forEach(member=>{
 					const mid = member.id;
 					const card = Cards[mid];
+					console.log(card.henshinFrom && member.level <= 99)
 					if (card.henshinFrom && member.level <= 99)
 					{ //要变身后的才进行操作
 						const _card = Cards[card.evoRootId];
@@ -731,7 +760,7 @@ function loadData(force = false)
 					opt.value = m.id;
 					opt.label = m.id + " - " + returnMonsterNameArr(m, currentLanguage.searchlist, currentDataSource.code).join(" | ");
 	
-					const linkRes = new RegExp("link:(\\d+)", "ig").exec(m.specialAttribute);
+					/*const linkRes = new RegExp("link:(\\d+)", "ig").exec(m.specialAttribute);
 					if (linkRes) { //每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
 						const toId = parseInt(linkRes[1], 10);
 						const _m = Cards[toId];
@@ -740,7 +769,7 @@ function loadData(force = false)
 						//	_m.evoRootId = m.evoRootId;
 						m.henshinTo = toId;
 						_m.henshinFrom = m.id;
-					}
+					}*/
 				});
 				monstersList.appendChild(fragment);
 			}
