@@ -436,7 +436,6 @@ class EvoTree
 			const li = evoSubEvo.appendChild(document.createElement("li"));
 			li.appendChild(subEvo.toListNode());
 		});
-		console.log(monName.scrollWidth);
 		return tBox;
 	};
 }
