@@ -793,8 +793,18 @@ ul{
 	box-sizing: border-box;
 	font-size: 25px;
 	height: 40px;
-	width: 100%;
-	display: block;
+	width: calc(100% - 50px);
+}
+.edit-box .setting-box .row-mon-id .search-by-string{
+	box-sizing: border-box;
+	font-size: 25px;
+	height: 40px;
+	width: 45px;
+	margin-left: 5px;
+	padding: 0;
+}
+.edit-box .setting-box .row-mon-id .search-by-string::before{
+	content: "🔍";
 }
 .edit-box .setting-box .row-mon-id .unable-monster{
 	pointer-events: none;

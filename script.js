@@ -1655,6 +1655,7 @@ function initialize() {
 
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
+	const btnSearchByString = settingBox.querySelector(".row-mon-id .search-by-string");
 	monstersID.onchange = function(e)
 	{
 		if (/^\d+$/.test(this.value)) {
@@ -1693,11 +1694,14 @@ function initialize() {
 		{
 			if (!/^\d+$/.test(this.value) && this.value.length > 0) //如果不是数字，且字符串长度大于0，则进行字符串搜索
 			{
-				searchByString(monstersID.value);
+		    searchByString(monstersID.value);
 			}
 		}
 	}
-
+	//字符串搜索
+	btnSearchByString.onclick = function() {
+		searchByString(monstersID.value);
+	};
 	//觉醒
 	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
 	const awokenCountLabel = monEditAwokensRow.querySelector(".awoken-count");
