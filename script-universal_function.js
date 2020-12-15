@@ -396,7 +396,7 @@ function calculateAbility_max(id,solo, teamsCount)
 //搜索卡片用
 function searchCards(cards,attr1,attr2,fixMainColor,types,typeAndOr,rares,awokens,sawokens,equalAk,incSawoken)
 {
-	let cardsRange = cards.slice(1); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
+	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	//属性
 	if (attr1 != null && attr1 ===  attr2 || //主副属性一致并不为空
 		(attr1 === 6 && attr2 === -1)) //主副属性都为“无”
@@ -489,6 +489,8 @@ function searchCards(cards,attr1,attr2,fixMainColor,types,typeAndOr,rares,awoken
 				   equalAk && equivalentAwoken && card.superAwakenings.includes(equivalentAwoken.big); //如果开启等效觉醒
 		}) );
 	}
+
+	cardsRange = cardsRange.filter(card=>card.id); //去除Cards[0]
 	return cardsRange;
 }
 //产生一个怪物头像
