@@ -256,23 +256,15 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 		[{index:3,value:200},{index:67,value:-2000}]  //RCV
 	];
 	const previousAwokenScale = [ //在297之前，对应比例加三维觉醒的序号与倍率值，就是语音觉醒
-		[], //HP
-		[], //ATK
-		[]  //RCV
+		[{index:63,scale:1.1}], //HP
+		[{index:63,scale:1.1}], //ATK
+		[{index:63,scale:1.1}]  //RCV
 	];
 	const latterAwokenScale = [ //对应比例加三维觉醒的序号与倍率值
 		[], //HP
 		[], //ATK
 		[]  //RCV
 	];
-
-	if (currentDataSource.code=="ja")
-	{
-		//63 语音觉醒
-		previousAwokenScale.forEach(ab=>{
-			ab.push({index:63,scale:1.1});
-		});
-	}
 
 	if (!solo)
 	{ //协力时计算协力觉醒
