@@ -20,7 +20,7 @@ fs.access(outJSON,function(err){
 	}
 
 	//根据文件路径读取文件，返回文件列表
-	fs.readdir(sourceFolder,function(err,files){console.log()
+	fs.readdir(sourceFolder,function(err,files){
 		if(err){
 			console.warn(err);
 		}else{
