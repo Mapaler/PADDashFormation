@@ -596,6 +596,21 @@
 .awoken-icon[data-awoken-icon='72']{/*掉毒*/
 	background-position-y:calc(-32px * 72);
 }
+.awoken-icon[data-awoken-icon='73']{/*2串火*/
+	background-position-y:calc(-32px * 73);
+}
+.awoken-icon[data-awoken-icon='74']{/*2串水*/
+	background-position-y:calc(-32px * 74);
+}
+.awoken-icon[data-awoken-icon='75']{/*2串木*/
+	background-position-y:calc(-32px * 75);
+}
+.awoken-icon[data-awoken-icon='76']{/*2串光*/
+	background-position-y:calc(-32px * 76);
+}
+.awoken-icon[data-awoken-icon='77']{/*2串暗*/
+	background-position-y:calc(-32px * 77);
+}
 /*类型*/
 .type-icon{
 	background-image: url(images/type.png);
