@@ -58,16 +58,10 @@ Number.prototype.prefixInteger = function(length, useGrouping = false)
 			minimumIntegerDigits: length
 		});
 }
-//数字补前导0
-Number.prototype.parseBigNumber = function()
+//大数字缩短长度，默认返回本地定义字符串
+Number.prototype.bigNumberToString = function()
 {  
 	return this.toLocaleString();
-}
-
-//大数字缩短长度，默认返回本地定义字符串
-function parseBigNumber(number)
-{
-	return number.toLocaleString();
 }
 
 //数组删除自己尾部的空元素

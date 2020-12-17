@@ -1778,7 +1778,7 @@ function initialize() {
 			level: level
 		};
 		const needExp = calculateExp(tempMon);
-		monLvExp.textContent = needExp ? needExp[0].parseBigNumber() + (level > 99 ? ` + ${needExp[1].parseBigNumber()}` : "") : "";
+		monLvExp.textContent = needExp ? needExp[0].bigNumberToString() + (level > 99 ? ` + ${needExp[1].bigNumberToString()}` : "") : "";
 	}
 	editBox.reCalculateExp = reCalculateExp;
 	//三维

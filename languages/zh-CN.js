@@ -1,5 +1,36 @@
 ﻿document.title = `智龙迷城${teamsCount}人队伍图制作工具`;
 
+//大数字缩短长度
+Number.prototype.bigNumberToString = function()
+{
+	let numTemp = this.valueOf();
+	if (!numTemp) return "0";
+	const grouping = Math.pow(10, 4);
+	const unit = ['','万','亿','兆','京','垓'];
+	const numParts = [];
+	do{
+		numParts.push(numTemp % grouping);
+		numTemp = Math.floor(numTemp / grouping);
+	}while(numTemp>0 && numParts.length<(unit.length-1))
+	if (numTemp>0)
+	{
+		numParts.push(numTemp);
+	}
+	let numPartsStr = numParts.map((num,idx)=>{
+		if (num > 0)
+		{
+			return (num < 1e3 ? "零" : "") + num.toLocaleString() + unit[idx];
+		}else
+			return "零";
+	});
+
+	numPartsStr.reverse(); //反向
+	let outStr = numPartsStr.join("");
+	outStr = outStr.replace(/(^零+|零+$)/g,''); //去除开头的零
+	outStr = outStr.replace(/零{2,}/g,'零'); //去除多个连续的零
+	return outStr;
+}
+
 //查找原先完整技能
 function findFullSkill(subSkill){
 	const parentSkill = Skills.find(ss=>(ss.type === 116 || ss.type === 118 || ss.type === 138) && ss.params.includes(subSkill.id)) || subSkill;
@@ -230,7 +261,7 @@ function parseSkillDescription(skill)
 			str = `对敌方全体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 1:
-			str = `对敌方全体造成${parseBigNumber(sk[1])}点${attrN(sk[0])}属性伤害`;
+			str = `对敌方全体造成${sk[1].bigNumberToString()}点${attrN(sk[0])}属性伤害`;
 			break;
 		case 2:
 			str = `对敌方1体造成自身攻击力×${sk[0]/100}${sk[1]&&sk[1]!=sk[0]?'~'+sk[1]/100:''}倍的自身属性伤害`;
@@ -344,7 +375,7 @@ function parseSkillDescription(skill)
 			str = `受到敌人攻击时${sk[0]==100?"":`有${sk[0]}的几率`}进行受到伤害${sk[1]/100}倍的${attrN(sk[2])}属性反击`;
 			break;
 		case 42:
-			str = `对${attrN(sk[0])}属性敌人造成${parseBigNumber(sk[2])}点${attrN(sk[1])}属性伤害`;
+			str = `对${attrN(sk[0])}属性敌人造成${sk[2].bigNumberToString()}点${attrN(sk[1])}属性伤害`;
 			break;
 		case 43:
 			str = `HP ${sk[0]==100 ?"全满":`${sk[0]}%以上`}时${sk[1]<100?`有${sk[1]}%的几率使`:""}受到的伤害减少${sk[2]}%`;
@@ -379,10 +410,10 @@ function parseSkillDescription(skill)
 			str = `进入地下城时为队长的话，获得的金币×${sk[0]/100}倍`;
 			break;
 		case 55:
-			str = `对敌方1体造成${parseBigNumber(sk[0])}点无视防御的固定伤害`;
+			str = `对敌方1体造成${sk[0].bigNumberToString()}点无视防御的固定伤害`;
 			break;
 		case 56:
-			str = `对敌方全体造成${parseBigNumber(sk[0])}点无视防御的固定伤害`;
+			str = `对敌方全体造成${sk[0].bigNumberToString()}点无视防御的固定伤害`;
 			break;
 		case 58:
 			str = `对敌方全体造成自身攻击力×${sk[1]/100}${sk[2]&&sk[2]!=sk[1]?'~'+sk[2]/100:''}倍的${attrN(sk[0])}属性伤害`;
@@ -461,11 +492,11 @@ function parseSkillDescription(skill)
 			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方全体造成自身攻击力×${sk[1]/100}${sk[2]&&sk[2]!=sk[1]?'~'+sk[2]/100:''}倍的${attrN(sk[0])}属性伤害`;
 			break;
 		case 86:
-			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方1体造成${parseBigNumber(sk[1])}点${attrN(sk[0])}属性伤害`;
+			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方1体造成${sk[1].bigNumberToString()}点${attrN(sk[0])}属性伤害`;
 			if (sk[2]) str += `未知 参数2 ${sk[2]}`;
 			break;
 		case 87:
-			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方全体造成${parseBigNumber(sk[1])}点${attrN(sk[0])}属性伤害`;
+			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方全体造成${sk[1].bigNumberToString()}点${attrN(sk[0])}属性伤害`;
 			if (sk[2]) str += `未知 参数2 ${sk[2]}`;
 			break;
 		case 88:
@@ -562,7 +593,7 @@ function parseSkillDescription(skill)
 				li.setAttribute("data-skillid", repeatSkill[0]);
 				li.addEventListener("click",fastShowSkill);
 				li.appendChild(parseSkillDescription(Skills[repeatSkill[0]]));
-				li.appendChild(document.createTextNode(`×${repeatSkill.length}次（共${parseBigNumber(repeatDamage[0]*repeatSkill.length)}）`));
+				li.appendChild(document.createTextNode(`×${repeatSkill.length}次（共${(repeatDamage[0]*repeatSkill.length).bigNumberToString()}）`));
 				noRepeatSk = sk.filter(subSkill => Skills[subSkill].type !== 188);
 			}else
 			{
@@ -1166,7 +1197,7 @@ function parseSkillDescription(skill)
 			if (sk[3] || sk[4] || sk[5]) str += "的"+getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]});
 			break;
 		case 179:
-			str = `${sk[0]}回合内，每回合回复${sk[1]?`${parseBigNumber(sk[1])}点`:` HP 上限 ${sk[2]}%`}的 HP`;
+			str = `${sk[0]}回合内，每回合回复${sk[1]?`${sk[1].bigNumberToString()}点`:` HP 上限 ${sk[2]}%`}的 HP`;
 			if(sk[3] || sk[4])
 			{
 				str += `，并将`;
@@ -1207,7 +1238,7 @@ function parseSkillDescription(skill)
 			if (sk[0] || sk[1]) str += getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的" + getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]});
 			break;
 		case 188: //多次单体固伤
-			str = `对敌方1体造成${parseBigNumber(sk[0])}点无视防御的固定伤害`;
+			str = `对敌方1体造成${sk[0].bigNumberToString()}点无视防御的固定伤害`;
 			break;
 		case 189: 
 		//解除寶珠的鎖定狀態；所有寶珠變成火、水、木、光；顯示3COMBO的轉珠路徑（只適用於普通地下城＆3個消除）
@@ -1263,7 +1294,7 @@ function parseSkillDescription(skill)
 			break;
 		case 198:
 			//以回復寶珠回復40000HP或以上時，受到的傷害減少50%
-			str = `以回复宝珠回复${parseBigNumber(sk[0])}点或以上时`;
+			str = `以回复宝珠回复${sk[0].bigNumberToString()}点或以上时`;
 			if (sk[1] && sk[1] != 100) str += `所有宠物的${getFixedHpAtkRcvString({atk:sk[1]})}`;
 			if (sk[2]) str += `，受到的伤害减少${sk[2]}%`;
 			if (sk[3]) str += `，觉醒无效状态减少${sk[3]}回合`;
@@ -1285,10 +1316,10 @@ function parseSkillDescription(skill)
 			}
 			if (!atSameTime) str+=`${sk[1]}种属性以上`;
 			else if(sk[0] == 31) str += `5色`;
-			str += `同时攻击时，追加${parseBigNumber(sk[2])}点固定伤害`;
+			str += `同时攻击时，追加${sk[2].bigNumberToString()}点固定伤害`;
 			break;
 		case 200:
-			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0],true)}宝珠时，追加${parseBigNumber(sk[2])}点固定伤害`;
+			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0],true)}宝珠时，追加${sk[2].bigNumberToString()}点固定伤害`;
 			break;
 		case 201:
 			fullColor = sk.slice(0,4).filter(c=>c>0); //最多4串珠
@@ -1301,7 +1332,7 @@ function parseSkillDescription(skill)
 			{//光寶珠有2COMBO或以上時
 				str = `${nb(fullColor[0], attrsName).join("、")}宝珠有${sk[4]}串或以上时`;
 			}
-			if (sk[5]) str += `，追加${parseBigNumber(sk[5])}点固定伤害`;
+			if (sk[5]) str += `，追加${sk[5].bigNumberToString()}点固定伤害`;
 			break;
 		case 202:
 			fragment.appendChild(document.createTextNode("变身为"));
@@ -1394,24 +1425,6 @@ function parseSkillDescription(skill)
 	span.innerHTML = str;
 	//(skill.description.length?(descriptionToHTML(skill.description) + "<hr>"):"") + str
 	return fragment;
-}
-//大数字缩短长度
-function parseBigNumber(number)
-{
-	if (number === 0)
-	{
-		return number.toLocaleString();
-	}else if (number % 1e8 === 0)
-	{
-		return (number / 1e8).toLocaleString() + " 亿";
-	}else if (number % 1e4 === 0)
-	{
-		return (number / 1e4).toLocaleString() + " 万";
-	}else
-	{
-		return number.toLocaleString();
-	}
-	
 }
 
 //增加特殊搜索模式

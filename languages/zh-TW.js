@@ -23,4 +23,35 @@
     force_reload_data: "強制刷新數據",
 }
 
+//大數字縮短長度
+Number.prototype.bigNumberToString = function()
+{
+	let numTemp = this.valueOf();
+	if (!numTemp) return "0";
+	const grouping = Math.pow(10, 4);
+	const unit = ['','萬','億','兆','京','垓'];
+	const numParts = [];
+	do{
+		numParts.push(numTemp % grouping);
+		numTemp = Math.floor(numTemp / grouping);
+	}while(numTemp>0 && numParts.length<(unit.length-1))
+	if (numTemp>0)
+	{
+		numParts.push(numTemp);
+	}
+	let numPartsStr = numParts.map((num,idx)=>{
+		if (num > 0)
+		{
+			return (num < 1e3 ? "零" : "") + num.toLocaleString() + unit[idx];
+		}else
+			return "零";
+	});
+
+	numPartsStr.reverse(); //反向
+	let outStr = numPartsStr.join("");
+	outStr = outStr.replace(/(^零+|零+$)/g,''); //去除開頭的零
+	outStr = outStr.replace(/零{2,}/g,'零'); //去除多個連續的零
+	return outStr;
+}
+
 localisation(localTranslating);
