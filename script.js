@@ -2804,24 +2804,25 @@ function refreshAll(formationData) {
 	formationBox.appendChild(fragment);
 	txtDetail.onblur(); //这个需要放在显示出来后再改才能生效
 }
+
+function awokenSetCount(aicon, number) {
+	if (!aicon) return; //没有这个觉醒就撤回 
+	const ali = aicon.parentNode;
+	const countDom = ali.querySelector(".count");
+	countDom.textContent = number;
+	if (number)
+		ali.classList.remove(className_displayNone);
+	else
+		ali.classList.add(className_displayNone);
+}
 //刷新队伍觉醒统计
 function refreshTeamAwokenCount(awokenDom, team) {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	const awokenUL = fragment.appendChild(awokenDom.querySelector(".awoken-ul"));
 
-	function setCount(aicon, number) {
-		if (!aicon) return; //没有这个觉醒就撤回 
-		const ali = aicon.parentNode;
-		const countDom = ali.querySelector(".count");
-		countDom.textContent = number;
-		if (number)
-			ali.classList.remove(className_displayNone);
-		else
-			ali.classList.add(className_displayNone);
-	}
-	for (let ai = 1; ai <= 72; ai++) {
-		const aicon = awokenUL.querySelector(`.awoken-icon[data-awoken-icon='${ai}']`);
-		if (!aicon) continue; //如果没有这个觉醒图，直接跳过
+	const aicons = Array.from(awokenUL.querySelectorAll(`.awoken-icon[data-awoken-icon]`));
+	aicons.forEach(aicon=>{
+		const ai = parseInt(aicon.getAttribute("data-awoken-icon"),10);
 		//搜索等效觉醒
 		const equalIndex = equivalent_awoken.findIndex(eak => eak.small === ai || eak.big === ai);
 		if (equalIndex >= 0) {
@@ -2829,14 +2830,15 @@ function refreshTeamAwokenCount(awokenDom, team) {
 			if (equivalentAwoken.small === ai) {
 				const totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 					awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
-				setCount(aicon, totalNum);
+				awokenSetCount(aicon, totalNum);
 			} else {
-				continue;
+				return;
 			}
 		} else {
-			setCount(aicon, awokenCountInTeam(team, ai, solo, teamsCount));
+			awokenSetCount(aicon, awokenCountInTeam(team, ai, solo, teamsCount));
 		}
-	}
+	})
+	
 	awokenDom.appendChild(fragment);
 }
 //刷新阵型觉醒统计
@@ -2844,20 +2846,9 @@ function refreshFormationAwokenCount(awokenDom, teams) {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	const awokenUL = fragment.appendChild(awokenDom.querySelector(".awoken-ul"));
 
-	function setCount(aicon, number) {
-		if (!aicon) return; //没有这个觉醒就撤回 
-		const ali = aicon.parentNode;
-		const countDom = ali.querySelector(".count");
-		countDom.textContent = number;
-		if (number)
-			ali.classList.remove(className_displayNone);
-		else
-			ali.classList.add(className_displayNone);
-	}
-
-	for (let ai = 1; ai <= 72; ai++) {
-		const aicon = awokenUL.querySelector(`.awoken-icon[data-awoken-icon='${ai}']`);
-		if (!aicon) continue; //如果没有这个觉醒图，直接跳过
+	const aicons = Array.from(awokenUL.querySelectorAll(`.awoken-icon[data-awoken-icon]`));
+	aicons.forEach(aicon=>{
+		const ai = parseInt(aicon.getAttribute("data-awoken-icon"),10);
 		//搜索等效觉醒
 		const equalIndex = equivalent_awoken.findIndex(eak => eak.small === ai || eak.big === ai);
 		if (equalIndex >= 0) {
@@ -2865,14 +2856,15 @@ function refreshFormationAwokenCount(awokenDom, teams) {
 			if (equivalentAwoken.small === ai) {
 				const totalNum = awokenCountInFormation(teams, equivalentAwoken.small, solo) +
 					awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times;
-				setCount(aicon, totalNum);
+				awokenSetCount(aicon, totalNum);
 			} else {
-				continue;
+				return;
 			}
 		} else {
-			setCount(aicon, awokenCountInFormation(teams, ai, solo));
+			awokenSetCount(aicon, awokenCountInFormation(teams, ai, solo));
 		}
-	}
+	})
+
 	awokenDom.appendChild(fragment);
 }
 //刷新能力值
