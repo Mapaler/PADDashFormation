@@ -1725,7 +1725,7 @@ function initialize() {
 			const card = Cards[editBox.mid];
 			const decoder = new Adpcm(adpcm_wasm, pcmImportObj);
 			decoder.resetDecodeState(new Adpcm.State(0, 0));
-			decodeAudio(`sound/voice/${currentDataSource.code}/padv${card.voiceId.PrefixInteger(3)}.wav`, decoder.decode.bind(decoder));
+			decodeAudio(`sound/voice/${currentDataSource.code}/padv${card.voiceId.prefixInteger(3)}.wav`, decoder.decode.bind(decoder));
 		}
 	}
 	monEditAwokensLabel.forEach(akDom => akDom.onclick = playVoiceAwoken);
@@ -1771,14 +1771,14 @@ function initialize() {
 	monEditLv110.onclick = setIptToMyValue;
 	//编辑界面重新计算怪物的经验值
 	function reCalculateExp() {
-		const monid = parseInt(monstersID.value || 0, 10);
+		const monid = editBox.mid;
 		const level = parseInt(monEditLv.value || 0, 10);
 		const tempMon = {
 			id: monid,
 			level: level
 		};
 		const needExp = calculateExp(tempMon);
-		monLvExp.textContent = needExp ? parseBigNumber(needExp[0]) + (level > 99 ? ` + ${parseBigNumber(needExp[1])}` : "") : "";
+		monLvExp.textContent = needExp ? needExp[0].parseBigNumber() + (level > 99 ? ` + ${needExp[1].parseBigNumber()}` : "") : "";
 	}
 	editBox.reCalculateExp = reCalculateExp;
 	//三维

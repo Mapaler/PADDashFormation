@@ -50,10 +50,26 @@ function getQueryString(name,url) {
 }
 
 //数字补前导0
-Number.prototype.PrefixInteger = function(length)
+Number.prototype.prefixInteger = function(length, useGrouping = false)
 {  
-	return (Array(length).join('0') + this).slice(-length); 
+	return this.toLocaleString(undefined,
+		{
+			useGrouping: useGrouping,
+			minimumIntegerDigits: length
+		});
 }
+//数字补前导0
+Number.prototype.parseBigNumber = function()
+{  
+	return this.toLocaleString();
+}
+
+//大数字缩短长度，默认返回本地定义字符串
+function parseBigNumber(number)
+{
+	return number.toLocaleString();
+}
+
 //数组删除自己尾部的空元素
 Array.prototype.DeleteLatter = function(item = null)
 {
