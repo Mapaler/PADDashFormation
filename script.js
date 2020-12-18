@@ -2821,24 +2821,29 @@ function refreshTeamAwokenCount(awokenDom, team) {
 	const awokenUL = fragment.appendChild(awokenDom.querySelector(".awoken-ul"));
 
 	const aicons = Array.from(awokenUL.querySelectorAll(`.awoken-icon[data-awoken-icon]`));
-	aicons.forEach(aicon=>{
+	const acs = aicons.map(aicon=>{
 		const ai = parseInt(aicon.getAttribute("data-awoken-icon"),10);
+		let totalNum = 0;
 		//搜索等效觉醒
-		const equalIndex = equivalent_awoken.findIndex(eak => eak.small === ai || eak.big === ai);
-		if (equalIndex >= 0) {
-			const equivalentAwoken = equivalent_awoken[equalIndex];
-			if (equivalentAwoken.small === ai) {
-				const totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
-					awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
-				awokenSetCount(aicon, totalNum);
-			} else {
-				return;
-			}
-		} else {
-			awokenSetCount(aicon, awokenCountInTeam(team, ai, solo, teamsCount));
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ai || eak.big === ai);
+		if (equivalentAwoken && equivalentAwoken.small === ai)
+		{
+			totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
+				awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+		} else
+		{
+			totalNum = awokenCountInTeam(team, ai, solo, teamsCount);
 		}
-	})
-	
+		awokenSetCount(aicon, totalNum);
+		return {a:ai,c:totalNum};
+	});
+	if (acs.every(ac=>ac.c==0))
+	{
+		awokenDom.classList.add(className_displayNone);
+	} else
+	{
+		awokenDom.classList.remove(className_displayNone);
+	}
 	awokenDom.appendChild(fragment);
 }
 //刷新阵型觉醒统计
@@ -2847,24 +2852,29 @@ function refreshFormationAwokenCount(awokenDom, teams) {
 	const awokenUL = fragment.appendChild(awokenDom.querySelector(".awoken-ul"));
 
 	const aicons = Array.from(awokenUL.querySelectorAll(`.awoken-icon[data-awoken-icon]`));
-	aicons.forEach(aicon=>{
+	const acs = aicons.map(aicon=>{
 		const ai = parseInt(aicon.getAttribute("data-awoken-icon"),10);
+		let totalNum = 0;
 		//搜索等效觉醒
-		const equalIndex = equivalent_awoken.findIndex(eak => eak.small === ai || eak.big === ai);
-		if (equalIndex >= 0) {
-			const equivalentAwoken = equivalent_awoken[equalIndex];
-			if (equivalentAwoken.small === ai) {
-				const totalNum = awokenCountInFormation(teams, equivalentAwoken.small, solo) +
-					awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times;
-				awokenSetCount(aicon, totalNum);
-			} else {
-				return;
-			}
-		} else {
-			awokenSetCount(aicon, awokenCountInFormation(teams, ai, solo));
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ai || eak.big === ai);
+		if (equivalentAwoken && equivalentAwoken.small === ai)
+		{
+			totalNum = awokenCountInFormation(teams, equivalentAwoken.small, solo) +
+				awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times;
+		} else
+		{
+			totalNum = awokenCountInFormation(teams, ai, solo);
 		}
-	})
-
+		awokenSetCount(aicon, totalNum);
+		return {a:ai,c:totalNum};
+	});
+	if (acs.every(ac=>ac.c==0))
+	{
+		awokenDom.classList.add(className_displayNone);
+	} else
+	{
+		awokenDom.classList.remove(className_displayNone);
+	}
 	awokenDom.appendChild(fragment);
 }
 //刷新能力值
