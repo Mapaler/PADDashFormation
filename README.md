@@ -98,6 +98,7 @@ Please refer to existing files.
 * [퍼즐앤드래곤](https://pad.neocyon.com/W/)
 
 # 使用开源软件 | Open source software used
+* [Puzzle-and-Dragons-Texture-Tool](//github.com/codywatts/Puzzle-and-Dragons-Texture-Tool) //Extract Images
 * [pad-rikuu](//github.com/kiootic/pad-rikuu) //Parse data
 * [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
 * [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
