@@ -25,7 +25,7 @@ If your simulator needs Android 7 to play PAD. Take the [Nox Player](https://www
 	1. 将 Fidder 根证书导出到桌面  
 	Export the Fidder Root Certificate to desktop
 	1. 在电脑上找一个 **openssl.exe** 程序  
-	Find an **opensl.exe** program on computer
+	Find an **openssl.exe** program on computer
 	1. 执行代码，将证书由 *CER* 转换为 *PEM* 格式  
 	Execute the code to convert the certificate from *CER* to *PEM* format  
 	`openssl x509 -inform DER -in FiddlerRoot.cer -out cacert.pem`
@@ -106,14 +106,12 @@ Add the following code to `OnBeforeResponse` of Fidder's **Customize Rules** to 
 	}
 	```
 
-* 使用 [pad-rikuu](//github.com/kiootic/pad-rikuu) 的 Card 解析代码  
-Parse  Using the Card parsing code of the [pad-rikuu](//github.com/kiootic/pad-rikuu).
-
 * 运行`提取整合怪物信息.bat`   
 Execute the following code in CMD
 	```bat
 	node.exe extractByNode.js
 	```
+
 * 会将每种语言的信息提取到一个文件内，互相之间也保留有不同语言的怪物名称、标签数据  
 Each language's information is extracted into a file, and monster names and tag data in different languages are retained from each other
 
