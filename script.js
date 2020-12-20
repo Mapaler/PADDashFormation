@@ -2826,10 +2826,13 @@ function refreshTeamAwokenCount(awokenDom, team) {
 		let totalNum = 0;
 		//搜索等效觉醒
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ai || eak.big === ai);
-		if (equivalentAwoken && equivalentAwoken.small === ai)
+		if (equivalent_awoken)
 		{
-			totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
-				awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+			if (equivalentAwoken.small === ai)
+			{
+				totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
+					awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+			}
 		} else
 		{
 			totalNum = awokenCountInTeam(team, ai, solo, teamsCount);
@@ -2857,10 +2860,13 @@ function refreshFormationAwokenCount(awokenDom, teams) {
 		let totalNum = 0;
 		//搜索等效觉醒
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ai || eak.big === ai);
-		if (equivalentAwoken && equivalentAwoken.small === ai)
+		if (equivalentAwoken)
 		{
-			totalNum = awokenCountInFormation(teams, equivalentAwoken.small, solo) +
-				awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times;
+			if (equivalentAwoken.small === ai)
+			{
+				totalNum = awokenCountInFormation(teams, equivalentAwoken.small, solo) +
+					awokenCountInFormation(teams, equivalentAwoken.big, solo) * equivalentAwoken.times;
+			}
 		} else
 		{
 			totalNum = awokenCountInFormation(teams, ai, solo);
