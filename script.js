@@ -2826,7 +2826,7 @@ function refreshTeamAwokenCount(awokenDom, team) {
 		let totalNum = 0;
 		//搜索等效觉醒
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ai || eak.big === ai);
-		if (equivalent_awoken)
+		if (equivalentAwoken)
 		{
 			if (equivalentAwoken.small === ai)
 			{
