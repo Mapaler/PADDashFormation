@@ -245,7 +245,7 @@
 .control-box .btn-swap-ABC-team::before{
 	content: "🔄ローテーションABCチーム";
 }
-.control-box .lbl-henshen-change::before{
+.control-box .lbl-henshin-change::before{
 	content: "🕴️変身";
 }
 .control-box .show-mon-id-lbl::after{

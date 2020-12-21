@@ -1949,6 +1949,11 @@ ul{
 .control-box .languages-label::before{
 	content: "🌐Lanuage:";
 }
+.control-box .lbl-henshin-change,
+.help-link
+{
+	display: inline-block;
+}
 
 .control-box .solo-link::before{
 	content: "Jump To Solo Version";

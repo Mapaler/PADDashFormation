@@ -248,7 +248,7 @@
 .control-box .btn-swap-ABC-team::before{
 	content: "🔄轮换ABC队";
 }
-.control-box .lbl-henshen-change::before{
+.control-box .lbl-henshin-change::before{
 	content: "🕴️变身";
 }
 .control-box .show-mon-id-lbl::after{

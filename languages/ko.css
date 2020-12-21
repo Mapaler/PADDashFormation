@@ -242,7 +242,7 @@
 .control-box .btn-swap-ABC-team::before{
 	content: "🔄로테이션 ABC 팀";
 }
-.control-box .lbl-henshen-change::before{
+.control-box .lbl-henshin-change::before{
 	content: "🕴️변신";
 }
 .control-box .show-mon-id-lbl::after{
