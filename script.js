@@ -2924,12 +2924,17 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][0].id : teams[1][0][0].id) : team[0][5].id;
 
 	if (tHpDom) {
+		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true);
+		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true);
+		const totalReduce = 1 - (1 - reduceScale1) * (1 - reduceScale2);
 
 		const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
 		const teamHPNoAwokenArr = countTeamHp(team[0], leader1id, leader2id, solo, true);
 
-		const tHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
-		const tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v) => pv + v); //队伍计算的总HP无觉醒
+
+		let tHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
+		let tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v) => pv + v); //队伍计算的总HP无觉醒
+
 
 		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
 
@@ -2940,8 +2945,13 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 			badgeHPScale = 1.15;
 		}
 
-		tHpDom.textContent = Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale) +
-			` (${Math.round(Math.round(tHPNoAwoken) * badgeHPScale)})`;
+		tHP = Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale);
+		tHPNoAwoken = Math.round(Math.round(tHPNoAwoken) * badgeHPScale);
+
+		const tReduceHP = tHP / (1 - reduceScale1) / (1 - reduceScale2); //队伍正常满血加上盾能承受的最大伤害
+
+		tHpDom.textContent = tHP +
+			` (${tHPNoAwoken}) >> Max ${Math.round(tReduceHP)}(-${(totalReduce * 100).toFixed(2)}%)`;
 	}
 
 	if (tMoveDom) {
@@ -2964,8 +2974,14 @@ function refreshFormationTotalHP(totalDom, teams) {
 		//因为目前仅用于2P，所以直接在外面固定写了
 		const leader1id = teams[0][0][0].id;
 		const leader2id = teams[1][0][0].id;
+
+		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true);
+		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true);
+		const totalReduce = 1 - (1 - reduceScale1) * (1 - reduceScale2);
+
 		const tHPArr = teams.map(function(team) {
 			const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
+
 
 			const teamTHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
 			const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
@@ -2981,8 +2997,10 @@ function refreshFormationTotalHP(totalDom, teams) {
 		const tHP = tHPArr.reduce((pv, v) => pv + v);
 		const tHPNoAwoken = tHPNoAwokenArr.reduce((pv, v) => pv + v);
 
+		const tReduceHP = tHP / (1 - reduceScale1) / (1 - reduceScale2); //队伍正常满血加上盾能承受的最大伤害
+
 		tHpDom.textContent = tHP.toString() +
-			` (${tHPNoAwoken})`;
+			` (${tHPNoAwoken}) >> Max ${Math.round(tReduceHP)}(-${(totalReduce * 100).toFixed(2)}%)`;
 	}
 }
 //刷新单人技能CD
