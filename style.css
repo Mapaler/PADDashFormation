@@ -79,6 +79,7 @@ body{
 	box-sizing: border-box;
 	padding: 1px;
 	margin: 0;
+	white-space: pre-wrap;
 }
 
 .guide-mod .control-box>div.status
