@@ -1395,16 +1395,7 @@ ul{
 .monster-rare[data-rarity='8']::after{content: "★★★★★★★★";}
 .monster-rare[data-rarity='9']::after{content: "★★★★★★★★★";}
 .monster-rare[data-rarity='10']::after{content: "★★★★★★★★★★";}
-.monster-rare[data-rarity='1']::before{content: "1";}
-.monster-rare[data-rarity='2']::before{content: "2";}
-.monster-rare[data-rarity='3']::before{content: "3";}
-.monster-rare[data-rarity='4']::before{content: "4";}
-.monster-rare[data-rarity='5']::before{content: "5";}
-.monster-rare[data-rarity='6']::before{content: "6";}
-.monster-rare[data-rarity='7']::before{content: "7";}
-.monster-rare[data-rarity='8']::before{content: "8";}
-.monster-rare[data-rarity='9']::before{content: "9";}
-.monster-rare[data-rarity='10']::before{content: "10";}
+.monster-rare::before{content: attr(data-rarity);}
 
 .monsterinfo-box .monster-mp::before
 {
