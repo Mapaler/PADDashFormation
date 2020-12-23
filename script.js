@@ -1486,8 +1486,8 @@ function initialize() {
 		s_awokensCounts.forEach(t => {
 			t.value = 0;
 		});
-		s_awokensLi.forEach(t => {
-			t.classList.add("zero");
+		s_awokensIcons.forEach(t => {
+			t.setAttribute("value", 0);
 		});
 	};
 	sawokenClear.onclick = function() { //清空超觉醒选项
