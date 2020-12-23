@@ -692,23 +692,46 @@ function countMoveTime(team, leader1id, leader2id, teamIdx)
 	const time1 = leaderSkillMoveTime(ls1);
 	const time2 = leaderSkillMoveTime(ls2);
 
-	let moveTime = {fixed:false,duration:5}; //基础5秒
+	let moveTime = {
+		fixed:false,
+		duration:{
+			default:5,
+			leader:0,
+			badge:0,
+			awoken:0,
+		}
+	}; //基础5秒
 	//固定操作时间的直接返回
 	if (time1.fixed || time2.fixed)
 	{
 		moveTime.fixed = true;
-		moveTime.duration = time1.fixed ?
-		(time2.fixed && time2.duration < time1.duration ? time2.duration : time1.duration) :
+		moveTime.duration.leader = time1.fixed ?
+		(time2.fixed ? Math.min(time1.duration, time2.duration) : time1.duration) :
 		time2.duration;
 	} else
 	{
-		moveTime.duration += time1.duration + time2.duration
-		//2人协力时的特殊处理
-		if (teamsCount === 2)
+		moveTime.duration.leader = time1.duration + time2.duration;
+
+		//1人、3人计算徽章
+		if (solo || teamsCount === 3)
+		{
+			//徽章部分
+			if (team[2] == 1) //小手指
+			{
+				moveTime.duration.badge = 1;
+			} else if (team[2] == 13) //大手指
+			{
+				moveTime.duration.badge = 2;
+			} else if (team[2] == 18) //月卡
+			{
+				moveTime.duration.badge = 3;
+			}
+		}
+		else if (teamsCount === 2) //2人协力时的特殊处理
 		{
 			const teams = formation.teams;
 			const team2 = teamIdx === 1 ? teams[0] : teams[1]; //获取队伍2
-			//复制队伍1
+			//复制队伍1，这里参数里的 team 换成了一个新的数组
 			team = [
 				team[0].concat(),
 				team[1].concat()
@@ -718,19 +741,12 @@ function countMoveTime(team, leader1id, leader2id, teamIdx)
 			team[1].push(team2[1][0]);
 		}
 
-		//徽章部分
-		if (team[2] == 1 && (solo || teamsCount === 3)) {
-			moveTime.duration += 1;
-		} else if (team[2] == 13 && (solo || teamsCount === 3)) {
-			moveTime.duration += 2;
-		}
-
 		//觉醒
 		const awokenMoveTime = [
 			{index:19,value:0.5}, //小手指
 			{index:53,value:1}, //大手指
 		];
-		moveTime.duration += awokenMoveTime.reduce((duration,aw)=>
+		moveTime.duration.awoken += awokenMoveTime.reduce((duration,aw)=>
 			duration + awokenCountInTeam(team, aw.index, solo, teamsCount) * aw.value
 		,0);
 		//潜觉
@@ -739,7 +755,7 @@ function countMoveTime(team, leader1id, leader2id, teamIdx)
 			{index:31,value:0.12}, //大手指潜觉
 		];
 
-		moveTime.duration += latentMoveTime.reduce((duration,la)=>
+		moveTime.duration.awoken += latentMoveTime.reduce((duration,la)=>
 			duration + team[0].reduce((count,menber)=>
 				count + (menber.latent ? menber.latent.filter(l=>l==la.index).length : 0)
 			,0) * la.value

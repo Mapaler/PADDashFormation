@@ -1974,18 +1974,26 @@ function initialize() {
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
 		refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
 
-		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
-		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
-		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
+		//如果是2人协力，且修改的是队长的情况，为了刷新另一个队伍时间计算，直接刷新整个队形
+		if (teamsCount === 2 && editBox.memberIdx[2] === 0)
+		{
+			refreshAll(formation);
+		}else
+		{
+			const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
+			if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
+			const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
+			if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
+	
+			const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
+			if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
+			const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
+			if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
+	
+			//刷新改队员的CD
+			refreshMemberSkillCD(teamBox, teamData, editBox.memberIdx[2]);
+		}
 
-		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
-		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
-		const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
-		if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
-
-		//刷新改队员的CD
-		refreshMemberSkillCD(teamBox, teamData, editBox.memberIdx[2]);
 		creatNewUrl();
 		editBox.hide();
 	};
@@ -2956,11 +2964,19 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 	if (tMoveDom) {
 		const moveTime = countMoveTime(team, leader1id, leader2id, teamIdx);
-		tMoveDom.textContent = moveTime.duration;
-		if (moveTime.fixed)
+		//tMoveDom.textContent = moveTime.duration;
+		if (moveTime.fixed) //固定时间的
+		{
 			tMoveDom.classList.add("fixed-move-time");
-		else
+			tMoveDom.setAttribute("data-no-awoken",moveTime.duration.leader);
+			tMoveDom.setAttribute("data-general",moveTime.duration.leader);
+		} else
+		{
 			tMoveDom.classList.remove("fixed-move-time");
+			tMoveDom.setAttribute("data-no-awoken",moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge);
+			tMoveDom.setAttribute("data-general",moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge + moveTime.duration.awoken);
+		}
+		
 	}
 }
 //刷新所有队伍能力值合计

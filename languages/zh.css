@@ -265,16 +265,16 @@
 }
 
 .team-total-info .tIf-total-hp::before{
-	content: "队伍HP (无觉醒)：";
+	content: "队伍HP ：";
 }
 .team-total-info .tIf-total-move::before{
-	content: "队伍操作时间：";
+	content: "操作时间：";
 }
 .team-total-info .tIf-total-move::after{
-	content: " 秒";
+	content: attr(data-general) " 秒 (封觉醒时 " attr(data-no-awoken) " 秒)";
 }
 .team-total-info .tIf-total-move.fixed-move-time::after{
-	content: " 秒 (固定)";
+	content: attr(data-general) " 秒 (固定)";
 }
 .formation-total-info .tIf-total-hp::before{
 	content: "总HP (无觉醒)：";

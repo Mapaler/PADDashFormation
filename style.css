@@ -486,24 +486,6 @@ ul{
 	width: var(--head-block-width);
 	height: var(--head-block-height);
 }
-.show-team-name-left .team-box-name::before{
-	display: inline-block;
-}
-.show-team-name-right .team-box-name::after{
-	display: inline-block;
-}
-.show-team-name-right .team-total-info .team-awoken,
-.show-team-name-right .team-total-info>div,
-.show-team-name-left .team-total-info .team-awoken,
-.show-team-name-left .team-total-info>div
-{
-	display: inline-block;
-}
-.show-team-name-right .team-total-info .team-awoken::before,
-.show-team-name-left .team-total-info .team-awoken::before
-{
-	display: none;
-}
 
 
 .reverse-member-assist .team-box-name::after,
