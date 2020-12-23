@@ -15,6 +15,7 @@ let showSearch; //整个程序都可以用的显示搜索函数
 
 const dataStructure = 3; //阵型输出数据的结构版本
 const className_displayNone = "display-none";
+const dataAttrName = "data-value"; //用于储存默认数据的属性名
 const isGuideMod = Boolean(parseInt(getQueryString("guide"))); //是否以图鉴模式启动
 
 if (location.search.includes('&amp;')) {
@@ -1057,14 +1058,14 @@ function initialize() {
 
 	const mSeriesId = smonsterinfoBox.querySelector(".monster-seriesId");
 	mSeriesId.onclick = function() { //搜索系列
-		const seriesId = parseInt(this.getAttribute('data-seriesId'), 10);
+		const seriesId = parseInt(this.getAttribute(dataAttrName), 10);
 		if (seriesId > 0) {
 			showSearch(Cards.filter(card => card.seriesId == seriesId));
 		}
 	};
 	const mCollabId = smonsterinfoBox.querySelector(".monster-collabId");
 	mCollabId.onclick = function() { //搜索合作
-		const collabId = parseInt(this.getAttribute('data-collabId'), 10);
+		const collabId = parseInt(this.getAttribute(dataAttrName), 10);
 		if (collabId > 0); {
 			showSearch(Cards.filter(card => card.collabId == collabId));
 		}
@@ -1425,6 +1426,7 @@ function initialize() {
 		if (count < 9) {
 			count++;
 			countDom.value = count;
+			//this.setAttribute("value", count);
 			this.parentNode.classList.remove("zero");
 		}
 	}
@@ -2482,16 +2484,16 @@ function editBoxChangeMonId(id) {
 	const mName = monInfoBox.querySelector(".monster-name");
 	mName.textContent = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
 	const mSeriesId = monInfoBox.querySelector(".monster-seriesId");
-	mSeriesId.textContent = card.seriesId;
-	mSeriesId.setAttribute("data-seriesId", card.seriesId);
+	//mSeriesId.textContent = card.seriesId;
+	mSeriesId.setAttribute(dataAttrName, card.seriesId);
 	if (card.seriesId == 0) {
 		mSeriesId.classList.add(className_displayNone);
 	} else {
 		mSeriesId.classList.remove(className_displayNone);
 	}
 	const mCollabId = monInfoBox.querySelector(".monster-collabId");
-	mCollabId.textContent = card.collabId;
-	mCollabId.setAttribute("data-collabId", card.collabId);
+	//mCollabId.textContent = card.collabId;
+	mCollabId.setAttribute(dataAttrName, card.collabId);
 	if (card.collabId == 0) {
 		mCollabId.classList.add(className_displayNone);
 	} else {
@@ -2550,33 +2552,6 @@ function editBoxChangeMonId(id) {
 		}
 	});
 	evoLinkCardsIdArray.sort((a,b)=>a-b);
-	/*const evoLinkCardsSet = new Set(Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id)); //筛选出相同进化链的
-	if (card.henshinFrom || card.henshinTo)
-	{  //添加变身的
-		function loopAddHenshin(setObj,card)
-		{
-			const tcard1 = Cards[card.henshinFrom] || null;
-			const tcard2 = Cards[card.henshinTo] || null;
-			const evoCards = Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id);
-			if (tcard1 && !setObj.has(tcard1.id))
-			{
-				setObj.add(tcard1.id);
-				loopAddHenshin(setObj,tcard1);
-			}
-			if (tcard2 && !setObj.has(tcard2.id))
-			{
-				setObj.add(tcard2.id);
-				loopAddHenshin(setObj,tcard2);
-			}
-			if (evoCards.length > 0)
-			{
-				evoCards.forEach(id=>setObj.add(id));
-			}
-		}
-		loopAddHenshin(evoLinkCardsSet,card);
-	}*/
-	//const evoLinkCardsIdArray = Array.from(evoLinkCardsSet).sort((a,b)=>a-b);
-	//const evoLinkCardsIdArray = Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id);
 
 	const createCardHead = editBox.createCardHead;
 	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
@@ -2646,7 +2621,8 @@ function editBoxChangeMonId(id) {
 	monEditSAwokensRow.querySelector("#sawoken-choice--1").click(); //选中隐藏的空超觉
 
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
-	monEditLvMax.textContent = monEditLvMax.value = card.maxLevel;
+	//monEditLvMax.textContent = monEditLvMax.value = card.maxLevel;
+	monEditLvMax.value = card.maxLevel;
 	const monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.max = monEditLv.value = card.maxLevel + (card.limitBreakIncr ? 11 : 0); //默认等级为110
 	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
@@ -2695,7 +2671,7 @@ function editBoxChangeMonId(id) {
 	skillLevel.max = t_maxLevel;
 	skillLevel.value = t_maxLevel;
 	skillLevel_Max.value = t_maxLevel;
-	skillLevel_Max.textContent = skill.maxLevel;
+	//skillLevel_Max.textContent = skill.maxLevel;
 	skillCD.textContent = skill.initialCooldown - t_maxLevel + 1;
 
 	rowSkill.appendChild(fragment);
@@ -2922,9 +2898,8 @@ function refreshAbility(abilityDom, team, idx) {
 function setTextContentAndAttribute(dom,str)
 {
 	if (!dom) return;
-	const attrName = "data-value";
 	dom.textContent = str;
-	dom.setAttribute(attrName, str);
+	dom.setAttribute(dataAttrName, str);
 }
 
 //刷新队伍能力值合计

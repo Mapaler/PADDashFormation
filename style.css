@@ -1356,8 +1356,17 @@ ul{
 	text-overflow:ellipsis;
 	overflow:hidden;
 }
+.monsterinfo-box .monster-seriesId::after,
+.monsterinfo-box .monster-collabId::after
+{
+	content: attr(data-value);
+}
 .monsterinfo-box .monster-seriesId:hover::after,
 .monsterinfo-box .monster-collabId:hover::after,
+.monsterinfo-box .monster-altName:hover::after
+{
+	content: attr(data-value) "🔍";
+}
 .monsterinfo-box .monster-altName:hover::after
 {
 	content: "🔍";
@@ -1590,6 +1599,10 @@ ul{
 {
 	content: "+";
 }
+.row-mon-plus .m-plus-btn::after
+{
+	content: attr(value);
+}
 .row-mon-plus .m-plus-btn
 {
 	padding: 0 3px;
@@ -1651,6 +1664,12 @@ ul{
 	box-sizing: border-box;
 	font-size: 18px;
 	padding: 0 3px;
+}
+.row-mon-level .m-level-btn-min::after,
+.row-mon-level .m-level-btn-max::after,
+.row-mon-level .m-level-btn-110::after
+{
+	content: attr(value);
 }
 .m-level-btn-110
 {
@@ -1773,6 +1792,11 @@ ul{
 .skill-box .m-skill-lv-max::before{
 	content: "最高Lv";
 }*/
+.skill-box .m-skill-lv-1::after,
+.skill-box .m-skill-lv-max::after
+{
+	content: attr(value);
+}
 .skill-box{
 	font-family: var(--game-font-family);
 	font-size: 16px;
