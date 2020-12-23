@@ -334,7 +334,7 @@
 	content: "稀有（OR）：";
 }
 .search-box .awoken-div::before{
-	content: "▼觉醒（AND）（提示：点击数字可减少数值）";
+	content: "▼觉醒（AND）（提示：长按清除）";
 }
 .search-box .sawoken-div::before{
 	content: "▼超觉醒（OR）";

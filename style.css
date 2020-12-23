@@ -1189,10 +1189,44 @@ ul{
 /*.search-box .awoken-div::before{
 	content: "觉醒";
 }*/
-.search-box .awoken-div .awoken-option
-{
-	display: inline;
+
+.awoken-div,
+.sawoken-div{
+	display: inline-block;
 }
+.awoken-div .awoken-icon{
+	position: relative;
+	opacity: var(--search-icon-unchecked);
+}
+.awoken-div .awoken-icon:not([value="0"]){
+	opacity: 1;
+}
+.awoken-div .awoken-icon~.count-symbol{
+	opacity: var(--search-icon-unchecked);
+}
+.awoken-div .awoken-icon:not([value="0"])~.count-symbol{
+	opacity: 1;
+}
+
+.awoken-div .awoken-icon::before{
+	display: none;
+}
+.awoken-div .awoken-icon:not([value="0"])::before{
+	display: inline-block;
+	content: attr(value);
+	position: absolute;
+	line-height: 18px;
+	font-size: 18px;
+	right: 0;
+	bottom: 0;
+	-webkit-text-stroke: 1px black;
+	text-stroke: 1px black;
+	text-shadow: black 1px 1px 1px;
+}
+.count-symbol{
+	display: none !important;
+}
+
 .search-box .awoken-div .awoken-clear::before,
 .search-box .sawoken-div .sawoken-clear::before
 {
@@ -1202,11 +1236,10 @@ ul{
 .search-box .sawoken-div .sawoken-clear
 {
 	padding: 0;
-	float: right;
 }
 .awoken-div .awoken-ul.official-awoken-sorting
 {
-	width: 620px;
+	width: 350px;
 }
 .awoken-ul .awoken-count
 {
@@ -1215,7 +1248,8 @@ ul{
 	font-family: var(--game-font-family);
 
 	display: inline-block;
-	margin-right: 3px;
+	margin-right: 5px;
+	margin-top: 5px;
 }
 .awoken-ul .count
 {
@@ -1277,6 +1311,7 @@ ul{
 .sawoken-div .sawoken-ul .awoken-count
 {
 	margin-right: 5px;
+	margin-top: 5px;
 }
 
 .control-div button{

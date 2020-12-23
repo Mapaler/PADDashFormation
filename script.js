@@ -1426,12 +1426,43 @@ function initialize() {
 		if (count < 9) {
 			count++;
 			countDom.value = count;
-			//this.setAttribute("value", count);
-			this.parentNode.classList.remove("zero");
+			this.setAttribute("value", count);
+			//this.parentNode.classList.remove("zero");
 		}
 	}
+	function search_awokenClear() {
+		this.setAttribute("value", 0);
+		const countDom = this.parentNode.querySelector(".count");
+		countDom.value = 0;
+		//this.parentNode.classList.add("zero");
+	}
+	const longPressDuration = 1000; //1秒钟
+	function search_awokenLongPressStart(e) {
+		let _this = this;
+		this.longPress = setTimeout(function(){
+			search_awokenClear.apply(_this);
+		}, longPressDuration);
+		this.startTime = new Date(); //仅仅给自己设一个开始时间
+	}
+	function search_awokenLongPressEnd(e) {
+		const endTime = new Date();
+		if ((endTime - this.startTime) < longPressDuration)
+		{
+			search_awokenAdd1.apply(this);
+		}
+		clearTimeout(this.longPress);
+		this.startTime = null;
+	}
+	function search_awokenLongPressBreak(e) {
+		const endTime = new Date();
+		clearTimeout(this.longPress);
+		this.startTime = null;
+	}
 	s_awokensIcons.forEach((b, idx) => { //每种觉醒增加1
-		b.onclick = search_awokenAdd1;
+		//b.onclick = search_awokenAdd1;
+		b.onmousedown = search_awokenLongPressStart;
+		b.onmouseup = search_awokenLongPressEnd;
+		b.onmouseout = search_awokenLongPressBreak;
 	});
 
 	function search_awokenSub1() {
@@ -1439,8 +1470,9 @@ function initialize() {
 		if (count > 0) {
 			count--;
 			this.value = count;
+			this.parentNode.parentNode.querySelector(".awoken-icon").setAttribute("value", count);
 			if (count === 0) {
-				this.parentNode.parentNode.classList.add("zero");
+				//this.parentNode.parentNode.classList.add("zero");
 			}
 		}
 	}
