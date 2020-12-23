@@ -264,20 +264,10 @@
 	content:"拖拽時使用“複製”而不是“替換”";
 }
 
-.team-total-info .tIf-total-hp::before{
-	content: "隊伍HP (無覺醒)：";
-}
-.team-total-info .tIf-total-move::before{
-	content: "隊伍操作時間：";
-}
-.team-total-info .tIf-total-move::after{
+.tIf-total-move .general::after,
+.tIf-total-move .awoken-bind::after
+{
 	content: " 秒";
-}
-.team-total-info .tIf-total-move.fixed-move-time::after{
-	content: " 秒（固定）";
-}
-.formation-total-info .tIf-total-hp::before{
-	content: "總HP (無覺醒)：";
 }
 
 .setting-box .row-mon-id .open-search::before{

@@ -25,6 +25,26 @@ const teamsCount = 2;
 <script type="text/javascript">
 var formation = new Formation(teamsCount,5);
 </script>
+<style type="text/css">
+.show-team-name-left .team-box-name::before{
+	display: inline-block;
+}
+.show-team-name-right .team-box-name::after{
+	display: inline-block;
+}
+.show-team-name-right .team-total-info .team-awoken,
+.show-team-name-right .team-total-info>div,
+.show-team-name-left .team-total-info .team-awoken,
+.show-team-name-left .team-total-info>div
+{
+	display: inline-block;
+}
+.show-team-name-right .team-total-info .team-awoken::before,
+.show-team-name-left .team-total-info .team-awoken::before
+{
+	display: none;
+}
+</style>
 </head>
 
 <body>
@@ -53,11 +73,20 @@ var formation = new Formation(teamsCount,5);
 	</div>
 	<div class="formation-box">
 		<div class="title-box edit"><input type="text" class="title" placeholder="输入队伍标题" /><h1 class="title-display"></h1></div>
-		<div class="formation-total-info"><div class="tIf-total-hp"></div></div>
+		<div class="formation-total-info">
+			<div class="tIf-total-hp">
+				<span class="general"></span>
+				<span class="awoken-bind"></span>
+				<span class="reduce"></span>
+			</div>
+		</div>
 		<ul class="teams">
 			<li class="team-bigbox team-1 show-team-name-right">
 				<div class="team-total-info">
-					<div class="tIf-total-move"></div>
+					<div class="tIf-total-move">
+						<span class="general"></span>
+						<span class="awoken-bind"></span>
+					</div>
 					<div class="team-awoken">
 						<!--怪物觉醒-->
 						<ul class="awoken-ul">
@@ -439,7 +468,10 @@ var formation = new Formation(teamsCount,5);
 					</div>
 				</div>
 				<div class="team-total-info">
-					<div class="tIf-total-move"></div>
+					<div class="tIf-total-move">
+						<span class="general"></span>
+						<span class="awoken-bind"></span>
+					</div>
 					<div class="team-awoken">
 						<!--怪物觉醒-->
 						<ul class="awoken-ul">

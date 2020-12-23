@@ -269,20 +269,10 @@
 	content:"Change \"Swap\" to \"Copy\" when dragging";
 }
 
-.team-total-info .tIf-total-hp::before{
-	content: "Team HP (No Awoken): ";
-}
-.team-total-info .tIf-total-move::before{
-	content: "Team Move Time: ";
-}
-.team-total-info .tIf-total-move::after{
-	content: "s";
-}
-.team-total-info .tIf-total-move.fixed-move-time::after{
-	content: "s (Fiexd)";
-}
-.formation-total-info .tIf-total-hp::before{
-	content: "Total HP (No Awoken): ";
+.tIf-total-move .general::after,
+.tIf-total-move .awoken-bind::after
+{
+	content: " sec";
 }
 
 .setting-box .row-mon-id .open-search::before{
