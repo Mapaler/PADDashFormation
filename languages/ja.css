@@ -261,20 +261,10 @@
 	content:"ドラッグ時に「スワップ」を「コピー」に変更";
 }
 
-.team-total-info .tIf-total-hp::before{
-	content: "チームHP (覚醒無効):";
-}
-.team-total-info .tIf-total-move::before{
-	content: "操作時間:";
-}
-.team-total-info .tIf-total-move::after{
-	content: attr(data-general) " 秒 (覚醒無効な場合 " attr(data-no-awoken) " 秒)";
-}
-.team-total-info .tIf-total-move.fixed-move-time::after{
-	content: attr(data-general) " 秒 (固定)";
-}
-.formation-total-info .tIf-total-hp::before{
-	content: "総HP (覚醒無効):";
+.tIf-total-move .general::after,
+.tIf-total-move .awoken-bind::after
+{
+	content: " 秒";
 }
 
 .setting-box .row-mon-id .open-search::before{

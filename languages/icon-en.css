@@ -20,3 +20,12 @@
 {
 	background-position-x: -36px;
 }
+
+.tIf-total-hp .awoken-bind::before,
+.tIf-total-move .awoken-bind::before
+{
+    background-position-x: -16px;
+}
+.tIf-total-hp .reduce::before{
+    background-position-x: -16px;
+}

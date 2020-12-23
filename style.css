@@ -558,11 +558,67 @@ ul{
 {
 	display: inline-block;
 }
-/*
-.team-info .tIf-total-hp,.team-info .tIf-total-rcv{
-	display:inline-block;
+/*各种信息统计的图标*/
+.tIf-total-hp::before,
+.tIf-total-move::before,
+.tIf-total-hp .awoken-bind::before,
+.tIf-total-move .awoken-bind::before,
+.tIf-total-move.fixed-move-time::after,
+.tIf-total-hp .reduce::before
+{
+	content: " ";
+    background-size: cover;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
 }
-*/
+.tIf-total-hp .awoken-bind::before,
+.tIf-total-move .awoken-bind::before
+{
+	background-image: url(images/icon-awoken-bind.png);
+}
+
+.tIf-total-hp::before{
+	background-image: url(images/icon-HP.png);
+}
+
+.tIf-total-hp .reduce::before{
+	background-image: url(images/icon-reduce.png);
+}
+.tIf-total-hp .reduce::after{
+	content: "%";
+}
+.tIf-total-hp .max-equal::before{
+	content: "⇔";
+}
+
+.tIf-total-move::before{
+	background-image: url(images/icon-orb-move-time.png);
+}
+/*固定手指的情况*/
+.tIf-total-move.fixed-move-time .awoken-bind
+{
+	display: none;
+}
+.tIf-total-move.fixed-move-time{
+    position: relative;
+}
+@keyframes hidden-visible-animate{
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0.3;
+	}
+}
+.tIf-total-move.fixed-move-time::after{
+	background-image: url(images/icon-bind.png);
+    position: absolute;
+    left:0;
+    top:2px;
+	animation: hidden-visible-animate 0.5s infinite linear alternate;
+}
+
 /*队伍的潜觉*/
 .team-latents .latents{
 	width: var(--head-block-width);

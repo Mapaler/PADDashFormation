@@ -2918,6 +2918,15 @@ function refreshAbility(abilityDom, team, idx) {
 		}
 	});
 }
+
+function setTextContentAndAttribute(dom,str)
+{
+	if (!dom) return;
+	const attrName = "data-value";
+	dom.textContent = str;
+	dom.setAttribute(attrName, str);
+}
+
 //刷新队伍能力值合计
 function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	//计算总的生命值
@@ -2958,25 +2967,34 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		const tReduceHP = tHP / (1 - reduceScale1) / (1 - reduceScale2); //队伍正常满血加上盾能承受的最大伤害
 
-		tHpDom.textContent = tHP +
-			` (${tHPNoAwoken}) >> Max ${Math.round(tReduceHP)}(-${(totalReduce * 100).toFixed(2)}%)`;
+		const tHpDom_general = tHpDom.querySelector(".general");
+		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
+		const tHpDom_maxEqual = tHpDom.querySelector(".max-equal");
+		const tHpDom_reduce = tHpDom.querySelector(".reduce");
+
+		setTextContentAndAttribute(tHpDom_general, tHP);
+		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
+		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).toFixed(2));
+		tHpDom_reduce.setAttribute("data-max-equal", tReduceHP);
+		setTextContentAndAttribute(tHpDom_maxEqual, tReduceHP);
 	}
 
 	if (tMoveDom) {
 		const moveTime = countMoveTime(team, leader1id, leader2id, teamIdx);
-		//tMoveDom.textContent = moveTime.duration;
+		const tMoveDom_general = tMoveDom.querySelector(".general");
+		const tMoveDom_noAwoken = tMoveDom.querySelector(".awoken-bind");
+		
 		if (moveTime.fixed) //固定时间的
 		{
 			tMoveDom.classList.add("fixed-move-time");
-			tMoveDom.setAttribute("data-no-awoken",moveTime.duration.leader);
-			tMoveDom.setAttribute("data-general",moveTime.duration.leader);
+			setTextContentAndAttribute(tMoveDom_general, moveTime.duration.leader);
+			setTextContentAndAttribute(tMoveDom_noAwoken, moveTime.duration.leader);
 		} else
 		{
 			tMoveDom.classList.remove("fixed-move-time");
-			tMoveDom.setAttribute("data-no-awoken",moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge);
-			tMoveDom.setAttribute("data-general",moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge + moveTime.duration.awoken);
+			setTextContentAndAttribute(tMoveDom_general, moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge + moveTime.duration.awoken);
+			setTextContentAndAttribute(tMoveDom_noAwoken, moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge);
 		}
-		
 	}
 }
 //刷新所有队伍能力值合计
@@ -3015,8 +3033,16 @@ function refreshFormationTotalHP(totalDom, teams) {
 
 		const tReduceHP = tHP / (1 - reduceScale1) / (1 - reduceScale2); //队伍正常满血加上盾能承受的最大伤害
 
-		tHpDom.textContent = tHP.toString() +
-			` (${tHPNoAwoken}) >> Max ${Math.round(tReduceHP)}(-${(totalReduce * 100).toFixed(2)}%)`;
+		const tHpDom_general = tHpDom.querySelector(".general");
+		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
+		const tHpDom_maxEqual = tHpDom.querySelector(".max-equal");
+		const tHpDom_reduce = tHpDom.querySelector(".reduce");
+
+		setTextContentAndAttribute(tHpDom_general, tHP);
+		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
+		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).toFixed(2));
+		tHpDom_reduce.setAttribute("data-max-equal", tReduceHP);
+		setTextContentAndAttribute(tHpDom_maxEqual, tReduceHP);
 	}
 }
 //刷新单人技能CD

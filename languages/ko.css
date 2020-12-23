@@ -258,20 +258,10 @@
 	content:"드래그할 때 \"바꾸기\"를 \"복사\"로 변경";
 }
 
-.team-total-info .tIf-total-hp::before{
-	content: "팀 HP (각성은 없습니다):";
-}
-.team-total-info .tIf-total-move::before{
-	content: "팀 운영 시간입니다:";
-}
-.team-total-info .tIf-total-move::after{
-	content: attr(data-general) " 초 (각성 무효 " attr(data-no-awoken) " 초)";
-}
-.team-total-info .tIf-total-move.fixed-move-time::after{
-	content: attr(data-general) " 초 (고정합니다)";
-}
-.formation-total-info .tIf-total-hp::before{
-	content: "총 HP (각성은 없습니다)：";
+.tIf-total-move .general::after,
+.tIf-total-move .awoken-bind::after
+{
+	content: " 초";
 }
 
 .setting-box .row-mon-id .open-search::before{
