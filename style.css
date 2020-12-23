@@ -1149,45 +1149,9 @@ ul{
 	left: 0;
 	top: 0;
 }
-.rare-icon[data-rare-icon="1"]::after
+.rare-div .rare-icon::after
 {
-	content: "1";
-}
-.rare-icon[data-rare-icon="2"]::after
-{
-	content: "2";
-}
-.rare-icon[data-rare-icon="3"]::after
-{
-	content: "3";
-}
-.rare-icon[data-rare-icon="4"]::after
-{
-	content: "4";
-}
-.rare-icon[data-rare-icon="5"]::after
-{
-	content: "5";
-}
-.rare-icon[data-rare-icon="6"]::after
-{
-	content: "6";
-}
-.rare-icon[data-rare-icon="7"]::after
-{
-	content: "7";
-}
-.rare-icon[data-rare-icon="8"]::after
-{
-	content: "8";
-}
-.rare-icon[data-rare-icon="9"]::after
-{
-	content: "9";
-}
-.rare-icon[data-rare-icon="10"]::after
-{
-	content: "10";
+	content: attr(data-rare-icon);
 }
 
 /*.search-box .awoken-div::before{
