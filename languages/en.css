@@ -276,10 +276,10 @@
 	content: "Team Move Time: ";
 }
 .team-total-info .tIf-total-move::after{
-	content: "s";
+	content: attr(data-general) "s (Awoken bind " attr(data-no-awoken) "s)";
 }
 .team-total-info .tIf-total-move.fixed-move-time::after{
-	content: "s (Fiexd)";
+	content: attr(data-general) "s (Fiexd)";
 }
 .formation-total-info .tIf-total-hp::before{
 	content: "Total HP (No Awoken): ";

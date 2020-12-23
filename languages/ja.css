@@ -265,13 +265,13 @@
 	content: "チームHP (覚醒無効):";
 }
 .team-total-info .tIf-total-move::before{
-	content: "チーム操作時間:";
+	content: "操作時間:";
 }
 .team-total-info .tIf-total-move::after{
-	content: " 秒";
+	content: attr(data-general) " 秒 (覚醒無効な場合 " attr(data-no-awoken) " 秒)";
 }
 .team-total-info .tIf-total-move.fixed-move-time::after{
-	content: " 秒 (固定)";
+	content: attr(data-general) " 秒 (固定)";
 }
 .formation-total-info .tIf-total-hp::before{
 	content: "総HP (覚醒無効):";
