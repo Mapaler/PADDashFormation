@@ -2941,8 +2941,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][0].id : teams[1][0][0].id) : team[0][5].id;
 
 	if (tHpDom) {
-		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true);
-		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true);
+		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true,true,true);
+		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true,true,true);
 		const totalReduce = 1 - (1 - reduceScale1) * (1 - reduceScale2);
 
 		const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
@@ -2965,18 +2965,18 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		tHP = Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale);
 		tHPNoAwoken = Math.round(Math.round(tHPNoAwoken) * badgeHPScale);
 
-		const tReduceHP = tHP / (1 - reduceScale1) / (1 - reduceScale2); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHP = Math.round(tHP / (1 - reduceScale1) / (1 - reduceScale2)); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - reduceScale1) / (1 - reduceScale2)); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
-		const tHpDom_maxEqual = tHpDom.querySelector(".max-equal");
 		const tHpDom_reduce = tHpDom.querySelector(".reduce");
 
 		setTextContentAndAttribute(tHpDom_general, tHP);
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
 		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).toFixed(2));
-		tHpDom_reduce.setAttribute("data-max-equal", tReduceHP);
-		setTextContentAndAttribute(tHpDom_maxEqual, tReduceHP);
+		tHpDom_reduce.setAttribute("data-max-equal-general", tReduceHP);
+		tHpDom_reduce.setAttribute("data-max-equal-awoken-bind", tReduceHPNoAwoken);
 	}
 
 	if (tMoveDom) {
@@ -3009,8 +3009,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 		const leader1id = teams[0][0][0].id;
 		const leader2id = teams[1][0][0].id;
 
-		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true);
-		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true);
+		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true,true,true);
+		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true,true,true);
 		const totalReduce = 1 - (1 - reduceScale1) * (1 - reduceScale2);
 
 		const tHPArr = teams.map(function(team) {
@@ -3031,18 +3031,18 @@ function refreshFormationTotalHP(totalDom, teams) {
 		const tHP = tHPArr.reduce((pv, v) => pv + v);
 		const tHPNoAwoken = tHPNoAwokenArr.reduce((pv, v) => pv + v);
 
-		const tReduceHP = tHP / (1 - reduceScale1) / (1 - reduceScale2); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHP = Math.round(tHP / (1 - reduceScale1) / (1 - reduceScale2)); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - reduceScale1) / (1 - reduceScale2)); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
-		const tHpDom_maxEqual = tHpDom.querySelector(".max-equal");
 		const tHpDom_reduce = tHpDom.querySelector(".reduce");
 
 		setTextContentAndAttribute(tHpDom_general, tHP);
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
 		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).toFixed(2));
-		tHpDom_reduce.setAttribute("data-max-equal", tReduceHP);
-		setTextContentAndAttribute(tHpDom_maxEqual, tReduceHP);
+		tHpDom_reduce.setAttribute("data-max-equal-general", tReduceHP);
+		tHpDom_reduce.setAttribute("data-max-equal-awoken-bind", tReduceHPNoAwoken);
 	}
 }
 //刷新单人技能CD

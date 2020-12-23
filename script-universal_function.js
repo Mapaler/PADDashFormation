@@ -796,7 +796,7 @@ function countMoveTime(team, leader1id, leader2id, teamIdx)
 	return moveTime;
 }
 //获取盾减伤比例
-function getReduceScale(ls, allAttr = false, noHPneed = false)
+function getReduceScale(ls, allAttr = false, noHPneed = false, noProbability = false)
 {
 	const sk = ls.params;
 	let scale = 0;
@@ -811,9 +811,9 @@ function getReduceScale(ls, allAttr = false, noHPneed = false)
 		case 36: //2个属性盾
 			scale = allAttr ? 0 : sk[2]/100;
 			break;
-		case 38: //血线下 + 几率
-		case 43: //血线上 + 几率
-			scale = (noHPneed || allAttr) ? 0 : sk[2]/100;
+		case 38: //血线下 + 可能几率
+		case 43: //血线上 + 可能几率
+			scale = (noHPneed || noProbability && sk[1] !== 100) ? 0 : sk[2]/100;
 			break;
 		case 129: //无条件盾，属性个数不固定
 		case 163: //无条件盾，属性个数不固定

@@ -2011,6 +2011,10 @@ function parseSkillDescription(skill)
 			const skill = Skills[card.leaderSkillId];
 			return getReduceScale(skill, undefined, true) > 0;
 		})},
+		{name:"队长盾减伤-排除几率盾",function:cards=>cards.filter(card=>{
+			const skill = Skills[card.leaderSkillId];
+			return getReduceScale(skill, undefined, undefined, true) > 0;
+		})},
 		{name:"满血99重力不下半血-队长盾减伤[29%, 100%)",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const reduceScale = getReduceScale(skill);

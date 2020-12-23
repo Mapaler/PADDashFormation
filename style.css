@@ -588,8 +588,8 @@ ul{
 .tIf-total-hp .reduce::after{
 	content: "%";
 }
-.tIf-total-hp .max-equal::before{
-	content: "⇔";
+.tIf-total-hp .reduce:not([data-value="0.00"])::after{
+	content: "%⇔" attr(data-max-equal-general) "/" attr(data-max-equal-awoken-bind);
 }
 
 .tIf-total-move::before{
@@ -757,12 +757,6 @@ ul{
 {
 	display: none;
 	content: "";
-}
-.show-team-name-left .team-ability::before{
-	display: inline-block;
-}
-.show-team-name-right .team-ability::after{
-	display: inline-block;
 }
 .abilitys .hp::before,
 .abilitys .atk::before,
