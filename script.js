@@ -2992,8 +2992,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		} else
 		{
 			tMoveDom.classList.remove("fixed-move-time");
-			setTextContentAndAttribute(tMoveDom_general, moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge + moveTime.duration.awoken);
-			setTextContentAndAttribute(tMoveDom_noAwoken, moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge);
+			setTextContentAndAttribute(tMoveDom_general, Math.round((moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge + moveTime.duration.awoken) * 100) / 100);
+			setTextContentAndAttribute(tMoveDom_noAwoken, Math.round((moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge) * 100) / 100);
 		}
 	}
 }
