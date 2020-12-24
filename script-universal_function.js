@@ -508,7 +508,7 @@ function createCardA()
 	const cid = cdom.appendChild(document.createElement("div"));
 	cid.className = "id";
 	const cawoken = cdom.appendChild(document.createElement("div"));
-	cawoken.className = "awoken-count full-awoken";
+	cawoken.className = "awoken-count-num";
 	return cdom;
 }
 //返回文字说明内怪物Card的纯HTML

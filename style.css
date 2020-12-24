@@ -276,8 +276,7 @@ ul{
 	display:none;
 }
 /*怪物-觉醒*/
-.monster .awoken-count,
-.row-mon-awoken .awoken-count
+.awoken-count-num
 {
 	color: yellow;
 	text-shadow: black 0 0 4px;
@@ -287,33 +286,44 @@ ul{
 	width: 34px;
 	height: 38px;
 }
-.monster .awoken-count{
+.monster .awoken-count-num{
 	position: absolute;
 	top: -4px;
 	right: 0;
 	transform: scale(0.75) translateX(4px);
 }
-.monster .awoken-count,
-.monster .awoken-count.full-awoken::before,
-.row-mon-awoken .awoken-count,
-.row-mon-awoken .awoken-count.full-awoken::before
+
+/*显示怪物觉醒的数字*/
+.awoken-count-num
 {
+	font-family: var(--game-font-family);
 	font-size: 20px;
 	line-height: 28px;
 }
-.awoken-count.full-awoken{
-	font-size: 0;
+.awoken-count-num::before
+{
+	content: attr(data-value);
 }
-.awoken-count.full-awoken::before{
+.awoken-count-num[data-value="0"]
+{
+	display: none;
+}
+.awoken-count-num.full-awoken
+{
+	display: inline-block;
+}
+.awoken-count-num.full-awoken::before
+{
 	content: "★";
 }
-.allowable-assist .awoken-count.full-awoken{
-	font-size: 0;
+.allowable-assist .awoken-count-num.full-awoken
+{
 	text-shadow: none;
 	background-position-y: -38px;
 }
-.allowable-assist .awoken-count.full-awoken::before{
-	content: none;
+.allowable-assist .awoken-count-num.full-awoken::before
+{
+	display: none;
 }
 /*武器*/
 .monster.wepon .awoken-count.full-awoken{
@@ -332,6 +342,8 @@ ul{
 }
 /*怪物-等级*/
 .monster .level{
+	font-size: 15px;
+	line-height: 17px;
 	color: white;
 	height: 17px;
 	text-shadow: black 0 0 2px, black 2px 2px 0;
@@ -340,12 +352,13 @@ ul{
 	bottom: 0;
 	vertical-align: top;
 }
-.monster .level,.monster .level.max::before{
-	font-size: 15px;
-	line-height: 17px;
+.monster .level::after
+{
+	content: attr(data-value);
 }
-.monster .level.max{
-	font-size: 0;
+.monster .level.max::after
+{
+	display: none;
 }
 .monster .level._110{
 	color: lightskyblue;
@@ -1518,28 +1531,16 @@ ul{
 .row-mon-awoken{
 	margin-right: 20px;
 }
-.row-mon-awoken .awoken-ul, .row-mon-super-awoken .awoken-ul{
-	font-size: 0;
-	height: 32px;
+.row-mon-awoken .awoken-count-num{
+	display: inline-block;
+	transform: scale(0.84) translateY(-2px);
 }
 .edit-box .awoken-ul .awoken-icon,
-.edit-box .awoken-count
+.row-mon-awoken .awoken-count-num
 {
 	cursor: pointer;
 }
-.row-mon-awoken .awoken-count.full-awoken{
-	font-size: 0;
-}
-.row-mon-awoken .awoken-count,
-.row-mon-awoken .awoken-count.full-awoken::before
-{
-	font-size: 22px;
-	line-height: 28px;
-}
-.row-mon-awoken .awoken-count{
-	transform: scale(0.84) translateY(-2px);
-}
-.row-mon-awoken .awoken-count,
+.row-mon-awoken .awoken-count-num,
 .row-mon-awoken .awoken-icon
 {
 	vertical-align: top;
@@ -1747,10 +1748,13 @@ ul{
 	padding: 0 3px;
 }
 .row-mon-level .m-level-btn-min::after,
-.row-mon-level .m-level-btn-max::after,
-.row-mon-level .m-level-btn-110::after
+.row-mon-level .m-level-btn-max::after
 {
 	content: attr(value);
+}
+.row-mon-level .m-level-btn-110::after
+{
+	content: attr(value) " (+" attr(data-limit-break-incr) "%)";
 }
 .m-level-btn-110
 {

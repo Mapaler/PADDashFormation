@@ -1719,13 +1719,13 @@ function initialize() {
 	};
 	//觉醒
 	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
-	const awokenCountLabel = monEditAwokensRow.querySelector(".awoken-count");
+	const awokenCountLabel = monEditAwokensRow.querySelector(".awoken-count-num");
 	const monEditAwokens = Array.from(monEditAwokensRow.querySelectorAll(".awoken-ul input[name='awoken-number']"));
 
 	function checkAwoken() {
 		const card = Cards[editBox.mid];
 		const value = parseInt(this.value, 10);
-		awokenCountLabel.textContent = value;
+		awokenCountLabel.setAttribute(dataAttrName, value);
 		if (value > 0 && value == (card.awakenings.length))
 			awokenCountLabel.classList.add("full-awoken");
 		else
@@ -2281,7 +2281,8 @@ function changeid(mon, monDom, latentDom) {
 	if (levelDom) //如果提供了等级
 	{
 		const level = mon.level || 1;
-		levelDom.textContent = level;
+		levelDom.setAttribute(dataAttrName, level);
+		
 		if (level == card.maxLevel) { //如果等级刚好等于最大等级，则修改为“最大”的字
 			levelDom.classList.add("max");
 		} else {
@@ -2293,21 +2294,19 @@ function changeid(mon, monDom, latentDom) {
 			levelDom.classList.remove("_110");
 		}
 	}
-	const awokenIcon = monDom.querySelector(".awoken-count");
+	const awokenIcon = monDom.querySelector(".awoken-count-num");
 	if (awokenIcon) {
-		if (card.awakenings.length < 1 || mon.awoken == 0) //没觉醒
+		awokenIcon.setAttribute(dataAttrName, mon.awoken || 0);
+		if (mon.awoken != null) //如果提供了觉醒
 		{
-			awokenIcon.classList.add(className_displayNone);
-			awokenIcon.textContent = "";
-		} else if (mon.awoken > 0) //如果提供了觉醒
-		{
-			awokenIcon.classList.remove(className_displayNone);
-			awokenIcon.textContent = mon.awoken;
 			if (mon.awoken == card.awakenings.length) {
 				awokenIcon.classList.add("full-awoken");
 			} else {
 				awokenIcon.classList.remove("full-awoken");
 			}
+		}else
+		{
+			awokenIcon.classList.add("full-awoken");
 		}
 	}
 	const sawoken = monDom.querySelector(".super-awoken");
@@ -2640,11 +2639,14 @@ function editBoxChangeMonId(id) {
 	const monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.max = monEditLv.value = card.maxLevel + (card.limitBreakIncr ? 11 : 0); //默认等级为110
 	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
+
+	monEditLv110.setAttribute("data-limit-break-incr",card.limitBreakIncr);
 	if (card.limitBreakIncr) {
 		monEditLv110.classList.remove(className_displayNone);
 	} else {
 		monEditLv110.classList.add(className_displayNone);
 	}
+	
 	const mCost = settingBox.querySelector(".monster-cost");
 	mCost.textContent = card.cost;
 
