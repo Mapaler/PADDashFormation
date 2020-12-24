@@ -1449,12 +1449,12 @@ function initialize() {
 		const officialAwokenSorting_className = "official-awoken-sorting";
 		if (this.checked)
 		{
-			s_awokensUl.classList.add(officialAwokenSorting_className);
-			s_sawokensUl.classList.add(officialAwokenSorting_className);
+			s_awokensDiv.classList.add(officialAwokenSorting_className);
+			s_sawokensDiv.classList.add(officialAwokenSorting_className);
 		}else
 		{
-			s_awokensUl.classList.remove(officialAwokenSorting_className);
-			s_sawokensUl.classList.remove(officialAwokenSorting_className);
+			s_awokensDiv.classList.remove(officialAwokenSorting_className);
+			s_sawokensDiv.classList.remove(officialAwokenSorting_className);
 		}
 		s_awokensUl.appendChild(fragmentAwoken);
 		s_sawokensUl.appendChild(fragmentSawoken);

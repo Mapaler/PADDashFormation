@@ -1219,6 +1219,12 @@ ul{
 /*.search-box .awoken-div::before{
 	content: "觉醒";
 }*/
+.search-box .awoken-div::before{
+	display: none;
+}
+.search-box .awoken-div.official-awoken-sorting::before{
+	display: block;
+}
 
 .search-box .awoken-div,
 .search-box .sawoken-div{
@@ -1285,8 +1291,8 @@ ul{
 {
 	animation: icon-active 0.2s;
 }
-.awoken-div .awoken-ul.official-awoken-sorting,
-.sawoken-div .sawoken-ul.official-awoken-sorting
+.awoken-div.official-awoken-sorting .awoken-ul,
+.sawoken-div.official-awoken-sorting .sawoken-ul
 {
 	width: 335px;
 }
