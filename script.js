@@ -2304,7 +2304,7 @@ function changeid(mon, monDom, latentDom) {
 			} else {
 				awokenIcon.classList.remove("full-awoken");
 			}
-		}else
+		}else if(card.awakenings.length)
 		{
 			awokenIcon.classList.add("full-awoken");
 		}
@@ -2646,7 +2646,7 @@ function editBoxChangeMonId(id) {
 	} else {
 		monEditLv110.classList.add(className_displayNone);
 	}
-	
+
 	const mCost = settingBox.querySelector(".monster-cost");
 	mCost.textContent = card.cost;
 
