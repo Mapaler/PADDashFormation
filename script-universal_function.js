@@ -372,7 +372,7 @@ function calculateAbility_max(id,solo, teamsCount)
 	const tempMon = {
 		id: id,
 		level: card.maxLevel + (card.limitBreakIncr ? 11 : 0),
-		plus: [99,99,99],
+		plus: (card.overlay || card.types[0] == 15 && card.types[1] == -1) ? [0,0,0] : [99,99,99],  //当可以叠加时，不能打297
 		awoken: card.awakenings.length,
 	};
 	const abilities = calculateAbility(tempMon, null, solo, teamsCount);
