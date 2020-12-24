@@ -1360,11 +1360,11 @@ function initialize() {
 	//const s_rare = s_rareLi.map(li=>li.querySelector(".rare-check"));  //checkbox集合
 
 	const s_awokensDiv = searchBox.querySelector(".awoken-div");
-	const s_awokensUl = s_awokensDiv.querySelector(".awoken-ul");
+	const s_awokensUl = s_awokensDiv.querySelector(".all-awokens");
 	const s_awokensLi = Array.from(s_awokensUl.querySelectorAll(".awoken-count"));
 	const s_awokensIcons = s_awokensLi.map(li => li.querySelector(".awoken-icon"));
-	s_awokensUl.originalSorting = s_awokensIcons.map(icon => parseInt(icon.getAttribute("data-awoken-icon"), 10));
-	const s_awokensCounts = s_awokensLi.map(li => li.querySelector(".count"));
+	const s_awokensSubs = s_awokensLi.map(li => li.querySelector(".awoken-sub1"));
+	s_awokensUl.originalSorting = s_awokensIcons.map(icon => parseInt(icon.getAttribute("data-awoken-icon"), 10)); //储存觉醒列表的原始排序
 
 	const searchMonList = searchBox.querySelector(".search-mon-list"); //搜索结果列表
 	searchMonList.originalHeads = null; //用于存放原始搜索结果
@@ -1419,32 +1419,28 @@ function initialize() {
 	s_showOfficialAwokenSorting.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + officialSortingClassName)));
 	s_showOfficialAwokenSorting.onchange();
 
-
 	function search_awokenAdd1() {
-		const countDom = this.parentNode.querySelector(".count");
-		let count = parseInt(countDom.value, 10);
+		let count = parseInt(this.value || 0, 10);
 		if (count < 9) {
 			count++;
-			countDom.value = count;
 			this.setAttribute("value", count);
-			//this.parentNode.classList.remove("zero");
 		}
 	}
 	function search_awokenClear() {
 		this.setAttribute("value", 0);
-		const countDom = this.parentNode.querySelector(".count");
-		countDom.value = 0;
-		//this.parentNode.classList.add("zero");
 	}
-	const longPressDuration = 1000; //1秒钟
+	const longPressDuration = 700; //700毫秒
 	function search_awokenLongPressStart(e) {
+		console.log(e);
 		let _this = this;
 		this.longPress = setTimeout(function(){
 			search_awokenClear.apply(_this);
 		}, longPressDuration);
 		this.startTime = new Date(); //仅仅给自己设一个开始时间
+		e.preventDefault();
 	}
 	function search_awokenLongPressEnd(e) {
+		console.log(e);
 		const endTime = new Date();
 		if ((endTime - this.startTime) < longPressDuration)
 		{
@@ -1453,39 +1449,36 @@ function initialize() {
 		clearTimeout(this.longPress);
 		this.startTime = null;
 	}
-	function search_awokenLongPressBreak(e) {
-		const endTime = new Date();
+	function search_awokenLongPressCancel(e) {
+		console.log(e);
 		clearTimeout(this.longPress);
 		this.startTime = null;
 	}
-	s_awokensIcons.forEach((b, idx) => { //每种觉醒增加1
-		//b.onclick = search_awokenAdd1;
-		b.onmousedown = search_awokenLongPressStart;
-		b.onmouseup = search_awokenLongPressEnd;
-		b.onmouseout = search_awokenLongPressBreak;
+	s_awokensIcons.forEach(b => {
+		//b.ontouchstart = search_awokenLongPressStart;
+		//b.ontouchend = search_awokenLongPressEnd;
+		//b.ontouchcancel = search_awokenLongPressCancel;
+		//b.onmousedown = search_awokenLongPressStart;
+		//b.onmouseup = search_awokenLongPressEnd;
+		//b.onmouseout = search_awokenLongPressCancel;
+		b.onclick = search_awokenAdd1; //每种觉醒增加1
 	});
 
 	function search_awokenSub1() {
-		let count = parseInt(this.value, 10);
+		const awokenIcon = this.previousElementSibling;
+		let count = parseInt(awokenIcon.value || 0, 10);
 		if (count > 0) {
 			count--;
-			this.value = count;
-			this.parentNode.parentNode.querySelector(".awoken-icon").setAttribute("value", count);
-			if (count === 0) {
-				//this.parentNode.parentNode.classList.add("zero");
-			}
+			awokenIcon.setAttribute("value", count);
 		}
 	}
-	s_awokensCounts.forEach((b, idx) => { //每种觉醒减少1
-		b.onclick = search_awokenSub1;
+	s_awokensSubs.forEach(b => {
+		b.onclick = search_awokenSub1; //每种觉醒减少1
 	});
 
 	const awokenClear = searchBox.querySelector(".awoken-div .awoken-clear");
 	const sawokenClear = searchBox.querySelector(".sawoken-div .sawoken-clear");
 	awokenClear.onclick = function() { //清空觉醒选项
-		s_awokensCounts.forEach(t => {
-			t.value = 0;
-		});
 		s_awokensIcons.forEach(t => {
 			t.setAttribute("value", 0);
 		});
@@ -1595,9 +1588,12 @@ function initialize() {
 			s_rareHighs.filter(returnCheckedInput).map(returnInputValue).map(Str2Int)[0],
 		];
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
-		const awokensFilter = s_awokensCounts.filter(btn => parseInt(btn.value, 10) > 0).map(btn => {
-			const awokenIndex = parseInt(btn.parentNode.parentNode.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10);
-			return { id: awokenIndex, num: parseInt(btn.value, 10) };
+		const awokensFilter = s_awokensIcons.filter(btn => parseInt(btn.value, 10) > 0).map(btn => {
+			const awokenIndex = parseInt(btn.getAttribute("data-awoken-icon"), 10);
+			return {
+				id: awokenIndex,
+				num: parseInt(btn.value, 10)
+			};
 		});
 		const searchResult = searchCards(cards,
 			attr1, attr2,
@@ -1626,23 +1622,12 @@ function initialize() {
 		s_types.forEach(t => {
 			t.checked = false;
 		});
+		s_typeAndOr.onchange();
 		s_rareLows[0].checked = true;
 		s_rareHighs[9].checked = true;
-		s_typeAndOr.onchange();
 		
-		s_awokensCounts.forEach(t => {
-			t.value = 0;
-		});
-		s_awokensLi.forEach(t => {
-			t.classList.add("zero");
-		});
-		// 这些觉醒的选项干脆都不清除
-		//s_awokensEquivalent.checked = false;
-		//if (s_includeSuperAwoken.checked) s_includeSuperAwoken.click();
-
-		s_sawokens.forEach(t => {
-			t.checked = false;
-		});
+		awokenClear.click();
+		sawokenClear.click();;
 
 		searchMonList.originalHeads = null;
 		searchMonList.innerHTML = "";

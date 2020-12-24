@@ -990,6 +990,8 @@ ul{
 	display: inline-block;
 	vertical-align: top;
 	font-size:16px;
+}
+.search-box .attr-list>li{
 	overflow: hidden;
 }
 .search-box>div>ul>li>label{
@@ -1194,38 +1196,6 @@ ul{
 .sawoken-div{
 	display: inline-block;
 }
-.awoken-div .awoken-icon{
-	position: relative;
-	opacity: var(--search-icon-unchecked);
-}
-.awoken-div .awoken-icon:not([value="0"]){
-	opacity: 1;
-}
-.awoken-div .awoken-icon~.count-symbol{
-	opacity: var(--search-icon-unchecked);
-}
-.awoken-div .awoken-icon:not([value="0"])~.count-symbol{
-	opacity: 1;
-}
-
-.awoken-div .awoken-icon::before{
-	display: none;
-}
-.awoken-div .awoken-icon:not([value="0"])::before{
-	display: inline-block;
-	content: attr(value);
-	position: absolute;
-	line-height: 18px;
-	font-size: 18px;
-	right: 0;
-	bottom: 0;
-	-webkit-text-stroke: 1px black;
-	text-stroke: 1px black;
-	text-shadow: black 1px 1px 1px;
-}
-.count-symbol{
-	display: none !important;
-}
 
 .search-box .awoken-div .awoken-clear::before,
 .search-box .sawoken-div .sawoken-clear::before
@@ -1239,7 +1209,7 @@ ul{
 }
 .awoken-div .awoken-ul.official-awoken-sorting
 {
-	width: 350px;
+	width: 490px;
 }
 .awoken-ul .awoken-count
 {
@@ -1258,14 +1228,13 @@ ul{
 	display: inline-block;
 	vertical-align: middle;
 }
-.awoken-ul .count::before,
-.search-box .awoken-div .count-symbol::before
+.awoken-ul .count::before
 {
 	content: "×";
 }
-.search-box .awoken-ul button,
-.search-box .awoken-ul input[type='button']
+.search-box .awoken-div .awoken-icon
 {
+	position: relative;
 	border: none;
 	background-color: unset;
 	font-family: var(--game-font-family);
@@ -1275,6 +1244,60 @@ ul{
 	padding: 0;
 	text-align: left;
 }
+
+.search-box .awoken-div .awoken-icon:not([value]),
+.search-box .awoken-div .awoken-icon[value="0"],
+.search-box .awoken-div .awoken-icon:not([value])~.awoken-sub1,
+.search-box .awoken-div .awoken-icon[value="0"]~.awoken-sub1
+{
+	opacity: var(--search-icon-unchecked);
+}
+.awoken-div .awoken-icon:not([value="0"])::before
+{
+	display: inline-block;
+	content: attr(value);
+	position: absolute;
+	line-height: 18px;
+	font-size: 18px;
+	right: 0;
+	bottom: 0;
+	-webkit-text-stroke: 1px black;
+	text-stroke: 1px black;
+	text-shadow: black 1px 1px 1px;
+}
+.awoken-div .awoken-sub1
+{
+	background-image: linear-gradient(to bottom,#C38E5F,#2F2008);
+	border: none;
+	border-radius: 5px;
+	padding: 2px;
+	cursor: pointer;
+	transition: transform 0.1s;
+	height: 32px;
+}
+.awoken-div .awoken-sub1::before
+{
+	line-height: unset;
+	display: inline-block;
+	box-sizing: border-box;
+	background-color: #956A42;
+	background-image: url(images/slate.svg);
+	background-size: 120px 120px;
+	border-radius: 2px;
+	vertical-align: middle;
+	color: white;
+	font-family: var(--game-font-family);
+	text-shadow: black 2px 2px 0;
+}
+.awoken-div .awoken-sub1::before
+{
+	content: "▼";
+}
+.awoken-div .awoken-sub1:active
+{
+	transform: scale(1.1);
+}
+
 .search-box .awoken-ul .awoken-count.zero{
 	opacity: var(--search-icon-unchecked);
 }
