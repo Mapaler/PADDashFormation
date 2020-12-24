@@ -291,7 +291,7 @@
 .search-box .show-official-awoken-sorting-label::after{
 	content: "공식 각성 순서를 사용합니다";
 }
-.search-mon-list .search-list-length::before{
+.search-box .search-list-length::before{
     content: "결과 수:";
 }
 .search-box .sort-div::before{
@@ -329,6 +329,10 @@
 }
 .search-box .awoken-option::before{
 	content: "▼각성（AND）";
+}
+.search-box .rare-clear::before
+{
+	content: "재설정";
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before

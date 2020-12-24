@@ -1355,17 +1355,51 @@ function initialize() {
 		const radioHigh = s_rareHighs.find(radio=>radio.checked);
 		const rangeLow = radioLow ? parseInt(radioLow.value,10) : 1;
 		const rangeHigh = radioHigh ? parseInt(radioHigh.value,10) : 10;
+		
+		s_rareLows.find(radio=>parseInt(radio.value,10) == (
+			rangeLow != rangeHigh ?
+			thisValue :
+			(
+				thisValue == rangeLow ?
+				1 :
+				Math.min(thisValue,rangeLow)
+			)
+		)).checked = true;
+		s_rareHighs.find(radio=>parseInt(radio.value,10) == (
+			rangeLow != rangeHigh ?
+			thisValue :
+			(
+				thisValue == rangeLow ?
+				10 :
+				Math.max(thisValue,rangeHigh)
+			)
+		)).checked = true;
+/*
 		if (rangeLow == rangeHigh)
 		{
-			s_rareLows.find(radio=>parseInt(radio.value,10) == Math.min(thisValue,rangeLow)).checked = true;
-			s_rareHighs.find(radio=>parseInt(radio.value,10) == Math.max(thisValue,rangeLow)).checked = true;
+			if (thisValue == rangeLow)
+			{
+				s_rareLows.find(radio=>parseInt(radio.value,10) == 1).checked = true;
+				s_rareHighs.find(radio=>parseInt(radio.value,10) == 10).checked = true;
+			}else
+			{
+				s_rareLows.find(radio=>parseInt(radio.value,10) == Math.min(thisValue,rangeLow)).checked = true;
+				s_rareHighs.find(radio=>parseInt(radio.value,10) == Math.max(thisValue,rangeLow)).checked = true;
+			}
 		}else
 		{
+			console.log("恢复单选");
 			s_rareLows.find(radio=>parseInt(radio.value,10) == thisValue).checked = true;
 			s_rareHighs.find(radio=>parseInt(radio.value,10) == thisValue).checked = true;
 		}
+		*/
 	}
 	s_rareIcons.forEach(icon=>icon.onclick = s_rareIcons_onclick);
+	const s_rareClear = s_rareDiv.querySelector(".rare-clear");
+	s_rareClear.onclick = function(){
+		s_rareLows[0].checked = true;
+		s_rareHighs[s_rareHighs.length-1].checked = true;
+	}
 
 	//const s_rare = s_rareLi.map(li=>li.querySelector(".rare-check"));  //checkbox集合
 
@@ -1497,6 +1531,7 @@ function initialize() {
 	const s_add_show_abilities = searchBox.querySelector("#add-show-abilities"); //是否显示三维
 	const s_add_show_abilities_with_awoken = searchBox.querySelector("#add-show-abilities-with-awoken"); //是否显示计算觉醒的三维
 	
+	const searchResultCount = searchBox.querySelector(".search-list-length");
 	showSearch = function(searchArr, customAdditionalFunction)
 	{
 		if (!(searchArr instanceof Array))
@@ -1521,9 +1556,6 @@ function initialize() {
 
 		if (searchArr.length > 0) {
 			const fragment = document.createDocumentFragment(); //创建节点用的临时空间
-			const listLength = fragment.appendChild(document.createElement("div"));
-			listLength.className = "search-list-length";
-			listLength.textContent = searchArr.length;
 			//获取原始排序的头像列表
 			const additionalOption = { //搜索列表的额外选项
 				showAwoken: s_add_show_awoken.checked,
@@ -1545,6 +1577,7 @@ function initialize() {
 			//const state = {searchArr:idArr,mid:editBox.mid};
 			//history.pushState(state, null, location);
 		}
+		searchResultCount.setAttribute("data-search-result-count", searchArr.length);
 		searchMonList.classList.remove(className_displayNone);
 	};
 	//对已经搜索到的Cards重新附加显示
@@ -1620,13 +1653,13 @@ function initialize() {
 			t.checked = false;
 		});
 		s_typeAndOr.onchange();
-		s_rareLows[0].checked = true;
-		s_rareHighs[9].checked = true;
+		s_rareClear.onclick();
 		
-		awokenClear.click();
-		sawokenClear.click();;
+		awokenClear.onclick();
+		sawokenClear.onclick();
 
 		searchMonList.originalHeads = null;
+		searchResultCount.setAttribute("data-search-result-count", 0);
 		searchMonList.innerHTML = "";
 	};
 

@@ -1200,6 +1200,10 @@ ul{
 {
 	content: attr(data-rare-icon);
 }
+.search-box .rare-clear
+{
+	margin-left: 5px;
+}
 
 .search-box .awoken-option .selected-awokens{
 	min-height: 32px;
@@ -1221,11 +1225,13 @@ ul{
 	display: inline-block;
 	vertical-align: top;
 }
+.search-box .rare-clear,
 .search-box .awoken-clear,
 .search-box .sawoken-clear
 {
 	vertical-align: top;
 }
+.search-box .rare-clear::before,
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before
 {
@@ -1395,9 +1401,17 @@ ul{
 	border-radius: 5px;
 	background: grey;
 }
-.search-mon-list .search-list-length::before
+.search-box .search-list-length
 {
-    margin-left:4px;
+    float: right;
+}
+.search-box .search-list-length[data-search-result-count="0"]
+{
+	display: none;
+}
+.search-box .search-list-length:not([data-search-result-count="0"])::after
+{
+	content: attr(data-search-result-count);
 }
 .guide-mod .search-box .search-mon-list{
 	max-height: 790px;

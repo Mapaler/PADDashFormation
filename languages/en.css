@@ -302,7 +302,7 @@
 .search-box .show-official-awoken-sorting-label::after{
 	content: "Use the official Awoken sorting";
 }
-.search-mon-list .search-list-length::before{
+.search-box .search-list-length::before{
     content: "Number of results:";
 }
 .search-box .sort-div::before{
@@ -340,6 +340,10 @@
 }
 .search-box .awoken-option::before{
 	content: "▼Awoken (AND)";
+}
+.search-box .rare-clear::before
+{
+	content: "Reset";
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before
