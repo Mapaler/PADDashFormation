@@ -330,8 +330,11 @@
 .search-box .rare-div::before{
 	content: "希少性（OR）：";
 }
+.search-box .awoken-option::before{
+	content: "▼觉醒（AND）";
+}
 .search-box .awoken-div::before{
-	content: "▼覚醒（AND）（しえ:数値をクリックすると数値が減少します）";
+	content: "▼追加覚醒";
 }
 .search-box .sawoken-div::before{
 	content: "▼超覚醒（OR）";

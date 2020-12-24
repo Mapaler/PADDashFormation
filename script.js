@@ -1363,7 +1363,6 @@ function initialize() {
 	const s_awokensUl = s_awokensDiv.querySelector(".all-awokens");
 	const s_awokensLi = Array.from(s_awokensUl.querySelectorAll(".awoken-count"));
 	const s_awokensIcons = s_awokensLi.map(li => li.querySelector(".awoken-icon"));
-	const s_awokensSubs = s_awokensLi.map(li => li.querySelector(".awoken-sub1"));
 	s_awokensUl.originalSorting = s_awokensIcons.map(icon => parseInt(icon.getAttribute("data-awoken-icon"), 10)); //储存觉醒列表的原始排序
 
 	const searchMonList = searchBox.querySelector(".search-mon-list"); //搜索结果列表
@@ -1419,61 +1418,37 @@ function initialize() {
 	s_showOfficialAwokenSorting.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + officialSortingClassName)));
 	s_showOfficialAwokenSorting.onchange();
 
+	const s_selectedAwokensUl = searchBox.querySelector(".selected-awokens");
 	function search_awokenAdd1() {
 		let count = parseInt(this.value || 0, 10);
-		if (count < 9) {
+		const maxCount = parseInt(this.getAttribute("data-max-count") || 9, 10);
+		if (count < maxCount) {
 			count++;
 			this.setAttribute("value", count);
-		}
-	}
-	function search_awokenClear() {
-		this.setAttribute("value", 0);
-	}
-	const longPressDuration = 700; //700毫秒
-	function search_awokenLongPressStart(e) {
-		console.log(e);
-		let _this = this;
-		this.longPress = setTimeout(function(){
-			search_awokenClear.apply(_this);
-		}, longPressDuration);
-		this.startTime = new Date(); //仅仅给自己设一个开始时间
-		e.preventDefault();
-	}
-	function search_awokenLongPressEnd(e) {
-		console.log(e);
-		const endTime = new Date();
-		if ((endTime - this.startTime) < longPressDuration)
-		{
-			search_awokenAdd1.apply(this);
-		}
-		clearTimeout(this.longPress);
-		this.startTime = null;
-	}
-	function search_awokenLongPressCancel(e) {
-		console.log(e);
-		clearTimeout(this.longPress);
-		this.startTime = null;
-	}
-	s_awokensIcons.forEach(b => {
-		//b.ontouchstart = search_awokenLongPressStart;
-		//b.ontouchend = search_awokenLongPressEnd;
-		//b.ontouchcancel = search_awokenLongPressCancel;
-		//b.onmousedown = search_awokenLongPressStart;
-		//b.onmouseup = search_awokenLongPressEnd;
-		//b.onmouseout = search_awokenLongPressCancel;
-		b.onclick = search_awokenAdd1; //每种觉醒增加1
-	});
 
+			const iconLi = document.createElement("li");
+			const icon = iconLi.appendChild(document.createElement("icon"))
+			icon.className = "awoken-icon";
+			icon.setAttribute("data-awoken-icon", this.getAttribute("data-awoken-icon"));
+			icon.onclick = search_awokenSub1;
+			s_selectedAwokensUl.appendChild(iconLi);
+		}
+	}
 	function search_awokenSub1() {
-		const awokenIcon = this.previousElementSibling;
+		const awokenId = this.getAttribute("data-awoken-icon");
+		const awokenIcon = s_awokensIcons.find(icon=>icon.getAttribute("data-awoken-icon") == awokenId);
 		let count = parseInt(awokenIcon.value || 0, 10);
 		if (count > 0) {
 			count--;
 			awokenIcon.setAttribute("value", count);
 		}
+		this.parentNode.remove();
 	}
-	s_awokensSubs.forEach(b => {
-		b.onclick = search_awokenSub1; //每种觉醒减少1
+	function search_awokenClear() {
+		this.setAttribute("value", 0);
+	}
+	s_awokensIcons.forEach(b => {
+		b.onclick = search_awokenAdd1; //每种觉醒增加1
 	});
 
 	const awokenClear = searchBox.querySelector(".awoken-div .awoken-clear");
@@ -1482,6 +1457,7 @@ function initialize() {
 		s_awokensIcons.forEach(t => {
 			t.setAttribute("value", 0);
 		});
+		s_selectedAwokensUl.innerHTML = "";
 	};
 	sawokenClear.onclick = function() { //清空超觉醒选项
 		s_sawokens.forEach(t => {

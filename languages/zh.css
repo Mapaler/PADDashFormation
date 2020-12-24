@@ -333,8 +333,11 @@
 .search-box .rare-div::before{
 	content: "稀有（OR）：";
 }
+.search-box .awoken-option::before{
+	content: "▼觉醒（AND）";
+}
 .search-box .awoken-div::before{
-	content: "▼觉醒（AND）（提示：长按清除）";
+	content: "▼添加觉醒";
 }
 .search-box .sawoken-div::before{
 	content: "▼超觉醒（OR）";

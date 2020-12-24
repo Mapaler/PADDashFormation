@@ -327,8 +327,11 @@
 .search-box .rare-div::before{
 	content: "희귀（OR）：";
 }
+.search-box .awoken-option::before{
+	content: "▼각성（AND）";
+}
 .search-box .awoken-div::before{
-	content: "▼각성（AND）（번째:숫자를 누르면 숫자가 낮아집니다）";
+	content: "▼각성 추가";
 }
 .search-box .sawoken-div::before{
 	content: "▼슈퍼 각성（OR）";

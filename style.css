@@ -1188,13 +1188,22 @@ ul{
 	content: attr(data-rare-icon);
 }
 
+.search-box .awoken-option .selected-awokens{
+    min-height: 32px;
+    width: auto;
+    min-width: 320px;
+    background-color: #00000044;
+    border-radius: 6px;
+    box-shadow: inset black 0 0 3px;
+}
 /*.search-box .awoken-div::before{
 	content: "觉醒";
 }*/
 
-.awoken-div,
-.sawoken-div{
+.search-box .awoken-div,
+.search-box .sawoken-div{
 	display: inline-block;
+	vertical-align: top;
 }
 
 .search-box .awoken-div .awoken-clear::before,
@@ -1207,9 +1216,10 @@ ul{
 {
 	padding: 0;
 }
-.awoken-div .awoken-ul.official-awoken-sorting
+.awoken-div .awoken-ul.official-awoken-sorting,
+.sawoken-div .sawoken-ul.official-awoken-sorting
 {
-	width: 490px;
+	width: 335px;
 }
 .awoken-ul .awoken-count
 {
@@ -1254,8 +1264,8 @@ ul{
 }
 .awoken-div .awoken-icon:not([value="0"])::before
 {
-	display: inline-block;
 	content: attr(value);
+	display: inline-block;
 	position: absolute;
 	line-height: 18px;
 	font-size: 18px;
@@ -1265,39 +1275,6 @@ ul{
 	text-stroke: 1px black;
 	text-shadow: black 1px 1px 1px;
 }
-.awoken-div .awoken-sub1
-{
-	background-image: linear-gradient(to bottom,#C38E5F,#2F2008);
-	border: none;
-	border-radius: 5px;
-	padding: 2px;
-	cursor: pointer;
-	transition: transform 0.1s;
-	height: 32px;
-}
-.awoken-div .awoken-sub1::before
-{
-	line-height: unset;
-	display: inline-block;
-	box-sizing: border-box;
-	background-color: #956A42;
-	background-image: url(images/slate.svg);
-	background-size: 120px 120px;
-	border-radius: 2px;
-	vertical-align: middle;
-	color: white;
-	font-family: var(--game-font-family);
-	text-shadow: black 2px 2px 0;
-}
-.awoken-div .awoken-sub1::before
-{
-	content: "▼";
-}
-.awoken-div .awoken-sub1:active
-{
-	transform: scale(1.1);
-}
-
 .search-box .awoken-ul .awoken-count.zero{
 	opacity: var(--search-icon-unchecked);
 }
@@ -1321,10 +1298,6 @@ ul{
 /*.search-box .sawoken-div::before{
 	content: "超觉醒";
 }*/
-.sawoken-div .sawoken-ul.official-awoken-sorting
-{
-	width: 350px;
-}
 .sawoken-div .sawoken-ul li label{
 	opacity: var(--search-icon-unchecked);
 }

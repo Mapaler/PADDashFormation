@@ -338,8 +338,11 @@
 .search-box .rare-div::before{
 	content: "Rarity (OR):";
 }
+.search-box .awoken-option::before{
+	content: "▼Awoken (AND)";
+}
 .search-box .awoken-div::before{
-	content: "▼Awoken (AND) (Tips: Click on number to reduce value)";
+	content: "▼Add Awoken";
 }
 .search-box .sawoken-div::before{
 	content: "▼Super Awoken (OR)";
