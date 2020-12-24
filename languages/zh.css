@@ -336,6 +336,11 @@
 .search-box .awoken-option::before{
 	content: "▼觉醒（AND）";
 }
+.search-box .awoken-clear::before,
+.search-box .sawoken-clear::before
+{
+	content: "清除";
+}
 .search-box .awoken-div::before{
 	content: "▼添加觉醒";
 }

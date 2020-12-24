@@ -330,6 +330,11 @@
 .search-box .awoken-option::before{
 	content: "▼각성（AND）";
 }
+.search-box .awoken-clear::before,
+.search-box .sawoken-clear::before
+{
+	content: "명확한";
+}
 .search-box .awoken-div::before{
 	content: "▼각성 추가";
 }

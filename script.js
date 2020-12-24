@@ -1232,20 +1232,20 @@ function initialize() {
 				abilitiesPreview.classList.add("abilities-with-awoken-preview");
 			}
 		}
-		//产生一个觉醒列表
-		function creatAwokenList(awokens) {
-			const ul = document.createElement("ul");
-			ul.className = "awoken-ul";
-			awokens.forEach(ak=>{
-				const li = ul.appendChild(document.createElement("li"));
-				const icon = li.appendChild(document.createElement("icon"));
-				icon.className = "awoken-icon";
-				icon.setAttribute("data-awoken-icon",ak);
-			});
-			return ul;
-		}
 		if (options.showAwoken)
 		{
+			//产生一个觉醒列表
+			function creatAwokenList(awokens) {
+				const ul = document.createElement("ul");
+				ul.className = "awoken-ul";
+				awokens.forEach(ak=>{
+					const li = ul.appendChild(document.createElement("li"));
+					const icon = li.appendChild(document.createElement("icon"));
+					icon.className = "awoken-icon";
+					icon.setAttribute("data-awoken-icon",ak);
+				});
+				return ul;
+			}
 			const awokenPreview = cli.appendChild(document.createElement("div"));
 			awokenPreview.className = "awoken-preview";
 			if (card.awakenings.length)
@@ -1259,6 +1259,16 @@ function initialize() {
 				sakUl.classList.add("awoken-preview-superAwakenings");
 			}
 		}
+		
+		if (options.customAddition)
+		{
+			options.customAddition.forEach(func=>{
+				const c_addition = cli.appendChild(document.createElement("div"));
+				c_addition.className = "custom-addition";
+				c_addition.appendChild(func(card));
+			});
+		}
+
 		cli.onclick = clickHeadToNewMon;
 		return cli;
 	};
@@ -1451,8 +1461,8 @@ function initialize() {
 		b.onclick = search_awokenAdd1; //每种觉醒增加1
 	});
 
-	const awokenClear = searchBox.querySelector(".awoken-div .awoken-clear");
-	const sawokenClear = searchBox.querySelector(".sawoken-div .sawoken-clear");
+	const awokenClear = searchBox.querySelector(".awoken-clear");
+	const sawokenClear = searchBox.querySelector(".sawoken-clear");
 	awokenClear.onclick = function() { //清空觉醒选项
 		s_awokensIcons.forEach(t => {
 			t.setAttribute("value", 0);
@@ -1487,10 +1497,18 @@ function initialize() {
 	const s_add_show_abilities = searchBox.querySelector("#add-show-abilities"); //是否显示三维
 	const s_add_show_abilities_with_awoken = searchBox.querySelector("#add-show-abilities-with-awoken"); //是否显示计算觉醒的三维
 	
-	showSearch = function(searchArr)
+	showSearch = function(searchArr, customAdditionalFunction)
 	{
-		editBox.show();
+		if (!(searchArr instanceof Array))
+		{ //如果不是数组就直接取消下一步
+			return;
+		}
+		if (searchArr.some(card=>typeof card == "number"))
+		{ //如果传入的是数字，就转成card对象
+			searchArr = searchArr.map(id=>typeof id == "object" ? id : Cards[id]);
+		}
 		searchBox.classList.remove(className_displayNone);
+		editBox.show();
 		const createCardHead = editBox.createCardHead;
 
 		searchMonList.classList.add(className_displayNone);
@@ -1512,6 +1530,9 @@ function initialize() {
 				showCD: s_add_show_CD.checked,
 				showAbilities: s_add_show_abilities.checked,
 				showAbilitiesWithAwoken: s_add_show_abilities_with_awoken.checked,
+				customAddition: typeof customAdditionalFunction == "function" ?
+				 [customAdditionalFunction] :
+				 (customAdditionalFunction instanceof Array ? customAdditionalFunction : null)
 			};
 			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, additionalOption));
 			//对头像列表进行排序

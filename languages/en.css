@@ -341,6 +341,11 @@
 .search-box .awoken-option::before{
 	content: "▼Awoken (AND)";
 }
+.search-box .awoken-clear::before,
+.search-box .sawoken-clear::before
+{
+	content: "Clear";
+}
 .search-box .awoken-div::before{
 	content: "▼Add Awoken";
 }

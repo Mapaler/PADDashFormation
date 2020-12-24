@@ -1189,12 +1189,15 @@ ul{
 }
 
 .search-box .awoken-option .selected-awokens{
-    min-height: 32px;
-    width: auto;
+	min-height: 32px;
+	box-sizing: border-box;
+    width: calc(100% - 90px);
     min-width: 320px;
     background-color: #00000044;
     border-radius: 6px;
-    box-shadow: inset black 0 0 3px;
+	box-shadow: inset black 0 0 3px;
+	display: inline-block;
+	vertical-align: top;
 }
 /*.search-box .awoken-div::before{
 	content: "觉醒";
@@ -1205,16 +1208,63 @@ ul{
 	display: inline-block;
 	vertical-align: top;
 }
-
-.search-box .awoken-div .awoken-clear::before,
-.search-box .sawoken-div .sawoken-clear::before
+.search-box .awoken-clear,
+.search-box .sawoken-clear
 {
-	content: "❌";
+	vertical-align: top;
 }
-.search-box .awoken-div .awoken-clear,
-.search-box .sawoken-div .sawoken-clear
+.search-box .awoken-clear::before,
+.search-box .sawoken-clear::before
 {
+	width: 80px;
+	background-size: 100px 100px;
+	background-position-y: 40px;
+	vertical-align: top;
+	font-size: 18px;
+	line-height: 28px;
 	padding: 0;
+	vertical-align: top;
+}
+.search-box .sawoken-clear::before
+{
+	width: 50px;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+@keyframes awoken-appear {
+	0% {
+		transform: scale(0);
+	}
+	50% {
+		transform: scale(1.5);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+.selected-awokens .awoken-icon
+{
+	animation: awoken-appear 0.2s;
+}
+@keyframes icon-active {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.5);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+.types-div .type-icon:active,
+.rare-div .rare-icon:active,
+.selected-awokens .awoken-icon:active,
+.awoken-div .awoken-icon:active,
+.sawoken-div .awoken-icon:active
+{
+	animation: icon-active 0.2s;
 }
 .awoken-div .awoken-ul.official-awoken-sorting,
 .sawoken-div .sawoken-ul.official-awoken-sorting
