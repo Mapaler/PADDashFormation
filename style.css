@@ -621,15 +621,28 @@ ul{
 		opacity: 1;
 	}
 	to {
-		opacity: 0.3;
+		opacity: 0;
 	}
 }
-.tIf-total-move.fixed-move-time::after{
+.tIf-total-move.fixed-move-time::after
+{
 	background-image: url(images/icon-bind.png);
     position: absolute;
     left:0;
     top:2px;
-	animation: hidden-visible-animate 0.5s infinite linear alternate;
+	animation: hidden-visible-animate 0.5s infinite ease-in alternate;
+}
+/*单人时的协力觉醒和多人时的掉落觉醒显示无效*/
+body.solo .awoken-icon[data-awoken-icon="30"]::after,
+body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
+{
+	content: " ";
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background-image: url(images/icon-bind.png);
+	background-size: cover;
+	animation: hidden-visible-animate 0.5s infinite ease-in alternate;
 }
 
 /*队伍的潜觉*/
