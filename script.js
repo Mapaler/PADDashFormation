@@ -1567,6 +1567,7 @@ function initialize() {
 				 (customAdditionalFunction instanceof Array ? customAdditionalFunction : null)
 			};
 			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, additionalOption));
+			searchMonList.customAddition = additionalOption.customAddition;
 			//对头像列表进行排序
 			const headsArray = sortHeadsArray(searchMonList.originalHeads);
 			headsArray.forEach(head => fragment.appendChild(head));
@@ -1586,7 +1587,7 @@ function initialize() {
 		if (Array.isArray(searchMonList.originalHeads))
 		{
 			const oldArr = searchMonList.originalHeads.map(head=>head.card);
-			showSearch(oldArr);
+			showSearch(oldArr, searchMonList.customAddition);
 		}
 	}
 	s_add_show_awoken.onchange = reShowSearch;
@@ -1594,7 +1595,7 @@ function initialize() {
 	s_add_show_abilities.onchange = reShowSearch;
 	s_add_show_abilities_with_awoken.onchange = reShowSearch;
 
-	const startSearch = function(cards) {
+	const startSearch = function(cards, customAdditionalFunction) {
 		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
 		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
 		let attr1, attr2;
@@ -1637,7 +1638,7 @@ function initialize() {
 			s_includeSuperAwoken.checked
 		);
 		//console.log("搜索结果", searchResult);
-		showSearch(searchResult);
+		showSearch(searchResult, customAdditionalFunction);
 	};
 	searchBox.startSearch = startSearch;
 	searchStart.onclick = function() {

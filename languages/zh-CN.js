@@ -1556,7 +1556,7 @@ function parseSkillDescription(skill)
 	const specialSearchFunctions = [
 		{name:"不做筛选",function:cards=>cards},
 		{name:"======队长技======",function:cards=>cards},
-		{name:"队长技固伤追击（按伤害排序）",function:cards=>{
+		{name:"队长技固伤追击（按伤害排序，内测附加显示）",function:cards=>{
 			const searchTypeArray = [199,200,201];
 			function getSkillFixedDamage(skill)
 			{
@@ -1589,8 +1589,27 @@ function parseSkillDescription(skill)
 					getSkillFixedDamage(b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
 				return a_pC - b_pC;
 			});
+		},addition:card=>{
+			const searchTypeArray = [199,200,201];
+			function getSkillFixedDamage(skill)
+			{
+				switch (skill.type)
+				{
+					case 199: case 200:
+						return skill.params[2];
+					case 201:
+						return skill.params[5];
+					default:
+						return 0;
+				}
+			}
+			const skill = Skills[card.leaderSkillId];
+			const value = searchTypeArray.includes(skill.type) ?
+					getSkillFixedDamage(skill) :
+					getSkillFixedDamage(skill.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
+			return document.createTextNode(value.bigNumberToString() + "固伤");
 		}},
-		{name:"队长技+C（按+C数排序）",function:cards=>{
+		{name:"队长技+C（按+C数排序，内测附加显示）",function:cards=>{
 			const searchTypeArray = [192,194,206,209,210];
 			function getSkillAddCombo(skill)
 			{
@@ -1627,6 +1646,29 @@ function parseSkillDescription(skill)
 					getSkillAddCombo(b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
 				return a_pC - b_pC;
 			});
+		},addition:card=>{
+			const searchTypeArray = [192,194,206,209,210];
+			function getSkillAddCombo(skill)
+			{
+				switch (skill.type)
+				{
+					case 192: case 194:
+						return skill.params[3];
+					case 206:
+						return skill.params[6];
+					case 209:
+						return skill.params[0];
+					case 210:
+						return skill.params[2];
+					default:
+						return 0;
+				}
+			}
+			const skill = Skills[card.leaderSkillId];
+			const value = searchTypeArray.includes(skill.type) ?
+				getSkillAddCombo(skill) :
+				getSkillAddCombo(skill.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
+			return document.createTextNode(value.bigNumberToString() + "C");
 		}},
 		{name:"7×6 版面",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [162,186];
@@ -1648,7 +1690,7 @@ function parseSkillDescription(skill)
 				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
 			}
 		})},
-		{name:"队长技加/减秒（按秒数排序）",function:cards=>cards.filter(card=>{
+		{name:"队长技加/减秒（按秒数排序，内测附加显示）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [15,185];
 			const skill = Skills[card.leaderSkillId];
 			if (searchTypeArray.some(t=>skill.type == t))
@@ -1668,8 +1710,15 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.some(t=>subskill.type == t)).params[0];
 			return a_pC - b_pC;
-		})},
-		{name:"固定操作时间（按时间排序）",function:cards=>cards.filter(card=>{
+		}),addition:card=>{
+			const searchTypeArray = [15,185];
+			const skill = Skills[card.leaderSkillId];
+			const value = searchTypeArray.includes(skill.type) ?
+				skill.params[0] :
+				skill.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[0];
+			return document.createTextNode((value > 0 ? "+" : "") + (value/100) + "秒");
+		}},
+		{name:"固定操作时间（按时间排序，内测附加显示）",function:cards=>cards.filter(card=>{
 			const searchType = 178;
 			const skill = Skills[card.leaderSkillId];
 			if (skill.type == searchType)
@@ -1689,7 +1738,14 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchType = 178;
+			const skill = Skills[card.leaderSkillId];
+			const value = skill.type == searchType ?
+				skill.params[0] :
+				skill.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+			return document.createTextNode("固定" + value + "秒");
+		}},
 		{name:"消除宝珠时计算防御的追打（按追打比率排序）",function:cards=>cards.filter(card=>{
 			const searchType = 12;
 			const skill = Skills[card.leaderSkillId];
@@ -3703,11 +3759,15 @@ function parseSkillDescription(skill)
 	//将搜索按钮强制改成特殊搜索
 	const searchStart = controlDiv.querySelector(".search-start");
 	searchStart.onclick = function(){
-		let result = Cards;
-		specialSearchArray.forEach(ss=>
-			result = specialSearchFunctions[parseInt(ss.value,10)].function(result)
-		);
-		searchBox.startSearch(result);
+		const result = specialSearchArray.reduce((pre,ss)=>
+			{
+				const funcObj = specialSearchFunctions[parseInt(ss.value,10)];
+				if (!funcObj) return pre;
+				pre.result = funcObj.function(pre.result); //结果进一步筛选
+				if (funcObj.addition) pre.addition.push(funcObj.addition); //如果有附加显示，则添加到列表
+				return pre;
+			}, {result: Cards, addition: []});
+		searchBox.startSearch(result.result, result.addition);
 	};
 	controlDiv.insertBefore(fragment,controlDiv.firstElementChild);
 	const searchClear = controlDiv.querySelector(".search-clear");

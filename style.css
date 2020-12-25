@@ -997,6 +997,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	color: #dfd;
 }
+.custom-addition
+{
+	font-size: 14px;
+	max-width: 75px;
+}
 
 
 /*.setting-box .row-mon-id .open-search::before{
