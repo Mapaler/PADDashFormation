@@ -326,7 +326,7 @@ ul{
 	display: none;
 }
 /*武器*/
-.monster.wepon .awoken-count.full-awoken{
+.monster.wepon .awoken-count-num.full-awoken{
 	transform: scale(0.79) translateY(4px);
 	width:32px;height:32px;
 	background-image: url(images/awoken.png);
