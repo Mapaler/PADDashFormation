@@ -499,7 +499,11 @@ ul{
 	width: var(--head-block-width);
 	height: var(--head-block-height);
 }
-
+.show-team-name-left .team-box-name::before,
+.show-team-name-right .team-box-name::after
+{
+	display: inline-block;
+}
 
 .reverse-member-assist .team-box-name::after,
 .reverse-member-assist .team-box-name::before
