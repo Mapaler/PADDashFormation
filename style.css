@@ -945,10 +945,18 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 }
 
 /*搜索结果显示觉醒列表的相关css*/
-.awoken-preview .awoken-ul{
+.awoken-preview .awoken-ul,
+.custom-addition .awoken-ul
+{
 	width: 75px;
 }
-.awoken-preview .awoken-ul>li{
+.custom-addition ul
+{
+	display: inline;
+}
+.awoken-preview .awoken-ul>li,
+.custom-addition .awoken-ul>li
+{
 	display: inline-block;
 }
 .awoken-preview .awoken-preview-superAwakenings{
@@ -958,10 +966,14 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .awoken-preview .awoken-preview-superAwakenings .awoken-icon{
 	opacity: 0.6;
 }
-.awoken-preview .awoken-ul li{
+.awoken-preview .awoken-ul>li,
+.custom-addition .awoken-ul>li
+{
 	margin: 0.5px !important;
 }
-.awoken-preview .awoken-icon{
+.awoken-preview .awoken-icon,
+.custom-addition .awoken-icon
+{
 	filter: unset;
 		transform: scale(0.75);
 		margin: calc(-32px * (1 - 0.75) / 2);
@@ -2156,7 +2168,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	cursor: pointer;
 }
-.board td
+.orb-icon
 {
 	width: 20px;
 	height: 20px;
@@ -2164,8 +2176,13 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	border-radius: 50%;
 	padding: 0;
 	text-align: center;
+	display: inline-block;
 }
-.board td::before
+table .orb-icon
+{
+	display: table-cell;
+}
+.orb-icon::before
 {
 	font-size: 13px;
 	line-height: 13px;
@@ -2173,87 +2190,87 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	max-height: 100%;
 	max-width: 100%;
 }
-.board .orb-0
+.orb-icon[data-orb-icon="0"]
 { /*火*/
 	background-color: #ef3535;
 }
-.board .orb-0::before
+.orb-icon[data-orb-icon="0"]::before
 {
 	content: "🔥";
 }
-.board .orb-1
+.orb-icon[data-orb-icon="1"]
 { /*水*/
 	background-color: #258bed;
 }
-.board .orb-1::before
+.orb-icon[data-orb-icon="1"]::before
 {
 	content: "🌊";
 }
-.board .orb-2
+.orb-icon[data-orb-icon="2"]
 { /*木*/
 	background-color: #28c031;
 }
-.board .orb-2::before
+.orb-icon[data-orb-icon="2"]::before
 {
 	content: "🍃";
 }
-.board .orb-3
+.orb-icon[data-orb-icon="3"]
 { /*光*/
 	background-color: #eded29;
 }
-.board .orb-3::before
+.orb-icon[data-orb-icon="3"]::before
 {
 	content: "🌞";
 }
-.board .orb-4
+.orb-icon[data-orb-icon="4"]
 { /*暗*/
 	background-color: #972ecb;
 }
-.board .orb-4::before
+.orb-icon[data-orb-icon="4"]::before
 {
 	content: "🦇";
 }
-.board .orb-5
+.orb-icon[data-orb-icon="5"]
 { /*心*/
 	background-color: #f8baba;
 	border-radius: 3px;
 }
-.board .orb-5::before
+.orb-icon[data-orb-icon="5"]::before
 {
 	content: "💗";
 }
-.board .orb-6
+.orb-icon[data-orb-icon="6"]
 { /*废*/
 	background-color: #d3d3d3;
 	border-radius: 5px;
 }
-.board .orb-6::before
+.orb-icon[data-orb-icon="6"]::before
 {
 	content: "🕷️";
 }
-.board .orb-7
+.orb-icon[data-orb-icon="7"]
 { /*毒*/
 	background-color: #e831f3;
 	border-radius: 5px;
 }
-.board .orb-7::before
+.orb-icon[data-orb-icon="7"]::before
 {
 	content: "💀";
 }
-.board .orb-8
+.orb-icon[data-orb-icon="8"]
 { /*剧毒*/
 	background-color: #670181;
 	border-radius: 5px;
 }
-.board .orb-8::before
+.orb-icon[data-orb-icon="8"]::before
 {
 	content: "☠️";
 }
-.board .orb-9
+.orb-icon[data-orb-icon="9"]
 { /*炸弹*/
 	background-color: #7c7c7c;
 }
-.board .orb-9::before
+.orb-icon[data-orb-icon="9"]::before
 {
 	content: "💣";
 }
@@ -2299,10 +2316,10 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	border-top: 2px solid white;
 	margin-top: 5px;
 }
-.dialog .dialog-content .additional-string::before
+/*.dialog .dialog-content .additional-string::before
 {
 	content: "其他語言";
-}
+}*/
 .dialog .dialog-control
 {
 	text-align: center;

@@ -221,7 +221,11 @@ function parseSkillDescription(skill)
 
 			rowData.forEach((orbType,ci,cArr)=>{
 				const cell = row.insertCell();
-				if (orbType != null) cell.className = `has-orb orb-${orbType}`;
+				cell.className = "orb-icon";
+				if (orbType != null)
+				{
+					cell.setAttribute("data-orb-icon", orbType);
+				}
 				if (ci == 3 && cArr.length > 6) cell.classList.add("board-cell5");
 			});
 		});	
@@ -1430,6 +1434,28 @@ function parseSkillDescription(skill)
 //增加特殊搜索模式
 (function() {
 	'use strict';
+	//返回卡片的技能
+	function getCardSkill(card, skillTypes, isLeaderSkill = false)
+	{
+		return isLeaderSkill ?
+			getActuallySkill(Skills[card.leaderSkillId], skillTypes) :
+			getActuallySkill(Skills[card.activeSkillId], skillTypes);
+	}
+	//查找到真正起作用的那一个技能
+	function getActuallySkill(skill,skillTypes)
+	{
+		if (skillTypes.includes(skill.type))
+		{
+			return skill;
+		}else if (skill.type == 116 || skill.type == 118 || skill.type == 138)
+		{
+			const subSkills = skill.params.map(id=>Skills[id]);
+			return subSkills.find(subskill => skillTypes.includes(subskill.type));
+		}else
+		{
+			return null;
+		}
+	}
 	//获取血倍率
 	function getHPScale(ls)
 	{
@@ -1553,10 +1579,42 @@ function parseSkillDescription(skill)
 				return -1;
 		}
 	}
+
+	//创建1个觉醒图标
+	function createAwokenIcon(awokenId)
+	{
+		const icon = document.createElement("icon");
+		icon.className ="awoken-icon";
+		icon.setAttribute("data-awoken-icon", awokenId);
+		return icon;
+	}
+	//产生一个觉醒列表
+	function creatAwokenList(awokens) {
+		const ul = document.createElement("ul");
+		ul.className = "awoken-ul";
+		awokens.forEach(ak=>{
+			const li = ul.appendChild(document.createElement("li"));
+			const icon = li.appendChild(createAwokenIcon(ak));
+		});
+		return ul;
+	}
+	//产生宝珠列表
+	function createOrbsList(orbs)
+	{
+		const ul = document.createElement("ul");
+		ul.className = "board";
+		orbs.forEach(orbType => {
+			const li = ul.appendChild(document.createElement("li"));
+			li.className = `orb-icon`;
+			li.setAttribute("data-orb-icon", orbType);
+		});	
+		return ul;
+	}
+
 	const specialSearchFunctions = [
 		{name:"不做筛选",function:cards=>cards},
 		{name:"======队长技======",function:cards=>cards},
-		{name:"队长技固伤追击（按伤害排序，内测附加显示）",function:cards=>{
+		{name:"队长技固伤追击（按伤害排序）",function:cards=>{
 			const searchTypeArray = [199,200,201];
 			function getSkillFixedDamage(skill)
 			{
@@ -1609,7 +1667,7 @@ function parseSkillDescription(skill)
 					getSkillFixedDamage(skill.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
 			return document.createTextNode(value.bigNumberToString() + "固伤");
 		}},
-		{name:"队长技+C（按+C数排序，内测附加显示）",function:cards=>{
+		{name:"队长技+C（按+C数排序）",function:cards=>{
 			const searchTypeArray = [192,194,206,209,210];
 			function getSkillAddCombo(skill)
 			{
@@ -1664,11 +1722,10 @@ function parseSkillDescription(skill)
 						return 0;
 				}
 			}
-			const skill = Skills[card.leaderSkillId];
-			const value = searchTypeArray.includes(skill.type) ?
-				getSkillAddCombo(skill) :
-				getSkillAddCombo(skill.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
-			return document.createTextNode(value.bigNumberToString() + "C");
+			const skill = getCardSkill(card, searchTypeArray, true);
+			const sk = skill.params;
+			const value = getSkillAddCombo(skill);
+			return document.createTextNode(`+${value.bigNumberToString()}C${skill.type==210?`/十字`:""}`);
 		}},
 		{name:"7×6 版面",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [162,186];
@@ -1690,7 +1747,7 @@ function parseSkillDescription(skill)
 				return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t));
 			}
 		})},
-		{name:"队长技加/减秒（按秒数排序，内测附加显示）",function:cards=>cards.filter(card=>{
+		{name:"队长技加/减秒（按秒数排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [15,185];
 			const skill = Skills[card.leaderSkillId];
 			if (searchTypeArray.some(t=>skill.type == t))
@@ -1718,7 +1775,7 @@ function parseSkillDescription(skill)
 				skill.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[0];
 			return document.createTextNode((value > 0 ? "+" : "") + (value/100) + "秒");
 		}},
-		{name:"固定操作时间（按时间排序，内测附加显示）",function:cards=>cards.filter(card=>{
+		{name:"固定操作时间（按时间排序）",function:cards=>cards.filter(card=>{
 			const searchType = 178;
 			const skill = Skills[card.leaderSkillId];
 			if (skill.type == searchType)
@@ -2170,7 +2227,12 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [173];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+			return document.createTextNode(`属吸×${sk[0]}T`);
+		}},
 		{name:"破伤吸 buff（按破吸回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 173;
 			const skill = Skills[card.activeSkillId];
@@ -2191,7 +2253,12 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [173];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+			return document.createTextNode(`伤吸×${sk[0]}T`);
+		}},
 		{name:"双破吸 buff（按破吸回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 173;
 			const skill = Skills[card.activeSkillId];
@@ -2212,7 +2279,12 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [173];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+			return document.createTextNode(`双破×${sk[0]}T`);
+		}},
 		{name:"贯穿无效盾 buff（按破吸回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 191;
 			const skill = Skills[card.activeSkillId];
@@ -2233,7 +2305,12 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [191];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+			return document.createTextNode(`破贯×${sk[0]}T`);
+		}},
 		{name:"-----解封类-----",function:cards=>cards},
 		{name:"解封（按解封回合排序）",function:cards=>{
 			const JieFeng_ParamsIndex = type=>type == 179 ? 3 : 0;
@@ -2258,6 +2335,14 @@ function parseSkillDescription(skill)
 					b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type));
 				return a_pC.params[JieFeng_ParamsIndex(a_pC.type)] - b_pC.params[JieFeng_ParamsIndex(b_pC.type)];
 			});
+		},addition:card=>{
+			const searchTypeArray = [117,179];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const JieFengTurn = skill=>skill.type == 179 ? skill.params[3] : skill.params[0];
+			const value = JieFengTurn(skill);
+			return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解封`);
 		}},
 		{name:"解觉醒（按解觉回合排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [117,179];
@@ -2279,7 +2364,14 @@ function parseSkillDescription(skill)
 				b_s.params[4] :
 				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [117,179];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const value = sk[4];
+			return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解觉`);
+		}},
 		{name:"解封+觉醒（按解觉醒回合排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [117,179];
 			const skill = Skills[card.activeSkillId];
@@ -2300,7 +2392,19 @@ function parseSkillDescription(skill)
 				b_s.params[4] :
 				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [117,179];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const JieFengTurn = skill=>skill.type == 179 ? skill.params[3] : skill.params[0];
+			const value1 = JieFengTurn(skill);
+			const value2 = sk[4];
+			
+			return document.createTextNode(value1 == value2 ?
+				`${value1 == 9999 ? "全" : value1 + "T"}解封+觉` :
+				`${value1 == 9999 ? "全" : value1 + "T"}解封，${value2 == 9999 ? "全" : value2 + "T"}解觉`);
+		}},
 		{name:"解禁消珠（按消除回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 196;
 			const skill = Skills[card.activeSkillId];
@@ -2321,7 +2425,14 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [196];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const value = sk[0];
+			return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
+		}},
 		{name:"-----锁珠类-----",function:cards=>cards},
 		{name:"解锁",function:cards=>cards.filter(card=>{
 			const searchType = 172;
@@ -2455,7 +2566,15 @@ function parseSkillDescription(skill)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 1));
 			}
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [71];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+			
+			return createOrbsList(colors);
+		}},
 		{name:"普通洗版2色",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
@@ -2470,7 +2589,15 @@ function parseSkillDescription(skill)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 2));
 			}
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [71];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+			
+			return createOrbsList(colors);
+		}},
 		{name:"普通洗版3色",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
@@ -2485,7 +2612,15 @@ function parseSkillDescription(skill)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 3));
 			}
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [71];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+			
+			return createOrbsList(colors);
+		}},
 		{name:"普通洗版4色",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
@@ -2500,7 +2635,15 @@ function parseSkillDescription(skill)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 4));
 			}
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [71];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+			
+			return createOrbsList(colors);
+		}},
 		{name:"普通洗版5色",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
@@ -2515,7 +2658,15 @@ function parseSkillDescription(skill)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 5));
 			}
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [71];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+			
+			return createOrbsList(colors);
+		}},
 		{name:"普通洗版6色以上",function:cards=>cards.filter(card=>{
 			function isOnlyColor(sk, colorTypeCount)
 			{
@@ -2530,7 +2681,15 @@ function parseSkillDescription(skill)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 6));
 			}
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [71];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
+			
+			return createOrbsList(colors);
+		}},
 		{name:"固定30个产珠",function:cards=>cards.filter(card=>{
 			function is30(sk)
 			{
@@ -2613,7 +2772,21 @@ function parseSkillDescription(skill)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [127];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const colors = [];
+			for (let ai=0;ai<sk.length;ai+=2)
+			{
+				colors.push(flags(sk[ai+1])[0]);
+			}
+			const fragment = document.createDocumentFragment();
+			fragment.appendChild(document.createTextNode(`竖`));
+			fragment.appendChild(createOrbsList(colors));
+			return fragment;
+		}},
 		{name:"产竖（含心）",function:cards=>cards.filter(card=>{
 			function isHeart(sk)
 			{
@@ -2643,7 +2816,22 @@ function parseSkillDescription(skill)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [128];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const colors = [];
+			for (let ai=0;ai<sk.length;ai+=2)
+			{
+				colors.push(flags(sk[ai+1])[0]);
+			}
+			
+			const fragment = document.createDocumentFragment();
+			fragment.appendChild(document.createTextNode(`横`));
+			fragment.appendChild(createOrbsList(colors));
+			return fragment;
+		}},
 		{name:"2横或以上",function:cards=>cards.filter(card=>{
 			const searchType = 128;
 			const skill = Skills[card.activeSkillId];
@@ -2702,66 +2890,22 @@ function parseSkillDescription(skill)
 			}
 		})},
 		{name:"----- buff 类-----",function:cards=>cards},
-		{name:"掉落率提升-属性-火",function:cards=>cards.filter(card=>{
-			const searchType = 126;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && (skill.params[0] & 1))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 1));
-			}
-		})},
-		{name:"掉落率提升-属性-水",function:cards=>cards.filter(card=>{
-			const searchType = 126;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && (skill.params[0] & 2))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 2));
-			}
-		})},
-		{name:"掉落率提升-属性-木",function:cards=>cards.filter(card=>{
-			const searchType = 126;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && (skill.params[0] & 4))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 4));
-			}
-		})},
-		{name:"掉落率提升-属性-光",function:cards=>cards.filter(card=>{
-			const searchType = 126;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && (skill.params[0] & 8))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 8));
-			}
-		})},
-		{name:"掉落率提升-属性-暗",function:cards=>cards.filter(card=>{
-			const searchType = 126;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && (skill.params[0] & 16))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 16));
-			}
-		})},
-		{name:"掉落率提升-属性-心",function:cards=>cards.filter(card=>{
-			const searchType = 126;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType && (skill.params[0] & 32))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType && (subskill.params[0] & 32));
-			}
-		})},
+		{name:"掉落率提升",function:cards=>cards.filter(card=>{
+			const searchTypeArray = [126];
+			const skill = getCardSkill(card, searchTypeArray);
+			return skill;
+		}),addition:card=>{
+			const searchTypeArray = [126];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const colors = flags(sk[0]);
+			
+			const fragment = document.createDocumentFragment();
+			fragment.appendChild(createOrbsList(colors));
+			fragment.appendChild(document.createTextNode(`↓${sk[3]}%×${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}T`));
+			return fragment;
+		}},
 		{name:"掉落率提升-属性-毒、废（顶毒）",function:cards=>cards.filter(card=>{
 			const searchType = 126;
 			const skill = Skills[card.activeSkillId];
@@ -2927,7 +3071,24 @@ function parseSkillDescription(skill)
 				sortNum = a_pC - b_pC;
 			}
 			return sortNum;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [3,156];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const fragment = document.createDocumentFragment();
+			if (skill.type == 156)
+			{
+				fragment.appendChild(document.createTextNode(`${sk[5]}%/`));
+				const awokenArr = sk.slice(1,4).filter(s=>s>0);
+				fragment.appendChild(creatAwokenList(awokenArr));
+				fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
+			}else
+			{
+				fragment.appendChild(document.createTextNode(`${sk[1]}%×${sk[0]}T`));
+			}
+			return fragment;
+		}},
 		{name:"全属减伤 100%（无敌）",function:cards=>cards.filter(card=>{
 			const searchType = 3;
 			const skill = Skills[card.activeSkillId];
@@ -2970,6 +3131,18 @@ function parseSkillDescription(skill)
 					b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 				return a_pC - b_pC;
 			});
+		},addition:card=>{
+			const searchTypeArray = [21];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+			
+			const colors = [sk[1]];
+			const fragment = document.createDocumentFragment();
+			fragment.appendChild(document.createTextNode(`-`));
+			fragment.appendChild(createOrbsList(colors));
+			fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
+
+			return fragment;
 		}},
 		{name:"变为全体攻击（按回合数排序）",function:cards=>cards.filter(card=>{
 			const searchType = 51;
@@ -3033,7 +3206,12 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [146];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+			return document.createTextNode(`${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}溜`);
+		}},
 		{name:"将自身换为队长",function:cards=>cards.filter(card=>{
 			const searchType = 93;
 			const skill = Skills[card.activeSkillId];
@@ -3133,7 +3311,12 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [18];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+			return document.createTextNode(`威吓×${sk[0]}T`);
+		}},
 		{name:"破防（按防御减少比例排序）",function:cards=>cards.filter(card=>{
 			const searchType = 19;
 			const skill = Skills[card.activeSkillId];
@@ -3217,7 +3400,17 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [153];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+			
+			const colors = [sk[0]];
+			const fragment = document.createDocumentFragment();
+			fragment.appendChild(document.createTextNode(`敌→`));
+			fragment.appendChild(createOrbsList(colors));
+			return fragment;
+		}},
 		{name:"受伤反击 buff",function:cards=>cards.filter(card=>{
 			const searchType = 60;
 			const skill = Skills[card.activeSkillId];
@@ -3376,57 +3569,18 @@ function parseSkillDescription(skill)
 				const subskills = skill.params.map(id=>Skills[id]);
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
-		})},
-		{name:"大炮-属性-火",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getCannonAttr(skill) == 0)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getCannonAttr(subskill) == 0);
-			}
-		})},
-		{name:"大炮-属性-水",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getCannonAttr(skill) == 1)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getCannonAttr(subskill) == 1);
-			}
-		})},
-		{name:"大炮-属性-木",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getCannonAttr(skill) == 2)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getCannonAttr(subskill) == 2);
-			}
-		})},
-		{name:"大炮-属性-光",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getCannonAttr(skill) == 3)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getCannonAttr(subskill) == 3);
-			}
-		})},
-		{name:"大炮-属性-暗",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [0,1,37,42,58,59,84,85,86,87,110,115,143,144];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type) && skill.id!=0 && getCannonAttr(skill) == 4)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && getCannonAttr(subskill) == 4);
-			}
-		})},
+		}),addition:card=>{
+			const searchTypeArray = [0,1,2,35,37,42,58,59,84,85,86,87,110,115,143,144];
+			const skill = getCardSkill(card, searchTypeArray);
+			const sk = skill.params;
+
+			const colors = [getCannonAttr(skill)];
+			
+			const fragment = document.createDocumentFragment();
+			fragment.appendChild(document.createTextNode(`射`));
+			fragment.appendChild(createOrbsList(colors));
+			return fragment;
+		}},
 		{name:"大炮-属性-释放者自身",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [2,35];
 			const skill = Skills[card.activeSkillId];
@@ -3729,7 +3883,7 @@ function parseSkillDescription(skill)
 		//searchLabel.appendChild(document.createTextNode(`筛选${index}:`));
 		const specialSearch = searchLi.appendChild(document.createElement("select"));
 		specialSearchFunctions.forEach((sfunc,idx)=>{
-			specialSearch.options.add(new Option(sfunc.name,idx));
+			specialSearch.options.add(new Option(sfunc.name + (sfunc.addition ? "+附加显示" : ""),idx));
 		});
 		return {dom:searchLi,list:specialSearch};
 	}
