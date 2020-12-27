@@ -2551,7 +2551,7 @@ function editBoxChangeMonId(id) {
 	
 	//mAltName.setAttribute("data-monId", card.id);
 
-	if (card.altName.length >= 0 || card.otTags && card.otTags.length >= 0) { //当没有合作名
+	if (card.altName.length > 0 || card.otTags && card.otTags.length > 0) { //当没有合作名
 		mAltName.classList.remove(className_displayNone);
 	} else {
 		mAltName.classList.add(className_displayNone);
