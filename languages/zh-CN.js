@@ -1434,23 +1434,49 @@ function parseSkillDescription(skill)
 //增加特殊搜索模式
 (function() {
 	'use strict';
-	//返回卡片的技能
-	function getCardSkill(card, skillTypes, isLeaderSkill = false)
+	//返回卡片的队长技能
+	function getCardLeaderSkill(card, skillTypes, searchRandom = true)
 	{
-		return isLeaderSkill ?
-			getActuallySkill(Skills[card.leaderSkillId], skillTypes) :
-			getActuallySkill(Skills[card.activeSkillId], skillTypes);
+		return getActuallySkill(Skills[card.leaderSkillId], skillTypes, searchRandom);
+	}
+	//返回卡片的技能
+	function getCardActiveSkill(card, skillTypes, searchRandom = true)
+	{
+		return getActuallySkill(Skills[card.activeSkillId], skillTypes, searchRandom);
+	}
+	//返回卡片的技能
+	function getCardSkill(card, skillTypes, searchRandom = true, skillGreatType = 0)
+	{
+		switch(skillGreatType)
+		{
+			case 1:
+			case "leader":
+				return getCardLeaderSkill(card, skillTypes, searchRandom);
+			case 2:
+			case "active":
+				return getCardActiveSkill(card, skillTypes, searchRandom);
+			default:
+				return getCardLeaderSkill(card, skillTypes, searchRandom) || getCardActiveSkill(card, skillTypes, searchRandom)
+		}
 	}
 	//查找到真正起作用的那一个技能
-	function getActuallySkill(skill,skillTypes)
+	function getActuallySkill(skill, skillTypes, searchRandom = true)
 	{
 		if (skillTypes.includes(skill.type))
 		{
 			return skill;
-		}else if (skill.type == 116 || skill.type == 118 || skill.type == 138)
+		}else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138)
 		{
 			const subSkills = skill.params.map(id=>Skills[id]);
-			return subSkills.find(subskill => skillTypes.includes(subskill.type));
+			for(let i = 0;i < subSkills.length; i++)
+			{ //因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
+				let foundSubSkill = getActuallySkill(subSkills[i], skillTypes, searchRandom);
+				if (foundSubSkill)
+				{
+					return foundSubSkill;
+				}
+			}
+			return null;
 		}else
 		{
 			return null;
@@ -1629,22 +1655,11 @@ function parseSkillDescription(skill)
 				}
 			}
 			return cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				if (searchTypeArray.some(t=>skill.type == t && getSkillFixedDamage(skill)>0))
-					return true;
-				else if (skill.type == 138){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t && getSkillFixedDamage(subskill)>0));
-				}
+				const skill = getCardLeaderSkill(card, searchTypeArray);
+				return skill ? (getSkillFixedDamage(skill)>0) : false;
 			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				let a_pC = 0,b_pC = 0;
-				a_pC = searchTypeArray.includes(a_s.type) ?
-					getSkillFixedDamage(a_s) :
-					getSkillFixedDamage(a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
-				b_pC = searchTypeArray.includes(b_s.type) ?
-					getSkillFixedDamage(b_s) :
-					getSkillFixedDamage(b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
+				const a_s = getCardLeaderSkill(a, searchTypeArray), b_s = getCardLeaderSkill(b, searchTypeArray);
+				let a_pC = getSkillFixedDamage(a_s),b_pC = getSkillFixedDamage(b_s);
 				return a_pC - b_pC;
 			});
 		},addition:card=>{
@@ -1661,10 +1676,9 @@ function parseSkillDescription(skill)
 						return 0;
 				}
 			}
-			const skill = Skills[card.leaderSkillId];
-			const value = searchTypeArray.includes(skill.type) ?
-					getSkillFixedDamage(skill) :
-					getSkillFixedDamage(skill.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
+			const skill = getCardLeaderSkill(card, searchTypeArray);
+			const sk = skill.params;
+			const value = getSkillFixedDamage(skill);
 			return document.createTextNode(value.bigNumberToString() + "固伤");
 		}},
 		{name:"队长技+C（按+C数排序）",function:cards=>{
@@ -1686,22 +1700,11 @@ function parseSkillDescription(skill)
 				}
 			}
 			return cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				if (searchTypeArray.some(t=>skill.type == t && getSkillAddCombo(skill)>0))
-					return true;
-				else if (skill.type == 138){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>searchTypeArray.some(t=>subskill.type == t && getSkillAddCombo(subskill)>0));
-				}
+				const skill = getCardLeaderSkill(card, searchTypeArray);
+				return skill ? (getSkillAddCombo(skill)>0) : false;
 			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				let a_pC = 0,b_pC = 0;
-				a_pC = searchTypeArray.includes(a_s.type) ?
-					getSkillAddCombo(a_s) :
-					getSkillAddCombo(a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
-				b_pC = searchTypeArray.includes(b_s.type) ?
-					getSkillAddCombo(b_s) :
-					getSkillAddCombo(b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)));
+				const a_s = getCardLeaderSkill(a, searchTypeArray), b_s = getCardLeaderSkill(b, searchTypeArray);
+				let a_pC = getSkillAddCombo(a_s),b_pC = getSkillAddCombo(b_s);
 				return a_pC - b_pC;
 			});
 		},addition:card=>{
@@ -1722,7 +1725,7 @@ function parseSkillDescription(skill)
 						return 0;
 				}
 			}
-			const skill = getCardSkill(card, searchTypeArray, true);
+			const skill = getCardLeaderSkill(card, searchTypeArray);
 			const sk = skill.params;
 			const value = getSkillAddCombo(skill);
 			return document.createTextNode(`+${value.bigNumberToString()}C${skill.type==210?`/十字`:""}`);
@@ -1997,7 +2000,13 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),
+		addition:card=>{
+			const searchTypeArray = [53];
+			const skill = getCardLeaderSkill(card, searchTypeArray);
+			const sk = skill.params;
+			return document.createTextNode(`掉率x${sk[0]/100}`);
+		}},
 		{name:"增加金币掉落倍数（按增加倍率排序）",function:cards=>cards.filter(card=>{
 			const searchType = 54;
 			const skill = Skills[card.leaderSkillId];
@@ -2018,7 +2027,13 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),
+		addition:card=>{
+			const searchTypeArray = [54];
+			const skill = getCardLeaderSkill(card, searchTypeArray);
+			const sk = skill.params;
+			return document.createTextNode(`金币x${sk[0]/100}`);
+		}},
 		{name:"增加经验获取倍数（按增加倍率排序）",function:cards=>cards.filter(card=>{
 			const searchType = 148;
 			const skill = Skills[card.leaderSkillId];
@@ -2039,7 +2054,13 @@ function parseSkillDescription(skill)
 				b_s.params[0] :
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
-		})},
+		}),
+		addition:card=>{
+			const searchTypeArray = [148];
+			const skill = getCardLeaderSkill(card, searchTypeArray);
+			const sk = skill.params;
+			return document.createTextNode(`经验x${sk[0]/100}`);
+		}},
 		{name:"-----血倍率-----",function:cards=>cards},
 		{name:"队长血倍率[2, ∞)（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
@@ -2206,6 +2227,7 @@ function parseSkillDescription(skill)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 			return a_pC - b_pC;
 		})},
+		{name:"随机效果技能",function:cards=>cards.filter(card=>Skills[card.activeSkillId].type == 118)},
 		{name:"-----破吸类-----",function:cards=>cards},
 		{name:"破属吸 buff（按破吸回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 173;
@@ -2946,18 +2968,31 @@ function parseSkillDescription(skill)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
 		})},
-		{name:"回复力 buff（顶降回复）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [50,90];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type) && skill.params.slice(1,skill.params.length>2?-1:undefined).includes(5))
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>
-					searchTypeArray.includes(subskill.type) && subskill.params.slice(1,subskill.params.length>2?-1:undefined).includes(5)
-				);
+		{
+			name:"回复力 buff（顶降回复）",
+			function:cards=>{
+				const searchTypeArray = [50,90];
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (skill)
+					{
+						const sk = skill.params;
+						return sk.slice(1,sk.length>2?-1:undefined).includes(5);
+					}else return false;
+				}).sort((a,b)=>{
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					//将技能的手指类型转换为二进制01、10、11等形式，低位表示加固定秒，高位表示手指加倍
+					const a_ss = a_s.params.length > 2 ? a_s.params[a_s.params.length-1] : 0, b_ss = b_s.params.length > 2 ? b_s.params[b_s.params.length-1] : 0;
+					return a_ss - b_ss;
+				});
+			},
+			addition:card=>{
+				const searchTypeArray = [50,90];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const sk = skill.params;
+				return document.createTextNode(`回x${sk.length > 2 ? sk[sk.length-1]/100 : 0}`);
 			}
-		})},
+		},
 		{name:"攻击力 buff（顶降攻击）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [
 				88,92, //类型的
@@ -2979,16 +3014,30 @@ function parseSkillDescription(skill)
 				);
 			}
 		})},
-		{name:"操作时间 buff（顶减手指）",function:cards=>cards.filter(card=>{
-			const searchType = 132;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
+		{
+			name:"操作时间 buff（顶减手指）",
+			function:cards=>{
+				const searchTypeArray = [132];
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}).sort((a,b)=>{
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					//将技能的手指类型转换为二进制01、10、11等形式，低位表示加固定秒，高位表示手指加倍
+					const a_t =  Boolean(a_s.params[1]) | Boolean(a_s.params[2])<<1, b_t = Boolean(b_s.params[1]) | Boolean(b_s.params[2])<<1;
+					return (a_t - b_t) || ((a_t & b_t & 1) ? a_s.params[1] - b_s.params[1] : a_s.params[2] - b_s.params[2]);
+				});
+			},
+			addition:card=>{
+				const searchTypeArray = [132];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const sk = skill.params;
+				let str = "";
+				if (sk[1]) str += `${sk[1]>0?`+`:``}${sk[1]/10}S`;
+				if (sk[2]) str += `👆x${sk[2]/100}`;
+				return document.createTextNode(str);
 			}
-		})},
+		},
 		{name:"无天降 buff（顶无天降）",function:cards=>cards.filter(card=>{
 			const searchType = 184;
 			const skill = Skills[card.activeSkillId];
@@ -3009,27 +3058,28 @@ function parseSkillDescription(skill)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"加C buff（按C数排列）",function:cards=>cards.filter(card=>{
-			const searchType = 160;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
+		{
+			name:"加C buff（按C数排列）",
+			function:cards=>{
+				const searchTypeArray = [160];
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}).sort((a,b)=>{
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					return a_s.params[1] - b_s.params[1];
+				});
+			},
+			addition:card=>{
+				const searchTypeArray = [160];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const sk = skill.params;
+				let str = "";
+				if (sk[1]) str += `${sk[1]>0?`+`:``}${sk[1]/10}S`;
+				if (sk[2]) str += `👆x${sk[2]/100}`;
+				return document.createTextNode(`+${sk[1]}C×${sk[0]}T`);
 			}
-		}).sort((a,b)=>{
-			const searchType = 160;
-			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = (a_s.type == searchType) ?
-				a_s.params[1] :
-				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
-			b_pC = (b_s.type == searchType) ?
-				b_s.params[1] :
-				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
-			return a_pC - b_pC;
-		})},
+		},
 		{name:"全属减伤 buff（按减伤比率排序）",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [3,156];
 			const skill = Skills[card.activeSkillId];
@@ -3175,7 +3225,7 @@ function parseSkillDescription(skill)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"回血 buff",function:cards=>cards.filter(card=>{
+		{name:"回合结束回血 buff",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [179];
 			const skill = Skills[card.activeSkillId];
 			if (searchTypeArray.includes(skill.type))
@@ -3291,27 +3341,17 @@ function parseSkillDescription(skill)
 			}
 		})},
 		{name:"-----对敌 buff 类-----",function:cards=>cards},
-		{name:"威吓（按推迟回合排序）",function:cards=>cards.filter(card=>{
-			const searchType = 18;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
-			}
-		}).sort((a,b)=>{
-			const searchType = 18;
-			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = (a_s.type == searchType) ?
-				a_s.params[0] :
-				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			b_pC = (b_s.type == searchType) ?
-				b_s.params[0] :
-				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			return a_pC - b_pC;
-		}),addition:card=>{
+		{name:"威吓（按推迟回合排序）",function:cards=>{
+			const searchTypeArray = [18];
+			return cards.filter(card=>{
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return skill;
+			}).sort((a,b)=>{
+				const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+				let a_pC = a_s.params[0],b_pC = b_s.params[0];
+				return a_pC - b_pC;
+			});
+		},addition:card=>{
 			const searchTypeArray = [18];
 			const skill = getCardSkill(card, searchTypeArray);
 			const sk = skill.params;
