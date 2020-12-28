@@ -135,14 +135,14 @@ Member.prototype.outObj = function() {
 	let obj = [m.id];
 	if (m.level != undefined) obj[1] = m.level;
 	if (m.awoken != undefined) obj[2] = m.awoken;
-	if (m.plus != undefined && m.plus instanceof Array && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) != 0) {
+	if (m.plus != undefined && Array.isArray(m.plus) && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) != 0) {
 		if (m.plus[0] === m.plus[1] && m.plus[0] === m.plus[2]) { //当3个加值一样时只生成第一个减少长度
 			obj[3] = m.plus[0];
 		} else {
 			obj[3] = m.plus;
 		}
 	}
-	if (m.latent != undefined && m.latent instanceof Array && m.latent.length >= 1) obj[4] = m.latent;
+	if (m.latent != undefined && Array.isArray(m.latent) && m.latent.length >= 1) obj[4] = m.latent;
 	if (m.sawoken != undefined && m.sawoken >= 0) obj[5] = m.sawoken;
 	const card = Cards[m.id] || Cards[0]; //怪物固定数据
 	const skill = Skills[card.activeSkillId];
@@ -170,10 +170,10 @@ Member.prototype.loadObj = function(m, dataVersion) {
 	} else {
 		this.plus = m.plus;
 	}
-	if (!(this.plus instanceof Array)) this.plus = [0, 0, 0]; //如果加值不是数组，则改变
+	if (!(Array.isArray(this.plus))) this.plus = [0, 0, 0]; //如果加值不是数组，则改变
 	this.latent = dataVersion > 1 ? m[4] : m.latent;
-	if (this.latent instanceof Array && dataVersion <= 2) this.latent = this.latent.map(l => l >= 13 ? l + 3 : l); //修复以前自己编的潜觉编号为官方编号
-	if (!(this.latent instanceof Array)) this.latent = []; //如果潜觉不是数组，则改变
+	if (Array.isArray(this.latent) && dataVersion <= 2) this.latent = this.latent.map(l => l >= 13 ? l + 3 : l); //修复以前自己编的潜觉编号为官方编号
+	if (!(Array.isArray(this.latent))) this.latent = []; //如果潜觉不是数组，则改变
 	this.sawoken = dataVersion > 1 ? m[5] : m.sawoken;
 	this.skilllevel = m[6] || null;
 };
@@ -207,7 +207,7 @@ MemberAssist.prototype.loadFromMember = function(m) {
 	this.id = m.id;
 	if (m.level != undefined) this.level = m.level;
 	if (m.awoken != undefined) this.awoken = m.awoken;
-	if (m.plus != undefined && m.plus instanceof Array && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) > 0) this.plus = JSON.parse(JSON.stringify(m.plus));
+	if (m.plus != undefined && Array.isArray(m.plus) && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) > 0) this.plus = JSON.parse(JSON.stringify(m.plus));
 	if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 //正式队伍
@@ -226,11 +226,11 @@ MemberTeam.prototype.loadFromMember = function(m) {
 	this.id = m.id;
 	if (m.level != undefined) this.level = m.level;
 	if (m.awoken != undefined) this.awoken = m.awoken;
-	if (m.plus != undefined && m.plus instanceof Array && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) > 0) this.plus = JSON.parse(JSON.stringify(m.plus));
-	if (m.latent != undefined && m.latent instanceof Array && m.latent.length >= 1) this.latent = JSON.parse(JSON.stringify(m.latent));
+	if (m.plus != undefined && Array.isArray(m.plus) && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) > 0) this.plus = JSON.parse(JSON.stringify(m.plus));
+	if (m.latent != undefined && Array.isArray(m.latent) && m.latent.length >= 1) this.latent = JSON.parse(JSON.stringify(m.latent));
 	if (m.sawoken != undefined) this.sawoken = m.sawoken;
-	if (m.ability != undefined && m.ability instanceof Array && m.plus.length >= 3) this.ability = JSON.parse(JSON.stringify(m.ability));
-	if (m.abilityNoAwoken != undefined && m.abilityNoAwoken instanceof Array && m.plus.length >= 3) this.abilityNoAwoken = JSON.parse(JSON.stringify(m.abilityNoAwoken));
+	if (m.ability != undefined && Array.isArray(m.ability) && m.plus.length >= 3) this.ability = JSON.parse(JSON.stringify(m.ability));
+	if (m.abilityNoAwoken != undefined && Array.isArray(m.abilityNoAwoken) && m.plus.length >= 3) this.abilityNoAwoken = JSON.parse(JSON.stringify(m.abilityNoAwoken));
 	if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 
@@ -642,7 +642,7 @@ function loadData(force = false)
 		lastCkeys = localStorage.getItem("PADDF-ckey"); //读取本地储存的原来的ckey
 		try {
 			lastCkeys = JSON.parse(lastCkeys);
-			if (lastCkeys == null || !(lastCkeys instanceof Array))
+			if (lastCkeys == null || !(Array.isArray(lastCkeys)))
 				lastCkeys = [];
 		} catch (e) {
 			console.error("旧的 Ckey 数据 JSON 解码出错。", e);
@@ -669,7 +669,7 @@ function loadData(force = false)
 				console.error("Cards 数据库内容读取失败。");
 			};
 			request.onsuccess = function(event) {
-				if (request.result instanceof Array)
+				if (Array.isArray(request.result))
 				{
 					Cards = request.result;
 					dealCardsData(Cards);
@@ -756,7 +756,7 @@ function loadData(force = false)
 					console.error("Skills 数据库内容读取失败。");
 				};
 				request.onsuccess = function(event) {
-					if (request.result instanceof Array)
+					if (Array.isArray(request.result))
 					{
 						Skills = request.result;
 						dealSkillData(Skills);
@@ -1534,7 +1534,7 @@ function initialize() {
 	const searchResultCount = searchBox.querySelector(".search-list-length");
 	showSearch = function(searchArr, customAdditionalFunction)
 	{
-		if (!(searchArr instanceof Array))
+		if (!(Array.isArray(searchArr)))
 		{ //如果不是数组就直接取消下一步
 			return;
 		}
@@ -1564,7 +1564,7 @@ function initialize() {
 				showAbilitiesWithAwoken: s_add_show_abilities_with_awoken.checked,
 				customAddition: typeof customAdditionalFunction == "function" ?
 				 [customAdditionalFunction] :
-				 (customAdditionalFunction instanceof Array ? customAdditionalFunction : null)
+				 (Array.isArray(customAdditionalFunction) ? customAdditionalFunction : null)
 			};
 			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, additionalOption));
 			searchMonList.customAddition = additionalOption.customAddition;
