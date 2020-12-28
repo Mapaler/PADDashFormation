@@ -2,7 +2,7 @@
     webpage_title: `P&D ${teamsCount}P Formation Maker`,
     title_blank: "Input Formation Title",
     detail_blank: "Input Detail",
-    sort_name:{
+    sort_name: {
         sort_none: "Nope",
         sort_id: "Cards Id",
         sort_attrs : "Attribute",
@@ -21,6 +21,9 @@
         sort_abilityIndex_awoken: "Maximum Weighted Ability Index (+Awakening)",
     },
     force_reload_data: "Force refresh data",
+    skill_parse: {
+        Unknown: "unknown skill",
+    },
 }
 
 localisation(localTranslating);

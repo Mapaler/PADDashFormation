@@ -111,7 +111,7 @@ const SkillKinds = {
     NoSkyfall: "no-skyfall",
 }
 
-function parser(skillId)
+function skillParser(skillId)
 {
 	const skill = Skills[skillId];
 	if (!skill) return [];
@@ -119,7 +119,7 @@ function parser(skillId)
 		return [{ kind: SkillKinds.Unknown }];
 	}
 	//此处用apply将这个parser传递到后面解析函数的this里，用于递归解析
-	const result = parsers[skill.type].apply({ parser }, skill.params);
+	const result = parsers[skill.type].apply({ parser: skillParser }, skill.params);
 	const skills = (Array.isArray(result) ? result : [result])
 		.filter(s => Boolean(s))
 		.map(s => ({ id: skillId, type: skill.type, params: skill.params, ...s }));
@@ -167,7 +167,7 @@ const c = {
         return { hp: { min: min / 100, max: max / 100 } };
 	},
 	exact: function (type, value, attrs) {
-        if (attrs === void 0) { attrs = models_1.Attributes.all(); }
+        if (attrs === void 0) { attrs = Attributes.all(); }
         return { exact: { type: type, value: value, attrs: attrs } };
 	},
 	compo: function (type, ids) {
@@ -215,24 +215,25 @@ const p = {
         };
     },
     scaleAttrs: function (attrs, min, max, baseMul, bonusMul) {
-        return __assign({ kind: SkillPowerUpKind.ScaleAttributes, attrs: attrs }, scale(min, max, baseMul, bonusMul));
+        return { kind: SkillPowerUpKind.ScaleAttributes, attrs: attrs ,...scale(min, max, baseMul, bonusMul) };
     },
     scaleCombos: function (min, max, baseMul, bonusMul) {
-        return __assign({ kind: SkillPowerUpKind.ScaleCombos }, scale(min, max, baseMul, bonusMul));
+        return { kind: SkillPowerUpKind.ScaleCombos ,...scale(min, max, baseMul, bonusMul) };
     },
     scaleMatchLength: function (attrs, min, max, baseMul, bonusMul) {
-        return __assign({ kind: SkillPowerUpKind.ScaleMatchLength, attrs: attrs }, scale(min, max, baseMul, bonusMul));
+        return { kind: SkillPowerUpKind.ScaleMatchLength, attrs: attrs ,...scale(min, max, baseMul, bonusMul) };
     },
     scaleMatchAttrs: function (matches, min, max, baseMul, bonusMul) {
-        return __assign({ kind: SkillPowerUpKind.ScaleMatchAttrs, matches: matches }, scale(min, max, baseMul, bonusMul));
+        return { kind: SkillPowerUpKind.ScaleMatchAttrs, matches: matches ,...scale(min, max, baseMul, bonusMul) };
     },
     scaleCross: function (crosses) {
-        return { kind: SkillPowerUpKind.ScaleCross, crosses: crosses.map(function (cross) { return (__assign(__assign({}, cross), { mul: (cross.mul / 100) || 1 })); }) };
+        return { kind: SkillPowerUpKind.ScaleCross, crosses: crosses.map(cross => ({ ...cross, mul: (cross.mul / 100) || 1 })) };
     },
     scaleAwakenings: function (awakenings, value) {
         return { kind: SkillPowerUpKind.ScaleAwakenings, awakenings: awakenings, value: value / 100 };
     },
 }
+
 function activeTurns(turns, skill) {
     return skill ? { kind: SkillKinds.ActiveTurns, turns: turns, skill: skill } : null;
 }
@@ -253,7 +254,7 @@ function changeOrbs() {
 }
 function powerUp(attrs, types, value, condition, reduceDamageValue) {
     if (value.kind === SkillPowerUpKind.Multiplier) {
-        var _a = value, hp = _a.hp, atk = _a.atk, rcv = _a.rcv;
+        let hp = value.hp, atk = value.atk, rcv = value.rcv;
         if (hp === 1 && atk === 1 && rcv === 1 && !reduceDamage)
             return null;
     }
@@ -612,3 +613,449 @@ const parsers = {
 	  return damageEnemy('single', 'fixed', v.constant(value));
 	},
 };
+
+function renderSkill(skill)
+{
+	const fragment = document.createDocumentFragment();
+	const txt = str=>fragment.appendChild(document.createTextNode(str));
+	if (typeof localTranslating == "undefined") return fragment;
+	const tsp = localTranslating.skill_parse;
+	switch (skill.kind) {
+		case SkillKinds.Unknown: {
+			txt(tsp.Unknown);
+		}
+		/*
+		case SkillKinds.ActiveTurns: {
+			const { turns, skill: actionSkill } = skill as Skill.ActiveTurns;
+			return <span className="CardSkill-skill">{renderSkill(skillactionSkill)} &times; {turns} turns</span>;
+		}
+		case SkillKinds.RandomSkills: {
+			const { skills } = skill as Skill.RandomSkills;
+			return (
+				<>
+				<span className="CardSkill-skill">random skills:</span>
+				<ul className="CardSkill-item-list">
+					{skills.map((data, i) => <li key={i}>
+					<div className="CardSkill-skill-list">{data.map(renderSkillEntry)}</div>
+					</li>)}
+				</ul>
+				</>
+			);
+		}
+
+		case SkillKinds.Delay: {
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="status-delay" className="CardSkill-icon" title="Delay" />
+			</span>
+		);
+		}
+		case SkillKinds.MassAttack: {
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="status-mass-attack" className="CardSkill-icon" title="Mass attack" />
+			</span>
+		);
+		}
+		case SkillKinds.LeaderChange: {
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="status-leader-change" className="CardSkill-icon" title="Leader change" />
+			</span>
+		);
+		}
+		case SkillKinds.NoSkyfall: {
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="status-no-skyfall" className="CardSkill-icon" title="No skyfall" />
+			</span>
+		);
+		}
+		case SkillKinds.Heal: {
+		const { value } = skill as Skill.WithValue;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="status-heal" className="CardSkill-icon" title="Heal" />
+			{renderValue(value)}
+			</span>
+		);
+		}
+		case SkillKinds.DefenseBreak: {
+		const { value } = skill as Skill.WithValue;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="status-def-break" className="CardSkill-icon" title="Defense break" />
+			{renderValue(value)}
+			</span>
+		);
+		}
+		case SkillKinds.Poison: {
+		const { value } = skill as Skill.WithValue;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="status-poison" className="CardSkill-icon" title="Poison" />
+			{renderValue(value)}
+			</span>
+		);
+		}
+		case SkillKinds.TimeExtend: {
+		const { value } = skill as Skill.WithValue;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId={SkillValue.isLess(value) ? 'status-time-decr' : 'status-time-incr'}
+				className="CardSkill-icon"
+				title={SkillValue.isLess(value) ? 'Time decrease' : 'Time extend'}
+			/>
+			{renderValue(value, 'seconds')}
+			</span>
+		);
+		}
+		case SkillKinds.FollowAttack: {
+		const { value } = skill as Skill.WithValue;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="skill-follow-atk" className="CardSkill-icon" title="Follow-up Attack" />
+			{renderValue(value)}
+			</span>
+		);
+		}
+		case SkillKinds.AutoHeal: {
+		const { value } = skill as Skill.WithValue;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="status-heal" className="CardSkill-icon" title="Auto-heal" />
+			{renderValue(value)}
+			</span>
+		);
+		}
+		case SkillKinds.CTW: {
+		const { value } = skill as Skill.WithValue;
+		return (
+			<span className="CardSkill-skill">
+			<AssetBox className="CardSkill-icon-box" title="CTW">
+				<Asset assetId="status-combo" className="CardSkill-icon" />
+				<Asset assetId="status-time-incr" className="CardSkill-icon" style={{ transform: 'scale(0.75)' }} />
+			</AssetBox>
+			{renderValue(value, 'seconds')}
+			</span>
+		);
+		}
+		case SkillKinds.Gravity: {
+		const { value } = skill as Skill.WithValue;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="skill-gravity" className="CardSkill-icon" title="Gravity" />
+			{renderValue(value)}
+			</span>
+		);
+		}
+		case SkillKinds.Resolve: {
+		const { min, max } = skill as Skill.Resolve;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="status-resolve" className="CardSkill-icon" title="Resolve" />
+			{renderValue(min)} &hArr; {renderValue(max)}
+			</span>
+		);
+		}
+		case SkillKinds.BoardChange: {
+		const { attrs } = skill as Skill.BoardChange;
+		return (
+			<span className="CardSkill-skill">
+			<AssetBox className="CardSkill-icon-box" title="Board change">
+				<Asset assetId="status-combo" className="CardSkill-icon" />
+				<Asset assetId="overlay-drop" className="CardSkill-icon" />
+			</AssetBox>
+			{renderOrbs(attrs)}
+			</span>
+		);
+		}
+		case SkillKinds.SkillBoost: {
+		const { value } = skill as Skill.WithValue<number>;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="skill-boost" className="CardSkill-icon" title="Skill boost" />
+			{value} turns
+			</span>
+		);
+		}
+		case SkillKinds.AddCombo: {
+		const { value } = skill as Skill.WithValue<number>;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId={`status-combo-p${value}`} className="CardSkill-icon" title={`Add ${value} combo`} />
+			</span>
+		);
+		}
+		case SkillKinds.FixedTime: {
+		const { value } = skill as Skill.WithValue<number>;
+		return (
+			<span className="CardSkill-skill">
+			<AssetBox className="CardSkill-icon-box" title="Fixed movement time">
+				<Asset assetId="status-time-incr" className="CardSkill-icon" />
+				<Asset assetId="orb-locked" className="CardSkill-icon" />
+			</AssetBox>
+			{value} seconds
+			</span>
+		);
+		}
+		case SkillKinds.MinMatchLength: {
+		const { value } = skill as Skill.WithValue<number>;
+		return <span className="CardSkill-skill">minimum match length {value}</span>;
+		}
+		case SkillKinds.DropRefresh: {
+		return <span className="CardSkill-skill">drop refresh</span>;
+		}
+		case SkillKinds.Drum: {
+		return <span className="CardSkill-skill">drum sound</span>;
+		}
+		case SkillKinds.Board7x6: {
+		return <span className="CardSkill-skill">7x6 board</span>;
+		}
+
+		case SkillKinds.DamageEnemy: {
+		const { attr, target, selfHP, damage } = skill as Skill.DamageEnemy;
+		return (
+			<span className="CardSkill-skill">
+			{!!selfHP && <>HP = {renderValue(selfHP)} &rArr;</>}
+
+			<Asset assetId="skill-attack" className="CardSkill-icon" />
+
+			{target === 'all' && <Asset assetId="status-mass-attack" className="CardSkill-icon" title="All enemies" />}
+			{target === 'single' && <>single enemy </>}
+			{typeof target === 'number' && <>{renderAttrs(target)} enemies </>}
+
+			&rArr; {renderValue(damage)}
+			{attr === 'fixed' && <Asset assetId="status-def-break" className="CardSkill-icon" title="Fixed damage" />}
+			{typeof attr === 'number' && renderAttrs(attr)}
+
+			</span>
+		);
+		}
+		case SkillKinds.Vampire: {
+		const { attr, damage, heal } = skill as Skill.Vampire;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="skill-attack" className="CardSkill-icon" />
+			single enemy &rArr; {renderValue(damage)}
+			{typeof attr === 'number' && renderAttrs(attr)}
+			&nbsp;&rArr;
+			<Asset assetId="status-heal" className="CardSkill-icon" />
+			{renderValue(heal)} damage
+			</span>
+		);
+		}
+		case SkillKinds.CounterAttack: {
+		const { attr, prob, value } = skill as Skill.CounterAttack;
+		return (
+			<span className="CardSkill-skill">
+			<Asset assetId="status-counter" className="CardSkill-icon" />
+			{renderValue(prob)} &rArr; {renderValue(value)} damage
+			{typeof attr === 'number' && renderAttrs(attr)}
+			</span>
+		);
+		}
+		case SkillKinds.ChangeOrbs: {
+		const { changes } = skill as Skill.ChangeOrbs;
+		return (
+			<span className="CardSkill-skill">
+			<AssetBox className="CardSkill-icon-box" title="Change orbs">
+				<Asset assetId="status-all-attrs" className="CardSkill-icon" />
+				<Asset assetId="overlay-heal" className="CardSkill-icon" />
+			</AssetBox>
+			<span className="CardSkill-item-list">
+				{changes.map((change, i) => {
+				switch (change.kind) {
+					case 'from':
+					return (
+						<span key={i}>
+						{renderOrbs(change.from)} &rArr; {renderOrbs(change.to)}
+						</span>
+					);
+					case 'gen':
+					return (
+						<span key={i}>
+						{renderOrbs(change.exclude).map((orb, j) => (
+							<AssetBox className="CardSkill-icon-box" key={j}>
+							{orb}
+							<Asset assetId="overlay-cross" className="CardSkill-icon" />
+							</AssetBox>
+						))} &rArr; {renderOrbs(change.to)} &times; {change.count}
+						</span>
+					);
+					case 'fixed':
+					return (change.positions.length > 0 &&
+						<span key={i}>
+						{change.type === 'col' ? 'column' : 'row'}&nbsp;
+						{change.positions.map(p => p + 1).join(', ')}
+						&nbsp;&rArr; {renderOrbs(change.to)}
+						</span>
+					);
+				}
+				})}
+			</span>
+			</span>
+		);
+		}
+		case SkillKinds.Unbind: {
+		const { normal, awakenings } = skill as Skill.Unbind;
+		return (
+			<span className="CardSkill-skill CardSkill-item-list">
+			{!!normal && <span>
+				<Asset assetId="skill-unbind" className="CardSkill-icon" />
+				{normal} turns
+			</span>}
+			{!!awakenings && <span>
+				<AssetBox className="CardSkill-icon-box">
+				<Asset assetId="status-bind-awakenings" className="CardSkill-icon" />
+				<Asset assetId="overlay-heal" className="CardSkill-icon" />
+				</AssetBox>
+				{awakenings} turns
+			</span>}
+			</span>
+		);
+		}
+		case SkillKinds.OrbDropIncrease: {
+		const { attrs, value } = skill as Skill.OrbDropIncrease;
+		let attrElems: React.ReactNode[];
+		if (attrs === 'enhanced')
+			attrElems = [<Asset assetId="status-orb-enhanced" className="CardSkill-icon" key="enhanced" />];
+		else
+			attrElems = renderOrbs(attrs);
+
+		attrElems = attrElems.map((elem, i) => (
+			<AssetBox className="CardSkill-icon-box" key={i}>
+			{elem}
+			<Asset assetId="overlay-drop" className="CardSkill-icon" />
+			</AssetBox>
+		));
+
+		return (
+			<span className="CardSkill-skill">
+			{attrElems}
+			{renderValue(value)}
+			</span>
+		);
+		}
+		case SkillKinds.VoidEnemyBuff: {
+		const { buffs } = skill as Skill.VoidEnemyBuff;
+		return (
+			<span className="CardSkill-skill">{
+			buffs.map(buff => {
+				switch (buff) {
+				case 'attr-absorb': return (
+					<AssetBox className="CardSkill-icon-box" key={buff}>
+					<Asset assetId="status-all-attrs" className="CardSkill-icon" />
+					<Asset assetId="overlay-heal" className="CardSkill-icon" />
+					<Asset assetId="overlay-cross" className="CardSkill-icon" style={{ opacity: 0.75 }} />
+					</AssetBox>
+				);
+				case 'damage-absorb': return (
+					<AssetBox className="CardSkill-icon-box" key={buff}>
+					<Asset assetId="status-damage-absorb" className="CardSkill-icon" />
+					<Asset assetId="overlay-cross" className="CardSkill-icon" style={{ opacity: 0.75 }} />
+					</AssetBox>
+				);
+				}
+			})
+			} </span>
+		);
+		}
+		case SkillKinds.ChangeAttribute: {
+		const { attr, target } = skill as Skill.ChangeAttribute;
+
+		return (
+			<span className="CardSkill-skill">
+			{target === 'self' && 'Self'}
+			{target === 'opponent' && 'enemy'}
+			&nbsp;&rArr; {renderAttrs(attr)}
+			</span>
+		);
+		}
+		case SkillKinds.SetOrbState: {
+		const { orbs, state } = skill as Skill.SetOrbState;
+		let orbElems: React.ReactNode[];
+		if (!orbs) {
+			orbElems = [<Asset assetId="orb-blind" className="CardSkill-icon" key="all" />];
+		} else {
+			orbElems = renderOrbs(orbs);
+		}
+
+		return (
+			<span className="CardSkill-skill">
+			{(state === 'enhanced' || state === 'locked') && orbElems}
+			{state === 'unlocked' && orbElems.map((elem, i) => (
+				<AssetBox className="CardSkill-icon-box" key={i}>
+				{elem}
+				<Asset assetId="orb-locked" className="CardSkill-icon" />
+				</AssetBox>
+			))}
+			&rArr;
+			{state === 'enhanced' && orbElems.map((elem, i) => (
+				<AssetBox className="CardSkill-icon-box" key={i}>
+				{elem}
+				<Asset assetId="orb-enhanced" className="CardSkill-icon" />
+				</AssetBox>
+			))}
+			{state === 'locked' && orbElems.map((elem, i) => (
+				<AssetBox className="CardSkill-icon-box" key={i}>
+				{elem}
+				<Asset assetId="orb-locked" className="CardSkill-icon" />
+				</AssetBox>
+			))}
+			{state === 'unlocked' && orbElems}
+			</span>
+		);
+		}
+		case SkillKinds.RateMultiply: {
+		const { rate, value } = skill as Skill.RateMultiply;
+
+		return (
+			<span className="CardSkill-skill">
+			{rate === 'drop' && 'drop rate'}
+			{rate === 'coin' && 'coins'}
+			{rate === 'exp' && 'EXP'}
+			&nbsp;&times;&nbsp;
+			{renderValue(value)}
+			</span>
+		);
+		}
+
+		case SkillKinds.ReduceDamage: {
+		const { attrs, percent, condition } = skill as Skill.ReduceDamage;
+
+		return (
+			<span className="CardSkill-skill">
+			{!!condition && <>{renderCondition(condition)} &rArr; </>}
+			<Asset assetId="status-def" className="CardSkill-icon" />
+			{(Array.isArray(attrs) && !isEqual(attrs, Attributes.all())) && renderAttrs(attrs)}
+			{renderValue(percent)}
+			</span>
+		);
+		}
+		case SkillKinds.PowerUp: {
+		const { attrs, types, condition, value, reduceDamage } = skill as Skill.PowerUp;
+		const targets: React.ReactNode[] = [];
+		if (attrs && !isEqual(attrs, Attributes.all())) targets.push(...renderAttrs(attrs || []));
+		if (types) targets.push(...renderTypes(types || []));
+
+		return (
+			<span className="CardSkill-skill">
+			{condition && <>{renderCondition(condition)} &rArr; </>}
+			{targets.length > 0 && <>{targets}</>}
+			{!!value && renderPowerUp(value)}
+			{!!reduceDamage && <>
+				<Asset assetId="status-def" className="CardSkill-icon" />
+				{renderValue(reduceDamage)}
+			</>}
+			</span>
+		);
+		}
+	*/
+		default: {
+			console.log(skill, skill.kind);
+			txt(skill.kind);
+		}
+	}
+	return fragment;
+  };

@@ -2034,7 +2034,8 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .skill-box .skill-cd{
 	margin-left: 10px;
 }
-.skill-datail{
+.skill-datail-original,
+.skill-datail-parsed{
 	color: black;
 	padding: 0 8px 6px 8px;
 	line-height: 25px;

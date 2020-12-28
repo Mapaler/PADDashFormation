@@ -1,7 +1,8 @@
 @charset "utf-8";
 @import "zh.css";
 .edit-box .monsterinfo-box .monster-name,
-.edit-box .skill-box .skill-datail,
+.edit-box .skill-box .skill-datail-original,
+.edit-box .skill-box .skill-datail-parsed,
 .evo-panel-right .monster-name
 {
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;

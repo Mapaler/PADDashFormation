@@ -2511,8 +2511,8 @@ function editBoxChangeMonId(id) {
 	if (card.id == 0) {
 		id = 0;
 	}
-	const skill = Skills[card.activeSkillId];
-	const leaderSkill = Skills[card.leaderSkillId];
+	//const skill = Skills[card.activeSkillId];
+	//const leaderSkill = Skills[card.leaderSkillId];
 
 	let fragment = null;
 
@@ -2708,21 +2708,28 @@ function editBoxChangeMonId(id) {
 	const skillLevel = skillBox.querySelector(".m-skill-level");
 	//const skillLevel_1 = skillBox.querySelector(".m-skill-lv-1");
 	const skillLevel_Max = skillBox.querySelector(".m-skill-lv-max");
-	const skillDetail = skillBox.querySelector(".skill-datail");
+	const skillDetailParsed = skillBox.querySelector(".skill-datail-parsed");
+	const skillDetailOriginal = skillBox.querySelector(".skill-datail-original");
 
+	const activeskill = Skills[card.activeSkillId];
+	const leaderSkill = Skills[card.leaderSkillId];
 	fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	fragment.appendChild(skillBox);
 
-	skillTitle.innerHTML = descriptionToHTML(skill.name);
-	skillTitle.setAttribute("data-skillid", skill.id);
-	skillDetail.innerHTML = "";
-	skillDetail.appendChild(parseSkillDescription(skill));
-	const t_maxLevel = card.overlay || card.types.includes(15) ? 1 : skill.maxLevel; //遇到不能升技的，最大等级强制为1
+	skillTitle.innerHTML = descriptionToHTML(activeskill.name);
+	skillTitle.setAttribute("data-skillid", activeskill.id);
+	skillDetailOriginal.innerHTML = "";
+	skillDetailOriginal.appendChild(parseSkillDescription(activeskill));
+	skillDetailParsed.innerHTML = "";
+	skillParser(card.activeSkillId)
+		.map(parsedSkill => renderSkill(parsedSkill))
+		.forEach(node => skillDetailParsed.appendChild(node));
+	const t_maxLevel = card.overlay || card.types.includes(15) ? 1 : activeskill.maxLevel; //遇到不能升技的，最大等级强制为1
 	skillLevel.max = t_maxLevel;
 	skillLevel.value = t_maxLevel;
 	skillLevel_Max.value = t_maxLevel;
-	//skillLevel_Max.textContent = skill.maxLevel;
-	skillCD.textContent = skill.initialCooldown - t_maxLevel + 1;
+	//skillLevel_Max.textContent = activeskill.maxLevel;
+	skillCD.textContent = activeskill.initialCooldown - t_maxLevel + 1;
 
 	rowSkill.appendChild(fragment);
 
@@ -2730,15 +2737,20 @@ function editBoxChangeMonId(id) {
 	const rowLederSkill = settingBox.querySelector(".row-mon-leader-skill");
 	const lskillBox = rowLederSkill.querySelector(".skill-box");
 	const lskillTitle = lskillBox.querySelector(".skill-name");
-	const lskillDetail = lskillBox.querySelector(".skill-datail");
+	const lskillDetailParsed = lskillBox.querySelector(".skill-datail-parsed");
+	const lskillDetailOriginal = lskillBox.querySelector(".skill-datail-original");
 
 	fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	fragment.appendChild(lskillBox);
 
 	lskillTitle.innerHTML = descriptionToHTML(leaderSkill.name);
 	lskillTitle.setAttribute("data-skillid", leaderSkill.id);
-	lskillDetail.innerHTML = "";
-	lskillDetail.appendChild(parseSkillDescription(leaderSkill));
+	lskillDetailOriginal.innerHTML = "";
+	lskillDetailOriginal.appendChild(parseSkillDescription(leaderSkill));
+	lskillDetailParsed.innerHTML = "";
+	skillParser(card.leaderSkillId)
+		.map(parsedSkill => renderSkill(parsedSkill))
+		.forEach(node => lskillDetailParsed.appendChild(node));
 
 	rowLederSkill.appendChild(fragment);
 
