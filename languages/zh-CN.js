@@ -1659,7 +1659,7 @@ function parseSkillDescription(skill)
 				return skill ? (getSkillFixedDamage(skill)>0) : false;
 			}).sort((a,b)=>{
 				const a_s = getCardLeaderSkill(a, searchTypeArray), b_s = getCardLeaderSkill(b, searchTypeArray);
-				let a_pC = getSkillFixedDamage(a_s),b_pC = getSkillFixedDamage(b_s);
+				let a_pC = getSkillFixedDamage(a_s), b_pC = getSkillFixedDamage(b_s);
 				return a_pC - b_pC;
 			});
 		},addition:card=>{
@@ -2334,127 +2334,111 @@ function parseSkillDescription(skill)
 			return document.createTextNode(`破贯×${sk[0]}T`);
 		}},
 		{name:"-----解封类-----",function:cards=>cards},
-		{name:"解封（按解封回合排序）",function:cards=>{
-			const JieFeng_ParamsIndex = type=>type == 179 ? 3 : 0;
-			return cards.filter(card=>{
+		{
+			name:"解封（按解封回合排序）",
+			function:cards=>{
 				const searchTypeArray = [117,179];
-				const skill = Skills[card.activeSkillId];
-				if (searchTypeArray.includes(skill.type) && skill.params[JieFeng_ParamsIndex(skill.type)])
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && subskill.params[JieFeng_ParamsIndex(subskill.type)]);
+				function getJieFengHuiHe(skill)
+				{
+					return skill.type == 179 ? skill.params[3] : skill.params[0];
 				}
-			}).sort((a,b)=>{
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill ? getJieFengHuiHe(skill) : false;
+				}).sort((a,b)=>{
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					let a_pC = getJieFengHuiHe(a_s), b_pC = getJieFengHuiHe(b_s);
+					return a_pC - b_pC;
+				});
+			},
+			addition:card=>{
 				const searchTypeArray = [117,179];
-				const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-				let a_pC = 0,b_pC = 0;
-				a_pC = (searchTypeArray.includes(a_s.type)) ?
-					a_s :
-					a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type));
-				b_pC = (searchTypeArray.includes(b_s.type)) ?
-					b_s :
-					b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type));
-				return a_pC.params[JieFeng_ParamsIndex(a_pC.type)] - b_pC.params[JieFeng_ParamsIndex(b_pC.type)];
-			});
-		},addition:card=>{
-			const searchTypeArray = [117,179];
-			const skill = getCardSkill(card, searchTypeArray);
-			const sk = skill.params;
+				const skill = getCardSkill(card, searchTypeArray);
+				const sk = skill.params;
 
-			const JieFengTurn = skill=>skill.type == 179 ? skill.params[3] : skill.params[0];
-			const value = JieFengTurn(skill);
-			return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解封`);
-		}},
-		{name:"解觉醒（按解觉回合排序）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [117,179];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type) && skill.params[4])
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && subskill.params[4]);
+				const JieFengTurn = skill=>skill.type == 179 ? skill.params[3] : skill.params[0];
+				const value = JieFengTurn(skill);
+				return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解封`);
 			}
-		}).sort((a,b)=>{
-			const searchTypeArray = [117,179];
-			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = (searchTypeArray.includes(a_s.type)) ?
-				a_s.params[4] :
-				a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
-			b_pC = (searchTypeArray.includes(b_s.type)) ?
-				b_s.params[4] :
-				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
-			return a_pC - b_pC;
-		}),addition:card=>{
-			const searchTypeArray = [117,179];
-			const skill = getCardSkill(card, searchTypeArray);
-			const sk = skill.params;
+		},
+		{
+			name:"解觉醒（按解觉回合排序）",
+			function:cards=>{
+				const searchTypeArray = [117,179];
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill ? skill.params[4] : false;
+				}).sort((a,b)=>{
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					let a_pC = a_s.params[4], b_pC = b_s.params[4];
+					return a_pC - b_pC;
+				})
+			},
+			addition:card=>{
+				const searchTypeArray = [117,179];
+				const skill = getCardSkill(card, searchTypeArray);
+				const sk = skill.params;
 
-			const value = sk[4];
-			return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解觉`);
-		}},
-		{name:"解封+觉醒（按解觉醒回合排序）",function:cards=>cards.filter(card=>{
-			const searchTypeArray = [117,179];
-			const skill = Skills[card.activeSkillId];
-			if (searchTypeArray.includes(skill.type) && skill.params[4] && skill.params[skill.type == 179 ? 3 : 0])
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && subskill.params[4] && subskill.params[skill.type == 179 ? 3 : 0]);
+				const value = sk[4];
+				return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解觉`);
 			}
-		}).sort((a,b)=>{
-			const searchTypeArray = [117,179];
-			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = (searchTypeArray.includes(a_s.type)) ?
-				a_s.params[4] :
-				a_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
-			b_pC = (searchTypeArray.includes(b_s.type)) ?
-				b_s.params[4] :
-				b_s.params.map(id=>Skills[id]).find(subskill => searchTypeArray.includes(subskill.type)).params[4];
-			return a_pC - b_pC;
-		}),addition:card=>{
-			const searchTypeArray = [117,179];
-			const skill = getCardSkill(card, searchTypeArray);
-			const sk = skill.params;
+		},
+		{
+			name:"解封+觉醒（按解觉醒回合排序）",
+			function:cards=>{
+				const searchTypeArray = [117,179];
+				function getJieFengHuiHe(skill)
+				{
+					return skill.type == 179 ? skill.params[3] : skill.params[0];
+				}
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill ? (skill.params[4] && getJieFengHuiHe(skill)) : false;
+				}).sort((a,b)=>{
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					let a_pC = a_s.params[4], b_pC = b_s.params[4];
+					return a_pC - b_pC;
+				});
+			},
+			addition:card=>{
+				const searchTypeArray = [117,179];
+				const skill = getCardSkill(card, searchTypeArray);
+				const sk = skill.params;
 
-			const JieFengTurn = skill=>skill.type == 179 ? skill.params[3] : skill.params[0];
-			const value1 = JieFengTurn(skill);
-			const value2 = sk[4];
-			
-			return document.createTextNode(value1 == value2 ?
-				`${value1 == 9999 ? "全" : value1 + "T"}解封+觉` :
-				`${value1 == 9999 ? "全" : value1 + "T"}解封，${value2 == 9999 ? "全" : value2 + "T"}解觉`);
-		}},
-		{name:"解禁消珠（按消除回合排序）",function:cards=>cards.filter(card=>{
-			const searchType = 196;
-			const skill = Skills[card.activeSkillId];
-			if (skill.type == searchType)
-				return true;
-			else if (skill.type == 116 || skill.type == 118){
-				const subskills = skill.params.map(id=>Skills[id]);
-				return subskills.some(subskill=>subskill.type == searchType);
+				function getJieFengHuiHe(skill)
+				{
+					return skill.type == 179 ? skill.params[3] : skill.params[0];
+				}
+				const value1 = getJieFengHuiHe(skill);
+				const value2 = sk[4];
+				
+				return document.createTextNode(value1 == value2 ?
+					`${value1 == 9999 ? "全" : value1 + "T"}解封+觉` :
+					`${value1 == 9999 ? "全" : value1 + "T"}解封，${value2 == 9999 ? "全" : value2 + "T"}解觉`);
 			}
-		}).sort((a,b)=>{
-			const searchType = 196;
-			const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-			let a_pC = 0,b_pC = 0;
-			a_pC = (a_s.type == searchType) ?
-				a_s.params[0] :
-				a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			b_pC = (b_s.type == searchType) ?
-				b_s.params[0] :
-				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-			return a_pC - b_pC;
-		}),addition:card=>{
-			const searchTypeArray = [196];
-			const skill = getCardSkill(card, searchTypeArray);
-			const sk = skill.params;
+		},
+		{
+			name:"解禁消珠（按消除回合排序）",
+			function:cards=>{
+				const searchTypeArray = [196];
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}).sort((a,b)=>{
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					let a_pC = a_s.params[0], b_pC = b_s.params[0];
+					return a_pC - b_pC;
+				})
 
-			const value = sk[0];
-			return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
-		}},
+			},addition:card=>{
+				const searchTypeArray = [196];
+				const skill = getCardSkill(card, searchTypeArray);
+				const sk = skill.params;
+
+				const value = sk[0];
+				return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
+			}
+		},
 		{name:"-----锁珠类-----",function:cards=>cards},
 		{name:"解锁",function:cards=>cards.filter(card=>{
 			const searchType = 172;
