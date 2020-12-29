@@ -1,4 +1,13 @@
 ﻿document.title = `智龙迷城${teamsCount}人队伍图制作工具`;
+const localTranslating = {
+    skill_parse: {
+		unknown_skill_type: ()=>`未知的技能类型`,
+		active_turns: (turns, element)=>[`${turns}回合内，`, element],
+		random_skills: (element)=>[`随机执行以下技能：`, element],
+		delay: ()=> `将敌人的攻击延迟`,
+		mass_attack: ()=> `所有攻击变为全体攻击`,
+    },
+}
 
 //大数字缩短长度
 Number.prototype.bigNumberToString = function()

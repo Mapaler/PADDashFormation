@@ -2716,14 +2716,13 @@ function editBoxChangeMonId(id) {
 	fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	fragment.appendChild(skillBox);
 
-	skillTitle.innerHTML = descriptionToHTML(activeskill.name);
+	skillTitle.textContent = activeskill.name;
 	skillTitle.setAttribute("data-skillid", activeskill.id);
 	skillDetailOriginal.innerHTML = "";
 	skillDetailOriginal.appendChild(parseSkillDescription(activeskill));
 	skillDetailParsed.innerHTML = "";
-	skillParser(card.activeSkillId)
-		.map(parsedSkill => renderSkill(parsedSkill))
-		.forEach(node => skillDetailParsed.appendChild(node));
+	skillDetailParsed.appendChild(renderSkills(skillParser(card.activeSkillId)));
+
 	const t_maxLevel = card.overlay || card.types.includes(15) ? 1 : activeskill.maxLevel; //遇到不能升技的，最大等级强制为1
 	skillLevel.max = t_maxLevel;
 	skillLevel.value = t_maxLevel;
@@ -2743,14 +2742,12 @@ function editBoxChangeMonId(id) {
 	fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	fragment.appendChild(lskillBox);
 
-	lskillTitle.innerHTML = descriptionToHTML(leaderSkill.name);
+	lskillTitle.textContent = leaderSkill.name;
 	lskillTitle.setAttribute("data-skillid", leaderSkill.id);
 	lskillDetailOriginal.innerHTML = "";
 	lskillDetailOriginal.appendChild(parseSkillDescription(leaderSkill));
 	lskillDetailParsed.innerHTML = "";
-	skillParser(card.leaderSkillId)
-		.map(parsedSkill => renderSkill(parsedSkill))
-		.forEach(node => lskillDetailParsed.appendChild(node));
+	lskillDetailParsed.appendChild(renderSkills(skillParser(card.leaderSkillId)));
 
 	rowLederSkill.appendChild(fragment);
 

@@ -524,8 +524,9 @@ function cardN(id){
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)
 {
-	str = str.replace(/\n/ig,"<br>"); //换行
+	//str = str.replace(/\n/ig,"<br>"); //换行
 	//str = str.replace(/ /ig,"&nbsp;"); //换行
+
 	str = str.replace(/\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm,'<span style="color:#$1;">$2</span>'); //文字颜色
 	str = str.replace(/\%\{m([0-9]{1,4})\}/g,function (str, p1, offset, s){return cardN(parseInt(p1,10)).outerHTML;}); //怪物头像
 	return str;

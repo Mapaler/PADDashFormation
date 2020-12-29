@@ -126,6 +126,23 @@ function skillParser(skillId)
 	return skills;
 }
 
+//返回flag里值为true的数组，如[1,4,7]
+function flags(num){
+	/*
+	return Array.from(new Array(32),(i,n)=>n).filter(n => num & (1 << n)); //性能太差
+	return new Array(32).fill(null).map((i,n)=>n).filter(n => num & (1 << n)); //性能比上者好，但还是不够快
+	*/
+	const arr = [];
+	for (let i = 0; i<32;i++)
+	{
+		if (num & (1<<i))
+		{
+			arr.push(i);
+		}
+	}
+	return arr;
+}
+
 const v = {
     percent: function(value) {
         return { kind: SkillValueKind.Percent, value: (value / 100) || 1 };
@@ -215,16 +232,16 @@ const p = {
         };
     },
     scaleAttrs: function (attrs, min, max, baseMul, bonusMul) {
-        return { kind: SkillPowerUpKind.ScaleAttributes, attrs: attrs ,...scale(min, max, baseMul, bonusMul) };
+        return { kind: SkillPowerUpKind.ScaleAttributes, attrs: attrs ,...this.scale(min, max, baseMul, bonusMul) };
     },
     scaleCombos: function (min, max, baseMul, bonusMul) {
-        return { kind: SkillPowerUpKind.ScaleCombos ,...scale(min, max, baseMul, bonusMul) };
+        return { kind: SkillPowerUpKind.ScaleCombos ,...this.scale(min, max, baseMul, bonusMul) };
     },
     scaleMatchLength: function (attrs, min, max, baseMul, bonusMul) {
-        return { kind: SkillPowerUpKind.ScaleMatchLength, attrs: attrs ,...scale(min, max, baseMul, bonusMul) };
+        return { kind: SkillPowerUpKind.ScaleMatchLength, attrs: attrs ,...this.scale(min, max, baseMul, bonusMul) };
     },
     scaleMatchAttrs: function (matches, min, max, baseMul, bonusMul) {
-        return { kind: SkillPowerUpKind.ScaleMatchAttrs, matches: matches ,...scale(min, max, baseMul, bonusMul) };
+        return { kind: SkillPowerUpKind.ScaleMatchAttrs, matches: matches ,...this.scale(min, max, baseMul, bonusMul) };
     },
     scaleCross: function (crosses) {
         return { kind: SkillPowerUpKind.ScaleCross, crosses: crosses.map(cross => ({ ...cross, mul: (cross.mul / 100) || 1 })) };
@@ -614,49 +631,71 @@ const parsers = {
 	},
 };
 
+function renderSkills(skills)
+{
+	const ul = document.createElement("ul");
+	ul.className = "card-skill-list";
+	skills.forEach(skill=>{
+		const li = ul.appendChild(document.createElement("li"));
+		li.className = skill.kind;
+		li.appendChild(renderSkill(skill));
+	});
+	return ul;
+}
 function renderSkill(skill)
 {
+	function appendToFragment(arg){
+		if (Array.isArray(arg))
+		{
+			arg.forEach(element=>appendToFragment(element));
+		}
+		else if (typeof arg == "string")
+		{
+			return fragment.appendChild(document.createTextNode(arg));
+		}
+		else
+		{
+			console.log("看看这是啥",arg);
+			return fragment.appendChild(arg);
+		}
+	}
 	const fragment = document.createDocumentFragment();
-	const txt = str=>fragment.appendChild(document.createTextNode(str));
 	if (typeof localTranslating == "undefined") return fragment;
 	const tsp = localTranslating.skill_parse;
 	switch (skill.kind) {
 		case SkillKinds.Unknown: {
-			txt(tsp.Unknown);
+			appendToFragment(tsp.unknown_skill_type());
+			break;
 		}
-		/*
 		case SkillKinds.ActiveTurns: {
-			const { turns, skill: actionSkill } = skill as Skill.ActiveTurns;
-			return <span className="CardSkill-skill">{renderSkill(skillactionSkill)} &times; {turns} turns</span>;
+			appendToFragment(tsp.active_turns(skill.turns, renderSkill(skill.skill)));
+			break;
 		}
 		case SkillKinds.RandomSkills: {
-			const { skills } = skill as Skill.RandomSkills;
-			return (
-				<>
-				<span className="CardSkill-skill">random skills:</span>
-				<ul className="CardSkill-item-list">
-					{skills.map((data, i) => <li key={i}>
-					<div className="CardSkill-skill-list">{data.map(renderSkillEntry)}</div>
-					</li>)}
-				</ul>
-				</>
-			);
+			const ul = document.createElement("ul");
+			ul.className = "random-active-skill";
+			skill.skills.forEach(subSkills=>{
+				const li = ul.appendChild(document.createElement("li"));
+				li.appendChild(renderSkills(subSkills));
+			});
+			appendToFragment(tsp.random_skills(ul));
+			break;
 		}
-
 		case SkillKinds.Delay: {
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="status-delay" className="CardSkill-icon" title="Delay" />
-			</span>
-		);
+			const idoc = document.createElement("icon");
+			idoc.className = "icon-delay";
+			appendToFragment(idoc);
+			appendToFragment(tsp.delay());
+			break;
 		}
 		case SkillKinds.MassAttack: {
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="status-mass-attack" className="CardSkill-icon" title="Mass attack" />
-			</span>
-		);
+			const idoc = document.createElement("icon");
+			idoc.className = "icon-mass-attack";
+			appendToFragment(idoc);
+			appendToFragment(tsp.mass_attack());
+			break;
 		}
+		/*
 		case SkillKinds.LeaderChange: {
 		return (
 			<span className="CardSkill-skill">
@@ -1051,10 +1090,10 @@ function renderSkill(skill)
 			</span>
 		);
 		}
-	*/
+		*/
 		default: {
-			console.log(skill, skill.kind);
-			txt(skill.kind);
+			console.log(skill.kind, skill);
+			appendToFragment(skill.kind);
 		}
 	}
 	return fragment;

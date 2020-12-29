@@ -79,7 +79,7 @@ body{
 	box-sizing: border-box;
 	padding: 1px;
 	margin: 0;
-	white-space: pre-wrap;
+	white-space: break-spaces;
 }
 
 .guide-mod .control-box>div.status
@@ -2039,6 +2039,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	color: black;
 	padding: 0 8px 6px 8px;
 	line-height: 25px;
+	white-space: break-spaces;
+}
+.skill-datail-original
+{
+	border-bottom: #9C743E solid 2px;
 }
 .skill-datail .spColor{
 	color: #ff3600;
@@ -2050,10 +2055,10 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .skill-datail .detail-search::before{
 	content: "🔍";
 }
-.skill-datail .random-active-skill{
+.random-active-skill{
 	padding-left: 1em;
 }
-.skill-datail .random-active-skill>.active-skill-li{
+.random-active-skill>li{
 	list-style: decimal;
 }
 
