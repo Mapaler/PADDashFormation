@@ -23,12 +23,15 @@
     force_reload_data: `Force refresh data`,
     skill_parse: {
         unknown_skill_type: ()=>`Unknown skill type.`,
-		active_turns: (turns, element)=> [element,`, in ${turns} turns.`],
-        random_skills: (element)=>[`Activates these random skills:`, element],
+		active_turns: (turns, activeElement)=> [activeElement,`, for ${turns} turns.`],
+        random_skills: (skillList)=>[`Activates these random skills:`, skillList],
         delay: ()=> `Delays enemies' next move`,
 		mass_attack: ()=> `plus Mass Attack`,
         leader_change: ()=> `Switches places with Leader Monster; use again to switch back`,
-		no_skyfall: ()=> `No Skyfall Combos`,
+        no_skyfall: ()=> `No Skyfall Combos`,
+        value: {
+            unknown_value: (type)=>`[ unknown value: ${type}]`,
+        }
     },
 }
 

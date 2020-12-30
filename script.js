@@ -3008,7 +3008,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		setTextContentAndAttribute(tHpDom_general, tHP);
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
-		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).toFixed(2));
+		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).keepCounts());
 		tHpDom_reduce.setAttribute("data-max-equal-general", tReduceHP);
 		tHpDom_reduce.setAttribute("data-max-equal-awoken-bind", tReduceHPNoAwoken);
 	}
@@ -3026,8 +3026,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		} else
 		{
 			tMoveDom.classList.remove("fixed-move-time");
-			setTextContentAndAttribute(tMoveDom_general, Math.round((moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge + moveTime.duration.awoken) * 100) / 100);
-			setTextContentAndAttribute(tMoveDom_noAwoken, Math.round((moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge) * 100) / 100);
+			setTextContentAndAttribute(tMoveDom_general, (moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge + moveTime.duration.awoken).keepCounts());
+			setTextContentAndAttribute(tMoveDom_noAwoken, (moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge).keepCounts());
 		}
 	}
 }
@@ -3074,7 +3074,7 @@ function refreshFormationTotalHP(totalDom, teams) {
 
 		setTextContentAndAttribute(tHpDom_general, tHP);
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
-		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).toFixed(2));
+		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).keepCounts());
 		tHpDom_reduce.setAttribute("data-max-equal-general", tReduceHP);
 		tHpDom_reduce.setAttribute("data-max-equal-awoken-bind", tReduceHPNoAwoken);
 	}

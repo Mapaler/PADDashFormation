@@ -58,6 +58,11 @@ Number.prototype.prefixInteger = function(length, useGrouping = false)
 			minimumIntegerDigits: length
 		});
 }
+//最多保留N位小数，不留0
+Number.prototype.keepCounts = function(n = 2)
+{  
+	return Number(this.toFixed(n)).toString();
+}
 //大数字缩短长度，默认返回本地定义字符串
 Number.prototype.bigNumberToString = function()
 {  

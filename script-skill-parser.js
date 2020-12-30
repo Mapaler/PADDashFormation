@@ -655,7 +655,6 @@ function renderSkill(skill)
 		}
 		else
 		{
-			console.log("看看这是啥",arg);
 			return fragment.appendChild(arg);
 		}
 	}
@@ -705,6 +704,18 @@ function renderSkill(skill)
 		case SkillKinds.NoSkyfall: {
 			appendToFragment(createIcon("no-skyfall"));
 			appendToFragment(tsp.no_skyfall());
+			break;
+		}
+		case SkillKinds.Heal: {
+			appendToFragment(renderValue(skill.value));
+			break;
+		}
+		case SkillKinds.DefenseBreak: {
+			appendToFragment(renderValue(skill.value));
+			break;
+		}
+		case SkillKinds.Poison: {
+			appendToFragment(renderValue(skill.value));
 			break;
 		}
 		/*
@@ -1095,4 +1106,89 @@ function renderSkill(skill)
 		}
 	}
 	return fragment;
-  };
+};
+
+
+function renderValue(_value, unit) {
+	function appendToFragment(arg){
+		if (Array.isArray(arg))
+		{
+			arg.forEach(element=>appendToFragment(element));
+		}
+		else if (typeof arg == "string")
+		{
+			return fragment.appendChild(document.createTextNode(arg));
+		}
+		else
+		{
+			return fragment.appendChild(arg);
+		}
+	}
+	const fragment = document.createDocumentFragment();
+	if (typeof localTranslating == "undefined") return fragment;
+	const tspv = localTranslating.skill_parse.value;
+	switch (_value.kind) {
+		/*
+		case SkillValueKind.xRCV: {
+			_value.value 
+			const { value } = _value as SkillValue.Simple;
+			return <span>{formatNumber(value)} &times; {renderStat('rcv')}</span>;
+		}
+		case SkillValueKind.Percent: {
+			const { value } = _value as SkillValue.Simple;
+			return <span>{formatNumber(value * 100)}%</span>;
+		}
+		case SkillValueKind.Constant: {
+			const { value } = _value as SkillValue.Simple;
+			return <span>{formatNumber(value)}{unit ? ` ${unit}` : ''}</span>;
+		}
+		case SkillValueKind.xMaxHP: {
+			const { value } = _value as SkillValue.Simple;
+			return <span>{formatNumber(value * 100)}% of {renderStat('maxhp')}</span>;
+		}
+		case SkillValueKind.xHP: {
+			const { value } = _value as SkillValue.Simple;
+			return <span>{formatNumber(value * 100)}% of {renderStat('hp')}</span>;
+		}
+		case SkillValueKind.xATK: {
+			const { value } = _value as SkillValue.Simple;
+			return <span>{formatNumber(value)} &times; {renderStat('atk')}</span>;
+		}
+		case SkillValueKind.xRCV: {
+			const { value } = _value as SkillValue.Simple;
+			return <span>{formatNumber(value)} &times; {renderStat('rcv')}</span>;
+		}
+		case SkillValueKind.xTeamRCV: {
+			const { value } = _value as SkillValue.Simple;
+			return <span>{formatNumber(value)} &times; {renderStat('teamrcv')}</span>;
+		}
+		case SkillValueKind.xTeamATK: {
+			const { value, attrs } = _value as SkillValue.WithAttributes;
+			return <span>{formatNumber(value)} &times; {renderAttrs(attrs)} {renderStat('teamatk')}</span>;
+		}
+		case SkillValueKind.HPScale: {
+			const { min, max } = _value as SkillValue.Scale;
+			return <span>({formatNumber(min)} &hArr; {formatNumber(max)} &prop; {renderStat('hp')}) &times; {renderStat('atk')}</span>;
+		}
+		case SkillValueKind.RandomATK: {
+			const { min, max } = _value as SkillValue.Scale;
+			if (min === max) {
+			return <span>{formatNumber(min)} &times; {renderStat('atk')}</span>;
+			} else {
+			return <span>(random &times; {formatNumber(min)} &hArr; {formatNumber(max)}) &times; {renderStat('atk')}</span>;
+			}
+		}
+		case SkillValueKind.xAwakenings: {
+			const { value, awakenings } = _value as SkillValue.WithAwakenings;
+			return <span>{formatNumber(value * 100)}% &times; each of {awakenings.map(id =>
+			<Asset assetId={`awakening-${id}`} className="CardSkill-icon" key={id} />
+			)}</span>;
+		}
+		*/
+		default: {
+			console.log(_value.kind, _value);
+			appendToFragment(tspv.unknown_value(_value.kind));
+		}
+	}
+	return fragment;
+  }

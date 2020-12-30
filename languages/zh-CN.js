@@ -2,12 +2,15 @@
 const localTranslating = {
     skill_parse: {
 		unknown_skill_type: ()=>`未知的技能类型`,
-		active_turns: (turns, element)=>[`${turns}回合内，`, element],
-		random_skills: (element)=>[`随机执行以下技能：`, element],
+		active_turns: (turns, activeElement)=>[`${turns}回合内，`, activeElement],
+		random_skills: (skillList)=>[`随机执行以下技能：`, skillList],
 		delay: ()=> `将敌人的攻击延迟`,
 		mass_attack: ()=> `所有攻击变为全体攻击`,
 		leader_change: ()=> `将自身换为队长，再次使用则换回来`,
 		no_skyfall: ()=> `天降的宝珠不会消除`,
+        value: {
+            unknown_value: (type)=>`[ 未知数值: ${type}]`,
+        }
     },
 }
 

@@ -601,7 +601,7 @@ ul{
 .tIf-total-hp .reduce::after{
 	content: "%";
 }
-.tIf-total-hp .reduce:not([data-value="0.00"])::after{
+.tIf-total-hp .reduce:not([data-value="0"])::after{
 	content: "%⇔" attr(data-max-equal-general) "/" attr(data-max-equal-awoken-bind);
 }
 
@@ -2753,7 +2753,7 @@ table .orb-icon
 	display: inline-block;
 	width: 36px;
 	height: 36px;
-	background-image: url(images/icon-skills.png);
+	background-image: url(images/icon-skills.fw.png);
 	background-repeat: no-repeat;
 	vertical-align: bottom;
 	transform: scale(0.75);
