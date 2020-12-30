@@ -48,6 +48,14 @@ Attributes.orbs = function () {
 	];
 }
 
+const SkillValue = {
+	isLess: function (value) {
+		if (value.kind === SkillValueKind.Percent) return value.value < 1;
+		if (value.kind === SkillValueKind.Constant) return value.value < 0;
+		return false;
+	}
+};
+
 const SkillValueKind = {
 	Percent: 'mul',
 	Constant: 'const',
@@ -61,6 +69,8 @@ const SkillValueKind = {
 	xTeamRCV: 'mul-team-rcv',
 	xAwakenings: 'mul-awakenings',
 };
+
+
 
 const SkillPowerUpKind = {
 	Multiplier: 'mul',
@@ -631,6 +641,21 @@ const parsers = {
 	},
 };
 
+function _appendToFragment(fragment, arg){
+	if (Array.isArray(arg))
+	{
+		arg.forEach(element=>_appendToFragment(fragment, element));
+	}
+	else if (typeof arg == "string" || typeof arg == "number")
+	{
+		return fragment.appendChild(document.createTextNode(arg));
+	}
+	else
+	{
+		return fragment.appendChild(arg);
+	}
+}
+
 function renderSkills(skills)
 {
 	const ul = document.createElement("ul");
@@ -645,35 +670,25 @@ function renderSkills(skills)
 function renderSkill(skill)
 {
 	function appendToFragment(arg){
-		if (Array.isArray(arg))
-		{
-			arg.forEach(element=>appendToFragment(element));
-		}
-		else if (typeof arg == "string")
-		{
-			return fragment.appendChild(document.createTextNode(arg));
-		}
-		else
-		{
-			return fragment.appendChild(arg);
-		}
+		return _appendToFragment(fragment, arg);
 	}
-	function createIcon(iconType){
+	function createIcon(iconType, className){
 		const idoc = document.createElement("icon");
-		idoc.className = "icon-skill";
+		idoc.className = `icon-skill${className ? ` ${className}` : ''}`;
 		idoc.setAttribute("data-icon-type", iconType);
 		return idoc;
 	}
 	const fragment = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return fragment;
-	const tsp = localTranslating.skill_parse;
+	const tsps = localTranslating.skill_parse.skill;
+	const tspu = localTranslating.skill_parse.unit;
 	switch (skill.kind) {
 		case SkillKinds.Unknown: {
-			appendToFragment(tsp.unknown_skill_type());
+			appendToFragment(tsps.unknown());
 			break;
 		}
 		case SkillKinds.ActiveTurns: {
-			appendToFragment(tsp.active_turns(skill.turns, renderSkill(skill.skill)));
+			appendToFragment(tsps.active_turns(skill.turns, renderSkill(skill.skill)));
 			break;
 		}
 		case SkillKinds.RandomSkills: {
@@ -683,81 +698,50 @@ function renderSkill(skill)
 				const li = ul.appendChild(document.createElement("li"));
 				li.appendChild(renderSkills(subSkills));
 			});
-			appendToFragment(tsp.random_skills(ul));
+			appendToFragment(tsps.random_skills(ul));
 			break;
 		}
 		case SkillKinds.Delay: {
 			appendToFragment(createIcon("delay"));
-			appendToFragment(tsp.delay());
+			appendToFragment(tsps.delay());
 			break;
 		}
 		case SkillKinds.MassAttack: {
 			appendToFragment(createIcon("mass-attack"));
-			appendToFragment(tsp.mass_attack());
+			appendToFragment(tsps.mass_attack());
 			break;
 		}
 		case SkillKinds.LeaderChange: {
 			appendToFragment(createIcon("leader-change"));
-			appendToFragment(tsp.leader_change());
+			appendToFragment(tsps.leader_change());
 			break;
 		}
 		case SkillKinds.NoSkyfall: {
 			appendToFragment(createIcon("no-skyfall"));
-			appendToFragment(tsp.no_skyfall());
+			appendToFragment(tsps.no_skyfall());
 			break;
 		}
 		case SkillKinds.Heal: {
-			appendToFragment(renderValue(skill.value));
+			appendToFragment(createIcon("heal", "status-incr"));
+			appendToFragment(tsps.heal(renderValue(skill.value)));
 			break;
 		}
 		case SkillKinds.DefenseBreak: {
-			appendToFragment(renderValue(skill.value));
+			appendToFragment(createIcon("defense-break"));
+			appendToFragment(tsps.defense_break(renderValue(skill.value)));
 			break;
 		}
 		case SkillKinds.Poison: {
-			appendToFragment(renderValue(skill.value));
+			appendToFragment(createIcon("poison"));
+			appendToFragment(tsps.poison(renderValue(skill.value)));
+			break;
+		}
+		case SkillKinds.TimeExtend: {
+			appendToFragment(createIcon(SkillValue.isLess(skill.value) ? "status-time-decr" : "status-time-incr"));
+			appendToFragment(tsps.time_extend(renderValue(skill.value, tspu.seconds, { showsPlusSign:true, percentToScale:true })));
 			break;
 		}
 		/*
-		case SkillKinds.Heal: {
-		const { value } = skill as Skill.WithValue;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="status-heal" className="CardSkill-icon" title="Heal" />
-			{renderValue(value)}
-			</span>
-		);
-		}
-		case SkillKinds.DefenseBreak: {
-		const { value } = skill as Skill.WithValue;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="status-def-break" className="CardSkill-icon" title="Defense break" />
-			{renderValue(value)}
-			</span>
-		);
-		}
-		case SkillKinds.Poison: {
-		const { value } = skill as Skill.WithValue;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="status-poison" className="CardSkill-icon" title="Poison" />
-			{renderValue(value)}
-			</span>
-		);
-		}
-		case SkillKinds.TimeExtend: {
-		const { value } = skill as Skill.WithValue;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId={SkillValue.isLess(value) ? 'status-time-decr' : 'status-time-incr'}
-				className="CardSkill-icon"
-				title={SkillValue.isLess(value) ? 'Time decrease' : 'Time extend'}
-			/>
-			{renderValue(value, 'seconds')}
-			</span>
-		);
-		}
 		case SkillKinds.FollowAttack: {
 		const { value } = skill as Skill.WithValue;
 		return (
@@ -1108,32 +1092,193 @@ function renderSkill(skill)
 	return fragment;
 };
 
-
-function renderValue(_value, unit) {
+function renderStat(stat) {
 	function appendToFragment(arg){
-		if (Array.isArray(arg))
-		{
-			arg.forEach(element=>appendToFragment(element));
-		}
-		else if (typeof arg == "string")
-		{
-			return fragment.appendChild(document.createTextNode(arg));
-		}
-		else
-		{
-			return fragment.appendChild(arg);
-		}
+		return _appendToFragment(fragment, arg);
+	}
+	function newSpan(str , type)
+	{
+		const span = document.createElement("span");
+		span.className = "cardskill-stats";
+		span.setAttribute("data-cardskill-stats", type);
+		span.textContent = str;
+		return span;
+	}
+	const fragment = document.createDocumentFragment();
+	if (typeof localTranslating == "undefined") return fragment;
+	const tsps = localTranslating.skill_parse.stats;
+	console.log(stat)
+	if (tsps[stat])
+		appendToFragment(newSpan(tsps[stat](), stat));
+	else
+		appendToFragment(tsps.unknown(stat));
+	return fragment;
+}
+/*
+function renderAttrs(attrs: Attributes | Attributes[]) {
+	if (!Array.isArray(attrs))
+	attrs = [attrs];
+	return attrs.map(attr => {
+	if (attr >= Attributes.Heart)
+		return <Asset assetId={`orb-${attr}`} key={attr} className="CardSkill-icon" />;
+	return <Asset assetId={`attr-${attr}`} key={attr} className="CardSkill-icon" />;
+	});
+}
+
+function renderOrbs(attrs: Attributes | Attributes[]) {
+	if (!Array.isArray(attrs))
+	attrs = [attrs];
+	return attrs.map(attr => <Asset assetId={`orb-${attr}`} key={attr} className="CardSkill-icon" />);
+}
+
+function renderTypes(types: Types | Types[]) {
+	if (!Array.isArray(types))
+	types = [types];
+	return types.map(type => <Asset assetId={`type-${type}`} key={type} className="CardSkill-icon" />);
+}
+
+
+function renderCondition(cond: SkillCondition) {
+	if (cond.hp) {
+	if (cond.hp.min === cond.hp.max)
+		return <>{renderStat('hp')} = {formatNumber(cond.hp.min * 100)}%</>;
+	else if (cond.hp.min === 0)
+		return <>{renderStat('hp')} &le; {formatNumber(cond.hp.max * 100)}%</>;
+	else if (cond.hp.max === 1)
+		return <>{renderStat('hp')} &ge; {formatNumber(cond.hp.min * 100)}%</>;
+	else
+		return <>{renderStat('hp')} &in; [{formatNumber(cond.hp.min * 100)}%, {formatNumber(cond.hp.max * 100)}%]</>;
+	} else if (cond.useSkill) {
+	return <>use skill</>;
+	} else if (cond.multiplayer) {
+	return <>in multiplayer</>;
+	} else if (cond.remainOrbs) {
+	return <>&le; {cond.remainOrbs.count} orbs remain</>;
+	} else if (cond.exact) {
+	if (cond.exact.type === 'combo') {
+		return <>= {cond.exact.value} combos</>;
+	} else if (cond.exact.type === 'match-length') {
+		return <>= {cond.exact.value} {cond.exact.attrs === 'enhanced' ? 'Enhanced' : renderAttrs(cond.exact.attrs)} orbs</>;
+	}
+	} else if (cond.compo) {
+	return <>{cond.compo.type} [{cond.compo.ids.join()}] in team</>;
+	}
+	return <>[ unknown condition ]</>;
+}
+
+function renderPowerUp(powerUp: SkillPowerUp) {
+	function renderStats(hp: number, atk: number, rcv: number, mul = true) {
+	const operator = mul ? <>&times;</> : <>+</>;
+	let list: Array<['hp' | 'atk' | 'rcv', number]> = [['hp', hp], ['atk', atk], ['rcv', rcv]];
+	list = list.filter(([, value]) => value !== (mul ? 1 : 0));
+	if (list.length === 0) return null;
+
+	if (list.every(([, value]) => value === list[0][1])) {
+		return <>
+		{list.map(([name], i) => <React.Fragment key={name}>{i !== 0 && ', '}{renderStat(name)}</React.Fragment>)}
+		&nbsp;{operator} {formatNumber(list[0][1])}
+		</>;
+	} else {
+		return <>
+		{list.map(([name, value], i) => (
+			<React.Fragment key={name}>
+			{i !== 0 ? '; ' : ''}
+			{renderStat(name)}
+			&nbsp;{operator} {formatNumber(value)}
+			</React.Fragment>
+		))}
+		</>;
+	}
+	}
+
+	switch (powerUp.kind) {
+	case SkillPowerUpKind.Multiplier: {
+		const { hp, atk, rcv } = powerUp as SkillPowerUp.Mul;
+		return renderStats(hp, atk, rcv);
+	}
+	case SkillPowerUpKind.ScaleAttributes: {
+		const { attrs, min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.ScaleAttrs;
+		return <>
+		&ge; {min} of [{renderAttrs(attrs)}] &rArr; {renderStats(1, baseAtk, baseRcv)}
+		{max !== min && <> for each &le; {max} attributes: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
+		</>;
+	}
+	case SkillPowerUpKind.ScaleCombos: {
+		const { min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.Scale;
+		return <>
+		&ge; {min} combos &rArr; {renderStats(1, baseAtk, baseRcv)}
+		{max !== min && <> for each &le; {max} combos: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
+		</>;
+	}
+	case SkillPowerUpKind.ScaleMatchAttrs: {
+		const { matches, min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.ScaleMultiAttrs;
+		return <>
+		&ge; {min} matches of [{matches.map((attrs, i) =>
+			<React.Fragment key={i}>{i !== 0 && ', '}{renderAttrs(attrs)}</React.Fragment>
+		)}] &rArr; {renderStats(1, baseAtk, baseRcv)}
+		{max !== min && <> for each &le; {max} matches: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
+		</>;
+	}
+	case SkillPowerUpKind.ScaleMatchLength: {
+		const { attrs, min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.ScaleAttrs;
+		return <>
+		&ge; {min} &times; {renderAttrs(attrs)} &rArr; {renderStats(1, baseAtk, baseRcv)}
+		{max !== min && <> for each &le; {max} orbs: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
+		</>;
+	}
+	case SkillPowerUpKind.ScaleCross: {
+		const { crosses } = powerUp as SkillPowerUp.ScaleCross;
+		return crosses.map(({ single, attr, mul }, i) => <React.Fragment key={i}>
+		{i !== 0 && ', '}
+		{mul !== 1 && <>{renderStat('atk')} &times; {formatNumber(mul)} </>}
+		{single ? 'when' : 'for each'} cross of {renderAttrs(attr)}
+		</React.Fragment>);
+	}
+	case SkillPowerUpKind.ScaleAwakenings: {
+		const { awakenings, value } = powerUp as SkillPowerUp.ScaleAwakenings;
+		return <>
+		{renderStat('atk')} &times; {formatNumber(value - 1)} for each {awakenings.map(id =>
+			<Asset assetId={`awakening-${id}`} className="CardSkill-icon" key={id} />
+		)}
+		</>;
+	}
+	default:
+		return <>[ unknown power up ]</>;
+	}
+}
+*/
+function renderValue(_value, unit, option = {}) {
+	function appendToFragment(arg){
+		return _appendToFragment(fragment, arg);
 	}
 	const fragment = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return fragment;
 	const tspv = localTranslating.skill_parse.value;
 	switch (_value.kind) {
-		/*
-		case SkillValueKind.xRCV: {
-			_value.value 
-			const { value } = _value as SkillValue.Simple;
-			return <span>{formatNumber(value)} &times; {renderStat('rcv')}</span>;
+		case SkillValueKind.Percent: {
+			appendToFragment(option.percentToScale ? 
+				tspv.mul_scale(_value.value.keepCounts()) :
+				tspv.mul_percent((_value.value * 100).keepCounts())
+			);
+			break;
 		}
+		case SkillValueKind.Constant: {
+			appendToFragment(tspv.const((option.showsPlusSign && _value.value >= 0 ? "+" : "") + _value.value.keepCounts(), unit));
+			break;
+		}
+		case SkillValueKind.xHP: {
+			appendToFragment(tspv.mul_hp(_value.value.keepCounts(), renderStat('hp')));
+			break;
+		}
+		case SkillValueKind.xATK: {
+			appendToFragment(tspv.mul_atk(_value.value.keepCounts(), renderStat('atk')));
+			break;
+		}
+		case SkillValueKind.xRCV: {
+			appendToFragment(tspv.mul_rcv(_value.value.keepCounts(), renderStat('rcv')));
+			break;
+		}
+		/*
 		case SkillValueKind.Percent: {
 			const { value } = _value as SkillValue.Simple;
 			return <span>{formatNumber(value * 100)}%</span>;
@@ -1187,7 +1332,7 @@ function renderValue(_value, unit) {
 		*/
 		default: {
 			console.log(_value.kind, _value);
-			appendToFragment(tspv.unknown_value(_value.kind));
+			appendToFragment(tspv.unknown(_value.kind));
 		}
 	}
 	return fragment;

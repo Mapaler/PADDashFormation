@@ -2758,20 +2758,77 @@ table .orb-icon
 	vertical-align: bottom;
 	transform: scale(0.75);
 	margin: -4px;
+	position: relative;
 }
-.icon-skill[data-icon-type="delay"]
+.icon-skill.status-incr::after,
+.icon-skill.status-decr::after,
+.icon-skill.status-bind::after
 {
-	background-position-y:calc(-36px * 0);
+	content: "";
+	display: inline-block;
+	width: 36px;
+	height: 36px;
+	background-image: url(images/icon-skills.fw.png);
+	background-repeat: no-repeat;
+	position: absolute;
 }
-.icon-skill[data-icon-type="mass-attack"]
+.icon-skill.status-incr::after,
+.icon-skill.status-decr::after
+{
+	transform: scale(0.75);
+	margin: -4px;
+	right: -5px;
+	top: -3px;
+}
+.icon-skill.status-bind::after
+{
+	animation: hidden-visible-animate 0.5s infinite ease-in alternate;
+}
+.icon-skill.status-incr::after
 {
 	background-position-y:calc(-36px * 1);
 }
-.icon-skill[data-icon-type="leader-change"]
+.icon-skill.status-decr::after
 {
 	background-position-y:calc(-36px * 2);
 }
-.icon-skill[data-icon-type="no-skyfall"]
+.icon-skill.status-bind::after
 {
 	background-position-y:calc(-36px * 3);
+}
+.icon-skill[data-icon-type="delay"]
+{
+	background-position-y:calc(-36px * 4);
+}
+.icon-skill[data-icon-type="mass-attack"]
+{
+	background-position-y:calc(-36px * 5);
+}
+.icon-skill[data-icon-type="leader-change"]
+{
+	background-position-y:calc(-36px * 6);
+}
+.icon-skill[data-icon-type="no-skyfall"]
+{
+	background-position-y:calc(-36px * 7);
+}
+.icon-skill[data-icon-type="heal"]
+{
+	background-position-y:calc(-36px * 8);
+}
+.icon-skill[data-icon-type="defense-break"]
+{
+	background-position-y:calc(-36px * 9);
+}
+.icon-skill[data-icon-type="poison"]
+{
+	background-position-y:calc(-36px * 10);
+}
+.icon-skill[data-icon-type="status-time-decr"]
+{
+	background-position-y:calc(-36px * 11);
+}
+.icon-skill[data-icon-type="status-time-incr"]
+{
+	background-position-y:calc(-36px * 12);
 }
