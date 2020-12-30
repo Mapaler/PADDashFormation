@@ -659,6 +659,12 @@ function renderSkill(skill)
 			return fragment.appendChild(arg);
 		}
 	}
+	function createIcon(iconType){
+		const idoc = document.createElement("icon");
+		idoc.className = "icon-skill";
+		idoc.setAttribute("data-icon-type", iconType);
+		return idoc;
+	}
 	const fragment = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return fragment;
 	const tsp = localTranslating.skill_parse;
@@ -682,34 +688,26 @@ function renderSkill(skill)
 			break;
 		}
 		case SkillKinds.Delay: {
-			const idoc = document.createElement("icon");
-			idoc.className = "icon-delay";
-			appendToFragment(idoc);
+			appendToFragment(createIcon("delay"));
 			appendToFragment(tsp.delay());
 			break;
 		}
 		case SkillKinds.MassAttack: {
-			const idoc = document.createElement("icon");
-			idoc.className = "icon-mass-attack";
-			appendToFragment(idoc);
+			appendToFragment(createIcon("mass-attack"));
 			appendToFragment(tsp.mass_attack());
 			break;
 		}
-		/*
 		case SkillKinds.LeaderChange: {
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="status-leader-change" className="CardSkill-icon" title="Leader change" />
-			</span>
-		);
+			appendToFragment(createIcon("leader-change"));
+			appendToFragment(tsp.leader_change());
+			break;
 		}
 		case SkillKinds.NoSkyfall: {
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="status-no-skyfall" className="CardSkill-icon" title="No skyfall" />
-			</span>
-		);
+			appendToFragment(createIcon("no-skyfall"));
+			appendToFragment(tsp.no_skyfall());
+			break;
 		}
+		/*
 		case SkillKinds.Heal: {
 		const { value } = skill as Skill.WithValue;
 		return (

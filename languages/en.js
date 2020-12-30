@@ -27,6 +27,8 @@
         random_skills: (element)=>[`Activates these random skills:`, element],
         delay: ()=> `Delays enemies' next move`,
 		mass_attack: ()=> `plus Mass Attack`,
+        leader_change: ()=> `Switches places with Leader Monster; use again to switch back`,
+		no_skyfall: ()=> `No Skyfall Combos`,
     },
 }
 

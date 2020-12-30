@@ -243,10 +243,6 @@ ul{
 	background-image: url(images/CARDFRAME2.PNG);
 	background-position: 100px 100px; /*默认都不显示*/
 }
-.property[data-property='6']{
-	background-image: url(images/CARDFRAMEW.PNG);
-	background-position: 0 0;
-}
 /*怪物-加值*/
 .monster .plus{
 	color: yellow;
@@ -2751,4 +2747,31 @@ table .orb-icon
 .henshin-loop .evo-panel-right
 {
     border-color: #7F00FF;
+}
+.icon-skill
+{
+	display: inline-block;
+	width: 36px;
+	height: 36px;
+	background-image: url(images/icon-skills.png);
+	background-repeat: no-repeat;
+	vertical-align: bottom;
+	transform: scale(0.75);
+	margin: -4px;
+}
+.icon-skill[data-icon-type="delay"]
+{
+	background-position-y:calc(-36px * 0);
+}
+.icon-skill[data-icon-type="mass-attack"]
+{
+	background-position-y:calc(-36px * 1);
+}
+.icon-skill[data-icon-type="leader-change"]
+{
+	background-position-y:calc(-36px * 2);
+}
+.icon-skill[data-icon-type="no-skyfall"]
+{
+	background-position-y:calc(-36px * 3);
 }

@@ -3,44 +3,43 @@
 .property{ /*主属性*/
 	background-position-y: 0;
 }
-.property[data-property='-1']{
+.property[data-property='-1'],
+.subproperty[data-property='-1']
+{
 	background: none; /*无*/
 }
-.property[data-property='0']{
+.property[data-property='0'],
+.subproperty[data-property='0']
+{
 	background-position-x: calc(-102px * 0); /*火*/
 }
-.property[data-property='1']{
+.property[data-property='1'],
+.subproperty[data-property='1']
+{
 	background-position-x: calc(-102px * 1); /*水*/
 }
-.property[data-property='2']{
+.property[data-property='2'],
+.subproperty[data-property='2']
+{
 	background-position-x: calc(-102px * 2); /*木*/
 }
-.property[data-property='3']{
+.property[data-property='3'],
+.subproperty[data-property='3']
+{
 	background-position-x: calc(-102px * 3); /*光*/
 }
-.property[data-property='4']{
+.property[data-property='4'],
+.subproperty[data-property='4']
+{
 	background-position-x: calc(-102px * 4); /*暗*/
+}
+.property[data-property='6']
+{
+	background-image: url(images/CARDFRAMEW.PNG);
+	background-position: 0 0;
 }
 .subproperty{ /*副属性*/
 	background-position-y: -104px;
-}
-.subproperty[data-property='-1']{
-	background: none; /*无*/
-}
-.subproperty[data-property='0']{
-	background-position-x: calc(-102px * 0); /*火*/
-}
-.subproperty[data-property='1']{
-	background-position-x: calc(-102px * 1); /*水*/
-}
-.subproperty[data-property='2']{
-	background-position-x: calc(-102px * 2); /*木*/
-}
-.subproperty[data-property='3']{
-	background-position-x: calc(-102px * 3); /*光*/
-}
-.subproperty[data-property='4']{
-	background-position-x: calc(-102px * 4); /*暗*/
 }
 /*宠物头像所用的图片*/
 .monster[data-cards-pic-idx='1']{background-image: url(images/cards_ja/CARDS_001.PNG);}
