@@ -202,7 +202,8 @@ const c = {
 	},
     remainOrbs: function (count) { return { remainOrbs: { count: count } }; },
     useSkill: function () { return { useSkill: true }; },
-    multiplayer: function () { return { multiplayer: true }; },
+	multiplayer: function () { return { multiplayer: true }; },
+	probability: function (percent) { return { probability: percent }; },
 }
 
 const p = {
@@ -299,8 +300,8 @@ function rateMultiply(value, rate) {
 function orbDropIncrease(value, attrs) {
     return { kind: SkillKinds.OrbDropIncrease, value: value, attrs: attrs };
 }
-function resolve(min, max) {
-    return { kind: SkillKinds.Resolve, min: min, max: max };
+function resolve(min, condition) {
+    return { kind: SkillKinds.Resolve, min: min, max: 1, condition: condition };
 }
 function unbind(normal, awakenings) {
     return { kind: SkillKinds.Unbind, normal: normal, awakenings: awakenings };
@@ -355,7 +356,7 @@ const parsers = {
 	[11](attr, mul) { return powerUp([attr], null, p.mul({ atk: mul })); },
 	[12](mul) { return followAttack(v.xATK(mul)); },
 	[13](mul) { return autoHeal(v.xRCV(mul)); },
-	[14](min, max) { return resolve(v.percent(min), v.percent(max)); },
+	[14](min, percent) { return resolve(v.percent(min), c.probability(percent)); },
 	[15](time) { return timeExtend(v.constant(time / 100)); },
 	[16](percent) { return reduceDamage('all', v.percent(percent)); },
 	[17](attr, percent) { return reduceDamage([attr], v.percent(percent)); },
@@ -667,7 +668,7 @@ function renderSkills(skills)
 	});
 	return ul;
 }
-function renderSkill(skill)
+function renderSkill(skill, option = {})
 {
 	function appendToFragment(arg){
 		return _appendToFragment(fragment, arg);
@@ -687,11 +688,11 @@ function renderSkill(skill)
 			appendToFragment(tsps.unknown());
 			break;
 		}
-		case SkillKinds.ActiveTurns: {
-			appendToFragment(tsps.active_turns(skill.turns, renderSkill(skill.skill)));
+		case SkillKinds.ActiveTurns: { //有回合的行动
+			appendToFragment(tsps.active_turns(skill.turns, renderSkill(skill.skill, { forTurns: true })));
 			break;
 		}
-		case SkillKinds.RandomSkills: {
+		case SkillKinds.RandomSkills: { //随机技能
 			const ul = document.createElement("ul");
 			ul.className = "random-active-skill";
 			skill.skills.forEach(subSkills=>{
@@ -701,95 +702,74 @@ function renderSkill(skill)
 			appendToFragment(tsps.random_skills(ul));
 			break;
 		}
-		case SkillKinds.Delay: {
+		case SkillKinds.Delay: { //威吓
 			appendToFragment(createIcon("delay"));
 			appendToFragment(tsps.delay());
 			break;
 		}
-		case SkillKinds.MassAttack: {
+		case SkillKinds.MassAttack: { //全体攻击
 			appendToFragment(createIcon("mass-attack"));
 			appendToFragment(tsps.mass_attack());
 			break;
 		}
-		case SkillKinds.LeaderChange: {
+		case SkillKinds.LeaderChange: { //切换队长
 			appendToFragment(createIcon("leader-change"));
 			appendToFragment(tsps.leader_change());
 			break;
 		}
-		case SkillKinds.NoSkyfall: {
+		case SkillKinds.NoSkyfall: { //无天降
 			appendToFragment(createIcon("no-skyfall"));
 			appendToFragment(tsps.no_skyfall());
 			break;
 		}
-		case SkillKinds.Heal: {
-			appendToFragment(createIcon("heal", "status-incr"));
+		case SkillKinds.Heal: { //回血主动
+			option.forTurns ?
+			appendToFragment(createIcon("auto-heal")) :
+			appendToFragment(createIcon("heal", "hp-incr"))
+			;
 			appendToFragment(tsps.heal(renderValue(skill.value)));
 			break;
 		}
-		case SkillKinds.DefenseBreak: {
+		case SkillKinds.DefenseBreak: { //破防
 			appendToFragment(createIcon("defense-break"));
 			appendToFragment(tsps.defense_break(renderValue(skill.value)));
 			break;
 		}
-		case SkillKinds.Poison: {
+		case SkillKinds.Poison: { //毒
 			appendToFragment(createIcon("poison"));
 			appendToFragment(tsps.poison(renderValue(skill.value)));
 			break;
 		}
-		case SkillKinds.TimeExtend: {
-			appendToFragment(createIcon(SkillValue.isLess(skill.value) ? "status-time-decr" : "status-time-incr"));
-			appendToFragment(tsps.time_extend(renderValue(skill.value, tspu.seconds, { showsPlusSign:true, percentToScale:true })));
+		case SkillKinds.TimeExtend: { //时间变化buff
+			appendToFragment(createIcon("status-time", SkillValue.isLess(skill.value) ? "time-decr" : "time-incr"));
+			appendToFragment(tsps.time_extend(renderValue(skill.value, tspu.seconds, { showsPlusSign:true, showPercent:true })));
+			break;
+		}
+		case SkillKinds.FollowAttack: { //队长技追打
+			appendToFragment(tsps.follow_attack(renderValue(skill.value)));
+			break;
+		}
+		case SkillKinds.AutoHeal: { //队长技自动回血
+			appendToFragment(createIcon("auto-heal"));
+			appendToFragment(tsps.auto_heal(renderValue(skill.value)));
+			break;
+		}
+		case SkillKinds.CTW: { //时间暂停
+			appendToFragment(createIcon("ctw"));
+			appendToFragment(tsps.ctw(renderValue(skill.value, tspu.seconds)));
+			break;
+		}
+		case SkillKinds.Gravity: { //重力
+			appendToFragment(tsps.gravity(renderValue(skill.value, null, { showPercent:true, enemy: true })));
+			break;
+		}
+		case SkillKinds.Resolve: { //根性
+			appendToFragment(createIcon("resolve"));
+			appendToFragment(tsps.resolve(renderStat('hp', true), renderValue(skill.min, null, { showPercent:true }), skill.condition.probability));
 			break;
 		}
 		/*
-		case SkillKinds.FollowAttack: {
-		const { value } = skill as Skill.WithValue;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="skill-follow-atk" className="CardSkill-icon" title="Follow-up Attack" />
-			{renderValue(value)}
-			</span>
-		);
-		}
-		case SkillKinds.AutoHeal: {
-		const { value } = skill as Skill.WithValue;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="status-heal" className="CardSkill-icon" title="Auto-heal" />
-			{renderValue(value)}
-			</span>
-		);
-		}
-		case SkillKinds.CTW: {
-		const { value } = skill as Skill.WithValue;
-		return (
-			<span className="CardSkill-skill">
-			<AssetBox className="CardSkill-icon-box" title="CTW">
-				<Asset assetId="status-combo" className="CardSkill-icon" />
-				<Asset assetId="status-time-incr" className="CardSkill-icon" style={{ transform: 'scale(0.75)' }} />
-			</AssetBox>
-			{renderValue(value, 'seconds')}
-			</span>
-		);
-		}
-		case SkillKinds.Gravity: {
-		const { value } = skill as Skill.WithValue;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="skill-gravity" className="CardSkill-icon" title="Gravity" />
-			{renderValue(value)}
-			</span>
-		);
-		}
-		case SkillKinds.Resolve: {
-		const { min, max } = skill as Skill.Resolve;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="status-resolve" className="CardSkill-icon" title="Resolve" />
-			{renderValue(min)} &hArr; {renderValue(max)}
-			</span>
-		);
-		}
+
 		case SkillKinds.BoardChange: {
 		const { attrs } = skill as Skill.BoardChange;
 		return (
@@ -1092,7 +1072,7 @@ function renderSkill(skill)
 	return fragment;
 };
 
-function renderStat(stat) {
+function renderStat(stat, enemy) {
 	function appendToFragment(arg){
 		return _appendToFragment(fragment, arg);
 	}
@@ -1107,9 +1087,8 @@ function renderStat(stat) {
 	const fragment = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return fragment;
 	const tsps = localTranslating.skill_parse.stats;
-	console.log(stat)
 	if (tsps[stat])
-		appendToFragment(newSpan(tsps[stat](), stat));
+		appendToFragment(newSpan(tsps[stat](enemy), stat));
 	else
 		appendToFragment(tsps.unknown(stat));
 	return fragment;
@@ -1256,26 +1235,27 @@ function renderValue(_value, unit, option = {}) {
 	const tspv = localTranslating.skill_parse.value;
 	switch (_value.kind) {
 		case SkillValueKind.Percent: {
-			appendToFragment(option.percentToScale ? 
-				tspv.mul_scale(_value.value.keepCounts()) :
-				tspv.mul_percent((_value.value * 100).keepCounts())
-			);
+			appendToFragment(tspv.mul(_value.value, option.showPercent));
 			break;
 		}
 		case SkillValueKind.Constant: {
 			appendToFragment(tspv.const((option.showsPlusSign && _value.value >= 0 ? "+" : "") + _value.value.keepCounts(), unit));
 			break;
 		}
+		case SkillValueKind.xMaxHP: {
+			appendToFragment(tspv.mul_maxhp(_value.value, renderStat('maxhp'), option.showPercent));
+			break;
+		}
 		case SkillValueKind.xHP: {
-			appendToFragment(tspv.mul_hp(_value.value.keepCounts(), renderStat('hp')));
+			appendToFragment(tspv.mul_hp(_value.value, renderStat('hp', option.enemy), option.showPercent));
 			break;
 		}
 		case SkillValueKind.xATK: {
-			appendToFragment(tspv.mul_atk(_value.value.keepCounts(), renderStat('atk')));
+			appendToFragment(tspv.mul_atk(_value.value, renderStat('atk', option.enemy), option.showPercent));
 			break;
 		}
 		case SkillValueKind.xRCV: {
-			appendToFragment(tspv.mul_rcv(_value.value.keepCounts(), renderStat('rcv')));
+			appendToFragment(tspv.mul_rcv(_value.value, renderStat('rcv', option.enemy), option.showPercent));
 			break;
 		}
 		/*

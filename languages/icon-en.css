@@ -29,3 +29,6 @@
 .tIf-total-hp .reduce::before{
     background-position-x: -16px;
 }
+.icon-skill[data-icon-type="mass-attack"] {
+    background-position-x: calc(-36px * 1);
+}

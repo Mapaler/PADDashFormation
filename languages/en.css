@@ -468,3 +468,6 @@
 	transform: scaleX(0.6);
     margin: calc(-100px * (1 - 0.6) / 2);
 }
+.icon-skill[data-icon-type="resolve"] {
+    background-position-x: calc(-36px * 1);
+}

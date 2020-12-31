@@ -425,3 +425,6 @@
 {
     content: "루프 변신";
 }
+.icon-skill[data-icon-type="resolve"] {
+    background-position-x: calc(-36px * 2);
+}
