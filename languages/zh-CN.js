@@ -1639,7 +1639,7 @@ function parseSkillDescription(skill)
 
 	const specialSearchFunctions = [
 		{name:"不做筛选",function:cards=>cards},
-		{name:"======队长技======",function:cards=>cards},
+		{group:"======队长技======"},
 		{name:"队长技固伤追击（按伤害排序）",function:cards=>{
 			const searchTypeArray = [199,200,201];
 			function getSkillFixedDamage(skill)
@@ -2061,7 +2061,7 @@ function parseSkillDescription(skill)
 			const sk = skill.params;
 			return document.createTextNode(`经验x${sk[0]/100}`);
 		}},
-		{name:"-----血倍率-----",function:cards=>cards},
+		{group:"-----血倍率-----"},
 		{name:"队长血倍率[2, ∞)（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const HPscale = getHPScale(skill);
@@ -2099,7 +2099,7 @@ function parseSkillDescription(skill)
 			const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
 			return getHPScale(a_s) - getHPScale(b_s);
 		})},
-		{name:"-----减伤盾-----",function:cards=>cards},
+		{group:"-----减伤盾-----"},
 		{name:"队长盾减伤[75%, 100%]（按倍率排序）",function:cards=>cards.filter(card=>{
 			const skill = Skills[card.leaderSkillId];
 			const reduceScale = getReduceScale(skill);
@@ -2184,7 +2184,7 @@ function parseSkillDescription(skill)
 			return getReduceScale_unconditional(skill) > 0;
 		})},
 
-		{name:"======主动技======",function:cards=>cards},
+		{group:"======主动技======"},
 		{name:"1 CD",function:cards=>cards.filter(card=>{
 			if (card.activeSkillId == 0) return false;
 			const skill = Skills[card.activeSkillId];
@@ -2228,7 +2228,7 @@ function parseSkillDescription(skill)
 			return a_pC - b_pC;
 		})},
 		{name:"随机效果技能",function:cards=>cards.filter(card=>Skills[card.activeSkillId].type == 118)},
-		{name:"-----破吸类-----",function:cards=>cards},
+		{group:"-----破吸类-----"},
 		{name:"破属吸 buff（按破吸回合排序）",function:cards=>cards.filter(card=>{
 			const searchType = 173;
 			const skill = Skills[card.activeSkillId];
@@ -2333,7 +2333,7 @@ function parseSkillDescription(skill)
 			const sk = skill.params;
 			return document.createTextNode(`破贯×${sk[0]}T`);
 		}},
-		{name:"-----解封类-----",function:cards=>cards},
+		{group:"-----解封类-----"},
 		{
 			name:"解封（按解封回合排序）",
 			function:cards=>{
@@ -2439,7 +2439,7 @@ function parseSkillDescription(skill)
 				return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
 			}
 		},
-		{name:"-----锁珠类-----",function:cards=>cards},
+		{group:"-----锁珠类-----"},
 		{name:"解锁",function:cards=>cards.filter(card=>{
 			const searchType = 172;
 			const skill = Skills[card.activeSkillId];
@@ -2512,7 +2512,7 @@ function parseSkillDescription(skill)
 				b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[1];
 			return a_pC - b_pC;
 		})},
-		{name:"-----随机产珠类-----",function:cards=>cards},
+		{group:"-----随机产珠类-----"},
 		{name:"普通洗版-含心",function:cards=>cards.filter(card=>{
 			function includeHeart(sk)
 			{
@@ -2735,7 +2735,7 @@ function parseSkillDescription(skill)
 			}
 		})},
 		{name:"~~~转珠类有些复杂我没空做~~~",function:cards=>cards},
-		{name:"-----固定产珠类-----",function:cards=>cards},
+		{group:"-----固定产珠类-----"},
 		{name:"生成特殊形状的",function:cards=>cards.filter(card=>{
 			const searchType = 176;
 			const skill = Skills[card.activeSkillId];
@@ -2895,7 +2895,7 @@ function parseSkillDescription(skill)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) && isRow(subskill));
 			}
 		})},
-		{name:"----- buff 类-----",function:cards=>cards},
+		{group:"----- buff 类-----"},
 		{name:"掉落率提升",function:cards=>cards.filter(card=>{
 			const searchTypeArray = [126];
 			const skill = getCardSkill(card, searchTypeArray);
@@ -3219,7 +3219,7 @@ function parseSkillDescription(skill)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
 		})},
-		{name:"-----对自身队伍生效类-----",function:cards=>cards},
+		{group:"-----对自身队伍生效类-----"},
 		{name:"减少CD（按溜数排序，有范围的取小）",function:cards=>cards.filter(card=>{
 			const searchType = 146;
 			const skill = Skills[card.activeSkillId];
@@ -3324,7 +3324,7 @@ function parseSkillDescription(skill)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type) || subskill.type == 117 && (subskill.params[1] || subskill.params[2] || subskill.params[3]));
 			}
 		})},
-		{name:"-----对敌 buff 类-----",function:cards=>cards},
+		{group:"-----对敌 buff 类-----"},
 		{name:"威吓（按推迟回合排序）",function:cards=>{
 			const searchTypeArray = [18];
 			return cards.filter(card=>{
@@ -3445,7 +3445,7 @@ function parseSkillDescription(skill)
 				return subskills.some(subskill=>subskill.type == searchType);
 			}
 		})},
-		{name:"-----对敌直接伤害类-----",function:cards=>cards},
+		{group:"-----对敌直接伤害类-----"},
 		{name:"重力-敌人当前血量（按比例排序）",function:cards=>cards.filter(card=>{
 			const searchType = 6;
 			const skill = Skills[card.activeSkillId];
@@ -3773,7 +3773,7 @@ function parseSkillDescription(skill)
 				return subskills.some(subskill=>searchTypeArray.includes(subskill.type));
 			}
 		})},
-		{name:"======进化类型======",function:cards=>cards},
+		{group:"======进化类型======"},
 		{name:"8格潜觉",function:cards=>cards.filter(card=>card.is8Latent)},
 		{name:"非8格潜觉",function:cards=>cards.filter(card=>!card.is8Latent)},
 		{name:"像素进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))},
@@ -3805,7 +3805,7 @@ function parseSkillDescription(skill)
 		{name:"用三神面进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3795))},
 		{name:"用彩龙果进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3971))},
 		{name:"由武器进化而来",function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))},
-		{name:"======其他搜索======",function:cards=>cards},
+		{group:"======其他搜索======"},
 		{name:"攻击型或水属性（炭治郎队员）",function:cards=>cards.filter(card=>card.attrs.includes(1) || card.types.includes(6))},
 		{name:"火属性或水属性（火车队员）",function:cards=>cards.filter(card=>card.attrs.includes(0) || card.attrs.includes(1))},
 		{name:"不能破除等级限制",function:cards=>cards.filter(card=>card.limitBreakIncr===0)},
@@ -3818,7 +3818,7 @@ function parseSkillDescription(skill)
 		{name:"能获得珠子皮肤",function:cards=>cards.filter(card=>card.blockSkinId>0)},
 		{name:"所有潜觉蛋龙",function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)},
 		{name:"龙契士&龙唤士（10001）",function:cards=>cards.filter(card=>card.collabId==10001)},
-		{name:"-----觉醒类-----",function:cards=>cards},
+		{group:"-----觉醒类-----"},
 		{name:"有9个觉醒",function:cards=>cards.filter(card=>card.awakenings.length>=9)},
 		{name:"可以做辅助",function:cards=>cards.filter(card=>card.canAssist)},
 		{name:"不是武器",function:cards=>cards.filter(card=>!card.awakenings.includes(49))},
@@ -3907,7 +3907,14 @@ function parseSkillDescription(skill)
 		//searchLabel.appendChild(document.createTextNode(`筛选${index}:`));
 		const specialSearch = searchLi.appendChild(document.createElement("select"));
 		specialSearchFunctions.forEach((sfunc,idx)=>{
-			specialSearch.options.add(new Option(sfunc.name + (sfunc.addition ? "+附加显示" : ""),idx));
+			if (sfunc.group)
+			{
+				const optgroup = specialSearch.appendChild(document.createElement("optgroup"));
+				optgroup.label = sfunc.group;
+			}else
+			{
+				specialSearch.options.add(new Option(sfunc.name + (sfunc.addition ? "+附加显示" : ""),idx));
+			}
 		});
 		return {dom:searchLi,list:specialSearch};
 	}
