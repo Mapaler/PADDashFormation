@@ -1,3 +1,30 @@
+//带标签的模板字符串
+function tp(strings, ...keys) {
+	return (function(...values) {
+		let dict = values[values.length - 1] || {};
+		let fragment = document.createDocumentFragment();
+		fragment.appendChild(document.createTextNode(strings[0]));
+		let result = [strings[0]];
+		keys.forEach(function(key, i) {
+			let value = Number.isInteger(key) ? values[key] : dict[key];
+			if (typeof value == "string" || typeof value == "number")
+			{
+				value = document.createTextNode(value);
+			}
+			try{
+				console.log(value);
+				fragment.appendChild(value);
+			}catch(e)
+			{
+				console.log(value, e);
+				console.log(keys, values);
+			}
+			fragment.appendChild(document.createTextNode(strings[i + 1]));
+		});
+		return fragment;
+	});
+}
+
 const Attributes = {
     /*0: "Fire",
     1: "Water",
@@ -681,15 +708,20 @@ function renderSkill(skill, option = {})
 	}
 	const fragment = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return fragment;
+	const tsp = localTranslating.skill_parse;
 	const tsps = localTranslating.skill_parse.skill;
 	const tspu = localTranslating.skill_parse.unit;
+	const tspt = localTranslating.skill_parse.stats;
 	switch (skill.kind) {
 		case SkillKinds.Unknown: {
 			appendToFragment(tsps.unknown());
 			break;
 		}
 		case SkillKinds.ActiveTurns: { //有回合的行动
-			appendToFragment(tsps.active_turns(skill.turns, renderSkill(skill.skill, { forTurns: true })));
+			appendToFragment(tsps.active_turns({
+				turns: skill.turns,
+				active: renderSkill(skill.skill, { forTurns: true }),
+			}));
 			break;
 		}
 		case SkillKinds.RandomSkills: { //随机技能
@@ -742,7 +774,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.TimeExtend: { //时间变化buff
 			appendToFragment(createIcon("status-time", SkillValue.isLess(skill.value) ? "time-decr" : "time-incr"));
-			appendToFragment(tsps.time_extend(renderValue(skill.value, tspu.seconds, { showsPlusSign:true, showPercent:true })));
+			appendToFragment(tsps.time_extend(renderValue(skill.value, { unit: tspu.seconds, showsPlusSign:true, showPercent:true })));
 			break;
 		}
 		case SkillKinds.FollowAttack: { //队长技追打
@@ -756,16 +788,21 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.CTW: { //时间暂停
 			appendToFragment(createIcon("ctw"));
-			appendToFragment(tsps.ctw(renderValue(skill.value, tspu.seconds)));
+			appendToFragment(tsps.ctw(renderValue(skill.value, { unit: tspu.seconds })));
 			break;
 		}
 		case SkillKinds.Gravity: { //重力
-			appendToFragment(tsps.gravity(renderValue(skill.value, null, { showPercent:true, enemy: true })));
+			console.log(skill.value)
+			appendToFragment(tsps.gravity({
+				icon: createIcon("gravity"),
+				target: tsp.target.enemy(),
+				value: renderValue(skill.value, { showPercent:true }),
+			}));
 			break;
 		}
 		case SkillKinds.Resolve: { //根性
 			appendToFragment(createIcon("resolve"));
-			appendToFragment(tsps.resolve(renderStat('hp', true), renderValue(skill.min, null, { showPercent:true }), skill.condition.probability));
+			appendToFragment(tsps.resolve(renderStat('hp'), renderValue(skill.min, { showPercent:true }), skill.condition.probability));
 			break;
 		}
 		/*
@@ -1065,32 +1102,27 @@ function renderSkill(skill, option = {})
 		}
 		*/
 		default: {
-			console.log(skill.kind, skill);
+			console.log("未处理的技能类型",skill.kind, skill);
 			appendToFragment(skill.kind);
 		}
 	}
 	return fragment;
 };
 
-function renderStat(stat, enemy) {
+function renderStat(stat) {
 	function appendToFragment(arg){
 		return _appendToFragment(fragment, arg);
 	}
-	function newSpan(str , type)
-	{
-		const span = document.createElement("span");
-		span.className = "cardskill-stats";
-		span.setAttribute("data-cardskill-stats", type);
-		span.textContent = str;
-		return span;
-	}
 	const fragment = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return fragment;
-	const tsps = localTranslating.skill_parse.stats;
-	if (tsps[stat])
-		appendToFragment(newSpan(tsps[stat](enemy), stat));
+	const tspt = localTranslating.skill_parse.stats;
+	if (tspt[stat])
+		appendToFragment(tspt[stat]());
 	else
-		appendToFragment(tsps.unknown(stat));
+	{
+		console.log("未知状态类型",stat);
+		appendToFragment(tspt.unknown({ type: stat }));
+	}
 	return fragment;
 }
 /*
@@ -1226,36 +1258,115 @@ function renderPowerUp(powerUp: SkillPowerUp) {
 	}
 }
 */
-function renderValue(_value, unit, option = {}) {
+function renderValue(_value, option = {}) {
 	function appendToFragment(arg){
 		return _appendToFragment(fragment, arg);
 	}
 	const fragment = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return fragment;
 	const tspv = localTranslating.skill_parse.value;
+	const od = option.decimalDigits, os = option.showsPlusSign;
 	switch (_value.kind) {
 		case SkillValueKind.Percent: {
-			appendToFragment(tspv.mul(_value.value, option.showPercent));
+			appendToFragment(
+				option.showPercent ? 
+				tspv.mul_percent({value: (_value.value * 100).keepCounts(od,os)}) :
+				tspv.mul_times({value: _value.value.keepCounts(od,os)})
+			);
 			break;
 		}
 		case SkillValueKind.Constant: {
-			appendToFragment(tspv.const((option.showsPlusSign && _value.value >= 0 ? "+" : "") + _value.value.keepCounts(), unit));
+			appendToFragment(
+				tspv.const({
+					value: _value.value.keepCounts(od,os),
+					unit: option.unit ? option.unit() : undefined,
+				})
+			);
 			break;
 		}
 		case SkillValueKind.xMaxHP: {
-			appendToFragment(tspv.mul_maxhp(_value.value, renderStat('maxhp'), option.showPercent));
+			console.log(renderStat('maxhp'))
+			appendToFragment(
+				option.showPercent ? 
+				tspv.mul_of_percent({
+					value: (_value.value * 100).keepCounts(od,os),
+					stats: renderStat('maxhp'),
+				}) :
+				tspv.mul_of_times({
+					value: _value.value.keepCounts(od,os),
+					stats: renderStat('maxhp'),
+				})
+			);
 			break;
 		}
 		case SkillValueKind.xHP: {
-			appendToFragment(tspv.mul_hp(_value.value, renderStat('hp', option.enemy), option.showPercent));
+			appendToFragment(
+				option.showPercent ? 
+				tspv.mul_of_percent({
+					value: (_value.value * 100).keepCounts(od,os),
+					stats: renderStat('hp'),
+				}) :
+				tspv.mul_of_times({
+					value: _value.value.keepCounts(od,os),
+					stats: renderStat('hp'),
+				})
+			);
 			break;
 		}
 		case SkillValueKind.xATK: {
-			appendToFragment(tspv.mul_atk(_value.value, renderStat('atk', option.enemy), option.showPercent));
+			appendToFragment(
+				option.showPercent ? 
+				tspv.mul_of_percent({
+					value: (_value.value * 100).keepCounts(od,os),
+					stats: renderStat('atk'),
+				}) :
+				tspv.mul_of_times({
+					value: _value.value.keepCounts(od,os),
+					stats: renderStat('atk'),
+				})
+			);
 			break;
 		}
 		case SkillValueKind.xRCV: {
-			appendToFragment(tspv.mul_rcv(_value.value, renderStat('rcv', option.enemy), option.showPercent));
+			appendToFragment(
+				option.showPercent ? 
+				tspv.mul_of_percent({
+					value: (_value.value * 100).keepCounts(od,os),
+					stats: renderStat('rcv'),
+				}) :
+				tspv.mul_of_times({
+					value: _value.value.keepCounts(od,os),
+					stats: renderStat('rcv'),
+				})
+			);
+			break;
+		}
+		case SkillValueKind.xTeamRCV: {
+			appendToFragment(
+				option.showPercent ? 
+				tspv.mul_of_percent({
+					value: (_value.value * 100).keepCounts(od,os),
+					stats: renderStat('teamrcv'),
+				}) :
+				tspv.mul_of_times({
+					value: _value.value.keepCounts(od,os),
+					stats: renderStat('teamrcv'),
+				})
+			);
+			break;
+		}
+		case SkillValueKind.xTeamATK: {
+			appendToFragment(
+				option.showPercent ? 
+				tspv.mul_of_percent({
+					value: (_value.value * 100).keepCounts(od,os),
+					stats: renderStat('teamatk'),
+				}) :
+				tspv.mul_of_times({
+					value: _value.value.keepCounts(od,os),
+					stats: renderStat('teamatk'),
+				})
+			);
 			break;
 		}
 		/*
@@ -1311,8 +1422,8 @@ function renderValue(_value, unit, option = {}) {
 		}
 		*/
 		default: {
-			console.log(_value.kind, _value);
-			appendToFragment(tspv.unknown(_value.kind));
+			console.log("未知数值类型",_value.kind, _value);
+			appendToFragment(tspv.unknown({ type: _value.kind }));
 		}
 	}
 	return fragment;
