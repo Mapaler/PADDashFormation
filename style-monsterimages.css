@@ -610,6 +610,9 @@
 .awoken-icon[data-awoken-icon='77']{/*2串暗*/
 	background-position-y:calc(-32px * 77);
 }
+.awoken-icon[data-awoken-icon='78']{/*十字*/
+	background-position-y:calc(-32px * 78);
+}
 /*类型*/
 .type-icon{
 	background-image: url(images/type.png);
