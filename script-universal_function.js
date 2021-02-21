@@ -371,12 +371,12 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 	});
 	return abilitys;
 }
-function calculateAbility_max(id,solo, teamsCount)
+function calculateAbility_max(id, solo, teamsCount)
 {
 	const card = Cards[id];
 	const tempMon = {
 		id: id,
-		level: card.maxLevel + (card.limitBreakIncr ? 11 : 0),
+		level: card.limitBreakIncr ? 110 : card.maxLevel,
 		plus: (card.overlay || card.types[0] == 15 && card.types[1] == -1) ? [0,0,0] : [99,99,99],  //当可以叠加时，不能打297
 		awoken: card.awakenings.length,
 	};
