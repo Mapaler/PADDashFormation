@@ -117,13 +117,6 @@
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼Monster Level";
 }
-.row-mon-level .level-value::before,
-.row-mon-level .m-level-btn-min::before,
-.row-mon-level .m-level-btn-max::before,
-.row-mon-level .m-level-btn-110::before
-{
-	content: "Lv.";
-}
 .edit-box .setting-box .monster-cost::before{
 	content: "COST:";
 }

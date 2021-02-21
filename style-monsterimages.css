@@ -709,7 +709,10 @@
 .latent-icon[data-latent-icon='33']::before,
 .latent-icon[data-latent-icon='34']::before,
 .latent-icon[data-latent-icon='35']::before,
-.latent-icon[data-latent-icon='36']::before
+.latent-icon[data-latent-icon='36']::before,
+.latent-icon[data-latent-icon='43']::before,
+.latent-icon[data-latent-icon='44']::before,
+.latent-icon[data-latent-icon='45']::before
 {
 	width: 76px;
 }
@@ -720,7 +723,8 @@
 .latent-icon[data-latent-icon='38']::before,
 .latent-icon[data-latent-icon='39']::before,
 .latent-icon[data-latent-icon='40']::before,
-.latent-icon[data-latent-icon='41']::before
+.latent-icon[data-latent-icon='41']::before,
+.latent-icon[data-latent-icon='42']::before
 {
 	width: 252px;
 }
@@ -846,6 +850,18 @@
 }
 .latent-icon[data-latent-icon='41']::before{ /*U解禁消*/
 	background-position-y: calc(-32px * 41);
+}
+.latent-icon[data-latent-icon='42']::before{ /*伤害上限解除*/
+	background-position-y: calc(-32px * 42);
+}
+.latent-icon[data-latent-icon='43']::before{ /*HP++*/
+	background-position-y: calc(-32px * 43);
+}
+.latent-icon[data-latent-icon='44']::before{ /*攻击++*/
+	background-position-y: calc(-32px * 44);
+}
+.latent-icon[data-latent-icon='45']::before{ /*回复++*/
+	background-position-y: calc(-32px * 45);
 }
 
 /* 徽章背景 */
