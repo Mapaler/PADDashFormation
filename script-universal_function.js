@@ -225,7 +225,7 @@ function valueAt(level, maxLevel, curve) {
 	return curve.min + (curve.max - curve.min) * Math.pow(f, curve.scale);
 }
 //Code From pad-rikuu
-function curve(c, level, maxLevel, limitBreakIncr) {
+function curve(c, level, maxLevel, limitBreakIncr, limitBreakIncr120) {
 	let value = valueAt(level, maxLevel, {
 		min: c.min,
 		max: c.max!==undefined ? c.max : (c.min * maxLevel),
@@ -233,8 +233,12 @@ function curve(c, level, maxLevel, limitBreakIncr) {
 	});
 
 	if (level > maxLevel) {
-		const exceed = level - maxLevel;
-		value += c.max!==undefined ? (c.max * (limitBreakIncr / 100) * (exceed / 11)) : c.min * exceed;
+		const exceed99 = Math.min(level - maxLevel, 11);
+		const exceed110 = Math.max(0, level - 110);
+		console.log(exceed99, level - 110)
+		value += c.max!==undefined ?
+			((c.max * (limitBreakIncr / 100) * (exceed99 / 11)) + (c.max * (limitBreakIncr120 / 100) * (exceed110 / 10))) :
+			(c.min * exceed99 + c.min * exceed110);
 	}
 	return value;
 }
@@ -264,6 +268,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 
 	const bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性倍率
 	const plusAdd = [10,5,3]; //加值的增加值
+	const limitBreakIncr120 = [10,5,5]; //120三维增加比例
 	
 	const awokenAdd = [ //对应加三维觉醒的序号与增加值
 		[{index:1,value:500},{index:65,value:-2500}], //HP
@@ -297,7 +302,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 
 
 	const abilitys = memberCurves.map((ab, idx)=>{
-		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr)); //等级基础三维
+		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr, limitBreakIncr120[idx])); //等级基础三维
 		const n_plus = member.plus[idx] * plusAdd[idx]; //加值增加量
 		let n_assist_base = 0,n_assist_plus=0; //辅助的bonus
 		let awokenList = memberCard.awakenings.slice(0,member.awoken); //储存点亮的觉醒

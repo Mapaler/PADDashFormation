@@ -2681,7 +2681,6 @@ function editBoxChangeMonId(id) {
 	const monEditLv120 = settingBox.querySelector(".m-level-btn-120");
 
 	monEditLv110.setAttribute("data-limit-break-incr",card.limitBreakIncr);
-	monEditLv120.setAttribute("data-limit-break-incr",card.limitBreakIncr);
 	if (card.limitBreakIncr) {
 		monEditLv110.classList.remove(className_displayNone);
 		monEditLv120.classList.remove(className_displayNone);

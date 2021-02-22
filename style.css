@@ -1839,10 +1839,13 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	content: attr(value);
 }
-.row-mon-level .m-level-btn-110::after,
-.row-mon-level .m-level-btn-120::after
+.row-mon-level .m-level-btn-110::after
 {
 	content: attr(value) " (+" attr(data-limit-break-incr) "%)";
+}
+.row-mon-level .m-level-btn-120::after
+{
+	content: attr(value);
 }
 .m-level-btn-110
 {
