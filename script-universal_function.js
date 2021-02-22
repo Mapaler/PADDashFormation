@@ -293,9 +293,9 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 		});
 	}
 	const latentScale = [ //对应加三维潜在觉醒的序号与增加比例
-		[{index:1,scale:0.015},{index:12,scale:0.03},{index:28,scale:0.045},{index:43,scale:0.09}], //HP
-		[{index:2,scale:0.01},{index:12,scale:0.02},{index:29,scale:0.03},{index:44,scale:0.06}], //ATK
-		[{index:3,scale:0.1},{index:12,scale:0.2},{index:30,scale:0.3},{index:45,scale:0.6}]  //RCV
+		[{index:1,scale:0.015},{index:12,scale:0.03},{index:28,scale:0.045},{index:43,scale:0.10}], //HP
+		[{index:2,scale:0.01},{index:12,scale:0.02},{index:29,scale:0.03},{index:44,scale:0.05}], //ATK
+		[{index:3,scale:0.1},{index:12,scale:0.2},{index:30,scale:0.3},{index:45,scale:0.35}]  //RCV
 	];
 	const memberCurves = [memberCard.hp, memberCard.atk, memberCard.rcv];
 	const assistCurves = assistCard ? [assistCard.hp, assistCard.atk, assistCard.rcv] : null;
