@@ -447,8 +447,10 @@ function toggleDomClassName(checkBox, className, checkedAdd = true, dom = docume
 	const checked = checkBox.checked;
 	if (checked && checkedAdd || !checked && !checkedAdd) {
 		dom.classList.add(className);
+		return true;
 	} else {
 		dom.classList.remove(className);
+		return false;
 	}
 }
 //清除数据
@@ -595,7 +597,17 @@ window.onload = function(event) {
 
 	//设定初始的显示设置
 	toggleDomClassName(controlBox.querySelector("#show-mon-id"), 'not-show-mon-id', false);
-	toggleDomClassName(controlBox.querySelector("#btn-show-mon-skill-cd"), 'show-mon-skill-cd');
+
+	//记录显示CD开关的状态
+	const showMonSkillCd_id = "show-mon-skill-cd";
+	const btnShowMonSkillCd = controlBox.querySelector(`#btn-${showMonSkillCd_id}`);
+	btnShowMonSkillCd.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + showMonSkillCd_id)));
+	btnShowMonSkillCd.onclick = function(){
+		toggleDomClassName(this, showMonSkillCd_id);
+		localStorage.setItem("PADDF-" + showMonSkillCd_id, this.checked ? 1 : 0);
+	};
+	btnShowMonSkillCd.onclick();
+	
 	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
 
 	initialize(); //界面初始化
