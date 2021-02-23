@@ -427,6 +427,7 @@ ul{
 {
 	position: absolute;
 	z-index: 10;
+	right: 0;
 }
 /*辅助和队伍的每一只框架*/
 .member, .acquisitus-awoken-icon{
