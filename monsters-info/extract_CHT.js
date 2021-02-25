@@ -33,7 +33,7 @@ class monInfo
 		this.tags = [];
 	}
 }
-console.log(monArr_chs);
+
 //根据文件路径读取文件，返回文件列表
 fs.readdir(sourceFolder,function(err,files){
 	
