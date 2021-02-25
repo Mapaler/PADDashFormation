@@ -39,6 +39,16 @@ typekiller_for_type.forEach(t=>
 		type_allowable_latent[t.type] = t.allowableLatent;
 	}
 );
+//一般共同能打的潜觉
+const common_allowable_latent = [
+	1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,
+	28,29,30,31,32,33,34,35,36,37,38,
+	39,40,41, //需要拥有觉醒的才能打，但是有武器
+];
+//120级才能打的潜觉
+const v120_allowable_latent = [
+	42,43,44,45
+];
 //等效觉醒列表
 const equivalent_awoken = [
 	{small:10,big:52,times:2}, //防封
@@ -73,11 +83,11 @@ const sort_function_list = [
 		const skill_a = Skills[a.activeSkillId],skill_b = Skills[b.activeSkillId];
 		return (skill_a.initialCooldown - skill_a.maxLevel) - (skill_b.initialCooldown - skill_b.maxLevel);
 	}},
-	{tag:"sort_hpMax110",name:"最大HP",function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
-	{tag:"sort_atkMax110",name:"最大攻击",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
-	{tag:"sort_rcvMax110",name:"最大回复",function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_hpMax110",name:"Lv110最大HP",function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_atkMax110",name:"Lv110最大攻击",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_rcvMax110",name:"Lv110最大回复",function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
 	
-	{tag:"sort_hpMax110_awoken",name:"最大攻击(+觉醒)",function:(a,b)=>
+	{tag:"sort_hpMax110_awoken",name:"Lv110最大攻击(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
@@ -86,7 +96,7 @@ const sort_function_list = [
 			return abA - abB;
 		}
 	},
-	{tag:"sort_hpMax110_awoken",name:"最大HP(+觉醒)",function:(a,b)=>
+	{tag:"sort_hpMax110_awoken",name:"Lv110最大HP(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
@@ -95,7 +105,7 @@ const sort_function_list = [
 			return abA - abB;
 		}
 	},
-	{tag:"sort_hpMax110_awoken",name:"最大回复(+觉醒)",function:(a,b)=>
+	{tag:"sort_hpMax110_awoken",name:"Lv110最大回复(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
@@ -104,7 +114,7 @@ const sort_function_list = [
 			return abA - abB;
 		}
 	},
-	{tag:"sort_abilityIndex_awoken",name:"最大加权能力指数(+觉醒)",function:(a,b)=>
+	{tag:"sort_abilityIndex_awoken",name:"Lv110最大加权能力指数(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);

@@ -115,16 +115,8 @@
 .row-mon-ability .m-rcv-li::before{
 	content: "回復:";
 }
-
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼怪物等级";
-}
-.row-mon-level .level-value::before,
-.row-mon-level .m-level-btn-min::before,
-.row-mon-level .m-level-btn-max::before,
-.row-mon-level .m-level-btn-110::before
-{
-	content: "Lv.";
 }
 .edit-box .setting-box .monster-cost::before{
 	content: "消耗:";

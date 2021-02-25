@@ -359,6 +359,9 @@ ul{
 .monster .level._110{
 	color: lightskyblue;
 }
+.monster .level._120{
+	color: lightgreen;
+}
 /*.monster .level::before{
 	content: "Lv.";
 }.monster .level.max::before{
@@ -420,6 +423,7 @@ ul{
 {
 	position: absolute;
 	z-index: 10;
+	right: 0;
 }
 /*辅助和队伍的每一只框架*/
 .member, .acquisitus-awoken-icon{
@@ -696,7 +700,13 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-latents .latent-icon[data-latent-icon='36'],
 .team-latents .latent-icon[data-latent-icon='37'],
 .team-latents .latent-icon[data-latent-icon='38'],
-.team-latents .latent-icon[data-latent-icon='39']
+.team-latents .latent-icon[data-latent-icon='39'],
+.team-latents .latent-icon[data-latent-icon='40'],
+.team-latents .latent-icon[data-latent-icon='41'],
+.team-latents .latent-icon[data-latent-icon='42'],
+.team-latents .latent-icon[data-latent-icon='43'],
+.team-latents .latent-icon[data-latent-icon='44'],
+.team-latents .latent-icon[data-latent-icon='45']
 {
 	margin-left: 0;
 	margin-right: 0;
@@ -705,7 +715,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-latents .latent-ul .latent-icon[data-latent-icon='14']::before,
 .team-latents .latent-ul .latent-icon[data-latent-icon='15']::before,
 .team-latents .latent-ul .latent-icon[data-latent-icon='37']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='38']::before
+.team-latents .latent-ul .latent-icon[data-latent-icon='38']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='39']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='40']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='41']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='42']::before
 { /*6格的潜觉*/
 	width: 152px;
 	margin-left: -50px;
@@ -715,7 +729,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-latents .latent-ul .latent-icon[data-latent-icon='14'],
 .team-latents .latent-ul .latent-icon[data-latent-icon='15'],
 .team-latents .latent-ul .latent-icon[data-latent-icon='37'],
-.team-latents .latent-ul .latent-icon[data-latent-icon='38']
+.team-latents .latent-ul .latent-icon[data-latent-icon='38'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='39'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='40'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='41'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='42']
 {
 	border-radius: 5px 5px 5px 0;
 	box-shadow: black 1px 1px 1px;
@@ -724,7 +742,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-latents .latent-icon[data-latent-icon='14']+.latent-icon,
 .team-latents .latent-icon[data-latent-icon='15']+.latent-icon,
 .team-latents .latent-icon[data-latent-icon='37']+.latent-icon,
-.team-latents .latent-icon[data-latent-icon='38']+.latent-icon
+.team-latents .latent-icon[data-latent-icon='38']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='39']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='40']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='41']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='42']+.latent-icon
 {
 	width: 76px;
 	margin-left: 0;
@@ -742,7 +764,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-latents .latent-icon[data-latent-icon='14']+.latent-icon::before,
 .team-latents .latent-icon[data-latent-icon='15']+.latent-icon::before,
 .team-latents .latent-icon[data-latent-icon='37']+.latent-icon::before,
-.team-latents .latent-icon[data-latent-icon='38']+.latent-icon::before
+.team-latents .latent-icon[data-latent-icon='38']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='39']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='40']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='41']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='42']+.latent-icon::before
 {
 	background: none;
 }
@@ -1768,7 +1794,14 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	margin-left: 10px;
 }
-
+.row-mon-level .level-value::before,
+.row-mon-level .m-level-btn-min::before,
+.row-mon-level .m-level-btn-max::before,
+.row-mon-level .m-level-btn-110::before,
+.row-mon-level .m-level-btn-120::before
+{
+	content: "Lv.";
+}
 .row-mon-level .subrow
 {
 	font-family: var(--game-font-family );
@@ -1791,7 +1824,8 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 }
 .m-level-btn-min,
 .m-level-btn-max,
-.m-level-btn-110
+.m-level-btn-110,
+.m-level-btn-120
 {
 	box-sizing: border-box;
 	font-size: 18px;
@@ -1806,9 +1840,17 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	content: attr(value) " (+" attr(data-limit-break-incr) "%)";
 }
+.row-mon-level .m-level-btn-120::after
+{
+	content: attr(value);
+}
 .m-level-btn-110
 {
 	color: blue;
+}
+.m-level-btn-120
+{
+	color: green;
 }
 /*
 .m-level-exp::before{

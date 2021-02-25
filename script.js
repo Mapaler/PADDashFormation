@@ -447,8 +447,10 @@ function toggleDomClassName(checkBox, className, checkedAdd = true, dom = docume
 	const checked = checkBox.checked;
 	if (checked && checkedAdd || !checked && !checkedAdd) {
 		dom.classList.add(className);
+		return true;
 	} else {
 		dom.classList.remove(className);
+		return false;
 	}
 }
 //清除数据
@@ -595,7 +597,17 @@ window.onload = function(event) {
 
 	//设定初始的显示设置
 	toggleDomClassName(controlBox.querySelector("#show-mon-id"), 'not-show-mon-id', false);
-	toggleDomClassName(controlBox.querySelector("#btn-show-mon-skill-cd"), 'show-mon-skill-cd');
+
+	//记录显示CD开关的状态
+	const showMonSkillCd_id = "show-mon-skill-cd";
+	const btnShowMonSkillCd = controlBox.querySelector(`#btn-${showMonSkillCd_id}`);
+	btnShowMonSkillCd.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + showMonSkillCd_id)));
+	btnShowMonSkillCd.onclick = function(){
+		toggleDomClassName(this, showMonSkillCd_id);
+		localStorage.setItem("PADDF-" + showMonSkillCd_id, this.checked ? 1 : 0);
+	};
+	btnShowMonSkillCd.onclick();
+	
 	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
 
 	initialize(); //界面初始化
@@ -1819,6 +1831,9 @@ function initialize() {
 	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
 	monEditLv110.ipt = monEditLv;
 	monEditLv110.onclick = setIptToMyValue;
+	const monEditLv120 = settingBox.querySelector(".m-level-btn-120");
+	monEditLv120.ipt = monEditLv;
+	monEditLv120.onclick = setIptToMyValue;
 	//编辑界面重新计算怪物的经验值
 	function reCalculateExp() {
 		const monid = editBox.mid;
@@ -1828,7 +1843,7 @@ function initialize() {
 			level: level
 		};
 		const needExp = calculateExp(tempMon);
-		monLvExp.textContent = needExp ? needExp[0].bigNumberToString() + (level > 99 ? ` + ${needExp[1].bigNumberToString()}` : "") : "";
+		monLvExp.textContent = needExp ? needExp.map(exp=>exp.bigNumberToString()).join(" + ") : "";
 	}
 	editBox.reCalculateExp = reCalculateExp;
 	//三维
@@ -2323,9 +2338,10 @@ function changeid(mon, monDom, latentDom) {
 			levelDom.classList.remove("max");
 		}
 		if (card.limitBreakIncr && level >= card.maxLevel) { //如果支持超觉，并且等级超过99，就添加支持超觉的蓝色
-			levelDom.classList.add("_110");
+			levelDom.classList.add(level > 110 ? "_120" : "_110");
 		} else {
 			levelDom.classList.remove("_110");
+			levelDom.classList.remove("_120");
 		}
 	}
 	const awokenIcon = monDom.querySelector(".awoken-count-num");
@@ -2671,14 +2687,18 @@ function editBoxChangeMonId(id) {
 	//monEditLvMax.textContent = monEditLvMax.value = card.maxLevel;
 	monEditLvMax.value = card.maxLevel;
 	const monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.max = monEditLv.value = card.maxLevel + (card.limitBreakIncr ? 11 : 0); //默认等级为110
+	monEditLv.max = card.limitBreakIncr ? 120 : card.maxLevel; //最大等级为120
+	monEditLv.value = card.limitBreakIncr ? 110 : card.maxLevel; //默认等级为110
 	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
+	const monEditLv120 = settingBox.querySelector(".m-level-btn-120");
 
 	monEditLv110.setAttribute("data-limit-break-incr",card.limitBreakIncr);
 	if (card.limitBreakIncr) {
 		monEditLv110.classList.remove(className_displayNone);
+		monEditLv120.classList.remove(className_displayNone);
 	} else {
 		monEditLv110.classList.add(className_displayNone);
+		monEditLv120.classList.add(className_displayNone);
 	}
 
 	const mCost = settingBox.querySelector(".monster-cost");
@@ -2688,17 +2708,17 @@ function editBoxChangeMonId(id) {
 	const rowLatent = settingBox.querySelector(".row-mon-latent");
 	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
 	//该宠Type允许的杀，set不会出现重复的
-	const allowLatent = getAllowLatent(card.types);
+	const allowLatent = getAllowLatent(card);
 
-	typekiller_for_type.forEach(type => { //显示允许的杀，隐藏不允许的杀
-		const latentDom = monLatentAllowUl.querySelector(`.latent-icon[data-latent-icon='${type.latent}']`);
-		if (!latentDom) return;
-		if (allowLatent.includes(type.latent)) {
-			latentDom.classList.remove("unallowable-latent");
+	const latentIcons = Array.from(monLatentAllowUl.querySelectorAll(`.latent-icon[data-latent-icon]`));
+	latentIcons.forEach(icon => { //显示允许的潜觉，隐藏不允许的潜觉
+		const ltId = parseInt(icon.getAttribute("data-latent-icon"),10);
+		if (allowLatent.includes(ltId)) {
+			icon.classList.remove("unallowable-latent");
 		} else {
-			latentDom.classList.add("unallowable-latent");
+			icon.classList.add("unallowable-latent");
 		}
-	})
+	});
 
 	//怪物主动技能
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
@@ -2777,7 +2797,7 @@ function editBoxChangeMonId(id) {
 	}
 
 	//去除所有不能再打的潜觉
-	editBox.latent = filterAllowLatent(editBox.latent,allowLatent);
+	editBox.latent = editBox.latent.filter(lat => allowLatent.includes(lat));
 	editBox.refreshLatent(editBox.latent, id);
 	editBox.reCalculateExp();
 	editBox.reCalculateAbility();

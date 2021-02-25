@@ -138,10 +138,10 @@ function latentUseHole(latentId)
 	switch (true)
 	{
 		case (latentId === 12):
-		case (latentId >= 16 && latentId <= 36):
+		case (latentId >= 16 && latentId <= 36 || latentId >= 43):
 			return 2;
 		case (latentId >= 13 && latentId <= 15):
-		case (latentId >= 37):
+		case (latentId >= 37 && latentId <= 42):
 			return 6;
 		case (latentId < 12):
 		default:
@@ -230,7 +230,7 @@ function valueAt(level, maxLevel, curve) {
 	return curve.min + (curve.max - curve.min) * Math.pow(f, curve.scale);
 }
 //Code From pad-rikuu
-function curve(c, level, maxLevel, limitBreakIncr) {
+function curve(c, level, maxLevel, limitBreakIncr, limitBreakIncr120) {
 	let value = valueAt(level, maxLevel, {
 		min: c.min,
 		max: c.max!==undefined ? c.max : (c.min * maxLevel),
@@ -238,8 +238,12 @@ function curve(c, level, maxLevel, limitBreakIncr) {
 	});
 
 	if (level > maxLevel) {
-		const exceed = level - maxLevel;
-		value += c.max!==undefined ? (c.max * (limitBreakIncr / 100) * (exceed / 11)) : c.min * exceed;
+		const exceed99 = Math.min(level - maxLevel, 11);
+		const exceed110 = Math.max(0, level - 110);
+		console.log(exceed99, level - 110)
+		value += c.max!==undefined ?
+			((c.max * (limitBreakIncr / 100) * (exceed99 / 11)) + (c.max * (limitBreakIncr120 / 100) * (exceed110 / 10))) :
+			(c.min * exceed99 + c.min * exceed110);
 	}
 	return value;
 }
@@ -249,9 +253,14 @@ function calculateExp(member)
 	if (!member) return null;
 	const memberCard = Cards[member.id];
 	if (!memberCard || memberCard.id == 0 || !memberCard.enabled) return null;
-	const v99Exp = valueAt(member.level, 99, memberCard.exp);
-	const v110Exp = member.level > 99 ? Math.max(0, member.level - memberCard.maxLevel - 1) * 5000000 : 0;
-	return [Math.round(v99Exp),v110Exp];
+	const expArray = [
+		Math.round(valueAt(member.level, 99, memberCard.exp)) //99级以内的经验
+	];
+	if (member.level > 99)
+		expArray.push(Math.max(0, Math.min(member.level, 110) - 100) * 5000000);
+	if (member.level > 110)
+		expArray.push(Math.max(0, Math.min(member.level, 120) - 110) * 20000000);
+	return expArray;
 }
 //计算怪物的能力
 function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
@@ -264,6 +273,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 
 	const bonusScale = [0.1,0.05,0.15]; //辅助宠物附加的属性倍率
 	const plusAdd = [10,5,3]; //加值的增加值
+	const limitBreakIncr120 = [10,5,5]; //120三维增加比例
 	
 	const awokenAdd = [ //对应加三维觉醒的序号与增加值
 		[{index:1,value:500},{index:65,value:-2500}], //HP
@@ -288,16 +298,16 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 		});
 	}
 	const latentScale = [ //对应加三维潜在觉醒的序号与增加比例
-		[{index:1,scale:0.015},{index:12,scale:0.03},{index:28,scale:0.045}], //HP
-		[{index:2,scale:0.01},{index:12,scale:0.02},{index:29,scale:0.03}], //ATK
-		[{index:3,scale:0.1},{index:12,scale:0.2},{index:30,scale:0.3}]  //RCV
+		[{index:1,scale:0.015},{index:12,scale:0.03},{index:28,scale:0.045},{index:43,scale:0.10}], //HP
+		[{index:2,scale:0.01},{index:12,scale:0.02},{index:29,scale:0.03},{index:44,scale:0.05}], //ATK
+		[{index:3,scale:0.1},{index:12,scale:0.2},{index:30,scale:0.3},{index:45,scale:0.35}]  //RCV
 	];
 	const memberCurves = [memberCard.hp, memberCard.atk, memberCard.rcv];
 	const assistCurves = assistCard ? [assistCard.hp, assistCard.atk, assistCard.rcv] : null;
 
 
 	const abilitys = memberCurves.map((ab, idx)=>{
-		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr)); //等级基础三维
+		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr, limitBreakIncr120[idx])); //等级基础三维
 		const n_plus = member.plus[idx] * plusAdd[idx]; //加值增加量
 		let n_assist_base = 0,n_assist_plus=0; //辅助的bonus
 		let awokenList = memberCard.awakenings.slice(0,member.awoken); //储存点亮的觉醒
@@ -371,12 +381,12 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 	});
 	return abilitys;
 }
-function calculateAbility_max(id,solo, teamsCount)
+function calculateAbility_max(id, solo, teamsCount)
 {
 	const card = Cards[id];
 	const tempMon = {
 		id: id,
-		level: card.maxLevel + (card.limitBreakIncr ? 11 : 0),
+		level: card.limitBreakIncr ? 110 : card.maxLevel,
 		plus: (card.overlay || card.types[0] == 15 && card.types[1] == -1) ? [0,0,0] : [99,99,99],  //当可以叠加时，不能打297
 		awoken: card.awakenings.length,
 	};
@@ -554,21 +564,17 @@ function isReincarnated(card)
 	return card.is8Latent && !card.isUltEvo && (card.evoBaseId || card.evoRootId) != card.id && (card.awakenings.includes(49) ? isReincarnated(Cards[card.evoBaseId]) : true);
 }
 //获取类型允许的潜觉
-function getAllowLatent(types)
+function getAllowLatent(card)
 {
-	const latentSet = new Set();
-	types.filter(i => i >= 0)
+	const latentSet = new Set(common_allowable_latent);
+	card.types.filter(i => i >= 0)
 		.map(type => type_allowable_latent[type])
 		.forEach(tA => tA.forEach(t => latentSet.add(t)));
+	if (card.limitBreakIncr)
+	{
+		v120_allowable_latent.forEach(t=>latentSet.add(t));
+	}
 	return Array.from(latentSet);
-}
-//筛选出允许的潜觉
-function filterAllowLatent(latent, allowLatent)
-{
-	const allKillerLatent = typekiller_for_type.map(type => type.latent);
-	return latent.filter(lat =>
-		!allKillerLatent.includes(lat) || //保留不属于杀的潜觉
-		allKillerLatent.includes(lat) && allowLatent.includes(lat)); //属于杀的潜觉则只保留允许的
 }
 //计算队伍中有多少血量
 function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken=false)
