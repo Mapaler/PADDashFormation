@@ -4,7 +4,7 @@ function tp(strings, ...keys) {
 		let dict = values[values.length - 1] || {};
 		let fragment = document.createDocumentFragment();
 		fragment.appendChild(document.createTextNode(strings[0]));
-		let result = [strings[0]];
+		//let result = [strings[0]];
 		keys.forEach(function(key, i) {
 			let value = Number.isInteger(key) ? values[key] : dict[key];
 			if (typeof value == "string" || typeof value == "number")
@@ -735,8 +735,9 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.Delay: { //威吓
-			appendToFragment(createIcon("delay"));
-			appendToFragment(tsps.delay());
+
+			//appendToFragment(createIcon("delay"));
+			appendToFragment(tsps.delay({icon:createIcon("delay")}));
 			break;
 		}
 		case SkillKinds.MassAttack: { //全体攻击
