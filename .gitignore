@@ -1,5 +1,6 @@
 /monsters-info/Download-pad.skyozora.com
 /monsters-info/opencc
+/monsters-info/node_modules
 *formatting.json
 /monsters-info/official-API/*-dungeon.json
 /monsters-info/official-API/*-enemy_skill.json
