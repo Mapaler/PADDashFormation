@@ -820,16 +820,33 @@ function loadData(force = false)
 	
 			function dealSkillData()
 			{
-				if (controlBox)
+				//显示数据更新时间
+				let controlBoxHook = setInterval(checkControlBox, 500); //循环检测controlBox
+				checkControlBox();
+				function checkControlBox()
 				{
-					const updateTime = controlBox.querySelector(".datasource-updatetime");
-					updateTime.textContent = new Date(currentCkey.updateTime).toLocaleString(undefined, { hour12: false });
+					if (controlBox)
+					{
+						const updateTime = controlBox.querySelector(".datasource-updatetime");
+						updateTime.textContent = new Date(currentCkey.updateTime).toLocaleString(undefined, { hour12: false });
+						clearInterval(controlBoxHook);
+					}
 				}
 	
 				//initialize(); //初始化
 				if (statusLine) statusLine.classList.remove("loading-skill-info");
+
 				//如果通过的话就载入URL中的怪物数据
-				reloadFormationData();
+				let formationBoxHook = setInterval(checkControlBox, 500); //循环检测formationBox
+				checkFormationBox();
+				function checkFormationBox()
+				{
+					if (controlBox)
+					{
+						reloadFormationData();
+						clearInterval(formationBoxHook);
+					}
+				}
 			}
 		}
 
