@@ -837,11 +837,11 @@ function loadData(force = false)
 				if (statusLine) statusLine.classList.remove("loading-skill-info");
 
 				//如果通过的话就载入URL中的怪物数据
-				let formationBoxHook = setInterval(checkControlBox, 500); //循环检测formationBox
+				let formationBoxHook = setInterval(checkFormationBox, 500); //循环检测formationBox
 				checkFormationBox();
 				function checkFormationBox()
 				{
-					if (controlBox)
+					if (formationBox)
 					{
 						reloadFormationData();
 						clearInterval(formationBoxHook);
