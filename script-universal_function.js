@@ -322,7 +322,8 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 			}
 			if (memberCard.attrs[0] === assistCard.attrs[0] || memberCard.attrs[0] == 6 || assistCard.attrs[0] == 6)
 			{
-				n_assist_base = Math.round(curve(assistCurves[idx], assist.level, assistCard.maxLevel, assistCard.limitBreakIncr)); //辅助等级基础三维
+				
+				n_assist_base = Math.round(curve(assistCurves[idx], assist.level, assistCard.maxLevel, assistCard.limitBreakIncr, limitBreakIncr120[idx])); //辅助等级基础三维
 				n_assist_plus = assist.plus[idx] * plusAdd[idx]; //辅助加值增加量
 			}
 		}

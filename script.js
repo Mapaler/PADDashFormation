@@ -2355,7 +2355,15 @@ function changeid(mon, monDom, latentDom) {
 			levelDom.classList.remove("max");
 		}
 		if (card.limitBreakIncr && level >= card.maxLevel) { //如果支持超觉，并且等级超过99，就添加支持超觉的蓝色
-			levelDom.classList.add(level > 110 ? "_120" : "_110");
+			if (level <= 110) //Lv 99~110
+			{
+				levelDom.classList.add("_110");
+				levelDom.classList.remove("_120");
+			}else //Lv 111~120
+			{
+				levelDom.classList.add("_120");
+				levelDom.classList.remove("_110");
+			}
 		} else {
 			levelDom.classList.remove("_110");
 			levelDom.classList.remove("_120");
