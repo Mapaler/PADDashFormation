@@ -583,8 +583,8 @@ ul{
 .tIf-total-hp .general::before,
 .tIf-total-hp .awoken-bind::before,
 .tIf-total-hp .reduce .reduce-scale::before,
-.tIf-total-hp .reduce .equal-general::before,
-.tIf-total-hp .reduce .equal-awoken-bind::before,
+.tIf-total-hp .reduce .general::before,
+.tIf-total-hp .reduce .awoken-bind::before,
 .tIf-total-move .general::before,
 .tIf-total-move .awoken-bind::before,
 .tIf-total-move.fixed-move-time .general::after
@@ -596,14 +596,14 @@ ul{
 	height: 16px;
 }
 .tIf-total-hp .awoken-bind::before,
-.tIf-total-hp .reduce .equal-awoken-bind::before,
+.tIf-total-hp .reduce .awoken-bind::before,
 .tIf-total-move .awoken-bind::before
 {
 	background-image: url(images/icon-awoken-bind.png);
 }
 
 .tIf-total-hp .general::before,
-.tIf-total-hp .reduce .equal-general::before
+.tIf-total-hp .reduce .general::before
 {
 	background-image: url(images/icon-HP.png);
 }
@@ -612,10 +612,15 @@ ul{
 	background-image: url(images/icon-reduce.png);
 }
 .tIf-total-hp .reduce .reduce-scale::after{
+	content: "%⇔";
+}
+.tIf-total-hp .reduce.no-reduce .reduce-scale::after{
 	content: "%";
 }
-.tIf-total-hp .reduce .reduce-scale:not([data-value="0.00"])::after{
-	content: "%⇔";
+.tIf-total-hp .reduce.no-reduce .general,
+.tIf-total-hp .reduce.no-reduce .awoken-bind
+{
+	display: none;
 }
 
 .tIf-total-move .general::before{

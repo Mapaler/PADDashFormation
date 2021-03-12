@@ -3113,6 +3113,10 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
+		if (totalReduce > 0)
+			tHpDom_reduce.classList.remove("no-reduce");
+		else
+			tHpDom_reduce.classList.add("no-reduce");
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
@@ -3178,6 +3182,10 @@ function refreshFormationTotalHP(totalDom, teams) {
 
 		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
+		if (totalReduce > 0)
+			tHpDom_reduce.classList.remove("no-reduce");
+		else
+			tHpDom_reduce.classList.add("no-reduce");
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
