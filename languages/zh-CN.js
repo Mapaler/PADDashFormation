@@ -1,310 +1,286 @@
 ﻿document.title = `智龙迷城${teamsCount}人队伍图制作工具`;
 
 //大数字缩短长度
-Number.prototype.bigNumberToString = function()
-{
-	let numTemp = this.valueOf();
-	if (!numTemp) return "0";
-	const grouping = Math.pow(10, 4);
-	const unit = ['','万','亿','兆','京','垓'];
-	const numParts = [];
-	do{
-		numParts.push(numTemp % grouping);
-		numTemp = Math.floor(numTemp / grouping);
-	}while(numTemp>0 && numParts.length<(unit.length-1))
-	if (numTemp>0)
-	{
-		numParts.push(numTemp);
-	}
-	let numPartsStr = numParts.map((num,idx)=>{
-		if (num > 0)
-		{
-			return (num < 1e3 ? "零" : "") + num + unit[idx];
-		}else
-			return "零";
-	});
+Number.prototype.bigNumberToString = function() {
+    let numTemp = this.valueOf();
+    if (!numTemp) return "0";
+    const grouping = Math.pow(10, 4);
+    const unit = ['', '万', '亿', '兆', '京', '垓'];
+    const numParts = [];
+    do {
+        numParts.push(numTemp % grouping);
+        numTemp = Math.floor(numTemp / grouping);
+    } while (numTemp > 0 && numParts.length < (unit.length - 1))
+    if (numTemp > 0) {
+        numParts.push(numTemp);
+    }
+    let numPartsStr = numParts.map((num, idx) => {
+        if (num > 0) {
+            return (num < 1e3 ? "零" : "") + num + unit[idx];
+        } else
+            return "零";
+    });
 
-	numPartsStr.reverse(); //反向
-	let outStr = numPartsStr.join("");
-	outStr = outStr.replace(/(^零+|零+$)/g,''); //去除开头的零
-	outStr = outStr.replace(/零{2,}/g,'零'); //去除多个连续的零
-	return outStr;
+    numPartsStr.reverse(); //反向
+    let outStr = numPartsStr.join("");
+    outStr = outStr.replace(/(^零+|零+$)/g, ''); //去除开头的零
+    outStr = outStr.replace(/零{2,}/g, '零'); //去除多个连续的零
+    return outStr;
 }
 
 //查找原先完整技能
-function findFullSkill(subSkill){
-	const parentSkill = Skills.find(ss=>(ss.type === 116 || ss.type === 118 || ss.type === 138) && ss.params.includes(subSkill.id)) || subSkill;
-	const aCard = Cards.find(card=>card.activeSkillId == parentSkill.id || card.leaderSkillId == parentSkill.id);
-	return {skill:parentSkill,card:aCard};
+function findFullSkill(subSkill) {
+    const parentSkill = Skills.find(ss => (ss.type === 116 || ss.type === 118 || ss.type === 138) && ss.params.includes(subSkill.id)) || subSkill;
+    const aCard = Cards.find(card => card.activeSkillId == parentSkill.id || card.leaderSkillId == parentSkill.id);
+    return { skill: parentSkill, card: aCard };
 }
 //document.querySelector(".edit-box .row-mon-id .m-id").type = "number";
 //console.table(Skills.filter(s=>{const sk = s.params; return s.type == 156;}).map(findFullSkill));
 
 //返回flag里值为true的数组，如[1,4,7]
-function flags(num){
-	/*
-	return Array.from(new Array(32),(i,n)=>n).filter(n => num & (1 << n)); //性能太差
-	return new Array(32).fill(null).map((i,n)=>n).filter(n => num & (1 << n)); //性能比上者好，但还是不够快
-	*/
-	const arr = [];
-	for (let i = 0; i<32;i++)
-	{
-		if (num & (1<<i))
-		{
-			arr.push(i);
-		}
-	}
-	return arr;
+function flags(num) {
+    /*
+    return Array.from(new Array(32),(i,n)=>n).filter(n => num & (1 << n)); //性能太差
+    return new Array(32).fill(null).map((i,n)=>n).filter(n => num & (1 << n)); //性能比上者好，但还是不够快
+    */
+    const arr = [];
+    for (let i = 0; i < 32; i++) {
+        if (num & (1 << i)) {
+            arr.push(i);
+        }
+    }
+    return arr;
 }
 
 //按住Ctrl点击技能在控制台输出技能的对象
-function fastShowSkill(event)
-{
-	if (event.ctrlKey)
-	{
-		const skillId = parseInt(this.getAttribute("data-skillid"), 10);
-		console.log(Skills[skillId]);
-	}
+function fastShowSkill(event) {
+    if (event.ctrlKey) {
+        const skillId = parseInt(this.getAttribute("data-skillid"), 10);
+        console.log(Skills[skillId]);
+    }
 }
 //技能介绍里的头像的切换
-function changeToIdInSkillDetail(event)
-{
-	const settingBox = editBox.querySelector(".setting-box");
-	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
-	const mid = this.getAttribute("data-cardid");
-	monstersID.value = mid;
-	monstersID.onchange();
-	return false; //取消链接的默认操作
+function changeToIdInSkillDetail(event) {
+    const settingBox = editBox.querySelector(".setting-box");
+    const monstersID = settingBox.querySelector(".row-mon-id .m-id");
+    const mid = this.getAttribute("data-cardid");
+    monstersID.value = mid;
+    monstersID.onchange();
+    return false; //取消链接的默认操作
 }
 
 //insertAdjacentHTML 可以只增加部分 HTML
 //高级技能解释
-function parseSkillDescription(skill)
-{
-	const id = skill.id;
-	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-	if (id == 0) return fragment;
-	const type = skill.type;
-	const sk = skill.params;
-	
-	//珠子名和属性名数组
-	const attrsName = ["火","水","木","光","暗","回复","废","毒","剧毒","炸弹"];
-	//类型名数组
-	const typeName = ["进化","平衡","体力","回复","龙","神","攻击","恶魔","机械","特别保护","10","11","觉醒","13","强化","卖钱"];
-	//觉醒名数组
-	const awokenName = ["HP+","攻击+","回复+","火盾","水盾","木盾","光盾","暗盾","自回","防封","防暗","防废","防毒","火+","水+","木+","光+","暗+","手指","心解","SB","火横","水横","木横","光横","暗横","U","SX","心+","协力","龙杀","神杀","恶魔杀","机杀","平衡杀","攻击杀","体力杀","回复杀","进化杀","觉醒杀","强化杀","卖钱杀","7c","5色破防","心追","全体 HP ","全体回复","破无效","武器觉醒","方块心追","5色溜","大防封","大手指","防云","防封条","大SB","满血强化","下半血强化","L盾","L解锁","10c","c珠","语音","奖励增加"," HP -","攻击-","回复-","大防暗","大防废","大防毒","掉废","掉毒","2串火","2串水","2串木","2串光","2串暗"];
-	const ClumsN = ["左边第1竖列","左边第2竖列","左边第3竖列","右边第3竖列","右边第2竖列","右边第1竖列"];
-	const RowsN = ["最上1横行","上方第2横行","下方第3横行","下方第2横行","最下1横行"];
-	//返回属性名
-	function attrN(i){return attrsName[i || 0] || ("未知属性" + i);}
-	//返回类型名
-	function typeN(i){return typeName[i || 0] || ("未知类型" + i);}
-	//返回觉醒名
-	function awokenN(i){return awokenName[(i || 0)-1] || ("未知觉醒" + i);}
-	//从二进制的数字中获得有哪些内容
-	function getNamesFromBinary(num,dataArr)
-	{	/*num是输入的数字，2的N次方在2进制下表示1后面跟着N个0。
-		如果num和2的N次方同时存在某位1，则返回这个数，逻辑上转换为true。
-		filter就可以返回所有有这个数的数据*/
-		/*以珠子名称为例，num是输入的数字，比如10进制465转二进制=>111010001。
-		二进制数从低位到高位表示火水木光暗……
-		用逻辑运算AND序号来获得有没有这个值*/
-		var results = dataArr.filter(function(pn,pi){
-			return num & Math.pow(2,pi); //Math.pow(x,y)计算以x为底的y次方值
-		});
-		return results;
-	}
-	
-	const nb = getNamesFromBinary; //化简名称
+function parseSkillDescription(skill) {
+    const id = skill.id;
+    let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+    if (id == 0) return fragment;
+    const type = skill.type;
+    const sk = skill.params;
 
-	function getAttrTypeString(attrsArray = [],typesArray = [])
-	{
-		let outArr = [];
-		if (attrsArray && attrsArray.indexOf(0)>=0 &&
-			attrsArray.indexOf(1)>=0 &&
-			attrsArray.indexOf(2)>=0 &&
-			attrsArray.indexOf(3)>=0 &&
-			attrsArray.indexOf(4)>=0)
-		{
-			return "所有属性";
-		}
-		if (attrsArray && attrsArray.length)
-		{
-			outArr.push(attrsArray.map(attrN).join("、") + "属性");
-		}
-		if (typesArray && typesArray.length)
-		{
-			outArr.push(typesArray.map(typeN).join("、") + "类型");
-		}
-		return outArr.join("和");
-	}
-	function getOrbsAttrString(orbFlag,isOr = false)
-	{
-		let outStr = ``;
-		if ((orbFlag & 1023) == 1023) //1023-1111111111
-		{ //单纯5色
-			outStr += '任何';
-		}else if (orbFlag == 31) //31-11111
-		{ //单纯5色
-			outStr += '5色';
-		}else if((orbFlag & 31) == 31)
-		{ //5色加其他色
-			outStr += `5色+${nb(orbFlag ^ 31, attrsName).join(isOr?"或":"、")}`;
-		}else
-		{
-			outStr += `${nb(orbFlag, attrsName).join(isOr?"或":"、")}`;
-		}
-		return outStr;
-	}
-	function stats(value, statTypes)
-	{
-		return [
-			statTypes.indexOf(1) >= 0 ? value : 100, //攻击
-			statTypes.indexOf(2) >= 0 ? value : 100  //回复
-		];
-	}
-	const mulName = ["HP","攻击力","回复力"];
-	//获取固定的三维成长的名称
-	function getFixedHpAtkRcvString(values)
-	{
-		let mulArr = null;
-		if (Array.isArray(values)) {
-			mulArr = [
-				1,
-				values[0] / 100,
-				values[1] / 100,
-			];
-		} else
-		{
-			mulArr = [
-				(values.hp || 100) / 100,
-				(values.atk || 100) / 100,
-				(values.rcv || 100) / 100
-			];
-		}
-		const hasMul = mulArr.filter(m=>m != 1); //不是1的数值
-		let str = "";
-		if (hasMul.length>0)
-		{
-			const hasDiff = hasMul.filter(m=>m != hasMul[0]).length > 0; //存在不一样的值
-			if (hasDiff)
-			{
-				str += mulArr.map((m,i)=>(m>0 && m!=1)?(mulName[i]+(m>=1?`×${m}倍`:`变为${m*100}%`)):null).filter(s=>s!=null).join("，");
-			}else
-			{
-				let hasMulName = mulName.filter((n,i)=>mulArr[i] != 1);
-				if (hasMulName.length>=3)
-				{
-					str+=hasMulName.slice(0,hasMulName.length-1).join("、") + "和" + hasMulName[hasMulName.length-1];
-				}else
-				{
-					str+=hasMulName.join("和");
-				}
-				str += hasMul[0]>=1?`×${hasMul[0]}倍`:`变为${hasMul[0]*100}%`;
-			}
-		}else
-		{
-			str += "能力值没有变化";
-		}
-		return str;
-	}
-	const mul = getFixedHpAtkRcvString;
-	//技能介绍里的头像的切换
-	function createBoard(boardData)
-	{
-		const table = document.createElement("table");
-		table.className = "board fixed-shape-orb";
-		//console.table(boardData);
-		boardData.forEach((rowData,ri,rArr) => {
-			const row = table.insertRow();
-			if (ri == 2 && rArr.length > 5) row.classList.add("board-row4");
+    //珠子名和属性名数组
+    const attrsName = ["火", "水", "木", "光", "暗", "回复", "废", "毒", "剧毒", "炸弹"];
+    //类型名数组
+    const typeName = ["进化", "平衡", "体力", "回复", "龙", "神", "攻击", "恶魔", "机械", "特别保护", "10", "11", "觉醒", "13", "强化", "卖钱"];
+    //觉醒名数组
+    const awokenName = ["HP+", "攻击+", "回复+", "火盾", "水盾", "木盾", "光盾", "暗盾", "自回", "防封", "防暗", "防废", "防毒", "火+", "水+", "木+", "光+", "暗+", "手指", "心解", "SB", "火横", "水横", "木横", "光横", "暗横", "U", "SX", "心+", "协力", "龙杀", "神杀", "恶魔杀", "机杀", "平衡杀", "攻击杀", "体力杀", "回复杀", "进化杀", "觉醒杀", "强化杀", "卖钱杀", "7c", "5色破防", "心追", "全体 HP ", "全体回复", "破无效", "武器觉醒", "方块心追", "5色溜", "大防封", "大手指", "防云", "防封条", "大SB", "满血强化", "下半血强化", "L盾", "L解锁", "10c", "c珠", "语音", "奖励增加", " HP -", "攻击-", "回复-", "大防暗", "大防废", "大防毒", "掉废", "掉毒", "2串火", "2串水", "2串木", "2串光", "2串暗"];
+    const ClumsN = ["左边第1竖列", "左边第2竖列", "左边第3竖列", "右边第3竖列", "右边第2竖列", "右边第1竖列"];
+    const RowsN = ["最上1横行", "上方第2横行", "下方第3横行", "下方第2横行", "最下1横行"];
+    //返回属性名
+    function attrN(i) { return attrsName[i || 0] || ("未知属性" + i); }
+    //返回类型名
+    function typeN(i) { return typeName[i || 0] || ("未知类型" + i); }
+    //返回觉醒名
+    function awokenN(i) { return awokenName[(i || 0) - 1] || ("未知觉醒" + i); }
+    //从二进制的数字中获得有哪些内容
+    function getNamesFromBinary(num, dataArr) {
+        /*num是输入的数字，2的N次方在2进制下表示1后面跟着N个0。
+        	如果num和2的N次方同时存在某位1，则返回这个数，逻辑上转换为true。
+        	filter就可以返回所有有这个数的数据*/
+        /*以珠子名称为例，num是输入的数字，比如10进制465转二进制=>111010001。
+        二进制数从低位到高位表示火水木光暗……
+        用逻辑运算AND序号来获得有没有这个值*/
+        var results = dataArr.filter(function(pn, pi) {
+            return num & Math.pow(2, pi); //Math.pow(x,y)计算以x为底的y次方值
+        });
+        return results;
+    }
 
-			rowData.forEach((orbType,ci,cArr)=>{
-				const cell = row.insertCell();
-				cell.className = "orb-icon";
-				if (orbType != null)
-				{
-					cell.setAttribute("data-orb-icon", orbType);
-				}
-				if (ci == 3 && cArr.length > 6) cell.classList.add("board-cell5");
-			});
-		});	
-		table.onclick = function(){
-			this.classList.toggle("board-76");
-		};
-		return table;
-	}
+    const nb = getNamesFromBinary; //化简名称
 
-	function boardData_fixed(dataArr,orbType)
-	{
-		const data = dataArr.map(flag=>new Array(6).fill(null).map((a,i)=> (1<<i & flag) ? (orbType || 0) : null));
-		data.splice(3,0,data[2].concat()); //将第2行复制插入为第3行
-		data.forEach(rowData => 
-			rowData.splice(4,0,rowData[3]) //将第3个复制插入为第4个
-		);
-		return data;
-	}
-	function boardData_line(data)
-	{
-		data.splice(3,0,data[2].concat()); //将第2行复制插入为第3行
-		data.forEach(row=>row.splice(3,0,null)); //插入全空为第4个
-		return data;
-	}
-	function boardData_row(data)
-	{
-		data.splice(2,0,new Array(6).fill(null)); //插入全空为第3行
-		data.forEach(row=>row.splice(4,0,row[3])); //将第3个复制插入为第4个
-		return data;
-	}
+    function getAttrTypeString(attrsArray = [], typesArray = []) {
+        let outArr = [];
+        if (attrsArray && attrsArray.indexOf(0) >= 0 &&
+            attrsArray.indexOf(1) >= 0 &&
+            attrsArray.indexOf(2) >= 0 &&
+            attrsArray.indexOf(3) >= 0 &&
+            attrsArray.indexOf(4) >= 0) {
+            return "所有属性";
+        }
+        if (attrsArray && attrsArray.length) {
+            outArr.push(attrsArray.map(attrN).join("、") + "属性");
+        }
+        if (typesArray && typesArray.length) {
+            outArr.push(typesArray.map(typeN).join("、") + "类型");
+        }
+        return outArr.join("和");
+    }
 
-	let str = null;
-	let strArr = null,fullColor = null,atSameTime = null,hasDiffOrbs = null;
-	switch(type)
-	{
-		case 0:
-			str = `对敌方全体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害`;
-			break;
-		case 1:
-			str = `对敌方全体造成${sk[1].bigNumberToString()}点${attrN(sk[0])}属性伤害`;
-			break;
-		case 2:
-			str = `对敌方1体造成自身攻击力×${sk[0]/100}${sk[1]&&sk[1]!=sk[0]?'~'+sk[1]/100:''}倍的自身属性伤害`;
-			break;
-		case 3:
-			str = `${sk[0]}回合内，受到的伤害减少${sk[1]}%`;
-			break;
-		case 4:
-			str = `使敌方全体中毒，每回合损失宠物自身攻击力×${sk[0]/100}倍的 HP `;
-			break;
-		case 5:
-			str = `${sk[0]}秒内时间停止，可以任意移动宝珠`;
-			break;
-		case 6:
-			str = `敌人的 HP 减少${sk[0]}%`;
-			break;
-		case 7:
-			str = `回复宠物自身回复力×${sk[0]/100}倍的 HP`;
-			break;
-		case 8:
-			str = `回复${sk[0]} HP `;
-			break;
-		case 9:
-			str = `${attrN(sk[0])}宝珠变为${attrN(sk[1])}宝珠`;
-			break;
-		case 10:
-			str = `全版刷新`;
-			break;
-		case 11:
-			str = `${attrN(sk[0])}属性宠物的攻击力×${sk[1]/100}倍`;
-			break;
-		case 12:
-			str = `消除宝珠的回合，以自身攻击力×${sk[0]/100}倍的伤害追打敌人`;
-			break;
-		case 13:
-			str = `消除宝珠的回合，回复自身回复力×${sk[0]/100}倍的 HP `;
-			break;
-		case 14:
-			str = `如当前 HP 在 HP 上限的${sk[0]}%以上的话，受到单一次致命攻击时，${sk[1]<100?`有${sk[1]}的几率`:"将"}会以1点 HP 生还`;
+    function getOrbsAttrString(orbFlag, isOr = false) {
+        let outStr = ``;
+        if ((orbFlag & 1023) == 1023) //1023-1111111111
+        { //单纯5色
+            outStr += '任何';
+        } else if (orbFlag == 31) //31-11111
+        { //单纯5色
+            outStr += '5色';
+        } else if ((orbFlag & 31) == 31) { //5色加其他色
+            outStr += `5色+${nb(orbFlag ^ 31, attrsName).join(isOr?"或":"、")}`;
+        } else {
+            outStr += `${nb(orbFlag, attrsName).join(isOr?"或":"、")}`;
+        }
+        return outStr;
+    }
+
+    function stats(value, statTypes) {
+        return [
+            statTypes.indexOf(1) >= 0 ? value : 100, //攻击
+            statTypes.indexOf(2) >= 0 ? value : 100 //回复
+        ];
+    }
+    const mulName = ["HP", "攻击力", "回复力"];
+    //获取固定的三维成长的名称
+    function getFixedHpAtkRcvString(values) {
+        let mulArr = null;
+        if (Array.isArray(values)) {
+            mulArr = [
+                1,
+                values[0] / 100,
+                values[1] / 100,
+            ];
+        } else {
+            mulArr = [
+                (values.hp || 100) / 100,
+                (values.atk || 100) / 100,
+                (values.rcv || 100) / 100
+            ];
+        }
+        const hasMul = mulArr.filter(m => m != 1); //不是1的数值
+        let str = "";
+        if (hasMul.length > 0) {
+            const hasDiff = hasMul.filter(m => m != hasMul[0]).length > 0; //存在不一样的值
+            if (hasDiff) {
+                str += mulArr.map((m, i) => (m > 0 && m != 1) ? (mulName[i] + (m >= 1 ? `×${m}倍` : `变为${m*100}%`)) : null).filter(s => s != null).join("，");
+            } else {
+                let hasMulName = mulName.filter((n, i) => mulArr[i] != 1);
+                if (hasMulName.length >= 3) {
+                    str += hasMulName.slice(0, hasMulName.length - 1).join("、") + "和" + hasMulName[hasMulName.length - 1];
+                } else {
+                    str += hasMulName.join("和");
+                }
+                str += hasMul[0] >= 1 ? `×${hasMul[0]}倍` : `变为${hasMul[0]*100}%`;
+            }
+        } else {
+            str += "能力值没有变化";
+        }
+        return str;
+    }
+    const mul = getFixedHpAtkRcvString;
+    //技能介绍里的头像的切换
+    function createBoard(boardData) {
+        const table = document.createElement("table");
+        table.className = "board fixed-shape-orb";
+        //console.table(boardData);
+        boardData.forEach((rowData, ri, rArr) => {
+            const row = table.insertRow();
+            if (ri == 2 && rArr.length > 5) row.classList.add("board-row4");
+
+            rowData.forEach((orbType, ci, cArr) => {
+                const cell = row.insertCell();
+                cell.className = "orb-icon";
+                if (orbType != null) {
+                    cell.setAttribute("data-orb-icon", orbType);
+                }
+                if (ci == 3 && cArr.length > 6) cell.classList.add("board-cell5");
+            });
+        });
+        table.onclick = function() {
+            this.classList.toggle("board-76");
+        };
+        return table;
+    }
+
+    function boardData_fixed(dataArr, orbType) {
+        const data = dataArr.map(flag => new Array(6).fill(null).map((a, i) => (1 << i & flag) ? (orbType || 0) : null));
+        data.splice(3, 0, data[2].concat()); //将第2行复制插入为第3行
+        data.forEach(rowData =>
+            rowData.splice(4, 0, rowData[3]) //将第3个复制插入为第4个
+        );
+        return data;
+    }
+
+    function boardData_line(data) {
+        data.splice(3, 0, data[2].concat()); //将第2行复制插入为第3行
+        data.forEach(row => row.splice(3, 0, null)); //插入全空为第4个
+        return data;
+    }
+
+    function boardData_row(data) {
+        data.splice(2, 0, new Array(6).fill(null)); //插入全空为第3行
+        data.forEach(row => row.splice(4, 0, row[3])); //将第3个复制插入为第4个
+        return data;
+    }
+
+    let str = null;
+    let strArr = null,
+        fullColor = null,
+        atSameTime = null,
+        hasDiffOrbs = null;
+    switch (type) {
+        case 0:
+            str = `对敌方全体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害`;
+            break;
+        case 1:
+            str = `对敌方全体造成${sk[1].bigNumberToString()}点${attrN(sk[0])}属性伤害`;
+            break;
+        case 2:
+            str = `对敌方1体造成自身攻击力×${sk[0]/100}${sk[1]&&sk[1]!=sk[0]?'~'+sk[1]/100:''}倍的自身属性伤害`;
+            break;
+        case 3:
+            str = `${sk[0]}回合内，受到的伤害减少${sk[1]}%`;
+            break;
+        case 4:
+            str = `使敌方全体中毒，每回合损失宠物自身攻击力×${sk[0]/100}倍的 HP `;
+            break;
+        case 5:
+            str = `${sk[0]}秒内时间停止，可以任意移动宝珠`;
+            break;
+        case 6:
+            str = `敌人的 HP 减少${sk[0]}%`;
+            break;
+        case 7:
+            str = `回复宠物自身回复力×${sk[0]/100}倍的 HP`;
+            break;
+        case 8:
+            str = `回复${sk[0]} HP `;
+            break;
+        case 9:
+            str = `${attrN(sk[0])}宝珠变为${attrN(sk[1])}宝珠`;
+            break;
+        case 10:
+            str = `全版刷新`;
+            break;
+        case 11:
+            str = `${attrN(sk[0])}属性宠物的攻击力×${sk[1]/100}倍`;
+            break;
+        case 12:
+            str = `消除宝珠的回合，以自身攻击力×${sk[0]/100}倍的伤害追打敌人`;
+            break;
+        case 13:
+            str = `消除宝珠的回合，回复自身回复力×${sk[0]/100}倍的 HP `;
+            break;
+        case 14:
+            str = `如当前 HP 在 HP 上限的${sk[0]}%以上的话，受到单一次致命攻击时，${sk[1]<100?`有${sk[1]}的几率`:"将"}会以1点 HP 生还`;
 			break;
 		case 15:
 			str = `操作时间${sk[0]>0?`延长`:`减少`}${Math.abs(sk[0]/100)}秒`;
@@ -472,33 +448,42 @@ function parseSkillDescription(skill)
 			break;
 		case 71:
 			//这个类型，所有颜色是直接显示的，但是最后一位有个-1表示结束
-			strArr = sk;
-			if (sk.includes(-1))
-			{
-				strArr = sk.slice(0,sk.indexOf(-1));
-			}
-			str = "全画面的宝珠变成" + strArr.map(o=>attrN(o)).join("、");
-
 			let attrArr = sk.includes(-1) ? sk.slice(0,sk.indexOf(-1)) : sk;
 			strArr = [];
 			strArr.push(`全画面的宝珠变成${attrArr.map(o=>attrN(o)).join("、")}`);
 
-			var data = new Array(5).fill(null).map(()=>new Array(6).fill(null));
-			
-			let atrr = attrArr.entries();
-			for (let ai=0;ai<10;ai++)
+			const rowC = 5, columC = 6;
+			let valueArray = new Uint8Array(rowC * columC);
+			window.crypto.getRandomValues(valueArray); //获取符合密码学要求的安全的随机值
+			valueArray = Array.from(valueArray.map(x => attrArr[x % attrArr.length])); //用所有宝珠填充
+			//之后用每种颜色填充前3个
+			attrArr.forEach((attr,idx)=>{
+				valueArray.fill(attr, idx * 3, idx * 3 + 3);
+			});
+
+			//将上方数据重新乱序排列
+			let dataArray = [];
+			while(valueArray.length > 0)
 			{
-				let v = atrr.next().value;
-				if (v == undefined)
+				dataArray.push(valueArray.splice(Math.randomInteger(valueArray.length - 1),1));
+			}
+			
+			//创建版面数据，依次填入
+			var data = new Array(5).fill(null).map(()=>new Array(6).fill(null));
+
+			let da = dataArray.entries();
+			for (let ri=0;ri<rowC;ri++)
+			{
+				for (let ci=0;ci<columC;ci++)
 				{
-					atrr = attrArr.entries();
-					v = atrr.next().value;
+					let v = da.next().value;
+					if (v == undefined)
+					{
+						atrr = attrArr.entries();
+						v = atrr.next().value;
+					}
+					data[ri][ci] = v[1];
 				}
-				let row = Math.floor(ai / 2);
-				let cell_offset = ai % 2 ? 3 : 0;
-				data[row][cell_offset + 0] = v[1];
-				data[row][cell_offset + 1] = v[1];
-				data[row][cell_offset + 2] = v[1];
 			}
 
 			data = boardData_row(data);
