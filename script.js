@@ -607,6 +607,16 @@ window.onload = function(event) {
 		localStorage.setItem("PADDF-" + showMonSkillCd_id, this.checked ? 1 : 0);
 	};
 	btnShowMonSkillCd.onclick();
+
+	//记录显示觉醒开关的状态
+	const showMonAwoken_id = "show-mon-awoken";
+	const btnShowMonAwoken = controlBox.querySelector(`#btn-${showMonAwoken_id}`);
+	btnShowMonAwoken.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + showMonAwoken_id)));
+	btnShowMonAwoken.onclick = function(){
+		toggleDomClassName(this, showMonAwoken_id);
+		localStorage.setItem("PADDF-" + showMonAwoken_id, this.checked ? 1 : 0);
+	};
+	btnShowMonAwoken.onclick();
 	
 	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
 
@@ -1403,25 +1413,6 @@ function initialize() {
 				Math.max(thisValue,rangeHigh)
 			)
 		)).checked = true;
-/*
-		if (rangeLow == rangeHigh)
-		{
-			if (thisValue == rangeLow)
-			{
-				s_rareLows.find(radio=>parseInt(radio.value,10) == 1).checked = true;
-				s_rareHighs.find(radio=>parseInt(radio.value,10) == 10).checked = true;
-			}else
-			{
-				s_rareLows.find(radio=>parseInt(radio.value,10) == Math.min(thisValue,rangeLow)).checked = true;
-				s_rareHighs.find(radio=>parseInt(radio.value,10) == Math.max(thisValue,rangeLow)).checked = true;
-			}
-		}else
-		{
-			console.log("恢复单选");
-			s_rareLows.find(radio=>parseInt(radio.value,10) == thisValue).checked = true;
-			s_rareHighs.find(radio=>parseInt(radio.value,10) == thisValue).checked = true;
-		}
-		*/
 	}
 	s_rareIcons.forEach(icon=>icon.onclick = s_rareIcons_onclick);
 	const s_rareClear = s_rareDiv.querySelector(".rare-clear");
@@ -1493,11 +1484,11 @@ function initialize() {
 
 	const s_selectedAwokensUl = searchBox.querySelector(".selected-awokens");
 	function search_awokenAdd1() {
-		let count = parseInt(this.value || 0, 10);
+		let count = parseInt(this.getAttribute("data-awoken-count") || 0, 10);
 		const maxCount = parseInt(this.getAttribute("data-max-count") || 9, 10);
 		if (count < maxCount) {
 			count++;
-			this.setAttribute("value", count);
+			this.setAttribute("data-awoken-count", count);
 
 			const iconLi = document.createElement("li");
 			const icon = iconLi.appendChild(document.createElement("icon"))
@@ -1510,15 +1501,12 @@ function initialize() {
 	function search_awokenSub1() {
 		const awokenId = this.getAttribute("data-awoken-icon");
 		const awokenIcon = s_awokensIcons.find(icon=>icon.getAttribute("data-awoken-icon") == awokenId);
-		let count = parseInt(awokenIcon.value || 0, 10);
+		let count = parseInt(awokenIcon.getAttribute("data-awoken-count") || 0, 10);
 		if (count > 0) {
 			count--;
-			awokenIcon.setAttribute("value", count);
+			awokenIcon.setAttribute("data-awoken-count", count);
 		}
 		this.parentNode.remove();
-	}
-	function search_awokenClear() {
-		this.setAttribute("value", 0);
 	}
 	s_awokensIcons.forEach(b => {
 		b.onclick = search_awokenAdd1; //每种觉醒增加1
@@ -1528,7 +1516,7 @@ function initialize() {
 	const sawokenClear = searchBox.querySelector(".sawoken-clear");
 	awokenClear.onclick = function() { //清空觉醒选项
 		s_awokensIcons.forEach(t => {
-			t.setAttribute("value", 0);
+			t.setAttribute("data-awoken-count", 0);
 		});
 		s_selectedAwokensUl.innerHTML = "";
 	};
@@ -1648,11 +1636,11 @@ function initialize() {
 			s_rareHighs.filter(returnCheckedInput).map(returnInputValue).map(Str2Int)[0],
 		];
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
-		const awokensFilter = s_awokensIcons.filter(btn => parseInt(btn.value, 10) > 0).map(btn => {
+		const awokensFilter = s_awokensIcons.filter(btn => parseInt(btn.getAttribute("data-awoken-count"), 10) > 0).map(btn => {
 			const awokenIndex = parseInt(btn.getAttribute("data-awoken-icon"), 10);
 			return {
 				id: awokenIndex,
-				num: parseInt(btn.value, 10)
+				num: parseInt(btn.getAttribute("data-awoken-count"), 10)
 			};
 		});
 		const searchResult = searchCards(cards,
@@ -2860,6 +2848,8 @@ function refreshAll(formationData) {
 		const latentsDom = teamBox.querySelector(".team-latents");
 		const assistsDom = teamBox.querySelector(".team-assist");
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
+		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队伍队员觉醒
+		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //队伍队员觉醒
 		for (let ti = 0, ti_len = membersDom.querySelectorAll(".member").length; ti < ti_len; ti++) {
 			const member = membersDom.querySelector(`.member-${ti+1} .monster`);
 			const latent = latentsDom.querySelector(`.latents-${ti+1} .latent-ul`);
@@ -2868,6 +2858,7 @@ function refreshAll(formationData) {
 			changeid(teamData[1][ti], assist); //辅助
 			refreshMemberSkillCD(teamBox, teamData, ti); //技能CD
 			refreshAbility(teamAbilityDom, teamData, ti); //本人能力值
+			refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, ti); //本人觉醒
 		}
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, teamNum);
@@ -2987,6 +2978,71 @@ function refreshAbility(abilityDom, team, idx) {
 			div.classList.add(className_displayNone);
 			div.textContent = 0;
 		}
+	});
+}
+//刷新队员觉醒
+function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
+	if (!menberAwokenDom) return; //如果没有dom，直接跳过
+
+	const memberData = team[0][idx];
+	const assistData = team[1][idx];
+	//队员觉醒
+	let menberAwokens = Cards[memberData.id].awakenings.slice(0,memberData.awoken);
+	//单人和三人为队员增加超觉醒
+	if ((solo || teamsCount === 3) && memberData.sawoken != undefined) menberAwokens.push(Cards[memberData.id].superAwakenings[memberData.sawoken]);
+	//武器觉醒
+	let assistAwokens = Cards[assistData.id].awakenings.slice(0,assistData.awoken);
+	if (!assistAwokens.includes(49)) assistAwokens = []; //清空非武器的觉醒
+	/*if (assistAwokens.includes(49))
+	{
+		menberAwokens = menberAwokens.concat(assistAwokens);
+	}*/
+
+	const menberAwokenUl = menberAwokenDom.querySelector(`.menber-awoken-${idx + 1} .awoken-ul`);
+	const assistAwokenUl = assistAwokenDom.querySelector(`.menber-awoken-${idx + 1} .awoken-ul`);
+	/* //通用的
+	function countNum(arr) {
+		const map = arr.reduce(function(preMap, value){
+			return preMap.set(value, (preMap.get(value) || 0) + 1);
+		}, new Map());
+		return Array.from(map);
+	};*/
+	function countAwokenNum(arr) {
+		const map = arr.reduce(function(preMap, value){
+			const eak = equivalent_awoken.find(eako => eako.big === value);
+			if (eak)
+			{
+				return preMap.set(eak.small, (preMap.get(eak.small) || 0) + eak.times);
+			}else
+			{
+				return preMap.set(value, (preMap.get(value) || 0) + 1);
+			}
+		}, new Map());
+		return Array.from(map);
+	};
+	/*const hideAwokens = [49,1,2,3,63];
+	if (solo) hideAwokens.push(30); //协力觉醒
+	if (!solo) hideAwokens.push(63); //掉落觉醒
+	menberAwokens = menberAwokens.filter(ak=>!hideAwokens.includes(ak));*/
+	let menberAwokensCount = countAwokenNum(menberAwokens);
+	menberAwokenUl.innerHTML = '';
+	menberAwokensCount.forEach(akc=>{
+		const iconLi = document.createElement("li");
+		const icon = iconLi.appendChild(document.createElement("icon"))
+		icon.className = "awoken-icon";
+		icon.setAttribute("data-awoken-icon", akc[0]);
+		icon.setAttribute("data-awoken-count", akc[1]);
+		menberAwokenUl.appendChild(iconLi);
+	});
+	let assistAwokensCount = countAwokenNum(assistAwokens);
+	assistAwokenUl.innerHTML = '';
+	assistAwokensCount.forEach(akc=>{
+		const iconLi = document.createElement("li");
+		const icon = iconLi.appendChild(document.createElement("icon"))
+		icon.className = "awoken-icon";
+		icon.setAttribute("data-awoken-icon", akc[0]);
+		icon.setAttribute("data-awoken-count", akc[1]);
+		assistAwokenUl.appendChild(iconLi);
 	});
 }
 

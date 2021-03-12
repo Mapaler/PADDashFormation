@@ -830,7 +830,45 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .abilitys .rcv::before{
 	content: "回复：";
 }*/
-
+/*队员觉醒统计*/
+.menber-awoken
+{
+	width: var(--head-block-width);
+	display: inline-block;
+	vertical-align: top;
+}
+.team-assist-awoken .menber-awoken
+{
+	vertical-align: bottom;
+}
+.menber-awoken .awoken-ul
+{
+	display: inline-block;
+}
+.menber-awoken .awoken-ul>li
+{
+	display: inline-block;
+}
+.menber-awoken .awoken-icon
+{
+	filter: unset;
+	transform: scale(0.80);
+	margin: calc(-32px * (1 - 0.80) / 2);
+}
+.team-assist-awoken,
+.team-menber-awoken
+{
+	display : none;	
+}
+.show-mon-awoken .team-assist-awoken,
+.show-mon-awoken .team-menber-awoken
+{
+	display : block;	
+}
+.show-mon-awoken .monster .super-awoken
+{
+	filter: grayscale(100%);
+}
 
 /*编辑窗口*/
 .blur-bg{
@@ -1001,8 +1039,8 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .custom-addition .awoken-icon
 {
 	filter: unset;
-		transform: scale(0.75);
-		margin: calc(-32px * (1 - 0.75) / 2);
+	transform: scale(0.75);
+	margin: calc(-32px * (1 - 0.75) / 2);
 }
 
 .cd-preview .cd-max,
@@ -1377,7 +1415,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	content: "×";
 }
-.search-box .awoken-div .awoken-icon
+.awoken-icon
 {
 	position: relative;
 	border: none;
@@ -1390,16 +1428,15 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	text-align: left;
 }
 
-.search-box .awoken-div .awoken-icon:not([value]),
-.search-box .awoken-div .awoken-icon[value="0"],
-.search-box .awoken-div .awoken-icon:not([value])~.awoken-sub1,
-.search-box .awoken-div .awoken-icon[value="0"]~.awoken-sub1
+.search-box .awoken-div .awoken-icon:not([data-awoken-count]),
+.search-box .awoken-div .awoken-icon[data-awoken-count="0"]
 {
 	opacity: var(--search-icon-unchecked);
 }
-.awoken-div .awoken-icon:not([value="0"])::before
+
+.awoken-icon:not([data-awoken-count="0"])::before
 {
-	content: attr(value);
+	content: attr(data-awoken-count);
 	display: inline-block;
 	position: absolute;
 	line-height: 18px;
