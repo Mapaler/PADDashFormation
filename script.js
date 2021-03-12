@@ -3102,8 +3102,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
-		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-general"), tReduceHP.bigNumberToString());
-		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
 	}
 
 	if (tMoveDom) {
@@ -3167,8 +3167,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
-		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-general"), tReduceHP.bigNumberToString());
-		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
 	}
 }
 //刷新单人技能CD
