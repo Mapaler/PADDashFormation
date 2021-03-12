@@ -820,16 +820,33 @@ function loadData(force = false)
 	
 			function dealSkillData()
 			{
-				if (controlBox)
+				//显示数据更新时间
+				let controlBoxHook = setInterval(checkControlBox, 500); //循环检测controlBox
+				checkControlBox();
+				function checkControlBox()
 				{
-					const updateTime = controlBox.querySelector(".datasource-updatetime");
-					updateTime.textContent = new Date(currentCkey.updateTime).toLocaleString(undefined, { hour12: false });
+					if (controlBox)
+					{
+						const updateTime = controlBox.querySelector(".datasource-updatetime");
+						updateTime.textContent = new Date(currentCkey.updateTime).toLocaleString(undefined, { hour12: false });
+						clearInterval(controlBoxHook);
+					}
 				}
 	
 				//initialize(); //初始化
 				if (statusLine) statusLine.classList.remove("loading-skill-info");
+
 				//如果通过的话就载入URL中的怪物数据
-				reloadFormationData();
+				let formationBoxHook = setInterval(checkFormationBox, 500); //循环检测formationBox
+				checkFormationBox();
+				function checkFormationBox()
+				{
+					if (formationBox)
+					{
+						reloadFormationData();
+						clearInterval(formationBoxHook);
+					}
+				}
 			}
 		}
 
@@ -2338,7 +2355,15 @@ function changeid(mon, monDom, latentDom) {
 			levelDom.classList.remove("max");
 		}
 		if (card.limitBreakIncr && level >= card.maxLevel) { //如果支持超觉，并且等级超过99，就添加支持超觉的蓝色
-			levelDom.classList.add(level > 110 ? "_120" : "_110");
+			if (level <= 110) //Lv 99~110
+			{
+				levelDom.classList.add("_110");
+				levelDom.classList.remove("_120");
+			}else //Lv 111~120
+			{
+				levelDom.classList.add("_120");
+				levelDom.classList.remove("_110");
+			}
 		} else {
 			levelDom.classList.remove("_110");
 			levelDom.classList.remove("_120");

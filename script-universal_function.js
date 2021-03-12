@@ -240,7 +240,6 @@ function curve(c, level, maxLevel, limitBreakIncr, limitBreakIncr120) {
 	if (level > maxLevel) {
 		const exceed99 = Math.min(level - maxLevel, 11);
 		const exceed110 = Math.max(0, level - 110);
-		console.log(exceed99, level - 110)
 		value += c.max!==undefined ?
 			((c.max * (limitBreakIncr / 100) * (exceed99 / 11)) + (c.max * (limitBreakIncr120 / 100) * (exceed110 / 10))) :
 			(c.min * exceed99 + c.min * exceed110);
@@ -328,7 +327,8 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1)
 			}
 			if (memberCard.attrs[0] === assistCard.attrs[0] || memberCard.attrs[0] == 6 || assistCard.attrs[0] == 6)
 			{
-				n_assist_base = Math.round(curve(assistCurves[idx], assist.level, assistCard.maxLevel, assistCard.limitBreakIncr)); //辅助等级基础三维
+				
+				n_assist_base = Math.round(curve(assistCurves[idx], assist.level, assistCard.maxLevel, assistCard.limitBreakIncr, limitBreakIncr120[idx])); //辅助等级基础三维
 				n_assist_plus = assist.plus[idx] * plusAdd[idx]; //辅助加值增加量
 			}
 		}
