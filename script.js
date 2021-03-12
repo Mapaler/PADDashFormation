@@ -2055,6 +2055,10 @@ function initialize() {
 			const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 			if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 	
+			const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+			const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
+			if (teamMenberAwokenDom && teamAssistAwokenDom) refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+
 			const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 			if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
 			const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
@@ -2090,6 +2094,10 @@ function initialize() {
 		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 
+		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
+		if (teamMenberAwokenDom && teamAssistAwokenDom) refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+
 		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
 		const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
@@ -2116,6 +2124,10 @@ function initialize() {
 		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
 		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
+
+		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
+		if (teamMenberAwokenDom && teamAssistAwokenDom) refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
 
 		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
@@ -2848,8 +2860,8 @@ function refreshAll(formationData) {
 		const latentsDom = teamBox.querySelector(".team-latents");
 		const assistsDom = teamBox.querySelector(".team-assist");
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
-		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队伍队员觉醒
-		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //队伍队员觉醒
+		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
 		for (let ti = 0, ti_len = membersDom.querySelectorAll(".member").length; ti < ti_len; ti++) {
 			const member = membersDom.querySelector(`.member-${ti+1} .monster`);
 			const latent = latentsDom.querySelector(`.latents-${ti+1} .latent-ul`);
@@ -2989,7 +3001,7 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 	//队员觉醒
 	let menberAwokens = Cards[memberData.id].awakenings.slice(0,memberData.awoken);
 	//单人和三人为队员增加超觉醒
-	if ((solo || teamsCount === 3) && memberData.sawoken != undefined) menberAwokens.push(Cards[memberData.id].superAwakenings[memberData.sawoken]);
+	if ((solo || teamsCount === 3) && memberData.sawoken >= 0) menberAwokens.push(Cards[memberData.id].superAwakenings[memberData.sawoken]);
 	//menberAwokens.sort();
 	//武器觉醒
 	let assistAwokens = Cards[assistData.id].awakenings.slice(0,assistData.awoken);

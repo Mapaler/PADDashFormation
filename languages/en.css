@@ -255,6 +255,9 @@
 .control-box .btn-show-mon-skill-cd-lbl::after{
 	content:"❄️Show full skill's cooldown";
 }
+.control-box .btn-show-mon-awoken-lbl::after{
+	content:"👁Show card awoken";
+}
 .control-box .btn-show-awoken-count-lbl::after{
 	content:"⚔️Show awoken count and ability";
 }

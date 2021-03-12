@@ -244,6 +244,9 @@
 .control-box .btn-show-mon-skill-cd-lbl::after{
 	content:"❄️전체 스킬 쿨을 표시";
 }
+.control-box .btn-show-mon-awoken-lbl::after{
+	content:"👁카드 각성을 표시합니다";
+}
 .control-box .btn-show-awoken-count-lbl::after{
 	content:"⚔️각성 통계 및 기능 값 표시";
 }

@@ -250,6 +250,9 @@
 .control-box .btn-show-mon-skill-cd-lbl::after{
 	content:"❄️顯示已滿技能冷卻";
 }
+.control-box .btn-show-mon-awoken-lbl::after{
+	content:"👁顯示卡片覺醒";
+}
 .control-box .btn-show-awoken-count-lbl::after{
 	content:"⚔️顯示覺醒統計和能力值";
 }
