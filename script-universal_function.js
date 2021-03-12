@@ -690,6 +690,113 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken=false)
 	}
 	return mHpArr;
 }
+
+//返回卡片的队长技能
+function getCardLeaderSkill(card, skillTypes)
+{
+	return getActuallySkill(Skills[card.leaderSkillId], skillTypes, false);
+}
+//查找到真正起作用的那一个技能
+function getActuallySkill(skill, skillTypes, searchRandom = true)
+{
+	if (skillTypes.includes(skill.type))
+	{
+		return skill;
+	}else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138)
+	{
+		const subSkills = skill.params.map(id=>Skills[id]);
+		for(let i = 0;i < subSkills.length; i++)
+		{ //因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
+			let foundSubSkill = getActuallySkill(subSkills[i], skillTypes, searchRandom);
+			if (foundSubSkill)
+			{
+				return foundSubSkill;
+			}
+		}
+		return null;
+	}else
+	{
+		return null;
+	}
+}
+	
+//计算队伍是否为76
+function tIf_Effect_76board(leader1id, leader2id)
+{
+	const searchTypeArray = [162, 186];
+	const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
+	const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
+
+	return Boolean(ls1 || ls2);
+}
+//计算队伍是否为无天降
+function tIf_Effect_noSkyfall(leader1id, leader2id)
+{
+	const searchTypeArray = [163, 177];
+	const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
+	const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
+	
+	return Boolean(ls1 || ls2);
+}
+//计算队伍是否为毒无效
+function tIf_Effect_poisonNoEffect(leader1id, leader2id)
+{
+	const searchTypeArray = [197];
+	const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
+	const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
+	
+	return Boolean(ls1 || ls2);
+}
+//计算队伍的+C
+function tIf_Effect_addCombo(leader1id, leader2id)
+{
+	const searchTypeArray = [192,194,206,209,210];
+	const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
+	const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
+
+	function getSkillAddCombo(skill)
+	{
+		if (!skill) return 0;
+		switch (skill.type)
+		{
+			case 192: case 194:
+				return skill.params[3];
+			case 206:
+				return skill.params[6];
+			case 209:
+				return skill.params[0];
+			case 210:
+				return skill.params[2];
+			default:
+				return 0;
+		}
+	}
+	
+	return [getSkillAddCombo(ls1),getSkillAddCombo(ls2)];
+}
+//计算队伍的追打
+function tIf_Effect_inflicts(leader1id, leader2id)
+{
+	const searchTypeArray = [199,200,201];
+	const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
+	const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
+
+	function getSkillFixedDamage(skill)
+	{
+		if (!skill) return 0;
+		switch (skill.type)
+		{
+			case 199: case 200:
+				return skill.params[2];
+			case 201:
+				return skill.params[5];
+			default:
+				return 0;
+		}
+	}
+	
+	return [getSkillFixedDamage(ls1),getSkillFixedDamage(ls2)];
+}
 //计算队伍操作时间
 function countMoveTime(team, leader1id, leader2id, teamIdx)
 {

@@ -3073,6 +3073,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	if (!totalDom) return;
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
 	const tMoveDom = totalDom.querySelector(".tIf-total-move");
+	const tEffectDom = totalDom.querySelector(".tIf-effect");
 
 	const teams = formation.teams;
 
@@ -3139,17 +3140,66 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 			setTextContentAndAttribute(tMoveDom_noAwoken, Math.round((moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge) * 100) / 100);
 		}
 	}
+
+	if (tEffectDom)	{
+		const _76board = tEffectDom.querySelector("._76board");
+		if (tIf_Effect_76board(leader1id,leader2id))
+		{
+			_76board.classList.remove(className_displayNone);
+		}else
+		{
+			_76board.classList.add(className_displayNone);
+		}
+		const noSkyfall = tEffectDom.querySelector(".no-skyfall");
+		if (tIf_Effect_noSkyfall(leader1id,leader2id))
+		{
+			noSkyfall.classList.remove(className_displayNone);
+		}else
+		{
+			noSkyfall.classList.add(className_displayNone);
+		}
+		const poisonNoEffect = tEffectDom.querySelector(".poison-no-effect");
+		if (tIf_Effect_poisonNoEffect(leader1id,leader2id))
+		{
+			poisonNoEffect.classList.remove(className_displayNone);
+		}else
+		{
+			poisonNoEffect.classList.add(className_displayNone);
+		}
+		const addCombo = tEffectDom.querySelector(".add-combo");
+		const addComboValue = tIf_Effect_addCombo(leader1id,leader2id);
+		if ((addComboValue[0] | addComboValue[1]) > 0)
+		{
+			addCombo.classList.remove(className_displayNone);
+			addCombo.setAttribute("data-add-combo", addComboValue.filter(v=>v).join("/"));
+		}else
+		{
+			addCombo.classList.add(className_displayNone);
+		}
+		const inflicts = tEffectDom.querySelector(".inflicts");
+		const inflictsValue = tIf_Effect_inflicts(leader1id,leader2id);
+		if ((inflictsValue[0] | inflictsValue[1]) > 0)
+		{
+			inflicts.classList.remove(className_displayNone);
+			inflicts.setAttribute("data-inflicts", inflictsValue.filter(v=>v).map(v=>v.bigNumberToString()).join("/"));
+		}else
+		{
+			inflicts.classList.add(className_displayNone);
+		}
+	}
 }
 //刷新所有队伍能力值合计
 function refreshFormationTotalHP(totalDom, teams) {
 	//计算总的生命值
 	if (!totalDom) return;
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
+	const tEffectDom = totalDom.querySelector(".tIf-effect");
+	
+	//因为目前仅用于2P，所以直接在外面固定写了
+	const leader1id = teams[0][0][0].id;
+	const leader2id = teams[1][0][0].id;
 
 	if (tHpDom) {
-		//因为目前仅用于2P，所以直接在外面固定写了
-		const leader1id = teams[0][0][0].id;
-		const leader2id = teams[1][0][0].id;
 
 		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true,true,true);
 		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true,true,true);
@@ -3189,6 +3239,53 @@ function refreshFormationTotalHP(totalDom, teams) {
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
+	}
+
+	if (tEffectDom)	{
+		const _76board = tEffectDom.querySelector("._76board");
+		if (tIf_Effect_76board(leader1id,leader2id))
+		{
+			_76board.classList.remove(className_displayNone);
+		}else
+		{
+			_76board.classList.add(className_displayNone);
+		}
+		const noSkyfall = tEffectDom.querySelector(".no-skyfall");
+		if (tIf_Effect_noSkyfall(leader1id,leader2id))
+		{
+			noSkyfall.classList.remove(className_displayNone);
+		}else
+		{
+			noSkyfall.classList.add(className_displayNone);
+		}
+		const poisonNoEffect = tEffectDom.querySelector(".poison-no-effect");
+		if (tIf_Effect_poisonNoEffect(leader1id,leader2id))
+		{
+			poisonNoEffect.classList.remove(className_displayNone);
+		}else
+		{
+			poisonNoEffect.classList.add(className_displayNone);
+		}
+		const addCombo = tEffectDom.querySelector(".add-combo");
+		const addComboValue = tIf_Effect_addCombo(leader1id,leader2id);
+		if ((addComboValue[0] | addComboValue[1]) > 0)
+		{
+			addCombo.classList.remove(className_displayNone);
+			addCombo.setAttribute("data-add-combo", addComboValue.filter(v=>v).join("/"));
+		}else
+		{
+			addCombo.classList.add(className_displayNone);
+		}
+		const inflicts = tEffectDom.querySelector(".inflicts");
+		const inflictsValue = tIf_Effect_inflicts(leader1id,leader2id);
+		if ((inflictsValue[0] | inflictsValue[1]) > 0)
+		{
+			inflicts.classList.remove(className_displayNone);
+			inflicts.setAttribute("data-inflicts", inflictsValue.filter(v=>v).map(v=>v.bigNumberToString()).join("/"));
+		}else
+		{
+			inflicts.classList.add(className_displayNone);
+		}
 	}
 }
 //刷新单人技能CD

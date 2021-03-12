@@ -19,7 +19,7 @@ Number.prototype.bigNumberToString = function()
 	let numPartsStr = numParts.map((num,idx)=>{
 		if (num > 0)
 		{
-			return (num < 1e3 ? "零" : "") + num.toLocaleString() + unit[idx];
+			return (num < 1e3 ? "零" : "") + num + unit[idx];
 		}else
 			return "零";
 	});

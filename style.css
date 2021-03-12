@@ -580,6 +580,11 @@ ul{
 	display: inline-block;
 }
 /*各种信息统计的图标*/
+.tIf-total-move,
+.tIf-effect
+{
+	display: inline-block;
+}
 .tIf-total-hp .general::before,
 .tIf-total-hp .awoken-bind::before,
 .tIf-total-hp .reduce .reduce-scale::before,
@@ -587,13 +592,16 @@ ul{
 .tIf-total-hp .reduce .awoken-bind::before,
 .tIf-total-move .general::before,
 .tIf-total-move .awoken-bind::before,
-.tIf-total-move.fixed-move-time::after
+.tIf-total-move.fixed-move-time::after,
+.tIf-effect icon::before,
+icon.poison-no-effect::after
 {
 	content: " ";
     background-size: cover;
 	display: inline-block;
-	width: 16px;
-	height: 16px;
+	width: 20px;
+	height: 20px;
+	vertical-align: top;
 }
 .tIf-total-hp .awoken-bind::before,
 .tIf-total-hp .reduce .awoken-bind::before,
@@ -642,12 +650,13 @@ ul{
 		opacity: 0;
 	}
 }
-.tIf-total-move.fixed-move-time::after
+.tIf-total-move.fixed-move-time::after,
+icon.poison-no-effect::after
 {
 	background-image: url(images/icon-bind.png);
     position: absolute;
-    left:0;
-    top:2px;
+    left: 0;
+    top: 0;
 	animation: hidden-visible-animate 0.5s infinite ease-in alternate;
 }
 /*单人时的协力觉醒和多人时的掉落觉醒显示无效*/
@@ -661,6 +670,50 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	background-image: url(images/icon-bind.png);
 	background-size: cover;
 	animation: hidden-visible-animate 0.5s infinite ease-in alternate;
+}
+
+.tIf-effect icon
+{
+	position: relative;
+}
+icon._76board::before
+{
+	background-image: url(images/icon-76board.png);
+}
+icon.no-skyfall::before
+{
+	background-image: url(images/icon-no-skyfall.png);
+}
+icon.poison-no-effect::before
+{
+	background-image: url(images/icon-poison.png);
+}
+icon.add-combo
+{
+	margin-right: 7px;
+}
+icon.add-combo::before
+{
+	background-image: url(images/icon-add-combo.png);
+}
+icon.add-combo::after
+{
+	color: white;
+	text-shadow: black 1px 1px 0,black -1px 0px 0,black 0 0 1px;
+	font-family: var(--game-font-family);
+	font-size: 12px;
+	position: absolute;
+	top: -7px;
+	left: 10px;
+	content: attr(data-add-combo);
+}
+icon.inflicts::before
+{
+	background-image: url(images/icon-inflicts.png);
+}
+icon.inflicts::after
+{
+	content: attr(data-inflicts);
 }
 
 /*队伍的潜觉*/
