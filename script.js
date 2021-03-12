@@ -3060,7 +3060,6 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	//计算总的生命值
 	if (!totalDom) return;
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
-	const tRcvDom = totalDom.querySelector(".tIf-total-rcv");
 	const tMoveDom = totalDom.querySelector(".tIf-total-move");
 
 	const teams = formation.teams;
@@ -3100,11 +3099,11 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
 		const tHpDom_reduce = tHpDom.querySelector(".reduce");
 
-		setTextContentAndAttribute(tHpDom_general, tHP);
-		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
+		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
-		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-general"), tReduceHP);
-		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-awoken-bind"), tReduceHPNoAwoken);
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-general"), tReduceHP.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
 	}
 
 	if (tMoveDom) {
@@ -3130,7 +3129,6 @@ function refreshFormationTotalHP(totalDom, teams) {
 	//计算总的生命值
 	if (!totalDom) return;
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
-	const tRcvDom = totalDom.querySelector(".tIf-total-rcv");
 
 	if (tHpDom) {
 		//因为目前仅用于2P，所以直接在外面固定写了
@@ -3169,8 +3167,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
-		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-general"), tReduceHP);
-		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-awoken-bind"), tReduceHPNoAwoken);
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-general"), tReduceHP.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
 	}
 }
 //刷新单人技能CD
