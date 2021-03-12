@@ -22,10 +22,8 @@
 }
 
 .tIf-total-hp .awoken-bind::before,
-.tIf-total-move .awoken-bind::before
+.tIf-total-move .awoken-bind::before,
+.tIf-total-hp .reduce .reduce-scale::before
 {
-    background-position-x: -16px;
-}
-.tIf-total-hp .reduce::before{
-    background-position-x: -16px;
+    background-position-x: -20px;
 }
