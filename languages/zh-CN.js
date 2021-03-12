@@ -478,6 +478,34 @@ function parseSkillDescription(skill)
 				strArr = sk.slice(0,sk.indexOf(-1));
 			}
 			str = "全画面的宝珠变成" + strArr.map(o=>attrN(o)).join("、");
+
+			let attrArr = sk.includes(-1) ? sk.slice(0,sk.indexOf(-1)) : sk;
+			strArr = [];
+			strArr.push(`全画面的宝珠变成${attrArr.map(o=>attrN(o)).join("、")}`);
+
+			var data = new Array(5).fill(null).map(()=>new Array(6).fill(null));
+			
+			let atrr = attrArr.entries();
+			for (let ai=0;ai<10;ai++)
+			{
+				let v = atrr.next().value;
+				if (v == undefined)
+				{
+					atrr = attrArr.entries();
+					v = atrr.next().value;
+				}
+				let row = Math.floor(ai / 2);
+				let cell_offset = ai % 2 ? 3 : 0;
+				data[row][cell_offset + 0] = v[1];
+				data[row][cell_offset + 1] = v[1];
+				data[row][cell_offset + 2] = v[1];
+			}
+
+			data = boardData_row(data);
+			fragment.appendChild(document.createTextNode(strArr.join("，")));
+			var table = createBoard(data);
+			fragment.appendChild(table);
+			return fragment;
 			break;
 		case 73:
 			str = `${getAttrTypeString([sk[0]],[sk[1]])}宠物的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[2]})}`;
