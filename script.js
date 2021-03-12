@@ -2990,9 +2990,11 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 	let menberAwokens = Cards[memberData.id].awakenings.slice(0,memberData.awoken);
 	//单人和三人为队员增加超觉醒
 	if ((solo || teamsCount === 3) && memberData.sawoken != undefined) menberAwokens.push(Cards[memberData.id].superAwakenings[memberData.sawoken]);
+	//menberAwokens.sort();
 	//武器觉醒
 	let assistAwokens = Cards[assistData.id].awakenings.slice(0,assistData.awoken);
 	if (!assistAwokens.includes(49)) assistAwokens = []; //清空非武器的觉醒
+	//assistAwokens.sort();
 	/*if (assistAwokens.includes(49))
 	{
 		menberAwokens = menberAwokens.concat(assistAwokens);
@@ -3100,9 +3102,9 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		setTextContentAndAttribute(tHpDom_general, tHP);
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
-		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).toFixed(2));
-		tHpDom_reduce.setAttribute("data-max-equal-general", tReduceHP);
-		tHpDom_reduce.setAttribute("data-max-equal-awoken-bind", tReduceHPNoAwoken);
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-general"), tReduceHP);
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-awoken-bind"), tReduceHPNoAwoken);
 	}
 
 	if (tMoveDom) {
@@ -3164,11 +3166,11 @@ function refreshFormationTotalHP(totalDom, teams) {
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
 		const tHpDom_reduce = tHpDom.querySelector(".reduce");
 
-		setTextContentAndAttribute(tHpDom_general, tHP);
-		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
-		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).toFixed(2));
-		tHpDom_reduce.setAttribute("data-max-equal-general", tReduceHP);
-		tHpDom_reduce.setAttribute("data-max-equal-awoken-bind", tReduceHPNoAwoken);
+		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-general"), tReduceHP);
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".equal-awoken-bind"), tReduceHPNoAwoken);
 	}
 }
 //刷新单人技能CD

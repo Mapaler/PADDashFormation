@@ -580,12 +580,14 @@ ul{
 	display: inline-block;
 }
 /*各种信息统计的图标*/
-.tIf-total-hp::before,
-.tIf-total-move::before,
+.tIf-total-hp .general::before,
 .tIf-total-hp .awoken-bind::before,
+.tIf-total-hp .reduce .reduce-scale::before,
+.tIf-total-hp .reduce .equal-general::before,
+.tIf-total-hp .reduce .equal-awoken-bind::before,
+.tIf-total-move .general::before,
 .tIf-total-move .awoken-bind::before,
-.tIf-total-move.fixed-move-time::after,
-.tIf-total-hp .reduce::before
+.tIf-total-move.fixed-move-time .general::after
 {
 	content: " ";
     background-size: cover;
@@ -594,26 +596,29 @@ ul{
 	height: 16px;
 }
 .tIf-total-hp .awoken-bind::before,
+.tIf-total-hp .reduce .equal-awoken-bind::before,
 .tIf-total-move .awoken-bind::before
 {
 	background-image: url(images/icon-awoken-bind.png);
 }
 
-.tIf-total-hp::before{
+.tIf-total-hp .general::before,
+.tIf-total-hp .reduce .equal-general::before
+{
 	background-image: url(images/icon-HP.png);
 }
 
-.tIf-total-hp .reduce::before{
+.tIf-total-hp .reduce .reduce-scale::before{
 	background-image: url(images/icon-reduce.png);
 }
-.tIf-total-hp .reduce::after{
+.tIf-total-hp .reduce .reduce-scale::after{
 	content: "%";
 }
-.tIf-total-hp .reduce:not([data-value="0.00"])::after{
-	content: "%⇔" attr(data-max-equal-general) "/" attr(data-max-equal-awoken-bind);
+.tIf-total-hp .reduce .reduce-scale:not([data-value="0.00"])::after{
+	content: "%⇔";
 }
 
-.tIf-total-move::before{
+.tIf-total-move .general::before{
 	background-image: url(images/icon-orb-move-time.png);
 }
 /*固定手指的情况*/
@@ -632,7 +637,7 @@ ul{
 		opacity: 0;
 	}
 }
-.tIf-total-move.fixed-move-time::after
+.tIf-total-move.fixed-move-time .general::after
 {
 	background-image: url(images/icon-bind.png);
     position: absolute;
@@ -837,9 +842,10 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	display: inline-block;
 	vertical-align: top;
 }
-.team-assist-awoken .menber-awoken
+.team-menber-awoken,
+.team-assist-awoken
 {
-	vertical-align: bottom;
+	margin-top: 3px;
 }
 .menber-awoken .awoken-ul
 {
