@@ -587,7 +587,7 @@ ul{
 .tIf-total-hp .reduce .awoken-bind::before,
 .tIf-total-move .general::before,
 .tIf-total-move .awoken-bind::before,
-.tIf-total-move.fixed-move-time .general::after
+.tIf-total-move.fixed-move-time::after
 {
 	content: " ";
     background-size: cover;
@@ -642,7 +642,7 @@ ul{
 		opacity: 0;
 	}
 }
-.tIf-total-move.fixed-move-time .general::after
+.tIf-total-move.fixed-move-time::after
 {
 	background-image: url(images/icon-bind.png);
     position: absolute;
