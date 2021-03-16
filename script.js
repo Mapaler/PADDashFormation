@@ -1163,9 +1163,9 @@ function initialize() {
 	}
 	const hpDetailDialog_Close = hpDetailDialog.querySelector(".dialog-close");
 	hpDetailDialog_Close.onclick = function(){hpDetailDialog.close();};
-	teamBigBoxs.forEach(teamBigBox => {
-		const reduceDetails = teamBigBox.querySelector(".tIf-total-hp .reduce-details");
-		reduceDetails.onclick = function(){
+	const reduceDetailsBars = Array.from(formationBox.querySelectorAll(".tIf-total-hp .reduce-details"));
+	reduceDetailsBars.forEach(bar => {
+		bar.onclick = function(){
 			hpDetailDialog.show(this.reduceAttrRanges, this.tHP, this.tHPNoAwoken);
 		};
 	});
@@ -3195,7 +3195,7 @@ function drawHpInfo(hpBarDom, reduceAttrRanges)
 		ctx.fillRect(0, 0, width, height);
 		
 		reduceRanges.forEach(range=>{
-			ctx.fillStyle = `rgba(204, 0 ,85, 0.5)`;
+			ctx.fillStyle = `rgba(204, 0 ,85, 0.7)`;
 			ctx.fillRect(width * (range.min / 100), 0, width * ((range.max - range.min) / 100), height * (1 - range.scale));
 		});
 	}
@@ -3395,8 +3395,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 		hpBar.tHP = tHP;
 		hpBar.tHPNoAwoken = tHPNoAwoken;
 
-		const tReduceHP = Math.round(tHP / (1 - reduceScale1) / (1 - reduceScale2)); //队伍正常满血加上盾能承受的最大伤害
-		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - reduceScale1) / (1 - reduceScale2)); //队伍封觉醒满血加上盾能承受的最大伤害
+		const tReduceHP = Math.round(tHP / totalReduce); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / totalReduce); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
