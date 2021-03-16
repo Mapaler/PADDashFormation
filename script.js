@@ -3169,7 +3169,6 @@ function drawHpInfo(hpBarDom, reduceAttrRanges)
 	const width = hpBarDom.width, height = hpBarDom.height;
 
 	let ctx = hpBarDom.getContext("2d");
-	console.log(reduceAttrRanges)
 	if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0])) //有指定属性减伤
 	{
 		const attrColors = ['crimson','cornflowerblue','green','goldenrod','purple'];
