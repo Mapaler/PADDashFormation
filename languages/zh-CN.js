@@ -35,7 +35,11 @@ function findFullSkill(subSkill) {
     return { skill: parentSkill, card: aCard };
 }
 //document.querySelector(".edit-box .row-mon-id .m-id").type = "number";
-//console.table(Skills.filter(s=>{const sk = s.params; return s.type == 156;}).map(findFullSkill));
+/* 快速搜索指定类型的技能
+var result = Skills.filter(s=>{const sk = s.params; return s.type == 156;}).map(findFullSkill);
+console.table(result);
+showSearch(result.map(o=>o.card).filter(c=>c));
+*/
 
 //返回flag里值为true的数组，如[1,4,7]
 function flags(num) {

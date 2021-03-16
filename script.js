@@ -3081,8 +3081,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][0].id : teams[1][0][0].id) : team[0][5].id;
 
 	if (tHpDom) {
-		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true,true,true);
-		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true,true,true);
+		const reduceScale1 = getReduceScale(leader1id,true,true,true);
+		const reduceScale2 = getReduceScale(leader2id,true,true,true);
 		const totalReduce = 1 - (1 - reduceScale1) * (1 - reduceScale2);
 
 		const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
@@ -3201,8 +3201,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 
 	if (tHpDom) {
 
-		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true,true,true);
-		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true,true,true);
+		const reduceScale1 = getReduceScale(leader1id,true,true,true);
+		const reduceScale2 = getReduceScale(leader2id,true,true,true);
 		const totalReduce = 1 - (1 - reduceScale1) * (1 - reduceScale2);
 
 		const tHPArr = teams.map(function(team) {
