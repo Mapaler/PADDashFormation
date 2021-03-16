@@ -184,6 +184,119 @@ ul{
 	min-width: 648px;
 }
 
+/*弹出窗口相关*/
+.dialog
+{
+	color: white;
+	position: absolute;
+	padding: 5px;
+	border: 2px ridge #D1D398;
+	top: 0;
+	background-image: linear-gradient(to bottom,#788321f0,#3E4D14f0);
+	border-radius: 6px;
+	box-shadow: black 2px 0px 1px,black 0px 2px 1px,black -2px 0px 1px,black 0px -2px 1px;
+	margin-left: calc(50% - 200px);
+	margin-top: 30px;
+	font-family: var(--game-font-family);
+	text-shadow: black 2px 2px 0;
+}
+.dialog .dialog-title
+{
+	font-size: 20px;
+	line-height: 20px;
+	text-align: center;
+	margin-bottom: 5px;
+}
+.dialog .dialog-content .additional-string
+{
+	border-top: 2px solid white;
+	margin-top: 5px;
+}
+/*.dialog .dialog-content .additional-string::before
+{
+	content: "其他語言";
+}*/
+.dialog .dialog-control
+{
+	text-align: center;
+	margin-top:10px;
+}
+.brown-button
+{
+	background-image: linear-gradient(to bottom,#C38E5F,#2F2008);
+	border: none;
+	border-radius: 5px;
+	padding: 2px;
+	cursor: pointer;
+	transition: transform 0.1s;
+}
+.brown-button:active
+{
+	transform: scale(1.1);
+}
+.brown-button::before
+{
+	display: inline-block;
+	box-sizing: border-box;
+	width: 100px;
+	padding: 5px;
+	background-color: #956A42;
+	background-image: url(images/slate.svg);
+	background-size: 120px 120px;
+	border-radius: 2px;
+	font-size: 20px;
+	line-height: 20px;
+	vertical-align: middle;
+	color: white;
+	font-family: var(--game-font-family);
+	text-shadow: black 2px 2px 0;
+}
+/*
+.dialog-search-string .dialog-title::before
+{
+	content: "以字符串搜索";
+}
+.dialog-close::before
+{
+	content: "关闭";
+}
+*/
+.dialog-search-string
+{
+	width: 260px;
+}
+.dialog-search-string .string-copy,
+.dialog-search-string .string-search
+{
+	box-sizing: border-box;
+	width: 45px;
+	margin-left: 5px;
+	cursor: pointer;
+	background-color: #994433;
+	border: 2px solid #FFCC88;
+	box-shadow: black 1px 0 1px,black -1px 0 1px,black 0 -1px 1px,black 0 3px 2px;
+	border-radius: 5px;
+	padding: 0;
+}
+.dialog-search-string .string-copy::before
+{
+	content: "📋";
+}
+.dialog-search-string .string-search::before
+{
+	content: "🔍";
+}
+.dialog-search-string .string-value
+{
+	box-sizing: border-box;
+	width: calc(100% - 50px * 2);
+}
+.dialog-search-string .additional-string .string-value
+{
+	box-sizing: border-box;
+	width: calc(100% - 50px * 1);
+}
+
 /*单个怪物*/
 .monster{
 	font-family: var(--game-font-family);
@@ -649,6 +762,11 @@ icon.poison-no-effect::after,
 .reduce-details:hover
 {
 	box-shadow: red 0 0 3px;
+}
+.dialog-hp-detail
+{
+	margin-left: calc(50% - 300px);
+	margin-top: 100px;
 }
 .hp-range-table
 {
@@ -2492,118 +2610,6 @@ table .orb-icon
 	display: table-cell;
 }
 
-/*弹出窗口相关*/
-.dialog
-{
-	color: white;
-	position: absolute;
-	padding: 5px;
-	border: 2px ridge #D1D398;
-	top: 0;
-	background-image: linear-gradient(to bottom,#788321f0,#3E4D14f0);
-	border-radius: 6px;
-	box-shadow: black 2px 0px 1px,black 0px 2px 1px,black -2px 0px 1px,black 0px -2px 1px;
-	margin-left: calc(50% - 130px);
-	margin-top: 30px;
-	font-family: var(--game-font-family);
-	text-shadow: black 2px 2px 0;
-}
-.dialog .dialog-title
-{
-	font-size: 20px;
-	line-height: 20px;
-	text-align: center;
-	margin-bottom: 5px;
-}
-.dialog .dialog-content .additional-string
-{
-	border-top: 2px solid white;
-	margin-top: 5px;
-}
-/*.dialog .dialog-content .additional-string::before
-{
-	content: "其他語言";
-}*/
-.dialog .dialog-control
-{
-	text-align: center;
-	margin-top:10px;
-}
-.brown-button
-{
-	background-image: linear-gradient(to bottom,#C38E5F,#2F2008);
-	border: none;
-	border-radius: 5px;
-	padding: 2px;
-	cursor: pointer;
-	transition: transform 0.1s;
-}
-.brown-button:active
-{
-	transform: scale(1.1);
-}
-.brown-button::before
-{
-	display: inline-block;
-	box-sizing: border-box;
-	width: 100px;
-	padding: 5px;
-	background-color: #956A42;
-	background-image: url(images/slate.svg);
-	background-size: 120px 120px;
-	border-radius: 2px;
-	font-size: 20px;
-	line-height: 20px;
-	vertical-align: middle;
-	color: white;
-	font-family: var(--game-font-family);
-	text-shadow: black 2px 2px 0;
-}
-/*
-.dialog-search-string .dialog-title::before
-{
-	content: "以字符串搜索";
-}
-.dialog-close::before
-{
-	content: "关闭";
-}
-*/
-.dialog-search-string
-{
-	width: 260px;
-}
-.dialog-search-string .string-copy,
-.dialog-search-string .string-search
-{
-	box-sizing: border-box;
-	width: 45px;
-	margin-left: 5px;
-	cursor: pointer;
-	background-color: #994433;
-	border: 2px solid #FFCC88;
-	box-shadow: black 1px 0 1px,black -1px 0 1px,black 0 -1px 1px,black 0 3px 2px;
-	border-radius: 5px;
-	padding: 0;
-}
-.dialog-search-string .string-copy::before
-{
-	content: "📋";
-}
-.dialog-search-string .string-search::before
-{
-	content: "🔍";
-}
-.dialog-search-string .string-value
-{
-	box-sizing: border-box;
-	width: calc(100% - 50px * 2);
-}
-.dialog-search-string .additional-string .string-value
-{
-	box-sizing: border-box;
-	width: calc(100% - 50px * 1);
-}
 
 /*.open-evolutionary-tree::before
 {
