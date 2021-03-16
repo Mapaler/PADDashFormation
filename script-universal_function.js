@@ -878,16 +878,16 @@ function getReduceRange(reduceScales)
 		{
 			const range = ranges[rgLessIdx];
 			ranges.splice(rgLessIdx, 1,
-				new reduceRange({min:range.min, max:scale.hp.min, scale: range.scale}),
-				new reduceRange({min:scale.hp.min, max:range.max, scale: range.scale})
+				new reduceRange({min:range.min, max:scale.hp.min, scale: range.scale, probability: range.probability}),
+				new reduceRange({min:scale.hp.min, max:range.max, scale: range.scale, probability: range.probability})
 			);
 		}
 		if (rgMoreIdx >= 0)
 		{
 			const range = ranges[rgMoreIdx];
 			ranges.splice(rgMoreIdx, 1,
-				new reduceRange({min:range.min, max:scale.hp.max, scale: range.scale}),
-				new reduceRange({min:scale.hp.max, max:range.max, scale: range.scale})
+				new reduceRange({min:range.min, max:scale.hp.max, scale: range.scale, probability: range.probability}),
+				new reduceRange({min:scale.hp.max, max:range.max, scale: range.scale, probability: range.probability})
 			);
 		}
 		const needChangeScaleRanges = ranges.filter(range=>range.min >= scale.hp.min && range.max <= scale.hp.max);
