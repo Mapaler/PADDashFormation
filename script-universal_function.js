@@ -751,11 +751,30 @@ function tIf_Effect_inflicts(leader1id, leader2id) {
 }
 //计算队伍操作时间
 function countMoveTime(team, leader1id, leader2id, teamIdx) {
-    const ls1 = Skills[Cards[leader1id].leaderSkillId];
-    const ls2 = Skills[Cards[leader2id].leaderSkillId];
+    const searchTypeArray = [178, 15, 185];
+    const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
+    const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
     const time1 = leaderSkillMoveTime(ls1);
     const time2 = leaderSkillMoveTime(ls2);
 
+    function leaderSkillMoveTime(ls) {
+        const moveTime = { fixed: false, duration: 0 };
+        if (!ls) return moveTime;
+        const sk = ls.params;
+        switch (ls.type) {
+            case 178: //固定操作时间
+                moveTime.fixed = true;
+                moveTime.duration = sk[0];
+                break;
+            case 15:
+            case 185:
+                moveTime.duration += sk[0] / 100;
+                break;
+            default:
+        }
+        return moveTime;
+    }
+    
     let moveTime = {
         fixed: false,
         duration: {
@@ -776,16 +795,16 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 
         //1人、3人计算徽章
         if (solo || teamsCount === 3) {
-            //徽章部分
-            if (team[2] == 1) //小手指
-            {
-                moveTime.duration.badge = 1;
-            } else if (team[2] == 13) //大手指
-            {
-                moveTime.duration.badge = 2;
-            } else if (team[2] == 18) //月卡
-            {
-                moveTime.duration.badge = 3;
+            switch (team[2]) {
+                case 1: //小手指
+                    moveTime.duration.badge = 1;
+                    break;
+                case 13: //大手指
+                    moveTime.duration.badge = 2;
+                    break;
+                case 18: //月卡
+                    moveTime.duration.badge = 3;
+                    break;
             }
         } else if (teamsCount === 2) //2人协力时的特殊处理
         {
@@ -820,33 +839,6 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 
     }
 
-    function leaderSkillMoveTime(ls) {
-        let moveTime = { fixed: false, duration: 0 };
-        const sk = ls.params;
-        switch (ls.type) {
-            case 178: //固定操作时间
-                moveTime.fixed = true;
-                moveTime.duration = sk[0];
-                break;
-            case 15:
-            case 185:
-                moveTime.duration += sk[0] / 100;
-                break;
-            case 138: //调用其他队长技
-                return sk.reduce((pmul, skid) => {
-                    const subMoveTime = leaderSkillMoveTime(Skills[skid]);
-                    if (subMoveTime.fixed) {
-                        pmul.fixed = true;
-                        pmul.duration = subMoveTime.duration
-                    } else {
-                        pmul.duration += subMoveTime.duration;
-                    }
-                    return pmul;
-                }, moveTime);
-            default:
-        }
-        return moveTime;
-    }
     return moveTime;
 }
 //获取盾减伤比例
