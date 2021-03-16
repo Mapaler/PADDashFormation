@@ -684,8 +684,17 @@ function getActuallySkills(skill, skillTypes, searchRandom = true) {
 //计算队伍是否为76
 function tIf_Effect_76board(leader1id, leader2id) {
 	const searchTypeArray = [162, 186];
-	const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
-	const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
+	function henshinBase(cardid)
+	{
+		let card = Cards[cardid];
+		if (card.henshinFrom)
+		{
+			card = Cards[card.henshinFrom];
+		}
+		return card;
+	}
+	const ls1 = getCardLeaderSkills(henshinBase(leader1id), searchTypeArray)[0];
+	const ls2 = getCardLeaderSkills(henshinBase(leader2id), searchTypeArray)[0];
 
 	return Boolean(ls1 || ls2);
 }
