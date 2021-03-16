@@ -1073,6 +1073,103 @@ function initialize() {
 		badges.forEach(badge => badge.onclick = setBadge);
 	});
 
+	//显示HP的详细值
+	const hpDetailDialog = formationBox.querySelector(".dialog-hp-detail");
+	hpDetailDialog.show = function(reduceAttrRanges, tHP, tHPNoAwoken)
+	{
+		const dialogContent = this.querySelector(".dialog-content");
+		const fragment = document.createDocumentFragment();
+		
+		function insertHpRangeTable(reduceRanges, tHP, tHPNoAwoken, attr)
+		{
+			const table = document.createElement("table");
+			table.className = "hp-range-table";
+			table.setAttribute("data-attr", attr);
+			table.createCaption();
+			const tHead = table.createTHead();
+			const tBody = table.createTBody();
+			const rangeRow = tHead.insertRow();
+			rangeRow.className = "hp-range";
+			rangeRow.appendChild(document.createElement("th"));
+			const rageHpRow = tBody.insertRow();
+			rageHpRow.className = "general";
+			rageHpRow.appendChild(document.createElement("th"));
+			const rageHpNoAwokenRow = tBody.insertRow();
+			rageHpNoAwokenRow.className = "awoken-bind";
+			rageHpNoAwokenRow.appendChild(document.createElement("th"));
+			const reduceRow = tBody.insertRow();
+			reduceRow.className = "reduce-scale";
+			reduceRow.appendChild(document.createElement("th"));
+			const reduceHpRow = tBody.insertRow();
+			reduceHpRow.className = "reduce-general";
+			reduceHpRow.appendChild(document.createElement("th"));
+			const reduceHpNoAwokenRow = tBody.insertRow();
+			reduceHpNoAwokenRow.className = "reduce-awoken-bind";
+			reduceHpNoAwokenRow.appendChild(document.createElement("th"));
+			reduceRanges.forEach(range=>{
+				const hpRange = rangeRow.insertCell();
+				const hpRangeMin = hpRange.appendChild(document.createElement("span"));
+				hpRangeMin.className = "hp-range-min";
+				hpRangeMin.textContent = range.min;
+				hpRange.appendChild(document.createTextNode(" ~ "));
+				const hpRangeMax = hpRange.appendChild(document.createElement("span"));
+				hpRangeMax.className = "hp-range-max";
+				hpRangeMax.textContent = range.max;
+
+				const hpGeneral = rageHpRow.insertCell();
+				hpGeneral.textContent = `${Math.round(tHP * (range.min / 100))} ~ ${Math.round(tHP * (range.max/100))}`;
+
+				const hpAwokenBind = rageHpNoAwokenRow.insertCell();
+				hpAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100))} ~ ${Math.round(tHPNoAwoken * (range.max/100))}`;
+
+				const reduce = reduceRow.insertCell();
+				const reduceScale = reduce.appendChild(document.createElement("span"));
+				reduceScale.textContent = `${parseFloat((range.scale * 100).toFixed(2))}`;
+
+				if (range.probability < 1)
+				{
+					reduce.appendChild(document.createTextNode("("));
+					const reduceProb = reduce.appendChild(document.createElement("span"));
+					reduceProb.className = "reduce-probability";
+					reduceProb.textContent = `${(range.probability * 100).toFixed(0)}`;
+					reduce.appendChild(document.createTextNode(")"));
+				}
+
+				const reduceGeneral = reduceHpRow.insertCell();
+				reduceGeneral.textContent = `${Math.round(tHP * (range.min / 100) / (1 - range.scale))} ~ ${Math.round(tHP * (range.max/100) / (1 - range.scale))}`;
+				
+				const reduceAwokenBind = reduceHpNoAwokenRow.insertCell();
+				reduceAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100) / (1 - range.scale))} ~ ${Math.round(tHPNoAwoken * (range.max/100) / (1 - range.scale))}`;
+			});
+			return table;
+		}
+		if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0])) //有指定属性减伤
+		{
+			reduceAttrRanges.forEach((reduceRanges, ridx)=>fragment.appendChild(insertHpRangeTable(reduceRanges, tHP, tHPNoAwoken, ridx)));
+		}
+		else //只有阶梯盾
+		{
+			const reduceRanges = reduceAttrRanges[0];
+			fragment.appendChild(insertHpRangeTable(reduceRanges, tHP, tHPNoAwoken, 31));
+		}
+		
+		dialogContent.innerHTML = "";
+		dialogContent.appendChild(fragment);
+		this.classList.remove(className_displayNone);
+	}
+	hpDetailDialog.close = function()
+	{
+		this.classList.add(className_displayNone);
+	}
+	const hpDetailDialog_Close = hpDetailDialog.querySelector(".dialog-close");
+	hpDetailDialog_Close.onclick = function(){hpDetailDialog.close();};
+	teamBigBoxs.forEach(teamBigBox => {
+		const reduceDetails = teamBigBox.querySelector(".tIf-total-hp .reduce-details");
+		reduceDetails.onclick = function(){
+			hpDetailDialog.show(this.reduceAttrRanges, this.tHP, this.tHPNoAwoken);
+		};
+	});
+
 	//编辑框
 	editBox.mid = null; //储存怪物id
 	editBox.latent = []; //储存潜在觉醒
@@ -2008,7 +2105,7 @@ function initialize() {
 
 		teamData[editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
 
-		mon.id = parseInt(monstersID.value, 10);
+		mon.id = editBox.mid;
 		const card = Cards[mon.id] || Cards[0];
 		const skill = Skills[card.activeSkillId];
 
@@ -3067,6 +3164,43 @@ function setTextContentAndAttribute(dom,str)
 	dom.setAttribute(dataAttrName, str);
 }
 
+function drawHpInfo(hpBarDom, reduceAttrRanges)
+{
+	const width = hpBarDom.width, height = hpBarDom.height;
+
+	let ctx = hpBarDom.getContext("2d");
+	console.log(reduceAttrRanges)
+	if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0])) //有指定属性减伤
+	{
+		const attrColors = ['crimson','cornflowerblue','green','goldenrod','purple'];
+		reduceAttrRanges.forEach((reduceRanges, ridx)=>{
+			//console.table(reduceRanges);
+			ctx.fillStyle = attrColors[ridx];
+			ctx.fillRect(0, height / 5 * ridx, width, height / 5 * (ridx + 1));
+
+			reduceRanges.forEach(range=>{
+				ctx.fillStyle = `rgba(0, 0, 0, 0.5)`;
+				ctx.fillRect(width * (range.min / 100), height / 5 * ridx, width * (range.max / 100), height / 5 * (1 - range.scale));
+			});
+		});
+	}
+	else //只有阶梯盾
+	{
+		const reduceRanges = reduceAttrRanges[0];
+		//创建线性颜色渐变对象
+		const canvasGradient = ctx.createLinearGradient(0, 0, 0, height);
+		canvasGradient.addColorStop(0, "#EE99AA");
+		canvasGradient.addColorStop(0.4, "#FFDDEE");
+		canvasGradient.addColorStop(1, "#EE9999");
+		ctx.fillStyle = canvasGradient;
+		ctx.fillRect(0, 0, width, height);
+		
+		reduceRanges.forEach(range=>{
+			ctx.fillStyle = `rgba(204, 0 ,85, 0.5)`;
+			ctx.fillRect(width * (range.min / 100), 0, width * ((range.max - range.min) / 100), height * (1 - range.scale));
+		});
+	}
+}
 //刷新队伍能力值合计
 function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	//计算总的生命值
@@ -3081,9 +3215,24 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][0].id : teams[1][0][0].id) : team[0][5].id;
 
 	if (tHpDom) {
-		const reduceScale1 = getReduceScale(leader1id,true,true,true);
-		const reduceScale2 = getReduceScale(leader2id,true,true,true);
-		const totalReduce = 1 - (1 - reduceScale1) * (1 - reduceScale2);
+		const reduceScales1 = getReduceScales(leader1id);
+		const reduceScales2 = getReduceScales(leader2id);
+		const reduceAttrRanges = getReduceRange(reduceScales1.concat(reduceScales2));
+		//将所有范围平铺，然后选择盾最少那个作为基础盾值
+		const leastScale = reduceAttrRanges.flat().sort((a,b)=>a.scale-b.scale)[0];
+
+		const hpBar = totalDom.querySelector(".reduce-details");
+
+		if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0]) || reduceAttrRanges[0].length > 1 || reduceAttrRanges[0][0].probability < 1) //有阶梯盾或者有指定属性减伤或者减伤比例不是100%
+		{
+			drawHpInfo(hpBar, reduceAttrRanges);
+			hpBar.classList.remove(className_displayNone);
+		}else
+		{
+			hpBar.classList.add(className_displayNone);
+		}
+
+		const totalReduce = leastScale.scale;
 
 		const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
 		const teamHPNoAwokenArr = countTeamHp(team[0], leader1id, leader2id, solo, true);
@@ -3091,7 +3240,6 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		let tHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
 		let tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v) => pv + v); //队伍计算的总HP无觉醒
-
 
 		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
 
@@ -3105,8 +3253,13 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		tHP = Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale);
 		tHPNoAwoken = Math.round(Math.round(tHPNoAwoken) * badgeHPScale);
 
-		const tReduceHP = Math.round(tHP / (1 - reduceScale1) / (1 - reduceScale2)); //队伍正常满血加上盾能承受的最大伤害
-		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - reduceScale1) / (1 - reduceScale2)); //队伍封觉醒满血加上盾能承受的最大伤害
+		//记录到bar中，方便打开详情时调用
+		hpBar.reduceAttrRanges = reduceAttrRanges;
+		hpBar.tHP = tHP;
+		hpBar.tHPNoAwoken = tHPNoAwoken;
+
+		const tReduceHP = Math.round(tHP / (1 - totalReduce)); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - totalReduce)); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
@@ -3201,9 +3354,24 @@ function refreshFormationTotalHP(totalDom, teams) {
 
 	if (tHpDom) {
 
-		const reduceScale1 = getReduceScale(leader1id,true,true,true);
-		const reduceScale2 = getReduceScale(leader2id,true,true,true);
-		const totalReduce = 1 - (1 - reduceScale1) * (1 - reduceScale2);
+		const reduceScales1 = getReduceScales(leader1id);
+		const reduceScales2 = getReduceScales(leader2id);
+		const reduceAttrRanges = getReduceRange(reduceScales1.concat(reduceScales2));
+		//将所有范围平铺，然后选择盾最少那个作为基础盾值
+		const leastScale = reduceAttrRanges.flat().sort((a,b)=>a.scale-b.scale)[0];
+
+		const hpBar = totalDom.querySelector(".reduce-details");
+
+		if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0]) || reduceAttrRanges[0].length > 1 || reduceAttrRanges[0][0].probability < 1) //有阶梯盾或者有指定属性减伤或者减伤比例不是100%
+		{
+			drawHpInfo(hpBar, reduceAttrRanges);
+			hpBar.classList.remove(className_displayNone);
+		}else
+		{
+			hpBar.classList.add(className_displayNone);
+		}
+
+		const totalReduce = leastScale.scale;
 
 		const tHPArr = teams.map(function(team) {
 			const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
@@ -3222,6 +3390,11 @@ function refreshFormationTotalHP(totalDom, teams) {
 		});
 		const tHP = tHPArr.reduce((pv, v) => pv + v);
 		const tHPNoAwoken = tHPNoAwokenArr.reduce((pv, v) => pv + v);
+
+		//记录到bar中，方便打开详情时调用
+		hpBar.reduceAttrRanges = reduceAttrRanges;
+		hpBar.tHP = tHP;
+		hpBar.tHPNoAwoken = tHPNoAwoken;
 
 		const tReduceHP = Math.round(tHP / (1 - reduceScale1) / (1 - reduceScale2)); //队伍正常满血加上盾能承受的最大伤害
 		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - reduceScale1) / (1 - reduceScale2)); //队伍封觉醒满血加上盾能承受的最大伤害

@@ -594,41 +594,102 @@ ul{
 .tIf-total-move .awoken-bind::before,
 .tIf-total-move.fixed-move-time::after,
 .tIf-effect icon::before,
-icon.poison-no-effect::after
+icon.poison-no-effect::after,
+.hp-range-table th::before
 {
 	content: " ";
     background-size: cover;
 	display: inline-block;
 	width: 20px;
 	height: 20px;
-	vertical-align: top;
+	vertical-align: bottom;
 }
 .tIf-total-hp .awoken-bind::before,
 .tIf-total-hp .reduce .awoken-bind::before,
-.tIf-total-move .awoken-bind::before
+.tIf-total-move .awoken-bind::before,
+.hp-range-table .awoken-bind th::before,
+.hp-range-table .reduce-awoken-bind th::before
 {
 	background-image: url(images/icon-awoken-bind.png);
 }
 
 .tIf-total-hp .general::before,
-.tIf-total-hp .reduce .general::before
+.tIf-total-hp .reduce .general::before,
+.hp-range-table .general th::before,
+.hp-range-table .reduce-general th::before
 {
 	background-image: url(images/icon-HP.png);
 }
 
-.tIf-total-hp .reduce .reduce-scale::before{
+.tIf-total-hp .reduce .reduce-scale::before,
+.hp-range-table .reduce-scale th::before
+{
 	background-image: url(images/icon-reduce.png);
 }
 .tIf-total-hp .reduce .reduce-scale::after{
 	content: "%⇔";
 }
-.tIf-total-hp .reduce.no-reduce .reduce-scale::after{
+.tIf-total-hp .reduce.no-reduce .reduce-scale::after,
+.hp-range-table .hp-range td span:after,
+.hp-range-table .reduce-scale td span:after
+{
 	content: "%";
 }
 .tIf-total-hp .reduce.no-reduce .general,
 .tIf-total-hp .reduce.no-reduce .awoken-bind
 {
 	display: none;
+}
+
+.reduce-details
+{
+	cursor: pointer;
+	vertical-align: bottom;
+}
+.reduce-details:hover
+{
+	box-shadow: red 0 0 3px;
+}
+.hp-range-table
+{
+	font-family: var(--font-family);
+	border: 1px solid white;
+	background-color: saddlebrown;
+}
+.hp-range-table caption::before
+{
+	font-family: var(--game-font-family);
+}
+.hp-range-table td,
+.hp-range-table th
+{
+	border: 1px solid white;
+	padding: 0 4px;
+}
+.hp-range-table .hp-range th::before
+{
+	width: unset;
+	height: unset;
+}
+.hp-range-table[data-attr="0"]
+{
+	background-color: crimson;
+}
+.hp-range-table[data-attr="1"]
+{
+	background-color: cornflowerblue;
+}
+.hp-range-table[data-attr="2"]
+{
+	background-color: green;
+}
+.hp-range-table[data-attr="3"]
+{
+	background-color: goldenrod;
+}
+.hp-range-table[data-attr="4"]
+{
+	background-color: purple;
 }
 
 .tIf-total-move .general::before{
@@ -2434,6 +2495,7 @@ table .orb-icon
 /*弹出窗口相关*/
 .dialog
 {
+	color: white;
 	position: absolute;
 	padding: 5px;
 	border: 2px ridge #D1D398;
@@ -2441,7 +2503,6 @@ table .orb-icon
 	background-image: linear-gradient(to bottom,#788321f0,#3E4D14f0);
 	border-radius: 6px;
 	box-shadow: black 2px 0px 1px,black 0px 2px 1px,black -2px 0px 1px,black 0px -2px 1px;
-	width: 260px;
 	margin-left: calc(50% - 130px);
 	margin-top: 30px;
 	font-family: var(--game-font-family);
@@ -2508,6 +2569,10 @@ table .orb-icon
 	content: "关闭";
 }
 */
+.dialog-search-string
+{
+	width: 260px;
+}
 .dialog-search-string .string-copy,
 .dialog-search-string .string-search
 {

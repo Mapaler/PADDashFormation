@@ -52,9 +52,19 @@ Number.prototype.prefixInteger = function(length, useGrouping = false) {
 			minimumIntegerDigits: length
 		});
 	}
-	//大数字缩短长度，默认返回本地定义字符串
+//大数字缩短长度，默认返回本地定义字符串
 Number.prototype.bigNumberToString = function() {
 	return this.toLocaleString();
+}
+//将二进制flag转为数组
+function flags(num) {
+	const arr = [];
+	for (let i = 0; i < 32; i++) {
+		if (num & (1 << i)) {
+			arr.push(i);
+		}
+	}
+	return arr;
 }
 
 //数组删除自己尾部的空元素
@@ -553,15 +563,6 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 	//console.log('单个队伍血量：',mHpArr,mHpArr.reduce((p,c)=>p+c));
 
 	function memberHpMul(card, ls, memberArr, solo) {
-		function flags(num) {
-			const arr = [];
-			for (let i = 0; i < 32; i++) {
-				if (num & (1 << i)) {
-					arr.push(i);
-				}
-			}
-			return arr;
-		}
 
 		function hpMul(parm, scale) {
 			if (scale == undefined || scale == 0) return 1;
@@ -842,8 +843,75 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 
 	return moveTime;
 }
-//获取盾减伤比例
-function getReduceScale(leaderid, allAttr = false, noHPneed = false, noProbability = false) {
+//将盾减伤比例组叠加为一个减伤范围组
+function getReduceRange(reduceScales)
+{
+	class reduceRange{
+		constructor(obj)
+		{
+			this.min = 0;
+			this.max = 100;
+			this.scale = 0;
+			this.probability = 1;
+			if (typeof obj == "object") Object.assign(this, obj);
+		}
+	}
+	const ranges = [new reduceRange()];
+	const attrsRanges = new Array(5).fill(ranges); //5中属性的，默认填充第一个ranges的指针
+	function processingRanges(ranges, scale)
+	{
+		//先找scale.min在某个范围内的
+		const rgLessIdx = ranges.findIndex(range=>scale.hp.min > range.min && scale.hp.min < range.max),
+		//再找scale.max在某个范围内的
+			rgMoreIdx = ranges.findIndex(range=>scale.hp.max > range.min && scale.hp.max < range.max);
+		//先只拆分不乘比例
+		if (rgLessIdx >= 0)
+		{
+			const range = ranges[rgLessIdx];
+			ranges.splice(rgLessIdx, 1,
+				new reduceRange({min:range.min, max:scale.hp.min, scale: range.scale}),
+				new reduceRange({min:scale.hp.min, max:range.max, scale: range.scale})
+			);
+		}
+		if (rgMoreIdx >= 0)
+		{
+			const range = ranges[rgMoreIdx];
+			ranges.splice(rgMoreIdx, 1,
+				new reduceRange({min:range.min, max:scale.hp.max, scale: range.scale}),
+				new reduceRange({min:scale.hp.max, max:range.max, scale: range.scale})
+			);
+		}
+		const needChangeScaleRanges = ranges.filter(range=>range.min >= scale.hp.min && range.max <= scale.hp.max);
+		needChangeScaleRanges.forEach(range=>{
+			range.scale = 1 - (1 - range.scale) * (1 - scale.scale);
+			range.probability *= scale.probability;
+		});
+	}
+	//对scale进行排序，将所有全属性减伤的靠前，部分属性的靠后，这样前面的就只需要计算一次，后面的计算多次
+	reduceScales.sort((a,b)=>b.attrs - a.attrs);
+
+	reduceScales.forEach(scale=>{
+		if (scale.attrs == 0) //没有属性的
+		{
+			return;
+		}
+		else if ((scale.attrs & 31) != 31) //不符合全属性的
+		{
+			const attrs = flags(scale.attrs); //得到属性数组
+			attrs.forEach(n=>{
+				attrsRanges[n] = attrsRanges[n].map(range=>new reduceRange(range)); //复制一个新数组
+				processingRanges(attrsRanges[n], scale); //计算这个数组的减伤比例
+			});
+		}
+		else
+		{ //只处理第一数组
+			processingRanges(ranges, scale);
+		}
+	});
+	return attrsRanges;
+}
+//获取盾减伤比例组
+function getReduceScales(leaderid) {
 	const searchTypeArray = [16, 17, 36, 38, 43, 129, 163, 130, 131, 151, 169, 198, 170, 182, 193, 171, 183];
 	const lss = getCardLeaderSkills(Cards[leaderid], searchTypeArray);
 	
@@ -865,11 +933,11 @@ function getReduceScale(leaderid, allAttr = false, noHPneed = false, noProbabili
 				break;
 			case 17: //单属性盾
 				reduce.scale = sk[1] / 100;
-				reduce.attr = 0 | sk[0] >= 0 ? 1 << sk[0] : 0;
+				reduce.attrs = 0 | (sk[0] >= 0 ? 1 << sk[0] : 0);
 				break;
 			case 36: //2个属性盾
 				reduce.scale = sk[2] / 100;
-				reduce.attr = 0 | sk[0] >= 0 ? 1 << sk[0] : 0 | sk[1] >= 0 ? 1 << sk[1] : 0;
+				reduce.attrs = 0 | (sk[0] >= 0 ? 1 << sk[0] : 0) | (sk[1] >= 0 ? 1 << sk[1] : 0);
 				break;
 			case 38: //血线下 + 可能几率
 			case 43: //血线上 + 可能几率
@@ -884,11 +952,11 @@ function getReduceScale(leaderid, allAttr = false, noHPneed = false, noProbabili
 					if(ls.type == 38)
 					{
 						reduce.hp.max = sk[0];
-						reduce.hp.mix = 0;
+						reduce.hp.min = 0;
 					}else
 					{
 						reduce.hp.max = 100;
-						reduce.hp.mix = sk[0];
+						reduce.hp.min = sk[0];
 					}
 				}
 				break;
@@ -897,7 +965,7 @@ function getReduceScale(leaderid, allAttr = false, noHPneed = false, noProbabili
 			case 130: //血线下 + 属性个数不固定
 			case 131: //血线上 + 属性个数不固定
 				reduce.scale = (sk[6] || 0) / 100;
-				reduce.attr = 0 | sk[5];
+				reduce.attrs = 0 | sk[5];
 				if (ls.type == 130 || ls.type == 131)
 				{
 					if (sk[0] == 100)
@@ -909,11 +977,11 @@ function getReduceScale(leaderid, allAttr = false, noHPneed = false, noProbabili
 						if(ls.type == 130)
 						{
 							reduce.hp.max = sk[0];
-							reduce.hp.mix = 0;
+							reduce.hp.min = 0;
 						}else
 						{
 							reduce.hp.max = 100;
-							reduce.hp.mix = sk[0];
+							reduce.hp.min = sk[0];
 						}
 					}
 				}
@@ -940,62 +1008,12 @@ function getReduceScale(leaderid, allAttr = false, noHPneed = false, noProbabili
 				}else
 				{
 					reduce.hp.max = 100;
-					reduce.hp.mix = sk[2];
+					reduce.hp.min = sk[2];
 				}
 				break;
 			default:
 		}
 		return reduce;
 	}
-
-	return lss.map(leaderReduceScale);
-
-	const sk = ls.params;
-	let scale = 0;
-	const skills = getActuallySkills(ls);
-	switch (ls.type) {
-		case 16: //无条件盾
-			scale = sk[0] / 100;
-			break;
-		case 17: //单属性盾
-			scale = allAttr ? 0 : sk[1] / 100;
-			break;
-		case 36: //2个属性盾
-			scale = allAttr ? 0 : sk[2] / 100;
-			break;
-		case 38: //血线下 + 可能几率
-		case 43: //血线上 + 可能几率
-			scale = (noHPneed || noProbability && sk[1] !== 100) ? 0 : sk[2] / 100;
-			break;
-		case 129: //无条件盾，属性个数不固定
-		case 163: //无条件盾，属性个数不固定
-			scale = (allAttr && (sk[5] & 31) != 31) ? 0 : sk[6] / 100;
-			break;
-		case 130: //血线下 + 属性个数不固定
-		case 131: //血线上 + 属性个数不固定
-			scale = (noHPneed || allAttr && (sk[5] & 31) != 31) ? 0 : sk[6] / 100;
-			break;
-		case 151: //十字心触发
-		case 169: //C触发
-		case 198: //回血触发
-			scale = sk[2] / 100;
-			break;
-		case 170: //多色触发
-		case 182: //长串触发
-		case 193: //L触发
-			scale = sk[3] / 100;
-			break;
-		case 171: //多串触发
-			scale = sk[6] / 100;
-			break;
-		case 183: //又是个有两段血线的队长技
-			scale = noHPneed ? 0 : sk[4] / 100;
-			break;
-
-		case 138: //调用其他队长技
-			scale = sk.reduce((pmul, skid) => 1 - (1 - pmul) * (1 - getReduceScale(Skills[skid], allAttr, noHPneed)), 0);
-			break;
-		default:
-	}
-	return scale || 0;
+	return lss.map(leaderReduceScale).filter(re=>re.scale > 0);
 }
