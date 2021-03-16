@@ -658,56 +658,57 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 }
 
 //返回卡片的队长技能
-function getCardLeaderSkill(card, skillTypes) {
-    return getActuallySkill(Skills[card.leaderSkillId], skillTypes, false);
+function getCardLeaderSkills(card, skillTypes) {
+    return getActuallySkills(Skills[card.leaderSkillId], skillTypes, false);
 }
 //查找到真正起作用的那一个技能
-function getActuallySkill(skill, skillTypes, searchRandom = true) {
-    if (skillTypes.includes(skill.type)) {
-        return skill;
-    } else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138) {
-        const subSkills = skill.params.map(id => Skills[id]);
-        for (let i = 0; i < subSkills.length; i++) { //因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
-            let foundSubSkill = getActuallySkill(subSkills[i], skillTypes, searchRandom);
-            if (foundSubSkill) {
-                return foundSubSkill;
-            }
-        }
-        return null;
-    } else {
-        return null;
+function getActuallySkills(skill, skillTypes, searchRandom = true) {
+    if (skillTypes.includes(skill.type))
+    {
+        return [skill];
+    }
+    else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138)
+    {
+        //因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
+        let subSkills = skill.params.flatMap(id => getActuallySkills(Skills[id], skillTypes, searchRandom));
+        subSkills = subSkills.filter(s=>s.length);
+        return subSkills;
+    }
+    else
+    {
+        return [];
     }
 }
 
 //计算队伍是否为76
 function tIf_Effect_76board(leader1id, leader2id) {
     const searchTypeArray = [162, 186];
-    const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
-    const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
+    const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
+    const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
 
     return Boolean(ls1 || ls2);
 }
 //计算队伍是否为无天降
 function tIf_Effect_noSkyfall(leader1id, leader2id) {
     const searchTypeArray = [163, 177];
-    const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
-    const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
-
+    const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
+    const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
+[0]
     return Boolean(ls1 || ls2);
 }
 //计算队伍是否为毒无效
 function tIf_Effect_poisonNoEffect(leader1id, leader2id) {
     const searchTypeArray = [197];
-    const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
-    const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
+    const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
+    const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
 
     return Boolean(ls1 || ls2);
 }
 //计算队伍的+C
 function tIf_Effect_addCombo(leader1id, leader2id) {
     const searchTypeArray = [192, 194, 206, 209, 210];
-    const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
-    const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
+    const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
+    const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
 
     function getSkillAddCombo(skill) {
         if (!skill) return 0;
@@ -731,8 +732,8 @@ function tIf_Effect_addCombo(leader1id, leader2id) {
 //计算队伍的追打
 function tIf_Effect_inflicts(leader1id, leader2id) {
     const searchTypeArray = [199, 200, 201];
-    const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
-    const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
+    const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
+    const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
 
     function getSkillFixedDamage(skill) {
         if (!skill) return 0;
@@ -752,8 +753,8 @@ function tIf_Effect_inflicts(leader1id, leader2id) {
 //计算队伍操作时间
 function countMoveTime(team, leader1id, leader2id, teamIdx) {
     const searchTypeArray = [178, 15, 185];
-    const ls1 = getCardLeaderSkill(Cards[leader1id], searchTypeArray);
-    const ls2 = getCardLeaderSkill(Cards[leader2id], searchTypeArray);
+    const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
+    const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
     const time1 = leaderSkillMoveTime(ls1);
     const time2 = leaderSkillMoveTime(ls2);
 
@@ -845,6 +846,7 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 function getReduceScale(ls, allAttr = false, noHPneed = false, noProbability = false) {
     const sk = ls.params;
     let scale = 0;
+    const searchTypeArray = [16, 17, 36, 38, 43, 129, 163, 130, 131, 151, 169, 198, 170, 182, 193, 171, 183];
     switch (ls.type) {
         case 16: //无条件盾
             scale = sk[0] / 100;
