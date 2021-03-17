@@ -247,6 +247,9 @@
 .control-box .btn-show-mon-skill-cd-lbl::after{
 	content:"❄️フル スキル クールを表示";
 }
+.control-box .btn-show-mon-awoken-lbl::after{
+	content:"👁カードの覚醒を表示します";
+}
 .control-box .btn-show-awoken-count-lbl::after{
 	content:"⚔️総覚醒と能力値の表示";
 }
@@ -258,6 +261,43 @@
 .tIf-total-move .awoken-bind::after
 {
 	content: " 秒";
+}
+
+.dialog-hp-detail .dialog-title::before
+{
+	content: "HP 範囲減傷の詳細";
+}
+.hp-range-table .hp-range th::before
+{
+	content: "HP 範囲";
+}
+.hp-range-table .reduce-scale .reduce-probability:before
+{
+	content: "確率 ";
+}
+.hp-range-table caption::before
+{
+	content: "すべての属性の敵";
+}
+.hp-range-table[data-attr="0"] caption::before
+{
+	content: "火属性の敵";
+}
+.hp-range-table[data-attr="1"] caption::before
+{
+	content: "水属性の敵";
+}
+.hp-range-table[data-attr="2"] caption::before
+{
+	content: "木属性の敵";
+}
+.hp-range-table[data-attr="3"] caption::before
+{
+	content: "光属性の敵";
+}
+.hp-range-table[data-attr="4"] caption::before
+{
+	content: "暗属性の敵";
 }
 
 .setting-box .row-mon-id .open-search::before{

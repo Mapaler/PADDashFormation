@@ -250,6 +250,9 @@
 .control-box .btn-show-mon-skill-cd-lbl::after{
 	content:"❄️顯示已滿技能冷卻";
 }
+.control-box .btn-show-mon-awoken-lbl::after{
+	content:"👁顯示卡片覺醒";
+}
 .control-box .btn-show-awoken-count-lbl::after{
 	content:"⚔️顯示覺醒統計和能力值";
 }
@@ -261,6 +264,43 @@
 .tIf-total-move .awoken-bind::after
 {
 	content: " 秒";
+}
+
+.dialog-hp-detail .dialog-title::before
+{
+	content: "HP 階段減傷詳情";
+}
+.hp-range-table .hp-range th::before
+{
+	content: "HP 範圍";
+}
+.hp-range-table .reduce-scale .reduce-probability:before
+{
+	content: "幾率 ";
+}
+.hp-range-table caption::before
+{
+	content: "全屬性敵人";
+}
+.hp-range-table[data-attr="0"] caption::before
+{
+	content: "火屬性敵人";
+}
+.hp-range-table[data-attr="1"] caption::before
+{
+	content: "水屬性敵人";
+}
+.hp-range-table[data-attr="2"] caption::before
+{
+	content: "木屬性敵人";
+}
+.hp-range-table[data-attr="3"] caption::before
+{
+	content: "光屬性敵人";
+}
+.hp-range-table[data-attr="4"] caption::before
+{
+	content: "暗屬性敵人";
 }
 
 .setting-box .row-mon-id .open-search::before{

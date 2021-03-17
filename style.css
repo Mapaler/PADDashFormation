@@ -184,6 +184,119 @@ ul{
 	min-width: 648px;
 }
 
+/*弹出窗口相关*/
+.dialog
+{
+	color: white;
+	position: absolute;
+	padding: 5px;
+	border: 2px ridge #D1D398;
+	top: 0;
+	background-image: linear-gradient(to bottom,#788321f0,#3E4D14f0);
+	border-radius: 6px;
+	box-shadow: black 2px 0px 1px,black 0px 2px 1px,black -2px 0px 1px,black 0px -2px 1px;
+	margin-left: calc(50% - 200px);
+	margin-top: 30px;
+	font-family: var(--game-font-family);
+	text-shadow: black 2px 2px 0;
+}
+.dialog .dialog-title
+{
+	font-size: 20px;
+	line-height: 20px;
+	text-align: center;
+	margin-bottom: 5px;
+}
+.dialog .dialog-content .additional-string
+{
+	border-top: 2px solid white;
+	margin-top: 5px;
+}
+/*.dialog .dialog-content .additional-string::before
+{
+	content: "其他語言";
+}*/
+.dialog .dialog-control
+{
+	text-align: center;
+	margin-top:10px;
+}
+.brown-button
+{
+	background-image: linear-gradient(to bottom,#C38E5F,#2F2008);
+	border: none;
+	border-radius: 5px;
+	padding: 2px;
+	cursor: pointer;
+	transition: transform 0.1s;
+}
+.brown-button:active
+{
+	transform: scale(1.1);
+}
+.brown-button::before
+{
+	display: inline-block;
+	box-sizing: border-box;
+	width: 100px;
+	padding: 5px;
+	background-color: #956A42;
+	background-image: url(images/slate.svg);
+	background-size: 120px 120px;
+	border-radius: 2px;
+	font-size: 20px;
+	line-height: 20px;
+	vertical-align: middle;
+	color: white;
+	font-family: var(--game-font-family);
+	text-shadow: black 2px 2px 0;
+}
+/*
+.dialog-search-string .dialog-title::before
+{
+	content: "以字符串搜索";
+}
+.dialog-close::before
+{
+	content: "关闭";
+}
+*/
+.dialog-search-string
+{
+	width: 260px;
+}
+.dialog-search-string .string-copy,
+.dialog-search-string .string-search
+{
+	box-sizing: border-box;
+	width: 45px;
+	margin-left: 5px;
+	cursor: pointer;
+	background-color: #994433;
+	border: 2px solid #FFCC88;
+	box-shadow: black 1px 0 1px,black -1px 0 1px,black 0 -1px 1px,black 0 3px 2px;
+	border-radius: 5px;
+	padding: 0;
+}
+.dialog-search-string .string-copy::before
+{
+	content: "📋";
+}
+.dialog-search-string .string-search::before
+{
+	content: "🔍";
+}
+.dialog-search-string .string-value
+{
+	box-sizing: border-box;
+	width: calc(100% - 50px * 2);
+}
+.dialog-search-string .additional-string .string-value
+{
+	box-sizing: border-box;
+	width: calc(100% - 50px * 1);
+}
+
 /*单个怪物*/
 .monster{
 	font-family: var(--game-font-family);
@@ -576,40 +689,128 @@ ul{
 	display: inline-block;
 }
 /*各种信息统计的图标*/
-.tIf-total-hp::before,
-.tIf-total-move::before,
+.tIf-total-move,
+.tIf-effect
+{
+	display: inline-block;
+}
+.tIf-total-hp .general::before,
 .tIf-total-hp .awoken-bind::before,
+.tIf-total-hp .reduce .reduce-scale::before,
+.tIf-total-hp .reduce .general::before,
+.tIf-total-hp .reduce .awoken-bind::before,
+.tIf-total-move .general::before,
 .tIf-total-move .awoken-bind::before,
 .tIf-total-move.fixed-move-time::after,
-.tIf-total-hp .reduce::before
+.tIf-effect icon::before,
+icon.poison-no-effect::after,
+.hp-range-table th::before
 {
 	content: " ";
     background-size: cover;
 	display: inline-block;
-	width: 16px;
-	height: 16px;
+	width: 20px;
+	height: 20px;
+	vertical-align: bottom;
 }
 .tIf-total-hp .awoken-bind::before,
-.tIf-total-move .awoken-bind::before
+.tIf-total-hp .reduce .awoken-bind::before,
+.tIf-total-move .awoken-bind::before,
+.hp-range-table .awoken-bind th::before,
+.hp-range-table .reduce-awoken-bind th::before
 {
 	background-image: url(images/icon-awoken-bind.png);
 }
 
-.tIf-total-hp::before{
+.tIf-total-hp .general::before,
+.tIf-total-hp .reduce .general::before,
+.hp-range-table .general th::before,
+.hp-range-table .reduce-general th::before
+{
 	background-image: url(images/icon-HP.png);
 }
 
-.tIf-total-hp .reduce::before{
+.tIf-total-hp .reduce .reduce-scale::before,
+.hp-range-table .reduce-scale th::before
+{
 	background-image: url(images/icon-reduce.png);
 }
-.tIf-total-hp .reduce::after{
+.tIf-total-hp .reduce .reduce-scale::after{
+	content: "%⇔";
+}
+.tIf-total-hp .reduce.no-reduce .reduce-scale::after,
+.hp-range-table .hp-range td span:after,
+.hp-range-table .reduce-scale td span:after
+{
 	content: "%";
 }
-.tIf-total-hp .reduce:not([data-value="0"])::after{
+.tIf-total-hp .reduce.no-reduce .general,
+.tIf-total-hp .reduce.no-reduce .awoken-bind
+{
+	display: none;
+}
+.tIf-total-hp .reduce:not([data-value="0"])::after
+{
 	content: "%⇔" attr(data-max-equal-general) "/" attr(data-max-equal-awoken-bind);
 }
 
-.tIf-total-move::before{
+.reduce-details
+{
+	cursor: pointer;
+	vertical-align: bottom;
+}
+.reduce-details:hover
+{
+	box-shadow: red 0 0 3px;
+}
+.dialog-hp-detail
+{
+	margin-left: calc(50% - 200px);
+	margin-top: 100px;
+}
+.hp-range-table
+{
+	font-family: var(--font-family);
+	border: 1px solid white;
+	background-color: saddlebrown;
+}
+.hp-range-table caption::before
+{
+	font-family: var(--game-font-family);
+}
+.hp-range-table td,
+.hp-range-table th
+{
+	border: 1px solid white;
+	padding: 0 4px;
+}
+.hp-range-table .hp-range th::before
+{
+	width: unset;
+	height: unset;
+}
+.hp-range-table[data-attr="0"]
+{
+	background-color: crimson;
+}
+.hp-range-table[data-attr="1"]
+{
+	background-color: cornflowerblue;
+}
+.hp-range-table[data-attr="2"]
+{
+	background-color: green;
+}
+.hp-range-table[data-attr="3"]
+{
+	background-color: goldenrod;
+}
+.hp-range-table[data-attr="4"]
+{
+	background-color: purple;
+}
+
+.tIf-total-move .general::before{
 	background-image: url(images/icon-orb-move-time.png);
 }
 /*固定手指的情况*/
@@ -628,12 +829,13 @@ ul{
 		opacity: 0;
 	}
 }
-.tIf-total-move.fixed-move-time::after
+.tIf-total-move.fixed-move-time::after,
+icon.poison-no-effect::after
 {
 	background-image: url(images/icon-bind.png);
     position: absolute;
-    left:0;
-    top:2px;
+    left: 0;
+    top: 0;
 	animation: hidden-visible-animate 0.5s infinite ease-in alternate;
 }
 /*单人时的协力觉醒和多人时的掉落觉醒显示无效*/
@@ -647,6 +849,50 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	background-image: url(images/icon-bind.png);
 	background-size: cover;
 	animation: hidden-visible-animate 0.5s infinite ease-in alternate;
+}
+
+.tIf-effect icon
+{
+	position: relative;
+}
+icon._76board::before
+{
+	background-image: url(images/icon-76board.png);
+}
+icon.no-skyfall::before
+{
+	background-image: url(images/icon-no-skyfall.png);
+}
+icon.poison-no-effect::before
+{
+	background-image: url(images/icon-poison.png);
+}
+icon.add-combo
+{
+	margin-right: 7px;
+}
+icon.add-combo::before
+{
+	background-image: url(images/icon-add-combo.png);
+}
+icon.add-combo::after
+{
+	color: white;
+	text-shadow: black 1px 1px 0,black -1px 0px 0,black 0 0 1px;
+	font-family: var(--game-font-family);
+	font-size: 12px;
+	position: absolute;
+	top: -7px;
+	left: 10px;
+	content: attr(data-add-combo);
+}
+icon.inflicts::before
+{
+	background-image: url(images/icon-inflicts.png);
+}
+icon.inflicts::after
+{
+	content: attr(data-inflicts);
 }
 
 /*队伍的潜觉*/
@@ -826,7 +1072,42 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .abilitys .rcv::before{
 	content: "回复：";
 }*/
-
+/*队员觉醒统计*/
+.menber-awoken
+{
+	width: var(--head-block-width);
+	display: inline-block;
+	vertical-align: top;
+}
+.team-menber-awoken,
+.team-assist-awoken
+{
+	margin-top: 3px;
+	display : none;	
+}
+.menber-awoken .awoken-ul
+{
+	display: inline-block;
+}
+.menber-awoken .awoken-ul>li
+{
+	display: inline-block;
+}
+.menber-awoken .awoken-icon
+{
+	filter: unset;
+	transform: scale(0.80);
+	margin: calc(-32px * (1 - 0.80) / 2);
+}
+.show-mon-awoken .team-assist-awoken,
+.show-mon-awoken .team-menber-awoken
+{
+	display : block;	
+}
+.show-mon-awoken .monster .super-awoken
+{
+	filter: grayscale(100%);
+}
 
 /*编辑窗口*/
 .blur-bg{
@@ -997,8 +1278,8 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .custom-addition .awoken-icon
 {
 	filter: unset;
-		transform: scale(0.75);
-		margin: calc(-32px * (1 - 0.75) / 2);
+	transform: scale(0.75);
+	margin: calc(-32px * (1 - 0.75) / 2);
 }
 
 .cd-preview .cd-max,
@@ -1373,7 +1654,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	content: "×";
 }
-.search-box .awoken-div .awoken-icon
+.awoken-icon
 {
 	position: relative;
 	border: none;
@@ -1386,16 +1667,15 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	text-align: left;
 }
 
-.search-box .awoken-div .awoken-icon:not([value]),
-.search-box .awoken-div .awoken-icon[value="0"],
-.search-box .awoken-div .awoken-icon:not([value])~.awoken-sub1,
-.search-box .awoken-div .awoken-icon[value="0"]~.awoken-sub1
+.search-box .awoken-div .awoken-icon:not([data-awoken-count]),
+.search-box .awoken-div .awoken-icon[data-awoken-count="0"]
 {
 	opacity: var(--search-icon-unchecked);
 }
-.awoken-div .awoken-icon:not([value="0"])::before
+
+.awoken-icon:not([data-awoken-count="0"])::before
 {
-	content: attr(value);
+	content: attr(data-awoken-count);
 	display: inline-block;
 	position: absolute;
 	line-height: 18px;
@@ -1403,7 +1683,6 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	right: 0;
 	bottom: 0;
 	-webkit-text-stroke: 1px black;
-	text-stroke: 1px black;
 	text-shadow: black 1px 1px 1px;
 }
 .search-box .awoken-ul .awoken-count.zero{
@@ -2332,114 +2611,6 @@ table .orb-icon
 	display: table-cell;
 }
 
-/*弹出窗口相关*/
-.dialog
-{
-	position: absolute;
-	padding: 5px;
-	border: 2px ridge #D1D398;
-	top: 0;
-	background-image: linear-gradient(to bottom,#788321f0,#3E4D14f0);
-	border-radius: 6px;
-	box-shadow: black 2px 0px 1px,black 0px 2px 1px,black -2px 0px 1px,black 0px -2px 1px;
-	width: 260px;
-	margin-left: calc(50% - 130px);
-	margin-top: 30px;
-	font-family: var(--game-font-family);
-	text-shadow: black 2px 2px 0;
-}
-.dialog .dialog-title
-{
-	font-size: 20px;
-	line-height: 20px;
-	text-align: center;
-	margin-bottom: 5px;
-}
-.dialog .dialog-content .additional-string
-{
-	border-top: 2px solid white;
-	margin-top: 5px;
-}
-/*.dialog .dialog-content .additional-string::before
-{
-	content: "其他語言";
-}*/
-.dialog .dialog-control
-{
-	text-align: center;
-	margin-top:10px;
-}
-.brown-button
-{
-	background-image: linear-gradient(to bottom,#C38E5F,#2F2008);
-	border: none;
-	border-radius: 5px;
-	padding: 2px;
-	cursor: pointer;
-	transition: transform 0.1s;
-}
-.brown-button:active
-{
-	transform: scale(1.1);
-}
-.brown-button::before
-{
-	display: inline-block;
-	box-sizing: border-box;
-	width: 100px;
-	padding: 5px;
-	background-color: #956A42;
-	background-image: url(images/slate.svg);
-	background-size: 120px 120px;
-	border-radius: 2px;
-	font-size: 20px;
-	line-height: 20px;
-	vertical-align: middle;
-	color: white;
-	font-family: var(--game-font-family);
-	text-shadow: black 2px 2px 0;
-}
-/*
-.dialog-search-string .dialog-title::before
-{
-	content: "以字符串搜索";
-}
-.dialog-close::before
-{
-	content: "关闭";
-}
-*/
-.dialog-search-string .string-copy,
-.dialog-search-string .string-search
-{
-	box-sizing: border-box;
-	width: 45px;
-	margin-left: 5px;
-	cursor: pointer;
-	background-color: #994433;
-	border: 2px solid #FFCC88;
-	box-shadow: black 1px 0 1px,black -1px 0 1px,black 0 -1px 1px,black 0 3px 2px;
-	border-radius: 5px;
-	padding: 0;
-}
-.dialog-search-string .string-copy::before
-{
-	content: "📋";
-}
-.dialog-search-string .string-search::before
-{
-	content: "🔍";
-}
-.dialog-search-string .string-value
-{
-	box-sizing: border-box;
-	width: calc(100% - 50px * 2);
-}
-.dialog-search-string .additional-string .string-value
-{
-	box-sizing: border-box;
-	width: calc(100% - 50px * 1);
-}
 
 /*.open-evolutionary-tree::before
 {

@@ -607,6 +607,16 @@ window.onload = function(event) {
 		localStorage.setItem("PADDF-" + showMonSkillCd_id, this.checked ? 1 : 0);
 	};
 	btnShowMonSkillCd.onclick();
+
+	//记录显示觉醒开关的状态
+	const showMonAwoken_id = "show-mon-awoken";
+	const btnShowMonAwoken = controlBox.querySelector(`#btn-${showMonAwoken_id}`);
+	btnShowMonAwoken.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + showMonAwoken_id)));
+	btnShowMonAwoken.onclick = function(){
+		toggleDomClassName(this, showMonAwoken_id);
+		localStorage.setItem("PADDF-" + showMonAwoken_id, this.checked ? 1 : 0);
+	};
+	btnShowMonAwoken.onclick();
 	
 	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
 
@@ -1063,6 +1073,103 @@ function initialize() {
 		badges.forEach(badge => badge.onclick = setBadge);
 	});
 
+	//显示HP的详细值
+	const hpDetailDialog = formationBox.querySelector(".dialog-hp-detail");
+	hpDetailDialog.show = function(reduceAttrRanges, tHP, tHPNoAwoken)
+	{
+		const dialogContent = this.querySelector(".dialog-content");
+		const fragment = document.createDocumentFragment();
+		
+		function insertHpRangeTable(reduceRanges, tHP, tHPNoAwoken, attr)
+		{
+			const table = document.createElement("table");
+			table.className = "hp-range-table";
+			table.setAttribute("data-attr", attr);
+			table.createCaption();
+			const tHead = table.createTHead();
+			const tBody = table.createTBody();
+			const rangeRow = tHead.insertRow();
+			rangeRow.className = "hp-range";
+			rangeRow.appendChild(document.createElement("th"));
+			const rageHpRow = tBody.insertRow();
+			rageHpRow.className = "general";
+			rageHpRow.appendChild(document.createElement("th"));
+			const rageHpNoAwokenRow = tBody.insertRow();
+			rageHpNoAwokenRow.className = "awoken-bind";
+			rageHpNoAwokenRow.appendChild(document.createElement("th"));
+			const reduceRow = tBody.insertRow();
+			reduceRow.className = "reduce-scale";
+			reduceRow.appendChild(document.createElement("th"));
+			const reduceHpRow = tBody.insertRow();
+			reduceHpRow.className = "reduce-general";
+			reduceHpRow.appendChild(document.createElement("th"));
+			const reduceHpNoAwokenRow = tBody.insertRow();
+			reduceHpNoAwokenRow.className = "reduce-awoken-bind";
+			reduceHpNoAwokenRow.appendChild(document.createElement("th"));
+			reduceRanges.forEach(range=>{
+				const hpRange = rangeRow.insertCell();
+				const hpRangeMin = hpRange.appendChild(document.createElement("span"));
+				hpRangeMin.className = "hp-range-min";
+				hpRangeMin.textContent = range.min;
+				hpRange.appendChild(document.createTextNode(" ~ "));
+				const hpRangeMax = hpRange.appendChild(document.createElement("span"));
+				hpRangeMax.className = "hp-range-max";
+				hpRangeMax.textContent = range.max;
+
+				const hpGeneral = rageHpRow.insertCell();
+				hpGeneral.textContent = `${Math.round(tHP * (range.min / 100))} ~ ${Math.round(tHP * (range.max/100))}`;
+
+				const hpAwokenBind = rageHpNoAwokenRow.insertCell();
+				hpAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100))} ~ ${Math.round(tHPNoAwoken * (range.max/100))}`;
+
+				const reduce = reduceRow.insertCell();
+				const reduceScale = reduce.appendChild(document.createElement("span"));
+				reduceScale.textContent = `${parseFloat((range.scale * 100).toFixed(2))}`;
+
+				if (range.probability < 1)
+				{
+					reduce.appendChild(document.createTextNode("("));
+					const reduceProb = reduce.appendChild(document.createElement("span"));
+					reduceProb.className = "reduce-probability";
+					reduceProb.textContent = `${(range.probability * 100).toFixed(0)}`;
+					reduce.appendChild(document.createTextNode(")"));
+				}
+
+				const reduceGeneral = reduceHpRow.insertCell();
+				reduceGeneral.textContent = `${Math.round(tHP * (range.min / 100) / (1 - range.scale))} ~ ${Math.round(tHP * (range.max/100) / (1 - range.scale))}`;
+				
+				const reduceAwokenBind = reduceHpNoAwokenRow.insertCell();
+				reduceAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100) / (1 - range.scale))} ~ ${Math.round(tHPNoAwoken * (range.max/100) / (1 - range.scale))}`;
+			});
+			return table;
+		}
+		if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0])) //有指定属性减伤
+		{
+			reduceAttrRanges.forEach((reduceRanges, ridx)=>fragment.appendChild(insertHpRangeTable(reduceRanges, tHP, tHPNoAwoken, ridx)));
+		}
+		else //只有阶梯盾
+		{
+			const reduceRanges = reduceAttrRanges[0];
+			fragment.appendChild(insertHpRangeTable(reduceRanges, tHP, tHPNoAwoken, 31));
+		}
+		
+		dialogContent.innerHTML = "";
+		dialogContent.appendChild(fragment);
+		this.classList.remove(className_displayNone);
+	}
+	hpDetailDialog.close = function()
+	{
+		this.classList.add(className_displayNone);
+	}
+	const hpDetailDialog_Close = hpDetailDialog.querySelector(".dialog-close");
+	hpDetailDialog_Close.onclick = function(){hpDetailDialog.close();};
+	const reduceDetailsBars = Array.from(formationBox.querySelectorAll(".tIf-total-hp .reduce-details"));
+	reduceDetailsBars.forEach(bar => {
+		bar.onclick = function(){
+			hpDetailDialog.show(this.reduceAttrRanges, this.tHP, this.tHPNoAwoken);
+		};
+	});
+
 	//编辑框
 	editBox.mid = null; //储存怪物id
 	editBox.latent = []; //储存潜在觉醒
@@ -1403,25 +1510,6 @@ function initialize() {
 				Math.max(thisValue,rangeHigh)
 			)
 		)).checked = true;
-/*
-		if (rangeLow == rangeHigh)
-		{
-			if (thisValue == rangeLow)
-			{
-				s_rareLows.find(radio=>parseInt(radio.value,10) == 1).checked = true;
-				s_rareHighs.find(radio=>parseInt(radio.value,10) == 10).checked = true;
-			}else
-			{
-				s_rareLows.find(radio=>parseInt(radio.value,10) == Math.min(thisValue,rangeLow)).checked = true;
-				s_rareHighs.find(radio=>parseInt(radio.value,10) == Math.max(thisValue,rangeLow)).checked = true;
-			}
-		}else
-		{
-			console.log("恢复单选");
-			s_rareLows.find(radio=>parseInt(radio.value,10) == thisValue).checked = true;
-			s_rareHighs.find(radio=>parseInt(radio.value,10) == thisValue).checked = true;
-		}
-		*/
 	}
 	s_rareIcons.forEach(icon=>icon.onclick = s_rareIcons_onclick);
 	const s_rareClear = s_rareDiv.querySelector(".rare-clear");
@@ -1493,11 +1581,11 @@ function initialize() {
 
 	const s_selectedAwokensUl = searchBox.querySelector(".selected-awokens");
 	function search_awokenAdd1() {
-		let count = parseInt(this.value || 0, 10);
+		let count = parseInt(this.getAttribute("data-awoken-count") || 0, 10);
 		const maxCount = parseInt(this.getAttribute("data-max-count") || 9, 10);
 		if (count < maxCount) {
 			count++;
-			this.setAttribute("value", count);
+			this.setAttribute("data-awoken-count", count);
 
 			const iconLi = document.createElement("li");
 			const icon = iconLi.appendChild(document.createElement("icon"))
@@ -1510,15 +1598,12 @@ function initialize() {
 	function search_awokenSub1() {
 		const awokenId = this.getAttribute("data-awoken-icon");
 		const awokenIcon = s_awokensIcons.find(icon=>icon.getAttribute("data-awoken-icon") == awokenId);
-		let count = parseInt(awokenIcon.value || 0, 10);
+		let count = parseInt(awokenIcon.getAttribute("data-awoken-count") || 0, 10);
 		if (count > 0) {
 			count--;
-			awokenIcon.setAttribute("value", count);
+			awokenIcon.setAttribute("data-awoken-count", count);
 		}
 		this.parentNode.remove();
-	}
-	function search_awokenClear() {
-		this.setAttribute("value", 0);
 	}
 	s_awokensIcons.forEach(b => {
 		b.onclick = search_awokenAdd1; //每种觉醒增加1
@@ -1528,7 +1613,7 @@ function initialize() {
 	const sawokenClear = searchBox.querySelector(".sawoken-clear");
 	awokenClear.onclick = function() { //清空觉醒选项
 		s_awokensIcons.forEach(t => {
-			t.setAttribute("value", 0);
+			t.setAttribute("data-awoken-count", 0);
 		});
 		s_selectedAwokensUl.innerHTML = "";
 	};
@@ -1648,11 +1733,11 @@ function initialize() {
 			s_rareHighs.filter(returnCheckedInput).map(returnInputValue).map(Str2Int)[0],
 		];
 		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
-		const awokensFilter = s_awokensIcons.filter(btn => parseInt(btn.value, 10) > 0).map(btn => {
+		const awokensFilter = s_awokensIcons.filter(btn => parseInt(btn.getAttribute("data-awoken-count"), 10) > 0).map(btn => {
 			const awokenIndex = parseInt(btn.getAttribute("data-awoken-icon"), 10);
 			return {
 				id: awokenIndex,
-				num: parseInt(btn.value, 10)
+				num: parseInt(btn.getAttribute("data-awoken-count"), 10)
 			};
 		});
 		const searchResult = searchCards(cards,
@@ -2020,7 +2105,7 @@ function initialize() {
 
 		teamData[editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
 
-		mon.id = parseInt(monstersID.value, 10);
+		mon.id = editBox.mid;
 		const card = Cards[mon.id] || Cards[0];
 		const skill = Skills[card.activeSkillId];
 
@@ -2067,6 +2152,10 @@ function initialize() {
 			const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 			if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 	
+			const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+			const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
+			if (teamMenberAwokenDom && teamAssistAwokenDom) refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+
 			const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 			if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
 			const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
@@ -2102,6 +2191,10 @@ function initialize() {
 		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 
+		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
+		if (teamMenberAwokenDom && teamAssistAwokenDom) refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+
 		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
 		const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
@@ -2128,6 +2221,10 @@ function initialize() {
 		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
 		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
+
+		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
+		if (teamMenberAwokenDom && teamAssistAwokenDom) refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
 
 		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
@@ -2869,6 +2966,8 @@ function refreshAll(formationData) {
 		const latentsDom = teamBox.querySelector(".team-latents");
 		const assistsDom = teamBox.querySelector(".team-assist");
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
+		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
 		for (let ti = 0, ti_len = membersDom.querySelectorAll(".member").length; ti < ti_len; ti++) {
 			const member = membersDom.querySelector(`.member-${ti+1} .monster`);
 			const latent = latentsDom.querySelector(`.latents-${ti+1} .latent-ul`);
@@ -2877,6 +2976,7 @@ function refreshAll(formationData) {
 			changeid(teamData[1][ti], assist); //辅助
 			refreshMemberSkillCD(teamBox, teamData, ti); //技能CD
 			refreshAbility(teamAbilityDom, teamData, ti); //本人能力值
+			refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, ti); //本人觉醒
 		}
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, teamNum);
@@ -2998,6 +3098,73 @@ function refreshAbility(abilityDom, team, idx) {
 		}
 	});
 }
+//刷新队员觉醒
+function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
+	if (!menberAwokenDom) return; //如果没有dom，直接跳过
+
+	const memberData = team[0][idx];
+	const assistData = team[1][idx];
+	//队员觉醒
+	let menberAwokens = Cards[memberData.id].awakenings.slice(0,memberData.awoken);
+	//单人和三人为队员增加超觉醒
+	if ((solo || teamsCount === 3) && memberData.sawoken >= 0) menberAwokens.push(Cards[memberData.id].superAwakenings[memberData.sawoken]);
+	//menberAwokens.sort();
+	//武器觉醒
+	let assistAwokens = Cards[assistData.id].awakenings.slice(0,assistData.awoken);
+	if (!assistAwokens.includes(49)) assistAwokens = []; //清空非武器的觉醒
+	//assistAwokens.sort();
+	/*if (assistAwokens.includes(49))
+	{
+		menberAwokens = menberAwokens.concat(assistAwokens);
+	}*/
+
+	const menberAwokenUl = menberAwokenDom.querySelector(`.menber-awoken-${idx + 1} .awoken-ul`);
+	const assistAwokenUl = assistAwokenDom.querySelector(`.menber-awoken-${idx + 1} .awoken-ul`);
+	/* //通用的
+	function countNum(arr) {
+		const map = arr.reduce(function(preMap, value){
+			return preMap.set(value, (preMap.get(value) || 0) + 1);
+		}, new Map());
+		return Array.from(map);
+	};*/
+	function countAwokenNum(arr) {
+		const map = arr.reduce(function(preMap, value){
+			const eak = equivalent_awoken.find(eako => eako.big === value);
+			if (eak)
+			{
+				return preMap.set(eak.small, (preMap.get(eak.small) || 0) + eak.times);
+			}else
+			{
+				return preMap.set(value, (preMap.get(value) || 0) + 1);
+			}
+		}, new Map());
+		return Array.from(map);
+	};
+	/*const hideAwokens = [49,1,2,3,63];
+	if (solo) hideAwokens.push(30); //协力觉醒
+	if (!solo) hideAwokens.push(63); //掉落觉醒
+	menberAwokens = menberAwokens.filter(ak=>!hideAwokens.includes(ak));*/
+	let menberAwokensCount = countAwokenNum(menberAwokens);
+	menberAwokenUl.innerHTML = '';
+	menberAwokensCount.forEach(akc=>{
+		const iconLi = document.createElement("li");
+		const icon = iconLi.appendChild(document.createElement("icon"))
+		icon.className = "awoken-icon";
+		icon.setAttribute("data-awoken-icon", akc[0]);
+		icon.setAttribute("data-awoken-count", akc[1]);
+		menberAwokenUl.appendChild(iconLi);
+	});
+	let assistAwokensCount = countAwokenNum(assistAwokens);
+	assistAwokenUl.innerHTML = '';
+	assistAwokensCount.forEach(akc=>{
+		const iconLi = document.createElement("li");
+		const icon = iconLi.appendChild(document.createElement("icon"))
+		icon.className = "awoken-icon";
+		icon.setAttribute("data-awoken-icon", akc[0]);
+		icon.setAttribute("data-awoken-count", akc[1]);
+		assistAwokenUl.appendChild(iconLi);
+	});
+}
 
 function setTextContentAndAttribute(dom,str)
 {
@@ -3006,13 +3173,49 @@ function setTextContentAndAttribute(dom,str)
 	dom.setAttribute(dataAttrName, str);
 }
 
+function drawHpInfo(hpBarDom, reduceAttrRanges)
+{
+	const width = hpBarDom.width, height = hpBarDom.height;
+
+	let ctx = hpBarDom.getContext("2d");
+	if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0])) //有指定属性减伤
+	{
+		const attrColors = ['crimson','cornflowerblue','green','goldenrod','purple'];
+		reduceAttrRanges.forEach((reduceRanges, ridx)=>{
+			//console.table(reduceRanges);
+			ctx.fillStyle = attrColors[ridx];
+			ctx.fillRect(0, height / 5 * ridx, width, height / 5 * (ridx + 1));
+
+			reduceRanges.forEach(range=>{
+				ctx.fillStyle = `rgba(0, 0, 0, 0.5)`;
+				ctx.fillRect(width * (range.min / 100), height / 5 * ridx, width * (range.max / 100), height / 5 * (1 - range.scale));
+			});
+		});
+	}
+	else //只有阶梯盾
+	{
+		const reduceRanges = reduceAttrRanges[0];
+		//创建线性颜色渐变对象
+		const canvasGradient = ctx.createLinearGradient(0, 0, 0, height);
+		canvasGradient.addColorStop(0, "#EE99AA");
+		canvasGradient.addColorStop(0.4, "#FFDDEE");
+		canvasGradient.addColorStop(1, "#EE9999");
+		ctx.fillStyle = canvasGradient;
+		ctx.fillRect(0, 0, width, height);
+		
+		reduceRanges.forEach(range=>{
+			ctx.fillStyle = `rgba(204, 0 ,85, 0.7)`;
+			ctx.fillRect(width * (range.min / 100), 0, width * ((range.max - range.min) / 100), height * (1 - range.scale));
+		});
+	}
+}
 //刷新队伍能力值合计
 function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	//计算总的生命值
 	if (!totalDom) return;
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
-	const tRcvDom = totalDom.querySelector(".tIf-total-rcv");
 	const tMoveDom = totalDom.querySelector(".tIf-total-move");
+	const tEffectDom = totalDom.querySelector(".tIf-effect");
 
 	const teams = formation.teams;
 
@@ -3020,9 +3223,24 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][0].id : teams[1][0][0].id) : team[0][5].id;
 
 	if (tHpDom) {
-		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true,true,true);
-		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true,true,true);
-		const totalReduce = 1 - (1 - reduceScale1) * (1 - reduceScale2);
+		const reduceScales1 = getReduceScales(leader1id);
+		const reduceScales2 = getReduceScales(leader2id);
+		const reduceAttrRanges = getReduceRange(reduceScales1.concat(reduceScales2));
+		//将所有范围平铺，然后选择盾最少那个作为基础盾值
+		const leastScale = reduceAttrRanges.flat().sort((a,b)=>a.scale-b.scale)[0];
+
+		const hpBar = totalDom.querySelector(".reduce-details");
+
+		if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0]) || reduceAttrRanges[0].length > 1 || reduceAttrRanges[0][0].probability < 1) //有阶梯盾或者有指定属性减伤或者减伤比例不是100%
+		{
+			drawHpInfo(hpBar, reduceAttrRanges);
+			hpBar.classList.remove(className_displayNone);
+		}else
+		{
+			hpBar.classList.add(className_displayNone);
+		}
+
+		const totalReduce = leastScale.scale;
 
 		const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
 		const teamHPNoAwokenArr = countTeamHp(team[0], leader1id, leader2id, solo, true);
@@ -3030,7 +3248,6 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		let tHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
 		let tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v) => pv + v); //队伍计算的总HP无觉醒
-
 
 		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
 
@@ -3044,18 +3261,27 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		tHP = Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale);
 		tHPNoAwoken = Math.round(Math.round(tHPNoAwoken) * badgeHPScale);
 
-		const tReduceHP = Math.round(tHP / (1 - reduceScale1) / (1 - reduceScale2)); //队伍正常满血加上盾能承受的最大伤害
-		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - reduceScale1) / (1 - reduceScale2)); //队伍封觉醒满血加上盾能承受的最大伤害
+		//记录到bar中，方便打开详情时调用
+		hpBar.reduceAttrRanges = reduceAttrRanges;
+		hpBar.tHP = tHP;
+		hpBar.tHPNoAwoken = tHPNoAwoken;
+
+		const tReduceHP = Math.round(tHP / (1 - totalReduce)); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - totalReduce)); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
 		const tHpDom_reduce = tHpDom.querySelector(".reduce");
 
-		setTextContentAndAttribute(tHpDom_general, tHP);
-		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
-		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).keepCounts());
-		tHpDom_reduce.setAttribute("data-max-equal-general", tReduceHP);
-		tHpDom_reduce.setAttribute("data-max-equal-awoken-bind", tReduceHPNoAwoken);
+		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
+		if (totalReduce > 0)
+			tHpDom_reduce.classList.remove("no-reduce");
+		else
+			tHpDom_reduce.classList.add("no-reduce");
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
 	}
 
 	if (tMoveDom) {
@@ -3075,22 +3301,85 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 			setTextContentAndAttribute(tMoveDom_noAwoken, (moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge).keepCounts());
 		}
 	}
+
+	if (tEffectDom)	{
+		const _76board = tEffectDom.querySelector("._76board");
+		if (tIf_Effect_76board(leader1id,leader2id))
+		{
+			_76board.classList.remove(className_displayNone);
+		}else
+		{
+			_76board.classList.add(className_displayNone);
+		}
+		const noSkyfall = tEffectDom.querySelector(".no-skyfall");
+		if (tIf_Effect_noSkyfall(leader1id,leader2id))
+		{
+			noSkyfall.classList.remove(className_displayNone);
+		}else
+		{
+			noSkyfall.classList.add(className_displayNone);
+		}
+		const poisonNoEffect = tEffectDom.querySelector(".poison-no-effect");
+		if (tIf_Effect_poisonNoEffect(leader1id,leader2id))
+		{
+			poisonNoEffect.classList.remove(className_displayNone);
+		}else
+		{
+			poisonNoEffect.classList.add(className_displayNone);
+		}
+		const addCombo = tEffectDom.querySelector(".add-combo");
+		const addComboValue = tIf_Effect_addCombo(leader1id,leader2id);
+		if ((addComboValue[0] | addComboValue[1]) > 0)
+		{
+			addCombo.classList.remove(className_displayNone);
+			addCombo.setAttribute("data-add-combo", addComboValue.filter(v=>v).join("/"));
+		}else
+		{
+			addCombo.classList.add(className_displayNone);
+		}
+		const inflicts = tEffectDom.querySelector(".inflicts");
+		const inflictsValue = tIf_Effect_inflicts(leader1id,leader2id);
+		if ((inflictsValue[0] | inflictsValue[1]) > 0)
+		{
+			inflicts.classList.remove(className_displayNone);
+			inflicts.setAttribute("data-inflicts", inflictsValue.filter(v=>v).map(v=>v.bigNumberToString()).join("/"));
+		}else
+		{
+			inflicts.classList.add(className_displayNone);
+		}
+	}
 }
 //刷新所有队伍能力值合计
 function refreshFormationTotalHP(totalDom, teams) {
 	//计算总的生命值
 	if (!totalDom) return;
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
-	const tRcvDom = totalDom.querySelector(".tIf-total-rcv");
+	const tEffectDom = totalDom.querySelector(".tIf-effect");
+	
+	//因为目前仅用于2P，所以直接在外面固定写了
+	const leader1id = teams[0][0][0].id;
+	const leader2id = teams[1][0][0].id;
 
 	if (tHpDom) {
-		//因为目前仅用于2P，所以直接在外面固定写了
-		const leader1id = teams[0][0][0].id;
-		const leader2id = teams[1][0][0].id;
 
-		const reduceScale1 = getReduceScale(Skills[Cards[leader1id].leaderSkillId],true,true,true);
-		const reduceScale2 = getReduceScale(Skills[Cards[leader2id].leaderSkillId],true,true,true);
-		const totalReduce = 1 - (1 - reduceScale1) * (1 - reduceScale2);
+		const reduceScales1 = getReduceScales(leader1id);
+		const reduceScales2 = getReduceScales(leader2id);
+		const reduceAttrRanges = getReduceRange(reduceScales1.concat(reduceScales2));
+		//将所有范围平铺，然后选择盾最少那个作为基础盾值
+		const leastScale = reduceAttrRanges.flat().sort((a,b)=>a.scale-b.scale)[0];
+
+		const hpBar = totalDom.querySelector(".reduce-details");
+
+		if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0]) || reduceAttrRanges[0].length > 1 || reduceAttrRanges[0][0].probability < 1) //有阶梯盾或者有指定属性减伤或者减伤比例不是100%
+		{
+			drawHpInfo(hpBar, reduceAttrRanges);
+			hpBar.classList.remove(className_displayNone);
+		}else
+		{
+			hpBar.classList.add(className_displayNone);
+		}
+
+		const totalReduce = leastScale.scale;
 
 		const tHPArr = teams.map(function(team) {
 			const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
@@ -3110,18 +3399,74 @@ function refreshFormationTotalHP(totalDom, teams) {
 		const tHP = tHPArr.reduce((pv, v) => pv + v);
 		const tHPNoAwoken = tHPNoAwokenArr.reduce((pv, v) => pv + v);
 
-		const tReduceHP = Math.round(tHP / (1 - reduceScale1) / (1 - reduceScale2)); //队伍正常满血加上盾能承受的最大伤害
-		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - reduceScale1) / (1 - reduceScale2)); //队伍封觉醒满血加上盾能承受的最大伤害
+		//记录到bar中，方便打开详情时调用
+		hpBar.reduceAttrRanges = reduceAttrRanges;
+		hpBar.tHP = tHP;
+		hpBar.tHPNoAwoken = tHPNoAwoken;
+
+		const tReduceHP = Math.round(tHP / totalReduce); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / totalReduce); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
 		const tHpDom_reduce = tHpDom.querySelector(".reduce");
 
-		setTextContentAndAttribute(tHpDom_general, tHP);
-		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken);
-		setTextContentAndAttribute(tHpDom_reduce, (totalReduce * 100).keepCounts());
-		tHpDom_reduce.setAttribute("data-max-equal-general", tReduceHP);
-		tHpDom_reduce.setAttribute("data-max-equal-awoken-bind", tReduceHPNoAwoken);
+		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
+		if (totalReduce > 0)
+			tHpDom_reduce.classList.remove("no-reduce");
+		else
+			tHpDom_reduce.classList.add("no-reduce");
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
+	}
+
+	if (tEffectDom)	{
+		const _76board = tEffectDom.querySelector("._76board");
+		if (tIf_Effect_76board(leader1id,leader2id))
+		{
+			_76board.classList.remove(className_displayNone);
+		}else
+		{
+			_76board.classList.add(className_displayNone);
+		}
+		const noSkyfall = tEffectDom.querySelector(".no-skyfall");
+		if (tIf_Effect_noSkyfall(leader1id,leader2id))
+		{
+			noSkyfall.classList.remove(className_displayNone);
+		}else
+		{
+			noSkyfall.classList.add(className_displayNone);
+		}
+		const poisonNoEffect = tEffectDom.querySelector(".poison-no-effect");
+		if (tIf_Effect_poisonNoEffect(leader1id,leader2id))
+		{
+			poisonNoEffect.classList.remove(className_displayNone);
+		}else
+		{
+			poisonNoEffect.classList.add(className_displayNone);
+		}
+		const addCombo = tEffectDom.querySelector(".add-combo");
+		const addComboValue = tIf_Effect_addCombo(leader1id,leader2id);
+		if ((addComboValue[0] | addComboValue[1]) > 0)
+		{
+			addCombo.classList.remove(className_displayNone);
+			addCombo.setAttribute("data-add-combo", addComboValue.filter(v=>v).join("/"));
+		}else
+		{
+			addCombo.classList.add(className_displayNone);
+		}
+		const inflicts = tEffectDom.querySelector(".inflicts");
+		const inflictsValue = tIf_Effect_inflicts(leader1id,leader2id);
+		if ((inflictsValue[0] | inflictsValue[1]) > 0)
+		{
+			inflicts.classList.remove(className_displayNone);
+			inflicts.setAttribute("data-inflicts", inflictsValue.filter(v=>v).map(v=>v.bigNumberToString()).join("/"));
+		}else
+		{
+			inflicts.classList.add(className_displayNone);
+		}
 	}
 }
 //刷新单人技能CD
