@@ -2,14 +2,14 @@
 const localTranslating = {
     skill_parse: {
         skill: {
-			unknown: tp`未知的技能类型`,
-			active_turns: tp`${'turns'}回合内，${'active'}`,
-			random_skills: (skillList)=>[`随机执行以下技能：`, skillList],
-			delay: tp`${'icon'}将敌人的攻击延迟`,
-			mass_attack: ()=> `所有攻击变为全体攻击`,
-			leader_change: ()=> `将自身换为队长，再次使用则换回来`,
-			no_skyfall: ()=> `天降的宝珠不会消除`,
-            heal: (valueElement)=> [`回复`, valueElement, `的 HP`],
+			unknown: tp`未知的技能类型：${'type'}`, //type
+			active_turns: tp`${'active'}，效果 ${'turns'} 回合`, //turns, active
+			random_skills: tp`随机发动以下技能：${'skill-list'}`, //skill-list
+			delay: tp`${'icon'}延迟敌人的攻击`, //icon
+			mass_attack: tp`${'icon'}所有攻击变为全体攻击`,
+			leader_change: tp`${'icon'}将自身换为队长，再次使用则换回来`,
+			no_skyfall: tp`${'icon'}天降的宝珠不会消除`,
+            heal: tp`${'icon'}回复 ${'value'} 的 HP`,
             defense_break:  (valueElement)=> [`敌方的防御力减少`, valueElement],
             poison: (valueElement)=> [`使敌方全体中毒，每回合损失`, valueElement, `的 HP`],
 			time_extend: (valueElement)=> [`宝珠移动时间`, valueElement],
@@ -21,7 +21,7 @@ const localTranslating = {
             resolve: (stats, valueElement, probability)=> [`如`, stats, `≧` , valueElement, probability<100 ? `，有${probability}%的几率`:'',`受到单一次致命攻击时，将会以1点 HP 生还`],
 		},
         value: {
-            unknown: tp`[ 未知数值: ${'type'}]`,
+            unknown: tp`[ 未知数值: ${'type'}]`, //type
 			const: tp`${'value'}${'unit'}`, // (value, unit)=> `${value}${unit ? ` ${unit}` : ''}`,
 			mul_percent: tp`${'value'}%`,
 			mul_times: tp`×${'value'}倍`,
@@ -33,7 +33,7 @@ const localTranslating = {
 			enemy: tp`敌人`,
 		},
         stats: {
-            unknown: tp`[ 未知状态: ${'type'}]`,
+            unknown: tp`[ 未知状态: ${'type'}]`, //type
             maxhp: tp`最大HP`,
             hp: tp`HP`,
             atk: tp`攻击力`,

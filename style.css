@@ -2312,7 +2312,6 @@ icon.inflicts::after
 .skill-title .type-title::before{
 	text-shadow: none;
 	-webkit-text-stroke: 3px black;
-	text-stroke: 3px black;
 }
 /*.row-mon-skill .type-title::before,
 .row-mon-skill .type-title::after
@@ -2779,10 +2778,6 @@ table .orb-icon
     display: inline-block;
     position: relative;
 }
-.evo-panel-left .evo-type::before,
-.evo-panel-left .evo-type::after
-{
-}
 .evo-panel-left .evo-type::after
 {
 	-webkit-background-clip: text;
@@ -2798,7 +2793,6 @@ table .orb-icon
 {
 	/*text-shadow: black 1px 1px 0,black -1px 1px 0,black 1px -1px 0,black -1px -1px 0;*/
 	-webkit-text-stroke: 3px black;
-	text-stroke: 3px black;
 }
 
 /*.base .evo-type::before,

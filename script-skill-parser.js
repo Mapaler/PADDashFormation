@@ -712,16 +712,21 @@ function renderSkill(skill, option = {})
 	const tsps = localTranslating.skill_parse.skill;
 	const tspu = localTranslating.skill_parse.unit;
 	const tspt = localTranslating.skill_parse.stats;
+	let dict;
 	switch (skill.kind) {
 		case SkillKinds.Unknown: {
-			appendToFragment(tsps.unknown());
+			dict = {
+				type: skill.kind
+			};
+			appendToFragment(tsps.unknown(dict));
 			break;
 		}
 		case SkillKinds.ActiveTurns: { //有回合的行动
-			appendToFragment(tsps.active_turns({
+			dict = {
 				turns: skill.turns,
 				active: renderSkill(skill.skill, { forTurns: true }),
-			}));
+			};
+			appendToFragment(tsps.active_turns(dict));
 			break;
 		}
 		case SkillKinds.RandomSkills: { //随机技能
@@ -731,36 +736,47 @@ function renderSkill(skill, option = {})
 				const li = ul.appendChild(document.createElement("li"));
 				li.appendChild(renderSkills(subSkills));
 			});
-			appendToFragment(tsps.random_skills(ul));
+			dict = {
+				"skill-list": ul,
+			};
+			appendToFragment(tsps.random_skills(dict));
 			break;
 		}
 		case SkillKinds.Delay: { //威吓
-
-			//appendToFragment(createIcon("delay"));
-			appendToFragment(tsps.delay({icon:createIcon("delay")}));
+			dict = {
+				icon: createIcon("delay"),
+			};
+			appendToFragment(tsps.delay(dict));
 			break;
 		}
 		case SkillKinds.MassAttack: { //全体攻击
-			appendToFragment(createIcon("mass-attack"));
-			appendToFragment(tsps.mass_attack());
+			dict = {
+				icon: createIcon("mass-attack"),
+			};
+			appendToFragment(tsps.mass_attack(dict));
 			break;
 		}
 		case SkillKinds.LeaderChange: { //切换队长
-			appendToFragment(createIcon("leader-change"));
-			appendToFragment(tsps.leader_change());
+			dict = {
+				icon: createIcon("leader-change"),
+			};
+			appendToFragment(tsps.leader_change(dict));
 			break;
 		}
 		case SkillKinds.NoSkyfall: { //无天降
-			appendToFragment(createIcon("no-skyfall"));
-			appendToFragment(tsps.no_skyfall());
+			dict = {
+				icon: createIcon("no-skyfall"),
+			};
+			appendToFragment(tsps.no_skyfall(dict));
 			break;
 		}
 		case SkillKinds.Heal: { //回血主动
-			option.forTurns ?
-			appendToFragment(createIcon("auto-heal")) :
-			appendToFragment(createIcon("heal", "hp-incr"))
-			;
-			appendToFragment(tsps.heal(renderValue(skill.value)));
+			console.log(skill)
+			dict = {
+				icon: option.forTurns ? createIcon("auto-heal") : createIcon("heal", "hp-incr"),
+				value: renderValue(skill.value),
+			};
+			appendToFragment(tsps.heal(dict));
 			break;
 		}
 		case SkillKinds.DefenseBreak: { //破防
@@ -1267,6 +1283,7 @@ function renderValue(_value, option = {}) {
 	if (typeof localTranslating == "undefined") return fragment;
 	const tspv = localTranslating.skill_parse.value;
 	const od = option.decimalDigits, os = option.showsPlusSign;
+	let dict;
 	switch (_value.kind) {
 		case SkillValueKind.Percent: {
 			appendToFragment(
