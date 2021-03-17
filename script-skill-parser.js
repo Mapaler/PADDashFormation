@@ -12,7 +12,7 @@ function tp(strings, ...keys) {
 				value = document.createTextNode(value);
 			}
 			try{
-				console.log(value);
+				//console.log(value);
 				fragment.appendChild(value);
 			}catch(e)
 			{

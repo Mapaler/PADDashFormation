@@ -560,6 +560,11 @@ function turnPage(toPage, e = null) {
 	}
 }
 window.onload = function(event) {
+	if (!Array.prototype.flat)
+	{
+		alert("请更新您的浏览器。\nPlease update your browser.");
+	}
+
 	controlBox = document.body.querySelector(".control-box");
 	statusLine = controlBox.querySelector(".status"); //显示当前状态的
 	formationBox = document.body.querySelector(".formation-box");
