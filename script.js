@@ -2954,6 +2954,10 @@ function refreshAll(formationData) {
 		const teamData = formationData.teams[teamNum];
 		const badgeBox = teamBigBox.querySelector(".team-badge");
 		if (badgeBox) {
+			//为了解决火狐在代码片段里无法正确修改checked的问题，所以事先把所有的都切换到false
+			const badges = Array.from(badgeBox.querySelectorAll(`.badge-radio`));
+			badges.forEach(badge=>badge.checked = false);
+
 			const badge = badgeBox.querySelector(`#team-${teamNum+1}-badge-${teamData[2] || 0}`);
 			badge.checked = true;
 		}
