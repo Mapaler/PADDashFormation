@@ -560,6 +560,11 @@ function turnPage(toPage, e = null) {
 	}
 }
 window.onload = function(event) {
+	if (!Array.prototype.flat)
+	{
+		alert("请更新您的浏览器。\nPlease update your browser.");
+	}
+
 	controlBox = document.body.querySelector(".control-box");
 	statusLine = controlBox.querySelector(".status"); //显示当前状态的
 	formationBox = document.body.querySelector(".formation-box");
@@ -3257,8 +3262,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		hpBar.tHP = tHP;
 		hpBar.tHPNoAwoken = tHPNoAwoken;
 
-		const tReduceHP = Math.round(tHP / (1 - totalReduce)); //队伍正常满血加上盾能承受的最大伤害
-		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - totalReduce)); //队伍封觉醒满血加上盾能承受的最大伤害
+		const tReduceHP = Math.floor(tHP / (1 - totalReduce)); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHPNoAwoken = Math.floor(tHPNoAwoken / (1 - totalReduce)); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
@@ -3395,8 +3400,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 		hpBar.tHP = tHP;
 		hpBar.tHPNoAwoken = tHPNoAwoken;
 
-		const tReduceHP = Math.round(tHP / totalReduce); //队伍正常满血加上盾能承受的最大伤害
-		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / totalReduce); //队伍封觉醒满血加上盾能承受的最大伤害
+		const tReduceHP = Math.floor(tHP / (1 - totalReduce)); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHPNoAwoken = Math.floor(tHPNoAwoken / (1 - totalReduce)); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");

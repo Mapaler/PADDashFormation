@@ -212,7 +212,7 @@ function returnMonsterNameArr(card, lsList, defaultCode) {
 //Code From pad-rikuu
 function valueAt(level, maxLevel, curve) {
 	const f = (maxLevel === 1 || level >= maxLevel) ? 1 : ((level - 1) / (maxLevel - 1));
-	return curve.min + (curve.max - curve.min) * Math.pow(f, curve.scale);
+	return curve.min + (curve.max - curve.min) * f ** curve.scale;
 }
 //Code From pad-rikuu
 function curve(c, level, maxLevel, limitBreakIncr, limitBreakIncr120) {
@@ -316,7 +316,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		//用来计算倍率觉醒的最终倍率是多少，reduce用
 		function calculateAwokenScale(previous, aw) {
 			const awokenCount = awokenList.filter(ak => ak == aw.index).length; //每个倍率觉醒的数量
-			return previous * Math.pow(aw.scale, awokenCount);
+			return previous * aw.scale ** awokenCount;
 		}
 
 		//倍率类觉醒的比例，直接从1开始乘
