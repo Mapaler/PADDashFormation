@@ -780,8 +780,12 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.DefenseBreak: { //破防
-			appendToFragment(createIcon("defense-break"));
-			appendToFragment(tsps.defense_break(renderValue(skill.value)));
+			console.log(skill)
+			dict = {
+				icon: createIcon("defense-break"),
+				value: renderValue(skill.value),
+			};
+			appendToFragment(tsps.defense_break(dict));
 			break;
 		}
 		case SkillKinds.Poison: { //毒

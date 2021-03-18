@@ -10,7 +10,7 @@ const localTranslating = {
 			leader_change: tp`${'icon'}将自身换为队长，再次使用则换回来`,
 			no_skyfall: tp`${'icon'}天降的宝珠不会消除`,
             heal: tp`${'icon'}回复 ${'value'} 的 HP`,
-            defense_break:  (valueElement)=> [`敌方的防御力减少`, valueElement],
+            defense_break: tp`${'icon'}敌方的防御力减少 ${'value'}`,
             poison: (valueElement)=> [`使敌方全体中毒，每回合损失`, valueElement, `的 HP`],
 			time_extend: (valueElement)=> [`宝珠移动时间`, valueElement],
 			follow_attack: (valueElement)=> [`消除宝珠的回合，以`, valueElement, `的伤害追打敌人`],
