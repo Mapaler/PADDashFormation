@@ -2963,6 +2963,10 @@ function refreshAll(formationData) {
 		const teamData = formationData.teams[teamNum];
 		const badgeBox = teamBigBox.querySelector(".team-badge");
 		if (badgeBox) {
+			//为了解决火狐在代码片段里无法正确修改checked的问题，所以事先把所有的都切换到false
+			const badges = Array.from(badgeBox.querySelectorAll(`.badge-radio`));
+			badges.forEach(badge=>badge.checked = false);
+
 			const badge = badgeBox.querySelector(`#team-${teamNum+1}-badge-${teamData[2] || 0}`);
 			badge.checked = true;
 		}
@@ -3271,8 +3275,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		hpBar.tHP = tHP;
 		hpBar.tHPNoAwoken = tHPNoAwoken;
 
-		const tReduceHP = Math.round(tHP / (1 - totalReduce)); //队伍正常满血加上盾能承受的最大伤害
-		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / (1 - totalReduce)); //队伍封觉醒满血加上盾能承受的最大伤害
+		const tReduceHP = Math.floor(tHP / (1 - totalReduce)); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHPNoAwoken = Math.floor(tHPNoAwoken / (1 - totalReduce)); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
@@ -3409,8 +3413,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 		hpBar.tHP = tHP;
 		hpBar.tHPNoAwoken = tHPNoAwoken;
 
-		const tReduceHP = Math.round(tHP / totalReduce); //队伍正常满血加上盾能承受的最大伤害
-		const tReduceHPNoAwoken = Math.round(tHPNoAwoken / totalReduce); //队伍封觉醒满血加上盾能承受的最大伤害
+		const tReduceHP = Math.floor(tHP / (1 - totalReduce)); //队伍正常满血加上盾能承受的最大伤害
+		const tReduceHPNoAwoken = Math.floor(tHPNoAwoken / (1 - totalReduce)); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
