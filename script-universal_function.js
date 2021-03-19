@@ -669,6 +669,10 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 function getCardLeaderSkills(card, skillTypes) {
 	return getActuallySkills(Skills[card.leaderSkillId], skillTypes, false);
 }
+//返回卡片的主动技能
+function getCardActiveSkills(card, skillTypes) {
+	return getActuallySkills(Skills[card.activeSkillId], skillTypes, false);
+}
 //查找到真正起作用的那一个技能
 function getActuallySkills(skill, skillTypes, searchRandom = true) {
 	if (skillTypes.includes(skill.type))

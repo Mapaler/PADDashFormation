@@ -3041,25 +3041,33 @@ function parseSkillDescription(skill) {
 				name:"回复力 buff（顶降回复）",
 				function:cards=>{
 					const searchTypeArray = [50,90];
+					function getRecScale(as)
+					{
+						const sk = as.params;
+						return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+					}
 					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						if (skill)
+						const skills = getCardActiveSkills(card, searchTypeArray);
+						if (skills.length)
 						{
-							const sk = skill.params;
-							return sk.slice(1,sk.length>2?-1:undefined).includes(5);
+							return skills.some(as=>getRecScale(as) > 0);
 						}else return false;
 					}).sort((a,b)=>{
-						const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
-						//将技能的手指类型转换为二进制01、10、11等形式，低位表示加固定秒，高位表示手指加倍
-						const a_ss = a_s.params.length > 2 ? a_s.params[a_s.params.length-1] : 0, b_ss = b_s.params.length > 2 ? b_s.params[b_s.params.length-1] : 0;
-						return a_ss - b_ss;
+						const a_ss = getCardActiveSkills(a, searchTypeArray), b_ss = getCardActiveSkills(b, searchTypeArray);
+						const a_sv = a_ss.map(a_s=>getRecScale(a_s)).sort().reverse()[0], b_sv = b_ss.map(b_s=>getRecScale(b_s)).sort().reverse()[0];
+						return a_sv - b_sv;
 					});
 				},
 				addition:card=>{
 					const searchTypeArray = [50,90];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					const sk = skill.params;
-					return document.createTextNode(`回x${sk.length > 2 ? sk[sk.length-1]/100 : 0}`);
+					function getRecScale(as)
+					{
+						const sk = as.params;
+						return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+					}
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					const skill = skills.find(as=>getRecScale(as) > 0);
+					return document.createTextNode(`回x${getRecScale(skill) / 100}`);
 				}
 			},
 			{name:"攻击力 buff（顶降攻击）",function:cards=>cards.filter(card=>{
