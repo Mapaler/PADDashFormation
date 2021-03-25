@@ -9,9 +9,9 @@ const localTranslating = {
 			mass_attack: tp`${'icon'}所有攻击变为全体攻击`,
 			leader_change: tp`${'icon'}将自身换为队长，再次使用则换回来`,
 			no_skyfall: tp`${'icon'}天降的宝珠不会消除`,
-            heal: tp`${'icon'}回复 ${'value'} 的 HP`,
+            heal: tp`${'icon'}回复 ${'value'} 的 ${'stats'}`,
             defense_break: tp`${'icon'}敌方的防御力减少 ${'value'}`,
-            poison: (valueElement)=> [`使敌方全体中毒，每回合损失`, valueElement, `的 HP`],
+            poison: tp`${'icon'}使${'target'}全体中毒，每回合损失${'belong_to'} ${'value'} 的 ${'stats'}`,
 			time_extend: (valueElement)=> [`宝珠移动时间`, valueElement],
 			follow_attack: (valueElement)=> [`消除宝珠的回合，以`, valueElement, `的伤害追打敌人`],
             auto_heal: (valueElement)=> [`消除宝珠的回合，回复`, valueElement, `的 HP`],
@@ -22,14 +22,14 @@ const localTranslating = {
 		},
         value: {
             unknown: tp`[ 未知数值: ${'type'}]`, //type
-			const: tp`${'value'}${'unit'}`, // (value, unit)=> `${value}${unit ? ` ${unit}` : ''}`,
+			const: tp`${'value'}${'unit'}`,
 			mul_percent: tp`${'value'}%`,
 			mul_times: tp`×${'value'}倍`,
 			mul_of_percent: tp`${'stats'}的${'value'}%`,
 			mul_of_times: tp`${'stats'}×${'value'}倍`,
 		},
 		target: {
-			self: tp`自身`,
+			self: tp`发动者自身`,
 			enemy: tp`敌人`,
 		},
         stats: {
