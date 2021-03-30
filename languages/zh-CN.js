@@ -826,7 +826,7 @@ function parseSkillDescription(skill) {
 			str = `回复队伍总回复力×${sk[0]/100}倍的 HP`;
 			break;
 		case 146:
-			str = `自身以外的宠物技能冷却减少${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}回合`;
+			str = `自身以外的宠物技能冷却减少↑${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}回合`;
 			break;
 		case 148:
 			str = `进入地下城时为队长的话，获得的等级经验值×${sk[0]/100}倍`;
@@ -1433,6 +1433,9 @@ function parseSkillDescription(skill) {
 			break;
 		case 214: //封自己的技能
 			str = `${sk[0]}回合内，玩家自身队伍无法使用主动技能`;
+			break;
+		case 218: //坐自己
+			str = `自身以外的宠物技能坐下↓${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}回合`;
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
@@ -3331,6 +3334,32 @@ function parseSkillDescription(skill) {
 				const skill = getCardSkill(card, searchTypeArray);
 				const sk = skill.params;
 				return document.createTextNode(`${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}溜`);
+			}},
+			{name:"增加CD（按坐数排序，有范围的取小）",function:cards=>cards.filter(card=>{
+				const searchType = 218;
+				const skill = Skills[card.activeSkillId];
+				if (skill.type == searchType)
+					return true;
+				else if (skill.type == 116 || skill.type == 118){
+					const subskills = skill.params.map(id=>Skills[id]);
+					return subskills.some(subskill=>subskill.type == searchType);
+				}
+			}).sort((a,b)=>{
+				const searchType = 218;
+				const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
+				let a_pC = 0,b_pC = 0;
+				a_pC = (a_s.type == searchType) ?
+					a_s.params[0] :
+					a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+				b_pC = (b_s.type == searchType) ?
+					b_s.params[0] :
+					b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
+				return a_pC - b_pC;
+			}),addition:card=>{
+				const searchTypeArray = [218];
+				const skill = getCardSkill(card, searchTypeArray);
+				const sk = skill.params;
+				return document.createTextNode(`坐下${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}`);
 			}},
 			{name:"将自身换为队长",function:cards=>cards.filter(card=>{
 				const searchType = 93;
