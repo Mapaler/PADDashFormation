@@ -422,7 +422,6 @@ class EvoTree
 		const monName = evotPanel_R.appendChild(document.createElement("div"));
 		monName.className = "monster-name";
 		monName.textContent = returnMonsterNameArr(this.card, currentLanguage.searchlist, currentDataSource.code)[0];
-		console.log(monName.offsetWidth);
 
 		const evotMaterials = evotPanel_R.appendChild(document.createElement("ul"));
 		evotMaterials.className = "evo-materials";
