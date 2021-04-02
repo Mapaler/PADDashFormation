@@ -615,12 +615,12 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 				scale = needMonIdArr.every(mid => memberIdArr.includes(mid)) ? sk[5] / 100 : 1;
 				break;
 			case 136:
-				scale = hpMul({ attrs: flags(sk[0]) }, sk[1]) *
-					sk[4] ? hpMul({ attrs: flags(sk[4]) }, sk[5]) : 1;
+				scale = hpMul({ attrs: flags(sk[0]) }, sk[1]);
+				if (sk[4]) scale *= hpMul({ attrs: flags(sk[4]) }, sk[5]);
 				break;
 			case 137:
-				scale = hpMul({ types: flags(sk[0]) }, sk[1]) *
-					sk[4] ? hpMul({ types: flags(sk[4]) }, sk[5]) : 1;
+				scale = hpMul({ types: flags(sk[0]) }, sk[1]);
+				if (sk[4]) scale *= hpMul({ types: flags(sk[4]) }, sk[5]);
 				break;
 			case 155:
 				scale = solo ? 1 : hpMul({ attrs: flags(sk[0]), types: flags(sk[1]) }, sk[2]);
