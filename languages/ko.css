@@ -404,6 +404,10 @@
 {
 	content: "⛓️진화 계통";
 }
+.real-time-change-card-label::after
+{
+	content: "카드를 즉시 업데이트합니다";
+}
 .base .evo-type::before,
 .base .evo-type::after
 {

@@ -409,6 +409,10 @@
 {
 	content: "⛓️进化链";
 }
+.real-time-change-card-label::after
+{
+	content: "即时更新卡片";
+}
 .base .evo-type::before,
 .base .evo-type::after
 {

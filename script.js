@@ -1436,6 +1436,14 @@ function initialize() {
 	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	openEvolutionaryTree.onclick = function() {evolutionaryTreeMask.show(editBox.mid)};
 
+	//输入id数字即时更新的开关
+	const realTimeClassName = 'real-time-change-card';
+	const s_realTimeChangeCard = settingBox.querySelector(`#${realTimeClassName}`);
+	s_realTimeChangeCard.onchange = function() {
+		localStorage.setItem("PADDF-" + realTimeClassName, this.checked ? 1 : 0);
+	}
+	s_realTimeChangeCard.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + realTimeClassName)));
+
 	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
 	searchOpen.onclick = function() {
 		s_includeSuperAwoken.onchange();
@@ -1823,7 +1831,7 @@ function initialize() {
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
 	const btnSearchByString = settingBox.querySelector(".row-mon-id .search-by-string");
-	monstersID.onchange = function(e)
+	function idChange(e)
 	{
 		if (/^\d+$/.test(this.value)) {
 			const newId = parseInt(this.value, 10);
@@ -1854,7 +1862,14 @@ function initialize() {
 			return false;
 		}
 	}
-	monstersID.oninput = monstersID.onchange;
+	monstersID.onchange = idChange;
+	monstersID.oninput = function(e)
+	{
+		if (s_realTimeChangeCard.checked)
+		{
+			idChange.call(this,e);
+		}
+	};
 	monstersID.onkeydown = function(e) {
 		//如果键入回车，则执行字符串搜索
 		if (e.key == "Enter")
@@ -2699,9 +2714,6 @@ function editBoxChangeMonId(id) {
 		mAltName.classList.add(className_displayNone);
 	}
 
-	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");
-	evoCardUl.classList.add(className_displayNone);
-	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
 
 	const evoLinkCardsIdArray = Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id); //筛选出相同进化链的
 	
@@ -2743,6 +2755,9 @@ function editBoxChangeMonId(id) {
 	evoLinkCardsIdArray.sort((a,b)=>a-b);
 
 	const createCardHead = editBox.createCardHead;
+	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");
+	evoCardUl.classList.add(className_displayNone);
+	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
 	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	if (evoLinkCardsIdArray.length > 1) {
 		fragment = document.createDocumentFragment(); //创建节点用的临时空间
@@ -2755,10 +2770,10 @@ function editBoxChangeMonId(id) {
 		});
 		evoCardUl.appendChild(fragment);
 		evoCardUl.classList.remove(className_displayNone);
-		openEvolutionaryTree.classList.remove(className_displayNone);
+		openEvolutionaryTree.classList.remove(className_displayNone); //显示进化树按钮
 	}else
 	{
-		openEvolutionaryTree.classList.add(className_displayNone);
+		openEvolutionaryTree.classList.add(className_displayNone); //隐藏进化树按钮
 	}
 
 	const mType = monInfoBox.querySelectorAll(".monster-type li");

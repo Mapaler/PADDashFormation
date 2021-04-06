@@ -415,6 +415,10 @@
 {
 	content: "⛓️Evo Search";
 }
+.real-time-change-card-label::after
+{
+	content: "Real-Time change card";
+}
 .base .evo-type::before,
 .base .evo-type::after
 {
