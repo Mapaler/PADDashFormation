@@ -1217,7 +1217,7 @@ function initialize() {
 		str = str.trim();
 		if (str.length>0)
 		{
-			showSearch(Cards.filter(card =>
+			return Cards.filter(card =>
 				{
 					const names = [card.name];
 					if (card.otLangName)
@@ -1232,7 +1232,10 @@ function initialize() {
 					return tags.some(astr=>astr.toLowerCase().includes(str.toLowerCase())) ||
 					names.some(astr=>astr.toLowerCase().includes(str.toLowerCase()));
 				}
-			));
+			);
+		}else
+		{
+			return [];
 		}
 	}
 	function copyString(input)
@@ -1263,7 +1266,7 @@ function initialize() {
 				copyBtn.onclick = function(){copyString(ipt)};
 				const searchBtn = li.appendChild(document.createElement("button"));
 				searchBtn.className = "string-search";
-				searchBtn.onclick = function(){searchByString(ipt.value)};
+				searchBtn.onclick = function(){showSearch(searchByString(ipt.value))};
 			});
 			fragment.appendChild(ul_original);
 		}
@@ -1279,7 +1282,7 @@ function initialize() {
 				ipt.readOnly = true;
 				const searchBtn = li.appendChild(document.createElement("button"));
 				searchBtn.className = "string-search";
-				searchBtn.onclick = function(){searchByString(ipt.value)};
+				searchBtn.onclick = function(){showSearch(searchByString(ipt.value))};
 			});
 			fragment.appendChild(ul_additional);
 		}
@@ -1856,13 +1859,10 @@ function initialize() {
 	}
 	monstersID.onchange = idChange;
 	monstersID.onkeydown = function(e) {
-		//如果键入回车，则执行字符串搜索
-		if (e.key == "Enter")
+		//如果键入回车，字符串长度大于0，且不是数字，则执行字符串搜索
+		if (e.key == "Enter" && this.value.length > 0 && !/^\d+$/.test(this.value))
 		{
-			if (this.value.length > 0 && !/^\d+$/.test(this.value)) //如果字符串长度大于0，且不是数字，则进行字符串搜索
-			{
-		    	searchByString(this.value);
-			}
+			showSearch(searchByString(this.value));
 		}
 	}
 	//输入id数字即时更新的开关
@@ -1877,7 +1877,7 @@ function initialize() {
 
 	//字符串搜索
 	btnSearchByString.onclick = function() {
-		searchByString(monstersID.value);
+		showSearch(searchByString(monstersID.value));
 	};
 	//觉醒
 	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
