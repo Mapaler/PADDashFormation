@@ -755,7 +755,7 @@ function tIf_Effect_poisonNoEffect(leader1id, leader2id) {
 }
 //计算队伍的+C
 function tIf_Effect_addCombo(leader1id, leader2id) {
-	const searchTypeArray = [192, 194, 206, 209, 210];
+	const searchTypeArray = [192, 194, 206, 209, 210, 219];
 	const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
 	const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
 
@@ -770,6 +770,7 @@ function tIf_Effect_addCombo(leader1id, leader2id) {
 			case 209:
 				return skill.params[0];
 			case 210:
+			case 219:
 				return skill.params[2];
 			default:
 				return 0;
