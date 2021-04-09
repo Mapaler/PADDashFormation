@@ -1279,7 +1279,7 @@ function parseSkillDescription(skill) {
 			str = `${sk[0]}回合内，${sk[1]}%概率掉落强化宝珠`;
 			break;
 		case 182:
-			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0])}宝珠时`;
+			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0], true)}宝珠时`;
 			if (sk[2] && sk[2] !== 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[2]})}`;
 			if (sk[3]) str += `，受到的伤害减少${sk[3]}%`;
 			break;
@@ -1315,17 +1315,14 @@ function parseSkillDescription(skill) {
 		case 191:
 			str = `${sk[0]}回合内，可以贯穿伤害无效盾`;
 			break;
-		case 192:
+		case 192: //192同时消除多色中所有色,219任意消除多色中1色
 			//相連消除9個或以上的火寶珠時攻擊力4倍、結算增加2COMBO
 			//同時消除光寶珠和水寶珠各4個或以上時攻擊力3倍、結算增加1COMBO；
-			fullColor = nb(sk[0], attrsName);
-			str = fullColor.length>1?"同时":"相连";
-			str += `消除${sk[1]}个或以上的${getOrbsAttrString(sk[0])}宝珠时`;
+			str = `${flags(sk[0]).length>1?"同时且":""}相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0])}宝珠时`;
 			if (sk[2] && sk[2] != 100) str += `，所有宠物的攻击力×${sk[2]/100}倍`;
 			if (sk[3]) str += `，结算时连击数+${sk[3]}`;
 			break;
 		case 193:
-			fullColor = nb(sk[0], attrsName);
 			str = `以L字形消除5个${getOrbsAttrString(sk[0])}宝珠时`;
 			if (sk[1] && sk[1] != 100 || sk[2] && sk[2] != 100) str+=`，所有宠物的${getFixedHpAtkRcvString({atk:sk[1],rcv:sk[2]})}`;
 			if (sk[3]) str+=`，受到的伤害减少${sk[3]}%`;
@@ -1483,6 +1480,9 @@ function parseSkillDescription(skill) {
 			break;
 		case 218: //坐自己
 			str = `自身以外的宠物技能坐下↓${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}回合`;
+			break;
+		case 219: //192同时消除多色中所有色,219任意消除多色中1色
+			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0], true)}宝珠时，结算时连击数+${sk[2]}`;
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
@@ -1749,7 +1749,7 @@ function parseSkillDescription(skill) {
 				return document.createTextNode(value.bigNumberToString() + "固伤");
 			}},
 			{name:"队长技+C（按+C数排序）",function:cards=>{
-				const searchTypeArray = [192,194,206,209,210];
+				const searchTypeArray = [192,194,206,209,210,219];
 				function getSkillAddCombo(skill)
 				{
 					switch (skill.type)
@@ -1761,6 +1761,7 @@ function parseSkillDescription(skill) {
 						case 209:
 							return skill.params[0];
 						case 210:
+						case 219:
 							return skill.params[2];
 						default:
 							return 0;
@@ -1775,7 +1776,7 @@ function parseSkillDescription(skill) {
 					return a_pC - b_pC;
 				});
 			},addition:card=>{
-				const searchTypeArray = [192,194,206,209,210];
+				const searchTypeArray = [192,194,206,209,210,219];
 				function getSkillAddCombo(skill)
 				{
 					switch (skill.type)
@@ -1787,6 +1788,7 @@ function parseSkillDescription(skill) {
 						case 209:
 							return skill.params[0];
 						case 210:
+						case 219:
 							return skill.params[2];
 						default:
 							return 0;
