@@ -16,7 +16,7 @@ let showSearch; //整个程序都可以用的显示搜索函数
 const dataStructure = 3; //阵型输出数据的结构版本
 const className_displayNone = "display-none";
 const dataAttrName = "data-value"; //用于储存默认数据的属性名
-const isGuideMod = Boolean(parseInt(getQueryString("guide"))); //是否以图鉴模式启动
+const isGuideMod = Boolean(Number(getQueryString("guide"))); //是否以图鉴模式启动
 
 if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
@@ -422,7 +422,6 @@ class EvoTree
 		const monName = evotPanel_R.appendChild(document.createElement("div"));
 		monName.className = "monster-name";
 		monName.textContent = returnMonsterNameArr(this.card, currentLanguage.searchlist, currentDataSource.code)[0];
-		console.log(monName.offsetWidth);
 
 		const evotMaterials = evotPanel_R.appendChild(document.createElement("ul"));
 		evotMaterials.className = "evo-materials";
@@ -606,20 +605,20 @@ window.onload = function(event) {
 	//记录显示CD开关的状态
 	const showMonSkillCd_id = "show-mon-skill-cd";
 	const btnShowMonSkillCd = controlBox.querySelector(`#btn-${showMonSkillCd_id}`);
-	btnShowMonSkillCd.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + showMonSkillCd_id)));
+	btnShowMonSkillCd.checked = Boolean(Number(localStorage.getItem("PADDF-" + showMonSkillCd_id)));
 	btnShowMonSkillCd.onclick = function(){
 		toggleDomClassName(this, showMonSkillCd_id);
-		localStorage.setItem("PADDF-" + showMonSkillCd_id, this.checked ? 1 : 0);
+		localStorage.setItem("PADDF-" + showMonSkillCd_id, Number(this.checked));
 	};
 	btnShowMonSkillCd.onclick();
 
 	//记录显示觉醒开关的状态
 	const showMonAwoken_id = "show-mon-awoken";
 	const btnShowMonAwoken = controlBox.querySelector(`#btn-${showMonAwoken_id}`);
-	btnShowMonAwoken.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + showMonAwoken_id)));
+	btnShowMonAwoken.checked = Boolean(Number(localStorage.getItem("PADDF-" + showMonAwoken_id)));
 	btnShowMonAwoken.onclick = function(){
 		toggleDomClassName(this, showMonAwoken_id);
-		localStorage.setItem("PADDF-" + showMonAwoken_id, this.checked ? 1 : 0);
+		localStorage.setItem("PADDF-" + showMonAwoken_id, Number(this.checked));
 	};
 	btnShowMonAwoken.onclick();
 	
@@ -1218,7 +1217,7 @@ function initialize() {
 		str = str.trim();
 		if (str.length>0)
 		{
-			showSearch(Cards.filter(card =>
+			return Cards.filter(card =>
 				{
 					const names = [card.name];
 					if (card.otLangName)
@@ -1233,7 +1232,10 @@ function initialize() {
 					return tags.some(astr=>astr.toLowerCase().includes(str.toLowerCase())) ||
 					names.some(astr=>astr.toLowerCase().includes(str.toLowerCase()));
 				}
-			));
+			);
+		}else
+		{
+			return [];
 		}
 	}
 	function copyString(input)
@@ -1264,7 +1266,7 @@ function initialize() {
 				copyBtn.onclick = function(){copyString(ipt)};
 				const searchBtn = li.appendChild(document.createElement("button"));
 				searchBtn.className = "string-search";
-				searchBtn.onclick = function(){searchByString(ipt.value)};
+				searchBtn.onclick = function(){showSearch(searchByString(ipt.value))};
 			});
 			fragment.appendChild(ul_original);
 		}
@@ -1280,7 +1282,7 @@ function initialize() {
 				ipt.readOnly = true;
 				const searchBtn = li.appendChild(document.createElement("button"));
 				searchBtn.className = "string-search";
-				searchBtn.onclick = function(){searchByString(ipt.value)};
+				searchBtn.onclick = function(){showSearch(searchByString(ipt.value))};
 			});
 			fragment.appendChild(ul_additional);
 		}
@@ -1556,7 +1558,7 @@ function initialize() {
 	const officialSortingClassName = 'show-official-awoken-sorting';
 	const s_showOfficialAwokenSorting = searchBox.querySelector(`#${officialSortingClassName}`); //显示官方排序的觉醒
 	s_showOfficialAwokenSorting.onchange = function(){
-		localStorage.setItem("PADDF-" + officialSortingClassName, this.checked ? 1 : 0);
+		localStorage.setItem("PADDF-" + officialSortingClassName, Number(this.checked));
 		let fragmentAwoken = document.createDocumentFragment();
 		let fragmentSawoken = document.createDocumentFragment();
 		const awokenSorting = this.checked ? official_awoken_sorting : s_awokensUl.originalSorting;
@@ -1581,7 +1583,7 @@ function initialize() {
 		s_awokensUl.appendChild(fragmentAwoken);
 		s_sawokensUl.appendChild(fragmentSawoken);
 	};
-	s_showOfficialAwokenSorting.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + officialSortingClassName)));
+	s_showOfficialAwokenSorting.checked = Boolean(Number(localStorage.getItem("PADDF-" + officialSortingClassName)));
 	s_showOfficialAwokenSorting.onchange();
 
 	const s_selectedAwokensUl = searchBox.querySelector(".selected-awokens");
@@ -1824,7 +1826,7 @@ function initialize() {
 	//id搜索
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
 	const btnSearchByString = settingBox.querySelector(".row-mon-id .search-by-string");
-	monstersID.onchange = function(e)
+	function idChange(e)
 	{
 		if (/^\d+$/.test(this.value)) {
 			const newId = parseInt(this.value, 10);
@@ -1855,20 +1857,27 @@ function initialize() {
 			return false;
 		}
 	}
-	monstersID.oninput = monstersID.onchange;
+	monstersID.onchange = idChange;
 	monstersID.onkeydown = function(e) {
-		//如果键入回车，则执行字符串搜索
-		if (e.key == "Enter")
+		//如果键入回车，字符串长度大于0，且不是数字，则执行字符串搜索
+		if (e.key == "Enter" && this.value.length > 0 && !/^\d+$/.test(this.value))
 		{
-			if (!/^\d+$/.test(this.value) && this.value.length > 0) //如果不是数字，且字符串长度大于0，则进行字符串搜索
-			{
-		    searchByString(monstersID.value);
-			}
+			showSearch(searchByString(this.value));
 		}
 	}
+	//输入id数字即时更新的开关
+	const realTimeClassName = 'real-time-change-card';
+	const s_realTimeChangeCard = settingBox.querySelector(`#${realTimeClassName}`);
+	s_realTimeChangeCard.onchange = function() {
+		monstersID.oninput = this.checked ? idChange : null;
+		localStorage.setItem("PADDF-" + realTimeClassName, Number(this.checked));
+	}
+	s_realTimeChangeCard.checked = Boolean(Number(localStorage.getItem("PADDF-" + realTimeClassName)));
+	s_realTimeChangeCard.onchange();
+
 	//字符串搜索
 	btnSearchByString.onclick = function() {
-		searchByString(monstersID.value);
+		showSearch(searchByString(monstersID.value));
 	};
 	//觉醒
 	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
@@ -1949,8 +1958,8 @@ function initialize() {
 			id: monid,
 			level: level
 		};
-		const needExp = calculateExp(tempMon);
-		monLvExp.textContent = needExp ? needExp.map(exp=>exp.bigNumberToString()).join(" + ") : "";
+		const needExpArr = calculateExp(tempMon);
+		monLvExp.textContent = needExpArr ? needExpArr.map(exp=>exp.bigNumberToString()).join(" + ") : "";
 	}
 	editBox.reCalculateExp = reCalculateExp;
 	//三维
@@ -2001,9 +2010,9 @@ function initialize() {
 	const s_hideLessUseLetent = settingBox.querySelector(`#${hideClassName}`);
 	s_hideLessUseLetent.onchange = function() {
 		toggleDomClassName(this, hideClassName, true, monEditLatentAllowableUl);
-		localStorage.setItem("PADDF-" + hideClassName, this.checked ? 1 : 0);
+		localStorage.setItem("PADDF-" + hideClassName, Number(this.checked));
 	}
-	s_hideLessUseLetent.checked = Boolean(parseInt(localStorage.getItem("PADDF-" + hideClassName)));
+	s_hideLessUseLetent.checked = Boolean(Number(localStorage.getItem("PADDF-" + hideClassName)));
 	s_hideLessUseLetent.onchange();
 
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
@@ -2700,9 +2709,6 @@ function editBoxChangeMonId(id) {
 		mAltName.classList.add(className_displayNone);
 	}
 
-	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");
-	evoCardUl.classList.add(className_displayNone);
-	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
 
 	const evoLinkCardsIdArray = Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id); //筛选出相同进化链的
 	
@@ -2744,6 +2750,9 @@ function editBoxChangeMonId(id) {
 	evoLinkCardsIdArray.sort((a,b)=>a-b);
 
 	const createCardHead = editBox.createCardHead;
+	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");
+	evoCardUl.classList.add(className_displayNone);
+	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
 	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	if (evoLinkCardsIdArray.length > 1) {
 		fragment = document.createDocumentFragment(); //创建节点用的临时空间
@@ -2756,10 +2765,10 @@ function editBoxChangeMonId(id) {
 		});
 		evoCardUl.appendChild(fragment);
 		evoCardUl.classList.remove(className_displayNone);
-		openEvolutionaryTree.classList.remove(className_displayNone);
+		openEvolutionaryTree.classList.remove(className_displayNone); //显示进化树按钮
 	}else
 	{
-		openEvolutionaryTree.classList.add(className_displayNone);
+		openEvolutionaryTree.classList.add(className_displayNone); //隐藏进化树按钮
 	}
 
 	const mType = monInfoBox.querySelectorAll(".monster-type li");

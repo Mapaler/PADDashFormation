@@ -483,6 +483,41 @@ function searchCards(cards, attr1, attr2, fixMainColor, types, typeAndOr, rares,
 	cardsRange = cardsRange.filter(card => card.id); //去除Cards[0]
 	return cardsRange;
 }
+function searchByString(str)
+{ // 考虑了一下onlyInTag被废弃了，因为和游戏内搜索不符
+	str = str.trim();
+	if (str.length>0)
+	{
+		return Cards.filter(card =>
+			{
+				const names = [card.name];
+				if (card.otLangName)
+				{
+					names.push(...Object.values(card.otLangName));
+				}
+				const tags = card.altName.concat();
+				if (card.otTags)
+				{
+					tags.push(...card.otTags);
+				}
+				return tags.some(astr=>astr.toLowerCase().includes(str.toLowerCase())) ||
+				names.some(astr=>astr.toLowerCase().includes(str.toLowerCase()));
+			}
+		);
+	}else
+	{
+		return [];
+	}
+}
+function copyString(input)
+{
+	input.focus(); //设input为焦点
+	input.select(); //选择全部
+	if (document.execCommand('copy')) {
+		document.execCommand('copy');
+	}
+	//input.blur(); //取消焦点
+}
 //产生一个怪物头像
 function createCardA() {
 	const cdom = document.createElement("a");
@@ -622,12 +657,12 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 				scale = needMonIdArr.every(mid => memberIdArr.includes(mid)) ? sk[5] / 100 : 1;
 				break;
 			case 136:
-				scale = hpMul({ attrs: flags(sk[0]) }, sk[1]) *
-					sk[4] ? hpMul({ attrs: flags(sk[4]) }, sk[5]) : 1;
+				scale = hpMul({ attrs: flags(sk[0]) }, sk[1]);
+				if (sk[4]) scale *= hpMul({ attrs: flags(sk[4]) }, sk[5]);
 				break;
 			case 137:
-				scale = hpMul({ types: flags(sk[0]) }, sk[1]) *
-					sk[4] ? hpMul({ types: flags(sk[4]) }, sk[5]) : 1;
+				scale = hpMul({ types: flags(sk[0]) }, sk[1]);
+				if (sk[4]) scale *= hpMul({ types: flags(sk[4]) }, sk[5]);
 				break;
 			case 155:
 				scale = solo ? 1 : hpMul({ attrs: flags(sk[0]), types: flags(sk[1]) }, sk[2]);

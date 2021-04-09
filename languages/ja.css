@@ -407,6 +407,10 @@
 {
 	content: "⛓️進化サーチ";
 }
+.real-time-change-card-label::after
+{
+	content: "カードを即座に更新します";
+}
 .base .evo-type::before,
 .base .evo-type::after
 {

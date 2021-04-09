@@ -1766,6 +1766,11 @@ icon.inflicts::after
 {
 	opacity: 1;
 }
+.setting-box .row-mon-id .real-time-change-card-label
+{
+	margin-right: 0;
+	margin-left: 5px;
+}
 .setting-box .row-mon-id .open-search{
 	float: right;
 }

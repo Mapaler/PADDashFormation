@@ -1,7 +1,7 @@
 如何获取怪物数据 | How to acquire monster data
 ===
 
-* 目前的获取API为  
+* 目前的获取 API 为  
 The current acquisition API is
 
 	| 语言 | API |
@@ -13,13 +13,13 @@ The current acquisition API is
 * 但是有加密的参数，我不知道如何生成，所以我只能从游戏的下载过程截获。  
 But there are encrypted parameters that I don't know how to generate. So I intercepted from the game's download process.
 
-* 使用[Fidder](https://www.telerik.com/download/fiddler)，执行*HTTPS中间人攻击*从游戏内抓包获得怪物信息。  
+* 使用 [Fidder](https://www.telerik.com/download/fiddler)，执行 *HTTPS 中间人攻击*从游戏内抓包获得怪物信息。  
 Use [Fidder](https://www.telerik.com/download/fiddler), do *HTTPS man-in-the-middle attack* to capture monster information from in-game capture.  
 
 * 安卓5可以直接在安卓系统里安装 *CER* 证书，但安卓7开始，系统不再信任用户证书。  
 Android 5 can install *CER* certificates directly in Android. Starting with Android 7, the system no longer trusts user certificates.
 
-* 如果你的模拟器需要安卓7才能玩智龙迷城。以[夜神模拟器](https://www.bignox.com/)为例，在安卓7里安装智龙迷城。  
+* 如果你的模拟器需要安卓 7 才能玩智龙迷城。以[夜神模拟器](https://www.bignox.com/)为例，在安卓 7 里安装智龙迷城。  
 If your simulator needs Android 7 to play PAD. Take the [Nox Player](https://www.bignox.com/) for example. Install PAD in Android 7.
 
 	1. 将 Fidder 根证书导出到桌面  
@@ -49,8 +49,8 @@ If your simulator needs Android 7 to play PAD. Take the [Nox Player](https://www
 * 将安卓模拟器内的 WiFi 代理设置到 Fidder 上  
 Set up the WiFi proxy in the Android emulator to Fidder
 
-* 打开 Fidder 的 HTTPS 解密，和 GZIP 解码  
-Turn on Fidder's HTTPS decrypt and GZIP decode
+* 打开 Fidder 的 允许远程计算机连接、HTTPS 解密、流式传输，和 GZIP 解码  
+Turn on Fidder's "Allow remote computers to connet", "HTTPS decrypt", "Stream" and "Decode"
 
 * 现在你运行模拟器内的游戏，Fidder 就能够截获和解密智龙迷城的数据了。将返回的 JSON 数据保存为文件。  
 Now that you're running the game inside the simulator, Fidder will be able to intercept and decrypt the data from the PAD. Save the response JSON data as a file.
@@ -120,5 +120,5 @@ Each language's information is extracted into a file, and monster names and tag 
 
 `CHT.json`与`CHS.json`的中文信息来源于战友网，见子项目 https://github.com/Mapaler/Download-pad.skyozora.com
 
-运行`提取中文数据.bat`，将战友网页面内容抽出，再使用Win64版 [OpenCC](https://github.com/BYVoid/OpenCC) 来繁转简。
+运行`提取中文数据.bat`，将战友网页面内容抽出，抽出过程使用 [OpenCC](https://github.com/BYVoid/OpenCC) 的 NodeJs 模块来繁转简。
 然后再运行一遍 `提取整合怪物信息.bat` 把中文插进去。

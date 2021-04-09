@@ -87,15 +87,16 @@ Please refer to existing files.
 > 本软件灵感来源于[PDC 智龙迷城伤害计算器](//play.google.com/store/apps/details?id=com.corombo13.paddamagecal)  
 > This software is inspired by [PDC パズドラダメージ計算](//play.google.com/store/apps/details?id=com.corombo13.paddamagecal)
 
-© GungHo Online Entertainment Inc. All Right Reserved.  
-所有图片素材版权与怪物信息归属于GungHo在线娱乐有限公司。  
-パズル&ドラゴンズに関する画像及び情報等の権利はGungHo Online Entertainment Inc.に帰属します。
+> © GungHo Online Entertainment Inc. All Right Reserved.  
+> 所有图片素材版权与怪物信息归属于GungHo在线娱乐有限公司。  
+> パズル&ドラゴンズに関する画像及び情報等の権利はGungHo Online Entertainment Inc.に帰属します。
+> ### 智龙迷城官网 | Puzzle & Dragons Official Website
+> * [パズル＆ドラゴンズ](http://pad.gungho.jp)
+> * [龍族拼圖](https://pad.gungho.jp/hktw/pad/)
+> * [Puzzle & Dragons](https://www.puzzleanddragons.us/)
+> * [퍼즐앤드래곤](https://pad.neocyon.com/W/)
 
-## 智龙迷城官网 | Puzzle & Dragons Official Website
-* [パズル＆ドラゴンズ](http://pad.gungho.jp)
-* [龍族拼圖](https://pad.gungho.jp/hktw/pad/)
-* [Puzzle & Dragons](https://www.puzzleanddragons.us/)
-* [퍼즐앤드래곤](https://pad.neocyon.com/W/)
+> 卡片中文名、中文分类来自于[Puzzle & Dragons 戰友系統及資訊網](https://pad.skyozora.com/)
 
 # 使用开源软件 | Open source software used
 * [Puzzle-and-Dragons-Texture-Tool](//github.com/codywatts/Puzzle-and-Dragons-Texture-Tool) //Extract Images
