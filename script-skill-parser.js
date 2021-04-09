@@ -11,13 +11,19 @@ function tp(strings, ...keys) {
 			{
 				value = document.createTextNode(value);
 			}
-			try{
-				//console.log(value);
-				fragment.appendChild(value);
-			}catch(e)
+			if (value == undefined)
 			{
-				console.log(value, e);
-				console.log(keys, values);
+				console.log("模板字符串中 %s 未找到输入数据",key);
+			}else
+			{
+				try{
+					//console.log(value);
+					fragment.appendChild(value);
+				}catch(e)
+				{
+					console.log(value, e);
+					console.log(keys, values);
+				}
 			}
 			fragment.appendChild(document.createTextNode(strings[i + 1]));
 		});
@@ -769,10 +775,10 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.Heal: { //回血主动
-			console.log(skill)
 			dict = {
 				icon: option.forTurns ? createIcon("auto-heal") : createIcon("heal", "hp-incr"),
-				value: renderValue(skill.value),
+				belong_to: option.forTurns ? tsp.target.team() : tsp.target.self(),
+				value: renderValue(skill.value, {percent: option.forTurns}),
 				stats: tsp.stats.hp(),
 			};
 			atf(tsp.skill.heal(dict));
@@ -798,17 +804,31 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.TimeExtend: { //时间变化buff
-			atf(createIcon("status-time", SkillValue.isLess(skill.value) ? "time-decr" : "time-incr"));
-			atf(tsp.skill.time_extend(renderValue(skill.value, { unit: tsp.unit.seconds, plusSign:true, percent:true })));
+			dict = {
+				icon: createIcon("status-time", SkillValue.isLess(skill.value) ? "time-decr" : "time-incr"),
+				value: renderValue(skill.value, { unit:tsp.unit.seconds, plusSign:true, percent:true }),
+			};
+			atf(tsp.skill.time_extend(dict));
 			break;
 		}
 		case SkillKinds.FollowAttack: { //队长技追打
-			atf(tsp.skill.follow_attack(renderValue(skill.value)));
+			dict = {
+				//icon: createIcon("follow_attack"),
+				belong_to: tsp.target.self(),
+				target: tsp.target.enemy(),
+				value: renderValue(skill.value),
+			};
+			atf(tsp.skill.follow_attack(dict));
 			break;
 		}
 		case SkillKinds.AutoHeal: { //队长技自动回血
-			atf(createIcon("auto-heal"));
-			atf(tsp.skill.auto_heal(renderValue(skill.value)));
+			dict = {
+				icon: createIcon("auto-heal"),
+				belong_to: tsp.target.self(),
+				value: renderValue(skill.value),
+				stats: tsp.stats.hp(),
+			};
+			atf(tsp.skill.auto_heal(dict));
 			break;
 		}
 		case SkillKinds.CTW: { //时间暂停

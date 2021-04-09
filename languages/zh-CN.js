@@ -9,12 +9,12 @@ const localTranslating = {
 			mass_attack: tp`${'icon'}所有攻击变为全体攻击`,
 			leader_change: tp`${'icon'}将自身换为队长，再次使用则换回来`,
 			no_skyfall: tp`${'icon'}天降的宝珠不会消除`,
-            heal: tp`${'icon'}回复 ${'value'} 的 ${'stats'}`,
+            heal: tp`${'icon'}回复 ${'belong_to'}${'value'} 的 ${'stats'}`,
             defense_break: tp`${'icon'}敌方的防御力减少 ${'value'}`,
             poison: tp`${'icon'}使${'target'}全体中毒，每回合损失${'belong_to'} ${'value'} 的 ${'stats'}`,
-			time_extend: (valueElement)=> [`宝珠移动时间`, valueElement],
-			follow_attack: (valueElement)=> [`消除宝珠的回合，以`, valueElement, `的伤害追打敌人`],
-            auto_heal: (valueElement)=> [`消除宝珠的回合，回复`, valueElement, `的 HP`],
+			time_extend: tp`${'icon'}宝珠移动时间 ${'value'}`,
+			follow_attack: tp`${'icon'}消除宝珠的回合，以${'belong_to'}${'value'}的伤害追打${'target'}（计算防御力）`,//(valueElement)=> [`消除宝珠的回合，以`, valueElement, `的伤害追打敌人`],
+            auto_heal: tp`${'icon'}消除宝珠的回合，回复${'belong_to'}${'value'}的 ${'stats'}`,
 			ctw: (valueElement)=> [valueElement, `内时间停止，可以任意移动宝珠`],
 			gravity: tp`造成${'target'}${'value'}的伤害`,//(valueElement)=> [`造成敌方`, valueElement, `的伤害`],
             resolve: (stats, valueElement, probability)=> [probability ? `有${(probability* 100).keepCounts()}%的几率`:'',`如当前`,valueElement,`，受到单一次致命攻击时，将会以1点 HP 生还`],
@@ -31,6 +31,7 @@ const localTranslating = {
 		target: {
 			self: tp`发动者自身`,
 			enemy: tp`敌人`,
+			team: tp`队伍`,
 		},
         stats: {
             unknown: tp`[ 未知状态: ${'type'}]`, //type
