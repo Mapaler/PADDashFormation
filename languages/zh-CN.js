@@ -1217,6 +1217,7 @@ function parseSkillDescription(skill) {
 			str = `<span class="spColor">【操作时间固定${sk[0]}秒】</span>`;
 			if (sk[1] || sk[2]) str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
 			if (sk[3] || sk[4] || sk[5]) str += "的"+getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]});
+			if (sk[6]) str += `，受到的${getAttrTypeString(flags(sk[6]))}属性伤害减少${sk[7]}%`;
 			break;
 		case 179:
 			str = `${sk[0]}回合内，每回合回复${sk[1]?`${sk[1].bigNumberToString()}点`:` HP 上限 ${sk[2]}%`}的 HP`;
