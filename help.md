@@ -2,7 +2,10 @@
 ======
 * 直接复制网址即可分享组队或自己添加收藏夹保存。你可以使用*短网址服务*进一步缩短网址。  
 Copy the URL directly to share the Formation, or add a Bookmark to archives. You can use any *Short URL Service* to further shorten the URL.  
-![分享组队](document/tips-share.png)
+![分享组队](document/tips-share.png)  
+你也可以使用浏览器扩展生成二维码来分享网址。  
+You can also share the URL in QR code by browser extensions.  
+![生成二维码](document/tips-qrcode.png)
 * 使用后退即可撤销上一次修改。  
 Use back to undo the last edit.  
 ![撤銷修改](document/tips-undo.png)
