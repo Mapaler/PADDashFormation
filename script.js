@@ -3119,7 +3119,7 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 	if ((solo || teamsCount === 3) && memberData.sawoken >= 0) menberAwokens.push(Cards[memberData.id].superAwakenings[memberData.sawoken]);
 	//menberAwokens.sort();
 	//武器觉醒
-	let assistAwokens = Cards[assistData.id].awakenings.slice(0,assistData.awoken);
+	let assistAwokens = Cards[assistData.id > 0 ? assistData.id : 0].awakenings.slice(0,assistData.awoken);
 	if (!assistAwokens.includes(49)) assistAwokens = []; //清空非武器的觉醒
 	//assistAwokens.sort();
 	/*if (assistAwokens.includes(49))
