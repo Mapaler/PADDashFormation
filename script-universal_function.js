@@ -961,7 +961,7 @@ function getReduceRange(reduceScales)
 }
 //获取盾减伤比例组
 function getReduceScales(leaderid) {
-	const searchTypeArray = [16, 17, 36, 38, 43, 129, 163, 130, 131, 151, 169, 198, 170, 182, 193, 171, 183];
+	const searchTypeArray = [16, 17, 36, 38, 43, 129, 163, 130, 131, 178, 151, 169, 198, 170, 182, 193, 171, 183];
 	const lss = getCardLeaderSkills(Cards[leaderid], searchTypeArray);
 	
 	function leaderReduceScale(ls) {
@@ -1034,6 +1034,10 @@ function getReduceScales(leaderid) {
 						}
 					}
 				}
+				break;
+			case 178: //无条件盾，属性个数不固定
+				reduce.scale = (sk[7] || 0) / 100;
+				reduce.attrs = 0 | sk[6];
 				break;
 			case 151: //十字心触发
 			case 169: //C触发

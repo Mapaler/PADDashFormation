@@ -1571,6 +1571,9 @@ function parseSkillDescription(skill) {
 			case 163: //无条件盾，属性个数不固定
 				scale = (allAttr && (sk[5] & 31) != 31) ? 0 : sk[6]/100;
 				break;
+			case 178: //无条件盾，属性个数不固定
+				scale = (allAttr && (sk[6] & 31) != 31) ? 0 : sk[7]/100;
+				break;
 			case 130: //血线下 + 属性个数不固定
 			case 131: //血线上 + 属性个数不固定
 				scale = (noHPneed || allAttr && (sk[5] & 31) != 31) ? 0 : sk[6]/100;
