@@ -240,9 +240,11 @@ var Formation = function(teamCount, memberCount) {
 	this.teams = [];
 	for (let ti = 0; ti < teamCount; ti++) {
 		const team = [
-			[],
-			[], 0
-		]; //第三个是徽章
+			[], //队员
+			[], //辅助
+			0, //徽章
+			0, //队长更换序号
+		];
 		for (let mi = 0; mi < memberCount; mi++) {
 			team[0].push(new MemberTeam());
 			team[1].push(new MemberAssist());
@@ -263,6 +265,7 @@ Formation.prototype.outObj = function() {
 			m.outObj()
 		).DeleteLatter();
 		if (t[2]) teamArr[2] = t[2];
+		if (t[3]) teamArr[3] = t[3];
 		return teamArr;
 	});
 	obj.v = dataStructure;
@@ -304,6 +307,7 @@ Formation.prototype.loadObj = function(f) {
 				m.loadObj(fm, dataVeision);
 			});
 			if (tf[2] != undefined) t[2] = tf[2]; //徽章
+			if (tf[3] != undefined) t[3] = tf[3]; //队长
 		}
 	});
 	if (f.b)
@@ -1038,6 +1042,159 @@ function initialize() {
 			allMembers.push(m);
 		});
 	});
+	
+	//从怪物头像获取队员的队伍编号
+	function getMemberArrayIndexFromMonHead(headDom) {
+		return [
+			parseInt(headDom.getAttribute("data-team"), 10), //team
+			parseInt(headDom.getAttribute("data-assist"), 10), //assist
+			parseInt(headDom.getAttribute("data-index"), 10), //index
+		];
+	}
+	//编辑界面点击每个怪物的头像的处理
+	function clickMonHead(e) {
+		const arr = getMemberArrayIndexFromMonHead(this);
+		editMon(arr[0], arr[1], arr[2]);
+		return false; //没有false将会打开链接
+	}
+	//编辑界面每个怪物的头像的拖动
+	function dragStartMonHead(e) {
+		e.dataTransfer.setData('from', JSON.stringify(getMemberArrayIndexFromMonHead(this)));
+	}
+	//编辑界面每个怪物的头像的经过，阻止事件发生
+	function dropOverMonHead(e) {
+		e.preventDefault();
+	}
+	//编辑界面每个怪物的头像的放下
+	function dropMonHead(e) {
+		const dataFrom = JSON.parse(e.dataTransfer.getData('from'));
+		const dataTo = getMemberArrayIndexFromMonHead(this);
+
+		if ((dataTo[0] !== dataFrom[0]) ||
+			(dataTo[1] !== dataFrom[1]) ||
+			(dataTo[2] !== dataFrom[2])) { //必须有所不同才继续交换
+			interchangeCard(dataFrom, dataTo);
+		}
+		return false; //没有false将会打开链接
+	}
+	//移动端编辑界面每个怪物的头像的放下
+	function touchstartMonHead(e) {
+		e.stopPropagation();
+		//console.log("开始触摸",e,this);
+		const tc = e.changedTouches[0];
+		const pX = tc.pageX,
+			pY = tc.pageY;
+		interchangeSVG.style.display = "none";
+		interchangeSVG.changePoint({ x: pX, y: pY }, { x: pX, y: pY });
+	}
+	//移动端编辑界面每个怪物的头像的移动
+	function touchmoveMonHead(e) {
+		//console.log("移动中",e,this);
+		const tc = e.changedTouches[0];
+		const pX = tc.pageX,
+			pY = tc.pageY;
+		const rect = this.getBoundingClientRect();
+		const top = rect.top + document.documentElement.scrollTop;
+		const left = rect.left + document.documentElement.scrollLeft;
+		if ((pY < top) || (pY > (top + rect.height)) ||
+			(pX < left) || (pX > (left + rect.width))) {
+			interchangeSVG.style.display = "block";
+			interchangeSVG.changePoint(null, { x: pX, y: pY });
+		} else {
+			interchangeSVG.style.display = "none";
+		}
+	}
+	//移动端编辑界面每个怪物的头像的结束
+	function touchendMonHead(e) {
+		const tc = e.changedTouches[0];
+		const pX = tc.pageX,
+			pY = tc.pageY;
+		//console.log("移动结束",pX,pY,e,this);
+		interchangeSVG.style.display = "none";
+		interchangeSVG.changePoint(null, { x: pX, y: pY });
+		const target = allMembers.find(m => {
+			const rect = m.getBoundingClientRect();
+			const top = rect.top + document.documentElement.scrollTop;
+			const left = rect.left + document.documentElement.scrollLeft;
+			const isInRect = (pY > top) && (pY < (top + rect.height)) &&
+				(pX > left) && (pX < (left + rect.width));
+			return isInRect;
+		});
+		if (target && this != target) {
+			//console.log("找到的对象",targets[0]);
+			const dataFrom = getMemberArrayIndexFromMonHead(this);
+			const dataTo = getMemberArrayIndexFromMonHead(target);
+
+			if ((dataTo[0] != dataFrom[0]) ||
+				(dataTo[1] != dataFrom[1]) ||
+				(dataTo[2] != dataFrom[2])) { //必须有所不同才继续交换
+				interchangeCard(dataFrom, dataTo);
+			}
+		}
+	}
+	//移动端编辑界面每个怪物的头像的取消
+	function touchcancelMonHead(e) {
+		interchangeSVG.style.display = "none";
+		console.log("移动取消", e, this);
+	}
+	function interchangeCard(formArr, toArr) {
+		function changeType(member, isAssist) {
+			if (member.id == 0 || (isAssist && member.id == -1)) {
+				return new Member();
+			} else {
+				const newMember = isAssist ? new MemberTeam() : new MemberAssist();
+				newMember.loadFromMember(member);
+				return newMember;
+			}
+		}
+		const changeSwapToCopy = controlBox.querySelector("#change-swap-to-copy"); //储存交换“复制”和“替换”
+		const isCopy = changeSwapToCopy.checked;
+		let from = formation.teams[formArr[0]][formArr[1]][formArr[2]];
+		let to = formation.teams[toArr[0]][toArr[1]][toArr[2]];
+		if (formArr[1] != toArr[1]) //从武器拖到非武器才改变类型
+		{
+			from = changeType(from, formArr[1]);
+			if (!isCopy) to = changeType(to, toArr[1]);
+		} else if (isCopy) {
+			const newFrom = new from.constructor();
+			newFrom.loadFromMember(from);
+			from = newFrom;
+		}
+		formation.teams[toArr[0]][toArr[1]][toArr[2]] = from;
+		if (!isCopy) formation.teams[formArr[0]][formArr[1]][formArr[2]] = to;
+	
+		creatNewUrl(); //刷新URL
+		refreshAll(formation); //刷新全部
+	}
+	function switchLeader(e)
+	{
+		const headDom = this.parentNode;
+		const arr = getMemberArrayIndexFromMonHead(headDom);
+		const team = formation.teams[arr[0]];
+		if (team[3] > 0) //如果队伍已经换了队长
+		{
+			if (team[3] == arr[2]) //点的就是换的队长
+			{
+				team[3] = 0; //还原
+			}else
+			{
+				team[3] = arr[2]; //改变成任何能点的换队长
+			}
+			creatNewUrl(); //刷新URL
+			refreshAll(formation); //刷新全部
+		}else //如果队伍没有换队长
+		{
+			if(arr[2] > 0) //如果点的不是原队长
+			{
+				team[3] = arr[2]; //接换成新队长
+				creatNewUrl(); //刷新URL
+				refreshAll(formation); //刷新全部
+			}
+		}
+
+		e.stopPropagation();
+		e.preventDefault();
+	}
 	//所有怪物头像，添加拖动交换的代码
 	allMembers.forEach(m => {
 		//点击
@@ -1052,6 +1209,8 @@ function initialize() {
 		m.ontouchmove = touchmoveMonHead;
 		m.ontouchend = touchendMonHead;
 		m.ontouchcancel = touchcancelMonHead;
+		//子元素
+		m.querySelector(".switch-leader").onclick = switchLeader;
 	});
 
 	//添加徽章
@@ -2280,130 +2439,6 @@ function initialize() {
 	}
 }
 
-//从怪物头像获取队员的队伍编号
-function getMemberArrayIndexFromMonHead(headDom) {
-	return [
-		parseInt(headDom.getAttribute("data-team"), 10), //team
-		parseInt(headDom.getAttribute("data-assist"), 10), //assist
-		parseInt(headDom.getAttribute("data-index"), 10), //index
-	];
-}
-//编辑界面点击每个怪物的头像的处理
-function clickMonHead(e) {
-	const arr = getMemberArrayIndexFromMonHead(this);
-	editMon(arr[0], arr[1], arr[2]);
-	return false; //没有false将会打开链接
-}
-//编辑界面每个怪物的头像的拖动
-function dragStartMonHead(e) {
-	e.dataTransfer.setData('from', JSON.stringify(getMemberArrayIndexFromMonHead(this)));
-}
-//编辑界面每个怪物的头像的经过，阻止事件发生
-function dropOverMonHead(e) {
-	e.preventDefault();
-}
-//编辑界面每个怪物的头像的放下
-function dropMonHead(e) {
-	const dataFrom = JSON.parse(e.dataTransfer.getData('from'));
-	const dataTo = getMemberArrayIndexFromMonHead(this);
-
-	if ((dataTo[0] !== dataFrom[0]) ||
-		(dataTo[1] !== dataFrom[1]) ||
-		(dataTo[2] !== dataFrom[2])) { //必须有所不同才继续交换
-		interchangeCard(dataFrom, dataTo);
-	}
-	return false; //没有false将会打开链接
-}
-//移动端编辑界面每个怪物的头像的放下
-function touchstartMonHead(e) {
-	e.stopPropagation();
-	//console.log("开始触摸",e,this);
-	const tc = e.changedTouches[0];
-	const pX = tc.pageX,
-		pY = tc.pageY;
-	interchangeSVG.style.display = "none";
-	interchangeSVG.changePoint({ x: pX, y: pY }, { x: pX, y: pY });
-}
-//移动端编辑界面每个怪物的头像的移动
-function touchmoveMonHead(e) {
-	//console.log("移动中",e,this);
-	const tc = e.changedTouches[0];
-	const pX = tc.pageX,
-		pY = tc.pageY;
-	const rect = this.getBoundingClientRect();
-	const top = rect.top + document.documentElement.scrollTop;
-	const left = rect.left + document.documentElement.scrollLeft;
-	if ((pY < top) || (pY > (top + rect.height)) ||
-		(pX < left) || (pX > (left + rect.width))) {
-		interchangeSVG.style.display = "block";
-		interchangeSVG.changePoint(null, { x: pX, y: pY });
-	} else {
-		interchangeSVG.style.display = "none";
-	}
-}
-//移动端编辑界面每个怪物的头像的结束
-function touchendMonHead(e) {
-	const tc = e.changedTouches[0];
-	const pX = tc.pageX,
-		pY = tc.pageY;
-	//console.log("移动结束",pX,pY,e,this);
-	interchangeSVG.style.display = "none";
-	interchangeSVG.changePoint(null, { x: pX, y: pY });
-	const target = allMembers.find(m => {
-		const rect = m.getBoundingClientRect();
-		const top = rect.top + document.documentElement.scrollTop;
-		const left = rect.left + document.documentElement.scrollLeft;
-		const isInRect = (pY > top) && (pY < (top + rect.height)) &&
-			(pX > left) && (pX < (left + rect.width));
-		return isInRect;
-	});
-	if (target && this != target) {
-		//console.log("找到的对象",targets[0]);
-		const dataFrom = getMemberArrayIndexFromMonHead(this);
-		const dataTo = getMemberArrayIndexFromMonHead(target);
-
-		if ((dataTo[0] != dataFrom[0]) ||
-			(dataTo[1] != dataFrom[1]) ||
-			(dataTo[2] != dataFrom[2])) { //必须有所不同才继续交换
-			interchangeCard(dataFrom, dataTo);
-		}
-	}
-}
-//移动端编辑界面每个怪物的头像的取消
-function touchcancelMonHead(e) {
-	interchangeSVG.style.display = "none";
-	console.log("移动取消", e, this);
-}
-
-function interchangeCard(formArr, toArr) {
-	function changeType(member, isAssist) {
-		if (member.id == 0 || (isAssist && member.id == -1)) {
-			return new Member();
-		} else {
-			const newMember = isAssist ? new MemberTeam() : new MemberAssist();
-			newMember.loadFromMember(member);
-			return newMember;
-		}
-	}
-	const changeSwapToCopy = controlBox.querySelector("#change-swap-to-copy"); //储存交换“复制”和“替换”
-	const isCopy = changeSwapToCopy.checked;
-	let from = formation.teams[formArr[0]][formArr[1]][formArr[2]];
-	let to = formation.teams[toArr[0]][toArr[1]][toArr[2]];
-	if (formArr[1] != toArr[1]) //从武器拖到非武器才改变类型
-	{
-		from = changeType(from, formArr[1]);
-		if (!isCopy) to = changeType(to, toArr[1]);
-	} else if (isCopy) {
-		const newFrom = new from.constructor();
-		newFrom.loadFromMember(from);
-		from = newFrom;
-	}
-	formation.teams[toArr[0]][toArr[1]][toArr[2]] = from;
-	if (!isCopy) formation.teams[formArr[0]][formArr[1]][formArr[2]] = to;
-
-	creatNewUrl(); //刷新URL
-	refreshAll(formation); //刷新全部
-}
 //改变一个怪物头像
 function changeid(mon, monDom, latentDom) {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
@@ -2599,7 +2634,10 @@ function refreshLatent(latent, monid, iconArr) {
 //点击怪物头像，出现编辑窗
 function editMon(teamNum, isAssist, indexInTeam) {
 	//数据
-	const mon = formation.teams[teamNum][isAssist][indexInTeam];
+	const team =  formation.teams[teamNum];
+	let mapIdx = indexInTeam == 0 ? team[3] : (indexInTeam == team[3] ? 0 : indexInTeam);
+
+	const mon = team[isAssist][mapIdx];
 
 	const teamBigBox = teamBigBoxs[teamNum];
 	const teamBox = teamBigBox.querySelector(".team-box");
@@ -2612,7 +2650,7 @@ function editMon(teamNum, isAssist, indexInTeam) {
 
 	editBox.isAssist = isAssist;
 	editBox.monsterHead = monsterHead;
-	editBox.memberIdx = [teamNum, isAssist, indexInTeam]; //储存队伍数组下标
+	editBox.memberIdx = [teamNum, isAssist, mapIdx]; //储存队伍数组下标
 	if (!isAssist) {
 		const latentBox = teamBox.querySelector(".team-latents .latents-" + (indexInTeam + 1) + " .latent-ul");
 		editBox.latentBox = latentBox;
@@ -2990,14 +3028,25 @@ function refreshAll(formationData) {
 		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
 		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
 		for (let ti = 0, ti_len = membersDom.querySelectorAll(".member").length; ti < ti_len; ti++) {
-			const member = membersDom.querySelector(`.member-${ti+1} .monster`);
-			const latent = latentsDom.querySelector(`.latents-${ti+1} .latent-ul`);
-			const assist = assistsDom.querySelector(`.member-${ti+1} .monster`);
+			let domIdx = ti == 0 ? teamData[3] + 1 : (ti == teamData[3] ? 1 : ti+1);
+
+			const member = membersDom.querySelector(`.member-${domIdx} .monster`);
+			const latent = latentsDom.querySelector(`.latents-${domIdx} .latent-ul`);
+			const assist = assistsDom.querySelector(`.member-${domIdx} .monster`);
 			changeid(teamData[0][ti], member, latent); //队员
 			changeid(teamData[1][ti], assist); //辅助
 			refreshMemberSkillCD(teamBox, teamData, ti); //技能CD
 			refreshAbility(teamAbilityDom, teamData, ti); //本人能力值
 			refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, ti); //本人觉醒
+
+			//更改换队长之后的队长边框的显示
+			if (ti == 0 || ti == 5)
+			{
+				member.parentNode.classList.add("team-leader");
+			}else
+			{
+				member.parentNode.classList.remove("team-leader");
+			}
 		}
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, teamNum);
@@ -3105,7 +3154,10 @@ function refreshAbility(abilityDom, team, idx) {
 		}
 	}
 	if (!abilityDom) return; //如果没有dom，直接跳过
-	const abilityLi = abilityDom.querySelector(".abilitys-" + (idx + 1));
+
+	let domIdx = idx == 0 ? team[3] + 1 : (idx == team[3] ? 1 : idx+1);
+
+	const abilityLi = abilityDom.querySelector(`.abilitys-${domIdx}`);
 	const hpDom = abilityLi.querySelector(".hp");
 	const atkDom = abilityLi.querySelector(".atk");
 	const rcvDom = abilityLi.querySelector(".rcv");
@@ -3139,8 +3191,10 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 		menberAwokens = menberAwokens.concat(assistAwokens);
 	}*/
 
-	const menberAwokenUl = menberAwokenDom.querySelector(`.menber-awoken-${idx + 1} .awoken-ul`);
-	const assistAwokenUl = assistAwokenDom.querySelector(`.menber-awoken-${idx + 1} .awoken-ul`);
+	let domIdx = idx == 0 ? team[3] + 1 : (idx == team[3] ? 1 : idx+1);
+
+	const menberAwokenUl = menberAwokenDom.querySelector(`.menber-awoken-${domIdx} .awoken-ul`);
+	const assistAwokenUl = assistAwokenDom.querySelector(`.menber-awoken-${domIdx} .awoken-ul`);
 	/* //通用的
 	function countNum(arr) {
 		const map = arr.reduce(function(preMap, value){
@@ -3240,8 +3294,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 	const teams = formation.teams;
 
-	const leader1id = team[0][0].id;
-	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][0].id : teams[1][0][0].id) : team[0][5].id;
+	const leader1id = team[0][team[3]].id;
+	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3]].id : teams[1][0][teams[1][3]].id) : team[0][5].id;
 
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
@@ -3325,7 +3379,10 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 	if (tEffectDom)	{
 		const _76board = tEffectDom.querySelector("._76board");
-		if (tIf_Effect_76board(leader1id,leader2id))
+		//76版队长技能不被欢队长所影响
+		const leader1id_original = team[0][0].id;
+		const leader2id_original = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][0].id : teams[1][0][0].id) : team[0][5].id;
+		if (tIf_Effect_76board(leader1id_original,leader2id_original))
 		{
 			_76board.classList.remove(className_displayNone);
 		}else
@@ -3378,8 +3435,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 	const tEffectDom = totalDom.querySelector(".tIf-effect");
 	
 	//因为目前仅用于2P，所以直接在外面固定写了
-	const leader1id = teams[0][0][0].id;
-	const leader2id = teams[1][0][0].id;
+	const leader1id = teams[0][0][teams[0][3]].id;
+	const leader2id = teams[1][0][teams[1][3]].id;
 
 	if (tHpDom) {
 
@@ -3445,7 +3502,10 @@ function refreshFormationTotalHP(totalDom, teams) {
 
 	if (tEffectDom)	{
 		const _76board = tEffectDom.querySelector("._76board");
-		if (tIf_Effect_76board(leader1id,leader2id))
+		//76版队长技能不被欢队长所影响
+		const leader1id_original = teams[0][0][0].id;
+		const leader2id_original = teams[1][0][0].id;
+		if (tIf_Effect_76board(leader1id_original,leader2id_original))
 		{
 			_76board.classList.remove(className_displayNone);
 		}else
@@ -3492,8 +3552,10 @@ function refreshFormationTotalHP(totalDom, teams) {
 }
 //刷新单人技能CD
 function refreshMemberSkillCD(teamDom, team, idx) {
-	const memberMonDom = teamDom.querySelector(`.team-members .member-${idx+1} .monster`);
-	const assistMonDom = teamDom.querySelector(`.team-assist .member-${idx+1} .monster`);
+	let domIdx = idx == 0 ? team[3] + 1 : (idx == team[3] ? 1 : idx+1);
+
+	const memberMonDom = teamDom.querySelector(`.team-members .member-${domIdx} .monster`);
+	const assistMonDom = teamDom.querySelector(`.team-assist .member-${domIdx} .monster`);
 	const member = team[0][idx];
 	const assist = team[1][idx];
 
