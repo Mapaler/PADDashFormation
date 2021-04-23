@@ -30,10 +30,11 @@ var GM_xmlhttpRequest = function(GM_param) {
 
 function g(id)
 {
+	let m = cards[id];
+	
 	console.log("原始数组",m);
 	console.log("已解析对象",pcards[id]); //输出人家大佬的格式
 
-	let m = cards[id];
 	var pn = ["火","水","木","光","暗"];
 	var p = [pn[m[2]]||"无", pn[m[3]]||"无"];
 	var tn = ["0进化","1平衡","2体力","3回复","4龙","5神","6攻击","7恶魔","8机械","9","10","11","12觉醒","13","14强化","15卖钱"];
@@ -92,7 +93,6 @@ GM_xmlhttpRequest({
 			card.unk06bin = card.unk06.toString(2);
 			card.unk07bin = card.unk07.toString(2);
 			card.unk08bin = card.unk08.toString(2); //已知一些flag
-			card.unk09bin = card.unk09.toString(2);
 			return card;
 		});
 	},

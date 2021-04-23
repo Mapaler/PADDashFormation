@@ -732,11 +732,12 @@ function parseSkillDescription(skill) {
 			{
 				if (hasDiffOrbs)
 				{//「光光火/光火火」組合的3COMBO時，所有寵物的攻擊力3.5倍；「光光火火」組合的4COMBO或以上時，所有寵物的攻擊力6倍 
-					str = `${strArr.map(a=>nb(a, attrsName)).join("、")}中${sk[5]}串同时攻击时，所有宠物的攻击力×${sk[6]/100}倍，每多1串+${sk[7]/100}倍，最大${strArr.length}串时×${(sk[6]+sk[7]*(strArr.length-sk[5]))/100}倍`;
+					str = `${strArr.map(a=>nb(a, attrsName)).join("、")}中${sk[5]}串同时攻击时，所有宠物的攻击力×${sk[6]/100}倍`;
 				}else
 				{//木寶珠有2COMBO時，所有寵物的攻擊力3倍，每多1COMBO+4倍，最大5COMBO時15倍 
-					str = `${nb(strArr[0], attrsName).join("、")}宝珠有${sk[5]}串时，所有宠物的攻击力×${sk[6]/100}倍，每多1串+${sk[7]/100}倍，最大${strArr.length}串时×${(sk[6]+sk[7]*(strArr.length-sk[5]))/100}倍`;
+					str = `${nb(strArr[0], attrsName).join("、")}宝珠有${sk[5]}串时，所有宠物的攻击力×${sk[6]/100}倍`;
 				}
+				if (sk[7]) str += `，每多1串+${sk[7]/100}倍，最大${strArr.length}串时×${(sk[6]+sk[7]*(strArr.length-sk[5]))/100}倍`;
 			}else
 			{
 				if (hasDiffOrbs)
@@ -1264,6 +1265,7 @@ function parseSkillDescription(skill) {
 			str = `<span class="spColor">【操作时间固定${sk[0]}秒】</span>`;
 			if (sk[1] || sk[2]) str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
 			if (sk[3] || sk[4] || sk[5]) str += "的"+getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]});
+			if (sk[6]) str += `，受到的${getAttrTypeString(flags(sk[6]))}属性伤害减少${sk[7]}%`;
 			break;
 		case 179:
 			str = `${sk[0]}回合内，每回合回复${sk[1]?`${sk[1].bigNumberToString()}点`:` HP 上限 ${sk[2]}%`}的 HP`;
@@ -1616,6 +1618,9 @@ function parseSkillDescription(skill) {
 			case 129: //无条件盾，属性个数不固定
 			case 163: //无条件盾，属性个数不固定
 				scale = (allAttr && (sk[5] & 31) != 31) ? 0 : sk[6]/100;
+				break;
+			case 178: //无条件盾，属性个数不固定
+				scale = (allAttr && (sk[6] & 31) != 31) ? 0 : sk[7]/100;
 				break;
 			case 130: //血线下 + 属性个数不固定
 			case 131: //血线上 + 属性个数不固定
