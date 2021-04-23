@@ -506,11 +506,11 @@ ul{
 /*.monster .id::before{
 	content: "No.";
 }*/
-.monster .skill::before{
+.monster .skill-cd::before{
 	content:"CD";
 	font-size: 10px;
 }
-.monster .skill{
+.monster .skill-cd{
 	font-size: 13px;
 	line-height: 13px;
 	color:white;
@@ -519,12 +519,25 @@ ul{
 	right:0;
 	bottom:0;
 }
-.monster .skill.max-skill{
+.monster .skill-cd.max-skill{
 	display: none;
 }
-.show-mon-skill-cd .monster .skill.max-skill{
+.show-mon-skill-cd .monster .skill-cd.max-skill{
 	display: block;
 }
+/*交换队长技的图标*/
+.monster .switch-leader
+{
+	position: absolute;
+	right: 0px;
+	bottom: 17px;
+	width: 23px;
+	height: 25px;
+	background-image: url(images/icon-switch-leader.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
 .not-show-awoken-count .formation-box .team-total-info, /*单个队伍血量统计*/
 .not-show-awoken-count .formation-box .team-ability, /*单个队伍三维*/
 .not-show-awoken-count .formation-box .team-awoken, /*单个队伍觉醒统计*/

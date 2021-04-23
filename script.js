@@ -2545,7 +2545,7 @@ function changeid(mon, monDom, latentDom) {
 		}
 	}
 
-	const skillCdDom = monDom.querySelector(".skill");
+	const skillCdDom = monDom.querySelector(".skill-cd");
 	if (skillCdDom) //如果存在技能CD DOM
 	{
 		//const skill = Skills[card.activeSkillId];
@@ -2553,6 +2553,18 @@ function changeid(mon, monDom, latentDom) {
 			skillCdDom.classList.add(className_displayNone);
 		} else {
 			skillCdDom.classList.remove(className_displayNone);
+		}
+	}
+
+	const switchLeaderDom = monDom.querySelector(".switch-leader");
+	if (switchLeaderDom) //如果存在队长交换 DOM
+	{
+		const skills = getCardActiveSkills(card, [93]); //更换队长的技能
+		
+		if (skills.length > 0) {
+			switchLeaderDom.classList.remove(className_displayNone);
+		} else {
+			switchLeaderDom.classList.add(className_displayNone);
 		}
 	}
 
@@ -3490,8 +3502,8 @@ function refreshMemberSkillCD(teamDom, team, idx) {
 	const assistCard = Cards[assist.id] || Cards[0];
 	const assistSkill = Skills[assistCard.activeSkillId];
 
-	const memberSkillCdDom = memberMonDom.querySelector(".skill");
-	const assistSkillCdDom = assistMonDom.querySelector(".skill");
+	const memberSkillCdDom = memberMonDom.querySelector(".skill-cd");
+	const assistSkillCdDom = assistMonDom.querySelector(".skill-cd");
 
 	const memberSkillCd = memberSkill ? (memberSkill.initialCooldown - (member.skilllevel || memberSkill.maxLevel) + 1) : 0;
 	const assistSkillCd = assistSkill ? (assistSkill.initialCooldown - (assist.skilllevel || assistSkill.maxLevel) + 1) : 0;
