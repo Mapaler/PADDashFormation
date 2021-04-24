@@ -2634,10 +2634,7 @@ function refreshLatent(latent, monid, iconArr) {
 //点击怪物头像，出现编辑窗
 function editMon(teamNum, isAssist, indexInTeam) {
 	//数据
-	const team =  formation.teams[teamNum];
-	let mapIdx = indexInTeam == 0 ? team[3] : (indexInTeam == team[3] ? 0 : indexInTeam);
-
-	const mon = team[isAssist][mapIdx];
+	const mon = formation.teams[teamNum][isAssist][indexInTeam];
 
 	const teamBigBox = teamBigBoxs[teamNum];
 	const teamBox = teamBigBox.querySelector(".team-box");
@@ -2650,7 +2647,7 @@ function editMon(teamNum, isAssist, indexInTeam) {
 
 	editBox.isAssist = isAssist;
 	editBox.monsterHead = monsterHead;
-	editBox.memberIdx = [teamNum, isAssist, mapIdx]; //储存队伍数组下标
+	editBox.memberIdx = [teamNum, isAssist, indexInTeam]; //储存队伍数组下标
 	if (!isAssist) {
 		const latentBox = teamBox.querySelector(".team-latents .latents-" + (indexInTeam + 1) + " .latent-ul");
 		editBox.latentBox = latentBox;
@@ -3028,25 +3025,37 @@ function refreshAll(formationData) {
 		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
 		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
 		for (let ti = 0, ti_len = membersDom.querySelectorAll(".member").length; ti < ti_len; ti++) {
-			let domIdx = ti == 0 ? teamData[3] + 1 : (ti == teamData[3] ? 1 : ti+1);
-
-			const member = membersDom.querySelector(`.member-${domIdx} .monster`);
-			const latent = latentsDom.querySelector(`.latents-${domIdx} .latent-ul`);
-			const assist = assistsDom.querySelector(`.member-${domIdx} .monster`);
+			//开始设置换队长
+			const leaderIdx = teamData[3];
+			const memberLi = membersDom.querySelector(`.member-${ti+1}`);
+			const latentLi = latentsDom.querySelector(`.latents-${ti+1}`);
+			const assistsLi = assistsDom.querySelector(`.member-${ti+1}`);
+			const teamAbilityLi = teamAbilityDom.querySelector(`.abilitys-${ti+1}`);
+			const teamMenberAwokenLi = teamMenberAwokenDom.querySelector(`.menber-awoken-${ti+1}`);
+			const teamAssistAwokenLi = teamAssistAwokenDom.querySelector(`.menber-awoken-${ti+1}`);
+			[memberLi,latentLi,assistsLi,teamAbilityLi,teamMenberAwokenLi,teamAssistAwokenLi].forEach(dom=>{
+				if (leaderIdx & ti == 0)
+				{
+					dom.style.transform = `translateX(${leaderIdx*108}px)`;
+				}
+				else if (leaderIdx && ti == leaderIdx)
+				{
+					dom.style.transform = `translateX(${ti*-108}px)`;
+				}else
+				{
+					dom.style.transform = null;
+				}
+			});
+			//修改显示内容
+			const member = memberLi.querySelector(`.monster`);
+			const assist = assistsLi.querySelector(`.monster`);
+			const latent = latentLi.querySelector(`.latent-ul`);
 			changeid(teamData[0][ti], member, latent); //队员
 			changeid(teamData[1][ti], assist); //辅助
 			refreshMemberSkillCD(teamBox, teamData, ti); //技能CD
 			refreshAbility(teamAbilityDom, teamData, ti); //本人能力值
 			refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, ti); //本人觉醒
 
-			//更改换队长之后的队长边框的显示
-			if (ti == 0 || ti == 5)
-			{
-				member.parentNode.classList.add("team-leader");
-			}else
-			{
-				member.parentNode.classList.remove("team-leader");
-			}
 		}
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, teamNum);
@@ -3154,10 +3163,7 @@ function refreshAbility(abilityDom, team, idx) {
 		}
 	}
 	if (!abilityDom) return; //如果没有dom，直接跳过
-
-	let domIdx = idx == 0 ? team[3] + 1 : (idx == team[3] ? 1 : idx+1);
-
-	const abilityLi = abilityDom.querySelector(`.abilitys-${domIdx}`);
+	const abilityLi = abilityDom.querySelector(".abilitys-" + (idx + 1));
 	const hpDom = abilityLi.querySelector(".hp");
 	const atkDom = abilityLi.querySelector(".atk");
 	const rcvDom = abilityLi.querySelector(".rcv");
@@ -3191,10 +3197,8 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 		menberAwokens = menberAwokens.concat(assistAwokens);
 	}*/
 
-	let domIdx = idx == 0 ? team[3] + 1 : (idx == team[3] ? 1 : idx+1);
-
-	const menberAwokenUl = menberAwokenDom.querySelector(`.menber-awoken-${domIdx} .awoken-ul`);
-	const assistAwokenUl = assistAwokenDom.querySelector(`.menber-awoken-${domIdx} .awoken-ul`);
+	const menberAwokenUl = menberAwokenDom.querySelector(`.menber-awoken-${idx + 1} .awoken-ul`);
+	const assistAwokenUl = assistAwokenDom.querySelector(`.menber-awoken-${idx + 1} .awoken-ul`);
 	/* //通用的
 	function countNum(arr) {
 		const map = arr.reduce(function(preMap, value){
@@ -3552,10 +3556,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 }
 //刷新单人技能CD
 function refreshMemberSkillCD(teamDom, team, idx) {
-	let domIdx = idx == 0 ? team[3] + 1 : (idx == team[3] ? 1 : idx+1);
-
-	const memberMonDom = teamDom.querySelector(`.team-members .member-${domIdx} .monster`);
-	const assistMonDom = teamDom.querySelector(`.team-assist .member-${domIdx} .monster`);
+	const memberMonDom = teamDom.querySelector(`.team-members .member-${idx+1} .monster`);
+	const assistMonDom = teamDom.querySelector(`.team-assist .member-${idx+1} .monster`);
 	const member = team[0][idx];
 	const assist = team[1][idx];
 

@@ -537,6 +537,14 @@ ul{
 	background-position: center;
 	background-repeat: no-repeat;
 }
+.monster .switch-leader:hover
+{
+	box-shadow: red 0 0 5px;
+}
+.monster .switch-leader:active
+{
+	animation: icon-active 0.2s;
+}
 
 .not-show-awoken-count .formation-box .team-total-info, /*单个队伍血量统计*/
 .not-show-awoken-count .formation-box .team-ability, /*单个队伍三维*/
