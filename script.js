@@ -3034,11 +3034,11 @@ function refreshAll(formationData) {
 			const teamMenberAwokenLi = teamMenberAwokenDom.querySelector(`.menber-awoken-${ti+1}`);
 			const teamAssistAwokenLi = teamAssistAwokenDom.querySelector(`.menber-awoken-${ti+1}`);
 			[memberLi,latentLi,assistsLi,teamAbilityLi,teamMenberAwokenLi,teamAssistAwokenLi].forEach(dom=>{
-				if (leaderIdx & ti == 0)
+				if (leaderIdx > 0 && ti == 0)
 				{
 					dom.style.transform = `translateX(${leaderIdx*108}px)`;
 				}
-				else if (leaderIdx && ti == leaderIdx)
+				else if (leaderIdx > 0 && ti == leaderIdx)
 				{
 					dom.style.transform = `translateX(${ti*-108}px)`;
 				}else
@@ -3052,6 +3052,12 @@ function refreshAll(formationData) {
 			const latent = latentLi.querySelector(`.latent-ul`);
 			changeid(teamData[0][ti], member, latent); //队员
 			changeid(teamData[1][ti], assist); //辅助
+			//如果换队长技能
+			if (leaderIdx == 0 && (ti == 0 || ti == 5))
+			{
+				member.querySelector(".switch-leader").classList.add(className_displayNone);
+				assist.querySelector(".switch-leader").classList.add(className_displayNone);
+			}
 			refreshMemberSkillCD(teamBox, teamData, ti); //技能CD
 			refreshAbility(teamAbilityDom, teamData, ti); //本人能力值
 			refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, ti); //本人觉醒
