@@ -726,7 +726,6 @@ ul{
 .tIf-total-hp .reduce .awoken-bind::before,
 .tIf-total-move .general::before,
 .tIf-total-move .awoken-bind::before,
-.tIf-total-move.fixed-move-time::after,
 .tIf-effect icon::before,
 icon.poison-no-effect::after,
 .hp-range-table th::before
@@ -842,6 +841,19 @@ icon.poison-no-effect::after,
 .tIf-total-move.fixed-move-time{
     position: relative;
 }
+.tIf-total-move.fixed-move-time::after {
+	content: " ";
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+    background-image: url(images/latent.png);
+	background-position-x: -32px;
+	transform: scale(0.5);
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
 @keyframes hidden-visible-animate{
 	from {
 		opacity: 1;
@@ -850,7 +862,6 @@ icon.poison-no-effect::after,
 		opacity: 0;
 	}
 }
-.tIf-total-move.fixed-move-time::after,
 icon.poison-no-effect::after
 {
 	background-image: url(images/icon-bind.png);
