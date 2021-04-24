@@ -306,8 +306,8 @@ Formation.prototype.loadObj = function(f) {
 				const fm = tf[1][mi];
 				m.loadObj(fm, dataVeision);
 			});
-			if (tf[2] != undefined) t[2] = tf[2]; //徽章
-			if (tf[3] != undefined) t[3] = tf[3]; //队长
+			t[2] = tf[2] || 0; //徽章
+			t[3] = tf[3] || 0; //队长
 		}
 	});
 	if (f.b)
