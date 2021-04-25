@@ -867,8 +867,8 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 				team[1].concat()
 			];
 			//把队伍2的队长和武器添加到复制的队伍1里面
-			team[0].push(team2[0][0]);
-			team[1].push(team2[1][0]);
+			team[0].push(team2[0][team2[3]]);
+			team[1].push(team2[1][team2[3]]);
 		}
 
 		//觉醒
