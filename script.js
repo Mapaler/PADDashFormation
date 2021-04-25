@@ -287,7 +287,8 @@ Formation.prototype.loadObj = function(f) {
 				t[1].forEach(function(m, mi) {
 					m.loadObj(null);
 				});
-				if (t[2] != undefined) t.splice(2);
+				t[2] = 0;
+				t[3] = 0;
 		});
 		return;
 	}
@@ -3304,8 +3305,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 	const teams = formation.teams;
 
-	const leader1id = team[0][team[3]].id;
-	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3]].id : teams[1][0][teams[1][3]].id) : team[0][5].id;
+	const leader1id = team[0][team[3] || 0].id;
+	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3] || 0].id : teams[1][0][teams[1][3] || 0].id) : team[0][5].id;
 
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
@@ -3445,8 +3446,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 	const tEffectDom = totalDom.querySelector(".tIf-effect");
 	
 	//因为目前仅用于2P，所以直接在外面固定写了
-	const leader1id = teams[0][0][teams[0][3]].id;
-	const leader2id = teams[1][0][teams[1][3]].id;
+	const leader1id = teams[0][0][teams[0][3] || 0].id;
+	const leader2id = teams[1][0][teams[1][3] || 0].id;
 
 	if (tHpDom) {
 
