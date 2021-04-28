@@ -1279,7 +1279,7 @@ function parseSkillDescription(skill) {
 			if (sk[3]) str += `，结算时连击数+${sk[3]}`;
 			break;
 		case 193:
-			str = `以L字形消除5个${getOrbsAttrString(sk[0])}宝珠时`;
+			str = `以L字形消除5个${getOrbsAttrString(sk[0], true)}宝珠时`;
 			if (sk[1] && sk[1] != 100 || sk[2] && sk[2] != 100) str+=`，所有宠物的${getFixedHpAtkRcvString({atk:sk[1],rcv:sk[2]})}`;
 			if (sk[3]) str+=`，受到的伤害减少${sk[3]}%`;
 			break;
