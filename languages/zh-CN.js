@@ -1137,7 +1137,7 @@ function parseSkillDescription(skill) {
 			else if(sk[0] == 31) str += `5色`;
 			str += `同时攻击时`;
 			if (sk[2] && sk[2] !== 100 || sk[4]) str += `，所有宠物的攻击力×${sk[2]/100}倍`;
-			if (sk[4]) str += `，每多1种属性+${sk[4]/100}倍，最大${sk[1] + (sk[5] - 1)}种属性时${(sk[5] - 1) * sk[4]/100 + sk[2]/100}倍。`;
+			if (sk[4]) str += `，每多1种属性+${sk[4]/100}倍，最大${sk[1] + (sk[5] - 1)}种属性时${(sk[5] - 1) * sk[4]/100 + sk[2]/100}倍`;
 			if (sk[3]) str += `，受到的伤害减少${sk[3]}%`;
 			break;
 		case 171:
@@ -3677,7 +3677,7 @@ function parseSkillDescription(skill) {
 				}
 			}),addition:card=>{
 				const searchTypeArray = [0,1,2,35,37,42,58,59,84,85,86,87,110,115,143,144];
-				const skill = getCardSkill(card, searchTypeArray);
+				const skill = getCardActiveSkill(card, searchTypeArray);
 				const sk = skill.params;
 	
 				const colors = [getCannonAttr(skill)];
