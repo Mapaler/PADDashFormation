@@ -3031,10 +3031,14 @@ function refreshAll(formationData) {
 			const memberLi = membersDom.querySelector(`.member-${ti+1}`);
 			const latentLi = latentsDom.querySelector(`.latents-${ti+1}`);
 			const assistsLi = assistsDom.querySelector(`.member-${ti+1}`);
-			const teamAbilityLi = teamAbilityDom.querySelector(`.abilitys-${ti+1}`);
-			const teamMenberAwokenLi = teamMenberAwokenDom.querySelector(`.menber-awoken-${ti+1}`);
-			const teamAssistAwokenLi = teamAssistAwokenDom.querySelector(`.menber-awoken-${ti+1}`);
+			const teamAbilityLi = teamAbilityDom ? teamAbilityDom.querySelector(`.abilitys-${ti+1}`) : undefined;
+			const teamMenberAwokenLi = teamAbilityDom ? teamMenberAwokenDom.querySelector(`.menber-awoken-${ti+1}`) : undefined;
+			const teamAssistAwokenLi = teamAbilityDom ? teamAssistAwokenDom.querySelector(`.menber-awoken-${ti+1}`) : undefined;
 			[memberLi,latentLi,assistsLi,teamAbilityLi,teamMenberAwokenLi,teamAssistAwokenLi].forEach(dom=>{
+				if (!dom)
+				{
+					return;
+				}
 				if (leaderIdx > 0 && ti == 0)
 				{
 					dom.style.transform = `translateX(${leaderIdx*108}px)`;
