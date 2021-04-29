@@ -12,6 +12,9 @@ Use back to undo the last edit.
 * 拖拽怪物头像即可快速交换位置或复制怪物，也支持手机触屏。  
 Drag monster avatars to quickly swap positions or copy monster, also supports mobile touch screen.  
 ![切换位置](document/tips-interchangeCard.png)
+* 如果你希望使用技能切换队长，使用切换按钮。这样可以保留原始队长强调边框，和76版面图标。  
+If you want switch leader by skill, use the switch button. This preserves the original leader accent border, and the 76 board icon.  
+![切换位置](document/tips-switch-leader.png)
 * 可以在编辑界面的怪物ID输入**怪物名称**或**标签**来搜索怪物。（键入回车以执行）  
 You can search for monsters by entering the **Monster Name** or **Tags** in the monster ID of the editing interface.(Type Enter to execute)  
 ![搜索怪物名称](document/tips-search-name.png)  

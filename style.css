@@ -502,11 +502,11 @@ ul{
 /*.monster .id::before{
 	content: "No.";
 }*/
-.monster .skill::before{
+.monster .skill-cd::before{
 	content:"CD";
 	font-size: 10px;
 }
-.monster .skill{
+.monster .skill-cd{
 	font-size: 13px;
 	line-height: 13px;
 	color:white;
@@ -515,12 +515,33 @@ ul{
 	right:0;
 	bottom:0;
 }
-.monster .skill.max-skill{
+.monster .skill-cd.max-skill{
 	display: none;
 }
-.show-mon-skill-cd .monster .skill.max-skill{
+.show-mon-skill-cd .monster .skill-cd.max-skill{
 	display: block;
 }
+/*交换队长技的图标*/
+.monster .switch-leader
+{
+	position: absolute;
+	right: 0px;
+	bottom: 17px;
+	width: 23px;
+	height: 25px;
+	background-image: url(images/icon-switch-leader.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.monster .switch-leader:hover
+{
+	box-shadow: red 0 0 5px;
+}
+.monster .switch-leader:active
+{
+	animation: icon-active 0.2s;
+}
+
 .not-show-awoken-count .formation-box .team-total-info, /*单个队伍血量统计*/
 .not-show-awoken-count .formation-box .team-ability, /*单个队伍三维*/
 .not-show-awoken-count .formation-box .team-awoken, /*单个队伍觉醒统计*/
@@ -701,7 +722,6 @@ ul{
 .tIf-total-hp .reduce .awoken-bind::before,
 .tIf-total-move .general::before,
 .tIf-total-move .awoken-bind::before,
-.tIf-total-move.fixed-move-time::after,
 .tIf-effect icon::before,
 icon.poison-no-effect::after,
 .hp-range-table th::before
@@ -821,6 +841,19 @@ icon.poison-no-effect::after,
 .tIf-total-move.fixed-move-time{
     position: relative;
 }
+.tIf-total-move.fixed-move-time::after {
+	content: " ";
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+    background-image: url(images/latent.png);
+	background-position-x: -32px;
+	transform: scale(0.5);
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
 @keyframes hidden-visible-animate{
 	from {
 		opacity: 1;
@@ -829,7 +862,6 @@ icon.poison-no-effect::after,
 		opacity: 0;
 	}
 }
-.tIf-total-move.fixed-move-time::after,
 icon.poison-no-effect::after
 {
 	background-image: url(images/icon-bind.png);
