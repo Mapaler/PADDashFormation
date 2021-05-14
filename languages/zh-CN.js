@@ -1482,11 +1482,17 @@ function parseSkillDescription(skill) {
 		case 214: //封自己的技能
 			str = `${sk[0]}回合内，玩家自身队伍无法使用主动技能`;
 			break;
+		case 215: //十字属性珠+C
+			str = `${sk[0]}回合内，${getOrbsAttrString(sk[1])}宝珠无法消除`;
+			break;
 		case 218: //坐自己
 			str = `自身以外的宠物技能坐下↓${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}回合`;
 			break;
 		case 219: //192同时消除多色中所有色,219任意消除多色中1色
 			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0], true)}宝珠时，结算时连击数+${sk[2]}`;
+			break;
+		case 223:
+			str = `${sk[0]}连击以上时，追加${sk[1].bigNumberToString()}点固定伤害`;
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
@@ -1715,7 +1721,7 @@ function parseSkillDescription(skill) {
 		{name:"不做筛选",function:cards=>cards},
 		{group:"======队长技======", functions: [
 			{name:"队长技固伤追击（按伤害排序）",function:cards=>{
-				const searchTypeArray = [199,200,201];
+				const searchTypeArray = [199,200,201,223];
 				function getSkillFixedDamage(skill)
 				{
 					switch (skill.type)
@@ -1724,6 +1730,8 @@ function parseSkillDescription(skill) {
 							return skill.params[2];
 						case 201:
 							return skill.params[5];
+						case 223:
+							return skill.params[1];
 						default:
 							return 0;
 					}
@@ -1737,7 +1745,7 @@ function parseSkillDescription(skill) {
 					return a_pC - b_pC;
 				});
 			},addition:card=>{
-				const searchTypeArray = [199,200,201];
+				const searchTypeArray = [199,200,201,223];
 				function getSkillFixedDamage(skill)
 				{
 					switch (skill.type)
@@ -1746,6 +1754,8 @@ function parseSkillDescription(skill) {
 							return skill.params[2];
 						case 201:
 							return skill.params[5];
+						case 223:
+							return skill.params[1];
 						default:
 							return 0;
 					}
@@ -2522,6 +2532,16 @@ function parseSkillDescription(skill) {
 			},
 			{name:"自封技能（能干啥？）",function:cards=>cards.filter(card=>{
 				const searchType = 214;
+				const skill = Skills[card.activeSkillId];
+				if (skill.type == searchType)
+					return true;
+				else if (skill.type == 116 || skill.type == 118){
+					const subskills = skill.params.map(id=>Skills[id]);
+					return subskills.some(subskill=>subskill.type == searchType);
+				}
+			})},
+			{name:"自封消珠（能干啥？）",function:cards=>cards.filter(card=>{
+				const searchType = 215;
 				const skill = Skills[card.activeSkillId];
 				if (skill.type == searchType)
 					return true;

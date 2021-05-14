@@ -788,7 +788,7 @@ function tIf_Effect_addCombo(leader1id, leader2id) {
 }
 //计算队伍的追打
 function tIf_Effect_inflicts(leader1id, leader2id) {
-	const searchTypeArray = [199, 200, 201];
+	const searchTypeArray = [199, 200, 201, 223];
 	const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
 	const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
 
@@ -800,6 +800,8 @@ function tIf_Effect_inflicts(leader1id, leader2id) {
 				return skill.params[2];
 			case 201:
 				return skill.params[5];
+			case 223:
+				return skill.params[1];
 			default:
 				return 0;
 		}
