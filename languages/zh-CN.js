@@ -1434,6 +1434,9 @@ function parseSkillDescription(skill) {
 		case 214: //封自己的技能
 			str = `${sk[0]}回合内，玩家自身队伍无法使用主动技能`;
 			break;
+		case 215: //十字属性珠+C
+			str = `${sk[0]}回合内，${getOrbsAttrString(sk[1])}宝珠无法消除`;
+			break;
 		case 218: //坐自己
 			str = `自身以外的宠物技能坐下↓${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}回合`;
 			break;
@@ -2481,6 +2484,16 @@ function parseSkillDescription(skill) {
 			},
 			{name:"自封技能（能干啥？）",function:cards=>cards.filter(card=>{
 				const searchType = 214;
+				const skill = Skills[card.activeSkillId];
+				if (skill.type == searchType)
+					return true;
+				else if (skill.type == 116 || skill.type == 118){
+					const subskills = skill.params.map(id=>Skills[id]);
+					return subskills.some(subskill=>subskill.type == searchType);
+				}
+			})},
+			{name:"自封消珠（能干啥？）",function:cards=>cards.filter(card=>{
+				const searchType = 215;
 				const skill = Skills[card.activeSkillId];
 				if (skill.type == searchType)
 					return true;
