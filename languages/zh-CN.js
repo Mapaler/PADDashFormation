@@ -1440,6 +1440,9 @@ function parseSkillDescription(skill) {
 		case 219: //192同时消除多色中所有色,219任意消除多色中1色
 			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0], true)}宝珠时，结算时连击数+${sk[2]}`;
 			break;
+		case 223:
+			str = `${sk[0]}连击以上时，追加${sk[1].bigNumberToString()}点固定伤害`;
+			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
 			//开发部分
@@ -1667,7 +1670,7 @@ function parseSkillDescription(skill) {
 		{name:"不做筛选",function:cards=>cards},
 		{group:"======队长技======", functions: [
 			{name:"队长技固伤追击（按伤害排序）",function:cards=>{
-				const searchTypeArray = [199,200,201];
+				const searchTypeArray = [199,200,201,223];
 				function getSkillFixedDamage(skill)
 				{
 					switch (skill.type)
@@ -1676,6 +1679,8 @@ function parseSkillDescription(skill) {
 							return skill.params[2];
 						case 201:
 							return skill.params[5];
+						case 223:
+							return skill.params[1];
 						default:
 							return 0;
 					}
@@ -1689,7 +1694,7 @@ function parseSkillDescription(skill) {
 					return a_pC - b_pC;
 				});
 			},addition:card=>{
-				const searchTypeArray = [199,200,201];
+				const searchTypeArray = [199,200,201,223];
 				function getSkillFixedDamage(skill)
 				{
 					switch (skill.type)
@@ -1698,6 +1703,8 @@ function parseSkillDescription(skill) {
 							return skill.params[2];
 						case 201:
 							return skill.params[5];
+						case 223:
+							return skill.params[1];
 						default:
 							return 0;
 					}
