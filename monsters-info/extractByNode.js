@@ -42,6 +42,18 @@ officialAPI.forEach(function(lang) {
 	const oCards = lang.cardOriginal = cardJsonObj.card;//将字符串转换为json对象
 
 	const monCards = lang.cards = [];
+	/*oCards.forEach((oCard, idx)=>{
+		let mid = oCard[0];
+		if (mid === idx) //原始怪物
+		{
+			monCards.push(new Card(oCard));
+		}else
+		{
+			const nCard = monCards[mid % 100000];
+			if (!nCard.specialVersion) nCard.specialVersion = {};
+			nCard.specialVersion[Math.floor(mid / 100000)] = new Card(oCard);
+		}
+	});*/
 	for (let cardIndex = 0; oCards[cardIndex][0] === cardIndex; cardIndex++)
 	{
 		monCards.push(new Card(oCards[cardIndex]));
