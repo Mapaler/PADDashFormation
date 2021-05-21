@@ -1443,6 +1443,9 @@ function parseSkillDescription(skill) {
 		case 219: //192同时消除多色中所有色,219任意消除多色中1色
 			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0], true)}宝珠时，结算时连击数+${sk[2]}`;
 			break;
+		case 220: //192同时消除多色中所有色,219任意消除多色中1色
+			str = `以L字形消除5个${getOrbsAttrString(sk[0], true)}宝珠时，结算时连击数+${sk[1]}`;
+			break;
 		case 223:
 			str = `${sk[0]}连击以上时，追加${sk[1].bigNumberToString()}点固定伤害`;
 			break;
@@ -1732,6 +1735,8 @@ function parseSkillDescription(skill) {
 						case 210:
 						case 219:
 							return skill.params[2];
+						case 220:
+							return skill.params[1];
 						default:
 							return 0;
 					}
@@ -1759,6 +1764,8 @@ function parseSkillDescription(skill) {
 						case 210:
 						case 219:
 							return skill.params[2];
+						case 220:
+							return skill.params[1];
 						default:
 							return 0;
 					}
