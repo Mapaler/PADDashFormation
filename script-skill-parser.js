@@ -121,6 +121,7 @@ const SkillKinds = {
     DamageEnemy: "damage-enemy",
     Vampire: "vampire",
     ReduceDamage: "reduce-damage",
+    HPModify: "hp-modify",
     Heal: "heal",
     ChangeOrbs: "change-orbs",
     PowerUp: "power-up",
@@ -307,6 +308,9 @@ function vampire(attr, damageValue, healValue) {
 function reduceDamage(attrs, percent, condition) {
     return { kind: SkillKinds.ReduceDamage, attrs: attrs, percent: percent, condition: condition };
 }
+function HPModify(value) {
+    return { kind: SkillKinds.HPModify, value: value };
+}
 function heal(value) {
     return { kind: SkillKinds.Heal, value: value };
 }
@@ -382,8 +386,8 @@ const parsers = {
 	[4](mul) { return poison(v.xATK(mul)); },
 	[5](time) { return CTW(v.constant(time)); },
 	[6](percent) { return gravity(v.xHP(percent)); },
-	[7](mul) { return heal(v.xRCV(mul)); },
-	[8](value) { return heal(v.constant(value)); },
+	[7](mul) { return HPModify(v.xRCV(mul)); },
+	[8](value) { return HPModify(v.constant(value)); },
 	[9](from, to) { return changeOrbs({ kind: 'from', from: [from || 0], to: [to || 0] }); },
 	[10]() { return dropRefresh(); },
 	[11](attr, mul) { return powerUp([attr], null, p.mul({ atk: mul })); },
@@ -490,7 +494,7 @@ const parsers = {
 	[116](...ids) { return ids.flatMap(id => this.parser(id)); },
 	[117](bind, rcv, constant, hp, awokenBind) {
 	  return [
-		rcv ? heal(v.xRCV(rcv)) : hp ? heal(v.xMaxHP(hp)) : constant ? heal(v.constant(constant)) : null,
+		rcv ? HPModify(v.xRCV(rcv)) : hp ? HPModify(v.xMaxHP(hp)) : constant ? HPModify(v.constant(constant)) : null,
 		(bind || awokenBind) ? unbind(bind || 0, awokenBind || 0) : null,
 	  ].filter(Boolean);
 	},
@@ -675,19 +679,27 @@ const parsers = {
 	},
 };
 
-function _appendToFragment(fragment, arg){
+DocumentFragment.prototype.ap = function(arg)
+{
 	if (Array.isArray(arg))
 	{
-		arg.forEach(element=>_appendToFragment(fragment, element));
+		arg.forEach(element=>this.ap(element));
 	}
 	else if (typeof arg == "string" || typeof arg == "number")
 	{
-		return fragment.appendChild(document.createTextNode(arg));
+		return this.appendChild(document.createTextNode(arg));
 	}
 	else
 	{
-		return fragment.appendChild(arg);
+		return this.appendChild(arg);
 	}
+}
+
+//按住Ctrl点击技能在控制台输出技能的对象
+function showParsedSkill(event) {
+    if (event.ctrlKey) {
+        console.log(this.skill);
+    }
 }
 
 function renderSkills(skills)
@@ -698,23 +710,23 @@ function renderSkills(skills)
 		const li = ul.appendChild(document.createElement("li"));
 		li.className = skill.kind;
 		li.appendChild(renderSkill(skill));
+		li.skill = skill;
+		li.addEventListener("click", showParsedSkill);
 	});
 	return ul;
 }
 function renderSkill(skill, option = {})
 {
-	function atf(arg){
-		return _appendToFragment(fragment, arg);
-	}
+	const frg = document.createDocumentFragment();
+	if (typeof localTranslating == "undefined") return frg;
+	const tsp = localTranslating.skill_parse;
+
 	function createIcon(iconType, className){
 		const idoc = document.createElement("icon");
 		idoc.className = `icon-skill${className ? ` ${className}` : ''}`;
 		idoc.setAttribute("data-icon-type", iconType);
 		return idoc;
 	}
-	const fragment = document.createDocumentFragment();
-	if (typeof localTranslating == "undefined") return fragment;
-	const tsp = localTranslating.skill_parse;
 	
 	let dict;
 	switch (skill.kind) {
@@ -722,7 +734,7 @@ function renderSkill(skill, option = {})
 			dict = {
 				type: skill.kind
 			};
-			atf(tsp.skill.unknown(dict));
+			frg.ap(tsp.skill.unknown(dict));
 			break;
 		}
 		case SkillKinds.ActiveTurns: { //有回合的行动
@@ -730,7 +742,7 @@ function renderSkill(skill, option = {})
 				turns: skill.turns,
 				active: renderSkill(skill.skill, { forTurns: true }),
 			};
-			atf(tsp.skill.active_turns(dict));
+			frg.ap(tsp.skill.active_turns(dict));
 			break;
 		}
 		case SkillKinds.RandomSkills: { //随机技能
@@ -743,45 +755,55 @@ function renderSkill(skill, option = {})
 			dict = {
 				"skill-list": ul,
 			};
-			atf(tsp.skill.random_skills(dict));
+			frg.ap(tsp.skill.random_skills(dict));
 			break;
 		}
 		case SkillKinds.Delay: { //威吓
 			dict = {
 				icon: createIcon("delay"),
 			};
-			atf(tsp.skill.delay(dict));
+			frg.ap(tsp.skill.delay(dict));
 			break;
 		}
 		case SkillKinds.MassAttack: { //全体攻击
 			dict = {
 				icon: createIcon("mass-attack"),
 			};
-			atf(tsp.skill.mass_attack(dict));
+			frg.ap(tsp.skill.mass_attack(dict));
 			break;
 		}
 		case SkillKinds.LeaderChange: { //切换队长
 			dict = {
 				icon: createIcon("leader-change"),
 			};
-			atf(tsp.skill.leader_change(dict));
+			frg.ap(tsp.skill.leader_change(dict));
 			break;
 		}
 		case SkillKinds.NoSkyfall: { //无天降
 			dict = {
 				icon: createIcon("no-skyfall"),
 			};
-			atf(tsp.skill.no_skyfall(dict));
+			frg.ap(tsp.skill.no_skyfall(dict));
 			break;
 		}
-		case SkillKinds.Heal: { //回血主动
+		case SkillKinds.HPModify: { //主动立刻回血
 			dict = {
-				icon: option.forTurns ? createIcon("auto-heal") : createIcon("heal", "hp-incr"),
+				icon: skill.value.value > 0 ? createIcon("heal", "hp-incr") : createIcon("heal", "hp-decr"),
 				belong_to: option.forTurns ? tsp.target.team() : tsp.target.self(),
 				value: renderValue(skill.value, {percent: option.forTurns}),
 				stats: tsp.stats.hp(),
 			};
-			atf(tsp.skill.heal(dict));
+			frg.ap(tsp.skill.heal(dict));
+			break;
+		}
+		case SkillKinds.Heal: { //主动回血buff
+			dict = {
+				icon: createIcon("auto-heal"),
+				belong_to: tsp.target.team(),
+				value: renderValue(skill.value),
+				stats: tsp.stats.hp(),
+			};
+			frg.ap(tsp.skill.heal(dict));
 			break;
 		}
 		case SkillKinds.DefenseBreak: { //破防
@@ -789,7 +811,7 @@ function renderSkill(skill, option = {})
 				icon: createIcon("defense-break"),
 				value: renderValue(skill.value, {percent: true}),
 			};
-			atf(tsp.skill.defense_break(dict));
+			frg.ap(tsp.skill.defense_break(dict));
 			break;
 		}
 		case SkillKinds.Poison: { //毒
@@ -800,7 +822,7 @@ function renderSkill(skill, option = {})
 				stats: tsp.stats.hp(),
 				value: renderValue(skill.value),
 			};
-			atf(tsp.skill.poison(dict));
+			frg.ap(tsp.skill.poison(dict));
 			break;
 		}
 		case SkillKinds.TimeExtend: { //时间变化buff
@@ -808,7 +830,7 @@ function renderSkill(skill, option = {})
 				icon: createIcon("status-time", SkillValue.isLess(skill.value) ? "time-decr" : "time-incr"),
 				value: renderValue(skill.value, { unit:tsp.unit.seconds, plusSign:true, percent:true }),
 			};
-			atf(tsp.skill.time_extend(dict));
+			frg.ap(tsp.skill.time_extend(dict));
 			break;
 		}
 		case SkillKinds.FollowAttack: { //队长技追打
@@ -818,7 +840,7 @@ function renderSkill(skill, option = {})
 				target: tsp.target.enemy(),
 				value: renderValue(skill.value),
 			};
-			atf(tsp.skill.follow_attack(dict));
+			frg.ap(tsp.skill.follow_attack(dict));
 			break;
 		}
 		case SkillKinds.AutoHeal: { //队长技自动回血
@@ -828,17 +850,17 @@ function renderSkill(skill, option = {})
 				value: renderValue(skill.value),
 				stats: tsp.stats.hp(),
 			};
-			atf(tsp.skill.auto_heal(dict));
+			frg.ap(tsp.skill.auto_heal(dict));
 			break;
 		}
 		case SkillKinds.CTW: { //时间暂停
-			atf(createIcon("ctw"));
-			atf(tsp.skill.ctw(renderValue(skill.value, { unit: tsp.unit.seconds })));
+			frg.ap(createIcon("ctw"));
+			frg.ap(tsp.skill.ctw(renderValue(skill.value, { unit: tsp.unit.seconds })));
 			break;
 		}
 		case SkillKinds.Gravity: { //重力
 			console.log(skill.value)
-			atf(tsp.skill.gravity({
+			frg.ap(tsp.skill.gravity({
 				icon: createIcon("gravity"),
 				target: tsp.target.enemy(),
 				value: renderValue(skill.value, { percent:true }),
@@ -846,8 +868,8 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.Resolve: { //根性
-			atf(createIcon("resolve"));
-			atf(tsp.skill.resolve(renderStat('hp'), renderValue(skill.min, { percent:true }), skill.condition.probability));
+			frg.ap(createIcon("resolve"));
+			frg.ap(tsp.skill.resolve(renderStat('hp'), renderValue(skill.min, { percent:true }), skill.condition.probability));
 			break;
 		}
 		/*
@@ -1148,27 +1170,24 @@ function renderSkill(skill, option = {})
 		*/
 		default: {
 			console.log("未处理的技能类型",skill.kind, skill);
-			atf(skill.kind);
+			frg.ap(skill.kind);
 		}
 	}
-	return fragment;
+	return frg;
 };
 
 function renderStat(stat) {
-	function atf(arg){
-		return _appendToFragment(fragment, arg);
-	}
-	const fragment = document.createDocumentFragment();
-	if (typeof localTranslating == "undefined") return fragment;
+	const frg = document.createDocumentFragment();
+	if (typeof localTranslating == "undefined") return frg;
 	const tspt = localTranslating.skill_parse.stats;
 	if (tspt[stat])
-		atf(tspt[stat]());
+		frg.ap(tspt[stat]());
 	else
 	{
 		console.log("未知状态类型",stat);
-		atf(tspt.unknown({ type: stat }));
+		frg.ap(tspt.unknown({ type: stat }));
 	}
-	return fragment;
+	return frg;
 }
 /*
 function renderAttrs(attrs: Attributes | Attributes[]) {
@@ -1304,11 +1323,8 @@ function renderPowerUp(powerUp: SkillPowerUp) {
 }
 */
 function renderValue(_value, option = {}) {
-	function atf(arg){
-		return _appendToFragment(fragment, arg);
-	}
-	const fragment = document.createDocumentFragment();
-	if (typeof localTranslating == "undefined") return fragment;
+	const frg = document.createDocumentFragment();
+	if (typeof localTranslating == "undefined") return frg;
 	const tspv = localTranslating.skill_parse.value;
 	const od = option.decimalDigits, os = option.plusSign;
 	let dict;
@@ -1317,7 +1333,7 @@ function renderValue(_value, option = {}) {
 			dict = {
 				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
 			};
-			atf(
+			frg.ap(
 				option.percent ? 
 				tspv.mul_percent(dict) :
 				tspv.mul_times(dict)
@@ -1329,7 +1345,7 @@ function renderValue(_value, option = {}) {
 				value: _value.value.keepCounts(od,os),
 				unit: option.unit ? option.unit() : undefined,
 			};
-			atf(tspv.const(dict));
+			frg.ap(tspv.const(dict));
 			break;
 		}
 		case SkillValueKind.xMaxHP: {
@@ -1337,7 +1353,7 @@ function renderValue(_value, option = {}) {
 				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
 				stats: renderStat('maxhp'),
 			};
-			atf(
+			frg.ap(
 				option.percent ? 
 				tspv.mul_of_percent(dict) :
 				tspv.mul_of_times(dict)
@@ -1349,7 +1365,7 @@ function renderValue(_value, option = {}) {
 				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
 				stats: renderStat('hp'),
 			};
-			atf(
+			frg.ap(
 				option.percent ? 
 				tspv.mul_of_percent(dict) :
 				tspv.mul_of_times(dict)
@@ -1361,7 +1377,7 @@ function renderValue(_value, option = {}) {
 				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
 				stats: renderStat('atk'),
 			};
-			atf(
+			frg.ap(
 				option.percent ? 
 				tspv.mul_of_percent(dict) :
 				tspv.mul_of_times(dict)
@@ -1373,7 +1389,7 @@ function renderValue(_value, option = {}) {
 				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
 				stats: renderStat('rcv'),
 			};
-			atf(
+			frg.ap(
 				option.percent ? 
 				tspv.mul_of_percent(dict) :
 				tspv.mul_of_times(dict)
@@ -1385,7 +1401,7 @@ function renderValue(_value, option = {}) {
 				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
 				stats: renderStat('teamrcv'),
 			};
-			atf(
+			frg.ap(
 				option.percent ? 
 				tspv.mul_of_percent(dict) :
 				tspv.mul_of_times(dict)
@@ -1397,7 +1413,7 @@ function renderValue(_value, option = {}) {
 				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
 				stats: renderStat('teamatk'),
 			};
-			atf(
+			frg.ap(
 				option.percent ? 
 				tspv.mul_of_percent(dict) :
 				tspv.mul_of_times(dict)
@@ -1458,8 +1474,8 @@ function renderValue(_value, option = {}) {
 		*/
 		default: {
 			console.log("未知数值类型",_value.kind, _value);
-			atf(tspv.unknown({ type: _value.kind }));
+			frg.ap(tspv.unknown({ type: _value.kind }));
 		}
 	}
-	return fragment;
+	return frg;
   }

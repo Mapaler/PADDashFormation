@@ -3344,7 +3344,7 @@ function parseSkillDescription(skill) {
 				}
 			})},
 			{name:"玩家回血",function:cards=>cards.filter(card=>{
-				const searchTypeArray = [7,8,35,115];
+				const searchTypeArray = [7,8,35,115]; //还有117不好判断的写在后面
 				const skill = Skills[card.activeSkillId];
 				if (searchTypeArray.includes(skill.type) || skill.type == 117 && (skill.params[1] || skill.params[2] || skill.params[3]))
 					return true;
