@@ -3,12 +3,14 @@ const localTranslating = {
     skill_parse: {
         skill: {
 			unknown: tp`未知的技能类型：${'type'}`, //type
-			active_turns: tp`${'active'}，效果 ${'turns'} 回合`, //turns, active
-			random_skills: tp`随机发动以下技能：${'skill-list'}`, //skill-list
+			active_turns: tp`${'actionSkill'}，效果 ${'turns'} 回合`, //turns, actionSkill
+			random_skills: tp`随机发动以下技能：${'skills'}`, //skills
+			damage_enemy: tp`对${'target'}造成${'damage'}的${'attr'}伤害`, //
 			delay: tp`${'icon'}延迟敌人的攻击`, //icon
 			mass_attack: tp`${'icon'}所有攻击变为全体攻击`,
 			leader_change: tp`${'icon'}将自身换为队长，再次使用则换回来`,
 			no_skyfall: tp`${'icon'}天降的宝珠不会消除`,
+            hp_modify: tp`${'icon'}回复 ${'belong_to'}${'value'} 的 ${'stats'}`,
             heal: tp`${'icon'}回复 ${'belong_to'}${'value'} 的 ${'stats'}`,
             defense_break: tp`${'icon'}敌方的防御力减少 ${'value'}`,
             poison: tp`${'icon'}使${'target'}全体中毒，每回合损失${'belong_to'} ${'value'} 的 ${'stats'}`,
@@ -16,7 +18,7 @@ const localTranslating = {
 			follow_attack: tp`${'icon'}消除宝珠的回合，以${'belong_to'}${'value'}的伤害追打${'target'}（计算防御力）`,//(valueElement)=> [`消除宝珠的回合，以`, valueElement, `的伤害追打敌人`],
             auto_heal: tp`${'icon'}消除宝珠的回合，回复${'belong_to'}${'value'}的 ${'stats'}`,
 			ctw: (valueElement)=> [valueElement, `内时间停止，可以任意移动宝珠`],
-			gravity: tp`造成${'target'}${'value'}的伤害`,//(valueElement)=> [`造成敌方`, valueElement, `的伤害`],
+			gravity: tp`${'icon'}造成${'target'}${'value'}的伤害`,//(valueElement)=> [`造成敌方`, valueElement, `的伤害`],
             resolve: (stats, valueElement, probability)=> [probability ? `有${(probability* 100).keepCounts()}%的几率`:'',`如当前`,valueElement,`，受到单一次致命攻击时，将会以1点 HP 生还`],
             resolve: (stats, valueElement, probability)=> [`如`, stats, `≧` , valueElement, probability<100 ? `，有${probability}%的几率`:'',`受到单一次致命攻击时，将会以1点 HP 生还`],
 		},
@@ -27,23 +29,56 @@ const localTranslating = {
 			mul_times: tp`×${'value'}倍`,
 			mul_of_percent: tp`${'stats'}的${'value'}%`,
 			mul_of_times: tp`${'stats'}×${'value'}倍`,
+			hp_scale: tp`${'hp'}为100%时${'min'}，${'hp'}为1时${'max'}`,
+		},
+		attrs: {
+			[0]: tp`${'icon'}火`,
+			[1]: tp`${'icon'}水`,
+			[2]: tp`${'icon'}木`,
+			[3]: tp`${'icon'}光`,
+			[4]: tp`${'icon'}暗`,
+			[5]: tp`${'icon'}回复`,
+			[6]: tp`${'icon'}空`,
+			self: tp`${'icon'}自身属性`,
+			fixed: tp`${'icon'}无视防御固定`,
+		},
+		orbs: {
+			[0]: tp`${'icon'}火`,
+			[1]: tp`${'icon'}水`,
+			[2]: tp`${'icon'}木`,
+			[3]: tp`${'icon'}光`,
+			[4]: tp`${'icon'}暗`,
+			[5]: tp`${'icon'}回复`,
+			[6]: tp`${'icon'}干扰`,
+			[7]: tp`${'icon'}毒`,
+			[8]: tp`${'icon'}剧毒`,
+			[9]: tp`${'icon'}炸弹`,
 		},
 		target: {
 			self: tp`发动者自身`,
 			enemy: tp`敌人`,
 			team: tp`队伍`,
+			enemy_all: tp`敌方全体`,
+			enemy_one: tp`敌方1体`,
+			enemy_attr: tp`${'attr'}属性敌人`,
 		},
         stats: {
             unknown: tp`[ 未知状态: ${'type'}]`, //type
             maxhp: tp`最大HP`,
-            hp: tp`HP`,
+            hp: tp`当前HP`,
             atk: tp`攻击力`,
 			rcv: tp`回复力`,
-            teamatk: tp`队伍攻击力`,
+            teamhp: tp`队伍总HP`,
+            teamatk: tp`队伍${'attrs'}总攻击力`,
             teamrcv: tp`队伍回复力`,
         },
 		unit: {
-			seconds : tp`秒`,
+			seconds: tp`秒`,
+			point: tp`点`,
+		},
+		word: {
+			slight_pause: tp`、`, //顿号
+			affix_attr: tp`${'cotent'}属性`, //词缀-属性
 		},
     },
 }

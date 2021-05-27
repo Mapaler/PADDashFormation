@@ -2925,7 +2925,7 @@ function editBoxChangeMonId(id) {
 	skillDetailOriginal.innerHTML = "";
 	skillDetailOriginal.appendChild(parseSkillDescription(activeskill));
 	skillDetailParsed.innerHTML = "";
-	skillDetailParsed.appendChild(renderSkills(skillParser(card.activeSkillId)));
+	skillDetailParsed.appendChild(renderSkillEntry(skillParser(card.activeSkillId)));
 
 	const t_maxLevel = card.overlay || card.types.includes(15) ? 1 : activeskill.maxLevel; //遇到不能升技的，最大等级强制为1
 	skillLevel.max = t_maxLevel;
@@ -2951,7 +2951,7 @@ function editBoxChangeMonId(id) {
 	lskillDetailOriginal.innerHTML = "";
 	lskillDetailOriginal.appendChild(parseSkillDescription(leaderSkill));
 	lskillDetailParsed.innerHTML = "";
-	lskillDetailParsed.appendChild(renderSkills(skillParser(card.leaderSkillId)));
+	lskillDetailParsed.appendChild(renderSkillEntry(skillParser(card.leaderSkillId)));
 
 	rowLederSkill.appendChild(fragment);
 

@@ -5,9 +5,9 @@ function tp(strings, ...keys) {
 		let fragment = document.createDocumentFragment();
 		fragment.appendChild(document.createTextNode(strings[0]));
 		//let result = [strings[0]];
-		keys.forEach(function(key, i) {
+		keys.forEach(function(key, i, arr) {
 			let value = Number.isInteger(key) ? values[key] : dict[key];
-			if (typeof value == "string" || typeof value == "number")
+			if (!(value instanceof Node))
 			{
 				value = document.createTextNode(value);
 			}
@@ -17,8 +17,7 @@ function tp(strings, ...keys) {
 			}else
 			{
 				try{
-					//console.log(value);
-					fragment.appendChild(value);
+					fragment.appendChild(arr.lastIndexOf(key) == i ? value : value.cloneNode(true));
 				}catch(e)
 				{
 					console.log(value, e);
@@ -98,6 +97,7 @@ const SkillValueKind = {
 	xRCV: 'mul-rcv',
 	RandomATK: 'random-atk',
 	HPScale: 'hp-scale',
+	xTeamHP: 'mul-team-hp',
 	xTeamATK: 'mul-team-atk',
 	xTeamRCV: 'mul-team-rcv',
 	xAwakenings: 'mul-awakenings',
@@ -211,6 +211,9 @@ const v = {
     },
     hpScale: function(min, max, scale) {
         return { kind: SkillValueKind.HPScale, min: (min / 100) || 1, max: (max / 100) || 1, scale: (scale / 100) || 1 };
+    },
+    xTeamHP: function(value) {
+        return { kind: SkillValueKind.xTeamHP, value: (value / 100) || 1 };
     },
     xTeamATK: function(attrs, value) {
         return { kind: SkillValueKind.xTeamATK, attrs: attrs, value: (value / 100) || 1 };
@@ -568,6 +571,8 @@ const parsers = {
 	[141](count, to, exclude) { return changeOrbs({ kind: 'gen', to: flags(to), exclude: flags(exclude), count }); },
 	[142](turns, attr) { return activeTurns(turns, changeAttr('self', attr)); },
   
+	[143](mul, dmgAttr) { return damageEnemy('all', dmgAttr || 0, v.xTeamHP(mul)); },
+
 	[144](teamAttrs, mul, single, dmgAttr) { return damageEnemy(single ? 'single' : 'all', dmgAttr, v.xTeamATK(flags(teamAttrs), mul)); },
 	[145](mul) { return heal(v.xTeamRCV(mul)); },
 	[146](turns) { return skillBoost(turns); },
@@ -679,22 +684,34 @@ const parsers = {
 	},
 };
 
+//将内容添加到代码片段
 DocumentFragment.prototype.ap = function(arg)
 {
-	if (Array.isArray(arg))
+	if (Array.isArray(arg)) //数组，递归自身
 	{
 		arg.forEach(element=>this.ap(element));
 	}
-	else if (typeof arg == "string" || typeof arg == "number")
+	else if (arg instanceof Node) //属于Node的直接添加
 	{
-		return this.appendChild(document.createTextNode(arg));
+		this.appendChild(arg);
 	}
-	else
+	else //其他内容的转换为文字添加
 	{
-		return this.appendChild(arg);
+		this.appendChild(document.createTextNode(arg));
 	}
 }
 
+//将数组和分隔符添加到一个代码片段，类似join
+Array.prototype.nodeJoin = function(separator)
+{
+	const frg = document.createDocumentFragment();
+	this.forEach((item, idx, arr)=>{
+		frg.ap(item);
+		if (idx < (arr.length - 1))
+			frg.ap(separator instanceof Node ? separator.cloneNode(true) : separator);
+	});
+	return frg;
+}
 //按住Ctrl点击技能在控制台输出技能的对象
 function showParsedSkill(event) {
     if (event.ctrlKey) {
@@ -702,7 +719,7 @@ function showParsedSkill(event) {
     }
 }
 
-function renderSkills(skills)
+function renderSkillEntry(skills)
 {
 	const ul = document.createElement("ul");
 	ul.className = "card-skill-list";
@@ -738,22 +755,24 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.ActiveTurns: { //有回合的行动
+			let turns = skill.turns, actionSkill = skill.skill;
 			dict = {
-				turns: skill.turns,
-				active: renderSkill(skill.skill, { forTurns: true }),
+				turns: turns,
+				actionSkill: actionSkill,
 			};
 			frg.ap(tsp.skill.active_turns(dict));
 			break;
 		}
 		case SkillKinds.RandomSkills: { //随机技能
+			let skills = skill.skills;
 			const ul = document.createElement("ul");
 			ul.className = "random-active-skill";
-			skill.skills.forEach(subSkills=>{
+			skills.forEach(subSkills=>{
 				const li = ul.appendChild(document.createElement("li"));
-				li.appendChild(renderSkills(subSkills));
+				li.appendChild(renderSkillEntry(subSkills));
 			});
 			dict = {
-				"skill-list": ul,
+				skills: ul,
 			};
 			frg.ap(tsp.skill.random_skills(dict));
 			break;
@@ -793,7 +812,7 @@ function renderSkill(skill, option = {})
 				value: renderValue(skill.value, {percent: option.forTurns}),
 				stats: tsp.stats.hp(),
 			};
-			frg.ap(tsp.skill.heal(dict));
+			frg.ap(tsp.skill.hp_modify(dict));
 			break;
 		}
 		case SkillKinds.Heal: { //主动回血buff
@@ -872,6 +891,19 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.resolve(renderStat('hp'), renderValue(skill.min, { percent:true }), skill.condition.probability));
 			break;
 		}
+		
+		case SkillKinds.DamageEnemy: {
+			let attr = skill.attr, target = skill.target, selfHP = skill.selfHP, damage = skill.damage;
+			if (attr == null) break; //没有属性时，编号为0的空技能
+			dict = {
+				icon: attr === 'fixed' ? createIcon("damage-enemy-fixed") : createIcon("damage-enemy"),
+				target: target === 'all' ? tsp.target.enemy_all() : target === 'single' ? tsp.target.enemy_one() : tsp.target.enemy_attr({attr: renderAttrs(target)}),
+				damage: renderValue(damage, {unit: tsp.unit.point}),
+				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true})
+			};
+			frg.ap(tsp.skill.damage_enemy(dict));
+			break;
+		}
 		/*
 
 		case SkillKinds.BoardChange: {
@@ -929,25 +961,6 @@ function renderSkill(skill, option = {})
 		return <span className="CardSkill-skill">7x6 board</span>;
 		}
 
-		case SkillKinds.DamageEnemy: {
-		const { attr, target, selfHP, damage } = skill as Skill.DamageEnemy;
-		return (
-			<span className="CardSkill-skill">
-			{!!selfHP && <>HP = {renderValue(selfHP)} &rArr;</>}
-
-			<Asset assetId="skill-attack" className="CardSkill-icon" />
-
-			{target === 'all' && <Asset assetId="status-mass-attack" className="CardSkill-icon" title="All enemies" />}
-			{target === 'single' && <>single enemy </>}
-			{typeof target === 'number' && <>{renderAttrs(target)} enemies </>}
-
-			&rArr; {renderValue(damage)}
-			{attr === 'fixed' && <Asset assetId="status-def-break" className="CardSkill-icon" title="Fixed damage" />}
-			{typeof attr === 'number' && renderAttrs(attr)}
-
-			</span>
-		);
-		}
 		case SkillKinds.Vampire: {
 		const { attr, damage, heal } = skill as Skill.Vampire;
 		return (
@@ -1176,12 +1189,12 @@ function renderSkill(skill, option = {})
 	return frg;
 };
 
-function renderStat(stat) {
+function renderStat(stat, option) {
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
 	const tspt = localTranslating.skill_parse.stats;
 	if (tspt[stat])
-		frg.ap(tspt[stat]());
+		frg.ap(tspt[stat](option));
 	else
 	{
 		console.log("未知状态类型",stat);
@@ -1189,16 +1202,25 @@ function renderStat(stat) {
 	}
 	return frg;
 }
-/*
-function renderAttrs(attrs: Attributes | Attributes[]) {
+
+function renderAttrs(attrs, option = {}) {
 	if (!Array.isArray(attrs))
-	attrs = [attrs];
-	return attrs.map(attr => {
-	if (attr >= Attributes.Heart)
-		return <Asset assetId={`orb-${attr}`} key={attr} className="CardSkill-icon" />;
-	return <Asset assetId={`attr-${attr}`} key={attr} className="CardSkill-icon" />;
-	});
+	attrs = [attrs || 0];
+	const frg = document.createDocumentFragment();
+	if (typeof localTranslating == "undefined") return frg;
+	
+	const tsp = localTranslating.skill_parse;
+	const contentFrg = attrs.map(attr => {
+		const icon = document.createElement("icon");
+		icon.className = "attr";
+		icon.setAttribute("data-attr-icon",attr);
+		return tsp.attrs[attr]({icon: icon});
+	})
+	.nodeJoin(tsp.word.slight_pause());
+	frg.ap(option.affix ? tsp.word.affix_attr({cotent: contentFrg}) : contentFrg);
+	return frg;
 }
+/*
 
 function renderOrbs(attrs: Attributes | Attributes[]) {
 	if (!Array.isArray(attrs))
@@ -1396,6 +1418,19 @@ function renderValue(_value, option = {}) {
 			);
 			break;
 		}
+		case SkillValueKind.xTeamHP: {
+			let value = _value.value;
+			dict = {
+				value: option.percent ? (value * 100).keepCounts(od,os) : value.keepCounts(od,os),
+				stats: renderStat('teamhp'),
+			};
+			frg.ap(
+				option.percent ? 
+				tspv.mul_of_percent(dict) :
+				tspv.mul_of_times(dict)
+			);
+			break;
+		}
 		case SkillValueKind.xTeamRCV: {
 			dict = {
 				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
@@ -1409,15 +1444,27 @@ function renderValue(_value, option = {}) {
 			break;
 		}
 		case SkillValueKind.xTeamATK: {
+			let attrs = _value.attrs, value = _value.value;
 			dict = {
-				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
-				stats: renderStat('teamatk'),
+				value: option.percent ? (value * 100).keepCounts(od,os) : value.keepCounts(od,os),
+				stats: renderStat('teamatk', {attrs: renderAttrs(attrs, {affix: true})}),
 			};
 			frg.ap(
 				option.percent ? 
 				tspv.mul_of_percent(dict) :
 				tspv.mul_of_times(dict)
 			);
+			break;
+		}
+		case SkillValueKind.HPScale: {
+			let min = _value.min, max = _value.max;
+			dict = {
+				min: tspv.mul_of_times({value: min.keepCounts(od,os), stats:renderStat('atk')}),
+				max: tspv.mul_of_times({value: max.keepCounts(od,os), stats:renderStat('atk')}),
+				hp: renderStat('hp'),
+			};
+			
+			frg.ap(tspv.hp_scale(dict));
 			break;
 		}
 		/*

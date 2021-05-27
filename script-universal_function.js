@@ -51,15 +51,16 @@ Number.prototype.prefixInteger = function(length, useGrouping = false) {
 			useGrouping: useGrouping,
 			minimumIntegerDigits: length
 		});
-	}
-//最多保留N位小数，不留0
-Number.prototype.keepCounts = function(decimalDigits = 2, plusSign = false)
-{  
-	return (plusSign && this > 0 ? '+' : '') + Number(this.toFixed(decimalDigits)).toString();
 }
 //大数字缩短长度，默认返回本地定义字符串
 Number.prototype.bigNumberToString = function() {
 	return this.toLocaleString();
+}
+//最多保留N位小数，不留0
+Number.prototype.keepCounts = function(decimalDigits = 2, plusSign = false)
+{
+	let newNumber = Number(this.toFixed(decimalDigits));
+	return (plusSign && this > 0 ? '+' : '') + newNumber.bigNumberToString();
 }
 //将二进制flag转为数组
 function flags(num) {
