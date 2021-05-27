@@ -3138,7 +3138,15 @@ table .orb-icon
 {
 	background-position-y:calc(-36px * 15);
 }
-.icon-skill[data-icon-type="damage-enemy-fixed"]
+.icon-skill[data-icon-type="unbind-normal"]
 {
 	background-position-y:calc(-36px * 16);
+}
+.icon-skill[data-icon-type="unbind-awakenings"]
+{
+	background-position-y:calc(-36px * 17);
+}
+.icon-skill[data-icon-type="unbind-matches"]
+{
+	background-position-y:calc(-36px * 18);
 }

@@ -7,15 +7,15 @@ function tp(strings, ...keys) {
 		//let result = [strings[0]];
 		keys.forEach(function(key, i, arr) {
 			let value = Number.isInteger(key) ? values[key] : dict[key];
-			if (!(value instanceof Node))
-			{
-				value = document.createTextNode(value);
-			}
 			if (value == undefined)
 			{
 				console.log("模板字符串中 %s 未找到输入数据",key);
 			}else
 			{
+				if (!(value instanceof Node))
+				{
+					value = document.createTextNode(value);
+				}
 				try{
 					fragment.appendChild(arr.lastIndexOf(key) == i ? value : value.cloneNode(true));
 				}catch(e)
@@ -91,6 +91,7 @@ const SkillValue = {
 const SkillValueKind = {
 	Percent: 'mul',
 	Constant: 'const',
+	ConstantTo: 'const-to',
 	xMaxHP: 'mul-maxhp',
 	xHP: 'mul-hp',
 	xATK: 'mul-atk',
@@ -121,8 +122,9 @@ const SkillKinds = {
     DamageEnemy: "damage-enemy",
     Vampire: "vampire",
     ReduceDamage: "reduce-damage",
-    HPModify: "hp-modify",
+    SelfHarm: "self-harm",
     Heal: "heal",
+    AutoHealBuff: "auto-heal-buff",
     ChangeOrbs: "change-orbs",
     PowerUp: "power-up",
     CounterAttack: "counter-attack",
@@ -157,6 +159,30 @@ const SkillKinds = {
 
 function skillParser(skillId)
 {
+	/*function merge(skills)
+	{
+		//解封部分的合并
+		let unbinds = skills.filter(skill=>skill.kind == SkillKinds.Unbind);
+		if (unbinds.length>1)
+		{ //把后面的全都合并到第一个
+			unbinds.reduce((pre,cur)=>{
+				pre.normal = pre.normal || cur.normal;
+				pre.awakenings = pre.awakenings || cur.awakenings;
+				pre.matches = pre.matches || cur.matches;
+				return pre
+			});
+			unbinds.shift(); //去除第一个
+			unbinds.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+		}
+		let fixedDamages = skills.filter(skill=>skill.kind == SkillKinds.DamageEnemy && skill.attr === 'fixed').filter((skill,idx,arr)=>skill.id==arr[0].id);
+		if (fixedDamages.length>1)
+		{ //把后面的全都合并到第一个
+			fixedDamages[0].times = 5;
+			fixedDamages.shift(); //去除第一个
+			fixedDamages.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+		}
+
+	}*/
 	const skill = Skills[skillId];
 	if (!skill) return [];
 	if (!parsers[skill.type]) {
@@ -167,6 +193,7 @@ function skillParser(skillId)
 	const skills = (Array.isArray(result) ? result : [result])
 		.filter(s => Boolean(s))
 		.map(s => ({ id: skillId, type: skill.type, params: skill.params, ...s }));
+	//merge(skills);
 	return skills;
 }
 
@@ -193,6 +220,9 @@ const v = {
     },
     constant: function(value) {
         return { kind: SkillValueKind.Constant, value: value || 0 };
+    },
+    constantTo: function(value) {
+        return { kind: SkillValueKind.ConstantTo, value: value || 1 };
     },
     xMaxHP: function(value) {
         return { kind: SkillValueKind.xMaxHP, value: (value / 100) || 1 };
@@ -302,8 +332,8 @@ const p = {
 function activeTurns(turns, skill) {
     return skill ? { kind: SkillKinds.ActiveTurns, turns: turns, skill: skill } : null;
 }
-function damageEnemy(target, attr, damage, selfHP) {
-    return { kind: SkillKinds.DamageEnemy, target: target, attr: attr, damage: damage, selfHP: selfHP };
+function damageEnemy(target, attr, damage) {
+    return { kind: SkillKinds.DamageEnemy, target: target, attr: attr, damage: damage };
 }
 function vampire(attr, damageValue, healValue) {
     return { kind: SkillKinds.Vampire, attr: attr, damage: damageValue, heal: healValue };
@@ -311,11 +341,14 @@ function vampire(attr, damageValue, healValue) {
 function reduceDamage(attrs, percent, condition) {
     return { kind: SkillKinds.ReduceDamage, attrs: attrs, percent: percent, condition: condition };
 }
-function HPModify(value) {
-    return { kind: SkillKinds.HPModify, value: value };
+function selfHarm(value) {
+    return { kind: SkillKinds.SelfHarm, value: value };
 }
 function heal(value) {
     return { kind: SkillKinds.Heal, value: value };
+}
+function autoHealBuff(value) {
+	return { kind: SkillKinds.AutoHealBuff, value: value };
 }
 function changeOrbs() {
     return { kind: SkillKinds.ChangeOrbs, changes: Array.from(arguments) };
@@ -343,8 +376,8 @@ function orbDropIncrease(value, attrs) {
 function resolve(min, condition) {
     return { kind: SkillKinds.Resolve, min: min, max: 1, condition: condition };
 }
-function unbind(normal, awakenings) {
-    return { kind: SkillKinds.Unbind, normal: normal, awakenings: awakenings };
+function unbind(normal, awakenings, matches) {
+    return { kind: SkillKinds.Unbind, normal: normal, awakenings: awakenings , matches: matches};
 }
 function boardChange(attrs) {
     return { kind: SkillKinds.BoardChange, attrs: attrs };
@@ -389,8 +422,8 @@ const parsers = {
 	[4](mul) { return poison(v.xATK(mul)); },
 	[5](time) { return CTW(v.constant(time)); },
 	[6](percent) { return gravity(v.xHP(percent)); },
-	[7](mul) { return HPModify(v.xRCV(mul)); },
-	[8](value) { return HPModify(v.constant(value)); },
+	[7](mul) { return heal(v.xRCV(mul)); },
+	[8](value) { return heal(v.constant(value)); },
 	[9](from, to) { return changeOrbs({ kind: 'from', from: [from || 0], to: [to || 0] }); },
 	[10]() { return dropRefresh(); },
 	[11](attr, mul) { return powerUp([attr], null, p.mul({ atk: mul })); },
@@ -463,10 +496,30 @@ const parsers = {
   
 	[79](type1, type2, mul) { return powerUp(null, [type1, type2], p.mul({ atk: mul, rcv: mul })); },
   
-	[84](attr, min, max, percent) { return damageEnemy('single', attr, v.randomATK(min, max), percent ? v.xHP(percent) : v.constant(1)); },
-	[85](attr, min, max, percent) { return damageEnemy('all', attr, v.randomATK(min, max), percent ? v.xHP(percent) : v.constant(1)); },
-	[86](attr, value, _, percent) { return damageEnemy('single', attr, v.constant(value), percent ? v.xHP(percent) : v.constant(1)); },
-	[87](attr, value, _, percent) { return damageEnemy('all', attr, v.constant(value), percent ? v.xHP(percent) : v.constant(1)); },
+	[84](attr, min, max, percent) {
+		return [
+			selfHarm(percent ? v.xHP(100 - percent) : v.constantTo(1)),
+			damageEnemy('single', attr, v.randomATK(min, max))
+		];
+	},
+	[85](attr, min, max, percent) {
+		return [
+			selfHarm(percent ? v.xHP(100 - percent) : v.constantTo(1)),
+			damageEnemy('all', attr, v.randomATK(min, max))
+		];
+	},
+	[86](attr, value, _, percent) {
+		return [
+			selfHarm(percent ? v.xHP(100 - percent) : v.constantTo(1)),
+			damageEnemy('single', attr, v.constant(value))
+		];
+	},
+	[87](attr, value, _, percent) {
+		return [
+			selfHarm(percent ? v.xHP(100 - percent) : v.constantTo(1)),
+			damageEnemy('all', attr, v.constant(value))
+		];
+	},
 	[88](turns, type, mul) { return activeTurns(turns, powerUp(null, [type], p.mul({ atk: mul }))); },
   
 	[90](turns, attr1, attr2, mul) { return activeTurns(turns, powerUp([attr1, attr2], null, p.mul({ atk: mul }))); },
@@ -497,7 +550,7 @@ const parsers = {
 	[116](...ids) { return ids.flatMap(id => this.parser(id)); },
 	[117](bind, rcv, constant, hp, awokenBind) {
 	  return [
-		rcv ? HPModify(v.xRCV(rcv)) : hp ? HPModify(v.xMaxHP(hp)) : constant ? HPModify(v.constant(constant)) : null,
+		rcv ? heal(v.xRCV(rcv)) : hp ? heal(v.xMaxHP(hp)) : constant ? heal(v.constant(constant)) : null,
 		(bind || awokenBind) ? unbind(bind || 0, awokenBind || 0) : null,
 	  ].filter(Boolean);
 	},
@@ -656,7 +709,12 @@ const parsers = {
 		powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv }))
 	  ];
 	},
-	[179](turns, value, percent) { return activeTurns(turns, heal(value ? v.constant(value) : v.xMaxHP(percent))); },
+	[179](turns, value, percent, bind, awokenBind) {
+		return [
+			(bind || awokenBind) ? unbind(bind || 0, awokenBind || 0) : null,
+			activeTurns(turns, autoHealBuff(value ? v.constant(value) : v.xMaxHP(percent)))
+		].filter(Boolean);
+	},
 	[180](turns, percent) { return activeTurns(turns, orbDropIncrease(v.percent(percent), 'enhanced')); },
   
 	[182](attrs, len, mul, percent) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul, 100], [0, 0]), undefined, v.percent(percent)); },
@@ -682,6 +740,12 @@ const parsers = {
 	[188](value) {
 	  return damageEnemy('single', 'fixed', v.constant(value));
 	},
+	[195](percent) {
+	  return selfHarm(percent ? v.xHP(percent) : v.constantTo(1));
+	},
+	[196](matches) {
+	  return unbind(0,0,matches);
+	},
 };
 
 //将内容添加到代码片段
@@ -699,6 +763,7 @@ DocumentFragment.prototype.ap = function(arg)
 	{
 		this.appendChild(document.createTextNode(arg));
 	}
+	return this;
 }
 
 //将数组和分隔符添加到一个代码片段，类似join
@@ -745,6 +810,11 @@ function renderSkill(skill, option = {})
 		return idoc;
 	}
 	
+	if (Array.isArray(skill))
+	{
+		frg.ap(skill.map(_skill=>renderSkill(_skill)));
+		return frg;
+	}
 	let dict;
 	switch (skill.kind) {
 		case SkillKinds.Unknown: {
@@ -758,7 +828,7 @@ function renderSkill(skill, option = {})
 			let turns = skill.turns, actionSkill = skill.skill;
 			dict = {
 				turns: turns,
-				actionSkill: actionSkill,
+				actionSkill: renderSkill(actionSkill),
 			};
 			frg.ap(tsp.skill.active_turns(dict));
 			break;
@@ -805,24 +875,34 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.no_skyfall(dict));
 			break;
 		}
-		case SkillKinds.HPModify: { //主动立刻回血
+		case SkillKinds.SelfHarm: { //主动自残
+			let value = skill.value;
 			dict = {
-				icon: skill.value.value > 0 ? createIcon("heal", "hp-incr") : createIcon("heal", "hp-decr"),
-				belong_to: option.forTurns ? tsp.target.team() : tsp.target.self(),
-				value: renderValue(skill.value, {percent: option.forTurns}),
+				icon: createIcon("heal", "hp-decr"),
+				value: renderValue(value, {percent: true}),
 				stats: tsp.stats.hp(),
 			};
-			frg.ap(tsp.skill.hp_modify(dict));
+			frg.ap(tsp.skill.self_harm(dict));
 			break;
 		}
 		case SkillKinds.Heal: { //主动回血buff
+			let value = skill.value;
 			dict = {
-				icon: createIcon("auto-heal"),
-				belong_to: tsp.target.team(),
-				value: renderValue(skill.value),
+				icon: createIcon("heal", "hp-incr"),
+				//icon: createIcon("auto-heal"),
+				value: renderValue(value, {unit: tsp.unit.point, percent: value.kind == SkillValueKind.xRCV ? false : true}),
 				stats: tsp.stats.hp(),
 			};
 			frg.ap(tsp.skill.heal(dict));
+			break;
+		}
+		case SkillKinds.AutoHealBuff: { //自动回血buff
+			dict = {
+				icon: createIcon("auto-heal"),
+				value: renderValue(skill.value, {unit: tsp.unit.point, percent: true}),
+				stats: tsp.stats.hp(),
+			};
+			frg.ap(tsp.skill.auto_heal_buff(dict));
 			break;
 		}
 		case SkillKinds.DefenseBreak: { //破防
@@ -878,7 +958,6 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.Gravity: { //重力
-			console.log(skill.value)
 			frg.ap(tsp.skill.gravity({
 				icon: createIcon("gravity"),
 				target: tsp.target.enemy(),
@@ -892,16 +971,40 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		
-		case SkillKinds.DamageEnemy: {
-			let attr = skill.attr, target = skill.target, selfHP = skill.selfHP, damage = skill.damage;
+		case SkillKinds.DamageEnemy: { //大炮和固伤
+			let attr = skill.attr, target = skill.target, damage = skill.damage;
 			if (attr == null) break; //没有属性时，编号为0的空技能
 			dict = {
-				icon: attr === 'fixed' ? createIcon("damage-enemy-fixed") : createIcon("damage-enemy"),
 				target: target === 'all' ? tsp.target.enemy_all() : target === 'single' ? tsp.target.enemy_one() : tsp.target.enemy_attr({attr: renderAttrs(target)}),
 				damage: renderValue(damage, {unit: tsp.unit.point}),
 				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true})
 			};
 			frg.ap(tsp.skill.damage_enemy(dict));
+			break;
+		}
+		case SkillKinds.Vampire: {
+			let attr = skill.attr, damage = skill.damage, heal = skill.heal;
+			dict = {
+				icon: createIcon("heal", "hp-incr"),
+				target: tsp.target.enemy_one(),
+				damage: renderValue(damage),
+				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true}),
+				heal: renderValue(heal, {percent: true}),
+			};
+			frg.ap(tsp.skill.vampire(dict));
+			break;
+		}
+		case SkillKinds.Unbind: {
+			let normal = skill.normal, awakenings = skill.awakenings, matches = skill.matches;
+			console.log(normal,awakenings)
+			let effects = [];
+			if (normal)
+				effects.push(tsp.skill.unbind_normal({icon: createIcon("unbind-normal"), value: normal}));
+			if (awakenings)
+				effects.push(tsp.skill.unbind_awakenings({icon: createIcon("unbind-awakenings"), value: awakenings}));
+			if (matches)
+				effects.push(tsp.skill.unbind_matches({icon: createIcon("unbind-matches"), value: matches}));
+			frg.ap(effects.nodeJoin(tsp.word.comma()));
 			break;
 		}
 		/*
@@ -1347,7 +1450,8 @@ function renderPowerUp(powerUp: SkillPowerUp) {
 function renderValue(_value, option = {}) {
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
-	const tspv = localTranslating.skill_parse.value;
+	const tsp = localTranslating.skill_parse
+	const tspv = tsp.value;
 	const od = option.decimalDigits, os = option.plusSign;
 	let dict;
 	switch (_value.kind) {
@@ -1368,6 +1472,13 @@ function renderValue(_value, option = {}) {
 				unit: option.unit ? option.unit() : undefined,
 			};
 			frg.ap(tspv.const(dict));
+			break;
+		}
+		case SkillValueKind.ConstantTo: {
+			dict = {
+				value: _value.value.keepCounts(od,os)
+			};
+			frg.ap(tspv.const_to(dict));
 			break;
 		}
 		case SkillValueKind.xMaxHP: {
@@ -1467,43 +1578,21 @@ function renderValue(_value, option = {}) {
 			frg.ap(tspv.hp_scale(dict));
 			break;
 		}
+		case SkillValueKind.RandomATK: {
+			let min = _value.min, max = _value.max;
+			dict = {
+				min: min.keepCounts(od,os),
+				atk: renderStat('atk'),
+			};
+			if (max != min)
+			{
+				dict.max = tsp.word.range_hyphen().ap(max.keepCounts(od,os));
+			}
+			
+			frg.ap(tspv.random_atk(dict));
+			break;
+		}
 		/*
-		case SkillValueKind.Percent: {
-			const { value } = _value as SkillValue.Simple;
-			return <span>{formatNumber(value * 100)}%</span>;
-		}
-		case SkillValueKind.Constant: {
-			const { value } = _value as SkillValue.Simple;
-			return <span>{formatNumber(value)}{unit ? ` ${unit}` : ''}</span>;
-		}
-		case SkillValueKind.xMaxHP: {
-			const { value } = _value as SkillValue.Simple;
-			return <span>{formatNumber(value * 100)}% of {renderStat('maxhp')}</span>;
-		}
-		case SkillValueKind.xHP: {
-			const { value } = _value as SkillValue.Simple;
-			return <span>{formatNumber(value * 100)}% of {renderStat('hp')}</span>;
-		}
-		case SkillValueKind.xATK: {
-			const { value } = _value as SkillValue.Simple;
-			return <span>{formatNumber(value)} &times; {renderStat('atk')}</span>;
-		}
-		case SkillValueKind.xRCV: {
-			const { value } = _value as SkillValue.Simple;
-			return <span>{formatNumber(value)} &times; {renderStat('rcv')}</span>;
-		}
-		case SkillValueKind.xTeamRCV: {
-			const { value } = _value as SkillValue.Simple;
-			return <span>{formatNumber(value)} &times; {renderStat('teamrcv')}</span>;
-		}
-		case SkillValueKind.xTeamATK: {
-			const { value, attrs } = _value as SkillValue.WithAttributes;
-			return <span>{formatNumber(value)} &times; {renderAttrs(attrs)} {renderStat('teamatk')}</span>;
-		}
-		case SkillValueKind.HPScale: {
-			const { min, max } = _value as SkillValue.Scale;
-			return <span>({formatNumber(min)} &hArr; {formatNumber(max)} &prop; {renderStat('hp')}) &times; {renderStat('atk')}</span>;
-		}
 		case SkillValueKind.RandomATK: {
 			const { min, max } = _value as SkillValue.Scale;
 			if (min === max) {

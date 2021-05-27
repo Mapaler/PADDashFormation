@@ -5,18 +5,23 @@ const localTranslating = {
 			unknown: tp`未知的技能类型：${'type'}`, //type
 			active_turns: tp`${'actionSkill'}，效果 ${'turns'} 回合`, //turns, actionSkill
 			random_skills: tp`随机发动以下技能：${'skills'}`, //skills
-			damage_enemy: tp`对${'target'}造成${'damage'}的${'attr'}伤害`, //
+			damage_enemy: tp`对${'target'}造成${'damage'}的${'attr'}伤害`, //target, damage, attr
+			vampire: tp`对${'target'}造成${'damage'}的${'attr'}伤害，并${'icon'}回复伤害值${'heal'}的HP`, //target, damage, attr
 			delay: tp`${'icon'}延迟敌人的攻击`, //icon
 			mass_attack: tp`${'icon'}所有攻击变为全体攻击`,
 			leader_change: tp`${'icon'}将自身换为队长，再次使用则换回来`,
 			no_skyfall: tp`${'icon'}天降的宝珠不会消除`,
-            hp_modify: tp`${'icon'}回复 ${'belong_to'}${'value'} 的 ${'stats'}`,
-            heal: tp`${'icon'}回复 ${'belong_to'}${'value'} 的 ${'stats'}`,
-            defense_break: tp`${'icon'}敌方的防御力减少 ${'value'}`,
+			self_harm: tp`${'icon'}${'stats'}减少${'value'}`,
+            heal: tp`${'icon'}回复 ${'value'} 的 ${'stats'}`,
+			unbind_normal: tp`${'icon'}封锁状态减少${'value'}`,
+			unbind_awakenings: tp`${'icon'}觉醒无效状态减少${'value'}回合`,
+			unbind_matches: tp`${'icon'}无法消除宝珠状态减少${'value'}回合`,
+            defense_break: tp`${'icon'}敌方的防御力减少${'value'}回合`,
             poison: tp`${'icon'}使${'target'}全体中毒，每回合损失${'belong_to'} ${'value'} 的 ${'stats'}`,
 			time_extend: tp`${'icon'}宝珠移动时间 ${'value'}`,
 			follow_attack: tp`${'icon'}消除宝珠的回合，以${'belong_to'}${'value'}的伤害追打${'target'}（计算防御力）`,//(valueElement)=> [`消除宝珠的回合，以`, valueElement, `的伤害追打敌人`],
-            auto_heal: tp`${'icon'}消除宝珠的回合，回复${'belong_to'}${'value'}的 ${'stats'}`,
+            auto_heal_buff: tp`行动结束后${'icon'}回复${'value'}的${'stats'}`,
+			auto_heal: tp`${'icon'}消除宝珠的回合，回复${'belong_to'}${'value'}的${'stats'}`,
 			ctw: (valueElement)=> [valueElement, `内时间停止，可以任意移动宝珠`],
 			gravity: tp`${'icon'}造成${'target'}${'value'}的伤害`,//(valueElement)=> [`造成敌方`, valueElement, `的伤害`],
             resolve: (stats, valueElement, probability)=> [probability ? `有${(probability* 100).keepCounts()}%的几率`:'',`如当前`,valueElement,`，受到单一次致命攻击时，将会以1点 HP 生还`],
@@ -25,11 +30,13 @@ const localTranslating = {
         value: {
             unknown: tp`[ 未知数值: ${'type'}]`, //type
 			const: tp`${'value'}${'unit'}`,
+			const_to: tp`到${'value'}`,
 			mul_percent: tp`${'value'}%`,
 			mul_times: tp`×${'value'}倍`,
 			mul_of_percent: tp`${'stats'}的${'value'}%`,
 			mul_of_times: tp`${'stats'}×${'value'}倍`,
 			hp_scale: tp`${'hp'}为100%时${'min'}，${'hp'}为1时${'max'}`,
+			random_atk: tp`${'atk'}×${'min'}${'max'}倍`,
 		},
 		attrs: {
 			[0]: tp`${'icon'}火`,
@@ -75,9 +82,12 @@ const localTranslating = {
 		unit: {
 			seconds: tp`秒`,
 			point: tp`点`,
+			turns: tp`回合`,
 		},
 		word: {
+			comma: tp`，`, //逗号
 			slight_pause: tp`、`, //顿号
+			range_hyphen: tp`~`, //范围连字符
 			affix_attr: tp`${'cotent'}属性`, //词缀-属性
 		},
     },
@@ -85,7 +95,9 @@ const localTranslating = {
 
 //大数字缩短长度
 Number.prototype.bigNumberToString = function() {
-    let numTemp = this.valueOf();
+	const negative = this < 0;
+
+    let numTemp = negative ? Math.abs(this) : this.valueOf();
     if (!numTemp) return "0";
     const grouping = Math.pow(10, 4);
     const unit = ['', '万', '亿', '兆', '京', '垓'];
@@ -108,7 +120,7 @@ Number.prototype.bigNumberToString = function() {
     let outStr = numPartsStr.join("");
     outStr = outStr.replace(/(^零+|零+$)/g, ''); //去除开头的零
     outStr = outStr.replace(/零{2,}/g, '零'); //去除多个连续的零
-    return outStr;
+    return (negative ? "-" : "") + outStr;
 }
 
 //查找原先完整技能
