@@ -573,13 +573,13 @@ function getAllowLatent(card) {
 }
 //计算队伍中有多少血量
 function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
-	const ls1 = Skills[Cards[leader1id].leaderSkillId];
-	const ls2 = Skills[Cards[leader2id].leaderSkillId];
+	const ls1 = Skills[(Cards[leader1id] || Cards[0]).leaderSkillId];
+	const ls2 = Skills[(Cards[leader2id] || Cards[0]).leaderSkillId];
 	const mHpArr = memberArr.map(m => {
 		const ability = noAwoken ? m.abilityNoAwoken : m.ability;
 		let hp = ability ? ability[0] : 0;
 		if (!hp) return 0;
-		const card = Cards[m.id];
+		const card = Cards[m.id] || Cards[0];
 		hp = hp1 = Math.round(hp * memberHpMul(card, ls2, memberArr, solo)); //战友队长技
 		hp = hp2 = Math.round(hp * memberHpMul(card, ls1, memberArr, solo)); //我方队长技
 
@@ -695,10 +695,12 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 
 //返回卡片的队长技能
 function getCardLeaderSkills(card, skillTypes) {
+	if (!card) return [];
 	return getActuallySkills(Skills[card.leaderSkillId], skillTypes, false);
 }
 //返回卡片的主动技能
 function getCardActiveSkills(card, skillTypes) {
+	if (!card) return [];
 	return getActuallySkills(Skills[card.activeSkillId], skillTypes, false);
 }
 //查找到真正起作用的那一个技能
@@ -726,7 +728,7 @@ function tIf_Effect_76board(leader1id, leader2id) {
 	function henshinBase(cardid)
 	{
 		let card = Cards[cardid];
-		if (card.henshinFrom)
+		if (card && card.henshinFrom)
 		{
 			card = Cards[card.henshinFrom];
 		}
