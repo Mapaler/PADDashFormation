@@ -957,6 +957,40 @@ function creatNewUrl(arg) {
 function inputFromQrString(string)
 {
 	const re = {code: 0, message: null};
+	function ObjToUrl(obj)
+	{
+		let fileName;
+		switch (obj.d.f.length)
+		{
+			case 1:{
+				fileName = "solo.html";
+				break;
+			}
+			case 2:{
+				fileName = "multi.html";
+				break;
+			}
+			case 3:{
+				fileName = "triple.html";
+				break;
+			}
+		}
+		const newUrl = new URL(fileName, location);
+		newUrl.searchParams.set("d",JSON.stringify(obj.d));
+		if (!obj.s || obj.s == "ja")
+		{
+			newUrl.searchParams.delete("s");
+		}else
+		{
+			newUrl.searchParams.set("s", obj.s);
+		}
+		let l = getQueryString("l");
+		if (getQueryString("l"))
+		{
+			newUrl.searchParams.set("l", l);
+		}
+		return newUrl;
+	}
 	//code 1~99 为各种编码
 	if (string.substr(0,1) == "{" && string.substr(-1,1) == "}")
 	{
@@ -966,37 +1000,7 @@ function inputFromQrString(string)
 			{
 				re.code = 1;
 				re.message = "发现队伍数据 | Formation data founded";
-				let fileName;
-				switch (jo.d.f.length)
-				{
-					case 1:{
-						fileName = "solo.html";
-						break;
-					}
-					case 2:{
-						fileName = "multi.html";
-						break;
-					}
-					case 3:{
-						fileName = "triple.html";
-						break;
-					}
-				}
-				const newUrl = new URL(fileName, location);
-				newUrl.searchParams.set("d",JSON.stringify(jo.d));
-				if (!jo.s || jo.s == "ja")
-				{
-					newUrl.searchParams.delete("s");
-				}else
-				{
-					newUrl.searchParams.set("s", jo.s);
-				}
-				let l = getQueryString("l");
-				if (getQueryString("l"))
-				{
-					newUrl.searchParams.set("l", l);
-				}
-				re.url = newUrl;
+				re.url = ObjToUrl(jo);
 			}else
 			{
 				re.code = 100;
@@ -1004,16 +1008,42 @@ function inputFromQrString(string)
 			}
 		}catch(e)
 		{
-			re.code = 101;
+			re.code = 111;
 			re.message = "错误的 JSON 格式 | The illegal JSON format";
 		}
-	}else if(string.substr(-1,1) == "}")
+	}
+	else if (string.substr(0,4) == "http")
+	{
+		try{
+			let url = new URL(string);
+			if (url.searchParams.get('d'))
+			{
+				re.code = 1;
+				re.message = "发现队伍数据 | Formation data founded";
+				let jo = {
+					d: JSON.parse(url.searchParams.get('d')),
+					s: url.searchParams.get('s'),
+				}
+				re.url = ObjToUrl(jo);
+			}else
+			{
+				re.code = 100;
+				re.message = "无队伍数据 | No formation data";
+			}
+		}catch(e)
+		{
+			re.code = 112;
+			re.message = "错误的 网址 格式 | The illegal URL format";
+		}
+	}
+	else if(string.substr(-1,1) == "}")
 	{ //PDC
 		re.code = 2;
 		re.message = "暂不支持 PDC 二维码 | PDC QR codes are not supported now";
-	}else
+	}
+	else
 	{
-		re.code = 100;
+		re.code = 110;
 		re.message = "不是 JSON 格式 | Not JSON format";
 	}
 	return re;
@@ -1169,7 +1199,7 @@ function initialize() {
 					qrContent.info.appendChild(newLink);
 				}else
 				{
-					qrContent.info.textContent = inputResult.code + ':' + inputResult.message;
+					qrContent.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
 				}
 			}).catch((err) => {
 				console.error(err)
@@ -1207,7 +1237,7 @@ function initialize() {
 						qrContent.info.appendChild(newLink);
 					}else
 					{
-						qrContent.info.textContent = inputResult.code + ':' + inputResult.message;
+						qrContent.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
 					}
 				}
 		
