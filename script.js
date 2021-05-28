@@ -1180,12 +1180,53 @@ function initialize() {
 			console.log(err);
 		});
 	}
+
 	
 	if (location.protocol == "http:" && location.host != "localhost" && location.host != "127.0.0.1")
 	{ //http不支持攝像頭
 		qrContent.readQrCamera.classList.add(className_displayNone);
 	}else
 	{
+		
+		function scanContinuously()
+		{
+			qrcodeReader.decodeFromInputVideoDeviceContinuously(selectedDeviceId, 'video', (result, err) => {
+				if (result) {
+					// properly decoded qr code
+					console.log('Found QR code!', result);
+					let inputResult = inputFromQrString(result.text);
+					
+					if (inputResult.code == 1)
+					{ //成功后就关闭
+						qrContent.readQrCamera.onclick();
+						qrContent.info.textContent = "";
+						const newLink = document.createElement("a");
+						newLink.className = "formation-from-qrcode";
+						newLink.href = inputResult.url;
+						newLink.target = "_blank";
+						qrContent.info.appendChild(newLink);
+					}else
+					{
+						qrContent.info.textContent = inputResult.code + ':' + inputResult.message;
+					}
+				}
+		
+				if (err) {
+					if (err instanceof ZXing.NotFoundException) {
+					console.log('No QR code found.')
+					}
+		
+					if (err instanceof ZXing.ChecksumException) {
+					console.log('A code was found, but it\'s read value was not valid.')
+					}
+		
+					if (err instanceof ZXing.FormatException) {
+					console.log('A code was found, but it was in a invalid format.')
+					}
+				}
+			});
+		}
+
 		qrcodeReader.getVideoInputDevices()
 		.then((videoInputDevices) => {
 			const sourceSelect_id = "selected-device-id";
@@ -1206,6 +1247,11 @@ function initialize() {
 				qrContent.sourceSelect.onchange = function() {
 					selectedDeviceId = this.value;
 					localStorage.setItem(cfgPrefix + sourceSelect_id, this.value);
+					if (qrContent.readQrCamera.classList.contains("running"))
+					{
+						qrcodeReader.reset();
+						scanContinuously();
+					}
 				};
 			}
 			qrContent.readQrCamera.onclick = function()
@@ -1221,41 +1267,7 @@ function initialize() {
 				{
 					qrContent.cavans.classList.add(className_displayNone);
 					qrContent.videoBox.classList.remove(className_displayNone);
-					qrcodeReader.decodeFromInputVideoDeviceContinuously(selectedDeviceId, 'video', (result, err) => {
-					  if (result) {
-						// properly decoded qr code
-						console.log('Found QR code!', result);
-						let inputResult = inputFromQrString(result.text);
-						
-						if (inputResult.code == 1)
-						{ //成功后就关闭
-							qrContent.readQrCamera.onclick();
-							qrContent.info.textContent = "";
-							const newLink = document.createElement("a");
-							newLink.className = "formation-from-qrcode";
-							newLink.href = inputResult.url;
-							newLink.target = "_blank";
-							qrContent.info.appendChild(newLink);
-						}else
-						{
-							qrContent.info.textContent = inputResult.code + ':' + inputResult.message;
-						}
-					  }
-			  
-					  if (err) {
-						if (err instanceof ZXing.NotFoundException) {
-						  console.log('No QR code found.')
-						}
-			  
-						if (err instanceof ZXing.ChecksumException) {
-						  console.log('A code was found, but it\'s read value was not valid.')
-						}
-			  
-						if (err instanceof ZXing.FormatException) {
-						  console.log('A code was found, but it was in a invalid format.')
-						}
-					  }
-					})
+					scanContinuously();
 				}
 				this.classList.toggle("running");
 			}
