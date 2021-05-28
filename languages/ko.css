@@ -462,3 +462,27 @@
 {
     content: "루프 변신";
 }
+
+.control-box .btn-qrcode::before{
+	content: "\f029 QR 코드";
+}
+.formation-from-qrcode::before
+{
+    content: "QR 코드에서 읽은 형성 링크";
+}
+label[for="sourceSelect"]::before
+{
+    content: "비디오 소스 선택:";
+}
+#qr-code-frame .save-qr-svg::before
+{
+    content: "\f0c7  QR 코드 이미지 저장";
+}
+#qr-code-frame .read-qr-camera::before
+{
+    content: "\f030  카메라로 스캔";
+}
+#qr-code-frame .read-qr-file::before
+{
+    content: "\f1c5  이미지 파일 읽기";
+}

@@ -464,3 +464,27 @@
 {
     content: "循環變身";
 }
+
+.control-box .btn-qrcode::before{
+	content: "\f029 二維碼";
+}
+.formation-from-qrcode::before
+{
+    content: "從二維碼中讀取的隊伍連結";
+}
+label[for="sourceSelect"]::before
+{
+    content: "視頻源選擇：";
+}
+#qr-code-frame .save-qr-svg::before
+{
+    content: "\f0c7 保存二維碼圖片";
+}
+#qr-code-frame .read-qr-camera::before
+{
+    content: "\f030 使用相機掃描";
+}
+#qr-code-frame .read-qr-file::before
+{
+    content: "\f1c5 讀取二維碼圖片";
+}

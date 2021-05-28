@@ -17,6 +17,7 @@ const teamsCount = 2;
 <script type="text/javascript" src="script-universal_function.js"></script>
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript" src="library/html2canvas.min.js"></script>
+<script type="text/javascript" src="library/zxing.umd.min.js"></script>
 <!--▼ADPCM播放相关-->
 <script type="text/javascript" src="library/jy4340132-aaa/std.js"></script>
 <script type="text/javascript" src="library/jy4340132-aaa/pcm_player.js"></script>
@@ -58,6 +59,7 @@ var formation = new Formation(teamsCount,5);
 		<div>
 			<button class="btn-clear-data" onclick="clearData();"></button>
 			<button class="btn-capture" onclick="capture();"></button>
+			<button class="btn-qrcode"></button>
 			<a class="down-capture display-none" target="_blank"></a>
 			<button class="btn-solo-link" onclick="turnPage(1,arguments[0]);"></button>
 			<button class="btn-triple-link" onclick="turnPage(3,arguments[0]);"></button>
@@ -1091,5 +1093,23 @@ var formation = new Formation(teamsCount,5);
 			<line />
 		</g>
 	</svg>
+	<div id="qr-code-frame" class="mask  display-none">
+		<button class="mask-close brown-button"></button>
+		<div class="mask-content">
+			<div class="action-button-box">
+				<a download="" class="save-qr-svg brown-button"><!--保存QR SVG--></a>
+				<button class="read-qr-camera brown-button"><!--相机扫--></button>
+				<button class="read-qr-file brown-button"><!--读文件--></button>
+				<input type="file" accept="image/*" class="file-select display-none">
+			</div>
+			<div class="info"></div>
+			<canvas class="qr-box"></canvas>
+			<div class="video-box display-none">
+				<div><label for="sourceSelect"><!--视频源选择--></label><select id="sourceSelect"></select></div>
+				<video id="video" width="500" height="500"></video>
+			</div>
+			
+		</div>
+	</div>
 </body>
 </html>

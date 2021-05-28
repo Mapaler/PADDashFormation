@@ -2850,6 +2850,30 @@ table .orb-icon
 	-webkit-text-stroke: 3px black;
 	text-stroke: 3px black;
 }
+
+.control-box .btn-qrcode::before{
+	font-family: 'Font Awesome 5 Free';
+	font-weight: normal;
+}
+#qr-code-frame
+{
+	color: white;
+}
+#qr-code-frame .brown-button::before
+{
+	font-family: 'Font Awesome 5 Free';
+	font-weight: normal;
+	width: unset;
+}
+#qr-code-frame a
+{
+	display: inline-block;
+	color: white;
+}
+.formation-from-qrcode
+{
+	font-size: 1.5em;
+}
 .qr-box
 {
 	display: inline-block;

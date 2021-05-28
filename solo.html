@@ -965,11 +965,22 @@ var formation = new Formation(teamsCount,6);
 			<line />
 		</g>
 	</svg>
-	<div id="qr-code-frame" class="mask display-none">
+	<div id="qr-code-frame" class="mask  display-none">
 		<button class="mask-close brown-button"></button>
 		<div class="mask-content">
-			<button class="read-qr brown-button">读</button>
+			<div class="action-button-box">
+				<a download="" class="save-qr-svg brown-button"><!--保存QR SVG--></a>
+				<button class="read-qr-camera brown-button"><!--相机扫--></button>
+				<button class="read-qr-file brown-button"><!--读文件--></button>
+				<input type="file" accept="image/*" class="file-select display-none">
+			</div>
+			<div class="info"></div>
 			<canvas class="qr-box"></canvas>
+			<div class="video-box display-none">
+				<div><label for="sourceSelect"><!--视频源选择--></label><select id="sourceSelect"></select></div>
+				<video id="video" width="500" height="500"></video>
+			</div>
+			
 		</div>
 	</div>
 </body>

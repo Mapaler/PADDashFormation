@@ -471,3 +471,27 @@
 {
     content: "ループ変身";
 }
+
+.control-box .btn-qrcode::before{
+	content: "\f029 QRコード";
+}
+.formation-from-qrcode::before
+{
+    content: "QRコードから読み取られたフォーメーションリンク";
+}
+label[for="sourceSelect"]::before
+{
+    content: "ビデオ ソースの選択:";
+}
+#qr-code-frame .save-qr-svg::before
+{
+    content: "\f0c7 QRコードイメージを保存";
+}
+#qr-code-frame .read-qr-camera::before
+{
+    content: "\f030 カメラでスキャンする";
+}
+#qr-code-frame .read-qr-file::before
+{
+    content: "\f1c5 画像ファイルを読み取る";
+}

@@ -14,8 +14,10 @@ let editBox; //储存整个editBox
 let showSearch; //整个程序都可以用的显示搜索函数
 let qrcodeReader; //二维码读取
 let qrcodeWriter; //二维码输出
+let selectedDeviceId; //视频源id
 
 const dataStructure = 3; //阵型输出数据的结构版本
+const cfgPrefix = "PADDF-"; //设置名称的前缀
 const className_displayNone = "display-none";
 const dataAttrName = "data-value"; //用于储存默认数据的属性名
 const isGuideMod = Boolean(Number(getQueryString("guide"))); //是否以图鉴模式启动
@@ -571,7 +573,7 @@ window.onload = function(event) {
 		alert("请更新您的浏览器。\nPlease update your browser.");
 	}
 
-	qrcodeReader = new ZXing.BrowserQRCodeSvgWriter(); //二维码读取
+	qrcodeReader = new ZXing.BrowserQRCodeReader(); //二维码读取
 	qrcodeWriter = new ZXing.BrowserQRCodeSvgWriter(); //二维码生成
 
 	controlBox = document.body.querySelector(".control-box");
@@ -615,20 +617,20 @@ window.onload = function(event) {
 	//记录显示CD开关的状态
 	const showMonSkillCd_id = "show-mon-skill-cd";
 	const btnShowMonSkillCd = controlBox.querySelector(`#btn-${showMonSkillCd_id}`);
-	btnShowMonSkillCd.checked = Boolean(Number(localStorage.getItem("PADDF-" + showMonSkillCd_id)));
+	btnShowMonSkillCd.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showMonSkillCd_id)));
 	btnShowMonSkillCd.onclick = function(){
 		toggleDomClassName(this, showMonSkillCd_id);
-		localStorage.setItem("PADDF-" + showMonSkillCd_id, Number(this.checked));
+		localStorage.setItem(cfgPrefix + showMonSkillCd_id, Number(this.checked));
 	};
 	btnShowMonSkillCd.onclick();
 
 	//记录显示觉醒开关的状态
 	const showMonAwoken_id = "show-mon-awoken";
 	const btnShowMonAwoken = controlBox.querySelector(`#btn-${showMonAwoken_id}`);
-	btnShowMonAwoken.checked = Boolean(Number(localStorage.getItem("PADDF-" + showMonAwoken_id)));
+	btnShowMonAwoken.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showMonAwoken_id)));
 	btnShowMonAwoken.onclick = function(){
 		toggleDomClassName(this, showMonAwoken_id);
-		localStorage.setItem("PADDF-" + showMonAwoken_id, Number(this.checked));
+		localStorage.setItem(cfgPrefix + showMonAwoken_id, Number(this.checked));
 	};
 	btnShowMonAwoken.onclick();
 	
@@ -951,6 +953,71 @@ function creatNewUrl(arg) {
 		}
 	}
 }
+//解析从QR图里获取的字符串
+function inputFromQrString(string)
+{
+	const re = {code: 0, message: null};
+	//code 1~99 为各种编码
+	if (string.substr(0,1) == "{" && string.substr(-1,1) == "}")
+	{
+		try{
+			let jo = JSON.parse(string);
+			if (jo.d && typeof jo.d == "object")
+			{
+				re.code = 1;
+				re.message = "发现队伍数据 | Formation data founded";
+				let fileName;
+				switch (jo.d.f.length)
+				{
+					case 1:{
+						fileName = "solo.html";
+						break;
+					}
+					case 2:{
+						fileName = "multi.html";
+						break;
+					}
+					case 3:{
+						fileName = "triple.html";
+						break;
+					}
+				}
+				const newUrl = new URL(fileName, location);
+				newUrl.searchParams.set("d",JSON.stringify(jo.d));
+				if (!jo.s || jo.s == "ja")
+				{
+					newUrl.searchParams.delete("s");
+				}else
+				{
+					newUrl.searchParams.set("s", jo.s);
+				}
+				let l = getQueryString("l");
+				if (getQueryString("l"))
+				{
+					newUrl.searchParams.set("l", l);
+				}
+				re.url = newUrl;
+			}else
+			{
+				re.code = 100;
+				re.message = "无队伍数据 | No formation data";
+			}
+		}catch(e)
+		{
+			re.code = 101;
+			re.message = "错误的 JSON 格式 | The illegal JSON format";
+		}
+	}else if(string.substr(-1,1) == "}")
+	{ //PDC
+		re.code = 2;
+		re.message = "暂不支持 PDC 二维码 | PDC QR codes are not supported now";
+	}else
+	{
+		re.code = 100;
+		re.message = "不是 JSON 格式 | Not JSON format";
+	}
+	return re;
+}
 //截图
 function capture() {
 	statusLine.classList.add("prepare-cauture");
@@ -1001,14 +1068,45 @@ function initialize() {
 	btnQrCode.onclick = function(){
 		qrCodeFrame.show();
 	};
-	qrCodeFrame.content = qrCodeFrame.querySelector(".mask-content");
 	qrCodeFrame.show = function(){
+		this.content.info.textContent  = "";
+		this.content.cavans.classList.remove(className_displayNone);
+		this.content.videoBox.classList.add(className_displayNone);
 		this.classList.remove(className_displayNone);
 		this.refreshQrCode();
 	};
+	qrCodeFrame.hide = function(){
+		qrcodeReader.reset();
+		this.classList.add(className_displayNone);
+	};
+	qrCodeFrame.close = qrCodeFrame.querySelector(".mask-close");
+	qrCodeFrame.close.onclick = function(){qrCodeFrame.hide()};
+
+	const qrContent = qrCodeFrame.content = qrCodeFrame.querySelector(".mask-content");
+	qrContent.info = qrContent.querySelector(".info");
+	qrContent.cavans = qrContent.querySelector("canvas");
+	qrContent.video = qrContent.querySelector("video");
+	qrContent.videoBox = qrContent.querySelector(".video-box");
+	qrContent.sourceSelect = qrContent.querySelector("#sourceSelect");
+	{
+		const qrActionButtonBox = qrContent.querySelector(".action-button-box");
+		qrContent.saveQrSvg = qrActionButtonBox.querySelector(".save-qr-svg");
+		qrContent.readQrCamera = qrActionButtonBox.querySelector(".read-qr-camera");
+		qrContent.readQrFile = qrActionButtonBox.querySelector(".read-qr-file");
+		qrContent.filePicker = qrActionButtonBox.querySelector(".file-select");
+	}
+	qrCodeFrame.ondragenter = ()=>false;
+	qrCodeFrame.ondragover =  ()=>false;
+	qrCodeFrame.ondrop = function(e)
+	{
+		imagesSelected(e.dataTransfer.files); 
+		e.stopPropagation();  
+		e.preventDefault();   
+	}
+
 	qrCodeFrame.refreshQrCode = function()
 	{
-		const qrBox = this.content.querySelector(".qr-box");
+		const qrBox = this.content.cavans;
 
 		let outStr = JSON.stringify({
 			d:formation.outObj(),
@@ -1024,9 +1122,12 @@ function initialize() {
 		const svgData = (new XMLSerializer()).serializeToString(svgElement);
 		const blob = new Blob([svgData], {type : 'image/svg+xml'});
 		const svgUrl = URL.createObjectURL(blob);
+		this.content.saveQrSvg.href = svgUrl;
+		this.content.saveQrSvg.download = formation.title || "PAD Dash Formation QR";
+
 		loadImage(svgUrl).then(function(img) {
 
-			ctx = qrBox.getContext('2d');
+			let ctx = qrBox.getContext('2d');
 	
 			qrBox.width = qrWidth;
 			qrBox.height = qrHeight;
@@ -1036,33 +1137,127 @@ function initialize() {
 			ctx.drawImage(img, 0, 0, qrWidth, qrHeight);
 			svgElement = null;
 			img = null;
+			ctx = null;
 		}, function(err) {
 			console.log(err);
 		});
 
-		// 加载 image
-		function loadImage(url) {
-			return new Promise(function(resolve, reject) {
-				var image = new Image();
-
-				image.src = url;
-				image.type = "svg"
-				image.crossOrigin = 'Anonymous';
-				image.onload = function() {
-					resolve(this);
-				};
-
-				image.onerror = function(err) {
-					reject(err);
-				};
-			});
-		}
 	}
-	qrCodeFrame.hide = function(){
-		this.classList.add(className_displayNone);
-	};
-	qrCodeFrame.close = qrCodeFrame.querySelector(".mask-close");
-	qrCodeFrame.close.onclick = function(){qrCodeFrame.hide()};
+	qrContent.readQrFile.onclick = function()
+	{
+		qrContent.filePicker.click();
+	}
+	qrContent.filePicker.onchange = function()
+	{
+		imagesSelected(this.files);
+	}
+	function imagesSelected(myFiles) {
+		if (myFiles.length < 1) return;
+		const file = myFiles[0];
+		loadImage(URL.createObjectURL(file)).then(function(img) {
+			qrcodeReader.decodeFromImage(img).then((result) => {
+				console.log('Found QR code!', result);
+				let inputResult = inputFromQrString(result.text);
+				
+				if (inputResult.code == 1)
+				{
+					qrContent.info.textContent = "";
+					const newLink = document.createElement("a");
+					newLink.className = "formation-from-qrcode";
+					newLink.href = inputResult.url;
+					newLink.target = "_blank";
+					qrContent.info.appendChild(newLink);
+				}else
+				{
+					qrContent.info.textContent = inputResult.code + ':' + inputResult.message;
+				}
+			}).catch((err) => {
+				console.error(err)
+				qrContent.info.textContent = err
+			})
+			console.log(`Started decode for image from ${img.src}`)
+		}, function(err) {
+			console.log(err);
+		});
+	}
+	
+	qrcodeReader.getVideoInputDevices()
+	.then((videoInputDevices) => {
+		const sourceSelect_id = "selected-device-id";
+		selectedDeviceId = localStorage.getItem(cfgPrefix + sourceSelect_id);
+		if (videoInputDevices.every(device=>device.deviceId != selectedDeviceId))
+		{
+			selectedDeviceId = videoInputDevices[0].deviceId;
+		}
+		if (videoInputDevices.length >= 1) {
+			videoInputDevices.forEach((element) => {
+				const sourceOption = document.createElement('option');
+				sourceOption.text = element.label
+				sourceOption.value = element.deviceId
+				qrContent.sourceSelect.appendChild(sourceOption)
+			});
+			qrContent.sourceSelect.selectedIndex = videoInputDevices.findIndex(device=>device.deviceId == selectedDeviceId);
+
+			qrContent.sourceSelect.onchange = function() {
+				selectedDeviceId = this.value;
+				localStorage.setItem(cfgPrefix + sourceSelect_id, this.value);
+			};
+		}
+		qrContent.readQrCamera.onclick = function()
+		{
+			if (this.classList.contains("running"))
+			{
+				qrcodeReader.reset();
+				qrContent.cavans.classList.remove(className_displayNone);
+				qrContent.videoBox.classList.add(className_displayNone);
+				qrContent.info.textContent  = "";
+
+			}else
+			{
+				qrContent.cavans.classList.add(className_displayNone);
+				qrContent.videoBox.classList.remove(className_displayNone);
+				qrcodeReader.decodeFromInputVideoDeviceContinuously(selectedDeviceId, 'video', (result, err) => {
+				  if (result) {
+					// properly decoded qr code
+					console.log('Found QR code!', result);
+					let inputResult = inputFromQrString(result.text);
+					
+					if (inputResult.code == 1)
+					{ //成功后就关闭
+						qrContent.readQrCamera.onclick();
+						qrContent.info.textContent = "";
+						const newLink = document.createElement("a");
+						newLink.className = "formation-from-qrcode";
+						newLink.href = inputResult.url;
+						newLink.target = "_blank";
+						qrContent.info.appendChild(newLink);
+					}else
+					{
+						qrContent.info.textContent = inputResult.code + ':' + inputResult.message;
+					}
+				  }
+		  
+				  if (err) {
+					if (err instanceof ZXing.NotFoundException) {
+					  console.log('No QR code found.')
+					}
+		  
+					if (err instanceof ZXing.ChecksumException) {
+					  console.log('A code was found, but it\'s read value was not valid.')
+					}
+		  
+					if (err instanceof ZXing.FormatException) {
+					  console.log('A code was found, but it was in a invalid format.')
+					}
+				  }
+				})
+			}
+			this.classList.toggle("running");
+		}
+	})
+	.catch((err) => {
+		console.error(err)
+	});
 
 	//标题和介绍文本框
 	const titleBox = formationBox.querySelector(".title-box");
@@ -1791,7 +1986,7 @@ function initialize() {
 	const officialSortingClassName = 'show-official-awoken-sorting';
 	const s_showOfficialAwokenSorting = searchBox.querySelector(`#${officialSortingClassName}`); //显示官方排序的觉醒
 	s_showOfficialAwokenSorting.onchange = function(){
-		localStorage.setItem("PADDF-" + officialSortingClassName, Number(this.checked));
+		localStorage.setItem(cfgPrefix + officialSortingClassName, Number(this.checked));
 		let fragmentAwoken = document.createDocumentFragment();
 		let fragmentSawoken = document.createDocumentFragment();
 		const awokenSorting = this.checked ? official_awoken_sorting : s_awokensUl.originalSorting;
@@ -1816,7 +2011,7 @@ function initialize() {
 		s_awokensUl.appendChild(fragmentAwoken);
 		s_sawokensUl.appendChild(fragmentSawoken);
 	};
-	s_showOfficialAwokenSorting.checked = Boolean(Number(localStorage.getItem("PADDF-" + officialSortingClassName)));
+	s_showOfficialAwokenSorting.checked = Boolean(Number(localStorage.getItem(cfgPrefix + officialSortingClassName)));
 	s_showOfficialAwokenSorting.onchange();
 
 	const s_selectedAwokensUl = searchBox.querySelector(".selected-awokens");
@@ -2103,9 +2298,9 @@ function initialize() {
 	const s_realTimeChangeCard = settingBox.querySelector(`#${realTimeClassName}`);
 	s_realTimeChangeCard.onchange = function() {
 		monstersID.oninput = this.checked ? idChange : null;
-		localStorage.setItem("PADDF-" + realTimeClassName, Number(this.checked));
+		localStorage.setItem(cfgPrefix + realTimeClassName, Number(this.checked));
 	}
-	s_realTimeChangeCard.checked = Boolean(Number(localStorage.getItem("PADDF-" + realTimeClassName)));
+	s_realTimeChangeCard.checked = Boolean(Number(localStorage.getItem(cfgPrefix + realTimeClassName)));
 	s_realTimeChangeCard.onchange();
 
 	//字符串搜索
@@ -2243,9 +2438,9 @@ function initialize() {
 	const s_hideLessUseLetent = settingBox.querySelector(`#${hideClassName}`);
 	s_hideLessUseLetent.onchange = function() {
 		toggleDomClassName(this, hideClassName, true, monEditLatentAllowableUl);
-		localStorage.setItem("PADDF-" + hideClassName, Number(this.checked));
+		localStorage.setItem(cfgPrefix + hideClassName, Number(this.checked));
 	}
-	s_hideLessUseLetent.checked = Boolean(Number(localStorage.getItem("PADDF-" + hideClassName)));
+	s_hideLessUseLetent.checked = Boolean(Number(localStorage.getItem(cfgPrefix + hideClassName)));
 	s_hideLessUseLetent.onchange();
 
 	const rowSkill = settingBox.querySelector(".row-mon-skill");

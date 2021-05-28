@@ -235,11 +235,6 @@
 	content: "📷截图";
 }
 
-.control-box .btn-qrcode::before{
-	content: "\f029二维码";
-	font-family: 'Font Awesome 5 Free';
-	font-weight: normal;
-}
 .control-box .btn-swap-AB-team::before{
 	content: "🔄交换AB队";
 }
@@ -468,4 +463,28 @@
 .henshin-loop .evo-type::after
 {
     content: "循環変身";
+}
+
+.control-box .btn-qrcode::before{
+	content: "\f029 二维码";
+}
+.formation-from-qrcode::before
+{
+    content: "从二维码中读取的队伍链接";
+}
+label[for="sourceSelect"]::before
+{
+    content: "视频源选择：";
+}
+#qr-code-frame .save-qr-svg::before
+{
+    content: "\f0c7  保存二维码图片";
+}
+#qr-code-frame .read-qr-camera::before
+{
+    content: "\f030  使用相机扫描";
+}
+#qr-code-frame .read-qr-file::before
+{
+    content: "\f1c5  读取二维码图片";
 }

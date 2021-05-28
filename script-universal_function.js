@@ -129,6 +129,25 @@ fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffe
 		}*/
 	});
 //▲ADPCM播放相关
+
+// 加载 image
+function loadImage(url) {
+	return new Promise(function(resolve, reject) {
+		var image = new Image();
+
+		image.src = url;
+		image.type = "svg"
+		image.crossOrigin = 'Anonymous';
+		image.onload = function() {
+			resolve(this);
+		};
+
+		image.onerror = function(err) {
+			reject(err);
+		};
+	});
+}
+
 function latentUseHole(latentId) {
 	switch (true) {
 		case (latentId === 12):
