@@ -860,7 +860,7 @@ function loadData(force = false)
 				checkFormationBox();
 				function checkFormationBox()
 				{
-					if (formationBox)
+					if (formationBox.querySelector('.teams'))
 					{
 						reloadFormationData();
 						clearInterval(formationBoxHook);
@@ -2521,7 +2521,7 @@ function changeid(mon, monDom, latentDom) {
 		awokenIcon.setAttribute(dataAttrName, mon.awoken || 0);
 		if (mon.awoken != null) //如果提供了觉醒
 		{
-			if (mon.awoken == card.awakenings.length) {
+			if (mon.awoken > 0 && mon.awoken == card.awakenings.length) {
 				awokenIcon.classList.add("full-awoken");
 			} else {
 				awokenIcon.classList.remove("full-awoken");
@@ -3203,13 +3203,16 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 
 	const memberData = team[0][idx];
 	const assistData = team[1][idx];
+
+	const memberCard = Cards[memberData.id] || Cards[0];
+	const assistCard = Cards[assistData.id] || Cards[0];
 	//队员觉醒
-	let menberAwokens = Cards[memberData.id].awakenings.slice(0,memberData.awoken);
+	let menberAwokens = memberCard.awakenings.slice(0,memberData.awoken);
 	//单人和三人为队员增加超觉醒
-	if ((solo || teamsCount === 3) && memberData.sawoken >= 0) menberAwokens.push(Cards[memberData.id].superAwakenings[memberData.sawoken]);
+	if ((solo || teamsCount === 3) && memberData.sawoken >= 0) menberAwokens.push(memberCard.superAwakenings[memberData.sawoken]);
 	//menberAwokens.sort();
 	//武器觉醒
-	let assistAwokens = Cards[assistData.id > 0 ? assistData.id : 0].awakenings.slice(0,assistData.awoken);
+	let assistAwokens = assistCard.awakenings.slice(0,assistData.awoken);
 	if (!assistAwokens.includes(49)) assistAwokens = []; //清空非武器的觉醒
 	//assistAwokens.sort();
 	/*if (assistAwokens.includes(49))
