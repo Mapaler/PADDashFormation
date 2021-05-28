@@ -860,7 +860,7 @@ function loadData(force = false)
 				checkFormationBox();
 				function checkFormationBox()
 				{
-					if (formationBox)
+					if (formationBox.querySelector('.teams'))
 					{
 						reloadFormationData();
 						clearInterval(formationBoxHook);
