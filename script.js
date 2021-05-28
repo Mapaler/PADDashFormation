@@ -12,6 +12,8 @@ let statusLine; //储存状态栏
 let formationBox; //储存整个formationBox
 let editBox; //储存整个editBox
 let showSearch; //整个程序都可以用的显示搜索函数
+let qrcodeReader; //二维码读取
+let qrcodeWriter; //二维码输出
 
 const dataStructure = 3; //阵型输出数据的结构版本
 const className_displayNone = "display-none";
@@ -569,6 +571,9 @@ window.onload = function(event) {
 		alert("请更新您的浏览器。\nPlease update your browser.");
 	}
 
+	qrcodeReader = new ZXing.BrowserQRCodeSvgWriter(); //二维码读取
+	qrcodeWriter = new ZXing.BrowserQRCodeSvgWriter(); //二维码生成
+
 	controlBox = document.body.querySelector(".control-box");
 	statusLine = controlBox.querySelector(".status"); //显示当前状态的
 	formationBox = document.body.querySelector(".formation-box");
@@ -990,6 +995,74 @@ function initialize() {
 		if (p2 && p2.y != undefined)
 			line.setAttribute("y2", p2.y);
 	};
+
+	const qrCodeFrame = document.body.querySelector("#qr-code-frame");
+	const btnQrCode = controlBox.querySelector(`.btn-qrcode`);
+	btnQrCode.onclick = function(){
+		qrCodeFrame.show();
+	};
+	qrCodeFrame.content = qrCodeFrame.querySelector(".mask-content");
+	qrCodeFrame.show = function(){
+		this.classList.remove(className_displayNone);
+		this.refreshQrCode();
+	};
+	qrCodeFrame.refreshQrCode = function()
+	{
+		const qrBox = this.content.querySelector(".qr-box");
+
+		let outStr = JSON.stringify({
+			d:formation.outObj(),
+			s:currentDataSource.code,
+		});
+		const EncodeHintType = ZXing.EncodeHintType;
+		let svgElement;
+		const hints = new Map();
+		hints.set(EncodeHintType.MARGIN, 0);
+		//hints.set(EncodeHintType.CHARACTER_SET, "UTF8");
+		const qrWidth = 500,qrHeight = 500;
+		svgElement = qrcodeWriter.write(outStr, qrWidth, qrHeight, hints);
+		const svgData = (new XMLSerializer()).serializeToString(svgElement);
+		const blob = new Blob([svgData], {type : 'image/svg+xml'});
+		const svgUrl = URL.createObjectURL(blob);
+		loadImage(svgUrl).then(function(img) {
+
+			ctx = qrBox.getContext('2d');
+	
+			qrBox.width = qrWidth;
+			qrBox.height = qrHeight;
+
+			ctx.fillStyle="white";
+			ctx.fillRect(0, 0, qrWidth, qrHeight,)
+			ctx.drawImage(img, 0, 0, qrWidth, qrHeight);
+			svgElement = null;
+			img = null;
+		}, function(err) {
+			console.log(err);
+		});
+
+		// 加载 image
+		function loadImage(url) {
+			return new Promise(function(resolve, reject) {
+				var image = new Image();
+
+				image.src = url;
+				image.type = "svg"
+				image.crossOrigin = 'Anonymous';
+				image.onload = function() {
+					resolve(this);
+				};
+
+				image.onerror = function(err) {
+					reject(err);
+				};
+			});
+		}
+	}
+	qrCodeFrame.hide = function(){
+		this.classList.add(className_displayNone);
+	};
+	qrCodeFrame.close = qrCodeFrame.querySelector(".mask-close");
+	qrCodeFrame.close.onclick = function(){qrCodeFrame.hide()};
 
 	//标题和介绍文本框
 	const titleBox = formationBox.querySelector(".title-box");
@@ -1590,12 +1663,12 @@ function initialize() {
 		maskContent.appendChild(fragment);
 		this.classList.remove(className_displayNone);
 	}
-	evolutionaryTreeMask.close = function()
+	evolutionaryTreeMask.hide = function()
 	{
 		this.classList.add(className_displayNone);
 	}
 	const evolutionaryTreeMask_Close = evolutionaryTreeMask.querySelector(".mask-close");
-	evolutionaryTreeMask_Close.onclick = function(){evolutionaryTreeMask.close();};
+	evolutionaryTreeMask_Close.onclick = function(){evolutionaryTreeMask.hide();};
 	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	openEvolutionaryTree.onclick = function() {evolutionaryTreeMask.show(editBox.mid)};
 

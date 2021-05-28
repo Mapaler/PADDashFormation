@@ -17,6 +17,7 @@ const teamsCount = 1;
 <script type="text/javascript" src="script-universal_function.js"></script>
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript" src="library/html2canvas.min.js"></script>
+<script type="text/javascript" src="library/zxing.umd.min.js"></script>
 <!--▼ADPCM播放相关-->
 <script type="text/javascript" src="library/jy4340132-aaa/std.js"></script>
 <script type="text/javascript" src="library/jy4340132-aaa/pcm_player.js"></script>
@@ -37,6 +38,7 @@ var formation = new Formation(teamsCount,6);
 		<div>
 			<button class="btn-clear-data" onclick="clearData();"></button>
 			<button class="btn-capture" onclick="capture();"></button>
+			<button class="btn-qrcode"></button>
 			<a class="down-capture display-none" target="_blank"></a>
 			<button class="btn-multi-link" onclick="turnPage(2,arguments[0]);"></button>
 			<button class="btn-triple-link" onclick="turnPage(3,arguments[0]);"></button>
@@ -963,5 +965,12 @@ var formation = new Formation(teamsCount,6);
 			<line />
 		</g>
 	</svg>
+	<div id="qr-code-frame" class="mask display-none">
+		<button class="mask-close brown-button"></button>
+		<div class="mask-content">
+			<button class="read-qr brown-button">读</button>
+			<canvas class="qr-box"></canvas>
+		</div>
+	</div>
 </body>
 </html>
