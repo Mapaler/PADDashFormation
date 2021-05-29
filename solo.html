@@ -968,19 +968,26 @@ var formation = new Formation(teamsCount,6);
 	<div id="qr-code-frame" class="mask  display-none">
 		<button class="mask-close brown-button"></button>
 		<div class="mask-content">
-			<div class="action-button-box">
-				<a download="" class="save-qr-svg brown-button"><!--保存QR SVG--></a>
-				<button class="read-qr-camera brown-button"><!--相机扫--></button>
-				<button class="read-qr-file brown-button"><!--读文件--></button>
-				<input type="file" accept="image/*" class="file-select display-none">
+			<div class="read-qr-box">
+				<div class="action-button-box">
+					<button class="read-qr-camera brown-button"><!--相机扫--></button>
+					<button class="read-qr-file brown-button"><!--读文件--></button>
+					<input type="file" accept="image/*" class="file-select display-none">
+				</div>
+				<div class="info"></div>
+				<div class="video-box display-none">
+					<div><label for="sourceSelect"><!--视频源选择--></label><select id="sourceSelect"></select></div>
+					<video id="video" width="500" height="500"></video>
+				</div>
 			</div>
-			<div class="info"></div>
-			<img class="qr-box" />
-			<div class="video-box display-none">
-				<div><label for="sourceSelect"><!--视频源选择--></label><select id="sourceSelect"></select></div>
-				<video id="video" width="500" height="500"></video>
+			<div class="save-qr-box">
+				<ul class="qr-data-type-ul">
+					<li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdf" id="qr-data-type-pdf" checked/><label for="qr-data-type-pdf"></label></li><!--本程序
+					--><li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdc" id="qr-data-type-pdc" /><label for="qr-data-type-pdc"></label></li><!--PDC-->
+				</ul>
+				<div class="qr-box"><img class="qr-code-image" /></div>
+				<a download="" class="save-qr-img brown-button"><!--保存QR 图片--></a>
 			</div>
-			
 		</div>
 	</div>
 </body>

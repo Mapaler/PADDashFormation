@@ -1430,19 +1430,29 @@ icon.inflicts::after
 .attrs-div .attr-list{
 	font-size:0;
 }
-.attrs-div .attr-list>li{
+.attrs-div .attr-list>li,
+.qr-data-type-ul>li
+{
 	border: 1px solid white;
 	border-left: none;
 	background: #947244;
+	display: inline-block;
+	overflow: hidden;
 }
-.attrs-div .attr-list>li:hover{
+.attrs-div .attr-list>li:hover,
+.qr-data-type-ul>li:hover
+{
 	background: #E9CB9E;
 }
-.attrs-div .attr-list>li:first-of-type{
+.attrs-div .attr-list>li:first-of-type,
+.qr-data-type-ul>li:first-of-type
+{
 	border-radius: 8px 0 0 8px;
 	border-left: 1px solid white;
 }
-.attrs-div .attr-list>li:last-of-type{
+.attrs-div .attr-list>li:last-of-type,
+.qr-data-type-ul>li:last-of-type
+{
 	border-radius: 0 8px 8px 0;
 }
 .attrs-div .attr-list>li>label
@@ -1453,7 +1463,9 @@ icon.inflicts::after
 	text-align: center;
 	vertical-align: middle;
 }
-.attrs-div .attr-list input:checked+label{
+.attrs-div .attr-list input:checked+label,
+.qr-data-type-ul>li input:checked+label
+{
 	background-color:#8C4242;
 	box-shadow: inset black 0 0 5px;
 	cursor: auto;
@@ -2867,17 +2879,41 @@ table .orb-icon
 }
 #qr-code-frame a
 {
-	display: inline-block;
 	color: white;
+}
+.read-qr-box::before,
+.save-qr-box::before
+{
+	display: block;
+	text-align: left;
+}
+
+.qr-data-type-ul .qr-data-type-radio
+{
+	display: none;
+}
+.qr-data-type-ul>li label
+{
+	font-size: 20px;
+	padding: 5px;
 }
 .formation-from-qrcode
 {
 	font-size: 1.5em;
+	display: block;
 }
-.qr-box
+.qr-code-image
 {
 	background-color: white;
-	display: inline-block;
+}
+.qr-data-type-ul .qr-data-type-radio
+{
+	display: none;
+}
+.qr-data-type-ul>li label
+{
+	font-size: 20px;
+	padding: 5px;
 }
 /*.base .evo-type::before,
 .base .evo-type::after

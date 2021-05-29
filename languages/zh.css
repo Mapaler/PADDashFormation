@@ -468,6 +468,16 @@
 .control-box .btn-qrcode::before{
 	content: "\f029 二维码";
 }
+
+.read-qr-box::before
+{
+	content: "读取二维码：";
+}
+.save-qr-box::before
+{
+	content: "生成二维码：";
+}
+
 .formation-from-qrcode::before
 {
     content: "从二维码中读取的队伍链接";
@@ -476,7 +486,7 @@ label[for="sourceSelect"]::before
 {
     content: "视频源选择：";
 }
-#qr-code-frame .save-qr-svg::before
+#qr-code-frame .save-qr-img::before
 {
     content: "\f0c7  保存二维码图片";
 }
@@ -484,7 +494,20 @@ label[for="sourceSelect"]::before
 {
     content: "\f030  使用相机扫描";
 }
+#qr-code-frame .read-qr-camera.running::before
+{
+    content: "\f28d  停止使用相机";
+}
 #qr-code-frame .read-qr-file::before
 {
     content: "\f1c5  读取二维码图片";
+}
+
+label[for="qr-data-type-pdf"]::before
+{
+	content: "本队伍图制作工具";
+}
+label[for="qr-data-type-pdc"]::before
+{
+	content: "智龙迷城伤害计算器（PDC）";
 }

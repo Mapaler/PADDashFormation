@@ -101,6 +101,7 @@ Please refer to existing files.
 # 使用开源软件 | Open source software used
 * [Puzzle-and-Dragons-Texture-Tool](//github.com/codywatts/Puzzle-and-Dragons-Texture-Tool) //Extract Images
 * [pad-rikuu](//github.com/kiootic/pad-rikuu) //Parse data
+* [zxing-js](//github.com/zxing-js/library) //Read, Write QR Code
 * [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
 * [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
 * [Zpix (最像素)](//github.com/SolidZORO/zpix-pixel-font) //Pixel Font

@@ -139,14 +139,14 @@ Member.prototype.outObj = function() {
 	let obj = [m.id];
 	if (m.level != undefined) obj[1] = m.level;
 	if (m.awoken != undefined) obj[2] = m.awoken;
-	if (m.plus != undefined && m.plus instanceof Array && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) != 0) {
+	if (m.plus != undefined && Array.isArray(m.plus) && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) != 0) {
 		if (m.plus[0] === m.plus[1] && m.plus[0] === m.plus[2]) { //当3个加值一样时只生成第一个减少长度
 			obj[3] = m.plus[0];
 		} else {
 			obj[3] = m.plus;
 		}
 	}
-	if (m.latent != undefined && m.latent instanceof Array && m.latent.length >= 1) obj[4] = m.latent;
+	if (m.latent != undefined && Array.isArray(m.latent) && m.latent.length >= 1) obj[4] = m.latent;
 	if (m.sawoken != undefined && m.sawoken >= 0) obj[5] = m.sawoken;
 	const card = Cards[m.id] || Cards[0]; //怪物固定数据
 	const skill = Skills[card.activeSkillId];
@@ -174,10 +174,10 @@ Member.prototype.loadObj = function(m, dataVersion) {
 	} else {
 		this.plus = m.plus;
 	}
-	if (!(this.plus instanceof Array)) this.plus = [0, 0, 0]; //如果加值不是数组，则改变
+	if (!Array.isArray(this.plus)) this.plus = [0, 0, 0]; //如果加值不是数组，则改变
 	this.latent = dataVersion > 1 ? m[4] : m.latent;
-	if (this.latent instanceof Array && dataVersion <= 2) this.latent = this.latent.map(l => l >= 13 ? l + 3 : l); //修复以前自己编的潜觉编号为官方编号
-	if (!(this.latent instanceof Array)) this.latent = []; //如果潜觉不是数组，则改变
+	if (Array.isArray(this.latent) && dataVersion <= 2) this.latent = this.latent.map(l => l >= 13 ? l + 3 : l); //修复以前自己编的潜觉编号为官方编号
+	if (!Array.isArray(this.latent)) this.latent = []; //如果潜觉不是数组，则改变
 	this.sawoken = dataVersion > 1 ? m[5] : m.sawoken;
 	this.skilllevel = m[6] || null;
 };
@@ -211,7 +211,7 @@ MemberAssist.prototype.loadFromMember = function(m) {
 	this.id = m.id;
 	if (m.level != undefined) this.level = m.level;
 	if (m.awoken != undefined) this.awoken = m.awoken;
-	if (m.plus != undefined && m.plus instanceof Array && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) > 0) this.plus = JSON.parse(JSON.stringify(m.plus));
+	if (m.plus != undefined && Array.isArray(m.plus) && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) > 0) this.plus = JSON.parse(JSON.stringify(m.plus));
 	if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 //正式队伍
@@ -230,11 +230,11 @@ MemberTeam.prototype.loadFromMember = function(m) {
 	this.id = m.id;
 	if (m.level != undefined) this.level = m.level;
 	if (m.awoken != undefined) this.awoken = m.awoken;
-	if (m.plus != undefined && m.plus instanceof Array && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) > 0) this.plus = JSON.parse(JSON.stringify(m.plus));
-	if (m.latent != undefined && m.latent instanceof Array && m.latent.length >= 1) this.latent = JSON.parse(JSON.stringify(m.latent));
+	if (m.plus != undefined && Array.isArray(m.plus) && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) > 0) this.plus = JSON.parse(JSON.stringify(m.plus));
+	if (m.latent != undefined && Array.isArray(m.latent) && m.latent.length >= 1) this.latent = JSON.parse(JSON.stringify(m.latent));
 	if (m.sawoken != undefined) this.sawoken = m.sawoken;
-	if (m.ability != undefined && m.ability instanceof Array && m.plus.length >= 3) this.ability = JSON.parse(JSON.stringify(m.ability));
-	if (m.abilityNoAwoken != undefined && m.abilityNoAwoken instanceof Array && m.plus.length >= 3) this.abilityNoAwoken = JSON.parse(JSON.stringify(m.abilityNoAwoken));
+	if (m.ability != undefined && Array.isArray(m.ability) && m.plus.length >= 3) this.ability = JSON.parse(JSON.stringify(m.ability));
+	if (m.abilityNoAwoken != undefined && Array.isArray(m.abilityNoAwoken) && m.plus.length >= 3) this.abilityNoAwoken = JSON.parse(JSON.stringify(m.abilityNoAwoken));
 	if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 
@@ -318,6 +318,75 @@ Formation.prototype.loadObj = function(f) {
 	if (f.b)
 		this.teams[0][2] = f.b; //原来模式的徽章
 };
+Formation.prototype.getPdfQrObj = function(keepSource = true)
+{
+	let qrObj = {
+		d:this.outObj()
+	};
+	if (keepSource) qrObj.s = currentDataSource.code;
+	return qrObj;
+}
+Formation.prototype.getPdcQrStr = function()
+{
+	function genMemberMap(m, a, position = 0)
+	{
+		const o = new Map();
+		o.set(0, m.id);
+		if (m.latent.length)
+			o.set(2, m.latent.map(pdfLtent=>pdcLatentMap.find(latent=>latent.pdf === pdfLtent).pdc.toString(36).prefix(2)).join('')); //潜觉
+		o.set(3, m.level);
+		o.set(4, m.plus[0]);
+		o.set(5, m.plus[1]);
+		o.set(6, m.plus[2]);
+		o.set(7, m.awoken == Cards[m.id].awakenings.length ? -1 : m.awoken);
+		o.set(8, m.sawoken >= 0 ? Cards[m.id].superAwakenings[m.sawoken] : 0);
+		if (a.id != 0)
+		{
+			o.set(9, a.id);
+			o.set(10, a.level);
+			o.set(11, a.plus[0]);
+			o.set(12, a.plus[1]);
+			o.set(13, a.plus[2]);
+			o.set(14, a.awoken == Cards[a.id].awakenings.length ? -1 : a.awoken);
+		}
+		o.set(15, position);
+		return o;
+	}
+	let pdcTeamsStr = this.teams.map(t=>{
+		let teamArr = [
+			pdcBadgeMap.find(badge=>badge.pdf === t[2]).pdc //徽章
+		];
+		const membersArr = t[0];
+		const assistArr = t[1];
+		for (let i=0;i<membersArr.length;i++)
+		{
+			if (membersArr[i].id > 0 || assistArr[i].id > 0)
+			{
+				let pdcMemberArr = Array.from(genMemberMap(membersArr[i], assistArr[i], i));
+				pdcMemberStr = pdcMemberArr.map(item => [
+					item[0].toString(36).prefix(2),
+					item[1].toString(36).prefix(2)
+				].join('')).join(',');
+				teamArr.push(pdcMemberStr);
+			}
+		}
+		return teamArr.join('}');
+	})
+	let outArr = [
+		[1,this.teams.length - 1]
+	].concat(pdcTeamsStr);
+	return outArr.join(']');
+}
+Formation.prototype.getQrStr = function(type)
+{
+	if (type == 'pdf' || type == 0)
+	{
+		return JSON.stringify(this.getPdfQrObj());
+	}else
+	{
+		return this.getPdcQrStr();
+	}
+}
 
 //进化树
 class EvoTree 
@@ -680,7 +749,7 @@ function loadData(force = false)
 		lastCkeys = localStorage.getItem("PADDF-ckey"); //读取本地储存的原来的ckey
 		try {
 			lastCkeys = JSON.parse(lastCkeys);
-			if (lastCkeys == null || !(lastCkeys instanceof Array))
+			if (lastCkeys == null || Array.isArray(!(lastCkeys)))
 				lastCkeys = [];
 		} catch (e) {
 			console.error("旧的 Ckey 数据 JSON 解码出错。", e);
@@ -707,7 +776,7 @@ function loadData(force = false)
 				console.error("Cards 数据库内容读取失败。");
 			};
 			request.onsuccess = function(event) {
-				if (request.result instanceof Array)
+				if (Array.isArray(request.result))
 				{
 					Cards = request.result;
 					dealCardsData(Cards);
@@ -794,7 +863,7 @@ function loadData(force = false)
 					console.error("Skills 数据库内容读取失败。");
 				};
 				request.onsuccess = function(event) {
-					if (request.result instanceof Array)
+					if (Array.isArray(request.result))
 					{
 						Skills = request.result;
 						dealSkillData(Skills);
@@ -992,33 +1061,6 @@ function inputFromQrString(string)
 		}
 		return newUrl;
 	}
-	function readPDC(string)
-	{
-		let teamsStr = string.split("]");
-		let baseInfo = teamsStr.shift().split(",");
-		let teamsArr = teamsStr.map(teamStr=>
-			{
-				let membersStr = teamStr.split("}").filter(Boolean);
-				const team = {
-					badge: parseInt(membersStr.shift(),10) //徽章是10进制
-				}
-				team.members = membersStr.map(memberStr=>{
-					let memberArr = memberStr.split(",").map(valueStr=>
-						[parseInt(valueStr.substr(0,2),36),
-						valueStr.substr(2)]);
-					return new Map(memberArr);
-				});
-				return team;
-			}
-		);
-		let pdcFotmation = {
-			version: parseInt(baseInfo[0],36),
-			teamCount: parseInt(baseInfo[1],36)+1,
-			teams: teamsArr
-		}
-		return pdcFotmation;
-	}
-
 	//code 1~99 为各种编码
 	if (string.substr(0,1) == "{" && string.substr(-1,1) == "}")
 	{
@@ -1064,10 +1106,13 @@ function inputFromQrString(string)
 			re.message = "错误的 网址 格式 | The illegal URL format";
 		}
 	}
-	else if(/^\d[\d\-\w,\]}]+}$/.test(string))
+	else if(/^\d[\d\-\w,\]}]+}/.test(string))
 	{ //PDC
 		re.code = 2;
-		re.message = "暂不支持 PDC 二维码 | PDC QR codes are not supported now";
+		re.message = "发现 PDC 二维码 | PDC QR code found";
+		const pdcFotmation = readPDC(string);
+		const newFotmation = pdcFotmationToPdfFotmation(pdcFotmation);
+		re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
 	}
 	else
 	{
@@ -1075,6 +1120,75 @@ function inputFromQrString(string)
 		re.message = "不是 JSON 格式 | Not JSON format";
 	}
 	return re;
+}
+//解析PDC的数据
+function readPDC(string)
+{
+	let teamsStr = string.split("]");
+	let baseInfo = teamsStr.shift().split(",");
+	let teamsArr = teamsStr.map(teamStr=>
+		{
+			let membersStr = teamStr.split("}").filter(Boolean);
+			const team = {
+				badge: parseInt(membersStr.shift(),10) //徽章是10进制
+			}
+			team.members = membersStr.map(memberStr=>{
+				let memberArr = memberStr.split(",").map(valueStr=>{
+					let idx = parseInt(valueStr.substr(0,2),36);
+					let value = valueStr.substr(2);
+					if (idx !== 2)
+					{
+						value = parseInt(value,36);
+					}else
+					{
+						value = value.split(/(\w{2})/).filter(Boolean).map(v=>parseInt(v,36));
+					}
+					return [idx, value];
+				});
+				return new Map(memberArr);
+			});
+			return team;
+		}
+	);
+	let pdcFotmation = {
+		version: parseInt(baseInfo[0],10),
+		teamCount: parseInt(baseInfo[1],10)+1,
+		teams: teamsArr
+	}
+	return pdcFotmation;
+}
+function pdcFotmationToPdfFotmation(pdcFotmation)
+{
+	const f = new Formation(pdcFotmation.teamCount, pdcFotmation.teamCount == 2 ? 5 : 6);
+	pdcFotmation.teams.forEach((pdcTeam,idx)=>{
+		const t = f.teams[idx];
+		const membersArr = t[0];
+		const assistArr = t[1];
+		//队伍徽章
+		t[2] = pdcTeam.badge === 0 ? 0 : pdcBadgeMap.find(badge=>badge.pdc === pdcTeam.badge).pdf;
+		pdcTeam.members.forEach(member=>{
+			const m = membersArr[member.get(15) || 0];
+			const a = assistArr[member.get(15) || 0];
+			m.id = member.get(0) || 0;
+			a.id = member.get(9) || 0; //延迟是-1刚好一样
+			if (member.get(2))
+			{
+				m.latent = member.get(2).map(pdcLatent=>pdcLatentMap.find(latent=>latent.pdc === pdcLatent).pdf);
+			}
+			m.level = member.get(3) || 1;
+			a.level = member.get(10) || 1;
+			m.plus[0] = member.get(4) || 0;
+			m.plus[1] = member.get(5) || 0;
+			m.plus[2] = member.get(6) || 0;
+			a.plus[0] = member.get(11) || 0;
+			a.plus[1] = member.get(12) || 0;
+			a.plus[2] = member.get(13) || 0;
+			m.awoken = member.get(7) >= 0 ? member.get(7) : Cards[m.id].awakenings.length;
+			a.awoken = member.get(14) >= 0 ? member.get(14) : Cards[a.id].awakenings.length;
+			m.sawoken = member.get(8) ? Cards[m.id].superAwakenings.indexOf(member.get(8)) : null;
+		});
+	});
+	return f;
 }
 //截图
 function capture() {
@@ -1127,11 +1241,14 @@ function initialize() {
 		qrCodeFrame.show();
 	};
 	qrCodeFrame.show = function(){
-		this.content.info.textContent  = "";
-		this.content.qrBox.classList.remove(className_displayNone);
-		this.content.videoBox.classList.add(className_displayNone);
+		const saveBox = this.content.saveBox;
+		const readBox = this.content.readBox;
+		readBox.info.textContent  = "";
+
+		readBox.videoBox.classList.add(className_displayNone);
 		this.classList.remove(className_displayNone);
-		this.refreshQrCode();
+		
+		this.refreshQrCode(formation.getQrStr(saveBox.qrDataType.find(radio=>radio.checked).value));
 	};
 	qrCodeFrame.hide = function(){
 		qrcodeReader.reset();
@@ -1141,18 +1258,23 @@ function initialize() {
 	qrCodeFrame.close.onclick = function(){qrCodeFrame.hide()};
 
 	const qrContent = qrCodeFrame.content = qrCodeFrame.querySelector(".mask-content");
-	qrContent.info = qrContent.querySelector(".info");
-	qrContent.qrBox = qrContent.querySelector(".qr-box");
-	qrContent.video = qrContent.querySelector("#video");
-	qrContent.videoBox = qrContent.querySelector(".video-box");
-	qrContent.sourceSelect = qrContent.querySelector("#sourceSelect");
-	{
-		const qrActionButtonBox = qrContent.querySelector(".action-button-box");
-		qrContent.saveQrSvg = qrActionButtonBox.querySelector(".save-qr-svg");
-		qrContent.readQrCamera = qrActionButtonBox.querySelector(".read-qr-camera");
-		qrContent.readQrFile = qrActionButtonBox.querySelector(".read-qr-file");
-		qrContent.filePicker = qrActionButtonBox.querySelector(".file-select");
-	}
+	const qrReadBox = qrContent.readBox = qrContent.querySelector(".read-qr-box");
+	const qrSaveBox = qrContent.saveBox = qrContent.querySelector(".save-qr-box");
+	qrReadBox.readQrCamera = qrReadBox.querySelector(".read-qr-camera");
+	qrReadBox.readQrFile = qrReadBox.querySelector(".read-qr-file");
+	qrReadBox.filePicker = qrReadBox.querySelector(".file-select");
+	qrReadBox.info = qrReadBox.querySelector(".info");
+	qrReadBox.video = qrReadBox.querySelector("#video");
+	qrReadBox.videoBox = qrReadBox.querySelector(".video-box");
+	qrReadBox.sourceSelect = qrReadBox.querySelector("#sourceSelect");
+
+	qrSaveBox.qrImage = qrSaveBox.querySelector(".qr-code-image");
+	qrSaveBox.qrDataType = Array.from(qrSaveBox.querySelectorAll(".qr-data-type-radio"));
+	qrSaveBox.qrDataType.forEach(radio=>radio.onclick = function(){
+		qrCodeFrame.refreshQrCode(formation.getQrStr(this.value));
+	});
+	qrSaveBox.saveQrImg = qrSaveBox.querySelector(".save-qr-img");
+
 	qrCodeFrame.ondragenter = ()=>false;
 	qrCodeFrame.ondragover =  ()=>false;
 	qrCodeFrame.ondrop = function(e)
@@ -1162,25 +1284,21 @@ function initialize() {
 		e.preventDefault();   
 	}
 
-	qrCodeFrame.refreshQrCode = function()
+	qrCodeFrame.refreshQrCode = function(string)
 	{
-		const qrBox = this.content.qrBox;
-		URL.revokeObjectURL(qrBox.src);
+		const qrImg = this.content.saveBox.qrImage;
+		URL.revokeObjectURL(qrImg.src);
 
-		let outStr = JSON.stringify({
-			d:formation.outObj(),
-			s:currentDataSource.code,
-		});
 		const EncodeHintType = ZXing.EncodeHintType;
 		const hints = new Map();
 		hints.set(EncodeHintType.MARGIN, 0);
 		//hints.set(EncodeHintType.CHARACTER_SET, "UTF8");
 		const qrWidth = 500,qrHeight = 500;
-		let svgElement = qrcodeWriter.write(outStr, qrWidth, qrHeight, hints);
+		let svgElement = qrcodeWriter.write(string, qrWidth, qrHeight, hints);
 		let svgData = new XMLSerializer().serializeToString(svgElement);
 		let blob = new Blob([svgData], {type : 'image/svg+xml'});
 		let svgUrl = URL.createObjectURL(blob);
-		qrBox.src = svgUrl;
+		qrImg.src = svgUrl;
 
 
 		loadImage(svgUrl).then(function(img) {
@@ -1195,10 +1313,11 @@ function initialize() {
 			ctx.drawImage(img, 0, 0, cavansWidth, cavansHeight);
 
 			cavans.toBlob(function(blob) {
-				URL.revokeObjectURL(qrContent.saveQrSvg.href);
+				const saveQrImg = qrSaveBox.saveQrImg;
+				URL.revokeObjectURL(saveQrImg.href);
 				const downLink = URL.createObjectURL(blob);
-				qrContent.saveQrSvg.download = formation.title || "PAD Dash Formation QR";
-				qrContent.saveQrSvg.href = downLink;
+				saveQrImg.download = formation.title || "PAD Dash Formation QR";
+				saveQrImg.href = downLink;
 			});
 
 			svgElement = null;
@@ -1212,11 +1331,11 @@ function initialize() {
 		});
 
 	}
-	qrContent.readQrFile.onclick = function()
+	qrReadBox.readQrFile.onclick = function()
 	{
-		qrContent.filePicker.click();
+		qrReadBox.filePicker.click();
 	}
-	qrContent.filePicker.onchange = function()
+	qrReadBox.filePicker.onchange = function()
 	{
 		imagesSelected(this.files);
 	}
@@ -1228,21 +1347,30 @@ function initialize() {
 				console.log('Found QR code!', result);
 				let inputResult = inputFromQrString(result.text);
 				
-				if (inputResult.code == 1)
+				qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
+				if (inputResult.code < 100)
 				{
-					qrContent.info.textContent = "";
 					const newLink = document.createElement("a");
 					newLink.className = "formation-from-qrcode";
 					newLink.href = inputResult.url;
 					newLink.target = "_blank";
-					qrContent.info.appendChild(newLink);
-				}else
-				{
-					qrContent.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
+					qrReadBox.info.appendChild(newLink);
 				}
 			}).catch((err) => {
-				console.error(err)
-				qrContent.info.textContent = err
+				console.error(err);
+				if (err) {
+					if (err instanceof ZXing.NotFoundException) {
+						qrReadBox.info.textContent = 'No QR code found.';
+					}
+		
+					if (err instanceof ZXing.ChecksumException) {
+						qrReadBox.info.textContent = 'A code was found, but it\'s read value was not valid.';
+					}
+		
+					if (err instanceof ZXing.FormatException) {
+						qrReadBox.info.textContent = 'A code was found, but it was in a invalid format.';
+					}
+				}
 			})
 			console.log(`Started decode for image from ${img.src}`)
 		}, function(err) {
@@ -1250,10 +1378,9 @@ function initialize() {
 		});
 	}
 
-	
 	if (location.protocol == "http:" && location.host != "localhost" && location.host != "127.0.0.1")
 	{ //http不支持攝像頭
-		qrContent.readQrCamera.classList.add(className_displayNone);
+		qrReadBox.readQrCamera.classList.add(className_displayNone);
 	}else
 	{
 		
@@ -1265,18 +1392,18 @@ function initialize() {
 					console.log('Found QR code!', result);
 					let inputResult = inputFromQrString(result.text);
 					
-					if (inputResult.code == 1)
+					if (inputResult.code < 100)
 					{ //成功后就关闭
-						qrContent.readQrCamera.onclick();
-						qrContent.info.textContent = "";
+						qrReadBox.readQrCamera.onclick();
+						qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
 						const newLink = document.createElement("a");
 						newLink.className = "formation-from-qrcode";
 						newLink.href = inputResult.url;
 						newLink.target = "_blank";
-						qrContent.info.appendChild(newLink);
+						qrReadBox.info.appendChild(newLink);
 					}else
 					{
-						qrContent.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
+						qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
 					}
 				}
 		
@@ -1309,33 +1436,31 @@ function initialize() {
 					const sourceOption = document.createElement('option');
 					sourceOption.text = element.label
 					sourceOption.value = element.deviceId
-					qrContent.sourceSelect.appendChild(sourceOption)
+					qrReadBox.sourceSelect.appendChild(sourceOption)
 				});
-				qrContent.sourceSelect.selectedIndex = videoInputDevices.findIndex(device=>device.deviceId == selectedDeviceId);
+				qrReadBox.sourceSelect.selectedIndex = videoInputDevices.findIndex(device=>device.deviceId == selectedDeviceId);
 	
-				qrContent.sourceSelect.onchange = function() {
+				qrReadBox.sourceSelect.onchange = function() {
 					selectedDeviceId = this.value;
 					localStorage.setItem(cfgPrefix + sourceSelect_id, this.value);
-					if (qrContent.readQrCamera.classList.contains("running"))
+					if (qrReadBox.readQrCamera.classList.contains("running"))
 					{
 						qrcodeReader.reset();
 						scanContinuously();
 					}
 				};
 			}
-			qrContent.readQrCamera.onclick = function()
+			qrReadBox.readQrCamera.onclick = function()
 			{
 				if (this.classList.contains("running"))
 				{
 					qrcodeReader.reset();
-					qrContent.qrBox.classList.remove(className_displayNone);
-					qrContent.videoBox.classList.add(className_displayNone);
-					qrContent.info.textContent  = "";
+					qrReadBox.videoBox.classList.add(className_displayNone);
+					qrReadBox.info.textContent  = "";
 	
 				}else
 				{
-					qrContent.qrBox.classList.add(className_displayNone);
-					qrContent.videoBox.classList.remove(className_displayNone);
+					qrReadBox.videoBox.classList.remove(className_displayNone);
 					scanContinuously();
 				}
 				this.classList.toggle("running");
@@ -2171,7 +2296,7 @@ function initialize() {
 	const searchResultCount = searchBox.querySelector(".search-list-length");
 	showSearch = function(searchArr, customAdditionalFunction)
 	{
-		if (!(searchArr instanceof Array))
+		if (!Array.isArray(searchArr))
 		{ //如果不是数组就直接取消下一步
 			return;
 		}
@@ -2201,7 +2326,7 @@ function initialize() {
 				showAbilitiesWithAwoken: s_add_show_abilities_with_awoken.checked,
 				customAddition: typeof customAdditionalFunction == "function" ?
 				 [customAdditionalFunction] :
-				 (customAdditionalFunction instanceof Array ? customAdditionalFunction : null)
+				 Array.isArray((customAdditionalFunction) ? customAdditionalFunction : null)
 			};
 			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, additionalOption));
 			searchMonList.customAddition = additionalOption.customAddition;

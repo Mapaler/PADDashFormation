@@ -47,11 +47,16 @@ function getQueryString(name, url) {
 
 //数字补前导0
 Number.prototype.prefixInteger = function(length, useGrouping = false) {
-		return this.toLocaleString(undefined, {
-			useGrouping: useGrouping,
-			minimumIntegerDigits: length
-		});
-	}
+	return this.toLocaleString(undefined, {
+		useGrouping: useGrouping,
+		minimumIntegerDigits: length
+	});
+}
+//数字补前导0
+String.prototype.prefix = function(length = 2, prefix = '0') {
+	let needAddLength = Math.max(length - this.length, 0);
+	return new Array(needAddLength).fill(prefix).join('') + this;
+}
 //大数字缩短长度，默认返回本地定义字符串
 Number.prototype.bigNumberToString = function() {
 	return this.toLocaleString();

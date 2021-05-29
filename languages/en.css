@@ -508,6 +508,16 @@
 .control-box .btn-qrcode::before{
 	content: "\f029 QR Code";
 }
+
+.read-qr-box::before
+{
+	content: "Read QR code:";
+}
+.save-qr-box::before
+{
+	content: "Generate QR code:";
+}
+
 .formation-from-qrcode::before
 {
     content: "A formation link read from a QR code";
@@ -516,7 +526,7 @@ label[for="sourceSelect"]::before
 {
     content: "Video source selection:";
 }
-#qr-code-frame .save-qr-svg::before
+#qr-code-frame .save-qr-img::before
 {
     content: "\f0c7  Save QR code image";
 }
@@ -524,7 +534,20 @@ label[for="sourceSelect"]::before
 {
     content: "\f030  Scan with the camera";
 }
+#qr-code-frame .read-qr-camera.running::before
+{
+    content: "\f28d  Stop using the camera";
+}
 #qr-code-frame .read-qr-file::before
 {
     content: "\f1c5  Read the image file";
+}
+
+label[for="qr-data-type-pdf"]::before
+{
+	content: "This Formation Picture Maker";
+}
+label[for="qr-data-type-pdc"]::before
+{
+	content: "P&D Damage Caculater (PDC)";
 }
