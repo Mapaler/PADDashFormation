@@ -2362,7 +2362,7 @@ function initialize() {
 				showAbilitiesWithAwoken: s_add_show_abilities_with_awoken.checked,
 				customAddition: typeof customAdditionalFunction == "function" ?
 				 [customAdditionalFunction] :
-				 Array.isArray((customAdditionalFunction) ? customAdditionalFunction : null)
+				 (Array.isArray(customAdditionalFunction) ? customAdditionalFunction : null)
 			};
 			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, additionalOption));
 			searchMonList.customAddition = additionalOption.customAddition;
