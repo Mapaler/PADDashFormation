@@ -338,8 +338,8 @@ Formation.prototype.getPdcQrStr = function()
 		o.set(4, m.plus[0]);
 		o.set(5, m.plus[1]);
 		o.set(6, m.plus[2]);
-		o.set(7, m.awoken >= Cards[m.id].awakenings.length ? -1 : m.awoken);
-		o.set(8, m.sawoken >= 0 ? Cards[m.id].superAwakenings[m.sawoken] : 0);
+		o.set(7, (m.awoken != null && m.awoken >= Cards[m.id].awakenings.length) ? -1 : m.awoken);
+		o.set(8, (m.sawoken != null && m.sawoken >= 0) ? Cards[m.id].superAwakenings[m.sawoken] : 0);
 		if (a.id != 0)
 		{
 			o.set(9, a.id);
@@ -347,7 +347,7 @@ Formation.prototype.getPdcQrStr = function()
 			o.set(11, a.plus[0]);
 			o.set(12, a.plus[1]);
 			o.set(13, a.plus[2]);
-			o.set(14, a.awoken >= Cards[a.id].awakenings.length ? -1 : a.awoken);
+			o.set(14, (a.awoken != null && a.awoken >= Cards[a.id].awakenings.length) ? -1 : a.awoken);
 		}
 		o.set(15, position);
 		return o;
@@ -375,10 +375,15 @@ Formation.prototype.getPdcQrStr = function()
 			if (membersArr[i].id > 0 || assistArr[i].id > 0)
 			{
 				let pdcMemberArr = Array.from(genMemberMap(membersArr[i], assistArr[i], (arr.length == 2 && idx == 1) ? i+1 : i)); //2人协力时，队伍2编号0是空的
-				pdcMemberStr = pdcMemberArr.map(item => [
+				pdcMemberStr = pdcMemberArr.map(item => {
+					if (item[1] == undefined)
+					{
+						console.log(item[0])
+					}
+					return [
 					item[0].toString(36).prefix(2),
 					item[1].toString(36).prefix(2)
-				].join('')).join(',');
+				].join('')}).join(',');
 				teamArr.push(pdcMemberStr);
 			}
 		}
