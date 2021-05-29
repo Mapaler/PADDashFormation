@@ -1380,7 +1380,12 @@ function initialize() {
 
 	if (location.protocol == "http:" && location.host != "localhost" && location.host != "127.0.0.1")
 	{ //http不支持攝像頭
-		qrReadBox.readQrCamera.classList.add(className_displayNone);
+		//qrReadBox.readQrCamera.classList.add(className_displayNone);
+		qrReadBox.readQrCamera.onclick = function()
+		{
+			if(confirm("需要 https 环境下才支持调用摄像头，是否跳转？\nCalling the camera is required in an https environment, do you want to jump?"))
+				location.protocol = "https:" //跳到https
+		}
 	}else
 	{
 		
