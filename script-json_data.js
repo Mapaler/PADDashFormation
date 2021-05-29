@@ -69,6 +69,77 @@ const official_awoken_sorting = [
            1,  2,  3, 46, 47, 39, 40, 41, 42,
           65, 66, 67,  9, 71, 72, 30, 64, 63,
           73, 74, 75, 76, 77, 78];
+
+//pdc的徽章对应数字
+const pdcBadgeMap = [
+	{pdf:0,pdc:10}, //无限cost
+	{pdf:1,pdc:12}, //小手指
+	{pdf:2,pdc:9}, //全体攻击
+	{pdf:3,pdc:5}, //小回复
+	{pdf:4,pdc:1}, //小血量
+	{pdf:5,pdc:3}, //小攻击
+	{pdf:6,pdc:8}, //SB
+	{pdf:7,pdc:18}, //队长防封
+	{pdf:8,pdc:19}, //SX
+	{pdf:9,pdc:7}, //无天降
+	{pdf:10,pdc:6}, //大回复
+	{pdf:11,pdc:2}, //大血量
+	{pdf:12,pdc:4}, //大攻击
+	{pdf:13,pdc:13}, //大手指
+	{pdf:14,pdc:11}, //加经验
+	{pdf:15,pdc:15}, //墨镜
+	{pdf:16,pdc:17}, //防废
+	{pdf:17,pdc:16}, //防毒
+	{pdf:18,pdc:14}, //月卡
+];
+//pdc的潜觉对应数字
+const pdcLatentMap = [
+	{pdf:1,pdc:1}, //HP
+	{pdf:2,pdc:0}, //攻击
+	{pdf:3,pdc:2}, //回复
+	{pdf:4,pdc:19}, //手指
+	{pdf:5,pdc:13}, //自回
+	{pdf:6,pdc:14}, //火盾
+	{pdf:7,pdc:15}, //水盾
+	{pdf:8,pdc:16}, //木盾
+	{pdf:9,pdc:17}, //光盾
+	{pdf:10,pdc:18}, //暗盾
+	{pdf:11,pdc:12}, //防坐
+	{pdf:12,pdc:3}, //三维
+	{pdf:13,pdc:35}, //不被换队长
+	{pdf:14,pdc:37}, //不掉废
+	{pdf:15,pdc:36}, //不掉毒
+	{pdf:16,pdc:24}, //进化杀
+	{pdf:17,pdc:25}, //觉醒杀
+	{pdf:18,pdc:26}, //强化杀
+	{pdf:19,pdc:27}, //卖钱杀
+	{pdf:20,pdc:4}, //神杀
+	{pdf:21,pdc:5}, //龙杀
+	{pdf:22,pdc:6}, //恶魔杀
+	{pdf:23,pdc:7}, //机械杀
+	{pdf:24,pdc:8}, //平衡杀
+	{pdf:25,pdc:9}, //攻击杀
+	{pdf:26,pdc:10}, //体力杀
+	{pdf:27,pdc:11}, //回复杀
+	{pdf:28,pdc:20}, //大HP
+	{pdf:29,pdc:21}, //大攻击
+	{pdf:30,pdc:22}, //大回复
+	{pdf:31,pdc:23}, //大手指
+	{pdf:32,pdc:28}, //大火盾
+	{pdf:33,pdc:29}, //大水盾
+	{pdf:34,pdc:30}, //大木盾
+	{pdf:35,pdc:31}, //大光盾
+	{pdf:36,pdc:32}, //大暗盾
+	{pdf:37,pdc:33}, //6色破无效
+	{pdf:38,pdc:34}, //3色破属吸
+	{pdf:39,pdc:40}, //C珠破吸
+	{pdf:40,pdc:39}, //心横解转转
+	{pdf:41,pdc:38}, //U解禁消
+	{pdf:42,pdc:41}, //伤害上限解除
+	{pdf:43,pdc:42}, //HP++
+	{pdf:44,pdc:43}, //攻击++
+	{pdf:45,pdc:44}, //回复++
+];
 //排序程序列表
 const sort_function_list = [
 	{tag:"sort_none",name:"无",function:()=>0},

@@ -953,6 +953,7 @@ function creatNewUrl(arg) {
 		}
 	}
 }
+
 //解析从QR图里获取的字符串
 function inputFromQrString(string)
 {
@@ -991,6 +992,33 @@ function inputFromQrString(string)
 		}
 		return newUrl;
 	}
+	function readPDC(string)
+	{
+		let teamsStr = string.split("]");
+		let baseInfo = teamsStr.shift().split(",");
+		let teamsArr = teamsStr.map(teamStr=>
+			{
+				let membersStr = teamStr.split("}").filter(Boolean);
+				const team = {
+					badge: parseInt(membersStr.shift(),10) //徽章是10进制
+				}
+				team.members = membersStr.map(memberStr=>{
+					let memberArr = memberStr.split(",").map(valueStr=>
+						[parseInt(valueStr.substr(0,2),36),
+						valueStr.substr(2)]);
+					return new Map(memberArr);
+				});
+				return team;
+			}
+		);
+		let pdcFotmation = {
+			version: parseInt(baseInfo[0],36),
+			teamCount: parseInt(baseInfo[1],36)+1,
+			teams: teamsArr
+		}
+		return pdcFotmation;
+	}
+
 	//code 1~99 为各种编码
 	if (string.substr(0,1) == "{" && string.substr(-1,1) == "}")
 	{
@@ -1012,7 +1040,7 @@ function inputFromQrString(string)
 			re.message = "错误的 JSON 格式 | The illegal JSON format";
 		}
 	}
-	else if (string.substr(0,4) == "http")
+	else if (/^http/i.test(string))
 	{
 		try{
 			let url = new URL(string);
@@ -1036,7 +1064,7 @@ function inputFromQrString(string)
 			re.message = "错误的 网址 格式 | The illegal URL format";
 		}
 	}
-	else if(string.substr(-1,1) == "}")
+	else if(/^\d[\d\-\w,\]}]+}$/.test(string))
 	{ //PDC
 		re.code = 2;
 		re.message = "暂不支持 PDC 二维码 | PDC QR codes are not supported now";
