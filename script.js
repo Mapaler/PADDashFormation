@@ -352,7 +352,19 @@ Formation.prototype.getPdcQrStr = function()
 		o.set(15, position);
 		return o;
 	}
-	let pdcTeamsStr = this.teams.map(t=>{
+	let outArr = [
+		[1,this.teams.length - 1]
+	];
+	
+	if (this.teams.length == 2)
+	{
+		const team1 = this.teams[0];
+		const team2 = this.teams[1];
+		team1[0].push(team2[0].shift());
+		team1[1].push(team2[1].shift());
+	}
+
+	let pdcTeamsStr = this.teams.map((t,idx,arr)=>{
 		let teamArr = [
 			pdcBadgeMap.find(badge=>badge.pdf === t[2]).pdc //徽章
 		];
@@ -362,7 +374,7 @@ Formation.prototype.getPdcQrStr = function()
 		{
 			if (membersArr[i].id > 0 || assistArr[i].id > 0)
 			{
-				let pdcMemberArr = Array.from(genMemberMap(membersArr[i], assistArr[i], i));
+				let pdcMemberArr = Array.from(genMemberMap(membersArr[i], assistArr[i], (arr.length == 2 && idx == 1) ? i+1 : i)); //2人协力时，队伍2编号0是空的
 				pdcMemberStr = pdcMemberArr.map(item => [
 					item[0].toString(36).prefix(2),
 					item[1].toString(36).prefix(2)
@@ -371,10 +383,17 @@ Formation.prototype.getPdcQrStr = function()
 			}
 		}
 		return teamArr.join('}');
-	})
-	let outArr = [
-		[1,this.teams.length - 1]
-	].concat(pdcTeamsStr);
+	});
+	
+	if (this.teams.length == 2)
+	{
+		const team1 = this.teams[0];
+		const team2 = this.teams[1];
+		team2[0].splice(0,0,team1[0].pop());
+		team2[1].splice(0,0,team1[1].pop());
+	}
+
+	outArr = outArr.concat(pdcTeamsStr);
 	return outArr.join(']');
 }
 Formation.prototype.getQrStr = function(type)
@@ -1160,13 +1179,25 @@ function readPDC(string)
 function pdcFotmationToPdfFotmation(pdcFotmation)
 {
 	const f = new Formation(pdcFotmation.teamCount, pdcFotmation.teamCount == 2 ? 5 : 6);
-	pdcFotmation.teams.forEach((pdcTeam,idx)=>{
-		const t = f.teams[idx];
+	if (pdcFotmation.teamCount == 2)
+	{
+		const team1 = pdcFotmation.teams[0].members;
+		const team2 = pdcFotmation.teams[1].members;
+		let team2Leader = team1.find(member=>member.get(15) == 5);
+		if (team2Leader)
+		{
+			team2Leader.set(15,0);
+			team2.splice(0,0,team2Leader);
+			team1.splice(team1.indexOf(team2Leader),1);
+		}
+	}
+	pdcFotmation.teams.forEach((pdcTeam,ti)=>{
+		const t = f.teams[ti];
 		const membersArr = t[0];
 		const assistArr = t[1];
 		//队伍徽章
 		t[2] = pdcTeam.badge === 0 ? 0 : pdcBadgeMap.find(badge=>badge.pdc === pdcTeam.badge).pdf;
-		pdcTeam.members.forEach(member=>{
+		pdcTeam.members.forEach((member)=>{
 			const m = membersArr[member.get(15) || 0];
 			const a = assistArr[member.get(15) || 0];
 			m.id = member.get(0) || 0;
