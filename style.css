@@ -2876,6 +2876,7 @@ table .orb-icon
 }
 .qr-box
 {
+	background-color: white;
 	display: inline-block;
 }
 /*.base .evo-type::before,

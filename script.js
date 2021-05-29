@@ -1100,7 +1100,7 @@ function initialize() {
 	};
 	qrCodeFrame.show = function(){
 		this.content.info.textContent  = "";
-		this.content.cavans.classList.remove(className_displayNone);
+		this.content.qrBox.classList.remove(className_displayNone);
 		this.content.videoBox.classList.add(className_displayNone);
 		this.classList.remove(className_displayNone);
 		this.refreshQrCode();
@@ -1114,8 +1114,8 @@ function initialize() {
 
 	const qrContent = qrCodeFrame.content = qrCodeFrame.querySelector(".mask-content");
 	qrContent.info = qrContent.querySelector(".info");
-	qrContent.cavans = qrContent.querySelector("canvas");
-	qrContent.video = qrContent.querySelector("video");
+	qrContent.qrBox = qrContent.querySelector(".qr-box");
+	qrContent.video = qrContent.querySelector("#video");
 	qrContent.videoBox = qrContent.querySelector(".video-box");
 	qrContent.sourceSelect = qrContent.querySelector("#sourceSelect");
 	{
@@ -1136,37 +1136,48 @@ function initialize() {
 
 	qrCodeFrame.refreshQrCode = function()
 	{
-		const qrBox = this.content.cavans;
+		const qrBox = this.content.qrBox;
+		URL.revokeObjectURL(qrBox.src);
 
 		let outStr = JSON.stringify({
 			d:formation.outObj(),
 			s:currentDataSource.code,
 		});
 		const EncodeHintType = ZXing.EncodeHintType;
-		let svgElement;
 		const hints = new Map();
 		hints.set(EncodeHintType.MARGIN, 0);
 		//hints.set(EncodeHintType.CHARACTER_SET, "UTF8");
 		const qrWidth = 500,qrHeight = 500;
-		svgElement = qrcodeWriter.write(outStr, qrWidth, qrHeight, hints);
-		const svgData = (new XMLSerializer()).serializeToString(svgElement);
-		const blob = new Blob([svgData], {type : 'image/svg+xml'});
-		const svgUrl = URL.createObjectURL(blob);
-		this.content.saveQrSvg.href = svgUrl;
-		this.content.saveQrSvg.download = formation.title || "PAD Dash Formation QR";
+		let svgElement = qrcodeWriter.write(outStr, qrWidth, qrHeight, hints);
+		let svgData = new XMLSerializer().serializeToString(svgElement);
+		let blob = new Blob([svgData], {type : 'image/svg+xml'});
+		let svgUrl = URL.createObjectURL(blob);
+		qrBox.src = svgUrl;
+
 
 		loadImage(svgUrl).then(function(img) {
-
-			let ctx = qrBox.getContext('2d');
-	
-			qrBox.width = qrWidth;
-			qrBox.height = qrHeight;
+			let cavansWidth = qrWidth * 2, cavansHeight = qrHeight * 2;
+			let cavans = document.createElement("canvas");
+			cavans.width = cavansWidth;
+			cavans.height = cavansHeight;
+			let ctx = cavans.getContext('2d');
 
 			ctx.fillStyle="white";
-			ctx.fillRect(0, 0, qrWidth, qrHeight,)
-			ctx.drawImage(img, 0, 0, qrWidth, qrHeight);
+			ctx.fillRect(0, 0, cavansWidth, cavansHeight)
+			ctx.drawImage(img, 0, 0, cavansWidth, cavansHeight);
+
+			cavans.toBlob(function(blob) {
+				URL.revokeObjectURL(qrContent.saveQrSvg.href);
+				const downLink = URL.createObjectURL(blob);
+				qrContent.saveQrSvg.download = formation.title || "PAD Dash Formation QR";
+				qrContent.saveQrSvg.href = downLink;
+			});
+
 			svgElement = null;
+			svgData = null;
+			blob = null;
 			img = null;
+			cavans = null;
 			ctx = null;
 		}, function(err) {
 			console.log(err);
@@ -1289,13 +1300,13 @@ function initialize() {
 				if (this.classList.contains("running"))
 				{
 					qrcodeReader.reset();
-					qrContent.cavans.classList.remove(className_displayNone);
+					qrContent.qrBox.classList.remove(className_displayNone);
 					qrContent.videoBox.classList.add(className_displayNone);
 					qrContent.info.textContent  = "";
 	
 				}else
 				{
-					qrContent.cavans.classList.add(className_displayNone);
+					qrContent.qrBox.classList.add(className_displayNone);
 					qrContent.videoBox.classList.remove(className_displayNone);
 					scanContinuously();
 				}
