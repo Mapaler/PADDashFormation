@@ -104,5 +104,6 @@ Please refer to existing files.
 * [zxing-js](//github.com/zxing-js/library) //Read, Write QR Code
 * [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
 * [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
+* [Font Awesome Free](https://github.com/FortAwesome/Font-Awesome) //Font Icon
 * [Zpix (最像素)](//github.com/SolidZORO/zpix-pixel-font) //Pixel Font
 * [font-spider](//github.com/aui/font-spider) //Compression Font file

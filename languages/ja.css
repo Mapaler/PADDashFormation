@@ -512,7 +512,7 @@ label[for="sourceSelect"]::before
 
 label[for="qr-data-type-pdf"]::before
 {
-	content: "このフォーメーション画像メーカー";
+	content: "パズドラチーム図作成ツール";
 }
 label[for="qr-data-type-pdc"]::before
 {

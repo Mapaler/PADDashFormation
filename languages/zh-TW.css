@@ -505,7 +505,7 @@ label[for="sourceSelect"]::before
 
 label[for="qr-data-type-pdf"]::before
 {
-	content: "本隊伍圖製作工具";
+	content: "龍族拼圖隊伍圖製作工具";
 }
 label[for="qr-data-type-pdc"]::before
 {

@@ -545,7 +545,7 @@ label[for="sourceSelect"]::before
 
 label[for="qr-data-type-pdf"]::before
 {
-	content: "This Formation Picture Maker";
+	content: "P&D Formation Maker";
 }
 label[for="qr-data-type-pdc"]::before
 {

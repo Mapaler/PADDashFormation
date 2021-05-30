@@ -503,7 +503,7 @@ label[for="sourceSelect"]::before
 
 label[for="qr-data-type-pdf"]::before
 {
-	content: "이 형성 사진 메이커";
+	content: "퍼즐앤드래곤 팀 다이어그램 생성 도구";
 }
 label[for="qr-data-type-pdc"]::before
 {
