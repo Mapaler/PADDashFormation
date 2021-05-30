@@ -32,12 +32,15 @@ if (currentLanguage == undefined)
 	const parameter_i18n = getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
 	const browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
 	currentLanguage = languageList.find(lang => { //筛选出符合的语言
-			if (parameter_i18n) //如果已指定就用指定的语言
-				return parameter_i18n.includes(lang.i18n);
-			else //否则筛选浏览器默认语言
-				return browser_i18n.includes(lang.i18n);
-		}) ||
-		languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
+		let searchCode = parameter_i18n || browser_i18n; //如果已指定就用指定的语言，否则筛选浏览器默认语言
+		if (lang.i18n_RegExp)
+		{
+			return lang.i18n_RegExp.test(searchCode);
+		}else
+		{
+			return searchCode.includes(lang.i18n);
+		}
+	}) || languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
 	//因为Script在Head里面，所以可以这里head已经加载好可以使用
 	document.head.querySelector("#language-css").href = `languages/${currentLanguage.i18n}.css`;
 }

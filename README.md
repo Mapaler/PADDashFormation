@@ -56,14 +56,16 @@ Chrome browser need start with the additional argument `--allow-file-access-from
 This is an Object for a language list item.
     ```js
     {
-      name:"English",
-      i18n:"en",
-      searchlist:["en","ja"],
-      guideURL:id=>`http://www.puzzledragonx.com/en/monster.asp?n=${id}`
+      name: "English",
+      i18n: "en",
+      i18n_RegExp: /^en/i,
+      searchlist: ["en","ja"],
+      guideURL: id=>`http://www.puzzledragonx.com/en/monster.asp?n=${id}`
     }
     ```
-    * `name` is the name shown in the list.
-    * `i18n` is the language-tag for your language.
+    * `name` is the showed name in the list.
+    * `i18n` is the language-tag for your language. You need to make sure that the file names are the same.
+    * `i18n_RegExp` is a *Regular Expressions* to match multiple languages (like `/^en/i` can match `en-US`, `en-CA` and `en-AU`).
     * `searchlist` is the search candidate list string order when you search monster in edit window.  
     Currently only `ja`,`en`,`ko`,`cht`,`chs` languages.(See [monsters-info](monsters-info))
     * `guideURL` is a **Function(cardId,cardName)** to return game guide URL for your language.
