@@ -29,18 +29,24 @@ if (location.search.includes('&amp;')) {
 //一开始就加载当前语言
 if (currentLanguage == undefined)
 {
-	const parameter_i18n = getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
-	const browser_i18n = (navigator.language || navigator.userLanguage); //获取浏览器语言
-	currentLanguage = languageList.find(lang => { //筛选出符合的语言
-		let searchCode = parameter_i18n || browser_i18n; //如果已指定就用指定的语言，否则筛选浏览器默认语言
-		if (lang.i18n_RegExp)
-		{
-			return lang.i18n_RegExp.test(searchCode);
-		}else
-		{
-			return searchCode.includes(lang.i18n);
-		}
-	}) || languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
+	const parameter_i18n = getQueryString(["l","lang"]); //获取参数指定的语言
+	const browser_i18n = navigator.language; //获取浏览器语言
+	if (parameter_i18n) //有指定语言的话，只找i18n完全相同的
+	{
+		currentLanguage = languageList.find(lang => lang.i18n == parameter_i18n) || languageList[0]; 
+	}
+	if (!currentLanguage) //如果还没有就直接搜索浏览器语言
+	{
+		currentLanguage = languageList.find(lang => { //筛选出符合的语言
+			if (lang.i18n_RegExp)
+			{
+				return lang.i18n_RegExp.test(browser_i18n); //匹配正则表达式
+			}else
+			{
+				return searchCode.includes(browser_i18n); //文字上的搜索包含
+			}
+		}) || languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
+	}
 	//因为Script在Head里面，所以可以这里head已经加载好可以使用
 	document.head.querySelector("#language-css").href = `languages/${currentLanguage.i18n}.css`;
 }
@@ -49,13 +55,11 @@ if (currentLanguage == undefined)
 if (currentDataSource == undefined)
 {
 	const parameter_dsCode = getQueryString("s"); //获取参数指定的数据来源
-	currentDataSource = parameter_dsCode ?
-		(dataSourceList.find(ds => ds.code == parameter_dsCode) || dataSourceList[0]) : //筛选出符合的数据源
-		dataSourceList[0]; //没有指定，直接使用日服
+	currentDataSource = dataSourceList.find(ds => ds.code == parameter_dsCode) || dataSourceList[0]; //筛选出符合的数据源
 }
 
 const dbName = "PADDF";
-var db = null;
+let db = null;
 const DBOpenRequest = indexedDB.open(dbName,2);
 
 DBOpenRequest.onsuccess = function(event) {
@@ -985,7 +989,7 @@ function reloadFormationData(event) {
 	}else
 	{
 		try {
-			const parameterDataString = getQueryString("d") || getQueryString("data");
+			const parameterDataString = getQueryString(["d","data"]);
 			formationData = JSON.parse(parameterDataString);
 			//console.log("从URL读取",formationData);
 
@@ -1025,7 +1029,7 @@ window.addEventListener('popstate',reloadFormationData); //前进后退时修改
 function creatNewUrl(arg) {
 	if (arg == undefined) arg = {};
 	if (!!(window.history && history.pushState)) { // 支持History API
-		const language_i18n = arg.language || getQueryString("l") || getQueryString("lang"); //获取参数指定的语言
+		const language_i18n = arg.language || getQueryString(["l","lang"]); //获取参数指定的语言
 		const datasource = arg.datasource || getQueryString("s");
 		const outObj = formation.outObj();
 
@@ -1082,7 +1086,7 @@ function inputFromQrString(string)
 			newUrl.searchParams.set("s", obj.s);
 		}
 		let l = getQueryString("l");
-		if (getQueryString("l"))
+		if (l)
 		{
 			newUrl.searchParams.set("l", l);
 		}

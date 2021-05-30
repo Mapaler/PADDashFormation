@@ -30,19 +30,19 @@ const GM_xmlhttpRequest = function(GM_param) {
 
 //获取URL参数
 function getQueryString(name, url) {
-	if (!!(window.URL && window.URLSearchParams)) { //浏览器原生支持的API
-		const urlObj = new URL(url || document.location);
-		return urlObj.searchParams.get(name);
-	} else {
-		const reg = new RegExp(`(?:^|&)${name}=([^&]*)(?:&|$)`, "i");
-		const searchStr = url || location.search.substr(1);
-		const r = searchStr.match(reg);
-		if (r != null) {
-			return decodeURIComponent(r[1]);
-		} else {
-			return null;
+	const urlObj = new URL(url || document.location);
+	if (!Array.isArray(name)) name = [name];
+	let n_e = name.entries(), n;
+	let value;
+	do
+	{
+		n = n_e.next();
+		if (!n.done)
+		{
+			value = urlObj.searchParams.get(n.value[1]);
 		}
-	}
+	}while(!n.done && value == undefined)
+	return value;
 }
 
 //数字补前导0
