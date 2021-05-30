@@ -43,7 +43,7 @@ if (currentLanguage == undefined)
 				return lang.i18n_RegExp.test(browser_i18n); //匹配正则表达式
 			}else
 			{
-				return searchCode.includes(browser_i18n); //文字上的搜索包含
+				return browser_i18n.includes(lang.i18n); //文字上的搜索包含
 			}
 		}) || languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
 	}
