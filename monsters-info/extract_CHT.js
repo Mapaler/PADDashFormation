@@ -33,6 +33,13 @@ class monInfo
 		this.tags = [];
 	}
 }
+const chsTranDiff = [
+	{reg:"铁甲奇侠",chs:"钢铁侠"},
+	{reg:"变形侠医",chs:"绿巨人"},
+	{reg:"毒魔",chs:"毒液"},
+	{reg:"魁隆",chs:"灭霸"},
+	{reg:"福瑞",chs:"弗瑞"},
+];
 
 //根据文件路径读取文件，返回文件列表
 fs.readdir(sourceFolder,function(err,files){
@@ -104,6 +111,7 @@ fs.readdir(sourceFolder,function(err,files){
 			{
 				const m = new monInfo(m_cht.id);
 				m.name = converter.convertSync(m_cht.name);
+				chsTranDiff.forEach(o=>m.name = m.name.replace(new RegExp(o.reg,"ig"),o.chs));
 				m_cht.tags.forEach(tag=> m.tags.push(converter.convertSync(tag)) );
 				monArr_chs.push(m);
 			}
