@@ -713,7 +713,7 @@ function parseSkillDescription(skill) {
 			return fragment;
 			break;
 		case 126:
-			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内，${nb(sk[0], attrsName).join("、")}宝珠的掉落率提高${sk[3]}%`;
+			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内，${nb(sk[0], attrsName).join("、")}宝珠的掉落率提高到${sk[3]}%`;
 			break;
 		case 127: //生成竖列
 			strArr = [];
