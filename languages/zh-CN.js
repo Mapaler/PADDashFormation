@@ -1449,6 +1449,9 @@ function parseSkillDescription(skill) {
 		case 223:
 			str = `${sk[0]}连击以上时，追加${sk[1].bigNumberToString()}点固定伤害`;
 			break;
+		case 224:
+			str = `${sk[0]}回合内，敌人全体变为${attrN(sk[1])}属性。（不受防护盾的影响）`;
+			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
 			//开发部分
@@ -3508,37 +3511,62 @@ function parseSkillDescription(skill) {
 					b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 				return a_pC - b_pC;
 			})},
-			{name:"改变敌人属性（按属性排序）",function:cards=>cards.filter(card=>{
-				const searchType = 153;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType)
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType);
+			{name:"改变敌人属性（按属性排序）",
+				function:cards=>{
+					//获取属性变化
+					function getAttrChange(ls)
+					{
+						if (!ls) return null;
+						const sk = ls.params;
+						switch (ls.type)
+						{
+							case 153: //永久变色
+								return sk[0];
+							case 224: //回合变色
+								return sk[1] || 0;
+							default:
+								return null;
+						}
+					}
+					const searchTypeArray = [153, 224];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return getAttrChange(skill) != null;
+					}).sort((a,b)=>{
+						const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+						let a_pC = getAttrChange(a_s),b_pC = getAttrChange(b_s);
+						return a_pC - b_pC;
+					})
+				},
+				addition:card=>{
+					//获取属性变化
+					function getAttrChange(ls)
+					{
+						if (!ls) return null;
+						const sk = ls.params;
+						switch (ls.type)
+						{
+							case 153: //永久变色
+								return sk[0];
+							case 224: //回合变色
+								return sk[1] || 0;
+							default:
+								return null;
+						}
+					}
+					const searchTypeArray = [153, 224];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					
+					const colors = [getAttrChange(skill)];
+					const fragment = document.createDocumentFragment();
+					if (skill.type == 224)
+						fragment.appendChild(document.createTextNode(`${sk[0]}T,`));
+					fragment.appendChild(document.createTextNode(`敌→`));
+					fragment.appendChild(createOrbsList(colors));
+					return fragment;
 				}
-			}).sort((a,b)=>{
-				const searchType = 153;
-				const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-				let a_pC = 0,b_pC = 0;
-				a_pC = (a_s.type == searchType) ?
-					a_s.params[0] :
-					a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-				b_pC = (b_s.type == searchType) ?
-					b_s.params[0] :
-					b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-				return a_pC - b_pC;
-			}),addition:card=>{
-				const searchTypeArray = [153];
-				const skill = getCardSkill(card, searchTypeArray);
-				const sk = skill.params;
-				
-				const colors = [sk[0]];
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(`敌→`));
-				fragment.appendChild(createOrbsList(colors));
-				return fragment;
-			}},
+			},
 			{name:"受伤反击 buff",function:cards=>cards.filter(card=>{
 				const searchType = 60;
 				const skill = Skills[card.activeSkillId];
