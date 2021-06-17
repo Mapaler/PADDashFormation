@@ -2830,8 +2830,7 @@ function initialize() {
 			mon.plus[1] = parseInt(monEditAddAtk.value) || 0;
 			mon.plus[2] = parseInt(monEditAddRcv.value) || 0;
 			if (!editBox.isAssist) { //如果不是辅助，则可以设定潜觉
-				mon.latent = editBox.latent.concat()
-					.sort((a, b) => latentUseHole(b) - latentUseHole(a)); //并排序
+				mon.latent = editBox.latent.concat();
 			}
 		}
 
@@ -3138,6 +3137,7 @@ function changeid(mon, monDom, latentDom) {
 //刷新潜觉
 function refreshLatent(latent, monid, iconArr) {
 	const maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
+	latent = latent.concat().sort((a, b) => latentUseHole(b) - latentUseHole(a));
 	let latentIndex = 0,
 		usedHoleN = 0;
 	for (let ai = 0; ai < iconArr.length; ai++) {
@@ -3151,6 +3151,7 @@ function refreshLatent(latent, monid, iconArr) {
 		} else if (ai < usedHoleN) //多格潜觉后方隐藏
 		{
 			icon.classList.add(className_displayNone);
+			icon.removeAttribute("data-latent-icon");
 		} else if (ai < maxLatentCount) //没有使用的空格觉醒
 		{
 			icon.removeAttribute("data-latent-icon");
@@ -3158,6 +3159,7 @@ function refreshLatent(latent, monid, iconArr) {
 		} else //不需要显示的部分
 		{
 			icon.classList.add(className_displayNone);
+			icon.removeAttribute("data-latent-icon");
 		}
 	}
 };
