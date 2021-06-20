@@ -18,6 +18,7 @@ const teamsCount = 2;
 <script type="text/javascript" src="script-skill-parser.js"></script>
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript" src="library/html2canvas.min.js"></script>
+<script type="text/javascript" src="library/zxing.umd.min.js"></script>
 <!--▼ADPCM播放相关-->
 <script type="text/javascript" src="library/jy4340132-aaa/std.js"></script>
 <script type="text/javascript" src="library/jy4340132-aaa/pcm_player.js"></script>
@@ -59,6 +60,7 @@ var formation = new Formation(teamsCount,5);
 		<div>
 			<button class="btn-clear-data" onclick="clearData();"></button>
 			<button class="btn-capture" onclick="capture();"></button>
+			<button class="btn-qrcode"></button>
 			<a class="down-capture display-none" target="_blank"></a>
 			<button class="btn-solo-link" onclick="turnPage(1,arguments[0]);"></button>
 			<button class="btn-triple-link" onclick="turnPage(3,arguments[0]);"></button>
@@ -701,14 +703,16 @@ var formation = new Formation(teamsCount,5);
 			</div>
 			<div class="awoken-div"><!--觉醒-->
 				<ul class="awoken-ul all-awokens">
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="49" data-max-count="1"></button><!--武器觉醒--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="21"></button><!--SB--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="52" data-max-count="1"></button><!--大防封--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="43"></button><!--7c--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="61"></button><!--10c--></li>
-					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="58"></button><!--下半血强化--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="48"></button><!--破无效--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="27"></button><!--U--></li>
-					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="21"></button><!--SB--></li>
-					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="49" data-max-count="1"></button><!--武器觉醒--></li>
-					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="52" data-max-count="1"></button><!--大防封--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="60"></button><!--L解锁--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="58"></button><!--下半血强化--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="57"></button><!--上半血强化--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="11" data-max-count="5"></button><!--防暗--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="12" data-max-count="5"></button><!--防废--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="13" data-max-count="5"></button><!--防毒--></li>
@@ -717,7 +721,6 @@ var formation = new Formation(teamsCount,5);
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="45" data-max-count="1"></button><!--心追--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="50"></button><!--方块心追--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="19"></button><!--手指--></li>
-					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="60"></button><!--L解锁--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="1"></button><!--HP+--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="2"></button><!--攻击+--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="3"></button><!--回复+--></li>
@@ -760,7 +763,6 @@ var formation = new Formation(teamsCount,5);
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="51"></button><!--5色溜--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="53"></button><!--大手指--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="56"></button><!--大SB--></li>
-					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="57"></button><!--满血强化--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="59"></button><!--L盾--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="62"></button><!--c珠--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="63" data-max-count="1"></button><!--语音--></li>
@@ -784,13 +786,15 @@ var formation = new Formation(teamsCount,5);
 			<div class="sawoken-div"><!--超觉醒-->
 				<button class="sawoken-clear brown-button" ></button>
 				<ul class="sawoken-ul">
-					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="43" id="search-awoken-43" /><label class="awoken-icon" data-awoken-icon="43" for="search-awoken-43"></label><!--7c--></li>
-					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="61" id="search-awoken-61" /><label class="awoken-icon" data-awoken-icon="61" for="search-awoken-61"></label><!--10c--></li>
-					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="58" id="search-awoken-58" /><label class="awoken-icon" data-awoken-icon="58" for="search-awoken-58"></label><!--下半血强化--></li>
-					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="48" id="search-awoken-48" /><label class="awoken-icon" data-awoken-icon="48" for="search-awoken-48"></label><!--破无效--></li>
-					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="27" id="search-awoken-27" /><label class="awoken-icon" data-awoken-icon="27" for="search-awoken-27"></label><!--U--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="21" id="search-awoken-21" /><label class="awoken-icon" data-awoken-icon="21" for="search-awoken-21"></label><!--SB--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="52" id="search-awoken-52" /><label class="awoken-icon" data-awoken-icon="52" for="search-awoken-52"></label><!--大防封--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="43" id="search-awoken-43" /><label class="awoken-icon" data-awoken-icon="43" for="search-awoken-43"></label><!--7c--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="61" id="search-awoken-61" /><label class="awoken-icon" data-awoken-icon="61" for="search-awoken-61"></label><!--10c--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="48" id="search-awoken-48" /><label class="awoken-icon" data-awoken-icon="48" for="search-awoken-48"></label><!--破无效--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="27" id="search-awoken-27" /><label class="awoken-icon" data-awoken-icon="27" for="search-awoken-27"></label><!--U--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="60" id="search-awoken-60" /><label class="awoken-icon" data-awoken-icon="60" for="search-awoken-60"></label><!--L解锁--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="58" id="search-awoken-58" /><label class="awoken-icon" data-awoken-icon="58" for="search-awoken-58"></label><!--下半血强化--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="57" id="search-awoken-57" /><label class="awoken-icon" data-awoken-icon="57" for="search-awoken-57"></label><!--上半血强化--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="68" id="search-awoken-68" /><label class="awoken-icon" data-awoken-icon="68" for="search-awoken-68"></label><!--大防暗--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="69" id="search-awoken-69" /><label class="awoken-icon" data-awoken-icon="69" for="search-awoken-69"></label><!--大防废--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="70" id="search-awoken-70" /><label class="awoken-icon" data-awoken-icon="70" for="search-awoken-70"></label><!--大防毒--></li>
@@ -799,7 +803,6 @@ var formation = new Formation(teamsCount,5);
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="45" id="search-awoken-45" /><label class="awoken-icon" data-awoken-icon="45" for="search-awoken-45"></label><!--心追--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="50" id="search-awoken-50" /><label class="awoken-icon" data-awoken-icon="50" for="search-awoken-50"></label><!--方块心追--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="19" id="search-awoken-19" /><label class="awoken-icon" data-awoken-icon="19" for="search-awoken-19"></label><!--手指--></li>
-					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="60" id="search-awoken-60" /><label class="awoken-icon" data-awoken-icon="60" for="search-awoken-60"></label><!--L解锁--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="1" id="search-awoken-1" /><label class="awoken-icon" data-awoken-icon="1" for="search-awoken-1"></label><!--HP+--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="2" id="search-awoken-2" /><label class="awoken-icon" data-awoken-icon="2" for="search-awoken-2"></label><!--攻击+--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="3" id="search-awoken-3" /><label class="awoken-icon" data-awoken-icon="3" for="search-awoken-3"></label><!--回复+--></li>
@@ -846,7 +849,6 @@ var formation = new Formation(teamsCount,5);
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="51" id="search-awoken-51" /><label class="awoken-icon" data-awoken-icon="51" for="search-awoken-51"></label><!--5色溜--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="53" id="search-awoken-53" /><label class="awoken-icon" data-awoken-icon="53" for="search-awoken-53"></label><!--大手指--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="56" id="search-awoken-56" /><label class="awoken-icon" data-awoken-icon="56" for="search-awoken-56"></label><!--大SB--></li>
-					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="57" id="search-awoken-57" /><label class="awoken-icon" data-awoken-icon="57" for="search-awoken-57"></label><!--满血强化--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="59" id="search-awoken-59" /><label class="awoken-icon" data-awoken-icon="59" for="search-awoken-59"></label><!--L盾--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="62" id="search-awoken-62" /><label class="awoken-icon" data-awoken-icon="62" for="search-awoken-62"></label><!--c珠--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="63" id="search-awoken-63" /><label class="awoken-icon" data-awoken-icon="63" for="search-awoken-63"></label><!--语音--></li>
@@ -1094,5 +1096,30 @@ var formation = new Formation(teamsCount,5);
 			<line />
 		</g>
 	</svg>
+	<div id="qr-code-frame" class="mask  display-none">
+		<button class="mask-close brown-button"></button>
+		<div class="mask-content">
+			<div class="read-qr-box">
+				<div class="action-button-box">
+					<button class="read-qr-camera brown-button"><!--相机扫--></button>
+					<button class="read-qr-file brown-button"><!--读文件--></button>
+					<input type="file" accept="image/*" class="file-select display-none">
+				</div>
+				<div class="info"></div>
+				<div class="video-box display-none">
+					<div><label for="sourceSelect"><!--视频源选择--></label><select id="sourceSelect"></select></div>
+					<video id="video" width="500" height="500"></video>
+				</div>
+			</div>
+			<div class="save-qr-box">
+				<ul class="qr-data-type-ul">
+					<li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdf" id="qr-data-type-pdf" checked/><label for="qr-data-type-pdf"></label></li><!--本程序
+					--><li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdc" id="qr-data-type-pdc" /><label for="qr-data-type-pdc"></label></li><!--PDC-->
+				</ul>
+				<div class="qr-box"><img class="qr-code-image" /></div>
+				<a download="" class="save-qr-img brown-button"><!--保存QR 图片--></a>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

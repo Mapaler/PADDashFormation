@@ -56,14 +56,16 @@ Chrome browser need start with the additional argument `--allow-file-access-from
 This is an Object for a language list item.
     ```js
     {
-      name:"English",
-      i18n:"en",
-      searchlist:["en","ja"],
-      guideURL:id=>`http://www.puzzledragonx.com/en/monster.asp?n=${id}`
+      name: "English",
+      i18n: "en",
+      i18n_RegExp: /^en/i,
+      searchlist: ["en","ja"],
+      guideURL: id=>`http://www.puzzledragonx.com/en/monster.asp?n=${id}`
     }
     ```
-    * `name` is the name shown in the list.
-    * `i18n` is the language-tag for your language.
+    * `name` is the showed name in the list.
+    * `i18n` is the language-tag for your language. You need to make sure that the file names are the same.
+    * `i18n_RegExp` is a *Regular Expressions* to match multiple `navigator.language` (like `/^en/i` can match `en-US`, `en-CA` and `en-AU`).
     * `searchlist` is the search candidate list string order when you search monster in edit window.  
     Currently only `ja`,`en`,`ko`,`cht`,`chs` languages.(See [monsters-info](monsters-info))
     * `guideURL` is a **Function(cardId,cardName)** to return game guide URL for your language.
@@ -101,7 +103,9 @@ Please refer to existing files.
 # 使用开源软件 | Open source software used
 * [Puzzle-and-Dragons-Texture-Tool](//github.com/codywatts/Puzzle-and-Dragons-Texture-Tool) //Extract Images
 * [pad-rikuu](//github.com/kiootic/pad-rikuu) //Parse data
+* [zxing-js](//github.com/zxing-js/library) //Read, Write QR Code
 * [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
 * [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
+* [Font Awesome Free](https://github.com/FortAwesome/Font-Awesome) //Font Icon
 * [Zpix (最像素)](//github.com/SolidZORO/zpix-pixel-font) //Pixel Font
 * [font-spider](//github.com/aui/font-spider) //Compression Font file

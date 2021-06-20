@@ -471,3 +471,50 @@
 {
     content: "ループ変身";
 }
+
+.control-box .btn-qrcode::before{
+	content: "\f029 QRコード";
+}
+
+.read-qr-box::before
+{
+	content: "QRコードを読み取る:";
+}
+.save-qr-box::before
+{
+	content: "QRコードを生成します:";
+}
+
+.formation-from-qrcode::before
+{
+    content: "QRコードから読み取られたフォーメーションリンク";
+}
+label[for="sourceSelect"]::before
+{
+    content: "ビデオ ソースの選択:";
+}
+#qr-code-frame .save-qr-img::before
+{
+    content: "\f0c7 QRコードイメージを保存";
+}
+#qr-code-frame .read-qr-camera::before
+{
+    content: "\f030 カメラでスキャンする";
+}
+#qr-code-frame .read-qr-camera.running::before
+{
+    content: "\f28d  カメラの使用を停止します";
+}
+#qr-code-frame .read-qr-file::before
+{
+    content: "\f1c5 画像ファイルを読み取る";
+}
+
+label[for="qr-data-type-pdf"]::before
+{
+	content: "パズドラチーム図作成ツール";
+}
+label[for="qr-data-type-pdc"]::before
+{
+	content: "パズドラダメージ計算 (PDC)";
+}

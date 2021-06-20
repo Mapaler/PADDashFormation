@@ -234,6 +234,7 @@
 .control-box .btn-capture::before{
 	content: "📷截图";
 }
+
 .control-box .btn-swap-AB-team::before{
 	content: "🔄交换AB队";
 }
@@ -462,4 +463,51 @@
 .henshin-loop .evo-type::after
 {
     content: "循環変身";
+}
+
+.control-box .btn-qrcode::before{
+	content: "\f029 二维码";
+}
+
+.read-qr-box::before
+{
+	content: "读取二维码：";
+}
+.save-qr-box::before
+{
+	content: "生成二维码：";
+}
+
+.formation-from-qrcode::before
+{
+    content: "从二维码中读取的队伍链接";
+}
+label[for="sourceSelect"]::before
+{
+    content: "视频源选择：";
+}
+#qr-code-frame .save-qr-img::before
+{
+    content: "\f0c7  保存二维码图片";
+}
+#qr-code-frame .read-qr-camera::before
+{
+    content: "\f030  使用相机扫描";
+}
+#qr-code-frame .read-qr-camera.running::before
+{
+    content: "\f28d  停止使用相机";
+}
+#qr-code-frame .read-qr-file::before
+{
+    content: "\f1c5  读取二维码图片";
+}
+
+label[for="qr-data-type-pdf"]::before
+{
+	content: "智龙迷城队伍图制作工具";
+}
+label[for="qr-data-type-pdc"]::before
+{
+	content: "智龙迷城伤害计算器（PDC）";
 }

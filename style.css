@@ -3,23 +3,37 @@
 	font-family: 'FOT-KurokaneStd-EB';
 	font-style: normal;
 	/*font-weight: 400;*/
-	src: url("fonts/FOT-KurokaneStd-EB.woff2") format('woff2'),
-		 url("fonts/FOT-KurokaneStd-EB.woff") format('woff'),
-		 url("fonts/FOT-KurokaneStd-EB.ttf") format('truetype'),
-		 url("fonts/FOT-KurokaneStd-EB.eot") format('embedded-opentype'),
-		 url("fonts/FOT-KurokaneStd-EB.svg") format('svg');
+	src:
+		url("fonts/FOT-KurokaneStd-EB.woff2") format('woff2'),
+		url("fonts/FOT-KurokaneStd-EB.woff") format('woff'),
+		url("fonts/FOT-KurokaneStd-EB.ttf") format('truetype'),
+		url("fonts/FOT-KurokaneStd-EB.eot") format('embedded-opentype'),
+		url("fonts/FOT-KurokaneStd-EB.svg") format('svg');
 }
 @font-face {
 	font-family: 'zpix';
 	src:
-	  url("fonts/zpix.woff2") format('woff2'),
-	  url("fonts/zpix.woff") format('woff'),
-	  url("fonts/zpix.ttf") format('truetype'),
-	  url("fonts/zpix.eot?#font-spider") format('embedded-opentype'),
-	  url("fonts/zpix.svg") format('svg');
+		url("fonts/zpix.woff2") format('woff2'),
+		url("fonts/zpix.woff") format('woff'),
+		url("fonts/zpix.ttf") format('truetype'),
+		url("fonts/zpix.eot?#font-spider") format('embedded-opentype'),
+		url("fonts/zpix.svg") format('svg');
 	font-weight: normal;
 	font-style: normal;
-  }
+}
+@font-face {
+	font-family: 'Font Awesome 5 Free';
+	font-style: normal;
+	font-weight: 900;
+	font-display: block;
+	src: url("fonts/fa-solid-900.eot");
+	src:
+		url("fonts/fa-solid-900.eot?#iefix") format("embedded-opentype"),
+		url("fonts/fa-solid-900.woff2") format("woff2"),
+		url("fonts/fa-solid-900.woff") format("woff"),
+		url("fonts/fa-solid-900.ttf") format("truetype"),
+		url("fonts/fa-solid-900.svg#fontawesome") format("svg");
+}
 @keyframes rotate-animate{
 	from {
 		transform: rotate(0deg);
@@ -1420,19 +1434,29 @@ icon.inflicts::after
 .attrs-div .attr-list{
 	font-size:0;
 }
-.attrs-div .attr-list>li{
+.attrs-div .attr-list>li,
+.qr-data-type-ul>li
+{
 	border: 1px solid white;
 	border-left: none;
 	background: #947244;
+	display: inline-block;
+	overflow: hidden;
 }
-.attrs-div .attr-list>li:hover{
+.attrs-div .attr-list>li:hover,
+.qr-data-type-ul>li:hover
+{
 	background: #E9CB9E;
 }
-.attrs-div .attr-list>li:first-of-type{
+.attrs-div .attr-list>li:first-of-type,
+.qr-data-type-ul>li:first-of-type
+{
 	border-radius: 8px 0 0 8px;
 	border-left: 1px solid white;
 }
-.attrs-div .attr-list>li:last-of-type{
+.attrs-div .attr-list>li:last-of-type,
+.qr-data-type-ul>li:last-of-type
+{
 	border-radius: 0 8px 8px 0;
 }
 .attrs-div .attr-list>li>label
@@ -1443,7 +1467,9 @@ icon.inflicts::after
 	text-align: center;
 	vertical-align: middle;
 }
-.attrs-div .attr-list input:checked+label{
+.attrs-div .attr-list input:checked+label,
+.qr-data-type-ul>li input:checked+label
+{
 	background-color:#8C4242;
 	box-shadow: inset black 0 0 5px;
 	cursor: auto;
@@ -2661,7 +2687,7 @@ table .orb-icon
 	content: "⛓️进化链";
 }*/
 
-.mask-evolutionary-tree
+.mask
 {
 	position: absolute;
 	width: 100%;
@@ -2840,6 +2866,58 @@ table .orb-icon
 	-webkit-text-stroke: 3px black;
 }
 
+.control-box .btn-qrcode::before{
+	font-family: 'Font Awesome 5 Free';
+	font-weight: normal;
+}
+#qr-code-frame
+{
+	color: white;
+}
+#qr-code-frame .brown-button::before
+{
+	font-family: 'Font Awesome 5 Free';
+	font-weight: normal;
+	width: unset;
+}
+#qr-code-frame a
+{
+	color: white;
+}
+.read-qr-box::before,
+.save-qr-box::before
+{
+	display: block;
+	text-align: left;
+}
+
+.qr-data-type-ul .qr-data-type-radio
+{
+	display: none;
+}
+.qr-data-type-ul>li label
+{
+	font-size: 20px;
+	padding: 5px;
+}
+.formation-from-qrcode
+{
+	font-size: 1.5em;
+	display: block;
+}
+.qr-code-image
+{
+	background-color: white;
+}
+.qr-data-type-ul .qr-data-type-radio
+{
+	display: none;
+}
+.qr-data-type-ul>li label
+{
+	font-size: 20px;
+	padding: 5px;
+}
 /*.base .evo-type::before,
 .base .evo-type::after
 {
