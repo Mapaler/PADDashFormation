@@ -154,7 +154,7 @@ function parseSkillDescription(skill) {
     }
     const mulName = ["HP", "攻击力", "回复力"];
     //获取固定的三维成长的名称
-    function getFixedHpAtkRcvString(values) {
+    function getFixedHpAtkRcvString(values, scale = true) {
         let mulArr = null;
         if (Array.isArray(values)) {
             mulArr = [
@@ -174,7 +174,7 @@ function parseSkillDescription(skill) {
         if (hasMul.length > 0) {
             const hasDiff = hasMul.filter(m => m != hasMul[0]).length > 0; //存在不一样的值
             if (hasDiff) {
-                str += mulArr.map((m, i) => (m > 0 && m != 1) ? (mulName[i] + (m >= 1 ? `×${m}倍` : `变为${m*100}%`)) : null).filter(s => s != null).join("，");
+                str += mulArr.map((m, i) => (m > 0 && m != 1) ? (mulName[i] + (scale ? (m >= 1 ? `×${m}倍` : `变为${m*100}%`) : `增加${m*100}%`)) : null).filter(s => s != null).join("，");
             } else {
                 let hasMulName = mulName.filter((n, i) => mulArr[i] != 1);
                 if (hasMulName.length >= 3) {
@@ -182,7 +182,7 @@ function parseSkillDescription(skill) {
                 } else {
                     str += hasMulName.join("和");
                 }
-                str += hasMul[0] >= 1 ? `×${hasMul[0]}倍` : `变为${hasMul[0]*100}%`;
+                str += scale ? (hasMul[0] >= 1 ? `×${hasMul[0]}倍` : `变为${hasMul[0]*100}%`) : `增加${hasMul[0]*100}%`;
             }
         } else {
             str += "能力值没有变化";
@@ -1451,6 +1451,9 @@ function parseSkillDescription(skill) {
 			break;
 		case 224:
 			str = `${sk[0]}回合内，敌人全体变为${attrN(sk[1])}属性。（不受防护盾的影响）`;
+			break;
+		case 229:
+			str = `队伍中每存在1个${getAttrTypeString(flags(sk[0]), flags(sk[1]))}时，${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]}, false)}`;
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
