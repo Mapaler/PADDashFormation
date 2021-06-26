@@ -1452,6 +1452,9 @@ function parseSkillDescription(skill) {
 		case 224:
 			str = `${sk[0]}回合内，敌人全体变为${attrN(sk[1])}属性。（不受防护盾的影响）`;
 			break;
+		case 228:
+			str = `${sk[0]}回合内，队伍中每存在1个${getAttrTypeString(flags(sk[1]), flags(sk[2]))}时，${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]}, false)}`;
+			break;
 		case 229:
 			str = `队伍中每存在1个${getAttrTypeString(flags(sk[0]), flags(sk[1]))}时，${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]}, false)}`;
 			break;
@@ -3025,7 +3028,7 @@ function parseSkillDescription(skill) {
 				}
 			})},
 			{name:"以觉醒数量为倍率类技能（宝石姬）",function:cards=>cards.filter(card=>{
-				const searchTypeArray = [156,168];
+				const searchTypeArray = [156,168,228];
 				const skill = Skills[card.activeSkillId];
 				if (searchTypeArray.includes(skill.type))
 					return true;
@@ -3037,11 +3040,17 @@ function parseSkillDescription(skill) {
 			{
 				name:"回复力 buff（顶降回复）",
 				function:cards=>{
-					const searchTypeArray = [50,90];
+					const searchTypeArray = [50,90,228];
 					function getRecScale(as)
 					{
 						const sk = as.params;
-						return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+						if (as.type == 228)
+						{
+							return sk[4] || 0;
+						}else
+						{
+							return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+						}
 					}
 					return cards.filter(card=>{
 						const skills = getCardActiveSkills(card, searchTypeArray);
@@ -3056,11 +3065,17 @@ function parseSkillDescription(skill) {
 					});
 				},
 				addition:card=>{
-					const searchTypeArray = [50,90];
+					const searchTypeArray = [50,90,228];
 					function getRecScale(as)
 					{
 						const sk = as.params;
-						return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+						if (as.type == 228)
+						{
+							return sk[4] || 0;
+						}else
+						{
+							return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+						}
 					}
 					const skills = getCardActiveSkills(card, searchTypeArray);
 					const skill = skills.find(as=>getRecScale(as) > 0);
@@ -3072,11 +3087,13 @@ function parseSkillDescription(skill) {
 					88,92, //类型的
 					50,90, //属性的，要排除回复力
 					156,168, //宝石姬
+					228, //属性、类型数量
 				];
 				const skill = Skills[card.activeSkillId];
 				if ((skill.type==88 || skill.type==92) || //类型的
 					(skill.type==50 || skill.type==90) && skill.params.slice(1,skill.params.length>2?-1:undefined).some(sk=>sk!=5) || //属性的，要排除回复力
-					skill.type==156 && skill.params[4] == 2 || skill.type==168 //宝石姬的
+					skill.type==156 && skill.params[4] == 2 || skill.type==168 || //宝石姬的
+					skill.type==228 && skill.params[3] > 0 //属性、类型数量
 				)
 					return true;
 				else if (skill.type == 116 || skill.type == 118){
@@ -3084,7 +3101,8 @@ function parseSkillDescription(skill) {
 					return subskills.some(subskill=>
 						(subskill.type==88 || subskill.type==92) || //类型的
 						(subskill.type==50 || subskill.type==90) && subskill.params.slice(1,subskill.params.length>2?-1:undefined).some(sk=>sk!=5) || //属性的，要排除回复力
-						subskill.type==156 && subskill.params[4] == 2 || subskill.type==168 //宝石姬的
+						subskill.type==156 && subskill.params[4] == 2 || subskill.type==168 ||//宝石姬的
+						subskill.type==228 && subskill.params[3] > 0 //属性、类型数量
 					);
 				}
 			})},
