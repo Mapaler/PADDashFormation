@@ -1,10 +1,10 @@
 ﻿智龙迷城队伍图制作工具帮助<br>Help of *Puzzle & Dragons Formation Maker*
 ======
-* 直接复制网址即可分享组队或自己添加收藏夹保存。你可以使用*短网址服务*进一步缩短网址。  
-Copy the URL directly to share the Formation, or add a Bookmark to archives. You can use any *Short URL Service* to further shorten the URL.  
+* 直接复制网址即可分享组队或自己添加收藏夹保存。  
+Copy the URL directly to share the Formation, or add a Bookmark to archives.  
 ![分享组队](document/tips-share.png)  
-你也可以使用浏览器扩展生成二维码来分享网址。  
-You can also share the URL in QR code by browser extensions.  
+为了更方便的分享，你可以使用任意第三方*短网址服务*进一步缩短网址。   
+For easier sharing, you can further shorten your URL using any third-party *Short URL Service*. Like, [bitly](https://bitly.com/).
 * 可以使用摄像头读取队伍二维码  
 You can use the camera to read the Formation QR code  
 ![使用摄像头读取二维码](document/tips-qr-read.webp)  
