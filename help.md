@@ -33,9 +33,15 @@ If you want switch leader by skill, use the switch button. This preserves the or
 * 可以在编辑界面的怪物ID输入**怪物名称**或**标签**来搜索怪物。（键入回车以执行）  
 You can search for monsters by entering the **Monster Name** or **Tags** in the monster ID of the editing interface.(Type Enter to execute)  
 ![搜索怪物名称](document/tips-search-name.png)  
-点击**系列ID**或**标签**，可搜索该系列  
-Clisk the **Series ID** or **Tags** to search for series.  
-![搜索怪物系列](document/tips-search-series.png)  
+* 点击**技能名称**，可搜索相同主动技能宠物  
+Click on **Skill Name** to search for the same active skills Cards.  
+![搜索怪物主动技能](document/tips-search-skills.png)  
+* 点击**系列ID**或**标签**，可搜索该系列  
+Click the **Series ID** or **Tags** to search for series.  
+![搜索怪物系列](document/tips-search-series.webp)  
+* 复制本版本游戏数据的**标签**，可在游戏中搜索系列名称  
+Copy the **Tag** of this version of the game data can search for the series in the game.  
+![在游戏中搜索怪物系列](document/tips-search-TagInGame.png)  
 * 点击编辑界面的怪物头像可以跳转到攻略网站。  
 Click on the monster avatar in the editing interface to jump to the Guide.  
 ![攻略网站](document/tips-guide.png)  
