@@ -25,6 +25,9 @@ const isGuideMod = Boolean(Number(getQueryString("guide"))); //是否以图鉴�
 if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
 }
+let localTranslating = {
+    webpage_title: `智龙迷城${teamsCount}人队伍图制作工具`,
+}
 
 //一开始就加载当前语言
 if (currentLanguage == undefined)
@@ -1530,6 +1533,8 @@ function initialize() {
 	txtTitle.onchange = function() {
 		formation.title = this.value;
 		txtTitleDisplay.innerHTML = descriptionToHTML(this.value);
+		let titleStr = txtTitleDisplay.textContent.trim();
+		document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
 		creatNewUrl();
 	};
 	txtTitle.onblur = function() {
@@ -3532,6 +3537,8 @@ function refreshAll(formationData) {
 	const txtTitleDisplay = titleBox.querySelector(".title-display");
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
 	txtTitleDisplay.innerHTML = descriptionToHTML(txtTitle.value);
+	let titleStr = txtTitleDisplay.textContent.trim();
+	document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
 	txtDetailDisplay.innerHTML = descriptionToHTML(txtDetail.value);
 	if (txtTitle.value.length == 0)
 		titleBox.classList.add("edit");

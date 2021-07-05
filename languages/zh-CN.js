@@ -1,4 +1,4 @@
-﻿document.title = `智龙迷城${teamsCount}人队伍图制作工具`;
+﻿document.title = localTranslating.webpage_title;
 
 //大数字缩短长度
 Number.prototype.bigNumberToString = function() {
