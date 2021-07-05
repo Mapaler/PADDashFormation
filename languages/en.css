@@ -308,9 +308,6 @@
 	content: "Dark Attribute Enemy";
 }
 
-.setting-box .row-mon-id .open-search::before{
-	content: "Simple Search";
-}
 .search-box::before{
 	content: "Search Cards";
 }
@@ -414,6 +411,10 @@
 .open-evolutionary-tree::before
 {
 	content: "⛓️Evo Search";
+}
+.search-evolution-by-this::after
+{
+	content: "Cards that need this card as evolutionary material";
 }
 .real-time-change-card-label::after
 {

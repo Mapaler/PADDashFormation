@@ -303,9 +303,6 @@
 	content: "暗屬性敵人";
 }
 
-.setting-box .row-mon-id .open-search::before{
-	content: "簡易搜索";
-}
 .search-box::before{
 	content: "搜索怪物";
 }
@@ -409,6 +406,10 @@
 .open-evolutionary-tree::before
 {
 	content: "⛓️進化鏈";
+}
+.search-evolution-by-this::after
+{
+	content: "需要此寵物作為進化素材的寵物";
 }
 .real-time-change-card-label::after
 {

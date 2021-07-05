@@ -1804,6 +1804,7 @@ icon.inflicts::after
 	border: 1px solid white;
 	border-radius: 5px;
 	background: grey;
+	width: 100%;
 }
 .search-box .search-list-length
 {
@@ -2678,6 +2679,11 @@ table .orb-icon
 {
 	content: "⛓️进化链";
 }*/
+.search-evolution-by-this icon
+{
+	transform: scale(50%);
+	margin: -8px;
+}
 
 .mask
 {

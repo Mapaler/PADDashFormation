@@ -297,9 +297,6 @@
 	content: "숨겨진 속성의 적";
 }
 
-.setting-box .row-mon-id .open-search::before{
-	content: "간단한 검색";
-}
 .search-box::before{
 	content: "몬스터 검색";
 }
@@ -403,6 +400,10 @@
 .open-evolutionary-tree::before
 {
 	content: "⛓️진화 계통";
+}
+.search-evolution-by-this::after
+{
+	content: "진화 자료로이 카드를 필요로하는 카드";
 }
 .real-time-change-card-label::after
 {

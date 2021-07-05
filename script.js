@@ -2127,13 +2127,8 @@ function initialize() {
 	evolutionaryTreeMask_Close.onclick = function(){evolutionaryTreeMask.hide();};
 	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	openEvolutionaryTree.onclick = function() {evolutionaryTreeMask.show(editBox.mid)};
-
-	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
-	searchOpen.onclick = function() {
-		s_includeSuperAwoken.onchange();
-		s_canAssist.onchange();
-		searchBox.classList.toggle(className_displayNone);
-	};
+	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
+	searchEvolutionByThis.onclick = function() {showSearch(Cards.filter(card=>card.evoMaterials.includes(editBox.mid)))};
 
 	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-1 .attr-radio"));
 	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-2 .attr-radio"));
@@ -2566,6 +2561,8 @@ function initialize() {
 
 	//字符串搜索
 	btnSearchByString.onclick = function() {
+		s_includeSuperAwoken.onchange();
+		s_canAssist.onchange();
 		showSearch(searchByString(monstersID.value));
 	};
 	//觉醒
@@ -3348,6 +3345,14 @@ function editBoxChangeMonId(id) {
 	}else
 	{
 		openEvolutionaryTree.classList.add(className_displayNone); //隐藏进化树按钮
+	}
+	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
+	if (card.types.includes(0))
+	{
+		searchEvolutionByThis.classList.remove(className_displayNone);
+	}else
+	{
+		searchEvolutionByThis.classList.add(className_displayNone);
 	}
 
 	const mType = monInfoBox.querySelectorAll(".monster-type li");
