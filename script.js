@@ -2551,6 +2551,8 @@ function initialize() {
 		//如果键入回车，字符串长度大于0，且不是数字，则执行字符串搜索
 		if (e.key == "Enter" && this.value.length > 0 && !/^\d+$/.test(this.value))
 		{
+			s_includeSuperAwoken.onchange();
+			s_canAssist.onchange();
 			showSearch(searchByString(this.value));
 		}
 	}
