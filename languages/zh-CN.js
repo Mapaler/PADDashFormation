@@ -1115,9 +1115,9 @@ function parseSkillDescription(skill) {
 			break;
 		case 169: //5COMBO或以上時受到的傷害減少25%、攻擊力6倍；
 			str = `${sk[0]}连击或以上时`;
-			if (sk[1] && sk[1] !== 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[1]})}`;
+			if (sk[1] && sk[1] !== 100) str += `，所有宠物的攻击力×${sk[1]/100}倍`;
 			if (sk[2]) str += `，受到的伤害减少${sk[2]}%`;
-			if (sk[4]) str += `；${sk[4]}连击或以上时，所有宠物的${getFixedHpAtkRcvString({atk:sk[3]})}`;
+			if (sk[4]) str += `；每多1连击攻击力+${sk[3]/100}倍，最大${sk[4]}连击时×${(sk[4] - sk[0]) * sk[3]/100 + sk[1]/100}倍`;
 			break;
 		case 170:
 			fullColor = nb(sk[0], attrsName);
@@ -1137,9 +1137,9 @@ function parseSkillDescription(skill) {
 			if (!atSameTime) str+=`${sk[1]}种属性以上`;
 			else if(sk[0] == 31) str += `5色`;
 			str += `同时攻击时`;
-			if (sk[2] && sk[2] !== 100 || sk[4]) str += `，所有宠物的攻击力×${sk[2]/100}倍`;
-			if (sk[4]) str += `，每多1种属性+${sk[4]/100}倍，最大${sk[1] + (sk[5] - 1)}种属性时${(sk[5] - 1) * sk[4]/100 + sk[2]/100}倍`;
+			if (sk[2] && sk[2] !== 100) str += `，所有宠物的攻击力×${sk[2]/100}倍`;
 			if (sk[3]) str += `，受到的伤害减少${sk[3]}%`;
+			if (sk[4]) str += `；每多1种属性攻击力+${sk[4]/100}倍，最大${sk[1] + (sk[5] - 1)}种属性时×${(sk[5] - 1) * sk[4]/100 + sk[2]/100}倍`;
 			break;
 		case 171:
 			fullColor = sk.slice(0,4).filter(c=>c>0); //最多4串珠
