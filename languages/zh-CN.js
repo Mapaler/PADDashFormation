@@ -1117,6 +1117,7 @@ function parseSkillDescription(skill) {
 			str = `${sk[0]}连击或以上时`;
 			if (sk[1] && sk[1] !== 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[1]})}`;
 			if (sk[2]) str += `，受到的伤害减少${sk[2]}%`;
+			if (sk[4]) str += `；${sk[4]}连击或以上时，所有宠物的${getFixedHpAtkRcvString({atk:sk[3]})}`;
 			break;
 		case 170:
 			fullColor = nb(sk[0], attrsName);
