@@ -2875,9 +2875,24 @@ function initialize() {
 		editBox.hide();
 	};
 	window.addEventListener("keydown",function(event) {
-		if (!editBox.classList.contains(className_displayNone)) {
+		if (!editBox.classList.contains(className_displayNone))
+		{ //编辑窗打开
 			if (event.key === "Escape") { //按下ESC时，自动关闭编辑窗
 				btnCancel.onclick();
+			}
+		}
+		else
+		{
+			//如果按Ctrl+左右方向键，或者是小键盘上的左右方向键（关闭Num），快速切换变身
+			if (event.key === "ArrowLeft"
+				&& (event.code == "Numpad4" || event.ctrlKey))
+			{
+				henshinStep(-1);
+			}
+			else if (event.key === "ArrowRight"
+				&& (event.code == "Numpad6" || event.ctrlKey))
+			{
+				henshinStep(+1);
 			}
 		}
 	});
