@@ -2527,7 +2527,10 @@ icon.inflicts::after
 	content: "🕴️变身";
 }
 */
-
+.control-box .lbl-henshin-change button
+{
+	font-size: 2em;
+}
 .control-box .btn-henshin-back::before{
 	content: "◀️";
 }

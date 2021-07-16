@@ -64,7 +64,6 @@ var formation = new Formation(teamsCount,5);
 			<button class="btn-solo-link" onclick="turnPage(1,arguments[0]);"></button>
 			<button class="btn-triple-link" onclick="turnPage(3,arguments[0]);"></button>
 			<button class="btn-swap-AB-team" onclick="swapABCteam();"></button>
-			<span class="lbl-henshin-change"><button class="btn-henshin-back" onclick="henshinStep(-1);"></button><button class="btn-henshin-forward" onclick="henshinStep(+1);"></button></span>
 			<a class="help-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/blob/master/help.md"></a>
 		</div>
 		<div>
@@ -74,6 +73,9 @@ var formation = new Formation(teamsCount,5);
 			<input type="checkbox" class="config-checkbox-ipt" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"><div class="config-checkbox-lbl-cicle"></div></label>
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
+		<div>
+			<span class="lbl-henshin-change"><button class="btn-henshin-back" onclick="henshinStep(-1);"></button><button class="btn-henshin-forward" onclick="henshinStep(+1);"></button></span>
+		</div>
 	</div>
 	<div class="formation-box">
 		<div class="title-box edit"><input type="text" class="title" placeholder="输入队伍标题" /><h1 class="title-display"></h1></div>
