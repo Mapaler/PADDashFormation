@@ -3971,7 +3971,6 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				const attrNum = card.attrs.filter(a=>a==attrId).length;
 				return pre + attrNum;
 			},0);
-			console.log(attrCount);
 			attrDom.setAttribute(dataAttrName, attrCount);
 		});
 	}

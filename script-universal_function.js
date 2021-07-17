@@ -715,7 +715,7 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 				let correspondingTypes = flags(sk[1]); //符合的类型
 				let correspondingTimes = attrsArr.filter(a=>correspondingAttrs.includes(a)).length + typesArr.filter(t=>correspondingTypes.includes(t)).length; //符合的次数
 				scale = sk[2] * correspondingTimes / 100 + 1;
-				console.log('属性、类型个数动态倍率，当前队长HP倍率为 %s',scale);
+				//console.log('属性、类型个数动态倍率，当前队长HP倍率为 %s',scale);
 				break;
 			}
 			case 138: //调用其他队长技
