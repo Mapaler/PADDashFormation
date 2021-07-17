@@ -3966,10 +3966,12 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		attrDoms.forEach(attrDom=>{
 			const attrId = parseInt(attrDom.getAttribute("data-attr-icon"));
 			const attrCount = team_2p.reduce((pre,member)=>{
+				if (member.id <= 0) return pre;
 				const card = Cards[member.id];
 				const attrNum = card.attrs.filter(a=>a==attrId).length;
 				return pre + attrNum;
 			},0);
+			console.log(attrCount);
 			attrDom.setAttribute(dataAttrName, attrCount);
 		});
 	}
@@ -3980,6 +3982,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		typeDoms.forEach(typeDom=>{
 			const typeId = parseInt(typeDom.getAttribute("data-type-icon"));
 			const typeCount = team_2p.reduce((pre,member)=>{
+				if (member.id <= 0) return pre;
 				const card = Cards[member.id];
 				const typeNum = card.types.filter(a=>a==typeId).length;
 				return pre + typeNum;
