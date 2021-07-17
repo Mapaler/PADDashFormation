@@ -3068,7 +3068,7 @@ function changeid(mon, monDom, latentDom) {
 		awokenIcon.setAttribute(dataAttrName, mon.awoken || 0);
 		if (mon.awoken != null) //如果提供了觉醒
 		{
-			if (mon.awoken > 0 && mon.awoken == card.awakenings.length) {
+			if (card.awakenings.length > 0 && mon.awoken >= card.awakenings.length) {
 				awokenIcon.classList.add("full-awoken");
 			} else {
 				awokenIcon.classList.remove("full-awoken");
