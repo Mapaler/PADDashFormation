@@ -941,6 +941,48 @@ icon.inflicts::after
 	content: attr(data-inflicts);
 }
 
+/*队伍内属性、type的个数统计*/
+.tIf-attrs,
+.tIf-types
+{
+	display: inline-block;
+	vertical-align: top;
+}
+.tIf-attrs>li,
+.tIf-types>li
+{
+	display: inline-block;
+}
+.tIf-attrs icon.attr,
+.tIf-types icon.type-icon
+{
+	position: relative;
+	font-family: var(--game-font-family);
+	color: white;
+	line-height: 32px;
+	font-size: 16px;
+}
+.tIf-attrs icon.attr:not([data-value]),
+.tIf-types icon.type-icon:not([data-value]),
+.tIf-attrs icon.attr[data-value="0"],
+.tIf-types icon.type-icon[data-value="0"]
+{
+	display: none;
+}
+.tIf-attrs icon.attr::before,
+.tIf-types icon.type-icon::before
+{
+	content: "x"attr(data-value);
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	font-size: 16px;
+	line-height: 17px;
+	-webkit-text-stroke: 1px black;
+	text-stroke: 1px black;
+	text-shadow: black 1px 1px 1px;
+}
+
 /*队伍的潜觉*/
 .team-latents .latents{
 	width: var(--head-block-width);
@@ -1144,11 +1186,13 @@ icon.inflicts::after
 	transform: scale(0.80);
 	margin: calc(-32px * (1 - 0.80) / 2);
 }
+.tIf-addition-info,
 .team-assist-awoken,
 .team-menber-awoken
 {
 	display : none;	
 }
+.show-mon-awoken .tIf-addition-info,
 .show-mon-awoken .team-assist-awoken,
 .show-mon-awoken .team-menber-awoken
 {

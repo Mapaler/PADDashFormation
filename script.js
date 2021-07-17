@@ -3875,6 +3875,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader1id = team[0][team[3] || 0].id;
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3] || 0].id : teams[1][0][teams[1][3] || 0].id) : team[0][5].id;
 
+	const team_2p = teamsCount===2 ? team[0].concat((teamIdx === 1 ? teams[0][0] : teams[1][0])) : team[0];
+
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
 		const reduceScales2 = getReduceScales(leader2id);
@@ -3953,6 +3955,37 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 			setTextContentAndAttribute(tMoveDom_general, Math.round((moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge + moveTime.duration.awoken) * 100) / 100);
 			setTextContentAndAttribute(tMoveDom_noAwoken, Math.round((moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge) * 100) / 100);
 		}
+	}
+
+	const tAttrsDom = totalDom.querySelector(".tIf-attrs");
+	const tTypesDom = totalDom.querySelector(".tIf-types");
+	//统计队伍颜色个数
+	if (tAttrsDom)
+	{
+		const attrDoms = Array.from(tAttrsDom.querySelectorAll(".attr"));
+		attrDoms.forEach(attrDom=>{
+			const attrId = parseInt(attrDom.getAttribute("data-attr-icon"));
+			const attrCount = team_2p.reduce((pre,member)=>{
+				const card = Cards[member.id];
+				const attrNum = card.attrs.filter(a=>a==attrId).length;
+				return pre + attrNum;
+			},0);
+			attrDom.setAttribute(dataAttrName, attrCount);
+		});
+	}
+	//统计队伍类型个数
+	if (tTypesDom)
+	{
+		const typeDoms = Array.from(tTypesDom.querySelectorAll(".type-icon"));
+		typeDoms.forEach(typeDom=>{
+			const typeId = parseInt(typeDom.getAttribute("data-type-icon"));
+			const typeCount = team_2p.reduce((pre,member)=>{
+				const card = Cards[member.id];
+				const typeNum = card.types.filter(a=>a==typeId).length;
+				return pre + typeNum;
+			},0);
+			typeDom.setAttribute(dataAttrName, typeCount);
+		});
 	}
 
 	if (tEffectDom)	{
