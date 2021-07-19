@@ -3599,13 +3599,13 @@ function refreshAll(formationData) {
 				{
 					return;
 				}
-				if (leaderIdx > 0 && ti == 0)
+				if (leaderIdx > 0 && ti == 0) //队长
 				{
-					dom.style.transform = `translateX(${leaderIdx*108}px)`;
+					dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-leaderIdx)*-108}px)` : `translateX(${leaderIdx*108}px)`;
 				}
-				else if (leaderIdx > 0 && ti == leaderIdx)
+				else if (leaderIdx > 0 && ti == leaderIdx) //队长员
 				{
-					dom.style.transform = `translateX(${ti*-108}px)`;
+					dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-ti)*108}px)` : `translateX(${ti*-108}px)`;
 				}else
 				{
 					dom.style.transform = null;
