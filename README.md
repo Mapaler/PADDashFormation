@@ -1,16 +1,12 @@
-﻿智龙迷城队伍图制作工具 | Puzzle & Dragons Formation Maker
+﻿智龙急速阵型 | P&D Dash Formation
 ======
-这个工具可以帮助你方便的制作和分享车队阵型或单人队形。易用的编辑界面，电脑、手机上都可以轻松使用。   
-This tool can help you easily create and share Swipe Formation or Solo Formation. Easy to use editing interface and use on your PC and Phone.
+这是一个智龙迷城队伍图制作工具。  
+This is a Puzzle & Dragons Formation Maker.
 
-### 目前支持的语言 | Supported Languages
-1. 中文（简体）
-1. 中文（繁體）
-1. English
-1. 日本語 (by Bing Microsoft Translator)
-1. 한국어 (by Bing Microsoft Translator)
+这个工具可以帮助你方便的制作和分享车队阵型或单人队形。电脑、智能手机上都可以轻松使用。   
+This tool can help you easily create and share Swipe Formation or Solo Formation. Easy to use on your PC and Smart Phone.
 
-### 预览 \| Preview
+### 预览 | Preview
 
 | **单人 \| Solo** | **2人协力 \| 2P** |
 | :---: | :---: |
@@ -18,18 +14,12 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 | **3人协力 \| 3P** | **手机 \| Mobile**  |
 | ![3人协力界面预览](document/preview-capture-3p.png) | ![手机端预览](document/preview-mobile.jpg) |
 
-
 # 如何使用 | HOW TO USE
 ## 快速使用在线版 | Online Quick Start
 * <https://mapaler.github.io/PADDashFormation/> (Github Pages)  
 [![](https://www.mozilla.org/media/img/firefox/favicon.ico)Firefox](https://www.mozilla.org/firefox/new/) is recommended on your phone for better performance. Chrome is very slow when searching for a large number of cards
-* http://mapaler.gitee.io/paddashformation/ (码云的镜象，国内用这个更快 | Chinese mirror)  
+* <https://mapaler.gitee.io/paddashformation/> (码云的镜象，国内用这个更快 | Chinese mirror)  
 手机上使用 [![](https://www.mozilla.org/media/img/firefox/favicon.ico)火狐浏览器](https://www.mozilla.org/firefox/new/) 具有更好的性能，Chrome 卡死了。
-
-### 示例链接 | Sample Link
-  * [单人示例](http://mapaler.gitee.io/paddashformation/solo.html?d={"t"%3A"千鸟^ff3600^【7×6版面】^p换队长打里·异形"%2C"d"%3A"%25{m5537}可以换%25{m3524}"%2C"f"%3A[[[[5537%2C110%2C9%2C99%2C[18%2C11%2C11%2C10%2C11]%2C1]%2C[5141%2C110%2C9%2C99%2C[11%2C11%2C11%2C11%2C11%2C10]%2C2]%2C[5004%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C0]%2C[5658%2C110%2C9%2C99%2C[19%2C11%2C11%2C11%2C11]%2C0]%2C[3898%2C110%2C9%2C99%2C[25%2C11%2C11%2C11%2C11]%2C0]%2C[5658%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C2]]%2C[[5573%2C1%2C7%2C99]%2C[5591%2C1%2C6%2C99]%2C[5582%2C1%2C6]%2C[5656%2C1%2C6]%2C[4897%2C99%2C5%2C99]%2C[5420%2C99%2C5%2Cnull%2Cnull%2Cnull%2C1]]]]%2C"b"%3A13}) | [Solo Sample](//mapaler.github.io/PADDashFormation/solo.html?d={"t"%3A"千鸟^ff3600^【7×6版面】^p换队长打里·异形"%2C"d"%3A"%25{m5537}可以换%25{m3524}"%2C"f"%3A[[[[5537%2C110%2C9%2C99%2C[18%2C11%2C11%2C10%2C11]%2C1]%2C[5141%2C110%2C9%2C99%2C[11%2C11%2C11%2C11%2C11%2C10]%2C2]%2C[5004%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C0]%2C[5658%2C110%2C9%2C99%2C[19%2C11%2C11%2C11%2C11]%2C0]%2C[3898%2C110%2C9%2C99%2C[25%2C11%2C11%2C11%2C11]%2C0]%2C[5658%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C2]]%2C[[5573%2C1%2C7%2C99]%2C[5591%2C1%2C6%2C99]%2C[5582%2C1%2C6]%2C[5656%2C1%2C6]%2C[4897%2C99%2C5%2C99]%2C[5420%2C99%2C5%2Cnull%2Cnull%2Cnull%2C1]]]]%2C"b"%3A13})
-  * [2P车队示例](http://mapaler.gitee.io/paddashformation/multi.html?d={"t"%3A"我的^2288FF^水^p车队%20|%20My%20^2288FF^Water^p%20Swip%20Formation"%2C"d"%3A"%25{m2186}最好换%25{m4877}\n%25{m4877}%20is%20better%20than%20%25{m2186}"%2C"f"%3A[[[[4691%2C104%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[2186%2C101%2C8%2C99%2C[20%2C20%2C20]%2C0]%2C[4877%2C101%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4793%2C99%2C7%2C99]%2C[4877%2C101%2C9%2C99%2C[23%2C23%2C11%2C11]]]%2C[[4252%2C38%2C9]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]]]%2C[[[4691%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[4877%2C102%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4877%2C101%2C9%2C99%2C[23%2C23%2C11%2C11]]%2C[4793%2C99%2C7%2C99%2C[21%2C21%2C21]]%2C[2186%2C101%2C8%2C99%2Cnull%2C0]]%2C[[4394%2C12%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2C99%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]]]]}) | [2P Multi Formation Sample](//mapaler.github.io/PADDashFormation/multi.html?d={"t"%3A"我的^2288FF^水^p车队%20|%20My%20^2288FF^Water^p%20Swip%20Formation"%2C"d"%3A"%25{m2186}最好换%25{m4877}\n%25{m4877}%20is%20better%20than%20%25{m2186}"%2C"f"%3A[[[[4691%2C104%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[2186%2C101%2C8%2C99%2C[20%2C20%2C20]%2C0]%2C[4877%2C101%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4793%2C99%2C7%2C99]%2C[4877%2C101%2C9%2C99%2C[23%2C23%2C11%2C11]]]%2C[[4252%2C38%2C9]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]]]%2C[[[4691%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[4877%2C102%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4877%2C101%2C9%2C99%2C[23%2C23%2C11%2C11]]%2C[4793%2C99%2C7%2C99%2C[21%2C21%2C21]]%2C[2186%2C101%2C8%2C99%2Cnull%2C0]]%2C[[4394%2C12%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2C99%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]]]]})
-  * [3P协力示例](http://mapaler.gitee.io/paddashformation/triple.html?d={"t"%3A"3P%20Sample"%2C"d"%3A"3P没啥好的例子"%2C"f"%3A[[[[4691%2C104%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[2186%2C101%2C8%2C99%2C[20%2C20%2C20]%2C0]%2C[4877%2C101%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4793%2C99%2C7%2C99]%2C[5322%2C101%2C9%2C99%2C[20%2C20%2C20]]%2C[4691%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]]%2C[[4252%2C38%2C9]%2C[5632%2C1%2C6%2C99]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4828%2C5%2C3]%2C[4394%2C12%2C3%2Cnull%2Cnull%2Cnull%2C1]]]%2C[[[4691%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[2186%2C101%2C8%2C99%2Cnull%2C0]%2C[4877%2C102%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4793%2C99%2C7%2C99%2C[21%2C21%2C21]]%2C[4877%2C101%2C9%2C99%2C[23%2C23%2C11%2C11]]%2C[4691%2C104%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]]%2C[[4394%2C12%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4252%2C38%2C9]]]%2C[[[5888%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4877%2C99%2C9%2C99]%2C[4877%2C99%2C9%2C99]%2C[4877%2C99%2C9%2C99]%2C[2540%2C110%2C8%2C99%2C[11%2C11%2C11%2C11%2C11%2C11]%2C0]%2C[5887%2C99%2C9%2Cnull%2C[11%2C11%2C11%2C11%2C11%2C11]]]%2C[[0%2C0%2C0]%2C[0%2C0%2C0]%2C[0%2C0%2C0]%2C[0%2C0%2C0]%2C[0%2C0%2C0]%2C[0%2C0%2C0]]]]}) | [3P Multi Formation Sample](//mapaler.github.io/PADDashFormation/triple.html?d={"t"%3A"3P%20Sample"%2C"d"%3A"3P没啥好的例子"%2C"f"%3A[[[[4691%2C104%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[2186%2C101%2C8%2C99%2C[20%2C20%2C20]%2C0]%2C[4877%2C101%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4793%2C99%2C7%2C99]%2C[5322%2C101%2C9%2C99%2C[20%2C20%2C20]]%2C[4691%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]]%2C[[4252%2C38%2C9]%2C[5632%2C1%2C6%2C99]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4828%2C5%2C3]%2C[4394%2C12%2C3%2Cnull%2Cnull%2Cnull%2C1]]]%2C[[[4691%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]%2C[2186%2C101%2C8%2C99%2Cnull%2C0]%2C[4877%2C102%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4793%2C99%2C7%2C99%2C[21%2C21%2C21]]%2C[4877%2C101%2C9%2C99%2C[23%2C23%2C11%2C11]]%2C[4691%2C104%2C9%2C99%2C[19%2C19%2C11%2C11]%2C1]]%2C[[4394%2C12%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4155%2C1%2C7%2Cnull%2Cnull%2Cnull%2C1]%2C[4394%2C1%2C3%2Cnull%2Cnull%2Cnull%2C1]%2C[4252%2C38%2C9]]]%2C[[[5888%2C110%2C9%2C99%2C[19%2C19%2C11%2C11]]%2C[4877%2C99%2C9%2C99]%2C[4877%2C99%2C9%2C99]%2C[4877%2C99%2C9%2C99]%2C[2540%2C110%2C8%2C99%2C[11%2C11%2C11%2C11%2C11%2C11]%2C0]%2C[5887%2C99%2C9%2Cnull%2C[11%2C11%2C11%2C11%2C11%2C11]]]%2C[[0%2C0%2C0]%2C[0%2C0%2C0]%2C[0%2C0%2C0]%2C[0%2C0%2C0]%2C[0%2C0%2C0]%2C[0%2C0%2C0]]]]})
 
 ## 下载后使用本地版 | Use the local version after downloaded  
 [下载压缩包](//gitee.com/mapaler/PADDashFormation/repository/archive/master)或`git clone`后使用浏览器打开`index.html`。  
@@ -41,7 +31,14 @@ Chrome browser need start with the additional argument `--allow-file-access-from
 
 ## [帮助和提示 | Help and Tips](help.md)
 
-# 翻译我 | TRANSLATE ME
+# 翻译我 | Translate me
+## 目前支持的语言 | Languages currently supported
+1. 中文（简体）
+1. 中文（繁體）
+1. English
+1. 日本語 (by Bing Microsoft Translator)
+1. 한국어 (by Bing Microsoft Translator)
+
 ## How to **Pull requests**
 1. Click **Fork** In the page top right corner. Fork your own copy of this repository to your account.
 1. Use Git to clone/pull repository locally for modification (How to modify please see below).
@@ -56,14 +53,16 @@ Chrome browser need start with the additional argument `--allow-file-access-from
 This is an Object for a language list item.
     ```js
     {
-      name:"English",
-      i18n:"en",
-      searchlist:["en","ja"],
-      guideURL:id=>`http://www.puzzledragonx.com/en/monster.asp?n=${id}`
+      name: "English",
+      i18n: "en",
+      i18n_RegExp: /^en/i,
+      searchlist: ["en","ja"],
+      guideURL: id=>`http://www.puzzledragonx.com/en/monster.asp?n=${id}`
     }
     ```
-    * `name` is the name shown in the list.
-    * `i18n` is the language-tag for your language.
+    * `name` is the showed name in the list.
+    * `i18n` is the language-tag for your language. You need to make sure that the file names are the same.
+    * `i18n_RegExp` is a *Regular Expressions* to match multiple `navigator.language` (like `/^en/i` can match `en-US`, `en-CA` and `en-AU`).
     * `searchlist` is the search candidate list string order when you search monster in edit window.  
     Currently only `ja`,`en`,`ko`,`cht`,`chs` languages.(See [monsters-info](monsters-info))
     * `guideURL` is a **Function(cardId,cardName)** to return game guide URL for your language.
@@ -101,7 +100,9 @@ Please refer to existing files.
 # 使用开源软件 | Open source software used
 * [Puzzle-and-Dragons-Texture-Tool](//github.com/codywatts/Puzzle-and-Dragons-Texture-Tool) //Extract Images
 * [pad-rikuu](//github.com/kiootic/pad-rikuu) //Parse data
+* [zxing-js](//github.com/zxing-js/library) //Read, Write QR Code
 * [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
 * [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
+* [Font Awesome Free](https://github.com/FortAwesome/Font-Awesome) //Font Icon
 * [Zpix (最像素)](//github.com/SolidZORO/zpix-pixel-font) //Pixel Font
 * [font-spider](//github.com/aui/font-spider) //Compression Font file

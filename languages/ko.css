@@ -297,9 +297,6 @@
 	content: "숨겨진 속성의 적";
 }
 
-.setting-box .row-mon-id .open-search::before{
-	content: "간단한 검색";
-}
 .search-box::before{
 	content: "몬스터 검색";
 }
@@ -404,6 +401,10 @@
 {
 	content: "⛓️진화 계통";
 }
+.search-evolution-by-this::after
+{
+	content: "진화 자료로이 카드를 필요로하는 카드";
+}
 .real-time-change-card-label::after
 {
 	content: "카드를 즉시 업데이트합니다";
@@ -462,6 +463,53 @@
 {
     content: "루프 변신";
 }
-.icon-skill[data-icon-type="resolve"] {
-    background-position-x: calc(-36px * 2);
+
+.control-box .btn-qrcode::before{
+	content: "\f029 QR 코드";
 }
+
+.read-qr-box::before
+{
+	content: "QR 코드 읽기:";
+}
+.save-qr-box::before
+{
+	content: "QR 코드 생성:";
+}
+
+.formation-from-qrcode::before
+{
+    content: "QR 코드에서 읽은 형성 링크";
+}
+label[for="sourceSelect"]::before
+{
+    content: "비디오 소스 선택:";
+}
+#qr-code-frame .save-qr-img::before
+{
+    content: "\f0c7  QR 코드 이미지 저장";
+}
+#qr-code-frame .read-qr-camera::before
+{
+    content: "\f030  카메라로 스캔";
+}
+#qr-code-frame .read-qr-camera.running::before
+{
+    content: "\f28d  카메라 사용을 중지합니다";
+}
+#qr-code-frame .read-qr-file::before
+{
+    content: "\f1c5  이미지 파일 읽기";
+}
+
+label[for="qr-data-type-pdf"]::before
+{
+	content: "퍼즐앤드래곤 팀 다이어그램 생성 도구";
+}
+label[for="qr-data-type-pdc"]::before
+{
+	content: "퍼즐앤드래곤 데미지 카큐라터 (PDC)";
+}
+.icon-skill[data-icon-type="resolve"] {
+	background-position-x: calc(-36px * 2);
+}}

@@ -30,27 +30,32 @@ const GM_xmlhttpRequest = function(GM_param) {
 
 //获取URL参数
 function getQueryString(name, url) {
-	if (!!(window.URL && window.URLSearchParams)) { //浏览器原生支持的API
-		const urlObj = new URL(url || document.location);
-		return urlObj.searchParams.get(name);
-	} else {
-		const reg = new RegExp(`(?:^|&)${name}=([^&]*)(?:&|$)`, "i");
-		const searchStr = url || location.search.substr(1);
-		const r = searchStr.match(reg);
-		if (r != null) {
-			return decodeURIComponent(r[1]);
-		} else {
-			return null;
+	const urlObj = new URL(url || document.location);
+	if (!Array.isArray(name)) name = [name];
+	let n_e = name.entries(), n;
+	let value;
+	do
+	{
+		n = n_e.next();
+		if (!n.done)
+		{
+			value = urlObj.searchParams.get(n.value[1]);
 		}
-	}
+	}while(!n.done && value == undefined)
+	return value;
 }
 
 //数字补前导0
 Number.prototype.prefixInteger = function(length, useGrouping = false) {
-		return this.toLocaleString(undefined, {
-			useGrouping: useGrouping,
-			minimumIntegerDigits: length
-		});
+	return this.toLocaleString(undefined, {
+		useGrouping: useGrouping,
+		minimumIntegerDigits: length
+	});
+}
+//数字补前导0
+String.prototype.prefix = function(length = 2, prefix = '0') {
+	let needAddLength = Math.max(length - this.length, 0);
+	return new Array(needAddLength).fill(prefix).join('') + this;
 }
 //大数字缩短长度，默认返回本地定义字符串
 Number.prototype.bigNumberToString = function() {
@@ -135,6 +140,25 @@ fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffe
 		}*/
 	});
 //▲ADPCM播放相关
+
+// 加载 image
+function loadImage(url) {
+	return new Promise(function(resolve, reject) {
+		var image = new Image();
+
+		image.src = url;
+		image.type = "svg"
+		image.crossOrigin = 'Anonymous';
+		image.onload = function() {
+			resolve(this);
+		};
+
+		image.onerror = function(err) {
+			reject(err);
+		};
+	});
+}
+
 function latentUseHole(latentId) {
 	switch (true) {
 		case (latentId === 12):
@@ -691,6 +715,17 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 						break;
 				}
 				break;
+			case 229:{ //队员中存在每个属性或Type都算一次
+				let cardsArr = memberArr.filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
+				let attrsArr = cardsArr.flatMap(card => card.attr); //所有卡片的属性
+				let typesArr = cardsArr.flatMap(card => card.types); //所有卡片的类型
+				let correspondingAttrs = flags(sk[0]); //符合的属性
+				let correspondingTypes = flags(sk[1]); //符合的类型
+				let correspondingTimes = attrsArr.filter(a=>correspondingAttrs.includes(a)).length + typesArr.filter(t=>correspondingTypes.includes(t)).length; //符合的次数
+				scale = sk[2] * correspondingTimes / 100 + 1;
+				//console.log('属性、类型个数动态倍率，当前队长HP倍率为 %s',scale);
+				break;
+			}
 			case 138: //调用其他队长技
 				scale = sk.reduce((pmul, skid) => pmul * memberHpMul(card, Skills[skid], memberArr, solo), 1)
 				break;

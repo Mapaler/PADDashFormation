@@ -308,9 +308,6 @@
 	content: "Dark Attribute Enemy";
 }
 
-.setting-box .row-mon-id .open-search::before{
-	content: "Simple Search";
-}
 .search-box::before{
 	content: "Search Cards";
 }
@@ -415,6 +412,10 @@
 {
 	content: "⛓️Evo Search";
 }
+.search-evolution-by-this::after
+{
+	content: "Cards that need this card as evolutionary material";
+}
 .real-time-change-card-label::after
 {
 	content: "Real-Time change card";
@@ -505,6 +506,52 @@
 	transform: scaleX(0.6);
     margin: calc(-100px * (1 - 0.6) / 2);
 }
-.icon-skill[data-icon-type="resolve"] {
-    background-position-x: calc(-36px * 1);
+.control-box .btn-qrcode::before{
+	content: "\f029 QR Code";
 }
+
+.read-qr-box::before
+{
+	content: "Read QR code:";
+}
+.save-qr-box::before
+{
+	content: "Generate QR code:";
+}
+
+.formation-from-qrcode::before
+{
+    content: "A formation link read from a QR code";
+}
+label[for="sourceSelect"]::before
+{
+    content: "Video source selection:";
+}
+#qr-code-frame .save-qr-img::before
+{
+    content: "\f0c7  Save QR code image";
+}
+#qr-code-frame .read-qr-camera::before
+{
+    content: "\f030  Scan with the camera";
+}
+#qr-code-frame .read-qr-camera.running::before
+{
+    content: "\f28d  Stop using the camera";
+}
+#qr-code-frame .read-qr-file::before
+{
+    content: "\f1c5  Read the image file";
+}
+
+label[for="qr-data-type-pdf"]::before
+{
+	content: "P&D Formation Maker";
+}
+label[for="qr-data-type-pdc"]::before
+{
+	content: "P&D Damage Caculater (PDC)";
+}
+.icon-skill[data-icon-type="resolve"] {
+	background-position-x: calc(-36px * 1);
+}}

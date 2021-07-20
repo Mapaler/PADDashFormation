@@ -1,5 +1,5 @@
-﻿document.title = `智龙迷城${teamsCount}人队伍图制作工具`;
-const localTranslating = {
+﻿document.title = localTranslating.webpage_title;
+localTranslating = {
     skill_parse: {
         skill: {
 			unknown: tp`未知的技能类型：${'type'}`, //type
@@ -249,7 +249,7 @@ function parseSkillDescription(skill) {
     }
     const mulName = ["HP", "攻击力", "回复力"];
     //获取固定的三维成长的名称
-    function getFixedHpAtkRcvString(values) {
+    function getFixedHpAtkRcvString(values, scale = true) {
         let mulArr = null;
         if (Array.isArray(values)) {
             mulArr = [
@@ -269,7 +269,7 @@ function parseSkillDescription(skill) {
         if (hasMul.length > 0) {
             const hasDiff = hasMul.filter(m => m != hasMul[0]).length > 0; //存在不一样的值
             if (hasDiff) {
-                str += mulArr.map((m, i) => (m > 0 && m != 1) ? (mulName[i] + (m >= 1 ? `×${m}倍` : `变为${m*100}%`)) : null).filter(s => s != null).join("，");
+                str += mulArr.map((m, i) => (m > 0 && m != 1) ? (mulName[i] + (scale ? (m >= 1 ? `×${m}倍` : `变为${m*100}%`) : `增加${m*100}%`)) : null).filter(s => s != null).join("，");
             } else {
                 let hasMulName = mulName.filter((n, i) => mulArr[i] != 1);
                 if (hasMulName.length >= 3) {
@@ -277,7 +277,7 @@ function parseSkillDescription(skill) {
                 } else {
                     str += hasMulName.join("和");
                 }
-                str += hasMul[0] >= 1 ? `×${hasMul[0]}倍` : `变为${hasMul[0]*100}%`;
+                str += scale ? (hasMul[0] >= 1 ? `×${hasMul[0]}倍` : `变为${hasMul[0]*100}%`) : `增加${hasMul[0]*100}%`;
             }
         } else {
             str += "能力值没有变化";
@@ -808,7 +808,7 @@ function parseSkillDescription(skill) {
 			return fragment;
 			break;
 		case 126:
-			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内，${nb(sk[0], attrsName).join("、")}宝珠的掉落率提高${sk[3]}%`;
+			str = `${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}回合内，${nb(sk[0], attrsName).join("、")}宝珠的掉落率提高到${sk[3]}%`;
 			break;
 		case 127: //生成竖列
 			strArr = [];
@@ -1210,8 +1210,9 @@ function parseSkillDescription(skill) {
 			break;
 		case 169: //5COMBO或以上時受到的傷害減少25%、攻擊力6倍；
 			str = `${sk[0]}连击或以上时`;
-			if (sk[1] && sk[1] !== 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[1]})}`;
+			if (sk[1] && sk[1] !== 100) str += `，所有宠物的攻击力×${sk[1]/100}倍`;
 			if (sk[2]) str += `，受到的伤害减少${sk[2]}%`;
+			if (sk[4]) str += `；此后每多1连击攻击力+${sk[3]/100}倍，最大${sk[4]}连击时×${(sk[4] - sk[0]) * sk[3]/100 + sk[1]/100}倍`;
 			break;
 		case 170:
 			fullColor = nb(sk[0], attrsName);
@@ -1231,9 +1232,9 @@ function parseSkillDescription(skill) {
 			if (!atSameTime) str+=`${sk[1]}种属性以上`;
 			else if(sk[0] == 31) str += `5色`;
 			str += `同时攻击时`;
-			if (sk[2] && sk[2] !== 100 || sk[4]) str += `，所有宠物的攻击力×${sk[2]/100}倍`;
-			if (sk[4]) str += `，每多1种属性+${sk[4]/100}倍，最大${sk[1] + (sk[5] - 1)}种属性时${(sk[5] - 1) * sk[4]/100 + sk[2]/100}倍`;
+			if (sk[2] && sk[2] !== 100) str += `，所有宠物的攻击力×${sk[2]/100}倍`;
 			if (sk[3]) str += `，受到的伤害减少${sk[3]}%`;
+			if (sk[4]) str += `；此后每多1种属性攻击力+${sk[4]/100}倍，最大${sk[1] + (sk[5] - 1)}种属性时×${(sk[5] - 1) * sk[4]/100 + sk[2]/100}倍`;
 			break;
 		case 171:
 			fullColor = sk.slice(0,4).filter(c=>c>0); //最多4串珠
@@ -1543,6 +1544,15 @@ function parseSkillDescription(skill) {
 			break;
 		case 223:
 			str = `${sk[0]}连击以上时，追加${sk[1].bigNumberToString()}点固定伤害`;
+			break;
+		case 224:
+			str = `${sk[0]}回合内，敌人全体变为${attrN(sk[1])}属性。（不受防护盾的影响）`;
+			break;
+		case 228:
+			str = `${sk[0]}回合内，队伍中每存在1个${getAttrTypeString(flags(sk[1]), flags(sk[2]))}时，${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]}, false)}`;
+			break;
+		case 229:
+			str = `队伍中每存在1个${getAttrTypeString(flags(sk[0]), flags(sk[1]))}时，${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]}, false)}`;
 			break;
 		default:
 			str = `未知的技能类型${type}(No.${id})`;
@@ -3114,7 +3124,7 @@ function parseSkillDescription(skill) {
 				}
 			})},
 			{name:"以觉醒数量为倍率类技能（宝石姬）",function:cards=>cards.filter(card=>{
-				const searchTypeArray = [156,168];
+				const searchTypeArray = [156,168,228];
 				const skill = Skills[card.activeSkillId];
 				if (searchTypeArray.includes(skill.type))
 					return true;
@@ -3126,11 +3136,17 @@ function parseSkillDescription(skill) {
 			{
 				name:"回复力 buff（顶降回复）",
 				function:cards=>{
-					const searchTypeArray = [50,90];
+					const searchTypeArray = [50,90,228];
 					function getRecScale(as)
 					{
 						const sk = as.params;
-						return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+						if (as.type == 228)
+						{
+							return sk[4] || 0;
+						}else
+						{
+							return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+						}
 					}
 					return cards.filter(card=>{
 						const skills = getCardActiveSkills(card, searchTypeArray);
@@ -3145,11 +3161,17 @@ function parseSkillDescription(skill) {
 					});
 				},
 				addition:card=>{
-					const searchTypeArray = [50,90];
+					const searchTypeArray = [50,90,228];
 					function getRecScale(as)
 					{
 						const sk = as.params;
-						return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+						if (as.type == 228)
+						{
+							return sk[4] || 0;
+						}else
+						{
+							return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+						}
 					}
 					const skills = getCardActiveSkills(card, searchTypeArray);
 					const skill = skills.find(as=>getRecScale(as) > 0);
@@ -3161,11 +3183,13 @@ function parseSkillDescription(skill) {
 					88,92, //类型的
 					50,90, //属性的，要排除回复力
 					156,168, //宝石姬
+					228, //属性、类型数量
 				];
 				const skill = Skills[card.activeSkillId];
 				if ((skill.type==88 || skill.type==92) || //类型的
 					(skill.type==50 || skill.type==90) && skill.params.slice(1,skill.params.length>2?-1:undefined).some(sk=>sk!=5) || //属性的，要排除回复力
-					skill.type==156 && skill.params[4] == 2 || skill.type==168 //宝石姬的
+					skill.type==156 && skill.params[4] == 2 || skill.type==168 || //宝石姬的
+					skill.type==228 && skill.params[3] > 0 //属性、类型数量
 				)
 					return true;
 				else if (skill.type == 116 || skill.type == 118){
@@ -3173,7 +3197,8 @@ function parseSkillDescription(skill) {
 					return subskills.some(subskill=>
 						(subskill.type==88 || subskill.type==92) || //类型的
 						(subskill.type==50 || subskill.type==90) && subskill.params.slice(1,subskill.params.length>2?-1:undefined).some(sk=>sk!=5) || //属性的，要排除回复力
-						subskill.type==156 && subskill.params[4] == 2 || subskill.type==168 //宝石姬的
+						subskill.type==156 && subskill.params[4] == 2 || subskill.type==168 ||//宝石姬的
+						subskill.type==228 && subskill.params[3] > 0 //属性、类型数量
 					);
 				}
 			})},
@@ -3603,37 +3628,62 @@ function parseSkillDescription(skill) {
 					b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
 				return a_pC - b_pC;
 			})},
-			{name:"改变敌人属性（按属性排序）",function:cards=>cards.filter(card=>{
-				const searchType = 153;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType)
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType);
+			{name:"改变敌人属性（按属性排序）",
+				function:cards=>{
+					//获取属性变化
+					function getAttrChange(ls)
+					{
+						if (!ls) return null;
+						const sk = ls.params;
+						switch (ls.type)
+						{
+							case 153: //永久变色
+								return sk[0];
+							case 224: //回合变色
+								return sk[1] || 0;
+							default:
+								return null;
+						}
+					}
+					const searchTypeArray = [153, 224];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return getAttrChange(skill) != null;
+					}).sort((a,b)=>{
+						const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+						let a_pC = getAttrChange(a_s),b_pC = getAttrChange(b_s);
+						return a_pC - b_pC;
+					})
+				},
+				addition:card=>{
+					//获取属性变化
+					function getAttrChange(ls)
+					{
+						if (!ls) return null;
+						const sk = ls.params;
+						switch (ls.type)
+						{
+							case 153: //永久变色
+								return sk[0];
+							case 224: //回合变色
+								return sk[1] || 0;
+							default:
+								return null;
+						}
+					}
+					const searchTypeArray = [153, 224];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					
+					const colors = [getAttrChange(skill)];
+					const fragment = document.createDocumentFragment();
+					if (skill.type == 224)
+						fragment.appendChild(document.createTextNode(`${sk[0]}T,`));
+					fragment.appendChild(document.createTextNode(`敌→`));
+					fragment.appendChild(createOrbsList(colors));
+					return fragment;
 				}
-			}).sort((a,b)=>{
-				const searchType = 153;
-				const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-				let a_pC = 0,b_pC = 0;
-				a_pC = (a_s.type == searchType) ?
-					a_s.params[0] :
-					a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-				b_pC = (b_s.type == searchType) ?
-					b_s.params[0] :
-					b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-				return a_pC - b_pC;
-			}),addition:card=>{
-				const searchTypeArray = [153];
-				const skill = getCardSkill(card, searchTypeArray);
-				const sk = skill.params;
-				
-				const colors = [sk[0]];
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(`敌→`));
-				fragment.appendChild(createOrbsList(colors));
-				return fragment;
-			}},
+			},
 			{name:"受伤反击 buff",function:cards=>cards.filter(card=>{
 				const searchType = 60;
 				const skill = Skills[card.activeSkillId];
