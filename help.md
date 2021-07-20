@@ -47,7 +47,8 @@ If you want switch leader by skill, use the switch button. This preserves the or
 ![切换位置](document/tips-switch-leader.png)
 * 使用`Ctrl + ←/→`，或小键盘上的`←/→`(需关闭`NumLock`)可以快速切换变身。  
 You can using `Ctrl + ←/→` or `←/→` on keypad (turn `NumLock` off) to quickly change Henshin.  
-![关闭小键盘](document/tips-arrow-change-henshin.webp)
+![按键切换变身](document/tips-arrow-change-henshin.png)  
+![关闭小键盘](document/tips-arrow-close-numlock.webp)
 
 ## 搜索图鉴 | Search cards
 * 可以在编辑界面的怪物ID输入**怪物名称**或**标签**来搜索卡片。  
