@@ -783,7 +783,7 @@ function loadData(force = false)
 		lastCkeys = localStorage.getItem("PADDF-ckey"); //读取本地储存的原来的ckey
 		try {
 			lastCkeys = JSON.parse(lastCkeys);
-			if (lastCkeys == null || Array.isArray(!(lastCkeys)))
+			if (lastCkeys == null || !Array.isArray(lastCkeys))
 				lastCkeys = [];
 		} catch (e) {
 			console.error("旧的 Ckey 数据 JSON 解码出错。", e);
