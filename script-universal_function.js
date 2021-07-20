@@ -45,6 +45,7 @@ function getQueryString(name, url) {
 	return value;
 }
 
+
 //数字补前导0
 Number.prototype.prefixInteger = function(length, useGrouping = false) {
 	return this.toLocaleString(undefined, {
@@ -57,6 +58,28 @@ String.prototype.prefix = function(length = 2, prefix = '0') {
 	let needAddLength = Math.max(length - this.length, 0);
 	return new Array(needAddLength).fill(prefix).join('') + this;
 }
+
+// 将字符串转为Base64
+String.prototype.toBinary = function() {
+	const charCodes16Arr = [...this].map(char=>char.charCodeAt(0));
+	const codeUnits = new Uint16Array(charCodes16Arr);
+	const charCodes = new Uint8Array(codeUnits.buffer);
+	const result = [...charCodes].map(code=>String.fromCharCode(code)).join('');
+	return result;
+}
+String.prototype.toBase64 = function() {
+	return btoa(this.toBinary());
+}
+String.fromBinary = function(binary) {
+	const bytes = new Uint8Array([...binary].map(char=>char.charCodeAt(0)));
+	const charCodes = new Uint16Array(bytes.buffer);
+	const result = [...charCodes].map(code=>String.fromCharCode(code)).join('');
+	return result;
+}
+String.fromBase64 = function(base64) {
+	return String.fromBinary(atob(base64));
+}
+
 //大数字缩短长度，默认返回本地定义字符串
 Number.prototype.bigNumberToString = function() {
 	return this.toLocaleString();
