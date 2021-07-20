@@ -772,7 +772,7 @@ Array.prototype.nodeJoin = function(separator)
 	const frg = document.createDocumentFragment();
 	this.forEach((item, idx, arr)=>{
 		frg.ap(item);
-		if (idx < (arr.length - 1))
+		if (idx < (arr.length - 1) && separator != null)
 			frg.ap(separator instanceof Node ? separator.cloneNode(true) : separator);
 	});
 	return frg;
@@ -815,10 +815,9 @@ function renderSkill(skill, option = {})
 		frg.ap(skill.map(_skill=>renderSkill(_skill)));
 		return frg;
 	}
-	let dict;
 	switch (skill.kind) {
 		case SkillKinds.Unknown: {
-			dict = {
+			let dict = {
 				type: skill.kind
 			};
 			frg.ap(tsp.skill.unknown(dict));
@@ -826,7 +825,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.ActiveTurns: { //有回合的行动
 			let turns = skill.turns, actionSkill = skill.skill;
-			dict = {
+			let dict = {
 				turns: turns,
 				actionSkill: renderSkill(actionSkill),
 			};
@@ -841,35 +840,35 @@ function renderSkill(skill, option = {})
 				const li = ul.appendChild(document.createElement("li"));
 				li.appendChild(renderSkillEntry(subSkills));
 			});
-			dict = {
+			let dict = {
 				skills: ul,
 			};
 			frg.ap(tsp.skill.random_skills(dict));
 			break;
 		}
 		case SkillKinds.Delay: { //威吓
-			dict = {
+			let dict = {
 				icon: createIcon("delay"),
 			};
 			frg.ap(tsp.skill.delay(dict));
 			break;
 		}
 		case SkillKinds.MassAttack: { //全体攻击
-			dict = {
+			let dict = {
 				icon: createIcon("mass-attack"),
 			};
 			frg.ap(tsp.skill.mass_attack(dict));
 			break;
 		}
 		case SkillKinds.LeaderChange: { //切换队长
-			dict = {
+			let dict = {
 				icon: createIcon("leader-change"),
 			};
 			frg.ap(tsp.skill.leader_change(dict));
 			break;
 		}
 		case SkillKinds.NoSkyfall: { //无天降
-			dict = {
+			let dict = {
 				icon: createIcon("no-skyfall"),
 			};
 			frg.ap(tsp.skill.no_skyfall(dict));
@@ -877,7 +876,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.SelfHarm: { //主动自残
 			let value = skill.value;
-			dict = {
+			let dict = {
 				icon: createIcon("heal", "hp-decr"),
 				value: renderValue(value, {percent: true}),
 				stats: tsp.stats.hp(),
@@ -887,7 +886,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.Heal: { //主动回血buff
 			let value = skill.value;
-			dict = {
+			let dict = {
 				icon: createIcon("heal", "hp-incr"),
 				//icon: createIcon("auto-heal"),
 				value: renderValue(value, {unit: tsp.unit.point, percent: value.kind == SkillValueKind.xRCV ? false : true}),
@@ -897,7 +896,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.AutoHealBuff: { //自动回血buff
-			dict = {
+			let dict = {
 				icon: createIcon("auto-heal"),
 				value: renderValue(skill.value, {unit: tsp.unit.point, percent: true}),
 				stats: tsp.stats.hp(),
@@ -906,7 +905,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.DefenseBreak: { //破防
-			dict = {
+			let dict = {
 				icon: createIcon("defense-break"),
 				value: renderValue(skill.value, {percent: true}),
 			};
@@ -914,7 +913,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.Poison: { //毒
-			dict = {
+			let dict = {
 				icon: createIcon("poison"),
 				belong_to: tsp.target.self(),
 				target: tsp.target.enemy(),
@@ -925,7 +924,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.TimeExtend: { //时间变化buff
-			dict = {
+			let dict = {
 				icon: createIcon("status-time", SkillValue.isLess(skill.value) ? "time-decr" : "time-incr"),
 				value: renderValue(skill.value, { unit:tsp.unit.seconds, plusSign:true, percent:true }),
 			};
@@ -933,7 +932,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.FollowAttack: { //队长技追打
-			dict = {
+			let dict = {
 				//icon: createIcon("follow_attack"),
 				belong_to: tsp.target.self(),
 				target: tsp.target.enemy(),
@@ -943,7 +942,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.AutoHeal: { //队长技自动回血
-			dict = {
+			let dict = {
 				icon: createIcon("auto-heal"),
 				belong_to: tsp.target.self(),
 				value: renderValue(skill.value),
@@ -953,21 +952,31 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.CTW: { //时间暂停
-			frg.ap(createIcon("ctw"));
-			frg.ap(tsp.skill.ctw(renderValue(skill.value, { unit: tsp.unit.seconds })));
+			let dict = {
+				icon: createIcon("ctw"),
+				value: renderValue(skill.value, { unit: tsp.unit.seconds }),
+			};
+			frg.ap(tsp.skill.ctw(dict));
 			break;
 		}
 		case SkillKinds.Gravity: { //重力
-			frg.ap(tsp.skill.gravity({
+			let dict = {
 				icon: createIcon("gravity"),
 				target: tsp.target.enemy(),
 				value: renderValue(skill.value, { percent:true }),
-			}));
+			};
+			frg.ap(tsp.skill.gravity(dict));
 			break;
 		}
 		case SkillKinds.Resolve: { //根性
-			frg.ap(createIcon("resolve"));
-			frg.ap(tsp.skill.resolve(renderStat('hp'), renderValue(skill.min, { percent:true }), skill.condition.probability));
+			let prob = skill.condition.probability;
+			let dict = {
+				icon: createIcon("resolve"),
+				stats: renderStat('hp'),
+				value: renderValue(skill.min, { percent:true }),
+				probability: prob < 100 ? tsp.skill.probability({value: prob}) : "",
+			};
+			frg.ap(tsp.skill.resolve(dict));
 			break;
 		}
 		
@@ -996,7 +1005,6 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.Unbind: {
 			let normal = skill.normal, awakenings = skill.awakenings, matches = skill.matches;
-			console.log(normal,awakenings)
 			let effects = [];
 			if (normal)
 				effects.push(tsp.skill.unbind_normal({icon: createIcon("unbind-normal"), value: normal}));
@@ -1005,6 +1013,14 @@ function renderSkill(skill, option = {})
 			if (matches)
 				effects.push(tsp.skill.unbind_matches({icon: createIcon("unbind-matches"), value: matches}));
 			frg.ap(effects.nodeJoin(tsp.word.comma()));
+			break;
+		}
+		case SkillKinds.BoardChange: {
+			const attrs = skill.attrs;
+			dict = {
+				attrs: renderOrbs(attrs),
+			};
+			frg.ap(tsp.skill.board_change(dict));
 			break;
 		}
 		/*
@@ -1320,6 +1336,24 @@ function renderAttrs(attrs, option = {}) {
 		return tsp.attrs[attr]({icon: icon});
 	})
 	.nodeJoin(tsp.word.slight_pause());
+	frg.ap(option.affix ? tsp.word.affix_attr({cotent: contentFrg}) : contentFrg);
+	return frg;
+}
+
+function renderOrbs(attrs, option = {}) {
+	if (!Array.isArray(attrs))
+	attrs = [attrs || 0];
+	const frg = document.createDocumentFragment();
+	if (typeof localTranslating == "undefined") return frg;
+
+	const tsp = localTranslating.skill_parse;
+	const contentFrg = attrs.map(attr => {
+		const icon = document.createElement("icon");
+		icon.className = "orb";
+		icon.setAttribute("data-orb-icon",attr);
+		return tsp.orbs[attr]({icon: icon});
+	})
+	.nodeJoin();
 	frg.ap(option.affix ? tsp.word.affix_attr({cotent: contentFrg}) : contentFrg);
 	return frg;
 }

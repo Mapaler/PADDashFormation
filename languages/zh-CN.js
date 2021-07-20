@@ -1,5 +1,5 @@
-﻿document.title = localTranslating.webpage_title;
-localTranslating = {
+﻿localTranslating = {
+    webpage_title: `智龙迷城${teamsCount}人队伍图制作工具`,
     skill_parse: {
         skill: {
 			unknown: tp`未知的技能类型：${'type'}`, //type
@@ -19,13 +19,14 @@ localTranslating = {
             defense_break: tp`${'icon'}敌方的防御力减少${'value'}回合`,
             poison: tp`${'icon'}使${'target'}全体中毒，每回合损失${'belong_to'} ${'value'} 的 ${'stats'}`,
 			time_extend: tp`${'icon'}宝珠移动时间 ${'value'}`,
-			follow_attack: tp`${'icon'}消除宝珠的回合，以${'belong_to'}${'value'}的伤害追打${'target'}（计算防御力）`,//(valueElement)=> [`消除宝珠的回合，以`, valueElement, `的伤害追打敌人`],
+			follow_attack: tp`${'icon'}消除宝珠的回合，以${'belong_to'}${'value'}的伤害追打${'target'}（计算防御力）`,
             auto_heal_buff: tp`行动结束后${'icon'}回复${'value'}的${'stats'}`,
 			auto_heal: tp`${'icon'}消除宝珠的回合，回复${'belong_to'}${'value'}的${'stats'}`,
-			ctw: (valueElement)=> [valueElement, `内时间停止，可以任意移动宝珠`],
-			gravity: tp`${'icon'}造成${'target'}${'value'}的伤害`,//(valueElement)=> [`造成敌方`, valueElement, `的伤害`],
-            resolve: (stats, valueElement, probability)=> [probability ? `有${(probability* 100).keepCounts()}%的几率`:'',`如当前`,valueElement,`，受到单一次致命攻击时，将会以1点 HP 生还`],
-            resolve: (stats, valueElement, probability)=> [`如`, stats, `≧` , valueElement, probability<100 ? `，有${probability}%的几率`:'',`受到单一次致命攻击时，将会以1点 HP 生还`],
+			ctw: tp`${'icon'}${'value'}内时间停止，可以任意移动宝珠`,
+			gravity: tp`${'icon'}造成${'target'}${'value'}的伤害`,
+			resolve: tp`${'icon'}如${'stats'}≧${'value'}，受到单一次致命攻击时，${'probability'}将会以1点 HP 生还`,
+			probability: tp`有${'value'}%几率`,
+			board_change: tp`全画面的宝珠变为${'attrs'}`,
 		},
         value: {
             unknown: tp`[ 未知数值: ${'type'}]`, //type

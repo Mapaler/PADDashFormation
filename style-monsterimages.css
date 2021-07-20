@@ -1003,3 +1003,60 @@
 {
 	background-position-y:calc(-32px * 6);
 }
+
+/*属性图片*/
+.orb
+{
+	display: inline-block;
+	width: 36px;
+	height: 36px;
+	background-image: url(images/icon-orbs.fw.png);
+	background-position-y:calc(36px);
+	background-repeat: no-repeat;
+	vertical-align: bottom;
+}
+
+.orb[data-orb-icon='-1']
+{
+	width: auto;
+}
+.orb[data-orb-icon='0']
+{
+	background-position-y:calc(-36px * 0);
+}
+.orb[data-orb-icon='1']
+{
+	background-position-y:calc(-36px * 1);
+}
+.orb[data-orb-icon='2']
+{
+	background-position-y:calc(-36px * 2);
+}
+.orb[data-orb-icon='3']
+{
+	background-position-y:calc(-36px * 3);
+}
+.orb[data-orb-icon='4']
+{
+	background-position-y:calc(-36px * 4);
+}
+.orb[data-orb-icon='5']
+{
+	background-position-y:calc(-36px * 5);
+}
+.orb[data-orb-icon='6']
+{
+	background-position-y:calc(-36px * 6);
+}
+.orb[data-orb-icon='7']
+{
+	background-position-y:calc(-36px * 7);
+}
+.orb[data-orb-icon='8']
+{
+	background-position-y:calc(-36px * 8);
+}
+.orb[data-orb-icon='9']
+{
+	background-position-y:calc(-36px * 9);
+}
