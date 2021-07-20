@@ -628,7 +628,7 @@ const parsers = {
 
 	[144](teamAttrs, mul, single, dmgAttr) { return damageEnemy(single ? 'single' : 'all', dmgAttr, v.xTeamATK(flags(teamAttrs), mul)); },
 	[145](mul) { return heal(v.xTeamRCV(mul)); },
-	[146](turns) { return skillBoost(turns); },
+	[146](turns) { return skillBoost(v.constant(turns)); },
   
 	[148](percent) { return rateMultiply(v.percent(percent), 'exp'); },
 	[149](mul) { return powerUp(null, null, p.mul({ rcv: mul }), c.exact('match-length', 4, [Attributes.Heart])); },
@@ -746,6 +746,7 @@ const parsers = {
 	[196](matches) {
 	  return unbind(0,0,matches);
 	},
+	[218](turns) { return skillBoost(v.constant(-turns)); },
 };
 
 //将内容添加到代码片段
@@ -926,7 +927,8 @@ function renderSkill(skill, option = {})
 		case SkillKinds.TimeExtend: { //时间变化buff
 			let dict = {
 				icon: createIcon("status-time", SkillValue.isLess(skill.value) ? "time-decr" : "time-incr"),
-				value: renderValue(skill.value, { unit:tsp.unit.seconds, plusSign:true, percent:true }),
+				value: renderValue(skill.value, { unit:tsp.unit.seconds, plusSign: skill.value.kind != SkillValueKind.Percent, percent:true }),
+				
 			};
 			frg.ap(tsp.skill.time_extend(dict));
 			break;
@@ -1023,29 +1025,17 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.board_change(dict));
 			break;
 		}
-		/*
-
-		case SkillKinds.BoardChange: {
-		const { attrs } = skill as Skill.BoardChange;
-		return (
-			<span className="CardSkill-skill">
-			<AssetBox className="CardSkill-icon-box" title="Board change">
-				<Asset assetId="status-combo" className="CardSkill-icon" />
-				<Asset assetId="overlay-drop" className="CardSkill-icon" />
-			</AssetBox>
-			{renderOrbs(attrs)}
-			</span>
-		);
-		}
 		case SkillKinds.SkillBoost: {
-		const { value } = skill as Skill.WithValue<number>;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="skill-boost" className="CardSkill-icon" title="Skill boost" />
-			{value} turns
-			</span>
-		);
+			const value = skill.value;
+			let dict = {
+				icon: createIcon("skill-boost", SkillValue.isLess(skill.value) ? "boost-decr" : "boost-incr"),
+				turns: renderValue(value, { unit:tsp.unit.turns, plusSign:true }),
+			};
+			//renderValue(skill.value, { unit:tsp.unit.seconds, plusSign:true, percent:true })
+			frg.ap(tsp.skill.skill_boost(dict));
+			break;
 		}
+		/*
 		case SkillKinds.AddCombo: {
 		const { value } = skill as Skill.WithValue<number>;
 		return (
@@ -1353,7 +1343,7 @@ function renderOrbs(attrs, option = {}) {
 		icon.setAttribute("data-orb-icon",attr);
 		return tsp.orbs[attr]({icon: icon});
 	})
-	.nodeJoin();
+	.nodeJoin(tsp.word.slight_pause());
 	frg.ap(option.affix ? tsp.word.affix_attr({cotent: contentFrg}) : contentFrg);
 	return frg;
 }

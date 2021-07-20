@@ -27,6 +27,7 @@
 			resolve: tp`${'icon'}如${'stats'}≧${'value'}，受到单一次致命攻击时，${'probability'}将会以1点 HP 生还`,
 			probability: tp`有${'value'}%几率`,
 			board_change: tp`全画面的宝珠变为${'attrs'}`,
+			skill_boost: tp`自身以外成员的技能冷却储备${'icon'}${'turns'}`,
 		},
         value: {
             unknown: tp`[ 未知数值: ${'type'}]`, //type
@@ -38,29 +39,6 @@
 			mul_of_times: tp`${'stats'}×${'value'}倍`,
 			hp_scale: tp`${'hp'}为100%时${'min'}，${'hp'}为1时${'max'}`,
 			random_atk: tp`${'atk'}×${'min'}${'max'}倍`,
-		},
-		attrs: {
-			[0]: tp`${'icon'}火`,
-			[1]: tp`${'icon'}水`,
-			[2]: tp`${'icon'}木`,
-			[3]: tp`${'icon'}光`,
-			[4]: tp`${'icon'}暗`,
-			[5]: tp`${'icon'}回复`,
-			[6]: tp`${'icon'}空`,
-			self: tp`${'icon'}自身属性`,
-			fixed: tp`${'icon'}无视防御固定`,
-		},
-		orbs: {
-			[0]: tp`${'icon'}火`,
-			[1]: tp`${'icon'}水`,
-			[2]: tp`${'icon'}木`,
-			[3]: tp`${'icon'}光`,
-			[4]: tp`${'icon'}暗`,
-			[5]: tp`${'icon'}回复`,
-			[6]: tp`${'icon'}干扰`,
-			[7]: tp`${'icon'}毒`,
-			[8]: tp`${'icon'}剧毒`,
-			[9]: tp`${'icon'}炸弹`,
 		},
 		target: {
 			self: tp`发动者自身`,
@@ -90,6 +68,29 @@
 			slight_pause: tp`、`, //顿号
 			range_hyphen: tp`~`, //范围连字符
 			affix_attr: tp`${'cotent'}属性`, //词缀-属性
+		},
+		attrs: {
+			[0]: tp`${'icon'}火`,
+			[1]: tp`${'icon'}水`,
+			[2]: tp`${'icon'}木`,
+			[3]: tp`${'icon'}光`,
+			[4]: tp`${'icon'}暗`,
+			[5]: tp`${'icon'}回复`,
+			[6]: tp`${'icon'}空`,
+			self: tp`${'icon'}自身属性`,
+			fixed: tp`${'icon'}无视防御固定`,
+		},
+		orbs: {
+			[0]: tp`${'icon'}火`,
+			[1]: tp`${'icon'}水`,
+			[2]: tp`${'icon'}木`,
+			[3]: tp`${'icon'}光`,
+			[4]: tp`${'icon'}暗`,
+			[5]: tp`${'icon'}回复`,
+			[6]: tp`${'icon'}干扰`,
+			[7]: tp`${'icon'}毒`,
+			[8]: tp`${'icon'}剧毒`,
+			[9]: tp`${'icon'}炸弹`,
 		},
     },
 }

@@ -3158,6 +3158,8 @@ table .orb-icon
 .icon-skill.status-bind::after,
 .icon-skill.hp-incr::after,
 .icon-skill.hp-decr::after,
+.icon-skill.boost-incr::after,
+.icon-skill.boost-decr::after,
 .icon-skill[data-icon-type="ctw"]::before,
 .icon-skill[data-icon-type="ctw"]::after
 {
@@ -3285,4 +3287,18 @@ table .orb-icon
 .icon-skill[data-icon-type="unbind-matches"]
 {
 	background-position-y:calc(-36px * 18);
+}
+.icon-skill[data-icon-type="skill-boost"],
+.icon-skill.boost-incr::after,
+.icon-skill.boost-decr::after
+{
+	background-position-y:calc(-36px * 19);
+}
+.icon-skill.boost-incr::after
+{
+	background-position-x:calc(-36px * 1);
+}
+.icon-skill.boost-decr::after
+{
+	background-position-x:calc(-36px * 2);
 }
