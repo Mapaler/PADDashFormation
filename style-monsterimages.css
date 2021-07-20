@@ -613,6 +613,15 @@
 .awoken-icon[data-awoken-icon='78']{/*十字*/
 	background-position-y:calc(-32px * 78);
 }
+.awoken-icon[data-awoken-icon='79']{/*3色*/
+	background-position-y:calc(-32px * 79);
+}
+.awoken-icon[data-awoken-icon='80']{/*4色*/
+	background-position-y:calc(-32px * 80);
+}
+.awoken-icon[data-awoken-icon='81']{/*5色*/
+	background-position-y:calc(-32px * 81);
+}
 /*类型*/
 .type-icon{
 	background-image: url(images/type.png);

@@ -25,6 +25,9 @@ const isGuideMod = Boolean(Number(getQueryString("guide"))); //是否以图鉴�
 if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
 }
+let localTranslating = {
+    webpage_title: `智龙迷城${teamsCount}人队伍图制作工具`,
+}
 
 //一开始就加载当前语言
 if (currentLanguage == undefined)
@@ -1530,6 +1533,8 @@ function initialize() {
 	txtTitle.onchange = function() {
 		formation.title = this.value;
 		txtTitleDisplay.innerHTML = descriptionToHTML(this.value);
+		let titleStr = txtTitleDisplay.textContent.trim();
+		document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
 		creatNewUrl();
 	};
 	txtTitle.onblur = function() {
@@ -2127,13 +2132,8 @@ function initialize() {
 	evolutionaryTreeMask_Close.onclick = function(){evolutionaryTreeMask.hide();};
 	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	openEvolutionaryTree.onclick = function() {evolutionaryTreeMask.show(editBox.mid)};
-
-	const searchOpen = settingBox.querySelector(".row-mon-id .open-search");
-	searchOpen.onclick = function() {
-		s_includeSuperAwoken.onchange();
-		s_canAssist.onchange();
-		searchBox.classList.toggle(className_displayNone);
-	};
+	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
+	searchEvolutionByThis.onclick = function() {showSearch(Cards.filter(card=>card.evoMaterials.includes(editBox.mid)))};
 
 	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-1 .attr-radio"));
 	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-2 .attr-radio"));
@@ -2551,6 +2551,8 @@ function initialize() {
 		//如果键入回车，字符串长度大于0，且不是数字，则执行字符串搜索
 		if (e.key == "Enter" && this.value.length > 0 && !/^\d+$/.test(this.value))
 		{
+			s_includeSuperAwoken.onchange();
+			s_canAssist.onchange();
 			showSearch(searchByString(this.value));
 		}
 	}
@@ -2566,6 +2568,8 @@ function initialize() {
 
 	//字符串搜索
 	btnSearchByString.onclick = function() {
+		s_includeSuperAwoken.onchange();
+		s_canAssist.onchange();
 		showSearch(searchByString(monstersID.value));
 	};
 	//觉醒
@@ -2871,9 +2875,24 @@ function initialize() {
 		editBox.hide();
 	};
 	window.addEventListener("keydown",function(event) {
-		if (!editBox.classList.contains(className_displayNone)) {
+		if (!editBox.classList.contains(className_displayNone))
+		{ //编辑窗打开
 			if (event.key === "Escape") { //按下ESC时，自动关闭编辑窗
 				btnCancel.onclick();
+			}
+		}
+		else
+		{
+			//如果按Ctrl+左右方向键，或者是小键盘上的左右方向键（关闭Num），快速切换变身
+			if (event.key === "ArrowLeft"
+				&& (event.code == "Numpad4" || event.ctrlKey))
+			{
+				henshinStep(-1);
+			}
+			else if (event.key === "ArrowRight"
+				&& (event.code == "Numpad6" || event.ctrlKey))
+			{
+				henshinStep(+1);
 			}
 		}
 	});
@@ -3049,7 +3068,7 @@ function changeid(mon, monDom, latentDom) {
 		awokenIcon.setAttribute(dataAttrName, mon.awoken || 0);
 		if (mon.awoken != null) //如果提供了觉醒
 		{
-			if (mon.awoken > 0 && mon.awoken == card.awakenings.length) {
+			if (card.awakenings.length > 0 && mon.awoken >= card.awakenings.length) {
 				awokenIcon.classList.add("full-awoken");
 			} else {
 				awokenIcon.classList.remove("full-awoken");
@@ -3349,6 +3368,14 @@ function editBoxChangeMonId(id) {
 	{
 		openEvolutionaryTree.classList.add(className_displayNone); //隐藏进化树按钮
 	}
+	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
+	if (card.types.includes(0))
+	{
+		searchEvolutionByThis.classList.remove(className_displayNone);
+	}else
+	{
+		searchEvolutionByThis.classList.add(className_displayNone);
+	}
 
 	const mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (let ti = 0; ti < mType.length; ti++) {
@@ -3536,6 +3563,8 @@ function refreshAll(formationData) {
 	const txtTitleDisplay = titleBox.querySelector(".title-display");
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
 	txtTitleDisplay.innerHTML = descriptionToHTML(txtTitle.value);
+	let titleStr = txtTitleDisplay.textContent.trim();
+	document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
 	txtDetailDisplay.innerHTML = descriptionToHTML(txtDetail.value);
 	if (txtTitle.value.length == 0)
 		titleBox.classList.add("edit");
@@ -3579,13 +3608,13 @@ function refreshAll(formationData) {
 				{
 					return;
 				}
-				if (leaderIdx > 0 && ti == 0)
+				if (leaderIdx > 0 && ti == 0) //队长
 				{
-					dom.style.transform = `translateX(${leaderIdx*108}px)`;
+					dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-leaderIdx)*-108}px)` : `translateX(${leaderIdx*108}px)`;
 				}
-				else if (leaderIdx > 0 && ti == leaderIdx)
+				else if (leaderIdx > 0 && ti == leaderIdx) //队长员
 				{
-					dom.style.transform = `translateX(${ti*-108}px)`;
+					dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-ti)*108}px)` : `translateX(${ti*-108}px)`;
 				}else
 				{
 					dom.style.transform = null;
@@ -3855,6 +3884,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader1id = team[0][team[3] || 0].id;
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3] || 0].id : teams[1][0][teams[1][3] || 0].id) : team[0][5].id;
 
+	const team_2p = teamsCount===2 ? team[0].concat((teamIdx === 1 ? teams[0][0] : teams[1][0])) : team[0];
+
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
 		const reduceScales2 = getReduceScales(leader2id);
@@ -3933,6 +3964,39 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 			setTextContentAndAttribute(tMoveDom_general, (moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge + moveTime.duration.awoken).keepCounts());
 			setTextContentAndAttribute(tMoveDom_noAwoken, (moveTime.duration.default + moveTime.duration.leader + moveTime.duration.badge).keepCounts());
 		}
+	}
+
+	const tAttrsDom = totalDom.querySelector(".tIf-attrs");
+	const tTypesDom = totalDom.querySelector(".tIf-types");
+	//统计队伍颜色个数
+	if (tAttrsDom)
+	{
+		const attrDoms = Array.from(tAttrsDom.querySelectorAll(".attr"));
+		attrDoms.forEach(attrDom=>{
+			const attrId = parseInt(attrDom.getAttribute("data-attr-icon"));
+			const attrCount = team_2p.reduce((pre,member)=>{
+				if (member.id <= 0) return pre;
+				const card = Cards[member.id] || Cards[0];
+				const attrNum = card.attrs.filter(a=>a==attrId).length;
+				return pre + attrNum;
+			},0);
+			attrDom.setAttribute(dataAttrName, attrCount);
+		});
+	}
+	//统计队伍类型个数
+	if (tTypesDom)
+	{
+		const typeDoms = Array.from(tTypesDom.querySelectorAll(".type-icon"));
+		typeDoms.forEach(typeDom=>{
+			const typeId = parseInt(typeDom.getAttribute("data-type-icon"));
+			const typeCount = team_2p.reduce((pre,member)=>{
+				if (member.id <= 0) return pre;
+				const card = Cards[member.id] || Cards[0];
+				const typeNum = card.types.filter(a=>a==typeId).length;
+				return pre + typeNum;
+			},0);
+			typeDom.setAttribute(dataAttrName, typeCount);
+		});
 	}
 
 	if (tEffectDom)	{

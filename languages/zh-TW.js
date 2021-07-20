@@ -1,4 +1,4 @@
-﻿const localTranslating = {
+﻿localTranslating = {
     webpage_title: `龍族拼圖${teamsCount}人隊伍圖製作工具`,
     title_blank: "輸入隊伍標題",
     detail_blank: "輸入說明",

@@ -300,9 +300,6 @@
 	content: "暗属性の敵";
 }
 
-.setting-box .row-mon-id .open-search::before{
-	content: "簡単な検索";
-}
 .search-box::before{
 	content: "モンスターの検索";
 }
@@ -406,6 +403,10 @@
 .open-evolutionary-tree::before
 {
 	content: "⛓️進化サーチ";
+}
+.search-evolution-by-this::after
+{
+	content: "このカードを進化的な素材として必要とするカード";
 }
 .real-time-change-card-label::after
 {

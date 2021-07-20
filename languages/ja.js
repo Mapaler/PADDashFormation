@@ -1,4 +1,4 @@
-﻿const localTranslating = {
+﻿localTranslating = {
     webpage_title: `パズル＆ドラゴンズ${teamsCount}人のチーム図作成ツール`,
     title_blank: "入力タイトル",
     detail_blank: "入力詳細",

@@ -68,7 +68,8 @@ const official_awoken_sorting = [
            4,  5,  6,  7,  8, 35, 36, 37, 38,
            1,  2,  3, 46, 47, 39, 40, 41, 42,
           65, 66, 67,  9, 71, 72, 30, 64, 63,
-          73, 74, 75, 76, 77, 78];
+          73, 74, 75, 76, 77, 78, 79, 80, 81
+];
 
 //pdc的徽章对应数字
 const pdcBadgeMap = [
@@ -158,6 +159,7 @@ const sort_function_list = [
 	}},
 	{tag:"sort_rarity",name:"稀有度",function:(a,b)=>a.rarity-b.rarity},
 	{tag:"sort_cost",name:"消耗",function:(a,b)=>a.cost-b.cost},
+	{tag:"sort_mp",name:"MP",function:(a,b)=>a.mp-b.mp},
 	{tag:"sort_skillLv1",name:"技能最大冷却时间",function:(a,b)=>Skills[a.activeSkillId].initialCooldown-Skills[b.activeSkillId].initialCooldown},
 	{tag:"sort_skillLvMax",name:"技能最小冷却时间",function:(a,b)=>{
 		const skill_a = Skills[a.activeSkillId],skill_b = Skills[b.activeSkillId];
