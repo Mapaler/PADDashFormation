@@ -28,6 +28,12 @@
 			probability: tp`有${'value'}%几率`,
 			board_change: tp`全画面的宝珠变为${'attrs'}`,
 			skill_boost: tp`自身以外成员的技能冷却储备${'icon'}${'turns'}`,
+			add_combo: tp`结算时连击数增加${'value'}c${'icon'}`,
+			fixed_time: tp`【${'icon'}操作时间固定${'value'}】`,
+			min_match_length: tp`【限定≥${'value'}珠才能消除】`,
+			drop_refresh: tp`全板刷新`,
+			drum: tp`宝珠移动和消除的声音变成太鼓达人的音效`,
+			board7x6: tp`【${'icon'}7×6版面】`,
 		},
         value: {
             unknown: tp`[ 未知数值: ${'type'}]`, //type
