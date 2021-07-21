@@ -673,7 +673,12 @@ function turnPage(toPage, e = null) {
 window.onload = function(event) {
 	if (!Array.prototype.flat)
 	{
-		alert("请更新您的浏览器。\nPlease update your browser.");
+		alert(`请更新您的浏览器。火狐≥62 或 谷歌≥69
+Please update your browser. Firefox≥62 or Chrome≥69
+
+你的浏览器:
+Your browser:
+${navigator.userAgent}`);
 	}
 
 	qrcodeReader = new ZXing.BrowserQRCodeReader(); //二维码读取
@@ -1706,26 +1711,36 @@ function initialize() {
 		const headDom = this.parentNode;
 		const arr = getMemberArrayIndexFromMonHead(headDom);
 		const team = formation.teams[arr[0]];
+		const member = team[arr[1]][arr[2]];
+		const card = Cards[member.id] || Cards[0];
+		const skills = getCardActiveSkills(card, [93, 227]); //更换队长的技能
+		if (skills.length < 1) return;
+		const skill = skills[0];
+
 		if (team[3] > 0) //如果队伍已经换了队长
 		{
-			if (team[3] == arr[2]) //点的就是换的队长
+			if (skill.type == 227 //固定与右侧换队长
+				|| team[3] == arr[2]) //点的就是换的队长
 			{
 				team[3] = 0; //还原
 			}else
 			{
 				team[3] = arr[2]; //改变成任何能点的换队长
 			}
-			creatNewUrl(); //刷新URL
-			refreshAll(formation); //刷新全部
 		}else //如果队伍没有换队长
 		{
-			if(arr[2] > 0) //如果点的不是原队长
+			if (skill.type == 227) //固定与右侧换队长
+			{
+				let myTeam = team.slice(0,5);
+				team[3] = myTeam.length - 1 - team.slice(0,5).reverse().findIndex(m=>m.id>0);
+			}
+			else if(arr[2] > 0) //如果点的不是原队长
 			{
 				team[3] = arr[2]; //接换成新队长
-				creatNewUrl(); //刷新URL
-				refreshAll(formation); //刷新全部
 			}
 		}
+		creatNewUrl(); //刷新URL
+		refreshAll(formation); //刷新全部
 
 		e.stopPropagation();
 		e.preventDefault();
@@ -3142,7 +3157,7 @@ function changeid(mon, monDom, latentDom) {
 	const switchLeaderDom = monDom.querySelector(".switch-leader");
 	if (switchLeaderDom) //如果存在队长交换 DOM
 	{
-		const skills = getCardActiveSkills(card, [93]); //更换队长的技能
+		const skills = getCardActiveSkills(card, [93, 227]); //更换队长的技能
 		
 		if (skills.length > 0) {
 			switchLeaderDom.classList.remove(className_displayNone);
@@ -3620,8 +3635,18 @@ function refreshAll(formationData) {
 			//如果换队长技能
 			if (leaderIdx == 0 && (ti == 0 || ti == 5))
 			{
-				member.querySelector(".switch-leader").classList.add(className_displayNone);
-				assist.querySelector(".switch-leader").classList.add(className_displayNone);
+				const card_m = Cards[teamData[0][ti].id] || Cards[0];
+				const card_a = Cards[teamData[1][ti].id] || Cards[0];
+				const skills_m = getCardActiveSkills(card_m, [93, 227]); //更换队长的技能
+				const skills_a = getCardActiveSkills(card_a, [93, 227]); //更换队长的技能
+				if (skills_m.length == 0 || skills_m[0].type != 227)
+				{
+					member.querySelector(".switch-leader").classList.add(className_displayNone);
+				}
+				if (skills_a.length == 0 || skills_a[0].type != 227)
+				{
+					assist.querySelector(".switch-leader").classList.add(className_displayNone);
+				}
 			}
 			refreshMemberSkillCD(teamBox, teamData, ti); //技能CD
 			refreshAbility(teamAbilityDom, teamData, ti); //本人能力值

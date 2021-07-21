@@ -158,31 +158,32 @@ function parseSkillDescription(skill) {
         let mulArr = null;
         if (Array.isArray(values)) {
             mulArr = [
-                1,
-                values[0] / 100,
-                values[1] / 100,
+                100,
+                values[0],
+                values[1],
             ];
         } else {
             mulArr = [
-                (values.hp || 100) / 100,
-                (values.atk || 100) / 100,
-                (values.rcv || 100) / 100
+                (values.hp || 100),
+                (values.atk || 100),
+                (values.rcv || 100)
             ];
         }
-        const hasMul = mulArr.filter(m => m != 1); //不是1的数值
+		let hasMul = new Set(mulArr);
+		hasMul.delete(100);
+		hasMul = Array.from(hasMul);
         let str = "";
         if (hasMul.length > 0) {
-            const hasDiff = hasMul.filter(m => m != hasMul[0]).length > 0; //存在不一样的值
-            if (hasDiff) {
-                str += mulArr.map((m, i) => (m > 0 && m != 1) ? (mulName[i] + (scale ? (m >= 1 ? `×${m}倍` : `变为${m*100}%`) : `增加${m*100}%`)) : null).filter(s => s != null).join("，");
+            if (hasMul.length > 1) { //存在不一样的值
+                str += mulArr.map((m, i) => (m > 0 && m != 100) ? (mulName[i] + (scale ? (m >= 1 ? `×${m/100}倍` : `变为${m}%`) : `增加${m}%`)) : null).filter(s => s != null).join("，");
             } else {
-                let hasMulName = mulName.filter((n, i) => mulArr[i] != 1);
+                let hasMulName = mulName.filter((n, i) => mulArr[i] != 100);
                 if (hasMulName.length >= 3) {
                     str += hasMulName.slice(0, hasMulName.length - 1).join("、") + "和" + hasMulName[hasMulName.length - 1];
                 } else {
                     str += hasMulName.join("和");
                 }
-                str += scale ? (hasMul[0] >= 1 ? `×${hasMul[0]}倍` : `变为${hasMul[0]*100}%`) : `增加${hasMul[0]*100}%`;
+                str += scale ? (hasMul[0] >= 1 ? `×${hasMul[0]/100}倍` : `变为${hasMul[0]}%`) : `增加${hasMul[0]}%`;
             }
         } else {
             str += "能力值没有变化";
@@ -1453,6 +1454,21 @@ function parseSkillDescription(skill) {
 		case 224:
 			str = `${sk[0]}回合内，敌人全体变为${attrN(sk[1])}属性。（不受防护盾的影响）`;
 			break;
+		case 225:{
+			let strArr = [];
+			if (sk[0]) strArr.push(`大于${sk[0]}%`);
+			if (sk[1]) strArr.push(`小于${sk[1]}%`);
+			str = `HP${strArr.join("或")}时才能发动后续效果`;
+			break;
+		}
+		case 226:{
+			str = `${sk[0]}回合内，${sk[1]}%概率掉落带钉宝珠`;
+			break;
+		}
+		case 227:{
+			str = `指使当前队长与最后一位队员交换位置，再次使用此技能则换回来（待测试）。`;
+			break;
+		}
 		case 228:
 			str = `${sk[0]}回合内，队伍中每存在1个${getAttrTypeString(flags(sk[1]), flags(sk[2]))}时，${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]}, false)}`;
 			break;
