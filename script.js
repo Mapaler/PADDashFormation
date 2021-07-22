@@ -2117,7 +2117,12 @@ function initialize() {
 			options.customAddition.forEach(func=>{
 				const c_addition = cli.appendChild(document.createElement("div"));
 				c_addition.className = "custom-addition";
-				c_addition.appendChild(func(card));
+				let content = func(card);
+				if (typeof content == "string" || typeof content == "number")
+				{
+					content = document.createTextNode(content);
+				}
+				c_addition.appendChild(content);
 			});
 		}
 

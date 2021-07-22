@@ -1666,7 +1666,43 @@ function parseSkillDescription(skill) {
 				return -1;
 		}
 	}
-
+	
+	function boardChange_ColorTypes(skill)
+	{
+		if (!skill) return [];
+		const sk = skill.params;
+		const colors = sk.slice(0, sk.includes(-1)?sk.indexOf(-1):undefined);
+		return colors;
+	}
+	function boardChange_Addition(card)
+	{
+		const searchTypeArray = [71];
+		const skill = getCardSkill(card, searchTypeArray);
+		const colors = boardChange_ColorTypes(skill);
+		return createOrbsList(colors);
+	}
+	function changeOrbs_Addition(card)
+	{
+		const searchTypeArray = [154];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		const sk = skill.params;
+		const fragment = document.createDocumentFragment();
+		fragment.appendChild(createOrbsList(flags(sk[0] || 1)));
+		fragment.appendChild(document.createTextNode(`→`));
+		fragment.appendChild(createOrbsList(flags(sk[1] || 1)));
+		return fragment;
+	}
+	function generateOrbs_Addition(card)
+	{
+		const searchTypeArray = [141];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		const sk = skill.params;
+		const fragment = document.createDocumentFragment();
+		fragment.appendChild(createOrbsList(flags(sk[1] || 1)));
+		fragment.appendChild(document.createTextNode(`×${sk[0]}`));
+		return fragment;
+	}
+	
 	//创建1个觉醒图标
 	function createAwokenIcon(awokenId)
 	{
@@ -1688,6 +1724,7 @@ function parseSkillDescription(skill) {
 	//产生宝珠列表
 	function createOrbsList(orbs)
 	{
+		if (!Array.isArray(orbs)) orbs = [orbs];
 		const ul = document.createElement("ul");
 		ul.className = "board";
 		orbs.forEach(orbType => {
@@ -2515,7 +2552,7 @@ function parseSkillDescription(skill) {
 					return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
 				}
 			},
-			{name:"自封技能（能干啥？）",function:cards=>cards.filter(card=>{
+			{name:"自封技能",function:cards=>cards.filter(card=>{
 				const searchType = 214;
 				const skill = Skills[card.activeSkillId];
 				if (skill.type == searchType)
@@ -2525,7 +2562,7 @@ function parseSkillDescription(skill) {
 					return subskills.some(subskill=>subskill.type == searchType);
 				}
 			})},
-			{name:"自封消珠（能干啥？）",function:cards=>cards.filter(card=>{
+			{name:"自封消珠",function:cards=>cards.filter(card=>{
 				const searchType = 215;
 				const skill = Skills[card.activeSkillId];
 				if (skill.type == searchType)
@@ -2611,189 +2648,6 @@ function parseSkillDescription(skill) {
 			})},
 		]},
 		{group:"-----洗版类-----", functions: [
-			{name:"普通洗版-含心",function:cards=>cards.filter(card=>{
-				function includeHeart(sk)
-				{
-					const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-					return color.includes(5);
-				}
-				const searchType = 71;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType && includeHeart(skill.params))
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType && includeHeart(subskill.params));
-				}
-			})},
-			{name:"普通洗版-不含心",function:cards=>cards.filter(card=>{
-				function excludeHeart(sk)
-				{
-					const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-					return !color.includes(5);
-				}
-				const searchType = 71;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType && excludeHeart(skill.params))
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType && excludeHeart(subskill.params));
-				}
-			})},
-			{name:"普通洗版-含毒废",function:cards=>cards.filter(card=>{
-				function includeHeart(sk)
-				{
-					const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-					return color.includes(6) || color.includes(7) || color.includes(8) || color.includes(9);
-				}
-				const searchType = 71;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType && includeHeart(skill.params))
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType && includeHeart(subskill.params));
-				}
-			})},
-			{name:"普通洗版1色（花火）",function:cards=>cards.filter(card=>{
-				function isOnlyColor(sk, colorTypeCount)
-				{
-					const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-					return color.length == colorTypeCount;
-				}
-				const searchType = 71;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType && isOnlyColor(skill.params, 1))
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 1));
-				}
-			}),addition:card=>{
-				const searchTypeArray = [71];
-				const skill = getCardSkill(card, searchTypeArray);
-				const sk = skill.params;
-	
-				const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-				
-				return createOrbsList(colors);
-			}},
-			{name:"普通洗版2色",function:cards=>cards.filter(card=>{
-				function isOnlyColor(sk, colorTypeCount)
-				{
-					const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-					return color.length == colorTypeCount;
-				}
-				const searchType = 71;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType && isOnlyColor(skill.params, 2))
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 2));
-				}
-			}),addition:card=>{
-				const searchTypeArray = [71];
-				const skill = getCardSkill(card, searchTypeArray);
-				const sk = skill.params;
-	
-				const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-				
-				return createOrbsList(colors);
-			}},
-			{name:"普通洗版3色",function:cards=>cards.filter(card=>{
-				function isOnlyColor(sk, colorTypeCount)
-				{
-					const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-					return color.length == colorTypeCount;
-				}
-				const searchType = 71;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType && isOnlyColor(skill.params, 3))
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 3));
-				}
-			}),addition:card=>{
-				const searchTypeArray = [71];
-				const skill = getCardSkill(card, searchTypeArray);
-				const sk = skill.params;
-	
-				const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-				
-				return createOrbsList(colors);
-			}},
-			{name:"普通洗版4色",function:cards=>cards.filter(card=>{
-				function isOnlyColor(sk, colorTypeCount)
-				{
-					const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-					return color.length == colorTypeCount;
-				}
-				const searchType = 71;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType && isOnlyColor(skill.params, 4))
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 4));
-				}
-			}),addition:card=>{
-				const searchTypeArray = [71];
-				const skill = getCardSkill(card, searchTypeArray);
-				const sk = skill.params;
-	
-				const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-				
-				return createOrbsList(colors);
-			}},
-			{name:"普通洗版5色",function:cards=>cards.filter(card=>{
-				function isOnlyColor(sk, colorTypeCount)
-				{
-					const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-					return color.length == colorTypeCount;
-				}
-				const searchType = 71;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType && isOnlyColor(skill.params, 5))
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 5));
-				}
-			}),addition:card=>{
-				const searchTypeArray = [71];
-				const skill = getCardSkill(card, searchTypeArray);
-				const sk = skill.params;
-	
-				const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-				
-				return createOrbsList(colors);
-			}},
-			{name:"普通洗版6色以上",function:cards=>cards.filter(card=>{
-				function isOnlyColor(sk, colorTypeCount)
-				{
-					const color = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-					return color.length >= colorTypeCount;
-				}
-				const searchType = 71;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType && isOnlyColor(skill.params, 6))
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType && isOnlyColor(subskill.params, 6));
-				}
-			}),addition:card=>{
-				const searchTypeArray = [71];
-				const skill = getCardSkill(card, searchTypeArray);
-				const sk = skill.params;
-	
-				const colors = sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined);
-				
-				return createOrbsList(colors);
-			}},
 			{name:"刷版",function:cards=>cards.filter(card=>{
 				const searchType = 10;
 				const skill = Skills[card.activeSkillId];
@@ -2804,8 +2658,176 @@ function parseSkillDescription(skill) {
 					return subskills.some(subskill=>subskill.type == searchType);
 				}
 			})},
+			{name:"洗版-1色（花火）",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).length == 1;
+			}),addition:boardChange_Addition},
+			{name:"洗版-2色",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).length == 2;
+			}),addition:boardChange_Addition},
+			{name:"洗版-3色",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).length == 3;
+			}),addition:boardChange_Addition},
+			{name:"洗版-4色",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).length == 4;
+			}),addition:boardChange_Addition},
+			{name:"洗版-5色",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).length == 5;
+			}),addition:boardChange_Addition},
+			{name:"洗版-6色以上",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).length >= 6;
+			}),addition:boardChange_Addition},
+			{name:"洗版-含火",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).includes(0);
+			})},
+			{name:"洗版-含水",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).includes(1);
+			})},
+			{name:"洗版-含木",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).includes(2);
+			})},
+			{name:"洗版-含光",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).includes(3);
+			})},
+			{name:"洗版-含暗",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).includes(4);
+			})},
+			{name:"洗版-含心",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return boardChange_ColorTypes(skill).includes(5);
+			})},
+			{name:"洗版-含毒废",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [71];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const colors = boardChange_ColorTypes(skill);
+				return colors.includes(6)
+					|| colors.includes(7)
+					|| colors.includes(8)
+					|| colors.includes(9);
+			})},
 		]},
-		{group:"~~~转珠类有些复杂我没空做~~~"},
+		{group:"-----指定色转珠类-----", functions: [
+			{name:"转珠-变为-火",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(0);
+			}),addition:changeOrbs_Addition},
+			{name:"转珠-变为-水",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(1);
+			}),addition:changeOrbs_Addition},
+			{name:"转珠-变为-木",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(2);
+			}),addition:changeOrbs_Addition},
+			{name:"转珠-变为-光",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(3);
+			}),addition:changeOrbs_Addition},
+			{name:"转珠-变为-暗",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(4);
+			}),addition:changeOrbs_Addition},
+			{name:"转珠-变为-心",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(5);
+			}),addition:changeOrbs_Addition},
+			{name:"转珠-变为-毒废",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return (sk[1] & 960) > 0;
+			}),addition:changeOrbs_Addition},
+			{name:"转珠-转走-火",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[0] || 1).includes(0);
+			})},
+			{name:"转珠-转走-水",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[0] || 1).includes(1);
+			})},
+			{name:"转珠-转走-木",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[0] || 1).includes(2);
+			})},
+			{name:"转珠-转走-光",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[0] || 1).includes(3);
+			})},
+			{name:"转珠-转走-暗",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[0] || 1).includes(4);
+			})},
+			{name:"转珠-转走-心",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[0] || 1).includes(5);
+			})},
+			{name:"转珠-转走-毒废",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [154];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return (sk[0] & 960) > 0;
+			})},
+		]},
 		{group:"-----随机产珠类-----", functions: [
 			{name:"固定30个产珠",function:cards=>cards.filter(card=>{
 				function is30(sk)
@@ -2820,7 +2842,7 @@ function parseSkillDescription(skill) {
 					const subskills = skill.params.map(id=>Skills[id]);
 					return subskills.some(subskill=>subskill.type == searchType && is30(subskill.params));
 				}
-			})},
+			}),addition:generateOrbs_Addition},
 			{name:"固定15×2产珠",function:cards=>cards.filter(card=>{
 				function is1515(sk)
 				{
@@ -2834,10 +2856,59 @@ function parseSkillDescription(skill) {
 					const subskills = skill.params.map(id=>Skills[id]);
 					return subskills.some(subskill=>subskill.type == searchType && is1515(subskill.params));
 				}
-			})},
+			}),addition:generateOrbs_Addition},
+			{name:"产珠-生成-火",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [141];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(0);
+			}),addition:generateOrbs_Addition},
+			{name:"产珠-生成-水",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [141];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(1);
+			}),addition:generateOrbs_Addition},
+			{name:"产珠-生成-木",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [141];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(2);
+			}),addition:generateOrbs_Addition},
+			{name:"产珠-生成-光",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [141];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(3);
+			}),addition:generateOrbs_Addition},
+			{name:"产珠-生成-暗",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [141];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(4);
+			}),addition:generateOrbs_Addition},
+			{name:"产珠-生成-心",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [141];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return flags(sk[1] || 1).includes(5);
+			}),addition:generateOrbs_Addition},
+			{name:"产珠-生成-毒废",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [141];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return false;
+				const sk = skill.params;
+				return (sk[1] & 960) > 0;
+			}),addition:generateOrbs_Addition},
 		]},
-		{group:"-----固定产珠类-----", functions: [
-			{name:"生成特殊形状的",function:cards=>cards.filter(card=>{
+		{group:"-----固定位置产珠类-----", functions: [
+			{name:"生成指定形状的",function:cards=>cards.filter(card=>{
 				const searchType = 176;
 				const skill = Skills[card.activeSkillId];
 				if (skill.type == searchType)
@@ -2846,7 +2917,12 @@ function parseSkillDescription(skill) {
 					const subskills = skill.params.map(id=>Skills[id]);
 					return subskills.some(subskill=>subskill.type == searchType);
 				}
-			})},
+			}),addition:card=>{
+				const searchTypeArray = [176];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const sk = skill.params;
+				return createOrbsList(sk[5] || 1);
+			}},
 			{name:"生成3x3方块",function:cards=>cards.filter(card=>{
 				function is3x3(sk)
 				{
@@ -2869,7 +2945,15 @@ function parseSkillDescription(skill) {
 					const subskills = skill.params.map(id=>Skills[id]);
 					return subskills.some(subskill=>subskill.type == searchType && is3x3(subskill.params));
 				}
-			})},
+			}),addition:card=>{
+				const searchTypeArray = [176];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const sk = skill.params;
+				const fragment = document.createDocumentFragment();
+				fragment.appendChild(document.createTextNode(`3×3`));
+				fragment.appendChild(createOrbsList(sk[5] || 1));
+				return fragment;
+			}},
 			{name:"产竖",function:cards=>cards.filter(card=>{
 				const searchType = 127;
 				const skill = Skills[card.activeSkillId];
@@ -2887,11 +2971,11 @@ function parseSkillDescription(skill) {
 				const colors = [];
 				for (let ai=0;ai<sk.length;ai+=2)
 				{
-					colors.push(flags(sk[ai+1])[0]);
+					colors.push(flags(sk[ai+1]));
 				}
 				const fragment = document.createDocumentFragment();
 				fragment.appendChild(document.createTextNode(`竖`));
-				fragment.appendChild(createOrbsList(colors));
+				fragment.appendChild(createOrbsList(colors.flat()));
 				return fragment;
 			}},
 			{name:"产竖（含心）",function:cards=>cards.filter(card=>{
@@ -2931,12 +3015,12 @@ function parseSkillDescription(skill) {
 				const colors = [];
 				for (let ai=0;ai<sk.length;ai+=2)
 				{
-					colors.push(flags(sk[ai+1])[0]);
+					colors.push(flags(sk[ai+1]));
 				}
 				
 				const fragment = document.createDocumentFragment();
 				fragment.appendChild(document.createTextNode(`横`));
-				fragment.appendChild(createOrbsList(colors));
+				fragment.appendChild(createOrbsList(colors.flat()));
 				return fragment;
 			}},
 			{name:"2横或以上",function:cards=>cards.filter(card=>{
@@ -3385,7 +3469,7 @@ function parseSkillDescription(skill) {
 			})},
 		]},
 		{group:"-----对自身队伍生效类-----", functions: [
-			{name:"减少CD（按溜数排序，有范围的取小）",function:cards=>cards.filter(card=>{
+			{name:"【溜】减少CD（按回合排序）",function:cards=>cards.filter(card=>{
 				const searchType = 146;
 				const skill = Skills[card.activeSkillId];
 				if (skill.type == searchType)
@@ -3411,7 +3495,7 @@ function parseSkillDescription(skill) {
 				const sk = skill.params;
 				return document.createTextNode(`${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}溜`);
 			}},
-			{name:"增加CD（按坐数排序，有范围的取小）",function:cards=>cards.filter(card=>{
+			{name:"【坐】增加CD（按回合排序）",function:cards=>cards.filter(card=>{
 				const searchType = 218;
 				const skill = Skills[card.activeSkillId];
 				if (skill.type == searchType)
@@ -3437,15 +3521,10 @@ function parseSkillDescription(skill) {
 				const sk = skill.params;
 				return document.createTextNode(`坐下${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}`);
 			}},
-			{name:"将自身换为队长",function:cards=>cards.filter(card=>{
-				const searchType = 93;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType)
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType);
-				}
+			{name:"更换队长",function:cards=>cards.filter(card=>{
+				const searchTypeArray = [93, 227];
+				const skill = getCardSkill(card, searchTypeArray);
+				return skill != null;
 			})},
 			{name:"转换自身属性（按回合数排序）",function:cards=>cards.filter(card=>{
 				const searchType = 142;
@@ -3617,48 +3696,38 @@ function parseSkillDescription(skill) {
 			})},
 		]},
 		{group:"-----对敌直接伤害类-重力-----", functions: [
-			{name:"重力-敌人当前血量（按比例排序）",function:cards=>cards.filter(card=>{
-				const searchType = 6;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType)
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType);
-				}
-			}).sort((a,b)=>{
-				const searchType = 6;
-				const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-				let a_pC = 0,b_pC = 0;
-				a_pC = (a_s.type == searchType) ?
-					a_s.params[0] :
-					a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-				b_pC = (b_s.type == searchType) ?
-					b_s.params[0] :
-					b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-				return a_pC - b_pC;
-			})},
-			{name:"重力-敌人最大血量（按比例排序）",function:cards=>cards.filter(card=>{
-				const searchType = 161;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType)
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType);
-				}
-			}).sort((a,b)=>{
-				const searchType = 161;
-				const a_s = Skills[a.activeSkillId], b_s = Skills[b.activeSkillId];
-				let a_pC = 0,b_pC = 0;
-				a_pC = (a_s.type == searchType) ?
-					a_s.params[0] :
-					a_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-				b_pC = (b_s.type == searchType) ?
-					b_s.params[0] :
-					b_s.params.map(id=>Skills[id]).find(subskill => subskill.type == searchType).params[0];
-				return a_pC - b_pC;
-			})},
+			{name:"重力-敌人当前血量（按比例排序）",function:cards=>{
+				const searchTypeArray = [6];
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}).sort((a,b)=>{
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					let a_pC = a_s.params[0],b_pC = b_s.params[0];
+					return a_pC - b_pC;
+				})
+			},addition:card=>{
+				const searchTypeArray = [6];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const sk = skill.params;
+				return `当前${sk[0]}%`;
+			}},
+			{name:"重力-敌人最大血量（按比例排序）",function:cards=>{
+				const searchTypeArray = [161];
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}).sort((a,b)=>{
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					let a_pC = a_s.params[0],b_pC = b_s.params[0];
+					return a_pC - b_pC;
+				})
+			},addition:card=>{
+				const searchTypeArray = [161];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const sk = skill.params;
+				return `最大${sk[0]}%`;
+			}},
 		]},
 		{group:"-----对敌直接伤害类-无视防御固伤-----", functions: [
 			{name:"无视防御固伤-单体（按总伤害排序）",function:cards=>cards.filter(card=>{
@@ -3950,13 +4019,16 @@ function parseSkillDescription(skill) {
 			})},
 		]},
 		{group:"======进化类型======", functions: [
-			{name:"8格潜觉",function:cards=>cards.filter(card=>card.is8Latent)},
-			{name:"非8格潜觉",function:cards=>cards.filter(card=>!card.is8Latent)},
+			{name:"非变身",function:cards=>cards.filter(card=>!card.henshinFrom && !card.henshinTo)},
+			{name:"变身前",function:cards=>cards.filter(card=>card.henshinTo)},
+			{name:"变身后",function:cards=>cards.filter(card=>card.henshinFrom)},
 			{name:"像素进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))},
+			{name:"8格潜觉",function:cards=>cards.filter(card=>card.is8Latent)},
+			//{name:"非8格潜觉",function:cards=>cards.filter(card=>!card.is8Latent)},
 			{name:"转生、超转生进化",function:cards=>cards.filter(card=>isReincarnated(card))}, //evoBaseId可能为0
-			{name:"仅超转生进化",function:cards=>cards.filter(card=>isReincarnated(card) && !Cards[card.evoBaseId].isUltEvo)},
+			//{name:"仅超转生进化",function:cards=>cards.filter(card=>isReincarnated(card) && !Cards[card.evoBaseId].isUltEvo)},
 			{name:"超究极进化",function:cards=>cards.filter(card=>card.is8Latent && card.isUltEvo && !card.awakenings.includes(49))},
-			{name:"变身前",function:cards=>cards.filter(card=>{
+			/*{name:"变身前",function:cards=>cards.filter(card=>{
 				const searchType = 202;
 				const skill = Skills[card.activeSkillId];
 				if (skill.type == searchType)
@@ -3966,7 +4038,6 @@ function parseSkillDescription(skill) {
 					return subskills.some(subskill=>subskill.type == searchType);
 				}
 			})},
-			{name:"变身后",function:cards=>cards.filter(card=>card.henshinFrom)},
 			{name:"变身前后队长技保持不变",function:cards=>cards.filter(card=>{
 				const searchType = 202;
 				const skill = Skills[card.activeSkillId];
@@ -3976,31 +4047,28 @@ function parseSkillDescription(skill) {
 					const subskills = skill.params.map(id=>Skills[id]);
 					return subskills.some(subskill=>subskill.type == searchType && card.leaderSkillId == Cards[subskill.params[0]].leaderSkillId);
 				}
-			})},
-			{name:"非变身",function:cards=>cards.filter(card=>!card.henshinFrom && !card.henshinTo)},
-			{name:"用三神面进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3795))},
-			{name:"用彩龙果进化",function:cards=>cards.filter(card=>card.evoMaterials.includes(3971))},
+			})},*/
 			{name:"由武器进化而来",function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))},
 		]},
 		{group:"======其他搜索======", functions: [
 			{name:"攻击型或水属性（炭治郎队员）",function:cards=>cards.filter(card=>card.attrs.includes(1) || card.types.includes(6))},
 			{name:"火属性或水属性（火车队员）",function:cards=>cards.filter(card=>card.attrs.includes(0) || card.attrs.includes(1))},
-			{name:"不能破除等级限制",function:cards=>cards.filter(card=>card.limitBreakIncr===0)},
+			{name:"不能突破等级限制",function:cards=>cards.filter(card=>card.limitBreakIncr===0)},
 			{name:"110级三维成长100%",function:cards=>cards.filter(card=>card.limitBreakIncr>=100)},
-			{name:"满级不是1级（可强化）",function:cards=>cards.filter(card=>card.maxLevel>1)},
+			{name:"满级只有1级",function:cards=>cards.filter(card=>card.maxLevel==1)},
 			{name:"低于100mp",function:cards=>cards.filter(card=>card.sellMP<100)},
 			{name:"有3个type",function:cards=>cards.filter(card=>card.types.filter(t=>t>=0).length>=3)},
-			{name:"有副属性",function:cards=>cards.filter(card=>card.attrs[1]>=0)},
-			{name:"有副属性且主副属性不一致",function:cards=>cards.filter(card=>card.attrs[0]>=0 && card.attrs[1]>=0 && card.attrs[0] != card.attrs[1])},
-			{name:"能获得珠子皮肤",function:cards=>cards.filter(card=>card.blockSkinId>0)},
+			{name:"有两个属性",function:cards=>cards.filter(card=>card.attrs.filter(a=>a>=0 && a<6))},
+			{name:"主副属性不一致",function:cards=>cards.filter(card=>card.attrs[0]<6 && card.attrs[1]>=0 && card.attrs[0] != card.attrs[1])},
+			{name:"能获得宝珠皮肤",function:cards=>cards.filter(card=>card.blockSkinId>0)},
 			{name:"所有潜觉蛋龙",function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)},
-			{name:"龙契士&龙唤士（10001）",function:cards=>cards.filter(card=>card.collabId==10001)},
+			//{name:"龙契士&龙唤士（10001）",function:cards=>cards.filter(card=>card.collabId==10001)},
 		]},
 		{group:"-----觉醒类-----", functions: [
 			{name:"有9个觉醒",function:cards=>cards.filter(card=>card.awakenings.length>=9)},
 			{name:"可以做辅助",function:cards=>cards.filter(card=>card.canAssist)},
 			{name:"不是武器",function:cards=>cards.filter(card=>!card.awakenings.includes(49))},
-			{name:"有超觉醒",function:cards=>cards.filter(card=>card.superAwakenings.length > 0)},
+			{name:"能突破等级限制但没有超觉醒",function:cards=>cards.filter(card=>card.limitBreakIncr > 0 && card.superAwakenings.length == 0)},
 			{name:"有110，但没有超觉醒",function:cards=>cards.filter(card=>card.limitBreakIncr>0 && card.superAwakenings.length<1)},
 			{name:"3个相同杀觉醒，或2个杀觉醒并可打相同潜觉",function:cards=>cards.filter(card=>{
 				const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length>=2);
