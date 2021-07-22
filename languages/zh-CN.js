@@ -1724,7 +1724,8 @@ function parseSkillDescription(skill) {
 	//产生宝珠列表
 	function createOrbsList(orbs)
 	{
-		if (!Array.isArray(orbs)) orbs = [orbs];
+		if (orbs == undefined) orbs = [0];
+		else if (!Array.isArray(orbs)) orbs = [orbs];
 		const ul = document.createElement("ul");
 		ul.className = "board";
 		orbs.forEach(orbType => {
@@ -2921,7 +2922,7 @@ function parseSkillDescription(skill) {
 				const searchTypeArray = [176];
 				const skill = getCardActiveSkill(card, searchTypeArray);
 				const sk = skill.params;
-				return createOrbsList(sk[5] || 1);
+				return createOrbsList(sk[5]);
 			}},
 			{name:"生成3x3方块",function:cards=>cards.filter(card=>{
 				function is3x3(sk)
@@ -2951,7 +2952,7 @@ function parseSkillDescription(skill) {
 				const sk = skill.params;
 				const fragment = document.createDocumentFragment();
 				fragment.appendChild(document.createTextNode(`3×3`));
-				fragment.appendChild(createOrbsList(sk[5] || 1));
+				fragment.appendChild(createOrbsList(sk[5]));
 				return fragment;
 			}},
 			{name:"产竖",function:cards=>cards.filter(card=>{
