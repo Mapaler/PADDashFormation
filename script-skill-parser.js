@@ -396,7 +396,7 @@ function voidEnemyBuff(buffs) {
 }
 function skillBoost(value) { return { kind: SkillKinds.SkillBoost, value: value }; }
 function minMatch(value) { return { kind: SkillKinds.MinMatchLength, value: value }; }
-function fixedTime(value) { return { kind: SkillKinds.FixedTime, value: value }; }
+function fixedTime(value) { return { kind: SkillKinds.FixedTime, value: v.constant(value) }; }
 function addCombo(value) { return { kind: SkillKinds.AddCombo, value: value }; }
 function defBreak(value) { return { kind: SkillKinds.DefenseBreak, value: value }; }
 function poison(value) { return { kind: SkillKinds.Poison, value: value }; }
@@ -925,9 +925,10 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.TimeExtend: { //时间变化buff
+			let value = skill.value;
 			let dict = {
-				icon: createIcon("status-time", SkillValue.isLess(skill.value) ? "time-decr" : "time-incr"),
-				value: renderValue(skill.value, { unit:tsp.unit.seconds, plusSign: skill.value.kind != SkillValueKind.Percent, percent:true }),
+				icon: createIcon("status-time", SkillValue.isLess(value) ? "time-decr" : "time-incr"),
+				value: renderValue(value, { unit:tsp.unit.seconds, plusSign: value.kind != SkillValueKind.Percent, percent: SkillValue.isLess(value) }),
 				
 			};
 			frg.ap(tsp.skill.time_extend(dict));
@@ -993,19 +994,7 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.damage_enemy(dict));
 			break;
 		}
-		case SkillKinds.Vampire: {
-			let attr = skill.attr, damage = skill.damage, heal = skill.heal;
-			dict = {
-				icon: createIcon("heal", "hp-incr"),
-				target: tsp.target.enemy_one(),
-				damage: renderValue(damage),
-				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true}),
-				heal: renderValue(heal, {percent: true}),
-			};
-			frg.ap(tsp.skill.vampire(dict));
-			break;
-		}
-		case SkillKinds.Unbind: {
+		case SkillKinds.Unbind: { //解封
 			let normal = skill.normal, awakenings = skill.awakenings, matches = skill.matches;
 			let effects = [];
 			if (normal)
@@ -1017,7 +1006,7 @@ function renderSkill(skill, option = {})
 			frg.ap(effects.nodeJoin(tsp.word.comma()));
 			break;
 		}
-		case SkillKinds.BoardChange: {
+		case SkillKinds.BoardChange: { //洗版
 			const attrs = skill.attrs;
 			dict = {
 				attrs: renderOrbs(attrs),
@@ -1025,64 +1014,78 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.board_change(dict));
 			break;
 		}
-		case SkillKinds.SkillBoost: {
+		case SkillKinds.SkillBoost: { //溜
 			const value = skill.value;
 			let dict = {
 				icon: createIcon("skill-boost", SkillValue.isLess(skill.value) ? "boost-decr" : "boost-incr"),
 				turns: renderValue(value, { unit:tsp.unit.turns, plusSign:true }),
 			};
-			//renderValue(skill.value, { unit:tsp.unit.seconds, plusSign:true, percent:true })
 			frg.ap(tsp.skill.skill_boost(dict));
 			break;
 		}
-		/*
-		case SkillKinds.AddCombo: {
-		const { value } = skill as Skill.WithValue<number>;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId={`status-combo-p${value}`} className="CardSkill-icon" title={`Add ${value} combo`} />
-			</span>
-		);
+		case SkillKinds.AddCombo: { //+C
+			const value = skill.value;
+			let icon = createIcon("add-combo");
+			icon.setAttribute("data-add-combo", value);
+			let dict = {
+				icon: icon,
+				value: value,
+			};
+			frg.ap(tsp.skill.add_combo(dict));
+			break;
 		}
-		case SkillKinds.FixedTime: {
-		const { value } = skill as Skill.WithValue<number>;
-		return (
-			<span className="CardSkill-skill">
-			<AssetBox className="CardSkill-icon-box" title="Fixed movement time">
-				<Asset assetId="status-time-incr" className="CardSkill-icon" />
-				<Asset assetId="orb-locked" className="CardSkill-icon" />
-			</AssetBox>
-			{value} seconds
-			</span>
-		);
+		case SkillKinds.FixedTime: { //固定手指
+			const value = skill.value;
+			let dict = {
+				icon: createIcon(skill.kind),
+				value: renderValue(value, { unit: tsp.unit.seconds }),
+			};
+			frg.ap(tsp.skill.fixed_time(dict));
+			break;
 		}
-		case SkillKinds.MinMatchLength: {
-		const { value } = skill as Skill.WithValue<number>;
-		return <span className="CardSkill-skill">minimum match length {value}</span>;
+		case SkillKinds.MinMatchLength: { //最低匹配长度
+			const value = skill.value;
+			let dict = {
+				icon: createIcon(skill.kind),
+				value: value,
+			};
+			frg.ap(tsp.skill.min_match_length(dict));
+			break;
 		}
 		case SkillKinds.DropRefresh: {
-		return <span className="CardSkill-skill">drop refresh</span>;
+			let dict = {
+				icon: createIcon(skill.kind),
+			};
+			frg.ap(tsp.skill.drop_refresh(dict));
+			break;
 		}
 		case SkillKinds.Drum: {
-		return <span className="CardSkill-skill">drum sound</span>;
+			let dict = {
+				icon: createIcon(skill.kind),
+			};
+			frg.ap(tsp.skill.drum(dict));
+			break;
 		}
 		case SkillKinds.Board7x6: {
-		return <span className="CardSkill-skill">7x6 board</span>;
+			let dict = {
+				icon: createIcon(skill.kind),
+			};
+			frg.ap(tsp.skill.board7x6(dict));
+			break;
 		}
-
-		case SkillKinds.Vampire: {
-		const { attr, damage, heal } = skill as Skill.Vampire;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="skill-attack" className="CardSkill-icon" />
-			single enemy &rArr; {renderValue(damage)}
-			{typeof attr === 'number' && renderAttrs(attr)}
-			&nbsp;&rArr;
-			<Asset assetId="status-heal" className="CardSkill-icon" />
-			{renderValue(heal)} damage
-			</span>
-		);
+		case SkillKinds.Vampire: { //吸血
+			let attr = skill.attr, damage = skill.damage, heal = skill.heal;
+			dict = {
+				icon: createIcon("heal", "hp-incr"),
+				target: tsp.target.enemy_one(),
+				damage: renderValue(damage),
+				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true}),
+				heal: renderValue(heal, {percent: true}),
+			};
+			frg.ap(tsp.skill.vampire(dict));
+			break;
 		}
+		/*
 		case SkillKinds.CounterAttack: {
 		const { attr, prob, value } = skill as Skill.CounterAttack;
 		return (

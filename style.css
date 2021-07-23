@@ -791,10 +791,6 @@ icon.poison-no-effect::after,
 {
 	display: none;
 }
-.tIf-total-hp .reduce:not([data-value="0"])::after
-{
-	content: "%⇔" attr(data-max-equal-general) "/" attr(data-max-equal-awoken-bind);
-}
 
 .reduce-details
 {
@@ -3153,6 +3149,12 @@ table .orb-icon
 	/*margin: -4px;*/
 	position: relative;
 }
+.card-skill-list>.fixed-time,
+.card-skill-list>.min-match-len,
+.card-skill-list>.\37x6-board
+{
+	color: red;
+}
 .icon-skill.status-incr::after,
 .icon-skill.status-decr::after,
 .icon-skill.status-bind::after,
@@ -3161,7 +3163,9 @@ table .orb-icon
 .icon-skill.boost-incr::after,
 .icon-skill.boost-decr::after,
 .icon-skill[data-icon-type="ctw"]::before,
-.icon-skill[data-icon-type="ctw"]::after
+.icon-skill[data-icon-type="ctw"]::after,
+.icon-skill[data-icon-type="add-combo"]::after,
+.icon-skill[data-icon-type="fixed-time"]::after
 {
 	content: "";
 	position: absolute;
@@ -3301,4 +3305,35 @@ table .orb-icon
 .icon-skill.boost-decr::after
 {
 	background-position-x:calc(-36px * 2);
+}
+.icon-skill[data-icon-type="add-combo"]
+{
+	background-position-y:calc(-36px * 20);
+}
+.icon-skill[data-icon-type="add-combo"]::after
+{
+	color: white;
+	text-shadow: black 1px 1px 0,black -1px 0px 0,black 0 0 1px;
+	font-family: var(--game-font-family);
+	font-size: 15px;
+	top: 0;
+	left: 20px;
+	content: attr(data-add-combo);
+}
+.icon-skill[data-icon-type="fixed-time"]
+{
+	background-position-y:calc(-36px * 11);
+	background-position-x:calc(-36px * 1);
+}
+.icon-skill[data-icon-type="fixed-time"]::after
+{
+	background-position-y:calc(-36px * 11);
+	background-position-x:calc(-36px * 2);
+	transform: scale(0.75);
+	left: 10px;
+	top: 5px;
+}
+.icon-skill[data-icon-type="7x6-board"]
+{
+	background-position-y:calc(-36px * 21);
 }
