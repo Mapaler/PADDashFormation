@@ -815,54 +815,55 @@ function tIf_Effect_poisonNoEffect(leader1id, leader2id) {
 }
 //计算队伍的+C
 function tIf_Effect_addCombo(leader1id, leader2id) {
+	return [
+		getSkillAddCombo(Cards[leader1id]),
+		getSkillAddCombo(Cards[leader2id])
+	];
+}
+function getSkillAddCombo(card) {
 	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220];
-	const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
-	const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
-
-	function getSkillAddCombo(skill) {
-		if (!skill) return 0;
-		switch (skill.type) {
-			case 192:
-			case 194:
-				return skill.params[3];
-			case 206:
-				return skill.params[6];
-			case 209:
-				return skill.params[0];
-			case 210:
-			case 219:
-				return skill.params[2];
-			case 220:
-				return skill.params[1];
-			default:
-				return 0;
-		}
+	const skill = getCardLeaderSkills(card, searchTypeArray)[0];
+	if (!skill) return 0;
+	switch (skill.type) {
+		case 192:
+		case 194:
+			return skill.params[3];
+		case 206:
+			return skill.params[6];
+		case 209:
+			return skill.params[0];
+		case 210:
+		case 219:
+			return skill.params[2];
+		case 220:
+			return skill.params[1];
+		default:
+			return 0;
 	}
-
-	return [getSkillAddCombo(ls1), getSkillAddCombo(ls2)];
 }
 //计算队伍的追打
 function tIf_Effect_inflicts(leader1id, leader2id) {
 	const searchTypeArray = [199, 200, 201, 223];
-	const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
-	const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
-
-	function getSkillFixedDamage(skill) {
-		if (!skill) return 0;
-		switch (skill.type) {
-			case 199:
-			case 200:
-				return skill.params[2];
-			case 201:
-				return skill.params[5];
-			case 223:
-				return skill.params[1];
-			default:
-				return 0;
-		}
+	return [
+		getSkillFixedDamage(Cards[leader1id]),
+		getSkillFixedDamage(Cards[leader2id])
+	];
+}
+function getSkillFixedDamage(card) {
+	const searchTypeArray = [199, 200, 201, 223];
+	const skill = getCardLeaderSkills(card, searchTypeArray)[0];
+	if (!skill) return 0;
+	switch (skill.type) {
+		case 199:
+		case 200:
+			return skill.params[2];
+		case 201:
+			return skill.params[5];
+		case 223:
+			return skill.params[1];
+		default:
+			return 0;
 	}
-
-	return [getSkillFixedDamage(ls1), getSkillFixedDamage(ls2)];
 }
 //计算队伍操作时间
 function countMoveTime(team, leader1id, leader2id, teamIdx) {

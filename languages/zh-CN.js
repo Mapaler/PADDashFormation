@@ -529,8 +529,7 @@ function parseSkillDescription(skill) {
 			str = `${sk[0]}回合内，${strArr.filter(sk=>sk<5).map(attrN).join("、")}属性的攻击力${strArr.includes(5)?'、回复力':''}×${sk[sk.length-1]/100}倍`;
 			break;
 		case 91:
-			str = `${sk.slice(0,-1).map(attrN).join("、")}属性宝珠强化`;
-			if (sk[sk.length-1] != 6) str += `未知 参数${sk.length-1} ${sk[sk.length-1]}`;
+			str = `${sk.slice(0,-1).map(attrN).join("、")}属性宝珠强化（每颗强化珠伤害/回复增加${sk[sk.length-1]}%）`;
 			break;
 		case 92:
 			strArr = sk.slice(1,-1);

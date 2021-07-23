@@ -2351,7 +2351,7 @@ function initialize() {
 	function newSpecialSearchOption(func, idx1, idx2)
 	{
 		const funcName = returnMonsterNameArr(func, currentLanguage.searchlist, currentDataSource.code)[0];
-		return new Option(funcName + (func.addition ? "+" + localTranslating.addition_display : ""), idx1 + (idx2 != null ? "|" + idx2 : ""));
+		return new Option(funcName + (func.addition ? " " + localTranslating.addition_display : ""), idx1 + (idx2 != null ? "|" + idx2 : ""));
 	}
 	specialSearchFunctions.forEach((sfunc,idx)=>{
 		if (sfunc.group)
