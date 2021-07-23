@@ -371,7 +371,8 @@
 	content: "重置";
 }
 .search-box .awoken-clear::before,
-.search-box .sawoken-clear::before
+.search-box .sawoken-clear::before,
+.special-div .special-clear::before
 {
 	content: "清除";
 }
@@ -380,6 +381,12 @@
 }
 .search-box .sawoken-div::before{
 	content: "▼超覺醒（OR）";
+}
+.search-box .special-div::before{
+	content: "▼特殊搜索";
+}
+.special-div .special-add::before {
+    content: "➕";
 }
 .control-div .search-start::before{
 	content: "🔍開始搜索";

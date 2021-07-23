@@ -27,6 +27,7 @@ if (location.search.includes('&amp;')) {
 }
 let localTranslating = {
     webpage_title: `智龙迷城${teamsCount}人队伍图制作工具`,
+	addition_display: "💬",
 }
 
 //一开始就加载当前语言
@@ -2339,6 +2340,53 @@ function initialize() {
 		});
 	};
 
+	//特殊搜索部分
+	const s_specialDiv = searchBox.querySelector(".special-div");
+	const specialAdd = s_specialDiv.querySelector(".special-add");
+	const specialClear = s_specialDiv.querySelector(".special-clear");
+	const specialFilterUl = s_specialDiv.querySelector(".special-filter-list");
+	const specialFilterFirstLi = specialFilterUl.querySelector("li");
+	const specialFirstSelect = specialFilterFirstLi.querySelector(".special-filter");
+	
+	function newSpecialSearchOption(func, idx1, idx2)
+	{
+		const funcName = returnMonsterNameArr(func, currentLanguage.searchlist, currentDataSource.code)[0];
+		return new Option(funcName + (func.addition ? "+" + localTranslating.addition_display : ""), idx1 + (idx2 != null ? "|" + idx2 : ""));
+	}
+	specialSearchFunctions.forEach((sfunc,idx)=>{
+		if (sfunc.group)
+		{
+			console.debug(returnMonsterNameArr(sfunc, currentLanguage.searchlist, currentDataSource.code))
+			const groupName = returnMonsterNameArr(sfunc, currentLanguage.searchlist, currentDataSource.code)[0];
+			const optgroup = specialFirstSelect.appendChild(document.createElement("optgroup"));
+			optgroup.label = groupName;
+			if (sfunc.functions)
+			{
+				sfunc.functions.forEach((_sfunc,_idx)=>{
+					optgroup.appendChild(newSpecialSearchOption(_sfunc, idx, _idx));
+				});
+			}
+		}else
+		{
+			specialFirstSelect.options.add(newSpecialSearchOption(sfunc, idx));
+		}
+	});
+	specialAdd.onclick = function()
+	{
+		specialFilterUl.appendChild(specialFilterFirstLi.cloneNode(true));
+	}
+	specialAdd.onclick(); //先运行一次产生两个
+	specialClear.onclick = function()
+	{
+		/*for (let ci = specialFilterUl.children.length-1; ci>0; ci--)
+		{
+			specialFilterUl.children[ci].remove();
+		}*/
+		specialFilterUl.innerHTML = "";
+		specialFilterUl.appendChild(specialFilterFirstLi);
+		specialFirstSelect.selectedIndex = 0;
+	}
+
 	const s_controlDiv = searchBox.querySelector(".control-div");
 	const searchStart = s_controlDiv.querySelector(".search-start");
 	const searchClose = s_controlDiv.querySelector(".search-close");
@@ -2394,7 +2442,7 @@ function initialize() {
 				showAbilitiesWithAwoken: s_add_show_abilities_with_awoken.checked,
 				customAddition: typeof customAdditionalFunction == "function" ?
 				 [customAdditionalFunction] :
-				 (Array.isArray(customAdditionalFunction) ? customAdditionalFunction : null)
+				 (Array.isArray(customAdditionalFunction) ? customAdditionalFunction : [])
 			};
 			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, additionalOption));
 			searchMonList.customAddition = additionalOption.customAddition;
@@ -2426,6 +2474,7 @@ function initialize() {
 	s_add_show_abilities_with_awoken.onchange = reShowSearch;
 
 	const startSearch = function(cards, customAdditionalFunction) {
+		if (customAdditionalFunction == undefined) customAdditionalFunction = [];
 		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
 		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
 		let attr1, attr2;
@@ -2456,7 +2505,7 @@ function initialize() {
 				num: parseInt(btn.getAttribute("data-awoken-count"), 10)
 			};
 		});
-		const searchResult = searchCards(cards,
+		let searchResult = searchCards(cards,
 			attr1, attr2,
 			s_fixMainColor.checked,
 			typesFilter,
@@ -2467,7 +2516,20 @@ function initialize() {
 			s_awokensEquivalent.checked,
 			s_includeSuperAwoken.checked
 		);
-		//console.log("搜索结果", searchResult);
+
+		//进行特殊附加搜索
+		const specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter")).map(select=>{
+			const indexs = select.value.split("|").map(Number);
+			const funcObj = indexs.length > 1 ? specialSearchFunctions[indexs[0]].functions[indexs[1]] : specialSearchFunctions[indexs[0]];
+			return funcObj;
+		});
+		searchResult = specialFilters.reduce((pre,funcObj)=>
+		{
+			if (!funcObj) return pre;
+			if (funcObj.addition) customAdditionalFunction.push(funcObj.addition); //如果有附加显示，则添加到列表
+			return funcObj.function(pre); //结果进一步筛选
+		}, searchResult);
+		
 		showSearch(searchResult, customAdditionalFunction);
 	};
 	searchBox.startSearch = startSearch;
@@ -2488,6 +2550,7 @@ function initialize() {
 		
 		awokenClear.onclick();
 		sawokenClear.onclick();
+		specialClear.onclick();
 
 		searchMonList.originalHeads = null;
 		searchResultCount.setAttribute("data-search-result-count", 0);

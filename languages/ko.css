@@ -365,7 +365,8 @@
 	content: "재설정";
 }
 .search-box .awoken-clear::before,
-.search-box .sawoken-clear::before
+.search-box .sawoken-clear::before,
+.special-div .special-clear::before
 {
 	content: "명확한";
 }
@@ -374,6 +375,12 @@
 }
 .search-box .sawoken-div::before{
 	content: "▼슈퍼 각성（OR）";
+}
+.search-box .special-div::before{
+	content: "▼특별 검색";
+}
+.special-div .special-add::before {
+    content: "➕";
 }
 .control-div .search-start::before{
 	content: "🔍검색 시작";

@@ -376,7 +376,8 @@
 	content: "Reset";
 }
 .search-box .awoken-clear::before,
-.search-box .sawoken-clear::before
+.search-box .sawoken-clear::before,
+.special-div .special-clear::before
 {
 	content: "Clear";
 }
@@ -385,6 +386,12 @@
 }
 .search-box .sawoken-div::before{
 	content: "▼Super Awoken (OR)";
+}
+.search-box .special-div::before{
+	content: "▼Special Search";
+}
+.special-div .special-add::before {
+    content: "➕";
 }
 .control-div .search-start::before{
 	content: "🔍Start Search";

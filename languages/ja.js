@@ -1,5 +1,6 @@
 ﻿localTranslating = {
     webpage_title: `パズル＆ドラゴンズ${teamsCount}人のチーム図作成ツール`,
+	addition_display: "追加の表示",
     title_blank: "入力タイトル",
     detail_blank: "入力詳細",
     sort_name:{

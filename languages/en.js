@@ -1,5 +1,6 @@
 ﻿localTranslating = {
     webpage_title: `P&D ${teamsCount}P Formation Maker`,
+	addition_display: "Additional display",
     title_blank: "Input Formation Title",
     detail_blank: "Input Detail",
     sort_name:{

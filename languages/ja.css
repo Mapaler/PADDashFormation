@@ -368,7 +368,8 @@
 	content: "リセット";
 }
 .search-box .awoken-clear::before,
-.search-box .sawoken-clear::before
+.search-box .sawoken-clear::before,
+.special-div .special-clear::before
 {
 	content: "クリア";
 }
@@ -377,6 +378,12 @@
 }
 .search-box .sawoken-div::before{
 	content: "▼超覚醒（OR）";
+}
+.search-box .special-div::before{
+	content: "▼特別な検索";
+}
+.special-div .special-add::before {
+    content: "➕";
 }
 .control-div .search-start::before{
 	content: "🔍検索の開始";
