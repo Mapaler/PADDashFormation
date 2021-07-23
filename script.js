@@ -2356,7 +2356,6 @@ function initialize() {
 	specialSearchFunctions.forEach((sfunc,idx)=>{
 		if (sfunc.group)
 		{
-			console.debug(returnMonsterNameArr(sfunc, currentLanguage.searchlist, currentDataSource.code))
 			const groupName = returnMonsterNameArr(sfunc, currentLanguage.searchlist, currentDataSource.code)[0];
 			const optgroup = specialFirstSelect.appendChild(document.createElement("optgroup"));
 			optgroup.label = groupName;

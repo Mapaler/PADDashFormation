@@ -2821,7 +2821,7 @@ const specialSearchFunctions = (function() {
 					return false;
 				}
 			})},
-			{name:"4 same Killer Awoken, or 2 with same latent",otLangName:{chs:"4个相同杀觉醒（含超觉），或相同潜觉"},function:cards=>cards.filter(card=>{
+			{name:"4 same Killer Awoken(include super awoken), or 3 with same latent",otLangName:{chs:"4个相同杀觉醒（含超觉），或相同潜觉"},function:cards=>cards.filter(card=>{
 				const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length+(card.superAwakenings.includes(type.awoken)?1:0)>=3);
 				if (hasAwokenKiller)
 				{ //大于2个杀的进行判断
