@@ -11,6 +11,7 @@
         sort_evoRoot_Attrs : "カード進化ルートの属性",
         sort_rarity: "レアリティ",
         sort_cost: "コスト",
+        sort_mp: "MP",
         sort_skillLv1: "最大スキルターン",
         sort_skillLvMax: "最小スキルターン",
         sort_hpMax110: "最大 HP",

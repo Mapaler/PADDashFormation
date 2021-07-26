@@ -11,6 +11,7 @@
         sort_evoRoot_Attrs : "進化根怪物的屬性",
         sort_rarity: "稀有度",
         sort_cost: "消耗",
+        sort_mp: "MP",
         sort_skillLv1: "技能最大冷卻時間",
         sort_skillLvMax: "技能最小冷卻時間",
         sort_hpMax110: "最大 HP",

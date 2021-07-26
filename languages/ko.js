@@ -11,6 +11,7 @@
         sort_evoRoot_Attrs : "카드 진화 루트의 특성",
         sort_rarity: "래리티",
         sort_cost: "비용",
+        sort_mp: "MP",
         sort_skillLv1: "최대 스킬 턴",
         sort_skillLvMax: "최소 스킬 턴",
         sort_hpMax110: "최대 HP",

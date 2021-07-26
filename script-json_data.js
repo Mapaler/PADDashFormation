@@ -143,33 +143,33 @@ const pdcLatentMap = [
 ];
 //排序程序列表
 const sort_function_list = [
-	{tag:"sort_none",name:"",otLangName:{chs:"无"},function:()=>0},
-	{tag:"sort_id",name:"",otLangName:{chs:"怪物ID"},function:(a,b)=>a.id-b.id},
-	{tag:"sort_attrs",name:"",otLangName:{chs:"属性"},function:(a,b)=>{
+	{tag:"sort_none",name:"无",function:()=>0},
+	{tag:"sort_id",name:"怪物ID",function:(a,b)=>a.id-b.id},
+	{tag:"sort_attrs",name:"属性",function:(a,b)=>{
 		let num = a.attrs[0] - b.attrs[0];
 		if (num === 0) num = a.attrs[1] - b.attrs[1];
 		return num;
 	}},
-	{tag:"sort_evoRootId",name:"",otLangName:{chs:"进化树"},function:(a,b)=>a.evoRootId-b.evoRootId},
-	{tag:"sort_evoRoot_Attrs",name:"",otLangName:{chs:"进化根怪物的属性"},function:(a,b)=>{
+	{tag:"sort_evoRootId",name:"进化树",function:(a,b)=>a.evoRootId-b.evoRootId},
+	{tag:"sort_evoRoot_Attrs",name:"进化根怪物的属性",function:(a,b)=>{
 		const card_a = Cards[a.evoRootId],card_b = Cards[b.evoRootId];
 		let num = card_a.attrs[0] - card_b.attrs[0];
 		if (num === 0) num = card_a.attrs[1] - card_b.attrs[1];
 		return num;
 	}},
-	{tag:"sort_rarity",name:"",otLangName:{chs:"稀有度"},function:(a,b)=>a.rarity-b.rarity},
-	{tag:"sort_cost",name:"",otLangName:{chs:"消耗"},function:(a,b)=>a.cost-b.cost},
-	{tag:"sort_mp",name:"",otLangName:{chs:"MP"},function:(a,b)=>a.mp-b.mp},
-	{tag:"sort_skillLv1",name:"",otLangName:{chs:"技能最大冷却时间"},function:(a,b)=>Skills[a.activeSkillId].initialCooldown-Skills[b.activeSkillId].initialCooldown},
-	{tag:"sort_skillLvMax",name:"",otLangName:{chs:"技能最小冷却时间"},function:(a,b)=>{
+	{tag:"sort_rarity",name:"稀有度",function:(a,b)=>a.rarity-b.rarity},
+	{tag:"sort_cost",name:"消耗",function:(a,b)=>a.cost-b.cost},
+	{tag:"sort_mp",name:"MP",function:(a,b)=>a.mp-b.mp},
+	{tag:"sort_skillLv1",name:"技能最大冷却时间",function:(a,b)=>Skills[a.activeSkillId].initialCooldown-Skills[b.activeSkillId].initialCooldown},
+	{tag:"sort_skillLvMax",name:"技能最小冷却时间",function:(a,b)=>{
 		const skill_a = Skills[a.activeSkillId],skill_b = Skills[b.activeSkillId];
 		return (skill_a.initialCooldown - skill_a.maxLevel) - (skill_b.initialCooldown - skill_b.maxLevel);
 	}},
-	{tag:"sort_hpMax110",name:"",otLangName:{chs:"Lv110最大HP"},function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
-	{tag:"sort_atkMax110",name:"",otLangName:{chs:"Lv110最大攻击"},function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
-	{tag:"sort_rcvMax110",name:"",otLangName:{chs:"Lv110最大回复"},function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_hpMax110",name:"Lv110最大HP",function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_atkMax110",name:"Lv110最大攻击",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_rcvMax110",name:"Lv110最大回复",function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
 	
-	{tag:"sort_hpMax110_awoken",name:"",otLangName:{chs:"Lv110最大攻击(+觉醒)"},function:(a,b)=>
+	{tag:"sort_hpMax110_awoken",name:"Lv110最大攻击(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
@@ -178,7 +178,7 @@ const sort_function_list = [
 			return abA - abB;
 		}
 	},
-	{tag:"sort_hpMax110_awoken",name:"",otLangName:{chs:"Lv110最大HP(+觉醒)"},function:(a,b)=>
+	{tag:"sort_hpMax110_awoken",name:"Lv110最大HP(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
@@ -187,7 +187,7 @@ const sort_function_list = [
 			return abA - abB;
 		}
 	},
-	{tag:"sort_hpMax110_awoken",name:"",otLangName:{chs:"Lv110最大回复(+觉醒)"},function:(a,b)=>
+	{tag:"sort_hpMax110_awoken",name:"Lv110最大回复(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
@@ -196,7 +196,7 @@ const sort_function_list = [
 			return abA - abB;
 		}
 	},
-	{tag:"sort_abilityIndex_awoken",name:"",otLangName:{chs:"Lv110最大加权能力指数(+觉醒)"},function:(a,b)=>
+	{tag:"sort_abilityIndex_awoken",name:"Lv110最大加权能力指数(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
