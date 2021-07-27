@@ -561,7 +561,7 @@ function parseSkillDescription(skill) {
 			str = `${sk[0]}回合内，${strArr.map(typeN).join("、")}类型的攻击力×${sk[sk.length-1]/100}倍`;
 			break;
 		case 93:
-			str = `将自己换成队长，再次使用此技能则换为原来的队长。`;
+			str = `将自己换成队长，再次使用此技能则换为原来的队长。（进入地下城时为队长的话无效）`;
 			if (sk[0]) str += `未知 参数0 ${sk[0]}`;
 			break;
 		case 94:
@@ -1490,7 +1490,7 @@ function parseSkillDescription(skill) {
 			break;
 		}
 		case 227:{
-			str = `指使当前队长与最后一位队员交换位置，再次使用此技能则换回来（待测试）。`;
+			str = `指使当前队长与最后一位队员交换位置，再次使用此技能则换回来。`;
 			break;
 		}
 		case 228:
