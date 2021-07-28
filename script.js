@@ -695,8 +695,8 @@ ${navigator.userAgent}`);
 		document.body.classList.add('guide-mod');
 	}
 
-	const helpLink = controlBox.querySelector(".help-link");
-	if (location.hostname.includes("gitee")) { helpLink.hostname = "gitee.com"; }
+	//const helpLink = controlBox.querySelector(".help-link");
+	//if (location.hostname.includes("gitee")) { helpLink.hostname = "gitee.com"; }
 
 	//▼添加语言列表开始
 	const langSelectDom = controlBox.querySelector(".languages");
