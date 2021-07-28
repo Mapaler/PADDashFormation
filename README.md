@@ -17,19 +17,21 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 # 如何使用 | HOW TO USE
 ## 快速使用在线版 | Online Quick Start
 * <https://mapaler.github.io/PADDashFormation/> (Github Pages)  
-[![](https://www.mozilla.org/media/img/firefox/favicon.ico)Firefox](https://www.mozilla.org/firefox/new/) is recommended on your phone for better performance. Chrome is very slow when searching for a large number of cards
-* <https://mapaler.gitee.io/paddashformation/> (码云的镜象，国内用这个更快 | Chinese mirror)  
-手机上使用 [![](https://www.mozilla.org/media/img/firefox/favicon.ico)火狐浏览器](https://www.mozilla.org/firefox/new/) 具有更好的性能，Chrome 卡死了。
+推荐[![](https://www.mozilla.org/media/img/firefox/favicon.ico)火狐浏览器](https://www.mozilla.org/firefox/new/) | [![](https://www.mozilla.org/media/img/firefox/favicon.ico)Firefox](https://www.mozilla.org/firefox/new/) is recommended
 
-## 下载后使用本地版 | Use the local version after downloaded  
-[下载压缩包](//gitee.com/mapaler/PADDashFormation/repository/archive/master)或`git clone`后使用浏览器打开`index.html`。  
-[Download ZIP](//codeload.github.com/Mapaler/PADDashFormation/zip/master) or `git clone`, and open the `index.html` with Browser.
+## 下载后使用本地版 | Use the local version after downloaded
+[下载压缩包](archive/refs/heads/master.zip)或`git clone`后使用浏览器打开`index.html`。  
+[Download ZIP](archive/refs/heads/master.zip) or `git clone`, and open the `index.html` with Browser.
 * 火狐68.0及以后需要在`about:config`设定`privacy.file_unique_origin`为`false`。  
 Firefox 68.0 or above need setting the `privacy.file_unique_origin` to `false` in `about:config`.
 * Chrome需要添加`--allow-file-access-from-files`启动参数。  
 Chrome browser need start with the additional argument `--allow-file-access-from-files`.
 
-## [帮助和提示 | Help and Tips](help.md)
+## 创建自己的镜像网站 | Create your own mirror site
+`git clone`到你的 *http* 服务目录即可访问，将来更新时只需要`git pull`即可。  
+`git clone` to your *http* service directory for visited, and `git pull` for future updates.
+
+# [帮助和提示 | Help and Tips](help.md)
 
 # 翻译我 | Translate me
 ## 目前支持的语言 | Languages currently supported
