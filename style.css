@@ -1838,6 +1838,8 @@ icon.inflicts::after
 }
 .special-filter-list select{
 	font-size: 20px;
+	max-width: 100%;
+	box-sizing: border-box;
 }
 
 .control-div button{
