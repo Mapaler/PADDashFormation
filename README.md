@@ -15,9 +15,16 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 | ![3人协力界面预览](document/preview-capture-3p.png) | ![手机端预览](document/preview-mobile.jpg) |
 
 # 如何使用 | HOW TO USE
-## 快速使用在线版 | Online Quick Start
-* <https://mapaler.github.io/PADDashFormation/> (Github Pages)  
 推荐[![](https://www.mozilla.org/media/img/firefox/favicon.ico)火狐浏览器](https://www.mozilla.org/firefox/new/) | [![](https://www.mozilla.org/media/img/firefox/favicon.ico)Firefox](https://www.mozilla.org/firefox/new/) is recommended
+## 快速使用在线版（推荐） | Online Quick Start (Recommended)
+* <https://mapaler.github.io/PADDashFormation/> (Github Pages)
+* <https://mapaler.com/PADDashFormation/> (我自己的镜像 | my own mirror)
+> *Gitee* 的镜像已经停止更新。  
+> The mirror of *Gitee* has stopped updating.
+
+## 创建你自己的镜像网站 | Create your own mirror web site
+`git clone`到你的 *http* 服务目录即可访问，将来更新时只需要`git pull`即可。  
+`git clone` to your *http* service directory for visited, and `git pull` for future updates.
 
 ## 下载后使用本地版 | Use the local version after downloaded
 [下载压缩包](archive/refs/heads/master.zip)或`git clone`后使用浏览器打开`index.html`。  
@@ -26,10 +33,6 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 Firefox 68.0 or above need setting the `privacy.file_unique_origin` to `false` in `about:config`.
 * Chrome需要添加`--allow-file-access-from-files`启动参数。  
 Chrome browser need start with the additional argument `--allow-file-access-from-files`.
-
-## 创建自己的镜像网站 | Create your own mirror site
-`git clone`到你的 *http* 服务目录即可访问，将来更新时只需要`git pull`即可。  
-`git clone` to your *http* service directory for visited, and `git pull` for future updates.
 
 # [帮助和提示 | Help and Tips](help.md)
 
