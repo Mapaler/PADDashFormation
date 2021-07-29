@@ -757,9 +757,9 @@ function getCardLeaderSkills(card, skillTypes) {
 	return getActuallySkills(Skills[card.leaderSkillId], skillTypes, false);
 }
 //返回卡片的主动技能
-function getCardActiveSkills(card, skillTypes) {
+function getCardActiveSkills(card, skillTypes, searchRandom = false) {
 	if (!card) return [];
-	return getActuallySkills(Skills[card.activeSkillId], skillTypes, false);
+	return getActuallySkills(Skills[card.activeSkillId], skillTypes, searchRandom);
 }
 //查找到真正起作用的那一个技能
 function getActuallySkills(skill, skillTypes, searchRandom = true) {

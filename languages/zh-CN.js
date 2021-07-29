@@ -292,7 +292,7 @@ function parseSkillDescription(skill) {
             str = `回复宠物自身回复力×${sk[0]/100}倍的 HP`;
             break;
         case 8:
-            str = `回复${sk[0]} HP `;
+            str = `回复 ${sk[0]} 点 HP `;
             break;
         case 9:
             str = `${attrN(sk[0])}宝珠变为${attrN(sk[1])}宝珠`;
