@@ -525,13 +525,7 @@ const specialSearchFunctions = (function() {
 		const skill = getCardActiveSkill(card, searchTypeArray);
 		if (!skill) return 0;
 		const sk = skill.params;
-		if (skill.type == 195)
-		{
-			return sk[0] ? sk[0] : 100;
-		}else
-		{
-			return sk[3] ? sk[3] : 100;
-		}
+		return 100 - (sk[skill.type == 195 ? 0 : 3] || 0);
 	}
 	function changeEnemiesAttr_Attr(card)
 	{
