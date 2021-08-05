@@ -329,12 +329,12 @@ Formation.prototype.loadObj = function(f) {
 	if (f.b)
 		this.teams[0][2] = f.b; //原来模式的徽章
 };
-Formation.prototype.getPdfQrObj = function(keepSource = true)
+Formation.prototype.getPdfQrObj = function(keepDataSource = true)
 {
 	let qrObj = {
 		d:this.outObj()
 	};
-	if (keepSource) qrObj.s = currentDataSource.code;
+	if (keepDataSource) qrObj.s = currentDataSource.code;
 	return qrObj;
 }
 Formation.prototype.getPdcQrStr = function()
@@ -386,7 +386,6 @@ Formation.prototype.getPdcQrStr = function()
 			if (membersArr[i].id > 0 || assistArr[i].id > 0)
 			{
 				let pdcMemberMap = genMemberMap(membersArr[i], assistArr[i], (arr.length == 2 && idx == 1) ? i+1 : i); //2人协力时，队伍2编号0是空的
-				console.log(pdcMemberMap)
 				let pdcMemberArr = Array.from(pdcMemberMap);
 				pdcMemberStr = pdcMemberArr.map(item => {
 					if (item[1] == undefined)
@@ -1126,34 +1125,33 @@ function inputFromQrString(string)
 	}
 	else if (/^http/i.test(string))
 	{
-		try{
-			let url = new URL(string);
-			if (url.searchParams.get('d'))
-			{
-				re.code = 1;
-				re.message = "发现队伍数据 | Formation data founded";
+		let url = new URL(string);
+		if (url.searchParams.get('d'))
+		{
+			try{
 				let jo = {
 					d: JSON.parse(url.searchParams.get('d')),
 					s: url.searchParams.get('s'),
 				}
+				re.code = 1;
+				re.message = "发现队伍数据 | Formation data founded";
 				re.url = ObjToUrl(jo);
-			}else
+			}catch(e)
 			{
-				re.code = 100;
-				re.message = "无队伍数据 | No formation data";
+				re.code = 112;
+				re.message = "错误的 网址 格式 | The illegal URL format";
 			}
-		}catch(e)
+		}else
 		{
-			re.code = 112;
-			re.message = "错误的 网址 格式 | The illegal URL format";
+			re.code = 100;
+			re.message = "无队伍数据 | No formation data";
 		}
 	}
 	else if(/^\d[\d\-\w,\]}]+}/.test(string))
 	{ //PDC
 		re.code = 2;
 		re.message = "发现 PDC 格式 | PDC format found";
-		const pdcFotmation = readPDC(string);
-		const newFotmation = pdcFotmationToPdfFotmation(pdcFotmation);
+		const newFotmation = pdcFotmationToPdfFotmation(string);
 		re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
 	}
 	else
@@ -1163,44 +1161,46 @@ function inputFromQrString(string)
 	}
 	return re;
 }
+
 //解析PDC的数据
-function readPDC(string)
+function pdcFotmationToPdfFotmation(inputString)
 {
-	let teamsStr = string.split("]");
-	let baseInfo = teamsStr.shift().split(",");
-	let teamsArr = teamsStr.map(teamStr=>
-		{
-			let membersStr = teamStr.split("}").filter(Boolean);
-			const team = {
-				badge: parseInt(membersStr.shift(),10) //徽章是10进制
-			}
-			team.members = membersStr.map(memberStr=>{
-				let memberArr = memberStr.split(",").map(valueStr=>{
-					let idx = parseInt(valueStr.substr(0,2),36);
-					let value = valueStr.substr(2);
-					if (idx !== 2)
-					{
-						value = parseInt(value,36);
-					}else
-					{
-						value = value.split(/(\w{2})/).filter(Boolean).map(v=>parseInt(v,36));
-					}
-					return [idx, value];
+	function readPDC(string)
+	{
+		let teamsStr = string.split(']');
+		let baseInfo = teamsStr.shift().split(',');
+		let teamsArr = teamsStr.map(teamStr=>
+			{
+				let membersStr = teamStr.split('}').filter(Boolean);
+				const team = {
+					badge: parseInt(membersStr.shift(),10) //徽章是10进制
+				}
+				team.members = membersStr.map(memberStr=>{
+					let memberArr = memberStr.split(',').map(valueStr=>{
+						let idx = parseInt(valueStr.substr(0,2),36);
+						let value = valueStr.substr(2);
+						if (idx !== 2)
+						{
+							value = parseInt(value,36);
+						}else
+						{
+							value = value.split(/(\w{2})/).filter(Boolean).map(v=>parseInt(v,36));
+						}
+						return [idx, value];
+					});
+					return new Map(memberArr);
 				});
-				return new Map(memberArr);
-			});
-			return team;
+				return team;
+			}
+		);
+		let pdcFotmation = {
+			version: parseInt(baseInfo[0],10),
+			teamCount: parseInt(baseInfo[1],10)+1,
+			teams: teamsArr
 		}
-	);
-	let pdcFotmation = {
-		version: parseInt(baseInfo[0],10),
-		teamCount: parseInt(baseInfo[1],10)+1,
-		teams: teamsArr
+		return pdcFotmation;
 	}
-	return pdcFotmation;
-}
-function pdcFotmationToPdfFotmation(pdcFotmation)
-{
+	let pdcFotmation = readPDC(inputString);
 	const f = new Formation(pdcFotmation.teamCount, pdcFotmation.teamCount == 2 ? 5 : 6);
 	if (pdcFotmation.teamCount == 2)
 	{
