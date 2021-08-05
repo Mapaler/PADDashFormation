@@ -328,7 +328,7 @@
 	content: "使用官方覺醒排序";
 }
 .search-box .search-list-length::before{
-    content: "結果數量：";
+	content: "結果數量：";
 }
 .search-box .sort-div::before{
 	content: "排序：";
@@ -386,7 +386,7 @@
 	content: "▼特殊搜索";
 }
 .special-div .special-add::before {
-    content: "➕";
+	content: "➕";
 }
 .control-div .search-start::before{
 	content: "🔍開始搜索";
@@ -425,52 +425,52 @@
 .base .evo-type::before,
 .base .evo-type::after
 {
-    content: "基礎";
+	content: "基礎";
 }
 .evolution .evo-type::before,
 .evolution .evo-type::after
 {
-    content: "進化";
+	content: "進化";
 }
 .ult-evo .evo-type::before,
 .ult-evo .evo-type::after
 {
-    content: "究極進化";
+	content: "究極進化";
 }
 .reincarnation .evo-type::before,
 .reincarnation .evo-type::after
 {
-    content: "轉生進化";
+	content: "轉生進化";
 }
 .pixel-evo .evo-type::before,
 .pixel-evo .evo-type::after
 {
-    content: "像素進化";
+	content: "像素進化";
 }
 .assist-evo .evo-type::before,
 .assist-evo .evo-type::after
 {
-    content: "輔助進化";
+	content: "輔助進化";
 }
 .super-reincarnation .evo-type::before,
 .super-reincarnation .evo-type::after
 {
-    content: "超轉生進化";
+	content: "超轉生進化";
 }
 .super-ult-evo .evo-type::before,
 .super-ult-evo .evo-type::after
 {
-    content: "超究極進化";
+	content: "超究極進化";
 }
 .henshin .evo-type::before,
 .henshin .evo-type::after
 {
-    content: "變身";
+	content: "變身";
 }
 .henshin-loop .evo-type::before,
 .henshin-loop .evo-type::after
 {
-    content: "循環變身";
+	content: "循環變身";
 }
 
 .control-box .btn-qrcode::before{
@@ -486,36 +486,42 @@
 	content: "生成二維碼：";
 }
 
-.formation-from-qrcode::before
+.formation-from-string::before
 {
-    content: "從二維碼中讀取的隊伍連結";
+	content: "從字串中讀取的隊伍連結";
 }
 label[for="sourceSelect"]::before
 {
-    content: "視頻源選擇：";
+	content: "視頻源選擇：";
 }
 #qr-code-frame .save-qr-img::before
 {
-    content: "\f0c7 保存二維碼圖片";
+	content: "\f0c7 保存二維碼圖片";
 }
 #qr-code-frame .read-qr-camera::before
 {
-    content: "\f030 使用相機掃描";
+	content: "\f030 使用相機掃描";
 }
 #qr-code-frame .read-qr-camera.running::before
 {
-    content: "\f28d  停止使用相機";
+	content: "\f28d  停止使用相機";
 }
 #qr-code-frame .read-qr-file::before
 {
-    content: "\f1c5 讀取二維碼圖片";
+	content: "\f1c5 讀取二維碼圖片";
+}
+#qr-code-frame .read-string::before {
+	content: "\f891 读取字符串";
 }
 
 label[for="qr-data-type-pdf"]::before
 {
-	content: "龍族拼圖隊伍圖製作工具";
+	content: "龍圖急速陣型";
 }
 label[for="qr-data-type-pdc"]::before
 {
-	content: "智龙迷城傷害計算器 (PDC)";
+	content: "龍族拼圖傷害計算器(PDC)";
+}
+label[for="qr-data-type-pdchu"]::before {
+	content: "Valeria(pdchu)";
 }

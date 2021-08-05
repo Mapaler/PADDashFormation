@@ -385,16 +385,18 @@ Formation.prototype.getPdcQrStr = function()
 		{
 			if (membersArr[i].id > 0 || assistArr[i].id > 0)
 			{
-				let pdcMemberArr = Array.from(genMemberMap(membersArr[i], assistArr[i], (arr.length == 2 && idx == 1) ? i+1 : i)); //2人协力时，队伍2编号0是空的
+				let pdcMemberMap = genMemberMap(membersArr[i], assistArr[i], (arr.length == 2 && idx == 1) ? i+1 : i); //2人协力时，队伍2编号0是空的
+				console.log(pdcMemberMap)
+				let pdcMemberArr = Array.from(pdcMemberMap);
 				pdcMemberStr = pdcMemberArr.map(item => {
 					if (item[1] == undefined)
 					{
-						console.log(item[0])
+						return null;
 					}
 					return [
 					item[0].toString(36).prefix(2),
 					item[1].toString(36).prefix(2)
-				].join('')}).join(',');
+				].join('')}).filter(item=>item).join(',');
 				teamArr.push(pdcMemberStr);
 			}
 		}
@@ -1149,7 +1151,7 @@ function inputFromQrString(string)
 	else if(/^\d[\d\-\w,\]}]+}/.test(string))
 	{ //PDC
 		re.code = 2;
-		re.message = "发现 PDC 二维码 | PDC QR code found";
+		re.message = "发现 PDC 格式 | PDC format found";
 		const pdcFotmation = readPDC(string);
 		const newFotmation = pdcFotmationToPdfFotmation(pdcFotmation);
 		re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
@@ -1235,8 +1237,9 @@ function pdcFotmationToPdfFotmation(pdcFotmation)
 			a.plus[0] = member.get(11) || 0;
 			a.plus[1] = member.get(12) || 0;
 			a.plus[2] = member.get(13) || 0;
+
 			m.awoken = member.get(7) >= 0 ? member.get(7) : Cards[m.id].awakenings.length;
-			a.awoken = member.get(14) >= 0 ? member.get(14) : Cards[a.id].awakenings.length;
+			a.awoken = member.get(14) >= 0 ? member.get(14) : (a.id > 0 ? Cards[a.id].awakenings.length : 0);
 			m.sawoken = member.get(8) ? Cards[m.id].superAwakenings.indexOf(member.get(8)) : null;
 		});
 	});
@@ -1300,7 +1303,8 @@ function initialize() {
 		readBox.videoBox.classList.add(className_displayNone);
 		this.classList.remove(className_displayNone);
 		
-		this.refreshQrCode(formation.getQrStr(saveBox.qrDataType.find(radio=>radio.checked).value));
+		let qrTypeRadio = saveBox.qrDataType.find(radio=>radio.checked);
+		if (qrTypeRadio) qrTypeRadio.onclick(); //打开二维码窗口就先产生二维码
 	};
 	qrCodeFrame.hide = function(){
 		qrcodeReader.reset();
@@ -1312,6 +1316,7 @@ function initialize() {
 	const qrContent = qrCodeFrame.content = qrCodeFrame.querySelector(".mask-content");
 	const qrReadBox = qrContent.readBox = qrContent.querySelector(".read-qr-box");
 	const qrSaveBox = qrContent.saveBox = qrContent.querySelector(".save-qr-box");
+	qrReadBox.readString = qrReadBox.querySelector(".read-string");
 	qrReadBox.readQrCamera = qrReadBox.querySelector(".read-qr-camera");
 	qrReadBox.readQrFile = qrReadBox.querySelector(".read-qr-file");
 	qrReadBox.filePicker = qrReadBox.querySelector(".file-select");
@@ -1319,11 +1324,35 @@ function initialize() {
 	qrReadBox.video = qrReadBox.querySelector("#video");
 	qrReadBox.videoBox = qrReadBox.querySelector(".video-box");
 	qrReadBox.sourceSelect = qrReadBox.querySelector("#sourceSelect");
+	qrReadBox.qrStr = qrReadBox.querySelector(".string-input");
+	qrReadBox.readString.onclick = function()
+	{
+		let inputResult = inputFromQrString(qrReadBox.qrStr.value);
+		if (inputResult.code < 100)
+		{
+			qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
+			const newLink = document.createElement("a");
+			newLink.className = "formation-from-string";
+			newLink.href = inputResult.url;
+			newLink.target = "_blank";
+			qrReadBox.info.appendChild(newLink);
+		}else
+		{
+			qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
+		}
+	}
 
 	qrSaveBox.qrImage = qrSaveBox.querySelector(".qr-code-image");
+	qrSaveBox.qrStr = qrSaveBox.querySelector(".string-output");
+	qrSaveBox.qrStr.onchange = function()
+	{
+		qrCodeFrame.refreshQrCode(this.value);
+	}
 	qrSaveBox.qrDataType = Array.from(qrSaveBox.querySelectorAll(".qr-data-type-radio"));
 	qrSaveBox.qrDataType.forEach(radio=>radio.onclick = function(){
-		qrCodeFrame.refreshQrCode(formation.getQrStr(this.value));
+		let qrstr = formation.getQrStr(this.value);
+		qrSaveBox.qrStr.value = qrstr;
+		qrSaveBox.qrStr.onchange();
 	});
 	qrSaveBox.saveQrImg = qrSaveBox.querySelector(".save-qr-img");
 
@@ -1396,18 +1425,9 @@ function initialize() {
 		const file = myFiles[0];
 		loadImage(URL.createObjectURL(file)).then(function(img) {
 			qrcodeReader.decodeFromImage(img).then((result) => {
-				console.log('Found QR code!', result);
-				let inputResult = inputFromQrString(result.text);
-				
-				qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
-				if (inputResult.code < 100)
-				{
-					const newLink = document.createElement("a");
-					newLink.className = "formation-from-qrcode";
-					newLink.href = inputResult.url;
-					newLink.target = "_blank";
-					qrReadBox.info.appendChild(newLink);
-				}
+				console.debug('Found QR code!', result);
+				qrReadBox.qrStr.value = result.text;
+				qrReadBox.readString.onclick();
 			}).catch((err) => {
 				console.error(err);
 				if (err) {
@@ -1424,9 +1444,9 @@ function initialize() {
 					}
 				}
 			})
-			console.log(`Started decode for image from ${img.src}`)
+			console.debug(`Started decode for image from ${img.src}`)
 		}, function(err) {
-			console.log(err);
+			console.debug(err);
 		});
 	}
 
@@ -1440,41 +1460,27 @@ function initialize() {
 		}
 	}else
 	{
-		
 		function scanContinuously()
 		{
 			qrcodeReader.decodeFromInputVideoDeviceContinuously(selectedDeviceId, 'video', (result, err) => {
 				if (result) {
 					// properly decoded qr code
-					console.log('Found QR code!', result);
-					let inputResult = inputFromQrString(result.text);
-					
-					if (inputResult.code < 100)
-					{ //成功后就关闭
-						qrReadBox.readQrCamera.onclick();
-						qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
-						const newLink = document.createElement("a");
-						newLink.className = "formation-from-qrcode";
-						newLink.href = inputResult.url;
-						newLink.target = "_blank";
-						qrReadBox.info.appendChild(newLink);
-					}else
-					{
-						qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
-					}
+					console.debug('Found QR code!', result);
+					qrReadBox.qrStr.value = result.text;
+					qrReadBox.readString.onclick();
 				}
 		
 				if (err) {
 					if (err instanceof ZXing.NotFoundException) {
-					console.log('No QR code found.')
+					console.debug('No QR code found.')
 					}
 		
 					if (err instanceof ZXing.ChecksumException) {
-					console.log('A code was found, but it\'s read value was not valid.')
+					console.debug('A code was found, but it\'s read value was not valid.')
 					}
 		
 					if (err instanceof ZXing.FormatException) {
-					console.log('A code was found, but it was in a invalid format.')
+					console.debug('A code was found, but it was in a invalid format.')
 					}
 				}
 			});

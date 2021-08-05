@@ -2949,6 +2949,24 @@ table .orb-icon
 {
 	color: white;
 }
+#qr-code-frame .string-input
+{
+	width: calc(100% - 170px);
+	box-sizing: border-box;
+}
+#qr-code-frame .string-output
+{
+	width: calc(100% - 20px);
+}
+#qr-code-frame .qr-box
+{
+	margin: 5px;
+}
+.save-qr-box
+{
+	    padding-bottom: 10px;
+}
+
 .read-qr-box::before,
 .save-qr-box::before
 {
@@ -2965,7 +2983,7 @@ table .orb-icon
 	font-size: 20px;
 	padding: 5px;
 }
-.formation-from-qrcode
+.formation-from-string
 {
 	font-size: 1.5em;
 	display: block;

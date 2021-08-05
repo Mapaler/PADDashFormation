@@ -526,9 +526,9 @@
 	content: "Generate QR code:";
 }
 
-.formation-from-qrcode::before
+.formation-from-string::before
 {
-    content: "A formation link read from a QR code";
+    content: "A formation link read from string";
 }
 label[for="sourceSelect"]::before
 {
@@ -540,15 +540,18 @@ label[for="sourceSelect"]::before
 }
 #qr-code-frame .read-qr-camera::before
 {
-    content: "\f030  Scan with the camera";
+    content: "\f030  Scan with camera";
 }
 #qr-code-frame .read-qr-camera.running::before
 {
-    content: "\f28d  Stop using the camera";
+    content: "\f28d  Stop using camera";
 }
 #qr-code-frame .read-qr-file::before
 {
-    content: "\f1c5  Read the image file";
+    content: "\f1c5  Read image file";
+}
+#qr-code-frame .read-string::before {
+	content: "\f891 Read string";
 }
 
 label[for="qr-data-type-pdf"]::before
@@ -558,4 +561,7 @@ label[for="qr-data-type-pdf"]::before
 label[for="qr-data-type-pdc"]::before
 {
 	content: "P&D Damage Caculater (PDC)";
+}
+label[for="qr-data-type-pdchu"]::before {
+	content: "Valeria(pdchu)";
 }

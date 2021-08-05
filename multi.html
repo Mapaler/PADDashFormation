@@ -1157,6 +1157,10 @@ var formation = new Formation(teamsCount,5);
 		<div class="mask-content">
 			<div class="read-qr-box">
 				<div class="action-button-box">
+					<div class="read-text-box">
+						<input class="string-input" type="text"/>
+						<button class="read-string brown-button"><!--读字符串--></button>
+					</div>
 					<button class="read-qr-camera brown-button"><!--相机扫--></button>
 					<button class="read-qr-file brown-button"><!--读文件--></button>
 					<input type="file" accept="image/*" class="file-select display-none">
@@ -1170,8 +1174,10 @@ var formation = new Formation(teamsCount,5);
 			<div class="save-qr-box">
 				<ul class="qr-data-type-ul">
 					<li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdf" id="qr-data-type-pdf" checked/><label for="qr-data-type-pdf"></label></li><!--本程序
-					--><li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdc" id="qr-data-type-pdc" /><label for="qr-data-type-pdc"></label></li><!--PDC-->
+					--><li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdc" id="qr-data-type-pdc" /><label for="qr-data-type-pdc"></label></li><!--PDC
+					--><!--<li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdchu" id="qr-data-type-pdchu" /><label for="qr-data-type-pdchu"></label></li>--><!--Pdchu-->
 				</ul>
+				<input class="string-output" type="text" readonly/>
 				<div class="qr-box"><img class="qr-code-image" /></div>
 				<a download="" class="save-qr-img brown-button"><!--保存QR 图片--></a>
 			</div>
