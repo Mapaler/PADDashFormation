@@ -1433,7 +1433,36 @@ function initialize() {
 				console.error(err);
 				if (err) {
 					if (err instanceof ZXing.NotFoundException) {
-						qrReadBox.info.textContent = 'No QR code found.';
+						console.debug('Try crop PDC original QR', result);
+						let cavansWidth = 300, cavansHeight = 300;
+						let cavans = document.createElement("canvas");
+						cavans.width = cavansWidth;
+						cavans.height = cavansHeight;
+						let ctx = cavans.getContext('2d');
+			
+						ctx.fillStyle="white";
+						ctx.fillRect(0, 0, cavansWidth, cavansHeight)
+						ctx.drawImage(img, 0, 0, cavansWidth, cavansHeight, 0, 0, cavansWidth, cavansHeight);
+						qrcodeReader.decodeFromImageUrl(cavans.toDataURL()).then((result) => {
+							console.debug('Found QR code!', result);
+							qrReadBox.qrStr.value = result.text;
+							qrReadBox.readString.onclick();
+						}).catch((err) => {
+							console.error(err);
+							if (err) {
+								if (err instanceof ZXing.NotFoundException) {
+									qrReadBox.info.textContent = 'No QR code found.';
+								}
+					
+								if (err instanceof ZXing.ChecksumException) {
+									qrReadBox.info.textContent = 'A code was found, but it\'s read value was not valid.';
+								}
+					
+								if (err instanceof ZXing.FormatException) {
+									qrReadBox.info.textContent = 'A code was found, but it was in a invalid format.';
+								}
+							}
+						});
 					}
 		
 					if (err instanceof ZXing.ChecksumException) {
@@ -1444,7 +1473,7 @@ function initialize() {
 						qrReadBox.info.textContent = 'A code was found, but it was in a invalid format.';
 					}
 				}
-			})
+			});
 			console.debug(`Started decode for image from ${img.src}`)
 		}, function(err) {
 			console.debug(err);
