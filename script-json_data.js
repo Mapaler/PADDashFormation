@@ -519,6 +519,60 @@ const specialSearchFunctions = (function() {
 		});
 		return outObj;
 	}
+	function atkBuff_Rate(card)
+	{
+		const searchTypeArray = [
+			88,92, //类型的
+			50,90, //属性的，要排除回复力
+			156,168, //宝石姬
+			228, //属性、类型数量
+		];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+
+		const outObj = {
+			skilltype: 0, //0为没有，1为宝石姬类，2为指定类型、属性
+			types: [],
+			attrs: [],
+			awoken: [],
+			rate: 0,
+			turns: 0,
+		};
+		if (!skill) return outObj;
+		const sk = skill.params;
+		if (skill.type == 88 || skill.type == 92)
+		{
+			outObj.skilltype = 2;
+			outObj.types = sk.slice(1, skill.type == 88 ? 2 : 3);
+			outObj.turns = sk[0];
+			outObj.rate = sk[skill.type == 88 ? 2 : 3];
+		}
+		else if(skill.type == 50 || skill.type == 90)
+		{
+			outObj.attrs = sk.slice(1, skill.type == 50 ? 2 : 3);
+			if (outObj.attrs.includes(5))  //去除回复力
+				return outObj;
+			outObj.skilltype = 2;
+			outObj.turns = sk[0];
+			outObj.rate = sk[skill.type == 50 ? 2 : 3];
+		}
+		else if(skill.type == 156 && sk[4] == 2 //必须要是加攻击力
+			|| skill.type == 168)
+		{
+			outObj.skilltype = 1;
+			outObj.awoken = sk.slice(1, skill.type == 168 ? 7 : 4).filter(s=>s>0);
+			outObj.turns = sk[0];
+			outObj.rate = skill.type == 168 ? sk[7] : sk[5] - 100;
+		}
+		else if(skill.type == 228 && sk[3] > 0)
+		{
+			outObj.skilltype = 1;
+			outObj.attrs = flags(sk[1]);
+			outObj.types = flags(sk[2]);
+			outObj.turns = sk[0];
+			outObj.rate = sk[3];
+		}
+		return outObj;
+	}
 	function damageSelf_Rate(card)
 	{
 		const searchTypeArray = [84,85,86,87,195];
@@ -578,6 +632,20 @@ const specialSearchFunctions = (function() {
 			const li = ul.appendChild(document.createElement("li"));
 			li.className = `orb-icon`;
 			li.setAttribute("data-orb-icon", orbType);
+		});	
+		return ul;
+	}
+	//产生类型列表
+	function createTypesList(types)
+	{
+		if (types == undefined) types = [0];
+		else if (!Array.isArray(types)) types = [types];
+		const ul = document.createElement("ul");
+		ul.className = "types-ul";
+		types.forEach(type => {
+			const li = ul.appendChild(document.createElement("li"));
+			li.className = `type-icon`;
+			li.setAttribute("data-type-icon", type);
 		});	
 		return ul;
 	}
@@ -1851,11 +1919,11 @@ const specialSearchFunctions = (function() {
 			},
 		]},
 		{group:true,name:"----- Buff -----",otLangName:{chs:"----- buff 类-----"}, functions: [
-			{name:"Rate by awoken count(Jewel Princess)",otLangName:{chs:"以觉醒数量为倍率类技能（宝石姬）"},
+			{name:"Rate by state count(Jewel Princess)",otLangName:{chs:"以状态数量为倍率类技能（宝石姬）"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [156,168,228];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [156,168,228];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				})
 			},
 			{name:"RCV rate change",otLangName:{chs:"回复力 buff（顶回复）"},
@@ -1906,21 +1974,45 @@ const specialSearchFunctions = (function() {
 				}
 			},
 			{name:"ATK rate change",otLangName:{chs:"攻击力 buff（顶攻击）"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [
-						88,92, //类型的
-						50,90, //属性的，要排除回复力
-						156,168, //宝石姬
-						228, //属性、类型数量
-					];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return false;
-					return (skill.type==88 || skill.type==92) || //类型的
-						(skill.type==50 || skill.type==90) && skill.params.slice(1,skill.params.length>2?-1:undefined).some(sk=>sk!=5) || //属性的，要排除回复力
-						skill.type==156 && skill.params[4] == 2 || skill.type==168 || //宝石姬的
-						skill.type==228 && skill.params[3] > 0 //属性、类型数量
-						;
-				})
+				function:cards=>{
+					return cards.filter(card=>{
+						const atkbuff = atkBuff_Rate(card);
+						return atkbuff.skilltype > 0;
+					}).sort((a,b)=>{
+						let a_pC = atkBuff_Rate(a), b_pC = atkBuff_Rate(b);
+						let sortNum = a_pC.skilltype - b_pC.skilltype;
+						if (sortNum == 0)
+							sortNum = a_pC.rate - b_pC.rate;
+						if (sortNum == 0)
+							sortNum = a_pC.turns - b_pC.turns;
+						return sortNum;
+					});
+				},
+				addition:card=>{
+					const atkbuff = atkBuff_Rate(card);
+					const fragment = document.createDocumentFragment();
+					if (atkbuff.skilltype == 0) return fragment;
+					if (atkbuff.skilltype == 1)
+					{
+						fragment.appendChild(document.createTextNode(`+${atkbuff.rate}%/`));
+						if (atkbuff.awoken.length)
+							fragment.appendChild(creatAwokenList(atkbuff.awoken));
+						if (atkbuff.attrs.length)
+							fragment.appendChild(createOrbsList(atkbuff.attrs));
+						if (atkbuff.types.length)
+							fragment.appendChild(createTypesList(atkbuff.types));
+						fragment.appendChild(document.createTextNode(`×${atkbuff.turns}T`));
+					}else if (atkbuff.skilltype == 2)
+					{
+						if (atkbuff.attrs.length)
+							fragment.appendChild(createOrbsList(atkbuff.attrs));
+						if (atkbuff.types.length)
+							fragment.appendChild(createTypesList(atkbuff.types));
+						fragment.appendChild(document.createTextNode(`×${atkbuff.rate / 100}`));
+						fragment.appendChild(document.createTextNode(`×${atkbuff.turns}T`));
+					}
+					return fragment;
+				}
 			},
 			{name:"Move time change",otLangName:{chs:"操作时间 buff（顶手指）"},
 				function:cards=>{

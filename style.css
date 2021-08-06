@@ -1369,7 +1369,8 @@ icon.inflicts::after
 	margin: 0.5px !important;
 }
 .awoken-preview .awoken-icon,
-.custom-addition .awoken-icon
+.custom-addition .awoken-icon,
+.custom-addition .type-icon
 {
 	filter: unset;
 	transform: scale(0.75);

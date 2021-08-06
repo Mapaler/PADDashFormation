@@ -104,7 +104,6 @@ function parseSkillDescription(skill) {
     const id = skill.id;
     let fragment = document.createDocumentFragment(); //创建节点用的临时空间
     if (id == 0) return fragment;
-    const type = skill.type;
     const sk = skill.params;
 
     //珠子名和属性名数组
@@ -266,7 +265,7 @@ function parseSkillDescription(skill) {
         fullColor = null,
         atSameTime = null,
         hasDiffOrbs = null;
-    switch (type) {
+    switch (skill.type) {
         case 0:
             str = `对敌方全体造成自身攻击力×${sk[1]/100}倍的${attrN(sk[0])}属性伤害`;
             break;
@@ -404,8 +403,8 @@ function parseSkillDescription(skill) {
 		case 49:
 			str = `${sk.slice(0,sk.length-1).map(t=>attrN(t)).join("、")}属性宠物的回复力×${sk[sk.length-1]/100}倍`;
 			break;
-		case 50:
-			str = `${sk[0]}回合内，${(sk[1]==5?"回复力":`${attrN(sk[1])}属性的攻击力`)}${sk[2]>0?`×${sk[2]/100}倍`:"变为0"}`;
+		/*case 50:
+			str = `${sk[0]}回合内，${(sk[1]==5?"回复力":`${attrN(sk[1])}属性的攻击力`)}${sk[2]>0?`×${sk[2]/100}倍`:"变为0"}`;*/
 			break;
 		case 51:
 			str = `${sk[0]}回合内，所有攻击转为全体攻击`;
@@ -546,20 +545,38 @@ function parseSkillDescription(skill) {
 			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方全体造成${sk[1].bigNumberToString()}点${attrN(sk[0])}属性伤害`;
 			if (sk[2]) str += `未知 参数2 ${sk[2]}`;
 			break;
-		case 88:
+		/*case 88:
 			str = `${sk[0]}回合内，${typeN(sk[1])}类型的攻击力×${sk[2]/100}倍`;
-			break;
+			break;*/
+		case 50:
 		case 90:
-			strArr = sk.slice(1,-1);
-			str = `${sk[0]}回合内，${strArr.filter(sk=>sk<5).map(attrN).join("、")}属性的攻击力${strArr.includes(5)?'、回复力':''}×${sk[sk.length-1]/100}倍`;
+		{
+			let attrs = sk.slice(1, skill.type == 50 ? 2 : 3);
+			let turns = sk[0];
+			let rate = sk[skill.type == 50 ? 2 : 3] /100;
+			str = `${turns}回合内，`;
+			if (attrs.includes(5) && attrs.length == 1)
+			{
+				str += "回复力";
+			}else
+			{
+				str += `${getAttrTypeString(attrs)}的攻击力${attrs.includes(5) ? "、回复力" : ""}`;
+			}
+			str += `${rate>0?`×${rate}倍`:"变为0"}`;
 			break;
+		}
 		case 91:
 			str = `${sk.slice(0,-1).map(attrN).join("、")}属性宝珠强化（每颗强化珠伤害/回复增加${sk[sk.length-1]}%）`;
 			break;
+		case 88:
 		case 92:
-			strArr = sk.slice(1,-1);
-			str = `${sk[0]}回合内，${strArr.map(typeN).join("、")}类型的攻击力×${sk[sk.length-1]/100}倍`;
+		{
+			let types = sk.slice(1, skill.type == 88 ? 2 : 3);
+			let turns = sk[0];
+			let rate = sk[skill.type == 50 ? 2 : 3] /100;
+			str = `${turns}回合内，${getAttrTypeString(null,types)}的攻击力${rate>0?`×${rate}倍`:"变为0"}`;
 			break;
+		}
 		case 93:
 			str = `将自己换成队长，再次使用此技能则换为原来的队长。（进入地下城时为队长的话无效）`;
 			if (sk[0]) str += `未知 参数0 ${sk[0]}`;
@@ -780,19 +797,19 @@ function parseSkillDescription(skill) {
 			str = "";
 			if (sk[0] || sk[1]) str += `${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物`;
 			if (sk[2] || sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]})}`;
-			if (sk[5]) str += `${str.length>0?"，":""}受到的${getAttrTypeString(flags(sk[5]))}属性伤害减少${sk[6]}%`;
+			if (sk[5]) str += `${str.length>0?"，":""}受到的${getAttrTypeString(flags(sk[5]))}伤害减少${sk[6]}%`;
 			break;
 		case 130:
 			str = `HP ${sk[0]}%以下时`;
 			if (sk[1] || sk[2]) str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
 			if (sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]})}`;
-			if (sk[5]) str += `，受到的${getAttrTypeString(flags(sk[5]))}属性伤害减少${sk[6]}%`;
+			if (sk[5]) str += `，受到的${getAttrTypeString(flags(sk[5]))}伤害减少${sk[6]}%`;
 			break;
 		case 131:
 			str = `HP ${sk[0]==100?"全满":`${sk[0]}%以上`}时`;
 			if (sk[1] || sk[2]) str += `${getAttrTypeString(flags(sk[1]),flags(sk[2]))}宠物`;
 			if (sk[3] || sk[4]) str += `的${getFixedHpAtkRcvString({atk:sk[3],rcv:sk[4]})}`;
-			if (sk[5]) str += `，受到的${getAttrTypeString(flags(sk[5]))}属性伤害减少${sk[6]}%`;
+			if (sk[5]) str += `，受到的${getAttrTypeString(flags(sk[5]))}伤害减少${sk[6]}%`;
 			break;
 		case 132:
 			str = `${sk[0]}回合内，宝珠移动时间`;
@@ -883,7 +900,8 @@ function parseSkillDescription(skill) {
 			str = `协力时${getAttrTypeString(flags(sk[0]),flags(sk[1]))}宠物的${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]})}`;
 			break;
 		case 156: //宝石姬技能
-			awokenArr = sk.slice(1,4).filter(s=>s>0);
+		{
+			let awokenArr = sk.slice(1,4).filter(s=>s>0);
 			fragment.appendChild(document.createTextNode(`${sk[0]?`${sk[0]}回合内，`:""}根据队伍内觉醒技能`));
 			awokenArr.forEach((aid,idx,arr)=>{
 				const icon = fragment.appendChild(document.createElement("icon"));
@@ -903,6 +921,7 @@ function parseSkillDescription(skill) {
 				fragment.appendChild(document.createTextNode(`宝石姬技能，未知buff类型 参数[4]：${sk[4]}`));
 			return fragment;
 			break;
+		}
 		case 157:
 			fullColor = [sk[0],sk[2],sk[4]].filter(s=>s!=null);
 			strArr = [sk[1],sk[3],sk[5]].filter(s=>s>0);
@@ -1500,11 +1519,11 @@ function parseSkillDescription(skill) {
 			str = `队伍中每存在1个${getAttrTypeString(flags(sk[0]), flags(sk[1]))}时，${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]}, false)}`;
 			break;
 		default:
-			str = `未知的技能类型${type}(No.${id})`;
+			str = `未知的技能类型${skill.type}(No.${id})`;
 			//开发部分
 			//const copySkill = JSON.parse(JSON.stringify(skill));
 			//copySkill.params = copySkill.params.map(p=>[p,getBooleanFromBinary(p).join("")]);
-			console.log(`未知的技能类型${type}(No.${id})`,findFullSkill(skill));
+			console.log(`未知的技能类型${skill.type}(No.${id})`,findFullSkill(skill));
 			break;
 	}
 	const span = fragment.appendChild(document.createElement("span"));
