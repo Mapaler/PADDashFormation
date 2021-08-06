@@ -1,5 +1,6 @@
 ﻿localTranslating = {
     webpage_title: `龍族拼圖${teamsCount}人隊伍圖製作工具`,
+	addition_display: "附加顯示",
     title_blank: "輸入隊伍標題",
     detail_blank: "輸入說明",
     sort_name:{
@@ -10,6 +11,7 @@
         sort_evoRoot_Attrs : "進化根怪物的屬性",
         sort_rarity: "稀有度",
         sort_cost: "消耗",
+        sort_mp: "MP",
         sort_skillLv1: "技能最大冷卻時間",
         sort_skillLvMax: "技能最小冷卻時間",
         sort_hpMax110: "最大 HP",

@@ -27,6 +27,7 @@ if (location.search.includes('&amp;')) {
 }
 let localTranslating = {
     webpage_title: `智龙迷城${teamsCount}人队伍图制作工具`,
+	addition_display: "💬",
 }
 
 //一开始就加载当前语言
@@ -328,12 +329,12 @@ Formation.prototype.loadObj = function(f) {
 	if (f.b)
 		this.teams[0][2] = f.b; //原来模式的徽章
 };
-Formation.prototype.getPdfQrObj = function(keepSource = true)
+Formation.prototype.getPdfQrObj = function(keepDataSource = true)
 {
 	let qrObj = {
 		d:this.outObj()
 	};
-	if (keepSource) qrObj.s = currentDataSource.code;
+	if (keepDataSource) qrObj.s = currentDataSource.code;
 	return qrObj;
 }
 Formation.prototype.getPdcQrStr = function()
@@ -384,16 +385,17 @@ Formation.prototype.getPdcQrStr = function()
 		{
 			if (membersArr[i].id > 0 || assistArr[i].id > 0)
 			{
-				let pdcMemberArr = Array.from(genMemberMap(membersArr[i], assistArr[i], (arr.length == 2 && idx == 1) ? i+1 : i)); //2人协力时，队伍2编号0是空的
+				let pdcMemberMap = genMemberMap(membersArr[i], assistArr[i], (arr.length == 2 && idx == 1) ? i+1 : i); //2人协力时，队伍2编号0是空的
+				let pdcMemberArr = Array.from(pdcMemberMap);
 				pdcMemberStr = pdcMemberArr.map(item => {
 					if (item[1] == undefined)
 					{
-						console.log(item[0])
+						return null;
 					}
 					return [
 					item[0].toString(36).prefix(2),
 					item[1].toString(36).prefix(2)
-				].join('')}).join(',');
+				].join('')}).filter(item=>item).join(',');
 				teamArr.push(pdcMemberStr);
 			}
 		}
@@ -694,8 +696,8 @@ ${navigator.userAgent}`);
 		document.body.classList.add('guide-mod');
 	}
 
-	const helpLink = controlBox.querySelector(".help-link");
-	if (location.hostname.includes("gitee")) { helpLink.hostname = "gitee.com"; }
+	//const helpLink = controlBox.querySelector(".help-link");
+	//if (location.hostname.includes("gitee")) { helpLink.hostname = "gitee.com"; }
 
 	//▼添加语言列表开始
 	const langSelectDom = controlBox.querySelector(".languages");
@@ -1121,83 +1123,85 @@ function inputFromQrString(string)
 			re.message = "错误的 JSON 格式 | The illegal JSON format";
 		}
 	}
-	else if (/^http/i.test(string))
+	else if (/^(https?|file):\/\//i.test(string))
 	{
-		try{
-			let url = new URL(string);
-			if (url.searchParams.get('d'))
-			{
-				re.code = 1;
-				re.message = "发现队伍数据 | Formation data founded";
+		let url = new URL(string);
+		if (url.searchParams.get('d'))
+		{
+			try{
 				let jo = {
 					d: JSON.parse(url.searchParams.get('d')),
 					s: url.searchParams.get('s'),
 				}
+				re.code = 1;
+				re.message = "发现队伍数据 | Formation data founded";
 				re.url = ObjToUrl(jo);
-			}else
+			}catch(e)
 			{
-				re.code = 100;
-				re.message = "无队伍数据 | No formation data";
+				re.code = 112;
+				re.message = "错误的 网址 格式 | The illegal URL format";
 			}
-		}catch(e)
+		}
+		else
 		{
-			re.code = 112;
-			re.message = "错误的 网址 格式 | The illegal URL format";
+			re.code = 100;
+			re.message = "无队伍数据 | No formation data";
 		}
 	}
 	else if(/^\d[\d\-\w,\]}]+}/.test(string))
 	{ //PDC
 		re.code = 2;
-		re.message = "发现 PDC 二维码 | PDC QR code found";
-		const pdcFotmation = readPDC(string);
-		const newFotmation = pdcFotmationToPdfFotmation(pdcFotmation);
+		re.message = "发现 PDC 格式 | PDC format found";
+		const newFotmation = pdcFotmationToPdfFotmation(string);
 		re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
 	}
 	else
 	{
 		re.code = 110;
-		re.message = "不是 JSON 格式 | Not JSON format";
+		re.message = "不支持的格式 | Unsupported format";
 	}
 	return re;
 }
+
 //解析PDC的数据
-function readPDC(string)
+function pdcFotmationToPdfFotmation(inputString)
 {
-	let teamsStr = string.split("]");
-	let baseInfo = teamsStr.shift().split(",");
-	let teamsArr = teamsStr.map(teamStr=>
-		{
-			let membersStr = teamStr.split("}").filter(Boolean);
-			const team = {
-				badge: parseInt(membersStr.shift(),10) //徽章是10进制
-			}
-			team.members = membersStr.map(memberStr=>{
-				let memberArr = memberStr.split(",").map(valueStr=>{
-					let idx = parseInt(valueStr.substr(0,2),36);
-					let value = valueStr.substr(2);
-					if (idx !== 2)
-					{
-						value = parseInt(value,36);
-					}else
-					{
-						value = value.split(/(\w{2})/).filter(Boolean).map(v=>parseInt(v,36));
-					}
-					return [idx, value];
+	function readPDC(string)
+	{
+		let teamsStr = string.split(']');
+		let baseInfo = teamsStr.shift().split(',');
+		let teamsArr = teamsStr.map(teamStr=>
+			{
+				let membersStr = teamStr.split('}').filter(Boolean);
+				const team = {
+					badge: parseInt(membersStr.shift(),10) //徽章是10进制
+				}
+				team.members = membersStr.map(memberStr=>{
+					let memberArr = memberStr.split(',').map(valueStr=>{
+						let idx = parseInt(valueStr.substr(0,2),36);
+						let value = valueStr.substr(2);
+						if (idx !== 2)
+						{
+							value = parseInt(value,36);
+						}else
+						{
+							value = value.split(/(\w{2})/).filter(Boolean).map(v=>parseInt(v,36));
+						}
+						return [idx, value];
+					});
+					return new Map(memberArr);
 				});
-				return new Map(memberArr);
-			});
-			return team;
+				return team;
+			}
+		);
+		let pdcFotmation = {
+			version: parseInt(baseInfo[0],10),
+			teamCount: parseInt(baseInfo[1],10)+1,
+			teams: teamsArr
 		}
-	);
-	let pdcFotmation = {
-		version: parseInt(baseInfo[0],10),
-		teamCount: parseInt(baseInfo[1],10)+1,
-		teams: teamsArr
+		return pdcFotmation;
 	}
-	return pdcFotmation;
-}
-function pdcFotmationToPdfFotmation(pdcFotmation)
-{
+	let pdcFotmation = readPDC(inputString);
 	const f = new Formation(pdcFotmation.teamCount, pdcFotmation.teamCount == 2 ? 5 : 6);
 	if (pdcFotmation.teamCount == 2)
 	{
@@ -1234,8 +1238,9 @@ function pdcFotmationToPdfFotmation(pdcFotmation)
 			a.plus[0] = member.get(11) || 0;
 			a.plus[1] = member.get(12) || 0;
 			a.plus[2] = member.get(13) || 0;
+
 			m.awoken = member.get(7) >= 0 ? member.get(7) : Cards[m.id].awakenings.length;
-			a.awoken = member.get(14) >= 0 ? member.get(14) : Cards[a.id].awakenings.length;
+			a.awoken = member.get(14) >= 0 ? member.get(14) : (a.id > 0 ? Cards[a.id].awakenings.length : 0);
 			m.sawoken = member.get(8) ? Cards[m.id].superAwakenings.indexOf(member.get(8)) : null;
 		});
 	});
@@ -1299,7 +1304,8 @@ function initialize() {
 		readBox.videoBox.classList.add(className_displayNone);
 		this.classList.remove(className_displayNone);
 		
-		this.refreshQrCode(formation.getQrStr(saveBox.qrDataType.find(radio=>radio.checked).value));
+		let qrTypeRadio = saveBox.qrDataType.find(radio=>radio.checked);
+		if (qrTypeRadio) qrTypeRadio.onclick(); //打开二维码窗口就先产生二维码
 	};
 	qrCodeFrame.hide = function(){
 		qrcodeReader.reset();
@@ -1311,6 +1317,7 @@ function initialize() {
 	const qrContent = qrCodeFrame.content = qrCodeFrame.querySelector(".mask-content");
 	const qrReadBox = qrContent.readBox = qrContent.querySelector(".read-qr-box");
 	const qrSaveBox = qrContent.saveBox = qrContent.querySelector(".save-qr-box");
+	qrReadBox.readString = qrReadBox.querySelector(".read-string");
 	qrReadBox.readQrCamera = qrReadBox.querySelector(".read-qr-camera");
 	qrReadBox.readQrFile = qrReadBox.querySelector(".read-qr-file");
 	qrReadBox.filePicker = qrReadBox.querySelector(".file-select");
@@ -1318,11 +1325,35 @@ function initialize() {
 	qrReadBox.video = qrReadBox.querySelector("#video");
 	qrReadBox.videoBox = qrReadBox.querySelector(".video-box");
 	qrReadBox.sourceSelect = qrReadBox.querySelector("#sourceSelect");
+	qrReadBox.qrStr = qrReadBox.querySelector(".string-input");
+	qrReadBox.readString.onclick = function()
+	{
+		let inputResult = inputFromQrString(qrReadBox.qrStr.value);
+		if (inputResult.code < 100)
+		{
+			qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
+			const newLink = document.createElement("a");
+			newLink.className = "formation-from-string";
+			newLink.href = inputResult.url;
+			newLink.target = "_blank";
+			qrReadBox.info.appendChild(newLink);
+		}else
+		{
+			qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
+		}
+	}
 
 	qrSaveBox.qrImage = qrSaveBox.querySelector(".qr-code-image");
+	qrSaveBox.qrStr = qrSaveBox.querySelector(".string-output");
+	qrSaveBox.qrStr.onchange = function()
+	{
+		qrCodeFrame.refreshQrCode(this.value);
+	}
 	qrSaveBox.qrDataType = Array.from(qrSaveBox.querySelectorAll(".qr-data-type-radio"));
 	qrSaveBox.qrDataType.forEach(radio=>radio.onclick = function(){
-		qrCodeFrame.refreshQrCode(formation.getQrStr(this.value));
+		let qrstr = formation.getQrStr(this.value);
+		qrSaveBox.qrStr.value = qrstr;
+		qrSaveBox.qrStr.onchange();
 	});
 	qrSaveBox.saveQrImg = qrSaveBox.querySelector(".save-qr-img");
 
@@ -1395,18 +1426,9 @@ function initialize() {
 		const file = myFiles[0];
 		loadImage(URL.createObjectURL(file)).then(function(img) {
 			qrcodeReader.decodeFromImage(img).then((result) => {
-				console.log('Found QR code!', result);
-				let inputResult = inputFromQrString(result.text);
-				
-				qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
-				if (inputResult.code < 100)
-				{
-					const newLink = document.createElement("a");
-					newLink.className = "formation-from-qrcode";
-					newLink.href = inputResult.url;
-					newLink.target = "_blank";
-					qrReadBox.info.appendChild(newLink);
-				}
+				console.debug('Found QR code!', result);
+				qrReadBox.qrStr.value = result.text;
+				qrReadBox.readString.onclick();
 			}).catch((err) => {
 				console.error(err);
 				if (err) {
@@ -1423,9 +1445,9 @@ function initialize() {
 					}
 				}
 			})
-			console.log(`Started decode for image from ${img.src}`)
+			console.debug(`Started decode for image from ${img.src}`)
 		}, function(err) {
-			console.log(err);
+			console.debug(err);
 		});
 	}
 
@@ -1439,41 +1461,27 @@ function initialize() {
 		}
 	}else
 	{
-		
 		function scanContinuously()
 		{
 			qrcodeReader.decodeFromInputVideoDeviceContinuously(selectedDeviceId, 'video', (result, err) => {
 				if (result) {
 					// properly decoded qr code
-					console.log('Found QR code!', result);
-					let inputResult = inputFromQrString(result.text);
-					
-					if (inputResult.code < 100)
-					{ //成功后就关闭
-						qrReadBox.readQrCamera.onclick();
-						qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
-						const newLink = document.createElement("a");
-						newLink.className = "formation-from-qrcode";
-						newLink.href = inputResult.url;
-						newLink.target = "_blank";
-						qrReadBox.info.appendChild(newLink);
-					}else
-					{
-						qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
-					}
+					console.debug('Found QR code!', result);
+					qrReadBox.qrStr.value = result.text;
+					qrReadBox.readString.onclick();
 				}
 		
 				if (err) {
 					if (err instanceof ZXing.NotFoundException) {
-					console.log('No QR code found.')
+					console.debug('No QR code found.')
 					}
 		
 					if (err instanceof ZXing.ChecksumException) {
-					console.log('A code was found, but it\'s read value was not valid.')
+					console.debug('A code was found, but it\'s read value was not valid.')
 					}
 		
 					if (err instanceof ZXing.FormatException) {
-					console.log('A code was found, but it was in a invalid format.')
+					console.debug('A code was found, but it was in a invalid format.')
 					}
 				}
 			});
@@ -2339,6 +2347,52 @@ function initialize() {
 		});
 	};
 
+	//特殊搜索部分
+	const s_specialDiv = searchBox.querySelector(".special-div");
+	const specialAdd = s_specialDiv.querySelector(".special-add");
+	const specialClear = s_specialDiv.querySelector(".special-clear");
+	const specialFilterUl = s_specialDiv.querySelector(".special-filter-list");
+	const specialFilterFirstLi = specialFilterUl.querySelector("li");
+	const specialFirstSelect = specialFilterFirstLi.querySelector(".special-filter");
+	
+	function newSpecialSearchOption(func, idx1, idx2)
+	{
+		const funcName = returnMonsterNameArr(func, currentLanguage.searchlist, currentDataSource.code)[0];
+		return new Option(funcName + (func.addition ? " " + localTranslating.addition_display : ""), idx1 + (idx2 != null ? "|" + idx2 : ""));
+	}
+	specialSearchFunctions.forEach((sfunc,idx)=>{
+		if (sfunc.group)
+		{
+			const groupName = returnMonsterNameArr(sfunc, currentLanguage.searchlist, currentDataSource.code)[0];
+			const optgroup = specialFirstSelect.appendChild(document.createElement("optgroup"));
+			optgroup.label = groupName;
+			if (sfunc.functions)
+			{
+				sfunc.functions.forEach((_sfunc,_idx)=>{
+					optgroup.appendChild(newSpecialSearchOption(_sfunc, idx, _idx));
+				});
+			}
+		}else
+		{
+			specialFirstSelect.options.add(newSpecialSearchOption(sfunc, idx));
+		}
+	});
+	specialAdd.onclick = function()
+	{
+		specialFilterUl.appendChild(specialFilterFirstLi.cloneNode(true));
+	}
+	specialAdd.onclick(); //先运行一次产生两个
+	specialClear.onclick = function()
+	{
+		/*for (let ci = specialFilterUl.children.length-1; ci>0; ci--)
+		{
+			specialFilterUl.children[ci].remove();
+		}*/
+		specialFilterUl.innerHTML = "";
+		specialFilterUl.appendChild(specialFilterFirstLi);
+		specialFirstSelect.selectedIndex = 0;
+	}
+
 	const s_controlDiv = searchBox.querySelector(".control-div");
 	const searchStart = s_controlDiv.querySelector(".search-start");
 	const searchClose = s_controlDiv.querySelector(".search-close");
@@ -2394,7 +2448,7 @@ function initialize() {
 				showAbilitiesWithAwoken: s_add_show_abilities_with_awoken.checked,
 				customAddition: typeof customAdditionalFunction == "function" ?
 				 [customAdditionalFunction] :
-				 (Array.isArray(customAdditionalFunction) ? customAdditionalFunction : null)
+				 (Array.isArray(customAdditionalFunction) ? customAdditionalFunction : [])
 			};
 			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, additionalOption));
 			searchMonList.customAddition = additionalOption.customAddition;
@@ -2426,6 +2480,7 @@ function initialize() {
 	s_add_show_abilities_with_awoken.onchange = reShowSearch;
 
 	const startSearch = function(cards, customAdditionalFunction) {
+		if (customAdditionalFunction == undefined) customAdditionalFunction = [];
 		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
 		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
 		let attr1, attr2;
@@ -2456,7 +2511,7 @@ function initialize() {
 				num: parseInt(btn.getAttribute("data-awoken-count"), 10)
 			};
 		});
-		const searchResult = searchCards(cards,
+		let searchResult = searchCards(cards,
 			attr1, attr2,
 			s_fixMainColor.checked,
 			typesFilter,
@@ -2467,7 +2522,20 @@ function initialize() {
 			s_awokensEquivalent.checked,
 			s_includeSuperAwoken.checked
 		);
-		//console.log("搜索结果", searchResult);
+
+		//进行特殊附加搜索
+		const specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter")).map(select=>{
+			const indexs = select.value.split("|").map(Number);
+			const funcObj = indexs.length > 1 ? specialSearchFunctions[indexs[0]].functions[indexs[1]] : specialSearchFunctions[indexs[0]];
+			return funcObj;
+		});
+		searchResult = specialFilters.reduce((pre,funcObj)=>
+		{
+			if (!funcObj) return pre;
+			if (funcObj.addition) customAdditionalFunction.push(funcObj.addition); //如果有附加显示，则添加到列表
+			return funcObj.function(pre); //结果进一步筛选
+		}, searchResult);
+		
 		showSearch(searchResult, customAdditionalFunction);
 	};
 	searchBox.startSearch = startSearch;
@@ -2488,6 +2556,7 @@ function initialize() {
 		
 		awokenClear.onclick();
 		sawokenClear.onclick();
+		specialClear.onclick();
 
 		searchMonList.originalHeads = null;
 		searchResultCount.setAttribute("data-search-result-count", 0);

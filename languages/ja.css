@@ -368,7 +368,8 @@
 	content: "リセット";
 }
 .search-box .awoken-clear::before,
-.search-box .sawoken-clear::before
+.search-box .sawoken-clear::before,
+.special-div .special-clear::before
 {
 	content: "クリア";
 }
@@ -377,6 +378,12 @@
 }
 .search-box .sawoken-div::before{
 	content: "▼超覚醒（OR）";
+}
+.search-box .special-div::before{
+	content: "▼特別な検索";
+}
+.special-div .special-add::before {
+    content: "➕";
 }
 .control-div .search-start::before{
 	content: "🔍検索の開始";
@@ -486,9 +493,9 @@
 	content: "QRコードを生成します:";
 }
 
-.formation-from-qrcode::before
+.formation-from-string::before
 {
-    content: "QRコードから読み取られたフォーメーションリンク";
+    content: "文字列から読み取られた列リンク";
 }
 label[for="sourceSelect"]::before
 {
@@ -510,12 +517,18 @@ label[for="sourceSelect"]::before
 {
     content: "\f1c5 画像ファイルを読み取る";
 }
+#qr-code-frame .read-string::before {
+	content: "\f891 文字列を読み取ります";
+}
 
 label[for="qr-data-type-pdf"]::before
 {
-	content: "パズドラチーム図作成ツール";
+	content: "パズドラダッシュフォーメーション";
 }
 label[for="qr-data-type-pdc"]::before
 {
 	content: "パズドラダメージ計算 (PDC)";
+}
+label[for="qr-data-type-pdchu"]::before {
+	content: "Valeria(pdchu)";
 }

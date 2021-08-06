@@ -1,5 +1,6 @@
 ﻿localTranslating = {
     webpage_title: `パズル＆ドラゴンズ${teamsCount}人のチーム図作成ツール`,
+	addition_display: "追加の表示",
     title_blank: "入力タイトル",
     detail_blank: "入力詳細",
     sort_name:{
@@ -10,6 +11,7 @@
         sort_evoRoot_Attrs : "カード進化ルートの属性",
         sort_rarity: "レアリティ",
         sort_cost: "コスト",
+        sort_mp: "MP",
         sort_skillLv1: "最大スキルターン",
         sort_skillLvMax: "最小スキルターン",
         sort_hpMax110: "最大 HP",

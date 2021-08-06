@@ -8,30 +8,3 @@
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
 	font-weight: bold;
 }
-.specialSearch {
-	display: block !important;
-	min-height: 35px;
-}
-.specialSearch::before {
-	content: "▼暂时仅中文有的筛选（缺少翻译）";
-	display: block;
-}
-.specialSearch li{
-	margin-bottom: 5px;
-	margin-right: 3px;
-}
-.specialSearch select{
-	font-size: 20px;
-}
-.specialSearch .specialSearch-clear,
-.specialSearch .specialSearch-add
- {
-	float: right;
-	padding: 0;
-}
-.specialSearch .specialSearch-clear::before {
-    content: "❌";
-}
-.specialSearch .specialSearch-add::before {
-    content: "➕";
-}

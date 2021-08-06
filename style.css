@@ -1374,7 +1374,8 @@ icon.inflicts::after
 	margin: 0.5px !important;
 }
 .awoken-preview .awoken-icon,
-.custom-addition .awoken-icon
+.custom-addition .awoken-icon,
+.custom-addition .type-icon
 {
 	filter: unset;
 	transform: scale(0.75);
@@ -1687,7 +1688,9 @@ icon.inflicts::after
 }
 .search-box .rare-clear::before,
 .search-box .awoken-clear::before,
-.search-box .sawoken-clear::before
+.search-box .sawoken-clear::before,
+.search-box .special-add::before,
+.search-box .special-clear::before
 {
 	width: 80px;
 	background-size: 100px 100px;
@@ -1698,7 +1701,9 @@ icon.inflicts::after
 	padding: 0;
 	vertical-align: top;
 }
-.search-box .sawoken-clear::before
+.search-box .sawoken-clear::before,
+.search-box .special-add::before,
+.search-box .special-clear::before
 {
 	width: 50px;
 	font-size: 14px;
@@ -1829,6 +1834,17 @@ icon.inflicts::after
 {
 	margin-right: 5px;
 	margin-top: 5px;
+}
+
+
+.special-filter-list>li{
+	margin-bottom: 5px;
+	margin-right: 3px;
+}
+.special-filter-list select{
+	font-size: 20px;
+	max-width: 100%;
+	box-sizing: border-box;
 }
 
 .control-div button{
@@ -2938,6 +2954,24 @@ table .orb-icon
 {
 	color: white;
 }
+#qr-code-frame .string-input
+{
+	width: calc(100% - 170px);
+	box-sizing: border-box;
+}
+#qr-code-frame .string-output
+{
+	width: calc(100% - 20px);
+}
+#qr-code-frame .qr-box
+{
+	margin: 5px;
+}
+.save-qr-box
+{
+	    padding-bottom: 10px;
+}
+
 .read-qr-box::before,
 .save-qr-box::before
 {
@@ -2954,7 +2988,7 @@ table .orb-icon
 	font-size: 20px;
 	padding: 5px;
 }
-.formation-from-qrcode
+.formation-from-string
 {
 	font-size: 1.5em;
 	display: block;

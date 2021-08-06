@@ -365,7 +365,8 @@
 	content: "재설정";
 }
 .search-box .awoken-clear::before,
-.search-box .sawoken-clear::before
+.search-box .sawoken-clear::before,
+.special-div .special-clear::before
 {
 	content: "명확한";
 }
@@ -374,6 +375,12 @@
 }
 .search-box .sawoken-div::before{
 	content: "▼슈퍼 각성（OR）";
+}
+.search-box .special-div::before{
+	content: "▼특별 검색";
+}
+.special-div .special-add::before {
+    content: "➕";
 }
 .control-div .search-start::before{
 	content: "🔍검색 시작";
@@ -480,9 +487,9 @@
 	content: "QR 코드 생성:";
 }
 
-.formation-from-qrcode::before
+.formation-from-string::before
 {
-    content: "QR 코드에서 읽은 형성 링크";
+    content: "문자열에서 읽은 팀 링크입니다";
 }
 label[for="sourceSelect"]::before
 {
@@ -504,12 +511,18 @@ label[for="sourceSelect"]::before
 {
     content: "\f1c5  이미지 파일 읽기";
 }
+#qr-code-frame .read-string::before {
+	content: "\f891 문자열을 읽습니다";
+}
 
 label[for="qr-data-type-pdf"]::before
 {
-	content: "퍼즐앤드래곤 팀 다이어그램 생성 도구";
+	content: "퍼즐앤드래곤 대시 형성";
 }
 label[for="qr-data-type-pdc"]::before
 {
 	content: "퍼즐앤드래곤 데미지 카큐라터 (PDC)";
+}
+label[for="qr-data-type-pdchu"]::before {
+	content: "Valeria(pdchu)";
 }

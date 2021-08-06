@@ -1,1 +1,26 @@
-﻿document.title = localTranslating.webpage_title;
+﻿localTranslating = {
+    webpage_title: `智龙迷城${teamsCount}人队伍图制作工具`,
+	addition_display: "附加显示",
+    title_blank: "输入队伍标题",
+    detail_blank: "输入说明",
+    sort_name:{
+        sort_none: "无",
+        sort_id: "怪物ID",
+        sort_attrs: "属性",
+        sort_evoRootId: "进化树",
+        sort_evoRoot_Attrs : "进化根怪物的属性",
+        sort_rarity: "稀有度",
+        sort_cost: "消耗",
+        sort_mp: "MP",
+        sort_skillLv1: "技能最大冷却时间",
+        sort_skillLvMax: "技能最小冷却时间",
+        sort_hpMax110: "最大 HP",
+        sort_atkMax110: "最大攻击",
+        sort_rcvMax110: "最大回复",
+        sort_hpMax110_awoken: "最大 HP（+觉醒）",
+        sort_atkMax110_awoken: "最大攻击（+觉醒）",
+        sort_rcvMax110_awoken: "最大回复（+觉醒）",
+        sort_abilityIndex_awoken: "最大加权能力指数（+觉醒）",
+    },
+    force_reload_data: "强制刷新数据",
+}
