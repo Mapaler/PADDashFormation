@@ -1123,7 +1123,7 @@ function inputFromQrString(string)
 			re.message = "错误的 JSON 格式 | The illegal JSON format";
 		}
 	}
-	else if (/^http/i.test(string))
+	else if (/^(https?|file):\/\//i.test(string))
 	{
 		let url = new URL(string);
 		if (url.searchParams.get('d'))
@@ -1141,7 +1141,8 @@ function inputFromQrString(string)
 				re.code = 112;
 				re.message = "错误的 网址 格式 | The illegal URL format";
 			}
-		}else
+		}
+		else
 		{
 			re.code = 100;
 			re.message = "无队伍数据 | No formation data";
@@ -1157,7 +1158,7 @@ function inputFromQrString(string)
 	else
 	{
 		re.code = 110;
-		re.message = "不是 JSON 格式 | Not JSON format";
+		re.message = "不支持的格式 | Unsupported format";
 	}
 	return re;
 }
