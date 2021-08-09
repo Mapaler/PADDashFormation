@@ -47,8 +47,7 @@
 			auto_heal: tp`${'icon'}消除宝珠的回合，回复${'belong_to'}${'value'}的${'stats'}`,
 			ctw: tp`${'icon'}${'value'}内时间停止，可以任意移动宝珠`,
 			gravity: tp`${'icon'}造成${'target'}${'value'}的伤害`,
-			resolve: tp`${'icon'}如${'stats'}≧${'value'}，受到单一次致命攻击时，${'probability'}将会以1点 HP 生还`,
-			probability: tp`有${'value'}%几率`,
+			resolve: tp`${'icon'}如${'stats'}≧${'value'}，受到单一次致命攻击时，${'prob'}将会以1点 HP 生还`,
 			board_change: tp`全画面的宝珠变为${'attrs'}`,
 			skill_boost: tp`自身以外成员的技能冷却储备${'icon'}${'turns'}`,
 			add_combo: tp`结算时连击数增加${'value'}c${'icon'}`,
@@ -57,6 +56,7 @@
 			drop_refresh: tp`全板刷新`,
 			drum: tp`宝珠移动和消除的声音变成太鼓达人的音效`,
 			board7x6: tp`【${'icon'}7×6版面】`,
+			counter_attack: tp`受到${'target'}攻击时，${'prob'}进行受到伤害${'value'}的${'attr'}属性${'icon'}反击`,
 		},
         value: {
             unknown: tp`[ 未知数值: ${'type'}]`, //type
@@ -68,6 +68,7 @@
 			mul_of_times: tp`${'stats'}×${'value'}倍`,
 			hp_scale: tp`${'hp'}为100%时${'min'}，${'hp'}为1时${'max'}`,
 			random_atk: tp`${'atk'}×${'min'}${'max'}倍`,
+			prob: tp`有${'value'}几率`,
 		},
 		target: {
 			self: tp`发动者自身`,

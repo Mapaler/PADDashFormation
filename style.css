@@ -3166,6 +3166,7 @@ table .orb-icon
 {
     border-color: #7F00FF;
 }
+
 .icon-skill,
 .icon-skill::after,
 .icon-skill::before
@@ -3176,7 +3177,8 @@ table .orb-icon
 	background-image: url(images/icon-skills.fw.png);
 	background-repeat: no-repeat;
 }
-.icon-skill
+.icon-skill,
+.skill-datail-parsed icon.orb
 {
 	vertical-align: bottom;
 	transform: scale(0.75);
@@ -3370,4 +3372,8 @@ table .orb-icon
 .icon-skill[data-icon-type="7x6-board"]
 {
 	background-position-y:calc(-36px * 21);
+}
+.icon-skill[data-icon-type="counter-attack"]
+{
+	background-position-y:calc(-36px * 22);
 }

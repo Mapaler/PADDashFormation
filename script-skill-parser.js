@@ -270,7 +270,7 @@ const c = {
     remainOrbs: function (count) { return { remainOrbs: { count: count } }; },
     useSkill: function () { return { useSkill: true }; },
 	multiplayer: function () { return { multiplayer: true }; },
-	probability: function (percent) { return { probability: percent }; },
+	prob: function (percent) { return { prob: percent }; },
 }
 
 const p = {
@@ -373,8 +373,8 @@ function rateMultiply(value, rate) {
 function orbDropIncrease(value, attrs) {
     return { kind: SkillKinds.OrbDropIncrease, value: value, attrs: attrs };
 }
-function resolve(min, condition) {
-    return { kind: SkillKinds.Resolve, min: min, max: 1, condition: condition };
+function resolve(min, prob) {
+    return { kind: SkillKinds.Resolve, min: min, max: 1, prob: prob };
 }
 function unbind(normal, awakenings, matches) {
     return { kind: SkillKinds.Unbind, normal: normal, awakenings: awakenings , matches: matches};
@@ -429,7 +429,7 @@ const parsers = {
 	[11](attr, mul) { return powerUp([attr], null, p.mul({ atk: mul })); },
 	[12](mul) { return followAttack(v.xATK(mul)); },
 	[13](mul) { return autoHeal(v.xRCV(mul)); },
-	[14](min, percent) { return resolve(v.percent(min), c.probability(percent)); },
+	[14](min, prob) { return resolve(v.percent(min), v.percent(prob)); },
 	[15](time) { return timeExtend(v.constant(time / 100)); },
 	[16](percent) { return reduceDamage('all', v.percent(percent)); },
 	[17](attr, percent) { return reduceDamage([attr], v.percent(percent)); },
@@ -972,12 +972,12 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.Resolve: { //根性
-			let prob = skill.condition.probability;
+			let prob = skill.prob;
 			let dict = {
 				icon: createIcon("resolve"),
 				stats: renderStat('hp'),
 				value: renderValue(skill.min, { percent:true }),
-				probability: prob < 100 ? tsp.skill.probability({value: prob}) : "",
+				prob: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
 			};
 			frg.ap(tsp.skill.resolve(dict));
 			break;
@@ -1085,17 +1085,19 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.vampire(dict));
 			break;
 		}
-		/*
 		case SkillKinds.CounterAttack: {
-		const { attr, prob, value } = skill as Skill.CounterAttack;
-		return (
-			<span className="CardSkill-skill">
-			<Asset assetId="status-counter" className="CardSkill-icon" />
-			{renderValue(prob)} &rArr; {renderValue(value)} damage
-			{typeof attr === 'number' && renderAttrs(attr)}
-			</span>
-		);
+			let attr = skill.attr, prob = skill.prob, value = skill.value;
+			dict = {
+				icon: createIcon("counter-attack"),
+				target: tsp.target.enemy(),
+				prob: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
+				value: renderValue(value),
+				attr: renderAttrs(attr),
+			};
+			frg.ap(tsp.skill.counter_attack(dict));
+			break;
 		}
+		/*
 		case SkillKinds.ChangeOrbs: {
 		const { changes } = skill as Skill.ChangeOrbs;
 		return (
