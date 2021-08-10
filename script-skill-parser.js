@@ -126,6 +126,8 @@ const SkillKinds = {
     Heal: "heal",
     AutoHealBuff: "auto-heal-buff",
     ChangeOrbs: "change-orbs",
+    GenerateOrbs: "generate-orbs",
+    FixedOrbs: "fixed-orbs",
     PowerUp: "power-up",
     CounterAttack: "counter-attack",
     SetOrbState: "set-orb-state",
@@ -353,6 +355,12 @@ function autoHealBuff(value) {
 function changeOrbs() {
     return { kind: SkillKinds.ChangeOrbs, changes: Array.from(arguments) };
 }
+function generateOrbs(to, exclude, count) {
+    return { kind: SkillKinds.GenerateOrbs, to: to, exclude: exclude, count: count };
+}
+function fixedOrbs() {
+    return { kind: SkillKinds.FixedOrbs, generates: Array.from(arguments) };
+}
 function powerUp(attrs, types, value, condition, reduceDamageValue) {
     if (value.kind === SkillPowerUpKind.Multiplier) {
         let hp = value.hp, atk = value.atk, rcv = value.rcv;
@@ -424,7 +432,7 @@ const parsers = {
 	[6](percent) { return gravity(v.xHP(percent)); },
 	[7](mul) { return heal(v.xRCV(mul)); },
 	[8](value) { return heal(v.constant(value)); },
-	[9](from, to) { return changeOrbs({ kind: 'from', from: [from || 0], to: [to || 0] }); },
+	[9](from, to) { return changeOrbs({ from: [from || 0], to: [to || 0] }); },
 	[10]() { return dropRefresh(); },
 	[11](attr, mul) { return powerUp([attr], null, p.mul({ atk: mul })); },
 	[12](mul) { return followAttack(v.xATK(mul)); },
@@ -435,7 +443,7 @@ const parsers = {
 	[17](attr, percent) { return reduceDamage([attr], v.percent(percent)); },
 	[18](turns) { return activeTurns(turns, delay()); },
 	[19](turns, percent) { return activeTurns(turns, defBreak(v.percent(percent))); },
-	[20](from1, to1, from2, to2) { return changeOrbs({ kind: 'from', from: [from1 || 0], to: [to1 || 0] }, { kind: 'from', from: [from2 || 0], to: [to2 || 0] }); },
+	[20](from1, to1, from2, to2) { return changeOrbs({ from: [from1 || 0], to: [to1 || 0] }, { from: [from2 || 0], to: [to2 || 0] }); },
 	[21](turns, attr, percent) { return activeTurns(turns, reduceDamage([attr], v.percent(percent))); },
 	[22](type, mul) { return powerUp(null, [type], p.mul({ atk: mul })); },
 	[23](type, mul) { return powerUp(null, [type], p.mul({ hp: mul })); },
@@ -567,15 +575,15 @@ const parsers = {
 	[125](mon1, mon2, mon3, mon4, mon5, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp, atk, rcv }), c.compo('card', [mon1, mon2, mon3, mon4, mon5].filter(Boolean))); },
 	[126](attrs, turns, _, percent) { return activeTurns(turns, orbDropIncrease(v.percent(percent), flags(attrs))); },
 	[127](cols1, attrs1, cols2, attrs2) {
-	  return changeOrbs(
-		{ kind: 'fixed', to: flags(attrs1), type: 'col', positions: flags(cols1) },
-		{ kind: 'fixed', to: flags(attrs2), type: 'col', positions: flags(cols2) }
+	  return fixedOrbs(
+		{ to: flags(attrs1), type: 'col', positions: flags(cols1) },
+		{ to: flags(attrs2), type: 'col', positions: flags(cols2) }
 	  );
 	},
 	[128](rows1, attrs1, rows2, attrs2) {
-	  return changeOrbs(
-		{ kind: 'fixed', to: flags(attrs1), type: 'row', positions: flags(rows1) },
-		{ kind: 'fixed', to: flags(attrs2), type: 'row', positions: flags(rows2) }
+	  return fixedOrbs(
+		{ to: flags(attrs1), type: 'row', positions: flags(rows1) },
+		{ to: flags(attrs2), type: 'row', positions: flags(rows2) }
 	  );
 	},
 	[129](attrs, types, hp, atk, rcv, rAttrs, rPercent) {
@@ -621,7 +629,7 @@ const parsers = {
 	  ];
 	},
 	[140](attrs) { return setOrbState(flags(attrs), 'enhanced'); },
-	[141](count, to, exclude) { return changeOrbs({ kind: 'gen', to: flags(to), exclude: flags(exclude), count }); },
+	[141](count, to, exclude) { return generateOrbs(flags(to), flags(exclude), count); },
 	[142](turns, attr) { return activeTurns(turns, changeAttr('self', attr)); },
   
 	[143](mul, dmgAttr) { return damageEnemy('all', dmgAttr || 0, v.xTeamHP(mul)); },
@@ -640,7 +648,7 @@ const parsers = {
 	},
 	[152](attrs) { return setOrbState(flags(attrs), 'locked'); },
 	[153](attr) { return changeAttr('opponent', attr); },
-	[154](from, to) { return changeOrbs({ kind: 'from', to: flags(to), from: flags(from) }); },
+	[154](from, to) { return changeOrbs({ to: flags(to), from: flags(from) }); },
 	[155](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv }), c.multiplayer()); },
 	[156](turns, awoken1, awoken2, awoken3, type, mul) {
 	  return activeTurns(turns, type === 2 ?
@@ -696,7 +704,11 @@ const parsers = {
 	  ));
 	},
 	[175](series1, series2, series3, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp, atk, rcv }), c.compo('series', [series1, series2, series3].filter(Boolean))); },
-  
+	[176](row1, row2, row3, row4, row5, attrs) {
+		return fixedOrbs(
+		  { to: [attrs || 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>flags[row]) }
+		);
+	  },
 	[177](_0, _1, _2, _3, _4, remains, mul) {
 	  return [
 		noSkyfall(),
