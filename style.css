@@ -3185,6 +3185,28 @@ table .orb-icon
 	/*margin: -4px;*/
 	position: relative;
 }
+
+.skill-datail-parsed .board {
+	border-collapse: collapse;
+	background-color: #532;
+	background-image: url(images/slate.svg);
+	background-size: 120px 120px;
+	background-attachment: scroll;
+	background-position: 0 0;
+}
+.skill-datail-parsed .board .orb
+{
+	transform: unset;
+}
+.skill-datail-parsed .board td {
+	padding: 0;
+}
+.skill-datail-parsed .board tr:nth-of-type(2n+1)>td:nth-of-type(2n+1),
+.skill-datail-parsed .board tr:nth-of-type(2n)>td:nth-of-type(2n)
+{
+	  background-color: rgba(0,0,0,0.4);
+}
+
 .card-skill-list>.fixed-time,
 .card-skill-list>.min-match-len,
 .card-skill-list>.\37x6-board

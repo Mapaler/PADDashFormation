@@ -221,7 +221,7 @@ const v = {
         return { kind: SkillValueKind.Percent, value: (value / 100) || 1 };
     },
     constant: function(value) {
-        return { kind: SkillValueKind.Constant, value: value || 0 };
+        return { kind: SkillValueKind.Constant, value: value ?? 0 };
     },
     constantTo: function(value) {
         return { kind: SkillValueKind.ConstantTo, value: value || 1 };
@@ -307,8 +307,8 @@ const p = {
             max: max || min,
             baseAtk: (baseMul[0] / 100) || 1,
             baseRcv: (baseMul[1] / 100) || 1,
-            bonusAtk: (bonusMul[0] / 100) || 0,
-            bonusRcv: (bonusMul[1] / 100) || 0
+            bonusAtk: (bonusMul[0] / 100) ?? 0,
+            bonusRcv: (bonusMul[1] / 100) ?? 0
         };
     },
     scaleAttrs: function (attrs, min, max, baseMul, bonusMul) {
@@ -352,6 +352,9 @@ function heal(value) {
 function autoHealBuff(value) {
 	return { kind: SkillKinds.AutoHealBuff, value: value };
 }
+function fromTo(from, to) {
+    return { from: from, to: to };
+}
 function changeOrbs() {
     return { kind: SkillKinds.ChangeOrbs, changes: Array.from(arguments) };
 }
@@ -394,7 +397,7 @@ function randomSkills(skills) {
     return { kind: SkillKinds.RandomSkills, skills: skills };
 }
 function changeAttr(target, attr) {
-    return { kind: SkillKinds.ChangeAttribute, target: target, attr: attr || 0 };
+    return { kind: SkillKinds.ChangeAttribute, target: target, attr: attr ?? 0 };
 }
 function gravity(value) {
     return { kind: SkillKinds.Gravity, value: value };
@@ -432,7 +435,7 @@ const parsers = {
 	[6](percent) { return gravity(v.xHP(percent)); },
 	[7](mul) { return heal(v.xRCV(mul)); },
 	[8](value) { return heal(v.constant(value)); },
-	[9](from, to) { return changeOrbs({ from: [from || 0], to: [to || 0] }); },
+	[9](from, to) { return changeOrbs(fromTo([from ?? 0], [to ?? 0])); },
 	[10]() { return dropRefresh(); },
 	[11](attr, mul) { return powerUp([attr], null, p.mul({ atk: mul })); },
 	[12](mul) { return followAttack(v.xATK(mul)); },
@@ -443,7 +446,15 @@ const parsers = {
 	[17](attr, percent) { return reduceDamage([attr], v.percent(percent)); },
 	[18](turns) { return activeTurns(turns, delay()); },
 	[19](turns, percent) { return activeTurns(turns, defBreak(v.percent(percent))); },
-	[20](from1, to1, from2, to2) { return changeOrbs({ from: [from1 || 0], to: [to1 || 0] }, { from: [from2 || 0], to: [to2 || 0] }); },
+	[20](from1, to1, from2, to2) { 
+		if ((to1 ?? 0) == (to2 ?? 0))
+			return changeOrbs(fromTo([from1 ?? 0, from2 ?? 0], [to1 ?? 0]));
+		else
+			return changeOrbs(
+				fromTo([from1 ?? 0], [to1 ?? 0]),
+				fromTo([from2 ?? 0], [to2 ?? 0])
+			);
+	},
 	[21](turns, attr, percent) { return activeTurns(turns, reduceDamage([attr], v.percent(percent))); },
 	[22](type, mul) { return powerUp(null, [type], p.mul({ atk: mul })); },
 	[23](type, mul) { return powerUp(null, [type], p.mul({ hp: mul })); },
@@ -464,7 +475,7 @@ const parsers = {
 	[38](max, _, percent) { return reduceDamage('all', v.percent(percent), max === 100 ? c.hp(max, max) : c.hp(0, max)); },
 	[39](percent, stats1, stats2, mul) { return powerUp(null, null, p.mul(p.stats(mul, stats1, stats2)), c.hp(0, percent)); },
 	[40](attr1, attr2, mul) { return powerUp([attr1, attr2], null, p.mul({ atk: mul })); },
-	[41](prob, mul, attr) { return counterAttack(attr || 0, v.percent(prob), v.percent(mul)); },
+	[41](prob, mul, attr) { return counterAttack(attr ?? 0, v.percent(prob), v.percent(mul)); },
 	[42](targetAttr, dmgAttr, value) { return damageEnemy(targetAttr, dmgAttr, v.constant(value)); },
 	[43](min, max, percent) { return reduceDamage('all', v.percent(percent), c.hp(min, max)); },
 	[44](percent, stats1, stats2, mul) { return powerUp(null, null, p.mul(p.stats(mul, stats1, stats2)), c.hp(percent, 100)); },
@@ -484,7 +495,7 @@ const parsers = {
 	[58](attr, min, max) { return damageEnemy('all', attr, v.randomATK(min, max)); },
 	[59](attr, min, max) { return damageEnemy('single', attr, v.randomATK(min, max)); },
 	[60](turns, mul, attr) { return activeTurns(turns, counterAttack(attr, v.percent(100), v.percent(mul))); },
-	[61](attrs, min, base, bonus, incr) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (incr || 0), [base, 100], [bonus, 0])); },
+	[61](attrs, min, base, bonus, incr) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (incr ?? 0), [base, 100], [bonus, 0])); },
 	[62](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, atk: mul })); },
 	[63](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, rcv: mul })); },
 	[64](type, mul) { return powerUp(null, [type], p.mul({ atk: mul, rcv: mul })); },
@@ -559,7 +570,7 @@ const parsers = {
 	[117](bind, rcv, constant, hp, awokenBind) {
 	  return [
 		rcv ? heal(v.xRCV(rcv)) : hp ? heal(v.xMaxHP(hp)) : constant ? heal(v.constant(constant)) : null,
-		(bind || awokenBind) ? unbind(bind || 0, awokenBind || 0) : null,
+		(bind || awokenBind) ? unbind(bind ?? 0, awokenBind ?? 0) : null,
 	  ].filter(Boolean);
 	},
 	[118](...ids) { return randomSkills(ids.map(id => this.parser(id))); },
@@ -632,7 +643,7 @@ const parsers = {
 	[141](count, to, exclude) { return generateOrbs(flags(to), flags(exclude), count); },
 	[142](turns, attr) { return activeTurns(turns, changeAttr('self', attr)); },
   
-	[143](mul, dmgAttr) { return damageEnemy('all', dmgAttr || 0, v.xTeamHP(mul)); },
+	[143](mul, dmgAttr) { return damageEnemy('all', dmgAttr ?? 0, v.xTeamHP(mul)); },
 
 	[144](teamAttrs, mul, single, dmgAttr) { return damageEnemy(single ? 'single' : 'all', dmgAttr, v.xTeamATK(flags(teamAttrs), mul)); },
 	[145](mul) { return heal(v.xTeamRCV(mul)); },
@@ -648,7 +659,7 @@ const parsers = {
 	},
 	[152](attrs) { return setOrbState(flags(attrs), 'locked'); },
 	[153](attr) { return changeAttr('opponent', attr); },
-	[154](from, to) { return changeOrbs({ to: flags(to), from: flags(from) }); },
+	[154](from, to) { return changeOrbs(fromTo(flags(from), flags(to))); },
 	[155](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv }), c.multiplayer()); },
 	[156](turns, awoken1, awoken2, awoken3, type, mul) {
 	  return activeTurns(turns, type === 2 ?
@@ -684,7 +695,7 @@ const parsers = {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, attrs.length, [atk, rcv], [bonus, bonus]));
 	},
-	[165](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, incr) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (incr || 0), [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
+	[165](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, incr) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (incr ?? 0), [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
 	[166](min, baseAtk, baseRcv, bonusAtk, bonusRcv, max) { return powerUp(null, null, p.scaleCombos(min, max, [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
 	[167](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
   
@@ -706,7 +717,7 @@ const parsers = {
 	[175](series1, series2, series3, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp, atk, rcv }), c.compo('series', [series1, series2, series3].filter(Boolean))); },
 	[176](row1, row2, row3, row4, row5, attrs) {
 		return fixedOrbs(
-		  { to: [attrs || 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>flags[row]) }
+		  { to: [attrs ?? 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>flags(row)) }
 		);
 	  },
 	[177](_0, _1, _2, _3, _4, remains, mul) {
@@ -723,7 +734,7 @@ const parsers = {
 	},
 	[179](turns, value, percent, bind, awokenBind) {
 		return [
-			(bind || awokenBind) ? unbind(bind || 0, awokenBind || 0) : null,
+			(bind || awokenBind) ? unbind(bind ?? 0, awokenBind ?? 0) : null,
 			activeTurns(turns, autoHealBuff(value ? v.constant(value) : v.xMaxHP(percent)))
 		].filter(Boolean);
 	},
@@ -861,28 +872,28 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.Delay: { //威吓
 			let dict = {
-				icon: createIcon("delay"),
+				icon: createIcon(skill.kind),
 			};
 			frg.ap(tsp.skill.delay(dict));
 			break;
 		}
 		case SkillKinds.MassAttack: { //全体攻击
 			let dict = {
-				icon: createIcon("mass-attack"),
+				icon: createIcon(skill.kind),
 			};
 			frg.ap(tsp.skill.mass_attack(dict));
 			break;
 		}
 		case SkillKinds.LeaderChange: { //切换队长
 			let dict = {
-				icon: createIcon("leader-change"),
+				icon: createIcon(skill.kind),
 			};
 			frg.ap(tsp.skill.leader_change(dict));
 			break;
 		}
 		case SkillKinds.NoSkyfall: { //无天降
 			let dict = {
-				icon: createIcon("no-skyfall"),
+				icon: createIcon(skill.kind),
 			};
 			frg.ap(tsp.skill.no_skyfall(dict));
 			break;
@@ -919,7 +930,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.DefenseBreak: { //破防
 			let dict = {
-				icon: createIcon("defense-break"),
+				icon: createIcon(skill.kind),
 				value: renderValue(skill.value, {percent: true}),
 			};
 			frg.ap(tsp.skill.defense_break(dict));
@@ -927,7 +938,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.Poison: { //毒
 			let dict = {
-				icon: createIcon("poison"),
+				icon: createIcon(skill.kind),
 				belong_to: tsp.target.self(),
 				target: tsp.target.enemy(),
 				stats: tsp.stats.hp(),
@@ -958,7 +969,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.AutoHeal: { //队长技自动回血
 			let dict = {
-				icon: createIcon("auto-heal"),
+				icon: createIcon(skill.kind),
 				belong_to: tsp.target.self(),
 				value: renderValue(skill.value),
 				stats: tsp.stats.hp(),
@@ -968,7 +979,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.CTW: { //时间暂停
 			let dict = {
-				icon: createIcon("ctw"),
+				icon: createIcon(skill.kind),
 				value: renderValue(skill.value, { unit: tsp.unit.seconds }),
 			};
 			frg.ap(tsp.skill.ctw(dict));
@@ -976,7 +987,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.Gravity: { //重力
 			let dict = {
-				icon: createIcon("gravity"),
+				icon: createIcon(skill.kind),
 				target: tsp.target.enemy(),
 				value: renderValue(skill.value, { percent:true }),
 			};
@@ -986,7 +997,7 @@ function renderSkill(skill, option = {})
 		case SkillKinds.Resolve: { //根性
 			let prob = skill.prob;
 			let dict = {
-				icon: createIcon("resolve"),
+				icon: createIcon(skill.kind),
 				stats: renderStat('hp'),
 				value: renderValue(skill.min, { percent:true }),
 				prob: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
@@ -1010,11 +1021,11 @@ function renderSkill(skill, option = {})
 			let normal = skill.normal, awakenings = skill.awakenings, matches = skill.matches;
 			let effects = [];
 			if (normal)
-				effects.push(tsp.skill.unbind_normal({icon: createIcon("unbind-normal"), value: normal}));
+				effects.push(tsp.skill.unbind_normal({icon: createIcon("unbind-normal"), turns: normal}));
 			if (awakenings)
-				effects.push(tsp.skill.unbind_awakenings({icon: createIcon("unbind-awakenings"), value: awakenings}));
+				effects.push(tsp.skill.unbind_awakenings({icon: createIcon("unbind-awakenings"), turns: awakenings}));
 			if (matches)
-				effects.push(tsp.skill.unbind_matches({icon: createIcon("unbind-matches"), value: matches}));
+				effects.push(tsp.skill.unbind_matches({icon: createIcon("unbind-matches"), turns: matches}));
 			frg.ap(effects.nodeJoin(tsp.word.comma()));
 			break;
 		}
@@ -1029,7 +1040,7 @@ function renderSkill(skill, option = {})
 		case SkillKinds.SkillBoost: { //溜
 			const value = skill.value;
 			let dict = {
-				icon: createIcon("skill-boost", SkillValue.isLess(skill.value) ? "boost-decr" : "boost-incr"),
+				icon: createIcon(skill.kind, SkillValue.isLess(skill.value) ? "boost-decr" : "boost-incr"),
 				turns: renderValue(value, { unit:tsp.unit.turns, plusSign:true }),
 			};
 			frg.ap(tsp.skill.skill_boost(dict));
@@ -1037,7 +1048,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.AddCombo: { //+C
 			const value = skill.value;
-			let icon = createIcon("add-combo");
+			let icon = createIcon(skill.kind);
 			icon.setAttribute("data-add-combo", value);
 			let dict = {
 				icon: icon,
@@ -1064,21 +1075,21 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.min_match_length(dict));
 			break;
 		}
-		case SkillKinds.DropRefresh: {
+		case SkillKinds.DropRefresh: { //刷版
 			let dict = {
 				icon: createIcon(skill.kind),
 			};
 			frg.ap(tsp.skill.drop_refresh(dict));
 			break;
 		}
-		case SkillKinds.Drum: {
+		case SkillKinds.Drum: { //太鼓达人音效
 			let dict = {
-				icon: createIcon(skill.kind),
+				//icon: createIcon(skill.kind),
 			};
 			frg.ap(tsp.skill.drum(dict));
 			break;
 		}
-		case SkillKinds.Board7x6: {
+		case SkillKinds.Board7x6: { //76版
 			let dict = {
 				icon: createIcon(skill.kind),
 			};
@@ -1097,16 +1108,107 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.vampire(dict));
 			break;
 		}
-		case SkillKinds.CounterAttack: {
+		case SkillKinds.CounterAttack: { //反击
 			let attr = skill.attr, prob = skill.prob, value = skill.value;
 			dict = {
-				icon: createIcon("counter-attack"),
+				icon: createIcon(skill.kind),
 				target: tsp.target.enemy(),
 				prob: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
 				value: renderValue(value),
 				attr: renderAttrs(attr),
 			};
 			frg.ap(tsp.skill.counter_attack(dict));
+			break;
+		}
+		case SkillKinds.ChangeOrbs: { //珠子变换
+			let changes = skill.changes;
+			let changesDocument = [];
+			for (const change of changes)
+			{
+				dict = {
+					from: renderOrbs(change.from),
+					to: renderOrbs(change.to),
+				};
+				changesDocument.push(tsp.skill.change_orbs(dict));
+			}
+			frg.ap(changesDocument.nodeJoin(tsp.word.comma()));
+			break;
+		}
+		case SkillKinds.GenerateOrbs: { //产生珠子
+			let to = skill.to, exclude = skill.exclude, count = skill.count;
+			dict = {
+				exclude: exclude.length ? tsp.word.affix_exclude({cotent: renderOrbs(exclude)}) : void 0,
+				to: renderOrbs(to),
+				count: count,
+			};
+			frg.ap(tsp.skill.generate_orbs(dict));
+			break;
+		}
+		case SkillKinds.FixedOrbs: { //固定位置产生珠子
+			let generates = skill.generates;
+			let slight_pause = tsp.word.slight_pause().textContent;
+			let changesDocument = [];
+			let board = new Array(6).fill(null).map(i=>new Array(7).fill(null));
+			function posSplit(pos, max)
+			{
+				return {sequence: pos.filter(n=>n<=2).map(n=>n+1), reverse: pos.filter(n=>n>=3).reverse().map(n=>max-n)};
+			}
+			for (const generate of generates)
+			{
+				let _to = generate.to?.[0];
+				dict = {
+					to: renderOrbs(generate.to),
+				};
+				if (generate.type == 'shape')
+				{
+					dict.position = tsp.position.shape();
+					let _to = generate.to?.[0];
+					board = []; //直接替换掉旧的
+					for (let row of generate.positions)
+					{
+						let _row = new Array(6).fill(null);
+						for (let cell of row)
+						{
+							_row[cell] = _to;
+						}
+						_row.splice(3,0, row.includes(3) ? _to : null);
+						board.push(_row);
+					}
+					board.splice(3,0, board[2]);
+				}else
+				{
+					let posFrgs = [];
+					if (generate.type == 'row')
+					{
+						const pos = posSplit(generate.positions, 5);
+						if (pos.sequence.length) posFrgs.push(tsp.position.top({pos: pos.sequence.join(slight_pause)}));
+						if (pos.reverse.length) posFrgs.push(tsp.position.bottom({pos: pos.reverse.join(slight_pause)}));
+						for (let row of generate.positions)
+						{
+							if (row >= 2) row++;
+							board[row] = board[row].map(()=>_to);
+						}
+					}else
+					{
+						const pos = posSplit(generate.positions, 6);
+						if (pos.sequence.length) posFrgs.push(tsp.position.left({pos: pos.sequence.join(slight_pause)}));
+						if (pos.reverse.length) posFrgs.push(tsp.position.right({pos: pos.reverse.join(slight_pause)}));
+						for (let col of generate.positions)
+						{
+							if (col >= 3) col++;
+							for (let row of board)
+							{
+								row[col] = _to;
+							}
+						}
+					}
+					dict.position = posFrgs.nodeJoin(tsp.word.slight_pause());
+				}
+				changesDocument.push(tsp.skill.fixed_orbs(dict));
+			}
+			frg.ap(changesDocument.nodeJoin(tsp.word.comma()));
+			frg.ap(renderBoard(board));
+			
 			break;
 		}
 		/*
@@ -1149,24 +1251,6 @@ function renderSkill(skill, option = {})
 				}
 				})}
 			</span>
-			</span>
-		);
-		}
-		case SkillKinds.Unbind: {
-		const { normal, awakenings } = skill as Skill.Unbind;
-		return (
-			<span className="CardSkill-skill CardSkill-item-list">
-			{!!normal && <span>
-				<Asset assetId="skill-unbind" className="CardSkill-icon" />
-				{normal} turns
-			</span>}
-			{!!awakenings && <span>
-				<AssetBox className="CardSkill-icon-box">
-				<Asset assetId="status-bind-awakenings" className="CardSkill-icon" />
-				<Asset assetId="overlay-heal" className="CardSkill-icon" />
-				</AssetBox>
-				{awakenings} turns
-			</span>}
 			</span>
 		);
 		}
@@ -1331,7 +1415,7 @@ function renderStat(stat, option) {
 
 function renderAttrs(attrs, option = {}) {
 	if (!Array.isArray(attrs))
-	attrs = [attrs || 0];
+	attrs = [attrs ?? 0];
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
 	
@@ -1349,7 +1433,7 @@ function renderAttrs(attrs, option = {}) {
 
 function renderOrbs(attrs, option = {}) {
 	if (!Array.isArray(attrs))
-	attrs = [attrs || 0];
+	attrs = [attrs ?? 0];
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
 
@@ -1364,14 +1448,31 @@ function renderOrbs(attrs, option = {}) {
 	frg.ap(option.affix ? tsp.word.affix_attr({cotent: contentFrg}) : contentFrg);
 	return frg;
 }
-/*
 
-function renderOrbs(attrs: Attributes | Attributes[]) {
-	if (!Array.isArray(attrs))
-	attrs = [attrs];
-	return attrs.map(attr => <Asset assetId={`orb-${attr}`} key={attr} className="CardSkill-icon" />);
+function renderBoard(boardData) {
+	const table = document.createElement("table");
+	table.className = "board fixed-shape-orb";
+	boardData.forEach((rowData, ri, rArr) => {
+		const row = table.insertRow();
+		if (ri == 2 && rArr.length > 5) row.classList.add("board-row4");
+
+		rowData.forEach((orbType, ci, cArr) => {
+			const cell = row.insertCell();
+			const orb = cell.appendChild(document.createElement('icon'));
+			orb.className = "orb";
+			if (orbType != null) orb.setAttribute("data-orb-icon", orbType);
+			if (ci == 3 && cArr.length > 6) cell.classList.add("board-cell5");
+		});
+	});
+	if (boardData.length > 5)
+	{
+		table.onclick = function() {
+			this.classList.toggle("board-76");
+		};
+	}
+	return table;
 }
-
+/*
 function renderTypes(types: Types | Types[]) {
 	if (!Array.isArray(types))
 	types = [types];
@@ -1634,14 +1735,6 @@ function renderValue(_value, option = {}) {
 			break;
 		}
 		/*
-		case SkillValueKind.RandomATK: {
-			const { min, max } = _value as SkillValue.Scale;
-			if (min === max) {
-			return <span>{formatNumber(min)} &times; {renderStat('atk')}</span>;
-			} else {
-			return <span>(random &times; {formatNumber(min)} &hArr; {formatNumber(max)}) &times; {renderStat('atk')}</span>;
-			}
-		}
 		case SkillValueKind.xAwakenings: {
 			const { value, awakenings } = _value as SkillValue.WithAwakenings;
 			return <span>{formatNumber(value * 100)}% &times; each of {awakenings.map(id =>

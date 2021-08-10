@@ -36,9 +36,9 @@
 			no_skyfall: tp`${'icon'}天降的宝珠不会消除`,
 			self_harm: tp`${'icon'}${'stats'}减少${'value'}`,
             heal: tp`${'icon'}回复 ${'value'} 的 ${'stats'}`,
-			unbind_normal: tp`${'icon'}封锁状态减少${'value'}`,
-			unbind_awakenings: tp`${'icon'}觉醒无效状态减少${'value'}回合`,
-			unbind_matches: tp`${'icon'}无法消除宝珠状态减少${'value'}回合`,
+			unbind_normal: tp`${'icon'}封锁状态减少${'turns'}`,
+			unbind_awakenings: tp`${'icon'}觉醒无效状态减少${'turns'}回合`,
+			unbind_matches: tp`${'icon'}无法消除宝珠状态减少${'turns'}回合`,
             defense_break: tp`${'icon'}敌方的防御力减少${'value'}回合`,
             poison: tp`${'icon'}使${'target'}全体中毒，每回合损失${'belong_to'} ${'value'} 的 ${'stats'}`,
 			time_extend: tp`${'icon'}宝珠移动时间 ${'value'}`,
@@ -56,7 +56,17 @@
 			drop_refresh: tp`全板刷新`,
 			drum: tp`宝珠移动和消除的声音变成太鼓达人的音效`,
 			board7x6: tp`【${'icon'}7×6版面】`,
-			counter_attack: tp`受到${'target'}攻击时，${'prob'}进行受到伤害${'value'}的${'attr'}属性${'icon'}反击`,
+			counter_attack: tp`受到${'target'}攻击时，${'prob'}进行受到伤害${'value'}的${'attr'}属性${'icon'}反击`,	
+			change_orbs: tp`${'from'}→${'to'}`,
+			generate_orbs: tp`${'exclude'}生成${'to'}各${'count'}个`,
+			fixed_orbs: tp`在${'position'}产生${'to'}`,
+		},
+		position: {
+			top: tp`上方第${'pos'}横行`,
+			bottom: tp`下方第${'pos'}横行`,
+			left: tp`左方第${'pos'}竖列`,
+			right: tp`右方第${'pos'}竖列`,
+			shape: tp`指定位置`,
 		},
         value: {
             unknown: tp`[ 未知数值: ${'type'}]`, //type
@@ -98,6 +108,7 @@
 			slight_pause: tp`、`, //顿号
 			range_hyphen: tp`~`, //范围连字符
 			affix_attr: tp`${'cotent'}属性`, //词缀-属性
+			affix_exclude: tp`${'cotent'}以外`, //词缀-属性
 		},
 		attrs: {
 			[0]: tp`${'icon'}火`,
