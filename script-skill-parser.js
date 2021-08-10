@@ -1148,7 +1148,7 @@ function renderSkill(skill, option = {})
 			let generates = skill.generates;
 			let slight_pause = tsp.word.slight_pause().textContent;
 			let changesDocument = [];
-			let board = new Array(6).fill(null).map(i=>new Array(7).fill(null));
+			let board = new Array(5).fill(null).map(i=>new Array(6).fill(null));
 			function posSplit(pos, max)
 			{
 				return {sequence: pos.filter(n=>n<=2).map(n=>n+1), reverse: pos.filter(n=>n>=3).reverse().map(n=>max-n)};
@@ -1162,19 +1162,15 @@ function renderSkill(skill, option = {})
 				if (generate.type == 'shape')
 				{
 					dict.position = tsp.position.shape();
-					let _to = generate.to?.[0];
-					board = []; //直接替换掉旧的
-					for (let row of generate.positions)
+					for (let ri=0;ri<generate.positions.length;ri++)
 					{
-						let _row = new Array(6).fill(null);
-						for (let cell of row)
+						let row = board[ri];
+						//let _row = generate.positions[ri];
+						for (let cell of generate.positions[ri])
 						{
-							_row[cell] = _to;
+							row[cell] = _to;
 						}
-						_row.splice(3,0, row.includes(3) ? _to : null);
-						board.push(_row);
 					}
-					board.splice(3,0, board[2]);
 				}else
 				{
 					let posFrgs = [];
@@ -1185,7 +1181,7 @@ function renderSkill(skill, option = {})
 						if (pos.reverse.length) posFrgs.push(tsp.position.bottom({pos: pos.reverse.join(slight_pause)}));
 						for (let row of generate.positions)
 						{
-							if (row >= 2) row++;
+							//if (row >= 2) row++;
 							board[row] = board[row].map(()=>_to);
 						}
 					}else
@@ -1195,7 +1191,7 @@ function renderSkill(skill, option = {})
 						if (pos.reverse.length) posFrgs.push(tsp.position.right({pos: pos.reverse.join(slight_pause)}));
 						for (let col of generate.positions)
 						{
-							if (col >= 3) col++;
+							//if (col >= 3) col++;
 							for (let row of board)
 							{
 								row[col] = _to;
