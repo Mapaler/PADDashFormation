@@ -455,15 +455,51 @@ const specialSearchFunctions = (function() {
 		const colors = boardChange_ColorTypes(skill);
 		return createOrbsList(colors);
 	}
+	function orbsChangeParse(skill)
+	{
+		function changes(from, to)
+		{
+			return {from:from,to:to};
+		}
+		let outArr = [];
+		if (!skill) return outArr;
+		const sk = skill.params;
+		switch (skill.type)
+		{
+			case 9:{
+				outArr.push(changes([sk[0] || 0], [sk[1] || 0]));
+				break;
+			}
+			case 20:{
+				if (sk.length >= 3 && sk[1] == (sk[3] || 0))
+				{
+					outArr.push(changes([sk[0] || 0, sk[2] || 0], [sk[1] || 0]));
+				}
+				else
+				{
+					outArr.push(changes([sk[0] || 0], [sk[1] || 0]));
+					outArr.push(changes([sk[2] || 0], [sk[3] || 0]));
+				}
+				break;
+			}
+			case 154:{
+				outArr.push(changes(flags(sk[0] || 1), flags(sk[1] || 1)));
+				break;
+			}
+		}
+		return outArr;
+	}
 	function changeOrbs_Addition(card)
 	{
-		const searchTypeArray = [154];
-		const skill = getCardActiveSkill(card, searchTypeArray);
-		const sk = skill.params;
+		const searchTypeArray = [9,20,154];
+		const skills = getCardActiveSkills(card, searchTypeArray);
+		let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
 		const fragment = document.createDocumentFragment();
-		fragment.appendChild(createOrbsList(flags(sk[0] || 1)));
-		fragment.appendChild(document.createTextNode(`→`));
-		fragment.appendChild(createOrbsList(flags(sk[1] || 1)));
+		parsedSkills.forEach(p=>{
+			fragment.appendChild(createOrbsList(p.from));
+			fragment.appendChild(document.createTextNode(`→`));
+			fragment.appendChild(createOrbsList(p.to));
+		});
 		return fragment;
 	}
 	function generateOrbs_Addition(card)
@@ -602,7 +638,6 @@ const specialSearchFunctions = (function() {
 		}
 		return outObj;
 	}
-	
 	//创建1个觉醒图标
 	function createAwokenIcon(awokenId)
 	{
@@ -1430,122 +1465,136 @@ const specialSearchFunctions = (function() {
 		{group:true,name:"-----Orbs Change-----",otLangName:{chs:"-----指定色转珠类-----"}, functions: [
 			{name:"Orbs Change - to Fire",otLangName:{chs:"转珠-变为-火"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(0);
-			}),addition:changeOrbs_Addition},
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.to.includes(0));
+				}),
+				addition:changeOrbs_Addition
+			},
 			{name:"Orbs Change - to Water",otLangName:{chs:"转珠-变为-水"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(1);
-			}),addition:changeOrbs_Addition},
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.to.includes(1));
+				}),
+				addition:changeOrbs_Addition
+			},
 			{name:"Orbs Change - to Wood",otLangName:{chs:"转珠-变为-木"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(2);
-			}),addition:changeOrbs_Addition},
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.to.includes(2));
+				}),
+				addition:changeOrbs_Addition
+			},
 			{name:"Orbs Change - to Light",otLangName:{chs:"转珠-变为-光"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(3);
-			}),addition:changeOrbs_Addition},
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.to.includes(3));
+				}),
+				addition:changeOrbs_Addition
+			},
 			{name:"Orbs Change - to Dark",otLangName:{chs:"转珠-变为-暗"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(4);
-			}),addition:changeOrbs_Addition},
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.to.includes(4));
+				}),
+				addition:changeOrbs_Addition
+			},
 			{name:"Orbs Change - to Heart",otLangName:{chs:"转珠-变为-心"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(5);
-			}),addition:changeOrbs_Addition},
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.to.includes(5));
+				}),
+				addition:changeOrbs_Addition
+			},
 			{name:"Orbs Change - to Jammers/Poison",otLangName:{chs:"转珠-变为-毒废"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return (sk[1] & 960) > 0;
-			}),addition:changeOrbs_Addition},
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.to.includes(6) || p.to.includes(7) || p.to.includes(8) || p.to.includes(9));
+				}),
+				addition:changeOrbs_Addition
+			},
 			{name:"Orbs Change - from Fire",otLangName:{chs:"转珠-转走-火"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[0] || 1).includes(0);
-				})
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.from.includes(0));
+				}),
 			},
 			{name:"Orbs Change - from Water",otLangName:{chs:"转珠-转走-水"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[0] || 1).includes(1);
-				})
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.from.includes(1));
+				}),
 			},
 			{name:"Orbs Change - from Wood",otLangName:{chs:"转珠-转走-木"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[0] || 1).includes(2);
-				})
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.from.includes(2));
+				}),
 			},
 			{name:"Orbs Change - from Light",otLangName:{chs:"转珠-转走-光"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[0] || 1).includes(3);
-				})
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.from.includes(3));
+				}),
 			},
 			{name:"Orbs Change - from Dark",otLangName:{chs:"转珠-转走-暗"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[0] || 1).includes(4);
-				})
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.from.includes(4));
+				}),
 			},
 			{name:"Orbs Change - from Heart",otLangName:{chs:"转珠-转走-心"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[0] || 1).includes(5);
-				})
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.from.includes(5));
+				}),
 			},
 			{name:"Orbs Change - from Jammers/Poison",otLangName:{chs:"转珠-转走-毒废"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [154];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return (sk[0] & 960) > 0;
-				})
+					const searchTypeArray = [9,20,154];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return false;
+					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
+					return parsedSkills.some(p=>p.from.includes(6) || p.to.includes(7) || p.to.includes(8) || p.to.includes(9));
+				}),
 			},
 			{name:"Enhanced Orbs",otLangName:{chs:"强化宝珠"},
 				function:cards=>{
