@@ -33,7 +33,7 @@
 			delay: tp`${'icon'}延迟敌人的攻击`, //icon
 			mass_attack: tp`${'icon'}所有攻击变为全体攻击`,
 			leader_change: tp`${'icon'}将自身换为队长，再次使用则换回来`,
-			no_skyfall: tp`${'icon'}天降的宝珠不会消除`,
+			no_skyfall: tp`【${'icon'}天降的宝珠不会消除】`,
 			self_harm: tp`${'icon'}${'stats'}减少${'value'}`,
             heal: tp`${'icon'}回复 ${'value'} 的 ${'stats'}`,
 			unbind_normal: tp`${'icon'}封锁状态减少${'turns'}`,

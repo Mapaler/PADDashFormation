@@ -3242,9 +3242,10 @@ table .orb-icon
 	background-color: var(--board-light-color);
 }
 
-.card-skill-list>.fixed-time,
-.card-skill-list>.min-match-len,
-.card-skill-list>.\37x6-board
+.card-skill-list .no-skyfall,
+.card-skill-list .fixed-time,
+.card-skill-list .min-match-len,
+.card-skill-list .\37x6-board
 {
 	color: red;
 }
