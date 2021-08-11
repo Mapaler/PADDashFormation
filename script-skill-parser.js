@@ -96,16 +96,38 @@ class Board
 			this.randomFill(def);
 		}
 	}
-	randomFill(attrs)
+	//填充序列
+	sequenceFill(sequence)
 	{
-		let valueArray = new Uint8Array(this.#rowCount * this.#columnCount);
-		crypto.getRandomValues(valueArray); //获取符合密码学要求的安全的随机值
-		valueArray = Array.from(valueArray.map(x => attrs[x % attrs.length])); //用所有宝珠随机填充
-		//之后用每种颜色填充前3个
-		attrs.forEach((attr,idx)=>{
-			valueArray.fill(attr, idx * 3, idx * 3 + 3);
-		});
-		//将上方数据重新乱序排列
+		const o = sequence.entries();
+		//65版部分
+		for (let ri=0;ri<this.#data.length;ri++)
+		{
+			if (ri == 2) ri++;
+			const row = this.#data[ri];
+			for (let ci=0;ci<row.length;ci++)
+			{
+				if (ci == 3) ci++;
+				//从数组中随机取出一个
+				row[ci] = o.next().value?.[1] ?? row[ci];
+			}
+		}
+		//填充剩下的部分
+		for (let ri=0;ri<this.#data.length;ri++)
+		{
+			if (ri == 2) ri++;
+			const row = this.#data[ri];
+			row[3] = o.next().value?.[1] ?? row[3] ;
+		}
+		const row = this.#data[2];
+		for (let ci=0;ci<row.length;ci++)
+		{
+			row[ci] = o.next().value?.[1] ?? row[ci] ;
+		}
+	}
+	//将有序数组转为随机的数组
+	sequenceToRandom(valueArray)
+	{
 		const randomData = [];
 		//将65版之后的的提出来
 		let secondaryData = valueArray.splice((this.#rowCount - 1) * (this.#columnCount - 1));
@@ -118,37 +140,35 @@ class Board
 		{
 			randomData.push(secondaryData.randomShift());
 		}
-		const o = randomData.entries();
-		//65版部分
-		for (let ri=0;ri<this.#data.length;ri++)
-		{
-			if (ri == 2) ri++;
-			const row = this.#data[ri];
-			for (let ci=0;ci<row.length;ci++)
-			{
-				if (ci == 3) ci++;
-				//从数组中随机取出一个
-				row[ci] = o.next().value?.[1];
-			}
-		}
-		//填充剩下的部分
-		for (let ri=0;ri<this.#data.length;ri++)
-		{
-			if (ri == 2) ri++;
-			const row = this.#data[ri];
-			row[3] = o.next().value?.[1];
-		}
-		const row = this.#data[2];
-		for (let ci=0;ci<row.length;ci++)
-		{
-			row[ci] = o.next().value?.[1];
-		}
+		return randomData;
 	}
-	overlayBoard(board)
+	//洗版的填充
+	randomFill(attrs) 
 	{
-
+		let valueArray = new Uint8Array(this.#rowCount * this.#columnCount);
+		crypto.getRandomValues(valueArray); //获取符合密码学要求的安全的随机值
+		valueArray = Array.from(valueArray.map(x => attrs[x % attrs.length])); //用所有宝珠随机填充
+		//之后用每种颜色填充前3个
+		attrs.forEach((attr,idx)=>{
+			valueArray.fill(attr, idx * 3, (idx + 1) * 3);
+		});
+		//将上方数据重新乱序排列
+		const randomData = this.sequenceToRandom(valueArray);
+		this.sequenceFill(randomData);
 	}
-	setRow(rows, attr = 0) //设定横行
+	//生成珠子的填充
+	generateOrbs(attrs, count)
+	{
+		let valueArray = new Array(this.#rowCount * this.#columnCount);
+		attrs.forEach((attr,idx)=>{
+			valueArray.fill(attr, idx * count, (idx + 1) * count);
+		});
+		//将上方数据重新乱序排列
+		const randomData = this.sequenceToRandom(valueArray);
+		this.sequenceFill(randomData);
+	}
+	//设定横行
+	setRow(rows, attr = 0)
 	{
 		for (let row of rows)
 		{
@@ -158,10 +178,10 @@ class Board
 			{
 				rowData[ri] = attr;
 			}
-			//this.#data[row] = this.#data[row].map(()=>attr);
 		}
 	}
-	setColumn(cols, attr = 0) //设定横行
+	//设定竖列
+	setColumn(cols, attr = 0)
 	{
 		for (let col of cols)
 		{
@@ -172,6 +192,7 @@ class Board
 			}
 		}
 	}
+	//设定形状
 	setShape(matrix, attr = 0)
 	{
 		function fillRow(rowData, inputRow, attr)
@@ -192,10 +213,25 @@ class Board
 			fillRow(this.#data[ri >= 2 ? ri+1 : ri], matrix[ri], attr);
 		}
 	}
+	//面板叠加
+	overlayBoard(board)
+	{	
+		for (let ri=0;ri<board.length;ri++)
+		{
+			const rowNew = board[ri];
+			const rowOld = this.#data[ri];
+			for (let ci=0;ci<rowNew.length;ci++)
+			{
+				rowOld[ci] = rowNew[ci] ?? rowOld[ci];
+			}
+		}
+	}
+	//导出数组
 	valueOf()
 	{
 		return this.#data;
 	}
+	//输出表格
 	toTable()
 	{
 		const table = document.createElement("table");
@@ -1283,7 +1319,10 @@ function renderSkill(skill, option = {})
 				to: renderOrbs(to),
 				count: count,
 			};
+			let board = new Board();
+			board.generateOrbs(to, count);
 			frg.ap(tsp.skill.generate_orbs(dict));
+			frg.ap(board.toTable());
 			break;
 		}
 		case SkillKinds.FixedOrbs: { //固定位置产生珠子
