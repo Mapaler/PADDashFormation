@@ -3327,7 +3327,7 @@ table .orb-icon
 {
 	background-position-y:calc(-36px * 8);
 }
-.icon-skill[data-icon-type="defense-break"]
+.icon-skill[data-icon-type="def-break"]
 {
 	background-position-y:calc(-36px * 9);
 }
