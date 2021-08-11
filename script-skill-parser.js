@@ -333,6 +333,7 @@ const SkillKinds = {
     Drum: "drum",
     Board7x6: "7x6-board",
     NoSkyfall: "no-skyfall",
+	Henshin: "henshin",
 }
 
 function skillParser(skillId)
@@ -598,6 +599,7 @@ function drum() { return { kind: SkillKinds.Drum }; }
 function leaderChange() { return { kind: SkillKinds.LeaderChange }; }
 function board7x6() { return { kind: SkillKinds.Board7x6 }; }
 function noSkyfall() { return { kind: SkillKinds.NoSkyfall }; }
+function henshin(id) { return { kind: SkillKinds.Henshin, id: id }; }
 
 const parsers = {
 	parser: (() => []), //这个用来解决代码提示的报错问题，不起实际作用
@@ -882,10 +884,11 @@ const parsers = {
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, min, [mul, 0], [0, 0]), undefined, v.percent(percent));
 	},
 	[172]() { return setOrbState(null, 'unlocked'); },
-	[173](turns, attrAbsorb, _, damageAbsorb) {
+	[173](turns, attrAbsorb, comboAbsorb, damageAbsorb) {
 	  return activeTurns(turns, voidEnemyBuff(
 		[
 		  attrAbsorb && 'attr-absorb',
+		  comboAbsorb && 'combo-absorb',
 		  damageAbsorb && 'damage-absorb'
 		].filter((buff) => typeof buff === 'string')
 	  ));
@@ -939,11 +942,17 @@ const parsers = {
 	[188](value) {
 	  return damageEnemy('single', 'fixed', v.constant(value));
 	},
+	[191](turns) {
+	  return activeTurns(turns, voidEnemyBuff(['damage-void']));
+	},
 	[195](percent) {
 	  return selfHarm(percent ? v.xHP(percent) : v.constantTo(1));
 	},
 	[196](matches) {
 	  return unbind(0,0,matches);
+	},
+	[202](id) {
+	  return henshin(id);
 	},
 	[218](turns) { return skillBoost(v.constant(-turns)); },
 };
@@ -1371,29 +1380,17 @@ function renderSkill(skill, option = {})
 			
 			break;
 		}
-		/*
-		case SkillKinds.OrbDropIncrease: {
-		const { attrs, value } = skill as Skill.OrbDropIncrease;
-		let attrElems: React.ReactNode[];
-		if (attrs === 'enhanced')
-			attrElems = [<Asset assetId="status-orb-enhanced" className="CardSkill-icon" key="enhanced" />];
-		else
-			attrElems = renderOrbs(attrs);
-
-		attrElems = attrElems.map((elem, i) => (
-			<AssetBox className="CardSkill-icon-box" key={i}>
-			{elem}
-			<Asset assetId="overlay-drop" className="CardSkill-icon" />
-			</AssetBox>
-		));
-
-		return (
-			<span className="CardSkill-skill">
-			{attrElems}
-			{renderValue(value)}
-			</span>
-		);
+		case SkillKinds.OrbDropIncrease: { //增加天降
+			let attrs = skill.attrs, value = skill.value;
+			dict = {
+				icon: createIcon(skill.kind),
+				attrs: renderOrbs(attrs, {className: "drop"}),
+				value: renderValue(value, {percent: true}),
+			};
+			frg.ap(tsp.skill.orb_drop_increase(dict));
+			break;
 		}
+		/*
 		case SkillKinds.VoidEnemyBuff: {
 		const { buffs } = skill as Skill.VoidEnemyBuff;
 		return (
@@ -1559,6 +1556,7 @@ function renderOrbs(attrs, option = {}) {
 	const contentFrg = attrs.map(attr => {
 		const icon = document.createElement("icon");
 		icon.className = "orb";
+		if (option.className) icon.className += " " + option.className;
 		icon.setAttribute("data-orb-icon",attr);
 		return tsp.orbs[attr]({icon: icon});
 	})

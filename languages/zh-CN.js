@@ -57,9 +57,10 @@
 			drum: tp`宝珠移动和消除的声音变成太鼓达人的音效`,
 			board7x6: tp`【${'icon'}7×6版面】`,
 			counter_attack: tp`受到${'target'}攻击时，${'prob'}进行受到伤害${'value'}的${'attr'}属性${'icon'}反击`,	
-			change_orbs: tp`${'from'}→${'to'}`,
+			change_orbs: tp`[${'from'}]→[${'to'}]`,
 			generate_orbs: tp`${'exclude'}生成${'to'}各${'count'}个`,
 			fixed_orbs: tp`在${'position'}产生${'to'}`,
+			orb_drop_increase: tp`${'attrs'}宝珠的掉落率提高到${'value'}`,
 		},
 		position: {
 			top: tp`上方第${'pos'}横行`,
