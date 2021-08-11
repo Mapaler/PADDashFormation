@@ -80,6 +80,148 @@ Attributes.orbs = function () {
 	];
 }
 
+class Board
+{
+	#rowCount = 6;
+	#columnCount = 7;
+	#data = [];
+	constructor(def = null)
+	{
+		for (let ri=0;ri<this.#rowCount;ri++)
+		{
+			this.#data.push(new Array(this.#columnCount).fill(Array.isArray(def) ? null : def));
+		}
+		if (Array.isArray(def))
+		{
+			this.randomFill(def);
+		}
+	}
+	randomFill(attrs)
+	{
+		let valueArray = new Uint8Array(this.#rowCount * this.#columnCount);
+		crypto.getRandomValues(valueArray); //获取符合密码学要求的安全的随机值
+		valueArray = Array.from(valueArray.map(x => attrs[x % attrs.length])); //用所有宝珠随机填充
+		//之后用每种颜色填充前3个
+		attrs.forEach((attr,idx)=>{
+			valueArray.fill(attr, idx * 3, idx * 3 + 3);
+		});
+		//将上方数据重新乱序排列
+		const randomData = [];
+		//将65版之后的的提出来
+		let secondaryData = valueArray.splice((this.#rowCount - 1) * (this.#columnCount - 1));
+		
+		while(valueArray.length > 0)
+		{
+			randomData.push(valueArray.randomShift());
+		}
+		while(secondaryData.length > 0)
+		{
+			randomData.push(secondaryData.randomShift());
+		}
+		const o = randomData.entries();
+		//65版部分
+		for (let ri=0;ri<this.#data.length;ri++)
+		{
+			if (ri == 2) ri++;
+			const row = this.#data[ri];
+			for (let ci=0;ci<row.length;ci++)
+			{
+				if (ci == 3) ci++;
+				//从数组中随机取出一个
+				row[ci] = o.next().value?.[1];
+			}
+		}
+		//填充剩下的部分
+		for (let ri=0;ri<this.#data.length;ri++)
+		{
+			if (ri == 2) ri++;
+			const row = this.#data[ri];
+			row[3] = o.next().value?.[1];
+		}
+		const row = this.#data[2];
+		for (let ci=0;ci<row.length;ci++)
+		{
+			row[ci] = o.next().value?.[1];
+		}
+	}
+	overlayBoard(board)
+	{
+
+	}
+	setRow(rows, attr = 0) //设定横行
+	{
+		for (let row of rows)
+		{
+			if (row >= 2) row++;
+			const rowData = this.#data[row];
+			for (let ri=0;ri<rowData.length;ri++)
+			{
+				rowData[ri] = attr;
+			}
+			//this.#data[row] = this.#data[row].map(()=>attr);
+		}
+	}
+	setColumn(cols, attr = 0) //设定横行
+	{
+		for (let col of cols)
+		{
+			if (col >= 3) col++;
+			for (let row of this.#data)
+			{
+				row[col] = attr;
+			}
+		}
+	}
+	setShape(matrix, attr = 0)
+	{
+		function fillRow(rowData, inputRow, attr)
+		{
+			for (let col of inputRow)
+			{
+				if (col == 3) rowData[col] = attr;
+				if (col >= 3) col++;
+				rowData[col] = attr;
+			}
+		}
+		for (let ri=0;ri<matrix.length;ri++)
+		{
+			if (ri == 2)
+			{
+				fillRow(this.#data[ri], matrix[ri], attr);
+			}
+			fillRow(this.#data[ri >= 2 ? ri+1 : ri], matrix[ri], attr);
+		}
+	}
+	valueOf()
+	{
+		return this.#data;
+	}
+	toTable()
+	{
+		const table = document.createElement("table");
+		table.className = "board";
+		this.#data.forEach((rowData, ri, rArr) => {
+			const row = table.insertRow();
+			if (ri == 2 && rArr.length > 5) row.classList.add("board-row4");
+	
+			rowData.forEach((orbType, ci, cArr) => {
+				const cell = row.insertCell();
+				const orb = cell.appendChild(document.createElement('icon'));
+				orb.className = "orb";
+				if (orbType != null) orb.setAttribute("data-orb-icon", orbType);
+				if (ci == 3 && cArr.length > 6) cell.classList.add("board-cell5");
+			});
+		});
+		if (this.#data.length > 5)
+		{
+			table.onclick = function() {
+				this.classList.toggle("board-76");
+			};
+		}
+		return table;
+	}
+}
+
 const SkillValue = {
 	isLess: function (value) {
 		if (value.kind === SkillValueKind.Percent) return value.value < 1;
@@ -103,8 +245,6 @@ const SkillValueKind = {
 	xTeamRCV: 'mul-team-rcv',
 	xAwakenings: 'mul-awakenings',
 };
-
-
 
 const SkillPowerUpKind = {
 	Multiplier: 'mul',
@@ -1034,7 +1174,9 @@ function renderSkill(skill, option = {})
 			dict = {
 				attrs: renderOrbs(attrs),
 			};
+			let board = new Board(attrs);
 			frg.ap(tsp.skill.board_change(dict));
+			frg.ap(board.toTable());
 			break;
 		}
 		case SkillKinds.SkillBoost: { //溜
@@ -1148,7 +1290,8 @@ function renderSkill(skill, option = {})
 			let generates = skill.generates;
 			let slight_pause = tsp.word.slight_pause().textContent;
 			let changesDocument = [];
-			let board = new Array(5).fill(null).map(i=>new Array(6).fill(null));
+			//let board = new Array(5).fill(null).map(i=>new Array(6).fill(null));
+			let board = new Board();
 			function posSplit(pos, max)
 			{
 				return {sequence: pos.filter(n=>n<=2).map(n=>n+1), reverse: pos.filter(n=>n>=3).reverse().map(n=>max-n)};
@@ -1162,94 +1305,34 @@ function renderSkill(skill, option = {})
 				if (generate.type == 'shape')
 				{
 					dict.position = tsp.position.shape();
-					for (let ri=0;ri<generate.positions.length;ri++)
-					{
-						let row = board[ri];
-						//let _row = generate.positions[ri];
-						for (let cell of generate.positions[ri])
-						{
-							row[cell] = _to;
-						}
-					}
+					board.setShape(generate.positions, _to);
 				}else
 				{
 					let posFrgs = [];
+					if (generate.positions.length == 0) continue;
 					if (generate.type == 'row')
 					{
 						const pos = posSplit(generate.positions, 5);
 						if (pos.sequence.length) posFrgs.push(tsp.position.top({pos: pos.sequence.join(slight_pause)}));
 						if (pos.reverse.length) posFrgs.push(tsp.position.bottom({pos: pos.reverse.join(slight_pause)}));
-						for (let row of generate.positions)
-						{
-							//if (row >= 2) row++;
-							board[row] = board[row].map(()=>_to);
-						}
+						board.setRow(generate.positions, _to);
 					}else
 					{
 						const pos = posSplit(generate.positions, 6);
 						if (pos.sequence.length) posFrgs.push(tsp.position.left({pos: pos.sequence.join(slight_pause)}));
 						if (pos.reverse.length) posFrgs.push(tsp.position.right({pos: pos.reverse.join(slight_pause)}));
-						for (let col of generate.positions)
-						{
-							//if (col >= 3) col++;
-							for (let row of board)
-							{
-								row[col] = _to;
-							}
-						}
+						board.setColumn(generate.positions, _to);
 					}
 					dict.position = posFrgs.nodeJoin(tsp.word.slight_pause());
 				}
 				changesDocument.push(tsp.skill.fixed_orbs(dict));
 			}
 			frg.ap(changesDocument.nodeJoin(tsp.word.comma()));
-			frg.ap(renderBoard(board));
+			frg.ap(board.toTable());
 			
 			break;
 		}
 		/*
-		case SkillKinds.ChangeOrbs: {
-		const { changes } = skill as Skill.ChangeOrbs;
-		return (
-			<span className="CardSkill-skill">
-			<AssetBox className="CardSkill-icon-box" title="Change orbs">
-				<Asset assetId="status-all-attrs" className="CardSkill-icon" />
-				<Asset assetId="overlay-heal" className="CardSkill-icon" />
-			</AssetBox>
-			<span className="CardSkill-item-list">
-				{changes.map((change, i) => {
-				switch (change.kind) {
-					case 'from':
-					return (
-						<span key={i}>
-						{renderOrbs(change.from)} &rArr; {renderOrbs(change.to)}
-						</span>
-					);
-					case 'gen':
-					return (
-						<span key={i}>
-						{renderOrbs(change.exclude).map((orb, j) => (
-							<AssetBox className="CardSkill-icon-box" key={j}>
-							{orb}
-							<Asset assetId="overlay-cross" className="CardSkill-icon" />
-							</AssetBox>
-						))} &rArr; {renderOrbs(change.to)} &times; {change.count}
-						</span>
-					);
-					case 'fixed':
-					return (change.positions.length > 0 &&
-						<span key={i}>
-						{change.type === 'col' ? 'column' : 'row'}&nbsp;
-						{change.positions.map(p => p + 1).join(', ')}
-						&nbsp;&rArr; {renderOrbs(change.to)}
-						</span>
-					);
-				}
-				})}
-			</span>
-			</span>
-		);
-		}
 		case SkillKinds.OrbDropIncrease: {
 		const { attrs, value } = skill as Skill.OrbDropIncrease;
 		let attrElems: React.ReactNode[];
@@ -1445,29 +1528,6 @@ function renderOrbs(attrs, option = {}) {
 	return frg;
 }
 
-function renderBoard(boardData) {
-	const table = document.createElement("table");
-	table.className = "board fixed-shape-orb";
-	boardData.forEach((rowData, ri, rArr) => {
-		const row = table.insertRow();
-		if (ri == 2 && rArr.length > 5) row.classList.add("board-row4");
-
-		rowData.forEach((orbType, ci, cArr) => {
-			const cell = row.insertCell();
-			const orb = cell.appendChild(document.createElement('icon'));
-			orb.className = "orb";
-			if (orbType != null) orb.setAttribute("data-orb-icon", orbType);
-			if (ci == 3 && cArr.length > 6) cell.classList.add("board-cell5");
-		});
-	});
-	if (boardData.length > 5)
-	{
-		table.onclick = function() {
-			this.classList.toggle("board-76");
-		};
-	}
-	return table;
-}
 /*
 function renderTypes(types: Types | Types[]) {
 	if (!Array.isArray(types))

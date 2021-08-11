@@ -112,6 +112,9 @@ Array.prototype.DeleteLatter = function(item = null) {
 	this.splice(index + 1);
 	return this;
 }
+Array.prototype.randomShift = function() {
+	return this.splice(Math.random() * this.length, 1)?.[0];
+}
 
 Math.randomInteger = function(max, min = 0) {
 	return this.floor(this.random() * (max - min + 1) + min);

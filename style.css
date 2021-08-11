@@ -3190,9 +3190,11 @@ table .orb-icon
 	border-collapse: collapse;
 	background-color: #532;
 	background-image: url(images/slate.svg);
-	background-size: 120px 120px;
+	background-size: 100px 100px;
 	background-attachment: scroll;
 	background-position: 0 0;
+	--board-light-color: unset;
+	--board-deep-color: rgba(0,0,0,0.4);
 }
 .skill-datail-parsed .board .orb
 {
@@ -3204,7 +3206,40 @@ table .orb-icon
 .skill-datail-parsed .board tr:nth-of-type(2n+1)>td:nth-of-type(2n+1),
 .skill-datail-parsed .board tr:nth-of-type(2n)>td:nth-of-type(2n)
 {
-	  background-color: rgba(0,0,0,0.4);
+	background-color: var(--board-deep-color);
+}
+/*前两行右侧区域*/
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+1)>td:nth-of-type(2n+4),
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n)>td:nth-of-type(2n+5)
+{
+	background-color: var(--board-deep-color);
+}
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n)>td:nth-of-type(2n+4),
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+1)>td:nth-of-type(2n+5)
+{
+	background-color: var(--board-light-color);
+}
+/*后两行左侧区域*/
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+3)>td:nth-of-type(2n),
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+4)>td:nth-of-type(2n+1)
+{
+	background-color: var(--board-deep-color);
+}
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+3)>td:nth-of-type(2n+1),
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+4)>td:nth-of-type(2n)
+{
+	background-color: var(--board-light-color);
+}
+/*后两行右侧区域*/
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+4)>td:nth-of-type(2n+4),
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+3)>td:nth-of-type(2n+5)
+{
+	background-color: var(--board-deep-color);
+}
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+3)>td:nth-of-type(2n+4),
+.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+4)>td:nth-of-type(2n+5)
+{
+	background-color: var(--board-light-color);
 }
 
 .card-skill-list>.fixed-time,
