@@ -33,7 +33,7 @@
 			delay: tp`${'icon'}延迟敌人的攻击`, //icon
 			mass_attack: tp`所有攻击变为${'icon'}全体攻击`,
 			leader_change: tp`${'icon'}将${'target'}换为队长，再次使用则换回来`,
-			no_skyfall: tp`【${'icon'}天降的宝珠不会消除】`,
+			no_skyfall: tp`${'icon'}天降的宝珠不会消除`,
 			self_harm: tp`${'icon'}${'stats'}减少${'value'}`,
             heal: tp`${'icon'}回复 ${'value'} 的 ${'stats'}`,
 			unbind_normal: tp`${'icon'}封锁状态减少${'turns'}`,
@@ -43,6 +43,7 @@
             poison: tp`${'icon'}使${'target'}全体中毒，每回合损失${'belong_to'} ${'value'} 的 ${'stats'}`,
 			time_extend: tp`${'icon'}宝珠移动时间 ${'value'}`,
 			follow_attack: tp`${'icon'}消除宝珠的回合，以${'belong_to'}${'value'}的伤害追打${'target'}（计算防御力）`,
+			follow_attack_fixed: tp`追加${'target'}的${'icon'}固定伤害`,
             auto_heal_buff: tp`行动结束后${'icon'}回复${'value'}的${'stats'}`,
 			auto_heal: tp`${'icon'}消除宝珠的回合，回复${'belong_to'}${'value'}的${'stats'}`,
 			ctw: tp`${'icon'}${'value'}内时间停止，可以任意移动宝珠`,
@@ -50,7 +51,7 @@
 			resolve: tp`${'icon'}如${'stats'}≧${'value'}，受到单一次致命攻击时，${'prob'}将会以1点 HP 生还`,
 			board_change: tp`全画面的宝珠变为${'orbs'}`,
 			skill_boost: tp`自身以外成员的技能冷却储备${'icon'}${'turns'}`,
-			add_combo: tp`结算时连击数增加${'value'}c${'icon'}`,
+			add_combo: tp`结算时连击数增加${'value'}${'icon'}`,
 			fixed_time: tp`【${'icon'}操作时间固定${'value'}】`,
 			min_match_length: tp`【限定≥${'value'}珠才能消除】`,
 			drop_refresh: tp`全板刷新`,
@@ -76,7 +77,18 @@
 			rate_multiply_coin: tp`${'icon'}金币掉落率`,
 			rate_multiply_exp: tp`${'icon'}等级经验倍率`,
 			reduce_damage: tp`${'condition'}受到的${'attrs'}伤害${'icon'}减少${'value'}`,
-			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}`,
+			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
+		},
+		power: {
+            unknown: tp`[ 未知能力提升: ${'type'} ]`,
+			scale_attributes: tp`${'attrs'}中${'min'}种属性同时攻击时${'stats'}${'bonus'}`,
+			scale_attributes_bonus: tp`，每多1种${'bonus'}，最大${'max'}种时${'stats_max'}`,
+			scale_combos: tp`${'min'}连击时，${'stats'}${'bonus'}`,
+			scale_combos_bonus: tp`，每多1连击${'bonus'}，最大${'max'}连击时${'stats_max'}`,
+			scale_match_attrs: tp`${'matches'}中${'min'}串匹配时，${'stats'}${'bonus'}`,
+			scale_match_attrs_bonus: tp`，每多1串${'bonus'}，最大${'max'}串时${'stats_max'}`,
+			scale_match_length: tp`相连消除${'min'}个${'attrs'}时${'stats'}${'bonus'}`,
+			scale_match_length_bonus: tp`，每多1个${'bonus'}，最大${'max'}个时${'stats_max'}`,
 		},
 		cond: {
             unknown: tp`[ 未知条件 ]`,
@@ -94,9 +106,6 @@
 			compo_type_card: tp`队伍中同时存在 ${'ids'} 时`,
 			compo_type_series: tp`队员组成全为 ${'ids'} 系列时`,
 			compo_type_evolution: tp`队员组成全为 ${'ids'} 进化时`,
-		},
-		power: {
-            unknown: tp`[ 未知能力提升: ${'type'} ]`,
 		},
 		position: {
 			top: tp`上方第${'pos'}横行`,
@@ -190,6 +199,8 @@
 			[7]: tp`${'icon'}毒`,
 			[8]: tp`${'icon'}剧毒`,
 			[9]: tp`${'icon'}炸弹`,
+			_5color: tp`${'icon'}5色`,
+			_6color: tp`${'_5color'}+${'orb_rcv'}`,
 			all: tp`所有`,
 			any: tp`任何`,
 		},
@@ -1662,7 +1673,7 @@ function parseSkillDescription(skill) {
 		case 219: //192同时消除多色中所有色,219任意消除多色中1色
 			str = `相连消除${sk[1]}个或以上的${getOrbsAttrString(sk[0], true)}宝珠时，结算时连击数+${sk[2]}`;
 			break;
-		case 220: //192同时消除多色中所有色,219任意消除多色中1色
+		case 220:
 			str = `以L字形消除5个${getOrbsAttrString(sk[0], true)}宝珠时，结算时连击数+${sk[1]}`;
 			break;
 		case 223:

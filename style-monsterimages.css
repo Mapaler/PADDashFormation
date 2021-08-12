@@ -1079,6 +1079,11 @@ icon.type
 	animation: hidden-visible-animate 0.8s infinite ease-out alternate;
 }
 
+.orb[data-orb-icon='_5color']
+{
+	background-image: url(images/icon-skills.fw.png);
+	background-position-y:calc(-36px * 24);
+}
 .orb[data-orb-icon='-1']
 {
 	width: auto;

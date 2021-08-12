@@ -65,6 +65,16 @@ Attributes.all = function () {
 		this.Dark
 	];
 }
+Attributes._6color = function () {
+	return [
+		this.Fire,
+		this.Water,
+		this.Wood,
+		this.Light,
+		this.Dark,
+		this.Heart
+	];
+}
 Attributes.orbs = function () {
 	return [
 		this.Fire,
@@ -530,8 +540,8 @@ const p = {
     scaleCombos: function (min, max, baseMul, bonusMul) {
         return { kind: SkillPowerUpKind.ScaleCombos ,...this.scale(min, max, baseMul, bonusMul) };
     },
-    scaleMatchLength: function (attrs, min, max, baseMul, bonusMul) {
-        return { kind: SkillPowerUpKind.ScaleMatchLength, attrs: attrs ,...this.scale(min, max, baseMul, bonusMul) };
+    scaleMatchLength: function (attrs, min, max, baseMul, bonusMul, matchAll = false) {
+        return { kind: SkillPowerUpKind.ScaleMatchLength, attrs: attrs, matchAll ,...this.scale(min, max, baseMul, bonusMul) };
     },
     scaleMatchAttrs: function (matches, min, max, baseMul, bonusMul) {
         return { kind: SkillPowerUpKind.ScaleMatchAttrs, matches: matches ,...this.scale(min, max, baseMul, bonusMul) };
@@ -577,13 +587,13 @@ function generateOrbs(orbs, exclude, count) {
 function fixedOrbs() {
     return { kind: SkillKinds.FixedOrbs, generates: Array.from(arguments) };
 }
-function powerUp(attrs, types, value, condition, reduceDamageValue) {
+function powerUp(attrs, types, value, condition, reduceDamageValue, addCombo, followAttack) {
     if (value.kind === SkillPowerUpKind.Multiplier) {
         let hp = value.hp, atk = value.atk, rcv = value.rcv;
         if (hp === 1 && atk === 1 && rcv === 1 && !reduceDamage)
             return null;
     }
-    return { kind: SkillKinds.PowerUp, attrs: attrs, types: types, condition: condition, value: value, reduceDamage: reduceDamageValue };
+    return { kind: SkillKinds.PowerUp, attrs: attrs, types: types, condition: condition, value: value, reduceDamage: reduceDamageValue, addCombo: addCombo, followAttack: followAttack };
 }
 function counterAttack(attr, prob, value) {
     return { kind: SkillKinds.CounterAttack, attr: attr, prob: prob, value: value };
@@ -980,6 +990,9 @@ const parsers = {
 	},
 	[191](turns) {
 	  return activeTurns(turns, voidEnemyBuff(['damage-void']));
+	},
+	[192](attrs, len, mul, combo) {
+		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul, 100], [0, 0], true), null, null, combo);
 	},
 	[195](percent) {
 	  return selfHarm(percent ? v.xHP(percent) : v.constantTo(1));
@@ -1510,7 +1523,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.PowerUp: {
-			let attrs = skill.attrs, types = skill.types, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage;
+			let attrs = skill.attrs, types = skill.types, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage, addCombo = skill.addCombo, followAttack = skill.followAttack;
 			let targets = [];
 			if (attrs?.length && !isEqual(attrs, Attributes.all())) targets.push(renderAttrs(attrs || [], {affix: true}));
 			if (types?.length) targets.push(renderTypes(types || [], {affix: true}));
@@ -1525,6 +1538,15 @@ function renderSkill(skill, option = {})
 				dict.reduceDamage = tsp.word.comma().ap(tsp.skill.reduce_damage({
 					value: renderValue(reduceDamage, {percent: true}),
 					icon: createIcon("reduce-damage"),
+				}));
+			}
+			if (addCombo) {
+				dict.addCombo = tsp.word.comma().ap(renderSkill({kind: SkillKinds.AddCombo, value: addCombo}));
+			}
+			if (followAttack) {
+				dict.followAttack = tsp.word.comma().ap(tsp.skill.follow_attack_fixed({
+					value: renderValue(v.constant(followAttack)),
+					icon: createIcon("follow-attack"),
 				}));
 			}
 			frg.ap(tsp.skill.power_up(dict));
@@ -1590,6 +1612,17 @@ function renderOrbs(attrs, option = {}) {
 	if (isEqual(attrs, Attributes.orbs()))
 	{
 		contentFrg = option.any ? tsp.orbs.any() : tsp.orbs.all();
+	}
+	else if (isEqual(attrs, Attributes.all()))
+	{
+		contentFrg = renderOrbs('_5color');
+	}
+	else if (isEqual(attrs, Attributes._6color()))
+	{
+		contentFrg = tsp.orbs._6color({
+			_5color: renderOrbs('_5color'),
+			orb_rcv: renderOrbs(5),
+		});
 	}
 	else
 	{
@@ -1724,29 +1757,89 @@ function renderPowerUp(powerUp) {
 			frg.ap(renderStats(hp, atk, rcv));
 			break;
 		}
-		/*case SkillPowerUpKind.ScaleAttributes: {
+		case SkillPowerUpKind.ScaleAttributes: {
 			let attrs = powerUp.attrs, min = powerUp.min, max = powerUp.max, baseAtk = powerUp.baseAtk, baseRcv = powerUp.baseRcv, bonusAtk = powerUp.bonusAtk, bonusRcv = powerUp.bonusRcv;
-			return <>
-			&ge; {min} of [{renderAttrs(attrs)}] &rArr; {renderStats(1, baseAtk, baseRcv)}
-			{max !== min && <> for each &le; {max} attributes: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
-			</>;
+			
+			let dict = {
+				attrs: renderOrbs(attrs, {affix: true}),
+				min: min,
+				stats: renderStats(1, baseAtk, baseRcv),
+			}
+			if (max !== min)
+			{
+				let _dict = {
+					max: max,
+					bonus: renderStats(0, bonusAtk, bonusRcv, false),
+					stats_max: renderStats(1, baseAtk + bonusAtk * (max-min), baseRcv + bonusRcv * (max-min)),
+				}
+				dict.bonus = frg.ap(tsp.power.scale_attributes_bonus(_dict));
+			}
+			frg.ap(tsp.power.scale_attributes(dict));
+			
+			break;
 		}
 		case SkillPowerUpKind.ScaleCombos: {
-			const { min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.Scale;
-			return <>
-			&ge; {min} combos &rArr; {renderStats(1, baseAtk, baseRcv)}
-			{max !== min && <> for each &le; {max} combos: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
-			</>;
+			let min = powerUp.min, max = powerUp.max, baseAtk = powerUp.baseAtk, baseRcv = powerUp.baseRcv, bonusAtk = powerUp.bonusAtk, bonusRcv = powerUp.bonusRcv;
+			let dict = {
+				min: min,
+				stats: renderStats(1, baseAtk, baseRcv),
+			}
+			if (max !== min)
+			{
+				let _dict = {
+					max: max,
+					bonus: renderStats(0, bonusAtk, bonusRcv, false),
+					stats_max: renderStats(1, baseAtk + bonusAtk * (max-min), baseRcv + bonusRcv * (max-min)),
+				}
+				dict.bonus = frg.ap(tsp.power.scale_combos_bonus(_dict));
+			}
+			frg.ap(tsp.power.scale_combos(dict));
+			
+			break;
 		}
 		case SkillPowerUpKind.ScaleMatchAttrs: {
-			const { matches, min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.ScaleMultiAttrs;
-			return <>
-			&ge; {min} matches of [{matches.map((attrs, i) =>
-				<React.Fragment key={i}>{i !== 0 && ', '}{renderAttrs(attrs)}</React.Fragment>
-			)}] &rArr; {renderStats(1, baseAtk, baseRcv)}
-			{max !== min && <> for each &le; {max} matches: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
-			</>;
+			let matches = powerUp.matches, min = powerUp.min, max = powerUp.max, baseAtk = powerUp.baseAtk, baseRcv = powerUp.baseRcv, bonusAtk = powerUp.bonusAtk, bonusRcv = powerUp.bonusRcv;
+			let dict = {
+				matches: matches.map(orbs=>renderOrbs(orbs)).nodeJoin(tsp.word.slight_pause()),
+				min: min,
+				stats: renderStats(1, baseAtk, baseRcv),
+			}
+			if (max !== min)
+			{
+				let _dict = {
+					max: max,
+					bonus: renderStats(0, bonusAtk, bonusRcv, false),
+					stats_max: renderStats(1, baseAtk + bonusAtk * (max-min), baseRcv + bonusRcv * (max-min)),
+				}
+				dict.bonus = frg.ap(tsp.power.scale_match_attrs_bonus(_dict));
+			}
+			frg.ap(tsp.power.scale_match_attrs(dict));
+			
+			break;
 		}
+		case SkillPowerUpKind.ScaleMatchLength: {
+			let attrs = powerUp.attrs, min = powerUp.min, max = powerUp.max, baseAtk = powerUp.baseAtk, baseRcv = powerUp.baseRcv, bonusAtk = powerUp.bonusAtk, bonusRcv = powerUp.bonusRcv;
+			
+			let dict = {
+				attrs: renderOrbs(attrs, {affix: true}),
+				min: min,
+				stats: renderStats(1, baseAtk, baseRcv),
+			}
+			if (max !== min)
+			{
+				let _dict = {
+					max: max,
+					bonus: renderStats(0, bonusAtk, bonusRcv, false),
+					stats_max: renderStats(1, baseAtk + bonusAtk * (max-min), baseRcv + bonusRcv * (max-min)),
+				}
+				dict.bonus = frg.ap(tsp.power.scale_match_length_bonus(_dict));
+			}
+			frg.ap(tsp.power.scale_match_length(dict));
+			
+			break;
+		}
+		/*
+
 		case SkillPowerUpKind.ScaleMatchLength: {
 			const { attrs, min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.ScaleAttrs;
 			return <>

@@ -3171,6 +3171,7 @@ table .orb-icon
 .icon-skill::after,
 .icon-skill::before
 {
+	font-weight: normal;
 	display: inline-block;
 	width: 36px;
 	height: 36px;
