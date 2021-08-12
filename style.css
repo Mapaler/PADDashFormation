@@ -3178,7 +3178,8 @@ table .orb-icon
 	background-repeat: no-repeat;
 }
 .icon-skill,
-.skill-datail-parsed icon.orb
+.skill-datail-parsed icon.orb,
+.skill-datail-parsed icon.type
 {
 	vertical-align: bottom;
 	transform: scale(0.75);

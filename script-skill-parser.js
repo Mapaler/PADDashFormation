@@ -819,7 +819,7 @@ const parsers = {
 	},
 	[130](percent, attrs, types, atk, rcv, rAttrs, rPercent) {
 	  return [
-		powerUp(flags(attrs), flags(types), p.mul({ atk, rcv }), c.hp(0, percent)),
+		(atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ atk, rcv }), c.hp(0, percent)) || null,
 		rPercent && reduceDamage(flags(rAttrs), v.percent(rPercent), c.hp(0, percent)) || null
 	  ];
 	},
@@ -956,10 +956,10 @@ const parsers = {
 	[180](turns, percent) { return activeTurns(turns, orbDropIncrease(v.percent(percent), 'enhanced')); },
   
 	[182](attrs, len, mul, percent) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul, 100], [0, 0]), undefined, v.percent(percent)); },
-	[183](attrs, types, percent1, atk1, rcv1, percent2, atk2, rcv2) {
+	[183](attrs, types, percent1, atk1, reduce, percent2, atk2, rcv2) {
 	  return [
-		powerUp(flags(attrs), flags(types), p.mul({ atk: atk1, rcv: rcv1 }), c.hp(percent1, 100)),
-		powerUp(flags(attrs), flags(types), p.mul({ atk: atk2, rcv: rcv2 }), c.hp(0, percent2 || percent1)),
+		powerUp(flags(attrs), flags(types), p.mul({ atk: atk1 }), c.hp(percent1, 100), v.percent(reduce)),
+		(atk2 || rcv2) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk2, rcv: rcv2 }), c.hp(0, percent2 || percent1)) || null
 	  ];
 	},
 	[184](turns) { return activeTurns(turns, noSkyfall()); },
@@ -1227,7 +1227,7 @@ function renderSkill(skill, option = {})
 			let prob = skill.prob;
 			let dict = {
 				icon: createIcon(skill.kind),
-				stats: renderStat('hp'),
+				stats: renderStat('chp'),
 				value: renderValue(skill.min, { percent:true }),
 				prob: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
 			};
@@ -1509,39 +1509,27 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.reduce_damage(dict));
 			break;
 		}
-		/*
-
-		case SkillKinds.ReduceDamage: {
-		const { attrs, percent, condition } = skill as Skill.ReduceDamage;
-
-		return (
-			<span className="CardSkill-skill">
-			{!!condition && <>{renderCondition(condition)} &rArr; </>}
-			<Asset assetId="status-def" className="CardSkill-icon" />
-			{(Array.isArray(attrs) && !isEqual(attrs, Attributes.all())) && renderAttrs(attrs)}
-			{renderValue(percent)}
-			</span>
-		);
-		}
 		case SkillKinds.PowerUp: {
-		const { attrs, types, condition, value, reduceDamage } = skill as Skill.PowerUp;
-		const targets: React.ReactNode[] = [];
-		if (attrs && !isEqual(attrs, Attributes.all())) targets.push(...renderAttrs(attrs || []));
-		if (types) targets.push(...renderTypes(types || []));
-
-		return (
-			<span className="CardSkill-skill">
-			{condition && <>{renderCondition(condition)} &rArr; </>}
-			{targets.length > 0 && <>{targets}</>}
-			{!!value && renderPowerUp(value)}
-			{!!reduceDamage && <>
-				<Asset assetId="status-def" className="CardSkill-icon" />
-				{renderValue(reduceDamage)}
-			</>}
-			</span>
-		);
+			let attrs = skill.attrs, types = skill.types, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage;
+			let targets = [];
+			if (attrs?.length && !isEqual(attrs, Attributes.all())) targets.push(renderAttrs(attrs || [], {affix: true}));
+			if (types?.length) targets.push(renderTypes(types || [], {affix: true}));
+			
+			dict = {
+				icon: createIcon(skill.kind),
+			};
+			if (condition) dict.condition = renderCondition(condition);
+			if (targets.length > 0) dict.targets = targets.nodeJoin(tsp.word.slight_pause());
+			if (value) dict.value = renderPowerUp(value);
+			if (reduceDamage) {
+				dict.reduceDamage = tsp.word.comma().ap(tsp.skill.reduce_damage({
+					value: renderValue(reduceDamage, {percent: true}),
+					icon: createIcon("reduce-damage"),
+				}));
+			}
+			frg.ap(tsp.skill.power_up(dict));
+			break;
 		}
-		*/
 		default: {
 			console.log("未处理的技能类型",skill.kind, skill);
 			frg.ap(skill.kind);
@@ -1625,11 +1613,11 @@ function renderTypes(types, option = {}) {
 	if (typeof localTranslating == "undefined") return frg;
 	
 	const tsp = localTranslating.skill_parse;
-	const contentFrg = types.map(attr => {
+	const contentFrg = types.map(type => {
 		const icon = document.createElement("icon");
 		icon.className = "type";
-		icon.setAttribute("data-type-icon",attr);
-		return tsp.types[attr]({icon: icon});
+		icon.setAttribute("data-type-icon",type);
+		return tsp.types[type]({icon: icon});
 	})
 	.nodeJoin(tsp.word.slight_pause());
 	frg.ap(option.affix ? tsp.word.affix_type({cotent: contentFrg}) : contentFrg);
@@ -1641,7 +1629,7 @@ function renderCondition(cond) {
 	const tsp = localTranslating.skill_parse;
 	if (cond.hp) {
 		let dict = {
-			hp: renderStat('hp'),
+			hp: renderStat('chp'),
 			min: renderValue(v.percent(cond.hp.min * 100), {percent: true}),
 			max: renderValue(v.percent(cond.hp.max * 100), {percent: true}),
 		};
@@ -1668,11 +1656,10 @@ function renderCondition(cond) {
 			frg.ap(tsp.cond.exact_combo(dict));
 		} else if (cond.exact.type === 'match-length') {
 			let dict = {
-				value: cond.exact.value,
-				orbs: cond.exact.attrs === 'enhanced' ? tsp.cond.exact_match_enhanced() : renderOrbs(cond.exact.attrs)
+				value: renderValue(v.constant(cond.exact.value), {unit: tsp.unit.unit}),
+				orbs: cond.exact.attrs === 'enhanced' ? tsp.cond.exact_match_enhanced() : renderOrbs(cond.exact.attrs, {affix: true})
 			};
 			frg.ap(tsp.cond.exact_match_length(dict));
-		} else if (cond.exact.type === 'match-count') {
 		}
 	} else if (cond.compo) {
 		let dict = {};
@@ -1700,36 +1687,95 @@ function renderCondition(cond) {
 	return frg;
 }
 
-/*
+function renderPowerUp(powerUp) {
+	const frg = document.createDocumentFragment();
+	const tsp = localTranslating.skill_parse;
+	function renderStats(hp, atk, rcv, mul = true) {
+		const frg = document.createDocumentFragment();
+		const operator = mul ? '' : '+';
+		let list = [['hp', hp], ['atk', atk], ['rcv', rcv]];
+		//去除不改变的值
+		list = list.filter(([, value]) => value !== (mul ? 1 : 0));
+		if (list.length === 0) return frg;
 
+		if (list.every(([, value]) => value === list[0][1])) {
+			let value = list[0][1];
+			//三个值一样
+			frg.ap(list.map(([name]) => renderStat(name)).nodeJoin(tsp.word.slight_pause()));
+			frg.ap(operator);
+			frg.ap(renderValue(mul ? v.percent(value * 100): v.constant(value)));
+		} else {
+			//三个值不一样
+			let subDocument = list.map(([name, value]) => {
+				let _frg = document.createDocumentFragment();
+				_frg.ap(renderStat(name));
+				_frg.ap(operator);
+				_frg.ap(renderValue(mul ? v.percent(value * 100): v.constant(value)));
+				return _frg;
+			});
+			frg.ap(subDocument.nodeJoin(tsp.word.comma()));
+		}
+		return frg;
+	}
 
-function renderCondition(cond: SkillCondition) {
-	if (cond.hp) {
-	if (cond.hp.min === cond.hp.max)
-		return <>{renderStat('hp')} = {formatNumber(cond.hp.min * 100)}%</>;
-	else if (cond.hp.min === 0)
-		return <>{renderStat('hp')} &le; {formatNumber(cond.hp.max * 100)}%</>;
-	else if (cond.hp.max === 1)
-		return <>{renderStat('hp')} &ge; {formatNumber(cond.hp.min * 100)}%</>;
-	else
-		return <>{renderStat('hp')} &in; [{formatNumber(cond.hp.min * 100)}%, {formatNumber(cond.hp.max * 100)}%]</>;
-	} else if (cond.useSkill) {
-	return <>use skill</>;
-	} else if (cond.multiplayer) {
-	return <>in multiplayer</>;
-	} else if (cond.remainOrbs) {
-	return <>&le; {cond.remainOrbs.count} orbs remain</>;
-	} else if (cond.exact) {
-	if (cond.exact.type === 'combo') {
-		return <>= {cond.exact.value} combos</>;
-	} else if (cond.exact.type === 'match-length') {
-		return <>= {cond.exact.value} {cond.exact.attrs === 'enhanced' ? 'Enhanced' : renderAttrs(cond.exact.attrs)} orbs</>;
+	switch (powerUp.kind) {
+		case SkillPowerUpKind.Multiplier: {
+			let hp = powerUp.hp, atk = powerUp.atk, rcv = powerUp.rcv;
+			frg.ap(renderStats(hp, atk, rcv));
+			break;
+		}
+		/*case SkillPowerUpKind.ScaleAttributes: {
+			let attrs = powerUp.attrs, min = powerUp.min, max = powerUp.max, baseAtk = powerUp.baseAtk, baseRcv = powerUp.baseRcv, bonusAtk = powerUp.bonusAtk, bonusRcv = powerUp.bonusRcv;
+			return <>
+			&ge; {min} of [{renderAttrs(attrs)}] &rArr; {renderStats(1, baseAtk, baseRcv)}
+			{max !== min && <> for each &le; {max} attributes: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
+			</>;
+		}
+		case SkillPowerUpKind.ScaleCombos: {
+			const { min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.Scale;
+			return <>
+			&ge; {min} combos &rArr; {renderStats(1, baseAtk, baseRcv)}
+			{max !== min && <> for each &le; {max} combos: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
+			</>;
+		}
+		case SkillPowerUpKind.ScaleMatchAttrs: {
+			const { matches, min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.ScaleMultiAttrs;
+			return <>
+			&ge; {min} matches of [{matches.map((attrs, i) =>
+				<React.Fragment key={i}>{i !== 0 && ', '}{renderAttrs(attrs)}</React.Fragment>
+			)}] &rArr; {renderStats(1, baseAtk, baseRcv)}
+			{max !== min && <> for each &le; {max} matches: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
+			</>;
+		}
+		case SkillPowerUpKind.ScaleMatchLength: {
+			const { attrs, min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.ScaleAttrs;
+			return <>
+			&ge; {min} &times; {renderAttrs(attrs)} &rArr; {renderStats(1, baseAtk, baseRcv)}
+			{max !== min && <> for each &le; {max} orbs: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
+			</>;
+		}
+		case SkillPowerUpKind.ScaleCross: {
+			const { crosses } = powerUp as SkillPowerUp.ScaleCross;
+			return crosses.map(({ single, attr, mul }, i) => <React.Fragment key={i}>
+			{i !== 0 && ', '}
+			{mul !== 1 && <>{renderStat('atk')} &times; {formatNumber(mul)} </>}
+			{single ? 'when' : 'for each'} cross of {renderAttrs(attr)}
+			</React.Fragment>);
+		}
+		case SkillPowerUpKind.ScaleAwakenings: {
+			const { awakenings, value } = powerUp as SkillPowerUp.ScaleAwakenings;
+			return <>
+			{renderStat('atk')} &times; {formatNumber(value - 1)} for each {awakenings.map(id =>
+				<Asset assetId={`awakening-${id}`} className="CardSkill-icon" key={id} />
+			)}
+			</>;
+		}*/
+		default:
+			frg.ap(tsp.power.unknown({type: powerUp.kind}));
 	}
-	} else if (cond.compo) {
-	return <>{cond.compo.type} [{cond.compo.ids.join()}] in team</>;
-	}
-	return <>[ unknown condition ]</>;
+	return frg;
 }
+/*
 
 function renderPowerUp(powerUp: SkillPowerUp) {
 	function renderStats(hp: number, atk: number, rcv: number, mul = true) {

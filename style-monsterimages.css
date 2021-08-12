@@ -365,7 +365,10 @@
 .monster[data-cards-pic-y='8']{background-position-y:calc(-102px * 8);}
 .monster[data-cards-pic-y='9']{background-position-y:calc(-102px * 9);}
 /*觉醒、类型、潜觉*/
-.awoken-icon,.type-icon{
+.awoken-icon,
+.type-icon,
+icon.type
+{
 	display:inline-block;
 	width:32px;height:32px;
     vertical-align: middle;
@@ -623,48 +626,76 @@
 	background-position-y:calc(-32px * 81);
 }
 /*类型*/
-.type-icon{
+.type-icon,
+icon.type
+{
 	background-image: url(images/type.png);
 	background-position-x: 0;
 	background-position-y: 32px; /*默认不显示*/
 }
-.type-icon[data-type-icon='0']{/*进化用*/
+.type-icon[data-type-icon='0'],
+.type[data-type-icon='0']
+{/*进化用*/
 	background-position-y:calc(-32px * 0);
 }
-.type-icon[data-type-icon='1']{/*平衡*/
+.type-icon[data-type-icon='1'],
+.type[data-type-icon='1']
+{/*平衡*/
 	background-position-y:calc(-32px * 1);
 }
-.type-icon[data-type-icon='2']{/*体力*/
+.type-icon[data-type-icon='2'],
+.type[data-type-icon='2']
+{/*体力*/
 	background-position-y:calc(-32px * 2);
 }
-.type-icon[data-type-icon='3']{/*回复*/
+.type-icon[data-type-icon='3'],
+.type[data-type-icon='3']
+{/*回复*/
 	background-position-y:calc(-32px * 3);
 }
-.type-icon[data-type-icon='4']{/*龙*/
+.type-icon[data-type-icon='4'],
+.type[data-type-icon='4']
+{/*龙*/
 	background-position-y:calc(-32px * 4);
 }
-.type-icon[data-type-icon='5']{/*神*/
+.type-icon[data-type-icon='5'],
+.type[data-type-icon='5']
+{/*神*/
 	background-position-y:calc(-32px * 5);
 }
-.type-icon[data-type-icon='6']{/*攻击*/
+.type-icon[data-type-icon='6'],
+.type[data-type-icon='6']
+{/*攻击*/
 	background-position-y:calc(-32px * 6);
 }
-.type-icon[data-type-icon='7']{/*恶魔*/
+.type-icon[data-type-icon='7'],
+.type[data-type-icon='7']
+{/*恶魔*/
 	background-position-y:calc(-32px * 7);
 }
-.type-icon[data-type-icon='8']{/*机械*/
+.type-icon[data-type-icon='8'],
+.type[data-type-icon='8']
+{/*机械*/
 	background-position-y:calc(-32px * 8);
 }
-.type-icon[data-type-icon='9']{/*特别保护*/
+.type-icon[data-type-icon='9'],
+.type[data-type-icon='9']
+{/*特别保护*/
 	background-position-y:calc(-32px * 9);
 }
-.type-icon[data-type-icon='12']{/*能力觉醒用*/
+.type-icon[data-type-icon='12'],
+.type[data-type-icon='12']
+{/*能力觉醒用*/
 	background-position-y:calc(-32px * 12);
 }
-.type-icon[data-type-icon='14']{/*强化合成用*/
+.type-icon[data-type-icon='14'],
+.type[data-type-icon='14']
+{/*强化合成用*/
 	background-position-y:calc(-32px * 14);
 }
-.type-icon[data-type-icon='15']{/*贩卖用*/
+.type-icon[data-type-icon='15'],
+.type[data-type-icon='15']
+{/*贩卖用*/
 	background-position-y:calc(-32px * 15);
 }
 /*潜在觉醒*/

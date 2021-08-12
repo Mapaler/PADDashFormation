@@ -76,6 +76,7 @@
 			rate_multiply_coin: tp`${'icon'}金币掉落率`,
 			rate_multiply_exp: tp`${'icon'}等级经验倍率`,
 			reduce_damage: tp`${'condition'}受到的${'attrs'}伤害${'icon'}减少${'value'}`,
+			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}`,
 		},
 		cond: {
             unknown: tp`[ 未知条件 ]`,
@@ -86,13 +87,16 @@
 			use_skill: tp`使用技能时`,
 			multi_player: tp`协力时`,
 			remain_orbs: tp`剩余宝珠 ≤ ${'value'} 时`,
-			exact_combo: tp`≥ ${'value'}连击 时`,
-			exact_match_length: tp`相连消除 ≥ ${'value'}${'orbs'}时`,
+			exact_combo: tp`刚好${'value'}连击时`,
+			exact_match_length: tp`相连消除刚好${'value'}${'orbs'}时`,
 			exact_match_enhanced: tp`并且其中包含至少一个强化宝珠`,
 
 			compo_type_card: tp`队伍中同时存在 ${'ids'} 时`,
 			compo_type_series: tp`队员组成全为 ${'ids'} 系列时`,
 			compo_type_evolution: tp`队员组成全为 ${'ids'} 进化时`,
+		},
+		power: {
+            unknown: tp`[ 未知能力提升: ${'type'} ]`,
 		},
 		position: {
 			top: tp`上方第${'pos'}横行`,
@@ -125,7 +129,8 @@
         stats: {
             unknown: tp`[ 未知状态: ${'type'}]`, //type
             maxhp: tp`最大HP`,
-            hp: tp`当前HP`,
+            hp: tp`HP`,
+            chp: tp`当前HP`,
             atk: tp`攻击力`,
 			rcv: tp`回复力`,
             teamhp: tp`队伍总HP`,
