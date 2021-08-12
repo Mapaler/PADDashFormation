@@ -58,7 +58,7 @@
 			board7x6: tp`【${'icon'}7×6版面】`,
 			counter_attack: tp`受到${'target'}攻击时，${'prob'}进行受到伤害${'value'}的${'attr'}${'icon'}反击`,	
 			change_orbs: tp`${'from'}→${'to'}`,
-			generate_orbs: tp`${'exclude'}生成${'orbs'}各${'count'}个`,
+			generate_orbs: tp`${'exclude'}生成${'orbs'}各${'value'}个`,
 			fixed_orbs: tp`在${'position'}产生${'orbs'}`,
 			orb_drop_increase: tp`${'orbs'}的掉落率提高到${'value'}`,
 			attr_absorb: tp`${'icon'}属性吸收`,
@@ -68,13 +68,31 @@
 			void_enemy_buff: tp`敌人的 ${'buff'} 无效化`,
 			change_attribute: tp`将${'target'}变为${'attrs'}`,
 			set_orb_state_enhanced: tp`强化${'orbs'}（每颗宝珠效力增加${'value'}）`,
-			set_orb_state_locked: tp`将${'orbs'}锁定${'count'}`,
+			set_orb_state_locked: tp`将${'orbs'}锁定${'value'}`,
 			set_orb_state_unlocked: tp`${'icon'}解除所有宝珠的锁定状态`,
 			set_orb_state_bound: tp`无法消除${'orbs'}`,
 			rate_multiply: tp`作为队长进入地下城时，${'rate'}变为${'value'}`,
 			rate_multiply_drop: tp`${'icon'}怪物蛋掉落率`,
 			rate_multiply_coin: tp`${'icon'}金币掉落率`,
 			rate_multiply_exp: tp`${'icon'}等级经验倍率`,
+			reduce_damage: tp`${'condition'}受到的${'attrs'}伤害${'icon'}减少${'value'}`,
+		},
+		cond: {
+            unknown: tp`[ 未知条件 ]`,
+			hp_equal: tp`${'hp'} == ${'min'} 时`,
+			hp_less_or_equal: tp`${'hp'} ≤ ${'max'} 时`,
+			hp_greater_or_equal: tp`${'hp'} ≥ ${'min'} 时`,
+			hp_belong_to_range: tp`${'hp'} ∈ [${'min'},${'max'}] 时`,
+			use_skill: tp`使用技能时`,
+			multi_player: tp`协力时`,
+			remain_orbs: tp`剩余宝珠 ≤ ${'value'} 时`,
+			exact_combo: tp`≥ ${'value'}连击 时`,
+			exact_match_length: tp`相连消除 ≥ ${'value'}${'orbs'}时`,
+			exact_match_enhanced: tp`并且其中包含至少一个强化宝珠`,
+
+			compo_type_card: tp`队伍中同时存在 ${'ids'} 时`,
+			compo_type_series: tp`队员组成全为 ${'ids'} 系列时`,
+			compo_type_evolution: tp`队员组成全为 ${'ids'} 进化时`,
 		},
 		position: {
 			top: tp`上方第${'pos'}横行`,
@@ -126,6 +144,7 @@
 			range_hyphen: tp`~`, //范围连字符
 			affix_attr: tp`${'cotent'}属性`, //词缀-属性
 			affix_orb: tp`${'cotent'}宝珠`, //词缀-宝珠
+			affix_type: tp`${'cotent'}类型`, //词缀-类型
 			affix_exclude: tp`${'cotent'}以外`, //词缀-属性
 		},
 		attrs: {
@@ -136,8 +155,24 @@
 			[4]: tp`${'icon'}暗`,
 			[5]: tp`${'icon'}回复`,
 			[6]: tp`${'icon'}空`,
+			all: tp`所有`,
 			self: tp`${'icon'}自身属性`,
 			fixed: tp`${'icon'}无视防御固定`,
+		},
+		types: {
+			[0]: tp`${'icon'}进化用`,
+			[1]: tp`${'icon'}平衡`,
+			[2]: tp`${'icon'}体力`,
+			[3]: tp`${'icon'}回复`,
+			[4]: tp`${'icon'}龙`,
+			[5]: tp`${'icon'}神`,
+			[6]: tp`${'icon'}攻击`,
+			[7]: tp`${'icon'}恶魔`,
+			[8]: tp`${'icon'}攻击`,
+			[9]: tp`${'icon'}特别保护`,
+			[12]: tp`${'icon'}能力觉醒用`,
+			[14]: tp`${'icon'}强化合成用`,
+			[15]: tp`${'icon'}贩卖用`,
 		},
 		orbs: {
 			[0]: tp`${'icon'}火`,
@@ -150,8 +185,8 @@
 			[7]: tp`${'icon'}毒`,
 			[8]: tp`${'icon'}剧毒`,
 			[9]: tp`${'icon'}炸弹`,
-			all: tp`${'icon'}所有`,
-			any: tp`${'icon'}任何`,
+			all: tp`所有`,
+			any: tp`任何`,
 		},
     },
 }
@@ -1361,7 +1396,7 @@ function parseSkillDescription(skill) {
 				lnk.textContent = cid;
 				if (idx < arr.length-1) lnk.insertAdjacentText('afterend', "、");;
 			});
-			fragment.appendChild(document.createTextNode(`合作角色时，所有宠物的${getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]})}`));
+			fragment.appendChild(document.createTextNode(`系列角色时，所有宠物的${getFixedHpAtkRcvString({hp:sk[3],atk:sk[4],rcv:sk[5]})}`));
 			return fragment;
 			break;
 		case 176:

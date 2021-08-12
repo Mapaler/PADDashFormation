@@ -3481,3 +3481,7 @@ table .orb-icon
 {
 	background-position-y:calc(-36px * 31);
 }
+.icon-skill[data-icon-type="reduce-damage"]
+{
+	background-position-y:calc(-36px * 32);
+}

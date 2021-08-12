@@ -79,7 +79,43 @@ Attributes.orbs = function () {
 		this.Bomb,
 	];
 }
+//代码来自于 https://www.jianshu.com/p/3644833bca33
+function isEqual(obj1,obj2) {
+	//判断是否是对象或数组
+	function isObject(obj) {
+		return typeof obj === 'object' && obj !== null;
+	}
+	// 两个数据有任何一个不是对象或数组
+	if (!isObject(obj1) || !isObject(obj2)) {
+		// 值类型(注意：参与equal的一般不会是函数)
+		return obj1 === obj2;
+	}
+	// 如果传的两个参数都是同一个对象或数组
+	if (obj1 === obj2) {
+		return true;
+	}
 
+	// 两个都是对象或数组，而且不相等
+	// 1.先比较obj1和obj2的key的个数，是否一样
+	const obj1Keys = Object.keys(obj1);
+	const obj2Keys = Object.keys(obj2);
+	if (obj1Keys.length !== obj2Keys.length) {
+		return false;
+	}
+
+	// 如果key的个数相等,就是第二步
+	// 2.以obj1为基准，和obj2依次递归比较
+	for (let key in obj1) {
+		// 比较当前key的value  --- 递归
+		const res = isEqual(obj1[key], obj2[key]);
+		if (!res) {
+			return false;
+		}
+	}
+
+	// 3.全相等
+	return true
+}
 class Board
 {
 	#rowCount = 6;
@@ -954,6 +990,7 @@ const parsers = {
 	[202](id) {
 	  return henshin(id);
 	},
+	[203](evotype, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp, atk, rcv }), c.compo('evolution', [evotype])); },
 	[215](turns, attrs) { return activeTurns(turns, setOrbState(flags(attrs), 'bound')); },
 	[218](turns) { return skillBoost(v.constant(-turns)); },
 
@@ -1333,7 +1370,7 @@ function renderSkill(skill, option = {})
 			dict = {
 				exclude: exclude.length ? tsp.word.affix_exclude({cotent: renderOrbs(exclude)}) : void 0,
 				orbs: renderOrbs(orbs),
-				count: count,
+				value: count,
 			};
 			let board = new Board();
 			board.generateOrbs(orbs, count);
@@ -1436,7 +1473,7 @@ function renderSkill(skill, option = {})
 				}
 				case "locked":{
 					if (arg.count.value < 42)
-						dict.count = renderValue(arg.count, {unit: tsp.unit.unit});
+						dict.value = renderValue(arg.count, {unit: tsp.unit.unit});
 					frg.ap(tsp.skill.set_orb_state_locked(dict));
 					break;
 				}
@@ -1459,6 +1496,17 @@ function renderSkill(skill, option = {})
 				value: renderValue(value),
 			};
 			frg.ap(tsp.skill.rate_multiply(dict));
+			break;
+		}
+		case SkillKinds.ReduceDamage: {
+			let attrs = skill.attrs, percent = skill.percent, condition = skill.condition;
+			dict = {
+				icon: createIcon(skill.kind),
+				attrs: renderAttrs(attrs, {affix: true}),
+				value: renderValue(percent, {percent: true}),
+			};
+			if (condition) dict.condition = renderCondition(condition);
+			frg.ap(tsp.skill.reduce_damage(dict));
 			break;
 		}
 		/*
@@ -1523,13 +1571,21 @@ function renderAttrs(attrs, option = {}) {
 	if (typeof localTranslating == "undefined") return frg;
 	
 	const tsp = localTranslating.skill_parse;
-	const contentFrg = attrs.map(attr => {
-		const icon = document.createElement("icon");
-		icon.className = "attr";
-		icon.setAttribute("data-attr-icon",attr);
-		return tsp.attrs[attr]({icon: icon});
-	})
-	.nodeJoin(tsp.word.slight_pause());
+	let contentFrg;
+	if (isEqual(attrs, Attributes.all()))
+	{
+		contentFrg = option.any ? tsp.attrs.any() : tsp.attrs.all();
+	}
+	else
+	{
+		contentFrg = attrs.map(attr => {
+			const icon = document.createElement("icon");
+			icon.className = "attr";
+			icon.setAttribute("data-attr-icon",attr);
+			return tsp.attrs[attr]({icon: icon});
+		})
+		.nodeJoin(tsp.word.slight_pause());
+	}
 	frg.ap(option.affix ? tsp.word.affix_attr({cotent: contentFrg}) : contentFrg);
 	return frg;
 }
@@ -1542,17 +1598,8 @@ function renderOrbs(attrs, option = {}) {
 
 	const tsp = localTranslating.skill_parse;
 	let contentFrg;
-	if (attrs.includes(0) &&
-		attrs.includes(1) &&
-		attrs.includes(2) &&
-		attrs.includes(3) &&
-		attrs.includes(4) &&
-		attrs.includes(5) &&
-		attrs.includes(6) &&
-		attrs.includes(7) &&
-		attrs.includes(8) &&
-		attrs.includes(9)
-	)
+	
+	if (isEqual(attrs, Attributes.orbs()))
 	{
 		contentFrg = option.any ? tsp.orbs.any() : tsp.orbs.all();
 	}
@@ -1571,12 +1618,89 @@ function renderOrbs(attrs, option = {}) {
 	return frg;
 }
 
-/*
-function renderTypes(types: Types | Types[]) {
+function renderTypes(types, option = {}) {
 	if (!Array.isArray(types))
-	types = [types];
-	return types.map(type => <Asset assetId={`type-${type}`} key={type} className="CardSkill-icon" />);
+	types = [types ?? 0];
+	const frg = document.createDocumentFragment();
+	if (typeof localTranslating == "undefined") return frg;
+	
+	const tsp = localTranslating.skill_parse;
+	const contentFrg = types.map(attr => {
+		const icon = document.createElement("icon");
+		icon.className = "type";
+		icon.setAttribute("data-type-icon",attr);
+		return tsp.types[attr]({icon: icon});
+	})
+	.nodeJoin(tsp.word.slight_pause());
+	frg.ap(option.affix ? tsp.word.affix_type({cotent: contentFrg}) : contentFrg);
+	return frg;
 }
+
+function renderCondition(cond) {
+	const frg = document.createDocumentFragment();
+	const tsp = localTranslating.skill_parse;
+	if (cond.hp) {
+		let dict = {
+			hp: renderStat('hp'),
+			min: renderValue(v.percent(cond.hp.min * 100), {percent: true}),
+			max: renderValue(v.percent(cond.hp.max * 100), {percent: true}),
+		};
+		if (cond.hp.min === cond.hp.max)
+			frg.ap(tsp.cond.hp_equal(dict));
+		else if (cond.hp.min === 0)
+			frg.ap(tsp.cond.hp_less_or_equal(dict));
+		else if (cond.hp.max === 1)
+			frg.ap(tsp.cond.hp_greater_or_equal(dict));
+		else
+			frg.ap(tsp.cond.hp_belong_to_range(dict));
+	} else if (cond.useSkill) {
+		frg.ap(tsp.cond.use_skill());
+	} else if (cond.multiplayer) {
+		frg.ap(tsp.cond.multi_player());
+	} else if (cond.remainOrbs) {
+		let dict = {
+			count: renderValue(v.constant(cond.remainOrbs.count), {unit: tsp.unit.unit}),
+		};
+		frg.ap(tsp.cond.remain_orbs(dict));
+	} else if (cond.exact) {
+		if (cond.exact.type === 'combo') {
+			let dict = {value: cond.exact.value};
+			frg.ap(tsp.cond.exact_combo(dict));
+		} else if (cond.exact.type === 'match-length') {
+			let dict = {
+				value: cond.exact.value,
+				orbs: cond.exact.attrs === 'enhanced' ? tsp.cond.exact_match_enhanced() : renderOrbs(cond.exact.attrs)
+			};
+			frg.ap(tsp.cond.exact_match_length(dict));
+		} else if (cond.exact.type === 'match-count') {
+		}
+	} else if (cond.compo) {
+		let dict = {};
+		switch (cond.compo.type)
+		{
+			case 'card':{
+				dict.ids = cond.compo.ids.join();
+				frg.ap(tsp.cond.compo_type_card(dict));
+				break;
+			}
+			case 'series':{
+				dict.ids = cond.compo.ids.join();
+				frg.ap(tsp.cond.compo_type_series(dict));
+				break;
+			}
+			case 'evolution':{
+				dict.ids = cond.compo.ids.join();
+				frg.ap(tsp.cond.compo_type_evolution(dict));
+				break;
+			}
+		}
+	} else {
+		frg.ap(tsp.cond.unknown());
+	}
+	return frg;
+}
+
+/*
 
 
 function renderCondition(cond: SkillCondition) {
