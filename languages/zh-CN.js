@@ -31,8 +31,8 @@
 			damage_enemy: tp`对${'target'}造成${'damage'}的${'attr'}伤害`, //target, damage, attr
 			vampire: tp`对${'target'}造成${'damage'}的${'attr'}伤害，并${'icon'}回复伤害值${'heal'}的HP`, //target, damage, attr
 			delay: tp`${'icon'}延迟敌人的攻击`, //icon
-			mass_attack: tp`${'icon'}所有攻击变为全体攻击`,
-			leader_change: tp`${'icon'}将自身换为队长，再次使用则换回来`,
+			mass_attack: tp`所有攻击变为${'icon'}全体攻击`,
+			leader_change: tp`${'icon'}将${'target'}换为队长，再次使用则换回来`,
 			no_skyfall: tp`【${'icon'}天降的宝珠不会消除】`,
 			self_harm: tp`${'icon'}${'stats'}减少${'value'}`,
             heal: tp`${'icon'}回复 ${'value'} 的 ${'stats'}`,
@@ -48,7 +48,7 @@
 			ctw: tp`${'icon'}${'value'}内时间停止，可以任意移动宝珠`,
 			gravity: tp`${'icon'}造成${'target'}${'value'}的伤害`,
 			resolve: tp`${'icon'}如${'stats'}≧${'value'}，受到单一次致命攻击时，${'prob'}将会以1点 HP 生还`,
-			board_change: tp`全画面的宝珠变为${'attrs'}`,
+			board_change: tp`全画面的宝珠变为${'orbs'}`,
 			skill_boost: tp`自身以外成员的技能冷却储备${'icon'}${'turns'}`,
 			add_combo: tp`结算时连击数增加${'value'}c${'icon'}`,
 			fixed_time: tp`【${'icon'}操作时间固定${'value'}】`,
@@ -56,11 +56,25 @@
 			drop_refresh: tp`全板刷新`,
 			drum: tp`宝珠移动和消除的声音变成太鼓达人的音效`,
 			board7x6: tp`【${'icon'}7×6版面】`,
-			counter_attack: tp`受到${'target'}攻击时，${'prob'}进行受到伤害${'value'}的${'attr'}属性${'icon'}反击`,	
-			change_orbs: tp`[${'from'}]→[${'to'}]`,
-			generate_orbs: tp`${'exclude'}生成${'to'}各${'count'}个`,
-			fixed_orbs: tp`在${'position'}产生${'to'}`,
-			orb_drop_increase: tp`${'attrs'}宝珠的掉落率提高到${'value'}`,
+			counter_attack: tp`受到${'target'}攻击时，${'prob'}进行受到伤害${'value'}的${'attr'}${'icon'}反击`,	
+			change_orbs: tp`${'from'}→${'to'}`,
+			generate_orbs: tp`${'exclude'}生成${'orbs'}各${'count'}个`,
+			fixed_orbs: tp`在${'position'}产生${'orbs'}`,
+			orb_drop_increase: tp`${'orbs'}的掉落率提高到${'value'}`,
+			attr_absorb: tp`${'icon'}属性吸收`,
+			combo_absorb: tp`${'icon'}连击吸收`,
+			damage_absorb: tp`${'icon'}伤害吸收`,
+			damage_void: tp`${'icon'}伤害无效`,
+			void_enemy_buff: tp`敌人的 ${'buff'} 无效化`,
+			change_attribute: tp`将${'target'}变为${'attrs'}`,
+			set_orb_state_enhanced: tp`强化${'orbs'}（每颗宝珠效力增加${'value'}）`,
+			set_orb_state_locked: tp`将${'orbs'}锁定${'count'}`,
+			set_orb_state_unlocked: tp`${'icon'}解除所有宝珠的锁定状态`,
+			set_orb_state_bound: tp`无法消除${'orbs'}`,
+			rate_multiply: tp`作为队长进入地下城时，${'rate'}变为${'value'}`,
+			rate_multiply_drop: tp`${'icon'}怪物蛋掉落率`,
+			rate_multiply_coin: tp`${'icon'}金币掉落率`,
+			rate_multiply_exp: tp`${'icon'}等级经验倍率`,
 		},
 		position: {
 			top: tp`上方第${'pos'}横行`,
@@ -85,9 +99,10 @@
 			self: tp`发动者自身`,
 			enemy: tp`敌人`,
 			team: tp`队伍`,
+			team_last: tp`队伍最后一位队员`,
 			enemy_all: tp`敌方全体`,
 			enemy_one: tp`敌方1体`,
-			enemy_attr: tp`${'attr'}属性敌人`,
+			enemy_attr: tp`${'attr'}敌人`,
 		},
         stats: {
             unknown: tp`[ 未知状态: ${'type'}]`, //type
@@ -100,6 +115,7 @@
             teamrcv: tp`队伍回复力`,
         },
 		unit: {
+			unit: tp`个`,
 			seconds: tp`秒`,
 			point: tp`点`,
 			turns: tp`回合`,
@@ -109,6 +125,7 @@
 			slight_pause: tp`、`, //顿号
 			range_hyphen: tp`~`, //范围连字符
 			affix_attr: tp`${'cotent'}属性`, //词缀-属性
+			affix_orb: tp`${'cotent'}宝珠`, //词缀-宝珠
 			affix_exclude: tp`${'cotent'}以外`, //词缀-属性
 		},
 		attrs: {
@@ -133,6 +150,8 @@
 			[7]: tp`${'icon'}毒`,
 			[8]: tp`${'icon'}剧毒`,
 			[9]: tp`${'icon'}炸弹`,
+			all: tp`${'icon'}所有`,
+			any: tp`${'icon'}任何`,
 		},
     },
 }
@@ -1594,7 +1613,7 @@ function parseSkillDescription(skill) {
 		case 214: //封自己的技能
 			str = `${sk[0]}回合内，玩家自身队伍无法使用主动技能`;
 			break;
-		case 215: //十字属性珠+C
+		case 215: //封自己的珠子
 			str = `${sk[0]}回合内，${getOrbsAttrString(sk[1])}宝珠无法消除`;
 			break;
 		case 218: //坐自己

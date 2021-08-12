@@ -501,7 +501,7 @@ const p = {
         return { kind: SkillPowerUpKind.ScaleMatchAttrs, matches: matches ,...this.scale(min, max, baseMul, bonusMul) };
     },
     scaleCross: function (crosses) {
-        return { kind: SkillPowerUpKind.ScaleCross, crosses: crosses.map(cross => ({ ...cross, mul: (cross.mul / 100) || 1 })) };
+        return { kind: SkillPowerUpKind.ScaleCross, crosses: crosses.map(cross => ({ ...cross, atk: (cross.atk / 100) || 1, rcv: (cross.rcv / 100) || 1 })) };
     },
     scaleAwakenings: function (awakenings, value) {
         return { kind: SkillPowerUpKind.ScaleAwakenings, awakenings: awakenings, value: value / 100 };
@@ -535,8 +535,8 @@ function fromTo(from, to) {
 function changeOrbs() {
     return { kind: SkillKinds.ChangeOrbs, changes: Array.from(arguments) };
 }
-function generateOrbs(to, exclude, count) {
-    return { kind: SkillKinds.GenerateOrbs, to: to, exclude: exclude, count: count };
+function generateOrbs(orbs, exclude, count) {
+    return { kind: SkillKinds.GenerateOrbs, orbs: orbs, exclude: exclude, count: count };
 }
 function fixedOrbs() {
     return { kind: SkillKinds.FixedOrbs, generates: Array.from(arguments) };
@@ -552,8 +552,8 @@ function powerUp(attrs, types, value, condition, reduceDamageValue) {
 function counterAttack(attr, prob, value) {
     return { kind: SkillKinds.CounterAttack, attr: attr, prob: prob, value: value };
 }
-function setOrbState(orbs, state) {
-    return { kind: SkillKinds.SetOrbState, orbs: orbs, state: state };
+function setOrbState(orbs, state, arg) {
+    return { kind: SkillKinds.SetOrbState, orbs: orbs, state: state, arg: arg};
 }
 function rateMultiply(value, rate) {
     return { kind: SkillKinds.RateMultiply, value: value, rate: rate };
@@ -596,7 +596,7 @@ function delay() { return { kind: SkillKinds.Delay }; }
 function massAttack() { return { kind: SkillKinds.MassAttack }; }
 function dropRefresh() { return { kind: SkillKinds.DropRefresh }; }
 function drum() { return { kind: SkillKinds.Drum }; }
-function leaderChange() { return { kind: SkillKinds.LeaderChange }; }
+function leaderChange(type = 0) { return { kind: SkillKinds.LeaderChange, type: type }; }
 function board7x6() { return { kind: SkillKinds.Board7x6 }; }
 function noSkyfall() { return { kind: SkillKinds.NoSkyfall }; }
 function henshin(id) { return { kind: SkillKinds.Henshin, id: id }; }
@@ -664,7 +664,7 @@ const parsers = {
 	[49](attr, mul) { return powerUp([attr], null, p.mul({ rcv: mul })); },
 	[50](turns, attr, mul) { return activeTurns(turns, powerUp([attr], null, p.mul({ atk: mul }))); },
 	[51](turns) { return activeTurns(turns, massAttack()); },
-	[52](attr) { return setOrbState([attr], 'enhanced'); },
+	[52](attr, mul) { return setOrbState([attr], 'enhanced', {enhance: v.percent(mul)}); },
 	[53](mul) { return rateMultiply(v.percent(mul), 'drop'); },
 	[54](mul) { return rateMultiply(v.percent(mul), 'coin'); },
 	[55](value) { return damageEnemy('single', 'fixed', v.constant(value)); },
@@ -720,7 +720,7 @@ const parsers = {
 	[88](turns, type, mul) { return activeTurns(turns, powerUp(null, [type], p.mul({ atk: mul }))); },
   
 	[90](turns, attr1, attr2, mul) { return activeTurns(turns, powerUp([attr1, attr2], null, p.mul({ atk: mul }))); },
-	[91](attr1, attr2) { return setOrbState([attr1, attr2], 'enhanced'); },
+	[91](attr1, attr2, mul) { return setOrbState([attr1, attr2], 'enhanced', {enhance: v.percent(mul)}); },
 	[92](turns, type1, type2, mul) { return activeTurns(turns, powerUp(null, [type1, type2], p.mul({ atk: mul }))); },
 	[93]() { return leaderChange(); },
 	[94](percent, attr, stats1, stats2, mul) { return powerUp([attr], null, p.mul(p.stats(mul, stats1, stats2)), c.hp(0, percent)); },
@@ -762,17 +762,17 @@ const parsers = {
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus, 0]));
 	},
 	[125](mon1, mon2, mon3, mon4, mon5, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp, atk, rcv }), c.compo('card', [mon1, mon2, mon3, mon4, mon5].filter(Boolean))); },
-	[126](attrs, turns, _, percent) { return activeTurns(turns, orbDropIncrease(v.percent(percent), flags(attrs))); },
+	[126](attrs, turns, turns2, percent) { return activeTurns(turns === turns2 ? turns : [turns, turns2], orbDropIncrease(v.percent(percent), flags(attrs))); },
 	[127](cols1, attrs1, cols2, attrs2) {
 	  return fixedOrbs(
-		{ to: flags(attrs1), type: 'col', positions: flags(cols1) },
-		{ to: flags(attrs2), type: 'col', positions: flags(cols2) }
+		{ orbs: flags(attrs1), type: 'col', positions: flags(cols1) },
+		{ orbs: flags(attrs2), type: 'col', positions: flags(cols2) }
 	  );
 	},
 	[128](rows1, attrs1, rows2, attrs2) {
 	  return fixedOrbs(
-		{ to: flags(attrs1), type: 'row', positions: flags(rows1) },
-		{ to: flags(attrs2), type: 'row', positions: flags(rows2) }
+		{ orbs: flags(attrs1), type: 'row', positions: flags(rows1) },
+		{ orbs: flags(attrs2), type: 'row', positions: flags(rows2) }
 	  );
 	},
 	[129](attrs, types, hp, atk, rcv, rAttrs, rPercent) {
@@ -817,7 +817,7 @@ const parsers = {
 		),
 	  ];
 	},
-	[140](attrs) { return setOrbState(flags(attrs), 'enhanced'); },
+	[140](attrs, mul) { return setOrbState(flags(attrs), 'enhanced', {enhance: v.percent(mul)}); },
 	[141](count, to, exclude) { return generateOrbs(flags(to), flags(exclude), count); },
 	[142](turns, attr) { return activeTurns(turns, changeAttr('self', attr)); },
   
@@ -830,12 +830,12 @@ const parsers = {
 	[148](percent) { return rateMultiply(v.percent(percent), 'exp'); },
 	[149](mul) { return powerUp(null, null, p.mul({ rcv: mul }), c.exact('match-length', 4, [Attributes.Heart])); },
 	[150](_, mul) { return powerUp(null, null, p.mul({ atk: mul }), c.exact('match-length', 5, 'enhanced')); },
-	[151](mul, _, percent) {
+	[151](mul1, mul2, percent) {
 	  return [
-		powerUp(null, null, p.scaleCross([{ single: true, attr: Attributes.Heart, mul }]), undefined, v.percent(percent)),
+		powerUp(null, null, p.scaleCross([{ single: true, attr: Attributes.Heart, atk: mul1, rcv: mul2 }]), undefined, v.percent(percent)),
 	  ];
 	},
-	[152](attrs) { return setOrbState(flags(attrs), 'locked'); },
+	[152](attrs, count) { return setOrbState(flags(attrs), 'locked', {count: v.constant(count)}); },
 	[153](attr) { return changeAttr('opponent', attr); },
 	[154](from, to) { return changeOrbs(fromTo(flags(from), flags(to))); },
 	[155](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv }), c.multiplayer()); },
@@ -896,7 +896,7 @@ const parsers = {
 	[175](series1, series2, series3, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp, atk, rcv }), c.compo('series', [series1, series2, series3].filter(Boolean))); },
 	[176](row1, row2, row3, row4, row5, attrs) {
 		return fixedOrbs(
-		  { to: [attrs ?? 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>flags(row)) }
+		  { orbs: [attrs ?? 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>flags(row)) }
 		);
 	  },
 	[177](_0, _1, _2, _3, _4, remains, mul) {
@@ -954,7 +954,12 @@ const parsers = {
 	[202](id) {
 	  return henshin(id);
 	},
+	[215](turns, attrs) { return activeTurns(turns, setOrbState(flags(attrs), 'bound')); },
 	[218](turns) { return skillBoost(v.constant(-turns)); },
+
+	[224](turns, attr) { return activeTurns(turns, changeAttr('opponent', attr)); },
+
+	[227]() { return leaderChange(1); },
 };
 
 //将内容添加到代码片段
@@ -1035,7 +1040,7 @@ function renderSkill(skill, option = {})
 		case SkillKinds.ActiveTurns: { //有回合的行动
 			let turns = skill.turns, actionSkill = skill.skill;
 			let dict = {
-				turns: turns,
+				turns: Array.isArray(turns) ? turns.join(tsp.word.range_hyphen().textContent) : turns,
 				actionSkill: renderSkill(actionSkill),
 			};
 			frg.ap(tsp.skill.active_turns(dict));
@@ -1070,8 +1075,10 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.LeaderChange: { //切换队长
+			let type = skill.type;
 			let dict = {
 				icon: createIcon(skill.kind),
+				target: type ? tsp.target.team_last() : tsp.target.self(),
 			};
 			frg.ap(tsp.skill.leader_change(dict));
 			break;
@@ -1195,7 +1202,7 @@ function renderSkill(skill, option = {})
 			let attr = skill.attr, target = skill.target, damage = skill.damage;
 			if (attr == null) break; //没有属性时，编号为0的空技能
 			dict = {
-				target: target === 'all' ? tsp.target.enemy_all() : target === 'single' ? tsp.target.enemy_one() : tsp.target.enemy_attr({attr: renderAttrs(target)}),
+				target: target === 'all' ? tsp.target.enemy_all() : target === 'single' ? tsp.target.enemy_one() : tsp.target.enemy_attr({attr: renderAttrs(target, {affix: true})}),
 				damage: renderValue(damage, {unit: tsp.unit.point}),
 				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true})
 			};
@@ -1217,7 +1224,7 @@ function renderSkill(skill, option = {})
 		case SkillKinds.BoardChange: { //洗版
 			const attrs = skill.attrs;
 			dict = {
-				attrs: renderOrbs(attrs),
+				orbs: renderOrbs(attrs),
 			};
 			let board = new Board(attrs);
 			frg.ap(tsp.skill.board_change(dict));
@@ -1302,34 +1309,34 @@ function renderSkill(skill, option = {})
 				target: tsp.target.enemy(),
 				prob: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
 				value: renderValue(value),
-				attr: renderAttrs(attr),
+				attr: renderAttrs(attr, {affix: true}),
 			};
 			frg.ap(tsp.skill.counter_attack(dict));
 			break;
 		}
 		case SkillKinds.ChangeOrbs: { //珠子变换
 			let changes = skill.changes;
-			let changesDocument = [];
+			let subDocument = [];
 			for (const change of changes)
 			{
 				dict = {
 					from: renderOrbs(change.from),
 					to: renderOrbs(change.to),
 				};
-				changesDocument.push(tsp.skill.change_orbs(dict));
+				subDocument.push(tsp.skill.change_orbs(dict));
 			}
-			frg.ap(changesDocument.nodeJoin(tsp.word.comma()));
+			frg.ap(subDocument.nodeJoin(tsp.word.comma()));
 			break;
 		}
 		case SkillKinds.GenerateOrbs: { //产生珠子
-			let to = skill.to, exclude = skill.exclude, count = skill.count;
+			let orbs = skill.orbs, exclude = skill.exclude, count = skill.count;
 			dict = {
 				exclude: exclude.length ? tsp.word.affix_exclude({cotent: renderOrbs(exclude)}) : void 0,
-				to: renderOrbs(to),
+				orbs: renderOrbs(orbs),
 				count: count,
 			};
 			let board = new Board();
-			board.generateOrbs(to, count);
+			board.generateOrbs(orbs, count);
 			frg.ap(tsp.skill.generate_orbs(dict));
 			frg.ap(board.toTable());
 			break;
@@ -1337,7 +1344,7 @@ function renderSkill(skill, option = {})
 		case SkillKinds.FixedOrbs: { //固定位置产生珠子
 			let generates = skill.generates;
 			let slight_pause = tsp.word.slight_pause().textContent;
-			let changesDocument = [];
+			let subDocument = [];
 			//let board = new Array(5).fill(null).map(i=>new Array(6).fill(null));
 			let board = new Board();
 			function posSplit(pos, max)
@@ -1346,14 +1353,14 @@ function renderSkill(skill, option = {})
 			}
 			for (const generate of generates)
 			{
-				let _to = generate.to?.[0];
+				let orb = generate.orbs?.[0];
 				dict = {
-					to: renderOrbs(generate.to),
+					orbs: renderOrbs(orb),
 				};
 				if (generate.type == 'shape')
 				{
 					dict.position = tsp.position.shape();
-					board.setShape(generate.positions, _to);
+					board.setShape(generate.positions, orb);
 				}else
 				{
 					let posFrgs = [];
@@ -1363,19 +1370,19 @@ function renderSkill(skill, option = {})
 						const pos = posSplit(generate.positions, 5);
 						if (pos.sequence.length) posFrgs.push(tsp.position.top({pos: pos.sequence.join(slight_pause)}));
 						if (pos.reverse.length) posFrgs.push(tsp.position.bottom({pos: pos.reverse.join(slight_pause)}));
-						board.setRow(generate.positions, _to);
+						board.setRow(generate.positions, orb);
 					}else
 					{
 						const pos = posSplit(generate.positions, 6);
 						if (pos.sequence.length) posFrgs.push(tsp.position.left({pos: pos.sequence.join(slight_pause)}));
 						if (pos.reverse.length) posFrgs.push(tsp.position.right({pos: pos.reverse.join(slight_pause)}));
-						board.setColumn(generate.positions, _to);
+						board.setColumn(generate.positions, orb);
 					}
 					dict.position = posFrgs.nodeJoin(tsp.word.slight_pause());
 				}
-				changesDocument.push(tsp.skill.fixed_orbs(dict));
+				subDocument.push(tsp.skill.fixed_orbs(dict));
 			}
-			frg.ap(changesDocument.nodeJoin(tsp.word.comma()));
+			frg.ap(subDocument.nodeJoin(tsp.word.comma()));
 			frg.ap(board.toTable());
 			
 			break;
@@ -1384,96 +1391,77 @@ function renderSkill(skill, option = {})
 			let attrs = skill.attrs, value = skill.value;
 			dict = {
 				icon: createIcon(skill.kind),
-				attrs: renderOrbs(attrs, {className: "drop"}),
+				orbs: renderOrbs(attrs, {className: "drop", affix: true}),
 				value: renderValue(value, {percent: true}),
 			};
 			frg.ap(tsp.skill.orb_drop_increase(dict));
 			break;
 		}
-		/*
 		case SkillKinds.VoidEnemyBuff: {
-		const { buffs } = skill as Skill.VoidEnemyBuff;
-		return (
-			<span className="CardSkill-skill">{
-			buffs.map(buff => {
-				switch (buff) {
-				case 'attr-absorb': return (
-					<AssetBox className="CardSkill-icon-box" key={buff}>
-					<Asset assetId="status-all-attrs" className="CardSkill-icon" />
-					<Asset assetId="overlay-heal" className="CardSkill-icon" />
-					<Asset assetId="overlay-cross" className="CardSkill-icon" style={{ opacity: 0.75 }} />
-					</AssetBox>
-				);
-				case 'damage-absorb': return (
-					<AssetBox className="CardSkill-icon-box" key={buff}>
-					<Asset assetId="status-damage-absorb" className="CardSkill-icon" />
-					<Asset assetId="overlay-cross" className="CardSkill-icon" style={{ opacity: 0.75 }} />
-					</AssetBox>
-				);
-				}
-			})
-			} </span>
-		);
+			let buffs = skill.buffs;
+			let subDocument = [];
+			for (let buff of buffs)
+			{
+				let dict = {
+					icon: createIcon(buff),
+				};
+				subDocument.push(tsp.skill[buff.replace(/\-/g,'_')](dict));
+			}
+			let dict = {
+				buff: subDocument.nodeJoin(tsp.word.slight_pause()),
+			};
+			frg.ap(tsp.skill.void_enemy_buff(dict));
+			break;
 		}
 		case SkillKinds.ChangeAttribute: {
-		const { attr, target } = skill as Skill.ChangeAttribute;
-
-		return (
-			<span className="CardSkill-skill">
-			{target === 'self' && 'Self'}
-			{target === 'opponent' && 'enemy'}
-			&nbsp;&rArr; {renderAttrs(attr)}
-			</span>
-		);
+			let attrs = skill.attrs, target = skill.target;
+			dict = {
+				attrs: renderAttrs(attrs, {affix: true}),
+				target: target === 'opponent' ? tsp.target.enemy_all() : tsp.target.self(),
+			};
+			frg.ap(tsp.skill.change_attribute(dict));
+			break;
 		}
 		case SkillKinds.SetOrbState: {
-		const { orbs, state } = skill as Skill.SetOrbState;
-		let orbElems: React.ReactNode[];
-		if (!orbs) {
-			orbElems = [<Asset assetId="orb-blind" className="CardSkill-icon" key="all" />];
-		} else {
-			orbElems = renderOrbs(orbs);
-		}
-
-		return (
-			<span className="CardSkill-skill">
-			{(state === 'enhanced' || state === 'locked') && orbElems}
-			{state === 'unlocked' && orbElems.map((elem, i) => (
-				<AssetBox className="CardSkill-icon-box" key={i}>
-				{elem}
-				<Asset assetId="orb-locked" className="CardSkill-icon" />
-				</AssetBox>
-			))}
-			&rArr;
-			{state === 'enhanced' && orbElems.map((elem, i) => (
-				<AssetBox className="CardSkill-icon-box" key={i}>
-				{elem}
-				<Asset assetId="orb-enhanced" className="CardSkill-icon" />
-				</AssetBox>
-			))}
-			{state === 'locked' && orbElems.map((elem, i) => (
-				<AssetBox className="CardSkill-icon-box" key={i}>
-				{elem}
-				<Asset assetId="orb-locked" className="CardSkill-icon" />
-				</AssetBox>
-			))}
-			{state === 'unlocked' && orbElems}
-			</span>
-		);
+			let orbs = skill.orbs, state = skill.state, arg = skill.arg;
+			dict = {
+				orbs: renderOrbs(orbs, {className: state, affix: true}),
+			};
+			switch (state)
+			{
+				case "enhanced":{
+					dict.value = renderValue(arg.enhance, {percent: true});
+					frg.ap(tsp.skill.set_orb_state_enhanced(dict));
+					break;
+				}
+				case "locked":{
+					if (arg.count.value < 42)
+						dict.count = renderValue(arg.count, {unit: tsp.unit.unit});
+					frg.ap(tsp.skill.set_orb_state_locked(dict));
+					break;
+				}
+				case "unlocked":{
+					dict.icon = createIcon('orb-unlocked'),
+					frg.ap(tsp.skill.set_orb_state_unlocked(dict));
+					break;
+				}
+				case "bound":{
+					frg.ap(tsp.skill.set_orb_state_bound(dict));
+					break;
+				}
+			}
+			break;
 		}
 		case SkillKinds.RateMultiply: {
-		const { rate, value } = skill as Skill.RateMultiply;
-
-		return (
-			<span className="CardSkill-skill">
-			{rate === 'drop' && 'drop rate'}
-			{rate === 'coin' && 'coins'}
-			{rate === 'exp' && 'EXP'}
-			&nbsp;&times;&nbsp;
-			{renderValue(value)}
-			</span>
-		);
+			let rate = skill.rate, value = skill.value;
+			dict = {
+				rate: tsp.skill["rate_multiply_" + rate]({icon: createIcon(skill.kind + "-" + rate)}),
+				value: renderValue(value),
+			};
+			frg.ap(tsp.skill.rate_multiply(dict));
+			break;
 		}
+		/*
 
 		case SkillKinds.ReduceDamage: {
 		const { attrs, percent, condition } = skill as Skill.ReduceDamage;
@@ -1553,15 +1541,33 @@ function renderOrbs(attrs, option = {}) {
 	if (typeof localTranslating == "undefined") return frg;
 
 	const tsp = localTranslating.skill_parse;
-	const contentFrg = attrs.map(attr => {
-		const icon = document.createElement("icon");
-		icon.className = "orb";
-		if (option.className) icon.className += " " + option.className;
-		icon.setAttribute("data-orb-icon",attr);
-		return tsp.orbs[attr]({icon: icon});
-	})
-	.nodeJoin(tsp.word.slight_pause());
-	frg.ap(option.affix ? tsp.word.affix_attr({cotent: contentFrg}) : contentFrg);
+	let contentFrg;
+	if (attrs.includes(0) &&
+		attrs.includes(1) &&
+		attrs.includes(2) &&
+		attrs.includes(3) &&
+		attrs.includes(4) &&
+		attrs.includes(5) &&
+		attrs.includes(6) &&
+		attrs.includes(7) &&
+		attrs.includes(8) &&
+		attrs.includes(9)
+	)
+	{
+		contentFrg = option.any ? tsp.orbs.any() : tsp.orbs.all();
+	}
+	else
+	{
+		contentFrg = attrs.map(attr => {
+			const icon = document.createElement("icon");
+			icon.className = "orb";
+			if (option.className) icon.className += " " + option.className;
+			icon.setAttribute("data-orb-icon",attr);
+			return tsp.orbs[attr]({icon: icon});
+		})
+		.nodeJoin(tsp.word.slight_pause());
+	}
+	frg.ap(option.affix ? tsp.word.affix_orb({cotent: contentFrg}) : contentFrg);
 	return frg;
 }
 
