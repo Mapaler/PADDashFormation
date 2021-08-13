@@ -200,7 +200,7 @@
 			[5]: tp`${'icon'}神`,
 			[6]: tp`${'icon'}攻击`,
 			[7]: tp`${'icon'}恶魔`,
-			[8]: tp`${'icon'}攻击`,
+			[8]: tp`${'icon'}机械`,
 			[9]: tp`${'icon'}特别保护`,
 			[12]: tp`${'icon'}能力觉醒用`,
 			[14]: tp`${'icon'}强化合成用`,
@@ -743,9 +743,9 @@ function parseSkillDescription(skill) {
 			str = `HP ${(sk[3]?(`减少${100-sk[3]}%`):"变为1")}，对敌方全体造成${sk[1].bigNumberToString()}点${attrN(sk[0])}属性伤害`;
 			if (sk[2]) str += `未知 参数2 ${sk[2]}`;
 			break;
-		/*case 88:
+		case 88:
 			str = `${sk[0]}回合内，${typeN(sk[1])}类型的攻击力×${sk[2]/100}倍`;
-			break;*/
+			break;
 		case 50:
 		case 90:
 		{
@@ -766,7 +766,6 @@ function parseSkillDescription(skill) {
 		case 91:
 			str = `${sk.slice(0,-1).map(attrN).join("、")}属性宝珠强化（每颗强化珠伤害/回复增加${sk[sk.length-1]}%）`;
 			break;
-		case 88:
 		case 92:
 		{
 			let types = sk.slice(1, skill.type == 88 ? 2 : 3);

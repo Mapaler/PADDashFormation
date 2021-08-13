@@ -957,7 +957,7 @@ const parsers = {
 	[163](attrs, types, hp, atk, rcv, rAttrs, rPercent) {
 	  return [
 		noSkyfall(),
-		powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv })),
+		(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv })) || null,
 		rPercent && reduceDamage(flags(rAttrs), v.percent(rPercent)) || null,
 	  ].filter(Boolean);
 	},

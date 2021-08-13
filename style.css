@@ -3185,7 +3185,7 @@ table .orb-icon
 {
 	vertical-align: bottom;
 	transform: scale(0.75);
-	/*margin: -4px;*/
+	margin: -4px;
 	position: relative;
 }
 .skill-datail-parsed a.detail-search
@@ -3213,9 +3213,10 @@ table .orb-icon
 	--board-light-color: unset;
 	--board-deep-color: rgba(0,0,0,0.4);
 }
-.skill-datail-parsed .board .orb
+.board .orb
 {
 	transform: unset;
+	margin: unser;
 }
 .board .orb.enhanced::after,
 .board .orb.locked::after,
