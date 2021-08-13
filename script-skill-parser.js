@@ -728,7 +728,7 @@ const parsers = {
   
 	[48](attr, mul) { return powerUp([attr], null, p.mul({ hp: mul })); },
 	[49](attr, mul) { return powerUp([attr], null, p.mul({ rcv: mul })); },
-	[50](turns, attr, mul) { return activeTurns(turns, powerUp([attr], null, p.mul({ atk: mul }))); },
+	[50](turns, attr, mul) { return activeTurns(turns, powerUp([attr], null, p.mul({ atk: mul ?? 0  }))); },
 	[51](turns) { return activeTurns(turns, massAttack()); },
 	[52](attr, mul) { return setOrbState([attr], 'enhanced', {enhance: v.percent(mul)}); },
 	[53](mul) { return rateMultiply(v.percent(mul), 'drop'); },
@@ -2035,7 +2035,7 @@ function renderPowerUp(powerUp) {
 		const operator = mul ? '' : '+';
 		let list = [['hp', hp], ['atk', atk], ['rcv', rcv]];
 		//去除不改变的值
-		list = list.filter(([, value]) => value !== (mul ? 1 : 0) && value !== 0);
+		list = list.filter(([, value]) => value !== (mul ? 1 : 0));
 		//&&!(name === 'hp' && value === 0));
 
 		if (list.length === 0) return frg;

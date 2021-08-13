@@ -2246,21 +2246,22 @@ const specialSearchFunctions = (function() {
 						const sk = as.params;
 						if (as.type == 228)
 						{
-							return sk[4] || 0;
+							return sk[4];
 						}else
 						{
-							return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+							return sk.slice(1,sk.length>2?-1:undefined).includes(5) ? (sk.length > 2 ? sk[sk.length-1] : 0) : null;
 						}
 					}
 					return cards.filter(card=>{
 						const skills = getCardActiveSkills(card, searchTypeArray);
 						if (skills.length)
 						{
-							return skills.some(as=>getRecScale(as) > 0);
+							return skills.some(as=>getRecScale(as) != null);
 						}else return false;
 					}).sort((a,b)=>{
 						const a_s = getCardActiveSkills(a, searchTypeArray), b_s = getCardActiveSkills(b, searchTypeArray);
-						const a_sv = a_s.map(a_s=>getRecScale(a_s)).sort().reverse()[0], b_sv = b_s.map(b_s=>getRecScale(b_s)).sort().reverse()[0];
+						const a_sv = a_s.map(a_s=>getRecScale(a_s)).filter(n=>n!==null).sort().reverse()[0],
+						b_sv = b_s.map(b_s=>getRecScale(b_s)).filter(n=>n!==null).sort().reverse()[0];
 						return a_sv - b_sv;
 					});
 				},
@@ -2271,14 +2272,14 @@ const specialSearchFunctions = (function() {
 						const sk = as.params;
 						if (as.type == 228)
 						{
-							return sk[4] || 0;
+							return sk[4];
 						}else
 						{
-							return sk.slice(1,sk.length>2?-1:undefined).includes(5) && sk.length > 2 ? sk[sk.length-1] : 0;
+							return sk.slice(1,sk.length>2?-1:undefined).includes(5) ? (sk.length > 2 ? sk[sk.length-1] : 0) : null;
 						}
 					}
 					const skills = getCardActiveSkills(card, searchTypeArray);
-					const skill = skills.find(as=>getRecScale(as) > 0);
+					const skill = skills.find(as=>getRecScale(as) != null);
 					if (skill.type == 228)
 						return `回+${getRecScale(skill) / 100}×N`;
 					else
