@@ -2477,11 +2477,17 @@ icon.inflicts::after
 .row-mon-leader-skill .skill-title .skill-name{
 	color: #85FD80;
 }
-.skill-box .skill-cd-control{
+.skill-box .skill-cd-control,
+.skill-box .skill-parse-control
+{
 	float: right;
 }
 .skill-box .skill-cd{
 	margin-left: 10px;
+}
+.skill-box:not(.show-skill-original) .skill-datail-original
+{
+	display: none;
 }
 .skill-datail-original,
 .skill-datail-parsed{

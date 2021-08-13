@@ -1,34 +1,4 @@
-//带标签的模板字符串
-function tp(strings, ...keys) {
-	return (function(...values) {
-		let dict = values[values.length - 1] || {};
-		let fragment = document.createDocumentFragment();
-		fragment.appendChild(document.createTextNode(strings[0]));
-		//let result = [strings[0]];
-		keys.forEach(function(key, i, arr) {
-			let value = Number.isInteger(key) ? values[key] : dict[key];
-			if (value == undefined)
-			{
-				//console.debug("模板字符串中 %s 未找到输入数据",key);
-			}else
-			{
-				if (!(value instanceof Node))
-				{
-					value = document.createTextNode(value);
-				}
-				try{
-					fragment.appendChild(arr.lastIndexOf(key) == i ? value : value.cloneNode(true));
-				}catch(e)
-				{
-					console.log(value, e);
-					console.log(keys, values);
-				}
-			}
-			fragment.appendChild(document.createTextNode(strings[i + 1]));
-		});
-		return fragment;
-	});
-}
+let merge_skill = false;
 
 const Attributes = {
     /*0: "Fire",
@@ -448,7 +418,7 @@ function skillParser(skillId)
 	const skills = (Array.isArray(result) ? result : [result])
 		.filter(s => Boolean(s))
 		.map(s => ({ id: skillId, type: skill.type, params: skill.params, ...s }));
-	//merge(skills);
+	if (merge_skill) merge(skills);
 	return skills;
 }
 
@@ -1188,52 +1158,53 @@ function renderSkillEntry(skills)
 		li.addEventListener("click", showParsedSkill);
 	});
 
-	/*
-	let boardChange = skills.filter(skill=>
-		skill.kind == SkillKinds.BoardChange ||
-		skill.kind == SkillKinds.GenerateOrbs ||
-		skill.kind == SkillKinds.FixedOrbs
-	);
-	if (boardChange.length > 0)
+	if (merge_skill)
 	{
-		const board = new Board();
-		for (let skill of boardChange)
+		let boardChange = skills.filter(skill=>
+			skill.kind == SkillKinds.BoardChange ||
+			skill.kind == SkillKinds.GenerateOrbs ||
+			skill.kind == SkillKinds.FixedOrbs
+		);
+		if (boardChange.length > 0)
 		{
-			switch (skill.kind)
+			const board = new Board();
+			for (let skill of boardChange)
 			{
-				case SkillKinds.BoardChange: { //洗版
-					const attrs = skill.attrs;
-					board.randomFill(attrs);
-					break;
-				}
-				case SkillKinds.GenerateOrbs: { //产生珠子
-					let orbs = skill.orbs, exclude = skill.exclude, count = skill.count;
-					board.generateOrbs(orbs, count, exclude);
-					break;
-				}
-				case SkillKinds.FixedOrbs: { //固定位置产生珠子
-					let generates = skill.generates;
-					for (const generate of generates)
-					{
-						let orb = generate.orbs?.[0];
-						if (generate.type == 'shape') {
-							board.setShape(generate.positions, orb);
-						} else {
-							if (generate.type == 'row')
-								board.setRow(generate.positions, orb);
-							else
-								board.setColumn(generate.positions, orb);
-						}
+				switch (skill.kind)
+				{
+					case SkillKinds.BoardChange: { //洗版
+						const attrs = skill.attrs;
+						board.randomFill(attrs);
+						break;
 					}
-					break;
+					case SkillKinds.GenerateOrbs: { //产生珠子
+						let orbs = skill.orbs, exclude = skill.exclude, count = skill.count;
+						board.generateOrbs(orbs, count, exclude);
+						break;
+					}
+					case SkillKinds.FixedOrbs: { //固定位置产生珠子
+						let generates = skill.generates;
+						for (const generate of generates)
+						{
+							let orb = generate.orbs?.[0];
+							if (generate.type == 'shape') {
+								board.setShape(generate.positions, orb);
+							} else {
+								if (generate.type == 'row')
+									board.setRow(generate.positions, orb);
+								else
+									board.setColumn(generate.positions, orb);
+							}
+						}
+						break;
+					}
 				}
 			}
+			const li = ul.appendChild(document.createElement("li"));
+			li.appendChild(board.toTable());
+			li.className = "merge-board";
 		}
-		const li = ul.appendChild(document.createElement("li"));
-		li.appendChild(board.toTable());
-		li.className = "merge-board";
 	}
-	*/
 
 	return ul;
 }
@@ -1434,13 +1405,20 @@ function renderSkill(skill, option = {})
 		}
 		
 		case SkillKinds.DamageEnemy: { //大炮和固伤
-			let attr = skill.attr, target = skill.target, damage = skill.damage;
+			let attr = skill.attr, target = skill.target, damage = skill.damage, times = skill.times;
 			if (attr == null) break; //没有属性时，编号为0的空技能
 			dict = {
 				target: target === 'all' ? tsp.target.enemy_all() : target === 'single' ? tsp.target.enemy_one() : tsp.target.enemy_attr({attr: renderAttrs(target, {affix: true})}),
 				damage: renderValue(damage, {unit: tsp.unit.point}),
-				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true})
+				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true}),
 			};
+			if (times)
+			{
+				dict.times = renderValue(v.constant(times), {unit: tsp.unit.times});
+				dict.totalDamage = tsp.skill.damage_enemy_count({
+					damage: renderValue(v.constant(damage.value * times), {unit: tsp.unit.point})
+				});
+			}
 			frg.ap(tsp.skill.damage_enemy(dict));
 			break;
 		}
@@ -1468,9 +1446,12 @@ function renderSkill(skill, option = {})
 			dict = {
 				orbs: renderOrbs(attrs),
 			};
-			let board = new Board(attrs);
 			frg.ap(tsp.skill.board_change(dict));
-			frg.ap(board.toTable());
+			if (!merge_skill)
+			{
+				let board = new Board(attrs);
+				frg.ap(board.toTable());
+			}
 			break;
 		}
 		case SkillKinds.SkillBoost: { //溜
@@ -1578,17 +1559,20 @@ function renderSkill(skill, option = {})
 				orbs: renderOrbs(orbs, {time}),
 				value: count,
 			};
-			let board = new Board();
-			board.generateOrbs(orbs, count, exclude);
 			frg.ap(tsp.skill.generate_orbs(dict));
-			frg.ap(board.toTable());
+			if (!merge_skill)
+			{
+				let board = new Board();
+				board.generateOrbs(orbs, count, exclude);
+				frg.ap(board.toTable());
+			}
 			break;
 		}
 		case SkillKinds.FixedOrbs: { //固定位置产生珠子
 			let generates = skill.generates;
 			let slight_pause = tsp.word.slight_pause().textContent;
 			let subDocument = [];
-			let board = new Board();
+			let board = merge_skill ? null : new Board();
 			function posSplit(pos, max)
 			{
 				return {sequence: pos.filter(n=>n<=2).map(n=>n+1), reverse: pos.filter(n=>n>=3).reverse().map(n=>max-n)};
@@ -1602,7 +1586,7 @@ function renderSkill(skill, option = {})
 				if (generate.type == 'shape')
 				{
 					dict.position = tsp.position.shape();
-					board.setShape(generate.positions, orb);
+					if (!merge_skill) board.setShape(generate.positions, orb);
 				}else
 				{
 					let posFrgs = [];
@@ -1612,20 +1596,20 @@ function renderSkill(skill, option = {})
 						const pos = posSplit(generate.positions, 5);
 						if (pos.sequence.length) posFrgs.push(tsp.position.top({pos: pos.sequence.join(slight_pause)}));
 						if (pos.reverse.length) posFrgs.push(tsp.position.bottom({pos: pos.reverse.join(slight_pause)}));
-						board.setRow(generate.positions, orb);
+						if (!merge_skill) board.setRow(generate.positions, orb);
 					}else
 					{
 						const pos = posSplit(generate.positions, 6);
 						if (pos.sequence.length) posFrgs.push(tsp.position.left({pos: pos.sequence.join(slight_pause)}));
 						if (pos.reverse.length) posFrgs.push(tsp.position.right({pos: pos.reverse.join(slight_pause)}));
-						board.setColumn(generate.positions, orb);
+						if (!merge_skill) board.setColumn(generate.positions, orb);
 					}
 					dict.position = posFrgs.nodeJoin(tsp.word.slight_pause());
 				}
 				subDocument.push(tsp.skill.fixed_orbs(dict));
 			}
 			frg.ap(subDocument.nodeJoin(tsp.word.comma()));
-			frg.ap(board.toTable());
+			if (!merge_skill) frg.ap(board.toTable());
 			
 			break;
 		}

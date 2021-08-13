@@ -1,4 +1,4 @@
-﻿localTranslating = {
+﻿const _localTranslating = {
     webpage_title: `퍼즐앤드래곤 ${teamsCount} 명의 팀 다이어그램 작성 도구`,
 	addition_display: "추가 표시입니다",
     title_blank: "입력 제목",
@@ -24,5 +24,5 @@
     },
     force_reload_data: "데이터 강제 새로 고침",
 }
-
+deepMerge(localTranslating, _localTranslating);
 localisation(localTranslating);

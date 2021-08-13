@@ -1,4 +1,4 @@
-﻿localTranslating = {
+﻿const _localTranslating = {
     webpage_title: `P&D ${teamsCount}P Formation Maker`,
 	addition_display: "Additional display",
     title_blank: "Input Formation Title",
@@ -22,7 +22,7 @@
         sort_abilityIndex_awoken: "Maximum Weighted Ability Index (+Awakening)",
     },
     force_reload_data: `Force refresh data`,
-    skill_parse: {
+    /*skill_parse: {
         skill: {
             unknown: ()=>`Unknown skill type.`,
             active_turns: (turns, activeElement)=> [activeElement,`, for ${turns} turns.`],
@@ -62,7 +62,7 @@
         unit: {
             seconds : `sec`,
         },
-    },
+    },*/
 }
-
+deepMerge(localTranslating, _localTranslating);
 localisation(localTranslating);

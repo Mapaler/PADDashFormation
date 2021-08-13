@@ -25,10 +25,6 @@ const isGuideMod = Boolean(Number(getQueryString("guide"))); //是否以图鉴�
 if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
 }
-let localTranslating = {
-    webpage_title: `智龙迷城${teamsCount}人队伍图制作工具`,
-	addition_display: "💬",
-}
 
 //一开始就加载当前语言
 if (currentLanguage == undefined)
@@ -2842,7 +2838,6 @@ function initialize() {
 			showSearch(s_cards); //显示
 		}
 	};
-	
 
 	skillLevel.onchange = function() {
 		const card = Cards[editBox.mid] || Cards[0]; //怪物固定数据
@@ -2853,6 +2848,49 @@ function initialize() {
 	skillLevel_1.onclick = setIptToMyValue;
 	skillLevel_Max.ipt = skillLevel;
 	skillLevel_Max.onclick = setIptToMyValue;
+
+	const rowLeaderSkill = settingBox.querySelector(".row-mon-leader-skill");
+	const leaderSkillBox = rowLeaderSkill.querySelector(".skill-box");
+	const showSkillOriginalClassName = 'show-skill-original';
+	const showSkillOriginal = leaderSkillBox.querySelector(`#${showSkillOriginalClassName}`); //显示官方排序的觉醒
+	showSkillOriginal.onchange = function(){
+		localStorage.setItem(cfgPrefix + showSkillOriginalClassName, Number(this.checked));
+		if (this.checked)
+		{
+			skillBox.classList.add(showSkillOriginalClassName);
+			leaderSkillBox.classList.add(showSkillOriginalClassName);
+		}else
+		{
+			skillBox.classList.remove(showSkillOriginalClassName);
+			leaderSkillBox.classList.remove(showSkillOriginalClassName);
+		}
+	};
+	showSkillOriginal.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showSkillOriginalClassName)));
+	showSkillOriginal.onchange();
+
+	editBox.refreshSkillParse = function(skp, lskp){
+		const skillDetailParsed = skp ?? skillBox.querySelector(".skill-datail-parsed");
+		const lskillDetailParsed = lskp ?? leaderSkillBox.querySelector(".skill-datail-parsed");
+		
+		const card = Cards[this.mid] || Cards[0];
+		if (!card) return;
+		
+		skillDetailParsed.innerHTML = "";
+		skillDetailParsed.appendChild(renderSkillEntry(skillParser(card.activeSkillId)));
+		lskillDetailParsed.innerHTML = "";
+		lskillDetailParsed.appendChild(renderSkillEntry(skillParser(card.leaderSkillId)));
+	};
+
+	const mergeSillClassName = 'merge-skill';
+	const mergeSill = leaderSkillBox.querySelector(`#${mergeSillClassName}`); //显示官方排序的觉醒
+	mergeSill.onchange = function(){
+		localStorage.setItem(cfgPrefix + mergeSillClassName, Number(this.checked));
+		merge_skill = this.checked;
+		editBox.refreshSkillParse();
+	};
+	mergeSill.checked = Boolean(Number(localStorage.getItem(cfgPrefix + mergeSillClassName)));
+	mergeSill.onchange();
+
 
 	//已有觉醒的去除
 	function deleteLatent() {
@@ -3382,8 +3420,6 @@ function editBoxChangeMonId(id) {
 	//const skill = Skills[card.activeSkillId];
 	//const leaderSkill = Skills[card.leaderSkillId];
 
-	let fragment = null;
-
 	const monInfoBox = editBox.querySelector(".monsterinfo-box");
 	const settingBox = editBox.querySelector(".setting-box");
 
@@ -3471,7 +3507,7 @@ function editBoxChangeMonId(id) {
 	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
 	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	if (evoLinkCardsIdArray.length > 1) {
-		fragment = document.createDocumentFragment(); //创建节点用的临时空间
+		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 		evoLinkCardsIdArray.forEach(function(mid) {
 			const cli = createCardHead(mid);
 			if (mid == id) {
@@ -3593,15 +3629,13 @@ function editBoxChangeMonId(id) {
 
 	const activeskill = Skills[card.activeSkillId];
 	const leaderSkill = Skills[card.leaderSkillId];
-	fragment = document.createDocumentFragment(); //创建节点用的临时空间
-	fragment.appendChild(skillBox);
+	let frg1 = document.createDocumentFragment(); //创建节点用的临时空间
+	frg1.appendChild(skillBox);
 
 	skillTitle.textContent = activeskill.name;
 	skillTitle.setAttribute("data-skillid", activeskill.id);
 	skillDetailOriginal.innerHTML = "";
 	skillDetailOriginal.appendChild(parseSkillDescription(activeskill));
-	skillDetailParsed.innerHTML = "";
-	skillDetailParsed.appendChild(renderSkillEntry(skillParser(card.activeSkillId)));
 
 	const t_maxLevel = card.overlay || card.types.includes(15) ? 1 : activeskill.maxLevel; //遇到不能升技的，最大等级强制为1
 	skillLevel.max = t_maxLevel;
@@ -3610,8 +3644,6 @@ function editBoxChangeMonId(id) {
 	//skillLevel_Max.textContent = activeskill.maxLevel;
 	skillCD.textContent = activeskill.initialCooldown - t_maxLevel + 1;
 
-	rowSkill.appendChild(fragment);
-
 	//怪物队长技能
 	const rowLederSkill = settingBox.querySelector(".row-mon-leader-skill");
 	const lskillBox = rowLederSkill.querySelector(".skill-box");
@@ -3619,17 +3651,17 @@ function editBoxChangeMonId(id) {
 	const lskillDetailParsed = lskillBox.querySelector(".skill-datail-parsed");
 	const lskillDetailOriginal = lskillBox.querySelector(".skill-datail-original");
 
-	fragment = document.createDocumentFragment(); //创建节点用的临时空间
-	fragment.appendChild(lskillBox);
+	let frg2 = document.createDocumentFragment(); //创建节点用的临时空间
+	frg2.appendChild(lskillBox);
 
 	lskillTitle.textContent = leaderSkill.name;
 	lskillTitle.setAttribute("data-skillid", leaderSkill.id);
 	lskillDetailOriginal.innerHTML = "";
 	lskillDetailOriginal.appendChild(parseSkillDescription(leaderSkill));
-	lskillDetailParsed.innerHTML = "";
-	lskillDetailParsed.appendChild(renderSkillEntry(skillParser(card.leaderSkillId)));
 
-	rowLederSkill.appendChild(fragment);
+	editBox.refreshSkillParse(skillDetailParsed, lskillDetailParsed);
+	rowSkill.appendChild(frg1);
+	rowLederSkill.appendChild(frg2);
 
 	if (card.overlay || card.types[0] == 15 && card.types[1] == -1) { //当可以叠加时，不能打297和潜觉
 		rowPlus.classList.add("disabled");

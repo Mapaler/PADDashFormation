@@ -144,6 +144,12 @@
 {
 	content: "리더스킬";
 }
+label[for="show-skill-original"]::after{
+	content: "기술 원본";
+}
+label[for="merge-skill"]::after{
+	content: "기술 병합";
+}
 
 .edit-box .button-box .button-null::after{
 	content: "비워 둡니다";

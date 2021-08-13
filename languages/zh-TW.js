@@ -1,4 +1,4 @@
-﻿localTranslating = {
+﻿const _localTranslating = {
     webpage_title: `龍族拼圖${teamsCount}人隊伍圖製作工具`,
 	addition_display: "附加顯示",
     title_blank: "輸入隊伍標題",
@@ -23,7 +23,9 @@
         sort_abilityIndex_awoken: "最大加權能力指數（+覺醒）",
     },
     force_reload_data: "強制刷新數據",
-}
+};
+deepMerge(localTranslating, _localTranslating);
+localisation(localTranslating);
 
 //大數字縮短長度
 Number.prototype.bigNumberToString = function()
@@ -55,5 +57,3 @@ Number.prototype.bigNumberToString = function()
 	outStr = outStr.replace(/零{2,}/g,'零'); //去除多個連續的零
 	return outStr;
 }
-
-localisation(localTranslating);

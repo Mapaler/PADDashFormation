@@ -147,6 +147,12 @@
 {
 	content: "リーダースキル";
 }
+label[for="show-skill-original"]::after{
+	content: "スキルの原文";
+}
+label[for="merge-skill"]::after{
+	content: "スキルのマージ";
+}
 
 .edit-box .button-box .button-null::after{
 	content: "空白のままに";

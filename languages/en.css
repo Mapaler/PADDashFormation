@@ -149,6 +149,12 @@
 {
 	content: "Leader Skill";
 }
+label[for="show-skill-original"]::after{
+	content: "Skill Original";
+}
+label[for="merge-skill"]::after{
+	content: "Merge Skill";
+}
 
 .edit-box .button-box .button-null::after{
 	content: "Leave a blank";

@@ -146,6 +146,12 @@
 {
 	content: "隊長技能";
 }
+label[for="show-skill-original"]::after{
+	content: "技能原文";
+}
+label[for="merge-skill"]::after{
+	content: "合并技能";
+}
 
 .edit-box .button-box .button-null::after{
 	content: "留空格子";

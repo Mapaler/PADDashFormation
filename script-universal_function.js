@@ -90,17 +90,6 @@ Number.prototype.keepCounts = function(decimalDigits = 2, plusSign = false)
 	let newNumber = Number(this.toFixed(decimalDigits));
 	return (plusSign && this > 0 ? '+' : '') + newNumber.bigNumberToString();
 }
-//将二进制flag转为数组
-function flags(num) {
-	const arr = [];
-	for (let i = 0; i < 32; i++) {
-		if (num & (1 << i)) {
-			arr.push(i);
-		}
-	}
-	return arr;
-}
-
 //数组删除自己尾部的空元素
 Array.prototype.DeleteLatter = function(item = null) {
 	let index = this.length - 1;
@@ -120,6 +109,64 @@ Math.randomInteger = function(max, min = 0) {
 	return this.floor(this.random() * (max - min + 1) + min);
 }
 
+//将二进制flag转为数组
+function flags(num) {
+	const arr = [];
+	for (let i = 0; i < 32; i++) {
+		if (num & (1 << i)) {
+			arr.push(i);
+		}
+	}
+	return arr;
+}
+
+//带标签的模板字符串
+function tp(strings, ...keys) {
+	return (function(...values) {
+		let dict = values[values.length - 1] || {};
+		let fragment = document.createDocumentFragment();
+		fragment.appendChild(document.createTextNode(strings[0]));
+		//let result = [strings[0]];
+		keys.forEach(function(key, i, arr) {
+			let value = Number.isInteger(key) ? values[key] : dict[key];
+			if (value == undefined)
+			{
+				//console.debug("模板字符串中 %s 未找到输入数据",key);
+			}else
+			{
+				if (!(value instanceof Node))
+				{
+					value = document.createTextNode(value);
+				}
+				try{
+					fragment.appendChild(arr.lastIndexOf(key) == i ? value : value.cloneNode(true));
+				}catch(e)
+				{
+					console.log(value, e);
+					console.log(keys, values);
+				}
+			}
+			fragment.appendChild(document.createTextNode(strings[i + 1]));
+		});
+		return fragment;
+	});
+}
+
+//来自于 https://www.cnblogs.com/zhenguo-chen/p/14672332.html
+function deepMerge(obj1, obj2) {
+	let key;
+	for (key in obj2) {
+	  // 如果target(也就是obj1[key])存在，且是对象的话再去调用deepMerge，否则就是obj1[key]里面没这个对象，需要与obj2[key]合并
+	  // 如果obj2[key]没有值或者值不是对象，此时直接替换obj1[key]
+		obj1[key] =
+			obj1[key] &&
+				obj1[key].toString() === "[object Object]" &&
+				(obj2[key] && obj2[key].toString() === "[object Object]")
+				? deepMerge(obj1[key], obj2[key])
+				: (obj1[key] = obj2[key]);
+	}
+	return obj1;
+}
 //▼ADPCM播放相关，来自 https://github.com/jy4340132/aaa
 const pcmMemory = new WebAssembly.Memory({ initial: 256, maximum: 256 });
 

@@ -1,4 +1,4 @@
-﻿localTranslating = {
+﻿const _localTranslating = {
     webpage_title: `パズル＆ドラゴンズ${teamsCount}人のチーム図作成ツール`,
 	addition_display: "追加の表示",
     title_blank: "入力タイトル",
@@ -24,6 +24,8 @@
     },
     force_reload_data: "データの強制更新",
 }
+deepMerge(localTranslating, _localTranslating);
+localisation(localTranslating);
 
 //大数字缩短长度
 Number.prototype.bigNumberToString = function()
