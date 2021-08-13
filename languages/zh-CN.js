@@ -81,14 +81,17 @@
 		},
 		power: {
             unknown: tp`[ 未知能力提升: ${'type'} ]`,
-			scale_attributes: tp`${'attrs'}中${'min'}种属性同时攻击时${'stats'}${'bonus'}`,
+			scale_attributes: tp`${'orbs'}中${'min'}种属性同时攻击时${'stats'}${'bonus'}`,
 			scale_attributes_bonus: tp`，每多1种${'bonus'}，最大${'max'}种时${'stats_max'}`,
 			scale_combos: tp`${'min'}连击时，${'stats'}${'bonus'}`,
 			scale_combos_bonus: tp`，每多1连击${'bonus'}，最大${'max'}连击时${'stats_max'}`,
 			scale_match_attrs: tp`${'matches'}中${'min'}串匹配时，${'stats'}${'bonus'}`,
 			scale_match_attrs_bonus: tp`，每多1串${'bonus'}，最大${'max'}串时${'stats_max'}`,
-			scale_match_length: tp`相连消除${'min'}个${'attrs'}时${'stats'}${'bonus'}`,
+			scale_match_length: tp`${'in_once'}相连消除${'min'}个${'orbs'}时${'stats'}${'bonus'}`,
 			scale_match_length_bonus: tp`，每多1个${'bonus'}，最大${'max'}个时${'stats_max'}`,
+			scale_cross: tp`每以十字形式消除一组${'orbs'}时${'stats'}`,
+			scale_cross_single: tp`以十字形式消除${'orbs'}时${'stats'}`,
+			scale_state_kind_count: tp`以队伍中${'awakenings'}${'attrs'}${'types'}的数量提升，每个${'stats'}`,
 		},
 		cond: {
             unknown: tp`[ 未知条件 ]`,
@@ -104,7 +107,7 @@
 			exact_match_enhanced: tp`并且其中包含至少一个强化宝珠`,
 
 			compo_type_card: tp`队伍中同时存在 ${'ids'} 时`,
-			compo_type_series: tp`队员组成全为 ${'ids'} 系列时`,
+			compo_type_series: tp`队员组成全为 ${'ids'} 合作时`,
 			compo_type_evolution: tp`队员组成全为 ${'ids'} 进化时`,
 		},
 		position: {
@@ -125,6 +128,7 @@
 			hp_scale: tp`${'hp'}为100%时${'min'}，${'hp'}为1时${'max'}`,
 			random_atk: tp`${'atk'}×${'min'}${'max'}倍`,
 			prob: tp`有${'value'}几率`,
+			x_awakenings: tp`${'awakenings'}数量×${'value'}`,
 		},
 		target: {
 			self: tp`发动者自身`,
@@ -156,9 +160,11 @@
 			comma: tp`，`, //逗号
 			slight_pause: tp`、`, //顿号
 			range_hyphen: tp`~`, //范围连字符
+			in_once: tp`同时`,
 			affix_attr: tp`${'cotent'}属性`, //词缀-属性
 			affix_orb: tp`${'cotent'}宝珠`, //词缀-宝珠
 			affix_type: tp`${'cotent'}类型`, //词缀-类型
+			affix_awakening: tp`${'cotent'}觉醒`, //词缀-觉醒
 			affix_exclude: tp`${'cotent'}以外`, //词缀-属性
 		},
 		attrs: {
@@ -202,7 +208,7 @@
 			_5color: tp`${'icon'}5色`,
 			_6color: tp`${'_5color'}+${'orb_rcv'}`,
 			all: tp`所有`,
-			any: tp`任何`,
+			any: tp`任何${'cotent'}`,
 		},
     },
 }
@@ -272,15 +278,6 @@ function fastShowSkill(event) {
         const skillId = parseInt(this.getAttribute("data-skillid"), 10);
         console.log(Skills[skillId]);
     }
-}
-//技能介绍里的头像的切换
-function changeToIdInSkillDetail(event) {
-    const settingBox = editBox.querySelector(".setting-box");
-    const monstersID = settingBox.querySelector(".row-mon-id .m-id");
-    const mid = this.getAttribute("data-cardid");
-    monstersID.value = mid;
-    monstersID.onchange();
-    return false; //取消链接的默认操作
 }
 
 //insertAdjacentHTML 可以只增加部分 HTML
@@ -1397,12 +1394,6 @@ function parseSkillDescription(skill) {
 		case 175: //隊員編成均為「マガジン」合作活動角色時，所有寵物的攻擊力8倍
 			let needCollabs = sk.slice(0,3).filter(s=>s>0); //最多3种id
 			fragment.appendChild(document.createTextNode(`队员组成全是`));
-			
-			//搜索并显示合作
-			function searchCollab(event) {
-				const collabId = parseInt(this.getAttribute('data-collabId'), 10);
-				showSearch(Cards.filter(card => card.collabId == collabId));
-			}
 
 			needCollabs.forEach((cid,idx,arr)=>{
 				const lnk = fragment.appendChild(document.createElement("a"));

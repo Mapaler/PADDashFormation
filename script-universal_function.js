@@ -594,6 +594,22 @@ function cardN(id) {
 	changeid({ id: id }, monDom);
 	return monOuterDom;
 }
+//技能介绍里的头像的切换
+function changeToIdInSkillDetail(event) {
+    const settingBox = editBox.querySelector(".setting-box");
+    const monstersID = settingBox.querySelector(".row-mon-id .m-id");
+    const mid = this.getAttribute("data-cardid");
+    monstersID.value = mid;
+    monstersID.onchange();
+    return false; //取消链接的默认操作
+}
+//搜索并显示合作
+function searchCollab(event) {
+	const collabId = parseInt(this.getAttribute('data-collabId'), 10);
+	showSearch(Cards.filter(card => card.collabId == collabId));
+	return false;
+}
+
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)
 {

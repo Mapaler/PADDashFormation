@@ -143,8 +143,10 @@ class Board
 		}
 	}
 	//填充序列
-	sequenceFill(sequence)
+	sequenceFill(sequence, exclude)
 	{
+		if (!Array.isArray(exclude) && exclude != null)
+			exclude = [exclude];
 		const o = sequence.entries();
 		//65版部分
 		for (let ri=0;ri<this.#data.length;ri++)
@@ -155,6 +157,7 @@ class Board
 			{
 				if (ci == 3) ci++;
 				//从数组中随机取出一个
+				if (exclude && exclude.includes([row[ci]])) continue;
 				row[ci] = o.next().value?.[1] ?? row[ci];
 			}
 		}
@@ -163,11 +166,13 @@ class Board
 		{
 			if (ri == 2) ri++;
 			const row = this.#data[ri];
+			if (exclude && exclude.includes([row[3]])) continue;
 			row[3] = o.next().value?.[1] ?? row[3] ;
 		}
 		const row = this.#data[2];
 		for (let ci=0;ci<row.length;ci++)
 		{
+			if (exclude && exclude.includes([row[ci]])) continue;
 			row[ci] = o.next().value?.[1] ?? row[ci] ;
 		}
 	}
@@ -203,15 +208,21 @@ class Board
 		this.sequenceFill(randomData);
 	}
 	//生成珠子的填充
-	generateOrbs(attrs, count)
+	generateOrbs(attrs, count, exclude)
 	{
-		let valueArray = new Array(this.#rowCount * this.#columnCount);
+		let space = this.#rowCount * this.#columnCount;
+		if (exclude?.length > 0)
+		{
+			space -= this.#data.flat().filter(o=>exclude.includes(o)).length;
+		}
+		
+		let valueArray = new Array(space);
 		attrs.forEach((attr,idx)=>{
 			valueArray.fill(attr, idx * count, (idx + 1) * count);
 		});
 		//将上方数据重新乱序排列
 		const randomData = this.sequenceToRandom(valueArray);
-		this.sequenceFill(randomData);
+		this.sequenceFill(randomData, exclude);
 	}
 	//设定横行
 	setRow(rows, attr = 0)
@@ -336,6 +347,7 @@ const SkillPowerUpKind = {
 	ScaleMatchAttrs: 'scale-match-attrs',
 	ScaleCross: 'scale-cross',
 	ScaleAwakenings: 'scale-awakenings',
+	ScaleStateKindCount: 'scale-state-kind-count',
 };
 
 const SkillKinds = {
@@ -384,7 +396,7 @@ const SkillKinds = {
 
 function skillParser(skillId)
 {
-	/*function merge(skills)
+	function merge(skills)
 	{
 		//解封部分的合并
 		let unbinds = skills.filter(skill=>skill.kind == SkillKinds.Unbind);
@@ -396,18 +408,30 @@ function skillParser(skillId)
 				pre.matches = pre.matches || cur.matches;
 				return pre
 			});
-			unbinds.shift(); //去除第一个
+			unbinds.shift(); //从筛选中去除第一个
 			unbinds.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
 		}
 		let fixedDamages = skills.filter(skill=>skill.kind == SkillKinds.DamageEnemy && skill.attr === 'fixed').filter((skill,idx,arr)=>skill.id==arr[0].id);
 		if (fixedDamages.length>1)
 		{ //把后面的全都合并到第一个
-			fixedDamages[0].times = 5;
-			fixedDamages.shift(); //去除第一个
+			fixedDamages[0].times = fixedDamages.length;
+			fixedDamages.shift(); //从筛选中去除第一个
 			fixedDamages.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
 		}
-
-	}*/
+		let scaleCross = skills.filter(skill=>skill.kind == SkillKinds.PowerUp && skill.value.kind == SkillPowerUpKind.ScaleCross).filter((skill,idx,arr)=>{
+			let atk = arr[0].value.crosses[0].atk;
+			return skill.value.crosses.every(cross=>cross.atk == atk);
+		});
+		if (scaleCross.length>1)
+		{ //把后面的全都合并到第一个
+			scaleCross.reduce((pre,cur)=>{
+				pre.value.crosses = pre.value.crosses.concat(cur.value.crosses);
+				return pre
+			});
+			scaleCross.shift(); //从筛选中去除第一个
+			scaleCross.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+		}
+	}
 	const skill = Skills[skillId];
 	if (!skill) return [];
 	if (!parsers[skill.type]) {
@@ -477,7 +501,7 @@ const v = {
         return { kind: SkillValueKind.xTeamRCV, value: (value / 100) || 1 };
     },
     percentAwakenings: function(awakenings, value) {
-        return { kind: SkillValueKind.xAwakenings, awakenings: awakenings, value: value / 100 };
+        return { kind: SkillValueKind.xAwakenings, awakenings: awakenings, value: value };
     },
 };
 
@@ -511,9 +535,9 @@ const p = {
         else {
             return {
                 kind: SkillPowerUpKind.Multiplier,
-                hp: (values.hp || 100) / 100,
-                atk: (values.atk || 100) / 100,
-                rcv: (values.rcv || 100) / 100
+                hp: (values.hp ?? 100) / 100,
+                atk: (values.atk ?? 100) / 100,
+                rcv: (values.rcv ?? 100) / 100
             };
         }
     },
@@ -549,8 +573,8 @@ const p = {
     scaleCross: function (crosses) {
         return { kind: SkillPowerUpKind.ScaleCross, crosses: crosses.map(cross => ({ ...cross, atk: (cross.atk / 100) || 1, rcv: (cross.rcv / 100) || 1 })) };
     },
-    scaleAwakenings: function (awakenings, value) {
-        return { kind: SkillPowerUpKind.ScaleAwakenings, awakenings: awakenings, value: value / 100 };
+    scaleStateKindCount: function (awakenings, attrs, types, value) {
+        return { kind: SkillPowerUpKind.ScaleStateKindCount, awakenings: awakenings, attrs: attrs, types: types, value: value };
     },
 }
 
@@ -886,17 +910,23 @@ const parsers = {
 	[154](from, to) { return changeOrbs(fromTo(flags(from), flags(to))); },
 	[155](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv }), c.multiplayer()); },
 	[156](turns, awoken1, awoken2, awoken3, type, mul) {
-	  return activeTurns(turns, type === 2 ?
-		powerUp(null, null, p.scaleAwakenings([awoken1, awoken2, awoken3].filter(Boolean), mul)) :
-		reduceDamage('all', v.percentAwakenings([awoken1, awoken2, awoken3].filter(Boolean), mul))
-	  );
+		if (type == 1)
+		{
+			return heal(v.percentAwakenings([awoken1, awoken2, awoken3].filter(Boolean), v.xRCV(mul)));
+		}else
+		{
+			return activeTurns(turns, type === 2 ?
+				powerUp(null, null, p.scaleStateKindCount([awoken1, awoken2, awoken3].filter(Boolean), null, null, p.mul({atk: mul - 100, hp:0, rcv:0}))) :
+				reduceDamage('all', v.percentAwakenings([awoken1, awoken2, awoken3].filter(Boolean), v.percent(mul)))
+			);
+		}
 	},
 	[157](attr1, mul1, attr2, mul2, attr3, mul3) {
 	  return powerUp(null, null, p.scaleCross([
-		{ single: false, attr: attr1, mul: mul1 },
-		{ single: false, attr: attr2, mul: mul2 },
-		{ single: false, attr: attr3, mul: mul3 }
-	  ].filter(cross => cross.mul)));
+		{ single: false, attr: attr1, atk: mul1 },
+		{ single: false, attr: attr2, atk: mul2 },
+		{ single: false, attr: attr3, atk: mul3 }
+	  ].filter(cross => cross.atk)));
 	},
 	[158](len, attrs, types, atk, hp, rcv) {
 	  return [
@@ -922,7 +952,11 @@ const parsers = {
 	[165](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, incr) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (incr ?? 0), [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
 	[166](min, baseAtk, baseRcv, bonusAtk, bonusRcv, max) { return powerUp(null, null, p.scaleCombos(min, max, [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
 	[167](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
-  
+	[168](turns, awoken1, awoken2, awoken3, awoken4, awoken5, awoken6, mul) {
+		return activeTurns(turns, 
+			powerUp(null, null, p.scaleStateKindCount([awoken1, awoken2, awoken3, awoken4, awoken5, awoken6].filter(Boolean), null, null, p.mul({atk: mul, hp:0, rcv:0})))
+		);
+	},
 	[169](combo, mul, percent) { return powerUp(null, null, p.scaleCombos(combo, combo, [mul, 100], [0, 0]), undefined, v.percent(percent)); },
 	[170](attrs, min, mul, percent) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul, 100], [0, 0]), undefined, v.percent(percent)); },
 	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent) {
@@ -1010,6 +1044,14 @@ const parsers = {
 	[224](turns, attr) { return activeTurns(turns, changeAttr('opponent', attr)); },
 
 	[227]() { return leaderChange(1); },
+	[228](turns, attrs, types, atk, rcv) {
+		return activeTurns(turns,
+			powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({atk: atk, rcv: rcv, hp:0})))
+		);
+	},
+	[229](attrs, types, hp, atk, rcv) {
+		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp, atk: atk, rcv: rcv})));
+	},
 };
 
 //将内容添加到代码片段
@@ -1059,6 +1101,54 @@ function renderSkillEntry(skills)
 		li.skill = skill;
 		li.addEventListener("click", showParsedSkill);
 	});
+
+	/*
+	let boardChange = skills.filter(skill=>
+		skill.kind == SkillKinds.BoardChange ||
+		skill.kind == SkillKinds.GenerateOrbs ||
+		skill.kind == SkillKinds.FixedOrbs
+	);
+	if (boardChange.length > 0)
+	{
+		const board = new Board();
+		for (let skill of boardChange)
+		{
+			switch (skill.kind)
+			{
+				case SkillKinds.BoardChange: { //洗版
+					const attrs = skill.attrs;
+					board.randomFill(attrs);
+					break;
+				}
+				case SkillKinds.GenerateOrbs: { //产生珠子
+					let orbs = skill.orbs, exclude = skill.exclude, count = skill.count;
+					board.generateOrbs(orbs, count, exclude);
+					break;
+				}
+				case SkillKinds.FixedOrbs: { //固定位置产生珠子
+					let generates = skill.generates;
+					for (const generate of generates)
+					{
+						let orb = generate.orbs?.[0];
+						if (generate.type == 'shape') {
+							board.setShape(generate.positions, orb);
+						} else {
+							if (generate.type == 'row')
+								board.setRow(generate.positions, orb);
+							else
+								board.setColumn(generate.positions, orb);
+						}
+					}
+					break;
+				}
+			}
+		}
+		const li = ul.appendChild(document.createElement("li"));
+		li.appendChild(board.toTable());
+		li.className = "merge-board";
+	}
+	*/
+
 	return ul;
 }
 function renderSkill(skill, option = {})
@@ -1386,7 +1476,7 @@ function renderSkill(skill, option = {})
 				value: count,
 			};
 			let board = new Board();
-			board.generateOrbs(orbs, count);
+			board.generateOrbs(orbs, count, exclude);
 			frg.ap(tsp.skill.generate_orbs(dict));
 			frg.ap(board.toTable());
 			break;
@@ -1576,7 +1666,7 @@ function renderStat(stat, option) {
 
 function renderAttrs(attrs, option = {}) {
 	if (!Array.isArray(attrs))
-	attrs = [attrs ?? 0];
+		attrs = [attrs ?? 0];
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
 	
@@ -1584,7 +1674,7 @@ function renderAttrs(attrs, option = {}) {
 	let contentFrg;
 	if (isEqual(attrs, Attributes.all()))
 	{
-		contentFrg = option.any ? tsp.attrs.any() : tsp.attrs.all();
+		contentFrg = tsp.attrs.all();
 	}
 	else
 	{
@@ -1596,13 +1686,15 @@ function renderAttrs(attrs, option = {}) {
 		})
 		.nodeJoin(tsp.word.slight_pause());
 	}
-	frg.ap(option.affix ? tsp.word.affix_attr({cotent: contentFrg}) : contentFrg);
+	if (option.affix)
+		contentFrg = tsp.word.affix_attr({cotent: contentFrg});
+	frg.ap(contentFrg);
 	return frg;
 }
 
 function renderOrbs(attrs, option = {}) {
 	if (!Array.isArray(attrs))
-	attrs = [attrs ?? 0];
+		attrs = [attrs ?? 0];
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
 
@@ -1611,7 +1703,7 @@ function renderOrbs(attrs, option = {}) {
 	
 	if (isEqual(attrs, Attributes.orbs()))
 	{
-		contentFrg = option.any ? tsp.orbs.any() : tsp.orbs.all();
+		contentFrg = tsp.orbs.all();
 	}
 	else if (isEqual(attrs, Attributes.all()))
 	{
@@ -1635,13 +1727,17 @@ function renderOrbs(attrs, option = {}) {
 		})
 		.nodeJoin(tsp.word.slight_pause());
 	}
-	frg.ap(option.affix ? tsp.word.affix_orb({cotent: contentFrg}) : contentFrg);
+	if (option.affix)
+		contentFrg = tsp.word.affix_orb({cotent: contentFrg});
+	if (option.any)
+		contentFrg = tsp.orbs.any({cotent: contentFrg});
+	frg.ap(contentFrg);
 	return frg;
 }
 
 function renderTypes(types, option = {}) {
 	if (!Array.isArray(types))
-	types = [types ?? 0];
+		types = [types ?? 0];
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
 	
@@ -1654,6 +1750,24 @@ function renderTypes(types, option = {}) {
 	})
 	.nodeJoin(tsp.word.slight_pause());
 	frg.ap(option.affix ? tsp.word.affix_type({cotent: contentFrg}) : contentFrg);
+	return frg;
+}
+
+function renderAwakenings(awakenings, option = {}) {
+	if (!Array.isArray(awakenings))
+		awakenings = [awakenings ?? 0];
+	const frg = document.createDocumentFragment();
+	if (typeof localTranslating == "undefined") return frg;
+	
+	const tsp = localTranslating.skill_parse;
+	const contentFrg = awakenings.map(awoken => {
+		const icon = document.createElement("icon");
+		icon.className = "awoken-icon";
+		icon.setAttribute("data-awoken-icon",awoken);
+		return icon;
+	})
+	.nodeJoin(tsp.word.slight_pause());
+	frg.ap(option.affix ? tsp.word.affix_awakening({cotent: contentFrg}) : contentFrg);
 	return frg;
 }
 
@@ -1699,12 +1813,23 @@ function renderCondition(cond) {
 		switch (cond.compo.type)
 		{
 			case 'card':{
-				dict.ids = cond.compo.ids.join();
+				dict.ids = cond.compo.ids.map(mid=>{
+					const dom = cardN(mid);
+					dom.monDom.onclick = changeToIdInSkillDetail;
+					return dom;
+				}).nodeJoin();
 				frg.ap(tsp.cond.compo_type_card(dict));
 				break;
 			}
 			case 'series':{
-				dict.ids = cond.compo.ids.join();
+				dict.ids = cond.compo.ids.map(cid=>{
+					const lnk = document.createElement("a");
+					lnk.className ="detail-search monster-collabId";
+					lnk.setAttribute("data-collabId",cid);
+					lnk.onclick = searchCollab;
+					lnk.textContent = cid;
+					return lnk;
+				}).nodeJoin(tsp.word.slight_pause());
 				frg.ap(tsp.cond.compo_type_series(dict));
 				break;
 			}
@@ -1723,12 +1848,16 @@ function renderCondition(cond) {
 function renderPowerUp(powerUp) {
 	const frg = document.createDocumentFragment();
 	const tsp = localTranslating.skill_parse;
-	function renderStats(hp, atk, rcv, mul = true) {
+	function renderStats(hp, atk, rcv, option = {}) {
+		const mul = option.mul ?? true;
+		option.percent = !mul;
 		const frg = document.createDocumentFragment();
 		const operator = mul ? '' : '+';
 		let list = [['hp', hp], ['atk', atk], ['rcv', rcv]];
 		//去除不改变的值
-		list = list.filter(([, value]) => value !== (mul ? 1 : 0));
+		list = list.filter(([name, value]) => value !== (mul ? 1 : 0) &&
+		!(name === 'hp' && value === 0));
+
 		if (list.length === 0) return frg;
 
 		if (list.every(([, value]) => value === list[0][1])) {
@@ -1736,14 +1865,14 @@ function renderPowerUp(powerUp) {
 			//三个值一样
 			frg.ap(list.map(([name]) => renderStat(name)).nodeJoin(tsp.word.slight_pause()));
 			frg.ap(operator);
-			frg.ap(renderValue(mul ? v.percent(value * 100): v.constant(value)));
+			frg.ap(renderValue(v.percent(value * 100), option));
 		} else {
 			//三个值不一样
 			let subDocument = list.map(([name, value]) => {
 				let _frg = document.createDocumentFragment();
 				_frg.ap(renderStat(name));
 				_frg.ap(operator);
-				_frg.ap(renderValue(mul ? v.percent(value * 100): v.constant(value)));
+				_frg.ap(renderValue(v.percent(value * 100), option));
 				return _frg;
 			});
 			frg.ap(subDocument.nodeJoin(tsp.word.comma()));
@@ -1761,7 +1890,7 @@ function renderPowerUp(powerUp) {
 			let attrs = powerUp.attrs, min = powerUp.min, max = powerUp.max, baseAtk = powerUp.baseAtk, baseRcv = powerUp.baseRcv, bonusAtk = powerUp.bonusAtk, bonusRcv = powerUp.bonusRcv;
 			
 			let dict = {
-				attrs: renderOrbs(attrs, {affix: true}),
+				orbs: renderOrbs(attrs, {affix: true}),
 				min: min,
 				stats: renderStats(1, baseAtk, baseRcv),
 			}
@@ -1769,7 +1898,7 @@ function renderPowerUp(powerUp) {
 			{
 				let _dict = {
 					max: max,
-					bonus: renderStats(0, bonusAtk, bonusRcv, false),
+					bonus: renderStats(0, bonusAtk, bonusRcv, {mul: false}),
 					stats_max: renderStats(1, baseAtk + bonusAtk * (max-min), baseRcv + bonusRcv * (max-min)),
 				}
 				dict.bonus = frg.ap(tsp.power.scale_attributes_bonus(_dict));
@@ -1788,7 +1917,7 @@ function renderPowerUp(powerUp) {
 			{
 				let _dict = {
 					max: max,
-					bonus: renderStats(0, bonusAtk, bonusRcv, false),
+					bonus: renderStats(0, bonusAtk, bonusRcv, {mul: false}),
 					stats_max: renderStats(1, baseAtk + bonusAtk * (max-min), baseRcv + bonusRcv * (max-min)),
 				}
 				dict.bonus = frg.ap(tsp.power.scale_combos_bonus(_dict));
@@ -1808,7 +1937,7 @@ function renderPowerUp(powerUp) {
 			{
 				let _dict = {
 					max: max,
-					bonus: renderStats(0, bonusAtk, bonusRcv, false),
+					bonus: renderStats(0, bonusAtk, bonusRcv, {mul: false}),
 					stats_max: renderStats(1, baseAtk + bonusAtk * (max-min), baseRcv + bonusRcv * (max-min)),
 				}
 				dict.bonus = frg.ap(tsp.power.scale_match_attrs_bonus(_dict));
@@ -1818,18 +1947,19 @@ function renderPowerUp(powerUp) {
 			break;
 		}
 		case SkillPowerUpKind.ScaleMatchLength: {
-			let attrs = powerUp.attrs, min = powerUp.min, max = powerUp.max, baseAtk = powerUp.baseAtk, baseRcv = powerUp.baseRcv, bonusAtk = powerUp.bonusAtk, bonusRcv = powerUp.bonusRcv;
+			let attrs = powerUp.attrs, min = powerUp.min, max = powerUp.max, baseAtk = powerUp.baseAtk, baseRcv = powerUp.baseRcv, bonusAtk = powerUp.bonusAtk, bonusRcv = powerUp.bonusRcv, matchAll = powerUp.matchAll;
 			
 			let dict = {
-				attrs: renderOrbs(attrs, {affix: true}),
+				orbs: renderOrbs(attrs, {affix: true}),
 				min: min,
 				stats: renderStats(1, baseAtk, baseRcv),
+				in_once: matchAll && tsp.word.in_once() || null,
 			}
 			if (max !== min)
 			{
 				let _dict = {
 					max: max,
-					bonus: renderStats(0, bonusAtk, bonusRcv, false),
+					bonus: renderStats(0, bonusAtk, bonusRcv, {mul: false}),
 					stats_max: renderStats(1, baseAtk + bonusAtk * (max-min), baseRcv + bonusRcv * (max-min)),
 				}
 				dict.bonus = frg.ap(tsp.power.scale_match_length_bonus(_dict));
@@ -1838,23 +1968,41 @@ function renderPowerUp(powerUp) {
 			
 			break;
 		}
-		/*
-
-		case SkillPowerUpKind.ScaleMatchLength: {
-			const { attrs, min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp as SkillPowerUp.ScaleAttrs;
-			return <>
-			&ge; {min} &times; {renderAttrs(attrs)} &rArr; {renderStats(1, baseAtk, baseRcv)}
-			{max !== min && <> for each &le; {max} orbs: {renderStats(0, bonusAtk, bonusRcv, false)}</>}
-			</>;
-		}
 		case SkillPowerUpKind.ScaleCross: {
-			const { crosses } = powerUp as SkillPowerUp.ScaleCross;
-			return crosses.map(({ single, attr, mul }, i) => <React.Fragment key={i}>
-			{i !== 0 && ', '}
-			{mul !== 1 && <>{renderStat('atk')} &times; {formatNumber(mul)} </>}
-			{single ? 'when' : 'for each'} cross of {renderAttrs(attr)}
-			</React.Fragment>);
+			let crosses = powerUp.crosses;
+			
+			if (crosses.length >= 2 && crosses.every(cross => cross.atk === crosses[0].atk)) {
+				//所有值一样
+				let cross = crosses[0];
+				let dict = {
+					orbs: renderOrbs(crosses.map(cross => cross.attr), {affix: true, any: true}),
+					stats: renderStats(1, cross.atk, cross.rcv),
+				}
+				frg.ap(cross.single ? tsp.power.scale_cross_single(dict) : tsp.power.scale_cross(dict));
+			} else {
+				let subDocument = crosses.map(cross=>{
+					let dict = {
+						orbs: renderOrbs(cross.attr, {affix: true, any: true}),
+						stats: renderStats(1, cross.atk, cross.rcv),
+					}
+					return cross.single ? tsp.power.scale_cross_single(dict) : tsp.power.scale_cross(dict);
+				});
+				frg.ap(subDocument.nodeJoin(tsp.word.comma()));
+			}
+			break;
 		}
+		case SkillPowerUpKind.ScaleStateKindCount: {
+			let awakenings = powerUp.awakenings, attrs = powerUp.attrs, types = powerUp.types, value = powerUp.value;
+			let dict = {
+				stats: renderStats(value.hp, value.atk, value.rcv, {mul: false, percent: true}),
+				awakenings: awakenings?.length && renderAwakenings(awakenings, {affix: true}) || null,
+				attrs: attrs?.length && renderAttrs(attrs, {affix: true}) || null,
+				types: types?.length && renderTypes(types, {affix: true}) || null,
+			}
+			frg.ap(tsp.power.scale_state_kind_count(dict));
+			break;
+		}
+		/*
 		case SkillPowerUpKind.ScaleAwakenings: {
 			const { awakenings, value } = powerUp as SkillPowerUp.ScaleAwakenings;
 			return <>
@@ -2094,6 +2242,15 @@ function renderValue(_value, option = {}) {
 			}
 			
 			frg.ap(tspv.random_atk(dict));
+			break;
+		}
+		case SkillValueKind.xAwakenings: {
+			let value = _value.value, awakenings = _value.awakenings;
+			let dict = {
+				value: renderValue(value,{percent : true}),
+				awakenings: renderAwakenings(awakenings, {affix: true}),
+			}
+			frg.ap(tsp.value.x_awakenings(dict));
 			break;
 		}
 		/*
