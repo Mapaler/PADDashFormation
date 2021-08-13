@@ -127,7 +127,7 @@ class Board
 			{
 				if (ci == 3) ci++;
 				//从数组中随机取出一个
-				if (exclude && exclude.includes([row[ci]])) continue;
+				if (exclude && exclude.includes(row[ci])) continue;
 				row[ci] = o.next().value?.[1] ?? row[ci];
 			}
 		}
@@ -136,13 +136,13 @@ class Board
 		{
 			if (ri == 2) ri++;
 			const row = this.#data[ri];
-			if (exclude && exclude.includes([row[3]])) continue;
+			if (exclude && exclude.includes(row[3])) continue;
 			row[3] = o.next().value?.[1] ?? row[3] ;
 		}
 		const row = this.#data[2];
 		for (let ci=0;ci<row.length;ci++)
 		{
-			if (exclude && exclude.includes([row[ci]])) continue;
+			if (exclude && exclude.includes(row[ci])) continue;
 			row[ci] = o.next().value?.[1] ?? row[ci] ;
 		}
 	}
@@ -151,7 +151,8 @@ class Board
 	{
 		const randomData = [];
 		//将65版之后的的提出来
-		let secondaryData = valueArray.splice((this.#rowCount - 1) * (this.#columnCount - 1));
+		const maxCount = this.#rowCount * this.#columnCount
+		let secondaryData = valueArray.splice((this.#rowCount - 1) * (this.#columnCount - 1) - (maxCount - valueArray.length));
 		
 		while(valueArray.length > 0)
 		{
