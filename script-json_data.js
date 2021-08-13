@@ -111,7 +111,7 @@ let localTranslating = {
 			scale_match_attrs_bonus: tp`，每多1串${'bonus'}，最大${'max'}串时${'stats_max'}`,
 			scale_match_length: tp`${'in_once'}相连消除${'min'}个${'orbs'}时${'stats'}${'bonus'}`,
 			scale_match_length_bonus: tp`，每多1个${'bonus'}，最大${'max'}个时${'stats_max'}`,
-			scale_cross: tp`每以十字形式消除5个${'orbs'}时${'stats'}`,
+			scale_cross: tp`每以十字形式消除5个${'orbs'}1次时${'stats'}`,
 			scale_cross_single: tp`以十字形式消除5个${'orbs'}时${'stats'}`,
 			scale_state_kind_count: tp`以队伍中${'awakenings'}${'attrs'}${'types'}的数量提升，每个${'stats'}`,
 		},
@@ -736,14 +736,50 @@ const specialSearchFunctions = (function() {
 		});
 		return fragment;
 	}
+	function generateOrbsParse(card)
+	{
+		let outArr = [];
+		const searchTypeArray = [141, 208];
+		const skills = getCardActiveSkills(card, searchTypeArray);
+		if (!skills.length) return outArr;
+		for (let skill of skills)
+		{
+			const sk = skill.params;
+			if (skill.type == 141)
+			{
+				outArr.push({
+					count: sk[0],
+					to: flags(sk[1] || 1),
+					exclude: flags(sk[2]),
+				});
+			}else
+			{
+				outArr.push({
+					count: sk[0],
+					to: flags(sk[1] || 1),
+					exclude: flags(sk[2]),
+				});
+				outArr.push({
+					count: sk[3],
+					to: flags(sk[4] || 1),
+					exclude: flags(sk[5]),
+				});
+			}
+		}
+		return outArr;
+	}
 	function generateOrbs_Addition(card)
 	{
-		const searchTypeArray = [141];
+		const gens = generateOrbsParse(card);
+		const searchTypeArray = [141, 208];
 		const skill = getCardActiveSkill(card, searchTypeArray);
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
-		fragment.appendChild(createOrbsList(flags(sk[1] || 1)));
-		fragment.appendChild(document.createTextNode(`×${sk[0]}`));
+		for (let gen of gens)
+		{
+			fragment.appendChild(createOrbsList(gen.to));
+			fragment.appendChild(document.createTextNode(`×${gen.count}`));
+		}
 		return fragment;
 	}
 	function healImmediately_Rate(card)
@@ -1885,60 +1921,53 @@ const specialSearchFunctions = (function() {
 			}),addition:generateOrbs_Addition},
 			{name:"Create Fire Orbs",otLangName:{chs:"产珠-生成-火"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [141];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(0);
-			}),addition:generateOrbs_Addition},
+					const gens = generateOrbsParse(card);
+					return gens.some(gen=>gen.to.includes(0));
+				}),
+				addition:generateOrbs_Addition
+			},
 			{name:"Create Water Orbs",otLangName:{chs:"产珠-生成-水"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [141];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(1);
-			}),addition:generateOrbs_Addition},
+					const gens = generateOrbsParse(card);
+					return gens.some(gen=>gen.to.includes(1));
+				}),
+				addition:generateOrbs_Addition
+			},
 			{name:"Create Wood Orbs",otLangName:{chs:"产珠-生成-木"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [141];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(2);
-			}),addition:generateOrbs_Addition},
+					const gens = generateOrbsParse(card);
+					return gens.some(gen=>gen.to.includes(2));
+				}),
+				addition:generateOrbs_Addition
+			},
 			{name:"Create Light Orbs",otLangName:{chs:"产珠-生成-光"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [141];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(3);
-			}),addition:generateOrbs_Addition},
+					const gens = generateOrbsParse(card);
+					return gens.some(gen=>gen.to.includes(3));
+				}),
+				addition:generateOrbs_Addition
+			},
 			{name:"Create Dark Orbs",otLangName:{chs:"产珠-生成-暗"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [141];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(4);
-			}),addition:generateOrbs_Addition},
+					const gens = generateOrbsParse(card);
+					return gens.some(gen=>gen.to.includes(4));
+				}),
+				addition:generateOrbs_Addition
+			},
 			{name:"Create Heart Orbs",otLangName:{chs:"产珠-生成-心"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [141];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return flags(sk[1] || 1).includes(5);
-			}),addition:generateOrbs_Addition},
+					const gens = generateOrbsParse(card);
+					return gens.some(gen=>gen.to.includes(5));
+				}),
+				addition:generateOrbs_Addition
+			},
 			{name:"Create Jammers/Poison Orbs",otLangName:{chs:"产珠-生成-毒废"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [141];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return false;
-				const sk = skill.params;
-				return (sk[1] & 960) > 0;
-			}),addition:generateOrbs_Addition},
+					const gens = generateOrbsParse(card);
+					return gens.some(gen=>gen.to.includes(6) || gen.to.includes(7) || gen.to.includes(8) || gen.to.includes(9));
+				}),
+				addition:generateOrbs_Addition
+			},
 		]},
 		{group:true,name:"-----Create Fixed Position Orbs-----",otLangName:{chs:"-----固定位置产珠类-----"}, functions: [
 			{name:"Create designated shape",otLangName:{chs:"生成指定形状的"},
