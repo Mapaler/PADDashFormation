@@ -3188,12 +3188,12 @@ table .orb-icon
 	/*margin: -4px;*/
 	position: relative;
 }
-.skill-datail-parsed .detail-search.monster-collabId
+.skill-datail-parsed a.detail-search
 {
 	cursor: pointer;
 	color: brown;
 }
-.skill-datail-parsed .detail-search.monster-collabId:hover
+.skill-datail-parsed a.detail-search:hover
 {
 	background: rgba(150,110,10,0.5);
 	border-radius: 5px;
@@ -3308,7 +3308,8 @@ table .orb-icon
 .icon-skill[data-icon-type="attr-absorb"]::after,
 .icon-skill[data-icon-type="combo-absorb"]::after,
 .icon-skill[data-icon-type="damage-absorb"]::after,
-.icon-skill[data-icon-type="damage-void"]::after
+.icon-skill[data-icon-type="damage-void"]::after,
+.icon-skill[data-icon-type="bind-skill"]::after
 {
 	content: "";
 	background-position-y:calc(-36px * 3);
@@ -3415,7 +3416,8 @@ table .orb-icon
 }
 .icon-skill[data-icon-type="skill-boost"],
 .icon-skill.boost-incr::after,
-.icon-skill.boost-decr::after
+.icon-skill.boost-decr::after,
+.icon-skill[data-icon-type="bind-skill"]
 {
 	background-position-y:calc(-36px * 19);
 }
@@ -3501,4 +3503,17 @@ table .orb-icon
 .icon-skill[data-icon-type="reduce-damage"]
 {
 	background-position-y:calc(-36px * 32);
+}
+.icon-skill[data-icon-type="orb-locked"]
+{
+	background-position-y:calc(-36px * 11);
+	background-position-x:calc(-36px * 2);
+}
+.icon-skill[data-icon-type="orb-enhanced"]
+{
+	background-position-y:calc(-36px * 33);
+}
+.icon-skill[data-icon-type="orb-nail"]
+{
+	background-position-y:calc(-36px * 35);
 }

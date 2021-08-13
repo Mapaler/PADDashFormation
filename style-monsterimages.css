@@ -1128,3 +1128,7 @@ icon.type
 {
 	background-position-y:calc(-36px * 9);
 }
+.orb[data-orb-icon='variation']
+{
+	background-position-y:calc(-36px * 10);
+}

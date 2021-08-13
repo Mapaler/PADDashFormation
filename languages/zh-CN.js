@@ -39,11 +39,12 @@
 			unbind_normal: tp`${'icon'}封锁状态减少${'turns'}`,
 			unbind_awakenings: tp`${'icon'}觉醒无效状态减少${'turns'}回合`,
 			unbind_matches: tp`${'icon'}无法消除宝珠状态减少${'turns'}回合`,
+			bind_skill: tp`${'icon'}自身无法使用技能`,
             defense_break: tp`${'icon'}敌方的防御力减少${'value'}回合`,
             poison: tp`${'icon'}使${'target'}全体中毒，每回合损失${'belong_to'} ${'value'} 的 ${'stats'}`,
 			time_extend: tp`${'icon'}宝珠移动时间 ${'value'}`,
 			follow_attack: tp`${'icon'}消除宝珠的回合，以${'belong_to'}${'value'}的伤害追打${'target'}（计算防御力）`,
-			follow_attack_fixed: tp`追加${'target'}的${'icon'}固定伤害`,
+			follow_attack_fixed: tp`追加${'damage'}的${'attr'}伤害`,
             auto_heal_buff: tp`行动结束后${'icon'}回复${'value'}的${'stats'}`,
 			auto_heal: tp`${'icon'}消除宝珠的回合，回复${'belong_to'}${'value'}的${'stats'}`,
 			ctw: tp`${'icon'}${'value'}内时间停止，可以任意移动宝珠`,
@@ -70,8 +71,8 @@
 			damage_void: tp`${'icon'}伤害无效`,
 			void_enemy_buff: tp`敌人的 ${'buff'} 无效化`,
 			change_attribute: tp`将${'target'}变为${'attrs'}`,
-			set_orb_state_enhanced: tp`强化${'orbs'}（每颗宝珠效力增加${'value'}）`,
-			set_orb_state_locked: tp`将${'orbs'}锁定${'value'}`,
+			set_orb_state_enhanced: tp`${'icon'}强化${'orbs'}（每颗宝珠效力增加${'value'}）`,
+			set_orb_state_locked: tp`将${'orbs'}${'icon'}锁定${'value'}`,
 			set_orb_state_unlocked: tp`${'icon'}解除所有宝珠的锁定状态`,
 			set_orb_state_bound: tp`无法消除${'orbs'}`,
 			rate_multiply: tp`作为队长进入地下城时，${'rate'}变为${'value'}`,
@@ -93,8 +94,8 @@
 			scale_match_attrs_bonus: tp`，每多1串${'bonus'}，最大${'max'}串时${'stats_max'}`,
 			scale_match_length: tp`${'in_once'}相连消除${'min'}个${'orbs'}时${'stats'}${'bonus'}`,
 			scale_match_length_bonus: tp`，每多1个${'bonus'}，最大${'max'}个时${'stats_max'}`,
-			scale_cross: tp`每以十字形式消除一组${'orbs'}时${'stats'}`,
-			scale_cross_single: tp`以十字形式消除${'orbs'}时${'stats'}`,
+			scale_cross: tp`每以十字形式消除5个${'orbs'}时${'stats'}`,
+			scale_cross_single: tp`以十字形式消除5个${'orbs'}时${'stats'}`,
 			scale_state_kind_count: tp`以队伍中${'awakenings'}${'attrs'}${'types'}的数量提升，每个${'stats'}`,
 		},
 		cond: {
@@ -115,6 +116,7 @@
 			compo_type_evolution: tp`队员组成全为 ${'ids'} 进化时`,
 
 			L_shape: tp`以L字形式消除5个${'orbs'}时`,
+			heal: tp`以${'orbs'}回复${'heal'}时`,
 		},
 		position: {
 			top: tp`上方第${'pos'}横行`,
@@ -167,6 +169,9 @@
 			slight_pause: tp`、`, //顿号
 			range_hyphen: tp`~`, //范围连字符
 			in_once: tp`同时`,
+			evo_type_pixel: tp`像素进化`,
+			evo_type_reincarnation: tp`转生或超转生进化`,
+			evo_type_unknow: tp`未知进化`,
 			affix_attr: tp`${'cotent'}属性`, //词缀-属性
 			affix_orb: tp`${'cotent'}宝珠`, //词缀-宝珠
 			affix_type: tp`${'cotent'}类型`, //词缀-类型
@@ -214,6 +219,7 @@
 			enhanced: tp`${'icon'}强化`,
 			locked: tp`${'icon'}锁定`,
 			nail: tp`${'icon'}钉子`,
+			variation: tp`${'icon'}变换珠（每${'time'}秒变换）`,
 			_5color: tp`${'icon'}5色`,
 			_6color: tp`${'_5color'}+${'orb_rcv'}`,
 			all: tp`所有`,
