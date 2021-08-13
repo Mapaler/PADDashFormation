@@ -329,6 +329,7 @@ const SkillValueKind = {
 	ConstantTo: 'const-to',
 	xMaxHP: 'mul-maxhp',
 	xHP: 'mul-hp',
+	xCHP: 'mul-chp',
 	xATK: 'mul-atk',
 	xRCV: 'mul-rcv',
 	RandomATK: 'random-atk',
@@ -374,6 +375,7 @@ const SkillKinds = {
     Unbind: "unbind",
     BindSkill: "bind-skill",
     RandomSkills: "random-skills",
+	SkillProviso: "skill-proviso",
     ChangeAttribute: "change-attr",
     SkillBoost: "skill-boost",
     AddCombo: "add-combo",
@@ -395,6 +397,7 @@ const SkillKinds = {
     NoSkyfall: "no-skyfall",
 	Henshin: "henshin",
 	VoidPoison: "void-poison",
+	SkillProviso: "skill-proviso",
 }
 
 function skillParser(skillId)
@@ -481,6 +484,9 @@ const v = {
     },
     xHP: function(value) {
         return { kind: SkillValueKind.xHP, value: (value / 100) ?? 1 };
+    },
+    xCHP: function(value) {
+        return { kind: SkillValueKind.xCHP, value: (value / 100) ?? 1 };
     },
     xATK: function(value) {
         return { kind: SkillValueKind.xATK, value: (value / 100) ?? 1 };
@@ -679,6 +685,7 @@ function board7x6() { return { kind: SkillKinds.Board7x6 }; }
 function noSkyfall() { return { kind: SkillKinds.NoSkyfall }; }
 function henshin(id) { return { kind: SkillKinds.Henshin, id: id }; }
 function voidPoison() { return { kind: SkillKinds.VoidPoison }; }
+function skillProviso(cond) { return { kind: SkillKinds.SkillProviso, cond: cond }; }
 
 const parsers = {
 	parser: (() => []), //这个用来解决代码提示的报错问题，不起实际作用
@@ -689,7 +696,7 @@ const parsers = {
 	[3](turns, percent) { return activeTurns(turns, reduceDamage('all', v.percent(percent))); },
 	[4](mul) { return poison(v.xATK(mul)); },
 	[5](time) { return CTW(v.constant(time)); },
-	[6](percent) { return gravity(v.xHP(percent)); },
+	[6](percent) { return gravity(v.xCHP(percent)); },
 	[7](mul) { return heal(v.xRCV(mul)); },
 	[8](value) { return heal(v.constant(value)); },
 	[9](from, to) { return changeOrbs(fromTo([from ?? 0], [to ?? 0])); },
@@ -1120,7 +1127,7 @@ const parsers = {
 		return powerUp(null, null, p.scaleCombos(combo, combo, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[224](turns, attr) { return activeTurns(turns, changeAttr('opponent', attr)); },
-
+	[225](min, max) { return skillProviso(c.hp(min ?? 0, max ?? 100)); },
 	[226](turns, percent) { return activeTurns(turns, orbDropIncrease(v.percent(percent), [], 'nail')); },
 	[227]() { return leaderChange(1); },
 	[228](turns, attrs, types, atk, rcv) {
@@ -1768,6 +1775,15 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.void_poison(dict));
 			break;
 		}
+		case SkillKinds.SkillProviso: { //条件限制才能用技能
+			let cond = skill.cond;
+			dict = {
+				condition: renderCondition(cond)
+			}
+			frg.ap(tsp.skill.skill_proviso(dict));
+			break;
+		}
+		
 		default: {
 			console.log("未处理的技能类型",skill.kind, skill);
 			frg.ap(skill.kind);
@@ -2226,6 +2242,18 @@ function renderValue(_value, option = {}) {
 			dict = {
 				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
 				stats: renderStat('hp'),
+			};
+			frg.ap(
+				option.percent ? 
+				tspv.mul_of_percent(dict) :
+				tspv.mul_of_times(dict)
+			);
+			break;
+		}
+		case SkillValueKind.xCHP: {
+			dict = {
+				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
+				stats: renderStat('chp'),
 			};
 			frg.ap(
 				option.percent ? 

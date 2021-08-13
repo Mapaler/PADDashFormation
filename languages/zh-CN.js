@@ -83,6 +83,7 @@
 			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			henshin: tp`变身为${'card'}`,
 			void_poison: tp`消除${'poison'}时不会受到毒伤害`,
+			skill_proviso: tp`${'condition'}才能发动后续效果`,
 		},
 		power: {
             unknown: tp`[ 未知能力提升: ${'type'} ]`,

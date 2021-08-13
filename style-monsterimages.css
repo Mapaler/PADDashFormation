@@ -1043,7 +1043,7 @@ icon.type
 	display: inline-block;
 	width: 36px;
 	height: 36px;
-	background-image: url(images/icon-orbs.fw.png);
+	background-image: url(images/icon-orbs.png);
 	background-position-y: 36px;
 	background-repeat: no-repeat;
 	vertical-align: bottom;
@@ -1081,7 +1081,7 @@ icon.type
 
 .orb[data-orb-icon='_5color']
 {
-	background-image: url(images/icon-skills.fw.png);
+	background-image: url(images/icon-skills.png);
 	background-position-y:calc(-36px * 24);
 }
 .orb[data-orb-icon='-1']
