@@ -43,6 +43,7 @@ let localTranslating = {
 			active_turns: tp`${'actionSkill'}，效果 ${'turns'} 回合`, //turns, actionSkill
 			random_skills: tp`随机发动以下技能：${'skills'}`, //skills
 			damage_enemy: tp`对${'target'}造成${'damage'}的${'attr'}伤害${'times'}${'totalDamage'}`, //target, damage, attr
+			damage_enemy_times: tp`×${'times'}`,
 			damage_enemy_count: tp`(共${'damage'})`,
 			vampire: tp`对${'target'}造成${'damage'}的${'attr'}伤害，并${'icon'}回复伤害值${'heal'}的HP`, //target, damage, attr
 			delay: tp`${'icon'}延迟敌人的攻击`, //icon

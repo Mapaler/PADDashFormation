@@ -1423,7 +1423,9 @@ function renderSkill(skill, option = {})
 			};
 			if (times)
 			{
-				dict.times = renderValue(v.constant(times), {unit: tsp.unit.times});
+				dict.times = tsp.skill.damage_enemy_times({
+					times: renderValue(v.constant(times), {unit: tsp.unit.times})
+				});
 				dict.totalDamage = tsp.skill.damage_enemy_count({
 					damage: renderValue(v.constant(damage.value * times), {unit: tsp.unit.point})
 				});
@@ -2130,7 +2132,7 @@ function renderPowerUp(powerUp) {
 				orbs: renderOrbs(attrs, {affix: true}),
 				min: min,
 				stats: renderStats(1, baseAtk, baseRcv),
-				in_once: matchAll && tsp.word.in_once() || null,
+				in_once: matchAll && attrs.length>1 && tsp.word.in_once() || null,
 			}
 			if (max !== min)
 			{
