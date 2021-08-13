@@ -387,6 +387,15 @@ function skillParser(skillId)
 			unbinds.shift(); //从筛选中去除第一个
 			unbinds.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
 		}
+		//破吸部分的合并
+		let voidBuff = skills.filter(skill=>skill.kind == SkillKinds.ActiveTurns &&
+			skill.skill.kind == SkillKinds.VoidEnemyBuff);
+		if (voidBuff.length>1 && voidBuff.every((s,i,a)=>s.turns == a[0].turns))
+		{ //把后面的全都合并到第一个
+			voidBuff[0].skill.buffs = voidBuff.flatMap(s=>s.skill.buffs);
+			voidBuff.shift(); //从筛选中去除第一个
+			voidBuff.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+		}
 		let fixedDamages = skills.filter(skill=>skill.kind == SkillKinds.DamageEnemy && skill.attr === 'fixed').filter((skill,idx,arr)=>skill.id==arr[0].id);
 		if (fixedDamages.length>1)
 		{ //把后面的全都合并到第一个
