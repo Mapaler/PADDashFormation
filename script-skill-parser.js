@@ -1735,7 +1735,7 @@ function renderSkill(skill, option = {})
 					subDocument.push(renderPowerUp(value));
 				}
 			}
-			if (reduceDamage) {
+			if (reduceDamage && reduceDamage.value > 0) {
 				subDocument.push(tsp.skill.reduce_damage({
 					value: renderValue(reduceDamage, {percent: true}),
 					icon: createIcon("reduce-damage"),
