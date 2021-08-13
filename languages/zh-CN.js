@@ -81,14 +81,15 @@
 			reduce_damage: tp`${'condition'}受到的${'attrs'}伤害${'icon'}减少${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			henshin: tp`变身为${'card'}`,
+			void_poison: tp`消除${'poison'}时不会受到毒伤害`,
 		},
 		power: {
             unknown: tp`[ 未知能力提升: ${'type'} ]`,
 			scale_attributes: tp`${'orbs'}中${'min'}种属性同时攻击时${'stats'}${'bonus'}`,
 			scale_attributes_bonus: tp`，每多1种${'bonus'}，最大${'max'}种时${'stats_max'}`,
-			scale_combos: tp`${'min'}连击以上，${'stats'}${'bonus'}`,
+			scale_combos: tp`${'min'}连击以上时${'stats'}${'bonus'}`,
 			scale_combos_bonus: tp`，每多1连击${'bonus'}，最大${'max'}连击时${'stats_max'}`,
-			scale_match_attrs: tp`${'matches'}中${'min'}串匹配时，${'stats'}${'bonus'}`,
+			scale_match_attrs: tp`${'matches'}中${'min'}串匹配时${'stats'}${'bonus'}`,
 			scale_match_attrs_bonus: tp`，每多1串${'bonus'}，最大${'max'}串时${'stats_max'}`,
 			scale_match_length: tp`${'in_once'}相连消除${'min'}个${'orbs'}时${'stats'}${'bonus'}`,
 			scale_match_length_bonus: tp`，每多1个${'bonus'}，最大${'max'}个时${'stats_max'}`,
@@ -112,6 +113,8 @@
 			compo_type_card: tp`队伍中同时存在 ${'ids'} 时`,
 			compo_type_series: tp`队员组成全为 ${'ids'} 合作时`,
 			compo_type_evolution: tp`队员组成全为 ${'ids'} 进化时`,
+
+			L_shape: tp`以L字形式消除5个${'orbs'}时`,
 		},
 		position: {
 			top: tp`上方第${'pos'}横行`,
