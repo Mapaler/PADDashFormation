@@ -902,7 +902,7 @@ const parsers = {
 	  ];
 	},
 	[152](attrs, count) { return setOrbState(flags(attrs), 'locked', {count: v.constant(count)}); },
-	[153](attr) { return changeAttr('opponent', attr); },
+	[153](attr, _) { return changeAttr('opponent', attr); },
 	[154](from, to) { return changeOrbs(fromTo(flags(from), flags(to))); },
 	[155](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv }), c.multiplayer()); },
 	[156](turns, awoken1, awoken2, awoken3, type, mul) {
@@ -1547,7 +1547,7 @@ function renderSkill(skill, option = {})
 			dict = {
 				icon: createIcon(skill.kind),
 				target: tsp.target.enemy(),
-				prob: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
+				chance: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
 				value: renderValue(value),
 				attr: renderAttrs(attr, {affix: true}),
 			};
@@ -1631,8 +1631,11 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.OrbDropIncrease: { //增加天降
 			let attrs = skill.attrs, value = skill.value, flag = skill.flag;
+			
 			dict = {
-				value: value && renderValue(value, {percent: true}) || null,
+				chance: value && tsp.value.prob({
+					value: renderValue(value, {percent: true})
+				}) || null,
 				orbs: renderOrbs(attrs, {className: "drop", affix: true}),
 				flag: flag && tsp.orbs[flag]({icon: createIcon("orb-" + flag)}) || null,
 			};
@@ -1656,9 +1659,9 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.ChangeAttribute: {
-			let attrs = skill.attrs, target = skill.target;
+			let attr = skill.attr, target = skill.target;
 			dict = {
-				attrs: renderAttrs(attrs, {affix: true}),
+				attrs: renderAttrs(attr, {affix: true}),
 				target: target === 'opponent' ? tsp.target.enemy_all() : tsp.target.self(),
 			};
 			frg.ap(tsp.skill.change_attribute(dict));
