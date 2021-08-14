@@ -60,8 +60,8 @@ body{
 	--team-1-color : red;
 	--team-2-color : blue;
 	--team-3-color : green;
-	--font-family : "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
-	--game-font-family : 'FOT-KurokaneStd-EB',"Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
+	--font-family : "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
+	--game-font-family : 'FOT-KurokaneStd-EB',"Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--border-width: 2px;
 
 	font-family: var(--font-family);
@@ -2495,6 +2495,10 @@ icon.inflicts::after
 	padding: 0 8px 6px 8px;
 	line-height: 25px;
 	white-space: break-spaces;
+}
+.skill-datail-parsed{
+	font-family: var(--font-family);
+	font-weight: bold;
 }
 .skill-datail-original
 {
