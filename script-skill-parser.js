@@ -622,8 +622,8 @@ function rateMultiply(value, rate) {
 function orbDropIncrease(value, attrs, flag) {
     return { kind: SkillKinds.OrbDropIncrease, value: value, attrs: attrs, flag: flag };
 }
-function resolve(min, prob) {
-    return { kind: SkillKinds.Resolve, min: min, max: 1, prob: prob };
+function resolve(min, max) {
+    return { kind: SkillKinds.Resolve, min: min, max: max };
 }
 function unbind(normal, awakenings, matches) {
     return { kind: SkillKinds.Unbind, normal: normal, awakenings: awakenings , matches: matches};
@@ -684,7 +684,7 @@ const parsers = {
 	[11](attr, mul) { return powerUp([attr], null, p.mul({ atk: mul })); },
 	[12](mul) { return followAttack(v.xATK(mul)); },
 	[13](mul) { return autoHeal(v.xRCV(mul)); },
-	[14](min, prob) { return resolve(v.percent(min), v.percent(prob)); },
+	[14](min, max) { return resolve(v.percent(min), v.percent(max ?? 100)); },
 	[15](time) { return timeExtend(v.constant(time / 100)); },
 	[16](percent) { return reduceDamage('all', v.percent(percent)); },
 	[17](attr, percent) { return reduceDamage([attr], v.percent(percent)); },
@@ -761,25 +761,25 @@ const parsers = {
   
 	[84](attr, min, max, percent) {
 		return [
-			selfHarm(percent ? v.xHP(100 - percent) : v.constantTo(1)),
+			selfHarm(percent ? v.xCHP(100 - percent) : v.constantTo(1)),
 			damageEnemy('single', attr, v.randomATK(min, max))
 		];
 	},
 	[85](attr, min, max, percent) {
 		return [
-			selfHarm(percent ? v.xHP(100 - percent) : v.constantTo(1)),
+			selfHarm(percent ? v.xCHP(100 - percent) : v.constantTo(1)),
 			damageEnemy('all', attr, v.randomATK(min, max))
 		];
 	},
 	[86](attr, value, _, percent) {
 		return [
-			selfHarm(percent ? v.xHP(100 - percent) : v.constantTo(1)),
+			selfHarm(percent ? v.xCHP(100 - percent) : v.constantTo(1)),
 			damageEnemy('single', attr, v.constant(value))
 		];
 	},
 	[87](attr, value, _, percent) {
 		return [
-			selfHarm(percent ? v.xHP(100 - percent) : v.constantTo(1)),
+			selfHarm(percent ? v.xCHP(100 - percent) : v.constantTo(1)),
 			damageEnemy('all', attr, v.constant(value))
 		];
 	},
@@ -957,7 +957,7 @@ const parsers = {
 	[170](attrs, min, mul, percent) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul, 100], [0, 0]), undefined, v.percent(percent)); },
 	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, min, [mul, 0], [0, 0]), undefined, v.percent(percent));
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, min, [mul, 100], [0, 0]), undefined, v.percent(percent));
 	},
 	[172]() { return setOrbState(null, 'unlocked'); },
 	[173](turns, attrAbsorb, comboAbsorb, damageAbsorb) {
@@ -1000,9 +1000,9 @@ const parsers = {
 	[182](attrs, len, mul, percent) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul, 100], [0, 0]), undefined, v.percent(percent)); },
 	[183](attrs, types, percent1, atk1, reduce, percent2, atk2, rcv2) {
 	  return [
-		powerUp(flags(attrs), flags(types), p.mul({ atk: atk1 }), c.hp(percent1, 100), v.percent(reduce)),
-		(atk2 || rcv2) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk2, rcv: rcv2 }), c.hp(0, percent2 || percent1)) || null
-	  ];
+		(percent1 > 0) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk1 || 100 }), c.hp(percent1, 100), v.percent(reduce)) || null,
+		(atk2 || rcv2) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk2 || 100, rcv: rcv2 || 100 }), c.hp(0, percent2 || percent1)) || null
+	  ].filter(Boolean);
 	},
 	[184](turns) { return activeTurns(turns, noSkyfall()); },
 	[185](time, attrs, types, hp, atk, rcv) {
@@ -1036,13 +1036,13 @@ const parsers = {
 		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul, 100], [0, 0], true), null, null, [addCombo(combo)]);
 	},
 	[193](attrs, atk, rcv, percent) {
-		return powerUp(null, null, p.mul([atk, rcv]), c.LShape(flags(attrs)), v.percent(percent));
+		return powerUp(null, null, p.mul([atk || 100, rcv || 100]), c.LShape(flags(attrs)), v.percent(percent));
 	},
 	[194](attrs, min, mul, combo) {
-		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul, 0], [0, 0]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul, 100], [0, 0]), null, null, [addCombo(combo)]);
 	},
 	[195](percent) {
-	  return selfHarm(percent ? v.xHP(percent) : v.constantTo(1));
+	  return selfHarm(percent ? v.xCHP(percent) : v.constantTo(1));
 	},
 	[196](matches) {
 	  return unbind(0,0,matches);
@@ -1054,14 +1054,14 @@ const parsers = {
 		return powerUp(null, null, p.mul([atk, 0]), c.heal(heal), percent && v.percent(percent), awokenBind && [unbind(0, awokenBind ?? 0)]);
 	},
 	[199](attrs, min, damage) {
-		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [0, 0], [0, 0]), null, null, [followAttackFixed(damage)]);
+		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[200](attrs, len, damage) {
-		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [0, 0], [0, 0]), null, null, [followAttackFixed(damage)]);
+		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[201](attrs1, attrs2, attrs3, attrs4, min, damage) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, attrs.length, [0, 0], [0, 0]), null, null, [followAttackFixed(damage)]);
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[202](id) {
 	  return henshin(id);
@@ -1071,7 +1071,7 @@ const parsers = {
 	[205](attrs, turns) { return activeTurns(turns, orbDropIncrease(null, flags(attrs == -1 ? 1023: attrs), 'locked')); },
 	[206](attrs1, attrs2, attrs3, attrs4, attrs5, min, combo) {
 		const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
-		return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, attrs.length, [0, 0], [0, 0]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [addCombo(combo)]);
 	},
 	[207](turns, time, row1, row2, row3, row4, row5, count) {
 		return activeTurns(turns, count ?
@@ -1339,7 +1339,7 @@ function renderSkill(skill, option = {})
 			let dict = {
 				icon: createIcon(skill.kind),
 				belong_to: tsp.target.self(),
-				target: tsp.target.enemy(),
+				target: tsp.target.enemy_all(),
 				stats: tsp.stats.hp(),
 				value: renderValue(skill.value),
 			};
@@ -1407,8 +1407,8 @@ function renderSkill(skill, option = {})
 			let dict = {
 				icon: createIcon(skill.kind),
 				stats: renderStat('chp'),
-				value: renderValue(skill.min, { percent:true }),
-				prob: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
+				min: renderValue(skill.min, { percent:true }),
+				max: renderValue(skill.max, { percent:true }),
 			};
 			frg.ap(tsp.skill.resolve(dict));
 			break;
@@ -1499,7 +1499,8 @@ function renderSkill(skill, option = {})
 			const value = skill.value;
 			let dict = {
 				icon: createIcon(skill.kind),
-				value: value,
+				unmatchable: value - 1,
+				matchable: value,
 			};
 			frg.ap(tsp.skill.min_match_length(dict));
 			break;
@@ -1528,11 +1529,14 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.Vampire: { //吸血
 			let attr = skill.attr, damage = skill.damage, heal = skill.heal;
-			dict = {
-				icon: createIcon("heal", "hp-incr"),
+			let _dict = {
 				target: tsp.target.enemy_one(),
 				damage: renderValue(damage),
 				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true}),
+			};
+			dict = {
+				icon: createIcon("heal", "hp-incr"),
+				damage_enemy: tsp.skill.damage_enemy(_dict),
 				heal: renderValue(heal, {percent: true}),
 			};
 			frg.ap(tsp.skill.vampire(dict));
@@ -1675,7 +1679,7 @@ function renderSkill(skill, option = {})
 				}
 				case "locked":{
 					if (arg.count.value < 42)
-						dict.value = renderValue(arg.count, {unit: tsp.unit.unit});
+						dict.value = renderValue(arg.count, {unit: tsp.unit.orbs});
 					frg.ap(tsp.skill.set_orb_state_locked(dict));
 					break;
 				}
@@ -1712,15 +1716,17 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.PowerUp: {
 			let attrs = skill.attrs, types = skill.types, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage, additional = skill.additional;
-			let targets = [];
-			if (attrs?.filter(attr=> attr !== 5)?.length && !isEqual(attrs, Attributes.all())) targets.push(renderAttrs(attrs || [], {affix: true}));
-			if (types?.length) targets.push(renderTypes(types || [], {affix: true}));
-			
 			dict = {
 				icon: createIcon(skill.kind),
 			};
 			if (condition) dict.condition = renderCondition(condition);
-			if (targets.length > 0) dict.targets = targets.nodeJoin(tsp.word.slight_pause());
+			
+			let targetDict = {};
+			if (attrs?.filter(attr=> attr !== 5)?.length && !isEqual(attrs, Attributes.all())) targetDict.attrs = renderAttrs(attrs || [], {affix: true});
+			if (types?.length) targetDict.attrs = renderTypes(types || [], {affix: true});
+			
+			if (targetDict.attrs || targetDict.types) dict.targets = tsp.skill.power_up_targets(targetDict);
+
 			let subDocument = [];
 			if (value){
 				if (attrs?.includes(5) && value.kind == SkillPowerUpKind.Multiplier)
@@ -1864,7 +1870,7 @@ function renderOrbs(attrs, option = {}) {
 			let dict = {
 				icon: icon,
 			}
-			if (attr == 'variation') dict.time = option.time;
+			if (attr == 'variation') dict.time = renderValue(v.constant(option.time), {unit: tsp.unit.seconds}) ;
 			if (tsp.orbs[attr])
 				return tsp.orbs[attr](dict);
 			else
@@ -1939,7 +1945,7 @@ function renderCondition(cond) {
 		frg.ap(tsp.cond.multi_player());
 	} else if (cond.remainOrbs) {
 		let dict = {
-			value: renderValue(v.constant(cond.remainOrbs.count), {unit: tsp.unit.unit}),
+			value: renderValue(v.constant(cond.remainOrbs.count), {unit: tsp.unit.orbs}),
 		};
 		frg.ap(tsp.cond.remain_orbs(dict));
 	} else if (cond.exact) {
@@ -1948,7 +1954,7 @@ function renderCondition(cond) {
 			frg.ap(tsp.cond.exact_combo(dict));
 		} else if (cond.exact.type === 'match-length') {
 			let dict = {
-				value: renderValue(v.constant(cond.exact.value), {unit: tsp.unit.unit}),
+				value: renderValue(v.constant(cond.exact.value), {unit: tsp.unit.orbs}),
 				orbs: cond.exact.attrs === 'enhanced' ? tsp.cond.exact_match_enhanced() : renderOrbs(cond.exact.attrs, {affix: true})
 			};
 			frg.ap(tsp.cond.exact_match_length(dict));
@@ -2017,6 +2023,7 @@ function renderCondition(cond) {
 		let dict = {
 			orbs: renderOrbs(5, {affix: true}),
 			heal: renderValue(v.constant(cond.heal.min), {unit: tsp.unit.point}),
+			stats: renderStat('hp'),
 		};
 		frg.ap(tsp.cond.heal(dict));
 	} else {
@@ -2032,7 +2039,7 @@ function renderPowerUp(powerUp) {
 		const mul = option.mul ?? true;
 		option.percent = !mul;
 		const frg = document.createDocumentFragment();
-		const operator = mul ? '' : '+';
+		const operator = mul ? ' ' : '+';
 		let list = [['hp', hp], ['atk', atk], ['rcv', rcv]];
 		//去除不改变的值
 		list = list.filter(([, value]) => value !== (mul ? 1 : 0));
@@ -2354,14 +2361,6 @@ function renderValue(_value, option = {}) {
 			frg.ap(tsp.value.x_awakenings(dict));
 			break;
 		}
-		/*
-		case SkillValueKind.xAwakenings: {
-			const { value, awakenings } = _value as SkillValue.WithAwakenings;
-			return <span>{formatNumber(value * 100)}% &times; each of {awakenings.map(id =>
-			<Asset assetId={`awakening-${id}`} className="CardSkill-icon" key={id} />
-			)}</span>;
-		}
-		*/
 		default: {
 			console.log("未知数值类型",_value.kind, _value);
 			frg.ap(tspv.unknown({ type: _value.kind }));

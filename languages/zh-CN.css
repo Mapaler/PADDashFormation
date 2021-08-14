@@ -8,3 +8,10 @@
 	font-family: "Microsoft Yahei","Source Han Sans",Arial, Helvetica, sans-serif;
 	font-weight: bold;
 }
+.skill-datail-original .spColor{
+	color: #ff3600;
+}
+.skill-datail-original .detail-search{
+	cursor: pointer;
+	color: blue;
+}

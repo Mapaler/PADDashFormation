@@ -2500,14 +2500,7 @@ icon.inflicts::after
 {
 	border-bottom: #9C743E solid 2px;
 }
-.skill-datail .spColor{
-	color: #ff3600;
-}
-.skill-datail .detail-search{
-	cursor: pointer;
-	color: blue;
-}
-.skill-datail .detail-search::before{
+.skill-datail-parsed .detail-search::before{
 	content: "🔍";
 }
 .random-active-skill{
@@ -3278,7 +3271,7 @@ table .orb-icon
 .card-skill-list .min-match-len,
 .card-skill-list .\37x6-board
 {
-	color: red;
+	color: #ff3600;
 }
 .icon-skill.status-incr::after,
 .icon-skill.status-decr::after,
