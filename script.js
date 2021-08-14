@@ -724,21 +724,21 @@ ${navigator.userAgent}`);
 	const showMonSkillCd_id = "show-mon-skill-cd";
 	const btnShowMonSkillCd = controlBox.querySelector(`#btn-${showMonSkillCd_id}`);
 	btnShowMonSkillCd.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showMonSkillCd_id)));
-	btnShowMonSkillCd.onclick = function(){
+	btnShowMonSkillCd.onclick = function(e){
 		toggleDomClassName(this, showMonSkillCd_id);
-		localStorage.setItem(cfgPrefix + showMonSkillCd_id, Number(this.checked));
+		if (e) localStorage.setItem(cfgPrefix + showMonSkillCd_id, Number(this.checked));
 	};
-	btnShowMonSkillCd.onclick();
+	btnShowMonSkillCd.onclick(false);
 
 	//记录显示觉醒开关的状态
 	const showMonAwoken_id = "show-mon-awoken";
 	const btnShowMonAwoken = controlBox.querySelector(`#btn-${showMonAwoken_id}`);
 	btnShowMonAwoken.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showMonAwoken_id)));
-	btnShowMonAwoken.onclick = function(){
+	btnShowMonAwoken.onclick = function(e){
 		toggleDomClassName(this, showMonAwoken_id);
-		localStorage.setItem(cfgPrefix + showMonAwoken_id, Number(this.checked));
+		if (e) localStorage.setItem(cfgPrefix + showMonAwoken_id, Number(this.checked));
 	};
-	btnShowMonAwoken.onclick();
+	btnShowMonAwoken.onclick(false);
 	
 	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
 
@@ -2299,8 +2299,8 @@ function initialize() {
 
 	const officialSortingClassName = 'show-official-awoken-sorting';
 	const s_showOfficialAwokenSorting = searchBox.querySelector(`#${officialSortingClassName}`); //显示官方排序的觉醒
-	s_showOfficialAwokenSorting.onchange = function(){
-		localStorage.setItem(cfgPrefix + officialSortingClassName, Number(this.checked));
+	s_showOfficialAwokenSorting.onchange = function(e){
+		if (e) localStorage.setItem(cfgPrefix + officialSortingClassName, Number(this.checked));
 		let fragmentAwoken = document.createDocumentFragment();
 		let fragmentSawoken = document.createDocumentFragment();
 		const awokenSorting = this.checked ? official_awoken_sorting : s_awokensUl.originalSorting;
@@ -2326,7 +2326,7 @@ function initialize() {
 		s_sawokensUl.appendChild(fragmentSawoken);
 	};
 	s_showOfficialAwokenSorting.checked = Boolean(Number(localStorage.getItem(cfgPrefix + officialSortingClassName)));
-	s_showOfficialAwokenSorting.onchange();
+	s_showOfficialAwokenSorting.onchange(false);
 
 	const s_selectedAwokensUl = searchBox.querySelector(".selected-awokens");
 	function search_awokenAdd1() {
@@ -2673,12 +2673,12 @@ function initialize() {
 	//输入id数字即时更新的开关
 	const realTimeClassName = 'real-time-change-card';
 	const s_realTimeChangeCard = settingBox.querySelector(`#${realTimeClassName}`);
-	s_realTimeChangeCard.onchange = function() {
+	s_realTimeChangeCard.onchange = function(e) {
 		monstersID.oninput = this.checked ? idChange : null;
-		localStorage.setItem(cfgPrefix + realTimeClassName, Number(this.checked));
+		if (e) localStorage.setItem(cfgPrefix + realTimeClassName, Number(this.checked));
 	}
 	s_realTimeChangeCard.checked = Boolean(Number(localStorage.getItem(cfgPrefix + realTimeClassName)));
-	s_realTimeChangeCard.onchange();
+	s_realTimeChangeCard.onchange(false);
 
 	//字符串搜索
 	btnSearchByString.onclick = function() {
@@ -2815,12 +2815,12 @@ function initialize() {
 		};
 	const hideClassName = 'hide-less-use-latent';
 	const s_hideLessUseLetent = settingBox.querySelector(`#${hideClassName}`);
-	s_hideLessUseLetent.onchange = function() {
+	s_hideLessUseLetent.onchange = function(e) {
 		toggleDomClassName(this, hideClassName, true, monEditLatentAllowableUl);
-		localStorage.setItem(cfgPrefix + hideClassName, Number(this.checked));
+		if (e) localStorage.setItem(cfgPrefix + hideClassName, Number(this.checked));
 	}
 	s_hideLessUseLetent.checked = Boolean(Number(localStorage.getItem(cfgPrefix + hideClassName)));
-	s_hideLessUseLetent.onchange();
+	s_hideLessUseLetent.onchange(false);
 
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
 	const skillBox = rowSkill.querySelector(".skill-box");
@@ -2853,8 +2853,8 @@ function initialize() {
 	const leaderSkillBox = rowLeaderSkill.querySelector(".skill-box");
 	const showSkillOriginalClassName = 'show-skill-original';
 	const showSkillOriginal = leaderSkillBox.querySelector(`#${showSkillOriginalClassName}`); //显示官方排序的觉醒
-	showSkillOriginal.onchange = function(){
-		localStorage.setItem(cfgPrefix + showSkillOriginalClassName, Number(this.checked));
+	showSkillOriginal.onchange = function(e){
+		if (e) localStorage.setItem(cfgPrefix + showSkillOriginalClassName, Number(this.checked));
 		if (this.checked)
 		{
 			skillBox.classList.add(showSkillOriginalClassName);
@@ -2866,7 +2866,7 @@ function initialize() {
 		}
 	};
 	showSkillOriginal.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showSkillOriginalClassName)));
-	showSkillOriginal.onchange();
+	showSkillOriginal.onchange(false);
 
 	editBox.refreshSkillParse = function(skp, lskp){
 		const skillDetailParsed = skp ?? skillBox.querySelector(".skill-datail-parsed");
@@ -2883,13 +2883,13 @@ function initialize() {
 
 	const mergeSillClassName = 'merge-skill';
 	const mergeSill = leaderSkillBox.querySelector(`#${mergeSillClassName}`); //显示官方排序的觉醒
-	mergeSill.onchange = function(){
-		localStorage.setItem(cfgPrefix + mergeSillClassName, Number(this.checked));
+	mergeSill.onchange = function(e){
+		if (e) localStorage.setItem(cfgPrefix + mergeSillClassName, Number(this.checked));
 		merge_skill = this.checked;
 		editBox.refreshSkillParse();
 	};
 	mergeSill.checked = Boolean(Number(localStorage.getItem(cfgPrefix + mergeSillClassName)));
-	mergeSill.onchange();
+	mergeSill.onchange(false);
 
 
 	//已有觉醒的去除

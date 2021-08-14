@@ -1829,7 +1829,7 @@ function renderAttrs(attrs, option = {}) {
 			const icon = document.createElement("icon");
 			icon.className = "attr";
 			icon.setAttribute("data-attr-icon",attr);
-			return tsp.attrs[attr]({icon: icon});
+			return tsp.attrs?.[attr]({icon: icon});
 		})
 		.nodeJoin(tsp.word.slight_pause());
 	}
@@ -1874,10 +1874,7 @@ function renderOrbs(attrs, option = {}) {
 				icon: icon,
 			}
 			if (attr == 'variation') dict.time = renderValue(v.constant(option.time), {unit: tsp.unit.seconds}) ;
-			if (tsp.orbs[attr])
-				return tsp.orbs[attr](dict);
-			else
-				console.error(attr,'未知宝珠')
+			return tsp.orbs?.[attr](dict);
 		})
 		.nodeJoin(tsp.word.slight_pause());
 	}
@@ -1896,14 +1893,16 @@ function renderTypes(types, option = {}) {
 	if (typeof localTranslating == "undefined") return frg;
 	
 	const tsp = localTranslating.skill_parse;
-	const contentFrg = types.map(type => {
+	let contentFrg = types.map(type => {
 		const icon = document.createElement("icon");
 		icon.className = "type";
 		icon.setAttribute("data-type-icon",type);
-		return tsp.types[type]({icon: icon});
+		return tsp.types?.[type]({icon: icon});
 	})
 	.nodeJoin(tsp.word.slight_pause());
-	frg.ap(option.affix ? tsp.word.affix_type({cotent: contentFrg}) : contentFrg);
+	if (option.affix)
+		contentFrg = tsp.word.affix_type({cotent: contentFrg});
+	frg.ap(contentFrg);
 	return frg;
 }
 
@@ -1914,14 +1913,16 @@ function renderAwakenings(awakenings, option = {}) {
 	if (typeof localTranslating == "undefined") return frg;
 	
 	const tsp = localTranslating.skill_parse;
-	const contentFrg = awakenings.map(awoken => {
+	let contentFrg = awakenings.map(awoken => {
 		const icon = document.createElement("icon");
 		icon.className = "awoken-icon";
 		icon.setAttribute("data-awoken-icon",awoken);
-		return icon;
+		return tsp.awokens?.[awoken]({icon: icon});
 	})
 	.nodeJoin(tsp.word.slight_pause());
-	frg.ap(option.affix ? tsp.word.affix_awakening({cotent: contentFrg}) : contentFrg);
+	if (option.affix)
+		contentFrg = tsp.word.affix_awakening({cotent: contentFrg});
+	frg.ap(contentFrg);
 	return frg;
 }
 
