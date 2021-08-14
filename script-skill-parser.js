@@ -1050,16 +1050,16 @@ const parsers = {
 	  ].filter(Boolean);
 	},
 	[118](...ids) { return randomSkills(ids.map(id => this.parser(id))); },
-	[119](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [base, 100], [bonus, 0])); },
+	[119](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [base || 100, 100], [bonus, 0])); },
   
-	[121](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv })); },
-	[122](percent, attrs, types, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ atk, rcv }), c.hp(0, percent)); },
-	[123](percent, attrs, types, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ atk, rcv }), c.hp(percent, 100)); },
+	[121](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })); },
+	[122](percent, attrs, types, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(0, percent)); },
+	[123](percent, attrs, types, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(percent, 100)); },
 	[124](attrs1, attrs2, attrs3, attrs4, attrs5, min, mul, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus, 0]));
 	},
-	[125](mon1, mon2, mon3, mon4, mon5, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp, atk, rcv }), c.compo('card', [mon1, mon2, mon3, mon4, mon5].filter(Boolean))); },
+	[125](mon1, mon2, mon3, mon4, mon5, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('card', [mon1, mon2, mon3, mon4, mon5].filter(Boolean))); },
 	[126](attrs, turns, turns2, percent) { return activeTurns(turns === turns2 ? turns : [turns, turns2], orbDropIncrease(v.percent(percent), flags(attrs))); },
 	[127](cols1, attrs1, cols2, attrs2) {
 	  return fixedOrbs(
@@ -1081,35 +1081,35 @@ const parsers = {
 	},
 	[130](percent, attrs, types, atk, rcv, rAttrs, rPercent) {
 	  return [
-		(atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ atk, rcv }), c.hp(0, percent)) || null,
+		(atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(0, percent)) || null,
 		rPercent && reduceDamage(flags(rAttrs), v.percent(rPercent), c.hp(0, percent)) || null
 	  ];
 	},
 	[131](percent, attrs, types, atk, rcv, rAttrs, rPercent) {
 	  return [
-		powerUp(flags(attrs), flags(types), p.mul({ atk, rcv }), c.hp(percent, 100)),
+		powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(percent, 100)),
 		rPercent && reduceDamage(flags(rAttrs), v.percent(rPercent), c.hp(percent, 100)) || null
 	  ];
 	},
 	[132](turns, time, percent) { return activeTurns(turns, timeExtend(time ? v.constant(time / 10) : v.percent(percent))); },
-	[133](attrs, types, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ atk, rcv }), c.useSkill()); },
+	[133](attrs, types, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.useSkill()); },
 	[136](attrs1, hp1, atk1, rcv1, attrs2, hp2, atk2, rcv2) {
 	  return [
-		powerUp(flags(attrs1), null, p.mul({ hp: hp1, atk: atk1, rcv: rcv1 })),
-		powerUp(flags(attrs2), null, p.mul({ hp: hp2, atk: atk2, rcv: rcv2 })),
+		powerUp(flags(attrs1), null, p.mul({ hp: hp1 || 100, atk: atk1 || 100, rcv: rcv1 || 100 })),
+		powerUp(flags(attrs2), null, p.mul({ hp: hp2 || 100, atk: atk2 || 100, rcv: rcv2 || 100 })),
 	  ];
 	},
 	[137](types1, hp1, atk1, rcv1, types2, hp2, atk2, rcv2) {
 	  return [
-		powerUp(null, flags(types1), p.mul({ hp: hp1, atk: atk1, rcv: rcv1 })),
-		powerUp(null, flags(types2), p.mul({ hp: hp2, atk: atk2, rcv: rcv2 })),
+		powerUp(null, flags(types1), p.mul({ hp: hp1 || 100, atk: atk1 || 100, rcv: rcv1 || 100 })),
+		powerUp(null, flags(types2), p.mul({ hp: hp2 || 100, atk: atk2 || 100, rcv: rcv2 || 100 })),
 	  ];
 	},
 	[138](...ids) { return ids.flatMap(id => this.parser(id)); },
 	[139](attrs, types, percent1, less1, mul1, percent2, less2, mul2) {
 	  return [
-		powerUp(flags(attrs), flags(types), p.mul({ atk: mul1 }), less1 ? c.hp(0, percent1) : c.hp(percent1, 100)),
-		powerUp(flags(attrs), flags(types), p.mul({ atk: mul2 }), less1 ?
+		powerUp(flags(attrs), flags(types), p.mul({ atk: mul1 || 100 }), less1 ? c.hp(0, percent1) : c.hp(percent1, 100)),
+		powerUp(flags(attrs), flags(types), p.mul({ atk: mul2 || 100 }), less1 ?
 		  (less2 ? c.hp(percent1, percent2) : c.hp(percent2, 100)) :
 		  (less2 ? c.hp(0, percent2) : c.hp(percent2, percent1))
 		),
@@ -1136,7 +1136,7 @@ const parsers = {
 	[152](attrs, count) { return setOrbState(flags(attrs), 'locked', {count: v.constant(count)}); },
 	[153](attr, _) { return changeAttr('opponent', attr); },
 	[154](from, to) { return changeOrbs(fromTo(flags(from), flags(to))); },
-	[155](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv }), c.multiplayer()); },
+	[155](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.multiplayer()); },
 	[156](turns, awoken1, awoken2, awoken3, type, mul) {
 		if (type == 1)
 		{
@@ -1230,7 +1230,7 @@ const parsers = {
 	},
 	[180](turns, percent) { return activeTurns(turns, orbDropIncrease(v.percent(percent), [], 'enhanced')); },
   
-	[182](attrs, len, mul, percent) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul, 100], [0, 0]), null, v.percent(percent)); },
+	[182](attrs, len, mul, percent) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul || 100, 100], [0, 0]), null, v.percent(percent)); },
 	[183](attrs, types, percent1, atk1, reduce, percent2, atk2, rcv2) {
 	  return [
 		(percent1 > 0) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk1 || 100 }), c.hp(percent1, 100), v.percent(reduce)) || null,
@@ -1241,13 +1241,13 @@ const parsers = {
 	[185](time, attrs, types, hp, atk, rcv) {
 	  return [
 		timeExtend(v.constant(time / 100)),
-		powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv })),
+		powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })),
 	  ];
 	},
 	[186](attrs, types, hp, atk, rcv) {
 	  return [
 		board7x6(),
-		(hp || atk ||rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv })) || null,
+		(hp || atk ||rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
 	  ].filter(Boolean);
 	},
 
@@ -1272,7 +1272,7 @@ const parsers = {
 		return powerUp(null, null, p.mul([atk || 100, rcv || 100]), c.LShape(flags(attrs)), v.percent(percent));
 	},
 	[194](attrs, min, mul, combo) {
-		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul, 100], [0, 0]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul || 100, 100], [0, 0]), null, null, [addCombo(combo)]);
 	},
 	[195](percent) {
 	  return selfHarm(percent ? v.xCHP(percent) : v.constantTo(1));
@@ -1299,7 +1299,7 @@ const parsers = {
 	[202](id) {
 	  return henshin(id);
 	},
-	[203](evotype, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp, atk, rcv }), c.compo('evolution', [evotype])); },
+	[203](evotype, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('evolution', [evotype])); },
 
 	[205](attrs, turns) { return activeTurns(turns, orbDropIncrease(null, flags(attrs == -1 ? 1023: attrs), 'locked')); },
 	[206](attrs1, attrs2, attrs3, attrs4, attrs5, min, combo) {
