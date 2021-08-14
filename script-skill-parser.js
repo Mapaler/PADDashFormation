@@ -1130,7 +1130,7 @@ const parsers = {
 	[150](_, mul) { return powerUp(null, null, p.mul({ atk: mul }), c.exact('match-length', 5, 'enhanced')); },
 	[151](mul1, mul2, percent) {
 	  return [
-		powerUp(null, null, p.scaleCross([{ single: true, attr: Attributes.Heart, atk: mul1, rcv: mul2 }]), null, v.percent(percent)),
+		powerUp(null, null, p.scaleCross([{ single: true, attr: [Attributes.Heart], atk: mul1 || 100, rcv: mul2 || 100 }]), null, v.percent(percent)),
 	  ];
 	},
 	[152](attrs, count) { return setOrbState(flags(attrs), 'locked', {count: v.constant(count)}); },
@@ -1155,15 +1155,6 @@ const parsers = {
 			{ single: false, attr: [attr2], atk: mul2 },
 			{ single: false, attr: [attr3], atk: mul3 }
 		].filter(cross => cross.atk);
-		
-		/*if (crosses.length >= 2 && crosses.every(cross => cross.atk === crosses[0].atk)) {
-			//所有值一样
-			crosses.reduce((pre,cur)=>{
-				pre.attr = pre.attr.concat(cur.attr);
-				return pre
-			});
-			crosses = [crosses[0]];
-		}*/
 	  	return powerUp(null, null, p.scaleCross(crosses));
 	},
 	[158](len, attrs, types, atk, hp, rcv) {
@@ -1328,7 +1319,7 @@ const parsers = {
 		];
 	},
 	[209](combo) {
-		return powerUp(null, null, p.scaleCross([{ single: true, attr: Attributes.Heart, atk: 100, rcv: 100}]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleCross([{ single: true, attr: [Attributes.Heart], atk: 100, rcv: 100}]), null, null, [addCombo(combo)]);
 	},
 	[210](attrs, _, combo) {
 		return powerUp(null, null, p.scaleCross([{ single: false, attr: flags(attrs), atk: 100, rcv: 100}]), null, null, [addCombo(combo)]);

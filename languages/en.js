@@ -82,7 +82,7 @@
 			rate_multiply_drop: tp`${'icon'}Drop rate`,
 			rate_multiply_coin: tp`${'icon'}Coins`,
 			rate_multiply_exp: tp`${'icon'}Rank EXP`,
-			reduce_damage: tp`${'condition'}Reduces${'attrs'} damage taken by ${'value'}`,
+			reduce_damage: tp`${'condition'}${'icon'}Reduces${'attrs'} damage taken by ${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			power_up_targets: tp`${'attrs'}${'types'}'s `,
             henshin: tp`Transforms into ${'card'}`,

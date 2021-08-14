@@ -27,6 +27,10 @@
 {
     background-position-x: -20px;
 }
-.icon-skill[data-icon-type="mass-attack"] {
+.icon-skill[data-icon-type="mass-attack"],
+.icon-skill[data-icon-type="reduce-damage"],
+.icon-skill[data-icon-type="damage-absorb"],
+.icon-skill[data-icon-type="damage-void"]
+{
     background-position-x: calc(-36px * 1);
 }
