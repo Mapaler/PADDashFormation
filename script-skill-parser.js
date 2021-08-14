@@ -404,18 +404,250 @@ function skillParser(skillId)
 			fixedDamages.shift(); //从筛选中去除第一个
 			fixedDamages.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
 		}
-		let scaleCross = skills.filter(skill=>skill.kind == SkillKinds.PowerUp && skill.value.kind == SkillPowerUpKind.ScaleCross).filter((skill,idx,arr)=>{
-			let atk = arr[0].value.crosses[0].atk;
-			return skill.value.crosses.every(cross=>cross.atk == atk);
-		});
-		if (scaleCross.length>1)
-		{ //把后面的全都合并到第一个
-			scaleCross.reduce((pre,cur)=>{
-				pre.value.crosses = pre.value.crosses.concat(cur.value.crosses);
-				return pre
+		let skillPowerUp = skills.filter(skill=>skill.kind == SkillKinds.PowerUp);
+		if (skillPowerUp.length>1)
+		{
+			//十字
+			let scaleCross = skillPowerUp.filter(skill=>skill.value.kind === SkillPowerUpKind.ScaleCross);
+			function mergeScaleCrossAttr(skill)
+			{
+				let crosses = skill.value.crosses;
+				let atk = crosses[0].atk;
+				let rcv = crosses[0].rcv;
+				if (crosses.length >= 2 &&
+					crosses.every(cross=>cross.atk === atk && cross.rcv === rcv)
+				) {
+					//所有值一样
+					crosses.reduce((pre,cur)=>{
+						pre.attr = pre.attr.concat(cur.attr);
+						return pre;
+					});
+					skill.value.crosses.splice(1);
+				}
+			}
+			//每个十字技能，先把所有属性合并
+			scaleCross.forEach(mergeScaleCrossAttr);
+			//筛选出所有倍率一样的子技能
+			scaleCross = scaleCross.filter((skill,idx,arr)=>{
+				let atk = arr[0].value.crosses[0].atk;
+				let rcv = arr[0].value.crosses[0].rcv;
+				let crosses = skill.value.crosses;
+				return crosses.every(cross=>cross.atk === atk && cross.rcv === rcv);
 			});
-			scaleCross.shift(); //从筛选中去除第一个
-			scaleCross.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+			//先合并属性倍率
+			if (scaleCross.length >= 1)
+			{ //把后面的全都合并到第一个
+				scaleCross.reduce((pre,cur)=>{
+					pre.value.crosses = pre.value.crosses.concat(cur.value.crosses);
+					return pre
+				});
+				let _skill = scaleCross.shift(); //从筛选中去除第一个
+				scaleCross.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+				mergeScaleCrossAttr(_skill);
+			}
+			//重新找出来十字，合并附加内容
+			scaleCross = skills.filter(skill=>skill.kind == SkillKinds.PowerUp && skill.value.kind === SkillPowerUpKind.ScaleCross);
+			scaleCross = scaleCross.filter((skill,idx,arr)=>{
+				let s0 = arr[0];
+				let attr0 = s0.value.crosses[0].attr.concat().sort();
+				let attr1 = skill.value.crosses[0].attr.concat().sort();
+				return isEqual(skill.condition, s0.condition) &&
+				isEqual(skill.attrs, s0.attrs) &&
+				isEqual(skill.types, s0.types) &&
+				isEqual(attr0, attr1)
+				;
+			});
+			if (scaleCross.length > 1)
+			{ //把后面的全都合并到第一个
+				scaleCross.reduce((pre,cur)=>{
+					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
+					if (cur.reduceDamage)
+					{
+						if (!pre.reduceDamage)
+							pre.ReduceDamage = cur.reduceDamage;
+						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
+						pre.reduceDamage.value *= cur.reduceDamage.value;
+					}
+					return pre
+				});
+				scaleCross.shift(); //从筛选中去除第一个
+				scaleCross.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+			}
+
+			//长串匹配
+			let scaleMatchLength = skillPowerUp.filter(skill=>skill.value.kind === SkillPowerUpKind.ScaleMatchLength);	
+			scaleMatchLength = scaleMatchLength.filter((skill,idx,arr)=>{
+				let s0 = arr[0];
+				let v0 = s0.value;
+				let v1 = skill.value;
+				return isEqual(skill.condition, s0.condition) &&
+				isEqual(skill.attrs, s0.attrs) &&
+				isEqual(skill.types, s0.types) &&
+				v0.min === v1.min &&
+				v0.max === v1.max &&
+				(v0.matchAll === v1.matchAll || v0.attrs.length <= 1) && isEqual(v0.attrs, v1.attrs)
+				;
+			});
+
+			if (scaleMatchLength.length > 1)
+			{ //把后面的全都合并到第一个
+				scaleMatchLength.reduce((pre,cur)=>{
+					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
+					if (cur.reduceDamage)
+					{
+						if (!pre.reduceDamage)
+							pre.ReduceDamage = cur.reduceDamage;
+						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
+						pre.reduceDamage.value *= cur.reduceDamage.value;
+					}
+					if (cur.value.baseAtk !== 1) pre.value.baseAtk *= cur.value.baseAtk;
+					if (cur.value.baseRcv !== 1) pre.value.baseRcv *= cur.value.baseRcv;
+					pre.value.bonusAtk += cur.value.bonusAtk;
+					pre.value.bonusRcv += cur.value.bonusRcv;
+					return pre
+				});
+				scaleMatchLength.shift(); //从筛选中去除第一个
+				scaleMatchLength.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+			}
+			
+			//多串匹配
+			let scaleMatchAttrs = skillPowerUp.filter(skill=>skill.value.kind === SkillPowerUpKind.ScaleMatchAttrs);	
+			scaleMatchAttrs = scaleMatchAttrs.filter((skill,idx,arr)=>{
+				let s0 = arr[0];
+				let v0 = s0.value;
+				let v1 = skill.value;
+				return isEqual(skill.condition, s0.condition) &&
+				isEqual(skill.attrs, s0.attrs) &&
+				isEqual(skill.types, s0.types) &&
+				v0.min === v1.min &&
+				v0.max === v1.max &&
+				isEqual(v0.matches, v1.matches)
+				;
+			});
+
+			if (scaleMatchAttrs.length > 1)
+			{ //把后面的全都合并到第一个
+				scaleMatchAttrs.reduce((pre,cur)=>{
+					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
+					if (cur.reduceDamage)
+					{
+						if (!pre.reduceDamage)
+							pre.ReduceDamage = cur.reduceDamage;
+						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
+						pre.reduceDamage.value *= cur.reduceDamage.value;
+					}
+					if (cur.value.baseAtk !== 1) pre.value.baseAtk *= cur.value.baseAtk;
+					if (cur.value.baseRcv !== 1) pre.value.baseRcv *= cur.value.baseRcv;
+					pre.value.bonusAtk += cur.value.bonusAtk;
+					pre.value.bonusRcv += cur.value.bonusRcv;
+					return pre
+				});
+				scaleMatchAttrs.shift(); //从筛选中去除第一个
+				scaleMatchAttrs.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+			}
+			
+			//多色匹配
+			let scaleAttributes = skillPowerUp.filter(skill=>skill.value.kind === SkillPowerUpKind.ScaleAttributes);	
+			scaleAttributes = scaleAttributes.filter((skill,idx,arr)=>{
+				let s0 = arr[0];
+				let v0 = s0.value;
+				let v1 = skill.value;
+				return isEqual(skill.condition, s0.condition) &&
+				isEqual(skill.attrs, s0.attrs) &&
+				isEqual(skill.types, s0.types) &&
+				v0.min === v1.min &&
+				v0.max === v1.max &&
+				isEqual(v0.attrs, v1.attrs)
+				;
+			});
+
+			if (scaleAttributes.length > 1)
+			{ //把后面的全都合并到第一个
+				scaleAttributes.reduce((pre,cur)=>{
+					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
+					if (cur.reduceDamage)
+					{
+						if (!pre.reduceDamage)
+							pre.ReduceDamage = cur.reduceDamage;
+						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
+						pre.reduceDamage.value *= cur.reduceDamage.value;
+					}
+					if (cur.value.baseAtk !== 1) pre.value.baseAtk *= cur.value.baseAtk;
+					if (cur.value.baseRcv !== 1) pre.value.baseRcv *= cur.value.baseRcv;
+					pre.value.bonusAtk += cur.value.bonusAtk;
+					pre.value.bonusRcv += cur.value.bonusRcv;
+					return pre
+				});
+				scaleAttributes.shift(); //从筛选中去除第一个
+				scaleAttributes.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+			}
+			
+			//连击数
+			let scaleCombos = skillPowerUp.filter(skill=>skill.value.kind === SkillPowerUpKind.ScaleCombos);	
+			scaleCombos = scaleCombos.filter((skill,idx,arr)=>{
+				let s0 = arr[0];
+				let v0 = s0.value;
+				let v1 = skill.value;
+				return isEqual(skill.condition, s0.condition) &&
+				isEqual(skill.attrs, s0.attrs) &&
+				isEqual(skill.types, s0.types) &&
+				v0.min === v1.min &&
+				v0.max === v1.max
+				;
+			});
+
+			if (scaleCombos.length > 1)
+			{ //把后面的全都合并到第一个
+				scaleCombos.reduce((pre,cur)=>{
+					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
+					if (cur.reduceDamage)
+					{
+						if (!pre.reduceDamage)
+							pre.ReduceDamage = cur.reduceDamage;
+						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
+						pre.reduceDamage.value *= cur.reduceDamage.value;
+					}
+					if (cur.value.baseAtk !== 1) pre.value.baseAtk *= cur.value.baseAtk;
+					if (cur.value.baseRcv !== 1) pre.value.baseRcv *= cur.value.baseRcv;
+					pre.value.bonusAtk += cur.value.bonusAtk;
+					pre.value.bonusRcv += cur.value.bonusRcv;
+					return pre
+				});
+				scaleCombos.shift(); //从筛选中去除第一个
+				scaleCombos.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+			}
+			
+			//普通倍率
+			let multiplier = skillPowerUp.filter(skill=>skill.value.kind === SkillPowerUpKind.Multiplier
+				&& skill.condition?.LShape);	
+		
+			multiplier = multiplier.filter((skill,idx,arr)=>{
+				let s0 = arr[0];
+				return !!skill.condition && isEqual(skill.condition, s0.condition) &&
+				isEqual(skill.attrs, s0.attrs) &&
+				isEqual(skill.types, s0.types)
+				;
+			});
+
+			if (multiplier.length)
+			{ //把后面的全都合并到第一个
+				multiplier.reduce((pre,cur)=>{
+					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
+					if (cur.reduceDamage)
+					{
+						if (!pre.reduceDamage)
+							pre.ReduceDamage = cur.reduceDamage;
+						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
+						pre.reduceDamage.value *= cur.reduceDamage.value;
+					}
+					pre.value.atk *= cur.value.atk;
+					pre.value.hp *= cur.value.hp;
+					pre.value.rcv *= cur.value.rcv;
+					return pre
+				});
+				multiplier.shift(); //从筛选中去除第一个
+				multiplier.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+			}
 		}
 	}
 	const skill = Skills[skillId];
@@ -602,7 +834,7 @@ function generateOrbs(orbs, exclude, count, time) {
 function fixedOrbs() {
     return { kind: SkillKinds.FixedOrbs, generates: Array.from(arguments) };
 }
-function powerUp(attrs, types, value, condition, reduceDamageValue, additional) {
+function powerUp(attrs, types, value, condition = null, reduceDamageValue = null, additional = []) {
     if (value.kind === SkillPowerUpKind.Multiplier) {
         let hp = value.hp, atk = value.atk, rcv = value.rcv;
         if (hp === 1 && atk === 1 && rcv === 1 && !reduceDamage)
@@ -843,7 +1075,7 @@ const parsers = {
 	},
 	[129](attrs, types, hp, atk, rcv, rAttrs, rPercent) {
 	  return [
-		powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv })),
+		powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })),
 		rPercent && reduceDamage(flags(rAttrs), v.percent(rPercent)) || null
 	  ];
 	},
@@ -898,7 +1130,7 @@ const parsers = {
 	[150](_, mul) { return powerUp(null, null, p.mul({ atk: mul }), c.exact('match-length', 5, 'enhanced')); },
 	[151](mul1, mul2, percent) {
 	  return [
-		powerUp(null, null, p.scaleCross([{ single: true, attr: Attributes.Heart, atk: mul1, rcv: mul2 }]), undefined, v.percent(percent)),
+		powerUp(null, null, p.scaleCross([{ single: true, attr: Attributes.Heart, atk: mul1, rcv: mul2 }]), null, v.percent(percent)),
 	  ];
 	},
 	[152](attrs, count) { return setOrbState(flags(attrs), 'locked', {count: v.constant(count)}); },
@@ -918,11 +1150,21 @@ const parsers = {
 		}
 	},
 	[157](attr1, mul1, attr2, mul2, attr3, mul3) {
-	  return powerUp(null, null, p.scaleCross([
-		{ single: false, attr: attr1, atk: mul1 },
-		{ single: false, attr: attr2, atk: mul2 },
-		{ single: false, attr: attr3, atk: mul3 }
-	  ].filter(cross => cross.atk)));
+		let crosses = [
+			{ single: false, attr: [attr1], atk: mul1 },
+			{ single: false, attr: [attr2], atk: mul2 },
+			{ single: false, attr: [attr3], atk: mul3 }
+		].filter(cross => cross.atk);
+		
+		/*if (crosses.length >= 2 && crosses.every(cross => cross.atk === crosses[0].atk)) {
+			//所有值一样
+			crosses.reduce((pre,cur)=>{
+				pre.attr = pre.attr.concat(cur.attr);
+				return pre
+			});
+			crosses = [crosses[0]];
+		}*/
+	  	return powerUp(null, null, p.scaleCross(crosses));
 	},
 	[158](len, attrs, types, atk, hp, rcv) {
 	  return [
@@ -953,11 +1195,11 @@ const parsers = {
 			powerUp(null, null, p.scaleStateKindCount([awoken1, awoken2, awoken3, awoken4, awoken5, awoken6].filter(Boolean), null, null, p.mul({atk: mul, hp:0, rcv:0})))
 		);
 	},
-	[169](combo, mul, percent) { return powerUp(null, null, p.scaleCombos(combo, combo, [mul, 100], [0, 0]), undefined, v.percent(percent)); },
-	[170](attrs, min, mul, percent) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul, 100], [0, 0]), undefined, v.percent(percent)); },
+	[169](combo, mul, percent) { return powerUp(null, null, p.scaleCombos(combo, combo, [mul, 100], [0, 0]), null, v.percent(percent)); },
+	[170](attrs, min, mul, percent) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul, 100], [0, 0]), null, v.percent(percent)); },
 	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, min, [mul, 100], [0, 0]), undefined, v.percent(percent));
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, min, [mul, 100], [0, 0]), null, v.percent(percent));
 	},
 	[172]() { return setOrbState(null, 'unlocked'); },
 	[173](turns, attrAbsorb, comboAbsorb, damageAbsorb) {
@@ -997,7 +1239,7 @@ const parsers = {
 	},
 	[180](turns, percent) { return activeTurns(turns, orbDropIncrease(v.percent(percent), [], 'enhanced')); },
   
-	[182](attrs, len, mul, percent) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul, 100], [0, 0]), undefined, v.percent(percent)); },
+	[182](attrs, len, mul, percent) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul, 100], [0, 0]), null, v.percent(percent)); },
 	[183](attrs, types, percent1, atk1, reduce, percent2, atk2, rcv2) {
 	  return [
 		(percent1 > 0) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk1 || 100 }), c.hp(percent1, 100), v.percent(reduce)) || null,
@@ -1033,7 +1275,7 @@ const parsers = {
 	  return activeTurns(turns, voidEnemyBuff(['damage-void']));
 	},
 	[192](attrs, len, mul, combo) {
-		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul, 100], [0, 0], true), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul || 100, 100], [0, 0], true), null, null, [addCombo(combo)]);
 	},
 	[193](attrs, atk, rcv, percent) {
 		return powerUp(null, null, p.mul([atk || 100, rcv || 100]), c.LShape(flags(attrs)), v.percent(percent));
@@ -1097,10 +1339,10 @@ const parsers = {
 	[218](turns) { return skillBoost(v.constant(-turns)); },
 
 	[219](attrs, len, combo) {
-		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [0, 0], [0, 0]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [100, 100], [0, 0]), null, null, [addCombo(combo)]);
 	},
 	[220](attrs, combo) {
-		return powerUp(null, null, p.mul([0,0]), c.LShape(flags(attrs)), null, [addCombo(combo)]);
+		return powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, [addCombo(combo)]);
 	},
 
 	[223](combo, damage) {
@@ -2162,7 +2404,7 @@ function renderPowerUp(powerUp) {
 		case SkillPowerUpKind.ScaleCross: {
 			let crosses = powerUp.crosses;
 			
-			if (crosses.length >= 2 && crosses.every(cross => cross.atk === crosses[0].atk)) {
+			/*if (crosses.length >= 2 && crosses.every(cross => cross.atk === crosses[0].atk)) {
 				//所有值一样
 				let cross = crosses[0];
 				let dict = {
@@ -2170,7 +2412,7 @@ function renderPowerUp(powerUp) {
 					stats: renderStats(1, cross.atk, cross.rcv),
 				}
 				frg.ap(cross.single ? tsp.power.scale_cross_single(dict) : tsp.power.scale_cross(dict));
-			} else {
+			} else {*/
 				let subDocument = crosses.map(cross=>{
 					let dict = {
 						orbs: renderOrbs(cross.attr, {affix: true, any: true}),
@@ -2179,7 +2421,7 @@ function renderPowerUp(powerUp) {
 					return cross.single ? tsp.power.scale_cross_single(dict) : tsp.power.scale_cross(dict);
 				});
 				frg.ap(subDocument.nodeJoin(tsp.word.comma()));
-			}
+			//}
 			break;
 		}
 		case SkillPowerUpKind.ScaleStateKindCount: {
@@ -2221,7 +2463,7 @@ function renderValue(_value, option = {}) {
 		case SkillValueKind.Constant: {
 			dict = {
 				value: _value.value.keepCounts(od,os),
-				unit: option.unit ? option.unit() : undefined,
+				unit: option.unit ? option.unit() : null,
 			};
 			frg.ap(tspv.const(dict));
 			break;
