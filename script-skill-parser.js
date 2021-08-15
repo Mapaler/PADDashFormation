@@ -649,6 +649,7 @@ function skillParser(skillId)
 				multiplier.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
 			}
 		}
+		return skills;
 	}
 	const skill = Skills[skillId];
 	if (!skill) return [];
@@ -657,10 +658,31 @@ function skillParser(skillId)
 	}
 	//此处用apply将这个parser传递到后面解析函数的this里，用于递归解析
 	const result = parsers[skill.type].apply({ parser: skillParser }, skill.params);
-	const skills = (Array.isArray(result) ? result : [result])
+	let skills = (Array.isArray(result) ? result : [result])
 		.filter(s => Boolean(s))
 		.map(s => ({ id: skillId, type: skill.type, params: skill.params, ...s }));
-	if (merge_skill) merge(skills);
+
+	function splitProvisoSkill(skills)
+	{
+		let idx = skills.findIndex(skill=>skill.kind == SkillKinds.SkillProviso);
+		if (idx>=0)
+		{
+			return [
+				skills.slice(0,idx),
+				skills.slice(idx, idx+1),
+				skills.slice(idx+1),
+			];
+		}else
+		{
+			return [skills];
+		}
+	}
+	if (merge_skill)
+	{
+		let skillsSplit = splitProvisoSkill(skills).map(_skills=>merge(_skills));
+		skills = skillsSplit.flat(1);
+	}
+	
 	return skills;
 }
 
@@ -1160,7 +1182,7 @@ const parsers = {
 	[158](len, attrs, types, atk, hp, rcv) {
 	  return [
 		minMatch(len),
-		powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv }))
+		powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }))
 	  ];
 	},
 	[159](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [base, 100], [bonus, 0])); },
@@ -1170,7 +1192,7 @@ const parsers = {
 	[163](attrs, types, hp, atk, rcv, rAttrs, rPercent) {
 	  return [
 		noSkyfall(),
-		(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv })) || null,
+		(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
 		rPercent && reduceDamage(flags(rAttrs), v.percent(rPercent)) || null,
 	  ].filter(Boolean);
 	},
@@ -1202,7 +1224,7 @@ const parsers = {
 		].filter((buff) => typeof buff === 'string')
 	  ));
 	},
-	[175](series1, series2, series3, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp, atk, rcv }), c.compo('series', [series1, series2, series3].filter(Boolean))); },
+	[175](series1, series2, series3, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('series', [series1, series2, series3].filter(Boolean))); },
 	[176](row1, row2, row3, row4, row5, attrs) {
 		return fixedOrbs(
 			{ orbs: [attrs ?? 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>flags(row)) }
@@ -1211,14 +1233,14 @@ const parsers = {
 	[177](attrs, types, hp, atk, rcv, remains, mul) {
 	  return [
 		noSkyfall(),
-		(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv })) || null,
+		(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
 		mul && powerUp(null, null, p.mul({ atk: mul }), c.remainOrbs(remains)) || null
 	  ].filter(Boolean);
 	},
 	[178](time, attrs, types, hp, atk, rcv, attrs2, percent) {
 	  return [
 		fixedTime(time),
-		(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp, atk, rcv })),
+		(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })),
 		percent && reduceDamage(flags(attrs2), v.percent(percent)) || null,
 	  ].filter(Boolean);
 	},
@@ -1957,9 +1979,21 @@ function renderSkill(skill, option = {})
 			};
 			if (condition) dict.condition = renderCondition(condition);
 			
-			let targetDict = {};
-			if (attrs?.filter(attr=> attr !== 5)?.length && !isEqual(attrs, Attributes.all())) targetDict.attrs = renderAttrs(attrs || [], {affix: true});
-			if (types?.length) targetDict.attrs = renderTypes(types || [], {affix: true});
+			let targetDict = {}, attrs_types = [];
+			if (attrs?.filter(attr=> attr !== 5)?.length && !isEqual(attrs, Attributes.all()))
+			{
+				targetDict.attrs = renderAttrs(attrs || [], {affix: true});
+				attrs_types.push(targetDict.attrs);
+			}
+			if (types?.length)
+			{
+				targetDict.types = renderTypes(types || [], {affix: true});
+				attrs_types.push(targetDict.types);
+			}
+			if (attrs_types.length)
+			{
+				targetDict.attrs_types = attrs_types.nodeJoin(tsp.word.slight_pause());
+			}
 			
 			if (targetDict.attrs || targetDict.types) dict.targets = tsp.skill.power_up_targets(targetDict);
 

@@ -84,7 +84,7 @@
 			rate_multiply_exp: tp`${'icon'}Rank EXP`,
 			reduce_damage: tp`${'condition'}${'icon'}Reduces${'attrs'} damage taken by ${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
-			power_up_targets: tp`${'attrs'}${'types'}'s `,
+			power_up_targets: tp`[${'attrs_types'}]'s `, //attrs, types, attrs_types
             henshin: tp`Transforms into ${'card'}`,
 			void_poison: tp`Voids ${'poison'} damage`,
 			skill_proviso: tp`The follow-up effect can only be initiated ${'condition'}`,

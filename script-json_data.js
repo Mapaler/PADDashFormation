@@ -97,7 +97,7 @@ let localTranslating = {
 			rate_multiply_exp: tp`${'icon'}等级经验倍率`,
 			reduce_damage: tp`${'condition'}受到的${'attrs'}伤害${'icon'}减少${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
-			power_up_targets: tp`${'attrs'}${'types'}的 `,
+			power_up_targets: tp`${'attrs_types'}的 `,
 			henshin: tp`变身为${'card'}`,
 			void_poison: tp`消除${'poison'}时不会受到毒伤害`,
 			skill_proviso: tp`${'condition'}才能发动后续效果`,

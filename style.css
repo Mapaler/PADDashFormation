@@ -3277,6 +3277,11 @@ table .orb-icon
 {
 	color: #ff3600;
 }
+.card-skill-list .skill-proviso
+{
+	border-bottom: 1px brown dashed;
+}
+
 .icon-skill.status-incr::after,
 .icon-skill.status-decr::after,
 .icon-skill.status-bind::after,
