@@ -223,7 +223,7 @@ let localTranslating = {
 			enhanced: tp`${'icon'}强化`,
 			locked: tp`${'icon'}锁定`,
 			nail: tp`${'icon'}钉子`,
-			variation: tp`${'icon'}变换珠（每${'time'}秒变换）`,
+			variation: tp`${'icon'}变换珠（每${'time'}变换）`,
 			_5color: tp`${'icon'}5色`,
 			_6color: tp`${'_5color'}+${'orb_rcv'}`,
 			all: tp`所有`,

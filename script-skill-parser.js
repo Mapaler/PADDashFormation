@@ -1457,6 +1457,7 @@ function renderSkillEntry(skills)
 					}
 					case SkillKinds.GenerateOrbs: { //产生珠子
 						let orbs = skill.orbs, exclude = skill.exclude, count = skill.count;
+						console.log(orbs)
 						board.generateOrbs(orbs, count, exclude);
 						break;
 					}
