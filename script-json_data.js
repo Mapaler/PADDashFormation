@@ -203,7 +203,7 @@ let localTranslating = {
 			[2]: tp`${'icon'}木`,
 			[3]: tp`${'icon'}光`,
 			[4]: tp`${'icon'}暗`,
-			[5]: tp`${'icon'}回复`,
+			[5]: tp`${'icon'}回复力`,
 			[6]: tp`${'icon'}空`,
 			all: tp`所有`,
 			self: tp`${'icon'}自身属性`,
