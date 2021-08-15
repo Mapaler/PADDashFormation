@@ -1215,7 +1215,7 @@ const parsers = {
 		);
 	},
 	[169](min, base, percent, bonus, max) { return powerUp(null, null, p.scaleCombos(min, max ?? min, [base || 100, 100], [bonus, 0]), null, v.percent(percent)); },
-	[170](attrs, min, base, percent, bonus, stage) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + stage - 1, [base, 100], [bonus ?? 0, 0]), null, v.percent(percent)); },
+	[170](attrs, min, base, percent, bonus, stage) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (stage ? stage - 1 : 0), [base, 100], [bonus ?? 0, 0]), null, v.percent(percent)); },
 	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, min, [mul, 100], [0, 0]), null, v.percent(percent));
