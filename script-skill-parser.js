@@ -1200,7 +1200,10 @@ const parsers = {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, attrs.length, [atk, rcv], [bonus, bonus]));
 	},
-	[165](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, incr) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (incr ?? 0), [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
+	[165](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, incr) {
+		const attrsArr = flags(attrs);
+		return powerUp(null, null, p.scaleAttrs(attrsArr, min, min + (min < attrsArr.length ? (incr ?? 0) : 0), [baseAtk || 100, baseRcv || 100], [bonusAtk, bonusRcv]));
+	},
 	[166](min, baseAtk, baseRcv, bonusAtk, bonusRcv, max) { return powerUp(null, null, p.scaleCombos(min, max, [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
 	[167](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
 	[168](turns, awoken1, awoken2, awoken3, awoken4, awoken5, awoken6, mul) {
