@@ -1994,7 +1994,7 @@ function renderSkill(skill, option = {})
 			if (condition) dict.condition = renderCondition(condition);
 			
 			let targetDict = {}, attrs_types = [];
-			if (attrs && !isEqual(attrs, Attributes.all()))
+			if (attrs?.length && !isEqual(attrs, Attributes.all()))
 			{
 				targetDict.attrs = renderAttrs(attrs || [], {affix: attrs?.filter(attr=> attr !== 5)?.length});
 				attrs_types.push(targetDict.attrs);
