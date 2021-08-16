@@ -815,7 +815,7 @@ function loadData(force = false)
 			request.onsuccess = function(event) {
 				if (Array.isArray(request.result))
 				{
-					Cards = request.result;
+					Cards = loadExtraCardsData(request.result);
 					dealCardsData(Cards);
 				}else
 				{
@@ -835,7 +835,7 @@ function loadData(force = false)
 				url: `${sourceDataFolder}/mon_${currentDataSource.code}.json?t=${_time}`, //Cards数据文件
 				onload: function(response) {
 					try {
-						Cards = JSON.parse(response.response);
+						Cards = loadExtraCardsData(JSON.parse(response.response));
 					} catch (e) {
 						console.error("Cards 数据 JSON 解码出错。", e);
 						return;
@@ -862,7 +862,17 @@ function loadData(force = false)
 				}
 			});
 		}
-		
+		function loadExtraCardsData(_cards)
+		{
+			let splitIdx = _cards.findIndex((card, id)=>card.id !== id);
+			let cards = _cards.slice(0, splitIdx);
+			for (let i = splitIdx + 1; i < _cards.length; i++)
+			{
+				const card = _cards[i];
+				cards[card.id] = card;
+			}
+			return cards;
+		}
 		function dealCardsData()
 		{
 			if (editBox)
@@ -2830,14 +2840,7 @@ function initialize() {
 	const skillLevel_1 = skillBox.querySelector(".m-skill-lv-1");
 	const skillLevel_Max = skillBox.querySelector(".m-skill-lv-max");
 
-	skillTitle.onclick = function(event) {
-		if (event.ctrlKey) return;
-		const skillId = parseInt(this.getAttribute("data-skillid"), 10); //获得当前技能ID
-		const s_cards = Cards.filter(card => card.activeSkillId === skillId); //搜索同技能怪物
-		if (s_cards.length > 1) {
-			showSearch(s_cards); //显示
-		}
-	};
+	skillTitle.onclick = fastShowSkill;
 
 	skillLevel.onchange = function() {
 		const card = Cards[editBox.mid] || Cards[0]; //怪物固定数据
@@ -2851,6 +2854,9 @@ function initialize() {
 
 	const rowLeaderSkill = settingBox.querySelector(".row-mon-leader-skill");
 	const leaderSkillBox = rowLeaderSkill.querySelector(".skill-box");
+	const lskillTitle = leaderSkillBox.querySelector(".skill-name");
+	lskillTitle.onclick = fastShowSkill;
+
 	const showSkillOriginalClassName = 'show-skill-original';
 	const showSkillOriginal = leaderSkillBox.querySelector(`#${showSkillOriginalClassName}`); //显示官方排序的觉醒
 	showSkillOriginal.onchange = function(e){
@@ -3174,7 +3180,7 @@ function changeid(mon, monDom, latentDom) {
 		parentNode.classList.remove("null");
 		parentNode.classList.remove("delay");
 
-		monDom.setAttribute("data-cards-pic-idx", Math.ceil(monId / 100)); //添加图片编号
+		monDom.setAttribute("data-cards-pic-idx", Math.ceil(monId % 1e5 / 100)); //添加图片编号
 		const idxInPage = (monId - 1) % 100; //获取当前页面的总序号
 		monDom.setAttribute("data-cards-pic-x", idxInPage % 10); //添加X方向序号
 		monDom.setAttribute("data-cards-pic-y", Math.floor(idxInPage / 10)); //添加Y方向序号
@@ -3462,7 +3468,7 @@ function editBoxChangeMonId(id) {
 	}
 
 
-	const evoLinkCardsIdArray = Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id); //筛选出相同进化链的
+	const evoLinkCardsIdArray = card.evoRootId !== 0 ? Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id) : []; //筛选出相同进化链的
 	
 	function loopAddHenshin(arr,card)
 	{

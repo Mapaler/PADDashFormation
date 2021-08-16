@@ -32,7 +32,7 @@ Number.prototype.bigNumberToString = function()
 {
 	let numTemp = this.valueOf();
 	if (!numTemp) return "0";
-	const grouping = Math.pow(10, 4);
+    const grouping = 1e4;
 	const unit = ['','萬','億','兆','京','垓'];
 	const numParts = [];
 	do{

@@ -8,7 +8,7 @@ Number.prototype.bigNumberToString = function() {
 
     let numTemp = negative ? Math.abs(this) : this.valueOf();
     if (!numTemp) return "0";
-    const grouping = Math.pow(10, 4);
+    const grouping = 1e4;
     const unit = ['', '万', '亿', '兆', '京', '垓'];
     const numParts = [];
     do {
@@ -34,8 +34,8 @@ Number.prototype.bigNumberToString = function() {
 
 //查找原先完整技能
 function findFullSkill(subSkill) {
-    const parentSkill = Skills.find(ss => (ss.type === 116 || ss.type === 118 || ss.type === 138) && ss.params.includes(subSkill.id)) || subSkill;
-    const aCard = Cards.find(card => card.activeSkillId == parentSkill.id || card.leaderSkillId == parentSkill.id);
+    const parentSkill = Skills.find(ss => (ss.type === 116 || ss.type === 118 || ss.type === 138) && ss.params.includes(subSkill.id)) || subSkill;3
+    const aCard = Cards.find(card => card?.activeSkillId == parentSkill.id || card?.leaderSkillId == parentSkill.id);
     return { skill: parentSkill, card: aCard };
 }
 //document.querySelector(".edit-box .row-mon-id .m-id").type = "number";
@@ -45,20 +45,13 @@ showSearch(result.map(o=>o.card).filter(c=>c));
 console.table(result);
 */
 
-//按住Ctrl点击技能在控制台输出技能的对象
-function fastShowSkill(event) {
-    if (event.ctrlKey) {
-        const skillId = parseInt(this.getAttribute("data-skillid"), 10);
-        console.log(Skills[skillId]);
-    }
-}
 
 //insertAdjacentHTML 可以只增加部分 HTML
 //高级技能解释
 function parseSkillDescription(skill) {
-    const id = skill.id;
+    const id = skill?.id;
     let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-    if (id == 0) return fragment;
+    if (!id) return fragment;
     const sk = skill.params;
 
     //珠子名和属性名数组
@@ -1466,6 +1459,32 @@ function parseSkillDescription(skill) {
 		case 229:
 			str = `队伍中每存在1个${getAttrTypeString(flags(sk[0]), flags(sk[1]))}时，${getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]}, false)}`;
 			break;
+		case 1000:{ //8人限定的技能
+			//str = skill.description + '\n';
+			str = '';
+			switch (sk[0])
+			{
+				case 1: {
+					str += `对排名比自身靠后的`;
+					break;
+				}
+				case 2: {
+					str += `对排名${flags(sk[1]).map(n=>n+1).join('、')}`;
+					break;
+				}
+				case 3: {
+					str += `对排名比自身靠前的`;
+					break;
+				}
+				default: {
+					str += `未知排名${sk[0]}`;
+					break;
+				}
+			}
+			
+			str += `，使用敌人技能${sk.slice(2).join('、')}`;
+			break;
+		}
 		default:
 			str = `未知的技能类型${skill.type}(No.${id})`;
 			//开发部分

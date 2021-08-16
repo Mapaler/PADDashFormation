@@ -369,6 +369,7 @@ const SkillKinds = {
 	Henshin: "henshin",
 	VoidPoison: "void-poison",
 	SkillProviso: "skill-proviso",
+	ObstructOpponent: "obstruct-opponent",
 }
 
 function skillParser(skillId)
@@ -920,6 +921,9 @@ function noSkyfall() { return { kind: SkillKinds.NoSkyfall }; }
 function henshin(id) { return { kind: SkillKinds.Henshin, id: id }; }
 function voidPoison() { return { kind: SkillKinds.VoidPoison }; }
 function skillProviso(cond) { return { kind: SkillKinds.SkillProviso, cond: cond }; }
+function obstructOpponent(type, pos, ids) {
+	return { kind: SkillKinds.ObstructOpponent, type: type, pos: pos, enemy_skills: ids };
+}
 
 const parsers = {
 	parser: (() => []), //这个用来解决代码提示的报错问题，不起实际作用
@@ -1332,9 +1336,19 @@ const parsers = {
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[202](id) {
-	  return henshin(id);
+		return henshin(id);
 	},
-	[203](evotype, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('evolution', [evotype])); },
+	[203](evotypeid, hp, atk, rcv) {
+		let evotype = (type=>{
+			switch (type) {
+				case 0: return "pixel-evo";
+				case 2: return "reincarnation-evo";
+				default: return type;
+			}
+		})(evotypeid);
+		return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }),
+		c.compo('evolution', [evotype]));
+	},
 
 	[205](attrs, turns) { return activeTurns(turns, orbDropIncrease(null, flags(attrs == -1 ? 1023: attrs), 'locked')); },
 	[206](attrs1, attrs2, attrs3, attrs4, attrs5, min, combo) {
@@ -1385,6 +1399,17 @@ const parsers = {
 	},
 	[229](attrs, types, hp, atk, rcv) {
 		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp, atk: atk, rcv: rcv})));
+	},
+	[1000](type, pos, ...ids) {
+		let posType = (type=>{
+			switch (type) {
+				case 1: return "after-me";
+				case 2: return "designated-position";
+				case 3: return "before-me";
+				default: return type;
+			}
+		})(type);
+		return obstructOpponent(posType, flags(pos), ids);
 	},
 };
 
@@ -2070,6 +2095,35 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.skill_proviso(dict));
 			break;
 		}
+		case SkillKinds.ObstructOpponent: { //条件限制才能用技能
+			let type = skill.type, pos = skill.pos, enemy_skills = skill.enemy_skills;
+			let slight_pause = tsp.word.slight_pause().textContent;
+			dict = {
+				skills: enemy_skills.join(slight_pause)
+			}
+			let targetDict = { positions: pos?.map(p=>p+1).join(slight_pause)}
+			switch (type)
+			{
+				case "after-me": {
+					dict.target = tsp.skill.obstruct_opponent_after_me(targetDict);
+					break;
+				}
+				case "designated-position": {
+					dict.target = tsp.skill.obstruct_opponent_designated_position(targetDict);
+					break;
+				}
+				case "before-me": {
+					dict.target = tsp.skill.obstruct_opponent_before_me(targetDict);
+					break;
+				}
+				default: {
+					dict.target = tsp.cond.unknown();
+					break;
+				}
+			}
+			frg.ap(tsp.skill.obstruct_opponent(dict));
+			break;
+		}
 		
 		default: {
 			console.log("未处理的技能类型",skill.kind, skill);
@@ -2271,19 +2325,19 @@ function renderCondition(cond) {
 				break;
 			}
 			case 'evolution':{
-				dict.ids = cond.compo.ids.map(eid=>{
+				dict.ids = cond.compo.ids.map(type=>{
 					const lnk = document.createElement("a");
 					lnk.className ="detail-search";
-					switch (eid)
+					switch (type)
 					{
-						case 0:{ //像素进化
+						case "pixel-evo":{ //像素进化
 							lnk.appendChild(tsp.word.evo_type_pixel());
 							lnk.onclick = function(){
 								showSearch(Cards.filter(card=>card.evoMaterials.includes(3826)));
 							};
 							break;
 						}
-						case 2:{ //转生或超转生
+						case "reincarnation-evo":{ //转生或超转生
 							lnk.appendChild(tsp.word.evo_type_reincarnation());
 							lnk.onclick = function(){
 								showSearch(Cards.filter(card=>isReincarnated(card)));
@@ -2291,7 +2345,7 @@ function renderCondition(cond) {
 							break;
 						}
 						default:{ //转生或超转生
-							return tsp.word.evo_type_unknow();
+							return tsp.word.evo_type_unknow({ type });
 						}
 					}
 					return lnk;

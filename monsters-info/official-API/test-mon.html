@@ -80,8 +80,7 @@ GM_xmlhttpRequest({
 	url:"ja-card.json",
 	onload: function(response) {
 		const originalJSON = JSON.parse(response.response);
-		console.log(originalJSON)
-		cards = originalJSON.card.filter((c,idx)=>{return c[0]==idx;});
+		cards = originalJSON.card;
 		pcards = cards.map(c=>{
 			let card = new Card(c);
 			//将可能的flag显示为二进制

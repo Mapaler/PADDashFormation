@@ -101,6 +101,10 @@ let localTranslating = {
 			henshin: tp`变身为${'card'}`,
 			void_poison: tp`消除${'poison'}时不会受到毒伤害`,
 			skill_proviso: tp`${'condition'}才能发动后续效果`,
+			obstruct_opponent: tp`对${'target'}施加敌对技能效果：${'skills'}`,
+			obstruct_opponent_after_me: tp`排名比自身低的对手`,
+			obstruct_opponent_before_me: tp`排名比自身高的对手`,
+			obstruct_opponent_designated_position: tp`第${'positions'}排位的对手`,
 		},
 		power: {
             unknown: tp`[ 未知能力提升: ${'type'} ]`,
@@ -190,7 +194,7 @@ let localTranslating = {
 			in_once: tp`同时`,
 			evo_type_pixel: tp`像素进化`,
 			evo_type_reincarnation: tp`转生或超转生进化`,
-			evo_type_unknow: tp`未知进化`,
+			evo_type_unknow: tp`未知进化: ${'type'}`,
 			affix_attr: tp`${'cotent'}属性`, //词缀-属性
 			affix_orb: tp`${'cotent'}宝珠`, //词缀-宝珠
 			affix_type: tp`${'cotent'}类型`, //词缀-类型
@@ -3206,6 +3210,13 @@ const specialSearchFunctions = (function() {
 				}
 				})
 			},
+			/*{name:"8P dedicated hostile skills",otLangName:{chs:"8P专用敌对技能"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [1000];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				})
+			},*/
 		]},
 	];
 	return functions;

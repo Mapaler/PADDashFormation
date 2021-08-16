@@ -42,6 +42,7 @@ officialAPI.forEach(function(lang) {
 	const oCards = lang.cardOriginal = cardJsonObj.card;//将字符串转换为json对象
 
 	const monCards = lang.cards = [];
+	//const monCards = lang.cards = oCards.map(ocard=>new Card(ocard));
 	/*oCards.forEach((oCard, idx)=>{
 		let mid = oCard[0];
 		if (mid === idx) //原始怪物
@@ -56,7 +57,17 @@ officialAPI.forEach(function(lang) {
 	});*/
 	for (let cardIndex = 0; oCards[cardIndex][0] === cardIndex; cardIndex++)
 	{
-		monCards.push(new Card(oCards[cardIndex]));
+		const card = new Card(oCards[cardIndex]);
+		delete card.enemy;
+		delete card.unk01;
+		delete card.unk02;
+		delete card.unk03;
+		delete card.unk04;
+		delete card.unk05;
+		delete card.unk06;
+		delete card.unk07;
+		delete card.unk08;
+		monCards.push(card);
 	}
 
 	//加入自定义的语言
@@ -86,7 +97,6 @@ officialAPI.forEach(function(lang) {
 	const oSkills = lang.skillOriginal = skillJsonObj.skill;//将字符串转换为json对象
 	lang.skills = oSkills.map((oc,idx)=>new Skill(idx,oc)); //每一项生成分析对象
 
-	
 	lang.cards.forEach((m,idx,arr)=>{
 		const skill = lang.skills[m.activeSkillId];
 		let henshinTo = null;
@@ -104,6 +114,10 @@ officialAPI.forEach(function(lang) {
 			arr[henshinTo].henshinFrom = idx;
 		}
 	});
+
+	const eskillJson = fs.readFileSync("official-API/" + lang.code +"-enemy_skill.json", 'utf-8'); //使用同步读取技能
+	const eskillJsonObj = JSON.parse(eskillJson);
+	lang.enemy_skills = eskillJsonObj.enemy_skills;
 });
 
 //加入其他服务器相同角色的名字
@@ -214,6 +228,14 @@ var newCkeyObjs = officialAPI.map(lang=>{
 			console.error(err);
 		}
 		console.log(`skill_${lcode}.json 导出成功`);
+	});
+	const enemy_skillsStr = lang.enemy_skills;
+	//写入Skills
+	fs.writeFile(`./enemy_skills_${lcode}.json`,enemy_skillsStr,function(err){
+		if(err){
+			console.error(err);
+		}
+		console.log(`enemy_skills_${lcode}.json 导出成功`);
 	});
 
 	const cardHash = crypto.createHash('md5');

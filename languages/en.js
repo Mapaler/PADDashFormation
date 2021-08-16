@@ -87,7 +87,11 @@
 			power_up_targets: tp`[${'attrs_types'}]'s `, //attrs, types, attrs_types
             henshin: tp`Transforms into ${'card'}`,
 			void_poison: tp`Voids ${'poison'} damage`,
-			skill_proviso: tp`The follow-up effect can only be initiated ${'condition'}`,
+			skill_proviso: tp`The follow-up effect can only be activates ${'condition'}`,
+			obstruct_opponent: tp`Apply obstruct skill effect to ${'target'}: ${'skills'}`,
+			obstruct_opponent_after_me: tp`The opponent ranked lower than me`,
+			obstruct_opponent_before_me: tp`The opponent ranked higher than me`,
+			obstruct_opponent_designated_position: tp`No.${'positions'} ranked opponents`,
 		},
 		power: {
             unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -178,7 +182,7 @@
 			in_once: tp`in onece `,
 			evo_type_pixel: tp`Pixel Evo`,
 			evo_type_reincarnation: tp`Reinc. or Super Reinc. Evo`,
-			evo_type_unknow: tp`Unknown Evo`,
+			evo_type_unknow: tp`Unknown Evo: ${'type'}`,
 			affix_attr: tp`${'cotent'} attr.`,
 			affix_orb: tp`${'cotent'} orbs`,
 			affix_type: tp`${'cotent'} types`,
