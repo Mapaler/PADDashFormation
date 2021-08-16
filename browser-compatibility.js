@@ -15,7 +15,7 @@ if (needUpdateBrowser)
 		if (regRes = /(Firefox|Chrome)\/([\d\.]+)/ig.exec(navigator.userAgent))
 		{
 			return `${regRes[1]} ${regRes[2]}`;
-		}else if (regRes = /Version\/([\d\.]+)\s+(Safari)\//ig.exec(navigator.userAgent))
+		}else if (regRes = /Version\/([\d\.]+)\s+.*(\bSafari)\//ig.exec(navigator.userAgent))
 		{
 			return `${regRes[2]} ${regRes[1]}`;
 		}else
@@ -30,6 +30,6 @@ ${browserVersion}
 您的浏览器不支持 可选链操作符(?.) 和 空值合并操作符(??)。
 Your browser does not support Optional chaining (?.) and Nullish coalescing operator (??).
 
-请更新您的浏览器到 火狐 ≥ 74 或 谷歌 ≥ 80。
-Please update your browser to Firefox ≥ 74 or Chrome ≥ 80.`);
+请更新您的浏览器到 火狐 ≥ 74 或 谷歌 ≥ 80 或 苹果 ≥ 13.1。
+Please update your browser to Firefox ≥ 74 or Chrome ≥ 80 or Safari ≥ 13.1.`);
 }
