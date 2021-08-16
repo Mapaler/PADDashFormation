@@ -107,8 +107,8 @@ Please refer to existing files.
 > 卡片中文名、中文分类来自于[Puzzle & Dragons 戰友系統及資訊網](https://pad.skyozora.com/)
 
 # 使用开源软件 | Open source software used
+* [pad-rikuu](//github.com/kiootic/pad-rikuu) //Data structure and parser
 * [Puzzle-and-Dragons-Texture-Tool](//github.com/codywatts/Puzzle-and-Dragons-Texture-Tool) //Extract Images
-* [pad-rikuu](//github.com/kiootic/pad-rikuu) //Parse data
 * [zxing-js](//github.com/zxing-js/library) //Read, Write QR Code
 * [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
 * [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
