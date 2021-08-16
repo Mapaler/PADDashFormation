@@ -943,8 +943,8 @@ const specialSearchFunctions = (function() {
 		}
 		else if(skill.type == 50 || skill.type == 90)
 		{
-			outObj.attrs = sk.slice(1, skill.type == 50 ? 2 : 3);
-			if (outObj.attrs.includes(5))  //去除回复力
+			outObj.attrs = sk.slice(1, skill.type == 50 ? 2 : 3).filter(a=>a !== 5);
+			if (!outObj.attrs.length)  //去除回复力
 				return outObj;
 			outObj.skilltype = 2;
 			outObj.turns = sk[0];
