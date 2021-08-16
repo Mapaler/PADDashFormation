@@ -669,15 +669,6 @@ function turnPage(toPage, e = null) {
 	}
 }
 window.onload = function(event) {
-	if (!Array.prototype.flat)
-	{
-		alert(`请更新您的浏览器。火狐≥62 或 谷歌≥69
-Please update your browser. Firefox≥62 or Chrome≥69
-
-你的浏览器:
-Your browser:
-${navigator.userAgent}`);
-	}
 
 	qrcodeReader = new ZXing.BrowserQRCodeReader(); //二维码读取
 	qrcodeWriter = new ZXing.BrowserQRCodeSvgWriter(); //二维码生成
