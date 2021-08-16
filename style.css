@@ -1508,10 +1508,7 @@ icon.inflicts::after
 .attrs-div .attr-list>li>label
 {
 	width: 55px;
-	height: 32px;
-	line-height:32px;
 	text-align: center;
-	vertical-align: middle;
 }
 .attrs-div .attr-list input:checked+label,
 .qr-data-type-ul>li input:checked+label
@@ -3182,6 +3179,8 @@ table .orb-icon
 	background-repeat: no-repeat;
 }
 .icon-skill,
+.attr-list .attr,
+.skill-datail-parsed icon.attr,
 .skill-datail-parsed icon.orb,
 .skill-datail-parsed icon.type,
 .skill-datail-parsed icon.awoken-icon
