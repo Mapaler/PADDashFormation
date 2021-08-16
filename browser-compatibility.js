@@ -12,10 +12,10 @@ if (needUpdateBrowser)
 {
 	let browserVersion = ((UA)=>{
 		let regRes;
-		if (regRes = /(Firefox|Chrome)\/([\d\.]+)/ig.exec(navigator.userAgent))
+		if (regRes = /\b(Firefox|Chrome)\/([\d\.]+)/ig.exec(navigator.userAgent))
 		{
 			return `${regRes[1]} ${regRes[2]}`;
-		}else if (regRes = /Version\/([\d\.]+)\s+.*(\bSafari)\//ig.exec(navigator.userAgent))
+		}else if (regRes = /\bVersion\/([\d\.]+)\s+.*\b(Safari)\//ig.exec(navigator.userAgent))
 		{
 			return `${regRes[2]} ${regRes[1]}`;
 		}else
