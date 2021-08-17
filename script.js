@@ -1430,32 +1430,36 @@ function initialize() {
 				console.error(err);
 				if (err) {
 					if (err instanceof ZXing.NotFoundException) {
-						console.debug('Try crop PDC original QR', result);
-						let cavansWidth = 300, cavansHeight = 300;
+						console.debug('Try crop PDC original QR');
+						let cropLeft = 0, cropTop = 0, cropWidth = 300, cropHeight = 300, //裁剪尺寸
+							scale = 3, //放大倍率
+							extraLeft = 100, extraTop = 100, extraRight = 100, extraBottom = 100; //额外增加的宽度
 						let cavans = document.createElement("canvas");
-						cavans.width = cavansWidth;
-						cavans.height = cavansHeight;
+						cavans.width = cropWidth * scale + extraLeft + extraRight;
+						cavans.height = cropHeight * scale + extraTop + extraBottom;
 						let ctx = cavans.getContext('2d');
-			
 						ctx.fillStyle="white";
-						ctx.fillRect(0, 0, cavansWidth, cavansHeight)
-						ctx.drawImage(img, 0, 0, cavansWidth, cavansHeight, 0, 0, cavansWidth, cavansHeight);
-						qrcodeReader.decodeFromImageUrl(cavans.toDataURL()).then((result) => {
-							console.debug('Found QR code!', result);
-							qrReadBox.qrStr.value = result.text;
+						ctx.fillRect(0, 0, cavans.width, cavans.height);
+
+						ctx.drawImage(img, cropLeft, cropTop, cropWidth, cropHeight, extraLeft, extraTop, cropWidth * scale, cropHeight * scale);
+						//qrReadBox.appendChild(cavans);
+
+						qrcodeReader.decodeFromImageUrl(cavans.toDataURL()).then((result2) => {
+							console.debug('Found QR code!', result2);
+							qrReadBox.qrStr.value = result2.text;
 							qrReadBox.readString.onclick();
-						}).catch((err) => {
-							console.error(err);
-							if (err) {
+						}).catch((err2) => {
+							console.error(err2);
+							if (err2) {
 								if (err instanceof ZXing.NotFoundException) {
 									qrReadBox.info.textContent = 'No QR code found.';
 								}
 					
-								if (err instanceof ZXing.ChecksumException) {
+								if (err2 instanceof ZXing.ChecksumException) {
 									qrReadBox.info.textContent = 'A code was found, but it\'s read value was not valid.';
 								}
 					
-								if (err instanceof ZXing.FormatException) {
+								if (err2 instanceof ZXing.FormatException) {
 									qrReadBox.info.textContent = 'A code was found, but it was in a invalid format.';
 								}
 							}
