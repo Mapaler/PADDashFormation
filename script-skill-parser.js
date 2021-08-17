@@ -1731,13 +1731,55 @@ function renderSkill(skill, option = {})
 		case SkillKinds.Unbind: { //解封
 			let normal = skill.normal, awakenings = skill.awakenings, matches = skill.matches;
 			let effects = [];
-			if (normal)
-				effects.push(tsp.skill.unbind_normal({icon: createIcon("unbind-normal"), turns: normal}));
-			if (awakenings)
-				effects.push(tsp.skill.unbind_awakenings({icon: createIcon("unbind-awakenings"), turns: awakenings}));
-			if (matches)
-				effects.push(tsp.skill.unbind_matches({icon: createIcon("unbind-matches"), turns: matches}));
-			frg.ap(effects.nodeJoin(tsp.word.comma()));
+			let enabledStats = [normal, awakenings, matches].filter(Boolean);
+			if (merge_skill && enabledStats.length >= 2 && enabledStats.every((s,i,arr)=>s==arr[0]))
+			{
+				if (normal)
+				{
+					effects.push(tsp.skill.unbind_normal({icon: createIcon("unbind-normal")}));
+				}
+				if (awakenings)
+				{
+					effects.push(tsp.skill.unbind_awakenings({icon: createIcon("unbind-awakenings")}));
+				}
+				if (matches)
+				{
+					effects.push(tsp.skill.unbind_matches({icon: createIcon("unbind-matches")}));
+				}
+				let dict = {
+					turns: enabledStats[0],
+					stats: effects.nodeJoin(tsp.word.slight_pause()),
+				}
+				frg.ap(tsp.skill.unbind(dict));
+			}
+			else
+			{
+				if (normal)
+				{
+					let dict = {
+						turns: normal,
+						stats: tsp.skill.unbind_normal({icon: createIcon("unbind-normal")}),
+					}
+					effects.push(tsp.skill.unbind(dict));
+				}
+				if (awakenings)
+				{
+					let dict = {
+						turns: awakenings,
+						stats: tsp.skill.unbind_awakenings({icon: createIcon("unbind-awakenings")}),
+					}
+					effects.push(tsp.skill.unbind(dict));
+				}
+				if (matches)
+				{
+					let dict = {
+						turns: matches,
+						stats: tsp.skill.unbind_matches({icon: createIcon("unbind-matches")}),
+					}
+					effects.push(tsp.skill.unbind(dict));
+				}
+				frg.ap(effects.nodeJoin(tsp.word.comma()));
+			}
 			break;
 		}
 		case SkillKinds.BindSkill: {
