@@ -1245,7 +1245,7 @@ function pdcFotmationToPdfFotmation(inputString)
 }
 //截图
 function capture() {
-	statusLine.classList.add("prepare-cauture");
+	statusLine.classList.add("prepare-capture");
 	const titleBox = formationBox.querySelector(".title-box");
 	const detailBox = formationBox.querySelector(".detail-box");
 	const txtTitle = titleBox.querySelector(".title");
@@ -1258,9 +1258,9 @@ function capture() {
 		canvas.toBlob(function(blob) {
 			window.URL.revokeObjectURL(downLink.href);
 			downLink.href = URL.createObjectURL(blob);
-			downLink.download = `${teamsCount}P formation cauture.png`;
+			downLink.download = `${document.title}.png`;
 			downLink.click();
-			statusLine.classList.remove("prepare-cauture");
+			statusLine.classList.remove("prepare-capture");
 			//如果是空白文字，加回编辑状态
 			if (txtTitle.value.length == 0)
 				titleBox.classList.add("edit");
