@@ -1,6 +1,6 @@
 ﻿let needUpdateBrowser = (()=>{
 	try {
-		return !Boolean(eval("undefined ?? true"));
+		return !Boolean(eval("undefined?.undefined?.undefined ?? true"));
 	} catch (e) {
 		if (e.name !== 'SyntaxError') throw e // Throw the error if it is not a SyntaxError
 		return true;
