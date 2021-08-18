@@ -9,7 +9,7 @@
 .status.loading-skill-info .text::before{
 	content: "Loading skill data, please wait...";
 }
-.status.prepare-cauture .text::before{
+.status.prepare-capture .text::before{
 	content: "Preparing a screenshot, please wait...";
 }
 .delay .monster::before{

@@ -9,7 +9,7 @@
 .status.loading-skill-info .text::before{
 	content: "기술 데이터를 로드 하 고 있습니다.";
 }
-.status.prepare-cauture .text::before{
+.status.prepare-capture .text::before{
 	content: "스크린 샷을 준비 하 고 있습니다.";
 }
 .delay .monster::before{

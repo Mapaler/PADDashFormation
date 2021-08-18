@@ -4365,6 +4365,20 @@ function refreshMemberSkillCD(teamDom, team, idx) {
 	}
 }
 
+//按住Ctrl点击技能在控制台输出技能的对象
+function fastShowSkill(event) {
+	const skillId = parseInt(this.getAttribute("data-skillid"), 10); //获得当前技能ID
+	if (event.ctrlKey) {
+		const skillId = parseInt(this.getAttribute("data-skillid"), 10);
+		console.debug(Skills[skillId]);
+		return;
+	};
+	const s_cards = Cards.filter(card => card.activeSkillId === skillId || card.leaderSkillId === skillId); //搜索同技能怪物
+	if (s_cards.length > 1) {
+		showSearch(s_cards); //显示
+	}
+}
+
 function localisation($tra) {
 	if (!$tra) return;
 	document.title = $tra.webpage_title;

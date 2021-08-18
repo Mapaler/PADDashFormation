@@ -8,7 +8,7 @@
 .status.loading-skill-info .text::before{
 	content: "スキル データを読み込んでいます。";
 }
-.status.prepare-cauture .text::before{
+.status.prepare-capture .text::before{
 	content: "スクリーンショットを準備しています。";
 }
 .delay .monster::before{

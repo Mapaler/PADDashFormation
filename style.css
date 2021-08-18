@@ -185,7 +185,7 @@ input:checked+ .config-checkbox-lbl[for$=and-or]::after{
 .status.loading-check-version .icon,
 .status.loading-mon-info .icon,
 .status.loading-skill-info .icon,
-.status.prepare-cauture .icon
+.status.prepare-capture .icon
 {
 	display: inline-block;
 	width: 16px;
@@ -2468,11 +2468,14 @@ icon.inflicts::after
 	color: #84BAFC;
 	cursor: pointer;
 }
-.row-mon-skill .skill-title .skill-name:hover::after{
-	content: "🔍";
-}
 .row-mon-leader-skill .skill-title .skill-name{
 	color: #85FD80;
+	cursor: pointer;
+}
+.row-mon-skill .skill-title .skill-name:hover::after,
+.row-mon-leader-skill .skill-title .skill-name:hover::after
+{
+	content: "🔍";
 }
 .skill-box .skill-cd-control,
 .skill-box .skill-parse-control

@@ -9,7 +9,7 @@
 .status.loading-skill-info .text::before{
 	content: "正在載入技能数据，请稍候……";
 }
-.status.prepare-cauture .text::before{
+.status.prepare-capture .text::before{
 	content: "正在准備截圖，請稍後……";
 }
 .help-link::before{
