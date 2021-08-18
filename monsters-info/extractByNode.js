@@ -115,9 +115,9 @@ officialAPI.forEach(function(lang) {
 		}
 	});
 
-	const eskillJson = fs.readFileSync("official-API/" + lang.code +"-enemy_skill.json", 'utf-8'); //使用同步读取技能
-	const eskillJsonObj = JSON.parse(eskillJson);
-	lang.enemy_skills = eskillJsonObj.enemy_skills;
+	//const eskillJson = fs.readFileSync("official-API/" + lang.code +"-enemy_skill.json", 'utf-8'); //使用同步读取技能
+	//const eskillJsonObj = JSON.parse(eskillJson);
+	//lang.enemy_skills = eskillJsonObj.enemy_skills;
 });
 
 //加入其他服务器相同角色的名字
@@ -229,14 +229,14 @@ var newCkeyObjs = officialAPI.map(lang=>{
 		}
 		console.log(`skill_${lcode}.json 导出成功`);
 	});
-	const enemy_skillsStr = lang.enemy_skills;
-	//写入Skills
-	fs.writeFile(`./enemy_skills_${lcode}.json`,enemy_skillsStr,function(err){
-		if(err){
-			console.error(err);
-		}
-		console.log(`enemy_skills_${lcode}.json 导出成功`);
-	});
+	//const enemy_skillsStr = lang.enemy_skills;
+	//写入enemy_skills
+	//fs.writeFile(`./enemy_skills_${lcode}.json`,enemy_skillsStr,function(err){
+	//	if(err){
+	//		console.error(err);
+	//	}
+	//	console.log(`enemy_skills_${lcode}.json 导出成功`);
+	//});
 
 	const cardHash = crypto.createHash('md5');
 	const skillHash = crypto.createHash('md5');
