@@ -27,8 +27,8 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 `git clone` to your *http* service directory for visited, and `git pull` for future updates.
 
 ## 下载后使用本地版 | Use the local version after downloaded
-[下载压缩包](archive/refs/heads/master.zip)或`git clone`后使用浏览器打开`index.html`。  
-[Download ZIP](archive/refs/heads/master.zip) or `git clone`, and open the `index.html` with Browser.
+[下载压缩包](../../archive/refs/heads/master.zip)或`git clone`后使用浏览器打开`index.html`。  
+[Download ZIP](../../archive/refs/heads/master.zip) or `git clone`, and open the `index.html` with Browser.
 * 火狐68.0及以后需要在`about:config`设定`privacy.file_unique_origin`为`false`。  
 Firefox 68.0 or above need setting the `privacy.file_unique_origin` to `false` in `about:config`.
 * Chrome需要添加`--allow-file-access-from-files`启动参数。  
