@@ -23,8 +23,8 @@ if (needUpdateBrowser)
 			navigator.userAgent;
 		}
 	})(navigator.userAgent);
-	
-alert(`🙁浏览器内核版本太老 | Browser kernel is too old
+
+let alertStr = `🙁浏览器内核版本太老 | Browser kernel is too old
 您的浏览器版本为 | Your browser is:
 ${browserVersion}
 
@@ -32,5 +32,7 @@ ${browserVersion}
 Your browser does not support Optional chaining (?.) and Nullish coalescing operator (??) used in this program.
 
 请更新您的浏览器到 Firefox(火狐) ≥ 74 或 Chrome(谷歌) ≥ 80 或 Safari(苹果) ≥ 13.1。
-Please update your browser to Firefox ≥ 74 or Chrome ≥ 80 or Safari ≥ 13.1.`);
+Please update your browser to Firefox ≥ 74 or Chrome ≥ 80 or Safari ≥ 13.1.`;
+alert(alertStr);
+document.write(alertStr.replace(/\n/g,'<br />'));
 }
