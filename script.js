@@ -3717,10 +3717,11 @@ function editBoxChangeMonId(id) {
 //刷新整个队伍
 function refreshAll(formationData) {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-	const titleBox = fragment.appendChild(formationBox.querySelector(".title-box"));
+	const titleBox = formationBox.querySelector(".title-box");
 	const detailBox = formationBox.querySelector(".detail-box");
 	const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 	const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
+	const dungeonEnchanceDom = formationBox.querySelector(".dungeon-enchance"); //地下城强化
 
 	while (formationBox.childNodes.length > 0) {
 		fragment.appendChild(formationBox.childNodes[0]);
@@ -3744,6 +3745,23 @@ function refreshAll(formationData) {
 		detailBox.classList.add("edit");
 	else
 		detailBox.classList.remove("edit");
+	
+	let dge = formationData.dungeonEnchance;
+	if (dge.rate !== 1)
+	{
+		dungeonEnchanceDom.innerHTML = '';
+		//if (formationData.dungeonEnchance.attrs.length) dungeonEnchanceDom.appendChild(renderAttrs(formationData.dungeonEnchance.attrs));
+		//if (formationData.dungeonEnchance.types.length) dungeonEnchanceDom.appendChild(renderTypes(formationData.dungeonEnchance.types));
+	let rate = dge.rate * 100;
+		let skill = powerUp(dge.attrs, dge.types, p.mul({hp: rate, atk: rate, rcv: rate}));
+		dungeonEnchanceDom.appendChild(renderSkill(skill));
+		//tsp.skill.reduce_damage(dict)
+		//dungeonEnchanceDom.appendChild(renderTypes(formationData.dungeonEnchance.types));
+		dungeonEnchanceDom.classList.remove(className_displayNone);
+	}else
+	{
+		dungeonEnchanceDom.classList.add(className_displayNone);
+	}
 
 	teamBigBoxs.forEach((teamBigBox, teamNum) => {
 		const teamBox = teamBigBox.querySelector(".team-box");

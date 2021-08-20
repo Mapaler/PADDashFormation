@@ -729,7 +729,7 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 		let hp2 = hp = Math.round(hp * memberHpMul(card, ls1, memberArr, solo)); //我方队长技
 
 		//演示用代码
-		console.log("%s 第1次倍率血量：%s，第2次倍率血量：%s",Cards[m.id].otLangName["chs"],hp1,hp2);
+		//console.log("%s 第1次倍率血量：%s，第2次倍率血量：%s",Cards[m.id].otLangName["chs"],hp1,hp2);
 				
 		return hp;
 
