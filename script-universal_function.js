@@ -104,6 +104,18 @@ Array.prototype.DeleteLatter = function(item = null) {
 Array.prototype.randomShift = function() {
 	return this.splice(Math.random() * this.length, 1)?.[0];
 }
+//数组分组函数，用法：array.groupBy((a,b)=>a.type === b.type)
+Array.prototype.groupBy = function(func) {
+	const groups = this.reduce((pre,cur)=>{
+		const grp = pre.find(grp=>grp?.[0] && func(grp?.[0], cur));
+		if (grp)
+			grp.push(cur);
+		else
+			pre.push([cur]);
+		return pre;
+	}, []);
+	return groups;
+}
 
 Math.randomInteger = function(max, min = 0) {
 	return this.floor(this.random() * (max - min + 1) + min);

@@ -408,6 +408,34 @@ function skillParser(skillId)
 		let skillPowerUp = skills.filter(skill=>skill.kind == SkillKinds.PowerUp);
 		if (skillPowerUp.length>1)
 		{
+			//合并技能效果
+			function combinePowerUp(target, source) {
+				if (source?.additional.length)
+				{
+					if (!Array.isArray(target.additional)) target.additional = [];
+					for (let additional of source.additional)
+					{
+						target.additional.push(additional);
+					}
+				}
+				if (source.reduceDamage != undefined)
+				{
+					if (!target.reduceDamage)
+						target.ReduceDamage = source.reduceDamage;
+					else if (target.reduceDamage.kind === source.reduceDamage.kind)
+						target.reduceDamage.value *= source.reduceDamage.value;
+				}
+				if (target?.value.baseAtk != undefined && source?.value.baseAtk) target.value.baseAtk *= source.value.baseAtk;
+				if (target?.value.baseRcv != undefined && source?.value.baseRcv != undefined) target.value.baseRcv *= source.value.baseRcv;
+
+				if (target?.value.bonusAtk != undefined && source?.value.bonusAtk != undefined) target.value.bonusAtk += source.value.bonusAtk;
+				if (target?.value.bonusRcv != undefined && source?.value.bonusRcv != undefined) target.value.bonusRcv += source.value.bonusRcv;
+
+				if (target?.value.atk != undefined && source?.value.atk != undefined) target.value.atk += source.value.atk;
+				if (target?.value.hp != undefined && source?.value.hp != undefined) target.value.hp += source.value.hp;
+				if (target?.value.rcv != undefined && source?.value.rcv != undefined) target.value.rcv += source.value.rcv;
+			}
+
 			//十字
 			let scaleCross = skillPowerUp.filter(skill=>skill.value.kind === SkillPowerUpKind.ScaleCross);
 			function mergeScaleCrossAttr(skill)
@@ -461,14 +489,7 @@ function skillParser(skillId)
 			if (scaleCross.length > 1)
 			{ //把后面的全都合并到第一个
 				scaleCross.reduce((pre,cur)=>{
-					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
-					if (cur.reduceDamage)
-					{
-						if (!pre.reduceDamage)
-							pre.ReduceDamage = cur.reduceDamage;
-						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
-						pre.reduceDamage.value *= cur.reduceDamage.value;
-					}
+					combinePowerUp(pre, cur);
 					return pre
 				});
 				scaleCross.shift(); //从筛选中去除第一个
@@ -476,39 +497,30 @@ function skillParser(skillId)
 			}
 
 			//长串匹配
-			let scaleMatchLength = skillPowerUp.filter(skill=>skill.value.kind === SkillPowerUpKind.ScaleMatchLength);	
-			scaleMatchLength = scaleMatchLength.filter((skill,idx,arr)=>{
-				let s0 = arr[0];
-				let v0 = s0.value;
-				let v1 = skill.value;
-				return isEqual(skill.condition, s0.condition) &&
-				isEqual(skill.attrs, s0.attrs) &&
-				isEqual(skill.types, s0.types) &&
-				v0.min === v1.min &&
-				v0.max === v1.max &&
-				(v0.matchAll === v1.matchAll || v0.attrs.length <= 1) && isEqual(v0.attrs, v1.attrs)
+			let scaleMatchLength = skillPowerUp.filter(skill=>skill.value.kind === SkillPowerUpKind.ScaleMatchLength);
+			scaleMatchLength = scaleMatchLength.groupBy((a,b)=>{
+				let av = a.value;
+				let bv = b.value;
+
+				return isEqual(a.condition, b.condition) &&
+				isEqual(a.attrs, b.attrs) &&
+				isEqual(a.types, b.types) &&
+				av.min === bv.min &&
+				av.max === bv.max &&
+				(av.matchAll === bv.matchAll || av.attrs.length <= 1) && isEqual(av.attrs, bv.attrs)
 				;
 			});
-
-			if (scaleMatchLength.length > 1)
-			{ //把后面的全都合并到第一个
-				scaleMatchLength.reduce((pre,cur)=>{
-					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
-					if (cur.reduceDamage)
-					{
-						if (!pre.reduceDamage)
-							pre.ReduceDamage = cur.reduceDamage;
-						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
-						pre.reduceDamage.value *= cur.reduceDamage.value;
-					}
-					if (cur.value.baseAtk !== 1) pre.value.baseAtk *= cur.value.baseAtk;
-					if (cur.value.baseRcv !== 1) pre.value.baseRcv *= cur.value.baseRcv;
-					pre.value.bonusAtk += cur.value.bonusAtk;
-					pre.value.bonusRcv += cur.value.bonusRcv;
-					return pre
-				});
-				scaleMatchLength.shift(); //从筛选中去除第一个
-				scaleMatchLength.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+			for (let group of scaleMatchLength)
+			{
+				if (group.length > 1)
+				{ //把后面的全都合并到第一个
+					group.reduce((pre,cur)=>{
+						combinePowerUp(pre, cur);
+						return pre
+					});
+					group.shift(); //从筛选中去除第一个
+					group.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+				}
 			}
 			
 			//多串匹配
@@ -529,18 +541,7 @@ function skillParser(skillId)
 			if (scaleMatchAttrs.length > 1)
 			{ //把后面的全都合并到第一个
 				scaleMatchAttrs.reduce((pre,cur)=>{
-					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
-					if (cur.reduceDamage)
-					{
-						if (!pre.reduceDamage)
-							pre.ReduceDamage = cur.reduceDamage;
-						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
-						pre.reduceDamage.value *= cur.reduceDamage.value;
-					}
-					if (cur.value.baseAtk !== 1) pre.value.baseAtk *= cur.value.baseAtk;
-					if (cur.value.baseRcv !== 1) pre.value.baseRcv *= cur.value.baseRcv;
-					pre.value.bonusAtk += cur.value.bonusAtk;
-					pre.value.bonusRcv += cur.value.bonusRcv;
+					combinePowerUp(pre, cur);
 					return pre
 				});
 				scaleMatchAttrs.shift(); //从筛选中去除第一个
@@ -565,18 +566,7 @@ function skillParser(skillId)
 			if (scaleAttributes.length > 1)
 			{ //把后面的全都合并到第一个
 				scaleAttributes.reduce((pre,cur)=>{
-					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
-					if (cur.reduceDamage)
-					{
-						if (!pre.reduceDamage)
-							pre.ReduceDamage = cur.reduceDamage;
-						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
-						pre.reduceDamage.value *= cur.reduceDamage.value;
-					}
-					if (cur.value.baseAtk !== 1) pre.value.baseAtk *= cur.value.baseAtk;
-					if (cur.value.baseRcv !== 1) pre.value.baseRcv *= cur.value.baseRcv;
-					pre.value.bonusAtk += cur.value.bonusAtk;
-					pre.value.bonusRcv += cur.value.bonusRcv;
+					combinePowerUp(pre, cur);
 					return pre
 				});
 				scaleAttributes.shift(); //从筛选中去除第一个
@@ -600,18 +590,7 @@ function skillParser(skillId)
 			if (scaleCombos.length > 1)
 			{ //把后面的全都合并到第一个
 				scaleCombos.reduce((pre,cur)=>{
-					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
-					if (cur.reduceDamage)
-					{
-						if (!pre.reduceDamage)
-							pre.ReduceDamage = cur.reduceDamage;
-						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
-						pre.reduceDamage.value *= cur.reduceDamage.value;
-					}
-					if (cur.value.baseAtk !== 1) pre.value.baseAtk *= cur.value.baseAtk;
-					if (cur.value.baseRcv !== 1) pre.value.baseRcv *= cur.value.baseRcv;
-					pre.value.bonusAtk += cur.value.bonusAtk;
-					pre.value.bonusRcv += cur.value.bonusRcv;
+					combinePowerUp(pre, cur);
 					return pre
 				});
 				scaleCombos.shift(); //从筛选中去除第一个
@@ -633,17 +612,7 @@ function skillParser(skillId)
 			if (multiplier.length)
 			{ //把后面的全都合并到第一个
 				multiplier.reduce((pre,cur)=>{
-					if (cur.additional?.length) pre.additional = pre.additional.concat(cur.additional);
-					if (cur.reduceDamage)
-					{
-						if (!pre.reduceDamage)
-							pre.ReduceDamage = cur.reduceDamage;
-						else if (pre.reduceDamage.kind == cur.reduceDamage.kind)
-						pre.reduceDamage.value *= cur.reduceDamage.value;
-					}
-					pre.value.atk *= cur.value.atk;
-					pre.value.hp *= cur.value.hp;
-					pre.value.rcv *= cur.value.rcv;
+					combinePowerUp(pre, cur);
 					return pre
 				});
 				multiplier.shift(); //从筛选中去除第一个
@@ -811,10 +780,17 @@ const p = {
         return { kind: SkillPowerUpKind.ScaleCombos ,...this.scale(min, max, baseMul, bonusMul) };
     },
     scaleMatchLength: function (attrs, min, max, baseMul, bonusMul, matchAll = false) {
+		/*if (min <= 3 && min === max)
+        	return this.scaleAttrs(attrs, matchAll ? attrs.length : 1, matchAll ? attrs.length : 1, baseMul, bonusMul);
+		else*/
         return { kind: SkillPowerUpKind.ScaleMatchLength, attrs: attrs, matchAll: matchAll ,...this.scale(min, max, baseMul, bonusMul) };
     },
     scaleMatchAttrs: function (matches, min, max, baseMul, bonusMul) {
-        return { kind: SkillPowerUpKind.ScaleMatchAttrs, matches: matches ,...this.scale(min, max, baseMul, bonusMul) };
+		const flatMatches = matches.flat(); //当匹配的全是不同颜色时，切换成匹配颜色的技能
+		if (new Set(flatMatches).size === flatMatches.length)
+        	return this.scaleAttrs(matches, min, max, baseMul, bonusMul);
+		else
+        	return { kind: SkillPowerUpKind.ScaleMatchAttrs, matches: matches ,...this.scale(min, max, baseMul, bonusMul) };
     },
     scaleCross: function (crosses) {
         return { kind: SkillPowerUpKind.ScaleCross, crosses: crosses.map(cross => ({ ...cross, atk: ((cross.atk ?? 100) / 100), rcv: ((cross.rcv ?? 100) / 100)})) };
@@ -1482,7 +1458,6 @@ function renderSkillEntry(skills)
 					}
 					case SkillKinds.GenerateOrbs: { //产生珠子
 						let orbs = skill.orbs, exclude = skill.exclude, count = skill.count;
-						console.log(orbs)
 						board.generateOrbs(orbs, count, exclude);
 						break;
 					}
