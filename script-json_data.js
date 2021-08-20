@@ -496,7 +496,7 @@ const sort_function_list = [
 	{tag:"sort_atkMax110",name:"Lv110最大攻击",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
 	{tag:"sort_rcvMax110",name:"Lv110最大回复",function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
 	
-	{tag:"sort_hpMax110_awoken",name:"Lv110最大攻击(+觉醒)",function:(a,b)=>
+	{tag:"sort_atkMax110_awoken",name:"Lv110最大攻击(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
@@ -514,7 +514,7 @@ const sort_function_list = [
 			return abA - abB;
 		}
 	},
-	{tag:"sort_hpMax110_awoken",name:"Lv110最大回复(+觉醒)",function:(a,b)=>
+	{tag:"sort_rcvMax110_awoken",name:"Lv110最大回复(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
 				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
