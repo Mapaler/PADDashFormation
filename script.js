@@ -249,6 +249,11 @@ var Formation = function(teamCount, memberCount) {
 	this.title = "";
 	this.detail = "";
 	this.teams = [];
+	this.dungeonEnchance = {
+		attrs: [],
+		types: [],
+		rate: 1,
+	}
 	for (let ti = 0; ti < teamCount; ti++) {
 		const team = [
 			[], //队员
@@ -279,6 +284,11 @@ Formation.prototype.outObj = function() {
 		if (t[3]) teamArr[3] = t[3];
 		return teamArr;
 	});
+	if (this.dungeonEnchance.rate != 1) obj.r = [
+		this.dungeonEnchance.rate, //比例
+		reflags(this.dungeonEnchance.types) //优先添加Type
+	];
+	if (this.dungeonEnchance.attrs.length) obj.r.push(reflags(this.dungeonEnchance.attrs)); //有Attr.才添加
 	obj.v = dataStructure;
 	/*if (obj.f.every(team=>team[0].length == 0 && team[1].length == 0 && team[2] == undefined) &&
 	!obj.t &&
@@ -301,6 +311,9 @@ Formation.prototype.loadObj = function(f) {
 				t[2] = 0;
 				t[3] = 0;
 		});
+		this.dungeonEnchance.rate = 1;
+		this.dungeonEnchance.attrs.length = 0;
+		this.dungeonEnchance.types.length = 0;
 		return;
 	}
 	const dataVeision = f.v ? f.v : (f.f ? 2 : 1); //是第几版格式
@@ -322,6 +335,12 @@ Formation.prototype.loadObj = function(f) {
 			t[3] = tf[3] || 0; //队长
 		}
 	});
+	if (f.r)
+	{
+		this.dungeonEnchance.rate = f.r[0] ?? 1;
+		this.dungeonEnchance.types = flags(f.r[1] ?? 0);
+		this.dungeonEnchance.attrs = flags(f.r[2] ?? 0);
+	}
 	if (f.b)
 		this.teams[0][2] = f.b; //原来模式的徽章
 };

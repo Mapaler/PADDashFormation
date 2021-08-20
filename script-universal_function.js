@@ -131,6 +131,10 @@ function flags(num) {
 	}
 	return arr;
 }
+//将二进制flag转为数组
+function reflags(arr) {
+	return arr.reduce((pre,cur)=>pre | 1 << cur, 0);
+}
 
 //带标签的模板字符串
 function tp(strings, ...keys) {
@@ -464,8 +468,16 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		reValue = reValue * latterAwokenScale[idx].reduce(calculateAwokenScale, 1);
 
 		//都要做四舍五入
-		reValue = Math.round(reValue);
-		reValueNoAwoken = Math.round(reValueNoAwoken);
+		if (formation.dungeonEnchance.rate !== 1)
+		{
+			let rate = (memberCard.attrs.some(attr=>formation.dungeonEnchance.attrs.includes(attr)) || memberCard.types.some(type=>formation.dungeonEnchance.types.includes(type))) ? formation.dungeonEnchance.rate : 1;
+			reValue = Math.round(reValue * rate);
+			reValueNoAwoken = Math.round(reValueNoAwoken * rate);
+		}else
+		{
+			reValue = Math.round(reValue);
+			reValueNoAwoken = Math.round(reValueNoAwoken);
+		}
 		if (idx < 2) //idx顺序为HP、ATK、RCV
 		{ //HP和ATK最低为1
 			reValue = Math.max(reValue, 1);
@@ -713,17 +725,12 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 		let hp = ability ? ability[0] : 0;
 		if (!hp) return 0;
 		const card = Cards[m.id] || Cards[0];
-		hp = hp1 = Math.round(hp * memberHpMul(card, ls2, memberArr, solo)); //战友队长技
-		hp = hp2 = Math.round(hp * memberHpMul(card, ls1, memberArr, solo)); //我方队长技
+		let hp1 = hp = Math.round(hp * memberHpMul(card, ls2, memberArr, solo)); //战友队长技
+		let hp2 = hp = Math.round(hp * memberHpMul(card, ls1, memberArr, solo)); //我方队长技
 
-		/* 演示用代码
-				let hp1,hp2;
-				hp1 = hp * memberHpMul(card,ls2,memberArr,solo); 
-				hp = Math.round(hp1);
-				hp2 = hp * memberHpMul(card,ls1,memberArr,solo); 
-				hp = Math.round(hp2);
-				console.log("%s 第1次倍率血量：%s(%s)，第2次倍率血量：%s(%s)",Cards[m.id].otLangName["chs"],Math.round(hp1),hp1,Math.round(hp2),hp2);
-				*/
+		//演示用代码
+		console.log("%s 第1次倍率血量：%s，第2次倍率血量：%s",Cards[m.id].otLangName["chs"],hp1,hp2);
+				
 		return hp;
 
 	});
