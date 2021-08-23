@@ -252,7 +252,11 @@ var Formation = function(teamCount, memberCount) {
 	this.dungeonEnchance = {
 		attrs: [],
 		types: [],
-		rate: 1,
+		rate: {
+			hp: 1,
+			atk: 1,
+			rcv: 1
+		}
 	}
 	for (let ti = 0; ti < teamCount; ti++) {
 		const team = [
@@ -284,11 +288,14 @@ Formation.prototype.outObj = function() {
 		if (t[3]) teamArr[3] = t[3];
 		return teamArr;
 	});
-	if (this.dungeonEnchance.rate != 1) obj.r = [
-		this.dungeonEnchance.rate, //比例
-		reflags(this.dungeonEnchance.types) //优先添加Type
+	let dge = this.dungeonEnchance;
+	if (Object.values(dge.rate).some(rate => rate != 1)) obj.r = [
+		reflags(dge.attrs), //属性
+		reflags(dge.types), //类型
+		dge.rate.hp,
+		dge.rate.atk,
+		dge.rate.rcv
 	];
-	if (this.dungeonEnchance.attrs.length) obj.r.push(reflags(this.dungeonEnchance.attrs)); //有Attr.才添加
 	obj.v = dataStructure;
 	/*if (obj.f.every(team=>team[0].length == 0 && team[1].length == 0 && team[2] == undefined) &&
 	!obj.t &&
@@ -297,6 +304,7 @@ Formation.prototype.outObj = function() {
 	return obj;
 };
 Formation.prototype.loadObj = function(f) {
+	let dge = this.dungeonEnchance;
 	if (f == undefined) //如果没有提供数据，要返回空的
 	{
 		this.title = "";
@@ -311,9 +319,11 @@ Formation.prototype.loadObj = function(f) {
 				t[2] = 0;
 				t[3] = 0;
 		});
-		this.dungeonEnchance.rate = 1;
-		this.dungeonEnchance.attrs.length = 0;
-		this.dungeonEnchance.types.length = 0;
+		dge.attrs.length = 0;
+		dge.types.length = 0;
+		dge.rate.hp = 1;
+		dge.rate.atk = 1;
+		dge.rate.rcv = 1;
 		return;
 	}
 	const dataVeision = f.v ? f.v : (f.f ? 2 : 1); //是第几版格式
@@ -337,9 +347,11 @@ Formation.prototype.loadObj = function(f) {
 	});
 	if (f.r)
 	{
-		this.dungeonEnchance.rate = f.r[0] ?? 1;
-		this.dungeonEnchance.types = flags(f.r[1] ?? 0);
-		this.dungeonEnchance.attrs = flags(f.r[2] ?? 0);
+		dge.attrs = flags(f.r[0] ?? 0);
+		dge.types = flags(f.r[1] ?? 0);
+		dge.rate.hp = f.r[2] ?? 1;
+		dge.rate.atk = f.r[3] ?? 1;
+		dge.rate.rcv = f.r[4] ?? 1;
 	}
 	if (f.b)
 		this.teams[0][2] = f.b; //原来模式的徽章
@@ -451,6 +463,7 @@ class EvoTree
 			//mid = Cards[mid].evoRootId;
 			function returnRootId(mid)
 			{
+				console.log(mid)
 				mid = Cards[mid].evoRootId;
 				const m = Cards[mid];
 				if (m.henshinFrom && m.henshinFrom < m.id)
@@ -1307,28 +1320,36 @@ function initialize() {
 			line.setAttribute("y2", p2.y);
 	};
 
+	//初始化所有mask的关闭按钮
+	const masks = document.body.querySelectorAll(".mask");
+	for (const mask of masks)
+	{
+		mask.show = function(arg){
+			this?.initialize?.(arg);
+			this.classList.remove(className_displayNone);
+		};
+		mask.btnClose = mask.querySelector(".mask-close");
+		mask.btnClose.onclick = function(){
+			mask?.hide?.();
+			mask.classList.add(className_displayNone);
+		};
+	}
 	const qrCodeFrame = document.body.querySelector("#qr-code-frame");
 	const btnQrCode = controlBox.querySelector(`.btn-qrcode`);
 	btnQrCode.onclick = function(){
 		qrCodeFrame.show();
 	};
-	qrCodeFrame.show = function(){
+	qrCodeFrame.initialize = function(){
 		const saveBox = this.content.saveBox;
 		const readBox = this.content.readBox;
 		readBox.info.textContent  = "";
 
 		readBox.videoBox.classList.add(className_displayNone);
-		this.classList.remove(className_displayNone);
 		
 		let qrTypeRadio = saveBox.qrDataType.find(radio=>radio.checked);
 		if (qrTypeRadio) qrTypeRadio.onclick(); //打开二维码窗口就先产生二维码
 	};
-	qrCodeFrame.hide = function(){
-		qrcodeReader.reset();
-		this.classList.add(className_displayNone);
-	};
-	qrCodeFrame.close = qrCodeFrame.querySelector(".mask-close");
-	qrCodeFrame.close.onclick = function(){qrCodeFrame.hide()};
+	qrCodeFrame.hide = function(){qrcodeReader.reset();};
 
 	const qrContent = qrCodeFrame.content = qrCodeFrame.querySelector(".mask-content");
 	const qrReadBox = qrContent.readBox = qrContent.querySelector(".read-qr-box");
@@ -1939,6 +1960,74 @@ function initialize() {
 			hpDetailDialog.show(this.reduceAttrRanges, this.tHP, this.tHPNoAwoken);
 		};
 	});
+	
+	//设置地下城倍率
+	const dungeonEnchanceDialog = document.body.querySelector(".dialog-dungeon-enchance");
+	dungeonEnchanceDialog.show = function(formation)
+	{
+		const dialogContent = this.querySelector(".dialog-content");
+		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
+		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
+
+		let dge = formation.dungeonEnchance;
+		for (const attrDom of attrDoms)
+		{
+			attrDom.checked = dge.attrs.includes(parseInt(attrDom.value));
+		}
+		for (const typeDom of typeDoms)
+		{
+			typeDom.checked = dge.types.includes(parseInt(typeDom.value));
+		}
+		dialogContent.querySelector("#dungeon-hp").value = dge.rate.hp;
+		dialogContent.querySelector("#dungeon-atk").value = dge.rate.atk;
+		dialogContent.querySelector("#dungeon-rcv").value = dge.rate.rcv;
+
+		this.classList.remove(className_displayNone);
+	}
+	dungeonEnchanceDialog.close = function()
+	{
+		this.classList.add(className_displayNone);
+	}
+	const dungeonEnchanceDialogConfirm = dungeonEnchanceDialog.querySelector(".dialog-confirm");
+	dungeonEnchanceDialogConfirm.onclick = function(){
+		const dialogContent = dungeonEnchanceDialog.querySelector(".dialog-content");
+		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
+		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
+		const attrs = attrDoms.map(attrDom=>attrDom.checked ? parseInt(attrDom.value) : undefined).filter(v=>!isNaN(v));
+		const types = typeDoms.map(typeDom=>typeDom.checked ? parseInt(typeDom.value) : undefined).filter(v=>!isNaN(v));
+		
+		let dge = formation.dungeonEnchance;
+		dge.attrs = attrs;
+		console.log(attrs, types);
+		dge.types = types;
+		dge.rate.hp = parseInt(dialogContent.querySelector("#dungeon-hp").value);
+		dge.rate.atk = parseInt(dialogContent.querySelector("#dungeon-atk").value);
+		dge.rate.rcv = parseInt(dialogContent.querySelector("#dungeon-rcv").value);
+		dungeonEnchanceDialog.close();
+		creatNewUrl();
+		refreshAll(formation);
+	};
+	const dungeonEnchanceDialogClear = dungeonEnchanceDialog.querySelector(".dialog-clear");
+	dungeonEnchanceDialogClear.onclick = function(){
+		const dialogContent = dungeonEnchanceDialog.querySelector(".dialog-content");
+		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
+		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
+		for (const attrDom of attrDoms)
+		{
+			attrDom.checked = false;
+		}
+		for (const typeDom of typeDoms)
+		{
+			typeDom.checked = false;
+		}
+		dialogContent.querySelector("#dungeon-hp").value = 1;
+		dialogContent.querySelector("#dungeon-atk").value = 1;
+		dialogContent.querySelector("#dungeon-rcv").value = 1;
+	};
+	const dungeonEnchanceDialogOpen = controlBox.querySelector(".btn-set-dungeon-enchance");
+	dungeonEnchanceDialogOpen.onclick = function(){
+		dungeonEnchanceDialog.show(formation);
+	};
 
 	//编辑框
 	editBox.mid = null; //储存怪物id
@@ -2190,7 +2279,7 @@ function initialize() {
 	//显示进化树
 	const evolutionaryTreeMask = settingBox.querySelector(".mask-evolutionary-tree");
 
-	evolutionaryTreeMask.show = function(monid)
+	evolutionaryTreeMask.initialize = function(monid)
 	{
 		const maskContent = this.querySelector(".mask-content");
 		const fragment = document.createDocumentFragment();
@@ -2199,14 +2288,7 @@ function initialize() {
 		fragment.appendChild(evoTree.toListNode());
 		maskContent.innerHTML = "";
 		maskContent.appendChild(fragment);
-		this.classList.remove(className_displayNone);
 	}
-	evolutionaryTreeMask.hide = function()
-	{
-		this.classList.add(className_displayNone);
-	}
-	const evolutionaryTreeMask_Close = evolutionaryTreeMask.querySelector(".mask-close");
-	evolutionaryTreeMask_Close.onclick = function(){evolutionaryTreeMask.hide();};
 	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	openEvolutionaryTree.onclick = function() {evolutionaryTreeMask.show(editBox.mid)};
 	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
@@ -3747,16 +3829,11 @@ function refreshAll(formationData) {
 		detailBox.classList.remove("edit");
 	
 	let dge = formationData.dungeonEnchance;
-	if (dge.rate !== 1)
+	if (Object.values(dge.rate).some(rate => rate != 1))
 	{
 		dungeonEnchanceDom.innerHTML = '';
-		//if (formationData.dungeonEnchance.attrs.length) dungeonEnchanceDom.appendChild(renderAttrs(formationData.dungeonEnchance.attrs));
-		//if (formationData.dungeonEnchance.types.length) dungeonEnchanceDom.appendChild(renderTypes(formationData.dungeonEnchance.types));
-	let rate = dge.rate * 100;
-		let skill = powerUp(dge.attrs, dge.types, p.mul({hp: rate, atk: rate, rcv: rate}));
+		let skill = powerUp(dge.attrs, dge.types, p.mul({hp: dge.rate.hp * 100, atk: dge.rate.atk * 100, rcv: dge.rate.rcv * 100}));
 		dungeonEnchanceDom.appendChild(renderSkill(skill));
-		//tsp.skill.reduce_damage(dict)
-		//dungeonEnchanceDom.appendChild(renderTypes(formationData.dungeonEnchance.types));
 		dungeonEnchanceDom.classList.remove(className_displayNone);
 	}else
 	{

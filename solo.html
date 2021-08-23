@@ -44,6 +44,7 @@ var formation = new Formation(teamsCount,6);
 			<a class="down-capture display-none" target="_blank"></a>
 			<button class="btn-multi-link" onclick="turnPage(2,arguments[0]);"></button>
 			<button class="btn-triple-link" onclick="turnPage(3,arguments[0]);"></button>
+			<button class="btn-set-dungeon-enchance"></button>
 			<a class="help-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/blob/master/help.md"></a>
 		</div>
 		<div>
@@ -1016,7 +1017,7 @@ var formation = new Formation(teamsCount,6);
 			<line />
 		</g>
 	</svg>
-	<div id="qr-code-frame" class="mask  display-none">
+	<div id="qr-code-frame" class="mask display-none">
 		<button class="mask-close brown-button"></button>
 		<div class="mask-content">
 			<div class="read-qr-box">
@@ -1045,6 +1046,39 @@ var formation = new Formation(teamsCount,6);
 				<a download="" class="save-qr-img brown-button"><!--保存QR 图片--></a>
 			</div>
 		</div>
+	</div>
+	
+	<div class="dialog dialog-dungeon-enchance display-none">
+		<div class="dialog-title"></div>
+		<div class="dialog-content">
+			<ul class="attr-list">
+				<li><input type="checkbox" class="attr-check" name="dungeon-attrs" value="0" id="dungeon-attr-0" /><label class="attr" data-attr-icon="0" for="dungeon-attr-0"></label></li><!--火-->
+				<li><input type="checkbox" class="attr-check" name="dungeon-attrs" value="1" id="dungeon-attr-1" /><label class="attr" data-attr-icon="1" for="dungeon-attr-1"></label></li><!--水-->
+				<li><input type="checkbox" class="attr-check" name="dungeon-attrs" value="2" id="dungeon-attr-2" /><label class="attr" data-attr-icon="2" for="dungeon-attr-2"></label></li><!--木-->
+				<li><input type="checkbox" class="attr-check" name="dungeon-attrs" value="3" id="dungeon-attr-3" /><label class="attr" data-attr-icon="3" for="dungeon-attr-3"></label></li><!--光-->
+				<li><input type="checkbox" class="attr-check" name="dungeon-attrs" value="4" id="dungeon-attr-4" /><label class="attr" data-attr-icon="4" for="dungeon-attr-4"></label></li><!--暗-->
+			</ul>
+			<ul class="type-list">
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="4" id="dungeon-type-4" /><label class="type-icon" data-type-icon="4" for="dungeon-type-4"><!--龍--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="5" id="dungeon-type-5" /><label class="type-icon" data-type-icon="5" for="dungeon-type-5"><!--神--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="7" id="dungeon-type-7" /><label class="type-icon" data-type-icon="7" for="dungeon-type-7"><!--惡魔--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="8" id="dungeon-type-8" /><label class="type-icon" data-type-icon="8" for="dungeon-type-8"><!--机械--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="1" id="dungeon-type-1" /><label class="type-icon" data-type-icon="1" for="dungeon-type-1"><!--平衡--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="6" id="dungeon-type-6" /><label class="type-icon" data-type-icon="6" for="dungeon-type-6"><!--攻撃--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="2" id="dungeon-type-2" /><label class="type-icon" data-type-icon="2" for="dungeon-type-2"><!--体力--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="3" id="dungeon-type-3" /><label class="type-icon" data-type-icon="3" for="dungeon-type-3"><!--回復--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="0" id="dungeon-type-0" /><label class="type-icon" data-type-icon="0" for="dungeon-type-0"><!--進化用--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="12" id="dungeon-type-12" /><label class="type-icon" data-type-icon="12" for="dungeon-type-12"><!--能力覺醒用--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="14" id="dungeon-type-14" /><label class="type-icon" data-type-icon="14" for="dungeon-type-14"><!--強化合成用--></label></li>
+				<li><input type="checkbox" class="type-check" name="dungeon-types" value="15" id="dungeon-type-15" /><label class="type-icon" data-type-icon="15" for="dungeon-type-15"><!--販賣用--></label></li>
+			</ul>
+			<ul class="stats-list">
+				<li><label for="dungeon-hp"></label><input id="dungeon-hp" type="number" min=0 step=1 value=1 /></li>
+				<li><label for="dungeon-atk"></label><input id="dungeon-atk" type="number" min=0 step=1 value=1 /></li>
+				<li><label for="dungeon-rcv"></label><input id="dungeon-rcv" type="number" min=0 step=1 value=1 /></li>
+			</ul>
+		</div>
+		<div class="dialog-control"><button class="dialog-clear brown-button"></button><button class="dialog-confirm brown-button"></button></div>
 	</div>
 </body>
 </html>

@@ -13,32 +13,32 @@
 	},
 ];
 let localTranslating = {
-    webpage_title: `智龙迷城${teamsCount}人队伍图制作`,
+	webpage_title: `智龙迷城${teamsCount}人队伍图制作`,
 	addition_display: "💬",
-    title_blank: "输入队伍标题",
-    detail_blank: "输入说明",
-    sort_name:{
-        sort_none: "无",
-        sort_id: "怪物ID",
-        sort_attrs: "属性",
-        sort_evoRootId: "进化树",
-        sort_evoRoot_Attrs : "进化根怪物的属性",
-        sort_rarity: "稀有度",
-        sort_cost: "消耗",
-        sort_mp: "MP",
-        sort_skillLv1: "技能最大冷却时间",
-        sort_skillLvMax: "技能最小冷却时间",
-        sort_hpMax110: "最大 HP",
-        sort_atkMax110: "最大攻击",
-        sort_rcvMax110: "最大回复",
-        sort_hpMax110_awoken: "最大 HP（+觉醒）",
-        sort_atkMax110_awoken: "最大攻击（+觉醒）",
-        sort_rcvMax110_awoken: "最大回复（+觉醒）",
-        sort_abilityIndex_awoken: "最大加权能力指数（+觉醒）",
-    },
-    force_reload_data: "强制刷新数据",
-    skill_parse: {
-        skill: {
+	title_blank: "输入队伍标题",
+	detail_blank: "输入说明",
+	sort_name:{
+		sort_none: "无",
+		sort_id: "怪物ID",
+		sort_attrs: "属性",
+		sort_evoRootId: "进化树",
+		sort_evoRoot_Attrs : "进化根怪物的属性",
+		sort_rarity: "稀有度",
+		sort_cost: "消耗",
+		sort_mp: "MP",
+		sort_skillLv1: "技能最大冷却时间",
+		sort_skillLvMax: "技能最小冷却时间",
+		sort_hpMax110: "最大 HP",
+		sort_atkMax110: "最大攻击",
+		sort_rcvMax110: "最大回复",
+		sort_hpMax110_awoken: "最大 HP（+觉醒）",
+		sort_atkMax110_awoken: "最大攻击（+觉醒）",
+		sort_rcvMax110_awoken: "最大回复（+觉醒）",
+		sort_abilityIndex_awoken: "最大加权能力指数（+觉醒）",
+	},
+	force_reload_data: "强制刷新数据",
+	skill_parse: {
+		skill: {
 			unknown: tp`未知的技能类型：${'type'}`, //type
 			active_turns: tp`${'turns'} 回合内，${'actionSkill'}`, //turns, actionSkill
 			random_skills: tp`随机发动以下技能：${'skills'}`, //skills
@@ -51,18 +51,18 @@ let localTranslating = {
 			leader_change: tp`${'icon'}将${'target'}换为队长，再次使用则换回来`,
 			no_skyfall: tp`${'icon'}天降的宝珠不会消除`,
 			self_harm: tp`${'icon'}${'stats'}减少${'value'}`,
-            heal: tp`${'icon'}回复 ${'value'} 的 ${'stats'}`,
+			heal: tp`${'icon'}回复 ${'value'} 的 ${'stats'}`,
 			unbind: tp`${'stats'}状态减少 ${'turns'} 回合`,
 			unbind_normal: tp`${'icon'}封锁`,
 			unbind_awakenings: tp`${'icon'}觉醒无效`,
 			unbind_matches: tp`${'icon'}无法消除宝珠`,
 			bind_skill: tp`${'icon'}自身无法使用技能`,
-            defense_break: tp`${'icon'}敌方的防御力减少${'value'}`,
-            poison: tp`${'icon'}使${'target'}中毒，每回合损失${'belong_to'} ${'value'} 的 ${'stats'}`,
+			defense_break: tp`${'icon'}敌方的防御力减少${'value'}`,
+			poison: tp`${'icon'}使${'target'}中毒，每回合损失${'belong_to'} ${'value'} 的 ${'stats'}`,
 			time_extend: tp`${'icon'}宝珠移动时间 ${'value'}`,
 			follow_attack: tp`${'icon'}消除宝珠的回合，以${'belong_to'}${'value'}的伤害追打${'target'}（计算防御力）`,
 			follow_attack_fixed: tp`追加${'damage'}的${'attr'}伤害`,
-            auto_heal_buff: tp`行动结束后${'icon'}回复${'value'}的${'stats'}`,
+			auto_heal_buff: tp`行动结束后${'icon'}回复${'value'}的${'stats'}`,
 			auto_heal: tp`${'icon'}消除宝珠的回合，回复${'belong_to'}${'value'}的${'stats'}`,
 			ctw: tp`${'icon'}${'value'}内时间停止，可以任意移动宝珠`,
 			gravity: tp`${'icon'}造成${'target'}${'value'}的伤害`,
@@ -108,7 +108,7 @@ let localTranslating = {
 			obstruct_opponent_designated_position: tp`第${'positions'}排位的对手`,
 		},
 		power: {
-            unknown: tp`[ 未知能力提升: ${'type'} ]`,
+			unknown: tp`[ 未知能力提升: ${'type'} ]`,
 			scale_attributes: tp`${'orbs'}中${'min'}种属性同时攻击时${'stats'}${'bonus'}`,
 			scale_attributes_bonus: tp`，每多1种${'bonus'}，最大${'max'}种时${'stats_max'}`,
 			scale_combos: tp`${'min'}连击以上时${'stats'}${'bonus'}`,
@@ -122,7 +122,7 @@ let localTranslating = {
 			scale_state_kind_count: tp`以队伍中[${'awakenings'}${'attrs'}${'types'}]的数量提升，每个${'stats'}`,
 		},
 		cond: {
-            unknown: tp`[ 未知条件 ]`,
+			unknown: tp`[ 未知条件 ]`,
 			hp_equal: tp`${'hp'} == ${'min'} 时`,
 			hp_less_or_equal: tp`${'hp'} ≤ ${'max'} 时`,
 			hp_greater_or_equal: tp`${'hp'} ≥ ${'min'} 时`,
@@ -148,8 +148,8 @@ let localTranslating = {
 			right: tp`右方第${'pos'}竖列`,
 			shape: tp`指定位置`,
 		},
-        value: {
-            unknown: tp`[ 未知数值: ${'type'}]`, //type
+		value: {
+			unknown: tp`[ 未知数值: ${'type'}]`, //type
 			const: tp`${'value'}${'unit'}`,
 			const_to: tp`到${'value'}`,
 			mul_percent: tp`${'value'}%`,
@@ -170,17 +170,17 @@ let localTranslating = {
 			enemy_one: tp`敌方1体`,
 			enemy_attr: tp`${'attr'}敌人`,
 		},
-        stats: {
-            unknown: tp`[ 未知状态: ${'type'}]`, //type
-            maxhp: tp`最大HP`,
-            hp: tp`HP`,
-            chp: tp`当前HP`,
-            atk: tp`攻击力`,
+		stats: {
+			unknown: tp`[ 未知状态: ${'type'}]`, //type
+			maxhp: tp`最大HP`,
+			hp: tp`HP`,
+			chp: tp`当前HP`,
+			atk: tp`攻击力`,
 			rcv: tp`回复力`,
-            teamhp: tp`队伍总HP`,
-            teamatk: tp`队伍${'attrs'}总攻击力`,
-            teamrcv: tp`队伍回复力`,
-        },
+			teamhp: tp`队伍总HP`,
+			teamatk: tp`队伍${'attrs'}总攻击力`,
+			teamrcv: tp`队伍回复力`,
+		},
 		unit: {
 			orbs: tp`个`,
 			times: tp`次`,
@@ -333,7 +333,7 @@ let localTranslating = {
 			[80]: tp`${'icon'}4色`,
 			[81]: tp`${'icon'}5色`,
 		}
-    },
+	},
 }
 
 //类型和觉醒杀和潜觉杀的对应编号，还有类型可以打什么类型的潜觉杀
@@ -384,15 +384,15 @@ const equivalent_awoken = [
 ];
 //官方的觉醒排列顺序
 const official_awoken_sorting = [
-          21, 19, 43, 45, 10, 11, 12, 13, 49,
-          56, 53, 61, 50, 52, 68, 69, 70, 28,
-          27, 48, 62, 57, 58, 60, 59, 54, 55,
-          14, 15, 16, 17, 18, 29, 20, 44, 51,
-          22, 23, 24, 25, 26, 32, 31, 33, 34,
-           4,  5,  6,  7,  8, 35, 36, 37, 38,
-           1,  2,  3, 46, 47, 39, 40, 41, 42,
-          65, 66, 67,  9, 71, 72, 30, 64, 63,
-          73, 74, 75, 76, 77, 78, 79, 80, 81
+		  21, 19, 43, 45, 10, 11, 12, 13, 49,
+		  56, 53, 61, 50, 52, 68, 69, 70, 28,
+		  27, 48, 62, 57, 58, 60, 59, 54, 55,
+		  14, 15, 16, 17, 18, 29, 20, 44, 51,
+		  22, 23, 24, 25, 26, 32, 31, 33, 34,
+		   4,  5,  6,  7,  8, 35, 36, 37, 38,
+		   1,  2,  3, 46, 47, 39, 40, 41, 42,
+		  65, 66, 67,  9, 71, 72, 30, 64, 63,
+		  73, 74, 75, 76, 77, 78, 79, 80, 81
 ];
 
 //pdc的徽章对应数字

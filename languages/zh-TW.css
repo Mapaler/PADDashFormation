@@ -106,13 +106,19 @@
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼怪物加值";
 }
-.row-mon-ability .m-hp-li::before{
+.row-mon-ability .m-hp-li::before,
+.dialog-dungeon-enchance label[for="dungeon-hp"]::before
+{
 	content: "HP:";
 }
-.row-mon-ability .m-atk-li::before{
+.row-mon-ability .m-atk-li::before,
+.dialog-dungeon-enchance label[for="dungeon-atk"]::before
+{
 	content: "攻撃:";
 }
-.row-mon-ability .m-rcv-li::before{
+.row-mon-ability .m-rcv-li::before,
+.dialog-dungeon-enchance label[for="dungeon-rcv"]::before
+{
 	content: "回復:";
 }
 
@@ -378,7 +384,8 @@ label[for="merge-skill"]::after{
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before
+.special-div .special-clear::before,
+.dialog-dungeon-enchance .dialog-clear::before
 {
 	content: "清除";
 }
@@ -530,4 +537,28 @@ label[for="qr-data-type-pdc"]::before
 }
 label[for="qr-data-type-pdchu"]::before {
 	content: "Valeria(pdchu)";
+}
+.btn-set-dungeon-enchance::before
+{
+	content: "\f6d9 地下城强化";
+}
+.dialog-dungeon-enchance .dialog-title::before
+{
+	content: "地下城強化倍率設定";
+}
+.dialog-dungeon-enchance .dialog-confirm::before
+{
+	content: "確認";
+}
+.dialog-dungeon-enchance .attr-list::before
+{
+	content: "生效属性：";
+}
+.dialog-dungeon-enchance .type-list::before
+{
+	content: "生效類型：";
+}
+.dialog-dungeon-enchance .stats-list::before
+{
+	content: "強化倍率：";
 }

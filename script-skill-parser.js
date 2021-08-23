@@ -1,25 +1,25 @@
 let merge_skill = false;
 
 const Attributes = {
-    /*0: "Fire",
-    1: "Water",
-    2: "Wood",
-    3: "Light",
-    4: "Dark",
-    5: "Heart",
-    6: "Jammer",
-    7: "Poison",
-    8: "MPoison",
+	/*0: "Fire",
+	1: "Water",
+	2: "Wood",
+	3: "Light",
+	4: "Dark",
+	5: "Heart",
+	6: "Jammer",
+	7: "Poison",
+	8: "MPoison",
 	9: "Bomb",*/
-    Fire: 0,
-    Water: 1,
-    Wood: 2,
-    Light: 3,
-    Dark: 4,
-    Heart: 5,
-    Jammer: 6,
-    Poison: 7,
-    MPoison: 8,
+	Fire: 0,
+	Water: 1,
+	Wood: 2,
+	Light: 3,
+	Dark: 4,
+	Heart: 5,
+	Jammer: 6,
+	Poison: 7,
+	MPoison: 8,
 	Bomb: 9,
 }
 for (let name in Attributes)
@@ -322,50 +322,50 @@ const SkillPowerUpKind = {
 };
 
 const SkillKinds = {
-    Unknown: "unknown",
-    ActiveTurns: "active-turns",
-    DamageEnemy: "damage-enemy",
-    Vampire: "vampire",
-    ReduceDamage: "reduce-damage",
-    SelfHarm: "self-harm",
-    Heal: "heal",
-    AutoHealBuff: "auto-heal-buff",
-    ChangeOrbs: "change-orbs",
-    GenerateOrbs: "generate-orbs",
-    FixedOrbs: "fixed-orbs",
-    PowerUp: "power-up",
-    CounterAttack: "counter-attack",
-    SetOrbState: "set-orb-state",
-    RateMultiply: "rate-mul",
-    OrbDropIncrease: "orb-drop-incr",
-    Resolve: "resolve",
-    Delay: "delay",
-    DefenseBreak: "def-break",
-    MassAttack: "mass-attack",
-    BoardChange: "board-change",
-    Unbind: "unbind",
-    BindSkill: "bind-skill",
-    RandomSkills: "random-skills",
+	Unknown: "unknown",
+	ActiveTurns: "active-turns",
+	DamageEnemy: "damage-enemy",
+	Vampire: "vampire",
+	ReduceDamage: "reduce-damage",
+	SelfHarm: "self-harm",
+	Heal: "heal",
+	AutoHealBuff: "auto-heal-buff",
+	ChangeOrbs: "change-orbs",
+	GenerateOrbs: "generate-orbs",
+	FixedOrbs: "fixed-orbs",
+	PowerUp: "power-up",
+	CounterAttack: "counter-attack",
+	SetOrbState: "set-orb-state",
+	RateMultiply: "rate-mul",
+	OrbDropIncrease: "orb-drop-incr",
+	Resolve: "resolve",
+	Delay: "delay",
+	DefenseBreak: "def-break",
+	MassAttack: "mass-attack",
+	BoardChange: "board-change",
+	Unbind: "unbind",
+	BindSkill: "bind-skill",
+	RandomSkills: "random-skills",
 	SkillProviso: "skill-proviso",
-    ChangeAttribute: "change-attr",
-    SkillBoost: "skill-boost",
-    AddCombo: "add-combo",
-    VoidEnemyBuff: "void-enemy-buff",
-    Poison: "poison",
-    CTW: "ctw",
-    Gravity: "gravity",
-    FollowAttack: "follow-attack",
-    FollowAttackFixed: "follow-attack-fixed",
-    AutoHeal: "auto-heal",
-    TimeExtend: "time-extend",
-    DropRefresh: "drop-refresh",
-    LeaderChange: "leader-change",
-    MinMatchLength: "min-match-len",
-    FixedTime: "fixed-time",
-    Drum: "drum",
-    AutoPath: "auto-path",
-    Board7x6: "7x6-board",
-    NoSkyfall: "no-skyfall",
+	ChangeAttribute: "change-attr",
+	SkillBoost: "skill-boost",
+	AddCombo: "add-combo",
+	VoidEnemyBuff: "void-enemy-buff",
+	Poison: "poison",
+	CTW: "ctw",
+	Gravity: "gravity",
+	FollowAttack: "follow-attack",
+	FollowAttackFixed: "follow-attack-fixed",
+	AutoHeal: "auto-heal",
+	TimeExtend: "time-extend",
+	DropRefresh: "drop-refresh",
+	LeaderChange: "leader-change",
+	MinMatchLength: "min-match-len",
+	FixedTime: "fixed-time",
+	Drum: "drum",
+	AutoPath: "auto-path",
+	Board7x6: "7x6-board",
+	NoSkyfall: "no-skyfall",
 	Henshin: "henshin",
 	VoidPoison: "void-poison",
 	SkillProviso: "skill-proviso",
@@ -674,206 +674,206 @@ function flags(num){
 }
 
 const v = {
-    percent: function(value) {
-        return { kind: SkillValueKind.Percent, value: (value / 100) ?? 1 };
-    },
-    constant: function(value) {
-        return { kind: SkillValueKind.Constant, value: value ?? 0 };
-    },
-    constantTo: function(value) {
-        return { kind: SkillValueKind.ConstantTo, value: value ?? 1 };
-    },
-    xMaxHP: function(value) {
-        return { kind: SkillValueKind.xMaxHP, value: (value / 100) ?? 1 };
-    },
-    xHP: function(value) {
-        return { kind: SkillValueKind.xHP, value: (value / 100) ?? 1 };
-    },
-    xCHP: function(value) {
-        return { kind: SkillValueKind.xCHP, value: (value / 100) ?? 1 };
-    },
-    xATK: function(value) {
-        return { kind: SkillValueKind.xATK, value: (value / 100) ?? 1 };
-    },
-    xRCV: function(value) {
-        return { kind: SkillValueKind.xRCV, value: (value / 100) ?? 1 };
-    },
-    randomATK: function(min, max) {
-        return { kind: SkillValueKind.RandomATK, min: (min / 100) ?? 1, max: (max / 100) ?? 1, scale: 1 };
-    },
-    hpScale: function(min, max, scale) {
-        return { kind: SkillValueKind.HPScale, min: (min / 100) ?? 1, max: (max / 100) ?? 1, scale: (scale / 100) ?? 1 };
-    },
-    xTeamHP: function(value) {
-        return { kind: SkillValueKind.xTeamHP, value: (value / 100) ?? 1 };
-    },
-    xTeamATK: function(attrs, value) {
-        return { kind: SkillValueKind.xTeamATK, attrs: attrs, value: (value / 100) ?? 1 };
-    },
-    xTeamRCV: function(value) {
-        return { kind: SkillValueKind.xTeamRCV, value: (value / 100) ?? 1 };
-    },
-    percentAwakenings: function(awakenings, value) {
-        return { kind: SkillValueKind.xAwakenings, awakenings: awakenings, value: value };
-    },
+	percent: function(value) {
+		return { kind: SkillValueKind.Percent, value: (value / 100) ?? 1 };
+	},
+	constant: function(value) {
+		return { kind: SkillValueKind.Constant, value: value ?? 0 };
+	},
+	constantTo: function(value) {
+		return { kind: SkillValueKind.ConstantTo, value: value ?? 1 };
+	},
+	xMaxHP: function(value) {
+		return { kind: SkillValueKind.xMaxHP, value: (value / 100) ?? 1 };
+	},
+	xHP: function(value) {
+		return { kind: SkillValueKind.xHP, value: (value / 100) ?? 1 };
+	},
+	xCHP: function(value) {
+		return { kind: SkillValueKind.xCHP, value: (value / 100) ?? 1 };
+	},
+	xATK: function(value) {
+		return { kind: SkillValueKind.xATK, value: (value / 100) ?? 1 };
+	},
+	xRCV: function(value) {
+		return { kind: SkillValueKind.xRCV, value: (value / 100) ?? 1 };
+	},
+	randomATK: function(min, max) {
+		return { kind: SkillValueKind.RandomATK, min: (min / 100) ?? 1, max: (max / 100) ?? 1, scale: 1 };
+	},
+	hpScale: function(min, max, scale) {
+		return { kind: SkillValueKind.HPScale, min: (min / 100) ?? 1, max: (max / 100) ?? 1, scale: (scale / 100) ?? 1 };
+	},
+	xTeamHP: function(value) {
+		return { kind: SkillValueKind.xTeamHP, value: (value / 100) ?? 1 };
+	},
+	xTeamATK: function(attrs, value) {
+		return { kind: SkillValueKind.xTeamATK, attrs: attrs, value: (value / 100) ?? 1 };
+	},
+	xTeamRCV: function(value) {
+		return { kind: SkillValueKind.xTeamRCV, value: (value / 100) ?? 1 };
+	},
+	percentAwakenings: function(awakenings, value) {
+		return { kind: SkillValueKind.xAwakenings, awakenings: awakenings, value: value };
+	},
 };
 
 const c = {
 	hp: function (min, max) {
-        return { hp: { min: min / 100, max: max / 100 } };
+		return { hp: { min: min / 100, max: max / 100 } };
 	},
 	exact: function (type, value, attrs) {
-        if (attrs === void 0) { attrs = Attributes.all(); }
-        return { exact: { type: type, value: value, attrs: attrs } };
+		if (attrs === void 0) { attrs = Attributes.all(); }
+		return { exact: { type: type, value: value, attrs: attrs } };
 	},
 	compo: function (type, ids) {
-        return { compo: { type: type, ids: ids } };
+		return { compo: { type: type, ids: ids } };
 	},
-    remainOrbs: function (count) { return { remainOrbs: { count: count } }; },
-    useSkill: function () { return { useSkill: true }; },
+	remainOrbs: function (count) { return { remainOrbs: { count: count } }; },
+	useSkill: function () { return { useSkill: true }; },
 	multiplayer: function () { return { multiplayer: true }; },
 	prob: function (percent) { return { prob: percent }; },
-    LShape: function (attrs) { return { LShape: { attrs: attrs } }; },
+	LShape: function (attrs) { return { LShape: { attrs: attrs } }; },
 	heal: function (min) { return { heal: { min: min } }; },
 }
 
 const p = {
-    mul: function (values) {
-        if (Array.isArray(values)) {
-            return {
-                kind: SkillPowerUpKind.Multiplier,
-                hp: 1,
-                atk: values[0] / 100,
-                rcv: values[1] / 100
-            };
-        }
-        else {
-            return {
-                kind: SkillPowerUpKind.Multiplier,
-                hp: (values.hp ?? 100) / 100,
-                atk: (values.atk ?? 100) / 100,
-                rcv: (values.rcv ?? 100) / 100
-            };
-        }
-    },
-    stats: function (value) {
-        let statTypes = Array.from(arguments).slice(1);
-        return [
-            statTypes.indexOf(1) >= 0 ? value : 100,
-            statTypes.indexOf(2) >= 0 ? value : 100
-        ];
-    },
-    scale: function (min, max, baseMul, bonusMul) {
-        return {
-            min: min,
-            max: max ?? min,
-            baseAtk: (baseMul[0] / 100) ?? 1,
-            baseRcv: (baseMul[1] / 100) ?? 1,
-            bonusAtk: (bonusMul[0] / 100) ?? 0,
-            bonusRcv: (bonusMul[1] / 100) ?? 0
-        };
-    },
-    scaleAttrs: function (attrs, min, max, baseMul, bonusMul) {
-        return { kind: SkillPowerUpKind.ScaleAttributes, attrs: attrs ,...this.scale(min, max, baseMul, bonusMul) };
-    },
-    scaleCombos: function (min, max, baseMul, bonusMul) {
-        return { kind: SkillPowerUpKind.ScaleCombos ,...this.scale(min, max, baseMul, bonusMul) };
-    },
-    scaleMatchLength: function (attrs, min, max, baseMul, bonusMul, matchAll = false) {
+	mul: function (values) {
+		if (Array.isArray(values)) {
+			return {
+				kind: SkillPowerUpKind.Multiplier,
+				hp: 1,
+				atk: values[0] / 100,
+				rcv: values[1] / 100
+			};
+		}
+		else {
+			return {
+				kind: SkillPowerUpKind.Multiplier,
+				hp: (values.hp ?? 100) / 100,
+				atk: (values.atk ?? 100) / 100,
+				rcv: (values.rcv ?? 100) / 100
+			};
+		}
+	},
+	stats: function (value) {
+		let statTypes = Array.from(arguments).slice(1);
+		return [
+			statTypes.indexOf(1) >= 0 ? value : 100,
+			statTypes.indexOf(2) >= 0 ? value : 100
+		];
+	},
+	scale: function (min, max, baseMul, bonusMul) {
+		return {
+			min: min,
+			max: max ?? min,
+			baseAtk: (baseMul[0] / 100) ?? 1,
+			baseRcv: (baseMul[1] / 100) ?? 1,
+			bonusAtk: (bonusMul[0] / 100) ?? 0,
+			bonusRcv: (bonusMul[1] / 100) ?? 0
+		};
+	},
+	scaleAttrs: function (attrs, min, max, baseMul, bonusMul) {
+		return { kind: SkillPowerUpKind.ScaleAttributes, attrs: attrs ,...this.scale(min, max, baseMul, bonusMul) };
+	},
+	scaleCombos: function (min, max, baseMul, bonusMul) {
+		return { kind: SkillPowerUpKind.ScaleCombos ,...this.scale(min, max, baseMul, bonusMul) };
+	},
+	scaleMatchLength: function (attrs, min, max, baseMul, bonusMul, matchAll = false) {
 		/*if (min <= 3 && min === max)
-        	return this.scaleAttrs(attrs, matchAll ? attrs.length : 1, matchAll ? attrs.length : 1, baseMul, bonusMul);
+			return this.scaleAttrs(attrs, matchAll ? attrs.length : 1, matchAll ? attrs.length : 1, baseMul, bonusMul);
 		else*/
-        return { kind: SkillPowerUpKind.ScaleMatchLength, attrs: attrs, matchAll: matchAll ,...this.scale(min, max, baseMul, bonusMul) };
-    },
-    scaleMatchAttrs: function (matches, min, max, baseMul, bonusMul) {
+		return { kind: SkillPowerUpKind.ScaleMatchLength, attrs: attrs, matchAll: matchAll ,...this.scale(min, max, baseMul, bonusMul) };
+	},
+	scaleMatchAttrs: function (matches, min, max, baseMul, bonusMul) {
 		const flatMatches = matches.flat(); //当匹配的全是不同颜色时，切换成匹配颜色的技能
 		if (new Set(flatMatches).size === flatMatches.length)
-        	return this.scaleAttrs(matches, min, max, baseMul, bonusMul);
+			return this.scaleAttrs(matches, min, max, baseMul, bonusMul);
 		else
-        	return { kind: SkillPowerUpKind.ScaleMatchAttrs, matches: matches ,...this.scale(min, max, baseMul, bonusMul) };
-    },
-    scaleCross: function (crosses) {
-        return { kind: SkillPowerUpKind.ScaleCross, crosses: crosses.map(cross => ({ ...cross, atk: ((cross.atk ?? 100) / 100), rcv: ((cross.rcv ?? 100) / 100)})) };
-    },
-    scaleStateKindCount: function (awakenings, attrs, types, value) {
-        return { kind: SkillPowerUpKind.ScaleStateKindCount, awakenings: awakenings, attrs: attrs, types: types, value: value };
-    },
+			return { kind: SkillPowerUpKind.ScaleMatchAttrs, matches: matches ,...this.scale(min, max, baseMul, bonusMul) };
+	},
+	scaleCross: function (crosses) {
+		return { kind: SkillPowerUpKind.ScaleCross, crosses: crosses.map(cross => ({ ...cross, atk: ((cross.atk ?? 100) / 100), rcv: ((cross.rcv ?? 100) / 100)})) };
+	},
+	scaleStateKindCount: function (awakenings, attrs, types, value) {
+		return { kind: SkillPowerUpKind.ScaleStateKindCount, awakenings: awakenings, attrs: attrs, types: types, value: value };
+	},
 }
 
 function activeTurns(turns, skill) {
-    return skill ? { kind: SkillKinds.ActiveTurns, turns: turns, skill: skill } : null;
+	return skill ? { kind: SkillKinds.ActiveTurns, turns: turns, skill: skill } : null;
 }
 function damageEnemy(target, attr, damage) {
-    return { kind: SkillKinds.DamageEnemy, target: target, attr: attr, damage: damage };
+	return { kind: SkillKinds.DamageEnemy, target: target, attr: attr, damage: damage };
 }
 function vampire(attr, damageValue, healValue) {
-    return { kind: SkillKinds.Vampire, attr: attr, damage: damageValue, heal: healValue };
+	return { kind: SkillKinds.Vampire, attr: attr, damage: damageValue, heal: healValue };
 }
 function reduceDamage(attrs, percent, condition) {
-    return { kind: SkillKinds.ReduceDamage, attrs: attrs, percent: percent, condition: condition };
+	return { kind: SkillKinds.ReduceDamage, attrs: attrs, percent: percent, condition: condition };
 }
 function selfHarm(value) {
-    return { kind: SkillKinds.SelfHarm, value: value };
+	return { kind: SkillKinds.SelfHarm, value: value };
 }
 function heal(value) {
-    return { kind: SkillKinds.Heal, value: value };
+	return { kind: SkillKinds.Heal, value: value };
 }
 function autoHealBuff(value) {
 	return { kind: SkillKinds.AutoHealBuff, value: value };
 }
 function fromTo(from, to) {
-    return { from: from, to: to };
+	return { from: from, to: to };
 }
 function changeOrbs() {
-    return { kind: SkillKinds.ChangeOrbs, changes: Array.from(arguments) };
+	return { kind: SkillKinds.ChangeOrbs, changes: Array.from(arguments) };
 }
 function generateOrbs(orbs, exclude, count, time) {
-    return { kind: SkillKinds.GenerateOrbs, orbs: orbs, exclude: exclude, count: count, time: time};
+	return { kind: SkillKinds.GenerateOrbs, orbs: orbs, exclude: exclude, count: count, time: time};
 }
 function fixedOrbs() {
-    return { kind: SkillKinds.FixedOrbs, generates: Array.from(arguments) };
+	return { kind: SkillKinds.FixedOrbs, generates: Array.from(arguments) };
 }
 function powerUp(attrs, types, value, condition = null, reduceDamageValue = null, additional = []) {
-    if (value.kind === SkillPowerUpKind.Multiplier) {
-        let hp = value.hp, atk = value.atk, rcv = value.rcv;
-        if (hp === 1 && atk === 1 && rcv === 1 && !reduceDamage)
-            return null;
-    }
-    return { kind: SkillKinds.PowerUp, attrs: attrs, types: types, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
+	if (value.kind === SkillPowerUpKind.Multiplier) {
+		let hp = value.hp, atk = value.atk, rcv = value.rcv;
+		if (hp === 1 && atk === 1 && rcv === 1 && !reduceDamage)
+			return null;
+	}
+	return { kind: SkillKinds.PowerUp, attrs: attrs, types: types, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
 }
 function counterAttack(attr, prob, value) {
-    return { kind: SkillKinds.CounterAttack, attr: attr, prob: prob, value: value };
+	return { kind: SkillKinds.CounterAttack, attr: attr, prob: prob, value: value };
 }
 function setOrbState(orbs, state, arg) {
-    return { kind: SkillKinds.SetOrbState, orbs: orbs, state: state, arg: arg};
+	return { kind: SkillKinds.SetOrbState, orbs: orbs, state: state, arg: arg};
 }
 function rateMultiply(value, rate) {
-    return { kind: SkillKinds.RateMultiply, value: value, rate: rate };
+	return { kind: SkillKinds.RateMultiply, value: value, rate: rate };
 }
 function orbDropIncrease(value, attrs, flag) {
-    return { kind: SkillKinds.OrbDropIncrease, value: value, attrs: attrs, flag: flag };
+	return { kind: SkillKinds.OrbDropIncrease, value: value, attrs: attrs, flag: flag };
 }
 function resolve(min, max) {
-    return { kind: SkillKinds.Resolve, min: min, max: max };
+	return { kind: SkillKinds.Resolve, min: min, max: max };
 }
 function unbind(normal, awakenings, matches) {
-    return { kind: SkillKinds.Unbind, normal: normal, awakenings: awakenings , matches: matches};
+	return { kind: SkillKinds.Unbind, normal: normal, awakenings: awakenings , matches: matches};
 }
 function bindSkill() { return { kind: SkillKinds.BindSkill}; }
 function boardChange(attrs) {
-    return { kind: SkillKinds.BoardChange, attrs: attrs };
+	return { kind: SkillKinds.BoardChange, attrs: attrs };
 }
 function randomSkills(skills) {
-    return { kind: SkillKinds.RandomSkills, skills: skills };
+	return { kind: SkillKinds.RandomSkills, skills: skills };
 }
 function changeAttr(target, attr) {
-    return { kind: SkillKinds.ChangeAttribute, target: target, attr: attr ?? 0 };
+	return { kind: SkillKinds.ChangeAttribute, target: target, attr: attr ?? 0 };
 }
 function gravity(value) {
-    return { kind: SkillKinds.Gravity, value: value };
+	return { kind: SkillKinds.Gravity, value: value };
 }
 function voidEnemyBuff(buffs) {
-    return { kind: SkillKinds.VoidEnemyBuff, buffs: buffs };
+	return { kind: SkillKinds.VoidEnemyBuff, buffs: buffs };
 }
 function skillBoost(value) { return { kind: SkillKinds.SkillBoost, value: value }; }
 function minMatch(value) { return { kind: SkillKinds.MinMatchLength, value: value }; }
@@ -1420,9 +1420,9 @@ Array.prototype.nodeJoin = function(separator)
 }
 //按住Ctrl点击技能在控制台输出技能的对象
 function showParsedSkill(event) {
-    if (event.ctrlKey) {
-        console.log(this.skill);
-    }
+	if (event.ctrlKey) {
+		console.log(this.skill);
+	}
 }
 
 function renderSkillEntry(skills)

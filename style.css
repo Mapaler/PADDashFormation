@@ -749,7 +749,7 @@ icon.poison-no-effect::after,
 .hp-range-table th::before
 {
 	content: " ";
-    background-size: cover;
+	background-size: cover;
 	display: inline-block;
 	width: 20px;
 	height: 20px;
@@ -857,19 +857,19 @@ icon.poison-no-effect::after,
 	display: none;
 }
 .tIf-total-move.fixed-move-time{
-    position: relative;
+	position: relative;
 }
 .tIf-total-move.fixed-move-time::after {
 	content: " ";
 	display: inline-block;
 	width: 32px;
 	height: 32px;
-    background-image: url(images/latent.png);
+	background-image: url(images/latent.png);
 	background-position-x: -32px;
 	transform: scale(0.5);
-    position: absolute;
-    left: 0;
-    top: 0;
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 @keyframes hidden-visible-animate{
@@ -883,9 +883,9 @@ icon.poison-no-effect::after,
 icon.poison-no-effect::after
 {
 	background-image: url(images/icon-bind.png);
-    position: absolute;
-    left: 0;
-    top: 0;
+	position: absolute;
+	left: 0;
+	top: 0;
 	animation: hidden-visible-animate 0.5s infinite ease-in alternate;
 }
 /*单人时的协力觉醒和多人时的掉落觉醒显示无效*/
@@ -1530,11 +1530,16 @@ icon.inflicts::after
 {
 	display: inline-block;
 }
-.types-div .type-list input+label
+.types-div .type-list input+label,
+.sawoken-div .sawoken-ul input+label,
+.dialog-dungeon-enchance input[type="checkbox"]+label
 {
 	opacity: var(--search-icon-unchecked);
+	cursor: pointer;
 }
-.types-div .type-list input:checked+label
+.types-div .type-list input:checked+label,
+.sawoken-div .sawoken-ul input:checked+label,
+.dialog-dungeon-enchance input[type="checkbox"]:checked+label
 {
 	opacity: 1;
 }
@@ -1654,10 +1659,10 @@ icon.inflicts::after
 .search-box .awoken-option .selected-awokens{
 	min-height: 32px;
 	box-sizing: border-box;
-    width: calc(100% - 90px);
-    min-width: 320px;
-    background-color: #00000044;
-    border-radius: 6px;
+	width: calc(100% - 90px);
+	min-width: 320px;
+	background-color: #00000044;
+	border-radius: 6px;
 	box-shadow: inset black 0 0 3px;
 	display: inline-block;
 	vertical-align: top;
@@ -1821,12 +1826,7 @@ icon.inflicts::after
 /*.search-box .sawoken-div::before{
 	content: "超觉醒";
 }*/
-.sawoken-div .sawoken-ul li label{
-	opacity: var(--search-icon-unchecked);
-}
-.sawoken-div .sawoken-ul input:checked+label{
-	opacity: 1;
-}
+
 .sawoken-div .sawoken-ul .awoken-count
 {
 	margin-right: 5px;
@@ -1869,7 +1869,7 @@ icon.inflicts::after
 }
 .search-box .search-list-length
 {
-    float: right;
+	float: right;
 }
 .search-box .search-list-length[data-search-result-count="0"]
 {
@@ -2033,8 +2033,11 @@ icon.inflicts::after
 
 
 /*选中的觉醒后面部分半透明，前面的不透明*/
-.row-mon-awoken .awoken-number{display:none;}
-.row-mon-awoken .awoken-number:checked~label
+.row-mon-awoken input[type="radio"]
+{
+	display: none;
+}
+.row-mon-awoken input[type="radio"]:checked~label
 {
 	opacity: var(--search-icon-unchecked);
 }
@@ -2770,122 +2773,122 @@ table .orb-icon
 }
 .mask-content
 {
-    text-align: center;
+	text-align: center;
 }
 .evo-box
 {
-    display: inline-block;
-    text-align: left;
+	display: inline-block;
+	text-align: left;
 }
 .evo-panel,
 .evo-panel-left,
 .evo-panel-right
 {
-    display: inline-block;
+	display: inline-block;
 }
 .mask-evolutionary-tree .evo-panel-left>.monster-head
 {
-    display: inline-block;
+	display: inline-block;
 }
 .evo-materials>li
 {
-    display: inline-block;
+	display: inline-block;
 }
 .mask-evolutionary-tree .evo-materials .monster
 {
-    transform: scale(0.60);
-    margin: calc(-100px * (1 - 0.60) / 2);
+	transform: scale(0.60);
+	margin: calc(-100px * (1 - 0.60) / 2);
 }
 .mask-evolutionary-tree .evo-panel-left>.monster-head>.monster .id
 {
-    bottom: 5px;
-    font-size: 20px;
+	bottom: 5px;
+	font-size: 20px;
 }
 .mask-evolutionary-tree .evo-materials .monster .id
 {
-    bottom: 5px;
-    font-size: 22px;
+	bottom: 5px;
+	font-size: 22px;
 }
 .evo-panel
 {
-    border:black 2px solid;
-    border-radius: 7px;
+	border:black 2px solid;
+	border-radius: 7px;
 }
 .evo-panel-left,
 .evo-panel-right
 {
-    border:#D19635 2px solid;
-    border-radius: 4px;
-    height: 100px;
-    vertical-align: top;
+	border:#D19635 2px solid;
+	border-radius: 4px;
+	height: 100px;
+	vertical-align: top;
 }
 .evo-panel-left
 {
-    border-top-right-radius: unset;
-    border-bottom-right-radius: unset;
-    border-right: none;
-    background-image: linear-gradient(#A16928, #5F3D16);
-    padding: 0 2px;
-    text-align: center;
+	border-top-right-radius: unset;
+	border-bottom-right-radius: unset;
+	border-right: none;
+	background-image: linear-gradient(#A16928, #5F3D16);
+	padding: 0 2px;
+	text-align: center;
 }
 .evo-panel-right
 {
-    border-top-left-radius: unset;
-    border-bottom-left-radius: unset;
-    border-left: none;
-    background-image: url(images/slate.svg);
-    background-size: 200px;
+	border-top-left-radius: unset;
+	border-bottom-left-radius: unset;
+	border-left: none;
+	background-image: url(images/slate.svg);
+	background-size: 200px;
 }
 .evo-panel-right .monster-name
 {
 	font-family: var(--game-font-family);
-    font-size: 15px;
-    line-height: 15px;
-    background: #42341F;
-    border: 2px inset #F4F18E;
-    border-radius: 5px;
-    margin: 4px;
-    padding: 5px;
+	font-size: 15px;
+	line-height: 15px;
+	background: #42341F;
+	border: 2px inset #F4F18E;
+	border-radius: 5px;
+	margin: 4px;
+	padding: 5px;
 }
 .evo-materials
 {
-    margin: 0 4px;
+	margin: 0 4px;
 }
 
 .evo-materials .null .monster
 {
-    opacity: 0.5;
+	opacity: 0.5;
 }
 .evo-materials>li
 {
-    margin: 1px; 
+	margin: 1px; 
 }
 .evo-subevo
 {
-    padding-left: 35px;
-    padding-top: 5px; 
+	padding-left: 35px;
+	padding-top: 5px; 
 }
 .evo-subevo>li
 {
-    position:relative;
+	position:relative;
 }
 
 .evo-subevo>li::before
 {
-    content:' ';
-    position:absolute;
-    top:0;
-    left:-20px;
-    width:15px;
-    height:100%;
-    border-left:3px solid #E88230;
+	content:' ';
+	position:absolute;
+	top:0;
+	left:-20px;
+	width:15px;
+	height:100%;
+	border-left:3px solid #E88230;
 }
 .evo-subevo>li::after
 {
-    content:' ';
-    position:absolute;
-    top:43px;
-    left:-10px;
+	content:' ';
+	position:absolute;
+	top:43px;
+	left:-10px;
 	width:0;
 	height:0;
 	border-top: 8px solid transparent;
@@ -2894,33 +2897,33 @@ table .orb-icon
 }
 .evo-subevo>li:last-child::before
 {
-    border-bottom: 3px solid #F3B750;
-    border-bottom-left-radius: 8px;
-    height:50px;
+	border-bottom: 3px solid #F3B750;
+	border-bottom-left-radius: 8px;
+	height:50px;
 }
 .evo-subevo>li:last-child>.evo-box::before
 {
-    display: none;
+	display: none;
 }
 .evo-subevo>li>.evo-box::before
 {
-    content:' ';
-    position:absolute;
-    top:50px;
-    left:-20px;
-    width:18px;
-    border:none;
-    border-top:3px solid #E88230;
+	content:' ';
+	position:absolute;
+	top:50px;
+	left:-20px;
+	width:18px;
+	border:none;
+	border-top:3px solid #E88230;
 
 }
 
 .evo-panel-left .evo-type
 {
 	font-family: var(--game-font-family);
-    font-size: 15px;
-    line-height: 15px;
-    display: inline-block;
-    position: relative;
+	font-size: 15px;
+	line-height: 15px;
+	display: inline-block;
+	position: relative;
 }
 .evo-panel-left .evo-type::after
 {
@@ -2928,10 +2931,10 @@ table .orb-icon
 	background-clip: text;
 	color: transparent;
 	font-family: var(--game-font-family);
-    font-size: 15px;
-    line-height: 15px;
-    position: absolute;
-    left: 0;
+	font-size: 15px;
+	line-height: 15px;
+	position: absolute;
+	left: 0;
 }
 .evo-panel-left .evo-type::before
 {
@@ -2939,6 +2942,10 @@ table .orb-icon
 	-webkit-text-stroke: 3px black;
 }
 
+.control-box .btn-set-dungeon-enchance::before{
+	font-family: 'Font Awesome 5 Free';
+	font-weight: normal;
+}
 .control-box .btn-qrcode::before{
 	font-family: 'Font Awesome 5 Free';
 	font-weight: normal;
@@ -2972,7 +2979,7 @@ table .orb-icon
 }
 .save-qr-box
 {
-	    padding-bottom: 10px;
+		padding-bottom: 10px;
 }
 
 .read-qr-box::before,
@@ -3012,50 +3019,50 @@ table .orb-icon
 /*.base .evo-type::before,
 .base .evo-type::after
 {
-    content: "基礎";
+	content: "基礎";
 }
 .evolution .evo-type::before,
 .evolution .evo-type::after
 {
-    content: "進化";
+	content: "進化";
 }
 .ult-evo .evo-type::before,
 .ult-evo .evo-type::after
 {
-    content: "究極進化";
+	content: "究極進化";
 }
 .reincarnation .evo-type::before,
 .reincarnation .evo-type::after
 {
-    content: "轉生進化";
+	content: "轉生進化";
 }
 .pixel-evo .evo-type::before,
 .pixel-evo .evo-type::after
 {
-    content: "像素進化";
-    font-family: "zpix";
-    font-weight: bold;
+	content: "像素進化";
+	font-family: "zpix";
+	font-weight: bold;
 }
 .assist-evo .evo-type::before,
 .assist-evo .evo-type::after
 {
-    content: "輔助進化";
+	content: "輔助進化";
 }
 .super-reincarnation .evo-type::before,
 .super-reincarnation .evo-type::after
 {
-    content: "超轉生進化";
+	content: "超轉生進化";
 }
 .super-ult-evo .evo-type::before,
 .super-ult-evo .evo-type::after
 {
-    content: "超究極進化";
+	content: "超究極進化";
 }*/
 .pixel-evo .evo-type::before,
 .pixel-evo .evo-type::after
 {
-    font-family: "zpix";
-    font-weight: bold;
+	font-family: "zpix";
+	font-weight: bold;
 }
 
 .base .evo-type::after
@@ -3064,11 +3071,11 @@ table .orb-icon
 }
 .base
 {
-    background-color: #DCB476;
+	background-color: #DCB476;
 }
 .base .evo-panel-right
 {
-    border-color: #FDC686;
+	border-color: #FDC686;
 }
 .evolution .evo-type::after
 { /*進化*/
@@ -3076,11 +3083,11 @@ table .orb-icon
 }
 .evolution
 {
-    background-color: #C49669;
+	background-color: #C49669;
 }
 .evolution .evo-panel-right
 {
-    border-color: #DEAA76;
+	border-color: #DEAA76;
 }
 .ult-evo .evo-type::after
 { /*究極進化*/
@@ -3088,11 +3095,11 @@ table .orb-icon
 }
 .ult-evo
 {
-    background-color: #DDD844;
+	background-color: #DDD844;
 }
 .ult-evo .evo-panel-right
 {
-    border-color: #FEF84F;
+	border-color: #FEF84F;
 }
 .reincarnation .evo-type::after
 { /*轉生進化*/
@@ -3100,11 +3107,11 @@ table .orb-icon
 }
 .reincarnation
 {
-    background-color: #579889;
+	background-color: #579889;
 }
 .reincarnation .evo-panel-right
 {
-    border-color: #78B89A;
+	border-color: #78B89A;
 }
 .pixel-evo .evo-type::after
 { /*像素進化*/
@@ -3112,11 +3119,11 @@ table .orb-icon
 }
 .pixel-evo
 {
-    background-color: #B1AB94;
+	background-color: #B1AB94;
 }
 .pixel-evo .evo-panel-right
 {
-    border-color: #CBC4AA;
+	border-color: #CBC4AA;
 }
 .assist-evo .evo-type::after
 { /*輔助進化*/
@@ -3124,11 +3131,11 @@ table .orb-icon
 }
 .assist-evo
 {
-    background-color: #607F38;
+	background-color: #607F38;
 }
 .assist-evo .evo-panel-right
 {
-    border-color: #6F9241;
+	border-color: #6F9241;
 }
 .super-reincarnation .evo-type::after
 { /*超轉生進化*/
@@ -3136,11 +3143,11 @@ table .orb-icon
 }
 .super-reincarnation
 {
-    background-color: #C15644;
+	background-color: #C15644;
 }
 .super-reincarnation .evo-panel-right
 {
-    border-color: #DE634F;
+	border-color: #DE634F;
 }
 .super-ult-evo .evo-type::after
 { /*超究極進化*/
@@ -3152,7 +3159,7 @@ table .orb-icon
 }
 .super-ult-evo .evo-panel-right
 {
-    border-color: #DBE721;
+	border-color: #DBE721;
 }
 .evo-panel.henshin .evo-type::after,
 .evo-panel.henshin-loop .evo-type::after
@@ -3167,7 +3174,35 @@ table .orb-icon
 .evo-panel.henshin .evo-panel-right,
 .evo-panel.henshin-loop .evo-panel-right
 {
-    border-color: #7F00FF;
+	border-color: #7F00FF;
+}
+
+.dialog-dungeon-enchance
+{
+	margin-top: 100px;
+	margin-left: calc(50% - 270px);
+}
+.dialog-dungeon-enchance .attr-list>li,
+.dialog-dungeon-enchance .type-list>li,
+.dialog-dungeon-enchance .stats-list>li
+{
+	display: inline-block;
+}
+.dialog-dungeon-enchance .stats-list input
+{
+	width: 50px;
+}
+.dialog-dungeon-enchance .dialog-content>*
+{
+	margin-top: 5px;
+}
+.dialog-dungeon-enchance .stats-list>li
+{
+	margin-right: 5px;
+}
+.dialog-dungeon-enchance .dialog-control>button
+{
+	margin-right: 5px;
 }
 
 .icon-skill,
@@ -3182,7 +3217,7 @@ table .orb-icon
 	background-repeat: no-repeat;
 }
 .icon-skill,
-.attr-list .attr,
+.attrs-div .attr-list .attr,
 .skill-datail-parsed icon.attr,
 .skill-datail-parsed icon.orb,
 .skill-datail-parsed icon.type,

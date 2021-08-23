@@ -405,6 +405,9 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	const memberCurves = [memberCard.hp, memberCard.atk, memberCard.rcv];
 	const assistCurves = assistCard ? [assistCard.hp, assistCard.atk, assistCard.rcv] : null;
 
+	const dge = formation.dungeonEnchance;
+	const dgeRate = [dge.rate.hp, dge.rate.atk, dge.rate.rcv];
+	const isDge = memberCard.attrs.some(attr=>dge.attrs.includes(attr)) || memberCard.types.some(type=>dge.types.includes(type));
 
 	const abilitys = memberCurves.map((ab, idx) => {
 		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr, limitBreakIncr120[idx])); //等级基础三维
@@ -468,9 +471,9 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		reValue = reValue * latterAwokenScale[idx].reduce(calculateAwokenScale, 1);
 
 		//都要做四舍五入
-		if (formation.dungeonEnchance.rate !== 1)
+		if (isDge && dgeRate[idx] != 1)
 		{
-			let rate = (memberCard.attrs.some(attr=>formation.dungeonEnchance.attrs.includes(attr)) || memberCard.types.some(type=>formation.dungeonEnchance.types.includes(type))) ? formation.dungeonEnchance.rate : 1;
+			let rate = dgeRate[idx];
 			reValue = Math.round(reValue * rate);
 			reValueNoAwoken = Math.round(reValueNoAwoken * rate);
 		}else
@@ -667,12 +670,12 @@ function cardN(id) {
 }
 //技能介绍里的头像的切换
 function changeToIdInSkillDetail(event) {
-    const settingBox = editBox.querySelector(".setting-box");
-    const monstersID = settingBox.querySelector(".row-mon-id .m-id");
-    const mid = this.getAttribute("data-cardid");
-    monstersID.value = mid;
-    monstersID.onchange();
-    return false; //取消链接的默认操作
+	const settingBox = editBox.querySelector(".setting-box");
+	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
+	const mid = this.getAttribute("data-cardid");
+	monstersID.value = mid;
+	monstersID.onchange();
+	return false; //取消链接的默认操作
 }
 //搜索并显示合作
 function searchCollab(event) {

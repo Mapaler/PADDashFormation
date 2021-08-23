@@ -102,13 +102,19 @@
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼モンスタープラス";
 }
-.row-mon-ability .m-hp-li::before{
+.row-mon-ability .m-hp-li::before,
+.dialog-dungeon-enchance label[for="dungeon-hp"]::before
+{
 	content: "HP:";
 }
-.row-mon-ability .m-atk-li::before{
+.row-mon-ability .m-atk-li::before,
+.dialog-dungeon-enchance label[for="dungeon-atk"]::before
+{
 	content: "攻撃:";
 }
-.row-mon-ability .m-rcv-li::before{
+.row-mon-ability .m-rcv-li::before,
+.dialog-dungeon-enchance label[for="dungeon-rcv"]::before
+{
 	content: "回復:";
 }
 
@@ -331,7 +337,7 @@ label[for="merge-skill"]::after{
 	content: "公式の覚醒ソートを使用";
 }
 .search-box .search-list-length::before{
-    content: "結果の数:";
+	content: "結果の数:";
 }
 .search-box .sort-div::before{
 	content: "並べ替え:";
@@ -375,7 +381,8 @@ label[for="merge-skill"]::after{
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before
+.special-div .special-clear::before,
+.dialog-dungeon-enchance .dialog-clear::before
 {
 	content: "クリア";
 }
@@ -389,7 +396,7 @@ label[for="merge-skill"]::after{
 	content: "▼特別な検索";
 }
 .special-div .special-add::before {
-    content: "➕";
+	content: "➕";
 }
 .control-div .search-start::before{
 	content: "🔍検索の開始";
@@ -428,62 +435,62 @@ label[for="merge-skill"]::after{
 .base .evo-type::before,
 .base .evo-type::after
 {
-    content: "ベース";
+	content: "ベース";
 }
 .evolution .evo-type::before,
 .evolution .evo-type::after
 {
-    content: "進化";
+	content: "進化";
 }
 .ult-evo .evo-type::before,
 .ult-evo .evo-type::after
 {
-    content: "究極進化";
+	content: "究極進化";
 }
 .reincarnation .evo-type::before,
 .reincarnation .evo-type::after
 {
-    content: "転生進化";
+	content: "転生進化";
 }
 .pixel-evo .evo-type::before,
 .pixel-evo .evo-type::after
 {
-    content: "ドット進化";
+	content: "ドット進化";
 }
 .assist-evo .evo-type::before,
 .assist-evo .evo-type::after
 {
-    content: "アシスト進化";
+	content: "アシスト進化";
 }
 .super-reincarnation .evo-type::before,
 .super-reincarnation .evo-type::after
 {
-    content: "超転生進化";
+	content: "超転生進化";
 }
 .super-ult-evo .evo-type::before,
 .super-ult-evo .evo-type::after
 {
-    content: "超究極進化";
+	content: "超究極進化";
 }
 .pixel-evo .evo-type
 {
 	transform: scaleX(0.90);
-    margin: calc(-100px * (1 - 0.90) / 2);
+	margin: calc(-100px * (1 - 0.90) / 2);
 }
 .assist-evo .evo-type
 {
 	transform: scaleX(0.80);
-    margin: calc(-100px * (1 - 0.80) / 2);
+	margin: calc(-100px * (1 - 0.80) / 2);
 }
 .henshin .evo-type::before,
 .henshin .evo-type::after
 {
-    content: "変身";
+	content: "変身";
 }
 .henshin-loop .evo-type::before,
 .henshin-loop .evo-type::after
 {
-    content: "ループ変身";
+	content: "ループ変身";
 }
 
 .control-box .btn-qrcode::before{
@@ -501,27 +508,27 @@ label[for="merge-skill"]::after{
 
 .formation-from-string::before
 {
-    content: "文字列から読み取られた列リンク";
+	content: "文字列から読み取られた列リンク";
 }
 label[for="sourceSelect"]::before
 {
-    content: "ビデオ ソースの選択:";
+	content: "ビデオ ソースの選択:";
 }
 #qr-code-frame .save-qr-img::before
 {
-    content: "\f0c7 QRコードイメージを保存";
+	content: "\f0c7 QRコードイメージを保存";
 }
 #qr-code-frame .read-qr-camera::before
 {
-    content: "\f030 カメラでスキャンする";
+	content: "\f030 カメラでスキャンする";
 }
 #qr-code-frame .read-qr-camera.running::before
 {
-    content: "\f28d  カメラの使用を停止します";
+	content: "\f28d  カメラの使用を停止します";
 }
 #qr-code-frame .read-qr-file::before
 {
-    content: "\f1c5 画像ファイルを読み取る";
+	content: "\f1c5 画像ファイルを読み取る";
 }
 #qr-code-frame .read-string::before {
 	content: "\f891 文字列を読み取ります";
@@ -537,4 +544,28 @@ label[for="qr-data-type-pdc"]::before
 }
 label[for="qr-data-type-pdchu"]::before {
 	content: "Valeria(pdchu)";
+}
+.btn-set-dungeon-enchance::before
+{
+	content: "\f6d9 ダンジョン強化";
+}
+.dialog-dungeon-enchance .dialog-title::before
+{
+	content: "ダンジョン強化倍率設定";
+}
+.dialog-dungeon-enchance .dialog-confirm::before
+{
+	content: "確認";
+}
+.dialog-dungeon-enchance .attr-list::before
+{
+	content: "有効な属性：";
+}
+.dialog-dungeon-enchance .type-list::before
+{
+	content: "有効なタイプ：";
+}
+.dialog-dungeon-enchance .stats-list::before
+{
+	content: "強化倍率：";
 }

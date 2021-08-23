@@ -103,13 +103,19 @@
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼몬스터 플러스";
 }
-.row-mon-ability .m-hp-li::before{
+.row-mon-ability .m-hp-li::before,
+.dialog-dungeon-enchance label[for="dungeon-hp"]::before
+{
 	content: "HP:";
 }
-.row-mon-ability .m-atk-li::before{
+.row-mon-ability .m-atk-li::before,
+.dialog-dungeon-enchance label[for="dungeon-atk"]::before
+{
 	content: "공격:";
 }
-.row-mon-ability .m-rcv-li::before{
+.row-mon-ability .m-rcv-li::before,
+.dialog-dungeon-enchance label[for="dungeon-rcv"]::before
+{
 	content: "회복:";
 }
 
@@ -328,7 +334,7 @@ label[for="merge-skill"]::after{
 	content: "공식 각성 순서를 사용합니다";
 }
 .search-box .search-list-length::before{
-    content: "결과 수:";
+	content: "결과 수:";
 }
 .search-box .sort-div::before{
 	content: "정렬:";
@@ -372,7 +378,8 @@ label[for="merge-skill"]::after{
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before
+.special-div .special-clear::before,
+.dialog-dungeon-enchance .dialog-clear::before
 {
 	content: "명확한";
 }
@@ -386,7 +393,7 @@ label[for="merge-skill"]::after{
 	content: "▼특별 검색";
 }
 .special-div .special-add::before {
-    content: "➕";
+	content: "➕";
 }
 .control-div .search-start::before{
 	content: "🔍검색 시작";
@@ -425,42 +432,42 @@ label[for="merge-skill"]::after{
 .base .evo-type::before,
 .base .evo-type::after
 {
-    content: "베이스";
+	content: "베이스";
 }
 .evolution .evo-type::before,
 .evolution .evo-type::after
 {
-    content: "진 화";
+	content: "진 화";
 }
 .ult-evo .evo-type::before,
 .ult-evo .evo-type::after
 {
-    content: "궁극진화";
+	content: "궁극진화";
 }
 .reincarnation .evo-type::before,
 .reincarnation .evo-type::after
 {
-    content: "환생 진와";
+	content: "환생 진와";
 }
 .pixel-evo .evo-type::before,
 .pixel-evo .evo-type::after
 {
-    content: "도트 진화";
+	content: "도트 진화";
 }
 .assist-evo .evo-type::before,
 .assist-evo .evo-type::after
 {
-    content: "어시스트 진화";
+	content: "어시스트 진화";
 }
 .super-reincarnation .evo-type::before,
 .super-reincarnation .evo-type::after
 {
-    content: "초 환색진화";
+	content: "초 환색진화";
 }
 .super-ult-evo .evo-type::before,
 .super-ult-evo .evo-type::after
 {
-    content: "초 궁극진화";
+	content: "초 궁극진화";
 }
 .evo-type
 {
@@ -469,15 +476,15 @@ label[for="merge-skill"]::after{
 .henshin .evo-type::before,
 .henshin .evo-type::after
 {
-    content: "변신";
+	content: "변신";
 }
 .henshin-loop .evo-type::before,
 .henshin-loop .evo-type::after
 {
-    content: "루프 변신";
+	content: "루프 변신";
 }
 .icon-skill[data-icon-type="resolve"] {
-    background-position-x: calc(-36px * 2);
+	background-position-x: calc(-36px * 2);
 }
 
 .control-box .btn-qrcode::before{
@@ -495,27 +502,27 @@ label[for="merge-skill"]::after{
 
 .formation-from-string::before
 {
-    content: "문자열에서 읽은 팀 링크입니다";
+	content: "문자열에서 읽은 팀 링크입니다";
 }
 label[for="sourceSelect"]::before
 {
-    content: "비디오 소스 선택:";
+	content: "비디오 소스 선택:";
 }
 #qr-code-frame .save-qr-img::before
 {
-    content: "\f0c7  QR 코드 이미지 저장";
+	content: "\f0c7  QR 코드 이미지 저장";
 }
 #qr-code-frame .read-qr-camera::before
 {
-    content: "\f030  카메라로 스캔";
+	content: "\f030  카메라로 스캔";
 }
 #qr-code-frame .read-qr-camera.running::before
 {
-    content: "\f28d  카메라 사용을 중지합니다";
+	content: "\f28d  카메라 사용을 중지합니다";
 }
 #qr-code-frame .read-qr-file::before
 {
-    content: "\f1c5  이미지 파일 읽기";
+	content: "\f1c5  이미지 파일 읽기";
 }
 #qr-code-frame .read-string::before {
 	content: "\f891 문자열을 읽습니다";
@@ -531,4 +538,28 @@ label[for="qr-data-type-pdc"]::before
 }
 label[for="qr-data-type-pdchu"]::before {
 	content: "Valeria(pdchu)";
+}
+.btn-set-dungeon-enchance::before
+{
+	content: "\f6d9 던전 강화";
+}
+.dialog-dungeon-enchance .dialog-title::before
+{
+	content: "지하성 강화 배율 설정";
+}
+.dialog-dungeon-enchance .dialog-confirm::before
+{
+	content: "확인";
+}
+.dialog-dungeon-enchance .attr-list::before
+{
+	content: "유효한 속성:";
+}
+.dialog-dungeon-enchance .type-list::before
+{
+	content: "유효한 형식:";
+}
+.dialog-dungeon-enchance .stats-list::before
+{
+	content: "배율을 강화합니다:";
 }

@@ -1,54 +1,54 @@
 ﻿const _localTranslating = {
-    webpage_title: `P&D ${teamsCount}P Formation Maker`,
+	webpage_title: `P&D ${teamsCount}P Formation Maker`,
 	addition_display: "Additional display",
-    title_blank: "Input Formation Title",
-    detail_blank: "Input Detail",
-    sort_name:{
-        sort_none: "Nope",
-        sort_id: "Cards Id",
-        sort_attrs : "Attribute",
-        sort_evoRootId: "Cards Evolution Root",
-        sort_evoRoot_Attrs : "Cards Evolution Root's Attribute",
-        sort_rarity: "Rarity",
-        sort_cost: "Cost",
-        sort_skillLv1: "Maximum Skill Turn",
-        sort_skillLvMax: "Minimum Skill Turn",
-        sort_hpMax110: "Max HP",
-        sort_atkMax110: "Max ATK",
-        sort_rcvMax110: "Max RCV",
-        sort_hpMax110_awoken: "Max HP (+Awoken)",
-        sort_atkMax110_awoken: "Max ATK (+Awoken)",
-        sort_rcvMax110_awoken: "Max RCV (+Awoken)",
-        sort_abilityIndex_awoken: "Maximum Weighted Ability Index (+Awakening)",
-    },
-    force_reload_data: `Force refresh data`,
-    skill_parse: {
-        skill: {
+	title_blank: "Input Formation Title",
+	detail_blank: "Input Detail",
+	sort_name:{
+		sort_none: "Nope",
+		sort_id: "Cards Id",
+		sort_attrs : "Attribute",
+		sort_evoRootId: "Cards Evolution Root",
+		sort_evoRoot_Attrs : "Cards Evolution Root's Attribute",
+		sort_rarity: "Rarity",
+		sort_cost: "Cost",
+		sort_skillLv1: "Maximum Skill Turn",
+		sort_skillLvMax: "Minimum Skill Turn",
+		sort_hpMax110: "Max HP",
+		sort_atkMax110: "Max ATK",
+		sort_rcvMax110: "Max RCV",
+		sort_hpMax110_awoken: "Max HP (+Awoken)",
+		sort_atkMax110_awoken: "Max ATK (+Awoken)",
+		sort_rcvMax110_awoken: "Max RCV (+Awoken)",
+		sort_abilityIndex_awoken: "Maximum Weighted Ability Index (+Awakening)",
+	},
+	force_reload_data: `Force refresh data`,
+	skill_parse: {
+		skill: {
 			unknown: tp`Unkonwn skill type: ${'type'}`,
 			active_turns: tp`${'actionSkill'}, for ${'turns'} turns`,
 			random_skills: tp`Random Activates these skills:${'skills'}`,
 			damage_enemy: tp`Inflicts ${'times'}${'damage'} ${'attr'} attack on ${'target'}${'totalDamage'}`,
 			damage_enemy_times: tp`${'times'} `,
 			damage_enemy_count: tp` (${'damage'} in total)`,
-            //Inflicts a 50x attack to 1 enemy and recover 100% of the damage. Reduces unmatchable orb status by 9999 turns. 9999 turn awoken bind recovery.
+			//Inflicts a 50x attack to 1 enemy and recover 100% of the damage. Reduces unmatchable orb status by 9999 turns. 9999 turn awoken bind recovery.
 			vampire: tp`${'damage_enemy'} and ${'icon'}recover ${'heal'} of the damage`,
 			delay: tp`${'icon'}Delays enemies' next move`,
 			mass_attack: tp`${'icon'}Mass attacks`,
 			leader_change: tp`${'icon'}Switches ${'target'} with Leader Monster, use again to switch back`,
 			no_skyfall: tp`${'icon'}No Skyfall Combos`,
 			self_harm: tp`${'icon'}Reduces ${'stats'} by ${'value'}`,
-            heal: tp`${'icon'}Recover ${'value'} ${'stats'}`,
+			heal: tp`${'icon'}Recover ${'value'} ${'stats'}`,
 			unbind: tp`Recovery ${'stats'} by ${'turns'} turns`,
 			unbind_normal: tp`${'icon'}Bind`,
 			unbind_awakenings: tp`${'icon'}Awoken bind`,
 			unbind_matches: tp`${'icon'}Unmatchable orb`,
 			bind_skill: tp`${'icon'}Unable to use skills`,
-            defense_break: tp`${'icon'}Reduce enemy defense by ${'value'}`,
-            poison: tp`${'icon'}Poisons ${'target'}, reduce ${'stats'} with ${'belong_to'} ${'value'} per turns`,
+			defense_break: tp`${'icon'}Reduce enemy defense by ${'value'}`,
+			poison: tp`${'icon'}Poisons ${'target'}, reduce ${'stats'} with ${'belong_to'} ${'value'} per turns`,
 			time_extend: tp`${'icon'}Orb move time ${'value'}`,
 			follow_attack: tp`${'icon'}Bonus attack equal to ${'belong_to'} ${'value'} when matching Orbs (Consider the ${'target'}'s defense)`,
 			follow_attack_fixed: tp`inflicts ${'damage'} ${'attr'} damage`,
-            auto_heal_buff: tp`${'icon'}Heal ${'value'} ${'stats'} every turn`,
+			auto_heal_buff: tp`${'icon'}Heal ${'value'} ${'stats'} every turn`,
 			auto_heal: tp`${'icon'}Heal ${'stats'} by ${'belong_to'} ${'value'} after matching orbs`,
 			ctw: tp`${'icon'}Move orbs freely for ${'value'}`,
 			gravity: tp`${'icon'}Reduce ${'target'} ${'value'}`,
@@ -86,7 +86,7 @@
 			reduce_damage: tp`${'condition'}${'icon'}Reduces ${'attrs'} damage taken by ${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			power_up_targets: tp`[${'attrs_types'}]'s `, //attrs, types, attrs_types
-            henshin: tp`Transforms into ${'card'}`,
+			henshin: tp`Transforms into ${'card'}`,
 			void_poison: tp`Voids ${'poison'} damage`,
 			skill_proviso: tp`The follow-up effect can only be activates ${'condition'}`,
 			obstruct_opponent: tp`Apply obstruct skill effect to ${'target'}: ${'skills'}`,
@@ -95,7 +95,7 @@
 			obstruct_opponent_designated_position: tp`No.${'positions'} ranked opponents`,
 		},
 		power: {
-            unknown: tp`[ Unkonwn power up: ${'type'} ]`,
+			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
 			scale_attributes: tp`When matching ${'min'} attr. of ${'orbs'} ${'stats'}${'bonus'}`,
 			scale_attributes_bonus: tp`, ${'bonus'} per attr. additional, up to ${'stats_max'} for ${'max'} attr.`,
 			scale_combos: tp`When ${'min'} combos ${'stats'}${'bonus'}`,
@@ -109,7 +109,7 @@
 			scale_state_kind_count: tp`${'stats'} for each [${'awakenings'}${'attrs'}${'types'}] in team`,
 		},
 		cond: {
-            unknown: tp`[ Unknown condition ]`,
+			unknown: tp`[ Unknown condition ]`,
 			hp_equal: tp`When ${'hp'} == ${'min'} `,
 			hp_less_or_equal: tp`When ${'hp'} ≤ ${'max'} `,
 			hp_greater_or_equal: tp`When ${'hp'} ≥ ${'min'} `,
@@ -136,8 +136,8 @@
 			right: tp`${'pos'} of right columns`,
 			shape: tp`specified location`,
 		},
-        value: {
-            unknown: tp`[ Unknown value: ${'type'}]`, //type
+		value: {
+			unknown: tp`[ Unknown value: ${'type'}]`, //type
 			const: tp`${'value'} ${'unit'}`,
 			const_to: tp`to ${'value'}`,
 			mul_percent: tp`${'value'}%`,
@@ -158,17 +158,17 @@
 			enemy_one: tp`1 enemy`,
 			enemy_attr: tp`${'attr'} enemy`,
 		},
-        stats: {
-            unknown: tp`[ Unknown: ${'type'}]`, //type
-            maxhp: tp`Max HP`,
-            hp: tp`HP`,
-            chp: tp`current HP`,
-            atk: tp`ATK`,
+		stats: {
+			unknown: tp`[ Unknown: ${'type'}]`, //type
+			maxhp: tp`Max HP`,
+			hp: tp`HP`,
+			chp: tp`current HP`,
+			atk: tp`ATK`,
 			rcv: tp`RCV`,
-            teamhp: tp`Team HP`,
-            teamatk: tp`Team ${'attrs'} ATK`,
-            teamrcv: tp`Team RCV`,
-        },
+			teamhp: tp`Team HP`,
+			teamatk: tp`Team ${'attrs'} ATK`,
+			teamrcv: tp`Team RCV`,
+		},
 		unit: {
 			orbs: tp``,
 			times: tp` times`,
@@ -321,7 +321,7 @@
 			[80]: tp`${'icon'}Enhanced 4 colors`,
 			[81]: tp`${'icon'}Enhanced 5 colors`,
 		}
-    },
+	},
 }
 deepMerge(localTranslating, _localTranslating);
 localisation(localTranslating);

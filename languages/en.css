@@ -104,13 +104,19 @@
 .edit-box .setting-box .row-mon-plus::before{
 	content: "▼Monster Plus";
 }
-.row-mon-ability .m-hp-li::before{
+.row-mon-ability .m-hp-li::before,
+.dialog-dungeon-enchance label[for="dungeon-hp"]::before
+{
 	content: "HP:";
 }
-.row-mon-ability .m-atk-li::before{
+.row-mon-ability .m-atk-li::before,
+.dialog-dungeon-enchance label[for="dungeon-atk"]::before
+{
 	content: "ATK:";
 }
-.row-mon-ability .m-rcv-li::before{
+.row-mon-ability .m-rcv-li::before,
+.dialog-dungeon-enchance label[for="dungeon-rcv"]::before
+{
 	content: "RCV:";
 }
 
@@ -339,7 +345,7 @@ label[for="merge-skill"]::after{
 	content: "Use the official Awoken sorting";
 }
 .search-box .search-list-length::before{
-    content: "Number of results:";
+	content: "Number of results:";
 }
 .search-box .sort-div::before{
 	content: "Sort by:";
@@ -383,7 +389,8 @@ label[for="merge-skill"]::after{
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before
+.special-div .special-clear::before,
+.dialog-dungeon-enchance .dialog-clear::before
 {
 	content: "Clear";
 }
@@ -397,7 +404,7 @@ label[for="merge-skill"]::after{
 	content: "▼Special Search";
 }
 .special-div .special-add::before {
-    content: "➕";
+	content: "➕";
 }
 .control-div .search-start::before{
 	content: "🔍Start Search";
@@ -436,37 +443,37 @@ label[for="merge-skill"]::after{
 .base .evo-type::before,
 .base .evo-type::after
 {
-    content: "Base";
+	content: "Base";
 }
 .evolution .evo-type::before,
 .evolution .evo-type::after
 {
-    content: "Evolution";
+	content: "Evolution";
 }
 .ult-evo .evo-type::before,
 .ult-evo .evo-type::after
 {
-    content: "Ult Evo";
+	content: "Ult Evo";
 }
 .reincarnation .evo-type::before,
 .reincarnation .evo-type::after
 {
-    content: "Reincarnation";
+	content: "Reincarnation";
 }
 .pixel-evo .evo-type::before,
 .pixel-evo .evo-type::after
 {
-    content: "Pixel Evo";
+	content: "Pixel Evo";
 }
 .assist-evo .evo-type::before,
 .assist-evo .evo-type::after
 {
-    content: "Assist Evo";
+	content: "Assist Evo";
 }
 .super-reincarnation .evo-type::before,
 .super-reincarnation .evo-type::after
 {
-    content: "Super Reincarnation";
+	content: "Super Reincarnation";
 }
 .super-ult-evo .evo-type::before,
 .super-ult-evo .evo-type::after
@@ -477,50 +484,50 @@ label[for="merge-skill"]::after{
 .evolution .evo-type
 {
 	transform: scaleX(0.90);
-    margin: calc(-100px * (1 - 0.90) / 2);
+	margin: calc(-100px * (1 - 0.90) / 2);
 }
 .pixel-evo .evo-type
 {
 	transform: scaleX(0.95);
-    margin: calc(-100px * (1 - 0.95) / 2);
+	margin: calc(-100px * (1 - 0.95) / 2);
 }
 .super-ult-evo .evo-type
 {
 	transform: scaleX(0.65);
-    margin: calc(-100px * (1 - 0.63) / 2);
+	margin: calc(-100px * (1 - 0.63) / 2);
 }
 .reincarnation .evo-type
 {
 	transform: scaleX(0.60);
-    margin: calc(-100px * (1 - 0.55) / 2);
+	margin: calc(-100px * (1 - 0.55) / 2);
 }
 .assist-evo .evo-type
 {
 	transform: scaleX(0.85);
-    margin: calc(-100px * (1 - 0.85) / 2);
+	margin: calc(-100px * (1 - 0.85) / 2);
 }
 .super-reincarnation .evo-type
 {
 	transform: scaleX(0.43);
-    margin: calc(-100px * 1 / 2);
+	margin: calc(-100px * 1 / 2);
 }
 .henshin .evo-type::before,
 .henshin .evo-type::after
 {
-    content: "Henshin";
+	content: "Henshin";
 }
 .henshin-loop .evo-type::before,
 .henshin-loop .evo-type::after
 {
-    content: "Loop Henshin";
+	content: "Loop Henshin";
 }
 .henshin-loop  .evo-type
 {
 	transform: scaleX(0.6);
-    margin: calc(-100px * (1 - 0.6) / 2);
+	margin: calc(-100px * (1 - 0.6) / 2);
 }
 .icon-skill[data-icon-type="resolve"] {
-    background-position-x: calc(-36px * 1);
+	background-position-x: calc(-36px * 1);
 }
 .control-box .btn-qrcode::before{
 	content: "\f029 QR Code";
@@ -537,27 +544,27 @@ label[for="merge-skill"]::after{
 
 .formation-from-string::before
 {
-    content: "A formation link read from string";
+	content: "A formation link read from string";
 }
 label[for="sourceSelect"]::before
 {
-    content: "Video source selection:";
+	content: "Video source selection:";
 }
 #qr-code-frame .save-qr-img::before
 {
-    content: "\f0c7  Save QR code image";
+	content: "\f0c7  Save QR code image";
 }
 #qr-code-frame .read-qr-camera::before
 {
-    content: "\f030  Scan with camera";
+	content: "\f030  Scan with camera";
 }
 #qr-code-frame .read-qr-camera.running::before
 {
-    content: "\f28d  Stop using camera";
+	content: "\f28d  Stop using camera";
 }
 #qr-code-frame .read-qr-file::before
 {
-    content: "\f1c5  Read image file";
+	content: "\f1c5  Read image file";
 }
 #qr-code-frame .read-string::before {
 	content: "\f891 Read string";
@@ -573,4 +580,28 @@ label[for="qr-data-type-pdc"]::before
 }
 label[for="qr-data-type-pdchu"]::before {
 	content: "Valeria(pdchu)";
+}
+.btn-set-dungeon-enchance::before
+{
+	content: "\f6d9 Dungeon Enchanced";
+}
+.dialog-dungeon-enchance .dialog-title::before
+{
+	content: "Dungeon Enchancement Setting";
+}
+.dialog-dungeon-enchance .dialog-confirm::before
+{
+	content: "Confirm";
+}
+.dialog-dungeon-enchance .attr-list::before
+{
+	content: "Effective Attr.:";
+}
+.dialog-dungeon-enchance .type-list::before
+{
+	content: "Effective Types:";
+}
+.dialog-dungeon-enchance .stats-list::before
+{
+	content: "Enhancement Rate:";
 }
