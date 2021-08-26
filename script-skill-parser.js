@@ -98,14 +98,14 @@ function isEqual(obj1,obj2) {
 }
 class Board
 {
-	#rowCount = 6;
-	#columnCount = 7;
-	#data = [];
+	rowCount = 6;
+	columnCount = 7;
+	data = [];
 	constructor(def = null)
 	{
-		for (let ri=0;ri<this.#rowCount;ri++)
+		for (let ri=0;ri<this.rowCount;ri++)
 		{
-			this.#data.push(new Array(this.#columnCount).fill(Array.isArray(def) ? null : def));
+			this.data.push(new Array(this.columnCount).fill(Array.isArray(def) ? null : def));
 		}
 		if (Array.isArray(def))
 		{
@@ -119,10 +119,10 @@ class Board
 			exclude = [exclude];
 		const o = sequence.entries();
 		//65版部分
-		for (let ri=0;ri<this.#data.length;ri++)
+		for (let ri=0;ri<this.data.length;ri++)
 		{
 			if (ri == 2) ri++;
-			const row = this.#data[ri];
+			const row = this.data[ri];
 			for (let ci=0;ci<row.length;ci++)
 			{
 				if (ci == 3) ci++;
@@ -132,14 +132,14 @@ class Board
 			}
 		}
 		//填充剩下的部分
-		for (let ri=0;ri<this.#data.length;ri++)
+		for (let ri=0;ri<this.data.length;ri++)
 		{
 			if (ri == 2) ri++;
-			const row = this.#data[ri];
+			const row = this.data[ri];
 			if (exclude && exclude.includes(row[3])) continue;
 			row[3] = o.next().value?.[1] ?? row[3] ;
 		}
-		const row = this.#data[2];
+		const row = this.data[2];
 		for (let ci=0;ci<row.length;ci++)
 		{
 			if (exclude && exclude.includes(row[ci])) continue;
@@ -151,8 +151,8 @@ class Board
 	{
 		const randomData = [];
 		//将65版之后的的提出来
-		const maxCount = this.#rowCount * this.#columnCount
-		let secondaryData = valueArray.splice((this.#rowCount - 1) * (this.#columnCount - 1) - (maxCount - valueArray.length));
+		const maxCount = this.rowCount * this.columnCount
+		let secondaryData = valueArray.splice((this.rowCount - 1) * (this.columnCount - 1) - (maxCount - valueArray.length));
 		
 		while(valueArray.length > 0)
 		{
@@ -167,7 +167,7 @@ class Board
 	//洗版的填充
 	randomFill(attrs) 
 	{
-		let valueArray = new Uint8Array(this.#rowCount * this.#columnCount);
+		let valueArray = new Uint8Array(this.rowCount * this.columnCount);
 		crypto.getRandomValues(valueArray); //获取符合密码学要求的安全的随机值
 		valueArray = Array.from(valueArray.map(x => attrs[x % attrs.length])); //用所有宝珠随机填充
 		//之后用每种颜色填充前3个
@@ -181,10 +181,10 @@ class Board
 	//生成珠子的填充
 	generateOrbs(attrs, count, exclude)
 	{
-		let space = this.#rowCount * this.#columnCount;
+		let space = this.rowCount * this.columnCount;
 		if (exclude?.length > 0)
 		{
-			space -= this.#data.flat().filter(o=>exclude.includes(o)).length;
+			space -= this.data.flat().filter(o=>exclude.includes(o)).length;
 		}
 		
 		let valueArray = new Array(space);
@@ -201,7 +201,7 @@ class Board
 		for (let row of rows)
 		{
 			if (row >= 2) row++;
-			const rowData = this.#data[row];
+			const rowData = this.data[row];
 			for (let ri=0;ri<rowData.length;ri++)
 			{
 				rowData[ri] = attr;
@@ -214,7 +214,7 @@ class Board
 		for (let col of cols)
 		{
 			if (col >= 3) col++;
-			for (let row of this.#data)
+			for (let row of this.data)
 			{
 				row[col] = attr;
 			}
@@ -236,9 +236,9 @@ class Board
 		{
 			if (ri == 2)
 			{
-				fillRow(this.#data[ri], matrix[ri], attr);
+				fillRow(this.data[ri], matrix[ri], attr);
 			}
-			fillRow(this.#data[ri >= 2 ? ri+1 : ri], matrix[ri], attr);
+			fillRow(this.data[ri >= 2 ? ri+1 : ri], matrix[ri], attr);
 		}
 	}
 	//面板叠加
@@ -247,7 +247,7 @@ class Board
 		for (let ri=0;ri<board.length;ri++)
 		{
 			const rowNew = board[ri];
-			const rowOld = this.#data[ri];
+			const rowOld = this.data[ri];
 			for (let ci=0;ci<rowNew.length;ci++)
 			{
 				rowOld[ci] = rowNew[ci] ?? rowOld[ci];
@@ -257,14 +257,14 @@ class Board
 	//导出数组
 	valueOf()
 	{
-		return this.#data;
+		return this.data;
 	}
 	//输出表格
 	toTable()
 	{
 		const table = document.createElement("table");
 		table.className = "board";
-		this.#data.forEach((rowData, ri, rArr) => {
+		this.data.forEach((rowData, ri, rArr) => {
 			const row = table.insertRow();
 			if (ri == 2 && rArr.length > 5) row.classList.add("board-row4");
 	
@@ -276,7 +276,7 @@ class Board
 				if (ci == 3 && cArr.length > 6) cell.classList.add("board-cell5");
 			});
 		});
-		if (this.#data.length > 5)
+		if (this.data.length > 5)
 		{
 			table.onclick = function() {
 				this.classList.toggle("board-76");
