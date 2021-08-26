@@ -1424,7 +1424,7 @@ function showParsedSkill(event) {
 		console.log(this.skill);
 	}
 }
-console.log("aaa");
+
 function renderSkillEntry(skills)
 {
 	const ul = document.createElement("ul");
