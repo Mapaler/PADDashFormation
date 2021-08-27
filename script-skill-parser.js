@@ -839,6 +839,9 @@ function powerUp(attrs, types, value, condition = null, reduceDamageValue = null
 		if (hp === 1 && atk === 1 && rcv === 1 && !reduceDamage)
 			return null;
 	}
+	if (attrs?.target != undefined) {
+		return { kind: SkillKinds.PowerUp, target: attrs.target, attrs: null, types: null, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
+	}
 	return { kind: SkillKinds.PowerUp, attrs: attrs, types: types, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
 }
 function counterAttack(attr, prob, value) {
@@ -875,7 +878,7 @@ function gravity(value) {
 function voidEnemyBuff(buffs) {
 	return { kind: SkillKinds.VoidEnemyBuff, buffs: buffs };
 }
-function skillBoost(value) { return { kind: SkillKinds.SkillBoost, value: value }; }
+function skillBoost(value1, value2) { return { kind: SkillKinds.SkillBoost, min: value1, max: value2 ?? value1 }; }
 function minMatch(value) { return { kind: SkillKinds.MinMatchLength, value: value }; }
 function fixedTime(value) { return { kind: SkillKinds.FixedTime, value: v.constant(value) }; }
 function addCombo(value) { return { kind: SkillKinds.AddCombo, value: value }; }
@@ -1130,7 +1133,7 @@ const parsers = {
 
 	[144](teamAttrs, mul, single, dmgAttr) { return damageEnemy(single ? 'single' : 'all', dmgAttr, v.xTeamATK(flags(teamAttrs), mul)); },
 	[145](mul) { return heal(v.xTeamRCV(mul)); },
-	[146](turns) { return skillBoost(v.constant(turns)); },
+	[146](turns1, turns2) { return skillBoost(v.constant(turns1), turns2 ? v.constant(turns2) : undefined); },
   
 	[148](percent) { return rateMultiply(v.percent(percent), 'exp'); },
 	[149](mul) { return powerUp(null, null, p.mul({ rcv: mul }), c.exact('match-length', 4, [Attributes.Heart])); },
@@ -1196,9 +1199,9 @@ const parsers = {
 	},
 	[169](min, base, percent, bonus, max) { return powerUp(null, null, p.scaleCombos(min, max ?? min, [base || 100, 100], [bonus, 0]), null, v.percent(percent)); },
 	[170](attrs, min, base, percent, bonus, stage) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (stage ? stage - 1 : 0), [base, 100], [bonus ?? 0, 0]), null, v.percent(percent)); },
-	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent) {
+	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, min, [mul, 100], [0, 0]), null, v.percent(percent));
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus ?? 0, 0]), null, v.percent(percent));
 	},
 	[172]() { return setOrbState(null, 'unlocked'); },
 	[173](turns, attrAbsorb, comboAbsorb, damageAbsorb) {
@@ -1376,6 +1379,7 @@ const parsers = {
 	[229](attrs, types, hp, atk, rcv) {
 		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp, atk: atk, rcv: rcv})));
 	},
+	[230](turns, target, mul) { return activeTurns(turns, powerUp({target: target}, null, p.mul({ atk: mul }))); },
 	[1000](type, pos, ...ids) {
 		let posType = (type=>{
 			switch (type) {
@@ -1778,11 +1782,16 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.SkillBoost: { //溜
-			const value = skill.value;
+			const min = skill.min, max = skill.max;
 			let dict = {
-				icon: createIcon(skill.kind, SkillValue.isLess(skill.value) ? "boost-decr" : "boost-incr"),
-				turns: renderValue(value, { unit:tsp.unit.turns, plusSign:true }),
+				icon: createIcon(skill.kind, SkillValue.isLess(min) ? "boost-decr" : "boost-incr"),
+				turns_min: renderValue(min, { unit:tsp.unit.turns, plusSign:true }),
 			};
+			if (max.value !== min.value) {
+				dict.turns_max = tsp.skill.skill_boost_range(
+					{turns: renderValue(max, { unit:tsp.unit.turns, plusSign:true })}
+				);
+			}
 			frg.ap(tsp.skill.skill_boost(dict));
 			break;
 		}
@@ -2030,7 +2039,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.PowerUp: {
-			let attrs = skill.attrs, types = skill.types, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage, additional = skill.additional;
+			let attrs = skill.attrs, types = skill.types, target = skill.target, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage, additional = skill.additional;
 			dict = {
 				icon: createIcon(skill.kind),
 			};
@@ -2047,12 +2056,17 @@ function renderSkill(skill, option = {})
 				targetDict.types = renderTypes(types || [], {affix: true});
 				attrs_types.push(targetDict.types);
 			}
+			if (target == 1)
+			{
+				targetDict.target = tsp.target.self();
+				attrs_types.push(targetDict.target);
+			}
 			if (attrs_types.length)
 			{
 				targetDict.attrs_types = attrs_types.nodeJoin(tsp.word.slight_pause());
 			}
 			
-			if (targetDict.attrs || targetDict.types) dict.targets = tsp.skill.power_up_targets(targetDict);
+			if (attrs_types.length) dict.targets = tsp.skill.power_up_targets(targetDict);
 
 			let subDocument = [];
 			if (value){
