@@ -54,7 +54,8 @@
 			gravity: tp`${'icon'}Reduce ${'target'} ${'value'}`,
 			resolve: tp`${'icon'}Survive a single hit when ${'stats'}≧${'min'}`,
 			board_change: tp`Change all orbs to ${'orbs'}`,
-			skill_boost: tp`Team's skills charge ${'icon'}${'turns'}`,
+			skill_boost: tp`Team's skills charge ${'icon'}${'turns_min'}${'turns_max'}`,
+			skill_boost_range: tp`~${'turns'}`,
 			add_combo: tp`Adds ${'value'} combos${'icon'}`,
 			fixed_time: tp`[${'icon'}Fixed orb move time: ${'value'}]`,
 			min_match_length: tp`unable to erase ${'unmatchable'} Orbs or less`, //matchable, unmatchable
