@@ -1145,6 +1145,7 @@ function parseSkillDescription(skill) {
 			}
 			if (sk[5] && sk[5] !== 100) str += `，所有宠物的${getFixedHpAtkRcvString({atk:sk[5]})}`;
 			if (sk[6]) str += `，受到的伤害减少${sk[6]}%`;
+			if (sk[7]) str += `；此后每多1串攻击力+${sk[7]/100}倍，最大${fullColor.length}串时×${(fullColor.length - sk[4]) * sk[7]/100 + sk[5]/100}倍`;
 			break;
 		case 172:
 			str = `解锁所有宝珠`;
