@@ -1748,7 +1748,7 @@ const specialSearchFunctions = (function() {
 						return `回x${getRecScale(skill) / 100}`;
 				}
 			},
-			{name:"ATK rate change",otLangName:{chs:"攻击力 buff（顶攻击）"},
+			{name:"ATK rate change(All)",otLangName:{chs:"全队攻击力 buff（顶攻击）"},
 				function:cards=>{
 					return cards.filter(card=>{
 						const atkbuff = atkBuff_Rate(card);
@@ -1789,6 +1789,22 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
+			{name:"ATK rate change(Single)",otLangName:{chs:"单人攻击力 buff"},
+				function:cards=>{
+					const searchTypeArray = [230];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill && skill.params[2] !== 100;
+					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
+				},
+				addition:card=>{
+					const searchTypeArray = [230];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+		
+					return `${sk[2]}%×${sk[0]}T`;
+			}
+			},
 			{name:"Move time change",otLangName:{chs:"操作时间 buff（顶手指）"},
 				function:cards=>{
 					const searchTypeArray = [132];
@@ -1810,6 +1826,22 @@ const specialSearchFunctions = (function() {
 					if (sk[1]) str += `${sk[1]>0?`+`:``}${sk[1]/10}S`;
 					if (sk[2]) str += `x${sk[2]/100}`;
 					return str;
+				}
+			},
+			{name:"No Skyfall(sort by turns)",otLangName:{chs:"无天降 buff（按回合排序）"},
+				function:cards=>{
+				const searchTypeArray = [184];
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+				const searchTypeArray = [184];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const sk = skill.params;
+				
+				return `无↓×${sk[0]}T`;
 				}
 			},
 			{name:"Creates Roulette Orb",otLangName:{chs:"生成变换位（转转珠）"},
@@ -2242,22 +2274,6 @@ const specialSearchFunctions = (function() {
 				const skill = getCardActiveSkill(card, searchTypeArray);
 				const sk = skill.params;
 				return `${sk[1]}%×${sk[0]}T`;
-				}
-			},
-			{name:"No Skyfall(sort by turns)",otLangName:{chs:"无天降 buff（按回合排序）"},
-				function:cards=>{
-				const searchTypeArray = [184];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-				},
-				addition:card=>{
-				const searchTypeArray = [184];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				
-				return `无↓×${sk[0]}T`;
 				}
 			},
 			{name:"Drop rate increases",otLangName:{chs:"掉落率提升"},
