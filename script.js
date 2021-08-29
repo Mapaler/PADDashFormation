@@ -2995,11 +2995,14 @@ function initialize() {
 
 
 	//已有觉醒的去除
-	function deleteLatent() {
-		const aIdx = monEditLatents.filter(l => !l.classList.contains(className_displayNone)).findIndex(l => l == this);
-		editBox.latent.splice(aIdx, 1);
-		editBox.reCalculateAbility(); //重计算三维
-		editBox.refreshLatent(editBox.latent, editBox.mid); //刷新潜觉
+	function deleteLatent(e) {
+		const aIdx = editBox.latent.indexOf(parseInt(this.getAttribute("data-latent-icon")));
+		if (aIdx >= 0)
+		{
+			editBox.latent.splice(aIdx, 1);
+			editBox.reCalculateAbility(); //重计算三维
+			editBox.refreshLatent(editBox.latent, editBox.mid); //刷新潜觉
+		}
 	}
 	monEditLatents.forEach(la => la.onclick = deleteLatent);
 	//可选觉醒的添加
