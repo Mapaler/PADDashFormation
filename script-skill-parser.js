@@ -1067,7 +1067,7 @@ const parsers = {
 	[123](percent, attrs, types, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(percent, 100)); },
 	[124](attrs1, attrs2, attrs3, attrs4, attrs5, min, mul, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus, 0]));
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus, 0]));
 	},
 	[125](mon1, mon2, mon3, mon4, mon5, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('card', [mon1, mon2, mon3, mon4, mon5].filter(Boolean))); },
 	[126](attrs, turns, turns2, percent) { return activeTurns(turns === turns2 ? turns : [turns, turns2], orbDropIncrease(v.percent(percent), flags(attrs))); },
@@ -1184,7 +1184,7 @@ const parsers = {
 	},
 	[164](attrs1, attrs2, attrs3, attrs4, min, atk, rcv, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, attrs.length, [atk, rcv], [bonus, bonus]));
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, attrs.length, [atk, rcv], [bonus, bonus]));
 	},
 	[165](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, incr) {
 		const attrsArr = flags(attrs);
@@ -1201,7 +1201,7 @@ const parsers = {
 	[170](attrs, min, base, percent, bonus, stage) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (stage ? stage - 1 : 0), [base, 100], [bonus ?? 0, 0]), null, v.percent(percent)); },
 	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus ?? 0, 0]), null, v.percent(percent));
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus ?? 0, 0]), null, v.percent(percent));
 	},
 	[172]() { return setOrbState(null, 'unlocked'); },
 	[173](turns, attrAbsorb, comboAbsorb, damageAbsorb) {
@@ -1312,7 +1312,7 @@ const parsers = {
 	},
 	[201](attrs1, attrs2, attrs3, attrs4, min, damage) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[202](id) {
 		return henshin(id);
@@ -1332,7 +1332,7 @@ const parsers = {
 	[205](attrs, turns) { return activeTurns(turns, orbDropIncrease(null, flags(attrs == -1 ? 1023: attrs), 'locked')); },
 	[206](attrs1, attrs2, attrs3, attrs4, attrs5, min, combo) {
 		const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
-		return powerUp(null, null, p.scaleMatchAttrs(attrs.map(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [addCombo(combo)]);
 	},
 	[207](turns, time, row1, row2, row3, row4, row5, count) {
 		return activeTurns(turns, count ?
