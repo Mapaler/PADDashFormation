@@ -421,7 +421,7 @@ function skillParser(skillId)
 				if (source.reduceDamage != undefined)
 				{
 					if (!target.reduceDamage)
-						target.ReduceDamage = source.reduceDamage;
+						target.reduceDamage = source.reduceDamage;
 					else if (target.reduceDamage.kind === source.reduceDamage.kind)
 						target.reduceDamage.value *= source.reduceDamage.value;
 				}
