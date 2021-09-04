@@ -84,6 +84,7 @@ DBOpenRequest.onupgradeneeded = function(event) {
 	// 因为 id 可以保证是不重复的
 	store = db.createObjectStore("cards");
 	store = db.createObjectStore("skills");
+	store = db.createObjectStore("palyer_datas");
 
 	// 使用事务的 oncomplete 事件确保在插入数据前对象仓库已经创建完毕
 	store.transaction.oncomplete = function(event) {

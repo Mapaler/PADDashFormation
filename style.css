@@ -77,6 +77,7 @@ body{
 .help-link::before{
 	content: "ℹ️Help & Tips";
 }
+
 .title,
 .title-display
 {
