@@ -92,32 +92,21 @@ DBOpenRequest.onupgradeneeded = function(event) {
 	};
 };
 
-/*class Member2
+class Member2
 {
-	constructor(oldMenber = null,isAssist = false)
+	constructor(oldMenber, isAssist)
 	{
-		if (oldMenber)
-		{ //Copy一个
-			this.id = oldMenber.id;
-			this.level = oldMenber.level;
-			this.plus = [...oldMenber.plus];
-			this.awoken = oldMenber.awoken;
-			this.sAwoken = oldMenber.sAwoken;
-			this.latent = [...oldMenber.latent];
-			this.skilllevel = oldMenber.sAwoken;
-			this.assist = oldMenber.assist;
-		}else
-		{ //全新的
-			this.id = 0;
-			this.level = 1;
-			this.plus = [0,0,0];
-			this.awoken = 0;
-			this.sAwoken = null;
-			this.latent = [];
-			this.skilllevel = null;
-			this.assist = null;
-		}
-		this.isAssist = isAssist;
+		//this.index = oldMenber?.index ?? 0;
+		this.id = oldMenber?.id ?? 0;
+		//this.exp = oldMenber?.exp ?? 0;
+		this.level = oldMenber?.level ?? 1;
+		this.plus = oldMenber?.plus ?? {hp:0,atk:0,rcv:0};
+		this.awoken = oldMenber.awoken ?? 0;
+		this.superAwoken = oldMenber.superAwoken ?? null;
+		this.latent = oldMenber?.latent.concat() ?? [];
+		this.skillLevel = oldMenber.skillLevel ?? 0;
+		this.assist = oldMenber.assist ?? null;
+		this.isAssist = Boolean(isAssist !== undefined ? isAssist : oldMenber?.isAssist);
 	}
 	calculateAbility(solo,teamCount){
 		const card = Cards[this.id];
@@ -133,7 +122,7 @@ DBOpenRequest.onupgradeneeded = function(event) {
 	toJSON(){
 
 	}
-}*/
+}
 
 //队员基本的留空
 var Member = function() {
@@ -712,73 +701,6 @@ function turnPage(toPage, e = null) {
 		location.href = newURL;
 	}
 }
-window.onload = function(event) {
-
-	qrcodeReader = new ZXing.BrowserQRCodeReader(); //二维码读取
-	qrcodeWriter = new ZXing.BrowserQRCodeSvgWriter(); //二维码生成
-
-	controlBox = document.body.querySelector(".control-box");
-	statusLine = controlBox.querySelector(".status"); //显示当前状态的
-	formationBox = document.body.querySelector(".formation-box");
-	editBox = document.body.querySelector(".edit-box");
-
-	if (isGuideMod) {
-		console.info('现在是 怪物图鉴 模式');
-		document.body.classList.add('guide-mod');
-	}
-
-	//const helpLink = controlBox.querySelector(".help-link");
-	//if (location.hostname.includes("gitee")) { helpLink.hostname = "gitee.com"; }
-
-	//▼添加语言列表开始
-	const langSelectDom = controlBox.querySelector(".languages");
-	languageList.forEach(lang =>
-		langSelectDom.options.add(new Option(lang.name, lang.i18n))
-	);
-
-	const langOptionArray = Array.from(langSelectDom.options);
-	langOptionArray.find(langOpt => langOpt.value == currentLanguage.i18n).selected = true;
-
-	//▲添加语言列表结束
-	//▼添加数据来源列表开始
-	const dataSelectDom = controlBox.querySelector(".datasource");
-	dataSourceList.forEach(ds =>
-		dataSelectDom.options.add(new Option(ds.source, ds.code))
-	);
-	
-	const dataSourceOptionArray = Array.from(dataSelectDom.options);
-	dataSourceOptionArray.find(dataOpt => dataOpt.value == currentDataSource.code).selected = true;
-	//添加数据class
-	document.body.classList.add("ds-" + currentDataSource.code);
-	//▲添加数据来源列表结束
-
-	//设定初始的显示设置
-	toggleDomClassName(controlBox.querySelector("#show-mon-id"), 'not-show-mon-id', false);
-
-	//记录显示CD开关的状态
-	const showMonSkillCd_id = "show-mon-skill-cd";
-	const btnShowMonSkillCd = controlBox.querySelector(`#btn-${showMonSkillCd_id}`);
-	btnShowMonSkillCd.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showMonSkillCd_id)));
-	btnShowMonSkillCd.onclick = function(e){
-		toggleDomClassName(this, showMonSkillCd_id);
-		if (e) localStorage.setItem(cfgPrefix + showMonSkillCd_id, Number(this.checked));
-	};
-	btnShowMonSkillCd.onclick(false);
-
-	//记录显示觉醒开关的状态
-	const showMonAwoken_id = "show-mon-awoken";
-	const btnShowMonAwoken = controlBox.querySelector(`#btn-${showMonAwoken_id}`);
-	btnShowMonAwoken.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showMonAwoken_id)));
-	btnShowMonAwoken.onclick = function(e){
-		toggleDomClassName(this, showMonAwoken_id);
-		if (e) localStorage.setItem(cfgPrefix + showMonAwoken_id, Number(this.checked));
-	};
-	btnShowMonAwoken.onclick(false);
-	
-	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
-
-	initialize(); //界面初始化
-};
 
 function loadData(force = false)
 {
@@ -1104,7 +1026,6 @@ function creatNewUrl(arg) {
 		}
 	}
 }
-
 //解析从QR图里获取的字符串
 function inputFromQrString(string)
 {
@@ -1314,8 +1235,74 @@ function capture() {
 		//document.body.appendChild(canvas);
 	});
 }
+
+window.onload = initialize; //界面初始化
+
 //初始化
-function initialize() {
+function initialize(event) {
+
+	qrcodeReader = new ZXing.BrowserQRCodeReader(); //二维码读取
+	qrcodeWriter = new ZXing.BrowserQRCodeSvgWriter(); //二维码生成
+
+	controlBox = document.body.querySelector(".control-box");
+	statusLine = controlBox.querySelector(".status"); //显示当前状态的
+	formationBox = document.body.querySelector(".formation-box");
+	editBox = document.body.querySelector(".edit-box");
+
+	if (isGuideMod) {
+		console.info('现在是 怪物图鉴 模式');
+		document.body.classList.add('guide-mod');
+	}
+
+	//const helpLink = controlBox.querySelector(".help-link");
+	//if (location.hostname.includes("gitee")) { helpLink.hostname = "gitee.com"; }
+
+	//▼添加语言列表开始
+	const langSelectDom = controlBox.querySelector(".languages");
+	languageList.forEach(lang =>
+		langSelectDom.options.add(new Option(lang.name, lang.i18n))
+	);
+
+	const langOptionArray = Array.from(langSelectDom.options);
+	langOptionArray.find(langOpt => langOpt.value == currentLanguage.i18n).selected = true;
+
+	//▲添加语言列表结束
+	//▼添加数据来源列表开始
+	const dataSelectDom = controlBox.querySelector(".datasource");
+	dataSourceList.forEach(ds =>
+		dataSelectDom.options.add(new Option(ds.source, ds.code))
+	);
+	
+	const dataSourceOptionArray = Array.from(dataSelectDom.options);
+	dataSourceOptionArray.find(dataOpt => dataOpt.value == currentDataSource.code).selected = true;
+	//添加数据class
+	document.body.classList.add("ds-" + currentDataSource.code);
+	//▲添加数据来源列表结束
+
+	//设定初始的显示设置
+	toggleDomClassName(controlBox.querySelector("#show-mon-id"), 'not-show-mon-id', false);
+
+	//记录显示CD开关的状态
+	const showMonSkillCd_id = "show-mon-skill-cd";
+	const btnShowMonSkillCd = controlBox.querySelector(`#btn-${showMonSkillCd_id}`);
+	btnShowMonSkillCd.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showMonSkillCd_id)));
+	btnShowMonSkillCd.onclick = function(e){
+		toggleDomClassName(this, showMonSkillCd_id);
+		if (e) localStorage.setItem(cfgPrefix + showMonSkillCd_id, Number(this.checked));
+	};
+	btnShowMonSkillCd.onclick(false);
+
+	//记录显示觉醒开关的状态
+	const showMonAwoken_id = "show-mon-awoken";
+	const btnShowMonAwoken = controlBox.querySelector(`#btn-${showMonAwoken_id}`);
+	btnShowMonAwoken.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showMonAwoken_id)));
+	btnShowMonAwoken.onclick = function(e){
+		toggleDomClassName(this, showMonAwoken_id);
+		if (e) localStorage.setItem(cfgPrefix + showMonAwoken_id, Number(this.checked));
+	};
+	btnShowMonAwoken.onclick(false);
+	
+	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
 
 	//触屏使用的切换显示的线条
 	interchangeSVG = document.body.querySelector("#interchange-line");
@@ -1617,6 +1604,147 @@ function initialize() {
 		});
 	}
 	
+	const playerDataFrame = document.body.querySelector("#player-data-frame");
+	const btnPlayerData = controlBox.querySelector(`.btn-player-data`);
+	btnPlayerData.onclick = function(){
+		playerDataFrame.show();
+	};
+	playerDataFrame.uploadData = playerDataFrame.querySelector(".upload-data");
+	playerDataFrame.filePicker = playerDataFrame.querySelector(".file-select");
+	playerDataFrame.uploadData.onclick = function(){ playerDataFrame.filePicker.click(); };
+	playerDataFrame.filePicker.onchange = function(){ uploadPlayerData(this.files); };
+	
+	async function uploadPlayerData(myFiles) {
+		if (myFiles.length < 1) return;
+		
+		for (const myFile of myFiles)
+		{
+			try {
+				const reader = await fileReader(myFile, {readType: "text"});
+				const data = JSON.parse(reader.result);
+				const playerData = new PlayerData(data);
+				console.log(playerData,data);
+			} catch (error) {
+				console.error(error);
+			}
+			
+		}
+	}
+	class PlayerData
+	{
+		constructor(data)
+		{
+			Object.assign(this, data);
+			this.card_parsed = data.card.map(ocard=>new PlayerDataCard(ocard));
+			for (const mon of this.card_parsed)
+			{
+				mon.assist = mon.assistIndex === 0 ? null : this.card_parsed.find(m=>m.index === mon.assistIndex);
+			}
+			this.teams = data.decksb.decks.concat(data.decksbs.decks || [])
+			.map(deck=>new PlayerDataDeck(deck));
+			for (const team of this.teams)
+			{
+				team.members = team.membersId.map(id=>id===0 ? null : this.card_parsed.find(m=>m.index === id));
+			}
+		}
+	}
+	class PlayerDataDeck {
+		constructor(data) {
+			const e = data.entries();
+			this.membersId = [
+				e.next().value[1],
+				e.next().value[1],
+				e.next().value[1],
+				e.next().value[1],
+				e.next().value[1],
+			];
+			this.badge = e.next().value[1];
+			this.membersId.push(e.next().value[1]);
+			e.next(); //未知
+			e.next(); //未知
+			if (!e.next().done)
+			{
+				console.warn("出现未知的用户队伍数据");
+			}
+		}
+	}
+	class PlayerDataCard {
+		constructor(data) {
+			const e = data.entries();
+			this.index = e.next().value[1];
+			this.exp = e.next().value[1];
+			this.level = e.next().value[1];
+			e.next(); //未知
+			e.next(); //未知
+			this.id = e.next().value[1];
+			this.plus = {
+				hp : e.next().value[1],
+				atk: e.next().value[1],
+				rcv: e.next().value[1]
+			};
+			this.awoken = e.next().value[1];
+
+			let parsedLatent = this.parseLatent(e.next().value[1]);
+			this.latentMaxCount = parsedLatent.latentCount;
+			this.latent = this.deleteRepeatLatent(parsedLatent.latent.reverse());
+
+			this.assistIndex = e.next().value[1];
+			e.next(); //未知
+			this.superAwoken = e.next().value[1];
+			e.next(); //未知
+			if (!e.next().done)
+			{
+				console.warn("出现未知的用户箱子卡片数据");
+			}
+			//console.log(b);
+		}
+		parseLatent(number)
+		{
+			let latentNumber = BigInt(number);
+			let obj = {
+				latent: [],
+				latentCount: 6,
+			};
+			//console.log("原始数字",latentNumber.toString(2));
+			let latentVersion = latentNumber & 7n; //记录版本，111是用几位来做记录
+			latentNumber >>= 3n;
+			//console.log("读取潜觉记录位数",latentNumber.toString(2));
+			let changeLatentCount = Boolean(latentNumber & 1n); //1时就是增加格子数
+			latentNumber >>= 1n;
+			//console.log("读取潜觉格子数是否改变",latentNumber.toString(2));
+			if (changeLatentCount)
+			{
+				obj.latentCount = Number(latentNumber & 15n);
+				latentNumber >>= 4n;
+				//console.log("读取潜觉格子数",latentNumber.toString(2));
+			}
+			const getbnum = latentVersion > 6 ? 127n : 31n;
+			const rightbnum = latentVersion > 6 ? 7n : 5n;
+			while (latentNumber>0)
+			{
+				obj.latent.push(Number(latentNumber & getbnum));
+				latentNumber >>= rightbnum;
+				//console.log("读取一个潜觉",latentNumber.toString(2));
+			}
+			return obj;
+		}
+		deleteRepeatLatent(olatents)
+		{
+			let latents = olatents.concat();
+			for (let ai = 0; ai < latents.length; ai++)
+			{
+				let useHole = latentUseHole(latents[ai]);
+				if (useHole > 1)
+				{
+					latents.splice(ai+1, useHole-1);
+				}
+			}
+			return latents;
+		}
+	}
+
+	playerDataFrame.initialize = function(){
+	};
 
 	//标题和介绍文本框
 	const titleBox = formationBox.querySelector(".title-box");

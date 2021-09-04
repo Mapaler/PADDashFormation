@@ -61,6 +61,7 @@ body{
 	--team-2-color : blue;
 	--team-3-color : green;
 	--font-family : "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
+	--icon-font-family : 'Font Awesome 5 Free', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--game-font-family : 'FOT-KurokaneStd-EB',"Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--border-width: 2px;
 
@@ -261,7 +262,7 @@ ul{
 {
 	display: inline-block;
 	box-sizing: border-box;
-	width: 100px;
+	min-width: 100px;
 	padding: 5px;
 	background-color: #956A42;
 	background-image: url(images/slate.svg);
@@ -2573,6 +2574,10 @@ icon.inflicts::after
 .control-box{
 	margin-bottom: 10px;
 }
+.control-box>div
+{
+	margin-bottom: 2px;
+}
 .control-box .languages-label::before{
 	content: "🌐Lanuage:";
 }
@@ -2944,14 +2949,12 @@ table .orb-icon
 	-webkit-text-stroke: 3px black;
 }
 
-.control-box .btn-set-dungeon-enchance::before{
-	font-family: 'Font Awesome 5 Free';
-	font-weight: normal;
+.control-box,
+.control-box button
+{
+	font-family: var(--icon-font-family);
 }
-.control-box .btn-qrcode::before{
-	font-family: 'Font Awesome 5 Free';
-	font-weight: normal;
-}
+
 #qr-code-frame
 {
 	color: white;
@@ -3017,6 +3020,23 @@ table .orb-icon
 {
 	font-size: 20px;
 	padding: 5px;
+}
+
+#player-data-frame .player-box-title
+{
+	color: white;
+	text-align: center;
+	font-size: 2em;
+	font-family: var(--icon-font-family);
+}
+#player-data-frame .brown-button::before
+{
+	font-family: var(--icon-font-family);
+}
+#player-data-frame .upload-data
+{
+	float: right;
+	margin-right: 5px;
 }
 /*.base .evo-type::before,
 .base .evo-type::after

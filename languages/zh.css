@@ -246,6 +246,9 @@ label[for="merge-skill"]::after{
 .control-box .btn-capture::before{
 	content: "📷截图";
 }
+.control-box .btn-player-data::before{
+	content: "📦我的箱子";
+}
 
 .control-box .btn-swap-AB-team::before{
 	content: "🔄交换AB队";
@@ -565,4 +568,13 @@ label[for="qr-data-type-pdchu"]::before {
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "強化倍率：";
+}
+
+#player-data-frame .player-box-title::before
+{
+	content: "\f2bd\A 玩家数据";
+}
+#player-data-frame .upload-data::before
+{
+	content: "\f574 上传数据";
 }

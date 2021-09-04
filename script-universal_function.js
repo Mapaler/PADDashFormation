@@ -248,6 +248,31 @@ function loadImage(url) {
 	});
 }
 
+//代码来自 https://segmentfault.com/a/1190000004451095
+function fileReader (file, options = {}) {
+	return new Promise(function (resolve, reject) {
+		const reader = new FileReader();
+
+		reader.onload = function () {
+			resolve(reader);
+		};
+		reader.onerror = reject;
+
+		if (options.accept && !new RegExp(options.accept).test(file.type)) {
+			reject({
+				code: 1,
+				msg: 'wrong file type'
+			});
+		}
+
+		if (!file.type || /^text\//i.test(file.type) || options.readType == "text") {
+			reader.readAsText(file);
+		} else {
+			reader.readAsDataURL(file);
+		}
+	});
+}
+
 function latentUseHole(latentId) {
 	switch (true) {
 		case (latentId === 12):

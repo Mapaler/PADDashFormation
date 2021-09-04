@@ -46,6 +46,7 @@ var formation = new Formation(teamsCount,6);
 			<button class="btn-qrcode"></button>
 			<button class="btn-capture" onclick="capture();"></button>
 			<a class="down-capture display-none" target="_blank"></a>
+			<button class="btn-player-data"></button>
 			<a class="help-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/blob/master/help.md"></a>
 		</div>
 		<div>
@@ -1093,8 +1094,17 @@ var formation = new Formation(teamsCount,6);
 		</div>
 		<div class="dialog-control"><button class="dialog-clear brown-button"></button><button class="dialog-confirm brown-button"></button></div>
 	</div>
-<script type="text/javascript">
-document.querySelector('input[name="ptype"][value="1"]').checked=true;
-</script>
+	
+	<div id="player-data-frame" class="mask">
+		<div class="player-box-title"><!--玩家数据子--></div>
+		<div class="control-button-box">
+			<button class="mask-close brown-button"></button>
+			<button class="upload-data brown-button"></button>
+			<input type="file" class="file-select display-none" />
+		</div>
+		<div class="mask-content">
+			<ul class="player-datas-list"></ul>
+		</div>
+	</div>
 </body>
 </html>
