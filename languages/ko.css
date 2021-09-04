@@ -551,6 +551,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "확인";
 }
+.dialog-dungeon-enchance .rare-list::before
+{
+	content: "유효한 희귀도:";
+}
 .dialog-dungeon-enchance .attr-list::before
 {
 	content: "유효한 속성:";

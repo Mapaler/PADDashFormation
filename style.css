@@ -1471,6 +1471,7 @@ icon.inflicts::after
 	content: "限制属性1为主属性，属性2为副属性";
 }*/
 .attr-radio,
+.attr-check,
 .type-check,
 .rare-check,
 .sawoken-check
@@ -1598,7 +1599,7 @@ icon.inflicts::after
 	margin-top: -3px;
 	margin-bottom: -5px;
 }
-.rare-div .rare-icon
+.rare-icon
 {
 	font-family: var(--game-font-family);
 	color: white;
@@ -1628,7 +1629,7 @@ icon.inflicts::after
 	opacity: var(--search-icon-unchecked);
 }
 
-.rare-div .rare-icon::before
+.rare-icon::before
 {
 	content: "★";
 	color: gold;
@@ -1638,7 +1639,7 @@ icon.inflicts::after
 	left: 0;
 	top: 0;
 }
-.rare-div .rare-icon::after
+.rare-icon::after
 {
 	color: white;
 	text-shadow: black 0 0 4px;
@@ -1647,7 +1648,7 @@ icon.inflicts::after
 	left: 0;
 	top: 0;
 }
-.rare-div .rare-icon::after
+.rare-icon::after
 {
 	content: attr(data-rare-icon);
 }
@@ -3182,9 +3183,7 @@ table .orb-icon
 	margin-top: 100px;
 	margin-left: calc(50% - 270px);
 }
-.dialog-dungeon-enchance .attr-list>li,
-.dialog-dungeon-enchance .type-list>li,
-.dialog-dungeon-enchance .stats-list>li
+.dialog-dungeon-enchance .dialog-content>ul>li
 {
 	display: inline-block;
 }

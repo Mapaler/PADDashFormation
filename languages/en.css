@@ -593,6 +593,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "Confirm";
 }
+.dialog-dungeon-enchance .rare-list::before
+{
+	content: "Effective Rarity:";
+}
 .dialog-dungeon-enchance .attr-list::before
 {
 	content: "Effective Attr.:";

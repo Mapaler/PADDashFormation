@@ -91,7 +91,7 @@ Number.prototype.keepCounts = function(decimalDigits = 2, plusSign = false)
 	return (plusSign && this > 0 ? '+' : '') + newNumber.bigNumberToString();
 }
 //数组删除自己尾部的空元素
-Array.prototype.DeleteLatter = function(item = null) {
+Array.prototype.deleteLatter = function(item = null) {
 	let index = this.length - 1;
 	for (; index >= 0; index--) {
 		if (this[index] !== item) {
@@ -407,7 +407,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 
 	const dge = formation.dungeonEnchance;
 	const dgeRate = [dge.rate.hp, dge.rate.atk, dge.rate.rcv];
-	const isDge = memberCard.attrs.some(attr=>dge.attrs.includes(attr)) || memberCard.types.some(type=>dge.types.includes(type));
+	const isDge = dge.rarities.includes(memberCard.rarity) || memberCard.attrs.some(attr=>dge.attrs.includes(attr)) || memberCard.types.some(type=>dge.types.includes(type));
 
 	const abilitys = memberCurves.map((ab, idx) => {
 		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr, limitBreakIncr120[idx])); //等级基础三维
@@ -899,7 +899,7 @@ function tIf_Effect_noSkyfall(leader1id, leader2id) {
 	const searchTypeArray = [163, 177];
 	const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
 	const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
-[0]
+
 	return Boolean(ls1 || ls2);
 }
 //计算队伍是否为毒无效

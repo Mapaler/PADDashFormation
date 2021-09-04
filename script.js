@@ -252,6 +252,7 @@ var Formation = function(teamCount, memberCount) {
 	this.dungeonEnchance = {
 		attrs: [],
 		types: [],
+		rarities: [],
 		rate: {
 			hp: 1,
 			atk: 1,
@@ -280,21 +281,18 @@ Formation.prototype.outObj = function() {
 		const teamArr = [];
 		teamArr[0] = t[0].map(m =>
 			m.outObj()
-		).DeleteLatter();
+		).deleteLatter();
 		teamArr[1] = t[1].map(m =>
 			m.outObj()
-		).DeleteLatter();
+		).deleteLatter();
 		if (t[2]) teamArr[2] = t[2];
 		if (t[3]) teamArr[3] = t[3];
 		return teamArr;
 	});
 	let dge = this.dungeonEnchance;
 	if (Object.values(dge.rate).some(rate => rate != 1)) obj.r = [
-		reflags(dge.attrs), //属性
-		reflags(dge.types), //类型
-		dge.rate.hp,
-		dge.rate.atk,
-		dge.rate.rcv
+		[reflags(dge.types),reflags(dge.attrs),reflags(dge.rarities)].deleteLatter(0), //类型,属性,星级
+		[dge.rate.hp,dge.rate.atk,dge.rate.rcv].deleteLatter(1)
 	];
 	obj.v = dataStructure;
 	/*if (obj.f.every(team=>team[0].length == 0 && team[1].length == 0 && team[2] == undefined) &&
@@ -319,6 +317,7 @@ Formation.prototype.loadObj = function(f) {
 				t[2] = 0;
 				t[3] = 0;
 		});
+		dge.rarities.length = 0;
 		dge.attrs.length = 0;
 		dge.types.length = 0;
 		dge.rate.hp = 1;
@@ -347,11 +346,23 @@ Formation.prototype.loadObj = function(f) {
 	});
 	if (f.r)
 	{
-		dge.attrs = flags(f.r[0] ?? 0);
-		dge.types = flags(f.r[1] ?? 0);
-		dge.rate.hp = f.r[2] ?? 1;
-		dge.rate.atk = f.r[3] ?? 1;
-		dge.rate.rcv = f.r[4] ?? 1;
+		if (Array.isArray(f.r[0])) {
+			let effective = f.r[0];
+			let rates = f.r[1];
+			dge.types = flags(effective[0] ?? 0);
+			dge.attrs = flags(effective[1] ?? 0);
+			dge.rarities = flags(effective[2] ?? 0);
+			dge.rate.hp = rates[0] ?? 1;
+			dge.rate.atk = rates[1] ?? 1;
+			dge.rate.rcv = rates[2] ?? 1;
+		} else {
+			dge.attrs = flags(f.r[0] ?? 0);
+			dge.types = flags(f.r[1] ?? 0);
+			dge.rarities.length = 0;
+			dge.rate.hp = f.r[2] ?? 1;
+			dge.rate.atk = f.r[3] ?? 1;
+			dge.rate.rcv = f.r[4] ?? 1;
+		}
 	}
 	if (f.b)
 		this.teams[0][2] = f.b; //原来模式的徽章
@@ -1966,10 +1977,15 @@ function initialize() {
 	dungeonEnchanceDialog.show = function(formation)
 	{
 		const dialogContent = this.querySelector(".dialog-content");
+		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
 		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
 		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
 
 		let dge = formation.dungeonEnchance;
+		for (const rareDom of rareDoms)
+		{
+			rareDom.checked = dge.rarities.includes(parseInt(rareDom.value));
+		}
 		for (const attrDom of attrDoms)
 		{
 			attrDom.checked = dge.attrs.includes(parseInt(attrDom.value));
@@ -1991,14 +2007,16 @@ function initialize() {
 	const dungeonEnchanceDialogConfirm = dungeonEnchanceDialog.querySelector(".dialog-confirm");
 	dungeonEnchanceDialogConfirm.onclick = function(){
 		const dialogContent = dungeonEnchanceDialog.querySelector(".dialog-content");
+		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
 		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
 		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
+		const rarities = rareDoms.map(rareDom=>rareDom.checked ? parseInt(rareDom.value) : undefined).filter(v=>!isNaN(v));
 		const attrs = attrDoms.map(attrDom=>attrDom.checked ? parseInt(attrDom.value) : undefined).filter(v=>!isNaN(v));
 		const types = typeDoms.map(typeDom=>typeDom.checked ? parseInt(typeDom.value) : undefined).filter(v=>!isNaN(v));
 		
 		let dge = formation.dungeonEnchance;
+		dge.rarities = rarities;
 		dge.attrs = attrs;
-		console.log(attrs, types);
 		dge.types = types;
 		dge.rate.hp = parseInt(dialogContent.querySelector("#dungeon-hp").value);
 		dge.rate.atk = parseInt(dialogContent.querySelector("#dungeon-atk").value);
@@ -2010,8 +2028,13 @@ function initialize() {
 	const dungeonEnchanceDialogClear = dungeonEnchanceDialog.querySelector(".dialog-clear");
 	dungeonEnchanceDialogClear.onclick = function(){
 		const dialogContent = dungeonEnchanceDialog.querySelector(".dialog-content");
+		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
 		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
 		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
+		for (const rareDom of rareDoms)
+		{
+			rareDom.checked = false;
+		}
 		for (const attrDom of attrDoms)
 		{
 			attrDom.checked = false;
@@ -3835,6 +3858,13 @@ function refreshAll(formationData) {
 	if (Object.values(dge.rate).some(rate => rate != 1))
 	{
 		dungeonEnchanceDom.innerHTML = '';
+		if (dge.rarities.length > 0) {
+			for (const rarity of dge.rarities) {
+				const icon = dungeonEnchanceDom.appendChild(document.createElement("icon"));
+				icon.className = "rare-icon";
+				icon.setAttribute("data-rare-icon", rarity);
+			}
+		}
 		let skill = powerUp(dge.attrs, dge.types, p.mul({hp: dge.rate.hp * 100, atk: dge.rate.atk * 100, rcv: dge.rate.rcv * 100}));
 		dungeonEnchanceDom.appendChild(renderSkill(skill));
 		dungeonEnchanceDom.classList.remove(className_displayNone);

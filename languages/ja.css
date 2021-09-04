@@ -557,6 +557,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "確認";
 }
+.dialog-dungeon-enchance .rare-list::before
+{
+	content: "有効な希少性:";
+}
 .dialog-dungeon-enchance .attr-list::before
 {
 	content: "有効な属性：";

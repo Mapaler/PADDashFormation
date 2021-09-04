@@ -550,6 +550,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "確認";
 }
+.dialog-dungeon-enchance .rare-list::before
+{
+	content: "生效稀有度：";
+}
 .dialog-dungeon-enchance .attr-list::before
 {
 	content: "生效属性：";
