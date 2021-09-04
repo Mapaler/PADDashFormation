@@ -163,7 +163,7 @@ let localTranslating = {
 			x_awakenings: tp`${'awakenings'}数量×${'value'}`,
 		},
 		target: {
-			self: tp`怪物自身`,
+			self: tp`角色自身`,
 			enemy: tp`敌人`,
 			team: tp`队伍`,
 			team_last: tp`队伍最后一位队员`,
