@@ -333,18 +333,18 @@ ul{
 	cursor: pointer;
 	border-radius: 5px;
 }
-.null .monster,.delay .monster,
+.monster.null,.monster.delay,
 .null .property,.delay .property,
 .null .subproperty,.delay .subproperty
 {
 	box-sizing: border-box;
 	background-image: none !important;
 }
-.null .monster{
+.monster.null{
 	background-color: rgba(230,230,230,0.5);
 	border: 3px grey dashed;
 }
-.edit-box .null .monster{
+.edit-box .monster.null{
 	background-color: #653;
 	border: none;
 	box-shadow: inset black 0 0 7px;
@@ -352,12 +352,12 @@ ul{
 .member{
 	vertical-align: top;
 }
-.delay .monster{
+.monster.delay{
 	background-color: yellow;
 	box-shadow: inset orange 0 0 7px;
 	border: 3px black solid;
 }
-.delay .monster::before{
+.monster.delay::before{
 	width: 94px;
 	height: 94px;
 	color: black;
@@ -389,7 +389,9 @@ ul{
 	position: absolute;
 	left:10px;
 }
-.null .monster>div,.delay .monster>div{
+.monster.null>div,
+.monster.delay>div
+{
 	display:none !important;
 }
 .monster .plus .hp::before,
@@ -2862,7 +2864,7 @@ table .orb-icon
 	margin: 0 4px;
 }
 
-.evo-materials .null .monster
+.evo-materials .monster.null
 {
 	opacity: 0.5;
 }
@@ -3037,6 +3039,225 @@ table .orb-icon
 {
 	float: right;
 	margin-right: 5px;
+}
+
+.player-datas-list>li
+{
+	text-align: center;
+}
+.player-card
+{
+	display: inline-block;
+	background-color: #C39350;
+	background-image: url(images/slate.svg);
+	background-size: 300px 300px;
+	border: 3px solid black;
+	border-radius: 15px;
+	margin-top: 10px;
+	padding: 5px;
+	text-align: left;
+	font-family: var(--game-font-family);
+	border-spacing: 4px 0;
+}
+.player-card .delete::before
+{
+	content: "\f2ed";
+}
+.player-card .name
+{
+	background-color: #E7D5BA;
+	border: 1px solid #815C33;
+	border-radius: 5px;
+	padding: 0 5px;
+	font-family: var(--font-family);
+}
+.player-card .name::before
+{
+	content: "";
+	display: inline-block;
+	width: 36px;
+	height: 36px;
+	background-image: url(images/icon-orbs.png);
+	background-position-y: 36px;
+	background-repeat: no-repeat;
+	vertical-align: bottom;
+	transform: scale(0.5);
+	margin: -9px;
+	margin-right: -3px;
+}
+.player-card .name[data-camp="1"]::before
+{
+	background-position-y: 0;
+}
+.player-card .name[data-camp="2"]::before
+{
+	background-position-y: -36px;
+}
+.player-card .name[data-camp="3"]::before
+{
+	background-position-y: -72px;
+}
+
+.player-card .lvexp,
+.player-card .stama,
+.player-card .gold,
+.player-card .coin
+{
+	background-color: #363331;
+	border: #86663C 3px solid;
+	padding: 0 5px 0 5px;
+}
+.player-card .lvexp,
+.player-card .gold
+{
+	border-radius: 0  0 10px 10px;
+	border-bottom: none;
+	box-shadow:  inset black -2px 3px 3px;
+}
+.player-card .stama,
+.player-card .coin
+{
+	border-radius: 10px 10px 0 0;
+	border-top: none;
+	box-shadow:  inset black -2px -3px 3px;
+}
+
+.player-card .lvexp::before,
+.player-card .stama::before
+{
+	display: inline-block;
+	width: 45px;
+}
+.player-card .lvexp .level,
+.player-card .stama .sta_number
+{
+	width: 80px;
+	margin-left: 5px;
+}
+.player-card .gold,
+.player-card .coin
+{
+	width: 190px;
+}
+
+.player-card tr:not(:first-of-type)
+{
+	text-shadow: black 1px 1px 1px;
+}
+.player-card .lvexp::before,
+.player-card .lvexp .level
+{
+	color: #F2DA50;
+}
+.player-card .stama::before,
+.player-card .stama .sta_number
+{
+	color: #29BCE9;
+}
+.player-card .stama .sta_number .sta_cur.stama-beyond
+{
+	color: #F66A01;
+}
+.player-card .gold
+{
+	color: #85FF8B;
+}
+.player-card .coin
+{
+	color: #E1E64E;
+}
+
+.player-card .lvexp .level,
+.player-card .stama .sta_number
+{
+	display: inline-block;
+}
+
+.player-card .progress-bar
+{
+	display: inline-block;
+	height: 8px;
+	width: 150px;
+	background-color: black;
+	border-radius: 10px;
+	box-shadow: inset white 0 -3px 2px;
+	box-sizing: border-box;
+	padding: 2px;
+	position: relative;
+}
+
+.player-card .progress-bar .bar,
+.player-card .progress-bar .bar2
+{
+	position: absolute;
+	height: 100%;
+	border-radius: 10px;
+	box-shadow: inset black 0 -3px 2px;
+}
+.player-card .lvexp .bar
+{
+	background-color: #F2DA50;
+}
+.player-card .stama .bar
+{
+	background-color: #29BCE9;
+}
+.player-card .stama .bar2
+{
+	background-color: #F66A01;
+}
+
+
+.player-card .gold::before,
+.player-card .coin::before
+{
+	content: "";
+	display: inline-block;
+	width: 36px;
+	height: 36px;
+	background-image: url(images/icon-skills.png);
+	background-position-y: calc(-36px * 30);
+	background-repeat: no-repeat;
+	vertical-align: top;
+	transform: scale(0.75);
+	margin: calc(-36px * (1 - 0.75) / 2);
+}
+.player-card .gold::before
+{
+	background-position-x: -36px;
+}
+
+.deck-list,
+.deck-radio-list
+{
+	text-align: center;
+}
+.deck-list>li,
+.deck-radio-list>li
+{
+	display: inline-block;
+	position: relative
+}
+.deck-radio-list input
+{
+	font-size: 2em;
+}
+.deck-list
+{
+	margin-bottom: 10px;
+}
+.deck-list .monster
+{
+	transform: scale(0.75);
+	margin: calc(-100px * (1 - 0.75) / 2 );
+}
+.deck-list .monster.assist
+{
+	left: 1px;
+	bottom: -16px;
+	position: absolute;
+	transform: scale(0.4);
+	margin: calc(-100px * (1 - 0.4) / 2 );
 }
 /*.base .evo-type::before,
 .base .evo-type::after

@@ -15,11 +15,6 @@
 {
 	background-position-x: -252px;
 }
-.badge[data-badge-icon='0']::before,
-.badge[data-badge-icon='2']::before
-{
-	background-position-x: -36px;
-}
 
 .tIf-total-hp .awoken-bind::before,
 .tIf-total-move .awoken-bind::before,

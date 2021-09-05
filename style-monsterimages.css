@@ -978,6 +978,25 @@ icon.type
 .badge[data-badge-icon='18']::before{
 	background-position-y:calc(-30px * 18);
 }
+.badge[data-badge-icon='19']::before{
+	background-position-y:calc(-30px * 19);
+}
+.badge[data-badge-icon='20']::before{
+	background-position-y:calc(-30px * 20);
+}
+.badge[data-badge-icon='21']::before{
+	background-position-y:calc(-30px * 21);
+}
+.badge[data-badge-icon='22']::before{
+	background-position-y:calc(-30px * 22);
+}
+.badge[data-badge-icon='23']::before{
+	background-position-y:calc(-30px * 23);
+}
+.badge[data-badge-icon='50']::before{
+	background-position-x: -36px;
+	background-position-y: 0;
+}
 
 /*属性图片*/
 .attr

@@ -567,3 +567,12 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "배율을 강화합니다:";
 }
+.badge[data-badge-icon='1']::before,
+.badge[data-badge-icon='20']::before
+{
+	background-position-x: calc(-36px * 2);
+}
+.badge[data-badge-icon='3']::before
+{
+	background-position-x: -36px;
+}

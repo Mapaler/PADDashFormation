@@ -398,7 +398,7 @@ const official_awoken_sorting = [
 
 //pdc的徽章对应数字
 const pdcBadgeMap = [
-	{pdf:0,pdc:10}, //无限cost
+	{pdf:1,pdc:10}, //无限cost
 	{pdf:2,pdc:12}, //小手指
 	{pdf:3,pdc:9}, //全体攻击
 	{pdf:4,pdc:5}, //小回复
@@ -407,16 +407,17 @@ const pdcBadgeMap = [
 	{pdf:7,pdc:8}, //SB
 	{pdf:8,pdc:18}, //队长防封
 	{pdf:9,pdc:19}, //SX
-	{pdf:10,pdc:7}, //无天降
+	{pdf:11,pdc:7}, //无天降
 	{pdf:17,pdc:6}, //大回复
 	{pdf:18,pdc:2}, //大血量
 	{pdf:19,pdc:4}, //大攻击
+	{pdf:20,pdc:null}, //三维
 	{pdf:21,pdc:13}, //大手指
 	{pdf:10,pdc:11}, //加经验
 	{pdf:12,pdc:15}, //墨镜
 	{pdf:13,pdc:17}, //防废
 	{pdf:14,pdc:16}, //防毒
-	{pdf:1,pdc:14}, //月卡
+	{pdf:50,pdc:14}, //月卡
 ];
 //pdc的潜觉对应数字
 const pdcLatentMap = [

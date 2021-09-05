@@ -1,5 +1,6 @@
 let Cards = []; //怪物数据
 let Skills = []; //技能数据
+let PlayerDatas = []; //玩家数据
 let currentLanguage; //当前语言
 let currentDataSource; //当前数据
 
@@ -16,7 +17,7 @@ let qrcodeReader; //二维码读取
 let qrcodeWriter; //二维码输出
 let selectedDeviceId; //视频源id
 
-const dataStructure = 3; //阵型输出数据的结构版本
+const dataStructure = 4; //阵型输出数据的结构版本
 const cfgPrefix = "PADDF-"; //设置名称的前缀
 const className_displayNone = "display-none";
 const dataAttrName = "data-value"; //用于储存默认数据的属性名
@@ -60,7 +61,7 @@ if (currentDataSource == undefined)
 
 const dbName = "PADDF";
 let db = null;
-const DBOpenRequest = indexedDB.open(dbName,2);
+const DBOpenRequest = indexedDB.open(dbName, 4);
 
 DBOpenRequest.onsuccess = function(event) {
 	db = event.target.result; //DBOpenRequest.result;
@@ -80,11 +81,14 @@ DBOpenRequest.onupgradeneeded = function(event) {
 	let db = event.target.result;
 
 	let store;
-	// 建立一个对象仓库来存储用户的相关信息，我们选择 id 作为键路径（key path）
-	// 因为 id 可以保证是不重复的
-	store = db.createObjectStore("cards");
-	store = db.createObjectStore("skills");
-	store = db.createObjectStore("palyer_datas");
+	switch (true)
+	{
+		case event.oldVersion < 2:
+			store = db.createObjectStore("cards");
+			store = db.createObjectStore("skills");
+		case event.oldVersion < 3:
+			store = db.createObjectStore("palyer_datas", { keyPath: 'name' });
+	}
 
 	// 使用事务的 oncomplete 事件确保在插入数据前对象仓库已经创建完毕
 	store.transaction.oncomplete = function(event) {
@@ -304,7 +308,7 @@ Formation.prototype.loadObj = function(f) {
 				t[1].forEach(function(m, mi) {
 					m.loadObj(null);
 				});
-				t[2] = 0;
+				t[2] = 1;
 				t[3] = 0;
 		});
 		dge.rarities.length = 0;
@@ -330,10 +334,38 @@ Formation.prototype.loadObj = function(f) {
 				const fm = tf[1][mi];
 				m.loadObj(fm, dataVeision);
 			});
-			t[2] = tf[2] || 0; //徽章
-			t[3] = tf[3] || 0; //队长
+			t[2] = tf[2] != undefined ? (dataVeision > 3 ? tf[2] : badgeConvert(tf[2])) : 1; //徽章
+			t[3] = tf[3] ?? 0; //队长
 		}
 	});
+	function badgeConvert(old)
+	{
+		switch (old)
+		{
+			case 0:case 1:case 2:case 3:case 4:case 5:case 6:case 7:case 8: {
+				return old + 1;
+			}
+			case 9: {
+				return 11;
+			}
+			case 10:case 11:case 12: {
+				return old + 7;
+			}
+			case 13: {
+				return 21;
+			}
+			case 14: {
+				return 10;
+			}
+			case 15:case 16:case 17: {
+				return old - 3;
+			}
+			case 18: {
+				return 50;
+			}
+			default: return 1;
+		}
+	}
 	if (f.r)
 	{
 		if (Array.isArray(f.r[0])) {
@@ -452,6 +484,158 @@ Formation.prototype.getQrStr = function(type)
 	}
 }
 
+class PlayerData
+{
+	constructor(data)
+	{
+		Object.assign(this, data);
+		this.parsedCards = PlayerDataCard.parseDataArray(data.card);
+		this.parsedDecks = PlayerDataDeck.parseDataArray(
+			data.decksb.decks,
+			data?.decksbs?.decks,
+			this.parsedCards);
+	}
+}
+class PlayerDataDeck {
+	constructor(data, parsedCards) {
+		const e = data.entries();
+		this.membersIndex = [
+			e.next().value[1],
+			e.next().value[1],
+			e.next().value[1],
+			e.next().value[1],
+			e.next().value[1],
+		];
+		this.badge = e.next().value[1];
+		this.membersIndex.push(e.next().value[1]);
+		if (parsedCards)
+		{
+			this.members = this.membersIndex.map(id=>id===0 ? null : parsedCards.find(m=>m.index === id));
+		}
+		e.next(); //未知
+		e.next(); //未知
+		if (!e.next().done)
+		{
+			console.warn("出现未知的用户队伍数据");
+		}
+	}
+	static parseDataArray(decks1, decks2, parsedCards)
+	{
+		let datas = decks1.concat(decks2 ?? []);
+		let decks = datas.map(deck=>new PlayerDataDeck(deck, parsedCards));
+		if (Boolean(decks2))
+		{
+			decks.forEach(deck=>{if (deck.badge === 1) deck.badge = 50;});
+		}
+		return decks;
+	}
+	toFormation()
+	{
+		const f = new Formation(1, 6);
+		const team = f.teams[0];
+		team[2] = this.badge;
+		const tMembers = team[0];
+		const tAssists = team[1];
+		this.members.forEach((member, idx)=>{
+			const tm = tMembers[idx];
+			const ta = tAssists[idx];
+			if (member) {
+				tm.loadFromMember(member);
+				tm.sawoken = Cards[member.id].superAwakenings.indexOf(member.superAwoken);
+				tm.plus = Object.values(member.plus);
+				if (member.assist) {
+					ta.loadFromMember(member.assist);
+					ta.sawoken = Cards[member.assist.id].superAwakenings.indexOf(member.assist.superAwoken);
+					ta.plus = Object.values(member.assist.plus);
+				}
+			}
+		});
+		return f;
+	}
+}
+class PlayerDataCard {
+	constructor(data) {
+		const e = data.entries();
+		this.index = e.next().value[1];
+		this.exp = e.next().value[1];
+		this.level = e.next().value[1];
+		e.next(); //未知
+		e.next(); //未知
+		this.id = e.next().value[1];
+		this.plus = {
+			hp : e.next().value[1],
+			atk: e.next().value[1],
+			rcv: e.next().value[1]
+		};
+		this.awoken = e.next().value[1];
+
+		let parsedLatent = this.parseLatent(e.next().value[1]);
+		this.latentMaxCount = parsedLatent.latentCount;
+		this.latent = this.deleteRepeatLatent(parsedLatent.latent.reverse());
+
+		this.assistIndex = e.next().value[1];
+		e.next(); //未知
+		this.superAwoken = e.next().value[1];
+		e.next(); //未知
+		if (!e.next().done)
+		{
+			console.warn("出现未知的用户箱子卡片数据");
+		}
+		//console.log(b);
+	}
+	static parseDataArray(datas)
+	{
+		let parsedCards = datas.map(ocard=>new PlayerDataCard(ocard));
+		for (const mon of parsedCards)
+		{
+			mon.assist = mon.assistIndex === 0 ? null : parsedCards.find(m=>m.index === mon.assistIndex);
+		}
+		return parsedCards;
+	}
+	parseLatent(number)
+	{
+		let latentNumber = BigInt(number);
+		let obj = {
+			latent: [],
+			latentCount: 6,
+		};
+		//console.log("原始数字",latentNumber.toString(2));
+		let latentVersion = latentNumber & 7n; //记录版本，111是用几位来做记录
+		latentNumber >>= 3n;
+		//console.log("读取潜觉记录位数",latentNumber.toString(2));
+		let changeLatentCount = Boolean(latentNumber & 1n); //1时就是增加格子数
+		latentNumber >>= 1n;
+		//console.log("读取潜觉格子数是否改变",latentNumber.toString(2));
+		if (changeLatentCount)
+		{
+			obj.latentCount = Number(latentNumber & 15n);
+			latentNumber >>= 4n;
+			//console.log("读取潜觉格子数",latentNumber.toString(2));
+		}
+		const getbnum = latentVersion > 6 ? 127n : 31n;
+		const rightbnum = latentVersion > 6 ? 7n : 5n;
+		while (latentNumber>0)
+		{
+			obj.latent.push(Number(latentNumber & getbnum));
+			latentNumber >>= rightbnum;
+			//console.log("读取一个潜觉",latentNumber.toString(2));
+		}
+		return obj;
+	}
+	deleteRepeatLatent(olatents)
+	{
+		let latents = olatents.concat();
+		for (let ai = 0; ai < latents.length; ai++)
+		{
+			let useHole = latentUseHole(latents[ai]);
+			if (useHole > 1)
+			{
+				latents.splice(ai+1, useHole-1);
+			}
+		}
+		return latents;
+	}
+}
 //进化树
 class EvoTree 
 {
@@ -946,6 +1130,12 @@ function loadData(force = false)
 						clearInterval(formationBoxHook);
 					}
 				}
+
+				//读取储存的所有玩家数据
+				if (db) dbReadAll(db, "palyer_datas").then(datas=>{
+					PlayerDatas = datas.map(data=>new PlayerData(data));
+					document.body.querySelector("#player-data-frame").show();
+				});
 			}
 		}
 
@@ -1026,44 +1216,45 @@ function creatNewUrl(arg) {
 		}
 	}
 }
+
+function ObjToUrl(obj)
+{
+	let fileName;
+	switch (obj.d.f.length)
+	{
+		case 1:{
+			fileName = "solo.html";
+			break;
+		}
+		case 2:{
+			fileName = "multi.html";
+			break;
+		}
+		case 3:{
+			fileName = "triple.html";
+			break;
+		}
+	}
+	const newUrl = new URL(fileName, location);
+	newUrl.searchParams.set("d",JSON.stringify(obj.d));
+	if (!obj.s || obj.s == "ja")
+	{
+		newUrl.searchParams.delete("s");
+	}else
+	{
+		newUrl.searchParams.set("s", obj.s);
+	}
+	let l = getQueryString("l");
+	if (l)
+	{
+		newUrl.searchParams.set("l", l);
+	}
+	return newUrl;
+}
 //解析从QR图里获取的字符串
 function inputFromQrString(string)
 {
 	const re = {code: 0, message: null};
-	function ObjToUrl(obj)
-	{
-		let fileName;
-		switch (obj.d.f.length)
-		{
-			case 1:{
-				fileName = "solo.html";
-				break;
-			}
-			case 2:{
-				fileName = "multi.html";
-				break;
-			}
-			case 3:{
-				fileName = "triple.html";
-				break;
-			}
-		}
-		const newUrl = new URL(fileName, location);
-		newUrl.searchParams.set("d",JSON.stringify(obj.d));
-		if (!obj.s || obj.s == "ja")
-		{
-			newUrl.searchParams.delete("s");
-		}else
-		{
-			newUrl.searchParams.set("s", obj.s);
-		}
-		let l = getQueryString("l");
-		if (l)
-		{
-			newUrl.searchParams.set("l", l);
-		}
-		return newUrl;
-	}
 	//code 1~99 为各种编码
 	if (string.substr(0,1) == "{" && string.substr(-1,1) == "}")
 	{
@@ -1611,140 +1802,121 @@ function initialize(event) {
 	};
 	playerDataFrame.uploadData = playerDataFrame.querySelector(".upload-data");
 	playerDataFrame.filePicker = playerDataFrame.querySelector(".file-select");
+	playerDataFrame.playerList = playerDataFrame.querySelector(".player-datas-list");
 	playerDataFrame.uploadData.onclick = function(){ playerDataFrame.filePicker.click(); };
 	playerDataFrame.filePicker.onchange = function(){ uploadPlayerData(this.files); };
 	
+	playerDataFrame.initialize = function(){
+		this.playerList.innerHTML = '';
+		for (const playerData of PlayerDatas)
+		{
+			this.playerList.add(playerData);
+		}
+	};
+	function deletPlayerData(e)
+	{
+		const table = this.parentNode.parentNode.parentNode.parentNode;
+		table.parentNode.remove();
+		PlayerDatas.splice(PlayerDatas.indexOf(table.data), 1);
+		const name = table.getAttribute("data-player-name");
+		dbDelete(db, "palyer_datas", name);
+	}
+	playerDataFrame.playerList.add = function(data) {
+		this.appendChild(this.newPlayerData(data));
+	}
+	playerDataFrame.playerList.newPlayerData = function(data) {
+		const t = playerDataFrame.querySelector('#template-player-datas');
+		const clone = document.importNode(t.content, true);
+		const table = clone.querySelector("table");
+		table.data = data;
+		table.setAttribute("data-player-name", data.name);
+
+		const tbody = table.tBodies[0];
+
+		tbody.querySelector(".delete").onclick = deletPlayerData;
+
+		changeid({id: data.vs_icon}, tbody.querySelector(".avatar .monster"));
+		let name = tbody.querySelector(".name");
+		name.textContent = data.name;
+		name.setAttribute("data-camp", data.camp);
+
+		let lvexp = tbody.querySelector(".lvexp");
+		lvexp.querySelector(".progress-bar .bar").style.width = `${(data.exp - data.curLvExp) / (data.nextLvExp - data.curLvExp) * 100}%`;
+		lvexp.querySelector(".level").textContent = data.lv;
+
+		let stama = tbody.querySelector(".stama");
+		//第一管体力
+		stama.querySelector(".progress-bar .bar").style.width = `${Math.min(data.sta / data.sta_max, 1) * 100}%`;
+		//第二管体力
+		stama.querySelector(".progress-bar .bar2").style.width = `${Math.max(data.sta - data.sta_max, 0) / data.sta_max * 100}%`;
+		let sta_cur = stama.querySelector(".sta_number .sta_cur");
+		sta_cur.textContent = data.sta;
+		if (data.sta > data.sta_max) sta_cur.classList.add("stama-beyond");
+		stama.querySelector(".sta_number .sta_max").textContent = data.sta_max;
+
+		tbody.querySelector(".gold").textContent = data.gold.bigNumberToString();
+		tbody.querySelector(".coin").textContent = data.coin.bigNumberToString();
+
+		const deckList = tbody.querySelector(".decks .deck-list");
+		const teamLink = tbody.querySelector(".decks .team-link");
+		const radioList = tbody.querySelector(".decks .deck-radio-list");
+		data.parsedDecks.forEach((deck,idx)=>{
+			const li = radioList.appendChild(document.createElement("li"));
+			const ipt = li.appendChild(document.createElement("input"));
+			ipt.className = "deck-choose";
+			ipt.type = "radio";
+			ipt.name = `decks-${data.name}`;
+			ipt.value = idx;
+			ipt.onclick = changeDeck;
+			ipt.deck = deck;
+		});
+		radioList.querySelector(".deck-choose").click();
+
+		function changeDeck(e)
+		{
+			const deck = this.deck;
+			const lis = Array.from(deckList.querySelectorAll(":scope>li"));
+			lis.forEach((li,idx)=>{
+				changeid(deck.members[idx] ?? {id: 0}, li.querySelector(".monster:not(.assist)"));
+				changeid(deck.members[idx]?.assist ?? {id: 0}, li.querySelector(".monster.assist"));
+			});
+			const newFotmation = deck.toFormation();
+			teamLink.href = ObjToUrl(newFotmation.getPdfQrObj(false));
+		}
+		return clone;
+	}
+
 	async function uploadPlayerData(myFiles) {
 		if (myFiles.length < 1) return;
 		
-		for (const myFile of myFiles)
-		{
+		for (const myFile of myFiles) {
 			try {
 				const reader = await fileReader(myFile, {readType: "text"});
 				const data = JSON.parse(reader.result);
 				const playerData = new PlayerData(data);
-				console.log(playerData,data);
+				console.log(playerData);
+
+				let dataCount = 0;
+				if (db) {
+					dataCount = await dbCount(db, "palyer_datas", data.name);
+					await dbWrite(db, "palyer_datas", data);
+				}
+				let oldIdx = PlayerDatas.findIndex(dt=>dt.name == data.name);
+				if (dataCount && oldIdx >= 0) { //如果已经存在，就更新旧的数据
+					PlayerDatas.splice(oldIdx, 1, playerData);
+					const liArr = playerDataFrame.playerList.querySelectorAll(":scope>li");
+					liArr[oldIdx].remove();
+					playerDataFrame.playerList.insertBefore(playerDataFrame.playerList.newPlayerData(playerData), liArr[oldIdx+1]);
+				} else {
+					PlayerDatas.push(playerData);
+					playerDataFrame.playerList.add(playerData);
+				}
 			} catch (error) {
 				console.error(error);
 			}
-			
-		}
-	}
-	class PlayerData
-	{
-		constructor(data)
-		{
-			Object.assign(this, data);
-			this.card_parsed = data.card.map(ocard=>new PlayerDataCard(ocard));
-			for (const mon of this.card_parsed)
-			{
-				mon.assist = mon.assistIndex === 0 ? null : this.card_parsed.find(m=>m.index === mon.assistIndex);
-			}
-			this.teams = data.decksb.decks.concat(data.decksbs.decks || [])
-			.map(deck=>new PlayerDataDeck(deck));
-			for (const team of this.teams)
-			{
-				team.members = team.membersId.map(id=>id===0 ? null : this.card_parsed.find(m=>m.index === id));
-			}
-		}
-	}
-	class PlayerDataDeck {
-		constructor(data) {
-			const e = data.entries();
-			this.membersId = [
-				e.next().value[1],
-				e.next().value[1],
-				e.next().value[1],
-				e.next().value[1],
-				e.next().value[1],
-			];
-			this.badge = e.next().value[1];
-			this.membersId.push(e.next().value[1]);
-			e.next(); //未知
-			e.next(); //未知
-			if (!e.next().done)
-			{
-				console.warn("出现未知的用户队伍数据");
-			}
-		}
-	}
-	class PlayerDataCard {
-		constructor(data) {
-			const e = data.entries();
-			this.index = e.next().value[1];
-			this.exp = e.next().value[1];
-			this.level = e.next().value[1];
-			e.next(); //未知
-			e.next(); //未知
-			this.id = e.next().value[1];
-			this.plus = {
-				hp : e.next().value[1],
-				atk: e.next().value[1],
-				rcv: e.next().value[1]
-			};
-			this.awoken = e.next().value[1];
-
-			let parsedLatent = this.parseLatent(e.next().value[1]);
-			this.latentMaxCount = parsedLatent.latentCount;
-			this.latent = this.deleteRepeatLatent(parsedLatent.latent.reverse());
-
-			this.assistIndex = e.next().value[1];
-			e.next(); //未知
-			this.superAwoken = e.next().value[1];
-			e.next(); //未知
-			if (!e.next().done)
-			{
-				console.warn("出现未知的用户箱子卡片数据");
-			}
-			//console.log(b);
-		}
-		parseLatent(number)
-		{
-			let latentNumber = BigInt(number);
-			let obj = {
-				latent: [],
-				latentCount: 6,
-			};
-			//console.log("原始数字",latentNumber.toString(2));
-			let latentVersion = latentNumber & 7n; //记录版本，111是用几位来做记录
-			latentNumber >>= 3n;
-			//console.log("读取潜觉记录位数",latentNumber.toString(2));
-			let changeLatentCount = Boolean(latentNumber & 1n); //1时就是增加格子数
-			latentNumber >>= 1n;
-			//console.log("读取潜觉格子数是否改变",latentNumber.toString(2));
-			if (changeLatentCount)
-			{
-				obj.latentCount = Number(latentNumber & 15n);
-				latentNumber >>= 4n;
-				//console.log("读取潜觉格子数",latentNumber.toString(2));
-			}
-			const getbnum = latentVersion > 6 ? 127n : 31n;
-			const rightbnum = latentVersion > 6 ? 7n : 5n;
-			while (latentNumber>0)
-			{
-				obj.latent.push(Number(latentNumber & getbnum));
-				latentNumber >>= rightbnum;
-				//console.log("读取一个潜觉",latentNumber.toString(2));
-			}
-			return obj;
-		}
-		deleteRepeatLatent(olatents)
-		{
-			let latents = olatents.concat();
-			for (let ai = 0; ai < latents.length; ai++)
-			{
-				let useHole = latentUseHole(latents[ai]);
-				if (useHole > 1)
-				{
-					latents.splice(ai+1, useHole-1);
-				}
-			}
-			return latents;
 		}
 	}
 
-	playerDataFrame.initialize = function(){
-	};
 
 	//标题和介绍文本框
 	const titleBox = formationBox.querySelector(".title-box");
@@ -3412,8 +3584,8 @@ function changeid(mon, monDom, latentDom) {
 	{
 		monDom.removeAttribute("href");
 		monDom.removeAttribute("title");
-		parentNode.classList.add("delay");
-		parentNode.classList.remove("null");
+		monDom.classList.add("delay");
+		monDom.classList.remove("null");
 		parentNode.appendChild(fragment);
 		if (latentDom) latentDom.classList.add(className_displayNone);
 		return;
@@ -3421,15 +3593,15 @@ function changeid(mon, monDom, latentDom) {
 	{
 		monDom.removeAttribute("href");
 		monDom.removeAttribute("title");
-		parentNode.classList.add("null");
-		parentNode.classList.remove("delay");
+		monDom.classList.add("null");
+		monDom.classList.remove("delay");
 		parentNode.appendChild(fragment);
 		if (latentDom) latentDom.classList.add(className_displayNone);
 		return;
 	} else if (monId > -1) //如果提供了id
 	{
-		parentNode.classList.remove("null");
-		parentNode.classList.remove("delay");
+		monDom.classList.remove("null");
+		monDom.classList.remove("delay");
 
 		monDom.setAttribute("data-cards-pic-idx", Math.ceil(monId % 1e5 / 100)); //添加图片编号
 		const idxInPage = (monId - 1) % 100; //获取当前页面的总序号
@@ -4007,12 +4179,16 @@ function refreshAll(formationData) {
 		const teamData = formationData.teams[teamNum];
 		const badgeBox = teamBigBox.querySelector(".team-badge");
 		if (badgeBox) {
-			//为了解决火狐在代码片段里无法正确修改checked的问题，所以事先把所有的都切换到false
-			const badges = Array.from(badgeBox.querySelectorAll(`.badge-radio`));
-			badges.forEach(badge=>badge.checked = false);
 
 			const badge = badgeBox.querySelector(`#team-${teamNum+1}-badge-${teamData[2] || 0}`);
-			badge.checked = true;
+			if (badge)
+			{
+				//为了解决火狐在代码片段里无法正确修改checked的问题，所以事先把所有的都切换到false
+				const badges = Array.from(badgeBox.querySelectorAll(`.badge-radio`));
+				badges.forEach(badge=>badge.checked = false);
+				badge.checked = true;
+			}
+			
 		}
 
 		const membersDom = teamBox.querySelector(".team-members");
@@ -4353,10 +4529,12 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
 
 		let badgeHPScale = 1; //徽章倍率
-		if (team[2] == 4 && (solo || teamsCount === 3)) {
+		if (team[2] == 5 && (solo || teamsCount === 3)) {
 			badgeHPScale = 1.05;
-		} else if (team[2] == 11 && (solo || teamsCount === 3)) {
+		} else if (team[2] == 18 && (solo || teamsCount === 3)) {
 			badgeHPScale = 1.15;
+		} else if (team[2] == 20 && (solo || teamsCount === 3)) {
+			badgeHPScale = 1.10;
 		}
 
 		tHP = Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale);

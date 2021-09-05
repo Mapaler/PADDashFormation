@@ -5,9 +5,10 @@
 {
     background-position-x: calc(-32px * 2);
 }
-.badge[data-badge-icon='0']::before,
-.badge[data-badge-icon='14']::before,
-.badge[data-badge-icon='18']::before
+.badge[data-badge-icon='1']::before,
+.badge[data-badge-icon='10']::before,
+.badge[data-badge-icon='20']::before,
+.badge[data-badge-icon='51']::before
 {
-    background-position-x: calc(-36px * 2);
+    background-position-x: calc(-36px * 3);
 }

@@ -609,3 +609,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "Enhancement Rate:";
 }
+.badge[data-badge-icon='1']::before,
+.badge[data-badge-icon='3']::before,
+.badge[data-badge-icon='10']::before,
+.badge[data-badge-icon='20']::before
+{
+	background-position-x: -36px;
+}

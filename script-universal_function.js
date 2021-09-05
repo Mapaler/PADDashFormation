@@ -273,6 +273,76 @@ function fileReader (file, options = {}) {
 	});
 }
 
+function dbReadKey (db, tableName, keys) {
+	return new Promise(function (resolve, reject) {
+		const transaction = db.transaction([tableName]);
+		const objectStore = transaction.objectStore(tableName);
+		const request = objectStore.get(keys);
+		request.onsuccess = function(event) {
+			resolve(request.result);
+		};
+		request.onerror = reject;
+	});
+}
+
+function dbCount (db, tableName, key) {
+	return new Promise(function (resolve, reject) {
+		const transaction = db.transaction([tableName]);
+		const objectStore = transaction.objectStore(tableName);
+		const request = objectStore.count(key);
+		request.onsuccess = function() {
+			resolve(request.result);
+		}
+		request.onerror = reject;
+	});
+}
+
+function dbReadAll (db, tableName) {
+	return new Promise(async function (resolve, reject) {
+		let datas = [];
+		const transaction = db.transaction([tableName]);
+		const objectStore = transaction.objectStore(tableName);
+		const request = objectStore.openCursor();
+		request.onsuccess = function(event) {
+			var cursor = event.target.result;
+			if (cursor) {
+				// cursor.value 包含正在被遍历的当前记录
+				// 这里你可以对 result 做些什么
+				datas.push(cursor.value);
+				cursor.continue();
+			} else {
+				// 没有更多 results
+				resolve(datas);
+			}
+		};
+		request.onerror = reject;
+	});
+}
+
+function dbWrite (db, tableName, data, keys) {
+	return new Promise(function (resolve, reject) {
+		const transaction = db.transaction([tableName], "readwrite");
+		const objectStore = transaction.objectStore(tableName);
+		const request = objectStore.put(data, keys);
+		request.onsuccess = function(event) {
+			resolve(event);
+		};
+		request.onerror = reject;
+	});
+}
+
+function dbDelete (db, tableName, keys) {
+	return new Promise(function (resolve, reject) {
+		const transaction = db.transaction([tableName], "readwrite");
+		const objectStore = transaction.objectStore(tableName);
+		const request = objectStore.delete(keys);
+		request.onsuccess = function(event) {
+			resolve(event);
+		};
+		request.onerror = reject;
+	});
+}
+
 function latentUseHole(latentId) {
 	switch (true) {
 		case (latentId === 12):
@@ -1034,13 +1104,13 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 		//1人、3人计算徽章
 		if (solo || teamsCount === 3) {
 			switch (team[2]) {
-				case 1: //小手指
+				case 2: //小手指
 					moveTime.duration.badge = 1;
 					break;
-				case 13: //大手指
+				case 21: //大手指
 					moveTime.duration.badge = 2;
 					break;
-				case 18: //月卡
+				case 50: //月卡
 					moveTime.duration.badge = 3;
 					break;
 			}

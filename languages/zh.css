@@ -578,3 +578,17 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "\f574 上传数据";
 }
+
+.player-card .lvexp::before
+{
+	content: "EXP";
+}
+.player-card .lvexp .level::before
+{
+	content: "等級";
+}
+
+.player-card .stama::before
+{
+	content: "体力";
+}
