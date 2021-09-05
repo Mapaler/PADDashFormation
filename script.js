@@ -543,10 +543,12 @@ class PlayerDataDeck {
 				tm.loadFromMember(member);
 				tm.sawoken = Cards[member.id].superAwakenings.indexOf(member.superAwoken);
 				tm.plus = Object.values(member.plus);
+				tm.skilllevel = member.skillLevel - 1;
 				if (member.assist) {
 					ta.loadFromMember(member.assist);
 					ta.sawoken = Cards[member.assist.id].superAwakenings.indexOf(member.assist.superAwoken);
 					ta.plus = Object.values(member.assist.plus);
+					ta.skilllevel = member.assist.skillLevel - 1;
 				}
 			}
 		});
@@ -560,8 +562,18 @@ class PlayerDataCard {
 		this.exp = e.next().value[1];
 		this.level = e.next().value[1];
 		e.next(); //未知
-		e.next(); //未知
+		this.skillLevel = e.next().value[1]; //未知
 		this.id = e.next().value[1];
+
+		//叠加型用他们的经验来表示数量
+		const card = Cards[this.id];
+		this.count = 1;
+		if (card && card.overlay)
+		{
+			this.count = this.exp;
+			this.exp = 0;
+		}
+		
 		this.plus = {
 			hp : e.next().value[1],
 			atk: e.next().value[1],
