@@ -401,6 +401,17 @@ label[for="merge-skill"]::after{
 .search-box .special-div::before{
 	content: "▼特殊搜索";
 }
+.search-box .fast-switch::before {
+    content: "快速开关：";
+}
+label[for="no-henshin"]::after
+{
+	content: "非变身";
+}
+label[for="box-have"]::after
+{
+	content: "强调箱子拥有";
+}
 .special-div .special-add::before {
 	content: "➕";
 }

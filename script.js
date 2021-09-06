@@ -661,7 +661,6 @@ class EvoTree
 			//mid = Cards[mid].evoRootId;
 			function returnRootId(mid)
 			{
-				console.log(mid)
 				mid = Cards[mid].evoRootId;
 				const m = Cards[mid];
 				if (m.henshinFrom && m.henshinFrom < m.id)
@@ -756,7 +755,7 @@ class EvoTree
 		evoTypeDiv.className = "evo-type-div";
 		const evoType = evoTypeDiv.appendChild(document.createElement("span"));
 		evoType.className = "evo-type";
-		const monHead = evotPanel_L.appendChild(createCardHead(this.id));
+		const monHead = evotPanel_L.appendChild(createCardHead(this.id, {noTreeCount: true}));
 		monHead.className = "monster-head";
 
 		const monName = evotPanel_R.appendChild(document.createElement("div"));
@@ -767,7 +766,7 @@ class EvoTree
 		evotMaterials.className = "evo-materials";
 		this.card.evoMaterials.forEach(mid=>{
 			//const li = evotMaterials.appendChild(document.createElement("li"));
-			evotMaterials.appendChild(createCardHead(mid));
+			evotMaterials.appendChild(createCardHead(mid, {noTreeCount: true}));
 		});
 
 		const evoSubEvo = tBox.appendChild(document.createElement("ul"));
@@ -1033,10 +1032,10 @@ function loadData(force = false)
 			{
 				const monstersList = editBox.querySelector("#monsters-name-list");
 				let fragment = document.createDocumentFragment();
-				Cards.forEach(function(m) { //添加下拉框候选
+				Cards.forEach(function(card, idx, arr) { //添加下拉框候选
 					const opt = fragment.appendChild(document.createElement("option"));
-					opt.value = m.id;
-					opt.label = m.id + " - " + returnMonsterNameArr(m, currentLanguage.searchlist, currentDataSource.code).join(" | ");
+					opt.value = card.id;
+					opt.label = card.id + " - " + returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code).join(" | ");
 	
 					/*const linkRes = new RegExp("link:(\\d+)", "ig").exec(m.specialAttribute);
 					if (linkRes) { //每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
@@ -1048,7 +1047,12 @@ function loadData(force = false)
 						m.henshinTo = toId;
 						_m.henshinFrom = m.id;
 					}*/
+					/*if (card.evoRootId === card.id)
+					{
+						card.evoTree = arr.filter(c=>c.evoRootId === card.evoRootId);
+					}*/
 				});
+				
 				monstersList.appendChild(fragment);
 			}
 
@@ -1148,7 +1152,7 @@ function loadData(force = false)
 				if (db) dbReadAll(db, "palyer_datas").then(datas=>{
 					PlayerDatas = datas.map(data=>new PlayerData(data));
 					currentPlayerData = PlayerDatas.find(data=>data.name == localStorage.getItem(cfgPrefix + "default-player-name"));
-					document.body.querySelector("#player-data-frame").show();
+					//document.body.querySelector("#player-data-frame").show(); //debug用显示
 				});
 			}
 		}
@@ -2517,7 +2521,7 @@ function initialize(event) {
 			return false; //取消链接的默认操作
 		}
 		const cli = document.createElement("li");
-		const cdom = cli.head = createCardA(id);
+		const cdom = cli.head = createCardA(options);
 		cli.appendChild(cdom);
 		changeid({ id: id }, cdom);
 		const card = Cards[id];
@@ -2734,10 +2738,12 @@ function initialize(event) {
 
 	const s_awokensEquivalent = searchBox.querySelector("#consider-equivalent-awoken"); //搜索等效觉醒
 	const s_canAssist = searchBox.querySelector("#can-assist"); //只搜索辅助
-	s_canAssist.onchange = function() {
-		toggleDomClassName(this, "only-display-can-assist", true, searchMonList);
-	};
+	const s_noHenshin = searchBox.querySelector("#no-henshin"); //只搜索非变身
 
+	const s_boxHave = searchBox.querySelector("#box-have"); //只搜索辅助
+	s_boxHave.onchange = function() {
+		toggleDomClassName(this, "emphasize-box-have", true, document.body);
+	};
 
 	const s_sawokensDiv = searchBox.querySelector(".sawoken-div");
 	const s_sawokensUl = s_sawokensDiv.querySelector(".sawoken-ul");
@@ -2999,7 +3005,9 @@ function initialize(event) {
 			awokensFilter,
 			sawokensFilter,
 			s_awokensEquivalent.checked,
-			s_includeSuperAwoken.checked
+			s_includeSuperAwoken.checked,
+			s_canAssist.checked,
+			s_noHenshin.checked,
 		);
 
 		//进行特殊附加搜索
@@ -3120,7 +3128,7 @@ function initialize(event) {
 		if (e.key == "Enter" && this.value.length > 0 && !/^\d+$/.test(this.value))
 		{
 			s_includeSuperAwoken.onchange();
-			s_canAssist.onchange();
+			s_boxHave.onchange();
 			showSearch(searchByString(this.value));
 		}
 	}
@@ -3137,7 +3145,7 @@ function initialize(event) {
 	//字符串搜索
 	btnSearchByString.onclick = function() {
 		s_includeSuperAwoken.onchange();
-		s_canAssist.onchange();
+		s_boxHave.onchange();
 		showSearch(searchByString(monstersID.value));
 	};
 	//觉醒
@@ -3590,10 +3598,51 @@ function initialize(event) {
 	if (isGuideMod) //图鉴模式直接打开搜索框
 	{
 		s_includeSuperAwoken.onchange();
-		s_canAssist.onchange();
+		s_boxHave.onchange();
 		showSearch([]);
 		//if (monstersID.value.length == 0) editBoxChangeMonId(0);
 	}
+}
+
+//搜出一个卡片包含变身的的完整进化树
+function buildEvoTreeIdsArray(card, includeHenshin = true) {
+	const evoLinkCardsIdArray = card.evoRootId !== 0 ? Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id) : []; //筛选出相同进化链的
+	function loopAddHenshin(arr,card)
+	{
+		const tcard1 = Cards[card.henshinFrom] || null;
+		const tcard2 = Cards[card.henshinTo] || null;
+		const evoCards = Cards.filter(m=>m.evoRootId == card.evoRootId && !arr.includes(m.id)).map(m=>m.id);
+		if (tcard1 && !arr.includes(tcard1.id))
+		{
+			arr.push(tcard1.id);
+			loopAddHenshin(arr,tcard1);
+		}
+		if (tcard2 && !arr.includes(tcard2.id))
+		{
+			arr.push(tcard2.id);
+			loopAddHenshin(arr,tcard2);
+		}
+		if (evoCards.length > 0)
+		{
+			evoCards.forEach(mid=>{
+				arr.push(mid);
+				const m = Cards[mid];
+				if (m.henshinFrom || m.henshinTo)
+				{  //添加变身的
+					loopAddHenshin(arr,m);
+				}
+			});
+		}
+	}
+	evoLinkCardsIdArray.forEach((mid,idx,arr)=>{
+		const m = Cards[mid];
+		if (includeHenshin && (m.henshinFrom || m.henshinTo))
+		{  //添加变身的
+			loopAddHenshin(arr,m);
+		}
+	});
+	evoLinkCardsIdArray.sort((a,b)=>a-b);
+	return evoLinkCardsIdArray;
 }
 
 //改变一个怪物头像
@@ -3759,6 +3808,29 @@ function changeid(mon, monDom, latentDom) {
 			switchLeaderDom.classList.add(className_displayNone);
 		}
 	}
+	const countInBox = monDom.querySelector(".count-in-box");
+	if (countInBox && currentPlayerData) { //如果存在当前绑定用户数据
+		function cardsCount(pre,cur) {
+			return pre + cur.count;
+		}
+		let sameIdCount = currentPlayerData.parsedCards.filter(mon=>mon.id === monId).reduce(cardsCount, 0);
+		
+		monDom.setAttribute("data-box-have", sameIdCount === 0 ? 0 : 1);
+
+		const countSameId = countInBox.querySelector(".same-id");
+		if (countSameId) {
+			countSameId.setAttribute("data-same-id", sameIdCount);
+		}
+		const countEvoTree = countInBox.querySelector(".evo-tree");
+		if (countEvoTree) {
+			let evoLinkCardsIdArray = buildEvoTreeIdsArray(card);
+			let evoTreeCount = currentPlayerData.parsedCards.filter(mon=>evoLinkCardsIdArray.includes(mon.id)).reduce(cardsCount, 0);
+			if (sameIdCount === 0 && evoTreeCount > 0) {
+				monDom.setAttribute("data-box-have", 2);
+			}
+			countEvoTree.setAttribute("data-evo-tree", evoTreeCount - sameIdCount);
+		}
+	}
 
 	parentNode.appendChild(fragment);
 }
@@ -3914,45 +3986,7 @@ function editBoxChangeMonId(id) {
 		mAltName.classList.add(className_displayNone);
 	}
 
-
-	const evoLinkCardsIdArray = card.evoRootId !== 0 ? Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id) : []; //筛选出相同进化链的
-	
-	function loopAddHenshin(arr,card)
-	{
-		const tcard1 = Cards[card.henshinFrom] || null;
-		const tcard2 = Cards[card.henshinTo] || null;
-		const evoCards = Cards.filter(m=>m.evoRootId == card.evoRootId && !arr.includes(m.id)).map(m=>m.id);
-		if (tcard1 && !arr.includes(tcard1.id))
-		{
-			arr.push(tcard1.id);
-			loopAddHenshin(arr,tcard1);
-		}
-		if (tcard2 && !arr.includes(tcard2.id))
-		{
-			arr.push(tcard2.id);
-			loopAddHenshin(arr,tcard2);
-		}
-		if (evoCards.length > 0)
-		{
-			evoCards.forEach(mid=>
-			{
-				arr.push(mid);
-				const m = Cards[mid];
-				if (m.henshinFrom || m.henshinTo)
-				{  //添加变身的
-					loopAddHenshin(arr,m);
-				}
-			});
-		}
-	}
-	evoLinkCardsIdArray.forEach((mid,idx,arr)=>{
-		const m = Cards[mid];
-		if (m.henshinFrom || m.henshinTo)
-		{  //添加变身的
-			loopAddHenshin(arr,m);
-		}
-	});
-	evoLinkCardsIdArray.sort((a,b)=>a-b);
+	const evoLinkCardsIdArray = buildEvoTreeIdsArray(card);
 
 	const createCardHead = editBox.createCardHead;
 	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");
@@ -3962,7 +3996,7 @@ function editBoxChangeMonId(id) {
 	if (evoLinkCardsIdArray.length > 1) {
 		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 		evoLinkCardsIdArray.forEach(function(mid) {
-			const cli = createCardHead(mid);
+			const cli = createCardHead(mid, {noTreeCount: true});
 			if (mid == id) {
 				cli.classList.add("unable-monster");
 			}

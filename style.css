@@ -332,6 +332,7 @@ ul{
 	position: relative;
 	cursor: pointer;
 	border-radius: 5px;
+	text-decoration:none;
 }
 .monster.null,.monster.delay,
 .null .property,.delay .property,
@@ -566,6 +567,37 @@ ul{
 .monster .switch-leader:active
 {
 	animation: icon-active 0.2s;
+}
+/*怪物-箱子统计*/
+.monster .count-in-box
+{
+	position: absolute;
+	left: 15px;
+	top: -10px;
+	color: white;
+	text-shadow: black 0px 0px 2px,black -1px -1px 1px,black 1px 1px 1px,black 0px 3px 0;
+	font-size: 19px;
+}
+.monster .count-in-box .same-id[data-same-id]::before
+{
+	content: "×"attr(data-same-id);
+}
+.monster .count-in-box .evo-tree[data-evo-tree]:not([data-evo-tree="0"])::before
+{
+	content: "("attr(data-evo-tree)")";
+}
+
+.emphasize-box-have .monster[data-box-have="0"]
+{
+	opacity: 0.45;
+}
+.emphasize-box-have .search-mon-list .monster[data-box-have="0"]
+{
+	filter: grayscale(1);
+}
+.emphasize-box-have .monster[data-box-have="2"]
+{
+	opacity: 0.5;
 }
 
 .not-show-awoken-count .formation-box .team-total-info, /*单个队伍血量统计*/
@@ -1892,14 +1924,7 @@ icon.inflicts::after
 	max-height: 790px;
 	overflow: auto;
 }
-.search-mon-list.only-display-can-assist>li
-{
-	opacity: 0.25;
-}
-.search-mon-list.only-display-can-assist>li.allowable-assist
-{
-	opacity: 1;
-}
+
 .setting-box .row-mon-id .real-time-change-card-label
 {
 	margin-right: 0;

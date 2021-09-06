@@ -613,8 +613,10 @@ function calculateAbility_max(id, solo, teamsCount) {
 	}
 }
 //搜索卡片用
-function searchCards(cards, attr1, attr2, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken) {
+function searchCards(cards, attr1, attr2, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, noHenshin) {
 	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
+	if (canAssist) cardsRange = cardsRange.filter(card=>card.canAssist);
+	if (noHenshin) cardsRange = cardsRange.filter(card=>!card.henshinFrom || card.limitBreakIncr);
 	//属性
 	if (attr1 != null && attr1 === attr2 || //主副属性一致并不为空
 		(attr1 === 6 && attr2 === -1)) //主副属性都为“无”
@@ -729,35 +731,33 @@ function searchByString(str)
 		return [];
 	}
 }
-function copyString(input)
-{
+function copyString(input) {
 	input.focus(); //设input为焦点
 	input.select(); //选择全部
-	if (document.execCommand('copy')) {
-		document.execCommand('copy');
-	}
+	
+	navigator.clipboard.writeText(input.value).then(function() {
+		/* clipboard successfully set */
+		//复制成功
+	}, function() {
+		/* clipboard write failed */
+		document.execCommand('copy'); //尝试废弃的老方法
+	});
 	//input.blur(); //取消焦点
 }
 //产生一个怪物头像
-function createCardA() {
-	const cdom = document.createElement("a");
-	cdom.className = "monster";
-	cdom.target = "_blank";
-	const property = cdom.appendChild(document.createElement("div"));
-	property.className = "property";
-	const subproperty = cdom.appendChild(document.createElement("div"));
-	subproperty.className = "subproperty";
-	const cid = cdom.appendChild(document.createElement("div"));
-	cid.className = "id";
-	const cawoken = cdom.appendChild(document.createElement("div"));
-	cawoken.className = "awoken-count-num";
-	return cdom;
+function createCardA(option) {
+	const t = document.body.querySelector('#template-card-a');
+	const clone = document.importNode(t.content, true);
+	const monster = clone.querySelector(".monster");
+	if (option?.noTreeCount) monster.querySelector(".count-in-box .evo-tree").remove();
+	if (option?.noBoxCount) monster.querySelector(".count-in-box").remove();
+	return monster;
 }
 //返回文字说明内怪物Card的纯HTML
 function cardN(id) {
 	const monOuterDom = document.createElement("span");
 	monOuterDom.className = "detail-mon";
-	const monDom = createCardA(id);
+	const monDom = createCardA({noBoxCount: true});
 	monOuterDom.appendChild(monDom);
 	monOuterDom.monDom = monDom;
 	changeid({ id: id }, monDom);
