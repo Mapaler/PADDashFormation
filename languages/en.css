@@ -252,6 +252,9 @@ label[for="merge-skill"]::after{
 .control-box .btn-capture::before{
 	content: "📷Screenshot";
 }
+.control-box .btn-player-data::before{
+	content: "📦My Box";
+}
 .control-box .btn-swap-AB-team::before{
 	content: "🔄Swap AB Team";
 }
@@ -351,9 +354,6 @@ label[for="merge-skill"]::after{
 	content: "Sort by:";
 }
 .search-box .sort-reverse-label::after{
-	content: "Same";
-}
-.search-box input:checked+ .sort-reverse-label::after{
 	content: "Reverse";
 }
 .search-box .additional-div::before{
@@ -402,6 +402,17 @@ label[for="merge-skill"]::after{
 }
 .search-box .special-div::before{
 	content: "▼Special Search";
+}
+.search-box .fast-switch::before {
+    content: "Quick switch:";
+}
+label[for="no-henshin"]::after
+{
+	content: "Not Henshin";
+}
+label[for="box-have"]::after
+{
+	content: "Emphasize my box";
 }
 .special-div .special-add::before {
 	content: "➕";
@@ -609,6 +620,35 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "Enhancement Rate:";
 }
+
+#player-data-frame .player-box-title::before
+{
+	content: "\f2bd\A Player Data";
+}
+#player-data-frame .upload-data::before
+{
+	content: "\f574 Upload Data";
+}
+.player-card .set-default::before
+{
+	content: "\f468 Bind Box";
+}
+.player-card .lvexp::before
+{
+	content: "EXP";
+}
+.player-card .lvexp .level::before
+{
+	content: "Rank";
+	transform: scaleX(0.8);
+	margin: calc(-46px * (1 - 0.8) / 2);
+}
+
+.player-card .stama::before
+{
+	content: "STA";
+}
+
 .badge[data-badge-icon='1']::before,
 .badge[data-badge-icon='3']::before,
 .badge[data-badge-icon='10']::before,

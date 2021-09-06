@@ -241,6 +241,9 @@ label[for="merge-skill"]::after{
 .control-box .btn-capture::before{
 	content: "📷스크린샷";
 }
+.control-box .btn-player-data::before{
+	content: "📦내 상자";
+}
 .control-box .btn-swap-AB-team::before{
 	content: "🔄교환 AB 팀";
 }
@@ -340,9 +343,6 @@ label[for="merge-skill"]::after{
 	content: "정렬:";
 }
 .search-box .sort-reverse-label::after{
-	content: "양의";
-}
-.search-box input:checked+ .sort-reverse-label::after{
 	content: "역순";
 }
 .search-box .additional-div::before{
@@ -391,6 +391,17 @@ label[for="merge-skill"]::after{
 }
 .search-box .special-div::before{
 	content: "▼특별 검색";
+}
+.search-box .fast-switch::before {
+    content: "빠른 스위치:";
+}
+label[for="no-henshin"]::after
+{
+	content: "비변신";
+}
+label[for="box-have"]::after
+{
+	content: "상자에 있는 것을 강조합니다";
 }
 .special-div .special-add::before {
 	content: "➕";
@@ -566,6 +577,37 @@ label[for="qr-data-type-pdchu"]::before {
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "배율을 강화합니다:";
+}
+
+#player-data-frame .player-box-title::before
+{
+	content: "\f2bd\A 플레이어 데이터";
+}
+#player-data-frame .upload-data::before
+{
+	content: "\f574 데이터를 업로드합니다";
+}
+.player-card .set-default::before
+{
+	content: "\f468\A 상자를 바인딩";
+}
+.player-card .lvexp::before
+{
+	content: "EXP";
+}
+.player-card .lvexp .level::before
+{
+	content: "Rank";
+	transform: scaleX(0.8);
+	margin: calc(-46px * (1 - 0.8) / 2);
+}
+
+.player-card .stama::before
+{
+	content: "스태미나";
+	transform: scaleX(0.7);
+	margin: calc(-64px * (1 - 0.7) / 2);
+	width: 64px;
 }
 .badge[data-badge-icon='1']::before,
 .badge[data-badge-icon='20']::before

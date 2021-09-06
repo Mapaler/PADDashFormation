@@ -244,6 +244,9 @@ label[for="merge-skill"]::after{
 .control-box .btn-capture::before{
 	content: "📷スクリーンショット";
 }
+.control-box .btn-player-data::before{
+	content: "📦私の箱";
+}
 .control-box .btn-swap-AB-team::before{
 	content: "🔄交換ABチーム";
 }
@@ -343,9 +346,6 @@ label[for="merge-skill"]::after{
 	content: "並べ替え:";
 }
 .search-box .sort-reverse-label::after{
-	content: "正序";
-}
-.search-box input:checked+ .sort-reverse-label::after{
 	content: "逆序";
 }
 .search-box .additional-div::before{
@@ -394,6 +394,17 @@ label[for="merge-skill"]::after{
 }
 .search-box .special-div::before{
 	content: "▼特別な検索";
+}
+.search-box .fast-switch::before {
+    content: "クイックスイッチ:";
+}
+label[for="no-henshin"]::after
+{
+	content: "非変身";
+}
+label[for="box-have"]::after
+{
+	content: "ケースに所有することを強調します";
 }
 .special-div .special-add::before {
 	content: "➕";
@@ -572,4 +583,35 @@ label[for="qr-data-type-pdchu"]::before {
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "強化倍率：";
+}
+
+#player-data-frame .player-box-title::before
+{
+	content: "\f2bd\A プレイヤー データ";
+}
+#player-data-frame .upload-data::before
+{
+	content: "\f574 データのアップロード";
+}
+.player-card .set-default::before
+{
+	content: "\f468\A Boxバインド";
+}
+.player-card .lvexp::before
+{
+	content: "EXP";
+}
+.player-card .lvexp .level::before
+{
+	content: "ランク";
+	transform: scaleX(0.7);
+	margin: calc(-46px * (1 - 0.7) / 2);
+}
+
+.player-card .stama::before
+{
+	content: "スタミナ";
+	transform: scaleX(0.7);
+	margin: calc(-64px * (1 - 0.7) / 2);
+	width: 64px;
 }

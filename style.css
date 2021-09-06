@@ -3088,10 +3088,6 @@ table .orb-icon
 	font-family: var(--game-font-family);
 	border-spacing: 4px 0;
 }
-.player-card .set-default::before
-{
-	content: "\f468 \A绑定箱子";
-}
 .player-card .delete::before
 {
 	content: "\f2ed";
@@ -3100,6 +3096,10 @@ table .orb-icon
 .player-card .delete
 {
 	float: right;
+}
+.player-card .set-default
+{
+	vertical-align: bottom;
 }
 .player-card .name
 {
@@ -3171,6 +3171,10 @@ table .orb-icon
 {
 	width: 80px;
 	margin-left: 5px;
+}
+.player-card .lvexp .level::before
+{
+	display: inline-block;
 }
 .player-card .gold,
 .player-card .coin

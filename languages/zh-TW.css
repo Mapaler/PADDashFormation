@@ -247,6 +247,10 @@ label[for="merge-skill"]::after{
 .control-box .btn-capture::before{
 	content: "📷截圖";
 }
+.control-box .btn-player-data::before{
+	content: "📦我的箱子";
+}
+
 .control-box .btn-swap-AB-team::before{
 	content: "🔄交換AB隊";
 }
@@ -346,9 +350,6 @@ label[for="merge-skill"]::after{
 	content: "排序：";
 }
 .search-box .sort-reverse-label::after{
-	content: "順序";
-}
-.search-box input:checked+ .sort-reverse-label::after{
 	content: "逆序";
 }
 .search-box .additional-div::before{
@@ -397,6 +398,17 @@ label[for="merge-skill"]::after{
 }
 .search-box .special-div::before{
 	content: "▼特殊搜索";
+}
+.search-box .fast-switch::before {
+    content: "快速開關：";
+}
+label[for="no-henshin"]::after
+{
+	content: "非變身";
+}
+label[for="box-have"]::after
+{
+	content: "强調箱子擁有";
 }
 .special-div .special-add::before {
 	content: "➕";
@@ -565,4 +577,30 @@ label[for="qr-data-type-pdchu"]::before {
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "強化倍率：";
+}
+
+#player-data-frame .player-box-title::before
+{
+	content: "\f2bd\A 玩家數據";
+}
+#player-data-frame .upload-data::before
+{
+	content: "\f574 上傳數據";
+}
+.player-card .set-default::before
+{
+	content: "\f468\A 綁定箱子";
+}
+.player-card .lvexp::before
+{
+	content: "EXP";
+}
+.player-card .lvexp .level::before
+{
+	content: "等級";
+}
+
+.player-card .stama::before
+{
+	content: "體力";
 }

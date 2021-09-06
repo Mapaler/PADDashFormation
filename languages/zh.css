@@ -249,7 +249,6 @@ label[for="merge-skill"]::after{
 .control-box .btn-player-data::before{
 	content: "📦我的箱子";
 }
-
 .control-box .btn-swap-AB-team::before{
 	content: "🔄交换AB队";
 }
@@ -349,9 +348,6 @@ label[for="merge-skill"]::after{
 	content: "排序：";
 }
 .search-box .sort-reverse-label::after{
-	content: "顺序";
-}
-.search-box input:checked+ .sort-reverse-label::after{
 	content: "逆序";
 }
 .search-box .additional-div::before{
@@ -589,7 +585,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "\f574 上传数据";
 }
-
+.player-card .set-default::before
+{
+	content: "\f468\A 绑定箱子";
+}
 .player-card .lvexp::before
 {
 	content: "EXP";
