@@ -3,6 +3,7 @@ let Skills = []; //技能数据
 let PlayerDatas = []; //玩家数据
 let currentLanguage; //当前语言
 let currentDataSource; //当前数据
+let currentPlayerData; //当前玩家数据
 
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
@@ -936,7 +937,7 @@ function loadData(force = false)
 		console.debug("目前使用的数据区服是 %s。", currentDataSource.code);
 		
 		currentCkey = newCkeys.find(ckey => ckey.code == currentDataSource.code); //获取当前语言的ckey
-		lastCkeys = localStorage.getItem("PADDF-ckey"); //读取本地储存的原来的ckey
+		lastCkeys = localStorage.getItem(cfgPrefix + "ckey"); //读取本地储存的原来的ckey
 		try {
 			lastCkeys = JSON.parse(lastCkeys);
 			if (lastCkeys == null || !Array.isArray(lastCkeys))
@@ -1000,7 +1001,7 @@ function loadData(force = false)
 							console.log("Cards 数据库写入完毕。");
 							lastCurrentCkey.ckey.card = currentCkey.ckey.card;
 							lastCurrentCkey.updateTime = currentCkey.updateTime;
-							localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys)); //储存新的ckey
+							localStorage.setItem(cfgPrefix + "ckey", JSON.stringify(lastCkeys)); //储存新的ckey
 							dealCardsData(Cards);
 						};
 						const objectStore = transaction.objectStore(`cards`);
@@ -1097,7 +1098,7 @@ function loadData(force = false)
 								console.log("Skills 数据库写入完毕。");
 								lastCurrentCkey.ckey.skill = currentCkey.ckey.skill;
 								lastCurrentCkey.updateTime = currentCkey.updateTime;
-								localStorage.setItem("PADDF-ckey", JSON.stringify(lastCkeys)); //储存新的ckey
+								localStorage.setItem(cfgPrefix + "ckey", JSON.stringify(lastCkeys)); //储存新的ckey
 								dealSkillData(Skills);
 							};
 							const objectStore = transaction.objectStore(`skills`);
@@ -1146,6 +1147,7 @@ function loadData(force = false)
 				//读取储存的所有玩家数据
 				if (db) dbReadAll(db, "palyer_datas").then(datas=>{
 					PlayerDatas = datas.map(data=>new PlayerData(data));
+					currentPlayerData = PlayerDatas.find(data=>data.name == localStorage.getItem(cfgPrefix + "default-player-name"));
 					document.body.querySelector("#player-data-frame").show();
 				});
 			}
@@ -1829,9 +1831,17 @@ function initialize(event) {
 	{
 		const table = this.parentNode.parentNode.parentNode.parentNode;
 		table.parentNode.remove();
+		if (currentPlayerData == table.data) currentPlayerData = null;
 		PlayerDatas.splice(PlayerDatas.indexOf(table.data), 1);
 		const name = table.getAttribute("data-player-name");
 		dbDelete(db, "palyer_datas", name);
+	}
+	function setPlayerDataDefault(e)
+	{
+		const table = this.parentNode.parentNode.parentNode.parentNode;
+		currentPlayerData = table.data;
+		localStorage.setItem(cfgPrefix + "default-player-name", table.getAttribute("data-player-name"));
+		table.parentNode.querySelector("[name=default-player-data]").checked = true;
 	}
 	playerDataFrame.playerList.add = function(data) {
 		this.appendChild(this.newPlayerData(data));
@@ -1841,10 +1851,12 @@ function initialize(event) {
 		const clone = document.importNode(t.content, true);
 		const table = clone.querySelector("table");
 		table.data = data;
+		if (currentPlayerData == table.data) table.parentNode.querySelector("[name=default-player-data]").checked = true;
 		table.setAttribute("data-player-name", data.name);
 
 		const tbody = table.tBodies[0];
 
+		tbody.querySelector(".set-default").onclick = setPlayerDataDefault;
 		tbody.querySelector(".delete").onclick = deletPlayerData;
 
 		changeid({id: data.vs_icon}, tbody.querySelector(".avatar .monster"));
@@ -1869,7 +1881,7 @@ function initialize(event) {
 		tbody.querySelector(".gold").textContent = data.gold.bigNumberToString();
 		tbody.querySelector(".coin").textContent = data.coin.bigNumberToString();
 
-		const deckList = tbody.querySelector(".decks .deck-list");
+		const deckList = tbody.querySelector(".decks .deck");
 		const teamLink = tbody.querySelector(".decks .team-link");
 		const radioList = tbody.querySelector(".decks .deck-radio-list");
 		data.parsedDecks.forEach((deck,idx)=>{
@@ -1882,7 +1894,7 @@ function initialize(event) {
 			ipt.onclick = changeDeck;
 			ipt.deck = deck;
 		});
-		radioList.querySelector(".deck-choose").click();
+		radioList.querySelectorAll(".deck-choose")[data.curDeck ?? 0]?.click();
 
 		function changeDeck(e)
 		{
@@ -1893,7 +1905,7 @@ function initialize(event) {
 				changeid(deck.members[idx]?.assist ?? {id: 0}, li.querySelector(".monster.assist"));
 			});
 			const newFotmation = deck.toFormation();
-			teamLink.href = ObjToUrl(newFotmation.getPdfQrObj(false));
+			teamLink.href = ObjToUrl(newFotmation.getPdfQrObj(true));
 		}
 		return clone;
 	}

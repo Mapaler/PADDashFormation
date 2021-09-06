@@ -1115,20 +1115,24 @@ icon.inflicts::after
 	background: none;
 }
 /*队长的边框*/
-.team-box .team-members .team-leader .monster{
+.team-box .team-members .team-leader .monster
+{
 	border-radius: 10px;
 	border-width:4px;
 	border-style:solid;
 	box-sizing: initial;
 	margin: 0;
 }
-.team-1 .team-members .team-leader .monster{
+.team-1 .team-members .team-leader .monster
+{
 	border-color: var(--team-1-color);
 }
-.team-2 .team-members .team-leader .monster{
+.team-2 .team-members .team-leader .monster
+{
 	border-color: var(--team-2-color);
 }
-.team-3 .team-members .team-leader .monster{
+.team-3 .team-members .team-leader .monster
+{
 	border-color: var(--team-3-color);
 }
 
@@ -3059,9 +3063,18 @@ table .orb-icon
 	font-family: var(--game-font-family);
 	border-spacing: 4px 0;
 }
+.player-card .set-default::before
+{
+	content: "\f468 \A绑定箱子";
+}
 .player-card .delete::before
 {
 	content: "\f2ed";
+	min-width: 40px;
+}
+.player-card .delete
+{
+	float: right;
 }
 .player-card .name
 {
@@ -3227,12 +3240,13 @@ table .orb-icon
 	background-position-x: -36px;
 }
 
-.deck-list,
+.deck-line,
+.deck,
 .deck-radio-list
 {
 	text-align: center;
 }
-.deck-list>li,
+.deck>li,
 .deck-radio-list>li
 {
 	display: inline-block;
@@ -3241,23 +3255,29 @@ table .orb-icon
 .deck-radio-list input
 {
 	font-size: 2em;
+	cursor: pointer;
 }
-.deck-list
+.deck
 {
+	display: inline-block;
 	margin-bottom: 10px;
 }
-.deck-list .monster
+.deck .monster
 {
 	transform: scale(0.75);
 	margin: calc(-100px * (1 - 0.75) / 2 );
 }
-.deck-list .monster.assist
+.deck .monster.assist
 {
 	left: 1px;
 	bottom: -16px;
 	position: absolute;
 	transform: scale(0.4);
 	margin: calc(-100px * (1 - 0.4) / 2 );
+}
+.player-datas-list [name="default-player-data"]:checked+.player-card
+{
+	background-color: #D55D34;
 }
 /*.base .evo-type::before,
 .base .evo-type::after

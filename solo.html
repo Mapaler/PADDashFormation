@@ -1109,6 +1109,7 @@ var formation = new Formation(teamsCount,6);
 			<ul class="player-datas-list"></ul>
 			<template id="template-player-datas">
 				<li>
+					<input type="radio" class="display-none" name="default-player-data" />
 					<table class="player-card" data-player-name="">
 						<tbody>
 							<tr>
@@ -1119,7 +1120,7 @@ var formation = new Formation(teamsCount,6);
 									</div>
 								</td>
 								<td class="name"></td>
-								<td class="control"><button class="brown-button delete"></button></td>
+								<td class="control"><button class="brown-button set-default"></button><button class="brown-button delete"></button></td>
 							</tr>
 							<tr>
 								<td class="lvexp"><div class="progress-bar"><div class="bar"></div></div><div class="level"></div></td>
@@ -1131,70 +1132,72 @@ var formation = new Formation(teamsCount,6);
 							</tr>
 							<tr>
 								<td class="decks" colspan="4">
-									<a class="team-link" target="_blank">
-										<ul class="deck-list">
-											<li class="team-leader">
-												<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-												<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-											</li>
-											<li>
-												<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-												<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-											</li>
-											<li>
-												<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-												<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-											</li>
-											<li>
-												<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-												<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-											</li>
-											<li>
-												<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-												<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-											</li>
-											<li class="team-leader">
-												<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-												<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-													<div class="property" data-property=""></div>
-													<div class="subproperty" data-property=""></div>
-												</div>
-											</li>
-										</ul>
-									</a>
+									<div class="deck-line">
+										<a class="team-link" target="_blank">
+											<ul class="deck">
+												<li class="team-leader">
+													<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+													<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+												</li>
+												<li>
+													<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+													<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+												</li>
+												<li>
+													<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+													<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+												</li>
+												<li>
+													<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+													<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+												</li>
+												<li>
+													<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+													<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+												</li>
+												<li class="team-leader">
+													<div class="monster null" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+													<div class="monster assist" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
+														<div class="property" data-property=""></div>
+														<div class="subproperty" data-property=""></div>
+													</div>
+												</li>
+											</ul>
+										</a>
+									</div>
 									<ul class="deck-radio-list"></ul>
 								</td>
 							</tr>
