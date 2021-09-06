@@ -10,12 +10,12 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 
 | **单人 \| Solo** | **2人协力 \| 2P** |
 | :---: | :---: |
-| ![单人界面预览](document/preview-capture-1p.png) | ![2人协力界面预览](document/preview-capture-2p.png) |
+| ![单人界面预览](doc/images/preview-capture-1p.png) | ![2人协力界面预览](doc/images/preview-capture-2p.png) |
 | **3人协力 \| 3P** | **手机 \| Mobile**  |
-| ![3人协力界面预览](document/preview-capture-3p.png) | ![手机端预览](document/preview-mobile.jpg) |
+| ![3人协力界面预览](doc/images/preview-capture-3p.png) | ![手机端预览](doc/images/preview-mobile.jpg) |
 
 # 如何使用 | HOW TO USE
-推荐[![](https://www.mozilla.org/media/img/firefox/favicon.ico)火狐浏览器](https://www.mozilla.org/firefox/new/) | [![](https://www.mozilla.org/media/img/firefox/favicon.ico)Firefox](https://www.mozilla.org/firefox/new/) is recommended
+推荐[![][firefox]火狐浏览器](https://www.mozilla.org/firefox/new/) | [![][firefox]Firefox](https://www.mozilla.org/firefox/new/) is recommended
 ## 快速使用在线版（推荐） | Online Quick Start (Recommended)
 * <https://mapaler.github.io/PADDashFormation/> (Github Pages)
 * <https://mapaler.com/PADDashFormation/> (我自己的镜像 | my own mirror)
@@ -33,8 +33,6 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 Firefox 68.0 or above need setting the `privacy.file_unique_origin` to `false` in `about:config`.
 * Chrome需要添加`--allow-file-access-from-files`启动参数。  
 Chrome browser need start with the additional argument `--allow-file-access-from-files`.
-
-# [帮助和提示 | Help and Tips](help.md)
 
 # 翻译我 | Translate me
 ## 目前支持的语言 | Languages currently supported
@@ -115,3 +113,5 @@ Please refer to existing files.
 * [Font Awesome Free](https://github.com/FortAwesome/Font-Awesome) //Font Icon
 * [Zpix (最像素)](//github.com/SolidZORO/zpix-pixel-font) //Pixel Font
 * [font-spider](//github.com/aui/font-spider) //Compression Font file
+
+[firefox]: https://www.mozilla.org/media/img/firefox/favicon.ico

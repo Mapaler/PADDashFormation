@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>智龙急速阵型帮助</title>
+	<link rel="shortcut icon" href="images/icon.png" type="image/x-png" />
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		code {
+			padding: .2em .4em;
+			margin: 0;
+			font-size: 85%;
+			background-color: rgba(175, 184, 193, 0.2);
+			border-radius: 6px;
+			font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+		}
+		ul>li {
+			margin-bottom: 5px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>智龙迷城队伍图制作工具使用技巧<br>Tips of <em>Puzzle &amp; Dragons Formation Maker</em></h1>
+	<h2>目录 | Index</h2>
+	<ul class="index">
+		<li><a href="#share">分享队伍 | Share your team</a></li>
+		<li><a href="#editing-tips">队伍编辑技巧 | Convenient tips for edit</a></li>
+		<li><a href="#search-cards">搜索图鉴 | Search cards</a></li>
+		<li><a href="#advanced-of-text-detail">文字说明的高级功能 | Advanced of the description</a></li>
+		<li><a href="#others">其他 | Others</a></li>
+		<li><a href="#report-bug">报告BUG | Report BUG</a></li>
+		<li><a href="#program-source">程序源代码 | Program Source</a></li>
+	</ul>
+
+	<h2 id="share">分享 | Share</h2>
+	<h3>通过网址分享和收藏队伍 | Share and collect teams by URL</h3>
+	<p>直接复制网址即可分享组队或自己添加收藏夹保存。<br>
+		Copy the URL directly to share the Formation, or add a Bookmark to collect.<br>
+		<img src="images/tips-share.png" alt="分享组队"><br>
+		为了更方便的分享，你可以使用任意第三方<em>短网址服务</em>进一步缩短网址。<br>
+		For easier sharing, you can further shorten your URL using any third-party <em>Short URL Service</em>. Like, <a
+			href="https://bitly.com/">bitly</a>.
+	</p>
+	<h3>二维码分享 | Share by QR Code</h3>
+	<p>可以使用摄像头读取队伍二维码<br>
+		You can use the camera to read the Formation QR code<br>
+		<img src="images/tips-qr-read.webp" alt="使用摄像头读取二维码"><br>
+		读取到的队伍会显示为链接<br>
+		The read Formation appears as a link<br>
+		<img src="images/tips-qr-read-found.png" alt="成功读取到二维码"><br>
+		目前可以读取 | Currently can read:
+	</p>
+	<ol>
+		<li>本程序自有格式的二维码<br>
+			This program's own format QR code<br>
+			<img src="images/tips-qr-pdf.png" alt="PDF二维码">
+		</li>
+		<li>本程序网址链接的二维码<br>
+			QR code of this program's URL<br>
+			<img src="images/tips-qr-url.png" alt="URL二维码">
+		</li>
+		<li>PDC 的二维码<br>
+			PDC format QR code<br>
+			<img src="images/tips-qr-pdc.webp" alt="PDC二维码">
+		</li>
+	</ol>
+	<h2 id="editing-tips">编辑技巧 | Editing tips</h2>
+	<ul>
+		<li>使用<strong>后退</strong>即可撤销上一次修改，需要重做则使用前进。<br>
+			Use <strong>Back</strong> to undo the last edit, redo with Forward.<br>
+			<img src="images/tips-undo.png" alt="撤銷修改">
+		</li>
+		<li><strong>拖拽</strong>卡片头像即可快速交换位置，也支持手机触屏。<br>
+			<strong>Drag</strong> card avatars to quickly swap member's positions, also supports mobile touch
+			screen.<br>
+			<img src="images/tips-interchangeCard.png" alt="切换位置"><br>
+			使用顶部的开关可以切换到复制模式<br>
+			Use the switch at the top can switch to copy mode.
+		</li>
+		<li>如果你希望使用技能切换队长，使用切换按钮。这样可以保留原始队长强调边框，和76版面图标。<br>
+			If you want switch leader by skill, use the switch button. This preserves the original leader accent border,
+			and the 76 board icon.<br>
+			<img src="images/tips-switch-leader.png" alt="切换位置">
+		</li>
+		<li>使用<code>Ctrl + ←/→</code>，或小键盘上的<code>←/→</code>(需关闭<code>NumLock</code>)可以快速切换变身。<br>
+			You can using <code>Ctrl + ←/→</code> or <code>←/→</code> on keypad (turn <code>NumLock</code> off) to
+			quickly change Henshin.<br>
+			<img src="images/tips-arrow-change-henshin.png" alt="按键切换变身"><br>
+			<img src="images/tips-arrow-close-numlock.webp" alt="关闭小键盘">
+		</li>
+	</ul>
+	<h2 id="search-cards">搜索图鉴 | Search cards</h2>
+	<ul>
+		<li>可以在编辑界面的怪物ID输入<strong>怪物名称</strong>或<strong>标签</strong>来搜索卡片。<br>
+			You can search for card by entering the <strong>Monster Name</strong> or <strong>Tags</strong> in the
+			monster ID of the editing interface.<br>
+			<img src="images/tips-search-name.png" alt="搜索怪物名称">
+		</li>
+		<li>点击<strong>技能名称</strong>，可搜索相同主动技能宠物<br>
+			Click on <strong>Skill Name</strong> to search for the same active skills Cards.<br>
+			<img src="images/tips-search-skills.png" alt="搜索怪物主动技能">
+		</li>
+		<li>点击<strong>系列ID</strong>或<strong>标签</strong>，可搜索该系列<br>
+			Click the <strong>Series ID</strong> or <strong>Tags</strong> to search for series.<br>
+			<img src="images/tips-search-series.webp" alt="搜索怪物系列">
+		</li>
+		<li>复制本版本游戏数据的<strong>标签</strong>，可在游戏中搜索系列名称<br>
+			Copy the <strong>Tag</strong> of this version of the game data can search for the series in the game.<br>
+			<img src="images/tips-search-TagInGame.png" alt="在游戏中搜索怪物系列">
+		</li>
+		<li>点击编辑界面的卡片头像可以跳转到攻略网站。<br>
+			Click on the card avatar in the editing interface to jump to the Guide.<br>
+			<img src="images/tips-guide.png" alt="攻略网站"><br>
+			在队伍界面和搜索结果的怪物头像上，点击鼠标中键也可以跳转到攻略网站。在手机上则是长按怪物头像然后选择在新标签页打开。<br>
+			Or click the middle mouse button on the monster avatar of the formation interface and search results to jump
+			to the Guide. On your phone, you're long-pressing the monster avatar and then selecting to open it in a new
+			tab.<br>
+			<img src="images/tips-guide2.png" alt="攻略网站2">
+		</li>
+	</ul>
+	<h2 id="advanced-of-text-detail">文字的高级功能 | Advanced of text detail</h2>
+	<ul>
+		<li><code>%{m怪物ID}</code>可以显示怪物头像。<br>
+			<code>%{m[Monster ID]}</code> can display the monster avatar.<br>
+			<img src="images/tips-advanced-card.png" alt="怪物头像">
+		</li>
+		<li>队伍标题与队伍说明可以使用<code>^16进制颜色代码^内容^p</code>来改变内容颜色；<br>
+			Formation Title and Detail can use the <code>^[Hex Color Code]^Content^p</code> to change the color of the
+			Content.<br>
+			<img src="images/tips-advanced-color.png" alt="文字颜色"><br>
+		</li>
+	</ul>
+	<h2 id="others">其他 | Others</h2>
+	<ul>
+		<li>点击语音觉醒可以试听技能语音。<br>
+			Click Voice Awakening to try out skill voice.<br>
+			<img src="images/tips-voice.png" alt="语音觉醒">
+		</li>
+		<li>2人只显示部分共用的觉醒的统计（不包括超觉醒），单人和三人则全部显示。<br>
+			The 2P Multi Games Mode shows only several common awoken statistics (excluding super-awakening), but the
+			Solo and 3P Mode shows all.</li>
+		<li>内建的截图按钮依靠 <a
+				href="https://github.com/niklasvh/html2canvas/">html2canvas</a>，会有一些绘制错误，浏览器的截图扩展能够更加还原显示的真实样子。<br>
+			Built-in screenshot button relies on <a href="https://github.com/niklasvh/html2canvas/">html2canvas</a>,
+			there will be some drawing errors, browser screenshot extension can be more restore the real appearance of
+			the display.</li>
+		<li>如果你只是希望将本程序当作简单图鉴使用，可以在参数里加上<code>guide=1</code>，如<code>https://mapaler.gitee.io/paddashformation/solo.html?guide=1</code>。图鉴模式下进入网页时，会直接打开怪物修改界面，并且背景不透明。<br>
+			If you just want to use this program as a simple guide, you can add <code>guide=1</code> to the parameters,
+			such as <code>https://mapaler.github.io/PADDashFormation/solo.html?guide=1</code>. When you enter the page
+			in guide mode, the monster modification interface opens directly and the background is opaque.</li>
+	</ul>
+	<h2 id="report-bug">报告BUG | Report BUG</h2>
+	<p>如果发现 BUG，请先按 Ctrl+F5 强制刷新，并点击数据更新时间按钮强制更新数据。如仍存在问题可以在 <a
+			href="https://github.com/Mapaler/PADDashFormation/issues">Issues</a> 报告。<br>
+		If a BUG is found, first test again after force refresh by Ctrl-F5, then click the Data Update Time button to
+		force update the data. If there is still a problem, you can report it at the <a
+			href="https://github.com/Mapaler/PADDashFormation/issues">Issues</a>.</p>
+	<h2 id="program-source">程序源代码 | Program Source</h2>
+	<p>你可以在 <a href="https://github.com/Mapaler/PADDashFormation/">GitHub</a> 找到源代码。<br>
+		You can find the source code at <a href="https://github.com/Mapaler/PADDashFormation/">GitHub</a>.</p>
+
+</body>
+
+</html>
