@@ -120,6 +120,32 @@
 	<h4 id="use-Fidder">使用 Fidder | Use Fidder</h4>
 	<p>在电脑上安装<a href="https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe">Fiddler Classic</a></p>
 	<p>待写 To be written</p>
+	<h5>自动保存响应体 | Auto Save Response Body</h5>
+	<code style="white-space: pre-wrap;">//自动储存智龙迷城数据
+var PADDataPath = "D:\\PAD_Data\\";
+if (oSession.HostnameIs("api-adr.padsv.gungho.jp") //日服域名
+	|| oSession.HostnameIs("api-ht-adr.padsv.gungho.jp") //港台服域名
+	|| oSession.HostnameIs("api-na-adrv2.padsv.gungho.jp") //美服域名
+	|| oSession.HostnameIs("api-kr-adrv2.padsv.gungho.jp") //韩服域名
+) {
+	var serverName;
+	switch (oSession.hostname)
+	{
+		case "api-adr.padsv.gungho.jp": //日服域名
+		case "api-ht-adr.padsv.gungho.jp": //港台服域名
+			serverName = "ja"
+			break;
+		case "api-na-adrv2.padsv.gungho.jp": //美服域名
+			serverName = "en"
+			break;
+		case "api-kr-adrv2.padsv.gungho.jp": //韩服域名
+			serverName = "ko"
+			break;
+	}
+	if (oSession.uriContains("action=get_player_data")) { //自动保存怪物数据
+		oSession.SaveResponseBody(PADDataPath + serverName + "-player-data-" + new Date().getTime() + ".json");
+	}
+}</code>
 	<h4 id="multiple-devices">如何多设备登录 | How to login with multiple devices</h4>
 	<p>导出<code>data048.bin</code></p>
 	<p>待写 To be written</p>
