@@ -2392,6 +2392,11 @@ function initialize(event) {
 		this.classList.remove(className_displayNone);
 		formationBox.classList.add("blur-bg");
 		controlBox.classList.add("blur-bg");
+		const switchBoxHave = editBox.querySelector('label[for="box-have"]');
+		if (currentPlayerData)
+			switchBoxHave.classList.remove(className_displayNone);
+		else
+			switchBoxHave.classList.add(className_displayNone);
 	};
 	editBox.hide = function() {
 		this.classList.add(className_displayNone);
