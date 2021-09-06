@@ -581,9 +581,13 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "\f2bd\A 玩家数据";
 }
+#player-data-frame .how-to-use::before
+{
+	content: "📕如何使用";
+}
 #player-data-frame .upload-data::before
 {
-	content: "\f574 上传数据";
+	content: "\f07c 打开数据";
 }
 .player-card .set-default::before
 {
@@ -597,7 +601,6 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "等級";
 }
-
 .player-card .stama::before
 {
 	content: "体力";

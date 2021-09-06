@@ -625,9 +625,13 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "\f2bd\A Player Data";
 }
+#player-data-frame .how-to-use::before
+{
+	content: "📕How To Use";
+}
 #player-data-frame .upload-data::before
 {
-	content: "\f574 Upload Data";
+	content: "\f07c Open Data";
 }
 .player-card .set-default::before
 {
@@ -643,7 +647,6 @@ label[for="qr-data-type-pdchu"]::before {
 	transform: scaleX(0.8);
 	margin: calc(-46px * (1 - 0.8) / 2);
 }
-
 .player-card .stama::before
 {
 	content: "STA";

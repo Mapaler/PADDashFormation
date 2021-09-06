@@ -583,9 +583,13 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "\f2bd\A 플레이어 데이터";
 }
+#player-data-frame .how-to-use::before
+{
+	content: "📕사용방법";
+}
 #player-data-frame .upload-data::before
 {
-	content: "\f574 데이터를 업로드합니다";
+	content: "\f07c 데이터를 엽니다";
 }
 .player-card .set-default::before
 {
@@ -601,7 +605,6 @@ label[for="qr-data-type-pdchu"]::before {
 	transform: scaleX(0.8);
 	margin: calc(-46px * (1 - 0.8) / 2);
 }
-
 .player-card .stama::before
 {
 	content: "스태미나";

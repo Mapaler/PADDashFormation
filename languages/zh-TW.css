@@ -583,9 +583,13 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "\f2bd\A 玩家數據";
 }
+#player-data-frame .how-to-use::before
+{
+	content: "📕如何使用";
+}
 #player-data-frame .upload-data::before
 {
-	content: "\f574 上傳數據";
+	content: "\f07c 打開數據";
 }
 .player-card .set-default::before
 {
@@ -599,7 +603,6 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "等級";
 }
-
 .player-card .stama::before
 {
 	content: "體力";

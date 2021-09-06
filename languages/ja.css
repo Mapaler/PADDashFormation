@@ -589,9 +589,13 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "\f2bd\A プレイヤー データ";
 }
+#player-data-frame .how-to-use::before
+{
+	content: "📕使い方";
+}
 #player-data-frame .upload-data::before
 {
-	content: "\f574 データのアップロード";
+	content: "\f07c データを開きます";
 }
 .player-card .set-default::before
 {
@@ -607,7 +611,6 @@ label[for="qr-data-type-pdchu"]::before {
 	transform: scaleX(0.7);
 	margin: calc(-46px * (1 - 0.7) / 2);
 }
-
 .player-card .stama::before
 {
 	content: "スタミナ";

@@ -3069,6 +3069,13 @@ table .orb-icon
 	float: right;
 	margin-right: 5px;
 }
+#player-data-frame .how-to-use
+{
+	color: white;
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-left: 15px;
+}
 
 .player-datas-list>li
 {

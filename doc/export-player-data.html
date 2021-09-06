@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>智龙急速阵型帮助</title>
+	<link rel="shortcut icon" href="images/icon.png" type="image/x-png" />
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		code {
+			padding: .2em .4em;
+			margin: 0;
+			font-size: 85%;
+			background-color: rgba(175, 184, 193, 0.2);
+			border-radius: 6px;
+			font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+		}
+
+		ul>li {
+			margin-bottom: 5px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>如何获取用户游戏数据<br>How to get user game data</h1>
+	<h2>目录 | Index</h2>
+	<ul class="index">
+		<li><a href="#android">安卓用户 | Android User</a>
+			<ul class="index">
+				<li><a href="#no-root">无 Root 设备用户 | No Root device user</a>
+					<ul class="index">
+						<li><a href="#use-HttpCanary">使用 HttpCanary | Use HttpCanary</a></li>
+						<li><a href="#use-Fidder">使用 Fidder | Use Fidder</a></li>
+						<li><a href="#multiple-devices">如何多设备登录 | How to login with multiple devices</a></li>
+					</ul>
+				</li>
+				<li><a href="#have-root">Root 设备用户 | Root device user</a></li>
+			</ul>
+		</li>
+		<li><a href="#ios">苹果用户 | iOS User</a></li>
+	</ul>
+
+	<h2 id="android">安卓用户 | Android User</h2>
+	<h3 id="no-root">无 Root 设备用户 | No Root device user</h3>
+	<p>你需要在在电脑上安装一个能运行智龙迷城的安卓模拟器，比如 夜神模拟器、逍遥安卓、蓝叠模拟器。后面以<a href="https://www.bignox.com/">夜神模拟器国际版</a>进行讲解。（与夜神没有任何赞助关系。国际版自带谷歌套装，也能改中文）<br>
+		You'll need to install an Android simulator on your PC that runs P&amp;D, such as NoxPlayer, MEmu Play, BlueStacks. I'll use <a href="https://www.bignox.com/">NoxPlayer</a> later to explain. (There is no sponsorship relationship with NOX.)
+	</p>
+	<p>打开多开器，添加一个能运行智龙迷城的版本，目前有 安卓7 和 安卓7-64位。<br>
+		Run the Multi-Player Manager and add a version that runs P&amp;D, currently available in Android 7 and Android 7-64 bits.<br>
+		<img src="images/player-emu-add-new.webp" alt="添加模拟器">
+	</p>
+	<p>自行安装智龙迷城游戏并登录你的游戏账号。<br>
+		Install P&amp;D and log in to your game account.<br>
+		<img src="images/player-emu-pad-download-data.webp" alt="下载PAD数据">
+	</p>
+	<h4 id="use-HttpCanary">使用 HttpCanary | Use HttpCanary</h4>
+	<p>请自行从网上搜索并安装 <a href="https://www.423down.com/9279.html">HttpCanary</a>（已被谷歌商店下架）。<br>
+		Please search the web and install <a href="https://apkpure.com/httpcanary-%E2%80%94-http-sniffer-capture-analysis/com.guoshi.httpcanary">HttpCanary</a> yourself (It's blocked by google store).<br>
+		<img src="images/player-emu-install-apk.webp" alt="安装 APK">
+	</p>
+	<p>打开模拟器的 Root，并重启。<br>
+		Open the simulator's root and restart.<br>
+		<img src="images/player-emu-open-root.webp" alt="打开 Root">
+	</p>
+	<p>运行 HttpCanary，按照提示配置 VPN 和导入证书。<br>
+		Run HttpCanary, follow the prompts to configure the VPN and import certificates.<br>
+		<img src="images/player-emu-httpcanary-vpn.webp" alt="开启 VPN">
+		<img src="images/player-emu-httpcanary-cer.webp" alt="安装证书"><br>
+		授予 Root 权限，将证书移至系统目录。<br>
+		Grant Root permission to move the certificates to the system directory.<br>
+		<img src="images/player-emu-httpcanary-move-cer.webp" alt="移动证书到系统目录">
+	</p>
+	<p>可以根据需要关闭 Root 了（日服客户端需要关闭 Root 才能运行）。<br>
+		Root can be closed as needed. (The Japanese version client needs to close Root operation.)
+	</p>
+	<p>HttpCanary 菜单内添加智龙迷城为目标应用，可减少其他流量的干扰。<br>
+		Add P&amp;D to the target app in HttpCanary menu, to reduce interference with other traffic.<br>
+		<img src="images/player-emu-httpcanary-target-app.webp" alt="设置目标应用">
+	</p>
+	<p>回到首页，点击主按钮开始嗅探流量。<br>
+		Back on the home page, click the main button to start sniffing traffic.<br>
+		<img src="images/player-emu-httpcanary-start.webp" alt="开始嗅探">
+	</p>
+	<p>运行智龙迷城游戏，直到登陆成功。<br>
+		Run the P&amp;D game until log in successfully.<br>
+		<img src="images/player-emu-pad-login.webp" alt="登录游戏">
+	</p>
+	<p>返回 HttpCanary，找到<code>padsv.gungho.jp/api.php?action=get_player_data</code>网络请求。（一般紧跟<code>api.php?action=login</code>）<br>
+		Go back to HttpCanary to find the network request <code>padsv.gungho.jp/api.php?action=get_player_data</code>. (Generally followed by <code>api.php?action=login</code>)<br>
+		<img src="images/player-emu-httpcanary-find-item.webp" alt="找到请求">
+	</p>
+	<p>进入该条目，保存响应体。<br>
+		Go to the entry and Save Response Body.<br>
+		<img src="images/player-emu-httpcanary-save-response-body.webp" alt="保存响应体">
+	</p>
+	<p>使用文件管理器找到<code>手机储存/HttpCanary/download/[你保存的名称]/response_body.html</code>，这个就是你的游戏数据。<br>
+		Use the file manager to find <code>[Phone Storage]/HttpCanary/download/[The name you saved]/response_body.html</code><br>
+		<img src="images/player-emu-httpcanary-saved-data.webp" alt="保存的文件">
+	</p>
+	<p>打开模拟器的电脑共享目录。<br>
+		Open the simulator's PC shared folder.<br>
+		<img src="images/player-emu-open-pc-folder.webp" alt="打开电脑共享路径">
+	</p>
+	<p>将<code>response_body.html</code>复制到<code>手机储存/Download</code>文件夹，即可在电脑上看到文件。<br>
+		Copy <code>response_body.html</code> to <code>[Phone Storage]/Download</code> folder to see files on your PC.<br>
+		<img src="images/player-emu-httpcanary-copy-to-download.webp" alt="复制到下载文件夹">
+	</p>
+	<p>到我的箱子功能里打开即可。<br>
+		Open my box function and open it.<br>
+		<img src="images/player-open-data.webp" alt="打开数据">
+	</p>
+	<p>每次获取新的数据，重复 启动 HttpCanary > 登录游戏 > 保存响应体 的步骤。<br>
+		Each time you get new data, repeat the steps to Start httpCanary > Log in to the game > Save Response Body.
+	</p>
+	<p>如果希望不要每次都重新使用 SNS 登录游戏，可以查看<a href="#multiple-devices">如何多设备登录</a>。<br>
+		If you want to not reuse the SNS login game every time, you can see <a href="#multiple-devices">How to login with multiple devices</a>.
+	</p>
+	<h4 id="use-Fidder">使用 Fidder | Use Fidder</h4>
+	<p>在电脑上安装<a href="https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe">Fiddler Classic</a></p>
+	<p>待写 To be written</p>
+	<h4 id="multiple-devices">如何多设备登录 | How to login with multiple devices</h4>
+	<p>导出<code>data048.bin</code></p>
+	<p>待写 To be written</p>
+	<h3 id="have-root">Root 设备用户 | Root device user</h3>
+	<p>请参考<a href="#use-HttpCanary">HttpCanary</a>方法。<br>
+		Refer to the <a href="#use-HttpCanary">HttpCanary</a> method.</p>
+	<h2 id="ios">苹果用户 | iOS User</h2>
+	<p>我没有苹果设备，无法研究iOS。可以临时 SNS 跨平台到<a href="#no-root"></a>安卓模拟器</a>登录，进行数据导出。<br>
+		I don't have an Apple device so I can't study iOS. You can temporarily across platforms login to <a
+			href="#no-root">Android Simulator</a> for data export.</p>
+</body>
+
+</html>
