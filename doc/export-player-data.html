@@ -17,7 +17,11 @@
 			font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
 			white-space: pre-wrap;
 		}
-
+		.block-code
+		{
+			display: block;
+			background-color: #ddd;
+		}
 		ul>li {
 			margin-bottom: 5px;
 		}
@@ -139,66 +143,124 @@
 	<h4 id="use-Fidder">在电脑上使用 Fidder | Use Fidder on PC</h4>
 	<p>在电脑上安装<a href="https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe">Fiddler Classic</a><br>
 		Install <a href="https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe">Fiddler Classic</a> on your PC.<br>
-		<img src="images/player-fidder-install.png" alt="装好的 Fidder">
+		<img src="images/player-fidder-install.webp" alt="装好的 Fidder">
 	</p>
 	<p>为了使模拟器能连接 Fidder，打开允许远程计算机连接的功能。<br>同时为避免抓到其他无用的流量，推荐你关闭自动设为系统代理的选项并重启 Fidder。<br>
 		In order for the simulator to connect to Fidder, turn on the feature that <em>Allow remote computers to connect</em>.<br>And for avoid catching unwanted traffic, it is recommended that turn off the option <em>Act as the system proxy on startup</em> and restart the Fidder.<br>
-		<img src="images/player-fidder-close-system-proxy.png" alt="关闭默认代理">
+		<img src="images/player-fidder-close-system-proxy.webp" alt="关闭默认代理">
 	</p>
 	<p>打开 HTTPS 解密，警告询问你是否添加证书到电脑可以选择否，因为我们不需要解密电脑上的流量。<br>
 		Turn on <em>decrypt HTTPS traffic</em>. The warning asks if you want to add the certificate to your PC and you can choose No because we don't need to decrypt traffic from your PC.<br>
-		<img src="images/player-fidder-decrypt-https.png" alt="打开 HTTPS解密">
+		<img src="images/player-fidder-decrypt-https.webp" alt="打开 HTTPS解密">
 	</p>
-	<p>将根证书导出到桌面。<br>
-		Export the root certificate to the desktop.<br>
-		<img src="images/player-fidder-export-cer-to-desktop.png" alt="导出证书到桌面">
+	<p>将根证书导出到桌面，之后你将会在桌面上看到一个<code>FiddlerRoot.cer</code>文件。<br>
+		Export the root certificate to the desktop. You will then see a file <code>FiddlerRoot.cer</code> on your desktop.<br>
+		<img src="images/player-fidder-export-cer-to-desktop.webp" alt="导出证书到桌面">
 	</p>
-	<p>在桌面按住 Shift 点击鼠标右键，打开 PowerShell。<br>
+	<p>在桌面按住 <strong>Shift</strong> 点击鼠标右键，在此打开 PowerShell。<br>
+		Press and hold <strong>Shift</strong> on the desktop and right-click to open PowerShell here.<br>
+		<img src="images/player-fidder-export-cer-open-powershell.webp" alt="打开PowerShell">
 	</p>
-	<p>在 PowerShell 中，执行以下三行代码，之后你将会在桌面上，见到一个<code>FiddlerRoot.pem</code>文件。<br>
-		<code>
-			$cert=New-Object System.Security.Cryptography.X509Certificates.X509Certificate2(Resolve-Path "FiddlerRoot.cer");
-			$pem="-----BEGIN CERTIFICATE-----`r`n"+[Convert]::ToBase64String($cert.RawData, [Base64FormattingOptions]::InsertLineBreaks)+"`r`n-----END CERTIFICATE-----";
-			$pem | Out-File -Encoding ascii -FilePath FiddlerRoot.pem
-		</code>
+	<p>在 PowerShell 中，执行以下代码，之后你将会在桌面上，见到一个<code>269953fb.0</code>文件。<br>
+		In PowerShell, execute the following codes, and then you'll see a <code>269953fb.0</code> file on your desktop.<br><br>
+<code class="block-code"># get the cer full path
+$cert_path=Resolve-Path "FiddlerRoot.cer";
+# create a cert object
+$cert=New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($cert_path);
+# create a md5 object
+$md5 = New-Object -TypeName System.Security.Cryptography.MD5CryptoServiceProvider;
+# to openssl hash "-subject_hash_old"
+# get the cert SubjectName md5 hash
+$md5bin = $md5.ComputeHash($cert.SubjectName.RawData);
+# convert to this format bytes
+$hashnum = ([long]$md5bin[0] -bor ([long]$md5bin[1] -shl 8) -bor ([long]$md5bin[2] -shl 16) -bor ([long]$md5bin[3] -shl 24)) -band 0xffffffff;
+# convert bytes to file name
+$pem_name = [Convert]::ToString($hashnum, 16).padleft(8,"0")+".0";
+# create PEM format content
+$str=New-Object System.Text.StringBuilder("");
+$str.AppendLine("-----BEGIN CERTIFICATE-----");
+$str.AppendLine([Convert]::ToBase64String($cert.RawData, [Base64FormattingOptions]::InsertLineBreaks));
+$str.AppendLine("-----END CERTIFICATE-----");
+# save the file
+$str.ToString() | Out-File -Encoding ascii -FilePath $pem_name</code><br><br>
+		<img src="images/player-fidder-export-cer-convert.webp" alt="证书格式转换">
 	</p>
 	<p>打开模拟器的 Root，并重启。<br>
 		Open the simulator's root and restart.<br>
 		<img src="images/player-emu-open-root.webp" alt="打开 Root">
 	</p>
-	<p>将<code>FiddlerRoot.pem</code>复制到<code>/systen/etc/security/cert</code>文件夹内，并重启模拟器。<br>
+	<p>使用共享文件夹，将<code>269953fb.0</code>转移到模拟器。<br>
+		Use the shared folder to transfer <code>269953fb.0</code> to the simulator.<br>
+		<img src="images/player-fidder-export-cer-shared-folder.webp" alt="传送到模拟器">
+	</p>
+	<p>将<code>269953fb.0</code>复制到<code>/system/etc/security/cacerts</code>文件夹内。<br>
+		Copy the <code>269953fb.0</code> to the <code>/system/etc/security/cacerts</code> folder.<br>
+		<img src="images/player-fidder-export-cer-copy-to-system.webp" alt="复制到系统文件夹">
+	</p>
+	<p>打开<code>269953fb.0</code>文件属性，设置权限为<code>-rw-r--r--(644)</code>。<br>
+		Open <code>269953fb.0</code> file properties and set permissions to <code>-rw-r--r--(644)</code><br>
+		<img src="images/player-fidder-export-cer-set-permissions.webp" alt="设置文件属性">
+	</p>
+	<p><strong>重启模拟器</strong>，以使证书被系统读取。<br>
+		<strong>Restart the simulator</strong> so that the certificate is read by the system.
 	</p>
 	<p>可以根据需要关闭 Root 了（日服客户端需要关闭 Root 才能运行）。<br>
 		Root can be closed as needed. (The Japanese version client needs to close Root operation.)
 	</p>
-
-	<p>待写 To be written</p>
+	<p>修改模拟器内 WiFi 的代理，改为手动模式，主机名为电脑的网卡 IP，端口号为 8888。<br>
+		Modify the proxy of WiFi in the simulator to manual mode, the host name is the computer's network card IP, port number 8888.<br>
+		<img src="images/player-fidder-export-cer-set-proxy.webp" alt="设置WiFi代理"><br>
+		你可以在电脑网卡属性里找到当前 IP。<br>
+		You can find the current IP in the PC network card properties.<br>
+		<img src="images/player-fidder-export-cer-get-pc-ip.webp" alt="查找计算机IP">
+	</p>
+	<p>打开 Fiddler 的自动解码和流式传输。<br>
+		Turn on Fiddler's auto Decode and Stream.<br>
+		<img src="images/player-fidder-open-auto-decode.webp" alt="自动解码">
+	</p>
+	<p>运行智龙迷城游戏，直到登陆成功。<br>
+		Run the P&amp;D game until log in successfully.<br>
+		<img src="images/player-emu-pad-login.webp" alt="登录游戏">
+	</p>
+	<p>然后在 Fidder 内找到<code>padsv.gungho.jp/api.php?action=get_player_data</code>网络请求。（一般紧跟<code>api.php?action=login</code>）<br>
+		Go back to Fidder to find the network request <code>padsv.gungho.jp/api.php?action=get_player_data</code>.
+		<img src="images/player-fidder-found-traffic.webp" alt="发现网络请求">
+	</p>
+	<p>在右键菜单内选择保存响应体。<br>
+		Select Save Response Body within the right-click menu.<br>
+		<img src="images/player-fidder-save-response-body.webp" alt="保存响应体">
+	</p>
+	<p>到我的箱子功能里打开即可。<br>
+		Open my box function and open it.<br>
+		<img src="images/player-open-data.webp" alt="打开数据">
+	</p>
+	<p>每次获取新的数据，重复 开启 Fidder > 模拟器内登录游戏 > 保存响应体 的步骤。<br>
+		Each time you get new data, repeat the steps to Start Fidder > Log in to the game in the simulator > Save Response Body.
+	</p>
+	<p>如果希望不要每次都重新使用 SNS 登录游戏，可以查看<a href="#multiple-devices">如何多设备登录</a>。<br>
+		If you want to not reuse the SNS login game every time, you can see <a href="#multiple-devices">How to login
+			with multiple devices</a>.
+	</p>
 	<h5>自动保存响应体 | Auto Save Response Body</h5>
-	<code>//自动储存智龙迷城数据
-var PADDataPath = "D:\\PAD_Data\\";
-if (oSession.HostnameIs("api-adr.padsv.gungho.jp") //日服域名
-	|| oSession.HostnameIs("api-ht-adr.padsv.gungho.jp") //港台服域名
-	|| oSession.HostnameIs("api-na-adrv2.padsv.gungho.jp") //美服域名
-	|| oSession.HostnameIs("api-kr-adrv2.padsv.gungho.jp") //韩服域名
-) {
-	var serverName;
-	switch (oSession.hostname)
-	{
-		case "api-adr.padsv.gungho.jp": //日服域名
-		case "api-ht-adr.padsv.gungho.jp": //港台服域名
-			serverName = "ja"
-			break;
-		case "api-na-adrv2.padsv.gungho.jp": //美服域名
-			serverName = "en"
-			break;
-		case "api-kr-adrv2.padsv.gungho.jp": //韩服域名
-			serverName = "ko"
-			break;
-	}
-	if (oSession.uriContains("action=get_player_data")) { //自动保存怪物数据
-		oSession.SaveResponseBody(PADDataPath + serverName + "-player-data-" + new Date().getTime() + ".json");
-	}
+	<p>Fidder 可以使用脚本自动保存响应体。<br>
+		Fidder can use scripts to automatically save Response Body.
+	</p>
+	<p>在 Fidder 脚本中，快速跳转到<code>OnBeforeResponse</code>。<br>
+		In the Fidder Script, quickly jump to the <code>OnBeforeResponse</code><br>
+		<img src="images/player-fidder-go-to-script.webp" alt="跳到 OnBeforeResponse">
+	</p>
+	<p>将以下代码插入<code>OnBeforeResponse</code>代码括号内，并保存。<br>
+		Insert the following code into the parenthesis of the <code>OnBeforeResponse</code> code and save it.<br>
+		<img src="images/player-fidder-paste-code.webp" alt="保存代码"><br>
+		记得将第一行的文件路径修搞到你自己的文件夹，因为是转义符，右斜杠需要写两次。<br>
+		Remember to fix the first line of file paths to your own folder, because it's an escape character, and the right slash needs to be written twice.<br><br>
+		<code class="block-code">// the file saved path
+var PADDataPath = "D:\\PAD_Data";
+if (oSession.uriContains("action=get_player_data")) {
+	oSession.SaveResponseBody(PADDataPath + "\\player-data-" + new Date().getTime() + ".json");
 }</code>
+	</p>
+
 	<h4 id="multiple-devices">如何多设备登录 | How to login with multiple devices</h4>
 	<p>导出<code>data048.bin</code></p>
 	<p>待写 To be written</p>
