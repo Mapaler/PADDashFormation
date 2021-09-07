@@ -64,12 +64,12 @@
 		Open the simulator's root and restart.<br>
 		<img src="images/player-emu-open-root.webp" alt="打开 Root">
 	</p>
-	<p>运行 HttpCanary，按照提示配置 VPN 和导入证书。<br>
-		Run HttpCanary, follow the prompts to configure the VPN and import certificates.<br>
+	<p>运行 HttpCanary，按照提示配置本地 VPN 和导入证书（系统可能要求设置密码）。<br>
+		Run HttpCanary, follow the prompts to configure the local VPN and import certificates (The system may require a password).<br>
 		<img src="images/player-emu-httpcanary-vpn.webp" alt="开启 VPN">
 		<img src="images/player-emu-httpcanary-cer.webp" alt="安装证书"><br>
-		授予 Root 权限，将证书移至系统目录。<br>
-		Grant Root permission to move the certificates to the system directory.<br>
+		授予 Root 权限，将证书移至系统目录。安卓 7 以上必须这样做才能嗅探到 https 的流量。<br>
+		Grant Root permission to move the certificates to the system directory. Android 7 or above must do this to sniff out https traffic.<br>
 		<img src="images/player-emu-httpcanary-move-cer.webp" alt="移动证书到系统目录">
 	</p>
 	<p>可以根据需要关闭 Root 了（日服客户端需要关闭 Root 才能运行）。<br>
