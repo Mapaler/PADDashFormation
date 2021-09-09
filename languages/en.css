@@ -12,7 +12,7 @@
 .status.prepare-capture .text::before{
 	content: "Preparing a screenshot, please wait...";
 }
-.delay .monster::before{
+.monster.delay::before{
 	content: "Prevent\A Delay";
 	font-size: 22px;
 }

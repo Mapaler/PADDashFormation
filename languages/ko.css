@@ -12,7 +12,7 @@
 .status.prepare-capture .text::before{
 	content: "스크린 샷을 준비 하 고 있습니다.";
 }
-.delay .monster::before{
+.monster.delay::before{
 	content: "지 연\A방 지";
 }
 .monster .level.max::before{

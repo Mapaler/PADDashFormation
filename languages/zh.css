@@ -15,7 +15,7 @@
 .help-link::before{
 	content: "ℹ️帮助和提示";
 }
-.delay .monster::before{
+.monster.delay::before{
 	content: "应 对\A威 吓";
 }
 .monster .level.max::before{

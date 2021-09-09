@@ -11,7 +11,7 @@
 .status.prepare-capture .text::before{
 	content: "スクリーンショットを準備しています。";
 }
-.delay .monster::before{
+.monster.delay::before{
 	content: "遅 延\A対 策";
 }
 .monster .level.max::before{
