@@ -494,9 +494,6 @@ label[for="box-have"]::after
 {
 	content: "루프 변신";
 }
-.icon-skill[data-icon-type="resolve"] {
-	background-position-x: calc(-36px * 2);
-}
 
 .control-box .btn-qrcode::before{
 	content: "\f029 QR 코드";
@@ -620,4 +617,7 @@ label[for="qr-data-type-pdchu"]::before {
 .badge[data-badge-icon='3']::before
 {
 	background-position-x: -36px;
+}
+.icon-skill[data-icon-type="resolve"] {
+	background-position-x: calc(-36px * 2);
 }

@@ -537,9 +537,6 @@ label[for="box-have"]::after
 	transform: scaleX(0.6);
 	margin: calc(-100px * (1 - 0.6) / 2);
 }
-.icon-skill[data-icon-type="resolve"] {
-	background-position-x: calc(-36px * 1);
-}
 .control-box .btn-qrcode::before{
 	content: "\f029 QR Code";
 }
@@ -657,4 +654,7 @@ label[for="qr-data-type-pdchu"]::before {
 .badge[data-badge-icon='20']::before
 {
 	background-position-x: -36px;
+}
+.icon-skill[data-icon-type="resolve"] {
+	background-position-x: calc(-36px * 1);
 }
