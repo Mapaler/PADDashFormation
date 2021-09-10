@@ -431,9 +431,9 @@ function skillParser(skillId)
 				if (target?.value.bonusAtk != undefined && source?.value.bonusAtk != undefined) target.value.bonusAtk += source.value.bonusAtk;
 				if (target?.value.bonusRcv != undefined && source?.value.bonusRcv != undefined) target.value.bonusRcv += source.value.bonusRcv;
 
-				if (target?.value.atk != undefined && source?.value.atk != undefined) target.value.atk += source.value.atk;
-				if (target?.value.hp != undefined && source?.value.hp != undefined) target.value.hp += source.value.hp;
-				if (target?.value.rcv != undefined && source?.value.rcv != undefined) target.value.rcv += source.value.rcv;
+				if (target?.value.atk != undefined && source?.value.atk != undefined) target.value.atk *= source.value.atk;
+				if (target?.value.hp != undefined && source?.value.hp != undefined) target.value.hp *= source.value.hp;
+				if (target?.value.rcv != undefined && source?.value.rcv != undefined) target.value.rcv *= source.value.rcv;
 			}
 
 			//十字
@@ -623,13 +623,11 @@ function skillParser(skillId)
 	}
 	const skill = Skills[skillId];
 	if (!skill) return [];
-	if (!parsers[skill.type]) {
-		return [{ kind: SkillKinds.Unknown }];
-	}
 	//此处用apply将这个parser传递到后面解析函数的this里，用于递归解析
-	const result = parsers[skill.type].apply({ parser: skillParser }, skill.params);
+	const result = parsers?.[skill.type]?.apply({ parser: skillParser }, skill.params) 
+		?? { kind: SkillKinds.Unknown };
 	let skills = (Array.isArray(result) ? result : [result])
-		.filter(s => Boolean(s))
+		.filter(Boolean)
 		.map(s => ({ id: skillId, type: skill.type, params: skill.params, ...s }));
 
 	function splitProvisoSkill(skills)
@@ -1363,6 +1361,9 @@ const parsers = {
 	[220](attrs, combo) {
 		return powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, [addCombo(combo)]);
 	},
+	[221](attrs, damage) {
+		return powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, [followAttackFixed(damage)]);
+	},
 
 	[223](combo, damage) {
 		return powerUp(null, null, p.scaleCombos(combo, combo, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
@@ -1425,6 +1426,7 @@ Array.prototype.nodeJoin = function(separator)
 //按住Ctrl点击技能在控制台输出技能的对象
 function showParsedSkill(event) {
 	if (event.ctrlKey) {
+		//const skillId = parseInt(this.getAttribute("data-skill-id"));
 		console.log(this.skill);
 	}
 }
@@ -1437,6 +1439,7 @@ function renderSkillEntry(skills)
 		const li = ul.appendChild(document.createElement("li"));
 		li.className = skill.kind;
 		li.appendChild(renderSkill(skill));
+		//li.setAttribute("data-skill-id", skill.id);
 		li.skill = skill;
 		li.addEventListener("click", showParsedSkill);
 	});
