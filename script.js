@@ -780,10 +780,8 @@ class EvoTree
 }
 
 //切换通用的切换className显示的函数
-function toggleDomClassName(checkBox, className, checkedAdd = true, dom = document.body) {
-	if (!checkBox) return;
-	const checked = checkBox.checked;
-	if (checked && checkedAdd || !checked && !checkedAdd) {
+function toggleDomClassName(addClass, className, dom = document.body) {
+	if (addClass) {
 		dom.classList.add(className);
 		return true;
 	} else {
@@ -1489,29 +1487,40 @@ function initialize(event) {
 	//▲添加数据来源列表结束
 
 	//设定初始的显示设置
-	toggleDomClassName(controlBox.querySelector("#show-mon-id"), 'not-show-mon-id', false);
+	//记录显示CD开关的状态
+	const btnShowMonId = document.getElementById("show-mon-id");
+	btnShowMonId.checked = localStorage_getBoolean(cfgPrefix + btnShowMonId.id);
+	btnShowMonId.onclick = function(e){
+		toggleDomClassName(!this.checked, 'not-show-mon-id');
+		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
+	};
+	btnShowMonId.onclick(false);
 
 	//记录显示CD开关的状态
-	const showMonSkillCd_id = "show-mon-skill-cd";
-	const btnShowMonSkillCd = controlBox.querySelector(`#btn-${showMonSkillCd_id}`);
-	btnShowMonSkillCd.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showMonSkillCd_id)));
+	const btnShowMonSkillCd = document.getElementById("show-mon-skill-cd");
+	btnShowMonSkillCd.checked = localStorage_getBoolean(cfgPrefix + btnShowMonSkillCd.id);
 	btnShowMonSkillCd.onclick = function(e){
-		toggleDomClassName(this, showMonSkillCd_id);
-		if (e) localStorage.setItem(cfgPrefix + showMonSkillCd_id, Number(this.checked));
+		toggleDomClassName(this.checked, this.id);
+		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 	};
 	btnShowMonSkillCd.onclick(false);
 
 	//记录显示觉醒开关的状态
-	const showMonAwoken_id = "show-mon-awoken";
-	const btnShowMonAwoken = controlBox.querySelector(`#btn-${showMonAwoken_id}`);
-	btnShowMonAwoken.checked = Boolean(Number(localStorage.getItem(cfgPrefix + showMonAwoken_id)));
+	const btnShowMonAwoken = document.getElementById("show-mon-awoken");
+	btnShowMonAwoken.checked = localStorage_getBoolean(cfgPrefix + btnShowMonAwoken.id);
 	btnShowMonAwoken.onclick = function(e){
-		toggleDomClassName(this, showMonAwoken_id);
-		if (e) localStorage.setItem(cfgPrefix + showMonAwoken_id, Number(this.checked));
+		toggleDomClassName(this.checked, this.id);
+		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 	};
 	btnShowMonAwoken.onclick(false);
 	
-	toggleDomClassName(controlBox.querySelector("#btn-show-awoken-count"), 'not-show-awoken-count', false);
+	let btnShowAwokenCount = document.getElementById("show-awoken-count");
+	if (btnShowAwokenCount) {
+		btnShowAwokenCount.onclick = function() {
+			toggleDomClassName(!this.checked, 'not-show-awoken-count');
+		}
+		btnShowAwokenCount.onclick();
+	}
 
 	//触屏使用的切换显示的线条
 	interchangeSVG = document.body.querySelector("#interchange-line");
@@ -2392,11 +2401,6 @@ function initialize(event) {
 		this.classList.remove(className_displayNone);
 		formationBox.classList.add("blur-bg");
 		controlBox.classList.add("blur-bg");
-		const switchBoxHave = editBox.querySelector('label[for="box-have"]');
-		if (currentPlayerData)
-			switchBoxHave.classList.remove(className_displayNone);
-		else
-			switchBoxHave.classList.add(className_displayNone);
 	};
 	editBox.hide = function() {
 		this.classList.add(className_displayNone);
@@ -2745,10 +2749,14 @@ function initialize(event) {
 	const s_canAssist = searchBox.querySelector("#can-assist"); //只搜索辅助
 	const s_noHenshin = searchBox.querySelector("#no-henshin"); //只搜索非变身
 
-	const s_boxHave = searchBox.querySelector("#box-have"); //只搜索辅助
-	s_boxHave.onchange = function() {
-		toggleDomClassName(this, "emphasize-box-have", true, document.body);
+	//记录开关的状态
+	const s_boxHave = document.getElementById("box-have");
+	s_boxHave.checked = localStorage_getBoolean(cfgPrefix + s_boxHave.id);
+	s_boxHave.onchange = function(e) {
+		toggleDomClassName(this.checked, "emphasize-box-have");
+		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 	};
+	s_boxHave.onchange(false);
 
 	const s_sawokensDiv = searchBox.querySelector(".sawoken-div");
 	const s_sawokensUl = s_sawokensDiv.querySelector(".sawoken-ul");
@@ -2758,14 +2766,14 @@ function initialize(event) {
 	const s_sawokens = s_sawokensLi.map(li => li.querySelector(".sawoken-check"));
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onchange = function() {
-		toggleDomClassName(this, className_displayNone, true, s_sawokensDiv);
+		toggleDomClassName(!this.checked, className_displayNone, s_sawokensDiv);
 	};
+	s_includeSuperAwoken.onchange();
 
-
-	const officialSortingClassName = 'show-official-awoken-sorting';
-	const s_showOfficialAwokenSorting = searchBox.querySelector(`#${officialSortingClassName}`); //显示官方排序的觉醒
+	const s_showOfficialAwokenSorting = document.getElementById("show-official-awoken-sorting"); //显示官方排序的觉醒
+	s_showOfficialAwokenSorting.checked = localStorage_getBoolean(cfgPrefix + s_showOfficialAwokenSorting.id);
 	s_showOfficialAwokenSorting.onchange = function(e){
-		if (e) localStorage.setItem(cfgPrefix + officialSortingClassName, Number(this.checked));
+		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 		let fragmentAwoken = document.createDocumentFragment();
 		let fragmentSawoken = document.createDocumentFragment();
 		const awokenSorting = this.checked ? official_awoken_sorting : s_awokensUl.originalSorting;
@@ -2790,7 +2798,6 @@ function initialize(event) {
 		s_awokensUl.appendChild(fragmentAwoken);
 		s_sawokensUl.appendChild(fragmentSawoken);
 	};
-	s_showOfficialAwokenSorting.checked = Boolean(Number(localStorage.getItem(cfgPrefix + officialSortingClassName)));
 	s_showOfficialAwokenSorting.onchange(false);
 
 	const s_selectedAwokensUl = searchBox.querySelector(".selected-awokens");
@@ -3132,8 +3139,6 @@ function initialize(event) {
 		//如果键入回车，字符串长度大于0，且不是数字，则执行字符串搜索
 		if (e.key == "Enter" && this.value.length > 0 && !/^\d+$/.test(this.value))
 		{
-			s_includeSuperAwoken.onchange();
-			s_boxHave.onchange();
 			showSearch(searchByString(this.value));
 		}
 	}
@@ -3149,8 +3154,6 @@ function initialize(event) {
 
 	//字符串搜索
 	btnSearchByString.onclick = function() {
-		s_includeSuperAwoken.onchange();
-		s_boxHave.onchange();
 		showSearch(searchByString(monstersID.value));
 	};
 	//觉醒
@@ -3276,17 +3279,15 @@ function initialize(event) {
 	const monEditLatents = Array.from(monEditLatentUl.querySelectorAll("li"));
 	const monEditLatentAllowableUl = settingBox.querySelector(".m-latent-allowable-ul");
 	const monEditLatentsAllowable = Array.from(monEditLatentAllowableUl.querySelectorAll("li"));
-	editBox.refreshLatent = function(latent, monid) //刷新潜觉
-		{
-			refreshLatent(latent, monid, monEditLatents);
-		};
-	const hideClassName = 'hide-less-use-latent';
-	const s_hideLessUseLetent = settingBox.querySelector(`#${hideClassName}`);
+	editBox.refreshLatent = function(latent, monid) {//刷新潜觉
+		refreshLatent(latent, monid, monEditLatents);
+	};
+	const s_hideLessUseLetent = document.getElementById("hide-less-use-latent");
+	s_hideLessUseLetent.checked = localStorage_getBoolean(cfgPrefix + s_hideLessUseLetent.id);
 	s_hideLessUseLetent.onchange = function(e) {
-		toggleDomClassName(this, hideClassName, true, monEditLatentAllowableUl);
-		if (e) localStorage.setItem(cfgPrefix + hideClassName, Number(this.checked));
+		toggleDomClassName(this.checked, this.id, monEditLatentAllowableUl);
+		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 	}
-	s_hideLessUseLetent.checked = Boolean(Number(localStorage.getItem(cfgPrefix + hideClassName)));
 	s_hideLessUseLetent.onchange(false);
 
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
@@ -3602,8 +3603,6 @@ function initialize(event) {
 
 	if (isGuideMod) //图鉴模式直接打开搜索框
 	{
-		s_includeSuperAwoken.onchange();
-		s_boxHave.onchange();
 		showSearch([]);
 		//if (monstersID.value.length == 0) editBoxChangeMonId(0);
 	}

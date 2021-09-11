@@ -45,6 +45,11 @@ function getQueryString(name, url) {
 	return value;
 }
 
+function localStorage_getBoolean(name){
+	let value = localStorage.getItem(name);
+	if (value === "true") return true;
+	else return Boolean(Number(localStorage.getItem(name)));
+}
 
 //数字补前导0
 Number.prototype.prefixInteger = function(length, useGrouping = false) {

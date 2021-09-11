@@ -70,9 +70,9 @@ var formation = new Formation(teamsCount,5);
 			<a class="help-link" target="_blank" href="doc/index.html"></a>
 		</div>
 		<div>
-			<input type="checkbox" class="config-checkbox-ipt" name="btn-show-mon-skill-cd" id="btn-show-mon-skill-cd"><label class="config-checkbox-lbl btn-show-mon-skill-cd-lbl" for="btn-show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" class="config-checkbox-ipt" name="btn-show-mon-awoken" id="btn-show-mon-awoken"><label class="config-checkbox-lbl btn-show-mon-awoken-lbl" for="btn-show-mon-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-id" id="show-mon-id" onclick="toggleDomClassName(this,'not-show-mon-id',false);" checked><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
+			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-id" id="show-mon-id"><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
+			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-skill-cd" id="show-mon-skill-cd"><label class="config-checkbox-lbl show-mon-skill-cd-lbl" for="show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
+			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-awoken" id="show-mon-awoken"><label class="config-checkbox-lbl show-mon-awoken-lbl" for="show-mon-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
 			<input type="checkbox" class="config-checkbox-ipt" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"><div class="config-checkbox-lbl-cicle"></div></label>
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
@@ -947,7 +947,6 @@ var formation = new Formation(teamsCount,5);
 				<div class="sort-div"><!--排序栏-->
 					<select class="sort-list"></select>
 					<input type="checkbox" class="config-checkbox-ipt" name="sort-reverse" id="sort-reverse"><label class="config-checkbox-lbl sort-reverse-label" for="sort-reverse"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="box-have" id="box-have"><label class="config-checkbox-lbl" for="box-have"><div class="config-checkbox-lbl-cicle"></div></label>
 					<div class="search-list-length"></div>
 				</div>
 			</div>
@@ -1258,9 +1257,11 @@ var formation = new Formation(teamsCount,5);
 	<div id="player-data-frame" class="mask display-none">
 		<div class="player-box-title"><!--玩家数据子--></div>
 		<div class="control-button-box">
-			<button class="mask-close brown-button"></button>
 			<button class="upload-data brown-button"></button>
 			<input type="file" class="file-select display-none" multiple/>
+			<button class="mask-close brown-button"></button>
+			<a class="how-to-use" target="_blank" href="doc/export-player-data.html"></a>
+			<input type="checkbox" class="config-checkbox-ipt" name="box-have" id="box-have"><label class="config-checkbox-lbl" for="box-have"><div class="config-checkbox-lbl-cicle"></div></label>
 		</div>
 		<div class="mask-content">
 			<ul class="player-datas-list"></ul>

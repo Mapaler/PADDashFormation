@@ -267,17 +267,17 @@ label[for="merge-skill"]::after{
 .control-box .show-mon-id-lbl::after{
 	content:"🆔Show monster ID";
 }
-.control-box .btn-show-mon-skill-cd-lbl::after{
-	content:"❄️Show full skill's cooldown";
+.control-box .show-mon-skill-cd-lbl::after{
+	content:"❄️Show skill's cooldown";
 }
-.control-box .btn-show-mon-awoken-lbl::after{
+.control-box .show-mon-awoken-lbl::after{
 	content:"👁Show card awoken";
 }
-.control-box .btn-show-awoken-count-lbl::after{
+.control-box .show-awoken-count-lbl::after{
 	content:"⚔️Show awoken count and ability";
 }
 .control-box .change-swap-to-copy-lbl::after{
-	content:"Change \"Swap\" to \"Copy\" when dragging";
+	content:"\"Copy\" when dragging";
 }
 
 .tIf-total-move .general::after,

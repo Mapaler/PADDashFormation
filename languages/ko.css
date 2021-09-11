@@ -256,17 +256,17 @@ label[for="merge-skill"]::after{
 .control-box .show-mon-id-lbl::after{
 	content:"🆔몬스터 ID 표시";
 }
-.control-box .btn-show-mon-skill-cd-lbl::after{
-	content:"❄️전체 스킬 쿨을 표시";
+.control-box .show-mon-skill-cd-lbl::after{
+	content:"❄️스킬의 사용 대기 시간 표시";
 }
-.control-box .btn-show-mon-awoken-lbl::after{
+.control-box .show-mon-awoken-lbl::after{
 	content:"👁카드 각성을 표시합니다";
 }
-.control-box .btn-show-awoken-count-lbl::after{
+.control-box .show-awoken-count-lbl::after{
 	content:"⚔️각성 통계 및 기능 값 표시";
 }
 .control-box .change-swap-to-copy-lbl::after{
-	content:"드래그할 때 \"바꾸기\"를 \"복사\"로 변경";
+	content:"끌 때 복사";
 }
 
 .tIf-total-move .general::after,

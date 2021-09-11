@@ -2813,6 +2813,10 @@ table .orb-icon
 {
 	text-align: center;
 }
+.mask .control-button-box
+{
+	color: white;
+}
 .evo-box
 {
 	display: inline-block;

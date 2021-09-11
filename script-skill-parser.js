@@ -1374,7 +1374,7 @@ const parsers = {
 	[227]() { return leaderChange(1); },
 	[228](turns, attrs, types, atk, rcv) {
 		return activeTurns(turns,
-			powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({atk: atk, rcv: rcv, hp:0})))
+			powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({atk: atk, rcv: rcv ?? 0, hp:0})))
 		);
 	},
 	[229](attrs, types, hp, atk, rcv) {

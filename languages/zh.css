@@ -261,17 +261,17 @@ label[for="merge-skill"]::after{
 .control-box .show-mon-id-lbl::after{
 	content:"🆔显示怪物ID";
 }
-.control-box .btn-show-mon-skill-cd-lbl::after{
-	content:"❄️显示已满技能冷却";
+.control-box .show-mon-skill-cd-lbl::after{
+	content:"❄️显示技能冷却";
 }
-.control-box .btn-show-mon-awoken-lbl::after{
+.control-box .show-mon-awoken-lbl::after{
 	content:"👁显示卡片觉醒";
 }
-.control-box .btn-show-awoken-count-lbl::after{
+.control-box .show-awoken-count-lbl::after{
 	content:"⚔️显示觉醒统计和能力值";
 }
 .control-box .change-swap-to-copy-lbl::after{
-	content:"拖拽时使用“复制”而不是“替换”";
+	content:"拖拽时使用“复制”";
 }
 
 .tIf-total-move .general::after,
