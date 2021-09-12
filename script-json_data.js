@@ -874,6 +874,73 @@ const specialSearchFunctions = (function() {
 		}
 		return fragment;
 	}
+	function lock_Addition(card)
+	{
+		const searchTypeArray = [152];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		const sk = skill.params;
+		const fragment = document.createDocumentFragment();
+		fragment.appendChild(document.createTextNode(`锁`));
+		fragment.appendChild(createOrbsList(flags(sk[0] || 1)));
+		return fragment;
+	}
+	function dropLock_Addition(card)
+	{
+		const searchTypeArray = [205];
+		const skill = getCardActiveSkill(card, searchTypeArray, 1);
+		const sk = skill.params;
+		const fragment = document.createDocumentFragment();
+		fragment.appendChild(document.createTextNode(`掉锁`));
+		fragment.appendChild(createOrbsList(flags(sk[0] != -1 ? sk[0] : 1023)));
+		fragment.appendChild(document.createTextNode(`×${sk[1]}T`));
+		return fragment;
+	}
+	function dropOrb_Addition(card)
+	{
+		const searchTypeArray = [126];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		const sk = skill.params;
+
+		const colors = flags(sk[0]);
+		
+		const fragment = document.createDocumentFragment();
+		fragment.appendChild(createOrbsList(colors));
+		fragment.appendChild(document.createTextNode(`↓${sk[3]}%×${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}T`));
+		return fragment;
+	}
+	function generateColumnOrbs_Addition(card)
+	{
+		const searchTypeArray = [127];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		const sk = skill.params;
+
+		const colors = [];
+		for (let ai=0;ai<sk.length;ai+=2)
+		{
+			colors.push(flags(sk[ai+1]));
+		}
+		const fragment = document.createDocumentFragment();
+		fragment.appendChild(document.createTextNode(`竖`));
+		fragment.appendChild(createOrbsList(colors.flat()));
+		return fragment;
+	}
+	function generateRowOrbs_Addition(card)
+	{
+		const searchTypeArray = [128];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		const sk = skill.params;
+
+		const colors = [];
+		for (let ai=0;ai<sk.length;ai+=2)
+		{
+			colors.push(flags(sk[ai+1]));
+		}
+		
+		const fragment = document.createDocumentFragment();
+		fragment.appendChild(document.createTextNode(`横`));
+		fragment.appendChild(createOrbsList(colors.flat()));
+		return fragment;
+	}
 	function healImmediately_Rate(card)
 	{
 		const searchTypeArray = [7, //宠物回复力
@@ -2211,125 +2278,102 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Lock(Any color)",otLangName:{chs:"上锁（不限色）"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [152];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [152];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				}),
-				addition:card=>{
-				const searchTypeArray = [152];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(`锁`));
-				fragment.appendChild(createOrbsList(flags(sk[0] || 1)));
-				return fragment;
-				}
+				addition:lock_Addition
 			},
 			{name:"Lock(≥5 color)",otLangName:{chs:"上锁5色+心或全部"},
 				function:cards=>cards.filter(card=>{
 				const searchTypeArray = [152];
 				const skill = getCardActiveSkill(card, searchTypeArray);
 				return skill && (skill.params[0] & 63) === 63;
-				})
+				}),
+				addition:lock_Addition
 			},
 		]},
 		{group:true,name:"----- Orbs Drop -----",otLangName:{chs:"----- 珠子掉落 类-----"}, functions: [
 			{name:"Drop locked orbs(any color, sort by turns)",otLangName:{chs:"掉锁（不限色，按回合排序）"},
 				function:cards=>{
-				const searchTypeArray = [205];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
+					const searchTypeArray = [205];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
 				},
-				addition:card=>{
-				const searchTypeArray = [205];
-				const skill = getCardActiveSkill(card, searchTypeArray, 1);
-				const sk = skill.params;
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(`掉锁`));
-				fragment.appendChild(createOrbsList(flags(sk[0] != -1 ? sk[0] : 1023)));
-				fragment.appendChild(document.createTextNode(`×${sk[1]}T`));
-				return fragment;
-				}
+				addition:dropLock_Addition
 			},
 			{name:"Drop locked orbs(≥5 color, sort by turns)",otLangName:{chs:"掉锁5色+心或全部（按回合排序）"},
 				function:cards=>{
-				const searchTypeArray = [205];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill && (skill.params[0] & 63) === 63;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
-				}
+					const searchTypeArray = [205];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill && (skill.params[0] & 63) === 63;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
+				},
+				addition:dropLock_Addition
 			},
 			{name:"Drop Enhanced Orbs(sort by turns)",otLangName:{chs:"掉落强化宝珠（按回合排序）"},
 				function:cards=>{
-				const searchTypeArray = [180];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
+					const searchTypeArray = [180];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
 				},
 				addition:card=>{
-				const searchTypeArray = [180];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				return `${sk[1]}%×${sk[0]}T`;
+					const searchTypeArray = [180];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					return `${sk[1]}%×${sk[0]}T`;
 				}
 			},
 			{name:"Drop rate increases",otLangName:{chs:"掉落率提升"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [126];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [126];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				}),
-				addition:card=>{
-				const searchTypeArray = [126];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-	
-				const colors = flags(sk[0]);
-				
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(createOrbsList(colors));
-				fragment.appendChild(document.createTextNode(`↓${sk[3]}%×${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}T`));
-				return fragment;
-				}
+				addition:dropOrb_Addition
 			},
 			{name:"Drop rate - Attr. - Jammers/Poison",otLangName:{chs:"掉落率提升-属性-毒、废（顶毒）"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [126];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && (skill.params[0] & 960); // 960 = 二进制 1111000000
-				})
+					const searchTypeArray = [126];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && (skill.params[0] & 960); // 960 = 二进制 1111000000
+				}),
+				addition:dropOrb_Addition
 			},
 			{name:"Drop rate - 99 turns",otLangName:{chs:"掉落率提升-持续99回合"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [126];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && skill.params[1] >= 99;
-				})
+					const searchTypeArray = [126];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && skill.params[1] >= 99;
+				}),
+				addition:dropOrb_Addition
 			},
 			{name:"Drop rate - 100% rate",otLangName:{chs:"掉落率提升-100%几率"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [126];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && skill.params[3] == 100;
-				})
+					const searchTypeArray = [126];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && skill.params[3] == 100;
+				}),
+				addition:dropOrb_Addition
 			},
 			{name:"Drop Nail Orbs(sort by turns)",otLangName:{chs:"掉落钉珠（按回合排序）"},
 				function:cards=>{
-				const searchTypeArray = [226];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+					const searchTypeArray = [226];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
 				addition:card=>{
-				const searchTypeArray = [226];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				return `${sk[1]}%×${sk[0]}T`;
+					const searchTypeArray = [226];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					return `📌${sk[1]}%×${sk[0]}T`;
 				}
 			},
 		]},
@@ -2583,92 +2627,111 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Changes all Orbs to 1 color(Farm)",otLangName:{chs:"洗版-1色（花火）"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).length == 1;
-			}),addition:boardChange_Addition},
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).length == 1;
+				}),
+				addition:boardChange_Addition
+			},
 			{name:"Changes all Orbs to 2 color",otLangName:{chs:"洗版-2色"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).length == 2;
-			}),addition:boardChange_Addition},
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).length == 2;
+				}),
+				addition:boardChange_Addition
+			},
 			{name:"Changes all Orbs to 3 color",otLangName:{chs:"洗版-3色"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).length == 3;
-			}),addition:boardChange_Addition},
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).length == 3;
+				}),
+				addition:boardChange_Addition
+			},
 			{name:"Changes all Orbs to 4 color",otLangName:{chs:"洗版-4色"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).length == 4;
-			}),addition:boardChange_Addition},
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).length == 4;
+				}),
+				addition:boardChange_Addition
+			},
 			{name:"Changes all Orbs to 5 color",otLangName:{chs:"洗版-5色"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).length == 5;
-			}),addition:boardChange_Addition},
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).length == 5;
+				}),
+				addition:boardChange_Addition
+			},
 			{name:"Changes all Orbs to ≥6 color",otLangName:{chs:"洗版-6色以上"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).length >= 6;
-			}),addition:boardChange_Addition},
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).length >= 6;
+				}),
+				addition:boardChange_Addition
+			},
 			{name:"Changes all Orbs - include Fire",otLangName:{chs:"洗版-含火"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).includes(0);
-				})
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).includes(0);
+				}),
+				addition:boardChange_Addition
 			},
 			{name:"Changes all Orbs - include Water",otLangName:{chs:"洗版-含水"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).includes(1);
-				})
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).includes(1);
+				}),
+				addition:boardChange_Addition
 			},
 			{name:"Changes all Orbs - include Wood",otLangName:{chs:"洗版-含木"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).includes(2);
-				})
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).includes(2);
+				}),
+				addition:boardChange_Addition
 			},
 			{name:"Changes all Orbs - include Light",otLangName:{chs:"洗版-含光"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).includes(3);
-				})
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).includes(3);
+				}),
+				addition:boardChange_Addition
 			},
 			{name:"Changes all Orbs - include Dark",otLangName:{chs:"洗版-含暗"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).includes(4);
-				})
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).includes(4);
+				}),
+				addition:boardChange_Addition
 			},
 			{name:"Changes all Orbs - include Heart",otLangName:{chs:"洗版-含心"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return boardChange_ColorTypes(skill).includes(5);
-				})
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return boardChange_ColorTypes(skill).includes(5);
+				}),
+				addition:boardChange_Addition
 			},
 			{name:"Changes all Orbs - include Jammers/Poison",otLangName:{chs:"洗版-含毒废"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [71];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const colors = boardChange_ColorTypes(skill);
-				return colors.includes(6)
-					|| colors.includes(7)
-					|| colors.includes(8)
-					|| colors.includes(9);
-				})
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const colors = boardChange_ColorTypes(skill);
+					return colors.includes(6)
+						|| colors.includes(7)
+						|| colors.includes(8)
+						|| colors.includes(9);
+				}),
+				addition:boardChange_Addition
 			},
 		]},
 		{group:true,name:"-----Orbs Change-----",otLangName:{chs:"-----指定色转珠类-----"}, functions: [
@@ -2750,6 +2813,7 @@ const specialSearchFunctions = (function() {
 					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
 					return parsedSkills.some(p=>p.from.includes(0));
 				}),
+				addition:changeOrbs_Addition
 			},
 			{name:"Orbs Change - from Water",otLangName:{chs:"转珠-转走-水"},
 				function:cards=>cards.filter(card=>{
@@ -2759,6 +2823,7 @@ const specialSearchFunctions = (function() {
 					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
 					return parsedSkills.some(p=>p.from.includes(1));
 				}),
+				addition:changeOrbs_Addition
 			},
 			{name:"Orbs Change - from Wood",otLangName:{chs:"转珠-转走-木"},
 				function:cards=>cards.filter(card=>{
@@ -2768,6 +2833,7 @@ const specialSearchFunctions = (function() {
 					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
 					return parsedSkills.some(p=>p.from.includes(2));
 				}),
+				addition:changeOrbs_Addition
 			},
 			{name:"Orbs Change - from Light",otLangName:{chs:"转珠-转走-光"},
 				function:cards=>cards.filter(card=>{
@@ -2777,6 +2843,7 @@ const specialSearchFunctions = (function() {
 					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
 					return parsedSkills.some(p=>p.from.includes(3));
 				}),
+				addition:changeOrbs_Addition
 			},
 			{name:"Orbs Change - from Dark",otLangName:{chs:"转珠-转走-暗"},
 				function:cards=>cards.filter(card=>{
@@ -2786,6 +2853,7 @@ const specialSearchFunctions = (function() {
 					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
 					return parsedSkills.some(p=>p.from.includes(4));
 				}),
+				addition:changeOrbs_Addition
 			},
 			{name:"Orbs Change - from Heart",otLangName:{chs:"转珠-转走-心"},
 				function:cards=>cards.filter(card=>{
@@ -2795,6 +2863,7 @@ const specialSearchFunctions = (function() {
 					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
 					return parsedSkills.some(p=>p.from.includes(5));
 				}),
+				addition:changeOrbs_Addition
 			},
 			{name:"Orbs Change - from Jammers/Poison",otLangName:{chs:"转珠-转走-毒废"},
 				function:cards=>cards.filter(card=>{
@@ -2804,6 +2873,7 @@ const specialSearchFunctions = (function() {
 					let parsedSkills = skills.flatMap(skill=>orbsChangeParse(skill));
 					return parsedSkills.some(p=>p.from.includes(6) || p.to.includes(7) || p.to.includes(8) || p.to.includes(9));
 				}),
+				addition:changeOrbs_Addition
 			},
 			{name:"Enhanced Orbs",otLangName:{chs:"强化宝珠"},
 				function:cards=>{
@@ -2840,24 +2910,28 @@ const specialSearchFunctions = (function() {
 		{group:true,name:"-----Create Orbs-----",otLangName:{chs:"-----随机产珠类-----"}, functions: [
 			{name:"Create 30 Orbs",otLangName:{chs:"固定30个产珠"},
 				function:cards=>cards.filter(card=>{
-				function is30(sk)
-				{
-					return Boolean(flags(sk[1]).length * sk[0] == 30);
-				}
-				const searchTypeArray = [141];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && is30(skill.params);
-			}),addition:generateOrbs_Addition},
+					function is30(sk)
+					{
+						return Boolean(flags(sk[1]).length * sk[0] == 30);
+					}
+					const searchTypeArray = [141];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && is30(skill.params);
+				}),
+				addition:generateOrbs_Addition
+			},
 			{name:"Create 15×2 Orbs",otLangName:{chs:"固定15×2产珠"},
 				function:cards=>cards.filter(card=>{
-				function is1515(sk)
-				{
-					return Boolean(flags(sk[1]).length == 2 && sk[0] == 15);
-				}
-				const searchTypeArray = [141];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && is1515(skill.params);
-			}),addition:generateOrbs_Addition},
+					function is1515(sk)
+					{
+						return Boolean(flags(sk[1]).length == 2 && sk[0] == 15);
+					}
+					const searchTypeArray = [141];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && is1515(skill.params);
+				}),
+				addition:generateOrbs_Addition
+			},
 			{name:"Create Fire Orbs",otLangName:{chs:"产珠-生成-火"},
 				function:cards=>cards.filter(card=>{
 					const gens = generateOrbsParse(card);
@@ -2911,145 +2985,120 @@ const specialSearchFunctions = (function() {
 		{group:true,name:"-----Create Fixed Position Orbs-----",otLangName:{chs:"-----固定位置产珠类-----"}, functions: [
 			{name:"Create designated shape",otLangName:{chs:"生成指定形状的"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [176];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [176];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				})
 			},
 			{name:"Create 3×3 block",otLangName:{chs:"生成3×3方块"},
 				function:cards=>cards.filter(card=>{
-				function is3x3(sk)
-				{
-					for (let si=0;si<3;si++)
+					function is3x3(sk)
 					{
-						if (sk[si] === sk[si+1] && sk[si] === sk[si+2] && //3行连续相等
-							(si>0?(sk[si-1] & sk[si]) ===0:true) && //如果上一行存在，并且无交集(and为0)
-							(si+2<4?(sk[si+3] & sk[si]) ===0:true) && //如果下一行存在，并且无交集(and为0)
-							(sk[si] === 7 || sk[si] === 7<<1 || sk[si] === 7<<2 || sk[si] === 7<<3) //如果这一行满足任意2珠并联（二进制111=十进制7）
-						)
-						return true;
+						for (let si=0;si<3;si++)
+						{
+							if (sk[si] === sk[si+1] && sk[si] === sk[si+2] && //3行连续相等
+								(si>0?(sk[si-1] & sk[si]) ===0:true) && //如果上一行存在，并且无交集(and为0)
+								(si+2<4?(sk[si+3] & sk[si]) ===0:true) && //如果下一行存在，并且无交集(and为0)
+								(sk[si] === 7 || sk[si] === 7<<1 || sk[si] === 7<<2 || sk[si] === 7<<3) //如果这一行满足任意2珠并联（二进制111=十进制7）
+							)
+							return true;
+						}
+						return false;
 					}
-					return false;
-				}
-				const searchTypeArray = [176];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && is3x3(skill.params);
+					const searchTypeArray = [176];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && is3x3(skill.params);
 				}),
 				addition:card=>{
-				const searchTypeArray = [176];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(`3×3`));
-				fragment.appendChild(createOrbsList(sk[5]));
-				return fragment;
+					const searchTypeArray = [176];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(document.createTextNode(`3×3`));
+					fragment.appendChild(createOrbsList(sk[5]));
+					return fragment;
 				}
 			},
 			{name:"Create a vertical",otLangName:{chs:"产竖"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [127];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [127];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				}),
-				addition:card=>{
-				const searchTypeArray = [127];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-	
-				const colors = [];
-				for (let ai=0;ai<sk.length;ai+=2)
-				{
-					colors.push(flags(sk[ai+1]));
-				}
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(`竖`));
-				fragment.appendChild(createOrbsList(colors.flat()));
-				return fragment;
-				}
+				addition:generateColumnOrbs_Addition
 			},
 			{name:"Create a vertical include Heart",otLangName:{chs:"产竖（含心）"},
 				function:cards=>cards.filter(card=>{
-				function isHeart(sk)
-				{
-					for (let i=1;i<sk.length;i+=2)
+					function isHeart(sk)
 					{
-						if (sk[i] & 32)
+						for (let i=1;i<sk.length;i+=2)
 						{
-							return true;
+							if (sk[i] & 32)
+							{
+								return true;
+							}
 						}
 					}
-				}
-				const searchTypeArray = [127];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && isHeart(skill.params);
-				})
+					const searchTypeArray = [127];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && isHeart(skill.params);
+				}),
+				addition:generateColumnOrbs_Addition
 			},
 			{name:"Create a horizontal",otLangName:{chs:"产横"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [128];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [128];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				}),
-				addition:card=>{
-				const searchTypeArray = [128];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-	
-				const colors = [];
-				for (let ai=0;ai<sk.length;ai+=2)
-				{
-					colors.push(flags(sk[ai+1]));
-				}
-				
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(`横`));
-				fragment.appendChild(createOrbsList(colors.flat()));
-				return fragment;
-				}
+				addition:generateRowOrbs_Addition
 			},
 			{name:"Create ≥2 horizontals",otLangName:{chs:"2横或以上"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [128];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && (skill.params.length>=3 || flags(skill.params[0]).length>=2);
-				})
+					const searchTypeArray = [128];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && (skill.params.length>=3 || flags(skill.params[0]).length>=2);
+				}),
+				addition:generateRowOrbs_Addition
 			},
 			{name:"Create 2 color horizontals",otLangName:{chs:"2色横"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [128];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && skill.params[3]>=0 && (skill.params[1] & skill.params[3]) != skill.params[1];
-				})
+					const searchTypeArray = [128];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && skill.params[3]>=0 && (skill.params[1] & skill.params[3]) != skill.params[1];
+				}),
+				addition:generateRowOrbs_Addition
 			},
 			{name:"Create horizontal not Top or Bottom",otLangName:{chs:"非顶底横"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [128];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && ((skill.params[0] | skill.params[2]) & 14);
-				})
+					const searchTypeArray = [128];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && ((skill.params[0] | skill.params[2]) & 14);
+				}),
+				addition:generateRowOrbs_Addition
 			},
 			{name:"Extensive horizontal(include Farm and outer edges)",otLangName:{chs:"泛产横（包含花火与四周一圈等）"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [128,71,176];
-				function isRow(skill)
-				{
-					const sk = skill.params;
-					if (skill.type === 128) //普通横
-					{return true;}
-					else if (skill.type === 71) //花火
-					{return sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined).length === 1}
-					else if (skill.type === 176) //特殊形状
+					const searchTypeArray = [128,71,176];
+					function isRow(skill)
 					{
-						for (let si=0;si<5;si++)
+						const sk = skill.params;
+						if (skill.type === 128) //普通横
+						{return true;}
+						else if (skill.type === 71) //花火
+						{return sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined).length === 1}
+						else if (skill.type === 176) //特殊形状
 						{
-							if ((sk[si] & 63) === 63)
-								return true;
+							for (let si=0;si<5;si++)
+							{
+								if ((sk[si] & 63) === 63)
+									return true;
+							}
 						}
+						return false;
 					}
-					return false;
-				}
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && isRow(skill);
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && isRow(skill);
 				})
 			},
 		]},

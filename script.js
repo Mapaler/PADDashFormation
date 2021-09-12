@@ -2943,9 +2943,7 @@ function initialize(event) {
 				showCD: s_add_show_CD.checked,
 				showAbilities: s_add_show_abilities.checked,
 				showAbilitiesWithAwoken: s_add_show_abilities_with_awoken.checked,
-				customAddition: typeof customAdditionalFunction == "function" ?
-				 [customAdditionalFunction] :
-				 (Array.isArray(customAdditionalFunction) ? customAdditionalFunction : [])
+				customAddition: Array.isArray(customAdditionalFunction) ? customAdditionalFunction : (typeof customAdditionalFunction == "function" ? [customAdditionalFunction] : [])
 			};
 			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, additionalOption));
 			searchMonList.customAddition = additionalOption.customAddition;
@@ -3031,7 +3029,7 @@ function initialize(event) {
 		searchResult = specialFilters.reduce((pre,funcObj)=>
 		{
 			if (!funcObj) return pre;
-			if (funcObj.addition) customAdditionalFunction.push(funcObj.addition); //如果有附加显示，则添加到列表
+			if (funcObj.addition && !customAdditionalFunction.includes(funcObj.addition)) customAdditionalFunction.push(funcObj.addition); //如果有附加显示，则添加到列表
 			return funcObj.function(pre); //结果进一步筛选
 		}, searchResult);
 		
