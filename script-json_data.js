@@ -3194,9 +3194,6 @@ const specialSearchFunctions = (function() {
 			{name:"Have 9 awokens",otLangName:{chs:"有9个觉醒"},
 				function:cards=>cards.filter(card=>card.awakenings.length>=9)
 			},
-			{name:"Can be assist",otLangName:{chs:"可以做辅助"},
-				function:cards=>cards.filter(card=>card.canAssist)
-			},
 			{name:"Not weapon",otLangName:{chs:"不是武器"},
 				function:cards=>cards.filter(card=>!card.awakenings.includes(49))
 			},

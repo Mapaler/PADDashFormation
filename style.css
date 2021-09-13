@@ -496,11 +496,14 @@ ul{
 {
 	display: none;
 }
-.monster .level._110{
+.monster .level[data-level-range="110"]{
 	color: lightskyblue;
 }
-.monster .level._120{
+.monster .level[data-level-range="120"]{
 	color: lightgreen;
+}
+.monster .level[data-level-range="error"]{
+	color: red;
 }
 /*.monster .level::before{
 	content: "Lv.";
@@ -1735,7 +1738,7 @@ icon.inflicts::after
 .search-box .special-add::before,
 .search-box .special-clear::before
 {
-	width: 80px;
+	min-width: 80px;
 	background-size: 100px 100px;
 	background-position-y: 40px;
 	vertical-align: top;
@@ -1748,7 +1751,7 @@ icon.inflicts::after
 .search-box .special-add::before,
 .search-box .special-clear::before
 {
-	width: 50px;
+	min-width: 50px;
 	font-size: 14px;
 	line-height: 20px;
 }

@@ -45,10 +45,10 @@ function getQueryString(name, url) {
 	return value;
 }
 
-function localStorage_getBoolean(name){
+function localStorage_getBoolean(name, defaultValue = false){
 	let value = localStorage.getItem(name);
 	if (value === "true") return true;
-	else return Boolean(Number(localStorage.getItem(name)));
+	else return Boolean(Number(localStorage.getItem(name) ?? defaultValue));
 }
 
 //数字补前导0
