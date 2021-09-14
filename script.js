@@ -1853,8 +1853,16 @@ function initialize(event) {
 	{
 		const table = this.parentNode.parentNode.parentNode.parentNode;
 		currentPlayerData = table.data;
-		localStorage.setItem(cfgPrefix + "default-player-name", table.getAttribute("data-player-name"));
-		table.parentNode.querySelector("[name=default-player-data]").checked = true;
+		const cfgName = cfgPrefix + "default-player-name";
+		const dataPlayerName = table.getAttribute("data-player-name");
+		const checkInput = table.parentNode.querySelector("[name=default-player-data]");
+		if (localStorage.getItem(cfgName) === dataPlayerName) {
+			localStorage.removeItem(cfgName);
+			checkInput.checked = false;
+		} else {
+			localStorage.setItem(cfgName, dataPlayerName);
+			checkInput.checked = true;
+		}
 	}
 	playerDataFrame.playerList.add = function(data) {
 		this.appendChild(this.newPlayerData(data));
