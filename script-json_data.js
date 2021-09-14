@@ -28,12 +28,12 @@ let localTranslating = {
 		sort_mp: "MP",
 		sort_skillLv1: "技能最大冷却时间",
 		sort_skillLvMax: "技能最小冷却时间",
-		sort_hpMax110: "最大 HP",
-		sort_atkMax110: "最大攻击",
-		sort_rcvMax110: "最大回复",
-		sort_hpMax110_awoken: "最大 HP（+觉醒）",
-		sort_atkMax110_awoken: "最大攻击（+觉醒）",
-		sort_rcvMax110_awoken: "最大回复（+觉醒）",
+		sort_hpMax120: "最大 HP",
+		sort_atkMax120: "最大攻击",
+		sort_rcvMax120: "最大回复",
+		sort_hpMax120_awoken: "最大 HP（+觉醒）",
+		sort_atkMax120_awoken: "最大攻击（+觉醒）",
+		sort_rcvMax120_awoken: "最大回复（+觉醒）",
 		sort_abilityIndex_awoken: "最大加权能力指数（+觉醒）",
 	},
 	force_reload_data: "强制刷新数据",
@@ -494,43 +494,43 @@ const sort_function_list = [
 		return (skill_a.initialCooldown - skill_a.maxLevel) - (skill_b.initialCooldown - skill_b.maxLevel);
 		}
 			},
-	{tag:"sort_hpMax110",name:"Lv110最大HP",function:(a,b)=>a.hp.max * (1 + a.limitBreakIncr/100) - b.hp.max * (1 + b.limitBreakIncr/100)},
-	{tag:"sort_atkMax110",name:"Lv110最大攻击",function:(a,b)=>a.atk.max * (1 + a.limitBreakIncr/100) - b.atk.max * (1 + b.limitBreakIncr/100)},
-	{tag:"sort_rcvMax110",name:"Lv110最大回复",function:(a,b)=>a.rcv.max * (1 + a.limitBreakIncr/100) - b.rcv.max * (1 + b.limitBreakIncr/100)},
+	{tag:"sort_hpMax120",name:"Lv120最大HP",function:(a,b)=>a.hp.max * (a.limitBreakIncr ? (1 + a.limitBreakIncr/100) * 1.1 : 1) - b.hp.max * (b.limitBreakIncr ? (1 + b.limitBreakIncr/100) * 1.1 : 1)},
+	{tag:"sort_atkMax120",name:"Lv120最大攻击",function:(a,b)=>a.atk.max * (a.limitBreakIncr ? (1 + a.limitBreakIncr/100) * 1.05 : 1) - b.atk.max * (b.limitBreakIncr ? (1 + b.limitBreakIncr/100) * 1.05 : 1)},
+	{tag:"sort_rcvMax120",name:"Lv120最大回复",function:(a,b)=>a.rcv.max * (a.limitBreakIncr ? (1 + a.limitBreakIncr/100) * 1.05 : 1) - b.rcv.max * (b.limitBreakIncr ? (1 + b.limitBreakIncr/100) * 1.05 : 1)},
 	
-	{tag:"sort_atkMax110_awoken",name:"Lv110最大攻击(+觉醒)",function:(a,b)=>
+	{tag:"sort_atkMax110_awoken",name:"Lv120最大攻击(+觉醒)",function:(a,b)=>
 		{
-			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
-				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
+			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount, 120),
+				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount, 120);
 			const abA = abilities_2statusA ? abilities_2statusA.withAwoken.atk : 0,
 				  abB = abilities_2statusB ? abilities_2statusB.withAwoken.atk : 0;
 			return abA - abB;
 		}
 	},
-	{tag:"sort_hpMax110_awoken",name:"Lv110最大HP(+觉醒)",function:(a,b)=>
+	{tag:"sort_hpMax120_awoken",name:"Lv120最大HP(+觉醒)",function:(a,b)=>
 		{
-			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
-				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
+			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount, 120),
+				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount, 120);
 			const abA = abilities_2statusA ? abilities_2statusA.withAwoken.hp : 0,
-				abB = abilities_2statusB ? abilities_2statusB.withAwoken.hp : 0;
+				  abB = abilities_2statusB ? abilities_2statusB.withAwoken.hp : 0;
 			return abA - abB;
 		}
 	},
-	{tag:"sort_rcvMax110_awoken",name:"Lv110最大回复(+觉醒)",function:(a,b)=>
+	{tag:"sort_rcvMax120_awoken",name:"Lv120最大回复(+觉醒)",function:(a,b)=>
 		{
-			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
-				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
+			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount, 120),
+				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount, 120);
 			const abA = abilities_2statusA ? abilities_2statusA.withAwoken.rcv : 0,
-				abB = abilities_2statusB ? abilities_2statusB.withAwoken.rcv : 0;
+				  abB = abilities_2statusB ? abilities_2statusB.withAwoken.rcv : 0;
 			return abA - abB;
 		}
 	},
-	{tag:"sort_abilityIndex_awoken",name:"Lv110最大加权能力指数(+觉醒)",function:(a,b)=>
+	{tag:"sort_abilityIndex_awoken",name:"Lv120最大加权能力指数(+觉醒)",function:(a,b)=>
 		{
-			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount),
-				abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount);
+			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount, 120),
+				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount, 120);
 			const abA = abilities_2statusA ? abilities_2statusA.withAwoken.hp / 10 + abilities_2statusA.withAwoken.atk / 5 + abilities_2statusA.withAwoken.rcv / 3 : 0,
-				abB = abilities_2statusB ? abilities_2statusB.withAwoken.hp / 10 + abilities_2statusB.withAwoken.atk / 5 + abilities_2statusB.withAwoken.rcv / 3 : 0;
+				  abB = abilities_2statusB ? abilities_2statusB.withAwoken.hp / 10 + abilities_2statusB.withAwoken.atk / 5 + abilities_2statusB.withAwoken.rcv / 3 : 0;
 			return abA - abB;
 		}
 	},

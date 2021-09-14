@@ -2588,7 +2588,7 @@ function initialize(event) {
 		}
 		if (options.showAbilities || options.showAbilitiesWithAwoken)
 		{
-			const abilities_2status = calculateAbility_max(id, solo, teamsCount);
+			const abilities_2status = calculateAbility_max(id, solo, teamsCount, 120);
 			if (options.showAbilities && abilities_2status)
 			{
 				const abilitiesPreview = cli.appendChild(creatAbilitiesList(abilities_2status.noAwoken));

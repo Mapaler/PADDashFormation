@@ -474,7 +474,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 
 	const bonusScale = [0.1, 0.05, 0.15]; //辅助宠物附加的属性倍率
 	const plusAdd = [10, 5, 3]; //加值的增加值
-	const limitBreakIncr120 = [10, 5, 5]; //120三维增加比例
+	const limitBreakIncr120 = [10, 5, 5]; //120三维增加百分比例
 
 	const awokenAdd = [ //对应加三维觉醒的序号与增加值
 		[{ index: 1, value: 500 }, { index: 65, value: -2500 }], //HP
@@ -591,11 +591,11 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	return abilitys;
 }
 
-function calculateAbility_max(id, solo, teamsCount) {
+function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 	const card = Cards[id];
 	const tempMon = {
 		id: id,
-		level: card.limitBreakIncr ? 110 : card.maxLevel,
+		level: card.limitBreakIncr ? maxLevel : card.maxLevel,
 		plus: (card.overlay || card.types[0] == 15 && card.types[1] == -1) ? [0, 0, 0] : [99, 99, 99], //当可以叠加时，不能打297
 		awoken: card.awakenings.length,
 	};
