@@ -1852,14 +1852,15 @@ function initialize(event) {
 	function setPlayerDataDefault(e)
 	{
 		const table = this.parentNode.parentNode.parentNode.parentNode;
-		currentPlayerData = table.data;
 		const cfgName = cfgPrefix + "default-player-name";
 		const dataPlayerName = table.getAttribute("data-player-name");
 		const checkInput = table.parentNode.querySelector("[name=default-player-data]");
 		if (localStorage.getItem(cfgName) === dataPlayerName) {
+			currentPlayerData = null;
 			localStorage.removeItem(cfgName);
 			checkInput.checked = false;
 		} else {
+			currentPlayerData = table.data;
 			localStorage.setItem(cfgName, dataPlayerName);
 			checkInput.checked = true;
 		}
