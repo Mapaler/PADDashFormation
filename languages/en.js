@@ -78,7 +78,7 @@
 			change_attribute: tp`${'target'} Att. changes to ${'attrs'}`,
 			set_orb_state_enhanced: tp`${'orbs'} ${'icon'}enhanced (${'value'} per orb)`,
 			set_orb_state_locked: tp`${'icon'}Locks ${'value'}${'orbs'}`,
-			set_orb_state_unlocked: tp`${'icon'}Unlocks all orbs`,
+			set_orb_state_unlocked: tp`${'icon'}Unlocks ${'orbs'}`,
 			set_orb_state_bound: tp`${'orbs'} are unmatchable`,
 			rate_multiply: tp`${'rate'} ${'value'} when entering as leader`,
 			rate_multiply_drop: tp`${'icon'}Drop rate`,

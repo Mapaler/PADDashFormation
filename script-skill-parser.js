@@ -1201,7 +1201,7 @@ const parsers = {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus ?? 0, 0]), null, v.percent(percent));
 	},
-	[172]() { return setOrbState(null, 'unlocked'); },
+	[172]() { return setOrbState(Attributes.orbs(), 'unlocked'); },
 	[173](turns, attrAbsorb, comboAbsorb, damageAbsorb) {
 	  return activeTurns(turns, voidEnemyBuff(
 		[
@@ -1272,7 +1272,7 @@ const parsers = {
 	},
 	[189]() {
 	  return [
-		setOrbState(null, 'unlocked'),
+		setOrbState(Attributes.orbs(), 'unlocked'),
 		boardChange([0,1,2,3]),
 		autoPath(),
 	  ];
