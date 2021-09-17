@@ -105,6 +105,8 @@
 			scale_match_attrs_bonus: tp`, ${'bonus'} per matches additional，up to ${'stats_max'} for ${'max'} matches`,
 			scale_match_length: tp`When matching ${'min'} of ${'orbs'} ${'in_once'}${'stats'}${'bonus'}`,
 			scale_match_length_bonus: tp`, ${'bonus'} per orbs additional，up to ${'stats_max'} for ${'max'} orbs`,
+			scale_remain_orbs: tp`When ≤ ${'max'} orbs remain on the board ${'stats'}${'bonus'}`,
+			scale_remain_orbs_bonus: tp`, ${'bonus'} for each fewer orb, up to ${'stats_max'} for ${'min'} orbs`,
 			scale_cross: tp`When matching each cross of 5 ${'orbs'} ${'stats'}`,
 			scale_cross_single: tp`When matching a cross of 5 ${'orbs'} ${'stats'}`,
 			scale_state_kind_count: tp`${'stats'} for each [${'awakenings'}${'attrs'}${'types'}] in team`,
@@ -117,8 +119,7 @@
 			hp_belong_to_range: tp`When ${'hp'} ∈ [${'min'},${'max'}] `,
 			use_skill: tp`When skills used `,
 			multi_player: tp`When in Multiplayer Mode `,
-			remain_orbs: tp`When ≤ ${'value'} Orbs on
-			the board `,
+			remain_orbs: tp`When ≤ ${'value'} Orbs on the board `,
 			exact_combo: tp`When exactly ${'value'} combos `,
 			exact_match_length: tp`When matching exactly ${'value'}${'orbs'} `,
 			exact_match_enhanced: tp` orbs including enhanced`,
