@@ -16,12 +16,29 @@
 			location.href = "multi.html" + location.search; //跳到多人模式
 	}
 
-	var browser_i18n = (navigator.language||navigator.userLanguage); //获取浏览器语言
-	var hasLanguage = languageList.filter(function(l){ //筛选出符合的语言
-		return browser_i18n.indexOf(l.i18n)>=0;
-	});
-	language = hasLanguage.length?hasLanguage[hasLanguage.length-1]:languageList[0]; //没有找到指定语言的情况下，自动用默认的语言
-	document.head.querySelector("#language-css").href = "languages/"+language.i18n+".css";
+	let browser_i18n = (navigator.language||navigator.userLanguage); //获取浏览器语言
+	let currentLanguage = languageList.find(lang => { //筛选出符合的语言
+			if (lang.i18n_RegExp)
+			{
+				return lang.i18n_RegExp.test(browser_i18n); //匹配正则表达式
+			}else
+			{
+				return browser_i18n.includes(lang.i18n); //文字上的搜索包含
+			}
+		}) || languageList[0]; //没有找到指定语言的情况下，自动用第一个语言（英语）
+
+	document.head.querySelector("#language-css").href = "languages/"+currentLanguage.i18n+".css";
+
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('service-worker.js', {scope: './'})
+		.then(function(registration) {
+			console.log('service worker 注册成功',registration);
+		}).catch(function(error) {
+			console.error('servcie worker 注册失败',error);
+		});
+	} else {
+		console.error('浏览器不支持 servcie worker');
+	}
 </script>
 <style type="text/css">
 .title,.control-box{

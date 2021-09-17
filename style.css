@@ -1,38 +1,30 @@
 @charset "utf-8";
 @font-face {
 	font-family: 'FOT-KurokaneStd-EB';
-	font-style: normal;
-	/*font-weight: 400;*/
 	src:
-		url("fonts/FOT-KurokaneStd-EB.woff2") format('woff2'),
-		url("fonts/FOT-KurokaneStd-EB.woff") format('woff'),
-		url("fonts/FOT-KurokaneStd-EB.ttf") format('truetype'),
-		url("fonts/FOT-KurokaneStd-EB.eot") format('embedded-opentype'),
-		url("fonts/FOT-KurokaneStd-EB.svg") format('svg');
+		local("FOT-Kurokane Std EB"),
+		local("KurokaneStd-EB"),
+		local("FOT-くろかね Std"),
+		url("./fonts/FOT-KurokaneStd-EB.woff2") format('woff2');
+	font-style: normal;
+	font-weight: normal;
 }
 @font-face {
 	font-family: 'zpix';
 	src:
-		url("fonts/zpix.woff2") format('woff2'),
-		url("fonts/zpix.woff") format('woff'),
-		url("fonts/zpix.ttf") format('truetype'),
-		url("fonts/zpix.eot?#font-spider") format('embedded-opentype'),
-		url("fonts/zpix.svg") format('svg');
+		local("Zpix"),
+		url("./fonts/zpix.woff2") format('woff2');
 	font-weight: normal;
 	font-style: normal;
 }
 @font-face {
 	font-family: 'Font Awesome 5 Free';
+	src:
+		local("FontAwesome"),
+		url("fonts/fa-solid-900.woff2") format("woff2");
 	font-style: normal;
 	font-weight: 900;
 	font-display: block;
-	src: url("fonts/fa-solid-900.eot");
-	src:
-		url("fonts/fa-solid-900.eot?#iefix") format("embedded-opentype"),
-		url("fonts/fa-solid-900.woff2") format("woff2"),
-		url("fonts/fa-solid-900.woff") format("woff"),
-		url("fonts/fa-solid-900.ttf") format("truetype"),
-		url("fonts/fa-solid-900.svg#fontawesome") format("svg");
 }
 @keyframes rotate-animate{
 	from {

@@ -28,6 +28,17 @@ if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
 }
 
+if ('serviceWorker' in navigator) {
+	navigator.serviceWorker.register('service-worker.js', {scope: './'})
+	.then(function(registration) {
+		console.log('service worker 注册成功',registration);
+	}).catch(function(error) {
+		console.error('servcie worker 注册失败',error);
+	});
+} else {
+	console.error('浏览器不支持 servcie worker');
+}
+
 //一开始就加载当前语言
 if (currentLanguage == undefined)
 {
@@ -1138,7 +1149,7 @@ function loadData(force = false)
 				checkFormationBox();
 				function checkFormationBox()
 				{
-					if (formationBox.querySelector('.teams'))
+					if (formationBox?.querySelector('.teams'))
 					{
 						reloadFormationData();
 						clearInterval(formationBoxHook);
