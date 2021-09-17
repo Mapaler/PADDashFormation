@@ -1291,7 +1291,7 @@ const parsers = {
 		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul || 100, 100], [0, 0]), null, null, [addCombo(combo)]);
 	},
 	[195](percent) {
-	  return selfHarm(percent ? v.xCHP(percent) : v.constantTo(1));
+	  return selfHarm(percent ? v.xCHP(100 - percent) : v.constantTo(1));
 	},
 	[196](matches) {
 	  return unbind(0,0,matches);
