@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>智龙急速阵型帮助</title>
-	<link rel="shortcut icon" href="images/icon.png" type="image/x-png" />
+	<link rel="shortcut icon" href="../images/icon.png" type="image/x-png" />
 	<meta name="viewport"
 		content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<style type="text/css">
@@ -20,6 +20,18 @@
 			margin-bottom: 5px;
 		}
 	</style>
+	<script type="text/javascript">
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('../service-worker.js', {scope: '../'})
+			.then(function(registration) {
+				console.log('service worker 注册成功',registration);
+			}).catch(function(error) {
+				console.error('servcie worker 注册失败',error);
+			});
+		} else {
+			console.error('浏览器不支持 servcie worker');
+		}
+	</script>
 </head>
 
 <body>
