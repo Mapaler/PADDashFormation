@@ -12,7 +12,7 @@
 ]);
 
 self.addEventListener('install', function(event) {
-	console.debug("Service Worker 安装中");
+	console.debug("Service Worker install");
 	const preCache = () => {
 		return Promise.all([
 			cache.open(CACHES.get("font")).then(function(cache) {
@@ -38,7 +38,7 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('activate', function(event) {
-// You're good to go!
+	console.debug("Service Worker activate");
 	var cacheNames = new Set(CACHES.values());
 	event.waitUntil(
 		caches.keys().then(function(keyList) { //所有的现存的缓存列表
@@ -53,50 +53,55 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-	event.respondWith(
-		caches.match(event.request).then(function(resp) {
-			const url = new URL(event.request.url);
-			const path = url.pathname;
-			if (/\.json$/i.test(path)) { //json数据优先通过网络获取
-				return fetch(event.request).then(async function(response) {
-					console.debug("缓存数据", url);
-					const cache = await caches.open(CACHES.get("data"));
-					cache.put(url.origin + path, response.clone());
-					return response;
-				}).catch((err)=>resp);
-			} else { //其他的优先使用缓存
-				if (resp) console.debug("找到缓存", event.request.url);
+	const url = new URL(event.request.url);
+	const path = url.pathname;
+	const fileUrl = url.origin + path;
+	if (/\.json$/i.test(path)) { //json数据优先通过网络获取
+		event.respondWith(
+			fetch(event.request).then(async function(response) {
+				console.debug("缓存数据", url);
+				const cache = await caches.open(CACHES.get("data"));
+				cache.put(fileUrl, response.clone());
+				return response;
+			}).catch((err)=>
+				caches.match(fileUrl).then(resp=>resp)
+			)
+		);
+	} else { //其他的优先使用缓存
+		event.respondWith(
+			caches.match(fileUrl).then(function(resp) {
+				if (resp) console.debug("找到缓存", fileUrl);
 				return resp || fetch(event.request).then(async function(response) {
 					//console.debug("正则测试",/images\/cards\w+\/CARDS_\d+\.PNG/i.test(event.request.url));
 					if (/\.(html|js|css|wasm)$/i.test(path) ||
 						/\/images\/[\w\-]+\.(png|svg)/i.test(path)) { //缓存程序
 						console.debug("缓存程序", url);
 						const cache = await caches.open(CACHES.get("program"));
-						cache.put(event.request, response.clone());
+						cache.put(fileUrl, response.clone());
 					} else if (/\/doc\//i.test(path)) { //缓存文档
 						console.debug("缓存文档", url);
 						const cache = await caches.open(CACHES.get("document"));
-						cache.put(event.request, response.clone());
+						cache.put(fileUrl, response.clone());
 					} else if (/\.woff2$/i.test(path)) { //缓存字体
 						console.debug("缓存字体", url);
 						const cache = await caches.open(CACHES.get("font"));
-						cache.put(event.request, response.clone());
+						cache.put(fileUrl, response.clone());
 					} else if (/images\/cards_\w+\/CARDS_\d+\.PNG/i.test(path)) { //缓存卡片图
 						let regRes = /cards_(ja|en|ko)/i.exec(path);
 						let langCode = regRes[1];
 						console.debug("缓存Cards-" + langCode, url);
 						const cache = await caches.open(CACHES.get("cards_" + langCode));
-						cache.put(event.request, response.clone());
+						cache.put(fileUrl, response.clone());
 					} else if (/sound\/voice\/\w+\/padv\d+.wav/i.test(path)) { //缓存音效
 						let regRes = /\/(ja|en|ko)\//i.exec(path);
 						let langCode = regRes[1];
 						console.debug("缓存Voice-" + langCode, url);
 						const cache = await caches.open(CACHES.get("voice_" + langCode));
-						cache.put(event.request, response.clone());
+						cache.put(fileUrl, response.clone());
 					}
 					return response;
 				});
-			}
-		})
-	);
+			})
+		);
+	}
 });
