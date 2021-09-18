@@ -32,7 +32,7 @@
 	if ('serviceWorker' in navigator) {
 		navigator.serviceWorker.register('service-worker.js', {scope: './'})
 		.then(function(registration) {
-			console.log('service worker 注册成功',registration);
+			console.debug('service worker 注册成功',registration);
 		}).catch(function(error) {
 			console.error('servcie worker 注册失败',error);
 		});
