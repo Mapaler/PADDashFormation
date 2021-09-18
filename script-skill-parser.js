@@ -318,6 +318,7 @@ const SkillPowerUpKind = {
 	ScaleMatchLength: 'scale-match-len',
 	ScaleMatchAttrs: 'scale-match-attrs',
 	ScaleCross: 'scale-cross',
+	ScaleRemainOrbs: 'scale-remain-orbs',
 	ScaleStateKindCount: 'scale-state-kind-count',
 };
 
@@ -793,6 +794,9 @@ const p = {
 	scaleCross: function (crosses) {
 		return { kind: SkillPowerUpKind.ScaleCross, crosses: crosses.map(cross => ({ ...cross, atk: ((cross.atk ?? 100) / 100), rcv: ((cross.rcv ?? 100) / 100)})) };
 	},
+	scaleRemainOrbs: function (max, baseMul, bonusMul) {
+		return { kind: SkillPowerUpKind.ScaleRemainOrbs ,...this.scale(bonusMul ? 0 : max, max, baseMul, bonusMul) };
+	},
 	scaleStateKindCount: function (awakenings, attrs, types, value) {
 		return { kind: SkillPowerUpKind.ScaleStateKindCount, awakenings: awakenings, attrs: attrs, types: types, value: value };
 	},
@@ -1217,11 +1221,11 @@ const parsers = {
 			{ orbs: [attrs ?? 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>flags(row)) }
 		);
 	},
-	[177](attrs, types, hp, atk, rcv, remains, mul) {
+	[177](attrs, types, hp, atk, rcv, remains, baseAtk, bonusAtk) {
 	  return [
 		noSkyfall(),
 		(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
-		mul && powerUp(null, null, p.mul({ atk: mul }), c.remainOrbs(remains)) || null
+		baseAtk && powerUp(null, null, p.scaleRemainOrbs(remains, [baseAtk ?? 100, 100], [bonusAtk ?? 0, 0])) || null
 	  ].filter(Boolean);
 	},
 	[178](time, attrs, types, hp, atk, rcv, attrs2, percent) {
@@ -2550,6 +2554,26 @@ function renderPowerUp(powerUp) {
 				});
 				frg.ap(subDocument.nodeJoin(tsp.word.comma()));
 			//}
+			break;
+		}
+		case SkillPowerUpKind.ScaleRemainOrbs: {
+			let min = powerUp.min, max = powerUp.max, baseAtk = powerUp.baseAtk, baseRcv = powerUp.baseRcv, bonusAtk = powerUp.bonusAtk, bonusRcv = powerUp.bonusRcv;
+			
+			let dict = {
+				max: max,
+				stats: renderStats(1, baseAtk, baseRcv),
+			}
+			if (max !== min)
+			{
+				let _dict = {
+					min: min,
+					bonus: renderStats(0, bonusAtk, bonusRcv, {mul: false}),
+					stats_max: renderStats(1, baseAtk + bonusAtk * (max-min), baseRcv + bonusRcv * (max-min)),
+				}
+				dict.bonus = frg.ap(tsp.power.scale_remain_orbs_bonus(_dict));
+			}
+			frg.ap(tsp.power.scale_remain_orbs(dict));
+			
 			break;
 		}
 		case SkillPowerUpKind.ScaleStateKindCount: {
