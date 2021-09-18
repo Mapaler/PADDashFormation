@@ -82,13 +82,13 @@ self.addEventListener('fetch', function(event) {
 						const cache = await caches.open(CACHES.get("font"));
 						cache.put(event.request, response.clone());
 					} else if (/images\/cards_\w+\/CARDS_\d+\.PNG/i.test(path)) { //缓存卡片图
-						let regRes = /cards_(\w+)/i.exec(path);
+						let regRes = /cards_(ja|en|ko)/i.exec(path);
 						let langCode = regRes[1];
 						console.debug("缓存Cards-" + langCode, url);
 						const cache = await caches.open(CACHES.get("cards_" + langCode));
 						cache.put(event.request, response.clone());
 					} else if (/sound\/voice\/\w+\/padv\d+.wav/i.test(path)) { //缓存音效
-						let regRes = /\/(\w+)\//i.exec(path);
+						let regRes = /\/(ja|en|ko)\//i.exec(path);
 						let langCode = regRes[1];
 						console.debug("缓存Voice-" + langCode, url);
 						const cache = await caches.open(CACHES.get("voice_" + langCode));
