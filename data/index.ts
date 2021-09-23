@@ -5,13 +5,13 @@ const regions = [
 	{path: 'padKO', regionID: 'KO', baseJsonURL: 'https://dl-kr.padsv.gungho.jp/base.kr-adr.json'},
 //	{path: 'padHT', regionID: 'HT', baseJsonURL: 'https://dl.padsv.gungho.jp/base.ht-adr.json'},
 ];
-async function downloadFile(url, path) {
+async function downloadFile(url: string, path: string) {
 	const response = await fetch(url);
 	const headers = response.headers;
 	//console.log(headers);
 	const body = new Uint8Array(await response.clone().arrayBuffer());
 	Deno.writeFileSync(`${path}/${basename(response.url)}`, body);
-	const fileData = new Date(headers.get("date")); //获取修改时间
+	const fileData = new Date(headers.get("date") as string); //获取修改时间
 	Deno.utimeSync(`${path}/${basename(response.url)}`, fileData, fileData);
 	return response;
 }
@@ -24,4 +24,7 @@ for (const region of regions) {
 	const extlistUrl = `${baseJsonData.extlist}/extlist.bin`;
 	console.log(`正在下载 ${extlistUrl}`);
 	const extlistResponse = await downloadFile(extlistUrl, region.path);
+	const extdllistUrl = `${baseJsonData.efl}/extdllist.bin`;
+	console.log(`正在下载 ${extdllistUrl}`);
+	const extdllistResponse = await downloadFile(extdllistUrl, region.path);
 }
