@@ -447,11 +447,10 @@ function skillParser(skillId)
 				if (crosses.length >= 2 &&
 					crosses.every(cross=>cross.atk === atk && cross.rcv === rcv)
 				) {
-					//所有值一样
-					crosses.reduce((pre,cur)=>{
-						pre.attr = pre.attr.concat(cur.attr);
+					crosses[0].attr = Array.from(new Set(crosses.reduce((pre,cur)=>{
+						pre.push(...cur.attr);
 						return pre;
-					});
+					}, [])));
 					skill.value.crosses.splice(1);
 				}
 			}
@@ -468,6 +467,7 @@ function skillParser(skillId)
 			if (scaleCross.length >= 1)
 			{ //把后面的全都合并到第一个
 				scaleCross.reduce((pre,cur)=>{
+					combinePowerUp(pre,cur);
 					pre.value.crosses = pre.value.crosses.concat(cur.value.crosses);
 					return pre
 				});
