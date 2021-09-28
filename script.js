@@ -2769,7 +2769,7 @@ function initialize(event) {
 	const s_sawokens = s_sawokensLi.map(li => li.querySelector(".sawoken-check"));
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onchange = function() {
-		toggleDomClassName(!this.checked, className_displayNone, s_sawokensDiv);
+		toggleDomClassName(this.checked, className_displayNone, s_sawokensDiv);
 	};
 	s_includeSuperAwoken.onchange();
 
