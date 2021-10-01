@@ -605,3 +605,11 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "体力";
 }
+
+
+.edit-box .monsterinfo-box .monster-name,
+.evo-panel-right .monster-name
+{
+	font-family: var(--font-family);
+	font-weight: bold;
+}

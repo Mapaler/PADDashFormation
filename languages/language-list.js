@@ -8,11 +8,7 @@
 		guideURL:id=>`https://pad.skyozora.com/pets/${id}`
 	},
 	{
-		name:"中文（简体）技能解析",i18n:"zh-CN",i18n_RegExp:/^zh-(?:hans-)?/i,searchlist:["chs","ja"],
-		guideURL:id=>`https://pad.skyozora.com/pets/${id}`
-	},
-	{
-		name:"中文（简体）原版技能",i18n:"zh",searchlist:["chs","ja"],
+		name:"中文（简体）",i18n:"zh",i18n_RegExp:/^zh-(?:hans-)?/i,searchlist:["chs","ja"],
 		guideURL:id=>`https://pad.skyozora.com/pets/${id}`
 	},
 	{
@@ -22,5 +18,9 @@
 	{
 		name:"한국어",i18n:"ko",searchlist:["ko","ja"],
 		guideURL:id=>`http://www.thisisgame.com/pad/info/monster/detail.php?code=${id}`
+	},
+	{
+		name:"Debug用",i18n:"zh-CN",searchlist:["chs","ja"],
+		guideURL:id=>`https://pad.skyozora.com/pets/${id}`
 	},
 ];
