@@ -1122,8 +1122,8 @@ const parsers = {
 		return [
 			powerUp(flags(attrs), flags(types), p.mul({ atk: mul1 || 100 }), less1 ? c.hp(0, percent1) : c.hp(percent1, 100)),
 			powerUp(flags(attrs), flags(types), p.mul({ atk: mul2 || 100 }), less1 ?
-			(less2 ? c.hp(percent1, percent2) : c.hp(percent2, 100)) :
-			(less2 ? c.hp(0, percent2) : c.hp(percent2, percent1))
+				(less2 ? c.hp(percent1, percent2) : c.hp(percent2, 100)) :
+				(less2 ? c.hp(0, percent2) : c.hp(percent2, percent1 - 1))
 			),
 		];
 	},
