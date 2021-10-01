@@ -1025,12 +1025,12 @@ function loadData(force = false)
 		}
 		function loadExtraCardsData(_cards)
 		{
-			let splitIdx = _cards.findIndex((card, id)=>card.id !== id);
+			let splitIdx = _cards.findIndex((card, id)=>card?.id !== id);
 			let cards = _cards.slice(0, splitIdx);
 			for (let i = splitIdx + 1; i < _cards.length; i++)
 			{
 				const card = _cards[i];
-				cards[card.id] = card;
+				cards[card?.id] = card;
 			}
 			return cards;
 		}
@@ -2780,7 +2780,7 @@ function initialize(event) {
 	const s_sawokens = s_sawokensLi.map(li => li.querySelector(".sawoken-check"));
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onchange = function() {
-		toggleDomClassName(!this.checked, className_displayNone, s_sawokensDiv);
+		toggleDomClassName(this.checked, className_displayNone, s_sawokensDiv);
 	};
 	s_includeSuperAwoken.onchange();
 

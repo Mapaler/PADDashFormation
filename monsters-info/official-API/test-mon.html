@@ -4,9 +4,12 @@
 <meta charset="utf-8">
 <title>怪物代码测试</title>
 <script type="text/javascript" src="parseCard.js" ></script>
+<script type="text/javascript" src="parseSkill.js" ></script>
 <script type="text/javascript">
 var cards;
 var pcards;
+var skills;
+var pskills;
 var mid;
 var GM_xmlhttpRequest = function(GM_param) {
 	var xhr = new XMLHttpRequest(); //创建XMLHttpRequest对象
@@ -30,10 +33,11 @@ var GM_xmlhttpRequest = function(GM_param) {
 
 function g(id)
 {
-	let m = cards[id];
+	let idx = cards.findIndex(c=>c[0] === id);
+	let m = cards[idx];
 	
 	console.log("原始数组",m);
-	console.log("已解析对象",pcards[id]); //输出人家大佬的格式
+	console.log("已解析对象",pcards[idx]); //输出人家大佬的格式
 
 	var pn = ["火","水","木","光","暗"];
 	var p = [pn[m[2]]||"无", pn[m[3]]||"无"];
@@ -75,29 +79,30 @@ function g(id)
 		m[41],m[42],m[43],m[44],m[45], //进化素材ID 1-5
 	);
 }
-GM_xmlhttpRequest({
-	method: "GET",
-	url:"ja-card.json",
-	onload: function(response) {
-		const originalJSON = JSON.parse(response.response);
-		cards = originalJSON.card;
-		pcards = cards.map(c=>{
-			let card = new Card(c);
-			//将可能的flag显示为二进制
-			card.unk01bin = card.unk01.toString(2);
-			card.unk02bin = card.unk02.toString(2);
-			card.unk03bin = card.unk03.toString(2);
-			card.unk04bin = card.unk04.toString(2);
-			card.unk05bin = card.unk05.toString(2);
-			card.unk06bin = card.unk06.toString(2);
-			card.unk07bin = card.unk07.toString(2);
-			card.unk08bin = card.unk08.toString(2); //已知一些flag
-			return card;
-		});
-	},
-	onerror: function(response) {
-		console.error("怪物数据获取错误",response);
-	}
+fetch("ja-card.json").then(async response=>{
+	const originalJSON = await response.json();
+	cards = originalJSON.card;
+	pcards = cards.map(c=>{
+		let card = new Card(c);
+		//将可能的flag显示为二进制
+		card.unk01bin = card.unk01.toString(2);
+		card.unk02bin = card.unk02.toString(2);
+		card.unk03bin = card.unk03.toString(2);
+		card.unk04bin = card.unk04.toString(2);
+		card.unk05bin = card.unk05.toString(2);
+		card.unk06bin = card.unk06.toString(2);
+		card.unk07bin = card.unk07.toString(2);
+		card.unk08bin = card.unk08.toString(2); //已知一些flag
+		return card;
+	});
+});
+fetch("ja-skill.json").then(async response=>{
+	const originalJSON = await response.json();
+	skills = originalJSON.skill;
+	pskills = skills.map((s, idx)=>{
+		let skill = new Skill(idx, s);
+		return skill;
+	});
 });
 </script>
 </head>
