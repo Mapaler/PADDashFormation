@@ -1014,12 +1014,12 @@ function loadData(force = false)
 		}
 		function loadExtraCardsData(_cards)
 		{
-			let splitIdx = _cards.findIndex((card, id)=>card.id !== id);
+			let splitIdx = _cards.findIndex((card, id)=>card?.id !== id);
 			let cards = _cards.slice(0, splitIdx);
 			for (let i = splitIdx + 1; i < _cards.length; i++)
 			{
 				const card = _cards[i];
-				cards[card.id] = card;
+				cards[card?.id] = card;
 			}
 			return cards;
 		}
