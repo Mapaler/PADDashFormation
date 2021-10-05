@@ -155,12 +155,12 @@ function tp(strings, ...keys) {
 				//console.debug("模板字符串中 %s 未找到输入数据",key);
 			}else
 			{
-				if (!(value instanceof Node))
+				if (!(value instanceof HTMLElement))
 				{
 					value = document.createTextNode(value);
 				}
 				try{
-					fragment.appendChild(arr.lastIndexOf(key) == i ? value : value.cloneNode(true));
+					fragment.appendChild(arr.lastIndexOf(key) === i ? value : value.cloneNode(true)); //如果是最后一个匹配的标签，就插入原始的DOM（保留行为），否则插入克隆的DOM
 				}catch(e)
 				{
 					console.log(value, e);
