@@ -1436,7 +1436,7 @@ function capture() {
 	titleBox.classList.remove("edit");
 	detailBox.classList.remove("edit");
 	const downLink = controlBox.querySelector(".down-capture");
-	html2canvas(formationBox).then(canvas => {
+	html2canvas(formationBox, {backgroundColor: null}).then(canvas => {
 		canvas.toBlob(function(blob) {
 			window.URL.revokeObjectURL(downLink.href);
 			downLink.href = URL.createObjectURL(blob);
