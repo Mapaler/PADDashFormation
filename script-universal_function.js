@@ -155,7 +155,7 @@ function tp(strings, ...keys) {
 				//console.debug("模板字符串中 %s 未找到输入数据",key);
 			}else
 			{
-				if (!(value instanceof HTMLElement))
+				if (!(value instanceof Node)) //这里需要用 Node 而不是 HTMLElement，因为 DocumentFragment 从属于 Node
 				{
 					value = document.createTextNode(value);
 				}

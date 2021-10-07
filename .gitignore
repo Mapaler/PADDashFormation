@@ -3,6 +3,7 @@
 /monsters-info/node_modules
 *formatting.json
 /monsters-info/official-API/*-dungeon.json
+/monsters-info/official-API/*-player-data*.json
 /monsters-info/official-API/*-enemy_skill.json
 /monsters-info/official-API/*-limited_bonus.json
 /monsters-info/official-API/*-mdatadl.json
