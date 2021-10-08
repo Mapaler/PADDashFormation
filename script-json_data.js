@@ -500,7 +500,7 @@ const sort_function_list = [
 	{tag:"sort_atkMax120",name:"Lv120最大攻击",function:(a,b)=>a.atk.max * (a.limitBreakIncr ? (1 + a.limitBreakIncr/100) * 1.05 : 1) - b.atk.max * (b.limitBreakIncr ? (1 + b.limitBreakIncr/100) * 1.05 : 1)},
 	{tag:"sort_rcvMax120",name:"Lv120最大回复",function:(a,b)=>a.rcv.max * (a.limitBreakIncr ? (1 + a.limitBreakIncr/100) * 1.05 : 1) - b.rcv.max * (b.limitBreakIncr ? (1 + b.limitBreakIncr/100) * 1.05 : 1)},
 	
-	{tag:"sort_atkMax110_awoken",name:"Lv120最大攻击(+觉醒)",function:(a,b)=>
+	{tag:"sort_atkMax120_awoken",name:"Lv120最大攻击(+觉醒)",function:(a,b)=>
 		{
 			const abilities_2statusA = calculateAbility_max(a.id, solo, teamsCount, 120),
 				  abilities_2statusB = calculateAbility_max(b.id, solo, teamsCount, 120);
