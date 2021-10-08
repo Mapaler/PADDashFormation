@@ -3714,6 +3714,8 @@ function changeid(mon, monDom, latentDom) {
 			levelDom.setAttribute("data-level-range", "110");
 		} else if (level > card.maxLevel) {
 			levelDom.setAttribute("data-level-range", "error");
+		} else {
+			levelDom.setAttribute("data-level-range", "99");
 		}
 	}
 	const awokenIcon = monDom.querySelector(".awoken-count-num");
