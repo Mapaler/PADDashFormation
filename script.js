@@ -1396,7 +1396,7 @@ function pdcFotmationToPdfFotmation(inputString)
 			a.id = member.get(9) || 0; //延迟是-1刚好一样
 			if (member.get(2))
 			{
-				m.latent = member.get(2).map(pdcLatent=>pdcLatentMap.find(latent=>latent.pdc === pdcLatent).pdf);
+				m.latent = member.get(2).map(pdcLatent=>pdcLatentMap.find(latent=>latent.pdc === pdcLatent)?.pdf ?? 0);
 			}
 			m.level = member.get(3) || 1;
 			a.level = member.get(10) || 1;
