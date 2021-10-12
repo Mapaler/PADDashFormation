@@ -3560,7 +3560,7 @@ table .orb-icon
 .board .orb
 {
 	transform: unset;
-	margin: unser;
+	margin: unset;
 }
 .board .orb.enhanced::after,
 .board .orb.locked::after,
