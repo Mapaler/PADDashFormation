@@ -3909,8 +3909,8 @@ function editMon(teamNum, isAssist, indexInTeam) {
 }
 //编辑窗，修改怪物ID
 function editBoxChangeMonId(id) {
-	const card = Cards[id] || Cards[0]; //怪物固定数据
-	if (card.id == 0) {
+	const card = Cards[id] ?? Cards[0]; //怪物固定数据
+	if (card.id === 0) {
 		id = 0;
 	}
 	//const skill = Skills[card.activeSkillId];
