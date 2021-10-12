@@ -1138,7 +1138,7 @@ function loadData(force = false)
 				checkFormationBox();
 				function checkFormationBox()
 				{
-					if (formationBox.querySelector('.teams'))
+					if (formationBox?.querySelector('.teams'))
 					{
 						reloadFormationData();
 						clearInterval(formationBoxHook);
@@ -1396,7 +1396,7 @@ function pdcFotmationToPdfFotmation(inputString)
 			a.id = member.get(9) || 0; //延迟是-1刚好一样
 			if (member.get(2))
 			{
-				m.latent = member.get(2).map(pdcLatent=>pdcLatentMap.find(latent=>latent.pdc === pdcLatent).pdf);
+				m.latent = member.get(2).map(pdcLatent=>pdcLatentMap.find(latent=>latent.pdc === pdcLatent)?.pdf ?? 0);
 			}
 			m.level = member.get(3) || 1;
 			a.level = member.get(10) || 1;
@@ -1425,7 +1425,7 @@ function capture() {
 	titleBox.classList.remove("edit");
 	detailBox.classList.remove("edit");
 	const downLink = controlBox.querySelector(".down-capture");
-	html2canvas(formationBox).then(canvas => {
+	html2canvas(formationBox, {backgroundColor: null}).then(canvas => {
 		canvas.toBlob(function(blob) {
 			window.URL.revokeObjectURL(downLink.href);
 			downLink.href = URL.createObjectURL(blob);
