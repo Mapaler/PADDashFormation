@@ -1043,112 +1043,12 @@ icon.inflicts::after
 	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
 	min-height: 47px; /* 为了防止只有一层6格大潜觉的时候，被缩减太多的问题*/
 }
-
 .team-latents .latent-icon
 {
 	margin-top: 3px;
-	margin-left: 3px;
-	margin-right: 3px;
+	margin-right: 6px;
 }
-.team-latents .latent-icon[data-latent-icon='12'],
-.team-latents .latent-icon[data-latent-icon='13'],
-.team-latents .latent-icon[data-latent-icon='14'],
-.team-latents .latent-icon[data-latent-icon='15'],
-.team-latents .latent-icon[data-latent-icon='16'],
-.team-latents .latent-icon[data-latent-icon='17'],
-.team-latents .latent-icon[data-latent-icon='18'],
-.team-latents .latent-icon[data-latent-icon='19'],
-.team-latents .latent-icon[data-latent-icon='20'],
-.team-latents .latent-icon[data-latent-icon='21'],
-.team-latents .latent-icon[data-latent-icon='22'],
-.team-latents .latent-icon[data-latent-icon='23'],
-.team-latents .latent-icon[data-latent-icon='24'],
-.team-latents .latent-icon[data-latent-icon='25'],
-.team-latents .latent-icon[data-latent-icon='26'],
-.team-latents .latent-icon[data-latent-icon='27'],
-.team-latents .latent-icon[data-latent-icon='28'],
-.team-latents .latent-icon[data-latent-icon='29'],
-.team-latents .latent-icon[data-latent-icon='30'],
-.team-latents .latent-icon[data-latent-icon='31'],
-.team-latents .latent-icon[data-latent-icon='32'],
-.team-latents .latent-icon[data-latent-icon='33'],
-.team-latents .latent-icon[data-latent-icon='34'],
-.team-latents .latent-icon[data-latent-icon='35'],
-.team-latents .latent-icon[data-latent-icon='36'],
-.team-latents .latent-icon[data-latent-icon='37'],
-.team-latents .latent-icon[data-latent-icon='38'],
-.team-latents .latent-icon[data-latent-icon='39'],
-.team-latents .latent-icon[data-latent-icon='40'],
-.team-latents .latent-icon[data-latent-icon='41'],
-.team-latents .latent-icon[data-latent-icon='42'],
-.team-latents .latent-icon[data-latent-icon='43'],
-.team-latents .latent-icon[data-latent-icon='44'],
-.team-latents .latent-icon[data-latent-icon='45']
-{
-	margin-left: 0;
-	margin-right: 0;
-}
-.team-latents .latent-ul .latent-icon[data-latent-icon='13']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='14']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='15']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='37']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='38']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='39']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='40']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='41']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='42']::before
-{ /*6格的潜觉*/
-	width: 152px;
-	margin-left: -50px;
-	margin-right: 47px;
-}
-.team-latents .latent-ul .latent-icon[data-latent-icon='13'],
-.team-latents .latent-ul .latent-icon[data-latent-icon='14'],
-.team-latents .latent-ul .latent-icon[data-latent-icon='15'],
-.team-latents .latent-ul .latent-icon[data-latent-icon='37'],
-.team-latents .latent-ul .latent-icon[data-latent-icon='38'],
-.team-latents .latent-ul .latent-icon[data-latent-icon='39'],
-.team-latents .latent-ul .latent-icon[data-latent-icon='40'],
-.team-latents .latent-ul .latent-icon[data-latent-icon='41'],
-.team-latents .latent-ul .latent-icon[data-latent-icon='42']
-{
-	border-radius: 5px 5px 5px 0;
-	box-shadow: black 1px 1px 1px;
-}
-.team-latents .latent-icon[data-latent-icon='13']+.latent-icon,
-.team-latents .latent-icon[data-latent-icon='14']+.latent-icon,
-.team-latents .latent-icon[data-latent-icon='15']+.latent-icon,
-.team-latents .latent-icon[data-latent-icon='37']+.latent-icon,
-.team-latents .latent-icon[data-latent-icon='38']+.latent-icon,
-.team-latents .latent-icon[data-latent-icon='39']+.latent-icon,
-.team-latents .latent-icon[data-latent-icon='40']+.latent-icon,
-.team-latents .latent-icon[data-latent-icon='41']+.latent-icon,
-.team-latents .latent-icon[data-latent-icon='42']+.latent-icon
-{
-	width: 76px;
-	margin-left: 0;
-	margin-right: 0;
-	display: inline-block !important;
-	background: linear-gradient(#2277EE , #1155AA  80%);
-	border-color: #CCEEFF;
-	box-shadow: black 1px 1px 1px;
-	border-radius: 0 0 5px 5px;
-	border-top: none;
-	margin-top: 4px;;
-	transform: translatey(-4px) scaley(1.2);
-}
-.team-latents .latent-icon[data-latent-icon='13']+.latent-icon::before,
-.team-latents .latent-icon[data-latent-icon='14']+.latent-icon::before,
-.team-latents .latent-icon[data-latent-icon='15']+.latent-icon::before,
-.team-latents .latent-icon[data-latent-icon='37']+.latent-icon::before,
-.team-latents .latent-icon[data-latent-icon='38']+.latent-icon::before,
-.team-latents .latent-icon[data-latent-icon='39']+.latent-icon::before,
-.team-latents .latent-icon[data-latent-icon='40']+.latent-icon::before,
-.team-latents .latent-icon[data-latent-icon='41']+.latent-icon::before,
-.team-latents .latent-icon[data-latent-icon='42']+.latent-icon::before
-{
-	background: none;
-}
+
 /*队长的边框*/
 .team-box .team-members .team-leader .monster
 {
@@ -2372,12 +2272,18 @@ icon.inflicts::after
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="24"],
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="25"],
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="26"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="27"]
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="27"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="13"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="14"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="15"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="37"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="38"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="39"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="40"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="41"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="42"]
 {
 	display: inline-block;
-}
-.guide-mod .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="11"]{
-	display: none;
 }
 .hide-less-use-latent-label{
 	margin-left: 5px;

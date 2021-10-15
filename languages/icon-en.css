@@ -11,9 +11,11 @@
 }
 .latent-icon[data-latent-icon='17']::before,
 .latent-icon[data-latent-icon='37']::before,
-.latent-icon[data-latent-icon='39']::before
+.latent-icon[data-latent-icon='39']::before,
+.team-latents .latent-icon[data-latent-icon='37']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='39']+.latent-icon::before
 {
-	background-position-x: -252px;
+	background-position-x: -32px;
 }
 
 .tIf-total-hp .awoken-bind::before,
@@ -28,5 +30,5 @@
 .icon-skill[data-icon-type="damage-absorb"],
 .icon-skill[data-icon-type="damage-void"]
 {
-	background-position-x: calc(-36px * 1);
+	background-position-x: -36px;
 }

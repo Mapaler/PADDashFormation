@@ -3354,7 +3354,8 @@ function initialize(event) {
 
 	//已有觉醒的去除
 	function deleteLatent(e) {
-		const aIdx = editBox.latent.indexOf(parseInt(this.getAttribute("data-latent-icon")));
+		const lIdx = parseInt(this.getAttribute("data-latent-icon"), 10); //潜觉的序号
+		const aIdx = editBox.latent.indexOf(lIdx);
 		if (aIdx >= 0)
 		{
 			editBox.latent.splice(aIdx, 1);
@@ -3401,7 +3402,9 @@ function initialize(event) {
 			awoken: awoken,
 			latent: latent
 		};
+
 		const abilitys = calculateAbility(tempMon, null, solo, teamsCount);
+		toggleDomClassName(level > 110, "level-super-break", monEditLatentUl); //切换潜觉为120级
 
 		monEditHpValue.textContent = abilitys ? abilitys[0][0].toLocaleString() : 0;
 		monEditAtkValue.textContent = abilitys ? abilitys[1][0].toLocaleString() : 0;
@@ -3692,7 +3695,7 @@ function changeid(mon, monDom, latentDom) {
 	}
 	const levelDom = monDom.querySelector(".level");
 	if (levelDom) { //如果提供了等级
-		const level = mon.level || 1;
+		const level = mon.level ?? 1;
 		levelDom.setAttribute(dataAttrName, level);
 
 		toggleDomClassName(level === card.maxLevel, "max", levelDom);
@@ -3755,14 +3758,16 @@ function changeid(mon, monDom, latentDom) {
 	if (latentDom) {
 		if (mon.latent) //如果提供了潜觉
 		{
+			const level = mon.level ?? 1;
 			const latent = mon.latent;
 			if (latent.length < 1) {
 				latentDom.classList.add(className_displayNone);
 			} else {
 				const latentDoms = Array.from(latentDom.querySelectorAll("li"));
-				refreshLatent(latent, mon.id, latentDoms);
+				refreshLatent(latent, mon.id, latentDoms, {sort:true});
 				latentDom.classList.remove(className_displayNone);
 			}
+			toggleDomClassName(level > 110, "level-super-break", latentDom); //切换潜觉为120级
 		} else {
 			latentDom.classList.add(className_displayNone);
 		}
@@ -3809,9 +3814,10 @@ function changeid(mon, monDom, latentDom) {
 	parentNode.appendChild(fragment);
 }
 //刷新潜觉
-function refreshLatent(latent, monid, iconArr) {
+function refreshLatent(latent, monid, iconArr, option) {
 	const maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
-	latent = latent.concat().sort((a, b) => latentUseHole(b) - latentUseHole(a));
+	latent = latent.concat();
+	if (option?.sort) latent.sort((a, b) => latentUseHole(b) - latentUseHole(a));
 	let latentIndex = 0,
 		usedHoleN = 0;
 	for (let ai = 0; ai < iconArr.length; ai++) {
@@ -3828,8 +3834,8 @@ function refreshLatent(latent, monid, iconArr) {
 			icon.removeAttribute("data-latent-icon");
 		} else if (ai < maxLatentCount) //没有使用的空格觉醒
 		{
-			icon.removeAttribute("data-latent-icon");
 			icon.classList.remove(className_displayNone);
+			icon.removeAttribute("data-latent-icon");
 		} else //不需要显示的部分
 		{
 			icon.classList.add(className_displayNone);
