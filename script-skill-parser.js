@@ -2063,9 +2063,12 @@ function renderSkill(skill, option = {})
 				targetDict.types = renderTypes(types || [], {affix: true});
 				attrs_types.push(targetDict.types);
 			}
-			if (target == 1)
+			if (target != undefined)
 			{
-				targetDict.target = tsp.target.self();
+				if (target === 1)
+					targetDict.target = tsp.target.self();
+				else if (target === 2)
+					targetDict.target = tsp.target.team_leader();
 				attrs_types.push(targetDict.target);
 			}
 			if (attrs_types.length)
