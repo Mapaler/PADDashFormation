@@ -903,7 +903,7 @@ icon.poison-no-effect::after,
 	display: inline-block;
 	width: 32px;
 	height: 32px;
-	background-image: url(images/latent.png);
+	background-image: url(images/icon-latent.png);
 	background-position-x: -32px;
 	transform: scale(0.5);
 	position: absolute;
