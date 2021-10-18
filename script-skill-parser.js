@@ -989,7 +989,8 @@ const parsers = {
 	[69](attr, type, mul) { return powerUp([attr], [type], p.mul({ atk: mul })); },
   
 	[71](...attrs) { return boardChange(attrs.filter(attr => attr >= 0)); },
-  
+	//据说是破除敌人的守护盾，但是因为重来没有实装过，所以不知道实际效果
+	[72](turns) { return activeTurns(turns, voidEnemyBuff(['guard'])); },
 	[73](attr, type, mul) { return powerUp([attr], [type], p.mul({ hp: mul, atk: mul })); },
   
 	[75](attr, type, mul) { return powerUp([attr], [type], p.mul({ atk: mul, rcv: mul })); },
@@ -1384,9 +1385,19 @@ const parsers = {
 	[229](attrs, types, hp, atk, rcv) {
 		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp, atk: atk, rcv: rcv})));
 	},
-	[230](turns, target, mul) { return activeTurns(turns, powerUp({target: target}, null, p.mul({ atk: mul }))); },
+	[230](turns, target, mul) {
+		const targetType = (target=>{
+			switch (target) {
+				case 1: return "self";
+				case 2: return "leader";
+				case 3: return "sub-monsters";
+				default: return target;
+			}
+		})(target);
+		return activeTurns(turns, powerUp({target: targetType}, null, p.mul({ atk: mul })));
+	},
 	[1000](type, pos, ...ids) {
-		let posType = (type=>{
+		const posType = (type=>{
 			switch (type) {
 				case 1: return "after-me";
 				case 2: return "designated-position";
@@ -2066,15 +2077,15 @@ function renderSkill(skill, option = {})
 			if (target != undefined)
 			{
 				switch (target) {
-					case 1: {
+					case "self": {
 						targetDict.target = tsp.target.self();
 						break;
 					}
-					case 2: {
+					case "leader": {
 						targetDict.target = tsp.target.team_leader();
 						break;
 					}
-					case 3: {
+					case "sub-monsters": {
 						targetDict.target = tsp.target.team_sub();
 						break;
 					}
