@@ -157,6 +157,7 @@
 			team: tp`team`,
 			team_last: tp`the lastest member`,
 			team_leader: tp`leader`,
+			team_sub: tp`sub-monsters`,
 			enemy: tp`Enemy`,
 			enemy_all: tp`all enemys`,
 			enemy_one: tp`1 enemy`,

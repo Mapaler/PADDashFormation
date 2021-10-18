@@ -170,6 +170,7 @@ let localTranslating = {
 			team: tp`队伍`,
 			team_last: tp`队伍最后一位队员`,
 			team_leader: tp`队长`,
+			team_sub: tp`队员`,
 			enemy: tp`敌人`,
 			enemy_all: tp`敌方全体`,
 			enemy_one: tp`敌方1体`,
@@ -1867,7 +1868,7 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
-			{name:"ATK rate change(Single)",otLangName:{chs:"单人攻击力 buff"},
+			{name:"ATK rate change(on member)",otLangName:{chs:"队员攻击力 buff"},
 				function:cards=>{
 					const searchTypeArray = [230];
 					return cards.filter(card=>{
@@ -1879,8 +1880,23 @@ const specialSearchFunctions = (function() {
 					const searchTypeArray = [230];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					const sk = skill.params;
-		
-					return `${sk[2]}%×${sk[0]}T`;
+					let str = '';
+					switch (sk[1]) {
+						case 1: {
+							str+="自身";
+							break;
+						}
+						case 2: {
+							str+="队长";
+							break;
+						}
+						case 3: {
+							str+="队员";
+							break;
+						}
+					}
+					str+=`${sk[2] / 100}倍×${sk[0]}T`;
+					return str;
 			}
 			},
 			{name:"Move time change",otLangName:{chs:"操作时间 buff（顶手指）"},

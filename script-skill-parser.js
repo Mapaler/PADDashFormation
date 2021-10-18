@@ -2065,10 +2065,24 @@ function renderSkill(skill, option = {})
 			}
 			if (target != undefined)
 			{
-				if (target === 1)
-					targetDict.target = tsp.target.self();
-				else if (target === 2)
-					targetDict.target = tsp.target.team_leader();
+				switch (target) {
+					case 1: {
+						targetDict.target = tsp.target.self();
+						break;
+					}
+					case 2: {
+						targetDict.target = tsp.target.team_leader();
+						break;
+					}
+					case 3: {
+						targetDict.target = tsp.target.team_sub();
+						break;
+					}
+					default: {
+						targetDict.target = tsp.target.unknown();
+						break;
+					}
+				}
 				attrs_types.push(targetDict.target);
 			}
 			if (attrs_types.length)
