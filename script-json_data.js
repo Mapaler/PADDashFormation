@@ -1890,7 +1890,7 @@ const specialSearchFunctions = (function() {
 							str+="队长";
 							break;
 						}
-						case 3: {
+						case 8: {
 							str+="队员";
 							break;
 						}

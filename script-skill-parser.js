@@ -1386,11 +1386,16 @@ const parsers = {
 		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp, atk: atk, rcv: rcv})));
 	},
 	[230](turns, target, mul) {
+		/*const targetType = {
+			"self": Boolean(target & 1<<0),
+			"leader": Boolean(target & 1<<1),
+			"sub-monsters": Boolean(target & 1<<3),
+		}*/
 		const targetType = (target=>{
 			switch (target) {
 				case 1: return "self";
 				case 2: return "leader";
-				case 3: return "sub-monsters";
+				case 8: return "sub-monsters";
 				default: return target;
 			}
 		})(target);
