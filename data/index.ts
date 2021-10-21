@@ -1,4 +1,5 @@
 import { basename } from "https://deno.land/std/path/mod.ts";
+import { Extlist } from './extlist.ts';
 const regions = [
 	{path: 'pad', regionID: 'JA', baseJsonURL: 'https://dl.padsv.gungho.jp/base_adr.json'},
 	{path: 'padEN', regionID: 'NA', baseJsonURL: 'https://dl-na.padsv.gungho.jp/base-na-adr.json'},
@@ -27,4 +28,6 @@ for (const region of regions) {
 	const extdllistUrl = `${baseJsonData.efl}/extdllist.bin`;
 	console.log(`正在下载 ${extdllistUrl}`);
 	const extdllistResponse = await downloadFile(extdllistUrl, region.path);
-}
+	const extlist = Extlist.load(extlistResponse);
+	extlist.entries.forEach((item)=>{console.log(item)});
+} 
