@@ -165,10 +165,13 @@ let localTranslating = {
 			x_awakenings: tp`${'awakenings'}数量×${'value'}`,
 		},
 		target: {
+			unknown: tp`未知目标`,
 			self: tp`角色自身`,
-			enemy: tp`敌人`,
 			team: tp`队伍`,
 			team_last: tp`队伍最后一位队员`,
+			team_leader: tp`队长`,
+			team_sub: tp`队员`,
+			enemy: tp`敌人`,
 			enemy_all: tp`敌方全体`,
 			enemy_one: tp`敌方1体`,
 			enemy_attr: tp`${'attr'}敌人`,
@@ -436,6 +439,7 @@ const pdcLatentMap = [
 	{pdf:11,pdc:12}, //防坐
 	{pdf:12,pdc:3}, //三维
 	{pdf:13,pdc:35}, //不被换队长
+	{pdf:13,pdc:47}, //不被换队长 ×1.5
 	{pdf:14,pdc:37}, //不掉废
 	{pdf:15,pdc:36}, //不掉毒
 	{pdf:16,pdc:24}, //进化杀
@@ -460,10 +464,15 @@ const pdcLatentMap = [
 	{pdf:35,pdc:31}, //大光盾
 	{pdf:36,pdc:32}, //大暗盾
 	{pdf:37,pdc:33}, //6色破无效
+	{pdf:37,pdc:45}, //6色破无效 ×1.5
 	{pdf:38,pdc:34}, //3色破属吸
+	{pdf:38,pdc:46}, //3色破属吸 ×1.5
 	{pdf:39,pdc:40}, //C珠破吸
+	{pdf:39,pdc:50}, //C珠破吸 ×1.5
 	{pdf:40,pdc:39}, //心横解转转
+	{pdf:40,pdc:49}, //心横解转转 ×1.5
 	{pdf:41,pdc:38}, //U解禁消
+	{pdf:41,pdc:48}, //U解禁消 ×1.5
 	{pdf:42,pdc:41}, //伤害上限解除
 	{pdf:43,pdc:42}, //HP++
 	{pdf:44,pdc:43}, //攻击++
@@ -1859,7 +1868,7 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
-			{name:"ATK rate change(Single)",otLangName:{chs:"单人攻击力 buff"},
+			{name:"ATK rate change(on member)",otLangName:{chs:"队员攻击力 buff"},
 				function:cards=>{
 					const searchTypeArray = [230];
 					return cards.filter(card=>{
@@ -1871,8 +1880,23 @@ const specialSearchFunctions = (function() {
 					const searchTypeArray = [230];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					const sk = skill.params;
-		
-					return `${sk[2]}%×${sk[0]}T`;
+					let str = '';
+					switch (sk[1]) {
+						case 1: {
+							str+="自身";
+							break;
+						}
+						case 2: {
+							str+="队长";
+							break;
+						}
+						case 8: {
+							str+="队员";
+							break;
+						}
+					}
+					str+=`${sk[2] / 100}倍×${sk[0]}T`;
+					return str;
 			}
 			},
 			{name:"Move time change",otLangName:{chs:"操作时间 buff（顶手指）"},

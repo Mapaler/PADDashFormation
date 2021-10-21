@@ -58,7 +58,7 @@
 			skill_boost_range: tp`~${'turns'}`,
 			add_combo: tp`Adds ${'value'} combos${'icon'}`,
 			fixed_time: tp`[${'icon'}Fixed orb move time: ${'value'}]`,
-			min_match_length: tp`unable to erase ${'unmatchable'} Orbs or less`, //matchable, unmatchable
+			min_match_length: tp`[Only able to erase ≥${'matchable'} orbs]`, //matchable, unmatchable
 			drop_refresh: tp`Replaces all orbs`,
 			drum: tp`Plus a drumming sound is made when Orbs are moved`,
 			auto_path: tp`Shows 3 combo path (Norm. Dungeon & 3 linked Orbs only)`,
@@ -152,10 +152,13 @@
 			x_awakenings: tp`count of ${'awakenings'} ×${'value'}`,
 		},
 		target: {
+			unknown: tp`Unkown Target`,
 			self: tp`card's`,
-			enemy: tp`Enemy`,
 			team: tp`team`,
 			team_last: tp`the lastest member`,
+			team_leader: tp`leader`,
+			team_sub: tp`sub-monsters`,
+			enemy: tp`Enemy`,
 			enemy_all: tp`all enemys`,
 			enemy_one: tp`1 enemy`,
 			enemy_attr: tp`${'attr'} enemy`,

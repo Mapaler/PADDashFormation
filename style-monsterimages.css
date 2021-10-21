@@ -701,20 +701,25 @@ icon.type
 /*潜在觉醒*/
 .latent-icon{
 	display:inline-block;
+	text-align: center;
 	background: rgba(33,28,21,0.5);
 	border: 2px ridge rgba(82,82,60,0.5);
 	border-radius: 5px;
 	box-sizing: border-box;
 	box-shadow:inset 0 2px 1px -1px rgba(0,0,0,0.5);
 }
-.latent-icon::before{
-	content: "";
+.latent-icon::before,
+.ds-ja .latent-icon::after /*目前x1.5暂时只有日服支持，美服支持后删除.ds-ja*/
+{
 	display: inline-block;
 	margin: -2px;
 	width: 32px;
 	height: 32px;
-	background-image: url(images/latent.png);
+	background-image: url(images/icon-latent.png);
 	background-repeat: no-repeat;
+}
+.latent-icon::before{
+	content: "";
 }
 .latent-icon.latent-lock::before{
 	background-position-x: -32px;
@@ -727,43 +732,51 @@ icon.type
 .latent-icon[data-latent-icon]::before{
 	background-position-x: 0;
 }
-.latent-icon[data-latent-icon='12']::before,
-.latent-icon[data-latent-icon='16']::before,
-.latent-icon[data-latent-icon='17']::before,
-.latent-icon[data-latent-icon='18']::before,
-.latent-icon[data-latent-icon='19']::before,
-.latent-icon[data-latent-icon='20']::before,
-.latent-icon[data-latent-icon='21']::before,
-.latent-icon[data-latent-icon='22']::before,
-.latent-icon[data-latent-icon='23']::before,
-.latent-icon[data-latent-icon='24']::before,
-.latent-icon[data-latent-icon='25']::before,
-.latent-icon[data-latent-icon='26']::before,
-.latent-icon[data-latent-icon='27']::before,
-.latent-icon[data-latent-icon='28']::before,
-.latent-icon[data-latent-icon='29']::before,
-.latent-icon[data-latent-icon='30']::before,
-.latent-icon[data-latent-icon='31']::before,
-.latent-icon[data-latent-icon='32']::before,
-.latent-icon[data-latent-icon='33']::before,
-.latent-icon[data-latent-icon='34']::before,
-.latent-icon[data-latent-icon='35']::before,
-.latent-icon[data-latent-icon='36']::before,
-.latent-icon[data-latent-icon='43']::before,
-.latent-icon[data-latent-icon='44']::before,
-.latent-icon[data-latent-icon='45']::before
+/* 2格的 潜觉 */
+.m-latent-ul .latent-icon[data-latent-icon='12'],
+.m-latent-ul .latent-icon[data-latent-icon='16'],
+.m-latent-ul .latent-icon[data-latent-icon='17'],
+.m-latent-ul .latent-icon[data-latent-icon='18'],
+.m-latent-ul .latent-icon[data-latent-icon='19'],
+.m-latent-ul .latent-icon[data-latent-icon='20'],
+.m-latent-ul .latent-icon[data-latent-icon='21'],
+.m-latent-ul .latent-icon[data-latent-icon='22'],
+.m-latent-ul .latent-icon[data-latent-icon='23'],
+.m-latent-ul .latent-icon[data-latent-icon='24'],
+.m-latent-ul .latent-icon[data-latent-icon='25'],
+.m-latent-ul .latent-icon[data-latent-icon='26'],
+.m-latent-ul .latent-icon[data-latent-icon='27'],
+.m-latent-ul .latent-icon[data-latent-icon='28'],
+.m-latent-ul .latent-icon[data-latent-icon='29'],
+.m-latent-ul .latent-icon[data-latent-icon='30'],
+.m-latent-ul .latent-icon[data-latent-icon='31'],
+.m-latent-ul .latent-icon[data-latent-icon='32'],
+.m-latent-ul .latent-icon[data-latent-icon='33'],
+.m-latent-ul .latent-icon[data-latent-icon='34'],
+.m-latent-ul .latent-icon[data-latent-icon='35'],
+.m-latent-ul .latent-icon[data-latent-icon='36'],
+.m-latent-ul .latent-icon[data-latent-icon='43'],
+.m-latent-ul .latent-icon[data-latent-icon='44'],
+.m-latent-ul .latent-icon[data-latent-icon='45']
 {
 	width: 76px;
 }
-.latent-icon[data-latent-icon='13']::before,
-.latent-icon[data-latent-icon='14']::before,
-.latent-icon[data-latent-icon='15']::before,
-.latent-icon[data-latent-icon='37']::before,
-.latent-icon[data-latent-icon='38']::before,
-.latent-icon[data-latent-icon='39']::before,
-.latent-icon[data-latent-icon='40']::before,
-.latent-icon[data-latent-icon='41']::before,
-.latent-icon[data-latent-icon='42']::before
+/* 特殊的 三维潜觉 */
+.m-latent-ul .latent-icon[data-latent-icon='12']::before
+{
+	width: 76px;
+	background-position-x: -32px;
+}
+/* 6格的 潜觉 */
+.m-latent-ul .latent-icon[data-latent-icon='13'],
+.m-latent-ul .latent-icon[data-latent-icon='14'],
+.m-latent-ul .latent-icon[data-latent-icon='15'],
+.m-latent-ul .latent-icon[data-latent-icon='37'],
+.m-latent-ul .latent-icon[data-latent-icon='38'],
+.m-latent-ul .latent-icon[data-latent-icon='39'],
+.m-latent-ul .latent-icon[data-latent-icon='40'],
+.m-latent-ul .latent-icon[data-latent-icon='41'],
+.m-latent-ul .latent-icon[data-latent-icon='42']
 {
 	width: 252px;
 }
@@ -902,7 +915,145 @@ icon.type
 .latent-icon[data-latent-icon='45']::before{ /*回复++*/
 	background-position-y: calc(-32px * 45);
 }
-
+/* 队伍界面2格的 潜觉 */
+.team-latents .latent-ul .latent-icon[data-latent-icon='12'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='16'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='17'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='18'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='19'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='20'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='21'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='22'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='23'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='24'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='25'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='26'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='27'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='28'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='29'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='30'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='31'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='32'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='33'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='34'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='35'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='36'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='43'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='44'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='45']
+{
+	width: 70px;
+}
+/* 队伍界面特殊的 三维潜觉 */
+.team-latents .latent-ul .latent-icon[data-latent-icon='12']::before
+{
+	transform: scale(0.9);
+	margin-left: -5px;
+	width: 76px;
+	background-position-x: -32px;
+}
+/* 队伍界面6格的潜觉 */
+.team-latents .latent-ul .latent-icon[data-latent-icon='13'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='14'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='15'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='37'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='38'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='39'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='40'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='41'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='42']
+{
+	width: 146px;
+	margin-left: 0px;
+	border-radius: 5px 5px 5px 0;
+}
+.team-latents .latent-ul .latent-icon[data-latent-icon='13']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='14']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='15']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='37']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='38']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='39']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='40']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='41']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='42']::before
+{
+	background: none;
+}
+.team-latents .latent-icon[data-latent-icon='13']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='14']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='15']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='37']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='38']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='39']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='40']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='41']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='42']+.latent-icon
+{
+	width: 70px;
+	height: 39px;
+	margin-left: 0;
+	margin-right: 6px;
+	margin-bottom: -9px;
+	display: inline-block !important;
+	background: linear-gradient(#2277EE , #1155AA  80%);
+	border-color: #CCEEFF;
+	box-shadow: black 1px 1px 1px;
+	border-radius: 0 0 5px 5px;
+	border-top: none;
+	transform: translatey(-9px);
+}
+.team-latents .latent-icon[data-latent-icon='13']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='14']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='15']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='37']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='38']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='39']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='40']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='41']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='42']+.latent-icon::before
+{
+	transform: scale(1.54) translateY(-7px);
+}
+.team-latents .latent-icon[data-latent-icon='13']+.latent-icon::before{
+	background-position-y: calc(-32px * 13);
+}
+.team-latents .latent-icon[data-latent-icon='14']+.latent-icon::before{
+	background-position-y: calc(-32px * 14);
+}
+.team-latents .latent-icon[data-latent-icon='15']+.latent-icon::before{
+	background-position-y: calc(-32px * 15);
+}
+.team-latents .latent-icon[data-latent-icon='37']+.latent-icon::before{
+	background-position-y: calc(-32px * 37);
+}
+.team-latents .latent-icon[data-latent-icon='38']+.latent-icon::before{
+	background-position-y: calc(-32px * 38);
+}
+.team-latents .latent-icon[data-latent-icon='39']+.latent-icon::before{
+	background-position-y: calc(-32px * 39);
+}
+.team-latents .latent-icon[data-latent-icon='40']+.latent-icon::before{
+	background-position-y: calc(-32px * 40);
+}
+.team-latents .latent-icon[data-latent-icon='41']+.latent-icon::before{
+	background-position-y: calc(-32px * 41);
+}
+.team-latents .latent-icon[data-latent-icon='42']+.latent-icon::before
+{
+	background-position-y: calc(-32px * 42);
+}
+/* 额外有 x1.5 的 6格觉醒 */
+.level-super-break .latent-icon[data-latent-icon='13']::after,
+.level-super-break .latent-icon[data-latent-icon='37']::after,
+.level-super-break .latent-icon[data-latent-icon='38']::after,
+.level-super-break .latent-icon[data-latent-icon='39']::after,
+.level-super-break .latent-icon[data-latent-icon='40']::after,
+.level-super-break .latent-icon[data-latent-icon='41']::after
+{
+	content: "";
+	background-position-x: -32px;
+	background-position-y: calc(-32px * 42);
+}
 /* 徽章背景 */
 .badge{
 	background-image: url(images/badge-bg.png);
