@@ -963,7 +963,7 @@ function getActuallySkills(skill, skillTypes, searchRandom = true) {
 	{
 		return [skill];
 	}
-	else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138)
+	else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138 || skill.type == 232 || skill.type == 233)
 	{
 		//因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
 		let subSkills = skill.params.flatMap(id => getActuallySkills(Skills[id], skillTypes, searchRandom));
