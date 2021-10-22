@@ -347,6 +347,7 @@ const SkillKinds = {
 	Unbind: "unbind",
 	BindSkill: "bind-skill",
 	RandomSkills: "random-skills",
+	EvolvedSkills: "evolved-skills",
 	SkillProviso: "skill-proviso",
 	ChangeAttribute: "change-attr",
 	SkillBoost: "skill-boost",
@@ -870,6 +871,9 @@ function boardChange(attrs) {
 }
 function randomSkills(skills) {
 	return { kind: SkillKinds.RandomSkills, skills: skills };
+}
+function evolvedSkills(loop, skills) {
+	return { kind: SkillKinds.EvolvedSkills, loop: loop, skills: skills };
 }
 function changeAttr(target, attr) {
 	return { kind: SkillKinds.ChangeAttribute, target: target, attr: attr ?? 0 };
@@ -1401,6 +1405,8 @@ const parsers = {
 		})(target);
 		return activeTurns(turns, powerUp({target: targetType}, null, p.mul({ atk: mul })));
 	},
+	[232](...ids) { return evolvedSkills(false, ids.map(id => this.parser(id))); },
+	[233](...ids) { return evolvedSkills(true, ids.map(id => this.parser(id))); },
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -1449,6 +1455,27 @@ function showParsedSkill(event) {
 		//const skillId = parseInt(this.getAttribute("data-skill-id"));
 		console.log(this.skill);
 	}
+}
+
+function renderSkillTitle(skillId) {
+	const skill = Skills[skillId];
+	const div = document.createElement("div");
+	div.className = "evolved-skill-title";
+	const name = div.appendChild(document.createElement("span"));
+	name.className = "skill-name";
+	name.textContent = skill.name;
+	name.setAttribute("data-skillid", skillId);
+	name.onclick = fastShowSkill;
+	const cd = div.appendChild(document.createElement("span"));
+	cd.className = "skill-cd";
+	cd.textContent = skill.initialCooldown - skill.maxLevel + 1;
+	if (skill.maxLevel > 1) {
+		const level = div.appendChild(document.createElement("span"));
+		level.className = "skill-level-label";
+		level.textContent = skill.maxLevel;
+	}
+	
+	return div;
 }
 
 function renderSkillEntry(skills)
@@ -1553,14 +1580,35 @@ function renderSkill(skill, option = {})
 			let skills = skill.skills;
 			const ul = document.createElement("ul");
 			ul.className = "random-active-skill";
-			skills.forEach(subSkills=>{
+			skills.forEach(subSkill=>{
 				const li = ul.appendChild(document.createElement("li"));
-				li.appendChild(renderSkillEntry(subSkills));
+				li.appendChild(renderSkillEntry(subSkill));
 			});
 			let dict = {
 				skills: ul,
 			};
 			frg.ap(tsp.skill.random_skills(dict));
+			break;
+		}
+		case SkillKinds.EvolvedSkills: { //技能进化
+			let skills = skill.skills, loop = skill.loop;
+			const ul = document.createElement("ul");
+			ul.className = "evolved-active-skill";
+			skills.forEach((subSkill, idx)=>{
+				const li = ul.appendChild(document.createElement("li"));
+				li.appendChild(renderSkillTitle(skill.params[idx]));
+				li.appendChild(renderSkillEntry(subSkill));
+			});
+			let dict = {
+				skills: ul,
+			};
+			frg.ap(tsp.skill.evolved_skills(dict));
+			if (loop) {
+				let dict2 = {
+					icon: createIcon("evolved-skill-loop"),
+				}
+				frg.ap(tsp.skill.evolved_skills_loop(dict2));
+			}
 			break;
 		}
 		case SkillKinds.Delay: { //威吓

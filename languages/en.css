@@ -119,7 +119,6 @@
 {
 	content: "RCV:";
 }
-
 .edit-box .setting-box .row-mon-level::before{
 	content: "▼Monster Level";
 }
@@ -149,6 +148,11 @@
 .row-mon-skill .type-title::after
 {
 	content: "Skill";
+}
+.row-mon-skill .evolved-skill .type-title::before,
+.row-mon-skill .evolved-skill .type-title::after
+{
+	content: "Evoveld Skill";
 }
 .row-mon-leader-skill .type-title::before,
 .row-mon-leader-skill .type-title::after

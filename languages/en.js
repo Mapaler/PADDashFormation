@@ -27,6 +27,8 @@
 			unknown: tp`Unkonwn skill type: ${'type'}`,
 			active_turns: tp`${'actionSkill'}, for ${'turns'} turns`,
 			random_skills: tp`Random Activates these skills:${'skills'}`,
+			evolved_skills: tp`Skills evolve to the next stage when used:${'skills'}`,
+			evolved_skills_loop: tp`${`icon`}Returns to the first stage after use`,
 			damage_enemy: tp`Inflicts ${'times'}${'damage'} ${'attr'} attack on ${'target'}${'totalDamage'}`,
 			damage_enemy_times: tp`${'times'} `,
 			damage_enemy_count: tp` (${'damage'} in total)`,

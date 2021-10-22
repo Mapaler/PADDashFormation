@@ -42,6 +42,8 @@ let localTranslating = {
 			unknown: tp`未知的技能类型：${'type'}`, //type
 			active_turns: tp`${'turns'} 回合内，${'actionSkill'}`, //turns, actionSkill
 			random_skills: tp`随机发动以下技能：${'skills'}`, //skills
+			evolved_skills: tp`技能使用后会进化为下一阶段：${'skills'}`, //skills
+			evolved_skills_loop: tp`${`icon`}使用后返回第一阶段`,
 			damage_enemy: tp`对${'target'}造成${'damage'}的${'attr'}伤害${'times'}${'totalDamage'}`, //target, damage, attr
 			damage_enemy_times: tp`×${'times'}`,
 			damage_enemy_count: tp`(共${'damage'})`,
@@ -581,7 +583,7 @@ const specialSearchFunctions = (function() {
 		if (skillTypes.includes(skill.type))
 		{
 			return skill;
-		}else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138)
+		}else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138 || skill.type == 232 || skill.type == 233)
 		{
 			const subSkills = skill.params.map(id=>Skills[id]);
 			for(let i = 0;i < subSkills.length; i++)
@@ -1606,8 +1608,17 @@ const specialSearchFunctions = (function() {
 				return `时停${value}s`;
 				}
 			},
-			{name:"Random effect active",otLangName:{chs:"随机效果技能"},
-				function:cards=>cards.filter(card=>Skills[card.activeSkillId].type == 118)},
+			{
+				name:"Random effect active",otLangName:{chs:"随机效果技能"},
+				function:cards=>cards.filter(card=>Skills[card.activeSkillId].type == 118)
+			},
+			{
+				name:"Evolved active",otLangName:{chs:"进化类技能"},
+				function:cards=>cards.filter(card=>{
+					let skType = Skills[card.activeSkillId].type;
+					return skType == 232 || skType == 233;
+				})
+			},
 			{name:"Enable require HP range",otLangName:{chs:"技能使用血线要求"},
 				function:cards=>cards.filter(card=>{
 				const searchTypeArray = [225];

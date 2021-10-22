@@ -3335,8 +3335,12 @@ function initialize(event) {
 		const card = Cards[this.mid] || Cards[0];
 		if (!card) return;
 		
+		const activeSkill = skillParser(card.activeSkillId);
+		toggleDomClassName(
+			!activeSkill.some(skill=>skill.type == SkillKinds.EvolvedSkills),
+			"evolved-skill", skillBox);
 		skillDetailParsed.innerHTML = "";
-		skillDetailParsed.appendChild(renderSkillEntry(skillParser(card.activeSkillId)));
+		skillDetailParsed.appendChild(renderSkillEntry(activeSkill));
 		lskillDetailParsed.innerHTML = "";
 		lskillDetailParsed.appendChild(renderSkillEntry(skillParser(card.leaderSkillId)));
 	};

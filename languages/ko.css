@@ -145,6 +145,11 @@
 {
 	content: "스킬";
 }
+.row-mon-skill .evolved-skill .type-title::before,
+.row-mon-skill .evolved-skill .type-title::after
+{
+	content: "진화 기술";
+}
 .row-mon-leader-skill .type-title::before,
 .row-mon-leader-skill .type-title::after
 {
