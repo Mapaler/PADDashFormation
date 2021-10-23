@@ -3337,7 +3337,7 @@ function initialize(event) {
 		
 		const activeSkill = skillParser(card.activeSkillId);
 		toggleDomClassName(
-			!activeSkill.some(skill=>skill.type == SkillKinds.EvolvedSkills),
+			activeSkill.some(skill=>skill.kind == SkillKinds.EvolvedSkills),
 			"evolved-skill", skillBox);
 		skillDetailParsed.innerHTML = "";
 		skillDetailParsed.appendChild(renderSkillEntry(activeSkill));
