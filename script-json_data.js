@@ -500,7 +500,7 @@ const sort_function_list = [
 			},
 	{tag:"sort_rarity",name:"稀有度",function:(a,b)=>a.rarity-b.rarity},
 	{tag:"sort_cost",name:"消耗",function:(a,b)=>a.cost-b.cost},
-	{tag:"sort_mp",name:"MP",function:(a,b)=>a.mp-b.mp},
+	{tag:"sort_mp",name:"MP",function:(a,b)=>a.sellMP-b.sellMP},
 	{tag:"sort_skillLv1",name:"技能最大冷却时间",function:(a,b)=>Skills[a.activeSkillId].initialCooldown-Skills[b.activeSkillId].initialCooldown},
 	{tag:"sort_skillLvMax",name:"技能最小冷却时间",function:(a,b)=>{
 		const skill_a = Skills[a.activeSkillId],skill_b = Skills[b.activeSkillId];
