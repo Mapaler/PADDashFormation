@@ -41,7 +41,7 @@ ${browserVersion}
 
 Your browser does not support Optional chaining (?.) and Nullish coalescing operator (??) used in this program.
 
-Please update your browser to Firefox ≥ 74 or Chrome ≥ 80 or Safari ≥ 13.1.`;
+Please update your browser to Firefox ≥ 74 or Chrome ≥ 80 or Safari ≥ 13.4.`;
 	}
 
 alert(alertStr);
