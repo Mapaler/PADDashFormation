@@ -67,6 +67,10 @@ body{
 
 	font-family: var(--font-family);
 }
+.noscript {
+	color: red;
+	font-size: 2em;
+}
 .display-none{
 	display:none !important;
 }
