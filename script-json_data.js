@@ -690,6 +690,9 @@ const specialSearchFunctions = (function() {
 			case 183: //又是个有两段血线的队长技
 				scale = noHPneed ? 0 : sk[4]/100;
 				break;
+			case 210: //十字触发
+				scale = sk[1]/100;
+				break;
 
 			case 138: //调用其他队长技
 				scale = sk.reduce((pmul,skid)=> 1 - (1-pmul) * (1-getReduceScale(Skills[skid], allAttr, noHPneed)),0);

@@ -1326,6 +1326,9 @@ function getReduceScales(leaderid) {
 					reduce.hp.min = sk[2];
 				}
 				break;
+			case 210: //十字触发
+				reduce.scale = (sk[1] || 0) / 100;
+				break;
 			default:
 		}
 		return reduce;
