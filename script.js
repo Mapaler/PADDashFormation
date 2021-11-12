@@ -3725,7 +3725,7 @@ function changeid(mon, monDom, latentDom) {
 	}
 	const sawoken = monDom.querySelector(".super-awoken");
 	if (sawoken) { //如果存在超觉醒的DOM且提供了超觉醒
-		if (mon.sawoken != undefined && mon.sawoken >= 0 && card.superAwakenings.length) {
+		if (mon.sawoken != null && mon?.sawoken >= 0 && card.superAwakenings.length && mon.level >= 100 && mon.plus.every(p=>p>=99)) {
 			sawoken.classList.remove(className_displayNone);
 			const sawokenIcon = sawoken.querySelector(".awoken-icon");
 			sawokenIcon.setAttribute("data-awoken-icon", card.superAwakenings[mon.sawoken]);
