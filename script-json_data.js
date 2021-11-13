@@ -1005,7 +1005,7 @@ const specialSearchFunctions = (function() {
 		const searchTypeArray = [
 			88,92, //类型的
 			50,90, //属性的，要排除回复力
-			156,168, //宝石姬
+			156,168,231, //宝石姬
 			228, //属性、类型数量
 		];
 		const skill = getCardActiveSkill(card, searchTypeArray);
@@ -1040,7 +1040,7 @@ const specialSearchFunctions = (function() {
 			|| skill.type == 168)
 		{
 			outObj.skilltype = 1;
-			outObj.awoken = sk.slice(1, skill.type == 168 ? 7 : 4).filter(s=>s>0);
+			outObj.awoken = sk.slice(1, skill.type == 168 ? 7 : 4).filter(Boolean);
 			outObj.turns = sk[0];
 			outObj.rate = skill.type == 168 ? sk[7] : sk[5] - 100;
 		}
@@ -1051,6 +1051,48 @@ const specialSearchFunctions = (function() {
 			outObj.types = flags(sk[2]);
 			outObj.turns = sk[0];
 			outObj.rate = sk[3];
+		}
+		else if(skill.type == 231 && sk[6] > 0)
+		{
+			outObj.skilltype = 1;
+			outObj.awoken = sk.slice(1, 5).filter(Boolean).filter(flags);
+			outObj.turns = sk[0];
+			outObj.rate = sk[6];
+		}
+		return outObj;
+	}
+	function rcvBuff_Rate(card)
+	{
+		const searchTypeArray = [
+			50,90,
+			228, 231, //宝石姬
+		];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		const outObj = {
+			skilltype: 0, //0为没有，1为宝石姬类，2为指定类型、属性
+			types: [],
+			attrs: [],
+			awoken: [],
+			rate: 0,
+			turns: 0,
+		};
+		if (!skill) return outObj;
+		const sk = skill.params;
+		if (skill.type == 228 && sk[4] > 0) {
+			outObj.skilltype = 1;
+			outObj.attrs = flags(sk[1]);
+			outObj.types = flags(sk[2]);
+			outObj.turns = sk[0];
+			outObj.rate = sk[4];
+		} else if (skill.type == 231 && sk[7] > 0) {
+			outObj.skilltype = 1;
+			outObj.awoken = sk.slice(1, 5).filter(Boolean).filter(flags);
+			outObj.turns = sk[0];
+			outObj.rate = sk[7];
+		} else if (skill.type == 50 || skill.type == 90) {
+			outObj.skilltype = sk.slice(1,sk.length>2?-1:undefined).includes(5) ? 2 : 0;
+			outObj.turns = sk[0];
+			outObj.rate = sk.length > 2 ? sk[sk.length-1] : 0;
 		}
 		return outObj;
 	}
@@ -1788,57 +1830,52 @@ const specialSearchFunctions = (function() {
 		{group:true,name:"----- Buff -----",otLangName:{chs:"----- buff 类-----"}, functions: [
 			{name:"Rate by state count(Jewel Princess)",otLangName:{chs:"以状态数量为倍率类技能（宝石姬）"},
 				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [156,168,228];
+					const searchTypeArray = [156,168,228,231];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					return skill;
 				})
 			},
 			{name:"RCV rate change",otLangName:{chs:"回复力 buff（顶回复）"},
 				function:cards=>{
-					const searchTypeArray = [50,90,228];
-					function getRecScale(as)
-					{
-						const sk = as.params;
-						if (as.type == 228)
-						{
-							return sk[4];
-						}else
-						{
-							return sk.slice(1,sk.length>2?-1:undefined).includes(5) ? (sk.length > 2 ? sk[sk.length-1] : 0) : null;
-						}
-					}
 					return cards.filter(card=>{
-						const skills = getCardActiveSkills(card, searchTypeArray);
-						if (skills.length)
-						{
-							return skills.some(as=>getRecScale(as) != null);
-						}else return false;
+						const atkbuff = rcvBuff_Rate(card);
+						return atkbuff.skilltype > 0;
 					}).sort((a,b)=>{
-						const a_s = getCardActiveSkills(a, searchTypeArray), b_s = getCardActiveSkills(b, searchTypeArray);
-						const a_sv = a_s.map(a_s=>getRecScale(a_s)).filter(n=>n!==null).sort().reverse()[0],
-						b_sv = b_s.map(b_s=>getRecScale(b_s)).filter(n=>n!==null).sort().reverse()[0];
-						return a_sv - b_sv;
+						let a_pC = rcvBuff_Rate(a), b_pC = rcvBuff_Rate(b);
+						let sortNum = a_pC.skilltype - b_pC.skilltype;
+						if (sortNum == 0)
+							sortNum = a_pC.rate - b_pC.rate;
+						if (sortNum == 0)
+							sortNum = a_pC.turns - b_pC.turns;
+						return sortNum;
 					});
 				},
 				addition:card=>{
-					const searchTypeArray = [50,90,228];
-					function getRecScale(as)
+					
+					const atkbuff = rcvBuff_Rate(card);
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(createOrbsList([5]));
+					if (atkbuff.skilltype == 0) return fragment;
+					if (atkbuff.skilltype == 1)
 					{
-						const sk = as.params;
-						if (as.type == 228)
-						{
-							return sk[4];
-						}else
-						{
-							return sk.slice(1,sk.length>2?-1:undefined).includes(5) ? (sk.length > 2 ? sk[sk.length-1] : 0) : null;
-						}
+						fragment.appendChild(document.createTextNode(`+${atkbuff.rate}%/`));
+						if (atkbuff.awoken.length)
+							fragment.appendChild(creatAwokenList(atkbuff.awoken));
+						if (atkbuff.attrs.length)
+							fragment.appendChild(createOrbsList(atkbuff.attrs));
+						if (atkbuff.types.length)
+							fragment.appendChild(createTypesList(atkbuff.types));
+						fragment.appendChild(document.createTextNode(`×${atkbuff.turns}T`));
+					}else if (atkbuff.skilltype == 2)
+					{
+						if (atkbuff.attrs.length)
+							fragment.appendChild(createOrbsList(atkbuff.attrs));
+						if (atkbuff.types.length)
+							fragment.appendChild(createTypesList(atkbuff.types));
+						fragment.appendChild(document.createTextNode(`×${atkbuff.rate / 100}`));
+						fragment.appendChild(document.createTextNode(`×${atkbuff.turns}T`));
 					}
-					const skills = getCardActiveSkills(card, searchTypeArray);
-					const skill = skills.find(as=>getRecScale(as) != null);
-					if (skill.type == 228)
-						return `回+${getRecScale(skill) / 100}×N`;
-					else
-						return `回x${getRecScale(skill) / 100}`;
+					return fragment;
 				}
 			},
 			{name:"ATK rate change(All)",otLangName:{chs:"全队攻击力 buff（顶攻击）"},

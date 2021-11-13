@@ -1405,6 +1405,9 @@ const parsers = {
 		})(target);
 		return activeTurns(turns, powerUp({target: targetType}, null, p.mul({ atk: mul })));
 	},
+	[231](turns, awoken1, awoken2, awoken3, awoken4, awoken5, atk, rcv) {
+		return activeTurns(turns, powerUp(null, null, p.scaleStateKindCount([awoken1, awoken2, awoken3, awoken4, awoken5].filter(Boolean), null, null, p.mul({atk: atk, hp:0, rcv: rcv}))));
+	},
 	[232](...ids) { return evolvedSkills(false, ids.map(id => this.parser(id))); },
 	[233](...ids) { return evolvedSkills(true, ids.map(id => this.parser(id))); },
 	[1000](type, pos, ...ids) {
