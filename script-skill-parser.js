@@ -1319,7 +1319,7 @@ const parsers = {
 	},
 	[201](attrs1, attrs2, attrs3, attrs4, min, damage) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, min, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[202](id) {
 		return henshin(id);
@@ -1339,7 +1339,7 @@ const parsers = {
 	[205](attrs, turns) { return activeTurns(turns, orbDropIncrease(null, flags(attrs == -1 ? 1023: attrs), 'locked')); },
 	[206](attrs1, attrs2, attrs3, attrs4, attrs5, min, combo) {
 		const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
-		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, min, [100, 100], [0, 0]), null, null, [addCombo(combo)]);
 	},
 	[207](turns, time, row1, row2, row3, row4, row5, count) {
 		return activeTurns(turns, count ?
