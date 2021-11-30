@@ -39,8 +39,8 @@ Chrome browser need start with the additional argument `--allow-file-access-from
 1. 中文（简体）
 1. 中文（繁體）
 1. English
-1. 日本語 (by Bing Microsoft Translator)
-1. 한국어 (by Bing Microsoft Translator)
+1. 日本語 (スキル解析翻訳のヘルプが必要です,  by Bing Translator)
+1. 한국어 (스킬 구문 분석 번역에 도움이 필요,  by Bing Translator)
 
 ## How to **Pull requests**
 1. Click **Fork** In the page top right corner. Fork your own copy of this repository to your account.

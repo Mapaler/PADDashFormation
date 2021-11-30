@@ -19,8 +19,8 @@
 		name:"한국어",i18n:"ko",searchlist:["ko","ja"],
 		guideURL:id=>`http://www.thisisgame.com/pad/info/monster/detail.php?code=${id}`
 	},
-	{
+	/*{
 		name:"Debug用",i18n:"zh-CN",searchlist:["chs","ja"],
 		guideURL:id=>`https://pad.skyozora.com/pets/${id}`
-	},
+	},*/
 ];
