@@ -1,6 +1,5 @@
 ﻿const _localTranslating = {
 	webpage_title: `智龙迷城${teamsCount}人队伍图制作`,
-	addition_display: "💬",
 	title_blank: "输入队伍标题",
 	detail_blank: "输入说明",
 	sort_name:{

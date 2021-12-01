@@ -1,6 +1,5 @@
 ﻿const _localTranslating = {
 	webpage_title: `龍族拼圖${teamsCount}人隊伍圖製作`,
-	addition_display: "💬",
 	title_blank: "輸入隊伍標題",
 	detail_blank: "輸入説明",
 	sort_name:{
