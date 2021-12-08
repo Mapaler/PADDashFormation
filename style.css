@@ -496,15 +496,19 @@ ul{
 {
 	content: attr(data-value);
 }
+.monster .level.max
+{
+	color: #FEFF85;
+}
 .monster .level.max::after
 {
 	display: none;
 }
 .monster .level[data-level-range="110"]{
-	color: lightskyblue;
+	color: #85BCFF;
 }
 .monster .level[data-level-range="120"]{
-	color: lightgreen;
+	color: #19F897;
 }
 .monster .level[data-level-range="error"]{
 	color: red;
