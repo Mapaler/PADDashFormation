@@ -709,7 +709,7 @@ icon.type
 	box-shadow:inset 0 2px 1px -1px rgba(0,0,0,0.5);
 }
 .latent-icon::before,
-.ds-ja .latent-icon::after /*目前x1.5暂时只有日服支持，美服支持后删除.ds-ja*/
+.latent-icon::after /*目前x1.5暂时只有日服支持，美服支持后删除.ds-ja*/
 {
 	display: inline-block;
 	margin: -2px;

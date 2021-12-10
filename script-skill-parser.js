@@ -347,6 +347,7 @@ const SkillKinds = {
 	Unbind: "unbind",
 	BindSkill: "bind-skill",
 	RandomSkills: "random-skills",
+	EvolvedSkills: "evolved-skills",
 	SkillProviso: "skill-proviso",
 	ChangeAttribute: "change-attr",
 	SkillBoost: "skill-boost",
@@ -871,6 +872,9 @@ function boardChange(attrs) {
 function randomSkills(skills) {
 	return { kind: SkillKinds.RandomSkills, skills: skills };
 }
+function evolvedSkills(loop, skills) {
+	return { kind: SkillKinds.EvolvedSkills, loop: loop, skills: skills };
+}
 function changeAttr(target, attr) {
 	return { kind: SkillKinds.ChangeAttribute, target: target, attr: attr ?? 0 };
 }
@@ -1315,7 +1319,7 @@ const parsers = {
 	},
 	[201](attrs1, attrs2, attrs3, attrs4, min, damage) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, min, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[202](id) {
 		return henshin(id);
@@ -1335,7 +1339,7 @@ const parsers = {
 	[205](attrs, turns) { return activeTurns(turns, orbDropIncrease(null, flags(attrs == -1 ? 1023: attrs), 'locked')); },
 	[206](attrs1, attrs2, attrs3, attrs4, attrs5, min, combo) {
 		const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
-		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, attrs.length, [100, 100], [0, 0]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, min, [100, 100], [0, 0]), null, null, [addCombo(combo)]);
 	},
 	[207](turns, time, row1, row2, row3, row4, row5, count) {
 		return activeTurns(turns, count ?
@@ -1352,8 +1356,8 @@ const parsers = {
 	[209](combo) {
 		return powerUp(null, null, p.scaleCross([{ single: true, attr: [Attributes.Heart], atk: 100, rcv: 100}]), null, null, [addCombo(combo)]);
 	},
-	[210](attrs, _, combo) {
-		return powerUp(null, null, p.scaleCross([{ single: false, attr: flags(attrs), atk: 100, rcv: 100}]), null, null, [addCombo(combo)]);
+	[210](attrs, reduce, combo) {
+		return powerUp(null, null, p.scaleCross([{ single: false, attr: flags(attrs), atk: 100, rcv: 100}]), null, v.percent(reduce), [addCombo(combo)]);
 	},
 	[214](turns) { return activeTurns(turns, bindSkill()); },
 	[215](turns, attrs) { return activeTurns(turns, setOrbState(flags(attrs), 'bound')); },
@@ -1401,6 +1405,11 @@ const parsers = {
 		})(target);
 		return activeTurns(turns, powerUp({target: targetType}, null, p.mul({ atk: mul })));
 	},
+	[231](turns, awoken1, awoken2, awoken3, awoken4, awoken5, atk, rcv) {
+		return activeTurns(turns, powerUp(null, null, p.scaleStateKindCount([awoken1, awoken2, awoken3, awoken4, awoken5].filter(Boolean), null, null, p.mul({atk: atk, hp:0, rcv: rcv}))));
+	},
+	[232](...ids) { return evolvedSkills(false, ids.map(id => this.parser(id))); },
+	[233](...ids) { return evolvedSkills(true, ids.map(id => this.parser(id))); },
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -1449,6 +1458,27 @@ function showParsedSkill(event) {
 		//const skillId = parseInt(this.getAttribute("data-skill-id"));
 		console.log(this.skill);
 	}
+}
+
+function renderSkillTitle(skillId) {
+	const skill = Skills[skillId];
+	const div = document.createElement("div");
+	div.className = "evolved-skill-title";
+	const name = div.appendChild(document.createElement("span"));
+	name.className = "skill-name";
+	name.textContent = skill.name;
+	name.setAttribute("data-skillid", skillId);
+	name.onclick = fastShowSkill;
+	const cd = div.appendChild(document.createElement("span"));
+	cd.className = "skill-cd";
+	cd.textContent = skill.initialCooldown - skill.maxLevel + 1;
+	if (skill.maxLevel > 1) {
+		const level = div.appendChild(document.createElement("span"));
+		level.className = "skill-level-label";
+		level.textContent = skill.maxLevel;
+	}
+	
+	return div;
 }
 
 function renderSkillEntry(skills)
@@ -1553,14 +1583,35 @@ function renderSkill(skill, option = {})
 			let skills = skill.skills;
 			const ul = document.createElement("ul");
 			ul.className = "random-active-skill";
-			skills.forEach(subSkills=>{
+			skills.forEach(subSkill=>{
 				const li = ul.appendChild(document.createElement("li"));
-				li.appendChild(renderSkillEntry(subSkills));
+				li.appendChild(renderSkillEntry(subSkill));
 			});
 			let dict = {
 				skills: ul,
 			};
 			frg.ap(tsp.skill.random_skills(dict));
+			break;
+		}
+		case SkillKinds.EvolvedSkills: { //技能进化
+			let skills = skill.skills, loop = skill.loop;
+			const ul = document.createElement("ul");
+			ul.className = "evolved-active-skill";
+			skills.forEach((subSkill, idx)=>{
+				const li = ul.appendChild(document.createElement("li"));
+				li.appendChild(renderSkillTitle(skill.params[idx]));
+				li.appendChild(renderSkillEntry(subSkill));
+			});
+			let dict = {
+				skills: ul,
+			};
+			frg.ap(tsp.skill.evolved_skills(dict));
+			if (loop) {
+				let dict2 = {
+					icon: createIcon("evolved-skill-loop"),
+				}
+				frg.ap(tsp.skill.evolved_skills_loop(dict2));
+			}
 			break;
 		}
 		case SkillKinds.Delay: { //威吓

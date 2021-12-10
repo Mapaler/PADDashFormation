@@ -395,8 +395,8 @@ function awokenCountInTeam(team, awokenIndex, solo, teamsCount) {
 		const assistCard = Cards[assist.id];
 		//启用的觉醒数组片段
 		let enableAwoken = card.awakenings.slice(0, mon.awoken);
-		//单人、3人时,大于等于100级时增加超觉醒
-		if ((solo || teamsCount === 3) && mon.sawoken >= 0 && mon.level >= 100) {
+		//单人、3人时,大于等于100级且297时增加超觉醒
+		if ((solo || teamsCount === 3) && mon.sawoken >= 0 && mon.level >= 100 && mon.plus.every(p=>p>=99)) {
 			const sAwokenT = card.superAwakenings[mon.sawoken];
 			if (sAwokenT >= 0)
 				enableAwoken = enableAwoken.concat(sAwokenT);
@@ -508,31 +508,34 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	const dge = formation.dungeonEnchance;
 	const dgeRate = [dge.rate.hp, dge.rate.atk, dge.rate.rcv];
 	const isDge = dge.rarities.includes(memberCard.rarity) || memberCard.attrs.some(attr=>dge.attrs.includes(attr)) || memberCard.types.some(type=>dge.types.includes(type));
+	
+	//储存点亮的觉醒
+	let awokenList = memberCard.awakenings.slice(0, member.awoken);
+	//单人、3人时,大于等于100级且297时增加超觉醒
+	if ((solo || teamsCount === 3) && member.sawoken >= 0 && member.level >= 100 && member.plus.every(p=>p>=99)) {
+		const sAwokenT = memberCard.superAwakenings[member.sawoken];
+		if (sAwokenT >= 0) awokenList.push(sAwokenT)
+	}
+	//如果有武器还要计算武器的觉醒
+	let enableBouns = false;
+	if (assistCard?.id > 0 && assistCard.enabled) {
+		const assistAwokenList = assistCard.awakenings.slice(0, assist.awoken); //储存武器点亮的觉醒
+		if (assistAwokenList.includes(49)) { //49是武器觉醒，确认已经点亮了武器觉醒
+			awokenList.push(...assistAwokenList);
+		}
+		enableBouns = memberCard.attrs[0] === assistCard.attrs[0] || memberCard.attrs[0] == 6 || assistCard.attrs[0] == 6;
+	}
+
 
 	const abilitys = memberCurves.map((ab, idx) => {
 		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr, limitBreakIncr120[idx])); //等级基础三维
 		const n_plus = member.plus[idx] * plusAdd[idx]; //加值增加量
 		let n_assist_base = 0,
 			n_assist_plus = 0; //辅助的bonus
-		let awokenList = memberCard.awakenings.slice(0, member.awoken); //储存点亮的觉醒
-		//单人、3人时,大于等于100级时增加超觉醒
-		if ((solo || teamsCount === 3) && member.sawoken >= 0 && member.level >= 100) {
-			const sAwokenT = memberCard.superAwakenings[member.sawoken];
-			if (sAwokenT >= 0)
-				awokenList = awokenList.concat(sAwokenT);
-		}
-		//如果有武器还要计算武器的觉醒
-		if (assistCard && assistCard.id > 0 && assistCard.enabled) {
-			const assistAwokenList = assistCard.awakenings.slice(0, assist.awoken); //储存武器点亮的觉醒
-			if (assistAwokenList.includes(49)) //49是武器觉醒，确认已经点亮了武器觉醒
-			{
-				awokenList = awokenList.concat(assistAwokenList);
-			}
-			if (memberCard.attrs[0] === assistCard.attrs[0] || memberCard.attrs[0] == 6 || assistCard.attrs[0] == 6) {
-
-				n_assist_base = Math.round(curve(assistCurves[idx], assist.level, assistCard.maxLevel, assistCard.limitBreakIncr, limitBreakIncr120[idx])); //辅助等级基础三维
-				n_assist_plus = assist.plus[idx] * plusAdd[idx]; //辅助加值增加量
-			}
+		//计算辅助的额外血量
+		if (assistCard?.id > 0 && assistCard.enabled && enableBouns) {
+			n_assist_base = Math.round(curve(assistCurves[idx], assist.level, assistCard.maxLevel, assistCard.limitBreakIncr, limitBreakIncr120[idx])); //辅助等级基础三维
+			n_assist_plus = assist.plus[idx] * plusAdd[idx]; //辅助加值增加量
 		}
 
 		//用来计算倍率觉醒的最终倍率是多少，reduce用
@@ -884,6 +887,7 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 			case 121:
 			case 129:
 			case 163:
+			case 177:
 			case 186:
 				scale = hpMul({ attrs: flags(sk[0]), types: flags(sk[1]) }, sk[2]);
 				break;
@@ -963,7 +967,7 @@ function getActuallySkills(skill, skillTypes, searchRandom = true) {
 	{
 		return [skill];
 	}
-	else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138)
+	else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138 || skill.type == 232 || skill.type == 233)
 	{
 		//因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
 		let subSkills = skill.params.flatMap(id => getActuallySkills(Skills[id], skillTypes, searchRandom));
@@ -1325,6 +1329,9 @@ function getReduceScales(leaderid) {
 					reduce.hp.max = 100;
 					reduce.hp.min = sk[2];
 				}
+				break;
+			case 210: //十字触发
+				reduce.scale = (sk[1] || 0) / 100;
 				break;
 			default:
 		}

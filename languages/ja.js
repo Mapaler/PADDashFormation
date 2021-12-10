@@ -57,5 +57,3 @@ Number.prototype.bigNumberToString = function()
 	outStr = outStr.replace(/と{2,}/g,'と'); //去除多个连续的零
 	return outStr;
 }
-
-localisation(localTranslating);

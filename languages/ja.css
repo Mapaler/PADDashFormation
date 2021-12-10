@@ -148,6 +148,11 @@
 {
 	content: "スキル";
 }
+.row-mon-skill .evolved-skill .type-title::before,
+.row-mon-skill .evolved-skill .type-title::after
+{
+	content: "進化スキル";
+}
 .row-mon-leader-skill .type-title::before,
 .row-mon-leader-skill .type-title::after
 {

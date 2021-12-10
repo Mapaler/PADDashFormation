@@ -147,6 +147,11 @@
 {
 	content: "主動技能";
 }
+.row-mon-skill .evolved-skill .type-title::before,
+.row-mon-skill .evolved-skill .type-title::after
+{
+	content: "進化技能";
+}
 .row-mon-leader-skill .type-title::before,
 .row-mon-leader-skill .type-title::after
 {

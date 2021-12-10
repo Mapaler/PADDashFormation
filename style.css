@@ -59,6 +59,10 @@ body{
 
 	font-family: var(--font-family);
 }
+.noscript {
+	color: red;
+	font-size: 2em;
+}
 .display-none{
 	display:none !important;
 }
@@ -484,15 +488,19 @@ ul{
 {
 	content: attr(data-value);
 }
+.monster .level.max
+{
+	color: #FEFF85;
+}
 .monster .level.max::after
 {
 	display: none;
 }
 .monster .level[data-level-range="110"]{
-	color: lightskyblue;
+	color: #85BCFF;
 }
 .monster .level[data-level-range="120"]{
-	color: lightgreen;
+	color: #19F897;
 }
 .monster .level[data-level-range="error"]{
 	color: red;
@@ -2321,7 +2329,8 @@ icon.inflicts::after
 {
 	content: attr(value);
 }
-.skill-box{
+.skill-box
+{
 	font-family: var(--game-font-family);
 	font-size: 16px;
 	border: #9C743E solid 2px;
@@ -2391,6 +2400,11 @@ icon.inflicts::after
 	background-image: linear-gradient(white 25%, #3377AA 80%);
 }
 
+.row-mon-skill .evolved-skill .type-title::after
+{
+	background-image: linear-gradient(#228899 25%, #44DDDD 80%);
+}
+
 /*.row-mon-leader-skill .type-title::before,
 .row-mon-leader-skill .type-title::after
 {
@@ -2402,7 +2416,23 @@ icon.inflicts::after
 }
 
 
-.row-mon-skill .skill-title .skill-name{
+.evolved-skill-title
+{
+	background-color: #00000044;
+	font-family: var(--game-font-family);
+	font-weight: normal;
+	color: white;
+	padding: 0 10px 0 2px;
+	text-shadow:black 2px 2px 0;
+}
+.evolved-skill-title .skill-level-label,
+.evolved-skill-title .skill-cd
+{
+	float: right;
+}
+.row-mon-skill .skill-title .skill-name,
+.evolved-skill-title .skill-name
+{
 	color: #84BAFC;
 	cursor: pointer;
 }
@@ -2445,11 +2475,21 @@ icon.inflicts::after
 .skill-datail-parsed .detail-search::before{
 	content: "🔍";
 }
-.random-active-skill{
+.random-active-skill,
+.evolved-active-skill
+{
 	padding-left: 1em;
 }
-.random-active-skill>li{
+.random-active-skill>li,
+.evolved-active-skill>li
+{
 	list-style: decimal;
+	border-bottom: 1px solid white;
+}
+.random-active-skill>li:last-of-type,
+.evolved-active-skill>li:last-of-type
+{
+	border-bottom: unset;
 }
 
 .edit-box .button-box{
@@ -3764,4 +3804,9 @@ table .orb-icon
 .icon-skill[data-icon-type="orb-nail"]
 {
 	background-position-y:calc(-36px * 35);
+}
+.icon-skill[data-icon-type="evolved-skill-loop"]
+{
+	background-image: url(images/icon-evolved-skill-loop.png);
+	background-size: contain;
 }
