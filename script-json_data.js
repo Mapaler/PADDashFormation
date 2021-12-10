@@ -613,7 +613,7 @@ const specialSearchFunctions = (function() {
 				scale = sk[sk.length-1]/100;
 				break;
 			case 73: case 76:
-			case 121: case 129: case 163: case 186:
+			case 121: case 129: case 163: case 177: case 186:
 			case 155:
 				scale = sk[2]/100;
 				break;

@@ -887,6 +887,7 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 			case 121:
 			case 129:
 			case 163:
+			case 177:
 			case 186:
 				scale = hpMul({ attrs: flags(sk[0]), types: flags(sk[1]) }, sk[2]);
 				break;
