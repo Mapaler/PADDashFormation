@@ -625,6 +625,9 @@ icon.type
 .awoken-icon[data-awoken-icon='81']{/*5色*/
 	background-position-y:calc(-32px * 81);
 }
+.awoken-icon[data-awoken-icon='82']{/*12珠*/
+	background-position-y:calc(-32px * 82);
+}
 /*类型*/
 .type-icon,
 icon.type
