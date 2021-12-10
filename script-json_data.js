@@ -341,6 +341,7 @@ let localTranslating = {
 			[79]: tp`${'icon'}Enhanced 3 colors`,
 			[80]: tp`${'icon'}Enhanced 4 colors`,
 			[81]: tp`${'icon'}Enhanced 5 colors`,
+			[82]: tp`${'icon'}Super Connecting Eraser Bonus`,
 		}
 	},
 };
