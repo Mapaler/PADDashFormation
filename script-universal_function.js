@@ -771,6 +771,15 @@ function cardN(id) {
 	changeid({ id: id }, monDom);
 	return monOuterDom;
 }
+//返回文字说明内怪物Card的纯HTML
+function cardNClick() {
+	const id = parseInt(this.getAttribute("data-cardid"), 10);
+	editBox.show();
+	editBox.mid = id;
+	editBoxChangeMonId(id);
+	//showSearch([id]);
+	return false;
+}
 //技能介绍里的头像的切换
 function changeToIdInSkillDetail(event) {
 	const settingBox = editBox.querySelector(".setting-box");
@@ -790,18 +799,89 @@ function searchCollab(event) {
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)
 {
+	function formatParse(arr, reg, subMatchCount, returnFunc){
+		//const subMatchCount = returnFunc.length;
+		return arr.flatMap(item=>{
+			if (typeof item == "string") {
+				const subArr = item.split(new RegExp(reg));
+				const newArr = [];
+				for (let i = 0; i < subArr.length; i += (subMatchCount+1)) {
+					newArr.push(subArr[i]);
+					if (subArr[i+subMatchCount] !== undefined) {
+						newArr.push(returnFunc(...[subArr.slice(i + 1, i + subMatchCount + 1)]));
+					}
+				}
+				return newArr;
+			} else {
+				return item;
+			}
+		});
+	}
+	let nodeArr = [str];
+	nodeArr = formatParse(nodeArr, /\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm, 2,
+		(color, content)=>{
+			const sp = document.createElement("span");
+			sp.style.color = `#${color}`;
+			sp.textContent = content;
+			return sp;
+		});
+	nodeArr = formatParse(nodeArr, /\%\{m([0-9]{1,4})\}/g, 1,
+		(id)=>{
+			const avatar = cardN(parseInt(id,10));
+			avatar.monDom.onclick = cardNClick;
+			return avatar;
+		});
+
+/*	arr = arr.flatMap(item=>{
+		if (typeof item == "string") {
+			const subArr = item.split(/\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm);
+			const newArr = [];
+			for (let i = 0; i < subArr.length; i += 3) {
+				newArr.push(subArr[i]);
+				if (subArr[i+2] !== undefined) {
+					const sp = document.createElement("span");
+					sp.style.color = `#${subArr[i+1]}`;
+					sp.textContent = subArr[i+2];
+					newArr.push(sp);
+				}
+			}
+			return newArr;
+		} else {
+			return item;
+		}
+	});
+
+	arr = arr.flatMap(item=>{
+		if (typeof item == "string") {
+			const subArr = item.split(/\%\{m([0-9]{1,4})\}/g);
+			const newArr = [];
+			for (let i = 0; i < subArr.length; i += 2) {
+				newArr.push(subArr[i]);
+				if (subArr[i+1] !== undefined) {
+					const avatar = cardN(parseInt(subArr[i+1],10));
+					avatar.monDom.onclick = cardNClick;
+					newArr.push(avatar);
+				}
+			}
+			return newArr;
+		} else {
+			return item;
+		}
+	});*/
+
 	//str = str.replace(/\n/ig,"<br>"); //换行
 	//str = str.replace(/ /ig,"&nbsp;"); //换行
 
-	str = str.replace(/\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm,'<span style="color:#$1;">$2</span>'); //文字颜色
-	str = str.replace(/\%\{m([0-9]{1,4})\}/g,function (str, p1, offset, s){return cardN(parseInt(p1,10)).outerHTML;}); //怪物头像
-	return str;
+	//str = str.replace(/\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm,'<span style="color:#$1;">$2</span>'); //文字颜色
+	//str = str.replace(/\%\{m([0-9]{1,4})\}/g,function (str, p1, offset, s){return cardN(parseInt(p1,10)).outerHTML;}); //怪物头像
+	return nodeArr.nodeJoin();
 }
 //默认的技能解释的显示行为
 function parseSkillDescription(skill) {
-	const span = document.createElement("span");
-	span.innerHTML = descriptionToHTML(skill.description);
-	return span;
+	//const span = document.createElement("span");
+	//span.innerHTML = descriptionToHTML(skill.description);
+	
+	return descriptionToHTML(skill.description);
 }
 //大数字缩短长度，默认返回本地定义字符串
 function parseBigNumber(number) {

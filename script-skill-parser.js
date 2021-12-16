@@ -1447,7 +1447,7 @@ Array.prototype.nodeJoin = function(separator)
 	const frg = document.createDocumentFragment();
 	this.forEach((item, idx, arr)=>{
 		frg.ap(item);
-		if (idx < (arr.length - 1) && separator != null)
+		if (idx < (arr.length - 1) && separator !== undefined)
 			frg.ap(separator instanceof Node ? separator.cloneNode(true) : separator);
 	});
 	return frg;

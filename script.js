@@ -1973,7 +1973,9 @@ function initialize(event) {
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
 	txtTitle.onchange = function() {
 		formation.title = this.value;
-		txtTitleDisplay.innerHTML = descriptionToHTML(this.value);
+		//txtTitleDisplay.innerHTML = descriptionToHTML(this.value);
+		txtTitleDisplay.innerHTML = '';
+		txtTitleDisplay.appendChild(descriptionToHTML(this.value));
 		let titleStr = txtTitleDisplay.textContent.trim();
 		document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
 		creatNewUrl();
@@ -1984,7 +1986,9 @@ function initialize(event) {
 	};
 	txtDetail.onchange = function() {
 		formation.detail = this.value;
-		txtDetailDisplay.innerHTML = descriptionToHTML(this.value);
+		//txtDetailDisplay.innerHTML = descriptionToHTML(this.value);
+		txtDetailDisplay.innerHTML = '';
+		txtDetailDisplay.appendChild(descriptionToHTML(this.value));
 		creatNewUrl();
 	};
 	txtDetail.onblur = function() {
@@ -3165,7 +3169,7 @@ function initialize(event) {
 	const monEditAwokens = Array.from(monEditAwokensRow.querySelectorAll(".awoken-ul input[name='awoken-number']"));
 
 	function checkAwoken() {
-		const card = Cards[editBox.mid];
+		const card = Cards[editBox.mid ?? 0];
 		const value = parseInt(this.value, 10);
 		awokenCountLabel.setAttribute(dataAttrName, value);
 		toggleDomClassName(value > 0 && value == card.awakenings.length, "full-awoken", awokenCountLabel);
@@ -4152,10 +4156,14 @@ function refreshAll(formationData) {
 	txtDetail.value = formationData.detail || "";
 	const txtTitleDisplay = titleBox.querySelector(".title-display");
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
-	txtTitleDisplay.innerHTML = descriptionToHTML(txtTitle.value);
+	//txtTitleDisplay.innerHTML = descriptionToHTML(txtTitle.value);
+	txtTitleDisplay.innerHTML = '';
+	txtTitleDisplay.appendChild(descriptionToHTML(txtTitle.value));
 	let titleStr = txtTitleDisplay.textContent.trim();
 	document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
-	txtDetailDisplay.innerHTML = descriptionToHTML(txtDetail.value);
+	//txtDetailDisplay.innerHTML = descriptionToHTML(txtDetail.value);
+	txtDetailDisplay.innerHTML = '';
+	txtDetailDisplay.appendChild(descriptionToHTML(txtDetail.value));
 	
 	toggleDomClassName(!txtTitle.value.length, "edit", titleBox);
 	toggleDomClassName(!txtDetail.value.length, "edit", detailBox);
