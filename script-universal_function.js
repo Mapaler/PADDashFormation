@@ -825,11 +825,16 @@ function descriptionToHTML(str)
 			sp.textContent = content;
 			return sp;
 		});
-	nodeArr = formatParse(nodeArr, /\%\{m([0-9]{1,4})\}/g, 1,
+	nodeArr = formatParse(nodeArr, /\%\{m([0-9]{1,5})\}/g, 1,
 		(id)=>{
 			const avatar = cardN(parseInt(id,10));
 			avatar.monDom.onclick = cardNClick;
 			return avatar;
+		});
+	nodeArr = formatParse(nodeArr, /\%\{a([0-9]{1,3})\}/g, 1,
+		(id)=>{
+			const awokenList = renderAwakenings(parseInt(id,10));
+			return awokenList;
 		});
 
 /*	arr = arr.flatMap(item=>{
