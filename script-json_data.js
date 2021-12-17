@@ -140,9 +140,10 @@ let localTranslating = {
 			exact_match_length: tp`When matching exactly ${'value'}${'orbs'} `,
 			exact_match_enhanced: tp` orbs including enhanced`,
 
-			compo_type_card: tp`When ${'ids'} are all on team`,
-			compo_type_series: tp`When all subs from ${'ids'} collab (Needs at least 1 sub) `,
-			compo_type_evolution: tp`When all monsters in team are ${'ids'} `,
+			compo_type_card: tp`When ${'ids'} are all on team, `,
+			compo_type_series: tp`When all subs from ${'ids'} collab (Needs at least 1 sub), `,
+			compo_type_evolution: tp`When all monsters in team are ${'ids'}, `,
+			compo_type_rarity: tp`When the total ★ rarity of the team is ≤${'rarity'}, `,
 
 			L_shape: tp`When matching an L shape of 5 ${'orbs'} `,
 			heal: tp`When healing at least ${'heal'} ${'stats'} with ${'orbs'} `,
@@ -636,7 +637,7 @@ const specialSearchFunctions = (function() {
 			case 178: case 185:
 				scale = sk[3]/100;
 				break;
-			case 203:
+			case 203: case 217:
 				scale = sk[1]/100;
 				break;
 			case 138: //调用其他队长技

@@ -127,6 +127,7 @@
 			compo_type_card: tp`队伍中同时存在 ${'ids'} 时`,
 			compo_type_series: tp`队员组成全为 ${'ids'} 合作时`,
 			compo_type_evolution: tp`队员组成全为 ${'ids'} 进化时`,
+			compo_type_rarity: tp`队伍的总★稀有度 ≤${'rarity'} 时`,
 
 			L_shape: tp`以L字形式消除5个${'orbs'}时`,
 			heal: tp`以${'orbs'}回复${'heal'}${'stats'}时`,

@@ -1362,6 +1362,10 @@ const parsers = {
 	[214](turns) { return activeTurns(turns, bindSkill()); },
 	[215](turns, attrs) { return activeTurns(turns, setOrbState(flags(attrs), 'bound')); },
 
+	[217](rarity, hp, atk, rcv) {
+		return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }),
+		c.compo('rarity', rarity));
+	},
 	[218](turns) { return skillBoost(v.constant(-turns)); },
 
 	[219](attrs, len, combo) {
@@ -2473,6 +2477,11 @@ function renderCondition(cond) {
 					return lnk;
 				}).nodeJoin(tsp.word.slight_pause());
 				frg.ap(tsp.cond.compo_type_evolution(dict));
+				break;
+			}
+			case 'rarity':{
+				dict.rarity = cond.compo.ids;
+				frg.ap(tsp.cond.compo_type_rarity(dict));
 				break;
 			}
 		}

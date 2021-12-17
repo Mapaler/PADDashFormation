@@ -4510,7 +4510,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader1id = team[0][team[3] || 0].id;
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3] || 0].id : teams[1][0][teams[1][3] || 0].id) : team[0][5].id;
 
-	const team_2p = teamsCount===2 ? team[0].concat((teamIdx === 1 ? teams[0][0] : teams[1][0])) : team[0];
+	const team_2p = teamsCount===2 ? team[0].concat((teamIdx === 1 ? teams[0][0][0] : teams[1][0][0])) : team[0];
+	console.log(team[0], teams[0][0])
 
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
@@ -4594,8 +4595,20 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		}
 	}
 
+	const tRarityDom = totalDom.querySelector(".tIf-rarity");
 	const tAttrsDom = totalDom.querySelector(".tIf-attrs");
 	const tTypesDom = totalDom.querySelector(".tIf-types");
+	//统计队伍稀有度总数
+	if (tRarityDom)
+	{
+		const rarityDoms = tRarityDom.querySelector(".rarity");
+		const rarityCount = team_2p.reduce((pre,member)=>{
+			if (member.id <= 0) return pre;
+			const card = Cards[member.id] || Cards[0];
+			return pre + card.rarity;
+		},0);
+		rarityDoms.setAttribute(dataAttrName, rarityCount);
+	}
 	//统计队伍颜色个数
 	if (tAttrsDom)
 	{

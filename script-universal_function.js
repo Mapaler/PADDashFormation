@@ -1004,7 +1004,7 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 			case 185:
 				scale = hpMul({ attrs: flags(sk[1]), types: flags(sk[2]) }, sk[3]);
 				break;
-			case 203: //队员为指定类型，不包括双方队长，且队员数大于0
+			case 203:{ //队员为指定类型，不包括双方队长，且队员数大于0
 				let trueMemberCardsArr = memberArr.slice(1, 5).filter(m => m.id > 0).map(m => Cards[m.id]);
 				switch (sk[0]) {
 					case 0: //全是像素进化
@@ -1015,6 +1015,16 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 						break;
 				}
 				break;
+			}
+			case 217:{ //队员为指定类型，不包括双方队长，且队员数大于0
+				let cardsArr = memberArr.filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
+				const rarityCount = cardsArr.reduce((pre,member)=>{
+					const card = Cards[member.id] || Cards[0];
+					return pre + card.rarity;
+				},0);
+				scale = rarityCount <= sk[0] ? sk[1] / 100 : 1;
+				break;
+			}
 			case 229:{ //队员中存在每个属性或Type都算一次
 				let cardsArr = memberArr.filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
 				let attrsArr = cardsArr.flatMap(card => card.attr); //所有卡片的属性

@@ -993,12 +993,14 @@ icon.inflicts::after
 }
 
 /*队伍内属性、type的个数统计*/
+.tIf-rarity,
 .tIf-attrs,
 .tIf-types
 {
 	display: inline-block;
 	vertical-align: top;
 }
+.tIf-rarity>li,
 .tIf-attrs>li,
 .tIf-types>li
 {
@@ -1012,6 +1014,7 @@ icon.inflicts::after
 	color: white;
 	line-height: 32px;
 	font-size: 16px;
+	margin-right: 3px;
 }
 .tIf-attrs icon.attr:not([data-value]),
 .tIf-types icon.type-icon:not([data-value]),
@@ -1029,6 +1032,20 @@ icon.inflicts::after
 	bottom: 0;
 	font-size: 16px;
 	line-height: 17px;
+	-webkit-text-stroke: 1px black;
+	text-stroke: 1px black;
+	text-shadow: black 1px 1px 1px;
+}
+.tIf-rarity icon
+{
+	line-height: 32px;
+	font-size: 25px;
+	font-family: var(--game-font-family);
+}
+.tIf-rarity icon::before
+{
+	content: attr(data-value)"★";
+	color: gold;
 	-webkit-text-stroke: 1px black;
 	text-stroke: 1px black;
 	text-shadow: black 1px 1px 1px;
