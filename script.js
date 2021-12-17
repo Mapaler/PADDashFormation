@@ -4511,7 +4511,6 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3] || 0].id : teams[1][0][teams[1][3] || 0].id) : team[0][5].id;
 
 	const team_2p = teamsCount===2 ? team[0].concat((teamIdx === 1 ? teams[0][0][0] : teams[1][0][0])) : team[0];
-	console.log(team[0], teams[0][0])
 
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
