@@ -1562,8 +1562,6 @@ icon.inflicts::after
 }
 .types-div .latent-list .latent-icon:before
 {
-	margin-left: -23px;
-	margin-right: -25px;
 	margin-top: -3px;
 	margin-bottom: -5px;
 }
