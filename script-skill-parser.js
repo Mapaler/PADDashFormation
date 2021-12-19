@@ -735,6 +735,9 @@ const c = {
 	prob: function (percent) { return { prob: percent }; },
 	LShape: function (attrs) { return { LShape: { attrs: attrs } }; },
 	heal: function (min) { return { heal: { min: min } }; },
+	stage: function (min, max) {
+		return { stage: { min: min ?? 0, max: max ?? 0 } };
+	},
 }
 
 const p = {
@@ -2497,6 +2500,16 @@ function renderCondition(cond) {
 			stats: renderStat('hp'),
 		};
 		frg.ap(tsp.cond.heal(dict));
+	} else if (cond.stage) {
+		let dict = {
+			hp: renderStat('cstage'),
+			min: renderValue(v.constant(cond.stage.min)),
+			max: renderValue(v.constant(cond.stage.max)),
+		};
+		if (cond.stage.min > 0)
+			frg.ap(tsp.cond.stage_greater_or_equal(dict));
+		else if (cond.stage.max > 0)
+			frg.ap(tsp.cond.stage_less_or_equal(dict));
 	} else {
 		frg.ap(tsp.cond.unknown());
 	}

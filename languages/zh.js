@@ -129,6 +129,9 @@
 			compo_type_evolution: tp`队员组成全为 ${'ids'} 进化时`,
 			compo_type_rarity: tp`队伍的总★稀有度 ≤${'rarity'} 时`,
 
+			stage_less_or_equal: tp`${'stage'} ≤ ${'max'} 时`, //地下城层数
+			stage_greater_or_equal: tp`${'stage'} ≥ ${'min'} 时`,
+
 			L_shape: tp`以L字形式消除5个${'orbs'}时`,
 			heal: tp`以${'orbs'}回复${'heal'}${'stats'}时`,
 		},
@@ -174,6 +177,7 @@
 			teamhp: tp`队伍总HP`,
 			teamatk: tp`队伍${'attrs'}总攻击力`,
 			teamrcv: tp`队伍回复力`,
+			cstage: tp`当前地下城层数`,
 		},
 		unit: {
 			orbs: tp`个`,

@@ -145,6 +145,9 @@ let localTranslating = {
 			compo_type_evolution: tp`When all monsters in team are ${'ids'}, `,
 			compo_type_rarity: tp`When the total ★ rarity of the team is ≤${'rarity'}, `,
 
+			stage_less_or_equal: tp`When ${'stage'} ≤ ${'max'}, `,
+			stage_greater_or_equal: tp`When ${'stage'} ≥ ${'min'}, `,
+
 			L_shape: tp`When matching an L shape of 5 ${'orbs'} `,
 			heal: tp`When healing at least ${'heal'} ${'stats'} with ${'orbs'} `,
 		},
@@ -190,6 +193,7 @@ let localTranslating = {
 			teamhp: tp`Team HP`,
 			teamatk: tp`Team ${'attrs'} ATK`,
 			teamrcv: tp`Team RCV`,
+			cstage: tp`current Stage of Dungeon`,
 		},
 		unit: {
 			orbs: tp``,
