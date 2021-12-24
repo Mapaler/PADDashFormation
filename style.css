@@ -3581,6 +3581,10 @@ table .orb-icon
 }
 .card-skill-list .skill-proviso
 {
+	color: blue;
+}
+.card-skill-list .skill-proviso
+{
 	border-bottom: 1px brown dashed;
 }
 

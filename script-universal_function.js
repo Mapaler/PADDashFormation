@@ -808,7 +808,7 @@ function descriptionToHTML(str)
 				for (let i = 0; i < subArr.length; i += (subMatchCount+1)) {
 					newArr.push(subArr[i]);
 					if (subArr[i+subMatchCount] !== undefined) {
-						newArr.push(returnFunc(...[subArr.slice(i + 1, i + subMatchCount + 1)]));
+						newArr.push(returnFunc(...subArr.slice(i + 1, i + subMatchCount + 1)));
 					}
 				}
 				return newArr;
@@ -818,11 +818,16 @@ function descriptionToHTML(str)
 		});
 	}
 	let nodeArr = [str];
-	nodeArr = formatParse(nodeArr, /\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm, 2,
+	nodeArr = formatParse(nodeArr, /\^(\w+?)\^([^\^]+?)\^p/igm, 2,
 		(color, content)=>{
 			const sp = document.createElement("span");
-			sp.style.color = `#${color}`;
 			sp.textContent = content;
+			if (/^[a-fA-F0-9]+$/g.test(color)) {
+				sp.style.color = `#${color}`;
+			} else if (/qs/i.test(color)) {
+				sp.style.color = `blue`;
+			}
+			console.log(color, content)
 			return sp;
 		});
 	nodeArr = formatParse(nodeArr, /\%\{m([0-9]{1,5})\}/g, 1,

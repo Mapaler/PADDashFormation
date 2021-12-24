@@ -1674,18 +1674,34 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Enable require HP range",otLangName:{chs:"技能使用血线要求",cht:"技能使用血線要求"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [225];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [225];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				}),
 				addition:card=>{
-				const searchTypeArray = [225];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				let strArr = [];
-				if (sk[0]) strArr.push(`≥${sk[0]}%`);
-				if (sk[1]) strArr.push(`≤${sk[1]}%`);
-				return `HP ${strArr.join(" ")}`;
+					const searchTypeArray = [225];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					let strArr = [];
+					if (sk[0]) strArr.push(`≥${sk[0]}%`);
+					if (sk[1]) strArr.push(`≤${sk[1]}%`);
+					return `HP ${strArr.join(" ")}`;
+				}
+			},
+			{name:"Enable require Dungeon Stage",otLangName:{chs:"技能使用地下城层数要求",cht:"技能使用地下城層數要求"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [234];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [234];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					let strArr = [];
+					if (sk[0]) strArr.push(`≥${sk[0]}`);
+					if (sk[1]) strArr.push(`≤${sk[1]}`);
+					return `层 ${strArr.join(" ")}`;
 				}
 			},
 		]},

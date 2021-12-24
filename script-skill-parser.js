@@ -1417,6 +1417,7 @@ const parsers = {
 	},
 	[232](...ids) { return evolvedSkills(false, ids.map(id => this.parser(id))); },
 	[233](...ids) { return evolvedSkills(true, ids.map(id => this.parser(id))); },
+	[234](min, max) { return skillProviso(c.stage(min ?? 0, max ?? 0)); },
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -2502,7 +2503,7 @@ function renderCondition(cond) {
 		frg.ap(tsp.cond.heal(dict));
 	} else if (cond.stage) {
 		let dict = {
-			hp: renderStat('cstage'),
+			stage: renderStat('cstage'),
 			min: renderValue(v.constant(cond.stage.min)),
 			max: renderValue(v.constant(cond.stage.max)),
 		};
