@@ -100,7 +100,7 @@ let localTranslating = {
 			rate_multiply_drop: tp`${'icon'}Drop rate`,
 			rate_multiply_coin: tp`${'icon'}Coins`,
 			rate_multiply_exp: tp`${'icon'}Rank EXP`,
-			reduce_damage: tp`${'condition'}${'icon'}Reduces ${'attrs'} damage taken by ${'value'}`,
+			reduce_damage: tp`${'condition'}${'chance'}${'icon'}Reduces ${'attrs'} damage taken by ${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			power_up_targets: tp`[${'attrs_types'}]'s `, //attrs, types, attrs_types
 			henshin: tp`Transforms into ${'card'}`,

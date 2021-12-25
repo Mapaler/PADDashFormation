@@ -84,7 +84,7 @@
 			rate_multiply_drop: tp`${'icon'}怪物蛋掉落率`,
 			rate_multiply_coin: tp`${'icon'}金币掉落率`,
 			rate_multiply_exp: tp`${'icon'}等级经验倍率`,
-			reduce_damage: tp`${'condition'}受到的${'attrs'}伤害${'icon'}减少${'value'}`,
+			reduce_damage: tp`${'condition'}受到的${'attrs'}伤害${'chance'}${'icon'}减少${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'target'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			power_up_targets: tp`${'attrs_types'}的 `,
 			henshin: tp`变身为${'card'}`,

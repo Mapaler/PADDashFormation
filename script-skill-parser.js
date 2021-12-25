@@ -815,8 +815,8 @@ function damageEnemy(target, attr, damage) {
 function vampire(attr, damageValue, healValue) {
 	return { kind: SkillKinds.Vampire, attr: attr, damage: damageValue, heal: healValue };
 }
-function reduceDamage(attrs, percent, condition) {
-	return { kind: SkillKinds.ReduceDamage, attrs: attrs, percent: percent, condition: condition };
+function reduceDamage(attrs, percent, condition, prob) {
+	return { kind: SkillKinds.ReduceDamage, attrs: attrs, percent: percent, condition: condition, prob: prob || 1 };
 }
 function selfHarm(value) {
 	return { kind: SkillKinds.SelfHarm, value: value };
@@ -962,12 +962,12 @@ const parsers = {
 	[35](mul, percent) { return vampire('self', v.xATK(mul), v.percent(percent)); },
 	[36](attr1, attr2, percent) { return reduceDamage([attr1, attr2], v.percent(percent)); },
 	[37](attr, mul) { return damageEnemy('single', attr, v.xATK(mul)); },
-	[38](max, _, percent) { return reduceDamage('all', v.percent(percent), max === 100 ? c.hp(max, max) : c.hp(0, max)); },
+	[38](max, prob, percent) { return reduceDamage('all', v.percent(percent), max === 100 ? c.hp(max, max) : c.hp(0, max), v.percent(prob)); },
 	[39](percent, stats1, stats2, mul) { return powerUp(null, null, p.mul(p.stats(mul, stats1, stats2)), c.hp(0, percent)); },
 	[40](attr1, attr2, mul) { return powerUp([attr1, attr2], null, p.mul({ atk: mul })); },
 	[41](prob, mul, attr) { return counterAttack(attr ?? 0, v.percent(prob), v.percent(mul)); },
 	[42](targetAttr, dmgAttr, value) { return damageEnemy(targetAttr, dmgAttr, v.constant(value)); },
-	[43](min, max, percent) { return reduceDamage('all', v.percent(percent), c.hp(min, max)); },
+	[43](min, prob, percent) { return reduceDamage('all', v.percent(percent), c.hp(min, 100), v.percent(prob)); },
 	[44](percent, stats1, stats2, mul) { return powerUp(null, null, p.mul(p.stats(mul, stats1, stats2)), c.hp(percent, 100)); },
 	[45](attr, mul) { return powerUp([attr], null, p.mul({ hp: mul, atk: mul })); },
 	[46](attr1, attr2, mul) { return powerUp([attr1, attr2], null, p.mul({ hp: mul })); },
@@ -2110,13 +2110,15 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.ReduceDamage: {
-			let attrs = skill.attrs, percent = skill.percent, condition = skill.condition;
+			let attrs = skill.attrs, percent = skill.percent, condition = skill.condition, prob = skill.prob;
 			dict = {
 				icon: createIcon(skill.kind),
 				attrs: renderAttrs(attrs, {affix: true}),
 				value: renderValue(percent, {percent: true}),
+				condition: condition ? renderCondition(condition) : null,
+				chance: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
 			};
-			if (condition) dict.condition = renderCondition(condition);
+			console.log(prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null)
 			frg.ap(tsp.skill.reduce_damage(dict));
 			break;
 		}
