@@ -827,7 +827,6 @@ function descriptionToHTML(str)
 			} else if (/qs/i.test(color)) {
 				sp.style.color = `blue`;
 			}
-			console.log(color, content)
 			return sp;
 		});
 	nodeArr = formatParse(nodeArr, /\%\{m([0-9]{1,5})\}/g, 1,

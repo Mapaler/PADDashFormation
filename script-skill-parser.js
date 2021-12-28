@@ -2118,7 +2118,6 @@ function renderSkill(skill, option = {})
 				condition: condition ? renderCondition(condition) : null,
 				chance: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
 			};
-			console.log(prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null)
 			frg.ap(tsp.skill.reduce_damage(dict));
 			break;
 		}

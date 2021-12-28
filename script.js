@@ -1940,7 +1940,6 @@ function initialize(event) {
 				const reader = await fileReader(myFile, {readType: "text"});
 				const data = JSON.parse(reader.result);
 				const playerData = new PlayerData(data);
-				console.log(playerData);
 
 				let dataCount = 0;
 				if (db) {
