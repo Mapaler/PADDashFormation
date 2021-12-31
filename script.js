@@ -1916,7 +1916,7 @@ function initialize(event) {
 			ipt.onclick = changeDeck;
 			ipt.deck = deck;
 		});
-		radioList.querySelectorAll(".deck-choose")[data.curDeck ?? 0]?.click();
+		radioList.querySelectorAll(".deck-choose")[data.curDeck < 100 ? (data.curDeck || 0) : (data.curDeck - 100 + data.decksb.decks.length)]?.click();
 
 		function changeDeck(e)
 		{
