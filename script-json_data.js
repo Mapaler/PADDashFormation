@@ -732,7 +732,7 @@ const specialSearchFunctions = (function() {
 			case 42:
 				return sk[1];
 			case 144:
-				return sk[3];
+				return sk[3] ?? 0;
 			default:
 				return -1;
 		}
