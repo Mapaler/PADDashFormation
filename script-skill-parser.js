@@ -1294,13 +1294,13 @@ const parsers = {
 	  return activeTurns(turns, voidEnemyBuff(['damage-void']));
 	},
 	[192](attrs, len, mul, combo) {
-		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul || 100, 100], [0, 0], true), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul || 100, 100], [0, 0], true), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[193](attrs, atk, rcv, percent) {
 		return powerUp(null, null, p.mul([atk || 100, rcv || 100]), c.LShape(flags(attrs)), v.percent(percent));
 	},
 	[194](attrs, min, mul, combo) {
-		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul || 100, 100], [0, 0]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul || 100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[195](percent) {
 	  return selfHarm(percent ? v.xCHP(100 - percent) : v.constantTo(1));
@@ -1342,7 +1342,7 @@ const parsers = {
 	[205](attrs, turns) { return activeTurns(turns, orbDropIncrease(null, flags(attrs == -1 ? 1023: attrs), 'locked')); },
 	[206](attrs1, attrs2, attrs3, attrs4, attrs5, min, combo) {
 		const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
-		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, min, [100, 100], [0, 0]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, min, [100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[207](turns, time, row1, row2, row3, row4, row5, count) {
 		return activeTurns(turns, count ?
@@ -1357,10 +1357,10 @@ const parsers = {
 		];
 	},
 	[209](combo) {
-		return powerUp(null, null, p.scaleCross([{ single: true, attr: [Attributes.Heart], atk: 100, rcv: 100}]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleCross([{ single: true, attr: [Attributes.Heart], atk: 100, rcv: 100}]), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[210](attrs, reduce, combo) {
-		return powerUp(null, null, p.scaleCross([{ single: false, attr: flags(attrs), atk: 100, rcv: 100}]), null, v.percent(reduce), [addCombo(combo)]);
+		return powerUp(null, null, p.scaleCross([{ single: false, attr: flags(attrs), atk: 100, rcv: 100}]), null, v.percent(reduce), combo ? [addCombo(combo)] : null);
 	},
 	[214](turns) { return activeTurns(turns, bindSkill()); },
 	[215](turns, attrs) { return activeTurns(turns, setOrbState(flags(attrs), 'bound')); },
@@ -1372,17 +1372,17 @@ const parsers = {
 	[218](turns) { return skillBoost(v.constant(-turns)); },
 
 	[219](attrs, len, combo) {
-		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [100, 100], [0, 0]), null, null, [addCombo(combo)]);
+		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[220](attrs, combo) {
-		return powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, [addCombo(combo)]);
+		return powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, combo ? [addCombo(combo)] : null);
 	},
 	[221](attrs, damage) {
-		return powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, [followAttackFixed(damage)]);
+		return powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, damage ? [followAttackFixed(damage)] : null);
 	},
 
 	[223](combo, damage) {
-		return powerUp(null, null, p.scaleCombos(combo, combo, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
+		return powerUp(null, null, p.scaleCombos(combo, combo, [100, 100], [0, 0]), null, null, damage ? [followAttackFixed(damage)] : null);
 	},
 	[224](turns, attr) { return activeTurns(turns, changeAttr('opponent', attr)); },
 	[225](min, max) { return skillProviso(c.hp(min ?? 0, max ?? 100)); },
