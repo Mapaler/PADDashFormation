@@ -1,7 +1,7 @@
 ﻿const fs = require('fs');
 const path = require('path');
-const OpenCC = require('opencc');
-const converter = new OpenCC('t2s.json');
+const OpenCC = require('opencc-js');
+const converter = OpenCC.Converter({ from: 'hk', to: 'cn' });
 
 const sourceFolder = "Download-pad.skyozora.com/pad.skyozora.com"; //战友网数据的存储问文件夹
 const outJSON_cht = "custom/cht.json"; //输出的繁体JSON文件
@@ -34,11 +34,12 @@ class monInfo
 	}
 }
 const chsTranDiff = [
-	{reg:"铁甲奇侠",chs:"钢铁侠"},
-	{reg:"变形侠医",chs:"绿巨人"},
-	{reg:"毒魔",chs:"毒液"},
-	{reg:"魁隆",chs:"灭霸"},
-	{reg:"福瑞",chs:"弗瑞"},
+	{cht:"铁甲奇侠",chs:"钢铁侠"},
+	{cht:"变形侠医",chs:"绿巨人"},
+	{cht:"毒魔",chs:"毒液"},
+	{cht:"魁隆",chs:"灭霸"},
+	{cht:"福瑞",chs:"弗瑞"},
+	{cht:"「超人系列」",chs:"「奥特曼系列」"},
 ];
 
 //根据文件路径读取文件，返回文件列表
@@ -110,9 +111,10 @@ fs.readdir(sourceFolder,function(err,files){
 			}else
 			{
 				const m = new monInfo(m_cht.id);
-				m.name = converter.convertSync(m_cht.name);
-				chsTranDiff.forEach(o=>m.name = m.name.replace(new RegExp(o.reg,"ig"),o.chs));
-				m_cht.tags.forEach(tag=> m.tags.push(converter.convertSync(tag)) );
+				m.name = chsTranDiff.reduce((pre,o)=>pre.replaceAll(o.cht, o.chs), converter(m_cht.name));
+				//chsTranDiff.forEach(o=> m.name = m.name.replaceAll(o.cht, o.chs) );
+				m_cht.tags.forEach(tag=> m.tags.push(converter(tag)) );
+				m.tags = m.tags.map(tag=> chsTranDiff.reduce((pre,o)=>pre.replaceAll(o.cht, o.chs),tag));
 				monArr_chs.push(m);
 			}
 		});
