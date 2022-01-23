@@ -116,5 +116,6 @@ Please refer to existing files.
 * [Font Awesome Free](//github.com/FortAwesome/Font-Awesome) //Font Icon
 * [Zpix (最像素)](//github.com/SolidZORO/zpix-pixel-font) //Pixel Font
 * [font-spider](//github.com/aui/font-spider) //Compression Font file
+* [opencc-js](//github.com/nk2028/opencc-js) //繁转简
 
 [firefox]: https://www.mozilla.org/media/img/firefox/favicon.ico
