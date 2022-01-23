@@ -39,7 +39,7 @@ const chsTranDiff = [
 	{cht:"毒魔",chs:"毒液"},
 	{cht:"魁隆",chs:"灭霸"},
 	{cht:"福瑞",chs:"弗瑞"},
-	{cht:"「超人系列」",chs:"「奥特曼系列」"},
+	{cht:"超人系列",chs:"奥特曼系列"},
 ];
 
 //根据文件路径读取文件，返回文件列表
@@ -112,9 +112,7 @@ fs.readdir(sourceFolder,function(err,files){
 			{
 				const m = new monInfo(m_cht.id);
 				m.name = chsTranDiff.reduce((pre,o)=>pre.replaceAll(o.cht, o.chs), converter(m_cht.name));
-				//chsTranDiff.forEach(o=> m.name = m.name.replaceAll(o.cht, o.chs) );
-				m_cht.tags.forEach(tag=> m.tags.push(converter(tag)) );
-				m.tags = m.tags.map(tag=> chsTranDiff.reduce((pre,o)=>pre.replaceAll(o.cht, o.chs),tag));
+				m.tags = m_cht.tags.map(tag=> chsTranDiff.reduce((pre,o)=>pre.replaceAll(o.cht, o.chs), converter(tag)));
 				monArr_chs.push(m);
 			}
 		});
