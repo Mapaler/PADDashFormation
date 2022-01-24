@@ -127,6 +127,10 @@
 			compo_type_card: tp`隊伍中同時存在 ${'ids'} 時`,
 			compo_type_series: tp`隊員組成全為 ${'ids'} 合作時`,
 			compo_type_evolution: tp`隊員組成全為 ${'ids'} 進化時`,
+			compo_type_rarity: tp`隊伍的總★稀有度 ≤${'rarity'} 時`,
+
+			stage_less_or_equal: tp`${'stage'} ≤ ${'max'} 時`, //地下城层数
+			stage_greater_or_equal: tp`${'stage'} ≥ ${'min'} 時`,
 
 			L_shape: tp`以L字形式消除5個${'orbs'}時`,
 			heal: tp`以${'orbs'}回復${'heal'}${'stats'}時`,
@@ -173,6 +177,7 @@
 			teamhp: tp`隊伍總HP`,
 			teamatk: tp`隊伍${'attrs'}總攻擊力`,
 			teamrcv: tp`隊伍回復力`,
+			cstage: tp`當前地下城層數`,
 		},
 		unit: {
 			orbs: tp`個`,
@@ -325,6 +330,7 @@
 			[79]: tp`${'icon'}3色`,
 			[80]: tp`${'icon'}4色`,
 			[81]: tp`${'icon'}5色`,
+			[82]: tp`${'icon'}12珠`,
 		}
 	},
 };
@@ -332,32 +338,32 @@ deepMerge(localTranslating, _localTranslating);
 localisation(localTranslating);
 
 //大數字縮短長度
-Number.prototype.bigNumberToString = function()
-{
-	let numTemp = this.valueOf();
+Number.prototype.bigNumberToString = function() {
+
+	const negative = this < 0;
+
+	let numTemp = negative ? Math.abs(this) : this.valueOf();
 	if (!numTemp) return "0";
 	const grouping = 1e4;
 	const unit = ['','萬','億','兆','京','垓'];
 	const numParts = [];
-	do{
+	do {
 		numParts.push(numTemp % grouping);
 		numTemp = Math.floor(numTemp / grouping);
-	}while(numTemp>0 && numParts.length<(unit.length-1))
-	if (numTemp>0)
-	{
+	} while (numTemp > 0 && numParts.length < (unit.length - 1))
+	if (numTemp > 0) {
 		numParts.push(numTemp);
 	}
-	let numPartsStr = numParts.map((num,idx)=>{
-		if (num > 0)
-		{
-			return (num < 1e3 ? "영" : "") + num.toLocaleString() + unit[idx];
-		}else
-			return "영";
+	let numPartsStr = numParts.map((num, idx) => {
+		if (num > 0) {
+			return (num < 1e3 ? "零" : "") + num + unit[idx];
+		} else
+			return "零";
 	});
 
 	numPartsStr.reverse(); //反向
 	let outStr = numPartsStr.join("");
-	outStr = outStr.replace(/(^영+|영+$)/g,''); //去除開頭的零
-	outStr = outStr.replace(/영{2,}/g,'영'); //去除多個連續的零
-	return outStr;
+	outStr = outStr.replace(/(^零+|零+$)/g, ''); //去除开头的零
+	outStr = outStr.replace(/零{2,}/g, '零'); //去除多个连续的零
+	return (negative ? "-" : "") + outStr;
 }
