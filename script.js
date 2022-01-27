@@ -1708,7 +1708,7 @@ function initialize(event) {
 						}).catch((err2) => {
 							console.error(err2);
 							if (err2) {
-								if (err instanceof ZXing.NotFoundException) {
+								if (err2 instanceof ZXing.NotFoundException) {
 									qrReadBox.info.textContent = 'No QR code found.';
 								}
 					
