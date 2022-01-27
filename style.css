@@ -559,6 +559,18 @@ ul{
 .show-mon-skill-cd .monster .skill-cd.max-skill{
 	display: block;
 }
+/*显示怪物星级*/
+.show-mon-awoken .monster .rarity::before{
+	position: absolute;
+	left: 3px;
+	top: 10px;
+	font-size: 22px;
+	content: attr(data-value)"★";
+	color: yellow;
+	-webkit-text-stroke: 1px black;
+	text-shadow: black 1px 1px 1px;
+}
+
 /*交换队长技的图标*/
 .monster .switch-leader
 {

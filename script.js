@@ -3794,6 +3794,11 @@ function changeid(mon, monDom, latentDom) {
 		toggleDomClassName(!skills.length, className_displayNone, switchLeaderDom);
 	}
 
+	const m_rarity = monDom.querySelector(".rarity");
+	if (m_rarity) { //怪物ID
+		m_rarity.setAttribute(dataAttrName,card.rarity);
+	}
+
 	const countInBox = monDom.querySelector(".count-in-box");
 	if (countInBox && currentPlayerData) { //如果存在当前绑定用户数据
 		function cardsCount(pre,cur) {
