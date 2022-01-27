@@ -3948,6 +3948,7 @@ function editBoxChangeMonId(id) {
 	mMP.textContent = card.sellMP.toLocaleString();
 	const mName = monInfoBox.querySelector(".monster-name");
 	mName.textContent = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
+	mName.title = card.name;
 	const mSeriesId = monInfoBox.querySelector(".monster-seriesId");
 	//mSeriesId.textContent = card.seriesId;
 	mSeriesId.setAttribute(dataAttrName, card.seriesId);
