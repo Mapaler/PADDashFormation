@@ -1026,7 +1026,6 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 					const card = Cards[member.id] || Cards[0];
 					return pre + card.rarity;
 				},0);
-				console.debug(rarityCount);
 				scale = rarityCount <= sk[0] ? sk[1] / 100 : 1;
 				break;
 			}
