@@ -1020,12 +1020,13 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 				}
 				break;
 			}
-			case 217:{ //队员为指定类型，不包括双方队长，且队员数大于0
-				let cardsArr = memberArr.filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
+			case 217:{ //限定队伍星级，不包括好友队长
+				let cardsArr = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
 				const rarityCount = cardsArr.reduce((pre,member)=>{
 					const card = Cards[member.id] || Cards[0];
 					return pre + card.rarity;
 				},0);
+				console.debug(rarityCount);
 				scale = rarityCount <= sk[0] ? sk[1] / 100 : 1;
 				break;
 			}

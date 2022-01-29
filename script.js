@@ -4605,7 +4605,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	if (tRarityDom)
 	{
 		const rarityDoms = tRarityDom.querySelector(".rarity");
-		const rarityCount = team_2p.reduce((pre,member)=>{
+		const rarityCount = team[0].slice(0,5).reduce((pre,member)=>{
 			if (member.id <= 0) return pre;
 			const card = Cards[member.id] || Cards[0];
 			return pre + card.rarity;
