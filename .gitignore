@@ -11,3 +11,4 @@
 /fonts/.font-spider
 /images/*.fw.png
 /monsters-info/package-lock.json
+/monsters-info/official-API/*-player-data-*.json
