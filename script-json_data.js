@@ -754,7 +754,7 @@ const specialSearchFunctions = (function() {
 			return `双吸×${sk[0]}T`;
 		}else
 		{
-			return `${['属','C','伤'][sk.slice(1).indexOf(1)]}吸×${sk[0]}T`;
+			return `${['属','C','伤'][sk.slice(1).findIndex(Boolean)]}吸×${sk[0]}T`;
 		}
 	}
 	function unbind_Turns(card)
