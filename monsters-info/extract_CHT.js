@@ -1,7 +1,42 @@
 ﻿const fs = require('fs');
 const path = require('path');
-const OpenCC = require('opencc');
-const converter = new OpenCC('t2s.json');
+const OpenCC = require('opencc-js');
+const converter = OpenCC.Converter({ from: 'hk', to: 'cn' });
+const tsConverter = OpenCC.CustomConverter([
+	['铁甲奇侠', '钢铁侠'],
+	['变形侠医', '绿巨人'],
+	['毒魔', '毒液'],
+	['魁隆', '灭霸'],
+	['福瑞', '弗瑞'],
+	['超人系列', '奥特曼系列'],
+	['超人吉田/超人力霸王', '奥特曼【初代】'],
+	['贝塔胶囊', 'β魔棒'],
+	['超人迪加', '迪迦奥特曼'],
+	['超人贝利尔', '贝利亚奥特曼'],
+	['超人七号', '赛文奥特曼'],
+	['超人之眼', '奥特眼镜'],
+	['超人Zero/杰洛', '赛罗奥特曼'],
+	['超越Zero/杰洛', '赛罗奥特曼 无限形态'],
+	['超人Trigger/特利卡', '特利迦奥特曼'],
+	['GUTS 神光海帕枪', '胜利神光棒'],
+	['超人捷德', '捷德奥特曼'],
+	['Geed Riser', '捷德升华器'],
+	['超人太郎', '泰罗奥特曼'],
+	['超级炸弹', '奥特炸弹'],
+	['超级徽章', '奥特徽章'],
+	['超人Ace/卫司', '艾斯奥特曼'],
+	['超级戒指', '奥特戒指'],
+	['超人帝拿/帝纳', '戴拿奥特曼'],
+	['超人佳亚/盖亚', '盖亚奥特曼'],
+	['超人之父', '奥特之父'],
+	['超人之母', '奥特之母'],
+	['哥摩拉', '哥莫拉'],
+	['电王兽', '艾雷王'],
+	['金古乔', '金古桥'],
+	['美特隆', '梅特龙'],
+	['卡内贡', '卡尼贡'],
+	['超人硬币', '奥特曼硬币'],
+]);
 
 const sourceFolder = "Download-pad.skyozora.com/pad.skyozora.com"; //战友网数据的存储问文件夹
 const outJSON_cht = "custom/cht.json"; //输出的繁体JSON文件
@@ -33,13 +68,6 @@ class monInfo
 		this.tags = [];
 	}
 }
-const chsTranDiff = [
-	{reg:"铁甲奇侠",chs:"钢铁侠"},
-	{reg:"变形侠医",chs:"绿巨人"},
-	{reg:"毒魔",chs:"毒液"},
-	{reg:"魁隆",chs:"灭霸"},
-	{reg:"福瑞",chs:"弗瑞"},
-];
 
 //根据文件路径读取文件，返回文件列表
 fs.readdir(sourceFolder,function(err,files){
@@ -110,9 +138,9 @@ fs.readdir(sourceFolder,function(err,files){
 			}else
 			{
 				const m = new monInfo(m_cht.id);
-				m.name = converter.convertSync(m_cht.name);
-				chsTranDiff.forEach(o=>m.name = m.name.replace(new RegExp(o.reg,"ig"),o.chs));
-				m_cht.tags.forEach(tag=> m.tags.push(converter.convertSync(tag)) );
+				
+				m.name = tsConverter(converter(m_cht.name));
+				m.tags = m_cht.tags.map(tag=> tsConverter(converter(tag)));
 				monArr_chs.push(m);
 			}
 		});

@@ -27,10 +27,13 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 `git clone` to your *http* service directory for visited, and `git pull` for future updates.
 
 ## 下载后使用本地版 | Use the local version after downloaded
+> 火狐95.0后不再允许程序访问本地资源了，无法使用此方法。  
+> After Firefox 95.0, programs are no longer allowed to access local resources and this method cannot be used.
+
 [下载压缩包](../../archive/refs/heads/master.zip)或`git clone`后使用浏览器打开`index.html`。  
 [Download ZIP](../../archive/refs/heads/master.zip) or `git clone`, and open the `index.html` with Browser.
 * 火狐68.0及以后需要在`about:config`设定`privacy.file_unique_origin`为`false`。  
-Firefox 68.0 or above need setting the `privacy.file_unique_origin` to `false` in `about:config`.
+Firefox 68.0 or above need setting the `privacy.file_unique_origin` to `false` in `about:config`.  
 * Chrome需要添加`--allow-file-access-from-files`启动参数。  
 Chrome browser need start with the additional argument `--allow-file-access-from-files`.
 
@@ -110,8 +113,9 @@ Please refer to existing files.
 * [zxing-js](//github.com/zxing-js/library) //Read, Write QR Code
 * [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
 * [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
-* [Font Awesome Free](https://github.com/FortAwesome/Font-Awesome) //Font Icon
+* [Font Awesome Free](//github.com/FortAwesome/Font-Awesome) //Font Icon
 * [Zpix (最像素)](//github.com/SolidZORO/zpix-pixel-font) //Pixel Font
 * [font-spider](//github.com/aui/font-spider) //Compression Font file
+* [opencc-js](//github.com/nk2028/opencc-js) //繁转简
 
 [firefox]: https://www.mozilla.org/media/img/firefox/favicon.ico

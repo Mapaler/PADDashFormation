@@ -771,6 +771,15 @@ function cardN(id) {
 	changeid({ id: id }, monDom);
 	return monOuterDom;
 }
+//返回文字说明内怪物Card的纯HTML
+function cardNClick() {
+	const id = parseInt(this.getAttribute("data-cardid"), 10);
+	editBox.show();
+	editBox.mid = id;
+	editBoxChangeMonId(id);
+	//showSearch([id]);
+	return false;
+}
 //技能介绍里的头像的切换
 function changeToIdInSkillDetail(event) {
 	const settingBox = editBox.querySelector(".setting-box");
@@ -790,18 +799,98 @@ function searchCollab(event) {
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)
 {
+	function formatParse(arr, reg, subMatchCount, returnFunc){
+		//const subMatchCount = returnFunc.length;
+		return arr.flatMap(item=>{
+			if (typeof item == "string") {
+				const subArr = item.split(new RegExp(reg));
+				const newArr = [];
+				for (let i = 0; i < subArr.length; i += (subMatchCount+1)) {
+					newArr.push(subArr[i]);
+					if (subArr[i+subMatchCount] !== undefined) {
+						newArr.push(returnFunc(...subArr.slice(i + 1, i + subMatchCount + 1)));
+					}
+				}
+				return newArr;
+			} else {
+				return item;
+			}
+		});
+	}
+	let nodeArr = [str];
+	nodeArr = formatParse(nodeArr, /\^(\w+?)\^([^\^]+?)\^p/igm, 2,
+		(color, content)=>{
+			const sp = document.createElement("span");
+			sp.textContent = content;
+			if (/^[a-fA-F0-9]+$/g.test(color)) {
+				sp.style.color = `#${color}`;
+			} else if (/qs/i.test(color)) {
+				sp.style.color = `blue`;
+			}
+			return sp;
+		});
+	nodeArr = formatParse(nodeArr, /\%\{m([0-9]{1,5})\}/g, 1,
+		(id)=>{
+			const avatar = cardN(parseInt(id,10));
+			avatar.monDom.onclick = cardNClick;
+			return avatar;
+		});
+	nodeArr = formatParse(nodeArr, /\%\{a([0-9]{1,3})\}/g, 1,
+		(id)=>{
+			const awokenList = renderAwakenings(parseInt(id,10));
+			return awokenList;
+		});
+
+/*	arr = arr.flatMap(item=>{
+		if (typeof item == "string") {
+			const subArr = item.split(/\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm);
+			const newArr = [];
+			for (let i = 0; i < subArr.length; i += 3) {
+				newArr.push(subArr[i]);
+				if (subArr[i+2] !== undefined) {
+					const sp = document.createElement("span");
+					sp.style.color = `#${subArr[i+1]}`;
+					sp.textContent = subArr[i+2];
+					newArr.push(sp);
+				}
+			}
+			return newArr;
+		} else {
+			return item;
+		}
+	});
+
+	arr = arr.flatMap(item=>{
+		if (typeof item == "string") {
+			const subArr = item.split(/\%\{m([0-9]{1,4})\}/g);
+			const newArr = [];
+			for (let i = 0; i < subArr.length; i += 2) {
+				newArr.push(subArr[i]);
+				if (subArr[i+1] !== undefined) {
+					const avatar = cardN(parseInt(subArr[i+1],10));
+					avatar.monDom.onclick = cardNClick;
+					newArr.push(avatar);
+				}
+			}
+			return newArr;
+		} else {
+			return item;
+		}
+	});*/
+
 	//str = str.replace(/\n/ig,"<br>"); //换行
 	//str = str.replace(/ /ig,"&nbsp;"); //换行
 
-	str = str.replace(/\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm,'<span style="color:#$1;">$2</span>'); //文字颜色
-	str = str.replace(/\%\{m([0-9]{1,4})\}/g,function (str, p1, offset, s){return cardN(parseInt(p1,10)).outerHTML;}); //怪物头像
-	return str;
+	//str = str.replace(/\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm,'<span style="color:#$1;">$2</span>'); //文字颜色
+	//str = str.replace(/\%\{m([0-9]{1,4})\}/g,function (str, p1, offset, s){return cardN(parseInt(p1,10)).outerHTML;}); //怪物头像
+	return nodeArr.nodeJoin();
 }
 //默认的技能解释的显示行为
 function parseSkillDescription(skill) {
-	const span = document.createElement("span");
-	span.innerHTML = descriptionToHTML(skill.description);
-	return span;
+	//const span = document.createElement("span");
+	//span.innerHTML = descriptionToHTML(skill.description);
+	
+	return descriptionToHTML(skill.description);
 }
 //大数字缩短长度，默认返回本地定义字符串
 function parseBigNumber(number) {
@@ -919,7 +1008,7 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 			case 185:
 				scale = hpMul({ attrs: flags(sk[1]), types: flags(sk[2]) }, sk[3]);
 				break;
-			case 203: //队员为指定类型，不包括双方队长，且队员数大于0
+			case 203:{ //队员为指定类型，不包括双方队长，且队员数大于0
 				let trueMemberCardsArr = memberArr.slice(1, 5).filter(m => m.id > 0).map(m => Cards[m.id]);
 				switch (sk[0]) {
 					case 0: //全是像素进化
@@ -930,6 +1019,16 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 						break;
 				}
 				break;
+			}
+			case 217:{ //限定队伍星级，不包括好友队长
+				let cardsArr = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
+				const rarityCount = cardsArr.reduce((pre,member)=>{
+					const card = Cards[member.id] || Cards[0];
+					return pre + card.rarity;
+				},0);
+				scale = rarityCount <= sk[0] ? sk[1] / 100 : 1;
+				break;
+			}
 			case 229:{ //队员中存在每个属性或Type都算一次
 				let cardsArr = memberArr.filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
 				let attrsArr = cardsArr.flatMap(card => card.attr); //所有卡片的属性

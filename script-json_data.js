@@ -100,7 +100,7 @@ let localTranslating = {
 			rate_multiply_drop: tp`${'icon'}Drop rate`,
 			rate_multiply_coin: tp`${'icon'}Coins`,
 			rate_multiply_exp: tp`${'icon'}Rank EXP`,
-			reduce_damage: tp`${'condition'}${'icon'}Reduces ${'attrs'} damage taken by ${'value'}`,
+			reduce_damage: tp`${'condition'}${'chance'}${'icon'}Reduces ${'attrs'} damage taken by ${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			power_up_targets: tp`[${'attrs_types'}]'s `, //attrs, types, attrs_types
 			henshin: tp`Transforms into ${'card'}`,
@@ -140,9 +140,13 @@ let localTranslating = {
 			exact_match_length: tp`When matching exactly ${'value'}${'orbs'} `,
 			exact_match_enhanced: tp` orbs including enhanced`,
 
-			compo_type_card: tp`When ${'ids'} are all on team`,
-			compo_type_series: tp`When all subs from ${'ids'} collab (Needs at least 1 sub) `,
-			compo_type_evolution: tp`When all monsters in team are ${'ids'} `,
+			compo_type_card: tp`When ${'ids'} are all on team, `,
+			compo_type_series: tp`When all subs from ${'ids'} collab (Needs at least 1 sub), `,
+			compo_type_evolution: tp`When all monsters in team are ${'ids'}, `,
+			compo_type_rarity: tp`When the total ★ rarity of the team is ≤${'rarity'}, `,
+
+			stage_less_or_equal: tp`When ${'stage'} ≤ ${'max'}, `,
+			stage_greater_or_equal: tp`When ${'stage'} ≥ ${'min'}, `,
 
 			L_shape: tp`When matching an L shape of 5 ${'orbs'} `,
 			heal: tp`When healing at least ${'heal'} ${'stats'} with ${'orbs'} `,
@@ -189,6 +193,7 @@ let localTranslating = {
 			teamhp: tp`Team HP`,
 			teamatk: tp`Team ${'attrs'} ATK`,
 			teamrcv: tp`Team RCV`,
+			cstage: tp`current Stage of Dungeon`,
 		},
 		unit: {
 			orbs: tp``,
@@ -341,6 +346,7 @@ let localTranslating = {
 			[79]: tp`${'icon'}Enhanced 3 colors`,
 			[80]: tp`${'icon'}Enhanced 4 colors`,
 			[81]: tp`${'icon'}Enhanced 5 colors`,
+			[82]: tp`${'icon'}Super Connecting Eraser Bonus`,
 		}
 	},
 };
@@ -401,7 +407,8 @@ const official_awoken_sorting = [
 		   4,  5,  6,  7,  8, 35, 36, 37, 38,
 		   1,  2,  3, 46, 47, 39, 40, 41, 42,
 		  65, 66, 67,  9, 71, 72, 30, 64, 63,
-		  73, 74, 75, 76, 77, 78, 79, 80, 81
+		  73, 74, 75, 76, 77, 78, 79, 80, 81,
+		  82
 ];
 
 //pdc的徽章对应数字
@@ -634,7 +641,7 @@ const specialSearchFunctions = (function() {
 			case 178: case 185:
 				scale = sk[3]/100;
 				break;
-			case 203:
+			case 203: case 217:
 				scale = sk[1]/100;
 				break;
 			case 138: //调用其他队长技
@@ -725,7 +732,7 @@ const specialSearchFunctions = (function() {
 			case 42:
 				return sk[1];
 			case 144:
-				return sk[3];
+				return sk[3] ?? 0;
 			default:
 				return -1;
 		}
@@ -747,7 +754,7 @@ const specialSearchFunctions = (function() {
 			return `双吸×${sk[0]}T`;
 		}else
 		{
-			return `${['属','C','伤'][sk.slice(1).indexOf(1)]}吸×${sk[0]}T`;
+			return `${['属','C','伤'][sk.slice(1).findIndex(Boolean)]}吸×${sk[0]}T`;
 		}
 	}
 	function unbind_Turns(card)
@@ -1667,18 +1674,34 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Enable require HP range",otLangName:{chs:"技能使用血线要求",cht:"技能使用血線要求"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [225];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [225];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				}),
 				addition:card=>{
-				const searchTypeArray = [225];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				let strArr = [];
-				if (sk[0]) strArr.push(`≥${sk[0]}%`);
-				if (sk[1]) strArr.push(`≤${sk[1]}%`);
-				return `HP ${strArr.join(" ")}`;
+					const searchTypeArray = [225];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					let strArr = [];
+					if (sk[0]) strArr.push(`≥${sk[0]}%`);
+					if (sk[1]) strArr.push(`≤${sk[1]}%`);
+					return `HP ${strArr.join(" ")}`;
+				}
+			},
+			{name:"Enable require Dungeon Stage",otLangName:{chs:"技能使用地下城层数要求",cht:"技能使用地下城層數要求"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [234];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [234];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					let strArr = [];
+					if (sk[0]) strArr.push(`≥${sk[0]}`);
+					if (sk[1]) strArr.push(`≤${sk[1]}`);
+					return `层 ${strArr.join(" ")}`;
 				}
 			},
 		]},

@@ -1719,7 +1719,7 @@ function initialize(event) {
 						}).catch((err2) => {
 							console.error(err2);
 							if (err2) {
-								if (err instanceof ZXing.NotFoundException) {
+								if (err2 instanceof ZXing.NotFoundException) {
 									qrReadBox.info.textContent = 'No QR code found.';
 								}
 					
@@ -1927,7 +1927,7 @@ function initialize(event) {
 			ipt.onclick = changeDeck;
 			ipt.deck = deck;
 		});
-		radioList.querySelectorAll(".deck-choose")[data.curDeck ?? 0]?.click();
+		radioList.querySelectorAll(".deck-choose")[data.curDeck < 100 ? (data.curDeck || 0) : (data.curDeck - 100 + data.decksb.decks.length)]?.click();
 
 		function changeDeck(e)
 		{
@@ -1951,7 +1951,6 @@ function initialize(event) {
 				const reader = await fileReader(myFile, {readType: "text"});
 				const data = JSON.parse(reader.result);
 				const playerData = new PlayerData(data);
-				console.log(playerData);
 
 				let dataCount = 0;
 				if (db) {
@@ -1984,7 +1983,9 @@ function initialize(event) {
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
 	txtTitle.onchange = function() {
 		formation.title = this.value;
-		txtTitleDisplay.innerHTML = descriptionToHTML(this.value);
+		//txtTitleDisplay.innerHTML = descriptionToHTML(this.value);
+		txtTitleDisplay.innerHTML = '';
+		txtTitleDisplay.appendChild(descriptionToHTML(this.value));
 		let titleStr = txtTitleDisplay.textContent.trim();
 		document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
 		creatNewUrl();
@@ -1995,7 +1996,9 @@ function initialize(event) {
 	};
 	txtDetail.onchange = function() {
 		formation.detail = this.value;
-		txtDetailDisplay.innerHTML = descriptionToHTML(this.value);
+		//txtDetailDisplay.innerHTML = descriptionToHTML(this.value);
+		txtDetailDisplay.innerHTML = '';
+		txtDetailDisplay.appendChild(descriptionToHTML(this.value));
 		creatNewUrl();
 	};
 	txtDetail.onblur = function() {
@@ -3176,7 +3179,7 @@ function initialize(event) {
 	const monEditAwokens = Array.from(monEditAwokensRow.querySelectorAll(".awoken-ul input[name='awoken-number']"));
 
 	function checkAwoken() {
-		const card = Cards[editBox.mid];
+		const card = Cards[editBox.mid ?? 0];
 		const value = parseInt(this.value, 10);
 		awokenCountLabel.setAttribute(dataAttrName, value);
 		toggleDomClassName(value > 0 && value == card.awakenings.length, "full-awoken", awokenCountLabel);
@@ -3802,6 +3805,11 @@ function changeid(mon, monDom, latentDom) {
 		toggleDomClassName(!skills.length, className_displayNone, switchLeaderDom);
 	}
 
+	const m_rarity = monDom.querySelector(".rarity");
+	if (m_rarity) { //怪物ID
+		m_rarity.setAttribute(dataAttrName,card.rarity);
+	}
+
 	const countInBox = monDom.querySelector(".count-in-box");
 	if (countInBox && currentPlayerData) { //如果存在当前绑定用户数据
 		function cardsCount(pre,cur) {
@@ -3951,6 +3959,7 @@ function editBoxChangeMonId(id) {
 	mMP.textContent = card.sellMP.toLocaleString();
 	const mName = monInfoBox.querySelector(".monster-name");
 	mName.textContent = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
+	mName.title = card.name;
 	const mSeriesId = monInfoBox.querySelector(".monster-seriesId");
 	//mSeriesId.textContent = card.seriesId;
 	mSeriesId.setAttribute(dataAttrName, card.seriesId);
@@ -4163,10 +4172,14 @@ function refreshAll(formationData) {
 	txtDetail.value = formationData.detail || "";
 	const txtTitleDisplay = titleBox.querySelector(".title-display");
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
-	txtTitleDisplay.innerHTML = descriptionToHTML(txtTitle.value);
+	//txtTitleDisplay.innerHTML = descriptionToHTML(txtTitle.value);
+	txtTitleDisplay.innerHTML = '';
+	txtTitleDisplay.appendChild(descriptionToHTML(txtTitle.value));
 	let titleStr = txtTitleDisplay.textContent.trim();
 	document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
-	txtDetailDisplay.innerHTML = descriptionToHTML(txtDetail.value);
+	//txtDetailDisplay.innerHTML = descriptionToHTML(txtDetail.value);
+	txtDetailDisplay.innerHTML = '';
+	txtDetailDisplay.appendChild(descriptionToHTML(txtDetail.value));
 	
 	toggleDomClassName(!txtTitle.value.length, "edit", titleBox);
 	toggleDomClassName(!txtDetail.value.length, "edit", detailBox);
@@ -4513,7 +4526,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader1id = team[0][team[3] || 0].id;
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3] || 0].id : teams[1][0][teams[1][3] || 0].id) : team[0][5].id;
 
-	const team_2p = teamsCount===2 ? team[0].concat((teamIdx === 1 ? teams[0][0] : teams[1][0])) : team[0];
+	const team_2p = teamsCount===2 ? team[0].concat((teamIdx === 1 ? teams[0][0][0] : teams[1][0][0])) : team[0];
 
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
@@ -4597,8 +4610,20 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		}
 	}
 
+	const tRarityDom = totalDom.querySelector(".tIf-rarity");
 	const tAttrsDom = totalDom.querySelector(".tIf-attrs");
 	const tTypesDom = totalDom.querySelector(".tIf-types");
+	//统计队伍稀有度总数
+	if (tRarityDom)
+	{
+		const rarityDoms = tRarityDom.querySelector(".rarity");
+		const rarityCount = team[0].slice(0,5).reduce((pre,member)=>{
+			if (member.id <= 0) return pre;
+			const card = Cards[member.id] || Cards[0];
+			return pre + card.rarity;
+		},0);
+		rarityDoms.setAttribute(dataAttrName, rarityCount);
+	}
 	//统计队伍颜色个数
 	if (tAttrsDom)
 	{

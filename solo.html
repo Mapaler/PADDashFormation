@@ -92,26 +92,29 @@ var formation = new Formation(teamsCount,6);
 				</ul>
 				<div class="team-total-info">
 					<div class="tIf-addition-info">
+						<ul class="tIf-rarity">
+							<li><icon class="rarity" data-value="0"><!--稀有度--></icon></li>
+						</ul>
 						<ul class="tIf-attrs">
-							<li><icon class="attr" data-attr-icon="0"><!--火--></icon></li>
-							<li><icon class="attr" data-attr-icon="1"><!--水--></icon></li>
-							<li><icon class="attr" data-attr-icon="2"><!--木--></icon></li>
-							<li><icon class="attr" data-attr-icon="3"><!--光--></icon></li>
-							<li><icon class="attr" data-attr-icon="4"><!--暗--></icon></li>
+							<li><icon class="attr" data-attr-icon="0"><!--火--></icon></li><!--
+							--><li><icon class="attr" data-attr-icon="1"><!--水--></icon></li><!--
+							--><li><icon class="attr" data-attr-icon="2"><!--木--></icon></li><!--
+							--><li><icon class="attr" data-attr-icon="3"><!--光--></icon></li><!--
+							--><li><icon class="attr" data-attr-icon="4"><!--暗--></icon></li>
 						</ul>
 						<ul class="tIf-types">
-							<li><icon class="type-icon" data-type-icon="4"><!--龍--></icon></li>
-							<li><icon class="type-icon" data-type-icon="5"><!--神--></icon></li>
-							<li><icon class="type-icon" data-type-icon="7"><!--惡魔--></icon></li>
-							<li><icon class="type-icon" data-type-icon="8"><!--机械--></icon></li>
-							<li><icon class="type-icon" data-type-icon="1"><!--平衡--></icon></li>
-							<li><icon class="type-icon" data-type-icon="6"><!--攻撃--></icon></li>
-							<li><icon class="type-icon" data-type-icon="2"><!--体力--></icon></li>
-							<li><icon class="type-icon" data-type-icon="3"><!--回復--></icon></li>
-							<li><icon class="type-icon" data-type-icon="0"><!--進化用--></icon></li>
-							<li><icon class="type-icon" data-type-icon="12"><!--能力覺醒用--></icon></li>
-							<li><icon class="type-icon" data-type-icon="14"><!--強化合成用--></icon></li>
-							<li><icon class="type-icon" data-type-icon="15"><!--販賣用--></icon></li>
+							<li><icon class="type-icon" data-type-icon="4"><!--龍--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="5"><!--神--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="7"><!--惡魔--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="8"><!--机械--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="1"><!--平衡--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="6"><!--攻撃--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="2"><!--体力--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="3"><!--回復--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="0"><!--進化用--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="12"><!--能力覺醒用--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="14"><!--強化合成用--></icon></li><!--
+							--><li><icon class="type-icon" data-type-icon="15"><!--販賣用--></icon></li>
 						</ul>
 					</div>
 					<div class="tIf-total-hp">
@@ -524,6 +527,7 @@ var formation = new Formation(teamsCount,6);
 						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="79"></span><span class="count"></span></li><!--3色-->
 						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="80"></span><span class="count"></span></li><!--4色-->
 						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="81"></span><span class="count"></span></li><!--5色-->
+						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="82"></span><span class="count"></span></li><!--12珠-->
 					</ul>
 				</div>
 			</li>
@@ -693,6 +697,7 @@ var formation = new Formation(teamsCount,6);
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="79"></button><!--3色--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="80"></button><!--4色--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="81"></button><!--5色--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="82"></button><!--12珠--></li>
 				</ul>
 			</div>
 			<div class="sawoken-div"><!--超觉醒-->
@@ -779,6 +784,7 @@ var formation = new Formation(teamsCount,6);
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="79" id="search-awoken-79" /><label class="awoken-icon" data-awoken-icon="79" for="search-awoken-79"></label><!--3色--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="80" id="search-awoken-80" /><label class="awoken-icon" data-awoken-icon="80" for="search-awoken-80"></label><!--4色--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="81" id="search-awoken-81" /><label class="awoken-icon" data-awoken-icon="81" for="search-awoken-81"></label><!--5色--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="82" id="search-awoken-82" /><label class="awoken-icon" data-awoken-icon="82" for="search-awoken-82"></label><!--12珠--></li>
 				</ul>
 			</div>
 			<div class="special-div">
@@ -1022,13 +1028,7 @@ var formation = new Formation(teamsCount,6);
 		</div>
 
 		<template id="template-card-a">
-			<a class="monster" target="_blank" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title="">
-				<div class="property" data-property=""></div>
-				<div class="subproperty" data-property=""></div>
-				<div class="id"></div>
-				<div class="awoken-count-num"></div>
-				<div class="count-in-box"><span class="same-id"></span><span class="evo-tree"></span></div>
-			</a>
+			<a class="monster" target="_blank" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title=""><div class="property" data-property=""></div><div class="subproperty" data-property=""></div><div class="id"></div><div class="awoken-count-num"></div><div class="rarity"></div><div class="count-in-box"><span class="same-id"></span><span class="evo-tree"></span></div></a>
 		</template>
 	</div>
 	<svg id="interchange-line" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2" height="100%" width="100%" style="display:none;">

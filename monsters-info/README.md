@@ -118,5 +118,5 @@ Each language's information is extracted into a file, and monster names and tag 
 
 `CHT.json`与`CHS.json`的中文信息来源于战友网，见子项目 https://github.com/Mapaler/Download-pad.skyozora.com
 
-运行`提取中文数据.bat`，将战友网页面内容抽出，抽出过程使用 [OpenCC](https://github.com/BYVoid/OpenCC) 的 NodeJs 模块来繁转简。
+运行`提取中文数据.bat`，将战友网页面内容抽出，抽出过程使用 [opencc-js](https://github.com/nk2028/opencc-js) 的 NodeJs 模块来繁转简。
 然后再运行一遍 `提取整合怪物信息.bat` 把中文插进去。
