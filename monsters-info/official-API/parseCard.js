@@ -79,8 +79,10 @@ class Card{
 		card.voiceId = data[i++]; //语音觉醒的ID
 		card.blockSkinId = data[i++]; //珠子皮肤ID
 		card.specialAttribute = data[i++]; //特别属性，比如黄龙
-		if (i !== data.length)
-			console.log(`residue data for #${card.id}: ${i} ${data.length}`);
+		card.unk09 = data[i++]; //未知09
+		card.unk10 = data[i++]; //未知10
+		if ((i + 1) < data.length)
+			console.log(`有新增数据/residue data for #${card.id}: ${i} ${data.length}`);
 	}
 }
 //对于Nodejs输出成模块
