@@ -779,6 +779,51 @@ class EvoTree
 	};
 }
 
+//队长技能类型的翻译
+class LeaderSkillType{
+	constructor(flags1, flags2){
+		this.matchMode = {
+			multipleColors: Boolean(flags1 & 1 << 0),
+			rowMatch: Boolean(flags1 & 1 << 1),
+			combo: Boolean(flags1 & 1 << 2),
+			sameColor: Boolean(flags1 & 1 << 3),
+			LShape: Boolean(flags1 & 1 << 4),
+			crossMatch: Boolean(flags1 & 1 << 5),
+			heartCrossMatch: Boolean(flags1 & 1 << 6),
+			remainOrbs: Boolean(flags1 & 1 << 7),
+			enhanced5Orbs: Boolean(flags1 & 1 << 8),
+		};
+		this.restriction = {
+			attrEnhance: Boolean(flags1 & 1 << 9),
+			typeEnhance: Boolean(flags1 & 1 << 10),
+			board7x6: Boolean(flags1 & 1 << 11),
+			noSkyfall: Boolean(flags1 & 1 << 12),
+			HpRange: Boolean(flags1 & 1 << 13),
+			useSkill: Boolean(flags1 & 1 << 14),
+			moveTimeDecrease_Fixed: Boolean(flags1 & 1 << 15),
+			minMatchLen: Boolean(flags1 & 1 << 16),
+			specialTeam: Boolean(flags1 & 1 << 17),
+			effectWhenRecover: Boolean(flags1 & 1 << 18),
+		};
+		this.appendEffects = {
+			addCombo: Boolean(flags1 & 1 << 21),
+			fixedFollowAttack: Boolean(flags1 & 1 << 22),
+			scaleFollowAttack: Boolean(flags1 & 1 << 23),
+			reduce49down: Boolean(flags1 & 1 << 24),
+			reduce50: Boolean(flags1 & 1 << 25),
+			reduce51up: Boolean(flags1 & 1 << 26),
+			moveTimeIncrease: Boolean(flags1 & 1 << 20),
+			rateMultiplyExp_Coin: Boolean(flags1 & 1 << 27),
+			rateMultiplyDrop: Boolean(flags1 & 1 << 28),
+			voidPoison: Boolean(flags1 & 1 << 29),
+			counterAttack: Boolean(flags1 & 1 << 30),
+			autoHeal: Boolean(flags1 & 1 << 31),
+			unbindAwokenBind: Boolean(flags1 & 1 << 19),
+			resolve: Boolean(flags2 & 1 << 0),
+		};
+	}
+}
+
 //切换通用的切换className显示的函数
 function toggleDomClassName(addClass, className, dom = document.body) {
 	dom.classList[addClass ? "add" : "remove"](className);
@@ -933,14 +978,13 @@ function loadData(force = false)
 		console.debug("目前使用的数据区服是 %s。", currentDataSource.code);
 		
 		currentCkey = newCkeys.find(ckey => ckey.code == currentDataSource.code); //获取当前语言的ckey
-		lastCkeys = localStorage.getItem(cfgPrefix + "ckey"); //读取本地储存的原来的ckey
 		try {
-			lastCkeys = JSON.parse(lastCkeys);
-			if (lastCkeys == null || !Array.isArray(lastCkeys))
+			lastCkeys = JSON.parse(localStorage.getItem(cfgPrefix + "ckey")); //读取本地储存的原来的ckey
+			if (!Boolean(lastCkeys) || !Array.isArray(lastCkeys))
 				lastCkeys = [];
 		} catch (e) {
 			console.error("旧的 Ckey 数据 JSON 解码出错。", e);
-			return;
+			lastCkeys = [];
 		}
 		lastCurrentCkey = lastCkeys.find(ckey => ckey.code == currentDataSource.code);
 		if (!lastCurrentCkey) { //如果未找到上个ckey，则添加个新的
@@ -960,7 +1004,8 @@ function loadData(force = false)
 			const objectStore = transaction.objectStore(`cards`);
 			const request = objectStore.get(currentDataSource.code);
 			request.onerror = function(event) {
-				console.error("Cards 数据库内容读取失败。");
+				console.error("Cards 数据库内容读取失败，需重新下载。");
+				downloadCardsData();
 			};
 			request.onsuccess = function(event) {
 				if (Array.isArray(request.result))
@@ -1019,35 +1064,29 @@ function loadData(force = false)
 			for (let i = splitIdx + 1; i < _cards.length; i++)
 			{
 				const card = _cards[i];
+				if (card.searchFlags) card.leaderSkillTypes = new LeaderSkillType(...card.searchFlags);
+				/*card.unk01p = flags(card.unk01);
+				card.unk02p = flags(card.unk02);
+				card.unk03p = flags(card.unk03);
+				card.unk04p = flags(card.unk04);
+				card.unk05p = flags(card.unk05);
+				card.unk06p = flags(card.unk06);
+				card.unk07p = flags(card.unk07);
+				card.unk08p = flags(card.unk08);*/
 				cards[card?.id] = card;
 			}
 			return cards;
 		}
-		function dealCardsData()
+		function dealCardsData(_cards)
 		{
 			if (editBox)
 			{
 				const monstersList = editBox.querySelector("#monsters-name-list");
 				let fragment = document.createDocumentFragment();
-				Cards.forEach(function(card, idx, arr) { //添加下拉框候选
+				_cards.forEach(function(card, idx, arr) { //添加下拉框候选
 					const opt = fragment.appendChild(document.createElement("option"));
 					opt.value = card.id;
 					opt.label = card.id + " - " + returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code).join(" | ");
-	
-					/*const linkRes = new RegExp("link:(\\d+)", "ig").exec(m.specialAttribute);
-					if (linkRes) { //每个有链接的符卡，把它们被链接的符卡的进化根修改到链接前的
-						const toId = parseInt(linkRes[1], 10);
-						const _m = Cards[toId];
-						
-						//if (_m.evoBaseId == 0)
-						//	_m.evoRootId = m.evoRootId;
-						m.henshinTo = toId;
-						_m.henshinFrom = m.id;
-					}*/
-					/*if (card.evoRootId === card.id)
-					{
-						card.evoTree = arr.filter(c=>c.evoRootId === card.evoRootId);
-					}*/
 				});
 				
 				monstersList.appendChild(fragment);
@@ -1115,7 +1154,7 @@ function loadData(force = false)
 				});
 			}
 	
-			function dealSkillData()
+			function dealSkillData(_skills)
 			{
 				//显示数据更新时间
 				let controlBoxHook = setInterval(checkControlBox, 500); //循环检测controlBox
@@ -3455,8 +3494,8 @@ function initialize(event) {
 			mon.sawoken = mSAwokenChoIpt ? parseInt(mSAwokenChoIpt.value, 10) : -1;
 		}
 
-		if (card.types.some(t => { return t == 0 || t == 12 || t == 14 || t == 15; }) &&
-			(!card.overlay || mon.level >= card.maxLevel)) { //当4种特殊type的时候是无法297和打觉醒的，但是不能叠加的在未满级时可以
+		if (card.overlay || card.types.some(t=>[0,12,14,15].includes(t)) &&
+			mon.level >= card.maxLevel) { //当4种特殊type的时候是无法297和打觉醒的，但是不能叠加的在未满级时可以
 			mon.plus = [0, 0, 0];
 		} else {
 			mon.plus[0] = parseInt(monEditAddHp.value) || 0;
@@ -4085,7 +4124,7 @@ function editBoxChangeMonId(id) {
 	skillDetailOriginal.innerHTML = "";
 	skillDetailOriginal.appendChild(parseSkillDescription(activeskill));
 
-	const t_maxLevel = card.overlay || card.types.includes(15) ? 1 : activeskill.maxLevel; //遇到不能升技的，最大等级强制为1
+	const t_maxLevel = card.overlay ? 1 : activeskill.maxLevel; //遇到不能升技的，最大等级强制为1
 	skillLevel.max = t_maxLevel;
 	skillLevel.value = t_maxLevel;
 	skillLevel_Max.value = t_maxLevel;
@@ -4111,7 +4150,8 @@ function editBoxChangeMonId(id) {
 	rowSkill.appendChild(frg1);
 	rowLederSkill.appendChild(frg2);
 
-	if (card.overlay || card.types[0] == 15 && card.types[1] == -1) { //当可以叠加时，不能打297和潜觉
+	if (card.overlay || card.types.some(t=>[0,12,14,15].includes(t)) &&
+		card.maxLevel <= 1) { //当可以叠加时，不能打297和潜觉
 		rowPlus.classList.add("disabled");
 		rowPlus.querySelector(".m-plus-hp").value = 0;
 		rowPlus.querySelector(".m-plus-atk").value = 0;

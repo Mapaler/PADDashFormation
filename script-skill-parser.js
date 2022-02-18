@@ -1711,7 +1711,7 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.time_extend(dict));
 			break;
 		}
-		case SkillKinds.FollowAttack: { //队长技追打
+		case SkillKinds.FollowAttack: { //队长技倍率追打
 			let dict = {
 				//icon: createIcon("follow_attack"),
 				belong_to: tsp.target.self(),
