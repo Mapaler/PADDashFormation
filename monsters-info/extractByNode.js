@@ -67,6 +67,8 @@ officialAPI.forEach(function(lang) {
 		delete card.unk06;
 		delete card.unk07;
 		delete card.unk08;
+		if (card.searchFlags.every(num=>isNaN(num)))
+			delete card.searchFlags;
 		monCards.push(card);
 	}
 
@@ -258,8 +260,8 @@ var ckeyObjs;
 fs.readFile('./ckey.json','utf-8',function(err,data){
 	if(err)
 	{ //如果读取错误，直接使用全新ckey
-        ckeyObjs = newCkeyObjs;
-    } else
+		ckeyObjs = newCkeyObjs;
+	} else
 	{ //如果读取正确，则读入JSON，并判断是否和旧有的一致
 		ckeyObjs = JSON.parse(data);
 		for (let ci=0;ci<ckeyObjs.length;ci++)
@@ -271,7 +273,7 @@ fs.readFile('./ckey.json','utf-8',function(err,data){
 				ckeyObjs[ci] = newCkey;
 			}
 		}
-    }
+	}
 	fs.writeFile('./ckey.json',JSON.stringify(ckeyObjs),function(err){
 		if(err){
 			console.error(err);
