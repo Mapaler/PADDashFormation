@@ -1121,7 +1121,7 @@ function tIf_Effect_addCombo(leader1id, leader2id) {
 	];
 }
 function getSkillAddCombo(card) {
-	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220];
+	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220, 235];
 	const skill = getCardLeaderSkills(card, searchTypeArray)[0];
 	if (!skill) return 0;
 	switch (skill.type) {
@@ -1137,6 +1137,8 @@ function getSkillAddCombo(card) {
 			return skill.params[2];
 		case 220:
 			return skill.params[1];
+		case 235:
+			return skill.params[5];
 		default:
 			return 0;
 	}

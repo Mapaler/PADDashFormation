@@ -123,6 +123,7 @@
 			exact_combo: tp`剛好${'value'}連擊時`,
 			exact_match_length: tp`相連消除剛好${'value'}${'orbs'}時`,
 			exact_match_enhanced: tp`並且其中包含至少一個強化寶珠`,
+			exact_match_length_multiple: tp`每相連消除剛好${'value'}${'orbs'}1次時`,
 
 			compo_type_card: tp`隊伍中同時存在 ${'ids'} 時`,
 			compo_type_series: tp`隊員組成全為 ${'ids'} 合作時`,

@@ -137,8 +137,9 @@ let localTranslating = {
 			multi_player: tp`When in Multiplayer Mode `,
 			remain_orbs: tp`When ≤ ${'value'} Orbs on the board `,
 			exact_combo: tp`When exactly ${'value'} combos `,
-			exact_match_length: tp`When matching exactly ${'value'}${'orbs'} `,
+			exact_match_length: tp`When matching exactly of ${'value'}${'orbs'} `,
 			exact_match_enhanced: tp` orbs including enhanced`,
+			exact_match_length_multiple: tp`When matching each exactly of ${'value'}${'orbs'} `,
 
 			compo_type_card: tp`When ${'ids'} are all on team, `,
 			compo_type_series: tp`When all subs from ${'ids'} collab (Needs at least 1 sub), `,
@@ -1207,10 +1208,20 @@ const specialSearchFunctions = (function() {
 				});
 				},
 				addition:card=>{
-				const value = getSkillAddCombo(card);
-				const searchTypeArray = [210];
-				const skill = getCardLeaderSkill(card, searchTypeArray);
-				return `+${value.bigNumberToString()}C${skill?`/十字`:""}`;
+					const value = getSkillAddCombo(card);
+					let nodeArr = [`+${value.bigNumberToString()}C`]
+					let skill;
+					skill = getCardLeaderSkill(card, [210]);
+					if (skill) {
+						nodeArr.push("/十字");
+					}
+					skill = getCardLeaderSkill(card, [235]);
+					if (skill) {
+						nodeArr.push("/");
+						nodeArr.push(createOrbsList(flags(skill.params[0])));
+						nodeArr.push(`×${skill.params[2]}`);
+					}
+					return nodeArr.nodeJoin();
 				}
 			},
 			{name:"[7×6 board]",otLangName:{chs:"【7×6 版面】",cht:"【7×6 版面】"},

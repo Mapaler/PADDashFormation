@@ -123,6 +123,7 @@
 			exact_combo: tp`刚好${'value'}连击时`,
 			exact_match_length: tp`相连消除刚好${'value'}${'orbs'}时`,
 			exact_match_enhanced: tp`并且其中包含至少一个强化宝珠`,
+			exact_match_length_multiple: tp`每相连消除刚好${'value'}${'orbs'}1次时`,
 
 			compo_type_card: tp`队伍中同时存在 ${'ids'} 时`,
 			compo_type_series: tp`队员组成全为 ${'ids'} 合作时`,

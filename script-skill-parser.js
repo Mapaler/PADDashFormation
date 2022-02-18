@@ -722,9 +722,9 @@ const c = {
 	hp: function (min, max) {
 		return { hp: { min: min / 100, max: max / 100 } };
 	},
-	exact: function (type, value, attrs) {
+	exact: function (type, value, attrs, multiple = false) {
 		if (attrs === void 0) { attrs = Attributes.all(); }
-		return { exact: { type: type, value: value, attrs: attrs } };
+		return { exact: { type: type, value: value, attrs: attrs, multiple: multiple} };
 	},
 	compo: function (type, ids) {
 		return { compo: { type: type, ids: ids } };
@@ -1418,6 +1418,9 @@ const parsers = {
 	[232](...ids) { return evolvedSkills(false, ids.map(id => this.parser(id))); },
 	[233](...ids) { return evolvedSkills(true, ids.map(id => this.parser(id))); },
 	[234](min, max) { return skillProviso(c.stage(min ?? 0, max ?? 0)); },
+	[235](attr, _, len, _2, _3, combo) {
+		return powerUp(null, null, p.mul({ atk: 100 }), c.exact('match-length', len, flags(attr), true), null, [addCombo(combo)]);
+	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -2428,7 +2431,10 @@ function renderCondition(cond) {
 				value: renderValue(v.constant(cond.exact.value), {unit: tsp.unit.orbs}),
 				orbs: cond.exact.attrs === 'enhanced' ? tsp.cond.exact_match_enhanced() : renderOrbs(cond.exact.attrs, {affix: true})
 			};
-			frg.ap(tsp.cond.exact_match_length(dict));
+			
+			frg.ap(cond.exact.multiple ?
+				tsp.cond.exact_match_length_multiple(dict) :
+				tsp.cond.exact_match_length(dict));
 		}
 	} else if (cond.compo) {
 		let dict = {};
