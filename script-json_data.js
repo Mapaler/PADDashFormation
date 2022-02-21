@@ -3216,13 +3216,13 @@ const specialSearchFunctions = (function() {
 		]},
 		{group:true,name:"======Evo type======",otLangName:{chs:"======进化类型======",cht:"======進化類型======"}, functions: [
 			{name:"No Henshin",otLangName:{chs:"非变身",cht:"非變身"},
-				function:cards=>cards.filter(card=>!card.henshinFrom && !card.henshinTo)
+				function:cards=>cards.filter(card=>!Array.isArray(card.henshinFrom) && !card.henshinTo)
 			},
 			{name:"Before Henshin",otLangName:{chs:"变身前",cht:"變身前"},
 				function:cards=>cards.filter(card=>card.henshinTo)
 			},
 			{name:"After Henshin",otLangName:{chs:"变身后",cht:"變身後"},
-				function:cards=>cards.filter(card=>card.henshinFrom)
+				function:cards=>cards.filter(card=>Array.isArray(card.henshinFrom))
 			},
 			{name:"Pixel Evo",otLangName:{chs:"像素进化",cht:"像素進化"},
 				function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))

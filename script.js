@@ -656,16 +656,15 @@ class EvoTree
 	{
 		const _this = this;
 		this.parent = parent;
-		if (parent == null)
+		if (parent == null) //如果没有提供父级，则寻找进化根
 		{
-			//mid = Cards[mid].evoRootId;
 			function returnRootId(mid)
 			{
 				mid = Cards[mid].evoRootId;
 				const m = Cards[mid];
-				if (m.henshinFrom && m.henshinFrom < m.id)
-				{ //只有变身来源小于目前id的，才继续找base
-					mid = returnRootId(m.henshinFrom);
+				if (Array.isArray(m.henshinFrom) && m.henshinFrom[0] < m.id)
+				{ //只有变身来源小于目前id的，才继续找base,为了解决黑魔导女孩的问题
+					mid = returnRootId(m.henshinFrom[0]);
 				}
 				return mid;
 			}
@@ -683,7 +682,7 @@ class EvoTree
 		{
 			this.evoType = "Base";
 		}
-		else if (card.henshinFrom == parent.id)
+		else if (Array.isArray(card.henshinFrom) && card.henshinFrom[0] == parent.id)
 		{
 			this.evoType = "Henshin";
 		}
@@ -706,10 +705,7 @@ class EvoTree
 				}
 			}else
 			{
-				if (card.henshinFrom == parent.id)
-				{
-					this.evoType = "Henshin";
-				}else if (parent.card.isUltEvo) //转生
+				if (parent.card.isUltEvo) //转生
 				{
 					this.evoType = "Reincarnation";
 				}else if(parent.evoType == "Reincarnation")
@@ -721,10 +717,10 @@ class EvoTree
 				}
 			}
 		}
-		
+
 		if (this.idArr.includes(mid))
 		{
-			if (card.henshinFrom == parent.id)
+			if (Array.isArray(card.henshinFrom) && card.henshinFrom.includes(parent.id))
 			{
 				this.evoType = "Henshin Loop";
 			}
@@ -734,7 +730,7 @@ class EvoTree
 			this.idArr.push(mid);
 		}
 		if (card.henshinTo)
-			this.children.push(new EvoTree(card.henshinTo,_this));
+			this.children.push(new EvoTree(card.henshinTo, _this));
 		if (this.evoType != "Henshin")
 			this.children.push(...Cards.filter(scard=>scard.evoBaseId == mid && scard.id != mid).map(scard=>new EvoTree(scard.id,_this)));
 		//this.children = (card.henshinTo && card.henshinTo != card.evoRootId ? [new EvoTree(card.henshinTo,_this)] : []).concat(Cards.filter(scard=>scard.evoBaseId == mid && scard.id != mid).map(scard=>new EvoTree(scard.id,_this)));
@@ -860,9 +856,9 @@ function henshinStep(step)
 		{ //是变身的则返回
 			return gotoHenshin(Cards[card.henshinTo], --nstep);
 		}
-		else if (nstep < 0 && card.henshinFrom)
+		else if (nstep < 0 && Array.isArray(card.henshinFrom))
 		{
-			return gotoHenshin(Cards[card.henshinFrom], ++nstep);
+			return gotoHenshin(Cards[card.henshinFrom[0]], ++nstep);
 		}
 		else
 		{
@@ -873,7 +869,7 @@ function henshinStep(step)
 		team[0].forEach(member=>{
 			const mid = member.id;
 			const card = Cards[mid];
-			if (step > 0 ? card.henshinTo : (card.henshinFrom && member.level <= 99))
+			if (step > 0 ? card.henshinTo : (Array.isArray(card.henshinFrom) && member.level <= 99))
 			{ //要变身前的才进行操作
 				const _card = gotoHenshin(card, step);
 				member.id = _card.id;
@@ -3655,42 +3651,46 @@ function initialize(event) {
 
 //搜出一个卡片包含变身的的完整进化树
 function buildEvoTreeIdsArray(card, includeHenshin = true) {
-	const evoLinkCardsIdArray = card.evoRootId !== 0 ? Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id) : []; //筛选出相同进化链的
+	const evoLinkCardsIdArray = card.evoRootId ? Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id) : []; //筛选出相同进化链的
 	function loopAddHenshin(arr,card)
 	{
-		const tcard1 = Cards[card.henshinFrom] || null;
-		const tcard2 = Cards[card.henshinTo] || null;
-		const evoCards = Cards.filter(m=>m.evoRootId == card.evoRootId && !arr.includes(m.id)).map(m=>m.id);
-		if (tcard1 && !arr.includes(tcard1.id))
-		{
-			arr.push(tcard1.id);
-			loopAddHenshin(arr,tcard1);
+		//从本卡片变身到的
+		const cardIdTo = card.henshinTo;
+		if (!arr.includes(cardIdTo) && Cards[cardIdTo]) {
+			arr.push(cardIdTo);
+			loopAddHenshin(arr, Cards[cardIdTo]);
 		}
-		if (tcard2 && !arr.includes(tcard2.id))
-		{
-			arr.push(tcard2.id);
-			loopAddHenshin(arr,tcard2);
+		//变身到本卡片的（多个）
+		const cardsIdFrom = (card.henshinFrom || []).filter(id=>Boolean(Cards[id]) && !arr.includes(id));
+		if (cardsIdFrom.length) {
+			arr.push(...cardsIdFrom);
+			for (let id of cardsIdFrom) {
+				loopAddHenshin(arr, Cards[id]);
+			}
 		}
+		//本角色进化树上的
+		const evoCards = Cards.filter(m=>m.evoRootId == card.evoRootId && !arr.includes(m.id));
 		if (evoCards.length > 0)
 		{
-			evoCards.forEach(mid=>{
-				arr.push(mid);
-				const m = Cards[mid];
-				if (m.henshinFrom || m.henshinTo)
-				{  //添加变身的
-					loopAddHenshin(arr,m);
+			for (let card of evoCards) {
+				arr.push(card.id);
+				if (includeHenshin && (Array.isArray(card.henshinFrom) || card.henshinTo))
+				{  //添加这个的变身的
+					loopAddHenshin(arr, card);
 				}
-			});
+			}
 		}
 	}
-	evoLinkCardsIdArray.forEach((mid,idx,arr)=>{
-		const m = Cards[mid];
-		if (includeHenshin && (m.henshinFrom || m.henshinTo))
-		{  //添加变身的
-			loopAddHenshin(arr,m);
+	if (includeHenshin) {
+		for (let id of evoLinkCardsIdArray) {
+			const card = Cards[id];
+			if (Array.isArray(card.henshinFrom) || card.henshinTo)
+			{  //添加变身的
+				loopAddHenshin(evoLinkCardsIdArray, card);
+			}
 		}
-	});
-	evoLinkCardsIdArray.sort((a,b)=>a-b);
+	}
+	evoLinkCardsIdArray.sort((a,b)=>a-b); //按ID大小排序
 	return evoLinkCardsIdArray;
 }
 

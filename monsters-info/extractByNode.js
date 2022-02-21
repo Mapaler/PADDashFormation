@@ -32,6 +32,29 @@ function sameCard(m1,m2)
 	if (m1.collabId != m2.collabId) return false; //合作ID
 	return true;
 }
+
+//查找到真正起作用的那一个技能
+function getActuallySkills(skillsDataset, skillid, skillTypes, searchRandom = true) {
+	const skill = skillsDataset[skillid];
+	if (skill) {
+		if (skillTypes.includes(skill.type)){
+			return [skill];
+		} else if (skill.type == 116 || //主动技
+			(searchRandom && skill.type == 118) || //随机主动技
+			skill.type == 138 || //队长技
+			skill.type == 232 || //进化技能1，不循环
+			skill.type == 233) { //进化技能2，循环
+			//因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
+			let subSkills = skill.params.flatMap(id => getActuallySkills(skillsDataset, id, skillTypes, searchRandom));
+			subSkills = subSkills.filter(s=>s);
+			return subSkills;
+		} else {
+			return [];
+		}
+	} else {
+		return [];
+	}
+}
 /*
  * 正式流程
  */
@@ -100,20 +123,22 @@ officialAPI.forEach(function(lang) {
 	lang.skills = oSkills.map((oc,idx)=>new Skill(idx,oc)); //每一项生成分析对象
 
 	lang.cards.forEach((m,idx,arr)=>{
-		const skill = lang.skills[m.activeSkillId];
 		let henshinTo = null;
-		const searchType = 202;
-		if (skill.type == searchType)
+		const skills = getActuallySkills(lang.skills, m.activeSkillId, [202]);
+		if (skills.length) {
+			const skill = skills[0];
 			henshinTo = skill.params[0];
-		else if (skill.type == 116 || skill.type == 118){
-			const subskill = skill.params.map(id=>lang.skills[id]).find(subskill=>subskill.type == searchType);
-			if (subskill)
-				henshinTo = subskill.params[0];
 		}
 		if (henshinTo)
 		{
 			m.henshinTo = henshinTo;
-			arr[henshinTo].henshinFrom = idx;
+			//变身来源可能有多个，因此将变身来源修改为数组
+			let henshinFrom = arr[henshinTo].henshinFrom;
+			if (Array.isArray(henshinFrom)) {
+				henshinFrom.push(idx);
+			} else {
+				arr[henshinTo].henshinFrom = [idx];
+			}
 		}
 	});
 
