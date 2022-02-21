@@ -1127,42 +1127,43 @@ function getSkillAddCombo(card) {
 	switch (skill.type) {
 		case 192:
 		case 194:
-			return skill.params[3];
+			return skill.params[3] ?? 0;
 		case 206:
-			return skill.params[6];
+			return skill.params[6] ?? 0;
 		case 209:
-			return skill.params[0];
+			return skill.params[0] ?? 0;
 		case 210:
 		case 219:
-			return skill.params[2];
+			return skill.params[2] ?? 0;
 		case 220:
-			return skill.params[1];
+			return skill.params[1] ?? 0;
 		case 235:
-			return skill.params[5];
+			return skill.params[5] ?? 0;
 		default:
 			return 0;
 	}
 }
 //计算队伍的追打
 function tIf_Effect_inflicts(leader1id, leader2id) {
-	const searchTypeArray = [199, 200, 201, 223];
 	return [
 		getSkillFixedDamage(Cards[leader1id]),
 		getSkillFixedDamage(Cards[leader2id])
 	];
 }
 function getSkillFixedDamage(card) {
-	const searchTypeArray = [199, 200, 201, 223];
+	const searchTypeArray = [199, 200, 201, 223, 235];
 	const skill = getCardLeaderSkills(card, searchTypeArray)[0];
 	if (!skill) return 0;
 	switch (skill.type) {
 		case 199:
 		case 200:
-			return skill.params[2];
+			return skill.params[2] ?? 0;
 		case 201:
-			return skill.params[5];
+			return skill.params[5] ?? 0;
 		case 223:
-			return skill.params[1];
+			return skill.params[1] ?? 0;
+		case 235:
+			return skill.params[6] ?? 0;
 		default:
 			return 0;
 	}

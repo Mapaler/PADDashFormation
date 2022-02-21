@@ -1418,8 +1418,8 @@ const parsers = {
 	[232](...ids) { return evolvedSkills(false, ids.map(id => this.parser(id))); },
 	[233](...ids) { return evolvedSkills(true, ids.map(id => this.parser(id))); },
 	[234](min, max) { return skillProviso(c.stage(min ?? 0, max ?? 0)); },
-	[235](attr, _, len, _2, _3, combo) {
-		return powerUp(null, null, p.mul({ atk: 100 }), c.exact('match-length', len, flags(attr), true), null, [addCombo(combo)]);
+	[235](attr, _, len, atk, rcv, combo, damage) {
+		return powerUp(null, null, p.mul({ atk: atk || 100, rcv: rcv || 100,}), c.exact('match-length', len, flags(attr), true), null, [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean));
 	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
