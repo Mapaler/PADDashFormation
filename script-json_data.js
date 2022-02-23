@@ -1195,7 +1195,15 @@ const specialSearchFunctions = (function() {
 				});
 				},
 				addition:card=>{
-				return getSkillFixedDamage(card).bigNumberToString() + "固伤";
+					const value = getSkillFixedDamage(card);
+					let nodeArr = [`${value.bigNumberToString()}固伤`];
+					let skill;
+					if (skill = getCardLeaderSkill(card, [235])) {
+						nodeArr.push("/");
+						nodeArr.push(createOrbsList(flags(skill.params[0])));
+						nodeArr.push(`×${skill.params[2]}`);
+					}
+					return nodeArr.nodeJoin();
 				}
 			},
 			{name:"Adds combo(sort by combo)",otLangName:{chs:"队长技+C（按+C数排序）",cht:"隊長技+C（按+C數排序）"},
@@ -1209,14 +1217,11 @@ const specialSearchFunctions = (function() {
 				},
 				addition:card=>{
 					const value = getSkillAddCombo(card);
-					let nodeArr = [`+${value.bigNumberToString()}C`]
+					let nodeArr = [`+${value.bigNumberToString()}C`];
 					let skill;
-					skill = getCardLeaderSkill(card, [210]);
-					if (skill) {
+					if (skill = getCardLeaderSkill(card, [210])) {
 						nodeArr.push("/十字");
-					}
-					skill = getCardLeaderSkill(card, [235]);
-					if (skill) {
+					} else if (skill = getCardLeaderSkill(card, [235])) {
 						nodeArr.push("/");
 						nodeArr.push(createOrbsList(flags(skill.params[0])));
 						nodeArr.push(`×${skill.params[2]}`);
