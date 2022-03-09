@@ -1329,7 +1329,7 @@ function getReduceRange(reduceScales)
 }
 //获取盾减伤比例组
 function getReduceScales(leaderid) {
-	const searchTypeArray = [16, 17, 36, 38, 43, 129, 163, 130, 131, 178, 151, 169, 198, 170, 182, 193, 171, 183];
+	const searchTypeArray = [16, 17, 36, 38, 43, 129, 163, 130, 131, 178, 151, 169, 198, 170, 182, 193, 171, 183, 235];
 	const lss = getCardLeaderSkills(Cards[leaderid], searchTypeArray);
 	
 	function leaderReduceScale(ls) {
@@ -1435,6 +1435,10 @@ function getReduceScales(leaderid) {
 			case 210: //十字触发
 				reduce.scale = (sk[1] || 0) / 100;
 				break;
+			case 235: { //可多次触发
+				reduce.scale = (sk[4] || 0) / 100;
+				break;
+			}
 			default:
 		}
 		return reduce;
