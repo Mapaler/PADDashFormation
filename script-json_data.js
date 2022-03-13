@@ -2014,6 +2014,7 @@ const specialSearchFunctions = (function() {
 					let str = "👆";
 					if (sk[1]) str += `${sk[1]>0?`+`:``}${sk[1]/10}S`;
 					if (sk[2]) str += `x${sk[2]/100}`;
+					str += `x${sk[0]}T`;
 					return str;
 				}
 			},
@@ -2295,7 +2296,7 @@ const specialSearchFunctions = (function() {
 					const searchTypeArray = [218];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					const sk = skill.params;
-					return document.createTextNode(`坐下${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}`);
+					return document.createTextNode(`坐下${sk[0]}${sk[1] && sk[0]!=sk[1]?`~${sk[1]}`:""}`);
 				}
 			},
 			{name:"Change Leader",otLangName:{chs:"更换队长",cht:"更換隊長"},
