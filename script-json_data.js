@@ -343,11 +343,11 @@ let localTranslating = {
 			[75]: tp`${'icon'}Enhanced Wood Combos`,
 			[76]: tp`${'icon'}Enhanced Light Combos`,
 			[77]: tp`${'icon'}Enhanced Dark Combos`,
-			[78]: tp`${'icon'}CrossBoost`,
-			[79]: tp`${'icon'}Enhanced 3 colors`,
-			[80]: tp`${'icon'}Enhanced 4 colors`,
-			[81]: tp`${'icon'}Enhanced 5 colors`,
-			[82]: tp`${'icon'}Super Connecting Eraser Bonus`,
+			[78]: tp`${'icon'}Cross Attack`,
+			[79]: tp`${'icon'}3 Att. Enhanced Attack`,
+			[80]: tp`${'icon'}4 Att. Enhanced Attack`,
+			[81]: tp`${'icon'}5 Att. Enhanced Attack`,
+			[82]: tp`${'icon'}Super Enhanced Matching`,
 		}
 	},
 };
