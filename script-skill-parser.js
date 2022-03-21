@@ -985,7 +985,7 @@ const parsers = {
 	[58](attr, min, max) { return damageEnemy('all', attr, v.randomATK(min, max)); },
 	[59](attr, min, max) { return damageEnemy('single', attr, v.randomATK(min, max)); },
 	[60](turns, mul, attr) { return activeTurns(turns, counterAttack(attr, v.percent(100), v.percent(mul))); },
-	[61](attrs, min, base, bonus, incr) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, incr || 0, [base, 100], [bonus, 0])); },
+	[61](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, max || min, [base, 100], [bonus, 0])); },
 	[62](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, atk: mul })); },
 	[63](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, rcv: mul })); },
 	[64](type, mul) { return powerUp(null, [type], p.mul({ atk: mul, rcv: mul })); },
