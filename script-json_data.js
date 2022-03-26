@@ -104,6 +104,7 @@ let localTranslating = {
 			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			power_up_targets: tp`[${'attrs_types'}]'s `, //attrs, types, attrs_types
 			henshin: tp`Transforms into ${'card'}`,
+			random_henshin: tp`Random transforms into ${'cards'}`,
 			void_poison: tp`Voids ${'poison'} damage`,
 			skill_proviso: tp`The follow-up effect can only be activates ${'condition'}`,
 			obstruct_opponent: tp`Apply obstruct skill effect to ${'target'}: ${'skills'}`,
@@ -3226,10 +3227,12 @@ const specialSearchFunctions = (function() {
 		]},
 		{group:true,name:"======Evo type======",otLangName:{chs:"======进化类型======",cht:"======進化類型======"}, functions: [
 			{name:"No Henshin",otLangName:{chs:"非变身",cht:"非變身"},
-				function:cards=>cards.filter(card=>!Array.isArray(card.henshinFrom) && !card.henshinTo)
+				function:cards=>cards.filter(card=>
+					!Array.isArray(card.henshinFrom) &&
+					!Array.isArray(card.henshinTo))
 			},
 			{name:"Before Henshin",otLangName:{chs:"变身前",cht:"變身前"},
-				function:cards=>cards.filter(card=>card.henshinTo)
+				function:cards=>cards.filter(card=>Array.isArray(card.henshinTo))
 			},
 			{name:"After Henshin",otLangName:{chs:"变身后",cht:"變身後"},
 				function:cards=>cards.filter(card=>Array.isArray(card.henshinFrom))

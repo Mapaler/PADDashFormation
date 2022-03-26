@@ -106,6 +106,11 @@ Array.prototype.deleteLatter = function(item = null) {
 	this.splice(index + 1);
 	return this;
 }
+//数组去重
+Array.prototype.distinct = function() {
+	let _set = new Set(this);
+	return Array.from(_set)
+}
 Array.prototype.randomShift = function() {
 	return this.splice(Math.random() * this.length, 1)?.[0];
 }

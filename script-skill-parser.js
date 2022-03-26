@@ -906,7 +906,14 @@ function autoPath() { return { kind: SkillKinds.AutoPath }; }
 function leaderChange(type = 0) { return { kind: SkillKinds.LeaderChange, type: type }; }
 function board7x6() { return { kind: SkillKinds.Board7x6 }; }
 function noSkyfall() { return { kind: SkillKinds.NoSkyfall }; }
-function henshin(id) { return { kind: SkillKinds.Henshin, id: id }; }
+function henshin(id, random = false) {
+	return {
+		kind: SkillKinds.Henshin,
+		id: Array.isArray(id) ? id[0] : id, //兼容旧程序
+		ids: Array.isArray(id) ? id : [id],
+		random: random
+	};
+}
 function voidPoison() { return { kind: SkillKinds.VoidPoison }; }
 function skillProviso(cond) { return { kind: SkillKinds.SkillProviso, cond: cond }; }
 function obstructOpponent(type, pos, ids) {
@@ -1420,6 +1427,9 @@ const parsers = {
 	[234](min, max) { return skillProviso(c.stage(min ?? 0, max ?? 0)); },
 	[235](attr, _, len, atk, percent, combo, damage) {
 		return powerUp(null, null, p.mul({ atk: atk || 100}), c.exact('match-length', len, flags(attr), true), v.percent(percent), [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean));
+	},
+	[236](...ids) { //随机变身
+		return henshin(ids.distinct(), true);
 	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -2205,13 +2215,18 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.Henshin: { //变身
-			let id = skill.id;
-			const dom = cardN(id);
-			dom.monDom.onclick = changeToIdInSkillDetail;
+			let ids = skill.ids, random = skill.random;
+			let doms = ids.map(id=>{
+				let dom = cardN(id);
+				dom.monDom.onclick = changeToIdInSkillDetail;
+				return dom;	})
 			dict = {
-				card: dom,
+				cards: doms.nodeJoin(),
 			}
-			frg.ap(tsp.skill.henshin(dict));
+			frg.ap(random ? 
+				tsp.skill.random_henshin(dict) :
+				tsp.skill.henshin(dict)
+				);
 			break;
 		}
 		case SkillKinds.VoidPoison: { //毒无效
