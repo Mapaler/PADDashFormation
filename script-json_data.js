@@ -3251,30 +3251,6 @@ const specialSearchFunctions = (function() {
 			{name:"Super Ult Evo",otLangName:{chs:"超究极进化",cht:"超究極進化"},
 				function:cards=>cards.filter(card=>card.is8Latent && card.isUltEvo && !card.awakenings.includes(49))
 			},
-			/*{name:"",otLangName:{chs:"变身前",cht:"變身前"},
-				function:cards=>cards.filter(card=>{
-				const searchType = 202;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType)
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType);
-				}
-				})
-			},
-			{name:"",otLangName:{chs:"变身前后队长技保持不变",cht:"變身前後隊長技保持不變"},
-				function:cards=>cards.filter(card=>{
-				const searchType = 202;
-				const skill = Skills[card.activeSkillId];
-				if (skill.type == searchType && card.leaderSkillId == Cards[skill.params[0]].leaderSkillId)
-					return true;
-				else if (skill.type == 116 || skill.type == 118){
-					const subskills = skill.params.map(id=>Skills[id]);
-					return subskills.some(subskill=>subskill.type == searchType && card.leaderSkillId == Cards[subskill.params[0]].leaderSkillId);
-				}
-				})
-			},*/
 			{name:"Evo from Weapon",otLangName:{chs:"由武器进化而来",cht:"由武器進化而來"},
 				function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))
 			},

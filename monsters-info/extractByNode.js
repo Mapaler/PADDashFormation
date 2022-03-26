@@ -18,6 +18,11 @@ const officialAPI = [ //来源于官方API
 	}
 ];
 
+//数组去重
+Array.prototype.distinct = function() {
+	let _set = new Set(this);
+	return Array.from(_set)
+}
 //比较两只怪物是否是同一只（在不同语言服务器）
 function sameCard(m1,m2)
 {
@@ -122,22 +127,24 @@ officialAPI.forEach(function(lang) {
 	const oSkills = lang.skillOriginal = skillJsonObj.skill;//将字符串转换为json对象
 	lang.skills = oSkills.map((oc,idx)=>new Skill(idx,oc)); //每一项生成分析对象
 
-	lang.cards.forEach((m,idx,arr)=>{
+	lang.cards.forEach((m, idx, cardArr)=>{
 		let henshinTo = null;
-		const skills = getActuallySkills(lang.skills, m.activeSkillId, [202]);
-		if (skills.length) {
-			const skill = skills[0];
-			henshinTo = skill.params[0];
-		}
-		if (henshinTo)
-		{
-			m.henshinTo = henshinTo;
-			//变身来源可能有多个，因此将变身来源修改为数组
-			let henshinFrom = arr[henshinTo].henshinFrom;
-			if (Array.isArray(henshinFrom)) {
-				henshinFrom.push(idx);
-			} else {
-				arr[henshinTo].henshinFrom = [idx];
+		const henshinSkill = getActuallySkills(lang.skills, m.activeSkillId, [202, 236]);
+		if (henshinSkill.length) {
+			const skill = henshinSkill[0];
+			henshinTo = skill.params.distinct();
+			if (Array.isArray(henshinTo))
+			{
+				m.henshinTo = henshinTo;
+				//变身来源可能有多个，因此将变身来源修改为数组
+				for (let toId of henshinTo) {
+					let henshinFrom = cardArr[toId].henshinFrom;
+					if (Array.isArray(henshinFrom)) {
+						henshinFrom.push(idx);
+					} else {
+						cardArr[toId].henshinFrom = [idx];
+					}
+				}
 			}
 		}
 	});

@@ -663,7 +663,7 @@ class EvoTree
 				mid = Cards[mid].evoRootId;
 				const m = Cards[mid];
 				if (Array.isArray(m.henshinFrom) && m.henshinFrom[0] < m.id)
-				{ //只有变身来源小于目前id的，才继续找base,为了解决黑魔导女孩的问题
+				{ //只有变身来源小于目前id的，才继续找base,为了解决黑魔导女孩的问题，将来如果需要要可以改成检测是否能110级
 					mid = returnRootId(m.henshinFrom[0]);
 				}
 				return mid;
@@ -673,7 +673,7 @@ class EvoTree
 		const card = Cards[mid];
 		
 		this.id = mid;
-		this.idArr = parent ? parent.idArr : [];
+		this.idArr = parent ? parent.idArr.concat() : [];
 		this.card = card;
 		this.children = [];
 		this.evoType = null;
@@ -682,9 +682,17 @@ class EvoTree
 		{
 			this.evoType = "Base";
 		}
-		else if (Array.isArray(card.henshinFrom) && card.henshinFrom[0] == parent.id)
+		else if (Array.isArray(card.henshinFrom) && card.henshinFrom.includes(parent.id))
 		{
-			this.evoType = "Henshin";
+			if (parent.card.henshinTo.length > 1) {
+				this.evoType = "Random Henshin";
+				//限定最多两层随机变身
+				if (parent?.parent?.card?.henshinTo?.length > 1) {
+					return this;
+				}
+			}
+			else
+				this.evoType = "Henshin";
 		}
 		else
 		{
@@ -729,8 +737,11 @@ class EvoTree
 		{
 			this.idArr.push(mid);
 		}
-		if (card.henshinTo)
-			this.children.push(new EvoTree(card.henshinTo, _this));
+		if (Array.isArray(card.henshinTo)) {
+			for (let toId of card.henshinTo) {
+				this.children.push(new EvoTree(toId, _this));
+			}
+		}
 		if (this.evoType != "Henshin")
 			this.children.push(...Cards.filter(scard=>scard.evoBaseId == mid && scard.id != mid).map(scard=>new EvoTree(scard.id,_this)));
 		//this.children = (card.henshinTo && card.henshinTo != card.evoRootId ? [new EvoTree(card.henshinTo,_this)] : []).concat(Cards.filter(scard=>scard.evoBaseId == mid && scard.id != mid).map(scard=>new EvoTree(scard.id,_this)));
@@ -852,9 +863,10 @@ function henshinStep(step)
 
 	function gotoHenshin(card, nstep)
 	{
-		if (nstep > 0 && card.henshinTo)
-		{ //是变身的则返回
-			return gotoHenshin(Cards[card.henshinTo], --nstep);
+		if (nstep > 0 && Array.isArray(card.henshinTo))
+		{
+			let max = Math.randomInteger(card.henshinTo.length - 1);
+			return gotoHenshin(Cards[card.henshinTo[max]], --nstep);
 		}
 		else if (nstep < 0 && Array.isArray(card.henshinFrom))
 		{
@@ -869,7 +881,7 @@ function henshinStep(step)
 		team[0].forEach(member=>{
 			const mid = member.id;
 			const card = Cards[mid];
-			if (step > 0 ? card.henshinTo : (Array.isArray(card.henshinFrom) && member.level <= 99))
+			if (step > 0 ? Array.isArray(card.henshinTo) : (Array.isArray(card.henshinFrom) && member.level <= 99))
 			{ //要变身前的才进行操作
 				const _card = gotoHenshin(card, step);
 				member.id = _card.id;
@@ -3649,16 +3661,18 @@ function initialize(event) {
 	}
 }
 
-//搜出一个卡片包含变身的的完整进化树
+//搜出一个卡片包含变身的的完整进化树，用于平铺显示
 function buildEvoTreeIdsArray(card, includeHenshin = true) {
 	const evoLinkCardsIdArray = card.evoRootId ? Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id) : []; //筛选出相同进化链的
 	function loopAddHenshin(arr,card)
 	{
 		//从本卡片变身到的
-		const cardIdTo = card.henshinTo;
-		if (!arr.includes(cardIdTo) && Cards[cardIdTo]) {
-			arr.push(cardIdTo);
-			loopAddHenshin(arr, Cards[cardIdTo]);
+		const cardIdTo = (card.henshinTo || []).filter(id=>Boolean(Cards[id]) && !arr.includes(id));
+		if (cardIdTo.length) {
+			arr.push(...cardIdTo);
+			for (let id of cardIdTo) {
+				loopAddHenshin(arr, Cards[id]);
+			}
 		}
 		//变身到本卡片的（多个）
 		const cardsIdFrom = (card.henshinFrom || []).filter(id=>Boolean(Cards[id]) && !arr.includes(id));
@@ -3674,7 +3688,7 @@ function buildEvoTreeIdsArray(card, includeHenshin = true) {
 		{
 			for (let card of evoCards) {
 				arr.push(card.id);
-				if (includeHenshin && (Array.isArray(card.henshinFrom) || card.henshinTo))
+				if (includeHenshin && (Array.isArray(card.henshinFrom) || Array.isArray(card.henshinTo)))
 				{  //添加这个的变身的
 					loopAddHenshin(arr, card);
 				}
@@ -3684,7 +3698,7 @@ function buildEvoTreeIdsArray(card, includeHenshin = true) {
 	if (includeHenshin) {
 		for (let id of evoLinkCardsIdArray) {
 			const card = Cards[id];
-			if (Array.isArray(card.henshinFrom) || card.henshinTo)
+			if (Array.isArray(card.henshinFrom) || Array.isArray(card.henshinTo))
 			{  //添加变身的
 				loopAddHenshin(evoLinkCardsIdArray, card);
 			}
