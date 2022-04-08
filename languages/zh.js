@@ -163,7 +163,7 @@
 			team: tp`队伍`,
 			team_last: tp`队伍最后一位队员`,
 			team_leader: tp`队长`,
-			sub_monsters: tp`队员`,
+			sub_members: tp`队员`,
 			leader_self: tp`左边队长`,
 			leader_helper: tp`右边队长`,
 			enemy: tp`敌人`,

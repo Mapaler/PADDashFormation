@@ -179,7 +179,7 @@ let localTranslating = {
 			team: tp`team`,
 			team_last: tp`the lastest member`,
 			team_leader: tp`leader`,
-			sub_monsters: tp`sub-members`,
+			sub_members: tp`sub-members`,
 			leader_self: tp`left leader`,
 			leader_helper: tp`right leader`,
 			enemy: tp`Enemy`,
