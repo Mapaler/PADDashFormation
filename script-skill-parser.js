@@ -845,8 +845,8 @@ function powerUp(attrs, types, value, condition = null, reduceDamageValue = null
 		if (hp === 1 && atk === 1 && rcv === 1 && !reduceDamage)
 			return null;
 	}
-	if (attrs?.target != undefined) {
-		return { kind: SkillKinds.PowerUp, target: attrs.target, attrs: null, types: null, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
+	if (attrs?.targets != undefined) {
+		return { kind: SkillKinds.PowerUp, targets: attrs.targets, attrs: null, types: null, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
 	}
 	return { kind: SkillKinds.PowerUp, attrs: attrs, types: types, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
 }
@@ -1409,15 +1409,9 @@ const parsers = {
 			"leader": Boolean(target & 1<<1),
 			"sub-monsters": Boolean(target & 1<<3),
 		}*/
-		const targetType = (target=>{
-			switch (target) {
-				case 1: return "self";
-				case 2: return "leader";
-				case 8: return "sub-monsters";
-				default: return target;
-			}
-		})(target);
-		return activeTurns(turns, powerUp({target: targetType}, null, p.mul({ atk: mul })));
+		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+		const typeArr = flags(target).map(n => targetTypes[n]);
+		return activeTurns(turns, powerUp({targets: typeArr}, null, p.mul({ atk: mul })));
 	},
 	[231](turns, awoken1, awoken2, awoken3, awoken4, awoken5, atk, rcv) {
 		return activeTurns(turns, powerUp(null, null, p.scaleStateKindCount([awoken1, awoken2, awoken3, awoken4, awoken5].filter(Boolean), null, null, p.mul({atk: atk, hp:0, rcv: rcv}))));
@@ -2135,7 +2129,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.PowerUp: {
-			let attrs = skill.attrs, types = skill.types, target = skill.target, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage, additional = skill.additional;
+			let attrs = skill.attrs, types = skill.types, targets = skill.targets, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage, additional = skill.additional;
 			dict = {
 				icon: createIcon(skill.kind),
 			};
@@ -2152,26 +2146,11 @@ function renderSkill(skill, option = {})
 				targetDict.types = renderTypes(types || [], {affix: true});
 				attrs_types.push(targetDict.types);
 			}
-			if (target != undefined)
+			if (targets != undefined)
 			{
-				switch (target) {
-					case "self": {
-						targetDict.target = tsp.target.self();
-						break;
-					}
-					case "leader": {
-						targetDict.target = tsp.target.team_leader();
-						break;
-					}
-					case "sub-monsters": {
-						targetDict.target = tsp.target.team_sub();
-						break;
-					}
-					default: {
-						targetDict.target = tsp.target.unknown();
-						break;
-					}
-				}
+				targetDict.target = targets.map(target=>
+					tsp?.target[target.replaceAll("-","_")]())
+					.nodeJoin(tsp.word.slight_pause());
 				attrs_types.push(targetDict.target);
 			}
 			if (attrs_types.length)

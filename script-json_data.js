@@ -179,7 +179,9 @@ let localTranslating = {
 			team: tp`team`,
 			team_last: tp`the lastest member`,
 			team_leader: tp`leader`,
-			team_sub: tp`sub-monsters`,
+			sub_monsters: tp`sub-members`,
+			leader_self: tp`left leader`,
+			leader_helper: tp`right leader`,
 			enemy: tp`Enemy`,
 			enemy_all: tp`all enemys`,
 			enemy_one: tp`1 enemy`,
@@ -1977,21 +1979,9 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					const sk = skill.params;
 					let str = '';
-					switch (sk[1]) {
-						case 1: {
-							str+="自身";
-							break;
-						}
-						case 2: {
-							str+="队长";
-							break;
-						}
-						case 8: {
-							str+="队员";
-							break;
-						}
-					}
-					str+=`${sk[2] / 100}倍×${sk[0]}T`;
+					const typeName = ['自身','左队长','右队长','队员'];
+					str += flags(sk[1]).map(n=>typeName[n]).join(',');
+					str +=`${sk[2] / 100}倍×${sk[0]}T`;
 					return str;
 			}
 			},
