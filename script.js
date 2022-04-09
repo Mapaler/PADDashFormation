@@ -4301,8 +4301,9 @@ function refreshAll(formationData) {
 			const latent = latentLi.querySelector(`.latent-ul`);
 			changeid(teamData[0][ti], member, latent); //队员
 			changeid(teamData[1][ti], assist); //辅助
-			//如果换队长技能
-			if (leaderIdx == 0 && (ti == 0 || ti == 5))
+			//隐藏队长的自身换为换队长的技能
+			if (ti == 5 || //好友队长永远隐藏
+				leaderIdx == 0 && ti == 0 ) //当没换队长时，自身队长的欢队长技能隐藏
 			{
 				const card_m = Cards[teamData[0][ti].id] || Cards[0];
 				const card_a = Cards[teamData[1][ti].id] || Cards[0];
