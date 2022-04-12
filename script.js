@@ -3247,6 +3247,14 @@ function initialize(event) {
 			monEditSAwokens[0].click();
 		} else {
 			monEditSAwokensRow.swaokenIndex = value;
+			const plusArr = [monEditAddHp,monEditAddAtk,monEditAddRcv];
+			//自动打上297
+			if (plusArr.some(ipt=>parseInt(ipt.value)<99))
+			{
+				console.debug("点亮超觉醒，自动设定297");
+				plusArr.forEach(ipt=>ipt.value=99);
+				reCalculateAbility();
+			}
 		}
 	}
 	monEditSAwokens.forEach(akDom => {
@@ -3780,8 +3788,13 @@ function changeid(mon, monDom, latentDom) {
 		}
 	}
 	const sawoken = monDom.querySelector(".super-awoken");
-	if (sawoken) { //如果存在超觉醒的DOM且提供了超觉醒
-		if (mon.sawoken != null && mon?.sawoken >= 0 && card.superAwakenings.length && mon.level >= 100 && mon.plus.every(p=>p>=99)) {
+	if (sawoken) { //如果存在超觉醒的DOM
+		if (mon.sawoken != null && //怪物设定了超觉醒
+			mon?.sawoken >= 0 && //怪物超觉醒编号大于0
+			card.superAwakenings.length && //卡片有超觉醒
+			mon.level >= 100 && //怪物大于100级
+			mon.plus.every(p=>p>=99) //怪物297了
+		) {
 			sawoken.classList.remove(className_displayNone);
 			const sawokenIcon = sawoken.querySelector(".awoken-icon");
 			sawokenIcon.setAttribute("data-awoken-icon", card.superAwakenings[mon.sawoken]);
@@ -4455,7 +4468,15 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 	//队员觉醒
 	let menberAwokens = memberCard.awakenings.slice(0,memberData.awoken);
 	//单人和三人为队员增加超觉醒
-	if ((solo || teamsCount === 3) && memberData.sawoken >= 0) menberAwokens.push(memberCard.superAwakenings[memberData.sawoken]);
+	if ((solo || teamsCount === 3) &&
+		memberData.sawoken != null && //怪物设定了超觉醒
+		memberData.sawoken >= 0 && //怪物超觉醒编号大于0
+		memberCard.superAwakenings.length >= 0 && //卡片有超觉醒
+		memberData.level >= 100 && //怪物大于100级
+		memberData.plus.every(p=>p>=99) //怪物297了
+	) {
+		menberAwokens.push(memberCard.superAwakenings[memberData.sawoken]);
+	}
 	//menberAwokens.sort();
 	//武器觉醒
 	let assistAwokens = assistCard.awakenings.slice(0,assistData.awoken);
