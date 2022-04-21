@@ -68,19 +68,20 @@ class Card{
 		card.collabId = data[i++]; //合作ID
 		const flags = data[i++]; //一个旗子？
 		card.unk08 = flags; //未知08
-		card.canAssist = (flags & 1) !== 0; //是否能当二技
-		card.enabled = (flags & 1<<1) !== 0; //是否已启用
-		card.overlay = card.types.some(t => { //这步还是猜测，是否能合并
-			return t == 0 || t == 12 || t == 14; //0進化用;12能力覺醒用;14強化合成用;15販賣用
-		}) && (flags & 1<<3) === 0; //進化用、能力覺醒用、強化合成用，且flag有1000时
-		card.is8Latent = (flags & 1<<5) !== 0; //是否支持8个潜觉
+		card.canAssist = Boolean(flags & 1<<0); //是否能当二技
+		card.enabled = Boolean(flags & 1<<1); //是否已启用
+		
+		card.overlay = !Boolean(flags & 1<<3) && //flag有1<<3时，不合并，没有时则判断
+			card.types.some(t=>[0,12,14,15].includes(t)); //0進化用;12能力覺醒用;14強化合成用;15販賣用默认合并
+		card.is8Latent = Boolean(flags & 1<<5); //是否支持8个潜觉
 		card.altName = data[i++].split("|").filter(str=>str.length); //替换名字（分类标签）
 		card.limitBreakIncr = data[i++]; //110级增长
 		card.voiceId = data[i++]; //语音觉醒的ID
 		card.blockSkinId = data[i++]; //珠子皮肤ID
 		card.specialAttribute = data[i++]; //特别属性，比如黄龙
-		if (i !== data.length)
-			console.log(`residue data for #${card.id}: ${i} ${data.length}`);
+		card.searchFlags = [data[i++], data[i++]]; //队长技搜索类型，解析写在这里会导致文件太大，所以写到前端去了
+		if ((i + 1) < data.length)
+			console.log(`有新增数据/residue data for #${card.id}: ${i} ${data.length}`);
 	}
 }
 //对于Nodejs输出成模块

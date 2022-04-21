@@ -722,9 +722,9 @@ const c = {
 	hp: function (min, max) {
 		return { hp: { min: min / 100, max: max / 100 } };
 	},
-	exact: function (type, value, attrs) {
+	exact: function (type, value, attrs, multiple = false) {
 		if (attrs === void 0) { attrs = Attributes.all(); }
-		return { exact: { type: type, value: value, attrs: attrs } };
+		return { exact: { type: type, value: value, attrs: attrs, multiple: multiple} };
 	},
 	compo: function (type, ids) {
 		return { compo: { type: type, ids: ids } };
@@ -845,8 +845,8 @@ function powerUp(attrs, types, value, condition = null, reduceDamageValue = null
 		if (hp === 1 && atk === 1 && rcv === 1 && !reduceDamage)
 			return null;
 	}
-	if (attrs?.target != undefined) {
-		return { kind: SkillKinds.PowerUp, target: attrs.target, attrs: null, types: null, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
+	if (attrs?.targets != undefined) {
+		return { kind: SkillKinds.PowerUp, targets: attrs.targets, attrs: null, types: null, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
 	}
 	return { kind: SkillKinds.PowerUp, attrs: attrs, types: types, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
 }
@@ -906,7 +906,14 @@ function autoPath() { return { kind: SkillKinds.AutoPath }; }
 function leaderChange(type = 0) { return { kind: SkillKinds.LeaderChange, type: type }; }
 function board7x6() { return { kind: SkillKinds.Board7x6 }; }
 function noSkyfall() { return { kind: SkillKinds.NoSkyfall }; }
-function henshin(id) { return { kind: SkillKinds.Henshin, id: id }; }
+function henshin(id, random = false) {
+	return {
+		kind: SkillKinds.Henshin,
+		id: Array.isArray(id) ? id[0] : id, //兼容旧程序
+		ids: Array.isArray(id) ? id : [id],
+		random: random
+	};
+}
 function voidPoison() { return { kind: SkillKinds.VoidPoison }; }
 function skillProviso(cond) { return { kind: SkillKinds.SkillProviso, cond: cond }; }
 function obstructOpponent(type, pos, ids) {
@@ -985,7 +992,7 @@ const parsers = {
 	[58](attr, min, max) { return damageEnemy('all', attr, v.randomATK(min, max)); },
 	[59](attr, min, max) { return damageEnemy('single', attr, v.randomATK(min, max)); },
 	[60](turns, mul, attr) { return activeTurns(turns, counterAttack(attr, v.percent(100), v.percent(mul))); },
-	[61](attrs, min, base, bonus, incr) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (incr ?? 0), [base, 100], [bonus, 0])); },
+	[61](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, max || min, [base, 100], [bonus, 0])); },
 	[62](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, atk: mul })); },
 	[63](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, rcv: mul })); },
 	[64](type, mul) { return powerUp(null, [type], p.mul({ atk: mul, rcv: mul })); },
@@ -1402,15 +1409,9 @@ const parsers = {
 			"leader": Boolean(target & 1<<1),
 			"sub-monsters": Boolean(target & 1<<3),
 		}*/
-		const targetType = (target=>{
-			switch (target) {
-				case 1: return "self";
-				case 2: return "leader";
-				case 8: return "sub-monsters";
-				default: return target;
-			}
-		})(target);
-		return activeTurns(turns, powerUp({target: targetType}, null, p.mul({ atk: mul })));
+		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+		const typeArr = flags(target).map(n => targetTypes[n]);
+		return activeTurns(turns, powerUp({targets: typeArr}, null, p.mul({ atk: mul })));
 	},
 	[231](turns, awoken1, awoken2, awoken3, awoken4, awoken5, atk, rcv) {
 		return activeTurns(turns, powerUp(null, null, p.scaleStateKindCount([awoken1, awoken2, awoken3, awoken4, awoken5].filter(Boolean), null, null, p.mul({atk: atk, hp:0, rcv: rcv}))));
@@ -1418,6 +1419,12 @@ const parsers = {
 	[232](...ids) { return evolvedSkills(false, ids.map(id => this.parser(id))); },
 	[233](...ids) { return evolvedSkills(true, ids.map(id => this.parser(id))); },
 	[234](min, max) { return skillProviso(c.stage(min ?? 0, max ?? 0)); },
+	[235](attr, _, len, atk, percent, combo, damage) {
+		return powerUp(null, null, p.mul({ atk: atk || 100}), c.exact('match-length', len, flags(attr), true), v.percent(percent), [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean));
+	},
+	[236](...ids) { //随机变身
+		return henshin(ids.distinct(), true);
+	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -1711,7 +1718,7 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.time_extend(dict));
 			break;
 		}
-		case SkillKinds.FollowAttack: { //队长技追打
+		case SkillKinds.FollowAttack: { //队长技倍率追打
 			let dict = {
 				//icon: createIcon("follow_attack"),
 				belong_to: tsp.target.self(),
@@ -2122,7 +2129,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.PowerUp: {
-			let attrs = skill.attrs, types = skill.types, target = skill.target, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage, additional = skill.additional;
+			let attrs = skill.attrs, types = skill.types, targets = skill.targets, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage, additional = skill.additional;
 			dict = {
 				icon: createIcon(skill.kind),
 			};
@@ -2139,26 +2146,12 @@ function renderSkill(skill, option = {})
 				targetDict.types = renderTypes(types || [], {affix: true});
 				attrs_types.push(targetDict.types);
 			}
-			if (target != undefined)
+			if (targets != undefined)
 			{
-				switch (target) {
-					case "self": {
-						targetDict.target = tsp.target.self();
-						break;
-					}
-					case "leader": {
-						targetDict.target = tsp.target.team_leader();
-						break;
-					}
-					case "sub-monsters": {
-						targetDict.target = tsp.target.team_sub();
-						break;
-					}
-					default: {
-						targetDict.target = tsp.target.unknown();
-						break;
-					}
-				}
+				console.debug(targets)
+				targetDict.target = targets.map(target=>
+					tsp?.target[target.replaceAll("-","_")]?.())
+					.nodeJoin(tsp.word.slight_pause());
 				attrs_types.push(targetDict.target);
 			}
 			if (attrs_types.length)
@@ -2202,13 +2195,18 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.Henshin: { //变身
-			let id = skill.id;
-			const dom = cardN(id);
-			dom.monDom.onclick = changeToIdInSkillDetail;
+			let ids = skill.ids, random = skill.random;
+			let doms = ids.map(id=>{
+				let dom = cardN(id);
+				dom.monDom.onclick = changeToIdInSkillDetail;
+				return dom;	})
 			dict = {
-				card: dom,
+				cards: doms.nodeJoin(),
 			}
-			frg.ap(tsp.skill.henshin(dict));
+			frg.ap(random ? 
+				tsp.skill.random_henshin(dict) :
+				tsp.skill.henshin(dict)
+				);
 			break;
 		}
 		case SkillKinds.VoidPoison: { //毒无效
@@ -2428,7 +2426,10 @@ function renderCondition(cond) {
 				value: renderValue(v.constant(cond.exact.value), {unit: tsp.unit.orbs}),
 				orbs: cond.exact.attrs === 'enhanced' ? tsp.cond.exact_match_enhanced() : renderOrbs(cond.exact.attrs, {affix: true})
 			};
-			frg.ap(tsp.cond.exact_match_length(dict));
+			
+			frg.ap(cond.exact.multiple ?
+				tsp.cond.exact_match_length_multiple(dict) :
+				tsp.cond.exact_match_length(dict));
 		}
 	} else if (cond.compo) {
 		let dict = {};

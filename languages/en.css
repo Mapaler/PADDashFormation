@@ -531,6 +531,20 @@ label[for="box-have"]::after
 {
 	content: "Henshin";
 }
+.random-henshin .evo-type::before,
+.random-henshin .evo-type::after
+{
+	content: "Random Henshin";
+}
+.random-henshin .evo-type-div
+{
+	margin: 0 -10px;
+}
+.random-henshin .evo-type
+{
+	transform: scaleX(0.50);
+	margin: calc(-100px * (1 - 0.50) / 2);
+}
 .henshin-loop .evo-type::before,
 .henshin-loop .evo-type::after
 {

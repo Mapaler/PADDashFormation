@@ -15,7 +15,7 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 | ![3人协力界面预览](doc/images/preview-capture-3p.png) | ![手机端预览](doc/images/preview-mobile.jpg) |
 
 # 如何使用 | HOW TO USE
-推荐[![][firefox]火狐浏览器](https://www.mozilla.org/firefox/new/) | [![][firefox]Firefox](https://www.mozilla.org/firefox/new/) is recommended
+推荐[![][firefox]火狐浏览器](//www.mozilla.org/firefox/new/) | [![][firefox]Firefox](//www.mozilla.org/firefox/new/) is recommended
 ## 快速使用在线版（推荐） | Online Quick Start (Recommended)
 * <https://mapaler.github.io/PADDashFormation/> (Github Pages)
 * <https://mapaler.com/PADDashFormation/> (我自己的镜像 | my own mirror)
@@ -43,7 +43,7 @@ Chrome browser need start with the additional argument `--allow-file-access-from
 1. 中文（繁體）
 1. English
 1. 日本語 (スキル解析翻訳のヘルプが必要です,  by Bing Translator)
-1. 한국어 (스킬 구문 분석 번역에 도움이 필요,  by Bing Translator)
+1. 북한/한국어 (스킬 구문 분석 번역에 도움이 필요,  by Bing Translator)
 
 ## How to **Pull requests**
 1. Click **Fork** In the page top right corner. Fork your own copy of this repository to your account.
@@ -96,16 +96,16 @@ Please refer to existing files.
 > 所有图片素材版权与怪物信息归属于GungHo在线娱乐有限公司。  
 > パズル&ドラゴンズに関する画像及び情報等の権利はGungHo Online Entertainment Inc.に帰属します。
 > ### 智龙迷城官网 | Puzzle & Dragons Official Website
-> * [パズル＆ドラゴンズ](http://pad.gungho.jp)
-> * [龍族拼圖](https://pad.gungho.jp/hktw/pad/)
-> * [Puzzle & Dragons](https://www.puzzleanddragons.us/)
-> * [퍼즐앤드래곤](https://pad.neocyon.com/W/)
+> * [パズル＆ドラゴンズ](//pad.gungho.jp)
+> * [龍族拼圖](//pad.gungho.jp/hktw/pad/)
+> * [Puzzle & Dragons](//www.puzzleanddragons.us/)
+> * [퍼즐앤드래곤](//pad.neocyon.com/W/)
 
 > © Fontworks Inc. Font Kurokane Right Reserved.
 > くろかね字体版权归属于Fontworks有限公司。  
-> [くろかね書体](https://fontworks.co.jp/fontsearch/kurokanestd-eb/)の権利は フォントワークス株式会社 に帰属します。
+> [くろかね書体](//fontworks.co.jp/fontsearch/kurokanestd-eb/)の権利は フォントワークス株式会社 に帰属します。
 
-> 卡片中文名、中文分类来自于[Puzzle & Dragons 戰友系統及資訊網](https://pad.skyozora.com/)
+> 卡片中文名、中文分类来自于[Puzzle & Dragons 戰友系統及資訊網](//pad.skyozora.com/)
 
 # 使用开源软件 | Open source software used
 * [pad-rikuu](//github.com/kiootic/pad-rikuu) //Data structure and parser

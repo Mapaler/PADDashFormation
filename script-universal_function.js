@@ -106,6 +106,11 @@ Array.prototype.deleteLatter = function(item = null) {
 	this.splice(index + 1);
 	return this;
 }
+//数组去重
+Array.prototype.distinct = function() {
+	let _set = new Set(this);
+	return Array.from(_set)
+}
 Array.prototype.randomShift = function() {
 	return this.splice(Math.random() * this.length, 1)?.[0];
 }
@@ -624,7 +629,7 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 function searchCards(cards, attr1, attr2, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, noHenshin) {
 	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	if (canAssist) cardsRange = cardsRange.filter(card=>card.canAssist);
-	if (noHenshin) cardsRange = cardsRange.filter(card=>!card.henshinFrom || card.limitBreakIncr);
+	if (noHenshin) cardsRange = cardsRange.filter(card=>!Array.isArray(card.henshinFrom) || card.limitBreakIncr);
 	//属性
 	if (attr1 != null && attr1 === attr2 || //主副属性一致并不为空
 		(attr1 === 6 && attr2 === -1)) //主副属性都为“无”
@@ -1086,9 +1091,9 @@ function tIf_Effect_76board(leader1id, leader2id) {
 	{
 		if (firstId == undefined) firstId = cardid;
 		let card = Cards[cardid];
-		if (card && card.henshinFrom && card.henshinFrom !== firstId)
+		if (card && Array.isArray(card.henshinFrom) && card.henshinFrom[0] !== firstId)
 		{
-			card = henshinBase(card.henshinFrom, firstId);
+			card = henshinBase(card.henshinFrom[0], firstId);
 		}
 		return card;
 	}
@@ -1121,46 +1126,49 @@ function tIf_Effect_addCombo(leader1id, leader2id) {
 	];
 }
 function getSkillAddCombo(card) {
-	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220];
+	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220, 235];
 	const skill = getCardLeaderSkills(card, searchTypeArray)[0];
 	if (!skill) return 0;
 	switch (skill.type) {
 		case 192:
 		case 194:
-			return skill.params[3];
+			return skill.params[3] ?? 0;
 		case 206:
-			return skill.params[6];
+			return skill.params[6] ?? 0;
 		case 209:
-			return skill.params[0];
+			return skill.params[0] ?? 0;
 		case 210:
 		case 219:
-			return skill.params[2];
+			return skill.params[2] ?? 0;
 		case 220:
-			return skill.params[1];
+			return skill.params[1] ?? 0;
+		case 235:
+			return skill.params[5] ?? 0;
 		default:
 			return 0;
 	}
 }
 //计算队伍的追打
 function tIf_Effect_inflicts(leader1id, leader2id) {
-	const searchTypeArray = [199, 200, 201, 223];
 	return [
 		getSkillFixedDamage(Cards[leader1id]),
 		getSkillFixedDamage(Cards[leader2id])
 	];
 }
 function getSkillFixedDamage(card) {
-	const searchTypeArray = [199, 200, 201, 223];
+	const searchTypeArray = [199, 200, 201, 223, 235];
 	const skill = getCardLeaderSkills(card, searchTypeArray)[0];
 	if (!skill) return 0;
 	switch (skill.type) {
 		case 199:
 		case 200:
-			return skill.params[2];
+			return skill.params[2] ?? 0;
 		case 201:
-			return skill.params[5];
+			return skill.params[5] ?? 0;
 		case 223:
-			return skill.params[1];
+			return skill.params[1] ?? 0;
+		case 235:
+			return skill.params[6] ?? 0;
 		default:
 			return 0;
 	}
@@ -1326,7 +1334,7 @@ function getReduceRange(reduceScales)
 }
 //获取盾减伤比例组
 function getReduceScales(leaderid) {
-	const searchTypeArray = [16, 17, 36, 38, 43, 129, 163, 130, 131, 178, 151, 169, 198, 170, 182, 193, 171, 183];
+	const searchTypeArray = [16, 17, 36, 38, 43, 129, 163, 130, 131, 178, 151, 169, 198, 170, 182, 193, 171, 183, 235];
 	const lss = getCardLeaderSkills(Cards[leaderid], searchTypeArray);
 	
 	function leaderReduceScale(ls) {
@@ -1432,6 +1440,10 @@ function getReduceScales(leaderid) {
 			case 210: //十字触发
 				reduce.scale = (sk[1] || 0) / 100;
 				break;
+			case 235: { //可多次触发
+				reduce.scale = (sk[4] || 0) / 100;
+				break;
+			}
 			default:
 		}
 		return reduce;

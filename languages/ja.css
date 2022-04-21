@@ -503,6 +503,16 @@ label[for="box-have"]::after
 {
 	content: "変身";
 }
+.random-henshin .evo-type::before,
+.random-henshin .evo-type::after
+{
+	content: "ランダムで変身";
+}
+.random-henshin .evo-type
+{
+	transform: scaleX(0.70);
+	margin: calc(-100px * (1 - 0.70) / 2);
+}
 .henshin-loop .evo-type::before,
 .henshin-loop .evo-type::after
 {

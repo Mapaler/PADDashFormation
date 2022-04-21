@@ -3437,12 +3437,18 @@ table .orb-icon
 { /*變身*/
 	background-image: linear-gradient(#00FFFF 30%, #FF00FF);
 }
+.evo-panel.random-henshin .evo-type::after
+{ /*随机變身*/
+	background-image: linear-gradient(#00FFFF 30%, #FFF 60%, #FF00FF);
+}
 .evo-panel.henshin,
+.evo-panel.random-henshin,
 .evo-panel.henshin-loop
 {
 	background-image: linear-gradient(#BFFFCF,#FFFFBF,#FFBFBF);
 }
 .evo-panel.henshin .evo-panel-right,
+.evo-panel.random-henshin .evo-panel-right,
 .evo-panel.henshin-loop .evo-panel-right
 {
 	border-color: #7F00FF;

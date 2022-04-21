@@ -18,6 +18,11 @@ const officialAPI = [ //来源于官方API
 	}
 ];
 
+//数组去重
+Array.prototype.distinct = function() {
+	let _set = new Set(this);
+	return Array.from(_set)
+}
 //比较两只怪物是否是同一只（在不同语言服务器）
 function sameCard(m1,m2)
 {
@@ -31,6 +36,29 @@ function sameCard(m1,m2)
 	if (m1.maxLevel != m2.maxLevel) return false; //最大等级
 	if (m1.collabId != m2.collabId) return false; //合作ID
 	return true;
+}
+
+//查找到真正起作用的那一个技能
+function getActuallySkills(skillsDataset, skillid, skillTypes, searchRandom = true) {
+	const skill = skillsDataset[skillid];
+	if (skill) {
+		if (skillTypes.includes(skill.type)){
+			return [skill];
+		} else if (skill.type == 116 || //主动技
+			(searchRandom && skill.type == 118) || //随机主动技
+			skill.type == 138 || //队长技
+			skill.type == 232 || //进化技能1，不循环
+			skill.type == 233) { //进化技能2，循环
+			//因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
+			let subSkills = skill.params.flatMap(id => getActuallySkills(skillsDataset, id, skillTypes, searchRandom));
+			subSkills = subSkills.filter(s=>s);
+			return subSkills;
+		} else {
+			return [];
+		}
+	} else {
+		return [];
+	}
 }
 /*
  * 正式流程
@@ -67,6 +95,8 @@ officialAPI.forEach(function(lang) {
 		delete card.unk06;
 		delete card.unk07;
 		delete card.unk08;
+		if (card.searchFlags.every(num=>isNaN(num)))
+			delete card.searchFlags;
 		monCards.push(card);
 	}
 
@@ -97,21 +127,25 @@ officialAPI.forEach(function(lang) {
 	const oSkills = lang.skillOriginal = skillJsonObj.skill;//将字符串转换为json对象
 	lang.skills = oSkills.map((oc,idx)=>new Skill(idx,oc)); //每一项生成分析对象
 
-	lang.cards.forEach((m,idx,arr)=>{
-		const skill = lang.skills[m.activeSkillId];
+	lang.cards.forEach((m, idx, cardArr)=>{
 		let henshinTo = null;
-		const searchType = 202;
-		if (skill.type == searchType)
-			henshinTo = skill.params[0];
-		else if (skill.type == 116 || skill.type == 118){
-			const subskill = skill.params.map(id=>lang.skills[id]).find(subskill=>subskill.type == searchType);
-			if (subskill)
-				henshinTo = subskill.params[0];
-		}
-		if (henshinTo)
-		{
-			m.henshinTo = henshinTo;
-			arr[henshinTo].henshinFrom = idx;
+		const henshinSkill = getActuallySkills(lang.skills, m.activeSkillId, [202, 236]);
+		if (henshinSkill.length) {
+			const skill = henshinSkill[0];
+			henshinTo = skill.params.distinct();
+			if (Array.isArray(henshinTo))
+			{
+				m.henshinTo = henshinTo;
+				//变身来源可能有多个，因此将变身来源修改为数组
+				for (let toId of henshinTo) {
+					let henshinFrom = cardArr[toId].henshinFrom;
+					if (Array.isArray(henshinFrom)) {
+						henshinFrom.push(idx);
+					} else {
+						cardArr[toId].henshinFrom = [idx];
+					}
+				}
+			}
 		}
 	});
 
@@ -258,8 +292,8 @@ var ckeyObjs;
 fs.readFile('./ckey.json','utf-8',function(err,data){
 	if(err)
 	{ //如果读取错误，直接使用全新ckey
-        ckeyObjs = newCkeyObjs;
-    } else
+		ckeyObjs = newCkeyObjs;
+	} else
 	{ //如果读取正确，则读入JSON，并判断是否和旧有的一致
 		ckeyObjs = JSON.parse(data);
 		for (let ci=0;ci<ckeyObjs.length;ci++)
@@ -271,7 +305,7 @@ fs.readFile('./ckey.json','utf-8',function(err,data){
 				ckeyObjs[ci] = newCkey;
 			}
 		}
-    }
+	}
 	fs.writeFile('./ckey.json',JSON.stringify(ckeyObjs),function(err){
 		if(err){
 			console.error(err);

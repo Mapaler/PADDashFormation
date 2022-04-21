@@ -494,6 +494,11 @@ label[for="box-have"]::after
 {
 	content: "변신";
 }
+.random-henshin .evo-type::before,
+.random-henshin .evo-type::after
+{
+	content: "책상 변신";
+}
 .henshin-loop .evo-type::before,
 .henshin-loop .evo-type::after
 {
