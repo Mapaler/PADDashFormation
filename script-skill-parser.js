@@ -2148,7 +2148,6 @@ function renderSkill(skill, option = {})
 			}
 			if (targets != undefined)
 			{
-				console.debug(targets)
 				targetDict.target = targets.map(target=>
 					tsp?.target[target.replaceAll("-","_")]?.())
 					.nodeJoin(tsp.word.slight_pause());
