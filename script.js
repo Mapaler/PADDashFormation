@@ -4107,7 +4107,7 @@ function editBoxChangeMonId(id) {
 	monEditLvMax.value = card.maxLevel;
 	const monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.max = card.limitBreakIncr ? 120 : card.maxLevel; //最大等级为120
-	monEditLv.value = card.limitBreakIncr ? 110 : card.maxLevel; //默认等级为110
+	monEditLv.value = card.limitBreakIncr ? 120 : card.maxLevel; //默认等级为110
 	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
 	const monEditLv120 = settingBox.querySelector(".m-level-btn-120");
 
