@@ -24,9 +24,9 @@ If your simulator needs Android 7 to play PAD. Take the [Nox Player](https://www
 
 	1. 将 Fidder 根证书导出到桌面  
 	Export the Fidder Root Certificate to desktop
-	1. 在电脑上找一个 **openssl.exe** 程序，或者下载安装 [Win32OpenSSL](http://slproweb.com/products/Win32OpenSSL.html)
+	1. 在电脑上找一个 **openssl.exe** 程序，或者下载安装 [Win32OpenSSL](http://slproweb.com/products/Win32OpenSSL.html)  
 	Find an **openssl.exe** program on computer, or install [Win32OpenSSL](http://slproweb.com/products/Win32OpenSSL.html)
-	1. 执行代码，获取证书的hash 
+	1. 执行代码，获取证书的hash  
 	Execute the code to get the hash of the certificate  
 	`openssl x509 -inform PEM -subject_hash_old -noout -in FiddlerRoot.cer`
 	1. 执行代码，将证书由 *CER* 转换为 *PEM* 格式  
