@@ -1024,58 +1024,61 @@ const specialSearchFunctions = (function() {
 			156,168,231, //宝石姬
 			228, //属性、类型数量
 		];
-		const skill = getCardActiveSkill(card, searchTypeArray);
+		const skills = getCardActiveSkills(card, searchTypeArray);
+		return skills.map(atkBuffParse).find(s=>s.rate != 0) || atkBuffParse();
+		function atkBuffParse(skill) {
+			const outObj = {
+				skilltype: 0, //0为没有，1为宝石姬类，2为指定类型、属性
+				types: [],
+				attrs: [],
+				awoken: [],
+				rate: 0,
+				turns: 0,
+			};
+			if (!skill) return outObj;
+			const sk = skill.params;
+			if (skill.type == 88 || skill.type == 92)
+			{
+				outObj.skilltype = 2;
+				outObj.types = sk.slice(1, skill.type == 88 ? 2 : 3);
+				outObj.turns = sk[0];
+				outObj.rate = sk[skill.type == 88 ? 2 : 3];
+			}
+			else if(skill.type == 50 || skill.type == 90)
+			{
+				outObj.attrs = sk.slice(1, skill.type == 50 ? 2 : 3).filter(a=>a !== 5);
+				if (!outObj.attrs.length)  //去除回复力
+					return outObj;
+				outObj.skilltype = 2;
+				outObj.turns = sk[0];
+				outObj.rate = sk[skill.type == 50 ? 2 : 3];
+			}
+			else if(skill.type == 156 && sk[4] == 2 //必须要是加攻击力
+				|| skill.type == 168)
+			{
+				outObj.skilltype = 1;
+				outObj.awoken = sk.slice(1, skill.type == 168 ? 7 : 4).filter(Boolean);
+				outObj.turns = sk[0];
+				outObj.rate = skill.type == 168 ? sk[7] : sk[5] - 100;
+			}
+			else if(skill.type == 228 && sk[3] > 0)
+			{
+				outObj.skilltype = 1;
+				outObj.attrs = flags(sk[1]);
+				outObj.types = flags(sk[2]);
+				outObj.turns = sk[0];
+				outObj.rate = sk[3];
+			}
+			else if(skill.type == 231 && sk[6] > 0)
+			{
+				outObj.skilltype = 1;
+				outObj.awoken = sk.slice(1, 5).filter(Boolean).filter(flags);
+				outObj.turns = sk[0];
+				outObj.rate = sk[6];
+			}
+			return outObj;
+		}
 
-		const outObj = {
-			skilltype: 0, //0为没有，1为宝石姬类，2为指定类型、属性
-			types: [],
-			attrs: [],
-			awoken: [],
-			rate: 0,
-			turns: 0,
-		};
-		if (!skill) return outObj;
-		const sk = skill.params;
-		if (skill.type == 88 || skill.type == 92)
-		{
-			outObj.skilltype = 2;
-			outObj.types = sk.slice(1, skill.type == 88 ? 2 : 3);
-			outObj.turns = sk[0];
-			outObj.rate = sk[skill.type == 88 ? 2 : 3];
-		}
-		else if(skill.type == 50 || skill.type == 90)
-		{
-			outObj.attrs = sk.slice(1, skill.type == 50 ? 2 : 3).filter(a=>a !== 5);
-			if (!outObj.attrs.length)  //去除回复力
-				return outObj;
-			outObj.skilltype = 2;
-			outObj.turns = sk[0];
-			outObj.rate = sk[skill.type == 50 ? 2 : 3];
-		}
-		else if(skill.type == 156 && sk[4] == 2 //必须要是加攻击力
-			|| skill.type == 168)
-		{
-			outObj.skilltype = 1;
-			outObj.awoken = sk.slice(1, skill.type == 168 ? 7 : 4).filter(Boolean);
-			outObj.turns = sk[0];
-			outObj.rate = skill.type == 168 ? sk[7] : sk[5] - 100;
-		}
-		else if(skill.type == 228 && sk[3] > 0)
-		{
-			outObj.skilltype = 1;
-			outObj.attrs = flags(sk[1]);
-			outObj.types = flags(sk[2]);
-			outObj.turns = sk[0];
-			outObj.rate = sk[3];
-		}
-		else if(skill.type == 231 && sk[6] > 0)
-		{
-			outObj.skilltype = 1;
-			outObj.awoken = sk.slice(1, 5).filter(Boolean).filter(flags);
-			outObj.turns = sk[0];
-			outObj.rate = sk[6];
-		}
-		return outObj;
 	}
 	function rcvBuff_Rate(card)
 	{
@@ -1083,34 +1086,37 @@ const specialSearchFunctions = (function() {
 			50,90,
 			228, 231, //宝石姬
 		];
-		const skill = getCardActiveSkill(card, searchTypeArray);
-		const outObj = {
-			skilltype: 0, //0为没有，1为宝石姬类，2为指定类型、属性
-			types: [],
-			attrs: [],
-			awoken: [],
-			rate: 0,
-			turns: 0,
-		};
-		if (!skill) return outObj;
-		const sk = skill.params;
-		if (skill.type == 228 && sk[4] > 0) {
-			outObj.skilltype = 1;
-			outObj.attrs = flags(sk[1]);
-			outObj.types = flags(sk[2]);
-			outObj.turns = sk[0];
-			outObj.rate = sk[4];
-		} else if (skill.type == 231 && sk[7] > 0) {
-			outObj.skilltype = 1;
-			outObj.awoken = sk.slice(1, 5).filter(Boolean).filter(flags);
-			outObj.turns = sk[0];
-			outObj.rate = sk[7];
-		} else if (skill.type == 50 || skill.type == 90) {
-			outObj.skilltype = sk.slice(1,sk.length>2?-1:undefined).includes(5) ? 2 : 0;
-			outObj.turns = sk[0];
-			outObj.rate = sk.length > 2 ? sk[sk.length-1] : 0;
+		const skills = getCardActiveSkills(card, searchTypeArray);
+		return skills.map(rcvBuffParse).find(s=>s.rate != 0) || rcvBuffParse();
+		function rcvBuffParse(skill) {
+			const outObj = {
+				skilltype: 0, //0为没有，1为宝石姬类，2为指定类型、属性
+				types: [],
+				attrs: [],
+				awoken: [],
+				rate: 0,
+				turns: 0,
+			};
+			if (!skill) return outObj;
+			const sk = skill.params;
+			if (skill.type == 228 && sk[4] > 0) {
+				outObj.skilltype = 1;
+				outObj.attrs = flags(sk[1]);
+				outObj.types = flags(sk[2]);
+				outObj.turns = sk[0];
+				outObj.rate = sk[4];
+			} else if (skill.type == 231 && sk[7] > 0) {
+				outObj.skilltype = 1;
+				outObj.awoken = sk.slice(1, 5).filter(Boolean).filter(flags);
+				outObj.turns = sk[0];
+				outObj.rate = sk[7];
+			} else if (skill.type == 50 || skill.type == 90) {
+				outObj.skilltype = sk.slice(1,sk.length>2?-1:undefined).includes(5) ? 2 : 0;
+				outObj.turns = sk[0];
+				outObj.rate = sk.length > 2 ? sk[sk.length-1] : 0;
+			}
+			return outObj;
 		}
-		return outObj;
 	}
 	function damageSelf_Rate(card)
 	{
