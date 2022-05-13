@@ -973,6 +973,19 @@ const specialSearchFunctions = (function() {
 		fragment.appendChild(createOrbsList(colors.flat()));
 		return fragment;
 	}
+	function numericalATK_Addition(card)
+	{
+		const searchTypeArray = [0,1,2,35,37,42,58,59,84,85,86,87,110,115,143,144];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		//const sk = skill.params;
+
+		const colors = [getCannonAttr(skill)];
+		
+		const fragment = document.createDocumentFragment();
+		fragment.appendChild(document.createTextNode(`射`));
+		fragment.appendChild(createOrbsList(colors));
+		return fragment;
+	}
 	function healImmediately_Rate(card)
 	{
 		const searchTypeArray = [7, //宠物回复力
@@ -1197,21 +1210,7 @@ const specialSearchFunctions = (function() {
 	const functions = [
 		{name:"No Filter",otLangName:{chs:"不做筛选",cht:"不做篩選"},function:cards=>cards},
 		{group:true,name:"======Very commonly used=====",otLangName:{chs:"======非常常用======",cht:"======非常常用======"}, functions: [
-			{name:"↑Increase skills charge(sort by turns)",otLangName:{chs:"【溜】减少CD（按回合排序）",cht:"【溜】減少CD（按回合排序）"},
-				function:cards=>{
-					const searchTypeArray = [146];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-				},
-				addition:card=>{
-					const searchTypeArray = [146];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					const sk = skill.params;
-					return document.createTextNode(`${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}溜`);
-				}
-			},
+			/*
 			{name:"Voids both absorption(sort by turns)",otLangName:{chs:"双破吸 buff（按破吸回合排序）",cht:"雙破吸 buff（按破吸回合排序）"},
 				function:cards=>{
 				const searchTypeArray = [173];
@@ -1272,136 +1271,11 @@ const specialSearchFunctions = (function() {
 					return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
 				}
 			},
-			{name:"Fixed damage inflicts(sort by damage)",otLangName:{chs:"队长技固伤追击（按伤害排序）",cht:"隊長技固傷追擊（按傷害排序）"},
-				function:cards=>{
-				return cards.filter(card=>{
-					return getSkillFixedDamage(card) > 0;
-				}).sort((a,b)=>{
-					let a_pC = getSkillFixedDamage(a),b_pC = getSkillFixedDamage(b);
-					return a_pC - b_pC;
-				});
-				},
-				addition:card=>{
-					const value = getSkillFixedDamage(card);
-					let nodeArr = [`${value.bigNumberToString()}固伤`];
-					let skill;
-					if (skill = getCardLeaderSkill(card, [235])) {
-						nodeArr.push("/");
-						nodeArr.push(createOrbsList(flags(skill.params[0])));
-						nodeArr.push(`×${skill.params[2]}`);
-					}
-					return nodeArr.nodeJoin();
-				}
-			},
-			{name:"Adds combo(sort by combo)",otLangName:{chs:"队长技+C（按+C数排序）",cht:"隊長技+C（按+C數排序）"},
-				function:cards=>{
-				return cards.filter(card=>{
-					return getSkillAddCombo(card) > 0;
-				}).sort((a,b)=>{
-					let a_pC = getSkillAddCombo(a),b_pC = getSkillAddCombo(b);
-					return a_pC - b_pC;
-				});
-				},
-				addition:card=>{
-					const value = getSkillAddCombo(card);
-					let nodeArr = [`+${value.bigNumberToString()}C`];
-					let skill;
-					if (skill = getCardLeaderSkill(card, [210])) {
-						nodeArr.push("/十字");
-					} else if (skill = getCardLeaderSkill(card, [235])) {
-						nodeArr.push("/");
-						nodeArr.push(createOrbsList(flags(skill.params[0])));
-						nodeArr.push(`×${skill.params[2]}`);
-					}
-					return nodeArr.nodeJoin();
-				}
-			},
 			{name:"8 latent grids",otLangName:{chs:"8格潜觉",cht:"8格潛覺"},
 				function:cards=>cards.filter(card=>card.is8Latent)
-			},
+			},*/
 		]},
 		{group:true,name:"======Active Skill======",otLangName:{chs:"======主动技======",cht:"======主動技======"}, functions: [
-			{name:"1 CD",otLangName:{chs:"1 CD",cht:"1 CD"},
-				function:cards=>cards.filter(card=>{
-				if (card.activeSkillId == 0) return false;
-				const skill = Skills[card.activeSkillId];
-				return skill.initialCooldown - (skill.maxLevel - 1) <= 1;
-				})
-			},
-			{name:"Less than 4 can be cycled use(Inaccurate)",otLangName:{chs:"除 1 CD 外，4 个以下能永动开（可能不精确）",cht:"除 1 CD 外，4 個以下能永動開（可能不精確）"},
-				function:cards=>cards.filter(card=>{
-				if (card.activeSkillId == 0) return false;
-				const skill = Skills[card.activeSkillId];
-				const minCD = skill.initialCooldown - (skill.maxLevel - 1); //主动技最小的CD
-				let realCD = minCD;
-	
-				const searchTypeArray = [14];
-				const subSkill = getCardLeaderSkill(card, searchTypeArray);
-				if (subSkill)
-				{
-					realCD -= subSkill.params[0] * 3;
-				}
-				return minCD > 1 && realCD <= 4;
-				})
-			},
-			{name:"Time pause(sort by time)",otLangName:{chs:"时间暂停（按停止时间排序）",cht:"時間暫停（按停止時間排序）"},
-				function:cards=>{
-				const searchTypeArray = [5];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-				},
-				addition:card=>{
-				const searchTypeArray = [5];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const value = skill.params[0];
-				return `时停${value}s`;
-				}
-			},
-			{
-				name:"Random effect active",otLangName:{chs:"随机效果技能",cht:"隨機效果技能"},
-				function:cards=>cards.filter(card=>Skills[card.activeSkillId].type == 118)
-			},
-			{
-				name:"Evolved active",otLangName:{chs:"进化类技能",cht:"進化類技能"},
-				function:cards=>cards.filter(card=>{
-					let skType = Skills[card.activeSkillId].type;
-					return skType == 232 || skType == 233;
-				})
-			},
-			{name:"Enable require HP range",otLangName:{chs:"技能使用血线要求",cht:"技能使用血線要求"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [225];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
-				addition:card=>{
-					const searchTypeArray = [225];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					const sk = skill.params;
-					let strArr = [];
-					if (sk[0]) strArr.push(`≥${sk[0]}%`);
-					if (sk[1]) strArr.push(`≤${sk[1]}%`);
-					return `HP ${strArr.join(" ")}`;
-				}
-			},
-			{name:"Enable require Dungeon Stage",otLangName:{chs:"技能使用地下城层数要求",cht:"技能使用地下城層數要求"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [234];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
-				addition:card=>{
-					const searchTypeArray = [234];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					const sk = skill.params;
-					let strArr = [];
-					if (sk[0]) strArr.push(`≥${sk[0]}`);
-					if (sk[1]) strArr.push(`≤${sk[1]}`);
-					return `层 ${strArr.join(" ")}`;
-				}
-			},
 		]},
 		{group:true,name:"-----Voids Absorption-----",otLangName:{chs:"-----破吸类-----",cht:"-----破吸類-----"}, functions: [
 			{name:"Voids attribute absorption(sort by turns)",otLangName:{chs:"破属吸 buff（按破吸回合排序）",cht:"破屬吸 buff（按破吸回合排序）"},
@@ -1700,24 +1574,6 @@ const specialSearchFunctions = (function() {
 				return `无↓×${sk[0]}T`;
 				}
 			},
-			{name:"Creates Roulette Orb",otLangName:{chs:"生成变换位（转转珠）",cht:"生成變換位（轉轉珠）"},
-				function:cards=>{
-					const searchTypeArray = [207];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-				},
-				addition:card=>{
-					const searchTypeArray = [207];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					const sk = skill.params;
-					if (sk[7])
-						return `${sk[7]}个×${sk[0]}T`;
-					else
-						return `特殊形状×${sk[0]}T`;
-				}
-			},
 			{name:"Adds combo(sort by combo)",otLangName:{chs:"加C buff（按C数排列）",cht:"加C buff（按C數排列）"},
 				function:cards=>{
 					const searchTypeArray = [160];
@@ -1826,6 +1682,24 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					const sk = skill.params;
 					return `全体×${sk[0]}T`;
+				}
+			},
+			{name:"Creates Roulette Orb",otLangName:{chs:"生成变换位（转转珠）",cht:"生成變換位（轉轉珠）"},
+				function:cards=>{
+					const searchTypeArray = [207];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+					const searchTypeArray = [207];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					if (sk[7])
+						return `${sk[7]}个×${sk[0]}T`;
+					else
+						return `特殊形状×${sk[0]}T`;
 				}
 			},
 		]},
@@ -2246,19 +2120,20 @@ const specialSearchFunctions = (function() {
 		{group:true,name:"-----Damage Enemy - Numerical damage-----",otLangName:{chs:"-----对敌直接伤害类-大炮-----",cht:"-----對敵直接傷害類-大炮-----"}, functions: [
 			{name:"Numerical ATK - Target - Single",otLangName:{chs:"大炮-对象-敌方单体",cht:"大炮-對象-敵方單體"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [2,35,37,59,84,86,110,115,144];
-				function isSingle(skill)
-				{
-					if (skill.type == 110)
-						return Boolean(skill.params[0]);
-					else if (skill.type == 144)
-						return Boolean(skill.params[2]);
-					else
-						return true;
-				}
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && isSingle(skill);
-				})
+					const searchTypeArray = [2,35,37,59,84,86,110,115,144];
+					function isSingle(skill)
+					{
+						if (skill.type == 110)
+							return Boolean(skill.params[0]);
+						else if (skill.type == 144)
+							return Boolean(skill.params[2]);
+						else
+							return true;
+					}
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && isSingle(skill);
+				}),
+				addition: numericalATK_Addition
 			},
 			{name:"Numerical ATK - Target - Mass",otLangName:{chs:"大炮-对象-敌方全体",cht:"大炮-對象-敵方全體"},
 				function:cards=>cards.filter(card=>{
@@ -2274,7 +2149,8 @@ const specialSearchFunctions = (function() {
 				}
 				const skill = getCardActiveSkill(card, searchTypeArray);
 				return skill && skill.id!=0 && isAll(skill);
-				})
+				}),
+				addition: numericalATK_Addition
 			},
 			{name:"Numerical ATK - Target - Designate Attr",otLangName:{chs:"大炮-对象-指定属性敌人",cht:"大炮-對象-指定屬性敵人"},
 				function:cards=>cards.filter(card=>{
@@ -2283,125 +2159,110 @@ const specialSearchFunctions = (function() {
 				return skill;
 				})
 			},
-	
-			{name:"Numerical ATK - Attr - Any",otLangName:{chs:"大炮-属性-不限",cht:"大炮-屬性-不限"},
-				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [0,1,2,35,37,42,58,59,84,85,86,87,110,115,143,144];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && skill.id!=0;
-				}),
-				addition:card=>{
-				const searchTypeArray = [0,1,2,35,37,42,58,59,84,85,86,87,110,115,143,144];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				//const sk = skill.params;
-	
-				const colors = [getCannonAttr(skill)];
-				
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(`射`));
-				fragment.appendChild(createOrbsList(colors));
-				return fragment;
-				}
-			},
 			{name:"Numerical ATK - Attr - Actors self",otLangName:{chs:"大炮-属性-释放者自身",cht:"大炮-屬性-釋放者自身"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [2,35];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [2,35];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				})
 			},
 	
 			{name:"Numerical ATK - Damage - Rate by Actors self ATK(sort by rate)",otLangName:{chs:"大炮-伤害-自身攻击倍率（按倍率排序，范围取小）",cht:"大炮-傷害-自身攻擊倍率（按倍率排序，範圍取小）"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [0,2,35,37,58,59,84,85,115];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && skill.id!=0;
-			}).sort((a,b)=>{
-				const searchTypeArray = [0,2,35,37,58,59,84,85,115];
-				const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
-				function getNumber(skill)
-				{
-					const sk = skill.params;
-					switch(skill.type)
+					const searchTypeArray = [0,2,35,37,58,59,84,85,115];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && skill.id!=0;
+				}).sort((a,b)=>{
+					const searchTypeArray = [0,2,35,37,58,59,84,85,115];
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					function getNumber(skill)
 					{
-						case 0:
-						case 37:
-						case 58:
-						case 59:
-						case 84:
-						case 85:
-						case 115:
-							return sk[1];
-						case 2:
-						case 35:
-							return sk[0];
-						default:
-							return 0;
+						const sk = skill.params;
+						switch(skill.type)
+						{
+							case 0:
+							case 37:
+							case 58:
+							case 59:
+							case 84:
+							case 85:
+							case 115:
+								return sk[1];
+							case 2:
+							case 35:
+								return sk[0];
+							default:
+								return 0;
+						}
 					}
-				}
-				let a_pC = getNumber(a_s),b_pC = getNumber(b_s);
-				return a_pC - b_pC;
-				})
+					let a_pC = getNumber(a_s),b_pC = getNumber(b_s);
+					return a_pC - b_pC;
+				}),
+				addition: numericalATK_Addition
 			},
 			{name:"Numerical ATK - Damage - Fixed Attr Number (sort by number)",otLangName:{chs:"大炮-伤害-指定属性数值（按数值排序）",cht:"大炮-傷害-指定屬性數值（按數值排序）"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [1,42,86,87];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
-			}).sort((a,b)=>{
-				const searchTypeArray = [1,42,86,87];
-				const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
-				function getNumber(skill)
-				{
-					const sk = skill.params;
-					switch(skill.type)
+					const searchTypeArray = [1,42,86,87];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}).sort((a,b)=>{
+					const searchTypeArray = [1,42,86,87];
+					const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
+					function getNumber(skill)
 					{
-						case 1:
-						case 86:
-						case 87:
-							return sk[1];
-						case 42:
-							return sk[2];
-						default:
-							return 0;
+						const sk = skill.params;
+						switch(skill.type)
+						{
+							case 1:
+							case 86:
+							case 87:
+								return sk[1];
+							case 42:
+								return sk[2];
+							default:
+								return 0;
+						}
 					}
-				}
-				let a_pC = getNumber(a_s),b_pC = getNumber(b_s);
-				return a_pC - b_pC;
-				})
+					let a_pC = getNumber(a_s),b_pC = getNumber(b_s);
+					return a_pC - b_pC;
+				}),
+				addition: numericalATK_Addition
 			},
 			{name:"Numerical ATK - Damage - By remaining HP (sort by rate at HP 1)",otLangName:{chs:"大炮-伤害-根据剩余血量（按 1 HP 时倍率排序）",cht:"大炮-傷害-根據剩餘血量（按 1 HP 時倍率排序）"},
 				function:cards=>{
-				const searchTypeArray = [110];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray,3));
-				}
+					const searchTypeArray = [110];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,3));
+				},
+				addition: numericalATK_Addition
 			},
 			{name:"Numerical ATK - Damage - Team total HP (sort by rate)",otLangName:{chs:"大炮-伤害-队伍总 HP（按倍率排序）",cht:"大炮-傷害-隊伍總 HP（按倍率排序）"},
 				function:cards=>{
-				const searchTypeArray = [143];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-				}
+					const searchTypeArray = [143];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition: numericalATK_Addition
 			},
 			{name:"Numerical ATK - Damage - Team attrs ATK (sort by rate)",otLangName:{chs:"大炮-伤害-队伍某属性总攻击（按倍率排序）",cht:"大炮-傷害-隊伍某屬性總攻擊（按倍率排序）"},
 				function:cards=>{
-				const searchTypeArray = [144];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
-				}
+					const searchTypeArray = [144];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
+				},
+				addition: numericalATK_Addition
 			},
 			{name:"Numerical ATK - Special - Vampire",otLangName:{chs:"大炮-特殊-吸血",cht:"大炮-特殊-吸血"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [35,115];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [35,115];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				})
 			},
 		]},
@@ -2890,6 +2751,89 @@ const specialSearchFunctions = (function() {
 				})
 			},
 		]},
+		{group:true,name:"-----Others Active Skills-----",otLangName:{chs:"-----其他主动技-----",cht:"-----其他主動技-----"}, functions: [
+			{name:"1 CD",otLangName:{chs:"1 CD",cht:"1 CD"},
+				function:cards=>cards.filter(card=>{
+				if (card.activeSkillId == 0) return false;
+				const skill = Skills[card.activeSkillId];
+				return skill.initialCooldown - (skill.maxLevel - 1) <= 1;
+				})
+			},
+			{name:"Less than 4 can be cycled use(Inaccurate)",otLangName:{chs:"除 1 CD 外，4 个以下能永动开（可能不精确）",cht:"除 1 CD 外，4 個以下能永動開（可能不精確）"},
+				function:cards=>cards.filter(card=>{
+				if (card.activeSkillId == 0) return false;
+				const skill = Skills[card.activeSkillId];
+				const minCD = skill.initialCooldown - (skill.maxLevel - 1); //主动技最小的CD
+				let realCD = minCD;
+	
+				const searchTypeArray = [14];
+				const subSkill = getCardLeaderSkill(card, searchTypeArray);
+				if (subSkill)
+				{
+					realCD -= subSkill.params[0] * 3;
+				}
+				return minCD > 1 && realCD <= 4;
+				})
+			},
+			{name:"Time pause(sort by time)",otLangName:{chs:"时间暂停（按停止时间排序）",cht:"時間暫停（按停止時間排序）"},
+				function:cards=>{
+				const searchTypeArray = [5];
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+				const searchTypeArray = [5];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const value = skill.params[0];
+				return `时停${value}s`;
+				}
+			},
+			{
+				name:"Random effect active",otLangName:{chs:"随机效果技能",cht:"隨機效果技能"},
+				function:cards=>cards.filter(card=>Skills[card.activeSkillId].type == 118)
+			},
+			{
+				name:"Evolved active",otLangName:{chs:"进化类技能",cht:"進化類技能"},
+				function:cards=>cards.filter(card=>{
+					let skType = Skills[card.activeSkillId].type;
+					return skType == 232 || skType == 233;
+				})
+			},
+			{name:"Enable require HP range",otLangName:{chs:"技能使用血线要求",cht:"技能使用血線要求"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [225];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [225];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					let strArr = [];
+					if (sk[0]) strArr.push(`≥${sk[0]}%`);
+					if (sk[1]) strArr.push(`≤${sk[1]}%`);
+					return `HP ${strArr.join(" ")}`;
+				}
+			},
+			{name:"Enable require Dungeon Stage",otLangName:{chs:"技能使用地下城层数要求",cht:"技能使用地下城層數要求"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [234];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [234];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					const sk = skill.params;
+					let strArr = [];
+					if (sk[0]) strArr.push(`≥${sk[0]}`);
+					if (sk[1]) strArr.push(`≤${sk[1]}`);
+					return `层 ${strArr.join(" ")}`;
+				}
+			},
+		]},
 		
 		{group:true,name:"======Leader Skills=====",otLangName:{chs:"======队长技======",cht:"======隊長技======"}, functions: [
 			{name:"Fixed damage inflicts(sort by damage)",otLangName:{chs:"队长技固伤追击（按伤害排序）",cht:"隊長技固傷追擊（按傷害排序）"},
@@ -3360,9 +3304,6 @@ const specialSearchFunctions = (function() {
 			{name:"Pixel Evo",otLangName:{chs:"像素进化",cht:"像素進化"},
 				function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))
 			},
-			{name:"8 latent grids",otLangName:{chs:"8格潜觉",cht:"8格潛覺"},
-				function:cards=>cards.filter(card=>card.is8Latent)
-			},
 			//{name:"",otLangName:{chs:"非8格潜觉",cht:"非8格潛覺"},function:cards=>cards.filter(card=>!card.is8Latent)},
 			{name:"Reincarnation/Super Re..",otLangName:{chs:"转生、超转生进化",cht:"轉生、超轉生進化"},
 				function:cards=>cards.filter(card=>isReincarnated(card))
@@ -3412,6 +3353,9 @@ const specialSearchFunctions = (function() {
 			},
 		]},
 		{group:true,name:"----- Awoken -----",otLangName:{chs:"-----觉醒类-----",cht:"-----覺醒類-----"}, functions: [
+			{name:"8 latent grids",otLangName:{chs:"8格潜觉",cht:"8格潛覺"},
+				function:cards=>cards.filter(card=>card.is8Latent)
+			},
 			{name:"Have 9 awokens",otLangName:{chs:"有9个觉醒",cht:"有9個覺醒"},
 				function:cards=>cards.filter(card=>card.awakenings.length>=9)
 			},
@@ -3505,5 +3449,18 @@ const specialSearchFunctions = (function() {
 			},*/
 		]},
 	];
+	//非常常用
+	let commonlyUsed = functions.find(g=>g.group && g.name.includes("commonly used"));
+	if (commonlyUsed) {
+		let list = [
+			functions.find(g=>g.group && g.name.includes("player team"))?.functions.find(f=>f.name.includes("skills charge")),
+			functions.find(g=>g.group && g.name.includes("For Enemy"))?.functions.find(f=>f.name.includes("Menace")),
+			functions.find(g=>g.group && g.name.includes("Awoken"))?.functions.find(f=>f.name.includes("8 latent")),
+			functions.find(g=>g.group && g.name.includes("Leader Skills"))?.functions.find(f=>f.name.includes("Fixed damage inflicts")),
+			functions.find(g=>g.group && g.name.includes("Leader Skills"))?.functions.find(f=>f.name.includes("Adds combo")),
+		].filter(Boolean);
+		commonlyUsed.functions.push(...list);
+	}
+
 	return functions;
 })();
