@@ -706,7 +706,7 @@ const specialSearchFunctions = (function() {
 				scale = sk[1]/100;
 				break;
 			case 235: { //可多次触发
-				reduce.scale = (sk[4] || 0) / 100;
+				scale = (sk[4] || 0) / 100;
 				break;
 			}
 
