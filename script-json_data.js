@@ -717,6 +717,36 @@ const specialSearchFunctions = (function() {
 		}
 		return scale || 0;
 	}
+	//获取无条件盾减伤比例
+	function getReduceScale_unconditional(ls)
+	{
+		const sk = ls.params;
+		let scale = 0;
+		switch (ls.type)
+		{
+			case 16: //无条件盾
+			{
+				scale = sk[0]/100;
+				break;
+			}
+			case 129: //无条件盾，属性个数不固定
+			case 163: //无条件盾，属性个数不固定
+			{
+				scale = (sk[5] & 31) != 31 ? 0 : sk[6]/100;
+				break;
+			}
+			case 178: //无条件盾，属性个数不固定
+			{
+				scale = (sk[6] & 31) != 31 ? 0 : sk[7]/100;
+				break;
+			}
+			case 138: //调用其他队长技
+				scale = sk.reduce((pmul,skid)=> 1 - (1-pmul) * (1-getReduceScale_unconditional(Skills[skid])),0);
+				break;
+			default:
+		}
+		return scale || 0;
+	}
 	
 	function getCannonAttr(skill)
 	{
@@ -752,6 +782,28 @@ const specialSearchFunctions = (function() {
 		let a_pC = a_s.params[pidx],b_pC = b_s.params[pidx];
 		return a_pC - b_pC;
 	}
+	
+	function sortByHPScal(a,b)
+	{
+		const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+		return getHPScale(a_s) - getHPScale(b_s);
+	}
+	function HPScal_Addition(card)
+	{
+		const skill = Skills[card.leaderSkillId];
+		return `💟${Math.round(getHPScale(skill) * 100)}%`;
+	}
+	function sortByReduceScale(a,b)
+	{
+		const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+		return getReduceScale(a_s) - getReduceScale(b_s);
+	}
+	function ReduceScale_Addition(card)
+	{
+		const skill = Skills[card.leaderSkillId];
+		return `🛡️${Math.round(getReduceScale(skill) * 100)}%`;
+	}
+
 	function voidsAbsorption_Addition(card)
 	{
 		const searchTypeArray = [173];
@@ -3121,172 +3173,141 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Increase Exp rate(sort by rate)",otLangName:{chs:"增加经验获取倍数（按增加倍率排序）",cht:"增加經驗獲取倍數（按增加倍率排序）"},
 				function:cards=>{
-				const searchTypeArray = [148];
-				return cards.filter(card=>{
-					const skill = getCardLeaderSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+					const searchTypeArray = [148];
+					return cards.filter(card=>{
+						const skill = getCardLeaderSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
 				addition:card=>{
-				const searchTypeArray = [148];
-				const skill = getCardLeaderSkill(card, searchTypeArray);
-				const sk = skill.params;
-				return `经验x${sk[0]/100}`;
+					const searchTypeArray = [148];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					const sk = skill.params;
+					return `经验x${sk[0]/100}`;
 				}
 			},
 		]},
 		{group:true,name:"-----HP Scale-----",otLangName:{chs:"-----血倍率-----",cht:"-----血倍率-----"}, functions: [
 			{name:"HP Scale [2, ∞) (sort by rate)",otLangName:{chs:"队长血倍率[2, ∞)（按倍率排序）",cht:"隊長血倍率[2, ∞)（按倍率排序）"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const HPscale = getHPScale(skill);
-				return HPscale >= 2;
-			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				return getHPScale(a_s) - getHPScale(b_s);
-				})
+					const skill = Skills[card.leaderSkillId];
+					const HPscale = getHPScale(skill);
+					return HPscale >= 2;
+				}).sort(sortByHPScal),
+				addition: HPScal_Addition
 			},
 			{name:"HP Scale [1.5, 2) (sort by rate)",otLangName:{chs:"队长血倍率[1.5, 2)（按倍率排序）",cht:"隊長血倍率[1.5, 2)（按倍率排序）"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const HPscale = getHPScale(skill);
-				return HPscale >= 1.5 && HPscale < 2;
-			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				return getHPScale(a_s) - getHPScale(b_s);
-				})
+					const skill = Skills[card.leaderSkillId];
+					const HPscale = getHPScale(skill);
+					return HPscale >= 1.5 && HPscale < 2;
+				}).sort(sortByHPScal),
+				addition: HPScal_Addition
 			},
 			{name:"HP Scale (1, 1.5) (sort by rate)",otLangName:{chs:"队长血倍率(1, 1.5)（按倍率排序）",cht:"隊長血倍率(1, 1.5)（按倍率排序）"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const HPscale = getHPScale(skill);
-				return HPscale > 1 && HPscale < 1.5;
-			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				return getHPScale(a_s) - getHPScale(b_s);
-				})
+					const skill = Skills[card.leaderSkillId];
+					const HPscale = getHPScale(skill);
+					return HPscale > 1 && HPscale < 1.5;
+				}).sort(sortByHPScal),
+				addition: HPScal_Addition
 			},
 			{name:"HP Scale == 1 (sort by rate)",otLangName:{chs:"队长血倍率 == 1",cht:"隊長血倍率 == 1"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const HPscale = getHPScale(skill);
-				return HPscale === 1;
-				})
+					const skill = Skills[card.leaderSkillId];
+					const HPscale = getHPScale(skill);
+					return HPscale === 1;
+				}),
+				addition: HPScal_Addition
 			},
 			{name:"HP Scale [0, 1) (sort by rate)",otLangName:{chs:"队长血倍率[0, 1)（按倍率排序）",cht:"隊長血倍率[0, 1)（按倍率排序）"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const HPscale = getHPScale(skill);
-				return HPscale < 1;
-			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				return getHPScale(a_s) - getHPScale(b_s);
-				})
+					const skill = Skills[card.leaderSkillId];
+					const HPscale = getHPScale(skill);
+					return HPscale < 1;
+				}).sort(sortByHPScal),
+				addition: HPScal_Addition
 			},
 		]},
 		{group:true,name:"-----Reduce Shield-----",otLangName:{chs:"-----减伤盾-----",cht:"-----減傷盾-----"}, functions: [
 			{name:"Reduce Damage [75%, 100%] (sort by rate)",otLangName:{chs:"队长盾减伤[75%, 100%]（按倍率排序）",cht:"隊長盾減傷[75%, 100%]（按倍率排序）"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const reduceScale = getReduceScale(skill);
-				return reduceScale >= 0.75;
-			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				return getReduceScale(a_s) - getReduceScale(b_s);
-				})
+					const skill = Skills[card.leaderSkillId];
+					const reduceScale = getReduceScale(skill);
+					return reduceScale >= 0.75;
+				}).sort(sortByReduceScale),
+				addition: ReduceScale_Addition
 			},
 			{name:"Reduce Damage [50%, 75%) (sort by rate)",otLangName:{chs:"队长盾减伤[50%, 75%)（按倍率排序）",cht:"隊長盾減傷[50%, 75%)（按倍率排序）"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const reduceScale = getReduceScale(skill);
-				return reduceScale >= 0.5 && reduceScale < 0.75;
-			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				return getReduceScale(a_s) - getReduceScale(b_s);
-				})
+					const skill = Skills[card.leaderSkillId];
+					const reduceScale = getReduceScale(skill);
+					return reduceScale >= 0.5 && reduceScale < 0.75;
+				}).sort(sortByReduceScale),
+				addition: ReduceScale_Addition
 			},
 			{name:"Reduce Damage [25%, 50%) (sort by rate)",otLangName:{chs:"队长盾减伤[25%, 50%)（按倍率排序）",cht:"隊長盾減傷[25%, 50%)（按倍率排序）"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const reduceScale = getReduceScale(skill);
-				return reduceScale >= 0.25 && reduceScale < 0.5;
-			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				return getReduceScale(a_s) - getReduceScale(b_s);
-				})
+					const skill = Skills[card.leaderSkillId];
+					const reduceScale = getReduceScale(skill);
+					return reduceScale >= 0.25 && reduceScale < 0.5;
+				}).sort(sortByReduceScale),
+				addition: ReduceScale_Addition
 			},
 			{name:"Reduce Damage (0%, 25%) (sort by rate)",otLangName:{chs:"队长盾减伤(0%, 25%)（按倍率排序）",cht:"隊長盾減傷(0%, 25%)（按倍率排序）"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const reduceScale = getReduceScale(skill);
-				return reduceScale > 0 && reduceScale < 0.25;
-			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				return getReduceScale(a_s) - getReduceScale(b_s);
-				})
+					const skill = Skills[card.leaderSkillId];
+					const reduceScale = getReduceScale(skill);
+					return reduceScale > 0 && reduceScale < 0.25;
+				}).sort(sortByReduceScale),
+				addition: ReduceScale_Addition
 			},
 			{name:"Reduce Damage == 0",otLangName:{chs:"队长盾减伤 == 0",cht:"隊長盾減傷 == 0"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const reduceScale = getReduceScale(skill);
-				return reduceScale === 0;
+					const skill = Skills[card.leaderSkillId];
+					const reduceScale = getReduceScale(skill);
+					return reduceScale === 0;
 				})
 			},
 			{name:"Reduce Damage - Must all Att.",otLangName:{chs:"队长盾减伤-必须全属性减伤",cht:"隊長盾減傷-必須全屬性減傷"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				return getReduceScale(skill, true) > 0;
+					const skill = Skills[card.leaderSkillId];
+					return getReduceScale(skill, true) > 0;
 				})
 			},
 			{name:"Reduce Damage - Exclude HP-line",otLangName:{chs:"队长盾减伤-排除血线盾",cht:"隊長盾減傷-排除血線盾"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				return getReduceScale(skill, undefined, true) > 0;
+					const skill = Skills[card.leaderSkillId];
+					return getReduceScale(skill, undefined, true) > 0;
 				})
 			},
 			{name:"Reduce Damage - Exclude chance",otLangName:{chs:"队长盾减伤-排除几率盾",cht:"隊長盾減傷-排除幾率盾"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				return getReduceScale(skill, undefined, undefined, true) > 0;
+					const skill = Skills[card.leaderSkillId];
+					return getReduceScale(skill, undefined, undefined, true) > 0;
 				})
 			},
-			{name:"More than half with 99% gravity[29%, 100%)",otLangName:{chs:"满血99重力不下半血-队长盾减伤[29%, 100%)",cht:"滿血99重力不下半血-隊長盾減傷[29%, 100%)"},
+			/*{name:"More than half with 99% gravity[29%, 100%)",otLangName:{chs:"满血99重力不下半血-队长盾减伤[29%, 100%)",cht:"滿血99重力不下半血-隊長盾減傷[29%, 100%)"},
 				function:cards=>cards.filter(card=>{
-				const skill = Skills[card.leaderSkillId];
-				const reduceScale = getReduceScale(skill);
-				return reduceScale>=0.29;
-			}).sort((a,b)=>{
-				const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
-				return getReduceScale(a_s) - getReduceScale(b_s);
-				})
-			},
+					const skill = Skills[card.leaderSkillId];
+					const reduceScale = getReduceScale(skill);
+					return reduceScale>=0.29;
+				}).sort(sortByReduceScale)
+			},*/
 			{name:"Reduce Damage - Unconditional",otLangName:{chs:"队长盾减伤-无条件盾",cht:"隊長盾減傷-無條件盾"},
-				function:cards=>cards.filter(card=>{
-				//获取盾减伤比例
-				function getReduceScale_unconditional(ls)
-				{
-					const sk = ls.params;
-					let scale = 0;
-					switch (ls.type)
-					{
-						case 16: //无条件盾
-							scale = sk[0]/100;
-							break;
-						case 129: //无条件盾，属性个数不固定
-						case 163: //无条件盾，属性个数不固定
-							scale = (sk[5] & 31) != 31 ? 0 : sk[6]/100;
-							break;
-			
-						case 138: //调用其他队长技
-							scale = sk.reduce((pmul,skid)=> 1 - (1-pmul) * (1-getReduceScale_unconditional(Skills[skid])),0);
-							break;
-						default:
-					}
-					return scale || 0;
+				function:cards=>{
+					return cards.filter(card=>{
+						const skill = Skills[card.leaderSkillId];
+						return getReduceScale_unconditional(skill) > 0;
+					}).sort((a,b)=>{
+						const a_s = Skills[a.leaderSkillId], b_s = Skills[b.leaderSkillId];
+						return getReduceScale_unconditional(a_s) - getReduceScale_unconditional(b_s);
+					});
+				},
+				addition:card=>{
+					const skill = Skills[card.leaderSkillId];
+					return `无条件${Math.round(getReduceScale_unconditional(skill) * 100)}%`;
 				}
-				const skill = Skills[card.leaderSkillId];
-				return getReduceScale_unconditional(skill) > 0;
-				})
 			},
 		]},
 		{group:true,name:"======Evo type======",otLangName:{chs:"======进化类型======",cht:"======進化類型======"}, functions: [
