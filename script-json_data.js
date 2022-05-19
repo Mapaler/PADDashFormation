@@ -1261,72 +1261,6 @@ const specialSearchFunctions = (function() {
 
 	const functions = [
 		{name:"No Filter",otLangName:{chs:"不做筛选",cht:"不做篩選"},function:cards=>cards},
-		{group:true,name:"======Very commonly used=====",otLangName:{chs:"======非常常用======",cht:"======非常常用======"}, functions: [
-			/*
-			{name:"Voids both absorption(sort by turns)",otLangName:{chs:"双破吸 buff（按破吸回合排序）",cht:"雙破吸 buff（按破吸回合排序）"},
-				function:cards=>{
-				const searchTypeArray = [173];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill && skill.params[1] && skill.params[3];
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-			},addition:voidsAbsorption_Addition},
-			{name:"Pierce through damage void(sort by turns)",otLangName:{chs:"贯穿无效盾 buff（按破吸回合排序）",cht:"貫穿無效盾 buff（按破吸回合排序）"},
-				function:cards=>{
-					const searchTypeArray = [191];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-				},
-				addition:card=>{
-					const searchTypeArray = [191];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					const sk = skill.params;
-					return document.createTextNode(`破贯×${sk[0]}T`);
-				}
-			},
-			{
-				name:"Unbind both(sort by awoken turns)",otLangName:{chs:"解封+觉醒（按解觉醒回合排序）",cht:"解封+覺醒（按解覺醒回合排序）"},
-				function:cards=>{
-					return cards.filter(card=>{
-						const turns = unbind_Turns(card);
-						return turns.normal && turns.awoken > 0;
-					}).sort((a,b)=>{
-						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
-						let a_pC = a_s.awoken, b_pC = b_s.awoken;
-						return a_pC - b_pC;
-					});
-				},
-				addition:unbind_Addition
-			},
-			{
-				name:"Unbind unmatchable(sort by turns)",otLangName:{chs:"解禁消珠（按消除回合排序）",cht:"解禁消珠（按消除回合排序）"},
-				function:cards=>{
-					const searchTypeArray = [196];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>{
-						const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
-						let a_pC = a_s.params[0], b_pC = b_s.params[0];
-						return a_pC - b_pC;
-					})
-	
-					},
-				addition:card=>{
-					const searchTypeArray = [196];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					const sk = skill.params;
-	
-					const value = sk[0];
-					return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
-				}
-			},
-			{name:"8 latent grids",otLangName:{chs:"8格潜觉",cht:"8格潛覺"},
-				function:cards=>cards.filter(card=>card.is8Latent)
-			},*/
-		]},
 		{group:true,name:"======Active Skill======",otLangName:{chs:"======主动技======",cht:"======主動技======"}, functions: [
 		]},
 		{group:true,name:"-----Voids Absorption-----",otLangName:{chs:"-----破吸类-----",cht:"-----破吸類-----"}, functions: [
@@ -3470,6 +3404,7 @@ const specialSearchFunctions = (function() {
 			},*/
 		]},
 	];
+	/*
 	//非常常用
 	let commonlyUsed = functions.find(g=>g.group && g.name.includes("commonly used"));
 	if (commonlyUsed) {
@@ -3482,6 +3417,6 @@ const specialSearchFunctions = (function() {
 		].filter(Boolean);
 		commonlyUsed.functions.push(...list);
 	}
-
+	*/
 	return functions;
 })();

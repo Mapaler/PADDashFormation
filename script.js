@@ -4,6 +4,7 @@ let PlayerDatas = []; //玩家数据
 let currentLanguage; //当前语言
 let currentDataSource; //当前数据
 let currentPlayerData; //当前玩家数据
+let markedFilter = []; //收藏的特殊搜索
 
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
@@ -2903,6 +2904,7 @@ function initialize(event) {
 	const s_specialDiv = searchBox.querySelector(".special-div");
 	const specialAdd = s_specialDiv.querySelector(".special-add");
 	const specialClear = s_specialDiv.querySelector(".special-clear");
+	const specialStar = s_specialDiv.querySelector(".special-star");
 	const specialFilterUl = s_specialDiv.querySelector(".special-filter-list");
 	const specialFilterFirstLi = specialFilterUl.querySelector("li");
 	const specialFirstSelect = specialFilterFirstLi.querySelector(".special-filter");
@@ -2910,39 +2912,96 @@ function initialize(event) {
 	function newSpecialSearchOption(func, idx1, idx2)
 	{
 		const funcName = returnMonsterNameArr(func, currentLanguage.searchlist, currentDataSource.code)[0];
-		return new Option(funcName + (func.addition ? " " + localTranslating.addition_display : ""), idx1 + (idx2 != null ? "|" + idx2 : ""));
+		return new Option(
+			funcName + (func.addition ? " " + localTranslating.addition_display : ""), //有附加显示的，名称增加一个附加显示图标
+			idx1 + (idx2 != null ? "|" + idx2 : "") //值为 组序号|组内序号
+			);
 	}
-	specialSearchFunctions.forEach((sfunc,idx)=>{
-		if (sfunc.group)
-		{
-			const groupName = returnMonsterNameArr(sfunc, currentLanguage.searchlist, currentDataSource.code)[0];
-			const optgroup = specialFirstSelect.appendChild(document.createElement("optgroup"));
-			optgroup.label = groupName;
-			if (sfunc.functions)
-			{
-				sfunc.functions.forEach((_sfunc,_idx)=>{
-					optgroup.appendChild(newSpecialSearchOption(_sfunc, idx, _idx));
-				});
+	//读取储存的筛选收藏列表
+	let strMakedConfig = JSON.parse(localStorage.getItem(cfgPrefix + "marked-filter"));
+	if (Array.isArray(strMakedConfig)) {
+		for (let arr of strMakedConfig) {
+			let idx1 = specialSearchFunctions.findIndex(group=>group.name == arr[0]);
+			if (idx1 < 0 ) continue;
+			if (arr.length > 1) {
+				let idx2 = specialSearchFunctions[idx1].functions.findIndex(func=>func.name == arr[1]);
+				if (idx2 < 0 ) continue;
+				markedFilter.push([idx1, idx2]);
+			} else {
+				markedFilter.push([idx1]);
 			}
-		}else
-		{
-			specialFirstSelect.options.add(newSpecialSearchOption(sfunc, idx));
 		}
-	});
-	specialAdd.onclick = function()
-	{
+	}
+	specialFirstSelect.refreshList = function() {
+		const _this = specialFirstSelect;
+		function addNewOption(sfunc, idx){
+			if (sfunc.group)
+			{
+				const groupName = returnMonsterNameArr(sfunc, currentLanguage.searchlist, currentDataSource.code)[0];
+				const optgroup = _this.appendChild(document.createElement("optgroup"));
+				optgroup.label = groupName;
+				if (sfunc.functions)
+				{
+					sfunc.functions.forEach((_sfunc,_idx)=>{
+						optgroup.appendChild(newSpecialSearchOption(_sfunc, idx, _idx));
+					});
+				}
+			}else
+			{
+				_this.options.add(newSpecialSearchOption(sfunc, idx));
+			}
+		}
+		_this.innerHTML = '';
+		addNewOption(specialSearchFunctions[0], 0);
+		if (markedFilter.length > 0) {
+			const groupName = "=====★=====";
+			const optgroup = _this.appendChild(document.createElement("optgroup"));
+			optgroup.label = groupName;
+			for (let indexs of markedFilter) {
+				const funcObj = indexs.length > 1 ? specialSearchFunctions[indexs[0]].functions[indexs[1]] : specialSearchFunctions[indexs[0]];
+				optgroup.appendChild(newSpecialSearchOption(funcObj, indexs[0], indexs[1]));
+			}
+		}
+		for (let idx = 1; idx < specialSearchFunctions.length; idx++) {
+			addNewOption(specialSearchFunctions[idx], idx);
+		}
+	}
+	specialFirstSelect.onchange = function() {
+		const indexs = specialFirstSelect.value.split("|").map(Number);
+		let markIdx = markedFilter.findIndex(arr=>arr[0] === indexs[0] && arr[1] === indexs[1]);
+		if (markIdx >= 0) {//已经存在的收藏
+			specialStar.classList.add("marked");
+		} else {
+			specialStar.classList.remove("marked");
+		}
+	}
+	//只添加第一个列表，后面的全部通过克隆的方式复现
+	specialFirstSelect.refreshList();
+	specialAdd.onclick = function() {
 		specialFilterUl.appendChild(specialFilterFirstLi.cloneNode(true));
 	}
-	specialAdd.onclick(); //先运行一次产生两个
-	specialClear.onclick = function()
-	{
-		/*for (let ci = specialFilterUl.children.length-1; ci>0; ci--)
-		{
-			specialFilterUl.children[ci].remove();
-		}*/
+	//specialAdd.onclick(); //先运行一次产生两个
+	specialClear.onclick = function() {
 		specialFilterUl.innerHTML = "";
 		specialFilterUl.appendChild(specialFilterFirstLi);
 		specialFirstSelect.selectedIndex = 0;
+	}
+	specialStar.onclick = function() {
+		const indexs = specialFirstSelect.value.split("|").map(Number);
+		let markIdx = markedFilter.findIndex(arr=>arr[0] === indexs[0] && arr[1] === indexs[1]);
+		if (markIdx >= 0) {//已经存在的收藏
+			markedFilter.splice(markIdx,1);
+		} else {
+			markedFilter.push(indexs);
+		}
+		specialFirstSelect.refreshList(); //刷新列表
+		specialStar.classList.remove("marked"); //去掉自身的收藏标记
+		//储存设置
+		let strMakedConfig = markedFilter.map(indexs=>{
+			let arr = [specialSearchFunctions[indexs[0]].name];
+			if (indexs.length > 1) arr.push(specialSearchFunctions[indexs[0]].functions[indexs[1]].name);
+			return arr;})
+		localStorage.setItem(cfgPrefix + "marked-filter", JSON.stringify(strMakedConfig));
 	}
 
 	const s_controlDiv = searchBox.querySelector(".control-div");

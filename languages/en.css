@@ -421,6 +421,12 @@ label[for="box-have"]::after
 .special-div .special-add::before {
 	content: "➕";
 }
+.special-div .special-star::before {
+	content: "☆";
+}
+.special-div .special-star.marked::before {
+	content: "★";
+}
 .control-div .search-start::before{
 	content: "🔍Start Search";
 }

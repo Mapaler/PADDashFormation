@@ -1661,17 +1661,7 @@ icon.inflicts::after
 	display: inline-block;
 	vertical-align: top;
 }
-.search-box .rare-clear,
-.search-box .awoken-clear,
-.search-box .sawoken-clear
-{
-	vertical-align: top;
-}
-.search-box .rare-clear::before,
-.search-box .awoken-clear::before,
-.search-box .sawoken-clear::before,
-.search-box .special-add::before,
-.search-box .special-clear::before
+.search-box .brown-button::before
 {
 	min-width: 80px;
 	background-size: 100px 100px;
@@ -1682,9 +1672,11 @@ icon.inflicts::after
 	padding: 0;
 	vertical-align: top;
 }
+.search-box .rare-clear::before,
 .search-box .sawoken-clear::before,
 .search-box .special-add::before,
-.search-box .special-clear::before
+.search-box .special-clear::before,
+.search-box .special-star::before
 {
 	min-width: 50px;
 	font-size: 14px;
