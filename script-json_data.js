@@ -1378,19 +1378,6 @@ const specialSearchFunctions = (function() {
 					return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
 				}
 			},
-			{name:"Bind self active skill",otLangName:{chs:"自封技能",cht:"自封技能"},
-				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [214];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
-				}),
-				addition:card=>{
-				const searchTypeArray = [214];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				return document.createTextNode(`自封技${sk[0]}T`);
-				}
-			},
 			{name:"Bind self matchable",otLangName:{chs:"自封消珠",cht:"自封消珠"},
 				function:cards=>cards.filter(card=>{
 				const searchTypeArray = [215];
@@ -1406,6 +1393,19 @@ const specialSearchFunctions = (function() {
 				fragment.appendChild(createOrbsList(flags(sk[1] || 1)));
 				fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
 				return fragment;
+				}
+			},
+			{name:"Bind self active skill",otLangName:{chs:"自封技能",cht:"自封技能"},
+				function:cards=>cards.filter(card=>{
+				const searchTypeArray = [214];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return skill;
+				}),
+				addition:card=>{
+				const searchTypeArray = [214];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				const sk = skill.params;
+				return document.createTextNode(`自封技${sk[0]}T`);
 				}
 			},
 		]},
@@ -3265,67 +3265,31 @@ const specialSearchFunctions = (function() {
 			}, //evoBaseId可能为0
 			//{name:"",otLangName:{chs:"仅超转生进化",cht:"僅超轉生進化"},function:cards=>cards.filter(card=>isReincarnated(card) && !Cards[card.evoBaseId].isUltEvo)},
 			{name:"Super Ult Evo",otLangName:{chs:"超究极进化",cht:"超究極進化"},
-				function:cards=>cards.filter(card=>card.is8Latent && card.isUltEvo && !card.awakenings.includes(49))
+				function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].isUltEvo)
 			},
 			{name:"Evo from Weapon",otLangName:{chs:"由武器进化而来",cht:"由武器進化而來"},
 				function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))
 			},
 		]},
-		{group:true,name:"======Others Search======",otLangName:{chs:"======其他搜索======",cht:"======其他搜索======"}, functions: [
-			{name:"Water Att. & Attacker Type(Tanjiro)",otLangName:{chs:"攻击型或水属性（炭治郎队员）",cht:"攻擊型或水屬性（炭治郎隊員）"},
-				function:cards=>cards.filter(card=>card.attrs.includes(1) || card.types.includes(6))
-			},
-			{name:"Fire & Water Att.(Seina)",otLangName:{chs:"火属性或水属性（火车队员）",cht:"火屬性或水屬性（火車隊員）"},
-				function:cards=>cards.filter(card=>card.attrs.includes(0) || card.attrs.includes(1))
-			},
-			{name:"Level limit unable break",otLangName:{chs:"不能突破等级限制",cht:"不能突破等級限制"},
-				function:cards=>cards.filter(card=>card.limitBreakIncr===0)
-			},
-			{name:"Raise ≥50% at lv110",otLangName:{chs:"110级三维成长≥50%",cht:"110級三維成長≥50%"},
-				function:cards=>cards.filter(card=>card.limitBreakIncr>=50).sort((a,b)=>a.limitBreakIncr - b.limitBreakIncr),
-				addition:card=>`成长${card.limitBreakIncr}%`
-			},
-			{name:"Max level is lv1",otLangName:{chs:"满级只有1级",cht:"滿級只有1級"},
-				function:cards=>cards.filter(card=>card.maxLevel==1)
-			},
-			{name:"Less than 100mp",otLangName:{chs:"低于100mp",cht:"低於100mp"},
-				function:cards=>cards.filter(card=>card.sellMP<100)
-			},
-			{name:"Have 3 types",otLangName:{chs:"有3个type",cht:"有3個type"},
-				function:cards=>cards.filter(card=>card.types.filter(t=>t>=0).length>=3)
-			},
-			{name:"Have 2 Attrs",otLangName:{chs:"有两个属性",cht:"有兩個屬性"},
-				function:cards=>cards.filter(card=>card.attrs.filter(a=>a>=0 && a<6))
-			},
-			{name:"2 attrs are different",otLangName:{chs:"主副属性不一致",cht:"主副屬性不一致"},
-				function:cards=>cards.filter(card=>card.attrs[0]<6 && card.attrs[1]>=0 && card.attrs[0] != card.attrs[1])
-			},
-			{name:"Will get Orbs skin",otLangName:{chs:"能获得宝珠皮肤",cht:"能獲得寶珠皮膚"},
-				function:cards=>cards.filter(card=>card.blockSkinId>0)
-			},
-			{name:"All Latent TAMADRA",otLangName:{chs:"所有潜觉蛋龙",cht:"所有潛覺蛋龍"},
-				function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)
-			},
-		]},
-		{group:true,name:"----- Awoken -----",otLangName:{chs:"-----觉醒类-----",cht:"-----覺醒類-----"}, functions: [
+		{group:true,name:"====== Awoken ======",otLangName:{chs:"======觉醒类======",cht:"======覺醒類======"}, functions: [
 			{name:"8 latent grids",otLangName:{chs:"8格潜觉",cht:"8格潛覺"},
 				function:cards=>cards.filter(card=>card.is8Latent)
 			},
 			{name:"Have 9 awokens",otLangName:{chs:"有9个觉醒",cht:"有9個覺醒"},
 				function:cards=>cards.filter(card=>card.awakenings.length>=9)
 			},
+			{name:"Less than 9 awokens",otLangName:{chs:"不足9个觉醒",cht:"不足9個覺醒"},
+				function:cards=>cards.filter(card=>card.awakenings.length<9)
+			},
 			{name:"Not weapon",otLangName:{chs:"不是武器",cht:"不是武器"},
 				function:cards=>cards.filter(card=>!card.awakenings.includes(49))
 			},
-			{name:"Able to lv110, but no Super Awoken",otLangName:{chs:"能突破等级限制但没有超觉醒",cht:"能突破等級限制但沒有超覺醒"},
-				function:cards=>cards.filter(card=>card.limitBreakIncr > 0 && card.superAwakenings.length == 0)
-			},
-			{name:"3 same Killer Awoken, or 2 with same latent",otLangName:{chs:"3个相同杀觉醒，或2个杀觉醒并可打相同潜觉",cht:"3個相同殺覺醒，或2個殺覺醒並可打相同潛覺"},
+			{name:"3 same Killer Awoken(include super awoken), or 2 with same latent",otLangName:{chs:"3个相同杀觉醒（含超觉），或相同潜觉",cht:"3個相同殺覺醒（含超覺），或相同潛覺"},
 				function:cards=>cards.filter(card=>{
-				const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length>=2);
+				const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length+(card.superAwakenings.includes(type.awoken)?1:0)>=2);
 				if (hasAwokenKiller)
 				{ //大于2个杀的进行判断
-					if (card.awakenings.filter(ak=>ak===hasAwokenKiller.awoken).length>=3)
+					if (card.awakenings.filter(ak=>ak===hasAwokenKiller.awoken).length+(card.superAwakenings.includes(hasAwokenKiller.awoken)?1:0)>=3)
 					{ //大于3个杀的直接过
 						return true;
 					}else
@@ -3345,12 +3309,13 @@ const specialSearchFunctions = (function() {
 				}
 				})
 			},
-			{name:"3 same Killer Awoken(include super awoken), or 2 with same latent",otLangName:{chs:"3个相同杀觉醒（含超觉），或相同潜觉",cht:"3個相同殺覺醒（含超覺），或相同潛覺"},
+			/*
+			{name:"3 same Killer Awoken, or 2 with same latent",otLangName:{chs:"3个相同杀觉醒，或2个杀觉醒并可打相同潜觉",cht:"3個相同殺覺醒，或2個殺覺醒並可打相同潛覺"},
 				function:cards=>cards.filter(card=>{
-				const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length+(card.superAwakenings.includes(type.awoken)?1:0)>=2);
+				const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length>=2);
 				if (hasAwokenKiller)
 				{ //大于2个杀的进行判断
-					if (card.awakenings.filter(ak=>ak===hasAwokenKiller.awoken).length+(card.superAwakenings.includes(hasAwokenKiller.awoken)?1:0)>=3)
+					if (card.awakenings.filter(ak=>ak===hasAwokenKiller.awoken).length>=3)
 					{ //大于3个杀的直接过
 						return true;
 					}else
@@ -3395,7 +3360,7 @@ const specialSearchFunctions = (function() {
 				}
 				})
 			},
-			/*{name:"8P dedicated hostile skills",otLangName:{chs:"8P专用敌对技能",cht:"8P專用敵對技能"},
+			{name:"8P dedicated hostile skills",otLangName:{chs:"8P专用敌对技能",cht:"8P專用敵對技能"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [1000];
 					const skill = getCardActiveSkill(card, searchTypeArray);
@@ -3403,20 +3368,48 @@ const specialSearchFunctions = (function() {
 				})
 			},*/
 		]},
+		{group:true,name:"======Others Search======",otLangName:{chs:"======其他搜索======",cht:"======其他搜索======"}, functions: [
+			{name:"Water Att. & Attacker Type(Tanjiro)",otLangName:{chs:"攻击型或水属性（炭治郎队员）",cht:"攻擊型或水屬性（炭治郎隊員）"},
+				function:cards=>cards.filter(card=>card.attrs.includes(1) || card.types.includes(6))
+			},
+			{name:"Fire & Water Att.(Seina)",otLangName:{chs:"火属性或水属性（火车队员）",cht:"火屬性或水屬性（火車隊員）"},
+				function:cards=>cards.filter(card=>card.attrs.includes(0) || card.attrs.includes(1))
+			},
+			{name:"Level limit unable break",otLangName:{chs:"不能突破等级限制",cht:"不能突破等級限制"},
+				function:cards=>cards.filter(card=>card.limitBreakIncr===0)
+			},
+			{name:"Able to lv110",otLangName:{chs:"能突破等级限制",cht:"能突破等級限制"},
+				function:cards=>cards.filter(card=>card.limitBreakIncr > 0)
+			},
+			{name:"Able to lv110, but no Super Awoken",otLangName:{chs:"能突破等级限制但没有超觉醒",cht:"能突破等級限制但沒有超覺醒"},
+				function:cards=>cards.filter(card=>card.limitBreakIncr > 0 && card.superAwakenings.length == 0)
+			},
+			{name:"Raise ≥50% at lv110(sort by scale)",otLangName:{chs:"110级三维成长≥50%（按比例排序）",cht:"110級三維成長≥50%（按比例排序）"},
+				function:cards=>cards.filter(card=>card.limitBreakIncr>=50).sort((a,b)=>a.limitBreakIncr - b.limitBreakIncr),
+				addition:card=>`成长${card.limitBreakIncr}%`
+			},
+			{name:"Max level is lv1",otLangName:{chs:"满级只有1级",cht:"滿級只有1級"},
+				function:cards=>cards.filter(card=>card.maxLevel==1)
+			},
+			{name:"Less than 100mp",otLangName:{chs:"低于100mp",cht:"低於100mp"},
+				function:cards=>cards.filter(card=>card.sellMP<100)
+			},
+			{name:"Have 3 types",otLangName:{chs:"有3个type",cht:"有3個type"},
+				function:cards=>cards.filter(card=>card.types.filter(t=>t>=0).length>=3)
+			},
+			{name:"Have 2 Attrs",otLangName:{chs:"有两个属性",cht:"有兩個屬性"},
+				function:cards=>cards.filter(card=>card.attrs.filter(a=>a>=0 && a<6))
+			},
+			{name:"2 attrs are different",otLangName:{chs:"主副属性不一致",cht:"主副屬性不一致"},
+				function:cards=>cards.filter(card=>card.attrs[0]<6 && card.attrs[1]>=0 && card.attrs[0] != card.attrs[1])
+			},
+			{name:"Will get Orbs skin",otLangName:{chs:"能获得宝珠皮肤",cht:"能獲得寶珠皮膚"},
+				function:cards=>cards.filter(card=>card.blockSkinId>0)
+			},
+			{name:"All Latent TAMADRA",otLangName:{chs:"所有潜觉蛋龙",cht:"所有潛覺蛋龍"},
+				function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)
+			},
+		]},
 	];
-	/*
-	//非常常用
-	let commonlyUsed = functions.find(g=>g.group && g.name.includes("commonly used"));
-	if (commonlyUsed) {
-		let list = [
-			functions.find(g=>g.group && g.name.includes("player team"))?.functions.find(f=>f.name.includes("skills charge")),
-			functions.find(g=>g.group && g.name.includes("For Enemy"))?.functions.find(f=>f.name.includes("Menace")),
-			functions.find(g=>g.group && g.name.includes("Awoken"))?.functions.find(f=>f.name.includes("8 latent")),
-			functions.find(g=>g.group && g.name.includes("Leader Skills"))?.functions.find(f=>f.name.includes("Fixed damage inflicts")),
-			functions.find(g=>g.group && g.name.includes("Leader Skills"))?.functions.find(f=>f.name.includes("Adds combo")),
-		].filter(Boolean);
-		commonlyUsed.functions.push(...list);
-	}
-	*/
 	return functions;
 })();
