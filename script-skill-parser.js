@@ -1215,7 +1215,12 @@ const parsers = {
 		);
 	},
 	[169](min, base, percent, bonus, max) { return powerUp(null, null, p.scaleCombos(min, max ?? min, [base || 100, 100], [bonus, 0]), null, v.percent(percent)); },
-	[170](attrs, min, base, percent, bonus, stage) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (stage ? stage - 1 : 0), [base, 100], [bonus ?? 0, 0]), null, v.percent(percent)); },
+	//stage的真实用法目前不知道，缺少样本来判断，不知道到底是直接算数(stage-1)还是算二进制个数(flags(stage).length)。 2022年5月23日
+	//按 瘦鹅 的说法，也可能是因为暗牛头限制了5色， 所以就算是3级到了6色，也只算5色。
+	[170](attrs, min, base, percent, bonus, stage) {
+		let attrsArr = flags(attrs);
+		return powerUp(null, null, p.scaleAttrs(attrsArr, min, Math.min(min + (stage || 0), attrsArr.length), [base, 100], [bonus ?? 0, 0]), null, v.percent(percent));
+	},
 	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus ?? 0, 0]), null, v.percent(percent));
