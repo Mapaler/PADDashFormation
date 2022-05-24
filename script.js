@@ -2840,11 +2840,11 @@ function initialize(event) {
 		}
 		for (const id of awokenSorting) {
 			const li = s_awokensLi.find(li=>getIconId(li) === id);
-			fragmentAwoken.appendChild(li);
+			if (li) fragmentAwoken.appendChild(li);
 		}
 		for (const id of sawokenSorting) {
 			const li = s_sawokensLi.find(li=>getIconId(li) === id);
-			fragmentSawoken.appendChild(li);
+			if (li) fragmentSawoken.appendChild(li);
 		}
 		
 		const className = "official-awoken-sorting";

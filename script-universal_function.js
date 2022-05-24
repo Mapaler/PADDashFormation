@@ -354,16 +354,25 @@ function dbDelete (db, tableName, keys) {
 }
 
 function latentUseHole(latentId) {
+	let num = 1;
 	switch (true) {
 		case (latentId === 12):
-		case (latentId >= 16 && latentId <= 36 || latentId >= 43):
+		case (latentId >= 16 && latentId <= 36):
+		case (latentId >= 43 && latentId <= 45):
+		{
 			return 2;
+		}
 		case (latentId >= 13 && latentId <= 15):
 		case (latentId >= 37 && latentId <= 42):
+		case (latentId == 46):
+		{
 			return 6;
+		}
 		case (latentId < 12):
 		default:
+		{
 			return 1;
+		}
 	}
 }
 //获取最大潜觉数量

@@ -1652,8 +1652,13 @@ icon.inflicts::after
 .search-box .awoken-div::before{
 	display: none;
 }
-.search-box .awoken-div.official-awoken-sorting::before{
-	display: block;
+.search-box .awoken-div.official-awoken-sorting::before,
+.search-box .sawoken-div.official-awoken-sorting::before
+{
+	display: inline-block;
+	vertical-align: top;
+	line-height: 26px;
+	
 }
 
 .search-box .awoken-div,
@@ -2308,7 +2313,8 @@ icon.inflicts::after
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="39"],
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="40"],
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="41"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="42"]
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="42"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="46"]
 {
 	display: inline-block;
 }
@@ -2324,7 +2330,9 @@ icon.inflicts::after
 	cursor: pointer;
 }
 /*不允许使用的潜觉，不是手指，半透明，灰度*/
-.m-latent-allowable-ul .latent-icon.unallowable-latent{
+.awoken-icon.unallowable-awoken,
+.latent-icon.unallowable-latent
+{
 	cursor: default;
 	opacity: var(--search-icon-unchecked);
 	filter: grayscale(100%);
