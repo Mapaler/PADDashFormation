@@ -505,7 +505,8 @@ const pdcLatentMap = [
 	{pdf:43,pdc:42}, //HP++
 	{pdf:44,pdc:43}, //攻击++
 	{pdf:45,pdc:44}, //回复++
-	{pdf:46,pdc:45}, //心追解云封
+	{pdf:46,pdc:51}, //心追解云封
+	{pdf:46,pdc:52}, //心追解云封 ×1.5
 ];
 //排序程序列表
 const sort_function_list = [
