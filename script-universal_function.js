@@ -931,7 +931,8 @@ function getAllowLatent(card) {
 	return Array.from(latentSet);
 }
 //计算队伍中有多少血量
-function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
+function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
+	let memberArr = team[0], assistArr = team[1];
 	const ls1 = Skills[(Cards[leader1id] || Cards[0]).leaderSkillId];
 	const ls2 = Skills[(Cards[leader2id] || Cards[0]).leaderSkillId];
 	const mHpArr = memberArr.map(m => {
@@ -1049,14 +1050,14 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 				break;
 			}
 			case 229:{ //队员中存在每个属性或Type都算一次
-				let cardsArr = memberArr.filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
-				let attrsArr = cardsArr.flatMap(card => card.attr); //所有卡片的属性
-				let typesArr = cardsArr.flatMap(card => card.types); //所有卡片的类型
-				let correspondingAttrs = flags(sk[0]); //符合的属性
-				let correspondingTypes = flags(sk[1]); //符合的类型
-				let correspondingTimes = attrsArr.filter(a=>correspondingAttrs.includes(a)).length + typesArr.filter(t=>correspondingTypes.includes(t)).length; //符合的次数
-				scale = sk[2] * correspondingTimes / 100 + 1;
-				//console.log('属性、类型个数动态倍率，当前队长HP倍率为 %s',scale);
+				const atCount = countTeamTotalAttrsTypes(memberArr, assistArr);
+
+				let correAttrs = flags(sk[0]), correTypes = flags(sk[1]); //符合的属性/类型
+				 //符合的次数
+				let correTimes = correAttrs.reduce((pre,attr)=>pre + (atCount.attrs.get(attr) || 0),0) +
+								 correTypes.reduce((pre,type)=>pre + (atCount.types.get(type) || 0),0);
+				scale = sk[2] * correTimes / 100 + 1;
+				console.debug('属性、类型个数动态倍率，当前队长HP倍率为 %s (匹配 %d 次)', scale, correTimes);
 				break;
 			}
 			case 138: //调用其他队长技
@@ -1069,6 +1070,48 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 	return mHpArr;
 }
 
+//由于有了更改属性和类型的武器，所以需要更改计算方法
+function countTeamTotalAttrsTypes(memberArr, assistArr) {
+	let attrsCount = new Map();
+	let typesCount = new Map();
+	for (let idx = 0; idx < memberArr.length; idx++) {
+		const member = memberArr[idx], assist = assistArr[idx];
+		if (member.id <= 0) continue; //跳过 id 0
+		const memberCard = member.card, assistCard = assist.card;
+		if (!memberCard) continue; //跳过没有的 id
+		let attrs = [...memberCard.attrs]; //属性只有两个，因此用固定的数组
+		let types = new Set(memberCard.types); //Type 用Set，确保不会重复
+		if (assistCard?.awakenings?.includes(49)) { //如果有武器
+			//更改副属性
+			let changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95);
+			if (changeAttr) attrs[1] = changeAttr - 91;
+			//添加类型
+			let appendTypes = assistCard.awakenings.filter(ak=>ak >= 83 && ak <= 90);
+			appendTypes = appendTypes.map(type=>{
+				switch (type) {
+					case 83: {return 5;}
+					case 84: {return 4;}
+					case 85: {return 7;}
+					case 86: {return 8;}
+					case 87: {return 1;}
+					case 88: {return 6;}
+					case 89: {return 2;}
+					case 90: {return 3;}
+				}
+			});
+			for (let appendType of appendTypes) {
+				types.add(appendType);
+			}
+		}
+		for (let attr of attrs) {
+			attrsCount.set(attr, (attrsCount.get(attr) || 0) + 1);
+		}
+		for (let type of types) {
+			typesCount.set(type, (typesCount.get(type) || 0) + 1);
+		}
+	}
+	return {attrs: attrsCount, types: typesCount};
+}
 //返回卡片的队长技能
 function getCardLeaderSkills(card, skillTypes) {
 	if (!card) return [];

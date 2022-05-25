@@ -136,6 +136,11 @@ var Member = function() {
 	this.ability = [0, 0, 0];
 	this.abilityNoAwoken = [0, 0, 0];
 };
+//让 Member 能直接获取 card
+Object.defineProperty(Member.prototype, "card", {
+	get() { return Cards[this.id]; }
+})
+
 Member.prototype.outObj = function() {
 	const m = this;
 	if (m.id == 0) return null;
@@ -3776,7 +3781,7 @@ function buildEvoTreeIdsArray(card, includeHenshin = true) {
 }
 
 //改变一个怪物头像
-function changeid(mon, monDom, latentDom) {
+function changeid(mon, monDom, latentDom, assist) {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	const parentNode = monDom.parentNode;
 	fragment.appendChild(monDom);
@@ -3812,7 +3817,13 @@ function changeid(mon, monDom, latentDom) {
 		monDom.setAttribute("data-cards-pic-y", Math.floor(idxInPage / 10)); //添加Y方向序号
 
 		monDom.querySelector(".property").setAttribute("data-property", card.attrs[0]); //主属性
-		monDom.querySelector(".subproperty").setAttribute("data-property", card.attrs[1]); //副属性
+		let subAttribute = card.attrs[1]; //正常的副属性
+		let assistCard = Cards[assist?.id];
+		if (assistCard && assistCard.awakenings.includes(49)) {  //如果传入了辅助武器
+			let changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95); //搜索改副属性的觉醒
+			if (changeAttr) subAttribute = changeAttr - 91; //更改副属性
+		}
+		monDom.querySelector(".subproperty").setAttribute("data-property", subAttribute); //副属性
 
 		monDom.title = "No." + monId + " " + (card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name);
 		monDom.href = currentLanguage.guideURL(monId, card.name);
@@ -4368,26 +4379,27 @@ function refreshAll(formationData) {
 				}
 			});
 			//修改显示内容
-			const member = memberLi.querySelector(`.monster`);
-			const assist = assistsLi.querySelector(`.monster`);
-			const latent = latentLi.querySelector(`.latent-ul`);
-			changeid(teamData[0][ti], member, latent); //队员
-			changeid(teamData[1][ti], assist); //辅助
+			const memberDom = memberLi.querySelector(`.monster`);
+			const assistDom = assistsLi.querySelector(`.monster`);
+			const latentDom = latentLi.querySelector(`.latent-ul`);
+			let member = teamData[0][ti], assist = teamData[1][ti];
+			changeid(member, memberDom, latentDom, assist); //队员
+			changeid(assist, assistDom); //辅助
 			//隐藏队长的自身换为换队长的技能
 			if (ti == 5 || //好友队长永远隐藏
 				leaderIdx == 0 && ti == 0 ) //当没换队长时，自身队长的欢队长技能隐藏
 			{
-				const card_m = Cards[teamData[0][ti].id] || Cards[0];
-				const card_a = Cards[teamData[1][ti].id] || Cards[0];
+				const card_m = Cards[member.id] || Cards[0];
+				const card_a = Cards[assist.id] || Cards[0];
 				const skills_m = getCardActiveSkills(card_m, [93, 227]); //更换队长的技能
 				const skills_a = getCardActiveSkills(card_a, [93, 227]); //更换队长的技能
 				if (skills_m.length == 0 || skills_m[0].type != 227)
 				{
-					member.querySelector(".switch-leader").classList.add(className_displayNone);
+					memberDom.querySelector(".switch-leader").classList.add(className_displayNone);
 				}
 				if (skills_a.length == 0 || skills_a[0].type != 227)
 				{
-					assist.querySelector(".switch-leader").classList.add(className_displayNone);
+					assistDom.querySelector(".switch-leader").classList.add(className_displayNone);
 				}
 			}
 			refreshMemberSkillCD(teamBox, teamData, ti); //技能CD
@@ -4650,7 +4662,9 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader1id = team[0][team[3] || 0].id;
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3] || 0].id : teams[1][0][teams[1][3] || 0].id) : team[0][5].id;
 
+	//计算当前队伍，2P时则是需要特殊处理
 	const team_2p = teamsCount===2 ? team[0].concat((teamIdx === 1 ? teams[0][0][0] : teams[1][0][0])) : team[0];
+	const assistTeam_2p = teamsCount===2 ? team[1].concat((teamIdx === 1 ? teams[0][1][0] : teams[1][1][0])) : team[1];
 
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
@@ -4672,8 +4686,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		const totalReduce = leastScale.scale;
 
-		const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
-		const teamHPNoAwokenArr = countTeamHp(team[0], leader1id, leader2id, solo, true);
+		const teamHPArr = countTeamHp(team, leader1id, leader2id, solo);
+		const teamHPNoAwokenArr = countTeamHp(team, leader1id, leader2id, solo, true);
 
 
 		let tHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
@@ -4748,35 +4762,24 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		},0);
 		rarityDoms.setAttribute(dataAttrName, rarityCount);
 	}
-	//统计队伍颜色个数
-	if (tAttrsDom)
+	//统计队伍属性/类型个数
+	if (tAttrsDom || tTypesDom)
 	{
-		const attrDoms = Array.from(tAttrsDom.querySelectorAll(".attr"));
-		attrDoms.forEach(attrDom=>{
-			const attrId = parseInt(attrDom.getAttribute("data-attr-icon"));
-			const attrCount = team_2p.reduce((pre,member)=>{
-				if (member.id <= 0) return pre;
-				const card = Cards[member.id] || Cards[0];
-				const attrNum = card.attrs.filter(a=>a==attrId).length;
-				return pre + attrNum;
-			},0);
-			attrDom.setAttribute(dataAttrName, attrCount);
-		});
-	}
-	//统计队伍类型个数
-	if (tTypesDom)
-	{
-		const typeDoms = Array.from(tTypesDom.querySelectorAll(".type-icon"));
-		typeDoms.forEach(typeDom=>{
-			const typeId = parseInt(typeDom.getAttribute("data-type-icon"));
-			const typeCount = team_2p.reduce((pre,member)=>{
-				if (member.id <= 0) return pre;
-				const card = Cards[member.id] || Cards[0];
-				const typeNum = card.types.filter(a=>a==typeId).length;
-				return pre + typeNum;
-			},0);
-			typeDom.setAttribute(dataAttrName, typeCount);
-		});
+		const atCount = countTeamTotalAttrsTypes(team_2p, assistTeam_2p);
+		if (tAttrsDom) {
+			const attrDoms = Array.from(tAttrsDom.querySelectorAll(".attr"));
+			attrDoms.forEach(attrDom=>{
+				const attrId = parseInt(attrDom.getAttribute("data-attr-icon"));
+				attrDom.setAttribute(dataAttrName, atCount.attrs.get(attrId) || 0);
+			});
+		}
+		if (tTypesDom) {
+			const typeDoms = Array.from(tTypesDom.querySelectorAll(".type-icon"));
+			typeDoms.forEach(typeDom=>{
+				const typeId = parseInt(typeDom.getAttribute("data-type-icon"));
+				typeDom.setAttribute(dataAttrName, atCount.types.get(typeId) || 0);
+			});
+		}
 	}
 
 	if (tEffectDom)	{
@@ -4862,7 +4865,7 @@ function refreshFormationTotalHP(totalDom, teams) {
 		const totalReduce = leastScale.scale;
 
 		const tHPArr = teams.map(function(team) {
-			const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
+			const teamHPArr = countTeamHp(team, leader1id, leader2id, solo);
 
 
 			const teamTHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
@@ -4871,7 +4874,7 @@ function refreshFormationTotalHP(totalDom, teams) {
 			return Math.round(teamTHP * (1 + 0.05 * teamHPAwoken));
 		});
 		const tHPNoAwokenArr = teams.map(function(team) {
-			const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo, true);
+			const teamHPArr = countTeamHp(team, leader1id, leader2id, solo, true);
 
 			const teamTHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
 			return Math.round(teamTHP);
