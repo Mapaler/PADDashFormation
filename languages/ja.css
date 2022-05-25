@@ -276,6 +276,10 @@ label[for="merge-skill"]::after{
 .control-box .change-swap-to-copy-lbl::after{
 	content:"ドラッグ時にコピー";
 }
+label[for="default-level"]::after
+{
+	content: "デフォルト Lv.";
+}
 
 .tIf-total-move .general::after,
 .tIf-total-move .awoken-bind::after

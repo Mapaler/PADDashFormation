@@ -2973,6 +2973,9 @@ table .orb-icon
 {
 	font-family: var(--icon-font-family);
 }
+#default-level {
+	width: 50px;
+}
 
 #qr-code-frame
 {

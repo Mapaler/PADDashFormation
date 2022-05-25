@@ -5,6 +5,7 @@ let currentLanguage; //当前语言
 let currentDataSource; //当前数据
 let currentPlayerData; //当前玩家数据
 let markedFilter = []; //收藏的特殊搜索
+let defaultLevel = 99; //默认等级
 
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
@@ -1602,6 +1603,16 @@ function initialize(event) {
 		}
 		btnShowAwokenCount.onclick();
 	}
+
+	//默认等级
+	const iptDefaultLevel = document.getElementById("default-level");
+	iptDefaultLevel.value = localStorage.getItem(cfgPrefix + iptDefaultLevel.id);
+	iptDefaultLevel.onchange = function(e){
+		let num = Number(this.value || this.placeholder);
+		defaultLevel = num;
+		if (e) localStorage.setItem(cfgPrefix + this.id, defaultLevel);
+	}
+	iptDefaultLevel.onchange(false);
 
 	//触屏使用的切换显示的线条
 	interchangeSVG = document.body.querySelector("#interchange-line");
@@ -4204,8 +4215,8 @@ function editBoxChangeMonId(id) {
 	//monEditLvMax.textContent = monEditLvMax.value = card.maxLevel;
 	monEditLvMax.value = card.maxLevel;
 	const monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.max = card.limitBreakIncr ? 120 : card.maxLevel; //最大等级为120
-	monEditLv.value = card.limitBreakIncr ? 120 : card.maxLevel; //默认等级为110
+	monEditLv.max = card.limitBreakIncr ? 120 : card.maxLevel; //最大可设定等级
+	monEditLv.value = Math.min(defaultLevel, card.limitBreakIncr ? 120 : card.maxLevel); //默认等级
 	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
 	const monEditLv120 = settingBox.querySelector(".m-level-btn-120");
 

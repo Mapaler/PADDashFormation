@@ -278,6 +278,10 @@ label[for="merge-skill"]::after{
 .control-box .change-swap-to-copy-lbl::after{
 	content:"拖拽时使用“复制”";
 }
+label[for="default-level"]::after
+{
+	content: "默认等级：";
+}
 
 .tIf-total-move .general::after,
 .tIf-total-move .awoken-bind::after

@@ -37,18 +37,25 @@ var formation = new Formation(teamsCount,6);
 			<label class="languages-label"><select class="languages"></select></label>
 			<label class="datasource-label"><select class="datasource"></select></label>
 			<button onclick="loadData(true);" class="datasource-updatetime" title="强制刷新数据"></button>
+			<a class="help-link" target="_blank" href="doc/index.html"></a>
 		</div>
 		<div>
 			<button class="btn-clear-data" onclick="clearData();"></button>
+			<button class="btn-player-data"></button>
 			<button class="btn-solo-link" disabled></button><button class="btn-multi-link" onclick="turnPage(2,arguments[0]);"></button><button class="btn-triple-link" onclick="turnPage(3,arguments[0]);"></button>
-			<button class="btn-set-dungeon-enchance"></button>
 		</div>
 		<div>
+			<a class="down-capture display-none" target="_blank"></a>
 			<button class="btn-qrcode"></button>
 			<button class="btn-capture" onclick="capture();"></button>
-			<a class="down-capture display-none" target="_blank"></a>
-			<button class="btn-player-data"></button>
-			<a class="help-link" target="_blank" href="doc/index.html"></a>
+			<button class="btn-set-dungeon-enchance"></button>
+			<label for="default-level"></label><input id="default-level" type="number" min="1" max="120" list="level-list" placeholder="110"/>
+			<datalist id="level-list">
+				<option>1</option>
+				<option>99</option>
+				<option>110</option>
+				<option>120</option>
+			</datalist>
 		</div>
 		<div>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-id" id="show-mon-id"><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
