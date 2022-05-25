@@ -935,13 +935,12 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 	let memberArr = team[0], assistArr = team[1];
 	const ls1 = Skills[(Cards[leader1id] || Cards[0]).leaderSkillId];
 	const ls2 = Skills[(Cards[leader2id] || Cards[0]).leaderSkillId];
-	const mHpArr = memberArr.map(m => {
-		const ability = noAwoken ? m.abilityNoAwoken : m.ability;
+	const mHpArr = memberArr.map((member, idx) => {
+		const ability = noAwoken ? member.abilityNoAwoken : member.ability;
 		let hp = ability ? ability[0] : 0;
 		if (!hp) return 0;
-		const card = Cards[m.id] || Cards[0];
-		let hp1 = hp = Math.round(hp * memberHpMul(card, ls2, memberArr, solo)); //战友队长技
-		let hp2 = hp = Math.round(hp * memberHpMul(card, ls1, memberArr, solo)); //我方队长技
+		let hp1 = hp = Math.round(hp * memberHpMul(member, assistArr[idx], ls2, memberArr, solo)); //战友队长技
+		let hp2 = hp = Math.round(hp * memberHpMul(member, assistArr[idx], ls1, memberArr, solo)); //我方队长技
 
 		//演示用代码
 		//console.log("%s 第1次倍率血量：%s，第2次倍率血量：%s",Cards[m.id].otLangName["chs"],hp1,hp2);
@@ -952,14 +951,15 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 
 	//console.log('单个队伍血量：',mHpArr,mHpArr.reduce((p,c)=>p+c));
 
-	function memberHpMul(card, ls, memberArr, solo) {
+	function memberHpMul(member, assist, ls, memberArr, solo) {
+		let memberAttrsTypes = member.getAttrsTypesWithWeapon(assist);
 
 		function hpMul(parm, scale) {
 			if (scale == undefined || scale == 0) return 1;
-			if (parm.attrs && card.attrs.some(a => parm.attrs.includes(a))) {
+			if (parm.attrs && memberAttrsTypes.attrs.some(a => parm.attrs.includes(a))) {
 				return scale / 100;
 			}
-			if (parm.types && card.types.some(t => parm.types.includes(t))) {
+			if (parm.types && memberAttrsTypes.types.some(t => parm.types.includes(t))) {
 				return scale / 100;
 			}
 			return 1;
@@ -1029,23 +1029,22 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 				scale = hpMul({ attrs: flags(sk[1]), types: flags(sk[2]) }, sk[3]);
 				break;
 			case 203:{ //队员为指定类型，不包括双方队长，且队员数大于0
-				let trueMemberCardsArr = memberArr.slice(1, 5).filter(m => m.id > 0).map(m => Cards[m.id]);
+				let trueMemberCardsArr = memberArr.slice(1, 5).filter(m => m.id > 0).map(m => m.card);
 				switch (sk[0]) {
 					case 0: //全是像素进化
-						scale = (trueMemberCardsArr.length > 0 && trueMemberCardsArr.every(card => card.evoMaterials.includes(3826))) ? sk[1] / 100 : 1;
+						scale = (trueMemberCardsArr.length > 0 && trueMemberCardsArr.every(memberCard => memberCard.evoMaterials.includes(3826))) ? sk[1] / 100 : 1;
 						break;
 					case 2: //全是转生、超转生（8格潜觉）
-						scale = (trueMemberCardsArr.length > 0 && trueMemberCardsArr.every(card => isReincarnated(card))) ? sk[1] / 100 : 1;
+						scale = (trueMemberCardsArr.length > 0 && trueMemberCardsArr.every(memberCard => isReincarnated(memberCard))) ? sk[1] / 100 : 1;
 						break;
 				}
 				break;
 			}
 			case 217:{ //限定队伍星级，不包括好友队长
-				let cardsArr = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
-				const rarityCount = cardsArr.reduce((pre,member)=>{
-					const card = Cards[member.id] || Cards[0];
-					return pre + card.rarity;
-				},0);
+				let cardsArr = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => m.card); //所有的卡片
+				const rarityCount = cardsArr.reduce((pre, memberCard)=>{
+					return pre + memberCard.rarity;
+				}, 0);
 				scale = rarityCount <= sk[0] ? sk[1] / 100 : 1;
 				break;
 			}
@@ -1061,7 +1060,7 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 				break;
 			}
 			case 138: //调用其他队长技
-				scale = sk.reduce((pmul, skid) => pmul * memberHpMul(card, Skills[skid], memberArr, solo), 1)
+				scale = sk.reduce((pmul, skid) => pmul * memberHpMul(member, assist, Skills[skid], memberArr, solo), 1)
 				break;
 			default:
 		}
@@ -1076,38 +1075,15 @@ function countTeamTotalAttrsTypes(memberArr, assistArr) {
 	let typesCount = new Map();
 	for (let idx = 0; idx < memberArr.length; idx++) {
 		const member = memberArr[idx], assist = assistArr[idx];
-		if (member.id <= 0) continue; //跳过 id 0
-		const memberCard = member.card, assistCard = assist.card;
-		if (!memberCard) continue; //跳过没有的 id
-		let attrs = [...memberCard.attrs]; //属性只有两个，因此用固定的数组
-		let types = new Set(memberCard.types); //Type 用Set，确保不会重复
-		if (assistCard?.awakenings?.includes(49)) { //如果有武器
-			//更改副属性
-			let changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95);
-			if (changeAttr) attrs[1] = changeAttr - 91;
-			//添加类型
-			let appendTypes = assistCard.awakenings.filter(ak=>ak >= 83 && ak <= 90);
-			appendTypes = appendTypes.map(type=>{
-				switch (type) {
-					case 83: {return 5;}
-					case 84: {return 4;}
-					case 85: {return 7;}
-					case 86: {return 8;}
-					case 87: {return 1;}
-					case 88: {return 6;}
-					case 89: {return 2;}
-					case 90: {return 3;}
-				}
-			});
-			for (let appendType of appendTypes) {
-				types.add(appendType);
+
+		let memberAttrsTypes = member.getAttrsTypesWithWeapon(assist);
+		if (memberAttrsTypes) {
+			for (let attr of memberAttrsTypes.attrs) {
+				attrsCount.set(attr, (attrsCount.get(attr) || 0) + 1);
 			}
-		}
-		for (let attr of attrs) {
-			attrsCount.set(attr, (attrsCount.get(attr) || 0) + 1);
-		}
-		for (let type of types) {
-			typesCount.set(type, (typesCount.get(type) || 0) + 1);
+			for (let type of memberAttrsTypes.types) {
+				typesCount.set(type, (typesCount.get(type) || 0) + 1);
+			}
 		}
 	}
 	return {attrs: attrsCount, types: typesCount};

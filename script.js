@@ -140,7 +140,35 @@ var Member = function() {
 Object.defineProperty(Member.prototype, "card", {
 	get() { return Cards[this.id]; }
 })
-
+Member.prototype.getAttrsTypesWithWeapon = function(assist) {
+	let memberCard = this.card, assistCard = assist?.card;
+	if (this.id <= 0 || !memberCard) return null; //跳过 id 0
+	let attrs = [...memberCard.attrs]; //属性只有两个，因此用固定的数组
+	let types = new Set(memberCard.types); //Type 用Set，确保不会重复
+	if (assistCard?.awakenings?.includes(49)) { //如果有武器
+		//更改副属性
+		let changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95);
+		if (changeAttr) attrs[1] = changeAttr - 91;
+		//添加类型
+		let appendTypes = assistCard.awakenings.filter(ak=>ak >= 83 && ak <= 90);
+		appendTypes = appendTypes.map(type=>{
+			switch (type) {
+				case 83: {return 5;}
+				case 84: {return 4;}
+				case 85: {return 7;}
+				case 86: {return 8;}
+				case 87: {return 1;}
+				case 88: {return 6;}
+				case 89: {return 2;}
+				case 90: {return 3;}
+			}
+		});
+		for (let appendType of appendTypes) {
+			types.add(appendType);
+		}
+	}
+	return {attrs: attrs, types: Array.from(types)};
+}
 Member.prototype.outObj = function() {
 	const m = this;
 	if (m.id == 0) return null;
