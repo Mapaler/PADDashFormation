@@ -2715,8 +2715,8 @@ function initialize(event) {
 	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
 	searchEvolutionByThis.onclick = function() {showSearch(Cards.filter(card=>card.evoMaterials.includes(editBox.mid)))};
 
-	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-1 .attr-radio"));
-	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-2 .attr-radio"));
+	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-1 [name=\"attr-1\"]"));
+	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-2 [name=\"attr-2\"]"));
 	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
 	const s_typesDiv = searchBox.querySelector(".types-div");
 	const s_typeAndOr = s_typesDiv.querySelector("#type-and-or");
@@ -3009,12 +3009,24 @@ function initialize(event) {
 	const searchClose = s_controlDiv.querySelector(".search-close");
 	const searchClear = s_controlDiv.querySelector(".search-clear");
 
+
 	function returnCheckedInput(ipt) {
 		return ipt.checked;
 	}
 
 	function returnInputValue(ipt) {
 		return ipt.value;
+	}
+
+	function returnRadiosValue(radioArr) {
+		let checkedRadio = radioArr.find(returnCheckedInput);
+		let firstCheckedValue = checkedRadio ? returnInputValue(checkedRadio) : undefined;
+		return firstCheckedValue;
+	}
+	function returnCheckBoxsValues(checkBoxsArr) {
+		let checkedCheckBoxs = checkBoxsArr.filter(returnCheckedInput);
+		let checkedValues = checkedCheckBoxs.map(returnInputValue);
+		return checkedValues;
 	}
 
 	function Str2Int(str) {
@@ -3088,31 +3100,19 @@ function initialize(event) {
 	s_add_show_abilities.onchange = reShowSearch;
 	s_add_show_abilities_with_awoken.onchange = reShowSearch;
 
-	const startSearch = function(cards, customAdditionalFunction) {
-		if (customAdditionalFunction == undefined) customAdditionalFunction = [];
-		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
-		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
+	const startSearch = function(cards, customAdditionalFunction = []) {
 		let attr1, attr2;
-		if (attr1Filter.length > 0) {
-			if (!isNaN(attr1Filter[0])) {
-				attr1 = parseInt(attr1Filter[0], 10);
-			} else {
-				attr1 = null;
-			}
-		}
-		if (attr2Filter.length > 0) {
-			if (!isNaN(attr2Filter[0])) {
-				attr2 = parseInt(attr2Filter[0], 10);
-			} else {
-				attr2 = null;
-			}
-		}
-		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
+		attr1 = returnRadiosValue(s_attr1s); //获取选中单选框的值
+		attr2 = returnRadiosValue(s_attr2s); //获取选中单选框的值
+		attr1 = isNaN(attr1) ? null : Str2Int(attr1); //将值转为十进制
+		attr2 = isNaN(attr2) ? null : Str2Int(attr2); //将值转为十进制
+
+		const typesFilter = returnCheckBoxsValues(s_types).map(Str2Int);
 		const rareFilter = [
-			s_rareLows.filter(returnCheckedInput).map(returnInputValue).map(Str2Int)[0],
-			s_rareHighs.filter(returnCheckedInput).map(returnInputValue).map(Str2Int)[0],
+			returnCheckBoxsValues(s_rareLows).map(Str2Int)[0],
+			returnCheckBoxsValues(s_rareHighs).map(Str2Int)[0],
 		];
-		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
+		const sawokensFilter = returnCheckBoxsValues(s_sawokens).map(Str2Int);
 		const awokensFilter = s_awokensIcons.filter(btn => parseInt(btn.getAttribute("data-awoken-count"), 10) > 0).map(btn => {
 			const awokenIndex = parseInt(btn.getAttribute("data-awoken-icon"), 10);
 			return {

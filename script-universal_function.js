@@ -643,22 +643,27 @@ function searchCards(cards, attr1, attr2, fixMainColor, types, typeAndOr, rares,
 	if (attr1 != null && attr1 === attr2 || //主副属性一致并不为空
 		(attr1 === 6 && attr2 === -1)) //主副属性都为“无”
 	{ //当两个颜色相同时，主副一样颜色的只需判断一次
-		cardsRange = cardsRange.filter(c => c.attrs[0] === attr1 && c.attrs[1] === attr1);
-	} else if (fixMainColor) //如果固定了顺序
+		cardsRange = cardsRange.filter(c => c.attrs[0] === attr1 && c.attrs[1] === attr2);
+	}
+	else if (fixMainColor) //如果固定了顺序
 	{
-		const a1null = attr1 === null,
-			a2null = attr2 === null;
-		cardsRange = cardsRange.filter(c =>
-			(a1null ? true : c.attrs[0] === attr1) &&
-			(a2null ? true : c.attrs[1] === attr2)
-		);
-	} else //不限定顺序时
+		const a1IsNull = attr1 === null,
+			a2IsNull = attr2 === null;
+		if (!a1IsNull || !a2IsNull) { //当a1、a2任一不为null（任意）时才需要筛选
+			cardsRange = cardsRange.filter(c =>
+				(a2IsNull ? c.attrs[0] === 6 && c.attrs[1] === attr1 : false) || //当2为随机，只有属性1时，也专门搜只有副属性=属性1的怪物
+				(a1IsNull ? true : c.attrs[0] === attr1) &&
+				(a2IsNull ? true : c.attrs[1] === attr2)
+			);
+		}
+	}
+	else //不限定顺序时
 	{
-		const search_attrs = [attr1, attr2].filter(a => a !== null && a >= 0 && a <= 5); //所有非空属性
-		const anone = attr1 === 6 || attr2 === -1; //是否有“无”属性
+		const search_attrs = [attr1, attr2].filter(a => a != null && a >= 0 && a <= 5); //所有非空属性
+		const aNone = attr1 === 6 || attr2 === -1; //是否有“无”属性
 		cardsRange = cardsRange.filter(c =>
 			search_attrs.every(a => c.attrs.includes(a)) &&
-			(anone ? (c.attrs.includes(6) || c.attrs.includes(-1)) : true)
+			(aNone ? (c.attrs.includes(6) || c.attrs.includes(-1)) : true)
 		);
 	}
 	//类型
