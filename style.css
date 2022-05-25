@@ -1190,11 +1190,16 @@ icon.inflicts::after
 
 /*编辑窗口*/
 .blur-bg{
-	filter:blur(5px);
-	pointer-events: none;
+	pointer-events: none; /*打开编辑窗后禁止后方有鼠标反应*/
 }
-.guide-mod .blur-bg{
-	filter: unset;
+ /*因为火狐还不支持 backdrop-filter 此部分只对火狐生效*/
+@-moz-document url-prefix(){
+	.blur-bg{
+		filter: blur(5px);
+	}
+	.guide-mod .blur-bg{
+		filter: unset;
+	}
 }
 
 .edit-box{
@@ -1206,9 +1211,12 @@ icon.inflicts::after
 	width:100%;
 	box-sizing: border-box;
 	min-width:664px;
+	
+	backdrop-filter: blur(5px);
 }
 .guide-mod .edit-box{
 	background-color: rgb(102, 73, 50);
+	backdrop-filter: unset;
 }
 .edit-box-title{
 	text-align: center;
