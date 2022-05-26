@@ -2094,6 +2094,7 @@ function initialize(event) {
 	txtDetailDisplay.onclick = function() {
 		detailBox.classList.add("edit");
 		txtDetail.focus();
+		txtDetail.sec
 	};
 
 	//这个写法的目的其实是为了确保添加顺序与1、2、3一致，即便打乱了顺序，也能正确添加
@@ -3352,7 +3353,7 @@ function initialize(event) {
 			monEditSAwokensRow.swaokenIndex = value;
 			const plusArr = [monEditAddHp,monEditAddAtk,monEditAddRcv];
 			//自动打上297
-			if (plusArr.some(ipt=>parseInt(ipt.value)<99))
+			if (!monEditSAwokensRow.classList.contains(className_displayNone) && plusArr.some(ipt=>parseInt(ipt.value)<99))
 			{
 				console.debug("点亮超觉醒，自动设定297");
 				plusArr.forEach(ipt=>ipt.value=99);
@@ -3600,7 +3601,7 @@ function initialize(event) {
 		teamData[editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
 
 		mon.id = editBox.mid;
-		const card = Cards[mon.id] || Cards[0];
+		const card = mon.card || Cards[0];
 		const skill = Skills[card.activeSkillId];
 
 		mon.level = parseInt(monEditLv.value, 10);
@@ -3634,12 +3635,17 @@ function initialize(event) {
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
 		refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
 
+		let changeAttrTypeWeapon = false;
+		let awokens = card.awakenings;
+		if (!editBox.isAssist) {//如果改的不是辅助
+			awokens = teamData[editBox.memberIdx[1] + 1][editBox.memberIdx[2]].card.awakenings;
+		}
+		if (awokens.includes(49) && awokens.some(ak => ak >= 83 && ak <= 95)) changeAttrTypeWeapon = true;
+
 		//如果是2人协力，且修改的是队长的情况，为了刷新另一个队伍时间计算，直接刷新整个队形
-		if (teamsCount === 2 && editBox.memberIdx[2] === 0)
-		{
+		if (teamsCount === 2 && editBox.memberIdx[2] === 0 || changeAttrTypeWeapon) {
 			refreshAll(formation);
-		}else
-		{
+		} else {
 			const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 			if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
 			const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
@@ -3654,7 +3660,7 @@ function initialize(event) {
 			const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
 			if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
 	
-			//刷新改队员的CD
+			//刷新该队员的CD
 			refreshMemberSkillCD(teamBox, teamData, editBox.memberIdx[2]);
 		}
 
@@ -3670,15 +3676,19 @@ function initialize(event) {
 		}
 		else
 		{
+			let selection = window.getSelection(), selectNodes = selection?.focusNode?.childNodes;
+			//如果正在编辑文本，则不执行快捷键操作
+			if (selectNodes && Array.from(selectNodes).some(node=>node?.nodeName === "TEXTAREA" || node?.nodeName === "INPUT"))
+				return;
 			//如果按Ctrl+左右方向键，或者是小键盘上的左右方向键（关闭Num），快速切换变身
 			if (event.key === "ArrowLeft"
 				&& (event.code == "Numpad4" || event.ctrlKey))
-			{
+			{ //变身后退
 				henshinStep(-1);
 			}
 			else if (event.key === "ArrowRight"
 				&& (event.code == "Numpad6" || event.ctrlKey))
-			{
+			{ //变身前进
 				henshinStep(+1);
 			}
 		}
@@ -3694,23 +3704,8 @@ function initialize(event) {
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
 		refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
 
-		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
-		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
-		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
-
-		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
-		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
-		if (teamMenberAwokenDom && teamAssistAwokenDom) refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
-
-		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
-		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
-		const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
-		if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
-
-		//刷新改队员的CD
-		refreshMemberSkillCD(teamBigBox, teamData, editBox.memberIdx[2]);
-
+		refreshAll(formation);
+		
 		creatNewUrl();
 		editBox.hide();
 	};
