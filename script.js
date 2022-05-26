@@ -2094,7 +2094,6 @@ function initialize(event) {
 	txtDetailDisplay.onclick = function() {
 		detailBox.classList.add("edit");
 		txtDetail.focus();
-		txtDetail.sec
 	};
 
 	//这个写法的目的其实是为了确保添加顺序与1、2、3一致，即便打乱了顺序，也能正确添加
