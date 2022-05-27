@@ -354,7 +354,6 @@ function dbDelete (db, tableName, keys) {
 }
 
 function latentUseHole(latentId) {
-	let num = 1;
 	switch (true) {
 		case (latentId === 12):
 		case (latentId >= 16 && latentId <= 36):

@@ -351,8 +351,8 @@ let localTranslating = {
 			[80]: tp`${'icon'}4 Att. Enhanced Attack`,
 			[81]: tp`${'icon'}5 Att. Enhanced Attack`,
 			[82]: tp`${'icon'}Super Enhanced Matching`,
-			[83]: tp`${'icon'}Append God Type`,
-			[84]: tp`${'icon'}Append Dragon Type`,
+			[83]: tp`${'icon'}Append Dragon Type`,
+			[84]: tp`${'icon'}Append God Type`,
 			[85]: tp`${'icon'}Append Devil Type`,
 			[86]: tp`${'icon'}Append Machine Type`,
 			[87]: tp`${'icon'}Append Balanced Type`,
@@ -425,7 +425,7 @@ const official_awoken_sorting = [
 		   1,  2,  3, 46, 47, 39, 40, 41, 42,
 		  65, 66, 67,  9, 71, 72, 30, 64, 63,
 		  73, 74, 75, 76, 77, 78, 79, 80, 81,
-		  82, 83, 84, 85, 86, 87, 88, 89, 90,
+		  82, 84, 83, 85, 86, 87, 88, 89, 90,
 		  91, 92, 93, 94, 95, 96
 ];
 

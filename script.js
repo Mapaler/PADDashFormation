@@ -152,18 +152,8 @@ Member.prototype.getAttrsTypesWithWeapon = function(assist) {
 		if (changeAttr) attrs[1] = changeAttr - 91;
 		//添加类型
 		let appendTypes = assistCard.awakenings.filter(ak=>ak >= 83 && ak <= 90);
-		appendTypes = appendTypes.map(type=>{
-			switch (type) {
-				case 83: {return 5;}
-				case 84: {return 4;}
-				case 85: {return 7;}
-				case 86: {return 8;}
-				case 87: {return 1;}
-				case 88: {return 6;}
-				case 89: {return 2;}
-				case 90: {return 3;}
-			}
-		});
+		appendTypes = appendTypes.map(type=>
+			typekiller_for_type.find(t=>(type - 45) === t.awoken).type);
 		for (let appendType of appendTypes) {
 			types.add(appendType);
 		}
