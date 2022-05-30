@@ -91,6 +91,7 @@
 			random_henshin: tp`随机变身为${'cards'}`,
 			void_poison: tp`消除${'poison'}时不会受到毒伤害`,
 			skill_proviso: tp`${'condition'}才能发动后续效果`,
+			impart_awoken: tp`赋予${'attrs_types'}额外的${'awakenings'}`,
 			obstruct_opponent: tp`对${'target'}施加敌对技能效果：${'skills'}`,
 			obstruct_opponent_after_me: tp`排名比自身低的对手`,
 			obstruct_opponent_before_me: tp`排名比自身高的对手`,

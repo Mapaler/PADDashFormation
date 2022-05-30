@@ -107,6 +107,7 @@ let localTranslating = {
 			random_henshin: tp`Random transforms into ${'cards'}`,
 			void_poison: tp`Voids ${'poison'} damage`,
 			skill_proviso: tp`The follow-up effect can only be activates ${'condition'}`,
+			impart_awoken: tp`Impart ${'attrs_types'} additional ${'awakenings'}`,
 			obstruct_opponent: tp`Apply obstruct skill effect to ${'target'}: ${'skills'}`,
 			obstruct_opponent_after_me: tp`The opponent ranked lower than me`,
 			obstruct_opponent_before_me: tp`The opponent ranked higher than me`,
@@ -2840,12 +2841,12 @@ const specialSearchFunctions = (function() {
 		{group:true,name:"======Leader Skills=====",otLangName:{chs:"======队长技======",cht:"======隊長技======"}, functions: [
 			{name:"Fixed damage inflicts(sort by damage)",otLangName:{chs:"队长技固伤追击（按伤害排序）",cht:"隊長技固傷追擊（按傷害排序）"},
 				function:cards=>{
-				return cards.filter(card=>{
-					return getSkillFixedDamage(card) > 0;
-				}).sort((a,b)=>{
-					let a_pC = getSkillFixedDamage(a),b_pC = getSkillFixedDamage(b);
-					return a_pC - b_pC;
-				});
+					return cards.filter(card=>{
+						return getSkillFixedDamage(card) > 0;
+					}).sort((a,b)=>{
+						let a_pC = getSkillFixedDamage(a),b_pC = getSkillFixedDamage(b);
+						return a_pC - b_pC;
+					});
 				},
 				addition:card=>{
 					const value = getSkillFixedDamage(card);
@@ -2861,12 +2862,12 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Adds combo(sort by combo)",otLangName:{chs:"队长技+C（按+C数排序）",cht:"隊長技+C（按+C數排序）"},
 				function:cards=>{
-				return cards.filter(card=>{
-					return getSkillAddCombo(card) > 0;
-				}).sort((a,b)=>{
-					let a_pC = getSkillAddCombo(a),b_pC = getSkillAddCombo(b);
-					return a_pC - b_pC;
-				});
+					return cards.filter(card=>{
+						return getSkillAddCombo(card) > 0;
+					}).sort((a,b)=>{
+						let a_pC = getSkillAddCombo(a),b_pC = getSkillAddCombo(b);
+						return a_pC - b_pC;
+					});
 				},
 				addition:card=>{
 					const value = getSkillAddCombo(card);
@@ -2880,6 +2881,28 @@ const specialSearchFunctions = (function() {
 						nodeArr.push(`×${skill.params[2]}`);
 					}
 					return nodeArr.nodeJoin();
+				}
+			},
+			{name:"Impart Awakenings",otLangName:{chs:"赋予觉醒",cht:"賦予覺醒"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [213];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [213];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					const sk = skill.params;
+					let attrs = flags(sk[0]), types = flags(sk[1]), awakenings = sk.slice(2);
+					const fragment = document.createDocumentFragment();
+					if (attrs.length)
+						fragment.appendChild(createOrbsList(attrs));
+					if (types.length)
+						fragment.appendChild(createTypesList(types));
+					fragment.appendChild(document.createTextNode(`:+`));
+					if (awakenings.length)
+						fragment.appendChild(creatAwokenList(awakenings));
+					return fragment;
 				}
 			},
 			{name:"[7×6 board]",otLangName:{chs:"【7×6 版面】",cht:"【7×6 版面】"},

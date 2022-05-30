@@ -371,7 +371,9 @@ const SkillKinds = {
 	Henshin: "henshin",
 	VoidPoison: "void-poison",
 	SkillProviso: "skill-proviso",
+	ImpartAwakenings: "impart-awakenings",
 	ObstructOpponent: "obstruct-opponent",
+
 }
 
 function skillParser(skillId)
@@ -916,6 +918,9 @@ function henshin(id, random = false) {
 }
 function voidPoison() { return { kind: SkillKinds.VoidPoison }; }
 function skillProviso(cond) { return { kind: SkillKinds.SkillProviso, cond: cond }; }
+function impartAwakenings(attrs, types, awakenings) {
+	return { kind: SkillKinds.ImpartAwakenings, attrs: attrs, types: types, awakenings: awakenings };
+}
 function obstructOpponent(type, pos, ids) {
 	return { kind: SkillKinds.ObstructOpponent, type: type, pos: pos, enemy_skills: ids };
 }
@@ -1373,6 +1378,9 @@ const parsers = {
 	},
 	[210](attrs, reduce, combo) {
 		return powerUp(null, null, p.scaleCross([{ single: false, attr: flags(attrs), atk: 100, rcv: 100}]), null, v.percent(reduce), combo ? [addCombo(combo)] : null);
+	},
+	[213](attrs, types, ...awakenings) { //赋予觉醒的队长技
+	  return impartAwakenings(flags(attrs), flags(types), awakenings);
 	},
 	[214](turns) { return activeTurns(turns, bindSkill()); },
 	[215](turns, attrs) { return activeTurns(turns, setOrbState(flags(attrs), 'bound')); },
@@ -2226,6 +2234,31 @@ function renderSkill(skill, option = {})
 				condition: renderCondition(cond)
 			}
 			frg.ap(tsp.skill.skill_proviso(dict));
+			break;
+		}
+		case SkillKinds.ImpartAwakenings: { //赋予队员觉醒
+			let attrs = skill.attrs, types = skill.types, awakenings = skill.awakenings;
+			dict = {
+				awakenings: renderAwakenings(awakenings, {affix: true}),
+			}
+			
+			let attrs_types = [];
+			if (attrs?.length && !isEqual(attrs, Attributes.all()))
+			{
+				dict.attrs = renderAttrs(attrs || [], {affix: attrs?.filter(attr=> attr !== 5)?.length});
+				attrs_types.push(dict.attrs);
+			}
+			if (types?.length)
+			{
+				dict.types = renderTypes(types || [], {affix: true});
+				attrs_types.push(dict.types);
+			}
+			if (attrs_types.length)
+			{
+				dict.attrs_types = attrs_types.nodeJoin(tsp.word.slight_pause());
+			}
+
+			frg.ap(tsp.skill.impart_awoken(dict));
 			break;
 		}
 		case SkillKinds.ObstructOpponent: { //条件限制才能用技能

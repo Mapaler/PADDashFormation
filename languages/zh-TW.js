@@ -90,6 +90,7 @@
 			henshin: tp`變身為${'card'}`,
 			void_poison: tp`消除${'poison'}時不會受到毒傷害`,
 			skill_proviso: tp`${'condition'}才能發動後續效果`,
+			impart_awoken: tp`賦予${'attrs_types'}額外的${'awakenings'}`,
 			obstruct_opponent: tp`對${'target'}施加敵對技能效果：${'skills'}`,
 			obstruct_opponent_after_me: tp`排名比自身低的對手`,
 			obstruct_opponent_before_me: tp`排名比自身高的對手`,
