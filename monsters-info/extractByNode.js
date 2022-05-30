@@ -99,6 +99,7 @@ officialAPI.forEach(function(lang) {
 			delete card.searchFlags;
 		monCards.push(card);
 	}
+	/*
 	//测试附加属性与类型的武器用
 	for (let i = 83; i <= 95; i++)
 	{
@@ -111,6 +112,7 @@ officialAPI.forEach(function(lang) {
 		testCard.awakenings.push(49, i);
 		monCards.push(testCard);
 	}
+	*/
 
 	//加入自定义的语言
 	lang.customName.forEach(function(lcode){
