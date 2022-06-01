@@ -168,6 +168,7 @@
 			enemy_all: tp`敵方全體`,
 			enemy_one: tp`敵方1體`,
 			enemy_attr: tp`${'attr'}敵人`,
+			the_attr: tp`該組寶珠屬性`,
 		},
 		stats: {
 			unknown: tp`[ 未知狀態: ${'type'}]`, //type

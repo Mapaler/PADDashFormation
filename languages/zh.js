@@ -171,6 +171,7 @@
 			enemy_all: tp`敌方全体`,
 			enemy_one: tp`敌方1体`,
 			enemy_attr: tp`${'attr'}敌人`,
+			the_attr: tp`该组宝珠属性`,
 		},
 		stats: {
 			unknown: tp`[ 未知状态: ${'type'}]`, //type

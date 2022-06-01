@@ -1159,7 +1159,7 @@ const parsers = {
   
 	[148](percent) { return rateMultiply(v.percent(percent), 'exp'); },
 	[149](mul) { return powerUp(null, null, p.mul({ rcv: mul }), c.exact('match-length', 4, [Attributes.Heart])); },
-	[150](_, mul) { return powerUp(null, null, p.mul({ atk: mul }), c.exact('match-length', 5, 'enhanced')); },
+	[150](_, mul) { return powerUp({targets: ['the-attr']}, null, p.mul({ atk: mul }), c.exact('match-length', 5, 'enhanced')); },
 	[151](mul1, mul2, percent) {
 		return powerUp(null, null, p.scaleCross([{ single: true, attr: [Attributes.Heart], atk: mul1 || 100, rcv: mul2 || 100 }]), null, v.percent(percent));
 	},
@@ -1414,7 +1414,7 @@ const parsers = {
 		);
 	},
 	[229](attrs, types, hp, atk, rcv) {
-		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp, atk: atk, rcv: rcv})));
+		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp || 0, atk: atk || 0, rcv: rcv || 0})));
 	},
 	[230](turns, target, mul) {
 		/*const targetType = {

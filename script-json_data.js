@@ -187,6 +187,7 @@ let localTranslating = {
 			enemy_all: tp`all enemys`,
 			enemy_one: tp`1 enemy`,
 			enemy_attr: tp`${'attr'} enemy`,
+			the_attr: tp`attr of the matched Orbs`,
 		},
 		stats: {
 			unknown: tp`[ Unknown: ${'type'}]`, //type
