@@ -153,7 +153,7 @@ Member.prototype.getAttrsTypesWithWeapon = function(assist) {
 		//添加类型
 		let appendTypes = assistCard.awakenings.filter(ak=>ak >= 83 && ak <= 90);
 		appendTypes = appendTypes.map(type=>
-			typekiller_for_type.find(t=>(type - 45) === t.awoken).type);
+			typekiller_for_type.find(t=>(type - 52) === t.awoken).type);
 		for (let appendType of appendTypes) {
 			types.add(appendType);
 		}
