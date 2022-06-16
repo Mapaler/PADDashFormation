@@ -2943,29 +2943,31 @@ table .orb-icon
 
 }
 
-.evo-panel-left .evo-type
+.evo-panel-left .evo-type,
+.evo-panel-left .evo-type::after
 {
 	font-family: var(--game-font-family);
 	font-size: 15px;
 	line-height: 15px;
+}
+.evo-panel-left .evo-type
+{
 	display: inline-block;
 	position: relative;
 }
 .evo-panel-left .evo-type::after
 {
-	-webkit-background-clip: text;
+	-webkit-background-clip: text; /*垃圾Chrome，不支持无前缀的*/
 	background-clip: text;
 	color: transparent;
-	font-family: var(--game-font-family);
-	font-size: 15px;
-	line-height: 15px;
 	position: absolute;
 	left: 0;
 }
+
 .evo-panel-left .evo-type::before
 {
 	/*text-shadow: black 1px 1px 0,black -1px 1px 0,black 1px -1px 0,black -1px -1px 0;*/
-	-webkit-text-stroke: 3px black;
+	-webkit-text-stroke: 3px black; /*非W3C标准，但都支持*/
 }
 
 .control-box,
