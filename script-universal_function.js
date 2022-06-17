@@ -51,38 +51,27 @@ function localStorage_getBoolean(name, defaultValue = false){
 	else return Boolean(Number(localStorage.getItem(name) ?? defaultValue));
 }
 
-//数字补前导0
-Number.prototype.prefixInteger = function(length, useGrouping = false) {
-	return this.toLocaleString(undefined, {
-		useGrouping: useGrouping,
-		minimumIntegerDigits: length
-	});
-}
-//数字补前导0
-String.prototype.prefix = function(length = 2, prefix = '0') {
-	let needAddLength = Math.max(length - this.length, 0);
-	return new Array(needAddLength).fill(prefix).join('') + this;
-}
-
-// 将字符串转为Base64
-String.prototype.toBinary = function() {
-	const charCodes16Arr = [...this].map(char=>char.charCodeAt(0));
-	const codeUnits = new Uint16Array(charCodes16Arr);
-	const charCodes = new Uint8Array(codeUnits.buffer);
+// 将字符串转为二进制字符串
+String.prototype.toUTF16BinaryString = function() {
+	const charCodes16Arr = [...this].map(char=>char.charCodeAt(0)); //将每个字符转为数字
+	const codeUnits = new Uint16Array(charCodes16Arr); //将每个字符存入 2 字节中。警告：仅限 0xFFFF 前的Unicode字符，之后的就得换 Uint32Array
+	const charCodes = new Uint8Array(codeUnits.buffer); //每两个存入中
 	const result = [...charCodes].map(code=>String.fromCharCode(code)).join('');
 	return result;
 }
-String.prototype.toBase64 = function() {
-	return btoa(this.toBinary());
-}
-String.fromBinary = function(binary) {
+
+String.fromBinaryString = function(binary) {
 	const bytes = new Uint8Array([...binary].map(char=>char.charCodeAt(0)));
 	const charCodes = new Uint16Array(bytes.buffer);
 	const result = [...charCodes].map(code=>String.fromCharCode(code)).join('');
 	return result;
 }
 String.fromBase64 = function(base64) {
-	return String.fromBinary(atob(base64));
+	return String.fromBinaryString(atob(base64));
+}
+//Buffer转16进制字符串
+Uint8Array.prototype.toHex = function() {
+	return [...this].map(n=>n.toString(16).padStart(2,'0')).join('');
 }
 
 //大数字缩短长度，默认返回本地定义字符串
@@ -130,6 +119,7 @@ Array.prototype.groupBy = function(func) {
 Math.randomInteger = function(max, min = 0) {
 	return this.floor(this.random() * (max - min + 1) + min);
 }
+
 
 //将二进制flag转为数组
 function flags(num) {

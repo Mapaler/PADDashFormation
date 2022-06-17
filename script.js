@@ -430,7 +430,7 @@ Formation.prototype.getPdcQrStr = function()
 		const o = new Map();
 		o.set(0, m.id);
 		if (m.latent.length)
-			o.set(2, m.latent.map(pdfLtent=>pdcLatentMap.find(latent=>latent.pdf === pdfLtent).pdc.toString(36).prefix(2)).join('')); //潜觉
+			o.set(2, m.latent.map(pdfLtent=>pdcLatentMap.find(latent=>latent.pdf === pdfLtent).pdc.toString(36).padStart(2,'0')).join('')); //潜觉
 		o.set(3, m.level);
 		o.set(4, m.plus[0]);
 		o.set(5, m.plus[1]);
@@ -479,8 +479,8 @@ Formation.prototype.getPdcQrStr = function()
 						return null;
 					}
 					return [
-					item[0].toString(36).prefix(2),
-					item[1].toString(36).prefix(2)
+					item[0].toString(36).padStart(2,'0'),
+					item[1].toString(36).padStart(2,'0')
 				].join('')}).filter(item=>item).join(',');
 				teamArr.push(pdcMemberStr);
 			}
@@ -1414,7 +1414,7 @@ function pdcFotmationToPdfFotmation(inputString)
 			{
 				let membersStr = teamStr.split('}').filter(Boolean);
 				const team = {
-					badge: parseInt(membersStr.shift(),10) //徽章是10进制
+					badge: parseInt(membersStr.shift(),10) //第一个元素是徽章，是10进制。读取并从数组内删掉，剩下的都是队员
 				}
 				team.members = membersStr.map(memberStr=>{
 					let memberArr = memberStr.split(',').map(valueStr=>{
@@ -3324,7 +3324,7 @@ function initialize(event) {
 			const card = Cards[editBox.mid];
 			const decoder = new Adpcm(adpcm_wasm, pcmImportObj);
 			decoder.resetDecodeState(new Adpcm.State(0, 0));
-			decodeAudio(`sound/voice/${currentDataSource.code}/padv${card.voiceId.prefixInteger(3)}.wav`, decoder.decode.bind(decoder));
+			decodeAudio(`sound/voice/${currentDataSource.code}/padv${card.voiceId.toString().padStart(2,'0')}.wav`, decoder.decode.bind(decoder));
 		}
 	}
 	monEditAwokensLabel.forEach(akDom => akDom.onclick = playVoiceAwoken);
