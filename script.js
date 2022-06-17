@@ -815,7 +815,7 @@ class EvoTree
 class LeaderSkillType{
 	constructor(flags1, flags2){
 		this.matchMode = {
-			multipleColors: Boolean(flags1 & 1 << 0),
+			multipleAttr: Boolean(flags1 & 1 << 0),
 			rowMatch: Boolean(flags1 & 1 << 1),
 			combo: Boolean(flags1 & 1 << 2),
 			sameColor: Boolean(flags1 & 1 << 3),
