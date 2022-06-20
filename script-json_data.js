@@ -2278,6 +2278,14 @@ const specialSearchFunctions = (function() {
 				return skill;
 				})
 			},
+			{name:"Changes all Orbs to any",otLangName:{chs:"洗版-任意色",cht:"洗版-任意色"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [71];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:boardChange_Addition
+			},
 			{name:"Changes all Orbs to 1 color(Farm)",otLangName:{chs:"洗版-1色（花火）",cht:"洗版-1色（花火）"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [71];

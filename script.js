@@ -3203,6 +3203,9 @@ function initialize(event) {
 		sawokenClear.onclick();
 		specialClear.onclick();
 
+		s_canAssist.checked = false;
+		s_noHenshin.checked = false;
+		
 		searchMonList.originalHeads = null;
 		searchResultCount.setAttribute("data-search-result-count", 0);
 		searchMonList.innerHTML = "";
