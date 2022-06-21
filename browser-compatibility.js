@@ -7,8 +7,7 @@
 	}
 })();
 
-if (needUpdateBrowser)
-{
+if (needUpdateBrowser) {
 	let browserVersion = ((UA)=>{
 		let regRes;
 		if (regRes = /\b(Firefox|Chrome)\/([\d\.]+)/ig.exec(UA)) {
@@ -43,4 +42,39 @@ Please update your browser core to Firefox ≥ 74 or Chrome ≥ 80 or Safari ≥
 
 alert(alertStr);
 document.write(alertStr.replace(/\n/g,'<br />'));
+}
+
+let denied = ((UA)=>{
+	return /\b(?:MicroMessenger|WeChat|Weixin|QQ|AliApp)\b/.test(UA);
+})(navigator.userAgent);
+if (denied) {
+	const mask = document.createElement("div");
+	mask.id = "denied-mask";
+	const css = `
+	#denied-mask {
+		position: fixed;
+		height: 100%;
+		width: 100%;
+		top: 0;
+		left: 0;
+		background-color: #000A;
+	}
+	.alert {
+		font-size: 2em;
+		font-weight: bold;
+		color: white;
+		text-align: center;
+	}
+	`;
+	const style = mask.appendChild(document.createElement("style"));
+	style.appendChild(document.createTextNode(css));
+	const alertDiv = mask.appendChild(document.createElement("div"));
+	alertDiv.className = "alert"
+	alertDiv.appendChild(document.createTextNode("请勿使用内置浏览"));
+	alertDiv.appendChild(document.createElement("br"));
+	alertDiv.appendChild(document.createTextNode("点击菜单使用正常浏览器打开↗"));
+
+	window.addEventListener("load", ()=>{
+		document.body.appendChild(mask);
+	});
 }
