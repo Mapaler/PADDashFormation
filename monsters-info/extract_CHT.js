@@ -3,6 +3,8 @@ const path = require('path');
 const OpenCC = require('opencc-js');
 const converter = OpenCC.Converter({ from: 'hk', to: 'cn' });
 const tsConverter = OpenCC.CustomConverter([
+	['点阵图', '像素画'],
+	['魔物猎人', '怪物猎人'],
 	['铁甲奇侠', '钢铁侠'],
 	['变形侠医', '绿巨人'],
 	['毒魔', '毒液'],

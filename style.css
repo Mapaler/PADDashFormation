@@ -1182,11 +1182,16 @@ icon.inflicts::after
 
 /*编辑窗口*/
 .blur-bg{
-	filter:blur(5px);
-	pointer-events: none;
+	pointer-events: none; /*打开编辑窗后禁止后方有鼠标反应*/
 }
-.guide-mod .blur-bg{
-	filter: unset;
+ /*因为火狐还不支持 backdrop-filter 此部分只对火狐生效*/
+@-moz-document url-prefix(){
+	.blur-bg{
+		filter: blur(5px);
+	}
+	.guide-mod .blur-bg{
+		filter: unset;
+	}
 }
 
 .edit-box{
@@ -1198,9 +1203,12 @@ icon.inflicts::after
 	width:100%;
 	box-sizing: border-box;
 	min-width:664px;
+	
+	backdrop-filter: blur(5px);
 }
 .guide-mod .edit-box{
 	background-color: rgb(102, 73, 50);
+	backdrop-filter: unset;
 }
 .edit-box-title{
 	text-align: center;
@@ -1644,8 +1652,13 @@ icon.inflicts::after
 .search-box .awoken-div::before{
 	display: none;
 }
-.search-box .awoken-div.official-awoken-sorting::before{
-	display: block;
+.search-box .awoken-div.official-awoken-sorting::before,
+.search-box .sawoken-div.official-awoken-sorting::before
+{
+	display: inline-block;
+	vertical-align: top;
+	line-height: 26px;
+	
 }
 
 .search-box .awoken-div,
@@ -1653,17 +1666,7 @@ icon.inflicts::after
 	display: inline-block;
 	vertical-align: top;
 }
-.search-box .rare-clear,
-.search-box .awoken-clear,
-.search-box .sawoken-clear
-{
-	vertical-align: top;
-}
-.search-box .rare-clear::before,
-.search-box .awoken-clear::before,
-.search-box .sawoken-clear::before,
-.search-box .special-add::before,
-.search-box .special-clear::before
+.search-box .brown-button::before
 {
 	min-width: 80px;
 	background-size: 100px 100px;
@@ -1674,9 +1677,11 @@ icon.inflicts::after
 	padding: 0;
 	vertical-align: top;
 }
+.search-box .rare-clear::before,
 .search-box .sawoken-clear::before,
 .search-box .special-add::before,
-.search-box .special-clear::before
+.search-box .special-clear::before,
+.search-box .special-star::before
 {
 	min-width: 50px;
 	font-size: 14px;
@@ -2308,7 +2313,8 @@ icon.inflicts::after
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="39"],
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="40"],
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="41"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="42"]
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="42"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="46"]
 {
 	display: inline-block;
 }
@@ -2324,7 +2330,9 @@ icon.inflicts::after
 	cursor: pointer;
 }
 /*不允许使用的潜觉，不是手指，半透明，灰度*/
-.m-latent-allowable-ul .latent-icon.unallowable-latent{
+.awoken-icon.unallowable-awoken,
+.latent-icon.unallowable-latent
+{
 	cursor: default;
 	opacity: var(--search-icon-unchecked);
 	filter: grayscale(100%);
@@ -2927,35 +2935,40 @@ table .orb-icon
 
 }
 
-.evo-panel-left .evo-type
+.evo-panel-left .evo-type,
+.evo-panel-left .evo-type::after
 {
 	font-family: var(--game-font-family);
 	font-size: 15px;
 	line-height: 15px;
+}
+.evo-panel-left .evo-type
+{
 	display: inline-block;
 	position: relative;
 }
 .evo-panel-left .evo-type::after
 {
-	-webkit-background-clip: text;
+	-webkit-background-clip: text; /*垃圾Chrome，不支持无前缀的*/
 	background-clip: text;
 	color: transparent;
-	font-family: var(--game-font-family);
-	font-size: 15px;
-	line-height: 15px;
 	position: absolute;
 	left: 0;
 }
+
 .evo-panel-left .evo-type::before
 {
 	/*text-shadow: black 1px 1px 0,black -1px 1px 0,black 1px -1px 0,black -1px -1px 0;*/
-	-webkit-text-stroke: 3px black;
+	-webkit-text-stroke: 3px black; /*非W3C标准，但都支持*/
 }
 
 .control-box,
 .control-box button
 {
 	font-family: var(--icon-font-family);
+}
+#default-level {
+	width: 50px;
 }
 
 #qr-code-frame

@@ -4,6 +4,8 @@ let PlayerDatas = []; //玩家数据
 let currentLanguage; //当前语言
 let currentDataSource; //当前数据
 let currentPlayerData; //当前玩家数据
+let markedFilter = []; //收藏的特殊搜索
+let defaultLevel = 99; //默认等级
 
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
@@ -146,6 +148,29 @@ var Member = function() {
 	this.ability = [0, 0, 0];
 	this.abilityNoAwoken = [0, 0, 0];
 };
+//让 Member 能直接获取 card
+Object.defineProperty(Member.prototype, "card", {
+	get() { return Cards[this.id]; }
+})
+Member.prototype.getAttrsTypesWithWeapon = function(assist) {
+	let memberCard = this.card, assistCard = assist?.card;
+	if (this.id <= 0 || !memberCard) return null; //跳过 id 0
+	let attrs = [...memberCard.attrs]; //属性只有两个，因此用固定的数组
+	let types = new Set(memberCard.types); //Type 用Set，确保不会重复
+	if (assistCard?.awakenings?.includes(49)) { //如果有武器
+		//更改副属性
+		let changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95);
+		if (changeAttr) attrs[1] = changeAttr - 91;
+		//添加类型
+		let appendTypes = assistCard.awakenings.filter(ak=>ak >= 83 && ak <= 90);
+		appendTypes = appendTypes.map(type=>
+			typekiller_for_type.find(t=>(type - 52) === t.awoken).type);
+		for (let appendType of appendTypes) {
+			types.add(appendType);
+		}
+	}
+	return {attrs: attrs, types: Array.from(types)};
+}
 Member.prototype.outObj = function() {
 	const m = this;
 	if (m.id == 0) return null;
@@ -416,7 +441,7 @@ Formation.prototype.getPdcQrStr = function()
 		const o = new Map();
 		o.set(0, m.id);
 		if (m.latent.length)
-			o.set(2, m.latent.map(pdfLtent=>pdcLatentMap.find(latent=>latent.pdf === pdfLtent).pdc.toString(36).prefix(2)).join('')); //潜觉
+			o.set(2, m.latent.map(pdfLtent=>pdcLatentMap.find(latent=>latent.pdf === pdfLtent).pdc.toString(36).padStart(2,'0')).join('')); //潜觉
 		o.set(3, m.level);
 		o.set(4, m.plus[0]);
 		o.set(5, m.plus[1]);
@@ -465,8 +490,8 @@ Formation.prototype.getPdcQrStr = function()
 						return null;
 					}
 					return [
-					item[0].toString(36).prefix(2),
-					item[1].toString(36).prefix(2)
+					item[0].toString(36).padStart(2,'0'),
+					item[1].toString(36).padStart(2,'0')
 				].join('')}).filter(item=>item).join(',');
 				teamArr.push(pdcMemberStr);
 			}
@@ -801,7 +826,7 @@ class EvoTree
 class LeaderSkillType{
 	constructor(flags1, flags2){
 		this.matchMode = {
-			multipleColors: Boolean(flags1 & 1 << 0),
+			multipleAttr: Boolean(flags1 & 1 << 0),
 			rowMatch: Boolean(flags1 & 1 << 1),
 			combo: Boolean(flags1 & 1 << 2),
 			sameColor: Boolean(flags1 & 1 << 3),
@@ -1400,7 +1425,7 @@ function pdcFotmationToPdfFotmation(inputString)
 			{
 				let membersStr = teamStr.split('}').filter(Boolean);
 				const team = {
-					badge: parseInt(membersStr.shift(),10) //徽章是10进制
+					badge: parseInt(membersStr.shift(),10) //第一个元素是徽章，是10进制。读取并从数组内删掉，剩下的都是队员
 				}
 				team.members = membersStr.map(memberStr=>{
 					let memberArr = memberStr.split(',').map(valueStr=>{
@@ -1579,6 +1604,16 @@ function initialize(event) {
 		}
 		btnShowAwokenCount.onclick();
 	}
+
+	//默认等级
+	const iptDefaultLevel = document.getElementById("default-level");
+	iptDefaultLevel.value = localStorage.getItem(cfgPrefix + iptDefaultLevel.id);
+	iptDefaultLevel.onchange = function(e){
+		let num = Number(this.value || this.placeholder);
+		defaultLevel = num;
+		if (e) localStorage.setItem(cfgPrefix + this.id, defaultLevel);
+	}
+	iptDefaultLevel.onchange(false);
 
 	//触屏使用的切换显示的线条
 	interchangeSVG = document.body.querySelector("#interchange-line");
@@ -2725,8 +2760,8 @@ function initialize(event) {
 	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
 	searchEvolutionByThis.onclick = function() {showSearch(Cards.filter(card=>card.evoMaterials.includes(editBox.mid)))};
 
-	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-1 .attr-radio"));
-	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-2 .attr-radio"));
+	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-1 [name=\"attr-1\"]"));
+	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-2 [name=\"attr-2\"]"));
 	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
 	const s_typesDiv = searchBox.querySelector(".types-div");
 	const s_typeAndOr = s_typesDiv.querySelector("#type-and-or");
@@ -2850,11 +2885,11 @@ function initialize(event) {
 		}
 		for (const id of awokenSorting) {
 			const li = s_awokensLi.find(li=>getIconId(li) === id);
-			fragmentAwoken.appendChild(li);
+			if (li) fragmentAwoken.appendChild(li);
 		}
 		for (const id of sawokenSorting) {
 			const li = s_sawokensLi.find(li=>getIconId(li) === id);
-			fragmentSawoken.appendChild(li);
+			if (li) fragmentSawoken.appendChild(li);
 		}
 		
 		const className = "official-awoken-sorting";
@@ -2914,6 +2949,7 @@ function initialize(event) {
 	const s_specialDiv = searchBox.querySelector(".special-div");
 	const specialAdd = s_specialDiv.querySelector(".special-add");
 	const specialClear = s_specialDiv.querySelector(".special-clear");
+	const specialStar = s_specialDiv.querySelector(".special-star");
 	const specialFilterUl = s_specialDiv.querySelector(".special-filter-list");
 	const specialFilterFirstLi = specialFilterUl.querySelector("li");
 	const specialFirstSelect = specialFilterFirstLi.querySelector(".special-filter");
@@ -2921,39 +2957,96 @@ function initialize(event) {
 	function newSpecialSearchOption(func, idx1, idx2)
 	{
 		const funcName = returnMonsterNameArr(func, currentLanguage.searchlist, currentDataSource.code)[0];
-		return new Option(funcName + (func.addition ? " " + localTranslating.addition_display : ""), idx1 + (idx2 != null ? "|" + idx2 : ""));
+		return new Option(
+			funcName + (func.addition ? " " + localTranslating.addition_display : ""), //有附加显示的，名称增加一个附加显示图标
+			idx1 + (idx2 != null ? "|" + idx2 : "") //值为 组序号|组内序号
+			);
 	}
-	specialSearchFunctions.forEach((sfunc,idx)=>{
-		if (sfunc.group)
-		{
-			const groupName = returnMonsterNameArr(sfunc, currentLanguage.searchlist, currentDataSource.code)[0];
-			const optgroup = specialFirstSelect.appendChild(document.createElement("optgroup"));
-			optgroup.label = groupName;
-			if (sfunc.functions)
-			{
-				sfunc.functions.forEach((_sfunc,_idx)=>{
-					optgroup.appendChild(newSpecialSearchOption(_sfunc, idx, _idx));
-				});
+	//读取储存的筛选收藏列表
+	let strMakedConfig = JSON.parse(localStorage.getItem(cfgPrefix + "marked-filter"));
+	if (Array.isArray(strMakedConfig)) {
+		for (let arr of strMakedConfig) {
+			let idx1 = specialSearchFunctions.findIndex(group=>group.name == arr[0]);
+			if (idx1 < 0 ) continue;
+			if (arr.length > 1) {
+				let idx2 = specialSearchFunctions[idx1].functions.findIndex(func=>func.name == arr[1]);
+				if (idx2 < 0 ) continue;
+				markedFilter.push([idx1, idx2]);
+			} else {
+				markedFilter.push([idx1]);
 			}
-		}else
-		{
-			specialFirstSelect.options.add(newSpecialSearchOption(sfunc, idx));
 		}
-	});
-	specialAdd.onclick = function()
-	{
+	}
+	specialFirstSelect.refreshList = function() {
+		const _this = specialFirstSelect;
+		function addNewOption(sfunc, idx){
+			if (sfunc.group)
+			{
+				const groupName = returnMonsterNameArr(sfunc, currentLanguage.searchlist, currentDataSource.code)[0];
+				const optgroup = _this.appendChild(document.createElement("optgroup"));
+				optgroup.label = groupName;
+				if (sfunc.functions)
+				{
+					sfunc.functions.forEach((_sfunc,_idx)=>{
+						optgroup.appendChild(newSpecialSearchOption(_sfunc, idx, _idx));
+					});
+				}
+			}else
+			{
+				_this.options.add(newSpecialSearchOption(sfunc, idx));
+			}
+		}
+		_this.innerHTML = '';
+		addNewOption(specialSearchFunctions[0], 0);
+		if (markedFilter.length > 0) {
+			const groupName = "=====★=====";
+			const optgroup = _this.appendChild(document.createElement("optgroup"));
+			optgroup.label = groupName;
+			for (let indexs of markedFilter) {
+				const funcObj = indexs.length > 1 ? specialSearchFunctions[indexs[0]].functions[indexs[1]] : specialSearchFunctions[indexs[0]];
+				optgroup.appendChild(newSpecialSearchOption(funcObj, indexs[0], indexs[1]));
+			}
+		}
+		for (let idx = 1; idx < specialSearchFunctions.length; idx++) {
+			addNewOption(specialSearchFunctions[idx], idx);
+		}
+	}
+	specialFirstSelect.onchange = function() {
+		const indexs = specialFirstSelect.value.split("|").map(Number);
+		let markIdx = markedFilter.findIndex(arr=>arr[0] === indexs[0] && arr[1] === indexs[1]);
+		if (markIdx >= 0) {//已经存在的收藏
+			specialStar.classList.add("marked");
+		} else {
+			specialStar.classList.remove("marked");
+		}
+	}
+	//只添加第一个列表，后面的全部通过克隆的方式复现
+	specialFirstSelect.refreshList();
+	specialAdd.onclick = function() {
 		specialFilterUl.appendChild(specialFilterFirstLi.cloneNode(true));
 	}
-	specialAdd.onclick(); //先运行一次产生两个
-	specialClear.onclick = function()
-	{
-		/*for (let ci = specialFilterUl.children.length-1; ci>0; ci--)
-		{
-			specialFilterUl.children[ci].remove();
-		}*/
+	//specialAdd.onclick(); //先运行一次产生两个
+	specialClear.onclick = function() {
 		specialFilterUl.innerHTML = "";
 		specialFilterUl.appendChild(specialFilterFirstLi);
 		specialFirstSelect.selectedIndex = 0;
+	}
+	specialStar.onclick = function() {
+		const indexs = specialFirstSelect.value.split("|").map(Number);
+		let markIdx = markedFilter.findIndex(arr=>arr[0] === indexs[0] && arr[1] === indexs[1]);
+		if (markIdx >= 0) {//已经存在的收藏
+			markedFilter.splice(markIdx,1);
+		} else {
+			markedFilter.push(indexs);
+		}
+		specialFirstSelect.refreshList(); //刷新列表
+		specialStar.classList.remove("marked"); //去掉自身的收藏标记
+		//储存设置
+		let strMakedConfig = markedFilter.map(indexs=>{
+			let arr = [specialSearchFunctions[indexs[0]].name];
+			if (indexs.length > 1) arr.push(specialSearchFunctions[indexs[0]].functions[indexs[1]].name);
+			return arr;})
+		localStorage.setItem(cfgPrefix + "marked-filter", JSON.stringify(strMakedConfig));
 	}
 
 	const s_controlDiv = searchBox.querySelector(".control-div");
@@ -2961,12 +3054,24 @@ function initialize(event) {
 	const searchClose = s_controlDiv.querySelector(".search-close");
 	const searchClear = s_controlDiv.querySelector(".search-clear");
 
+
 	function returnCheckedInput(ipt) {
 		return ipt.checked;
 	}
 
 	function returnInputValue(ipt) {
 		return ipt.value;
+	}
+
+	function returnRadiosValue(radioArr) {
+		let checkedRadio = radioArr.find(returnCheckedInput);
+		let firstCheckedValue = checkedRadio ? returnInputValue(checkedRadio) : undefined;
+		return firstCheckedValue;
+	}
+	function returnCheckBoxsValues(checkBoxsArr) {
+		let checkedCheckBoxs = checkBoxsArr.filter(returnCheckedInput);
+		let checkedValues = checkedCheckBoxs.map(returnInputValue);
+		return checkedValues;
 	}
 
 	function Str2Int(str) {
@@ -3040,31 +3145,19 @@ function initialize(event) {
 	s_add_show_abilities.onchange = reShowSearch;
 	s_add_show_abilities_with_awoken.onchange = reShowSearch;
 
-	const startSearch = function(cards, customAdditionalFunction) {
-		if (customAdditionalFunction == undefined) customAdditionalFunction = [];
-		const attr1Filter = s_attr1s.filter(returnCheckedInput).map(returnInputValue);
-		const attr2Filter = s_attr2s.filter(returnCheckedInput).map(returnInputValue);
+	const startSearch = function(cards, customAdditionalFunction = []) {
 		let attr1, attr2;
-		if (attr1Filter.length > 0) {
-			if (!isNaN(attr1Filter[0])) {
-				attr1 = parseInt(attr1Filter[0], 10);
-			} else {
-				attr1 = null;
-			}
-		}
-		if (attr2Filter.length > 0) {
-			if (!isNaN(attr2Filter[0])) {
-				attr2 = parseInt(attr2Filter[0], 10);
-			} else {
-				attr2 = null;
-			}
-		}
-		const typesFilter = s_types.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
+		attr1 = returnRadiosValue(s_attr1s); //获取选中单选框的值
+		attr2 = returnRadiosValue(s_attr2s); //获取选中单选框的值
+		attr1 = isNaN(attr1) ? null : Str2Int(attr1); //将值转为十进制
+		attr2 = isNaN(attr2) ? null : Str2Int(attr2); //将值转为十进制
+
+		const typesFilter = returnCheckBoxsValues(s_types).map(Str2Int);
 		const rareFilter = [
-			s_rareLows.filter(returnCheckedInput).map(returnInputValue).map(Str2Int)[0],
-			s_rareHighs.filter(returnCheckedInput).map(returnInputValue).map(Str2Int)[0],
+			returnCheckBoxsValues(s_rareLows).map(Str2Int)[0],
+			returnCheckBoxsValues(s_rareHighs).map(Str2Int)[0],
 		];
-		const sawokensFilter = s_sawokens.filter(returnCheckedInput).map(returnInputValue).map(Str2Int);
+		const sawokensFilter = returnCheckBoxsValues(s_sawokens).map(Str2Int);
 		const awokensFilter = s_awokensIcons.filter(btn => parseInt(btn.getAttribute("data-awoken-count"), 10) > 0).map(btn => {
 			const awokenIndex = parseInt(btn.getAttribute("data-awoken-icon"), 10);
 			return {
@@ -3121,6 +3214,9 @@ function initialize(event) {
 		sawokenClear.onclick();
 		specialClear.onclick();
 
+		s_canAssist.checked = false;
+		s_noHenshin.checked = false;
+		
 		searchMonList.originalHeads = null;
 		searchResultCount.setAttribute("data-search-result-count", 0);
 		searchMonList.innerHTML = "";
@@ -3242,7 +3338,7 @@ function initialize(event) {
 			const card = Cards[editBox.mid];
 			const decoder = new Adpcm(adpcm_wasm, pcmImportObj);
 			decoder.resetDecodeState(new Adpcm.State(0, 0));
-			decodeAudio(`sound/voice/${currentDataSource.code}/padv${card.voiceId.prefixInteger(3)}.wav`, decoder.decode.bind(decoder));
+			decodeAudio(`sound/voice/${currentDataSource.code}/padv${card.voiceId.toString().padStart(2,'0')}.wav`, decoder.decode.bind(decoder));
 		}
 	}
 	monEditAwokensLabel.forEach(akDom => akDom.onclick = playVoiceAwoken);
@@ -3260,7 +3356,7 @@ function initialize(event) {
 			monEditSAwokensRow.swaokenIndex = value;
 			const plusArr = [monEditAddHp,monEditAddAtk,monEditAddRcv];
 			//自动打上297
-			if (plusArr.some(ipt=>parseInt(ipt.value)<99))
+			if (!monEditSAwokensRow.classList.contains(className_displayNone) && plusArr.some(ipt=>parseInt(ipt.value)<99))
 			{
 				console.debug("点亮超觉醒，自动设定297");
 				plusArr.forEach(ipt=>ipt.value=99);
@@ -3508,7 +3604,7 @@ function initialize(event) {
 		teamData[editBox.memberIdx[1]][editBox.memberIdx[2]] = mon;
 
 		mon.id = editBox.mid;
-		const card = Cards[mon.id] || Cards[0];
+		const card = mon.card || Cards[0];
 		const skill = Skills[card.activeSkillId];
 
 		mon.level = parseInt(monEditLv.value, 10);
@@ -3542,12 +3638,17 @@ function initialize(event) {
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
 		refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
 
+		let changeAttrTypeWeapon = false;
+		let awokens = card.awakenings;
+		if (!editBox.isAssist) {//如果改的不是辅助
+			awokens = teamData[editBox.memberIdx[1] + 1][editBox.memberIdx[2]].card.awakenings;
+		}
+		if (awokens.includes(49) && awokens.some(ak => ak >= 83 && ak <= 95)) changeAttrTypeWeapon = true;
+
 		//如果是2人协力，且修改的是队长的情况，为了刷新另一个队伍时间计算，直接刷新整个队形
-		if (teamsCount === 2 && editBox.memberIdx[2] === 0)
-		{
+		if (teamsCount === 2 && editBox.memberIdx[2] === 0 || changeAttrTypeWeapon) {
 			refreshAll(formation);
-		}else
-		{
+		} else {
 			const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 			if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
 			const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
@@ -3562,7 +3663,7 @@ function initialize(event) {
 			const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
 			if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
 	
-			//刷新改队员的CD
+			//刷新该队员的CD
 			refreshMemberSkillCD(teamBox, teamData, editBox.memberIdx[2]);
 		}
 
@@ -3578,15 +3679,19 @@ function initialize(event) {
 		}
 		else
 		{
+			let selection = window.getSelection(), selectNodes = selection?.focusNode?.childNodes;
+			//如果正在编辑文本，则不执行快捷键操作
+			if (selectNodes && Array.from(selectNodes).some(node=>node?.nodeName === "TEXTAREA" || node?.nodeName === "INPUT"))
+				return;
 			//如果按Ctrl+左右方向键，或者是小键盘上的左右方向键（关闭Num），快速切换变身
 			if (event.key === "ArrowLeft"
 				&& (event.code == "Numpad4" || event.ctrlKey))
-			{
+			{ //变身后退
 				henshinStep(-1);
 			}
 			else if (event.key === "ArrowRight"
 				&& (event.code == "Numpad6" || event.ctrlKey))
-			{
+			{ //变身前进
 				henshinStep(+1);
 			}
 		}
@@ -3602,23 +3707,8 @@ function initialize(event) {
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
 		refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
 
-		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
-		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
-		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
-
-		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
-		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
-		if (teamMenberAwokenDom && teamAssistAwokenDom) refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
-
-		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
-		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
-		const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
-		if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
-
-		//刷新改队员的CD
-		refreshMemberSkillCD(teamBigBox, teamData, editBox.memberIdx[2]);
-
+		refreshAll(formation);
+		
 		creatNewUrl();
 		editBox.hide();
 	};
@@ -3728,7 +3818,7 @@ function buildEvoTreeIdsArray(card, includeHenshin = true) {
 }
 
 //改变一个怪物头像
-function changeid(mon, monDom, latentDom) {
+function changeid(mon, monDom, latentDom, assist) {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	const parentNode = monDom.parentNode;
 	fragment.appendChild(monDom);
@@ -3764,7 +3854,13 @@ function changeid(mon, monDom, latentDom) {
 		monDom.setAttribute("data-cards-pic-y", Math.floor(idxInPage / 10)); //添加Y方向序号
 
 		monDom.querySelector(".property").setAttribute("data-property", card.attrs[0]); //主属性
-		monDom.querySelector(".subproperty").setAttribute("data-property", card.attrs[1]); //副属性
+		let subAttribute = card.attrs[1]; //正常的副属性
+		let assistCard = Cards[assist?.id];
+		if (assistCard && assistCard.awakenings.includes(49)) {  //如果传入了辅助武器
+			let changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95); //搜索改副属性的觉醒
+			if (changeAttr) subAttribute = changeAttr - 91; //更改副属性
+		}
+		monDom.querySelector(".subproperty").setAttribute("data-property", subAttribute); //副属性
 
 		monDom.title = "No." + monId + " " + (card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name);
 		monDom.href = currentLanguage.guideURL(monId, card.name);
@@ -4117,8 +4213,8 @@ function editBoxChangeMonId(id) {
 	//monEditLvMax.textContent = monEditLvMax.value = card.maxLevel;
 	monEditLvMax.value = card.maxLevel;
 	const monEditLv = settingBox.querySelector(".m-level");
-	monEditLv.max = card.limitBreakIncr ? 120 : card.maxLevel; //最大等级为120
-	monEditLv.value = card.limitBreakIncr ? 110 : card.maxLevel; //默认等级为110
+	monEditLv.max = card.limitBreakIncr ? 120 : card.maxLevel; //最大可设定等级
+	monEditLv.value = Math.min(defaultLevel, card.limitBreakIncr ? 120 : card.maxLevel); //默认等级
 	const monEditLv110 = settingBox.querySelector(".m-level-btn-110");
 	const monEditLv120 = settingBox.querySelector(".m-level-btn-120");
 
@@ -4320,26 +4416,27 @@ function refreshAll(formationData) {
 				}
 			});
 			//修改显示内容
-			const member = memberLi.querySelector(`.monster`);
-			const assist = assistsLi.querySelector(`.monster`);
-			const latent = latentLi.querySelector(`.latent-ul`);
-			changeid(teamData[0][ti], member, latent); //队员
-			changeid(teamData[1][ti], assist); //辅助
+			const memberDom = memberLi.querySelector(`.monster`);
+			const assistDom = assistsLi.querySelector(`.monster`);
+			const latentDom = latentLi.querySelector(`.latent-ul`);
+			let member = teamData[0][ti], assist = teamData[1][ti];
+			changeid(member, memberDom, latentDom, assist); //队员
+			changeid(assist, assistDom); //辅助
 			//隐藏队长的自身换为换队长的技能
 			if (ti == 5 || //好友队长永远隐藏
 				leaderIdx == 0 && ti == 0 ) //当没换队长时，自身队长的欢队长技能隐藏
 			{
-				const card_m = Cards[teamData[0][ti].id] || Cards[0];
-				const card_a = Cards[teamData[1][ti].id] || Cards[0];
+				const card_m = Cards[member.id] || Cards[0];
+				const card_a = Cards[assist.id] || Cards[0];
 				const skills_m = getCardActiveSkills(card_m, [93, 227]); //更换队长的技能
 				const skills_a = getCardActiveSkills(card_a, [93, 227]); //更换队长的技能
 				if (skills_m.length == 0 || skills_m[0].type != 227)
 				{
-					member.querySelector(".switch-leader").classList.add(className_displayNone);
+					memberDom.querySelector(".switch-leader").classList.add(className_displayNone);
 				}
 				if (skills_a.length == 0 || skills_a[0].type != 227)
 				{
-					assist.querySelector(".switch-leader").classList.add(className_displayNone);
+					assistDom.querySelector(".switch-leader").classList.add(className_displayNone);
 				}
 			}
 			refreshMemberSkillCD(teamBox, teamData, ti); //技能CD
@@ -4602,7 +4699,9 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const leader1id = team[0][team[3] || 0].id;
 	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3] || 0].id : teams[1][0][teams[1][3] || 0].id) : team[0][5].id;
 
+	//计算当前队伍，2P时则是需要特殊处理
 	const team_2p = teamsCount===2 ? team[0].concat((teamIdx === 1 ? teams[0][0][0] : teams[1][0][0])) : team[0];
+	const assistTeam_2p = teamsCount===2 ? team[1].concat((teamIdx === 1 ? teams[0][1][0] : teams[1][1][0])) : team[1];
 
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
@@ -4624,8 +4723,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		const totalReduce = leastScale.scale;
 
-		const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
-		const teamHPNoAwokenArr = countTeamHp(team[0], leader1id, leader2id, solo, true);
+		const teamHPArr = countTeamHp(team, leader1id, leader2id, solo);
+		const teamHPNoAwokenArr = countTeamHp(team, leader1id, leader2id, solo, true);
 
 
 		let tHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
@@ -4700,35 +4799,24 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		},0);
 		rarityDoms.setAttribute(dataAttrName, rarityCount);
 	}
-	//统计队伍颜色个数
-	if (tAttrsDom)
+	//统计队伍属性/类型个数
+	if (tAttrsDom || tTypesDom)
 	{
-		const attrDoms = Array.from(tAttrsDom.querySelectorAll(".attr"));
-		attrDoms.forEach(attrDom=>{
-			const attrId = parseInt(attrDom.getAttribute("data-attr-icon"));
-			const attrCount = team_2p.reduce((pre,member)=>{
-				if (member.id <= 0) return pre;
-				const card = Cards[member.id] || Cards[0];
-				const attrNum = card.attrs.filter(a=>a==attrId).length;
-				return pre + attrNum;
-			},0);
-			attrDom.setAttribute(dataAttrName, attrCount);
-		});
-	}
-	//统计队伍类型个数
-	if (tTypesDom)
-	{
-		const typeDoms = Array.from(tTypesDom.querySelectorAll(".type-icon"));
-		typeDoms.forEach(typeDom=>{
-			const typeId = parseInt(typeDom.getAttribute("data-type-icon"));
-			const typeCount = team_2p.reduce((pre,member)=>{
-				if (member.id <= 0) return pre;
-				const card = Cards[member.id] || Cards[0];
-				const typeNum = card.types.filter(a=>a==typeId).length;
-				return pre + typeNum;
-			},0);
-			typeDom.setAttribute(dataAttrName, typeCount);
-		});
+		const atCount = countTeamTotalAttrsTypes(team_2p, assistTeam_2p);
+		if (tAttrsDom) {
+			const attrDoms = Array.from(tAttrsDom.querySelectorAll(".attr"));
+			attrDoms.forEach(attrDom=>{
+				const attrId = parseInt(attrDom.getAttribute("data-attr-icon"));
+				attrDom.setAttribute(dataAttrName, atCount.attrs.get(attrId) || 0);
+			});
+		}
+		if (tTypesDom) {
+			const typeDoms = Array.from(tTypesDom.querySelectorAll(".type-icon"));
+			typeDoms.forEach(typeDom=>{
+				const typeId = parseInt(typeDom.getAttribute("data-type-icon"));
+				typeDom.setAttribute(dataAttrName, atCount.types.get(typeId) || 0);
+			});
+		}
 	}
 
 	if (tEffectDom)	{
@@ -4814,7 +4902,7 @@ function refreshFormationTotalHP(totalDom, teams) {
 		const totalReduce = leastScale.scale;
 
 		const tHPArr = teams.map(function(team) {
-			const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo);
+			const teamHPArr = countTeamHp(team, leader1id, leader2id, solo);
 
 
 			const teamTHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
@@ -4823,7 +4911,7 @@ function refreshFormationTotalHP(totalDom, teams) {
 			return Math.round(teamTHP * (1 + 0.05 * teamHPAwoken));
 		});
 		const tHPNoAwokenArr = teams.map(function(team) {
-			const teamHPArr = countTeamHp(team[0], leader1id, leader2id, solo, true);
+			const teamHPArr = countTeamHp(team, leader1id, leader2id, solo, true);
 
 			const teamTHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
 			return Math.round(teamTHP);

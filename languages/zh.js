@@ -91,6 +91,7 @@
 			random_henshin: tp`随机变身为${'cards'}`,
 			void_poison: tp`消除${'poison'}时不会受到毒伤害`,
 			skill_proviso: tp`${'condition'}才能发动后续效果`,
+			impart_awoken: tp`赋予${'attrs_types'}额外的${'awakenings'}`,
 			obstruct_opponent: tp`对${'target'}施加敌对技能效果：${'skills'}`,
 			obstruct_opponent_after_me: tp`排名比自身低的对手`,
 			obstruct_opponent_before_me: tp`排名比自身高的对手`,
@@ -170,6 +171,7 @@
 			enemy_all: tp`敌方全体`,
 			enemy_one: tp`敌方1体`,
 			enemy_attr: tp`${'attr'}敌人`,
+			the_attr: tp`该组宝珠属性`,
 		},
 		stats: {
 			unknown: tp`[ 未知状态: ${'type'}]`, //type
@@ -335,6 +337,19 @@
 			[80]: tp`${'icon'}4色`,
 			[81]: tp`${'icon'}5色`,
 			[82]: tp`${'icon'}12珠`,
+			[83]: tp`${'icon'}附加龙类型`,
+			[84]: tp`${'icon'}附加神类型`,
+			[85]: tp`${'icon'}附加恶魔类型`,
+			[86]: tp`${'icon'}附加机械类型`,
+			[87]: tp`${'icon'}附加平衡类型`,
+			[88]: tp`${'icon'}附加攻击类型`,
+			[89]: tp`${'icon'}附加体力类型`,
+			[90]: tp`${'icon'}附加回复类型`,
+			[91]: tp`${'icon'}附加火属性`,
+			[92]: tp`${'icon'}附加水属性`,
+			[93]: tp`${'icon'}附加木属性`,
+			[94]: tp`${'icon'}附加光属性`,
+			[95]: tp`${'icon'}附加暗属性`,
 		}
 	},
 };

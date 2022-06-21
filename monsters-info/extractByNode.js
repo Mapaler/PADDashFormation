@@ -29,10 +29,10 @@ function sameCard(m1,m2)
 	if (m1 == undefined || m2 == undefined) return false; //是否存在
 	if (m1.attrs[0] != m2.attrs[0]) return false; //主属性
 	if (m1.attrs[1] != m2.attrs[1]) return false; //副属性
-	if (m1.types.length != m2.types.length) return false; //类型长度
-	if (m1.types.some(function(t1,ti){
-		return m2.types[ti] == undefined || m2.types[ti] != t1;
-	})) return false; //全部类型有任意不同的时候也返回false
+	//全部类型有任意不同的时候也返回false，但是考虑到上修，不要求总数一致
+	for (let i = 0; i < Math.min(m1.types.length, m2.types.length); i++) {
+		if (m1.types[i] != m2.types[i]) return false;
+	}
 	if (m1.maxLevel != m2.maxLevel) return false; //最大等级
 	if (m1.collabId != m2.collabId) return false; //合作ID
 	return true;
@@ -99,6 +99,20 @@ officialAPI.forEach(function(lang) {
 			delete card.searchFlags;
 		monCards.push(card);
 	}
+	/*
+	//测试附加属性与类型的武器用
+	for (let i = 83; i <= 95; i++)
+	{
+		let testCard = new Card(oCards[0]);
+		testCard.id = monCards.length;
+		testCard.canAssist = true;
+		if (i >= 83 && i<= 90) testCard.attrs[0] = 6;
+		if (i >= 91) testCard.attrs = [i - 91, i - 91];
+		testCard.name = "v20.0 new awoken debug test ID." + i;
+		testCard.awakenings.push(49, i);
+		monCards.push(testCard);
+	}
+	*/
 
 	//加入自定义的语言
 	lang.customName.forEach(function(lcode){

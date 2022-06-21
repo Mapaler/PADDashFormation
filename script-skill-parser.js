@@ -371,7 +371,9 @@ const SkillKinds = {
 	Henshin: "henshin",
 	VoidPoison: "void-poison",
 	SkillProviso: "skill-proviso",
+	ImpartAwakenings: "impart-awakenings",
 	ObstructOpponent: "obstruct-opponent",
+
 }
 
 function skillParser(skillId)
@@ -916,6 +918,9 @@ function henshin(id, random = false) {
 }
 function voidPoison() { return { kind: SkillKinds.VoidPoison }; }
 function skillProviso(cond) { return { kind: SkillKinds.SkillProviso, cond: cond }; }
+function impartAwakenings(attrs, types, awakenings) {
+	return { kind: SkillKinds.ImpartAwakenings, attrs: attrs, types: types, awakenings: awakenings };
+}
 function obstructOpponent(type, pos, ids) {
 	return { kind: SkillKinds.ObstructOpponent, type: type, pos: pos, enemy_skills: ids };
 }
@@ -992,7 +997,7 @@ const parsers = {
 	[58](attr, min, max) { return damageEnemy('all', attr, v.randomATK(min, max)); },
 	[59](attr, min, max) { return damageEnemy('single', attr, v.randomATK(min, max)); },
 	[60](turns, mul, attr) { return activeTurns(turns, counterAttack(attr, v.percent(100), v.percent(mul))); },
-	[61](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, max || min, [base, 100], [bonus, 0])); },
+	[61](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (max || 0), [base, 100], [bonus, 0])); },
 	[62](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, atk: mul })); },
 	[63](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, rcv: mul })); },
 	[64](type, mul) { return powerUp(null, [type], p.mul({ atk: mul, rcv: mul })); },
@@ -1154,7 +1159,7 @@ const parsers = {
   
 	[148](percent) { return rateMultiply(v.percent(percent), 'exp'); },
 	[149](mul) { return powerUp(null, null, p.mul({ rcv: mul }), c.exact('match-length', 4, [Attributes.Heart])); },
-	[150](_, mul) { return powerUp(null, null, p.mul({ atk: mul }), c.exact('match-length', 5, 'enhanced')); },
+	[150](_, mul) { return powerUp({targets: ['the-attr']}, null, p.mul({ atk: mul }), c.exact('match-length', 5, 'enhanced')); },
 	[151](mul1, mul2, percent) {
 		return powerUp(null, null, p.scaleCross([{ single: true, attr: [Attributes.Heart], atk: mul1 || 100, rcv: mul2 || 100 }]), null, v.percent(percent));
 	},
@@ -1215,7 +1220,12 @@ const parsers = {
 		);
 	},
 	[169](min, base, percent, bonus, max) { return powerUp(null, null, p.scaleCombos(min, max ?? min, [base || 100, 100], [bonus, 0]), null, v.percent(percent)); },
-	[170](attrs, min, base, percent, bonus, stage) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (stage ? stage - 1 : 0), [base, 100], [bonus ?? 0, 0]), null, v.percent(percent)); },
+	//stage的真实用法目前不知道，缺少样本来判断，不知道到底是直接算数(stage-1)还是算二进制个数(flags(stage).length)。 2022年5月23日
+	//按 瘦鹅 的说法，也可能是因为暗牛头限制了5色， 所以就算是3级到了6色，也只算5色。
+	[170](attrs, min, base, percent, bonus, stage) {
+		let attrsArr = flags(attrs);
+		return powerUp(null, null, p.scaleAttrs(attrsArr, min, Math.min(min + (stage || 0), attrsArr.length), [base, 100], [bonus ?? 0, 0]), null, v.percent(percent));
+	},
 	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus ?? 0, 0]), null, v.percent(percent));
@@ -1369,6 +1379,9 @@ const parsers = {
 	[210](attrs, reduce, combo) {
 		return powerUp(null, null, p.scaleCross([{ single: false, attr: flags(attrs), atk: 100, rcv: 100}]), null, v.percent(reduce), combo ? [addCombo(combo)] : null);
 	},
+	[213](attrs, types, ...awakenings) { //赋予觉醒的队长技
+	  return impartAwakenings(flags(attrs), flags(types), awakenings);
+	},
 	[214](turns) { return activeTurns(turns, bindSkill()); },
 	[215](turns, attrs) { return activeTurns(turns, setOrbState(flags(attrs), 'bound')); },
 
@@ -1401,7 +1414,7 @@ const parsers = {
 		);
 	},
 	[229](attrs, types, hp, atk, rcv) {
-		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp, atk: atk, rcv: rcv})));
+		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp || 0, atk: atk || 0, rcv: rcv || 0})));
 	},
 	[230](turns, target, mul) {
 		/*const targetType = {
@@ -2148,7 +2161,6 @@ function renderSkill(skill, option = {})
 			}
 			if (targets != undefined)
 			{
-				console.debug(targets)
 				targetDict.target = targets.map(target=>
 					tsp?.target[target.replaceAll("-","_")]?.())
 					.nodeJoin(tsp.word.slight_pause());
@@ -2222,6 +2234,31 @@ function renderSkill(skill, option = {})
 				condition: renderCondition(cond)
 			}
 			frg.ap(tsp.skill.skill_proviso(dict));
+			break;
+		}
+		case SkillKinds.ImpartAwakenings: { //赋予队员觉醒
+			let attrs = skill.attrs, types = skill.types, awakenings = skill.awakenings;
+			dict = {
+				awakenings: renderAwakenings(awakenings, {affix: true}),
+			}
+			
+			let attrs_types = [];
+			if (attrs?.length && !isEqual(attrs, Attributes.all()))
+			{
+				dict.attrs = renderAttrs(attrs || [], {affix: attrs?.filter(attr=> attr !== 5)?.length});
+				attrs_types.push(dict.attrs);
+			}
+			if (types?.length)
+			{
+				dict.types = renderTypes(types || [], {affix: true});
+				attrs_types.push(dict.types);
+			}
+			if (attrs_types.length)
+			{
+				dict.attrs_types = attrs_types.nodeJoin(tsp.word.slight_pause());
+			}
+
+			frg.ap(tsp.skill.impart_awoken(dict));
 			break;
 		}
 		case SkillKinds.ObstructOpponent: { //条件限制才能用技能

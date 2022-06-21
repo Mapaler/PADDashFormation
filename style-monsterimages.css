@@ -628,6 +628,45 @@ icon.type
 .awoken-icon[data-awoken-icon='82']{/*12珠*/
 	background-position-y:calc(-32px * 82);
 }
+.awoken-icon[data-awoken-icon='83']{/*附加神类型*/
+	background-position-y:calc(-32px * 83);
+}
+.awoken-icon[data-awoken-icon='84']{/*附加龙类型*/
+	background-position-y:calc(-32px * 84);
+}
+.awoken-icon[data-awoken-icon='85']{/*附加恶魔类型*/
+	background-position-y:calc(-32px * 85);
+}
+.awoken-icon[data-awoken-icon='86']{/*附加机械类型*/
+	background-position-y:calc(-32px * 86);
+}
+.awoken-icon[data-awoken-icon='87']{/*附加平衡类型*/
+	background-position-y:calc(-32px * 87);
+}
+.awoken-icon[data-awoken-icon='88']{/*附加攻击类型*/
+	background-position-y:calc(-32px * 88);
+}
+.awoken-icon[data-awoken-icon='89']{/*附加体力类型*/
+	background-position-y:calc(-32px * 89);
+}
+.awoken-icon[data-awoken-icon='90']{/*附加回复类型*/
+	background-position-y:calc(-32px * 90);
+}
+.awoken-icon[data-awoken-icon='91']{/*附加火属性*/
+	background-position-y:calc(-32px * 91);
+}
+.awoken-icon[data-awoken-icon='92']{/*附加水属性*/
+	background-position-y:calc(-32px * 92);
+}
+.awoken-icon[data-awoken-icon='93']{/*附加木属性*/
+	background-position-y:calc(-32px * 93);
+}
+.awoken-icon[data-awoken-icon='94']{/*附加光属性*/
+	background-position-y:calc(-32px * 94);
+}
+.awoken-icon[data-awoken-icon='95']{/*附加暗属性*/
+	background-position-y:calc(-32px * 95);
+}
 /*类型*/
 .type-icon,
 icon.type
@@ -779,7 +818,8 @@ icon.type
 .m-latent-ul .latent-icon[data-latent-icon='39'],
 .m-latent-ul .latent-icon[data-latent-icon='40'],
 .m-latent-ul .latent-icon[data-latent-icon='41'],
-.m-latent-ul .latent-icon[data-latent-icon='42']
+.m-latent-ul .latent-icon[data-latent-icon='42'],
+.m-latent-ul .latent-icon[data-latent-icon='46']
 {
 	width: 252px;
 }
@@ -918,6 +958,9 @@ icon.type
 .latent-icon[data-latent-icon='45']::before{ /*回复++*/
 	background-position-y: calc(-32px * 45);
 }
+.latent-icon[data-latent-icon='46']::before{ /*心追解云封*/
+	background-position-y: calc(-32px * 46);
+}
 /* 队伍界面2格的 潜觉 */
 .team-latents .latent-ul .latent-icon[data-latent-icon='12'],
 .team-latents .latent-ul .latent-icon[data-latent-icon='16'],
@@ -964,7 +1007,8 @@ icon.type
 .team-latents .latent-ul .latent-icon[data-latent-icon='39'],
 .team-latents .latent-ul .latent-icon[data-latent-icon='40'],
 .team-latents .latent-ul .latent-icon[data-latent-icon='41'],
-.team-latents .latent-ul .latent-icon[data-latent-icon='42']
+.team-latents .latent-ul .latent-icon[data-latent-icon='42'],
+.team-latents .latent-ul .latent-icon[data-latent-icon='46']
 {
 	width: 146px;
 	margin-left: 0px;
@@ -978,7 +1022,8 @@ icon.type
 .team-latents .latent-ul .latent-icon[data-latent-icon='39']::before,
 .team-latents .latent-ul .latent-icon[data-latent-icon='40']::before,
 .team-latents .latent-ul .latent-icon[data-latent-icon='41']::before,
-.team-latents .latent-ul .latent-icon[data-latent-icon='42']::before
+.team-latents .latent-ul .latent-icon[data-latent-icon='42']::before,
+.team-latents .latent-ul .latent-icon[data-latent-icon='46']::before
 {
 	background: none;
 }
@@ -990,7 +1035,8 @@ icon.type
 .team-latents .latent-icon[data-latent-icon='39']+.latent-icon,
 .team-latents .latent-icon[data-latent-icon='40']+.latent-icon,
 .team-latents .latent-icon[data-latent-icon='41']+.latent-icon,
-.team-latents .latent-icon[data-latent-icon='42']+.latent-icon
+.team-latents .latent-icon[data-latent-icon='42']+.latent-icon,
+.team-latents .latent-icon[data-latent-icon='46']+.latent-icon
 {
 	width: 70px;
 	height: 39px;
@@ -1013,7 +1059,8 @@ icon.type
 .team-latents .latent-icon[data-latent-icon='39']+.latent-icon::before,
 .team-latents .latent-icon[data-latent-icon='40']+.latent-icon::before,
 .team-latents .latent-icon[data-latent-icon='41']+.latent-icon::before,
-.team-latents .latent-icon[data-latent-icon='42']+.latent-icon::before
+.team-latents .latent-icon[data-latent-icon='42']+.latent-icon::before,
+.team-latents .latent-icon[data-latent-icon='46']+.latent-icon::before
 {
 	transform: scale(1.54) translateY(-7px);
 }
@@ -1045,13 +1092,18 @@ icon.type
 {
 	background-position-y: calc(-32px * 42);
 }
+.team-latents .latent-icon[data-latent-icon='46']+.latent-icon::before
+{
+	background-position-y: calc(-32px * 46);
+}
 /* 额外有 x1.5 的 6格觉醒 */
 .level-super-break .latent-icon[data-latent-icon='13']::after,
 .level-super-break .latent-icon[data-latent-icon='37']::after,
 .level-super-break .latent-icon[data-latent-icon='38']::after,
 .level-super-break .latent-icon[data-latent-icon='39']::after,
 .level-super-break .latent-icon[data-latent-icon='40']::after,
-.level-super-break .latent-icon[data-latent-icon='41']::after
+.level-super-break .latent-icon[data-latent-icon='41']::after,
+.level-super-break .latent-icon[data-latent-icon='46']::after
 {
 	content: "";
 	background-position-x: -32px;

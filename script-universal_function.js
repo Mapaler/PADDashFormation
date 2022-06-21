@@ -51,38 +51,27 @@ function localStorage_getBoolean(name, defaultValue = false){
 	else return Boolean(Number(localStorage.getItem(name) ?? defaultValue));
 }
 
-//数字补前导0
-Number.prototype.prefixInteger = function(length, useGrouping = false) {
-	return this.toLocaleString(undefined, {
-		useGrouping: useGrouping,
-		minimumIntegerDigits: length
-	});
-}
-//数字补前导0
-String.prototype.prefix = function(length = 2, prefix = '0') {
-	let needAddLength = Math.max(length - this.length, 0);
-	return new Array(needAddLength).fill(prefix).join('') + this;
-}
-
-// 将字符串转为Base64
-String.prototype.toBinary = function() {
-	const charCodes16Arr = [...this].map(char=>char.charCodeAt(0));
-	const codeUnits = new Uint16Array(charCodes16Arr);
-	const charCodes = new Uint8Array(codeUnits.buffer);
+// 将字符串转为二进制字符串
+String.prototype.toUTF16BinaryString = function() {
+	const charCodes16Arr = [...this].map(char=>char.charCodeAt(0)); //将每个字符转为数字
+	const codeUnits = new Uint16Array(charCodes16Arr); //将每个字符存入 2 字节中。警告：仅限 0xFFFF 前的Unicode字符，之后的就得换 Uint32Array
+	const charCodes = new Uint8Array(codeUnits.buffer); //每两个存入中
 	const result = [...charCodes].map(code=>String.fromCharCode(code)).join('');
 	return result;
 }
-String.prototype.toBase64 = function() {
-	return btoa(this.toBinary());
-}
-String.fromBinary = function(binary) {
+
+String.fromBinaryString = function(binary) {
 	const bytes = new Uint8Array([...binary].map(char=>char.charCodeAt(0)));
 	const charCodes = new Uint16Array(bytes.buffer);
 	const result = [...charCodes].map(code=>String.fromCharCode(code)).join('');
 	return result;
 }
 String.fromBase64 = function(base64) {
-	return String.fromBinary(atob(base64));
+	return String.fromBinaryString(atob(base64));
+}
+//Buffer转16进制字符串
+Uint8Array.prototype.toHex = function() {
+	return [...this].map(n=>n.toString(16).padStart(2,'0')).join('');
 }
 
 //大数字缩短长度，默认返回本地定义字符串
@@ -130,6 +119,7 @@ Array.prototype.groupBy = function(func) {
 Math.randomInteger = function(max, min = 0) {
 	return this.floor(this.random() * (max - min + 1) + min);
 }
+
 
 //将二进制flag转为数组
 function flags(num) {
@@ -356,14 +346,22 @@ function dbDelete (db, tableName, keys) {
 function latentUseHole(latentId) {
 	switch (true) {
 		case (latentId === 12):
-		case (latentId >= 16 && latentId <= 36 || latentId >= 43):
+		case (latentId >= 16 && latentId <= 36):
+		case (latentId >= 43 && latentId <= 45):
+		{
 			return 2;
+		}
 		case (latentId >= 13 && latentId <= 15):
 		case (latentId >= 37 && latentId <= 42):
+		case (latentId == 46):
+		{
 			return 6;
+		}
 		case (latentId < 12):
 		default:
+		{
 			return 1;
+		}
 	}
 }
 //获取最大潜觉数量
@@ -634,22 +632,27 @@ function searchCards(cards, attr1, attr2, fixMainColor, types, typeAndOr, rares,
 	if (attr1 != null && attr1 === attr2 || //主副属性一致并不为空
 		(attr1 === 6 && attr2 === -1)) //主副属性都为“无”
 	{ //当两个颜色相同时，主副一样颜色的只需判断一次
-		cardsRange = cardsRange.filter(c => c.attrs[0] === attr1 && c.attrs[1] === attr1);
-	} else if (fixMainColor) //如果固定了顺序
+		cardsRange = cardsRange.filter(c => c.attrs[0] === attr1 && c.attrs[1] === attr2);
+	}
+	else if (fixMainColor) //如果固定了顺序
 	{
-		const a1null = attr1 === null,
-			a2null = attr2 === null;
-		cardsRange = cardsRange.filter(c =>
-			(a1null ? true : c.attrs[0] === attr1) &&
-			(a2null ? true : c.attrs[1] === attr2)
-		);
-	} else //不限定顺序时
+		const a1IsNull = attr1 === null,
+			a2IsNull = attr2 === null;
+		if (!a1IsNull || !a2IsNull) { //当a1、a2任一不为null（任意）时才需要筛选
+			cardsRange = cardsRange.filter(c =>
+				(a2IsNull ? c.attrs[0] === 6 && c.attrs[1] === attr1 : false) || //当2为随机，只有属性1时，也专门搜只有副属性=属性1的怪物
+				(a1IsNull ? true : c.attrs[0] === attr1) &&
+				(a2IsNull ? true : c.attrs[1] === attr2)
+			);
+		}
+	}
+	else //不限定顺序时
 	{
-		const search_attrs = [attr1, attr2].filter(a => a !== null && a >= 0 && a <= 5); //所有非空属性
-		const anone = attr1 === 6 || attr2 === -1; //是否有“无”属性
+		const search_attrs = [attr1, attr2].filter(a => a != null && a >= 0 && a <= 5); //所有非空属性
+		const aNone = attr1 === 6 || attr2 === -1; //是否有“无”属性
 		cardsRange = cardsRange.filter(c =>
 			search_attrs.every(a => c.attrs.includes(a)) &&
-			(anone ? (c.attrs.includes(6) || c.attrs.includes(-1)) : true)
+			(aNone ? (c.attrs.includes(6) || c.attrs.includes(-1)) : true)
 		);
 	}
 	//类型
@@ -917,16 +920,16 @@ function getAllowLatent(card) {
 	return Array.from(latentSet);
 }
 //计算队伍中有多少血量
-function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
+function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
+	let memberArr = team[0], assistArr = team[1];
 	const ls1 = Skills[(Cards[leader1id] || Cards[0]).leaderSkillId];
 	const ls2 = Skills[(Cards[leader2id] || Cards[0]).leaderSkillId];
-	const mHpArr = memberArr.map(m => {
-		const ability = noAwoken ? m.abilityNoAwoken : m.ability;
+	const mHpArr = memberArr.map((member, idx) => {
+		const ability = noAwoken ? member.abilityNoAwoken : member.ability;
 		let hp = ability ? ability[0] : 0;
 		if (!hp) return 0;
-		const card = Cards[m.id] || Cards[0];
-		let hp1 = hp = Math.round(hp * memberHpMul(card, ls2, memberArr, solo)); //战友队长技
-		let hp2 = hp = Math.round(hp * memberHpMul(card, ls1, memberArr, solo)); //我方队长技
+		let hp1 = hp = Math.round(hp * memberHpMul(member, assistArr[idx], ls2, memberArr, solo)); //战友队长技
+		let hp2 = hp = Math.round(hp * memberHpMul(member, assistArr[idx], ls1, memberArr, solo)); //我方队长技
 
 		//演示用代码
 		//console.log("%s 第1次倍率血量：%s，第2次倍率血量：%s",Cards[m.id].otLangName["chs"],hp1,hp2);
@@ -937,14 +940,15 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 
 	//console.log('单个队伍血量：',mHpArr,mHpArr.reduce((p,c)=>p+c));
 
-	function memberHpMul(card, ls, memberArr, solo) {
+	function memberHpMul(member, assist, ls, memberArr, solo) {
+		let memberAttrsTypes = member.getAttrsTypesWithWeapon(assist);
 
 		function hpMul(parm, scale) {
 			if (scale == undefined || scale == 0) return 1;
-			if (parm.attrs && card.attrs.some(a => parm.attrs.includes(a))) {
+			if (parm.attrs && memberAttrsTypes.attrs.some(a => parm.attrs.includes(a))) {
 				return scale / 100;
 			}
-			if (parm.types && card.types.some(t => parm.types.includes(t))) {
+			if (parm.types && memberAttrsTypes.types.some(t => parm.types.includes(t))) {
 				return scale / 100;
 			}
 			return 1;
@@ -1014,39 +1018,38 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 				scale = hpMul({ attrs: flags(sk[1]), types: flags(sk[2]) }, sk[3]);
 				break;
 			case 203:{ //队员为指定类型，不包括双方队长，且队员数大于0
-				let trueMemberCardsArr = memberArr.slice(1, 5).filter(m => m.id > 0).map(m => Cards[m.id]);
+				let trueMemberCardsArr = memberArr.slice(1, 5).filter(m => m.id > 0).map(m => m.card);
 				switch (sk[0]) {
 					case 0: //全是像素进化
-						scale = (trueMemberCardsArr.length > 0 && trueMemberCardsArr.every(card => card.evoMaterials.includes(3826))) ? sk[1] / 100 : 1;
+						scale = (trueMemberCardsArr.length > 0 && trueMemberCardsArr.every(memberCard => memberCard.evoMaterials.includes(3826))) ? sk[1] / 100 : 1;
 						break;
 					case 2: //全是转生、超转生（8格潜觉）
-						scale = (trueMemberCardsArr.length > 0 && trueMemberCardsArr.every(card => isReincarnated(card))) ? sk[1] / 100 : 1;
+						scale = (trueMemberCardsArr.length > 0 && trueMemberCardsArr.every(memberCard => isReincarnated(memberCard))) ? sk[1] / 100 : 1;
 						break;
 				}
 				break;
 			}
 			case 217:{ //限定队伍星级，不包括好友队长
-				let cardsArr = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
-				const rarityCount = cardsArr.reduce((pre,member)=>{
-					const card = Cards[member.id] || Cards[0];
-					return pre + card.rarity;
-				},0);
+				let cardsArr = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => m.card); //所有的卡片
+				const rarityCount = cardsArr.reduce((pre, memberCard)=>{
+					return pre + memberCard.rarity;
+				}, 0);
 				scale = rarityCount <= sk[0] ? sk[1] / 100 : 1;
 				break;
 			}
 			case 229:{ //队员中存在每个属性或Type都算一次
-				let cardsArr = memberArr.filter(m => m.id > 0).map(m => Cards[m.id]); //所有的卡片
-				let attrsArr = cardsArr.flatMap(card => card.attr); //所有卡片的属性
-				let typesArr = cardsArr.flatMap(card => card.types); //所有卡片的类型
-				let correspondingAttrs = flags(sk[0]); //符合的属性
-				let correspondingTypes = flags(sk[1]); //符合的类型
-				let correspondingTimes = attrsArr.filter(a=>correspondingAttrs.includes(a)).length + typesArr.filter(t=>correspondingTypes.includes(t)).length; //符合的次数
-				scale = sk[2] * correspondingTimes / 100 + 1;
-				//console.log('属性、类型个数动态倍率，当前队长HP倍率为 %s',scale);
+				const atCount = countTeamTotalAttrsTypes(memberArr, assistArr);
+
+				let correAttrs = flags(sk[0]), correTypes = flags(sk[1]); //符合的属性/类型
+				 //符合的次数
+				let correTimes = correAttrs.reduce((pre,attr)=>pre + (atCount.attrs.get(attr) || 0),0) +
+								 correTypes.reduce((pre,type)=>pre + (atCount.types.get(type) || 0),0);
+				scale = sk[2] * correTimes / 100 + 1;
+				console.debug('属性、类型个数动态倍率，当前队长HP倍率为 %s (匹配 %d 次)', scale, correTimes);
 				break;
 			}
 			case 138: //调用其他队长技
-				scale = sk.reduce((pmul, skid) => pmul * memberHpMul(card, Skills[skid], memberArr, solo), 1)
+				scale = sk.reduce((pmul, skid) => pmul * memberHpMul(member, assist, Skills[skid], memberArr, solo), 1)
 				break;
 			default:
 		}
@@ -1055,6 +1058,25 @@ function countTeamHp(memberArr, leader1id, leader2id, solo, noAwoken = false) {
 	return mHpArr;
 }
 
+//由于有了更改属性和类型的武器，所以需要更改计算方法
+function countTeamTotalAttrsTypes(memberArr, assistArr) {
+	let attrsCount = new Map();
+	let typesCount = new Map();
+	for (let idx = 0; idx < memberArr.length; idx++) {
+		const member = memberArr[idx], assist = assistArr[idx];
+
+		let memberAttrsTypes = member.getAttrsTypesWithWeapon(assist);
+		if (memberAttrsTypes) {
+			for (let attr of memberAttrsTypes.attrs) {
+				attrsCount.set(attr, (attrsCount.get(attr) || 0) + 1);
+			}
+			for (let type of memberAttrsTypes.types) {
+				typesCount.set(type, (typesCount.get(type) || 0) + 1);
+			}
+		}
+	}
+	return {attrs: attrsCount, types: typesCount};
+}
 //返回卡片的队长技能
 function getCardLeaderSkills(card, skillTypes) {
 	if (!card) return [];

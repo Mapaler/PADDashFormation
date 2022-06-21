@@ -273,6 +273,10 @@ label[for="merge-skill"]::after{
 .control-box .change-swap-to-copy-lbl::after{
 	content:"끌 때 복사";
 }
+label[for="default-level"]::after
+{
+	content: "기본 Lv.";
+}
 
 .tIf-total-move .general::after,
 .tIf-total-move .awoken-bind::after
@@ -410,6 +414,12 @@ label[for="box-have"]::after
 }
 .special-div .special-add::before {
 	content: "➕";
+}
+.special-div .special-star::before {
+	content: "☆";
+}
+.special-div .special-star.marked::before {
+	content: "★";
 }
 .control-div .search-start::before{
 	content: "🔍검색 시작";

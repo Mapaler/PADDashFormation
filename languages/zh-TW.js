@@ -90,6 +90,7 @@
 			henshin: tp`變身為${'card'}`,
 			void_poison: tp`消除${'poison'}時不會受到毒傷害`,
 			skill_proviso: tp`${'condition'}才能發動後續效果`,
+			impart_awoken: tp`賦予${'attrs_types'}額外的${'awakenings'}`,
 			obstruct_opponent: tp`對${'target'}施加敵對技能效果：${'skills'}`,
 			obstruct_opponent_after_me: tp`排名比自身低的對手`,
 			obstruct_opponent_before_me: tp`排名比自身高的對手`,
@@ -167,6 +168,7 @@
 			enemy_all: tp`敵方全體`,
 			enemy_one: tp`敵方1體`,
 			enemy_attr: tp`${'attr'}敵人`,
+			the_attr: tp`該組寶珠屬性`,
 		},
 		stats: {
 			unknown: tp`[ 未知狀態: ${'type'}]`, //type
@@ -332,6 +334,19 @@
 			[80]: tp`${'icon'}4色`,
 			[81]: tp`${'icon'}5色`,
 			[82]: tp`${'icon'}12珠`,
+			[83]: tp`${'icon'}附加神類型`,
+			[84]: tp`${'icon'}附加龍類型`,
+			[85]: tp`${'icon'}附加惡魔類型`,
+			[86]: tp`${'icon'}附加機械類型`,
+			[87]: tp`${'icon'}附加平衡類型`,
+			[88]: tp`${'icon'}附加攻擊類型`,
+			[89]: tp`${'icon'}附加體力類型`,
+			[90]: tp`${'icon'}附加回復類型`,
+			[91]: tp`${'icon'}附加火屬性`,
+			[92]: tp`${'icon'}附加水屬性`,
+			[93]: tp`${'icon'}附加木屬性`,
+			[94]: tp`${'icon'}附加光屬性`,
+			[95]: tp`${'icon'}附加暗屬性`,
 		}
 	},
 };
