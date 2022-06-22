@@ -6213,7 +6213,7 @@ self.addEventListener('activate', function(event) {
 								const relativePath = (url.origin + path).replace(baseUrl.origin + baseUrl.pathname, "");
 								const oldmd5 = url.searchParams.get("md5"); //老的md5值
 								const md5 = cachesMap.get(relativePath); //记录的md5值
-								console.debug("检测缓存条目", url, relativePath, oldmd5, md5);
+								//console.debug("检测缓存条目", url, relativePath, oldmd5, md5);
 								if (!md5 || md5 !== oldmd5) {
 									console.debug("删除版本不匹配的缓存", request);
 									return cache.delete(request);
@@ -6233,14 +6233,14 @@ self.addEventListener('fetch', function(event) {
 	const path = url.pathname;
 	const relativePath = (url.origin + path).replace(baseUrl.origin + baseUrl.pathname, "");
 	const md5 = cachesMap.get(relativePath); //事先记录的md5值
-	console.debug("请求网络", event.request.url, relativePath, md5);
+	//console.debug("请求网络", event.request.url, relativePath, md5);
 	if (md5) url.searchParams.set("md5", md5);
 	//const fileUrl = url.origin + path;
 	if (/monsters-info\/.+\.json$/i.test(path)) { //json数据优先通过网络获取
 		event.respondWith(
 			fetch(event.request).then(async function(response) {
 				if (md5) {
-					console.debug("缓存怪物数据（在线优先）", url);
+					console.debug("缓存怪物数据（在线优先）", response);
 					const cache = await caches.open(cacheName);
 					cache.put(url, response.clone());
 				}
@@ -6253,10 +6253,10 @@ self.addEventListener('fetch', function(event) {
 		event.respondWith(
 			caches.match(url, {ignoreSearch: false}).then(function(resp) {
 				if (resp) {
-					console.debug("找到缓存，优先使用缓存", url, resp);
+					//console.debug("找到缓存，优先使用缓存", url, resp);
 					return resp;
 				}
-				console.debug("未找到缓存，开始 fetch");
+				//console.debug("未找到缓存，开始 fetch");
 				return fetch(event.request).then(async function(response) {
 					if (md5) {
 						console.debug("缓存一般数据（离线优先）", response);
