@@ -1,10 +1,10 @@
 {
 	"name": "P&D Dash Formation",
-	"short_name": "P&D-DF",
+	"short_name": "PDDF",
 	"start_url": "./index.html",
 	"display": "minimal-ui",
 	"background_color": "#52351E",
-	"description": "Puzzle & Dragons Formation Image Maker.",
+	"description": "Puzzle & Dragons Formation Maker.",
 	"icons": [{
 	  "src": "./images/desktop-icon/48.png",
 	  "sizes": "48x48",
