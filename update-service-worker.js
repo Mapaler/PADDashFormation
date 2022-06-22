@@ -45,6 +45,7 @@ cachesArr.push(...fontsHash);
 //程序
 const programHash = filesHashArr("./", /\.(js|html|css)$/i);
 programHash.splice(programHash.findIndex(item=>item[0] === "service-worker.js"), 1); //不要把service-worker自身加入
+programHash.splice(programHash.findIndex(item=>item[0] === "update-service-worker.js"), 1); //不要把update-service-worker自身加入
 cachesArr.push(...programHash);
 //语言
 const lanuageHash = filesHashArr("./languages", /\.(js|css)$/i);

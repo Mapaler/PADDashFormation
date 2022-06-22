@@ -5682,10 +5682,6 @@ const cachesMap = new Map([
 		"ee55eb0eea28744bdc2bcd17c2744542"
 	],
 	[
-		"update-service-worker.js",
-		"818bc3d1bbd5457376e067cba1df3a4e"
-	],
-	[
 		"languages/en.css",
 		"2cbfc0e6b9b5965b5db8256ca8160c49"
 	],
@@ -5879,7 +5875,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"e1d380e96d5b11923b3d9441880e3164"
+		"11fa276ae8d5db342140bc6b01c8bd6b"
 	],
 	[
 		"monsters-info/mon_en.json",
@@ -5903,7 +5899,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/skill_en.json",
-		"fa3a9fdb35a0a67e8e0405ab45aa842e"
+		"fc936e2f3cfb661a33d5052a23c05f7a"
 	],
 	[
 		"monsters-info/skill_ja.json",
