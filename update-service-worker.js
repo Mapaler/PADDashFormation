@@ -36,31 +36,37 @@ const cachesArr = [];
 for (let server of servers) {
 	const cardsHash = filesHashArr(`./images/cards_${server.code}`);
 	const voiceHash = filesHashArr(`./sound/voice/${server.code}`);
-	cachesArr.push([`card-${server.code}`, cardsHash]);
-	cachesArr.push([`voice-${server.code}`, voiceHash]);
+	cachesArr.push(...cardsHash);
+	cachesArr.push(...voiceHash);
 }
 //字体
 const fontsHash = filesHashArr("./fonts", /\.woff2?$/i);
-cachesArr.push([`fonts`, fontsHash]);
+cachesArr.push(...fontsHash);
 //程序
 const programHash = filesHashArr("./", /\.(js|html|css)$/i);
 programHash.splice(programHash.findIndex(item=>item[0] === "service-worker.js"), 1); //不要把service-worker自身加入
+cachesArr.push(...programHash);
+//语言
+const lanuageHash = filesHashArr("./languages", /\.(js|css)$/i);
+cachesArr.push(...lanuageHash);
+//UI图片
 const UiImageHash = filesHashArr("./images", /\.(png|webp|svg)$/i);
-cachesArr.push([`program`, programHash.concat(UiImageHash)]);
+cachesArr.push(...UiImageHash);
 //第三方库
 const libraryHash = filesHashArr("./library", /\.js/i); //第三方库
+cachesArr.push(...libraryHash);
 const library_aaaHash = filesHashArr("./library/jy4340132-aaa", /\.(js|wasm)$/i); //播放语音的库
-cachesArr.push([`library`, libraryHash.concat(library_aaaHash)]);
+cachesArr.push(...library_aaaHash);
 //数据
 const dataHash = filesHashArr("./monsters-info", /\.json$/i);
-cachesArr.push([`data`, dataHash]);
+cachesArr.push(...dataHash);
 //文档
 const docHash = filesHashArr("./doc", /\.html$/i);
 const docImageHash = filesHashArr("./doc/images", /\.(png|webp|svg)$/i);
-cachesArr.push([`document`, docHash.concat(docImageHash)]);
+cachesArr.push(...docHash.concat(docImageHash));
 
 const swJs = fs.readFileSync('./service-worker.js', 'utf-8');
-let formatterHashes = false;
-const newSwJs = swJs.replace(/(const\s+cachesArray\s*=\s*)[\s\S]+?;/i, `$1${JSON.stringify(cachesArr, undefined, formatterHashes ? "\t" : undefined)};`);
+let formatterHashes = true;
+const newSwJs = swJs.replace(/(const\s+cachesMap\s*=\s*)[\s\S]+?;/i, `$1new Map(${JSON.stringify(cachesArr, undefined, formatterHashes ? "\t" : undefined)});`);
 fs.writeFileSync('./service-worker.js', newSwJs, 'utf-8');
 console.log("更新 service-worker.js 完毕");
