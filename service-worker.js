@@ -5875,19 +5875,19 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"11fa276ae8d5db342140bc6b01c8bd6b"
+		"3e43b929eebdacbf12f6768a67f06e44"
 	],
 	[
 		"monsters-info/mon_en.json",
-		"59eb92f688d04fd1a238339fb70b0162"
+		"4627ed3f09b1ea9fcdc2927af531447a"
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"a2e41c3c566eb0649199102d3b307182"
+		"a1f02fdbe50b733ec130d6758ced78f3"
 	],
 	[
 		"monsters-info/mon_ko.json",
-		"29625b6520ecd9ee393ff00e607f0801"
+		"c8f2306c7e542237ae603bba143cf32a"
 	],
 	[
 		"monsters-info/package-lock.json",
@@ -5903,7 +5903,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/skill_ja.json",
-		"3b124788c18bb26dbf37752021774cde"
+		"641a8ff5c67ca65cb7b69feae7fb350a"
 	],
 	[
 		"monsters-info/skill_ko.json",
@@ -6236,11 +6236,11 @@ self.addEventListener('fetch', function(event) {
 	//console.debug("请求网络", event.request.url, relativePath, md5);
 	if (md5) url.searchParams.set("md5", md5);
 	//const fileUrl = url.origin + path;
-	if (/monsters-info\/.+\.json$/i.test(path)) { //json数据优先通过网络获取
+	if (/\.(html|js|css|json)$/i.test(path)) { //程序数据优先通过网络获取
 		event.respondWith(
 			fetch(event.request).then(async function(response) {
 				if (md5) {
-					console.debug("缓存怪物数据（在线优先）", response);
+					console.debug("缓存程序（在线优先）", response);
 					const cache = await caches.open(cacheName);
 					cache.put(url, response.clone());
 				}

@@ -71,6 +71,7 @@ class Card{
 		card.canAssist = Boolean(flags & 1<<0); //是否能当二技
 		card.enabled = Boolean(flags & 1<<1); //是否已启用
 		
+		card.types = card.types.filter(t=>t>=0); //type里面去掉-1
 		card.overlay = !Boolean(flags & 1<<3) && //flag有1<<3时，不合并，没有时则判断
 			card.types.some(t=>[0,12,14,15].includes(t)); //0進化用;12能力覺醒用;14強化合成用;15販賣用默认合并
 		card.is8Latent = Boolean(flags & 1<<5); //是否支持8个潜觉
