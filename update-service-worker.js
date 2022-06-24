@@ -27,7 +27,7 @@ function filesHashArr(dirName, extName) {
 		const cardHash = crypto.createHash('md5');
 		cardHash.update(file);
 		const md5 = cardHash.digest('hex');
-		//console.log(fullFileName, md5);
+		console.log(fullFileName, md5);
 		hashArr.push([fullFileName.replaceAll("\\", "\/"), md5]);
 	}
 	return hashArr;
