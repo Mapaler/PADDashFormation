@@ -660,7 +660,11 @@ label[for="qr-data-type-pdchu"]::before {
 }
 .player-card .set-default::before
 {
-	content: "\f468 Bind Box";
+	content: "\f468 Bind Data";
+}
+.player-card .open-show-box::before
+{
+	content: "\f468\A Show Box Data";
 }
 .player-card .lvexp::before
 {

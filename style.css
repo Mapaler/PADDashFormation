@@ -1309,6 +1309,12 @@ icon.inflicts::after
 	bottom: 5px;
 	font-size: 20px;
 }
+.edit-box .search-box .search-mon-list .monster .level {
+	bottom: 23px;
+}
+.edit-box .search-box .search-mon-list .monster .plus {
+	top: 20px;
+}
 
 .detail-box .detail-mon{
 	width: 50px;

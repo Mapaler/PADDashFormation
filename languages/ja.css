@@ -624,7 +624,11 @@ label[for="qr-data-type-pdchu"]::before {
 }
 .player-card .set-default::before
 {
-	content: "\f468\A Boxバインド";
+	content: "\f468\A データをバインド";
+}
+.player-card .open-show-box::before
+{
+	content: "\f468\A Box データを表示";
 }
 .player-card .lvexp::before
 {

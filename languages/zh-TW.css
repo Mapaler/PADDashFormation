@@ -613,7 +613,11 @@ label[for="qr-data-type-pdchu"]::before {
 }
 .player-card .set-default::before
 {
-	content: "\f468\A 綁定箱子";
+	content: "\f468\A 綁定數據";
+}
+.player-card .open-show-box::before
+{
+	content: "\f468\A 顯示箱子數據";
 }
 .player-card .lvexp::before
 {

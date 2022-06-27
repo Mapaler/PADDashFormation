@@ -110,7 +110,7 @@ DBOpenRequest.onupgradeneeded = function(event) {
 	};
 };
 
-class Member2
+/*class Member2
 {
 	constructor(oldMenber, isAssist)
 	{
@@ -140,7 +140,7 @@ class Member2
 	toJSON(){
 
 	}
-}
+}*/
 
 //队员基本的留空
 var Member = function() {
@@ -631,6 +631,18 @@ class PlayerDataCard {
 			console.warn("出现未知的用户箱子卡片数据");
 		}
 		//console.log(b);
+	}
+	toOldMember()
+	{
+		const m = new Member();
+		m.id = this.id;
+		m.level = this.level;
+		m.awoken = this.awoken;
+		m.skilllevel = this.skillLevel;
+		m.plus = [this.plus.hp,this.plus.atk,this.plus.rcv];
+		m.sawoken = Cards[this.id].superAwakenings.indexOf(this.superAwoken);
+		m.latent = this.latent.concat();
+		return m;
 	}
 	static parseDataArray(datas)
 	{
@@ -1958,6 +1970,12 @@ function initialize(event) {
 			checkInput.checked = true;
 		}
 	}
+	function openShowBox(e)
+	{
+		const table = this.parentNode.parentNode.parentNode.parentNode;
+		showSearch(table.data.parsedCards.map(m=>m.toOldMember()));
+		playerDataFrame.btnClose.onclick();
+	}
 	playerDataFrame.playerList.add = function(data) {
 		this.appendChild(this.newPlayerData(data));
 	}
@@ -1973,8 +1991,14 @@ function initialize(event) {
 
 		tbody.querySelector(".set-default").onclick = setPlayerDataDefault;
 		tbody.querySelector(".delete").onclick = deletPlayerData;
+		tbody.querySelector(".open-show-box").onclick = openShowBox;
 
 		changeid({id: data.vs_icon}, tbody.querySelector(".avatar .monster"));
+
+		
+		tbody.querySelector(".avatar .monster").onclick = function (){
+		}
+
 		let name = tbody.querySelector(".name");
 		name.textContent = data.name;
 		name.setAttribute("data-camp", data.camp);
@@ -2043,7 +2067,7 @@ function initialize(event) {
 				if (dataCount && oldIdx >= 0) { //如果已经存在，就更新旧的数据
 					PlayerDatas.splice(oldIdx, 1, playerData);
 					const liArr = playerDataFrame.playerList.querySelectorAll(":scope>li");
-					liArr[oldIdx].remove();
+					liArr[oldIdx] && liArr[oldIdx].remove();
 					playerDataFrame.playerList.insertBefore(playerDataFrame.playerList.newPlayerData(playerData), liArr[oldIdx+1]);
 				} else {
 					PlayerDatas.push(playerData);
@@ -2637,8 +2661,14 @@ function initialize(event) {
 		const cli = document.createElement("li");
 		const cdom = cli.head = createCardA(options);
 		cli.appendChild(cdom);
-		changeid({ id: id }, cdom);
-		const card = Cards[id];
+		let card;
+		if (id instanceof Member) {
+			changeid(id, cdom);
+			card = id.card;
+		} else {
+			changeid({ id: id }, cdom);
+			card = Cards[id];
+		}
 		cli.card = card;
 		if (card.canAssist)
 			cli.classList.add("allowable-assist");
@@ -3086,20 +3116,21 @@ function initialize(event) {
 	const searchResultCount = searchBox.querySelector(".search-list-length");
 	showSearch = function(searchArr, customAdditionalFunction)
 	{
-		if (!Array.isArray(searchArr))
-		{ //如果不是数组就直接取消下一步
-			return;
+		if (typeof(searchArr) === "number") {
+			searchArr = [searchArr];
+		} else if (Array.isArray(searchArr)) { //如果传入的内容是数字，就转成card对象
+			searchArr = searchArr.map(id=>typeof(id) === "object" ? id : Cards[id]);
+		} else {
+			return; //如果不是数组就直接取消下一步
 		}
-		if (searchArr.some(card=>typeof card == "number"))
-		{ //如果传入的是数字，就转成card对象
-			searchArr = searchArr.map(id=>typeof id == "object" ? id : Cards[id]);
-		}
+
 		searchBox.classList.remove(className_displayNone);
 		editBox.show();
 		const createCardHead = editBox.createCardHead;
 
 		searchMonList.classList.add(className_displayNone);
 		searchMonList.innerHTML = ""; //清空旧的
+		//辅助回收内存
 		if (Array.isArray(searchMonList.originalHeads))
 		{
 			searchMonList.originalHeads.forEach(item=>item = null);
@@ -3116,7 +3147,13 @@ function initialize(event) {
 				showAbilitiesWithAwoken: s_add_show_abilities_with_awoken.checked,
 				customAddition: Array.isArray(customAdditionalFunction) ? customAdditionalFunction : (typeof customAdditionalFunction == "function" ? [customAdditionalFunction] : [])
 			};
-			searchMonList.originalHeads = searchArr.map(card => createCardHead(card.id, additionalOption));
+			searchMonList.originalHeads = searchArr.map(card => {
+				if (card instanceof Member) {
+					return createCardHead(card, additionalOption);
+				} else {
+					return createCardHead(card.id, additionalOption);
+				}
+			});
 			searchMonList.customAddition = additionalOption.customAddition;
 			//对头像列表进行排序
 			const headsArray = sortHeadsArray(searchMonList.originalHeads);
@@ -3870,19 +3907,24 @@ function changeid(mon, monDom, latentDom, assist) {
 	}
 	const levelDom = monDom.querySelector(".level");
 	if (levelDom) { //如果提供了等级
-		const level = mon.level ?? 1;
-		levelDom.setAttribute(dataAttrName, level);
-
-		toggleDomClassName(level === card.maxLevel, "max", levelDom);
-		//如果等级刚好等于最大等级，则修改为“最大”的字
-		if (level >= 111 && level <= 120 && card.limitBreakIncr) {
-			levelDom.setAttribute("data-level-range", "120");
-		} else if (level >= 99 && level <= 110 && card.limitBreakIncr) {
-			levelDom.setAttribute("data-level-range", "110");
-		} else if (level > card.maxLevel) {
-			levelDom.setAttribute("data-level-range", "error");
+		if (mon.level) {
+			const level = mon.level ?? 1;
+			levelDom.setAttribute(dataAttrName, level);
+	
+			toggleDomClassName(level === card.maxLevel, "max", levelDom);
+			//如果等级刚好等于最大等级，则修改为“最大”的字
+			if (level >= 111 && level <= 120 && card.limitBreakIncr) {
+				levelDom.setAttribute("data-level-range", "120");
+			} else if (level >= 99 && level <= 110 && card.limitBreakIncr) {
+				levelDom.setAttribute("data-level-range", "110");
+			} else if (level > card.maxLevel) {
+				levelDom.setAttribute("data-level-range", "error");
+			} else {
+				levelDom.setAttribute("data-level-range", "99");
+			}
+			levelDom.classList.remove(className_displayNone);
 		} else {
-			levelDom.setAttribute("data-level-range", "99");
+			levelDom.classList.add(className_displayNone);
 		}
 	}
 	const awokenIcon = monDom.querySelector(".awoken-count-num");

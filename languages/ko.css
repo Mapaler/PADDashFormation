@@ -610,7 +610,11 @@ label[for="qr-data-type-pdchu"]::before {
 }
 .player-card .set-default::before
 {
-	content: "\f468\A 상자를 바인딩";
+	content: "\f468\A 데이터를 바인딩";
+}
+.player-card .open-show-box::before
+{
+	content: "\f468\A 상자 데이터를 표시";
 }
 .player-card .lvexp::before
 {
