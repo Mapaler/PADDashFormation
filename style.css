@@ -2765,7 +2765,40 @@ table .orb-icon
 {
 	display: table-cell;
 }
+.team-flags .team-member-icon {
+	display: inline-block;
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+	border-radius: 3px;
+	width: 10px;
+	height:10px;
+}
+.team-flags .team-member-icon:first-of-type,
+.team-flags .team-member-icon:last-of-type
+{
+	border-top-width: 2px;
+	border-color: darkred;
+}
+.team-flags .team-member-icon:first-of-type {
+	margin-right: 1px;
+}
+.team-flags .team-member-icon:last-of-type {
+	margin-left: 1px;
+}
 
+.team-flags.leader-self  .team-member-icon:first-of-type {
+	background-color: pink;
+}
+.team-flags.leader-helper  .team-member-icon:last-of-type {
+	background-color: pink;
+}
+.team-flags.sub-members  .team-member-icon:not(:first-of-type):not(:last-of-type) {
+	background-color: lightgreen;
+}
+.team-flags.self  .team-member-icon:nth-of-type(4) {
+	background-color: lightblue !important; 
+}
 
 /*.open-evolutionary-tree::before
 {

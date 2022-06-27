@@ -1056,6 +1056,26 @@ const specialSearchFunctions = (function() {
 		fragment.appendChild(createOrbsList(colors));
 		return fragment;
 	}
+	function memberATK_Addition(card)
+	{
+		const searchTypeArray = [230];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		const sk = skill.params;
+		const fragment = document.createDocumentFragment();
+		const ul = fragment.appendChild(document.createElement("ul"));
+		ul.className = "team-flags";
+		for (let i = 0; i<6; i++) {
+			const li = ul.appendChild(document.createElement("li"));
+			li.className = "team-member-icon";
+		}
+		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+		flags(sk[1]).forEach(n=>ul.classList.add(targetTypes[n]));
+		let str = '';
+		str +=`${sk[2] / 100}倍×${sk[0]}T`;
+		fragment.appendChild(document.createTextNode(str));
+		return fragment;
+	}
+	
 	function healImmediately_Rate(card)
 	{
 		const searchTypeArray = [7, //宠物回复力
@@ -1478,7 +1498,7 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
-			{name:"ATK rate change(All)",otLangName:{chs:"全队攻击力 buff（顶攻击）",cht:"全隊攻擊力 buff（頂攻擊）"},
+			{name:"Team ATK rate change",otLangName:{chs:"全队攻击力 buff",cht:"全隊攻擊力 buff"},
 				function:cards=>{
 					return cards.filter(card=>{
 						const atkbuff = atkBuff_Rate(card);
@@ -1519,24 +1539,45 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
-			{name:"ATK rate change(on member)",otLangName:{chs:"队员攻击力 buff",cht:"隊員攻擊力 buff"},
+			{name:"Member ATK rate change",otLangName:{chs:"队员攻击力 buff",cht:"隊員攻擊力 buff"},
 				function:cards=>{
 					const searchTypeArray = [230];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && skill.params[2] !== 100;
+						return skill;
 					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
 				},
-				addition:card=>{
+				addition:memberATK_Addition
+			},
+			{name:"Member ATK rate change - Self",otLangName:{chs:"队员攻击力 buff - 自身",cht:"隊員攻擊力 buff - 自身"},
+				function:cards=>{
 					const searchTypeArray = [230];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					const sk = skill.params;
-					let str = '';
-					const typeName = ['自身','左队长','右队长','队员'];
-					str += flags(sk[1]).map(n=>typeName[n]).join(',');
-					str +=`${sk[2] / 100}倍×${sk[0]}T`;
-					return str;
-			}
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill && Boolean(skill.params[1] & 1<<0);
+					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
+				},
+				addition:memberATK_Addition
+			},
+			{name:"Member ATK rate change - Leader",otLangName:{chs:"队员攻击力 buff - 队长",cht:"隊員攻擊力 buff - 隊長"},
+				function:cards=>{
+					const searchTypeArray = [230];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill && Boolean(skill.params[1] & (1<<1 | 1<<2));
+					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
+				},
+				addition:memberATK_Addition
+			},
+			{name:"Member ATK rate change - Member",otLangName:{chs:"队员攻击力 buff - 队员",cht:"隊員攻擊力 buff - 隊員"},
+				function:cards=>{
+					const searchTypeArray = [230];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill && Boolean(skill.params[1] & 1<<3);
+					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
+				},
+				addition:memberATK_Addition
 			},
 			{name:"Move time change",otLangName:{chs:"操作时间 buff（顶手指）",cht:"操作時間 buff（頂手指）"},
 				function:cards=>{
@@ -3336,6 +3377,9 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"After Henshin",otLangName:{chs:"变身后",cht:"變身後"},
 				function:cards=>cards.filter(card=>Array.isArray(card.henshinFrom))
+			},
+			{name:"Except Before Henshin(No Henshin+After Henshin)",otLangName:{chs:"除了变身前（非变身+变身后）",cht:"除了變身前（非變身+變身后）"},
+				function:cards=>cards.filter(card=>!Array.isArray(card.henshinTo))
 			},
 			{name:"Pixel Evo",otLangName:{chs:"像素进化",cht:"像素進化"},
 				function:cards=>cards.filter(card=>card.evoMaterials.includes(3826))

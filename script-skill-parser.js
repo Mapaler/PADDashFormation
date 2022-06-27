@@ -1417,11 +1417,6 @@ const parsers = {
 		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp || 0, atk: atk || 0, rcv: rcv || 0})));
 	},
 	[230](turns, target, mul) {
-		/*const targetType = {
-			"self": Boolean(target & 1<<0),
-			"leader": Boolean(target & 1<<1),
-			"sub-monsters": Boolean(target & 1<<3),
-		}*/
 		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
 		const typeArr = flags(target).map(n => targetTypes[n]);
 		return activeTurns(turns, powerUp({targets: typeArr}, null, p.mul({ atk: mul })));
