@@ -1973,6 +1973,7 @@ function initialize(event) {
 	function openShowBox(e)
 	{
 		const table = this.parentNode.parentNode.parentNode.parentNode;
+		table.querySelector(".set-default").onclick(); //打开箱子前先绑定这个数据
 		showSearch(table.data.parsedCards.map(m=>m.toOldMember()));
 		playerDataFrame.btnClose.onclick();
 	}
