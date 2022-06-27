@@ -6505,7 +6505,7 @@ self.addEventListener('fetch', function(event) {
 	} else { //其他的优先使用缓存
 		event.respondWith(
 			caches.match(url, {ignoreSearch: false}).then(function(resp) {
-				if (resp) {
+				if (resp && md5) {
 					//console.debug("找到缓存，优先使用缓存", url, resp);
 					return resp;
 				}
