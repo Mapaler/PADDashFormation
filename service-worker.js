@@ -6473,6 +6473,7 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', function(event) {
 	const url = new URL(event.request.url);
+	url.search = "";
 	const baseUrl = new URL(".", location);
 	const path = url.pathname;
 	const relativePath = (url.origin + path).replace(baseUrl.origin + baseUrl.pathname, "");
