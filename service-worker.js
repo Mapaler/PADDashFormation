@@ -6435,39 +6435,47 @@ const cachesMap = new Map([
 	]
 ]);
 
+// 安装阶段跳过等待，直接进入 active
+self.addEventListener('install', function (event) {
+    event.waitUntil(self.skipWaiting());
+});
+
 self.addEventListener('activate', function(event) {
 	console.debug("Service Worker activate");
-
+	
 	event.waitUntil(
-		caches.keys().then(function(keyList) { //所有的现存的缓存大分类列表
-			return Promise.all(
-				keyList.map(async function(key) {
-					if (cacheName !== key) { //如果不在当前的缓存列表里就删除
-						console.debug("未检测到该缓存分类，删除", key);
-						return caches.delete(key);
-					} else {
-						const cache = await caches.open(key);
-						const requests = await cache.keys();
-						console.debug("检测已有缓存分类", key);
-						return Promise.all(
-							requests.map(async function(request) {
-								const url = new URL(request.url);
-								const baseUrl = new URL(".", location);
-								const path = url.pathname;
-								const relativePath = (url.origin + path).replace(baseUrl.origin + baseUrl.pathname, "");
-								const oldmd5 = url.searchParams.get("md5"); //老的md5值
-								const md5 = cachesMap.get(relativePath); //记录的md5值
-								//console.debug("检测缓存条目", url, relativePath, oldmd5, md5);
-								if (!md5 || md5 !== oldmd5) {
-									console.debug("删除版本不匹配的缓存", request);
-									return cache.delete(request);
-								}
-							})
-						);
-					}
-				})
-			);
-		})
+		Promise.all([
+			self.clients.claim(),
+			caches.keys().then(function(keyList) { //所有的现存的缓存大分类列表
+				return Promise.all(
+					keyList.map(async function(key) {
+						if (cacheName !== key) { //如果不在当前的缓存列表里就删除
+							console.debug("未检测到该缓存分类，删除", key);
+							return caches.delete(key);
+						} else {
+							const cache = await caches.open(key);
+							const requests = await cache.keys();
+							console.debug("检测已有缓存分类", key);
+							return Promise.all(
+								requests.map(async function(request) {
+									const url = new URL(request.url);
+									const baseUrl = new URL(".", location);
+									const path = url.pathname;
+									const relativePath = (url.origin + path).replace(baseUrl.origin + baseUrl.pathname, "");
+									const oldmd5 = url.searchParams.get("md5"); //老的md5值
+									const md5 = cachesMap.get(relativePath); //记录的md5值
+									//console.debug("检测缓存条目", url, relativePath, oldmd5, md5);
+									if (!md5 || md5 !== oldmd5) {
+										console.debug("删除版本不匹配的缓存", request);
+										return cache.delete(request);
+									}
+								})
+							);
+						}
+					})
+				);
+			})
+		])
 	);
 });
 
