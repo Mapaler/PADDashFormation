@@ -359,11 +359,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_090.PNG",
-		"4399ab3563fcaa03edf6f0e89c70d92a"
+		"4dc173a8e4d662fc417f09880e5385c5"
 	],
 	[
 		"images/cards_ja/CARDS_091.PNG",
-		"dc9ba31ca40812c34202b2f028186124"
+		"b191621cc22b54941a8c182e1964ded5"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -2072,6 +2072,82 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv427.wav",
 		"512470afab18d6719675d10c5d524ae9"
+	],
+	[
+		"sound/voice/ja/padv428.wav",
+		"54ecd8b9c93f9c895044985da31a962c"
+	],
+	[
+		"sound/voice/ja/padv429.wav",
+		"ed8ae6da8d4a3550ee103f6630c5efe6"
+	],
+	[
+		"sound/voice/ja/padv430.wav",
+		"415690eb6def5cb19f37c469f3387c9c"
+	],
+	[
+		"sound/voice/ja/padv431.wav",
+		"fb0c125db6d89bb6fcd04355f29a4469"
+	],
+	[
+		"sound/voice/ja/padv432.wav",
+		"39cf1a0fd55806c3a876de6b6f191db2"
+	],
+	[
+		"sound/voice/ja/padv433.wav",
+		"5a393339925393570f0c79bcfa13da8c"
+	],
+	[
+		"sound/voice/ja/padv434.wav",
+		"48cfa19bf66939401ea91798cb4354e5"
+	],
+	[
+		"sound/voice/ja/padv435.wav",
+		"e2f81e6f3e147f9e513ebb04e0a84b9e"
+	],
+	[
+		"sound/voice/ja/padv436.wav",
+		"ff52285001c040a99e34229caf5ebbca"
+	],
+	[
+		"sound/voice/ja/padv437.wav",
+		"dbb7158ebf5a4a246e84d7237189b76f"
+	],
+	[
+		"sound/voice/ja/padv438.wav",
+		"57aeb58c678ff28fba74647fb562d050"
+	],
+	[
+		"sound/voice/ja/padv439.wav",
+		"d6e2bc59ae3a1bf778c12bdb86765dde"
+	],
+	[
+		"sound/voice/ja/padv440.wav",
+		"f230f577cdbff8e729557d180d27b994"
+	],
+	[
+		"sound/voice/ja/padv441.wav",
+		"5bbe78e1517fc9c644fbaef74f241cdc"
+	],
+	[
+		"sound/voice/ja/padv442.wav",
+		"8d3dafcb94717b55f89d1a45d6fb25e4"
+	],
+	[
+		"sound/voice/ja/padv443.wav",
+		"8514ded2e1f9b7bf73b5f469441f6b3e"
+	],
+	[
+		"sound/voice/ja/padv444.wav",
+		"33fa2fdb69977483d9b44521077ec7ff"
+	],
+	[
+		"sound/voice/ja/padv445.wav",
+		"b250f54e6294cac2089bc404fc4e380d"
+	],
+	[
+		"sound/voice/ja/padv446.wav",
+		"b1f7945c1b7e11605f3b939fc7f0a6f8"
 	],
 	[
 		"images/cards_en/CARDS_001.PNG",
@@ -5911,7 +5987,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"0743614793a639bab339b31b05090f88"
+		"3416ac8975488a4f872d1aaf3a17479e"
 	],
 	[
 		"solo.html",
@@ -6127,7 +6203,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"5db33a6e9e375bf600e496a9a7319044"
+		"d5b6acafe9be826d44ca805a0db96f3c"
 	],
 	[
 		"monsters-info/mon_en.json",
@@ -6135,7 +6211,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"961ce56cdd4090ff1580d84118cd2d56"
+		"d251a95402e44b6f4802d718b0f4fca1"
 	],
 	[
 		"monsters-info/mon_ko.json",
@@ -6155,7 +6231,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/skill_ja.json",
-		"a8fbf859fde03030e3c4fab07a3160ec"
+		"c896f7a36c3982941663990aab3f7a8c"
 	],
 	[
 		"monsters-info/skill_ko.json",
