@@ -1960,7 +1960,7 @@ function initialize(event) {
 		const cfgName = cfgPrefix + "default-player-name";
 		const dataPlayerName = table.getAttribute("data-player-name");
 		const checkInput = table.parentNode.querySelector("[name=default-player-data]");
-		if (localStorage.getItem(cfgName) === dataPlayerName) {
+		if (localStorage.getItem(cfgName) === dataPlayerName || e === true) {
 			currentPlayerData = null;
 			localStorage.removeItem(cfgName);
 			checkInput.checked = false;
@@ -1975,7 +1975,7 @@ function initialize(event) {
 		const table = this.parentNode.parentNode.parentNode.parentNode;
 		table.querySelector(".set-default").onclick(); //打开箱子前先绑定这个数据
 		showSearch(table.data.parsedCards.map(m=>m.toOldMember()));
-		playerDataFrame.btnClose.onclick();
+		playerDataFrame.btnClose.onclick(true);
 	}
 	playerDataFrame.playerList.add = function(data) {
 		this.appendChild(this.newPlayerData(data));
