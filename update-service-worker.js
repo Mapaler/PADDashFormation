@@ -60,6 +60,7 @@ const library_aaaHash = filesHashArr("./library/jy4340132-aaa", /\.(js|wasm)$/i)
 cachesArr.push(...library_aaaHash);
 //数据
 const dataHash = filesHashArr("./monsters-info", /\.json$/i);
+dataHash.splice(dataHash.findIndex(item=>item[0] === "package-lock.json"), 1); //不要把package-lock.json加入
 cachesArr.push(...dataHash);
 //文档
 const docHash = filesHashArr("./doc", /\.html$/i);
