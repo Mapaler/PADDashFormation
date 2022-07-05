@@ -120,6 +120,78 @@ Math.randomInteger = function(max, min = 0) {
 	return this.floor(this.random() * (max - min + 1) + min);
 }
 
+// Create a class for the element
+class CardAvatar extends HTMLElement {
+	// Specify observed attributes so that
+	// attributeChangedCallback will work
+	static get observedAttributes() {
+		return ['id'];
+	}
+	#id = 0;
+	get id() {
+		return this.#id;
+	}
+	set id(x) {
+		this.setAttribute('id', x);
+		//this.#id = x; //在属性改变的内容里已经写入了
+	}
+
+	constructor() {
+		// Always call super first in constructor
+		super();
+
+		// Create a shadow root
+		const shadow = this.attachShadow({mode: 'open'});
+
+		// Create some CSS to apply to the shadow dom
+		const linkElem = shadow.appendChild(document.createElement('link'));
+		linkElem.setAttribute('rel', 'stylesheet');
+		linkElem.setAttribute('href', 'style-card.css');
+		// Create spans
+		const wrapper = shadow.appendChild(document.createElement('a'));
+		wrapper.className = 'wrapper';
+		wrapper.target = '_blank';
+		const dAttr1 = wrapper.appendChild(document.createElement('div'));
+		dAttr1.className = 'attribute attribute-main';
+		const dAttr2 = wrapper.appendChild(document.createElement('div'));
+		dAttr2.className = 'attribute attribute-sub';
+
+		const dId = wrapper.appendChild(document.createElement('div'));
+		dId.className = 'card-id';
+	}
+	connectedCallback() {
+		console.log('自定义标签添加到页面');
+		this.update();
+	}
+	attributeChangedCallback(name, oldValue, newValue) {
+		console.log('自定义标签属性改变', name, oldValue, newValue);
+		if (name == 'id') this.#id = parseInt(this.getAttribute('id'));
+		this.update();
+	}
+	update() {
+		//得到怪物ID
+		const id = this.#id || 0;
+		const card = Cards[id] || Cards[0];
+		const dataSource = this.getAttribute('source') || currentDataSource.code;
+		const shadow = this.shadowRoot;
+		
+		const wrapper = shadow.querySelector('.wrapper');
+		wrapper.href = currentLanguage.guideURL(id, card.name);
+		wrapper.style.backgroundImage = `url(images/cards_${dataSource.toLowerCase()}/CARDS_${Math.ceil(id / 100).toString().padStart(3,"0")}.PNG)`;
+		const idxInPage = (id - 1) % 100; //获取当前页面内的序号
+		wrapper.setAttribute("data-cards-pic-x", idxInPage % 10); //添加X方向序号
+		wrapper.setAttribute("data-cards-pic-y", Math.floor(idxInPage / 10)); //添加Y方向序号
+		const dAttr1 = wrapper.querySelector('.attribute-main');
+		dAttr1.setAttribute('data-attr', card.attrs[0]);
+		const dAttr2 = wrapper.querySelector('.attribute-sub');
+		dAttr2.setAttribute('data-attr', card.attrs[1]);
+		const dId = wrapper.querySelector('.card-id');
+		dId.setAttribute('data-id', id);
+	}
+}
+
+// Define the new element
+customElements.define('card-avatar', CardAvatar);
 
 //将二进制flag转为数组
 function flags(num) {
