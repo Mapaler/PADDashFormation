@@ -3,7 +3,7 @@
 		{name: "Optional chaining (?.) / 可选链操作符(?.)", url: "https://caniuse.com/mdn-javascript_operators_optional_chaining", test: ()=>!Boolean(eval("undefined?.undefined || true"))},
 		{name: "Nullish coalescing operator (??) / 空值合并操作符(??)", url: "https://caniuse.com/mdn-javascript_operators_nullish_coalescing", test: ()=>!Boolean(eval("undefined ?? true"))},
 		{name: "BigInt value (1n) / BigInt 数据类型(1n)", url: "https://caniuse.com/bigint", test: ()=>!Boolean(eval("1n"))},
-		{name: "Private class fields (#name) / 类私有域(#name)", url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>!Boolean(eval("class test {#v = 0;}; true;"))},
+		//{name: "Private class fields (#name) / 类私有域(#name)", url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>!Boolean(eval("class test {#v = 0;}; true;"))},
 	]
 	return features.filter(feature=>{
 		try {

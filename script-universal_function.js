@@ -120,6 +120,7 @@ Math.randomInteger = function(max, min = 0) {
 	return this.floor(this.random() * (max - min + 1) + min);
 }
 
+
 // Create a class for the element
 class CardAvatar extends HTMLElement {
 	// Specify observed attributes so that
@@ -127,14 +128,33 @@ class CardAvatar extends HTMLElement {
 	static get observedAttributes() {
 		return ['id'];
 	}
-	#id = 0;
+	/*#id = 0;
 	get id() {
 		return this.#id;
-	}
+	}*/
+	id = 0;
+	/**
+	 * @param {string | number} x
+	 */
 	set id(x) {
 		this.setAttribute('id', x);
 		//this.#id = x; //在属性改变的内容里已经写入了
 	}
+	//#member = new Member();
+	/**
+	 * @param {Member} m
+	 */
+	/*get member() {
+		return this.#member;
+	}*/
+	/**
+	 * @param {Member} m
+	 */
+	/*set member(m) {
+		this.#member = m;
+		console.log("设定新的Member",m);
+		this.setAttribute('id', m.id);
+	}*/
 
 	constructor() {
 		// Always call super first in constructor
@@ -156,8 +176,28 @@ class CardAvatar extends HTMLElement {
 		const dAttr2 = wrapper.appendChild(document.createElement('div'));
 		dAttr2.className = 'attribute attribute-sub';
 
-		const dId = wrapper.appendChild(document.createElement('div'));
+		const dLeftTop = wrapper.appendChild(document.createElement('div'));
+		dLeftTop.className = "flex-box flex-left-top";
+		const dLeftBottom = wrapper.appendChild(document.createElement('div'));
+		dLeftBottom.className = "flex-box flex-left-bottom";
+		const dRightTop = wrapper.appendChild(document.createElement('div'));
+		dRightTop.className = "flex-box flex-right-top";
+		const dRightBottom = wrapper.appendChild(document.createElement('div'));
+		dRightBottom.className = "flex-box flex-right-bottom";
+
+		const dId = dLeftBottom.appendChild(document.createElement('div'));
 		dId.className = 'card-id';
+		const dLevel = dLeftBottom.appendChild(document.createElement('div'));
+		dLevel.className = 'level';
+		dLevel.textContent = "110";
+
+		const dEnhancement = dLeftTop.appendChild(document.createElement('div'));
+		dEnhancement.className = 'enhancement';
+		dEnhancement.textContent = "297";
+
+		const dActiveSkillCD = dRightBottom.appendChild(document.createElement('div'));
+		dActiveSkillCD.className = 'active-skill-cd';
+		dActiveSkillCD.textContent = "99";
 	}
 	connectedCallback() {
 		console.log('自定义标签添加到页面');
@@ -165,12 +205,14 @@ class CardAvatar extends HTMLElement {
 	}
 	attributeChangedCallback(name, oldValue, newValue) {
 		console.log('自定义标签属性改变', name, oldValue, newValue);
-		if (name == 'id') this.#id = parseInt(this.getAttribute('id'));
+		//if (name == 'id') this.#id = parseInt(this.getAttribute('id'));
+		if (name == 'id') this.id = parseInt(this.getAttribute('id'));
 		this.update();
 	}
 	update() {
 		//得到怪物ID
-		const id = this.#id || 0;
+		//const id = this.#id || 0;
+		const id = this.id || 0;
 		const card = Cards[id] || Cards[0];
 		const dataSource = this.getAttribute('source') || currentDataSource.code;
 		const shadow = this.shadowRoot;
