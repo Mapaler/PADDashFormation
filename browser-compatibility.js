@@ -1,14 +1,22 @@
-﻿let needUpdateBrowser = (()=>{
-	try {
-		return !Boolean(eval("1n && (undefined?.undefined ?? true)"));
-	} catch (e) {
-		if (e.name !== 'SyntaxError') throw e // Throw the error if it is not a SyntaxError
-		return true;
-	}
+﻿const unsupportFeatures = (()=>{
+	const features = [
+		{name: "Optional chaining (?.) / 可选链操作符(?.)", url: "https://caniuse.com/mdn-javascript_operators_optional_chaining", test: ()=>!Boolean(eval("undefined?.undefined || true"))},
+		{name: "Nullish coalescing operator (??) / 空值合并操作符(??)", url: "https://caniuse.com/mdn-javascript_operators_nullish_coalescing", test: ()=>!Boolean(eval("undefined ?? true"))},
+		{name: "BigInt value (1n) / BigInt 数据类型(1n)", url: "https://caniuse.com/bigint", test: ()=>!Boolean(eval("1n"))},
+		{name: "Private class fields (#name) / 类私有域(#name)", url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>!Boolean(eval("class test {#v = 0;}; true;"))},
+	]
+	return features.filter(feature=>{
+		try {
+			return feature.test();
+		} catch (e) {
+			if (e.name !== 'SyntaxError') throw e // Throw the error if it is not a SyntaxError
+			return true;
+		}
+	})
 })();
 
-if (needUpdateBrowser) {
-	let browserVersion = ((UA)=>{
+if (unsupportFeatures.length) {
+	const browserVersion = ((UA)=>{
 		let regRes;
 		if (regRes = /\b(Firefox|Chrome)\/([\d\.]+)/ig.exec(UA)) {
 			return `${regRes[1]} ${regRes[2]}`;
@@ -22,26 +30,26 @@ if (needUpdateBrowser) {
 	let alertStr;
 	if (/^zh-(?:han(?:s|t)-)?/.test(navigator.language)) {
 		alertStr = 
-`🙁浏览器内核版本太老
-您的浏览器版本为:
-${browserVersion}
-
-您的浏览器内核不支持本程序使用的 可选链操作符(?.) 和 空值合并操作符(??) 或 BigInt 数据类型。
-
-请更新您的浏览器内核到 Firefox(火狐) ≥ 74 或 Chrome(谷歌) ≥ 80 或 Safari ≥ 14。`;
+`🙁浏览器内核版本太老<br>
+您的浏览器版本为: ${browserVersion}<br>
+您的浏览器内核不支持本程序使用的以下技术
+<ol>
+${unsupportFeatures.map(feature=>`<li><a href="${feature.url}">${feature.name}</a></li>`).join('')}
+</ol>
+请更新您的浏览器内核到 Firefox(火狐) ≥ 90 或 Chrome(谷歌) ≥ 80 或 Safari ≥ 14.5。`;
 	} else {
 		alertStr = 
-`🙁Browser kernel is too old
-Your browser is:
-${browserVersion}
-
-Your browser core does not support Optional chaining (?.) and Nullish coalescing operator (??) or BigInt value used in this program.
-
-Please update your browser core to Firefox ≥ 74 or Chrome ≥ 80 or Safari ≥ 14`;
+`🙁Browser kernel is too old<br>
+Your browser is: ${browserVersion}<br>
+Your browser kernel does not support the following technologies used by this program:
+<ol>
+${unsupportFeatures.map(feature=>`<li><a href="${feature.url}">${feature.name}</a></li>`).join('')}
+</ol>
+Please update your browser core to Firefox ≥ 90 or Chrome ≥ 80 or Safari ≥ 14.5`;
 	}
 
-alert(alertStr);
-document.write(alertStr.replace(/\n/g,'<br />'));
+//alert(alertStr);
+document.write(alertStr);
 }
 
 let denied = ((UA)=>{

@@ -24,7 +24,7 @@ const dataStructure = 4; //阵型输出数据的结构版本
 const cfgPrefix = "PADDF-"; //设置名称的前缀
 const className_displayNone = "display-none";
 const dataAttrName = "data-value"; //用于储存默认数据的属性名
-const isGuideMod = !needUpdateBrowser && Boolean(Number(getQueryString("guide"))); //是否以图鉴模式启动
+const isGuideMod = !unsupportFeatures.length && Boolean(Number(getQueryString("guide"))); //是否以图鉴模式启动
 
 if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
