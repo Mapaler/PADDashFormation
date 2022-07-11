@@ -6586,9 +6586,10 @@ self.addEventListener('fetch', function(event) {
 					cache.put(url, response.clone());
 				}
 				return response;
-			}).catch((err)=> //如果在线失败，则忽略search
-				caches.match(url, {ignoreSearch: true}).then(resp=>resp)
-			)
+			}).catch(err=>{ //如果在线失败，则忽略search
+				console.error("数据在线获取失败，尝试使用忽略search的离线数据",err);
+				return await caches.match(url, {ignoreSearch: true});
+			})
 		);
 	} else { //其他的优先使用缓存
 		event.respondWith(
@@ -6605,9 +6606,10 @@ self.addEventListener('fetch', function(event) {
 						cache.put(url, response.clone());
 					}
 					return response;
-				}).catch((err)=> //如果都失败，则忽略search
-					caches.match(url, {ignoreSearch: true}).then(resp=>resp)
-				);
+				}).catch((err)=>{ //如果都失败，则忽略search
+					console.error("数据在线获取失败，尝试使用忽略search的离线数据",err);
+					return await caches.match(url, {ignoreSearch: true});
+				});
 			})
 		);
 	}
