@@ -2302,6 +2302,7 @@ icon.inflicts::after
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon{
 	display: none;
 }
+/*“隐藏少用潜觉”时不会隐藏的潜觉*/
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="11"],
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="20"],
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="21"],
@@ -2320,7 +2321,8 @@ icon.inflicts::after
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="40"],
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="41"],
 .m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="42"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="46"]
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="46"],
+.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="47"]
 {
 	display: inline-block;
 }

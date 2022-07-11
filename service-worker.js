@@ -5975,7 +5975,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"708e0b6411abd832b339fdff8bbaaa13"
+		"c07f449c1e8a13d43325e130f352ef54"
 	],
 	[
 		"script-skill-parser.js",
@@ -5983,7 +5983,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"10eabc7ba4b17d6be72ec997f8ddb682"
+		"6a902b84f2b38bec51974ffad7d92e34"
 	],
 	[
 		"script.js",
@@ -5991,7 +5991,7 @@ const cachesMap = new Map([
 	],
 	[
 		"solo.html",
-		"b9d613f19ea799bcb0a77c7cd39f726a"
+		"a68f217544e2a9c49ad65821cd3fcb29"
 	],
 	[
 		"style-card.css",
@@ -5999,11 +5999,11 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"4b0e7ceb6e209ce52d9e460c40313874"
+		"98897b24652c22acd257c7b9e3fe2c25"
 	],
 	[
 		"style.css",
-		"9e22c4876be31d31837b2cda324bf4d9"
+		"bc468913a73719031da40692b1cb81e5"
 	],
 	[
 		"temp.js",
@@ -6083,7 +6083,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"da166377b0a6215e8eab000a7b4e9a7e"
+		"4742a550d48eec5f1efba54d48297720"
 	],
 	[
 		"images/badge-bg.png",
@@ -6131,7 +6131,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-latent.png",
-		"9c9cba14dee24e92bb8b921e39b813dc"
+		"e7040896c8d6607bf65696e7175b7b5d"
 	],
 	[
 		"images/icon-MP.png",

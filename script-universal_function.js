@@ -467,7 +467,7 @@ function latentUseHole(latentId) {
 		}
 		case (latentId >= 13 && latentId <= 15):
 		case (latentId >= 37 && latentId <= 42):
-		case (latentId == 46):
+		case (latentId >= 46):
 		{
 			return 6;
 		}
