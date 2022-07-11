@@ -1219,20 +1219,27 @@ function getActuallySkills(skill, skillTypes, searchRandom = true) {
 		return [];
 	}
 }
-
+//返回变身宠的初级
+function henshinBase(cardid, firstId)
+{
+	let member;
+	if (cardid instanceof Member) {
+		member = cardid;
+		cardid = member.id;
+	}
+	if (firstId == undefined) firstId = cardid;
+	let card = Cards[cardid];
+	if (card && Array.isArray(card.henshinFrom) && card.henshinFrom[0] !== firstId
+		&& (member?.level ?? 1) <= card.maxLevel
+	)
+	{
+		card = henshinBase(card.henshinFrom[0], firstId);
+	}
+	return card;
+}
 //计算队伍是否为76
 function tIf_Effect_76board(leader1id, leader2id) {
 	const searchTypeArray = [162, 186];
-	function henshinBase(cardid, firstId)
-	{
-		if (firstId == undefined) firstId = cardid;
-		let card = Cards[cardid];
-		if (card && Array.isArray(card.henshinFrom) && card.henshinFrom[0] !== firstId)
-		{
-			card = henshinBase(card.henshinFrom[0], firstId);
-		}
-		return card;
-	}
 	const ls1 = getCardLeaderSkills(henshinBase(leader1id), searchTypeArray)[0];
 	const ls2 = getCardLeaderSkills(henshinBase(leader2id), searchTypeArray)[0];
 
@@ -1308,6 +1315,37 @@ function getSkillFixedDamage(card) {
 		default:
 			return 0;
 	}
+}
+//计算队伍SB
+function countTeamSB(team, solo) {
+	let sbn = 0;
+	const badge = team[2];
+	
+	for (let mi = 0; mi < team[0].length; mi++) {
+		const member = team[0][mi];
+		const assist = team[1][mi];
+		if (member.id < 0) continue;
+		const memberCard = henshinBase(member);
+		let enableAwoken = memberCard.awakenings.slice(0, member.awoken);
+		//单人、3人时,大于等于100级且297时增加超觉醒
+		if ((solo || teamsCount === 3) && member.sawoken >= 0 && member.level >= 100 && member.plus.every(p=>p>=99)) {
+			const sAwokenT = memberCard.superAwakenings[member.sawoken];
+			if (sAwokenT >= 0)
+				enableAwoken = enableAwoken.concat(sAwokenT);
+		}
+		if (assist.card && assist.card.enabled && assist.card.awakenings.includes(49)) { //如果卡片未启用
+			enableAwoken = enableAwoken.concat(assist.card.awakenings.slice(0, assist.awoken));
+		}
+
+		//大SB 56，小SB 21
+		sbn += enableAwoken.filter(n=>n===21).length;
+		sbn += enableAwoken.filter(n=>n===56).length * 2;
+		//心L 59，心L大SB潜觉 47
+		sbn += enableAwoken.filter(n=>n===59).length ? member.latent.filter(n=>n===47).length * 3 : 0;
+	}
+	if ((solo || teamsCount === 3) && badge === 7) sbn += 1;
+
+	return sbn;
 }
 //计算队伍操作时间
 function countMoveTime(team, leader1id, leader2id, teamIdx) {

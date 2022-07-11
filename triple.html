@@ -150,6 +150,9 @@ var formation = new Formation(teamsCount,6);
 							<canvas height="20" width="100" class="reduce-details display-none"></canvas>
 						</span>
 					</div>
+					<div class="tIf-total-skill-boost">
+						<span class="general"></span>
+					</div>
 					<div class="tIf-total-move">
 						<span class="general"></span>
 						<span class="awoken-bind"></span>
@@ -626,6 +629,9 @@ var formation = new Formation(teamsCount,6);
 							<canvas height="20" width="100" class="reduce-details display-none"></canvas>
 						</span>
 					</div>
+					<div class="tIf-total-skill-boost">
+						<span class="general"></span>
+					</div>
 					<div class="tIf-total-move">
 						<span class="general"></span>
 						<span class="awoken-bind"></span>
@@ -1101,6 +1107,9 @@ var formation = new Formation(teamsCount,6);
 							<span class="awoken-bind"></span>
 							<canvas height="20" width="100" class="reduce-details display-none"></canvas>
 						</span>
+					</div>
+					<div class="tIf-total-skill-boost">
+						<span class="general"></span>
 					</div>
 					<div class="tIf-total-move">
 						<span class="general"></span>
@@ -1699,6 +1708,15 @@ var formation = new Formation(teamsCount,6);
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="93" data-max-count="1"></button><!--附加木属性--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="94" data-max-count="1"></button><!--附加光属性--></li>
 					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="95" data-max-count="1"></button><!--附加暗属性--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="96"></button><!--大U--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="97"></button><!--大5色溜--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="98"></button><!--大自回--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="99"></button><!--大火+--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="100"></button><!--大水+--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="101"></button><!--大木+--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="102"></button><!--大光+--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="103"></button><!--大暗+--></li>
+					<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="104"></button><!--大心+--></li>
 				</ul>
 			</div>
 			<div class="sawoken-div"><!--超觉醒-->
@@ -1799,6 +1817,15 @@ var formation = new Formation(teamsCount,6);
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="93" id="search-awoken-93" /><label class="awoken-icon unallowable-awoken" data-awoken-icon="93" for="search-awoken-93"></label><!--附加木属性--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="94" id="search-awoken-94" /><label class="awoken-icon unallowable-awoken" data-awoken-icon="94" for="search-awoken-94"></label><!--附加光属性--></li>
 					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="95" id="search-awoken-95" /><label class="awoken-icon unallowable-awoken" data-awoken-icon="95" for="search-awoken-95"></label><!--附加暗属性--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="96" id="search-awoken-96" /><label class="awoken-icon" data-awoken-icon="96" for="search-awoken-96"></label><!--大U--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="97" id="search-awoken-97" /><label class="awoken-icon" data-awoken-icon="97" for="search-awoken-97"></label><!--大5色溜--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="98" id="search-awoken-98" /><label class="awoken-icon" data-awoken-icon="98" for="search-awoken-98"></label><!--大自回--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="99" id="search-awoken-99" /><label class="awoken-icon" data-awoken-icon="99" for="search-awoken-99"></label><!--大火+--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="100" id="search-awoken-100" /><label class="awoken-icon" data-awoken-icon="100" for="search-awoken-100"></label><!--大水+--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="101" id="search-awoken-101" /><label class="awoken-icon" data-awoken-icon="101" for="search-awoken-101"></label><!--大木+--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="102" id="search-awoken-102" /><label class="awoken-icon" data-awoken-icon="102" for="search-awoken-102"></label><!--大光+--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="103" id="search-awoken-103" /><label class="awoken-icon" data-awoken-icon="103" for="search-awoken-103"></label><!--大暗+--></li>
+					<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="104" id="search-awoken-104" /><label class="awoken-icon" data-awoken-icon="104" for="search-awoken-104"></label><!--大心+--></li>
 				</ul>
 			</div>
 			<div class="special-div">
@@ -1997,6 +2024,7 @@ var formation = new Formation(teamsCount,6);
 					<li class="latent-icon" data-latent-icon="41"></li><!--U解禁消-->
 					<li class="latent-icon" data-latent-icon="42"></li><!--伤害上限解除-->
 					<li class="latent-icon" data-latent-icon="46"></li><!--心追解云封-->
+					<li class="latent-icon" data-latent-icon="47"></li><!--心L大SB-->
 				</ul>
 			</div>
 			<div class="setting-row row-mon-skill">

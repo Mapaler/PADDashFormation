@@ -4734,6 +4734,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	//计算总的生命值
 	if (!totalDom) return;
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
+	const tSBDom = totalDom.querySelector(".tIf-total-skill-boost");
 	const tMoveDom = totalDom.querySelector(".tIf-total-move");
 	const tEffectDom = totalDom.querySelector(".tIf-effect");
 
@@ -4808,6 +4809,13 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
+	}
+
+	if (tSBDom) {
+		const sbn = countTeamSB(team, solo);
+		const tSBDom_general = tSBDom.querySelector(".general");
+		
+		setTextContentAndAttribute(tSBDom_general, sbn);
 	}
 
 	if (tMoveDom) {
@@ -4917,6 +4925,7 @@ function refreshFormationTotalHP(totalDom, teams) {
 	//计算总的生命值
 	if (!totalDom) return;
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
+	const tSBDom = totalDom.querySelector(".tIf-total-skill-boost");
 	const tEffectDom = totalDom.querySelector(".tIf-effect");
 	
 	//因为目前仅用于2P，所以直接在外面固定写了
@@ -4983,6 +4992,14 @@ function refreshFormationTotalHP(totalDom, teams) {
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
+	}
+	
+	if (tSBDom) {
+		const sbn1 = countTeamSB(teams[0], solo);
+		const sbn2 = countTeamSB(teams[1], solo);
+		const tSBDom_general = tSBDom.querySelector(".general");
+		
+		setTextContentAndAttribute(tSBDom_general, sbn1 + sbn2);
 	}
 
 	if (tEffectDom)	{

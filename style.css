@@ -783,6 +783,7 @@ ul{
 	display: inline-block;
 }
 /*各种信息统计的图标*/
+.tIf-total-skill-boost,
 .tIf-total-move,
 .tIf-effect
 {
@@ -793,6 +794,7 @@ ul{
 .tIf-total-hp .reduce .reduce-scale::before,
 .tIf-total-hp .reduce .general::before,
 .tIf-total-hp .reduce .awoken-bind::before,
+.tIf-total-skill-boost .general::before,
 .tIf-total-move .general::before,
 .tIf-total-move .awoken-bind::before,
 .tIf-effect icon::before,
@@ -899,6 +901,9 @@ icon.poison-no-effect::after,
 	background-color: purple;
 }
 
+.tIf-total-skill-boost .general::before{
+	background-image: url(images/icon-sb.png);
+}
 .tIf-total-move .general::before{
 	background-image: url(images/icon-orb-move-time.png);
 }
