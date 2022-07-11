@@ -5971,7 +5971,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"aafd38240e4233756aeb76a621b63189"
+		"4bb9b2201ab111b6fc2d6e56541d3caf"
 	],
 	[
 		"script-json_data.js",
@@ -5983,15 +5983,15 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"6a902b84f2b38bec51974ffad7d92e34"
+		"806b92aa6434b14e683751229c451cfa"
 	],
 	[
 		"script.js",
-		"125e74f07b4627b863179b61d973d941"
+		"94774b38d9fd1938191351ce0e54adfe"
 	],
 	[
 		"solo.html",
-		"a68f217544e2a9c49ad65821cd3fcb29"
+		"21886651aba645c0ad137db701968d5a"
 	],
 	[
 		"style-card.css",
@@ -6003,7 +6003,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"bc468913a73719031da40692b1cb81e5"
+		"de8d5e3ecc0ec78a47e2533586dc9ad4"
 	],
 	[
 		"temp.js",
@@ -6011,7 +6011,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"c89f108034cd768ae6fe4c186ac6e827"
+		"ee6189056a4d137887f903edfb0993eb"
 	],
 	[
 		"languages/en.css",
@@ -6156,6 +6156,10 @@ const cachesMap = new Map([
 	[
 		"images/icon-reduce.png",
 		"c29b5fd69163620c93abea788c3cdaca"
+	],
+	[
+		"images/icon-sb.png",
+		"57d9b2572aa99818523a9d9f9f08d3d6"
 	],
 	[
 		"images/icon-skills.png",
