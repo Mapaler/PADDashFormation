@@ -2468,8 +2468,7 @@ function initialize(event) {
 
 		this.classList.remove(className_displayNone);
 	}
-	dungeonEnchanceDialog.close = function()
-	{
+	dungeonEnchanceDialog.close = function(){
 		this.classList.add(className_displayNone);
 	}
 	const dungeonEnchanceDialogConfirm = dungeonEnchanceDialog.querySelector(".dialog-confirm");
@@ -2486,9 +2485,9 @@ function initialize(event) {
 		dge.rarities = rarities;
 		dge.attrs = attrs;
 		dge.types = types;
-		dge.rate.hp = parseInt(dialogContent.querySelector("#dungeon-hp").value);
-		dge.rate.atk = parseInt(dialogContent.querySelector("#dungeon-atk").value);
-		dge.rate.rcv = parseInt(dialogContent.querySelector("#dungeon-rcv").value);
+		dge.rate.hp = Number(dialogContent.querySelector("#dungeon-hp").value);
+		dge.rate.atk = Number(dialogContent.querySelector("#dungeon-atk").value);
+		dge.rate.rcv = Number(dialogContent.querySelector("#dungeon-rcv").value);
 		dungeonEnchanceDialog.close();
 		creatNewUrl();
 		refreshAll(formation);
