@@ -19,23 +19,10 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 ## 快速使用在线版（推荐） | Online Quick Start (Recommended)
 * <https://mapaler.github.io/PADDashFormation/> (Github Pages)
 * <https://mapaler.com/PADDashFormation/> (我自己的镜像 | my own mirror)
-> *Gitee* 的镜像已经停止更新。  
-> The mirror of *Gitee* has stopped updating.
 
 ## 创建你自己的镜像网站 | Create your own mirror web site
 `git clone`到你的 *http* 服务目录即可访问，将来更新时只需要`git pull`即可。  
 `git clone` to your *http* service directory for visited, and `git pull` for future updates.
-
-## 下载后使用本地版 | Use the local version after downloaded
-> 火狐95.0后不再允许程序访问本地资源了，无法使用此方法。  
-> After Firefox 95.0, programs are no longer allowed to access local resources and this method cannot be used.
-
-[下载压缩包](../../archive/refs/heads/master.zip)或`git clone`后使用浏览器打开`index.html`。  
-[Download ZIP](../../archive/refs/heads/master.zip) or `git clone`, and open the `index.html` with Browser.
-* 火狐68.0及以后需要在`about:config`设定`privacy.file_unique_origin`为`false`。  
-Firefox 68.0 or above need setting the `privacy.file_unique_origin` to `false` in `about:config`.  
-* Chrome需要添加`--allow-file-access-from-files`启动参数。  
-Chrome browser need start with the additional argument `--allow-file-access-from-files`.
 
 # 翻译我 | Translate me
 ## 目前支持的语言 | Languages currently supported
@@ -101,7 +88,7 @@ Please refer to existing files.
 > * [Puzzle & Dragons](//www.puzzleanddragons.us/)
 > * [퍼즐앤드래곤](//pad.neocyon.com/W/)
 
-> © Fontworks Inc. Font Kurokane Right Reserved.
+> © Fontworks Inc. Font Kurokane Right Reserved.  
 > くろかね字体版权归属于Fontworks有限公司。  
 > [くろかね書体](//fontworks.co.jp/fontsearch/kurokanestd-eb/)の権利は フォントワークス株式会社 に帰属します。
 
