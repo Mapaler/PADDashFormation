@@ -6563,7 +6563,7 @@ self.addEventListener('activate', function(event) {
 	);
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', async function(event) {
 	const url = new URL(event.request.url);
 	url.search = "";
 	const baseUrl = new URL(".", location);
@@ -6571,42 +6571,34 @@ self.addEventListener('fetch', function(event) {
 	const relativePath = (url.origin + path).replace(baseUrl.origin + baseUrl.pathname, "");
 	const md5 = cachesMap.get(relativePath); //事先记录的md5值
 	//console.debug("请求网络", event.request.url, relativePath, md5);
-	if (md5) url.searchParams.set("md5", md5);
-	//const fileUrl = url.origin + path;
-	if (/\.(html|js|css|json)$/i.test(path)) { //程序数据优先通过网络获取
-		event.respondWith(
-			fetch(event.request).then(async function(response) {
-				if (md5) {
-					console.debug("缓存程序（在线优先）", response);
-					const cache = await caches.open(cacheName);
-					cache.put(url, response.clone());
-				}
-				return response;
-			}).catch(err=>{ //如果在线失败，则忽略search
-				console.error("数据在线获取失败，尝试使用忽略search的离线数据",err);
-				return await caches.match(url, {ignoreSearch: true});
-			})
-		);
-	} else { //其他的优先使用缓存
-		event.respondWith(
-			caches.match(url, {ignoreSearch: false}).then(function(resp) {
-				if (resp && md5) {
-					//console.debug("找到缓存，优先使用缓存", url, resp);
-					return resp;
-				}
-				//console.debug("未找到缓存，开始 fetch");
-				return fetch(event.request).then(async function(response) {
-					if (md5) {
-						console.debug("缓存一般数据（离线优先）", response);
-						const cache = await caches.open(cacheName);
-						cache.put(url, response.clone());
-					}
-					return response;
-				}).catch((err)=>{ //如果都失败，则忽略search
-					console.error("数据在线获取失败，尝试使用忽略search的离线数据",err);
-					return await caches.match(url, {ignoreSearch: true});
-				});
-			})
-		);
+	if (md5) {
+		url.searchParams.set("md5", md5);
+		const responseWithMd5 = await caches.match(url, {ignoreSearch: false});
+		if (responseWithMd5) {
+			console.debug("%c已有相同 md5 缓存，直接使用缓存", "color: green;", url);
+			event.respondWith(responseWithMd5);
+		} else {
+			try {
+				console.debug("%c无相同 md5 缓存，重新在线获取", "color: blue;", url);
+				const newResponse = await fetch(event.request);
+				const cache = await caches.open(cacheName);
+				cache.put(url, newResponse.clone());
+				event.respondWith(newResponse);
+			} catch (error) {
+				console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据", "color: red;", error);
+				event.respondWith(caches.match(url, {ignoreSearch: true}));
+			}
+		}
+	} else {
+		try {
+			console.debug("无 md5 值，重新在线获取", url);
+			const newResponse = await fetch(event.request);
+			const cache = await caches.open(cacheName);
+			cache.put(url, newResponse.clone());
+			event.respondWith(newResponse);
+		} catch (error) {
+			console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据", "color: red;", error);
+			event.respondWith(caches.match(url, {ignoreSearch: true}));
+		}
 	}
 });
