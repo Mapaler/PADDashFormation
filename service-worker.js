@@ -6526,6 +6526,8 @@ self.addEventListener('install', function (event) {
 
 self.addEventListener('activate', function(event) {
 	console.debug("Service Worker activate");
+	const baseUrl = new URL(".", location);
+	const baseUrlString = baseUrl.origin + baseUrl.pathname;
 	
 	event.waitUntil(
 		Promise.all([
@@ -6543,13 +6545,11 @@ self.addEventListener('activate', function(event) {
 							return Promise.all(
 								requests.map(async function(request) {
 									const url = new URL(request.url);
-									const baseUrl = new URL(".", location);
-									const path = url.pathname;
-									const relativePath = (url.origin + path).replace(baseUrl.origin + baseUrl.pathname, "");
+									const relativePath = (url.origin + url.pathname).replace(baseUrlString, "");
 									const oldmd5 = url.searchParams.get("md5"); //老的md5值
-									const md5 = cachesMap.get(relativePath); //记录的md5值
+									const md5 = cachesMap.get(relativePath); //新的md5值
 									//console.debug("检测缓存条目", url, relativePath, oldmd5, md5);
-									if (!md5 || md5 !== oldmd5) {
+									if (md5 && md5 !== oldmd5) {
 										console.debug("删除版本不匹配的缓存", request);
 										return cache.delete(request);
 									}
@@ -6567,8 +6567,8 @@ self.addEventListener('fetch', async function(event) {
 	const url = new URL(event.request.url);
 	url.search = "";
 	const baseUrl = new URL(".", location);
-	const path = url.pathname;
-	const relativePath = (url.origin + path).replace(baseUrl.origin + baseUrl.pathname, "");
+	const baseUrlString = baseUrl.origin + baseUrl.pathname;
+	const relativePath = (url.origin + url.pathname).replace(baseUrlString, "");
 	const md5 = cachesMap.get(relativePath); //事先记录的md5值
 	//console.debug("请求网络", event.request.url, relativePath, md5);
 	if (md5) {
@@ -6585,7 +6585,7 @@ self.addEventListener('fetch', async function(event) {
 				cache.put(url, newResponse.clone());
 				event.respondWith(newResponse);
 			} catch (error) {
-				console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据", "color: red;", error);
+				console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据", "color: red;", url, error);
 				event.respondWith(caches.match(url, {ignoreSearch: true}));
 			}
 		}
@@ -6597,7 +6597,7 @@ self.addEventListener('fetch', async function(event) {
 			cache.put(url, newResponse.clone());
 			event.respondWith(newResponse);
 		} catch (error) {
-			console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据", "color: red;", error);
+			console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据", "color: red;", url, error);
 			event.respondWith(caches.match(url, {ignoreSearch: true}));
 		}
 	}
