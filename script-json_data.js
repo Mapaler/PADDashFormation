@@ -1005,7 +1005,7 @@ const specialSearchFunctions = (function() {
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
 		fragment.appendChild(document.createTextNode(`掉锁`));
-		fragment.appendChild(createOrbsList(flags(sk[0] != -1 ? sk[0] : 1023)));
+		fragment.appendChild(createOrbsList(flags(sk[0] != -1 ? sk[0] : 0b1111111111)));
 		fragment.appendChild(document.createTextNode(`×${sk[1]}T`));
 		return fragment;
 	}
