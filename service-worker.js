@@ -5979,7 +5979,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-skill-parser.js",
-		"7dcda01f193d1cd5411f0f8f8633e4e0"
+		"1380f9e54d6bbceb605181b7bfeb2c3b"
 	],
 	[
 		"script-universal_function.js",
