@@ -259,7 +259,7 @@ class Board
 	{
 		function fillRow(rowData, inputRow, attr)
 		{
-			for (const col of inputRow)
+			for (let col of inputRow)
 			{
 				if (col == 3) {
 					if (attr == "variation")
