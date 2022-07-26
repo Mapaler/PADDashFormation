@@ -96,6 +96,22 @@ function isEqual(obj1,obj2) {
 	// 3.全相等
 	return true
 }
+class Orb
+{
+	color = null;
+	states = [];
+	enhanced = false; //锁定
+	locked = false; //锁定
+	bound = false;
+	variation = false; //随机变换
+	constructor(color)
+	{
+		this.color = color;
+	}
+	valueOf() {
+		return this.color;
+	}
+}
 class Board
 {
 	rowCount = 6;
@@ -105,8 +121,14 @@ class Board
 	{
 		for (let ri=0;ri<this.rowCount;ri++)
 		{
-			this.data.push(new Array(this.columnCount).fill(Array.isArray(def) ? null : def));
+			const col = [];
+			for (let ci=0;ci<this.columnCount;ci++)
+			{
+				col.push(new Orb(Array.isArray(def) ? null : def));
+			}
+			this.data.push(col);
 		}
+		//如果传入的是数组，直接随机分布
 		if (Array.isArray(def))
 		{
 			this.randomFill(def);
@@ -127,8 +149,12 @@ class Board
 			{
 				if (ci == 3) ci++;
 				//从数组中随机取出一个
-				if (exclude && exclude.includes(row[ci])) continue;
-				row[ci] = o.next().value?.[1] ?? row[ci];
+				if (exclude && exclude.includes(row[ci].color)) continue;
+				const c = o.next().value?.[1] ?? row[ci].color;
+				if (c == "variation")
+					row[ci].states.push(c);
+				else
+					row[ci].color = c;
 			}
 		}
 		//填充剩下的部分
@@ -136,14 +162,22 @@ class Board
 		{
 			if (ri == 2) ri++;
 			const row = this.data[ri];
-			if (exclude && exclude.includes(row[3])) continue;
-			row[3] = o.next().value?.[1] ?? row[3] ;
+			if (exclude && exclude.includes(row[3].color)) continue;
+			const c = o.next().value?.[1] ?? row[3].color;
+			if (c == "variation")
+				row[3].states.push(c);
+			else
+				row[3].color = c;
 		}
 		const row = this.data[2];
 		for (let ci=0;ci<row.length;ci++)
 		{
-			if (exclude && exclude.includes(row[ci])) continue;
-			row[ci] = o.next().value?.[1] ?? row[ci] ;
+			if (exclude && exclude.includes(row[ci].color)) continue;
+			const c = o.next().value?.[1] ?? row[3].color;
+			if (c == "variation")
+				row[ci].states.push(c);
+			else
+				row[ci].color = c;
 		}
 	}
 	//将有序数组转为随机的数组
@@ -196,27 +230,27 @@ class Board
 		this.sequenceFill(randomData, exclude);
 	}
 	//设定横行
-	setRow(rows, attr = 0)
+	setRow(rowsNumber, attr = 0)
 	{
-		for (let row of rows)
+		for (let row of rowsNumber)
 		{
 			if (row >= 2) row++;
 			const rowData = this.data[row];
 			for (let ri=0;ri<rowData.length;ri++)
 			{
-				rowData[ri] = attr;
+				rowData[ri].color = attr;
 			}
 		}
 	}
 	//设定竖列
-	setColumn(cols, attr = 0)
+	setColumn(colsNumber, attr = 0)
 	{
-		for (let col of cols)
+		for (let col of colsNumber)
 		{
 			if (col >= 3) col++;
 			for (let row of this.data)
 			{
-				row[col] = attr;
+				row[col].color = attr;
 			}
 		}
 	}
@@ -225,14 +259,22 @@ class Board
 	{
 		function fillRow(rowData, inputRow, attr)
 		{
-			for (let col of inputRow)
+			for (const col of inputRow)
 			{
-				if (col == 3) rowData[col] = attr;
+				if (col == 3) {
+					if (attr == "variation")
+						rowData[col].states.push(attr);
+					else
+						rowData[col].color = attr;
+				}
 				if (col >= 3) col++;
-				rowData[col] = attr;
+				if (attr == "variation")
+					rowData[col].states.push(attr);
+				else
+					rowData[col].color = attr;
 			}
 		}
-		for (let ri=0;ri<matrix.length;ri++)
+		for (let ri=0; ri<matrix.length; ri++)
 		{
 			if (ri == 2)
 			{
@@ -244,13 +286,13 @@ class Board
 	//面板叠加
 	overlayBoard(board)
 	{	
-		for (let ri=0;ri<board.length;ri++)
+		for (let ri=0; ri<board.length; ri++)
 		{
 			const rowNew = board[ri];
 			const rowOld = this.data[ri];
-			for (let ci=0;ci<rowNew.length;ci++)
+			for (let ci=0; ci < rowNew.length; ci++)
 			{
-				rowOld[ci] = rowNew[ci] ?? rowOld[ci];
+				rowOld[ci] = Object.assign(rowOld[ci], rowNew[ci]);
 			}
 		}
 	}
@@ -263,6 +305,7 @@ class Board
 	toTable()
 	{
 		const table = document.createElement("table");
+		table.boardData = this.data;
 		table.className = "board";
 		this.data.forEach((rowData, ri, rArr) => {
 			const row = table.insertRow();
@@ -272,15 +315,16 @@ class Board
 				const cell = row.insertCell();
 				const orb = cell.appendChild(document.createElement('icon'));
 				orb.className = "orb";
-				if (orbType != null) orb.setAttribute("data-orb-icon", orbType);
+				if (orbType.color != null) orb.setAttribute("data-orb-icon", orbType.color);
+				orbType.states.forEach(state=>orb.classList.add(state));
 				if (ci == 3 && cArr.length > 6) cell.classList.add("board-cell5");
 			});
 		});
-		if (this.data.length > 5)
-		{
-			table.onclick = function() {
-				this.classList.toggle("board-76");
-			};
+		if (this.data.length > 5) {
+			table.onclick = toggle76;
+		}
+		function toggle76() {
+			this.classList.toggle("board-76");
 		}
 		return table;
 	}
@@ -1522,8 +1566,9 @@ function renderSkillEntry(skills)
 		let boardChange = skills.filter(skill=>
 			skill.kind == SkillKinds.BoardChange ||
 			skill.kind == SkillKinds.GenerateOrbs ||
-			skill.kind == SkillKinds.FixedOrbs
-		);
+			skill.kind == SkillKinds.FixedOrbs ||
+			skill.kind == SkillKinds.ActiveTurns && (skill.skill.kind == SkillKinds.FixedOrbs || skill.skill.kind == SkillKinds.GenerateOrbs)
+		).map(skill=>skill.kind == SkillKinds.ActiveTurns ? skill.skill : skill);
 		if (boardChange.length > 0)
 		{
 			const board = new Board();
@@ -1556,6 +1601,21 @@ function renderSkillEntry(skills)
 							}
 						}
 						break;
+					}
+				}
+			}
+			const setOrbState = skills.filter(skill=>skill.kind == SkillKinds.SetOrbState ||
+				skill.kind == SkillKinds.ActiveTurns && (skill.skill.kind == SkillKinds.SetOrbState)
+			).map(skill=>skill.kind == SkillKinds.ActiveTurns ? skill.skill : skill);
+			const boardData = board.data.flat();
+			for (let skill of setOrbState) {
+				if (["enhanced", "locked", "bound"].includes(skill.state)) {
+					const orbCount = skill.arg?.count?.value ?? boardData.length;
+					for (let oi = 0; oi < orbCount; oi++) {
+						const orb = boardData[oi];
+						if (skill.orbs.includes(orb.color)) {
+							orb.states.push(skill.state);
+						}
 					}
 				}
 			}
@@ -2366,7 +2426,10 @@ function renderOrbs(attrs, option = {}) {
 			const icon = document.createElement("icon");
 			icon.className = "orb";
 			if (option.className) icon.className += " " + option.className;
-			icon.setAttribute("data-orb-icon",attr);
+			if (attr == 'variation')
+				icon.classList.add('variation');
+			else
+				icon.setAttribute("data-orb-icon",attr);
 			let dict = {
 				icon: icon,
 			}

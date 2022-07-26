@@ -5979,7 +5979,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-skill-parser.js",
-		"1380f9e54d6bbceb605181b7bfeb2c3b"
+		"7acbb8fc22d0112f01beb8c6bf040a93"
 	],
 	[
 		"script-universal_function.js",
@@ -5999,7 +5999,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"98897b24652c22acd257c7b9e3fe2c25"
+		"773e7da6f8f97545e5b193339b2a66f4"
 	],
 	[
 		"style.css",
@@ -6147,7 +6147,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-orbs.png",
-		"c781a7f8165730312529ddb49f439870"
+		"5a984aca3416ae5e739aebe8518fb1f2"
 	],
 	[
 		"images/icon-poison.png",
