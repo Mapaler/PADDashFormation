@@ -1316,8 +1316,11 @@ icon.type
 .orb::after
 {
 	background-position-x: -36px;
+	position: absolute;
+	left: 0;
+	right: 0;
 }
-.orb.enhanced::before
+.orb.enhanced::after
 {
 	content: "";
 	background-position-y:calc(-36px * 0);
