@@ -3057,6 +3057,7 @@ function initialize(event) {
 	}
 	//specialAdd.onclick(); //先运行一次产生两个
 	specialClear.onclick = function() {
+		searchMonList.customAddition = null;
 		specialFilterUl.innerHTML = "";
 		specialFilterUl.appendChild(specialFilterFirstLi);
 		specialFirstSelect.selectedIndex = 0;
@@ -3122,6 +3123,10 @@ function initialize(event) {
 			searchArr = searchArr.map(id=>typeof(id) === "object" ? id : Cards[id]);
 		} else {
 			return; //如果不是数组就直接取消下一步
+		}
+		//如果之前打开了附加显示，继续沿用
+		if (customAdditionalFunction === undefined && searchMonList?.customAddition?.length) {
+			customAdditionalFunction = searchMonList.customAddition;
 		}
 
 		searchBox.classList.remove(className_displayNone);

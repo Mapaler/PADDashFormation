@@ -3546,6 +3546,18 @@ const specialSearchFunctions = (function() {
 			{name:"All Latent TAMADRA",otLangName:{chs:"所有潜觉蛋龙",cht:"所有潛覺蛋龍"},
 				function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)
 			},
+			{name:"Original Name",otLangName:{chs:"怪物原始名称",cht:"怪物原始名稱"},
+				function:cards=>cards,
+				addition:card=>card.name
+			},
+			{name:"Feed EXP",otLangName:{chs:"合成经验值",cht:"合成經驗值"},
+				function:cards=>cards.filter(card=>card.feedExp > 0).sort((a,b)=>a.feedExp * a.maxLevel - b.feedExp * b.maxLevel),
+				addition:card=>`EXP ${Math.round(card.feedExp * card.maxLevel / 4).bigNumberToString()}`
+			},
+			{name:"Sell Price",otLangName:{chs:"售卖金钱",cht:"售賣金錢"},
+				function:cards=>cards.filter(card=>card.sellPrice > 0).sort((a,b)=>a.sellPrice * a.maxLevel - b.sellPrice * b.maxLevel),
+				addition:card=>`Coin ${Math.round(card.sellPrice * card.maxLevel / 10).bigNumberToString()}`
+			},
 		]},
 	];
 	return functions;
