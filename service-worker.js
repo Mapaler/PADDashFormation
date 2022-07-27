@@ -2495,7 +2495,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_087.PNG",
-		"71a7c74bab1ce2ad80ec6c540c3b1dd8"
+		"b8658a3a740375a5e269ccafc3a37190"
 	],
 	[
 		"images/cards_en/CARDS_088.PNG",
@@ -2507,7 +2507,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_090.PNG",
-		"500051119dbf8ec33116a9bb2b671e37"
+		"a1edee575d5d88465ea44a8b40608867"
 	],
 	[
 		"sound/voice/en/padv001.wav",
@@ -4395,7 +4395,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_087.PNG",
-		"71a7c74bab1ce2ad80ec6c540c3b1dd8"
+		"b8658a3a740375a5e269ccafc3a37190"
 	],
 	[
 		"images/cards_ko/CARDS_088.PNG",
@@ -4407,7 +4407,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_090.PNG",
-		"500051119dbf8ec33116a9bb2b671e37"
+		"a1edee575d5d88465ea44a8b40608867"
 	],
 	[
 		"sound/voice/ko/padv001.wav",
@@ -6114,6 +6114,10 @@ const cachesMap = new Map([
 		"2c635288d6c94fafb07ff562198850d8"
 	],
 	[
+		"images/icon-awoken.svg",
+		"9a12779052569346857f560e3160dd75"
+	],
+	[
 		"images/icon-bind.png",
 		"4e8d8b8a11421b0f3100540d7ad85015"
 	],
@@ -6211,19 +6215,19 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"5b9d2492a1a5890252fe3a5a084dd5b1"
+		"2f903d604c386f2d63dfc9eb6f9fb11e"
 	],
 	[
 		"monsters-info/mon_en.json",
-		"ff994aad3fd7251808e05df3eb3e65b4"
+		"aa13b924f800c8b1a315306f99abcff6"
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"7d60c75a763b2516017374d046c20aef"
+		"68992660fa34ee5717c969ff2d8091d9"
 	],
 	[
 		"monsters-info/mon_ko.json",
-		"2d1a19abdc1ebf578ab6cebb71b4f03f"
+		"b31b36910476d0370804fe1e4ef6bcd5"
 	],
 	[
 		"monsters-info/package.json",
@@ -6231,7 +6235,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/skill_en.json",
-		"86f55ea41a56aabc0aa5b30c20ef1e57"
+		"ec7457a8a630e7df6f1340ab4e382451"
 	],
 	[
 		"monsters-info/skill_ja.json",
