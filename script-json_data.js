@@ -849,6 +849,7 @@ const specialSearchFunctions = (function() {
 	{
 		const searchTypeArray = [173];
 		const skill = getCardActiveSkill(card, searchTypeArray);
+		if (!skill) return;
 		const sk = skill.params;
 		if (sk[1] && sk[3])
 		{
@@ -990,6 +991,7 @@ const specialSearchFunctions = (function() {
 		const gens = generateOrbsParse(card);
 		const searchTypeArray = [141, 208];
 		const skill = getCardActiveSkill(card, searchTypeArray);
+		if (!skill) return;
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
 		for (let gen of gens)
@@ -1003,6 +1005,7 @@ const specialSearchFunctions = (function() {
 	{
 		const searchTypeArray = [152];
 		const skill = getCardActiveSkill(card, searchTypeArray);
+		if (!skill) return;
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
 		fragment.appendChild(document.createTextNode(`锁`));
@@ -1013,6 +1016,7 @@ const specialSearchFunctions = (function() {
 	{
 		const searchTypeArray = [205];
 		const skill = getCardActiveSkill(card, searchTypeArray, 1);
+		if (!skill) return;
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
 		fragment.appendChild(document.createTextNode(`掉锁`));
@@ -1024,6 +1028,7 @@ const specialSearchFunctions = (function() {
 	{
 		const searchTypeArray = [126];
 		const skill = getCardActiveSkill(card, searchTypeArray);
+		if (!skill) return;
 		const sk = skill.params;
 
 		const colors = flags(sk[0]);
@@ -1037,6 +1042,7 @@ const specialSearchFunctions = (function() {
 	{
 		const searchTypeArray = [127];
 		const skill = getCardActiveSkill(card, searchTypeArray);
+		if (!skill) return;
 		const sk = skill.params;
 
 		const colors = [];
@@ -1053,6 +1059,7 @@ const specialSearchFunctions = (function() {
 	{
 		const searchTypeArray = [128];
 		const skill = getCardActiveSkill(card, searchTypeArray);
+		if (!skill) return;
 		const sk = skill.params;
 
 		const colors = [];
@@ -1070,6 +1077,7 @@ const specialSearchFunctions = (function() {
 	{
 		const searchTypeArray = [0,1,2,35,37,42,58,59,84,85,86,87,110,115,143,144];
 		const skill = getCardActiveSkill(card, searchTypeArray);
+		if (!skill) return;
 		//const sk = skill.params;
 
 		const colors = [getCannonAttr(skill)];
@@ -1083,6 +1091,7 @@ const specialSearchFunctions = (function() {
 	{
 		const searchTypeArray = [230];
 		const skill = getCardActiveSkill(card, searchTypeArray);
+		if (!skill) return;
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
 		const ul = fragment.appendChild(document.createElement("ul"));
@@ -1368,6 +1377,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [191];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return document.createTextNode(`破贯×${sk[0]}T`);
 				}
@@ -1433,40 +1443,42 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [196];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
-	
 					const value = sk[0];
 					return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
 				}
 			},
 			{name:"Bind self matchable",otLangName:{chs:"自封消珠",cht:"自封消珠"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [215];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [215];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				}),
 				addition:card=>{
-				const searchTypeArray = [215];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(`自封`));
-				fragment.appendChild(createOrbsList(flags(sk[1] || 1)));
-				fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
-				return fragment;
+					const searchTypeArray = [215];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(document.createTextNode(`自封`));
+					fragment.appendChild(createOrbsList(flags(sk[1] || 1)));
+					fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
+					return fragment;
 				}
 			},
 			{name:"Bind self active skill",otLangName:{chs:"自封技能",cht:"自封技能"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [214];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [214];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				}),
 				addition:card=>{
-				const searchTypeArray = [214];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				return document.createTextNode(`自封技${sk[0]}T`);
+					const searchTypeArray = [214];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return document.createTextNode(`自封技${sk[0]}T`);
 				}
 			},
 		]},
@@ -1494,7 +1506,6 @@ const specialSearchFunctions = (function() {
 					});
 				},
 				addition:card=>{
-					
 					const atkbuff = rcvBuff_Rate(card);
 					const fragment = document.createDocumentFragment();
 					fragment.appendChild(createOrbsList([5]));
@@ -1618,6 +1629,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [132];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					let str = "👆";
 					if (sk[1]) str += `${sk[1]>0?`+`:``}${sk[1]/10}S`;
@@ -1628,18 +1640,18 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"No Skyfall(sort by turns)",otLangName:{chs:"无天降 buff（按回合排序）",cht:"無天降 buff（按回合排序）"},
 				function:cards=>{
-				const searchTypeArray = [184];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+					const searchTypeArray = [184];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
 				addition:card=>{
-				const searchTypeArray = [184];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				
-				return `无↓×${sk[0]}T`;
+					const searchTypeArray = [184];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `无↓×${sk[0]}T`;
 				}
 			},
 			{name:"Adds combo(sort by combo)",otLangName:{chs:"加C buff（按C数排列）",cht:"加C buff（按C數排列）"},
@@ -1656,6 +1668,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [160];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return `+${sk[1]}C×${sk[0]}T`;
 				}
@@ -1684,6 +1697,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [3,156];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 		
 					const fragment = document.createDocumentFragment();
@@ -1711,6 +1725,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [3];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return `无敌×${sk[0]}T`;
 				}
@@ -1726,6 +1741,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [21];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					
 					const colors = [sk[1]];
@@ -1748,6 +1764,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [51];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return `全体×${sk[0]}T`;
 				}
@@ -1763,6 +1780,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [207];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					if (sk[7])
 						return `${sk[7]}个×${sk[0]}T`;
@@ -1783,6 +1801,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [18];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return document.createTextNode(`威吓×${sk[0]}T`);
 				}
@@ -1798,8 +1817,8 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [19];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
-		
 					return `破防${sk[1]}%`;
 				}
 			},
@@ -1814,9 +1833,9 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [19];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
-		
-					return `全破×${sk[0]}T`;
+							return `全破×${sk[0]}T`;
 				}
 			},
 			{name:"Poisons enemies(sort by rate)",otLangName:{chs:"中毒（按毒伤比率排序）",cht:"中毒（按毒傷比率排序）"},
@@ -1830,8 +1849,8 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [4];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
-		
 					return `攻击力×${sk[0]/100}倍`;
 				}
 			},
@@ -1865,6 +1884,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [60];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					
 					const fragment = document.createDocumentFragment();
@@ -1888,6 +1908,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [146];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return document.createTextNode(`${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}溜`);
 				}
@@ -1903,6 +1924,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [218];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return document.createTextNode(`坐下${sk[0]}${sk[1] && sk[0]!=sk[1]?`~${sk[1]}`:""}`);
 				}
@@ -1925,6 +1947,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [142];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 
 					const fragment = document.createDocumentFragment();
@@ -1939,71 +1962,72 @@ const specialSearchFunctions = (function() {
 		{group:true,name:"-----Player's HP change-----",otLangName:{chs:"-----玩家HP操纵类-----",cht:"-----玩家HP操縱類-----"}, functions: [
 			{name:"Heal after turn",otLangName:{chs:"回合结束回血 buff",cht:"回合結束回血 buff"},
 				function:cards=>{
-				const searchTypeArray = [179];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+					const searchTypeArray = [179];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
 				addition:card=>{
-				const searchTypeArray = [179];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const sk = skill.params;
-				return `回复${sk[1]?`${sk[1].bigNumberToString()}`:`${sk[2]}%`}×${sk[0]}T`;
+					const searchTypeArray = [179];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `回复${sk[1]?`${sk[1].bigNumberToString()}`:`${sk[2]}%`}×${sk[0]}T`;
 				}
 			},
 			{name:"Heal immediately",otLangName:{chs:"玩家立刻回血",cht:"玩家立刻回血"},
 				function:cards=>{
-				return cards.filter(card=>{
-					const heal = healImmediately_Rate(card);
-					return Object.values(heal).some(v=>v);
-				})
-				.sort((a,b)=>{
-					const a_h = healImmediately_Rate(a), b_h = healImmediately_Rate(b);
-					const a_vs = Object.values(a_h), b_vs = Object.values(b_h);
-					const a_i = a_vs.findIndex(v=>v), b_i = b_vs.findIndex(v=>v);
-					let sortNum = a_i - b_i;
-					if (!sortNum)
-					{
-						sortNum = a_vs[a_i] - b_vs[b_i];
-					}
-					return sortNum;
-				});
+					return cards.filter(card=>{
+						const heal = healImmediately_Rate(card);
+						return Object.values(heal).some(v=>v);
+					})
+					.sort((a,b)=>{
+						const a_h = healImmediately_Rate(a), b_h = healImmediately_Rate(b);
+						const a_vs = Object.values(a_h), b_vs = Object.values(b_h);
+						const a_i = a_vs.findIndex(v=>v), b_i = b_vs.findIndex(v=>v);
+						let sortNum = a_i - b_i;
+						if (!sortNum)
+						{
+							sortNum = a_vs[a_i] - b_vs[b_i];
+						}
+						return sortNum;
+					});
 				},
 				addition:card=>{
-				const heal = healImmediately_Rate(card);
-				let strArr = [];
-				if (heal.scale)
-					strArr.push(`${heal.scale}%最大HP`);
-				if (heal.const)
-					strArr.push(`${heal.const.bigNumberToString()}点HP`);
-				if (heal.selfRcv)
-					strArr.push(`${heal.selfRcv/100}倍回复力`);
-				if (heal.vampire)
-					strArr.push(`${heal.vampire}%伤害`);
-				return strArr.join(',');
+					const heal = healImmediately_Rate(card);
+					let strArr = [];
+					if (heal.scale)
+						strArr.push(`${heal.scale}%最大HP`);
+					if (heal.const)
+						strArr.push(`${heal.const.bigNumberToString()}点HP`);
+					if (heal.selfRcv)
+						strArr.push(`${heal.selfRcv/100}倍回复力`);
+					if (heal.vampire)
+						strArr.push(`${heal.vampire}%伤害`);
+					return strArr.join(',');
 				}
 			},
 			{name:"Damage self(sort by rate)",otLangName:{chs:"玩家自残（HP 减少，按减少比率排序）",cht:"玩家自殘（HP 減少，按減少比率排序）"},
 				function:cards=>{
-				return cards.filter(card=>damageSelf_Rate(card)>0)
-					.sort((a,b)=>damageSelf_Rate(a) - damageSelf_Rate(b));
+					return cards.filter(card=>damageSelf_Rate(card)>0)
+						.sort((a,b)=>damageSelf_Rate(a) - damageSelf_Rate(b));
 				},
 				addition:card=>{
-				let rate = damageSelf_Rate(card);
-				if (rate < 100)
-					return `减少${rate}%`;
-				else
-					return `减少到1`;
+					let rate = damageSelf_Rate(card);
+					if (rate < 100)
+						return `减少${rate}%`;
+					else
+						return `减少到1`;
 				}
 			},
 		]},
 		{group:true,name:"----- Orbs Lock -----",otLangName:{chs:"-----锁珠类-----",cht:"-----鎖珠類-----"}, functions: [
 			{name:"Unlock",otLangName:{chs:"解锁",cht:"解鎖"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [172];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [172];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				})
 			},
 			{name:"Lock(Any color)",otLangName:{chs:"上锁（不限色）",cht:"上鎖（不限色）"},
@@ -2055,6 +2079,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [180];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return `${sk[1]}%×${sk[0]}T`;
 				}
@@ -2102,6 +2127,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [226];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return `📌${sk[1]}%×${sk[0]}T`;
 				}
@@ -2123,6 +2149,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [6];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return `当前${sk[0]}%`;
 				}
@@ -2142,6 +2169,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [161];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return `最大${sk[0]}%`;
 				}
@@ -2179,6 +2207,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [56];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 		
 					return `固伤${sk[0].bigNumberToString()}`;
@@ -2205,26 +2234,26 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Numerical ATK - Target - Mass",otLangName:{chs:"大炮-对象-敌方全体",cht:"大炮-對象-敵方全體"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [0,1,58,85,87,110,143,144];
-				function isAll(skill)
-				{
-					if (skill.type == 110)
-						return !Boolean(skill.params[0]);
-					else if (skill.type == 144)
-						return !Boolean(skill.params[2]);
-					else
-						return true;
-				}
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && skill.id!=0 && isAll(skill);
+					const searchTypeArray = [0,1,58,85,87,110,143,144];
+					function isAll(skill)
+					{
+						if (skill.type == 110)
+							return !Boolean(skill.params[0]);
+						else if (skill.type == 144)
+							return !Boolean(skill.params[2]);
+						else
+							return true;
+					}
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && skill.id!=0 && isAll(skill);
 				}),
 				addition: numericalATK_Addition
 			},
 			{name:"Numerical ATK - Target - Designate Attr",otLangName:{chs:"大炮-对象-指定属性敌人",cht:"大炮-對象-指定屬性敵人"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [42];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [42];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
 				})
 			},
 			{name:"Numerical ATK - Attr - Actors self",otLangName:{chs:"大炮-属性-释放者自身",cht:"大炮-屬性-釋放者自身"},
@@ -2611,6 +2640,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 				const searchTypeArray = [52,91,140];
 				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return;
 				const sk = skill.params;
 				let attrs = [];
 				switch (skill.type)
@@ -2737,6 +2767,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [176];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					const fragment = document.createDocumentFragment();
 					fragment.appendChild(document.createTextNode(`3×3`));
@@ -2886,6 +2917,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [225];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					let strArr = [];
 					if (sk[0]) strArr.push(`≥${sk[0]}%`);
@@ -2902,6 +2934,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [234];
 					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					let strArr = [];
 					if (sk[0]) strArr.push(`≥${sk[0]}`);
