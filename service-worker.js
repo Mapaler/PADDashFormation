@@ -5974,6 +5974,10 @@ const cachesMap = new Map([
 		"4bb9b2201ab111b6fc2d6e56541d3caf"
 	],
 	[
+		"script-custom_elements.js",
+		"9f83ca0833393e610c2c2b80845f1b7b"
+	],
+	[
 		"script-json_data.js",
 		"b5a0df3160f45cc7475dcf20d7743246"
 	],
@@ -5983,19 +5987,19 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"806b92aa6434b14e683751229c451cfa"
+		"af8d4bb7ff8e2dac0094d7fdaa238285"
 	],
 	[
 		"script.js",
 		"bcab71ce2bed3dd36c841f2cdbd86edf"
 	],
 	[
-		"solo.html",
-		"21886651aba645c0ad137db701968d5a"
+		"solo-dev.html",
+		"bece1a34ce268532972ad158ea02a76f"
 	],
 	[
-		"style-card.css",
-		"a3ecc88c3845113f867aaabe1d483645"
+		"solo.html",
+		"21886651aba645c0ad137db701968d5a"
 	],
 	[
 		"style-monsterimages.css",
@@ -6115,7 +6119,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-awoken.svg",
-		"9a12779052569346857f560e3160dd75"
+		"6dae8b28664c595e4cffaaa8af2f6e24"
 	],
 	[
 		"images/icon-bind.png",
@@ -6228,10 +6232,6 @@ const cachesMap = new Map([
 	[
 		"monsters-info/mon_ko.json",
 		"b31b36910476d0370804fe1e4ef6bcd5"
-	],
-	[
-		"monsters-info/package.json",
-		"7921537900d05033acc01807f89d46e4"
 	],
 	[
 		"monsters-info/skill_en.json",

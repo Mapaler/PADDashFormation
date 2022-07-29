@@ -3,6 +3,7 @@ const path = require('path');
 const mime = require('mime'); //需要安装
 const sizeOf = require('image-size'); //需要安装
 const { DOMImplementation, XMLSerializer } = require('@xmldom/xmldom'); //需要安装
+const xmlFormatter = require('xml-formatter');
 
 const directory = './awokens';
 const files = fs.readdirSync(directory);
@@ -29,7 +30,8 @@ for (const file of files)
 }
 iconArr.sort((a,b)=>{
 	function nameNum(fileName){return parseInt(/^\d+/.exec(fileName)[0])}
-	return nameNum(a.fileName) - nameNum(b.fileName);
+	return (nameNum(a.fileName) - nameNum(b.fileName)) || //先判断数字
+			(a.fileName.length - b.fileName.length); //然后判断文件名长度
 });
 
 const svgNS = 'http://www.w3.org/2000/svg';
@@ -41,7 +43,10 @@ for (const icon of iconArr)
 {
 	console.log('正在处理 %s', icon.fileName);
 	const symbol = svg.createElement('symbol');
-	symbol.setAttribute('id', `awoken-${parseInt(path.parse(icon.fileName).name)}`);
+	const parseName = path.parse(icon.fileName);
+	const regRes = /^(\d+)(.*)$/ig.exec(parseName.name);
+	let aid = regRes ? `${parseInt(regRes[1])}${regRes[2]}` : parseName.name;
+	symbol.setAttribute('id', `awoken-${aid}`);
 	symbol.setAttribute('viewBox', `0 0 32 32`);
 	svg.documentElement.appendChild(symbol);
 	const image = svg.createElement('image');
@@ -51,4 +56,10 @@ for (const icon of iconArr)
 	symbol.appendChild(image);
 }
 const serialized = new XMLSerializer().serializeToString(svg);
-fs.writeFileSync('../icon-awoken.svg', serialized);
+const formattedXml = xmlFormatter(serialized, {
+    indentation: '\t', 
+    filter: (node) => node.type !== 'Comment', 
+    collapseContent: true, 
+    lineSeparator: '\n'
+});
+fs.writeFileSync('../icon-awoken.svg', formattedXml);

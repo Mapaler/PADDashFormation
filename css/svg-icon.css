@@ -1,0 +1,10 @@
+@charset "utf-8";
+:host { /*控制 shadow DOM 的根元素*/
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+}
+svg {
+	width: 100%;
+	height: 100%;
+}
