@@ -1,6 +1,6 @@
 ﻿const fs = require('fs');
 const path = require('path');
-const OpenCC = require('opencc-js');
+const OpenCC = require('opencc-js'); //需要安装
 const converter = OpenCC.Converter({ from: 'hk', to: 'cn' });
 const tsConverter = OpenCC.CustomConverter([
 	['点阵图', '像素画'],
