@@ -2693,6 +2693,13 @@ function initialize(event) {
 				const CD_MaxDom = CDPreview.appendChild(document.createElement("span"));
 				CD_MaxDom.className = "cd-max";
 				CD_MaxDom.textContent = CD_Max;
+				if (skill.type === 232 || skill.type === 233) {
+					CDPreview.appendChild(document.createElement("br"));
+					const CD_EvoDom = CDPreview.appendChild(document.createElement("span"));
+					CD_EvoDom.className = "cd-evo";
+					CD_EvoDom.textContent = skill.params.slice(1).map(id=>Skills[id].initialCooldown).join('➔');
+					if (skill.type === 233) CD_EvoDom.classList.add("loop-evo-skill");
+				}
 			}
 		}
 		//产生一个能力值列表

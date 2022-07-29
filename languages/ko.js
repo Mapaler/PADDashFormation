@@ -14,6 +14,7 @@
 		sort_mp: "MP",
 		sort_skillLv1: "최대 스킬 턴",
 		sort_skillLvMax: "최소 스킬 턴",
+		sort_evoSkillLastCD: "최소 스킬 턴 (최종 진화)",
 		sort_hpMax120: "최대 HP",
 		sort_atkMax120: "최대 공격",
 		sort_rcvMax120: "최대 회복",

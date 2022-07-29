@@ -27,6 +27,7 @@ let localTranslating = {
 		sort_cost: "Cost",
 		sort_skillLv1: "Maximum Skill Turn",
 		sort_skillLvMax: "Minimum Skill Turn",
+		sort_evoSkillLastCD: "Minimum Skill Turn(latest in Evo Skill)",
 		sort_hpMax120: "Max HP",
 		sort_atkMax120: "Max ATK",
 		sort_rcvMax120: "Max RCV",
@@ -531,7 +532,7 @@ const sort_function_list = [
 		if (num === 0) num = a.attrs[1] - b.attrs[1];
 		return num;
 		}
-			},
+	},
 	{tag:"sort_evoRootId",name:"进化树",function:(a,b)=>a.evoRootId-b.evoRootId},
 	{tag:"sort_evoRoot_Attrs",name:"进化根怪物的属性",function:(a,b)=>{
 		const card_a = Cards[a.evoRootId],card_b = Cards[b.evoRootId];
@@ -539,7 +540,7 @@ const sort_function_list = [
 		if (num === 0) num = card_a.attrs[1] - card_b.attrs[1];
 		return num;
 		}
-			},
+	},
 	{tag:"sort_rarity",name:"稀有度",function:(a,b)=>a.rarity-b.rarity},
 	{tag:"sort_cost",name:"消耗",function:(a,b)=>a.cost-b.cost},
 	{tag:"sort_mp",name:"MP",function:(a,b)=>a.sellMP-b.sellMP},
@@ -548,7 +549,17 @@ const sort_function_list = [
 		const skill_a = Skills[a.activeSkillId],skill_b = Skills[b.activeSkillId];
 		return (skill_a.initialCooldown - skill_a.maxLevel) - (skill_b.initialCooldown - skill_b.maxLevel);
 		}
-			},
+	},
+	{tag:"sort_evoSkillLastCD",name:"技能最小冷却时间（进化后）",function:(a,b)=>{
+		function getEvoSkill(skill) {
+			//232为进化后不循环技能，233为循环技能
+			if (skill.type === 232 || skill.type === 233) return Skills[skill.params[skill.params.length-1]];
+			else return skill;
+		}
+		const skill_a = getEvoSkill(Skills[a.activeSkillId]),skill_b = getEvoSkill(Skills[b.activeSkillId]);
+		return (skill_a.initialCooldown - skill_a.maxLevel) - (skill_b.initialCooldown - skill_b.maxLevel);
+		}
+	},
 	{tag:"sort_hpMax120",name:"Lv120最大HP",function:(a,b)=>a.hp.max * (a.limitBreakIncr ? (1 + a.limitBreakIncr/100) * 1.1 : 1) - b.hp.max * (b.limitBreakIncr ? (1 + b.limitBreakIncr/100) * 1.1 : 1)},
 	{tag:"sort_atkMax120",name:"Lv120最大攻击",function:(a,b)=>a.atk.max * (a.limitBreakIncr ? (1 + a.limitBreakIncr/100) * 1.05 : 1) - b.atk.max * (b.limitBreakIncr ? (1 + b.limitBreakIncr/100) * 1.05 : 1)},
 	{tag:"sort_rcvMax120",name:"Lv120最大回复",function:(a,b)=>a.rcv.max * (a.limitBreakIncr ? (1 + a.limitBreakIncr/100) * 1.05 : 1) - b.rcv.max * (b.limitBreakIncr ? (1 + b.limitBreakIncr/100) * 1.05 : 1)},

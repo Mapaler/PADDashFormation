@@ -13,6 +13,7 @@
 		sort_mp: "MP",
 		sort_skillLv1: "技能最大冷卻時間",
 		sort_skillLvMax: "技能最小冷卻時間",
+		sort_evoSkillLastCD: "技能最小冷卻時間（最終進化）",
 		sort_hpMax120: "最大 HP",
 		sort_atkMax120: "最大攻擊",
 		sort_rcvMax120: "最大回復",

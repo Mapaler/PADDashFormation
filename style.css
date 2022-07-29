@@ -1374,13 +1374,24 @@ icon.inflicts::after
 }
 
 .cd-preview .cd-max,
-.cd-preview .cd-min
+.cd-preview .cd-min,
+.cd-preview .cd-evo
 {
 	font-size: 14px;
 }
 .cd-preview .cd-min::after
 {
 	content: "-";
+}
+.cd-preview .cd-evo::before
+{
+	content: "↪";
+	font-family: var(--icon-font-family);
+}
+.cd-preview .cd-evo.loop-evo-skill::after
+{
+	content: "⤴︎";
+	font-family: var(--icon-font-family);
 }
 .cd-preview,
 .add-show-CD-label

@@ -14,6 +14,7 @@
 		sort_mp: "MP",
 		sort_skillLv1: "最大スキルターン",
 		sort_skillLvMax: "最小スキルターン",
+		sort_skillLvMax: "最小スキルターン (最終的な進化)",
 		sort_hpMax120: "最大 HP",
 		sort_atkMax120: "最大攻撃",
 		sort_rcvMax120: "最大回復",

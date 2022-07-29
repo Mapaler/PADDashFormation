@@ -6051,7 +6051,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"b5a0df3160f45cc7475dcf20d7743246"
+		"1be54ab9c612ca3b42f022980a73043e"
 	],
 	[
 		"script-skill-parser.js",
@@ -6063,7 +6063,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"bcab71ce2bed3dd36c841f2cdbd86edf"
+		"724cedef45defdd2e88e2a32786b3058"
 	],
 	[
 		"solo-dev.html",
@@ -6079,7 +6079,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"de8d5e3ecc0ec78a47e2533586dc9ad4"
+		"da3c0a59dfbda94de933a7601c4dc001"
 	],
 	[
 		"temp.js",
@@ -6111,7 +6111,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.js",
-		"8cae9ca7f377778482bf3e01d89e10ce"
+		"73f6111cb77e306a474d4defe802423d"
 	],
 	[
 		"languages/ko.css",
@@ -6119,7 +6119,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.js",
-		"288813e6174ee62afcec66fccaec1058"
+		"a1c9e763adaa584e7cf7389d8ecd7996"
 	],
 	[
 		"languages/language-list.js",
@@ -6139,7 +6139,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.js",
-		"16d6a1866a60b83ce1606daf093cfa7a"
+		"972c759b114b20528002f4acd2f0c904"
 	],
 	[
 		"languages/zh.css",
@@ -6147,7 +6147,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.js",
-		"5be07deded3b1d32bb65a65535f0bee0"
+		"dda17737f83cdfebbc5401dd24a17cd1"
 	],
 	[
 		"images/attrs.png",
@@ -6304,6 +6304,10 @@ const cachesMap = new Map([
 	[
 		"monsters-info/mon_ko.json",
 		"503abf44367ae150b87b264da95ab69b"
+	],
+	[
+		"monsters-info/package-lock.json",
+		"cf85e99aa187cdc1a7351c9490c9d0b7"
 	],
 	[
 		"monsters-info/skill_en.json",
