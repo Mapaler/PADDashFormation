@@ -1610,7 +1610,8 @@ function renderSkillEntry(skills)
 			const boardData = board.data.flat();
 			for (let skill of setOrbState) {
 				if (["enhanced", "locked", "bound"].includes(skill.state)) {
-					const orbCount = skill.arg?.count?.value ?? boardData.length;
+					//技能内的数量，可能会大于版面内有的数据数量
+					const orbCount = Math.min(skill.arg?.count?.value ?? boardData.length, boardData.length);
 					for (let oi = 0; oi < orbCount; oi++) {
 						const orb = boardData[oi];
 						if (orb && skill.orbs.includes(orb.color)) {
