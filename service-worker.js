@@ -6055,7 +6055,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-skill-parser.js",
-		"98140d1d54d0a323732dcedf864cdee2"
+		"7fb17f97bd28f2d46991b575c44c2740"
 	],
 	[
 		"script-universal_function.js",
@@ -6304,10 +6304,6 @@ const cachesMap = new Map([
 	[
 		"monsters-info/mon_ko.json",
 		"503abf44367ae150b87b264da95ab69b"
-	],
-	[
-		"monsters-info/package-lock.json",
-		"cf85e99aa187cdc1a7351c9490c9d0b7"
 	],
 	[
 		"monsters-info/skill_en.json",

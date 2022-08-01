@@ -1613,7 +1613,7 @@ function renderSkillEntry(skills)
 					const orbCount = skill.arg?.count?.value ?? boardData.length;
 					for (let oi = 0; oi < orbCount; oi++) {
 						const orb = boardData[oi];
-						if (skill.orbs.includes(orb.color)) {
+						if (orb && skill.orbs.includes(orb.color)) {
 							orb.states.push(skill.state);
 						}
 					}
