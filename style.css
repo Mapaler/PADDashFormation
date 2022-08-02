@@ -1829,6 +1829,7 @@ icon.inflicts::after
 {
 	margin-right: 5px;
 	margin-top: 5px;
+	display: inline-block;
 }
 
 
@@ -2293,11 +2294,6 @@ icon.inflicts::after
 	border-radius: 7px;
 	padding: 2px;
 }
-.guide-mod .m-latent-ul-div,
-.guide-mod .m-latent-allowable-ul
-{
-	display: inline-block;
-}
 .m-latent-ul .latent-icon{
 	margin-left: 12px;
 }
@@ -2315,36 +2311,7 @@ icon.inflicts::after
 .m-latent-allowable-ul .latent-icon:last-of-type{
 	margin-right: unset;
 }
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon{
-	display: none;
-}
-/*“隐藏少用潜觉”时不会隐藏的潜觉*/
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="11"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="20"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="21"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="22"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="23"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="24"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="25"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="26"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="27"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="13"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="14"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="15"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="37"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="38"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="39"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="40"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="41"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="42"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="46"],
-.m-latent-allowable-ul.hide-less-use-latent .latent-icon[data-latent-icon="47"]
-{
-	display: inline-block;
-}
-.hide-less-use-latent-label{
-	margin-left: 5px;
-}
+
 /*没有打觉醒的空格，没有手指*/
 .m-latent-ul .latent-icon{
 	cursor: default;

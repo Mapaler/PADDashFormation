@@ -125,11 +125,8 @@
 .edit-box .setting-box .monster-cost::before{
 	content: "코스트:";
 }
-.edit-box .setting-box .row-mon-latent::before{
-	content: "▼몬스터 숨어있는";
-}
-.edit-box .setting-box .hide-less-use-latent-label::after{
-	content: "덜 사용되는 숨어있는 숨기기";
+.edit-box .setting-box .row-mon-latent details>summary::before{
+	content: "몬스터 숨어있는";
 }
 
 .skill-box .skill-cd::before,
@@ -395,8 +392,8 @@ label[for="default-level"]::after
 .search-box .awoken-div::before{
 	content: "▼각성 추가";
 }
-.search-box .sawoken-div::before{
-	content: "▼슈퍼 각성（OR）";
+.search-box .sawoken-div details summary::before{
+	content: "슈퍼 각성（OR）";
 }
 .search-box .special-div::before{
 	content: "▼특별 검색";

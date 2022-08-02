@@ -124,11 +124,8 @@
 .edit-box .setting-box .monster-cost::before{
 	content: "コスト:";
 }
-.edit-box .setting-box .row-mon-latent::before{
-	content: "▼モンスター潜在覚醒";
-}
-.edit-box .setting-box .hide-less-use-latent-label::after{
-	content: "使用の少ない潜在覚醒を隠す";
+.edit-box .setting-box .row-mon-latent details>summary::before{
+	content: "モンスター潜在覚醒";
 }
 
 .skill-box .skill-cd::before,
@@ -398,8 +395,8 @@ label[for="default-level"]::after
 .search-box .awoken-div::before{
 	content: "▼追加覚醒";
 }
-.search-box .sawoken-div::before{
-	content: "▼超覚醒（OR）";
+.search-box .sawoken-div details summary::before{
+	content: "超覚醒（OR）";
 }
 .search-box .special-div::before{
 	content: "▼特別な検索";

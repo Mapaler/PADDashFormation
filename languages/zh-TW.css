@@ -128,11 +128,8 @@
 .edit-box .setting-box .monster-cost::before{
 	content: "消耗:";
 }
-.edit-box .setting-box .row-mon-latent::before{
-	content: "▼潛在覺醒";
-}
-.edit-box .setting-box .hide-less-use-latent-label::after{
-	content: "隱藏少用的潛覺";
+.edit-box .setting-box .row-mon-latent details>summary::before{
+	content: "潛在覺醒";
 }
 
 .skill-box .skill-cd::before,
@@ -402,8 +399,8 @@ label[for="default-level"]::after
 .search-box .awoken-div::before{
 	content: "▼添加覺醒";
 }
-.search-box .sawoken-div::before{
-	content: "▼超覺醒（OR）";
+.search-box .sawoken-div details summary::before{
+	content: "超覺醒（OR）";
 }
 .search-box .special-div::before{
 	content: "▼特殊搜索";

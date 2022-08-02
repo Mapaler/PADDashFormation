@@ -3498,15 +3498,6 @@ function initialize(event) {
 		refreshLatent(latent, monid, monEditLatents);
 	};
 
-	//隐藏少用潜觉开关
-	const s_hideLessUseLetent = document.getElementById("hide-less-use-latent");
-	s_hideLessUseLetent.checked = localStorage_getBoolean(cfgPrefix + s_hideLessUseLetent.id);
-	s_hideLessUseLetent.onchange = function(e) {
-		toggleDomClassName(this.checked, this.id, monEditLatentAllowableUl);
-		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
-	}
-	s_hideLessUseLetent.onchange(false);
-
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
 	const skillBox = rowSkill.querySelector(".skill-box");
 	const skillTitle = skillBox.querySelector(".skill-name");
