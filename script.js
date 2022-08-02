@@ -2771,7 +2771,7 @@ function initialize(event) {
 				{
 					content = document.createTextNode(content);
 				}
-				c_addition.appendChild(content);
+				content && c_addition.appendChild(content);
 			});
 		}
 
