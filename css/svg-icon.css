@@ -8,18 +8,26 @@ svg {
 	width: 100%;
 	height: 100%;
 }
- .back {
+[type="awoken-count"] text{
+	font-size: 20px;
+	fill: yellow;
+	font-family: var(--game-font-family);
+	text-anchor: middle;
+    /* 文本水平居中 */
+    dominant-baseline: middle;
+    /* 文本垂直居中 */
+}
+.front {
+	fill: currentColor;
+}
+[type="awoken-count"] use {
 	fill: white;
+	color: #096E11;
 }
- .front {
-	fill: #096E11;
+[type="awoken-count"][icon-type="latent"] use {
+	color: #378DE8;
 }
-pad-icon[type="awoken-count"][number="full"][special] .back {
+[type="awoken-count"][special][full]:not([icon-type="latent"]) use {
 	fill: #FFFFD4;
-}
-pad-icon[type="awoken-count"][number="full"][special] .front {
-	fill: #F3DC69;
-}
-pad-icon[type="awoken-count"][latent] .front {
-	fill: #378DE8;
+	color: #F3DC69;
 }

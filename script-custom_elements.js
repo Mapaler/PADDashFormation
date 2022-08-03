@@ -118,14 +118,15 @@ class PadIcon extends HTMLElement {
 			'type', //图标类型
 			'number', //编号或数字，必须是数字
 			'lang', //英语、中文特殊图标的设定
-			'icon-name',//子图标名称
-			'icon-value',//子图标的值
+			'icon-type',//子图标类型
+			//'icon-value',//子图标的值
 			'full',//觉醒打满
 			'special',//是否是特殊颜色
 		];
 	}
 	#number = 0;
-	#type = "awoken";
+	#type = 'awoken';
+	#iconType = null;
 	get number() { this.#number; }
 	set number(x) {
 		const number = Number(x);
@@ -135,8 +136,21 @@ class PadIcon extends HTMLElement {
 	}
 	get type() { this.#type; }
 	set type(x) {
-		this.setAttribute('type', x);
+		if (x == null) {
+			this.removeAttribute('type');
+		} else {
+			this.setAttribute('type', x);
+		}
 		this.#type = x;
+	}
+	get iconType() { this.#iconType; }
+	set iconType(x) {
+		if (x == null) {
+			this.removeAttribute('icon-type');
+		} else {
+			this.setAttribute('icon-type', x);
+		}
+		this.#iconType = x;
 	}
 
 	constructor() {
@@ -158,21 +172,36 @@ class PadIcon extends HTMLElement {
 		this.update();
 	}
 	attributeChangedCallback(name, oldValue, newValue) { //自定义标签属性改变
+		const svg = this.shadowRoot.querySelector('svg');
+		if (name == 'type') {
+			this.#type = newValue;
+			//如果更换类型，删除use以外的其他node
+			const use = svg.querySelector('use');
+			[...svg.childNodes].forEach(child=>{if(child!=use) child.remove();});
+		}
 		if (name == 'number') {
 			const number = Number(newValue);
 			this.#number = Number.isNaN(number) ? 0 : number;
 		}
-		if (name == 'type') this.#type = newValue;
+		if (name == 'icon-type') this.#iconType = newValue;
+		//将这些属性全都复制到svg上去
+		if (newValue == null) {
+			svg.removeAttribute(name);
+		} else {
+			svg.setAttribute(name, newValue);
+		}
 		this.update();
 	}
 	update() {
-		let number = this.#number;
-		const type = this.#type;
+		const number = this.#number;
 		const lang = this.getAttribute('lang') || currentLanguage.i18n;
 		const shadow = this.shadowRoot;
 		const svg = shadow.querySelector('svg');
+		svg.setAttribute("type", this.#type);
+		this.#iconType ? svg.setAttribute("icon-type", this.#iconType) : svg.removeAttribute("icon-type");
 		const use = svg.querySelector('use');
-		switch (type) {
+		svg.setAttribute("viewBox", "0 0 32 32");
+		switch (this.#type) {
 			case 'awoken': {
 				if (/^(?:en|ko)/.test(lang) && [40,46,47,48].includes(number)) number += '-en'; //英文不一样的觉醒
 				if (/^(?:zh)/.test(lang) && [46,47].includes(number)) number += '-zh'; //中文不一样的觉醒
@@ -185,18 +214,17 @@ class PadIcon extends HTMLElement {
 				break;
 			}
 			case 'awoken-count': {
+				svg.setAttribute("viewBox", "0 0 34 38");
 				use.setAttribute("href",`images/icon-awoken-count.svg#awoken-count-bg`);
-				const text = svg.appendChild(document.createElementNS(svgNS, 'text'));
-				const iconName = this.getAttribute('icon-name');
-				svg.setAttribute("icon-name", iconName);
+				const text = svg.querySelector('text') || svg.appendChild(document.createElementNS(svgNS, 'text'));
 				//awoken,latent,8-latent
 				//full,enable-assist-full,latent-full,8-latent,8-latent-full
-
 				const full = this.getAttribute('full') != null;
 				const special = this.getAttribute('special') != null;
+				const style = svg.querySelector('style') || svg.appendChild(document.createElementNS(svgNS, 'style'));
 				text.textContent = full ? '★' : number;
 				text.setAttribute("x", "50%");
-				text.setAttribute("y", "50%");
+				text.setAttribute("y", "47%");
 				text.setAttribute("class", "number");
 				break;
 			}

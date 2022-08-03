@@ -1,10 +1,22 @@
-<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 123 75">
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 123 75" icon-type="latent">
 			<style>
 			.back {
-				fill: #FFFFD4;
+				fill: white;
 			}
 			.front {
+				fill: #096E11;
+			}
+			[icon-type="latent"] .front {
+				fill: red;
+			}
+			#bg-enable-be-assist .front {
 				fill: #F3DC69;
+			}
+			#bg-enable-be-assist .back {
+				fill: #FFFFD4;
+			}
+			#bg-latent .front {
+				fill: #378DE8;
 			}
 			</style>
 	<defs>
@@ -47,16 +59,20 @@
 		</g>
 	</symbol>
 <image width="123" height="40" xlink:href="../../../CTFX/Desktop/%E6%9C%AA%E5%91%BD%E5%90%8D-3.png"/>
+<g>
+	<circle class="back" filter="url(#out-shadow)" cx="23" cy="19" r="16"/>
+	<circle class="front" filter="url(#inset-shadow)" cx="23" cy="19" r="13"/>
+</g>
 <g id="bg-enable-be-assist">
 	<circle class="back" filter="url(#out-shadow)" cx="23" cy="49" r="16"/>
 	<circle class="front" filter="url(#inset-shadow)" cx="23" cy="49" r="13"/>
 </g>
 <g id="bg-latent">
-	<circle fill="white" filter="url(#out-shadow)" cx="60" cy="49" r="16"/>
-	<circle fill="#378DE8" filter="url(#inset-shadow)" cx="60" cy="49" r="13"/>
+	<circle class="back" filter="url(#out-shadow)" cx="60" cy="49" r="16"/>
+	<circle class="front" filter="url(#inset-shadow)" cx="60" cy="49" r="13"/>
 </g>
 <g id="bg-unable-be-assist">
-	<circle fill="white" filter="url(#out-shadow)" cx="103" cy="49" r="16"/>
-	<circle fill="#096E11" filter="url(#inset-shadow)" cx="103" cy="49" r="13"/>
+	<circle class="back" filter="url(#out-shadow)" cx="103" cy="49" r="16"/>
+	<circle class="front" filter="url(#inset-shadow)" cx="103" cy="49" r="13"/>
 </g>
 </svg>
