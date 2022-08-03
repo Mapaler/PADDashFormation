@@ -114,22 +114,26 @@ class PadIcon extends HTMLElement {
 	// Specify observed attributes so that
 	// attributeChangedCallback will work
 	static get observedAttributes() {
-		return ['iid','type','lang'];
+		return [
+			'type', //图标类型
+			'number', //编号或数字，必须是数字
+			'lang', //英语、中文特殊图标的设定
+			'icon-name',//子图标名称
+			'icon-value',//子图标的值
+			'full',//觉醒打满
+			'special',//是否是特殊颜色
+		];
 	}
-	#iid = 0;
+	#number = 0;
 	#type = "awoken";
-	get iid() { this.#iid; }
-	/**
-	 * @param {string | number} x
-	 */
-	set iid(x) {
-		this.setAttribute('iid', x);
-		this.#iid = x;
+	get number() { this.#number; }
+	set number(x) {
+		const number = Number(x);
+		if (Number.isNaN(number)) throw new Error('传入的 number 不是数字!');
+		this.setAttribute('number', number);
+		this.#number = number;
 	}
 	get type() { this.#type; }
-	/**
-	 * @param {string} x
-	 */
 	set type(x) {
 		this.setAttribute('type', x);
 		this.#type = x;
@@ -154,24 +158,48 @@ class PadIcon extends HTMLElement {
 		this.update();
 	}
 	attributeChangedCallback(name, oldValue, newValue) { //自定义标签属性改变
-		if (name == 'iid') this.#iid = parseInt(newValue);
+		if (name == 'number') {
+			const number = Number(newValue);
+			this.#number = Number.isNaN(number) ? 0 : number;
+		}
 		if (name == 'type') this.#type = newValue;
 		this.update();
 	}
 	update() {
-		let iid = this.#iid || 0;
+		let number = this.#number;
 		const type = this.#type;
 		const lang = this.getAttribute('lang') || currentLanguage.i18n;
 		const shadow = this.shadowRoot;
-		const use = shadow.querySelector('use');
+		const svg = shadow.querySelector('svg');
+		const use = svg.querySelector('use');
 		switch (type) {
 			case 'awoken': {
-				if (/^(?:en|ko)/.test(lang) && [40,46,47,48].includes(iid)) iid += '-en'; //英文不一样的觉醒
-				if (/^(?:zh)/.test(lang) && [46,47].includes(iid)) iid += '-zh'; //中文不一样的觉醒
-				use.setAttribute("href",`images/icon-awoken.svg#awoken-${iid}`);
+				if (/^(?:en|ko)/.test(lang) && [40,46,47,48].includes(number)) number += '-en'; //英文不一样的觉醒
+				if (/^(?:zh)/.test(lang) && [46,47].includes(number)) number += '-zh'; //中文不一样的觉醒
+				use.setAttribute("href",`images/icon-awoken.svg#awoken-${number}`);
 				break;
 			}
-			case 'type':
+			case 'type': {
+				if (/^(?:en|ko)/.test(lang) && [9,12].includes(number)) number += '-en'; //英文不一样的类型
+				use.setAttribute("href",`images/icon-type.svg#type-${number}`);
+				break;
+			}
+			case 'awoken-count': {
+				use.setAttribute("href",`images/icon-awoken-count.svg#awoken-count-bg`);
+				const text = svg.appendChild(document.createElementNS(svgNS, 'text'));
+				const iconName = this.getAttribute('icon-name');
+				svg.setAttribute("icon-name", iconName);
+				//awoken,latent,8-latent
+				//full,enable-assist-full,latent-full,8-latent,8-latent-full
+
+				const full = this.getAttribute('full') != null;
+				const special = this.getAttribute('special') != null;
+				text.textContent = full ? '★' : number;
+				text.setAttribute("x", "50%");
+				text.setAttribute("y", "50%");
+				text.setAttribute("class", "number");
+				break;
+			}
 			case 'latent':
 			case 'badge':
 			case 'attr':

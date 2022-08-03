@@ -1,0 +1,62 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 123 75">
+			<style>
+			.back {
+				fill: #FFFFD4;
+			}
+			.front {
+				fill: #F3DC69;
+			}
+			</style>
+	<defs>
+		<filter id="inset-shadow" x="-50%" y="-50%" width="200%" height="200%" name="inset-shadow">
+			<feComponentTransfer in="SourceAlpha">
+				<feFuncA tableValues="1 0" type="table"/>
+			</feComponentTransfer>
+			<feGaussianBlur stdDeviation="1" result="blur"/>
+			<feFlood flood-color="white" />
+			<feComposite in2="blur" operator="in"/>
+			<feOffset dx="0" dy="3"/>
+			<feComposite in2="SourceAlpha" operator="in" result="offsetblur-bottom"/>
+			<feFlood flood-color="black" />
+			<feComposite in2="blur" operator="in"/>
+			<feOffset dx="0" dy="-3"/>
+			<feComposite in2="SourceAlpha" operator="in" result="offsetblur-top"/>
+			<feMerge>
+					<feMergeNode in="SourceGraphic"/>
+					<feMergeNode in="offsetblur-bottom"/>
+					<feMergeNode in="offsetblur-top"/>
+			</feMerge>
+		</filter>
+		<filter id="out-shadow" x="-50%" y="-50%" width="200%" height="200%" name="inset-shadow">
+			<feComponentTransfer in="SourceAlpha">
+				<feFuncA tableValues="0 1" type="table"/>
+			</feComponentTransfer>
+			<feGaussianBlur stdDeviation="1" result="blur"/>
+			<feOffset dx="0" dy="3"/>
+			<feComposite in2="SourceAlpha" operator="out" result="offsetblur"/>
+			<feMerge>
+				<feMergeNode in="SourceGraphic"/>
+				<feMergeNode in="offsetblur"/>
+			</feMerge>
+		</filter>
+	</defs>
+	<symbol id="awoken-count-bg" viewBox="0 0 36 40">
+		<g>
+			<circle class="back" filter="url(#out-shadow)" cx="18" cy="16" r="16"/>
+			<circle class="front" filter="url(#inset-shadow)" cx="18" cy="16" r="13"/>
+		</g>
+	</symbol>
+<image width="123" height="40" xlink:href="../../../CTFX/Desktop/%E6%9C%AA%E5%91%BD%E5%90%8D-3.png"/>
+<g id="bg-enable-be-assist">
+	<circle class="back" filter="url(#out-shadow)" cx="23" cy="49" r="16"/>
+	<circle class="front" filter="url(#inset-shadow)" cx="23" cy="49" r="13"/>
+</g>
+<g id="bg-latent">
+	<circle fill="white" filter="url(#out-shadow)" cx="60" cy="49" r="16"/>
+	<circle fill="#378DE8" filter="url(#inset-shadow)" cx="60" cy="49" r="13"/>
+</g>
+<g id="bg-unable-be-assist">
+	<circle fill="white" filter="url(#out-shadow)" cx="103" cy="49" r="16"/>
+	<circle fill="#096E11" filter="url(#inset-shadow)" cx="103" cy="49" r="13"/>
+</g>
+</svg>

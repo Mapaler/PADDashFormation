@@ -8,3 +8,18 @@ svg {
 	width: 100%;
 	height: 100%;
 }
+ .back {
+	fill: white;
+}
+ .front {
+	fill: #096E11;
+}
+pad-icon[type="awoken-count"][number="full"][special] .back {
+	fill: #FFFFD4;
+}
+pad-icon[type="awoken-count"][number="full"][special] .front {
+	fill: #F3DC69;
+}
+pad-icon[type="awoken-count"][latent] .front {
+	fill: #378DE8;
+}
