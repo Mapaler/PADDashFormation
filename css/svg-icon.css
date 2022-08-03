@@ -17,17 +17,20 @@ svg {
     dominant-baseline: middle;
     /* 文本垂直居中 */
 }
+.back {
+	fill: var(--back-color);
+}
 .front {
-	fill: currentColor;
+	fill: var(--front-color);
 }
 [type="awoken-count"] use {
-	fill: white;
-	color: #096E11;
+	--back-color: white;
+	--front-color: #096E11;
 }
 [type="awoken-count"][icon-type="latent"] use {
-	color: #378DE8;
+	--front-color: #378DE8;
 }
 [type="awoken-count"][special][full]:not([icon-type="latent"]) use {
-	fill: #FFFFD4;
-	color: #F3DC69;
+	--back-color: #FFFFD4;
+	--front-color: #F3DC69;
 }

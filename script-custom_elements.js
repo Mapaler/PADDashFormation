@@ -122,6 +122,7 @@ class PadIcon extends HTMLElement {
 			//'icon-value',//子图标的值
 			'full',//觉醒打满
 			'special',//是否是特殊颜色
+			'flags', //各种选项开关，类似className
 		];
 	}
 	#number = 0;
