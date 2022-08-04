@@ -1,19 +1,9 @@
 ﻿/*
  * Detail: 仿照 DOMTokenList 功能实现的自定义 CustomTokenList
- * Reference: https://gist.github.com/dimitarnestorov/48b69a918288e9098db1aab904a2722a
- * Use:
-let span = document.querySelector("span");
-let _ctl = new CustomTokenList(span, "custom-token");
-span.customTokenList = _ctl;
-span.customTokenList.add("token1","token2");
-console.log(span.getAttribute("custom-token"));
-// token1 token2
-await span.setAttribute("custom-token", "token-a token-b token-c");
-console.log(span.customTokenList.value);
-// token-a token-b token-c
  */
-
 class CustomTokenList extends Array {
+	//Reference: https://stackoverflow.com/questions/49349195/using-splice-method-in-subclass-of-array-in-javascript/56181665#56181665 让splice能够用
+	static get [Symbol.species]() { return Array; }
 	static #illegalTokenRegRex = /\s/;
 	#node = null;
 	#attributeName = null;
@@ -102,7 +92,7 @@ class CustomTokenList extends Array {
 
 		tokens.forEach(token => {
 			const index = this.indexOf(token);
-			if (index>=0) this.splice(index,1);
+			if (index>=0) this.valueOf().splice(index,1);
 		});
 
 		if (this.#refreshAttribute) {
@@ -156,7 +146,7 @@ class CustomTokenList extends Array {
 			throw CustomTokenList.#InvalidCharacterError('replace');
 		const index = this.indexOf(oldToken);
 		if (index>=0) {
-			this.splice(index,1, newToken);
+			this.splice(index,1, this.contains(newToken) ? undefined : newToken);
 			if (this.#refreshAttribute) {
 				this.#observer.disconnect(); //解除绑定
 				this.#attribute.value = this.value;
@@ -301,6 +291,7 @@ class PadIcon extends HTMLElement {
 			'flags', //各种选项开关，类似className
 		];
 	}
+	#svg = document.createElementNS(svgNS,'svg');
 	#flags = null;
 	get flagsList() { return this.#flags; }
 	#number = 0;
@@ -343,10 +334,10 @@ class PadIcon extends HTMLElement {
 		linkElem.setAttribute('rel', 'stylesheet');
 		linkElem.setAttribute('href', 'css/svg-icon.css');
 
-		const svg = document.implementation.createDocument(svgNS,'svg');
-		const use = svg.createElementNS(svgNS, 'use');
-		svg.documentElement.appendChild(use);
-		shadow.appendChild(svg.documentElement);
+		const svg = this.#svg;
+		const use = document.createElementNS(svgNS, 'use');
+		svg.appendChild(use);
+		shadow.appendChild(svg);
 	}
 	connectedCallback() { //自定义标签添加到页面
 		this.update();
@@ -375,37 +366,53 @@ class PadIcon extends HTMLElement {
 	update() {
 		const number = this.#number;
 		const lang = this.getAttribute('lang') || currentLanguage.i18n;
-		const shadow = this.shadowRoot;
-		const svg = shadow.querySelector('svg');
-		svg.setAttribute("type", this.#type);
-		this.#iconType ? svg.setAttribute("icon-type", this.#iconType) : svg.removeAttribute("icon-type");
-		const use = svg.querySelector('use');
+		//const shadow = this.shadowRoot;
+		const svg = this.#svg;
+		//svg.setAttribute("type", this.#type);
+		//this.#iconType ? svg.setAttribute("icon-type", this.#iconType) : svg.removeAttribute("icon-type");
+		const use = svg.querySelector(':scope>use');
 		svg.setAttribute("viewBox", "0 0 32 32");
 		switch (this.#type) {
 			case 'awoken': {
 				if (/^(?:en|ko)/.test(lang) && [40,46,47,48].includes(number)) number += '-en'; //英文不一样的觉醒
 				if (/^(?:zh)/.test(lang) && [46,47].includes(number)) number += '-zh'; //中文不一样的觉醒
-				use.setAttribute("href",`images/icon-awoken.svg#awoken-${number}`);
+				use.href.baseVal = `images/icon-awoken.svg#awoken-${number}`;
 				break;
 			}
 			case 'type': {
 				if (/^(?:en|ko)/.test(lang) && [9,12].includes(number)) number += '-en'; //英文不一样的类型
-				use.setAttribute("href",`images/icon-type.svg#type-${number}`);
+				use.href.baseVal = `images/icon-type.svg#type-${number}`;
 				break;
 			}
 			case 'awoken-count': {
-				svg.setAttribute("viewBox", "0 0 34 38");
-				use.setAttribute("href",`images/icon-awoken-count.svg#awoken-count-bg`);
+				const full = this.flagsList.contains("full");
+				const weapon = this.flagsList.contains("weapon");
+				const canAssist = this.flagsList.contains("can-assist");
+				//svg.setAttribute("viewBox", "0 0 34 38");
+				svg.viewBox.baseVal.width = 34;
+				svg.viewBox.baseVal.height = 38;
+				if (full && weapon && canAssist) {
+					use.href.baseVal = `images/icon-awoken.svg#awoken-49`;
+					svg.querySelector('text')?.remove();
+					break;
+				}
+				use.href.baseVal = `images/icon-awoken-count.svg#awoken-count-bg`;
 				const text = svg.querySelector('text') || svg.appendChild(document.createElementNS(svgNS, 'text'));
-				//awoken,latent,8-latent
-				//full,enable-assist-full,latent-full,8-latent,8-latent-full
-				const full = this.getAttribute('full') != null;
-				const special = this.getAttribute('special') != null;
-				const style = svg.querySelector('style') || svg.appendChild(document.createElementNS(svgNS, 'style'));
 				text.textContent = full ? '★' : number;
-				text.setAttribute("x", "50%");
-				text.setAttribute("y", "47%");
-				text.setAttribute("class", "number");
+				//text.setAttribute("x", "50%");
+				const lengthX = svg.createSVGLength();
+				lengthX.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PERCENTAGE, 50);
+				text.x.baseVal.initialize(lengthX);
+				//text.setAttribute("y", "47%");
+				const lengthY = svg.createSVGLength();
+				lengthY.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PERCENTAGE, 47);
+				text.y.baseVal.initialize(lengthY);
+				text.classList.add("number");
+
+				text.textLength.baseVal.newValueSpecifiedUnits(
+					full ? SVGLength.SVG_LENGTHTYPE_EMS : SVGLength.SVG_LENGTHTYPE_PERCENTAGE,
+					full ? 0.9 : 100);
+				text.lengthAdjust.baseVal = full ? SVGTextElement.LENGTHADJUST_SPACINGANDGLYPHS : SVGTextElement.LENGTHADJUST_SPACING;
 				break;
 			}
 			case 'latent':

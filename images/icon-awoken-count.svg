@@ -1,24 +1,24 @@
 <svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 123 75" icon-type="latent">
-			<style>
-			.back {
-				fill: white;
-			}
-			.front {
-				fill: #096E11;
-			}
-			[icon-type="latent"] .front {
-				fill: red;
-			}
-			#bg-enable-be-assist .front {
-				fill: #F3DC69;
-			}
-			#bg-enable-be-assist .back {
-				fill: #FFFFD4;
-			}
-			#bg-latent .front {
-				fill: #378DE8;
-			}
-			</style>
+	<style>
+		.back {
+			fill: white;
+		}
+		.front {
+			fill: #096E11;
+		}
+		[icon-type="latent"] .front {
+			fill: url(#full-awoken);
+		}
+		#bg-enable-be-assist .front {
+			fill: #F3DC69;
+		}
+		#bg-enable-be-assist .back {
+			fill: #FFFFD4;
+		}
+		#bg-latent .front {
+			fill: #378DE8;
+		}
+	</style>
 	<defs>
 		<filter id="inset-shadow" x="-50%" y="-50%" width="200%" height="200%" name="inset-shadow">
 			<feComponentTransfer in="SourceAlpha">
@@ -51,6 +51,27 @@
 				<feMergeNode in="offsetblur"/>
 			</feMerge>
 		</filter>
+		<filter id="text-shadow" x="-50%" y="-50%" width="200%" height="200%" name="inset-shadow">
+			<feComponentTransfer in="SourceAlpha">
+				<feFuncA tableValues="0 1" type="table"/>
+			</feComponentTransfer>
+			<feGaussianBlur stdDeviation="1" result="blur"/>
+			<feOffset dx="0" dy="1"/>
+			<feComposite in2="SourceAlpha" operator="out" result="offsetblur"/>
+			<feMerge>
+				<feMergeNode in="SourceGraphic"/>
+				<feMergeNode in="offsetblur"/>
+			</feMerge>
+		</filter>
+		<linearGradient id="full-awoken-assist-front" gradientTransform="rotate(90)">
+			<stop offset="0%" style="stop-color:#AF8625;stop-opacity:1" />
+			<stop offset="50%" style="stop-color:#F3DC69;stop-opacity:1" />
+		</linearGradient>
+		<linearGradient id="full-awoken-star" gradientTransform="rotate(90)">
+			<stop offset="50%" style="stop-color:white;stop-opacity:1" />
+			<stop offset="70%" style="stop-color:#FCB234;stop-opacity:1" />
+			<stop offset="80%" style="stop-color:#FFDB5D;stop-opacity:1" />
+		</linearGradient>
 	</defs>
 	<symbol id="awoken-count-bg" viewBox="0 0 36 40">
 		<g>

@@ -27,10 +27,25 @@ svg {
 	--back-color: white;
 	--front-color: #096E11;
 }
+[type="awoken-count"] text {
+	fill: yellow;
+	stroke:black;
+	filter: url(../images/icon-awoken-count.svg#text-shadow);
+}
 [type="awoken-count"][icon-type="latent"] use {
 	--front-color: #378DE8;
 }
-[type="awoken-count"][special][full]:not([icon-type="latent"]) use {
+[type="awoken-count"][icon-type="latent"][flags~="8-latent"] text {
+	fill: #19F897;
+}
+[type="awoken-count"][flags~="can-assist"][flags~="full"]:not([icon-type="latent"]) use {
 	--back-color: #FFFFD4;
-	--front-color: #F3DC69;
+	--front-color: url(../images/icon-awoken-count.svg#full-awoken-assist-front);
+}
+[type="awoken-count"][flags~="full"][flags~="can-assist"]:not([icon-type="latent"]) text,
+[type="awoken-count"][flags~="full"][flags~="8-latent"][icon-type="latent"] text
+{
+	stroke: none;
+	fill: url(../images/icon-awoken-count.svg#full-awoken-star);
+	filter: url(../images/icon-awoken-count.svg#out-shadow);
 }
