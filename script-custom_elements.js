@@ -2,21 +2,18 @@
  * Detail: 仿照 DOMTokenList 功能实现的自定义 CustomTokenList
  * Reference: https://gist.github.com/dimitarnestorov/48b69a918288e9098db1aab904a2722a
  * Use:
- * let span = document.querySelector("span");
- * let customTokenList = new CustomTokenList(span, "custom-token");
- * span.customToken = customTokenList;
- * span.customToken.add("token1","token2")
- * console.log(span.getAttribute("custom-token"));
- * //=> token1 token2
- * span.setAttribute("custom-token", "token-a token-b token-c");
- * console.log(span.customToken.value);
- * //=> token-a token-b token-c
- * span.customToken.add("token1","token2")
- * console.log(span.getAttribute("custom-token"));
- * //=> token1 token2
+let span = document.querySelector("span");
+let _ctl = new CustomTokenList(span, "custom-token");
+span.customTokenList = _ctl;
+span.customTokenList.add("token1","token2");
+console.log(span.getAttribute("custom-token"));
+// token1 token2
+await span.setAttribute("custom-token", "token-a token-b token-c");
+console.log(span.customTokenList.value);
+// token-a token-b token-c
  */
-class CustomTokenList {
-	tokens = new Set();
+
+class CustomTokenList extends Array {
 	#node = null;
 	#attributeName = null;
 	#refreshAttribute = true;
@@ -39,11 +36,12 @@ class CustomTokenList {
 		}
 	}
 	constructor(node, attributeName){ //传入 HTMLElement 和需要绑定的 参数名称
+		super();
 		if (Object.getPrototypeOf(node).constructor == Attr) {
 			this.#attribute = node;
 		} else if (node instanceof HTMLElement) {
 			this.#node = node;
-			this.#attributeName = attributeName.toString().toLowerCase();
+			this.#attributeName = attributeName.toString().toLowerCase(); //attributeName 只支持小写
 			this.#observerOptions.attributeFilter = [this.#attributeName];
 		} else {
 			throw new TypeError(`${CustomTokenList.name}.constructor: Argument 1 is not an Attr or HTMLElement.\n参数 1 不是 Attr 或 HTMLElement。`);
@@ -53,9 +51,8 @@ class CustomTokenList {
 		this.#observer = new MutationObserver(function(mutationList) {
 			for (const mutation of mutationList) {
 				if (mutation.type == 'attributes' && mutation.attributeName == _this.#attributeName) {
-					console.log('单个变化',mutation);
 					_this.#attribute = _this.#node.getAttributeNode(_this.#attributeName);
-					_this.tokens.clear();
+					_this.length = 0;
 					if (_this.#attribute) {
 						_this.#refreshAttribute = false; //外部属性变化时，添加内容不再循环进行属性的更新
 						_this.add(..._this.#attribute.nodeValue.split(/\s+/g));
@@ -78,14 +75,16 @@ class CustomTokenList {
 		if (tokens.some(token=>/\s/.test(token)))
 			throw CustomTokenList.#InvalidCharacterError('add');
 
-		tokens.forEach(token=>this.tokens.add(token));
+		tokens.forEach(token => {
+			if (!this.includes(token)) this.push(token);
+		});
 
 		if (this.#refreshAttribute) {
 			this.#observer.disconnect(); //解除绑定
 			if (!this.#attribute) {
 				this.#node.setAttributeNode(document.createAttribute(this.#attributeName));
 			}
-			this.#attribute.value = [...this.tokens].join(' ');
+			this.#attribute.value = this.join(' ');
 			this.#observer.observe(this.#node, this.#observerOptions); //恢复绑定
 		}
 		return;
@@ -98,18 +97,21 @@ class CustomTokenList {
 		if (tokens.some(token=>/\s/.test(token)))
 			throw CustomTokenList.#InvalidCharacterError('remove');
 
-		tokens.forEach(token=>this.tokens.delete(token));
+		tokens.forEach(token => {
+			const index = this.indexOf(token);
+			if (index>=0) this.splice(index,1);
+		});
 
 		if (this.#refreshAttribute) {
 			this.#observer.disconnect(); //解除绑定
-			this.#attribute.value = [...this.tokens].join(' ');
+			this.#attribute.value = this.join(' ');
 			this.#observer.observe(this.#node, this.#observerOptions); //恢复绑定
 		}
 		return;
 	}
 
 	contains(token){
-		return this.tokens.has(token.toString());
+		return this.includes(token.toString());
 	}
 
 	toggle(token, force){
@@ -135,37 +137,23 @@ class CustomTokenList {
 
 	}
 
-	forEach(callback, thisArg) {
-		[...this.tokens].forEach(
-			(value, index, array)=>
-				callback.call(thisArg ?? this, value, index, array)
-			);
-	}
-
-	entries() {
-		return [...this.tokens].entries();
-	}
-
 	get value() {
-		return [...this.tokens].join(' ');
-	}
-
-	values() {
-		return this.tokens.values();
-	}
-
-	keys() {
-		return new Array(this.tokens).keys();
+		return this.join(' ');
 	}
 
 	replace(oldToken, newToken){
+		oldToken = oldToken.toString();
+		newToken = newToken.toString();
 		if (/\s/.test(oldToken) || /\s/.test(newToken))
 			throw CustomTokenList.#InvalidCharacterError('replace');
-		if (this.contains(oldToken)) {
-			this.#refreshAttribute = false; //减少一次属性的更新
-			this.remove(oldToken);
-			this.#refreshAttribute = true;
-			this.add(newToken);
+		const index = this.indexOf(oldToken);
+		if (index>=0) {
+			this.splice(index,1, newToken);
+			if (this.#refreshAttribute) {
+				this.#observer.disconnect(); //解除绑定
+				this.#attribute.value = this.join(' ');
+				this.#observer.observe(this.#node, this.#observerOptions); //恢复绑定
+			}
 			return true;
 		} else {
 			return false;
@@ -173,11 +161,7 @@ class CustomTokenList {
 	}
 
 	item(index) {
-		return [...this.tokens][index];
-	}
-
-	valueOf() {
-		return this.tokens;
+		return this[index];
 	}
 };
 
