@@ -43,7 +43,7 @@ svg {
 	--front-color: url(../images/icon-awoken-count.svg#full-awoken-assist-front);
 }
 [type="awoken-count"][flags~="full"][flags~="can-assist"]:not([icon-type="latent"]) text,
-[type="awoken-count"][flags~="full"][flags~="8-latent"][icon-type="latent"] text
+[type="awoken-count"][flags~="8-latent-full"][flags~="8-latent"][icon-type="latent"] text
 {
 	stroke: none;
 	fill: url(../images/icon-awoken-count.svg#full-awoken-star);

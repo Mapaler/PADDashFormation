@@ -291,11 +291,14 @@ class PadIcon extends HTMLElement {
 			'flags', //各种选项开关，类似className
 		];
 	}
+	static ELEMENT_TYPE_AWOKEN = 'awoken';
+	static ELEMENT_TYPE_TYPE = 'type';
+	static ELEMENT_TYPE_AWOKEN_COUNT = 'awoken-count';
 	#svg = document.createElementNS(svgNS,'svg');
 	#flags = null;
 	get flagsList() { return this.#flags; }
 	#number = 0;
-	#type = 'awoken';
+	#type = PadIcon.ELEMENT_TYPE_AWOKEN;
 	#iconType = null;
 	get number() { return this.#number; }
 	set number(x) {
@@ -373,18 +376,18 @@ class PadIcon extends HTMLElement {
 		const use = svg.querySelector(':scope>use');
 		svg.setAttribute("viewBox", "0 0 32 32");
 		switch (this.#type) {
-			case 'awoken': {
+			case PadIcon.ELEMENT_TYPE_AWOKEN: {
 				if (/^(?:en|ko)/.test(lang) && [40,46,47,48].includes(number)) number += '-en'; //英文不一样的觉醒
 				if (/^(?:zh)/.test(lang) && [46,47].includes(number)) number += '-zh'; //中文不一样的觉醒
 				use.href.baseVal = `images/icon-awoken.svg#awoken-${number}`;
 				break;
 			}
-			case 'type': {
+			case PadIcon.ELEMENT_TYPE_TYPE: {
 				if (/^(?:en|ko)/.test(lang) && [9,12].includes(number)) number += '-en'; //英文不一样的类型
 				use.href.baseVal = `images/icon-type.svg#type-${number}`;
 				break;
 			}
-			case 'awoken-count': {
+			case PadIcon.ELEMENT_TYPE_AWOKEN_COUNT: {
 				const full = this.flagsList.contains("full");
 				const weapon = this.flagsList.contains("weapon");
 				const canAssist = this.flagsList.contains("can-assist");
