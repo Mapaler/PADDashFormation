@@ -14,6 +14,7 @@ console.log(span.customTokenList.value);
  */
 
 class CustomTokenList extends Array {
+	static #illegalTokenRegRex = /\s/;
 	#node = null;
 	#attributeName = null;
 	#refreshAttribute = true;
@@ -27,7 +28,7 @@ class CustomTokenList extends Array {
 		return this.#node.getAttributeNode(this.#attributeName);
 	}
 	set #attribute(node) { //直接设定绑定的参数AttrNode
-		if (Object.getPrototypeOf(node).constructor == Attr) {
+		if (node instanceof Attr) {
 			this.#node = node.ownerElement;
 			this.#attributeName = node.nodeName;
 			this.#observerOptions.attributeFilter = [this.#attributeName];
@@ -37,7 +38,7 @@ class CustomTokenList extends Array {
 	}
 	constructor(node, attributeName){ //传入 HTMLElement 和需要绑定的 参数名称
 		super();
-		if (Object.getPrototypeOf(node).constructor == Attr) {
+		if (node instanceof Attr) {
 			this.#attribute = node;
 		} else if (node instanceof HTMLElement) {
 			this.#node = node;
@@ -51,7 +52,9 @@ class CustomTokenList extends Array {
 		this.#observer = new MutationObserver(function(mutationList) {
 			for (const mutation of mutationList) {
 				if (mutation.type == 'attributes' && mutation.attributeName == _this.#attributeName) {
+					//因为可能是删除属性，所以i需要重新取得属性
 					_this.#attribute = _this.#node.getAttributeNode(_this.#attributeName);
+					//清空旧值
 					_this.length = 0;
 					if (_this.#attribute) {
 						_this.#refreshAttribute = false; //外部属性变化时，添加内容不再循环进行属性的更新
@@ -72,7 +75,7 @@ class CustomTokenList extends Array {
 		//全部强制转换为字符串
 		tokens = tokens.map(token=>token.toString());
 		//如果任何 token 里存在空格，就直接抛出错误
-		if (tokens.some(token=>/\s/.test(token)))
+		if (tokens.some(token=>CustomTokenList.#illegalTokenRegRex.test(token)))
 			throw CustomTokenList.#InvalidCharacterError('add');
 
 		tokens.forEach(token => {
@@ -94,7 +97,7 @@ class CustomTokenList extends Array {
 		//全部强制转换为字符串
 		tokens = tokens.map(token=>token.toString());
 		//如果任何 token 里存在空格，就直接抛出错误
-		if (tokens.some(token=>/\s/.test(token)))
+		if (tokens.some(token=>CustomTokenList.#illegalTokenRegRex.test(token)))
 			throw CustomTokenList.#InvalidCharacterError('remove');
 
 		tokens.forEach(token => {
@@ -115,7 +118,7 @@ class CustomTokenList extends Array {
 	}
 
 	toggle(token, force){
-		if (/\s/.test(token))
+		if (CustomTokenList.#illegalTokenRegRex.test(token))
 			throw CustomTokenList.#InvalidCharacterError('toggle');
 		if (force !== undefined) {
 			if(Boolean(force)) {
@@ -140,11 +143,16 @@ class CustomTokenList extends Array {
 	get value() {
 		return this.join(' ');
 	}
+	set value(string) {
+		this.length = 0;
+		//因为add里面已经解除绑定了，所以这里不需要解除绑定
+		this.add(...new Set(string.split(/\s+/g)));
+	}
 
 	replace(oldToken, newToken){
 		oldToken = oldToken.toString();
 		newToken = newToken.toString();
-		if (/\s/.test(oldToken) || /\s/.test(newToken))
+		if (CustomTokenList.#illegalTokenRegRex.test(oldToken) || CustomTokenList.#illegalTokenRegRex.test(newToken))
 			throw CustomTokenList.#InvalidCharacterError('replace');
 		const index = this.indexOf(oldToken);
 		if (index>=0) {
@@ -290,8 +298,6 @@ class PadIcon extends HTMLElement {
 			'lang', //英语、中文特殊图标的设定
 			'icon-type',//子图标类型
 			//'icon-value',//子图标的值
-			'full',//觉醒打满
-			'special',//是否是特殊颜色
 			'flags', //各种选项开关，类似className
 		];
 	}
