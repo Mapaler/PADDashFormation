@@ -55,7 +55,7 @@ class CustomTokenList extends Array {
 					_this.length = 0;
 					if (_this.#attribute) {
 						_this.#refreshAttribute = false; //外部属性变化时，添加内容不再循环进行属性的更新
-						_this.add(..._this.#attribute.nodeValue.split(/\s+/g));
+						_this.add(...new Set(_this.#attribute.nodeValue.split(/\s+/g)));
 						_this.#refreshAttribute = true;
 					}
 				}
