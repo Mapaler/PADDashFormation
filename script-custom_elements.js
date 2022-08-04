@@ -295,6 +295,8 @@ class PadIcon extends HTMLElement {
 			'flags', //各种选项开关，类似className
 		];
 	}
+	#flags = null;
+	get flagsList() { return this.#flags; }
 	#number = 0;
 	#type = 'awoken';
 	#iconType = null;
@@ -327,6 +329,7 @@ class PadIcon extends HTMLElement {
 	constructor() {
 		// Always call super first in constructor
 		super();
+		this.#flags = new CustomTokenList(this, "flags");
 		// Create a shadow root
 		const shadow = this.attachShadow({mode: 'open'});
 		// Create some CSS to apply to the shadow dom
