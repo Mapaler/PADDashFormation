@@ -84,7 +84,7 @@ class CustomTokenList extends Array {
 			if (!this.#attribute) {
 				this.#node.setAttributeNode(document.createAttribute(this.#attributeName));
 			}
-			this.#attribute.value = this.join(' ');
+			this.#attribute.value = this.value;
 			this.#observer.observe(this.#node, this.#observerOptions); //恢复绑定
 		}
 		return;
@@ -104,7 +104,7 @@ class CustomTokenList extends Array {
 
 		if (this.#refreshAttribute) {
 			this.#observer.disconnect(); //解除绑定
-			this.#attribute.value = this.join(' ');
+			this.#attribute.value = this.value;
 			this.#observer.observe(this.#node, this.#observerOptions); //恢复绑定
 		}
 		return;
@@ -151,7 +151,7 @@ class CustomTokenList extends Array {
 			this.splice(index,1, newToken);
 			if (this.#refreshAttribute) {
 				this.#observer.disconnect(); //解除绑定
-				this.#attribute.value = this.join(' ');
+				this.#attribute.value = this.value;
 				this.#observer.observe(this.#node, this.#observerOptions); //恢复绑定
 			}
 			return true;
