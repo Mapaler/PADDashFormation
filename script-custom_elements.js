@@ -1,4 +1,188 @@
-﻿const svgNS = "http://www.w3.org/2000/svg"; //svg用的命名空间
+﻿/*
+ * Detail: 仿照 DOMTokenList 功能实现的自定义 CustomTokenList
+ * Reference: https://gist.github.com/dimitarnestorov/48b69a918288e9098db1aab904a2722a
+ * Use:
+ * let span = document.querySelector("span");
+ * let customTokenList = new CustomTokenList(span, "custom-token");
+ * span.customToken = customTokenList;
+ * span.customToken.add("token1","token2")
+ * console.log(span.getAttribute("custom-token"));
+ * //=> token1 token2
+ * span.setAttribute("custom-token", "token-a token-b token-c");
+ * console.log(span.customToken.value);
+ * //=> token-a token-b token-c
+ * span.customToken.add("token1","token2")
+ * console.log(span.getAttribute("custom-token"));
+ * //=> token1 token2
+ */
+class CustomTokenList {
+	tokens = new Set();
+	#node = null;
+	#attributeName = null;
+	#refreshAttribute = true;
+	#observer = null;
+	#observerOptions = {
+		attributeFilter: [],
+		attributeOldValue: true,
+		subtree: true
+	};
+	get #attribute() { //获取绑定的参数
+		return this.#node.getAttributeNode(this.#attributeName);
+	}
+	set #attribute(node) { //直接设定绑定的参数AttrNode
+		if (Object.getPrototypeOf(node).constructor == Attr) {
+			this.#node = node.ownerElement;
+			this.#attributeName = node.nodeName;
+			this.#observerOptions.attributeFilter = [this.#attributeName];
+		} else {
+			throw new TypeError(`${CustomTokenList.name}.#attribute: Argument 1 is not an Attr.\n参数 1 不是 Attr。`);
+		}
+	}
+	constructor(node, attributeName){ //传入 HTMLElement 和需要绑定的 参数名称
+		if (Object.getPrototypeOf(node).constructor == Attr) {
+			this.#attribute = node;
+		} else if (node instanceof HTMLElement) {
+			this.#node = node;
+			this.#attributeName = attributeName.toString().toLowerCase();
+			this.#observerOptions.attributeFilter = [this.#attributeName];
+		} else {
+			throw new TypeError(`${CustomTokenList.name}.constructor: Argument 1 is not an Attr or HTMLElement.\n参数 1 不是 Attr 或 HTMLElement。`);
+		}
+
+		const _this = this;
+		this.#observer = new MutationObserver(function(mutationList) {
+			for (const mutation of mutationList) {
+				if (mutation.type == 'attributes' && mutation.attributeName == _this.#attributeName) {
+					console.log('单个变化',mutation);
+					_this.#attribute = _this.#node.getAttributeNode(_this.#attributeName);
+					_this.tokens.clear();
+					if (_this.#attribute) {
+						_this.#refreshAttribute = false; //外部属性变化时，添加内容不再循环进行属性的更新
+						_this.add(..._this.#attribute.nodeValue.split(/\s+/g));
+						_this.#refreshAttribute = true;
+					}
+				}
+			}
+		});
+		this.#observer.observe(this.#node, this.#observerOptions);
+	}
+	
+	static #InvalidCharacterError(functionName) {
+		return new DOMException(`${CustomTokenList.name}.${functionName}:The token can not contain whitespace.\bToken 不允许包含空格。`, "InvalidCharacterError");
+	}
+
+	add(...tokens){
+		//全部强制转换为字符串
+		tokens = tokens.map(token=>token.toString());
+		//如果任何 token 里存在空格，就直接抛出错误
+		if (tokens.some(token=>/\s/.test(token)))
+			throw CustomTokenList.#InvalidCharacterError('add');
+
+		tokens.forEach(token=>this.tokens.add(token));
+
+		if (this.#refreshAttribute) {
+			this.#observer.disconnect(); //解除绑定
+			if (!this.#attribute) {
+				this.#node.setAttributeNode(document.createAttribute(this.#attributeName));
+			}
+			this.#attribute.value = [...this.tokens].join(' ');
+			this.#observer.observe(this.#node, this.#observerOptions); //恢复绑定
+		}
+		return;
+	}
+
+	remove(...tokens){
+		//全部强制转换为字符串
+		tokens = tokens.map(token=>token.toString());
+		//如果任何 token 里存在空格，就直接抛出错误
+		if (tokens.some(token=>/\s/.test(token)))
+			throw CustomTokenList.#InvalidCharacterError('remove');
+
+		tokens.forEach(token=>this.tokens.delete(token));
+
+		if (this.#refreshAttribute) {
+			this.#observer.disconnect(); //解除绑定
+			this.#attribute.value = [...this.tokens].join(' ');
+			this.#observer.observe(this.#node, this.#observerOptions); //恢复绑定
+		}
+		return;
+	}
+
+	contains(token){
+		return this.tokens.has(token.toString());
+	}
+
+	toggle(token, force){
+		if (/\s/.test(token))
+			throw CustomTokenList.#InvalidCharacterError('toggle');
+		if (force !== undefined) {
+			if(Boolean(force)) {
+				this.add(token);
+				return true;
+			}else{
+				this.remove(token);
+				return false;
+			}
+		} else {
+			if (this.contains(token)) {
+				this.remove(token);
+				return false;
+			} else {
+				this.add(token);
+				return true;
+			}
+		}
+
+	}
+
+	forEach(callback, thisArg) {
+		[...this.tokens].forEach(
+			(value, index, array)=>
+				callback.call(thisArg ?? this, value, index, array)
+			);
+	}
+
+	entries() {
+		return [...this.tokens].entries();
+	}
+
+	get value() {
+		return [...this.tokens].join(' ');
+	}
+
+	values() {
+		return this.tokens.values();
+	}
+
+	keys() {
+		return new Array(this.tokens).keys();
+	}
+
+	replace(oldToken, newToken){
+		if (/\s/.test(oldToken) || /\s/.test(newToken))
+			throw CustomTokenList.#InvalidCharacterError('replace');
+		if (this.contains(oldToken)) {
+			this.#refreshAttribute = false; //减少一次属性的更新
+			this.remove(oldToken);
+			this.#refreshAttribute = true;
+			this.add(newToken);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	item(index) {
+		return [...this.tokens][index];
+	}
+
+	valueOf() {
+		return this.tokens;
+	}
+};
+
+const svgNS = "http://www.w3.org/2000/svg"; //svg用的命名空间
+
 // Create a class for the element
 class CardAvatar extends HTMLElement {
 	// Specify observed attributes so that
@@ -7,7 +191,9 @@ class CardAvatar extends HTMLElement {
 		return ['iid'];
 	}
 	#iid = 0;
-	get iid() { this.#iid; }
+	get iid() { 
+		return this.#iid;
+	}
 	/**
 	 * @param {string | number} x
 	 */
@@ -128,14 +314,14 @@ class PadIcon extends HTMLElement {
 	#number = 0;
 	#type = 'awoken';
 	#iconType = null;
-	get number() { this.#number; }
+	get number() { return this.#number; }
 	set number(x) {
 		const number = Number(x);
 		if (Number.isNaN(number)) throw new Error('传入的 number 不是数字!');
 		this.setAttribute('number', number);
 		this.#number = number;
 	}
-	get type() { this.#type; }
+	get type() { return this.#type; }
 	set type(x) {
 		if (x == null) {
 			this.removeAttribute('type');
