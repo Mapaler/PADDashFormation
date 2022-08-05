@@ -95,10 +95,12 @@ Array.prototype.deleteLatter = function(item = null) {
 	this.splice(index + 1);
 	return this;
 }
-//数组去重
+//数组去重，改变自身
 Array.prototype.distinct = function() {
-	let _set = new Set(this);
-	return Array.from(_set)
+	const _set = new Set(this);
+	this.length = 0;
+	this.splice(this.length,0,..._set);
+	return this.valueOf();
 }
 Array.prototype.randomShift = function() {
 	return this.splice(Math.random() * this.length, 1)?.[0];

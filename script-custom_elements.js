@@ -37,7 +37,10 @@ class CustomTokenList extends Array {
 		} else {
 			throw new TypeError(`${CustomTokenList.name}.constructor: Argument 1 is not an Attr or HTMLElement.\n参数 1 不是 Attr 或 HTMLElement。`);
 		}
-
+		let initializeValue = this.#attribute.nodeValue;
+		if (initializeValue) { //如果值已经存在，则先添加到TokenList
+			this.add(...new Set(initializeValue.split(/\s+/g)));
+		}
 		const _this = this;
 		this.#observer = new MutationObserver(function(mutationList) {
 			for (const mutation of mutationList) {

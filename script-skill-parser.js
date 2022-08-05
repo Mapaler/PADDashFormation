@@ -417,7 +417,6 @@ const SkillKinds = {
 	SkillProviso: "skill-proviso",
 	ImpartAwakenings: "impart-awakenings",
 	ObstructOpponent: "obstruct-opponent",
-
 }
 
 function skillParser(skillId)
@@ -1476,6 +1475,11 @@ const parsers = {
 	},
 	[236](...ids) { //随机变身
 		return henshin(ids.distinct(), true);
+	},
+	[237](turns, hp) { //改变HP上限
+		return activeTurns(turns,
+			powerUp(null, null, p.mul({ hp: hp }))
+		);
 	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
