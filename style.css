@@ -1314,6 +1314,17 @@ icon.inflicts::after
 	bottom: 5px;
 	font-size: 20px;
 }
+.edit-box .setting-box .row-mon-id .evo-card-list .monster
+{
+	transform: scale(0.6);
+	margin: calc(-100px * (1 - 0.6) / 2);
+}
+.edit-box .setting-box .row-mon-id .evo-card-list .monster .id
+{
+	font-size: 1.4em;
+	font-weight: bold;
+	text-shadow: black -3px -3px 3px, black 3px -3px 3px, black -3px 3px 3px, black 3px 3px 3px, ;
+}
 .edit-box .search-box .search-mon-list .monster .level {
 	bottom: 23px;
 }
