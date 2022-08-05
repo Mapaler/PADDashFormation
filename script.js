@@ -656,26 +656,26 @@ class PlayerDataCard {
 	parseLatent(number)
 	{
 		let latentNumber = BigInt(number);
-		let obj = {
+		const obj = {
 			latent: [],
 			latentCount: 6,
 		};
 		//console.log("原始数字",latentNumber.toString(2));
-		let latentVersion = latentNumber & 7n; //记录版本，111是用几位来做记录
-		latentNumber >>= 3n;
+		const latentVersion = latentNumber & 0b111n; //记录版本，111是用几位来做记录，也就是最多7位
+		latentNumber >>= 3n; //右移3位
 		//console.log("读取潜觉记录位数",latentNumber.toString(2));
-		let changeLatentCount = Boolean(latentNumber & 1n); //1时就是增加格子数
-		latentNumber >>= 1n;
+		const changeLatentCount = Boolean(latentNumber & 1n); //1时就是开孔了
+		latentNumber >>= 1n; //右移1位
 		//console.log("读取潜觉格子数是否改变",latentNumber.toString(2));
 		if (changeLatentCount)
 		{
-			obj.latentCount = Number(latentNumber & 15n);
+			obj.latentCount = Number(latentNumber & 0b1111n);
 			latentNumber >>= 4n;
 			//console.log("读取潜觉格子数",latentNumber.toString(2));
 		}
-		const getbnum = latentVersion > 6 ? 127n : 31n;
-		const rightbnum = latentVersion > 6 ? 7n : 5n;
-		while (latentNumber>0)
+		const rightbnum = latentVersion > 6 ? 7n : 5n; //右移的距离
+		const getbnum = 2 ** rightbnum - 1; //逻辑与的数字 //latentVersion > 6 ? 0b1111111n : 0b11111n;
+		while (latentNumber > 0n)
 		{
 			obj.latent.push(Number(latentNumber & getbnum));
 			latentNumber >>= rightbnum;
