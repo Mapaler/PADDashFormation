@@ -232,7 +232,7 @@ class Board
 	//设定横行
 	setRow(rowsNumber, attr = 0)
 	{
-		for (let row of rowsNumber)
+		for (const row of rowsNumber)
 		{
 			if (row >= 2) row++;
 			const rowData = this.data[row];
@@ -248,7 +248,7 @@ class Board
 		for (let col of colsNumber)
 		{
 			if (col >= 3) col++;
-			for (let row of this.data)
+			for (const row of this.data)
 			{
 				row[col].color = attr;
 			}
@@ -460,10 +460,7 @@ function skillParser(skillId)
 				if (source?.additional.length)
 				{
 					if (!Array.isArray(target.additional)) target.additional = [];
-					for (let additional of source.additional)
-					{
-						target.additional.push(additional);
-					}
+					target.additional.push(...source.additional);
 				}
 				if (source.reduceDamage != undefined)
 				{
@@ -1567,16 +1564,17 @@ function renderSkillEntry(skills)
 
 	if (merge_skill)
 	{
-		let boardChange = skills.filter(skill=>
-			skill.kind == SkillKinds.BoardChange ||
-			skill.kind == SkillKinds.GenerateOrbs ||
-			skill.kind == SkillKinds.FixedOrbs ||
-			skill.kind == SkillKinds.ActiveTurns && (skill.skill.kind == SkillKinds.FixedOrbs || skill.skill.kind == SkillKinds.GenerateOrbs)
-		).map(skill=>skill.kind == SkillKinds.ActiveTurns ? skill.skill : skill);
+		let boardChange = skills.filter(skill=>{
+			const { kind } = skill;
+			kind == SkillKinds.BoardChange ||
+			kind == SkillKinds.GenerateOrbs ||
+			kind == SkillKinds.FixedOrbs ||
+			kind == SkillKinds.ActiveTurns && (skill.skill.kind == SkillKinds.FixedOrbs || skill.skill.kind == SkillKinds.GenerateOrbs)
+		}).map(skill=>skill.kind == SkillKinds.ActiveTurns ? skill.skill : skill);
 		if (boardChange.length > 0)
 		{
 			const board = new Board();
-			for (let skill of boardChange)
+			for (const skill of boardChange)
 			{
 				switch (skill.kind)
 				{
@@ -1591,8 +1589,7 @@ function renderSkillEntry(skills)
 						break;
 					}
 					case SkillKinds.FixedOrbs: { //固定位置产生珠子
-						let generates = skill.generates;
-						for (const generate of generates)
+						for (const generate of skill.generates)
 						{
 							let orb = generate.orbs?.[0];
 							if (generate.type == 'shape') {
@@ -1612,7 +1609,7 @@ function renderSkillEntry(skills)
 				skill.kind == SkillKinds.ActiveTurns && (skill.skill.kind == SkillKinds.SetOrbState)
 			).map(skill=>skill.kind == SkillKinds.ActiveTurns ? skill.skill : skill);
 			const boardData = board.data.flat();
-			for (let skill of setOrbState) {
+			for (const skill of setOrbState) {
 				if (["enhanced", "locked", "bound"].includes(skill.state)) {
 					//技能内的数量，可能会大于版面内有的数据数量
 					const orbCount = Math.min(skill.arg?.count?.value ?? boardData.length, boardData.length);
@@ -2128,7 +2125,7 @@ function renderSkill(skill, option = {})
 		case SkillKinds.VoidEnemyBuff: {
 			let buffs = skill.buffs;
 			let subDocument = [];
-			for (let buff of buffs)
+			for (const buff of buffs)
 			{
 				let dict = {
 					icon: createIcon(buff),
@@ -2257,7 +2254,7 @@ function renderSkill(skill, option = {})
 				}));
 			}
 			if (additional?.length) {
-				for (let subSkill of additional.filter(Boolean))
+				for (const subSkill of additional.filter(Boolean))
 				{
 					subDocument.push(renderSkill(subSkill, option));
 				}

@@ -1061,19 +1061,16 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 
 //由于有了更改属性和类型的武器，所以需要更改计算方法
 function countTeamTotalAttrsTypes(memberArr, assistArr) {
-	let attrsCount = new Map();
-	let typesCount = new Map();
+	//之前用的Map，现在为了性能改成数组
+	const attrsCount = [];
+	const typesCount = [];
 	for (let idx = 0; idx < memberArr.length; idx++) {
 		const member = memberArr[idx], assist = assistArr[idx];
 
-		let memberAttrsTypes = member.getAttrsTypesWithWeapon(assist);
+		const memberAttrsTypes = member.getAttrsTypesWithWeapon(assist);
 		if (memberAttrsTypes) {
-			for (let attr of memberAttrsTypes.attrs) {
-				attrsCount.set(attr, (attrsCount.get(attr) || 0) + 1);
-			}
-			for (let type of memberAttrsTypes.types) {
-				typesCount.set(type, (typesCount.get(type) || 0) + 1);
-			}
+			memberAttrsTypes.attr.forEach(attr=>attrsCount[attr]++||(attrsCount[attr]=1));
+			memberAttrsTypes.types.forEach(type=>typesCount[type]++||(typesCount[type]=1));
 		}
 	}
 	return {attrs: attrsCount, types: typesCount};
@@ -1097,8 +1094,7 @@ function getActuallySkills(skill, skillTypes, searchRandom = true) {
 	else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138 || skill.type == 232 || skill.type == 233)
 	{
 		//因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
-		let subSkills = skill.params.flatMap(id => getActuallySkills(Skills[id], skillTypes, searchRandom));
-		subSkills = subSkills.filter(s=>s);
+		const subSkills = skill.params.flatMap(id => getActuallySkills(Skills[id], skillTypes, searchRandom)).filter(s=>s);
 		return subSkills;
 	}
 	else

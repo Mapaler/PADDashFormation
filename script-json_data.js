@@ -960,7 +960,7 @@ const specialSearchFunctions = (function() {
 		const searchTypeArray = [141, 208];
 		const skills = getCardActiveSkills(card, searchTypeArray);
 		if (!skills.length) return outArr;
-		for (let skill of skills)
+		for (const skill of skills)
 		{
 			const sk = skill.params;
 			if (skill.type == 141)
@@ -994,7 +994,7 @@ const specialSearchFunctions = (function() {
 		if (!skill) return;
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
-		for (let gen of gens)
+		for (const gen of gens)
 		{
 			fragment.appendChild(createOrbsList(gen.to));
 			fragment.appendChild(document.createTextNode(`×${gen.count}`));

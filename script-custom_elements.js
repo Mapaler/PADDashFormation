@@ -39,7 +39,7 @@ class CustomTokenList extends Array {
 		}
 		let initializeValue = this.#attribute.nodeValue;
 		if (initializeValue) { //如果值已经存在，则先添加到TokenList
-			this.add(...new Set(initializeValue.split(/\s+/g)));
+			this.value = initializeValue;
 		}
 		const _this = this;
 		this.#observer = new MutationObserver(function(mutationList) {
@@ -54,6 +54,7 @@ class CustomTokenList extends Array {
 						_this.add(...new Set(_this.#attribute.nodeValue.split(/\s+/g)));
 						_this.#refreshAttribute = true;
 					}
+					break;
 				}
 			}
 		});
@@ -64,17 +65,7 @@ class CustomTokenList extends Array {
 		return new DOMException(`${CustomTokenList.name}.${functionName}:The token can not contain whitespace.\bToken 不允许包含空格。`, "InvalidCharacterError");
 	}
 
-	add(...tokens){
-		//全部强制转换为字符串
-		tokens = tokens.map(token=>token.toString());
-		//如果任何 token 里存在空格，就直接抛出错误
-		if (tokens.some(token=>CustomTokenList.#illegalTokenRegRex.test(token)))
-			throw CustomTokenList.#InvalidCharacterError('add');
-
-		tokens.forEach(token => {
-			if (!this.includes(token)) this.push(token);
-		});
-
+	#refreshAttributeValue() {
 		if (this.#refreshAttribute) {
 			this.#observer.disconnect(); //解除绑定
 			if (!this.#attribute) {
@@ -83,6 +74,21 @@ class CustomTokenList extends Array {
 			this.#attribute.value = this.value;
 			this.#observer.observe(this.#node, this.#observerOptions); //恢复绑定
 		}
+	}
+
+	add(...tokens){
+		//全部强制转换为字符串
+		tokens = tokens.map(token=>token.toString());
+		//如果任何 token 里存在空格，就直接抛出错误
+		if (tokens.some(token=>CustomTokenList.#illegalTokenRegRex.test(token)))
+			throw CustomTokenList.#InvalidCharacterError('add');
+
+		//经过测试普通循环push性能最高，并且由于需要去重，需要每次判断是否存在
+		tokens.forEach(token => {
+			if (!this.includes(token)) this.push(...token);
+		});
+
+		this.#refreshAttributeValue();
 		return;
 	}
 
@@ -93,16 +99,13 @@ class CustomTokenList extends Array {
 		if (tokens.some(token=>CustomTokenList.#illegalTokenRegRex.test(token)))
 			throw CustomTokenList.#InvalidCharacterError('remove');
 
+		//splice性能特别低，但是这里只能用这个
 		tokens.forEach(token => {
 			const index = this.indexOf(token);
 			if (index>=0) this.valueOf().splice(index,1);
 		});
 
-		if (this.#refreshAttribute) {
-			this.#observer.disconnect(); //解除绑定
-			this.#attribute.value = this.value;
-			this.#observer.observe(this.#node, this.#observerOptions); //恢复绑定
-		}
+		this.#refreshAttributeValue();
 		return;
 	}
 
@@ -136,10 +139,13 @@ class CustomTokenList extends Array {
 	get value() {
 		return this.join(' ');
 	}
-	set value(string) {
+	set value(attrValue) {
+		//将值确保转为字符串，然后以空格拆分，并加入Set确保唯一性
+		const inputTokens = [...new Set(attrValue.toString().split(/\s+/g))];
 		this.length = 0;
-		//因为add里面已经解除绑定了，所以这里不需要解除绑定
-		this.add(...new Set(string.split(/\s+/g)));
+		this.push(...inputTokens);
+		
+		this.#refreshAttributeValue();
 	}
 
 	replace(oldToken, newToken){
@@ -149,7 +155,7 @@ class CustomTokenList extends Array {
 			throw CustomTokenList.#InvalidCharacterError('replace');
 		const index = this.indexOf(oldToken);
 		if (index>=0) {
-			this.splice(index,1, this.contains(newToken) ? undefined : newToken);
+			this.splice(index,1, this.includes(newToken) ? undefined : newToken);
 			if (this.#refreshAttribute) {
 				this.#observer.disconnect(); //解除绑定
 				this.#attribute.value = this.value;

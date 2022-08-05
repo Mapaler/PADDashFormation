@@ -165,9 +165,7 @@ Member.prototype.getAttrsTypesWithWeapon = function(assist) {
 		let appendTypes = assistCard.awakenings.filter(ak=>ak >= 83 && ak <= 90);
 		appendTypes = appendTypes.map(type=>
 			typekiller_for_type.find(t=>(type - 52) === t.awoken).type);
-		for (let appendType of appendTypes) {
-			types.add(appendType);
-		}
+		appendTypes.forEach(appendType=>types.add(appendType));
 	}
 	return {attrs: attrs, types: Array.from(types)};
 }
@@ -646,11 +644,10 @@ class PlayerDataCard {
 	}
 	static parseDataArray(datas)
 	{
-		let parsedCards = datas.map(ocard=>new PlayerDataCard(ocard));
-		for (const mon of parsedCards)
-		{
+		const parsedCards = datas.map(ocard=>new PlayerDataCard(ocard));
+		parsedCards.forEach(mon=>{
 			mon.assist = mon.assistIndex === 0 ? null : parsedCards.find(m=>m.index === mon.assistIndex);
-		}
+		});
 		return parsedCards;
 	}
 	parseLatent(number)
@@ -685,14 +682,14 @@ class PlayerDataCard {
 	}
 	deleteRepeatLatent(olatents)
 	{
-		let latents = olatents.concat();
-		for (let ai = 0; ai < latents.length; ai++)
+		//splice性能太差，改成push一个新的数组
+		const latents = [];
+		for (let ai = 0; ai < olatents.length;)
 		{
-			let useHole = latentUseHole(latents[ai]);
-			if (useHole > 1)
-			{
-				latents.splice(ai+1, useHole-1);
-			}
+			const latent = olatents[ai];
+			latents.push(latent);
+			const useHole = latentUseHole(latent);
+			ai += useHole;
 		}
 		return latents;
 	}
@@ -786,9 +783,7 @@ class EvoTree
 			this.idArr.push(mid);
 		}
 		if (Array.isArray(card.henshinTo)) {
-			for (let toId of card.henshinTo) {
-				this.children.push(new EvoTree(toId, _this));
-			}
+			card.henshinTo.forEach(toId=>this.children.push(new EvoTree(toId, _this)), this);
 		}
 		if (this.evoType != "Henshin")
 			this.children.push(...Cards.filter(scard=>scard.evoBaseId == mid && scard.id != mid).map(scard=>new EvoTree(scard.id,_this)));
@@ -1644,8 +1639,7 @@ function initialize(event) {
 
 	//初始化所有mask的关闭按钮
 	const masks = document.body.querySelectorAll(".mask");
-	for (const mask of masks)
-	{
+	masks.forEach(mask=>{
 		mask.show = function(arg){
 			this?.initialize?.(arg);
 			this.classList.remove(className_displayNone);
@@ -1655,7 +1649,7 @@ function initialize(event) {
 			mask?.hide?.();
 			mask.classList.add(className_displayNone);
 		};
-	}
+	});
 	const qrCodeFrame = document.body.querySelector("#qr-code-frame");
 	const btnQrCode = controlBox.querySelector(`.btn-qrcode`);
 	btnQrCode.onclick = function(){
@@ -2449,22 +2443,18 @@ function initialize(event) {
 		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
 		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
 
-		let dge = formation.dungeonEnchance;
-		for (const rareDom of rareDoms)
-		{
-			rareDom.checked = dge.rarities.includes(parseInt(rareDom.value));
+		const dge = formation.dungeonEnchance;
+		function runCheck(checkBox){
+			checkBox.checked = this.includes(parseInt(checkBox.value));
 		}
-		for (const attrDom of attrDoms)
-		{
-			attrDom.checked = dge.attrs.includes(parseInt(attrDom.value));
-		}
-		for (const typeDom of typeDoms)
-		{
-			typeDom.checked = dge.types.includes(parseInt(typeDom.value));
-		}
-		dialogContent.querySelector("#dungeon-hp").value = dge.rate.hp;
-		dialogContent.querySelector("#dungeon-atk").value = dge.rate.atk;
-		dialogContent.querySelector("#dungeon-rcv").value = dge.rate.rcv;
+		rareDoms.forEach(runCheck,dge.rarities);
+		attrDoms.forEach(runCheck,dge.attrs);
+		typeDoms.forEach(runCheck,dge.types);
+
+		const {hp, atk, rcv} = dge.rate;
+		dialogContent.querySelector("#dungeon-hp").value = hp;
+		dialogContent.querySelector("#dungeon-atk").value = atk;
+		dialogContent.querySelector("#dungeon-rcv").value = rcv;
 
 		this.classList.remove(className_displayNone);
 	}
@@ -2477,11 +2467,11 @@ function initialize(event) {
 		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
 		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
 		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
-		const rarities = rareDoms.map(rareDom=>rareDom.checked ? parseInt(rareDom.value) : undefined).filter(v=>!isNaN(v));
-		const attrs = attrDoms.map(attrDom=>attrDom.checked ? parseInt(attrDom.value) : undefined).filter(v=>!isNaN(v));
-		const types = typeDoms.map(typeDom=>typeDom.checked ? parseInt(typeDom.value) : undefined).filter(v=>!isNaN(v));
+		const rarities = returnCheckBoxsValues(rareDoms).map(Str2Int);
+		const attrs = returnCheckBoxsValues(attrDoms).map(Str2Int);
+		const types = returnCheckBoxsValues(typeDoms).map(Str2Int);
 		
-		let dge = formation.dungeonEnchance;
+		const dge = formation.dungeonEnchance;
 		dge.rarities = rarities;
 		dge.attrs = attrs;
 		dge.types = types;
@@ -2498,18 +2488,12 @@ function initialize(event) {
 		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
 		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
 		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
-		for (const rareDom of rareDoms)
-		{
-			rareDom.checked = false;
+		function unchecked(checkBox) {
+			checkBox.checked = false;
 		}
-		for (const attrDom of attrDoms)
-		{
-			attrDom.checked = false;
-		}
-		for (const typeDom of typeDoms)
-		{
-			typeDom.checked = false;
-		}
+		rareDoms.forEach(unchecked);
+		attrDoms.forEach(unchecked);
+		typeDoms.forEach(unchecked);
 		dialogContent.querySelector("#dungeon-hp").value = 1;
 		dialogContent.querySelector("#dungeon-atk").value = 1;
 		dialogContent.querySelector("#dungeon-rcv").value = 1;
@@ -2917,17 +2901,15 @@ function initialize(event) {
 		const awokenSorting = checked ? official_awoken_sorting : s_awokensUl.originalSorting;
 		const sawokenSorting = checked ? official_awoken_sorting : s_sawokensUl.originalSorting;
 
-		function getIconId(li) {
-			return parseInt(li.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10);
+
+		function appendLi(id) {
+			const li = this.iconLis.find(li=>
+				parseInt(li.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10) === id
+			);
+			li && this.fragment.appendChild(li);
 		}
-		for (const id of awokenSorting) {
-			const li = s_awokensLi.find(li=>getIconId(li) === id);
-			if (li) fragmentAwoken.appendChild(li);
-		}
-		for (const id of sawokenSorting) {
-			const li = s_sawokensLi.find(li=>getIconId(li) === id);
-			if (li) fragmentSawoken.appendChild(li);
-		}
+		awokenSorting.forEach(appendLi, {iconLis: s_awokensLi, fragment: fragmentAwoken});
+		sawokenSorting.forEach(appendLi, {iconLis: s_sawokensLi, fragment: fragmentSawoken});
 		
 		const className = "official-awoken-sorting";
 		toggleDomClassName(checked, className, s_awokensDiv);
@@ -3000,23 +2982,23 @@ function initialize(event) {
 			);
 	}
 	//读取储存的筛选收藏列表
-	let strMakedConfig = JSON.parse(localStorage.getItem(cfgPrefix + "marked-filter"));
+	const strMakedConfig = JSON.parse(localStorage.getItem(cfgPrefix + "marked-filter"));
 	if (Array.isArray(strMakedConfig)) {
-		for (let arr of strMakedConfig) {
-			let idx1 = specialSearchFunctions.findIndex(group=>group.name == arr[0]);
-			if (idx1 < 0 ) continue;
-			if (arr.length > 1) {
-				let idx2 = specialSearchFunctions[idx1].functions.findIndex(func=>func.name == arr[1]);
-				if (idx2 < 0 ) continue;
+		strMakedConfig.forEach(([groupName, filterName])=>{
+			const idx1 = specialSearchFunctions.findIndex(group=>group.name == groupName);
+			if (idx1 < 0 ) return;
+			if (filterName !== undefined) {
+				const idx2 = specialSearchFunctions[idx1].functions.findIndex(func=>func.name == filterName);
+				if (idx2 < 0 ) return;
 				markedFilter.push([idx1, idx2]);
 			} else {
 				markedFilter.push([idx1]);
 			}
-		}
+		});
 	}
 	specialFirstSelect.refreshList = function() {
 		const _this = specialFirstSelect;
-		function addNewOption(sfunc, idx){
+		function addNewOption(sfunc, groudIndex){
 			if (sfunc.group)
 			{
 				const groupName = returnMonsterNameArr(sfunc, currentLanguage.searchlist, currentDataSource.code)[0];
@@ -3024,13 +3006,13 @@ function initialize(event) {
 				optgroup.label = groupName;
 				if (sfunc.functions)
 				{
-					sfunc.functions.forEach((_sfunc,_idx)=>{
-						optgroup.appendChild(newSpecialSearchOption(_sfunc, idx, _idx));
+					sfunc.functions.forEach((_sfunc, filterIndex)=>{
+						optgroup.appendChild(newSpecialSearchOption(_sfunc, groudIndex, filterIndex));
 					});
 				}
 			}else
 			{
-				_this.options.add(newSpecialSearchOption(sfunc, idx));
+				_this.options.add(newSpecialSearchOption(sfunc, groudIndex));
 			}
 		}
 		_this.innerHTML = '';
@@ -3039,18 +3021,18 @@ function initialize(event) {
 			const groupName = "=====★=====";
 			const optgroup = _this.appendChild(document.createElement("optgroup"));
 			optgroup.label = groupName;
-			for (let indexs of markedFilter) {
-				const funcObj = indexs.length > 1 ? specialSearchFunctions[indexs[0]].functions[indexs[1]] : specialSearchFunctions[indexs[0]];
-				optgroup.appendChild(newSpecialSearchOption(funcObj, indexs[0], indexs[1]));
-			}
+			markedFilter.forEach(([groudIndex, filterIndex])=>{
+				const funcObj = filterIndex !== undefined ? specialSearchFunctions[groudIndex].functions[filterIndex] : specialSearchFunctions[groudIndex];
+				optgroup.appendChild(newSpecialSearchOption(funcObj, groudIndex, filterIndex));
+			});
 		}
 		for (let idx = 1; idx < specialSearchFunctions.length; idx++) {
 			addNewOption(specialSearchFunctions[idx], idx);
 		}
 	}
 	specialFirstSelect.onchange = function() {
-		const indexs = specialFirstSelect.value.split("|").map(Number);
-		let markIdx = markedFilter.findIndex(arr=>arr[0] === indexs[0] && arr[1] === indexs[1]);
+		const [selectGroudIndex, selectFilterIndex] = specialFirstSelect.value.split("|").map(Number);
+		let markIdx = markedFilter.findIndex(([groudIndex, filterIndex])=>groudIndex === selectGroudIndex && filterIndex === selectFilterIndex);
 		if (markIdx >= 0) {//已经存在的收藏
 			specialStar.classList.add("marked");
 		} else {
@@ -3102,13 +3084,13 @@ function initialize(event) {
 	}
 
 	function returnRadiosValue(radioArr) {
-		let checkedRadio = radioArr.find(returnCheckedInput);
-		let firstCheckedValue = checkedRadio ? returnInputValue(checkedRadio) : undefined;
+		const checkedRadio = radioArr.find(returnCheckedInput);
+		const firstCheckedValue = checkedRadio ? returnInputValue(checkedRadio) : undefined;
 		return firstCheckedValue;
 	}
 	function returnCheckBoxsValues(checkBoxsArr) {
-		let checkedCheckBoxs = checkBoxsArr.filter(returnCheckedInput);
-		let checkedValues = checkedCheckBoxs.map(returnInputValue);
+		const checkedCheckBoxs = checkBoxsArr.filter(returnCheckedInput);
+		const checkedValues = checkedCheckBoxs.map(returnInputValue);
 		return checkedValues;
 	}
 
@@ -3812,47 +3794,40 @@ function initialize(event) {
 
 //搜出一个卡片包含变身的的完整进化树，用于平铺显示
 function buildEvoTreeIdsArray(card, includeHenshin = true) {
-	const evoLinkCardsIdArray = card.evoRootId ? Cards.filter(m=>m.evoRootId == card.evoRootId).map(m=>m.id) : []; //筛选出相同进化链的
-	function loopAddHenshin(arr,card)
+
+	function idToCard(id) {return Cards[id]}
+	function loopAddHenshin(card, cardSet)
 	{
+		function filterCard(_card) {
+			return _card && !cardSet.has(_card);
+		}
+		function addCard(_card) {
+			cardSet.add(_card);
+			loopAddHenshin(_card, cardSet);
+		}
 		//从本卡片变身到的
-		const cardIdTo = (card.henshinTo || []).filter(id=>Boolean(Cards[id]) && !arr.includes(id));
-		if (cardIdTo.length) {
-			arr.push(...cardIdTo);
-			for (let id of cardIdTo) {
-				loopAddHenshin(arr, Cards[id]);
-			}
+		if (Array.isArray(card.henshinFrom)) {
+			const cardTo = card.henshinFrom.map(idToCard).filter(filterCard);
+			cardTo.forEach(addCard);
 		}
 		//变身到本卡片的（多个）
-		const cardsIdFrom = (card.henshinFrom || []).filter(id=>Boolean(Cards[id]) && !arr.includes(id));
-		if (cardsIdFrom.length) {
-			arr.push(...cardsIdFrom);
-			for (let id of cardsIdFrom) {
-				loopAddHenshin(arr, Cards[id]);
-			}
+		if (Array.isArray(card.henshinTo)) {
+			const cardsFrom = card.henshinTo.map(idToCard).filter(filterCard);
+			cardsFrom.forEach(addCard);
 		}
-		//本角色进化树上的
-		const evoCards = Cards.filter(m=>m.evoRootId == card.evoRootId && !arr.includes(m.id));
-		if (evoCards.length > 0)
-		{
-			for (let card of evoCards) {
-				arr.push(card.id);
-				if (includeHenshin && (Array.isArray(card.henshinFrom) || Array.isArray(card.henshinTo)))
-				{  //添加这个的变身的
-					loopAddHenshin(arr, card);
-				}
-			}
-		}
+		//如果本角色可以变身为其他人，则继续搜索进化链，被变身的就不需要了。
+		const evoCards = Cards.filter(_card=>_card.evoRootId == card.evoRootId && !cardSet.has(_card));
+		evoCards.forEach(addCard);
 	}
+	let evoLinkCardsArray = card.evoRootId ? Cards.filter(m=>m.evoRootId == card.evoRootId) : []; //筛选出相同进化链的 Card
+	//let evoLinkCardsIdArray = evoLinkCardsArray.map(m=>m.id); //相同进化链的ID
+	const evoLinkCardsSet = new Set(evoLinkCardsArray);
 	if (includeHenshin) {
-		for (let id of evoLinkCardsIdArray) {
-			const card = Cards[id];
-			if (Array.isArray(card.henshinFrom) || Array.isArray(card.henshinTo))
-			{  //添加变身的
-				loopAddHenshin(evoLinkCardsIdArray, card);
-			}
-		}
+		evoLinkCardsArray.forEach(card=>{
+			loopAddHenshin(card, evoLinkCardsSet);
+		});
 	}
+	let evoLinkCardsIdArray = [...evoLinkCardsSet].map(card=>card.id); //只保留id
 	evoLinkCardsIdArray.sort((a,b)=>a-b); //按ID大小排序
 	return evoLinkCardsIdArray;
 }
@@ -4392,16 +4367,17 @@ function refreshAll(formationData) {
 	toggleDomClassName(!txtTitle.value.length, "edit", titleBox);
 	toggleDomClassName(!txtDetail.value.length, "edit", detailBox);
 	
-	let dge = formationData.dungeonEnchance;
-	if (Object.values(dge.rate).some(rate => rate != 1))
+	//地下城强化的显示，稀有度没有现成的，所以这里来循环生成
+	const dge = formationData.dungeonEnchance;
+	if (Object.values(dge.rate).some(rate => rate != 1)) //如果有任何一个属性的比率不为1，才产生强化图标
 	{
 		dungeonEnchanceDom.innerHTML = '';
 		if (dge.rarities.length > 0) {
-			for (const rarity of dge.rarities) {
+			dge.rarities.forEach(rarity=>{
 				const icon = dungeonEnchanceDom.appendChild(document.createElement("icon"));
 				icon.className = "rare-icon";
 				icon.setAttribute("data-rare-icon", rarity);
-			}
+			})
 		}
 		let skill = powerUp(dge.attrs, dge.types, p.mul({hp: dge.rate.hp * 100, atk: dge.rate.atk * 100, rcv: dge.rate.rcv * 100}));
 		dungeonEnchanceDom.appendChild(renderSkill(skill));
@@ -4855,19 +4831,19 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	//统计队伍属性/类型个数
 	if (tAttrsDom || tTypesDom)
 	{
-		const atCount = countTeamTotalAttrsTypes(team_2p, assistTeam_2p);
+		const {attrs, types} = countTeamTotalAttrsTypes(team_2p, assistTeam_2p);
 		if (tAttrsDom) {
 			const attrDoms = Array.from(tAttrsDom.querySelectorAll(".attr"));
 			attrDoms.forEach(attrDom=>{
 				const attrId = parseInt(attrDom.getAttribute("data-attr-icon"));
-				attrDom.setAttribute(dataAttrName, atCount.attrs.get(attrId) || 0);
+				attrDom.setAttribute(dataAttrName, attrs[attrId] || 0);
 			});
 		}
 		if (tTypesDom) {
 			const typeDoms = Array.from(tTypesDom.querySelectorAll(".type-icon"));
 			typeDoms.forEach(typeDom=>{
 				const typeId = parseInt(typeDom.getAttribute("data-type-icon"));
-				typeDom.setAttribute(dataAttrName, atCount.types.get(typeId) || 0);
+				typeDom.setAttribute(dataAttrName, types[typeId] || 0);
 			});
 		}
 	}
