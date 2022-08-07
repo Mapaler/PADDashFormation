@@ -1069,7 +1069,7 @@ function countTeamTotalAttrsTypes(memberArr, assistArr) {
 
 		const memberAttrsTypes = member.getAttrsTypesWithWeapon(assist);
 		if (memberAttrsTypes) {
-			memberAttrsTypes.attr.forEach(attr=>attrsCount[attr]++||(attrsCount[attr]=1));
+			memberAttrsTypes.attrs.forEach(attr=>attrsCount[attr]++||(attrsCount[attr]=1));
 			memberAttrsTypes.types.forEach(type=>typesCount[type]++||(typesCount[type]=1));
 		}
 	}
