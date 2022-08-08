@@ -37,7 +37,7 @@ class CustomTokenList extends Array {
 		} else {
 			throw new TypeError(`${CustomTokenList.name}.constructor: Argument 1 is not an Attr or HTMLElement.\n参数 1 不是 Attr 或 HTMLElement。`);
 		}
-		let initializeValue = this.#attribute.nodeValue;
+		let initializeValue = this.#attribute?.nodeValue;
 		if (initializeValue) { //如果值已经存在，则先添加到TokenList
 			this.value = initializeValue;
 		}
@@ -85,7 +85,7 @@ class CustomTokenList extends Array {
 
 		//经过测试普通循环push性能最高，并且由于需要去重，需要每次判断是否存在
 		tokens.forEach(token => {
-			if (!this.includes(token)) this.push(...token);
+			if (!this.includes(token)) this.push(token);
 		});
 
 		this.#refreshAttributeValue();
@@ -142,6 +142,7 @@ class CustomTokenList extends Array {
 	set value(attrValue) {
 		//将值确保转为字符串，然后以空格拆分，并加入Set确保唯一性
 		const inputTokens = [...new Set(attrValue.toString().split(/\s+/g))];
+		console.log(inputTokens)
 		this.length = 0;
 		this.push(...inputTokens);
 		
@@ -303,6 +304,7 @@ class PadIcon extends HTMLElement {
 	static ELEMENT_TYPE_AWOKEN = 'awoken';
 	static ELEMENT_TYPE_TYPE = 'type';
 	static ELEMENT_TYPE_AWOKEN_COUNT = 'awoken-count';
+	static ELEMENT_TYPE_LATENT = 'latent';
 	#svg = document.createElementNS(svgNS,'svg');
 	#flags = null;
 	get flagsList() { return this.#flags; }
@@ -427,7 +429,10 @@ class PadIcon extends HTMLElement {
 				text.lengthAdjust.baseVal = full ? SVGTextElement.LENGTHADJUST_SPACINGANDGLYPHS : SVGTextElement.LENGTHADJUST_SPACING;
 				break;
 			}
-			case 'latent':
+			case PadIcon.ELEMENT_TYPE_LATENT: {
+				use.href.baseVal = `images/icon-latent-block-bg.svg#block-6-table`;
+				break;
+			}
 			case 'badge':
 			case 'attr':
 			case 'orb':

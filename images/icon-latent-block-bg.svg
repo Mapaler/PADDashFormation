@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+	<defs>
+		<style>
+			.latent {
+				fill: url(#latent-grad);
+				filter: url(#latent-bg);
+			}
+			.big-latent {
+				fill: url(#latent-table-grad);
+				filter: url(#latent-bg);
+			}
+		</style>
+		<linearGradient id="latent-grad" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+			<stop offset="0" stop-color="#5af"/>
+			<stop offset="1" stop-color="#27e"/>
+		</linearGradient>
+		<linearGradient id="latent-table-grad" x1="0" y1="0" x2="0" y2="0.5" href="#latent-grad"></linearGradient>
+		<filter id="latent-bg">
+			<!--产生外部阴影-->
+			<feComponentTransfer in="SourceAlpha">
+				<feFuncA tableValues="0 1" type="table"/>
+			</feComponentTransfer>
+			<feGaussianBlur stdDeviation="1"/>
+			<feOffset dx="0" dy="2"/>
+			<feComposite in2="SourceAlpha" result="out-shadow"/>
+			<!--产生边框-->
+			<feMorphology in="SourceAlpha" operator="erode" radius="1" result="fill-range"/> <!--向内缩进1单位的范围-->
+			<feFlood flood-color="#BCE" /> <!--边框颜色-->
+			<feComposite in2="SourceAlpha" operator="in"/>
+			<feComposite in2="fill-range" operator="out" result="border"/>
+			<!--产生内部阴影-->
+			<feComponentTransfer in="fill-range" result="out-of-box-shadow"> <!--得到外部黑框-->
+				<feFuncA tableValues="1 0" type="table"/>
+			</feComponentTransfer>
+			<feGaussianBlur stdDeviation="1"/>
+			<feOffset dx="0" dy="2" /> <!--向下走1像素-->
+			<feComposite in2="fill-range" operator="in" result="in-shadow-top"/>
+			<feMerge>
+				<feMergeNode in="out-shadow"/>
+				<feMergeNode in="SourceGraphic"/>
+				<feMergeNode in="border"/>
+				<feMergeNode in="in-shadow-top"/>
+			</feMerge>
+		</filter>
+	</defs>
+	<symbol id="block-1" viewBox="0 0 32 32">
+		<rect fill="url(#latent-grad)" filter="url(#latent-bg)" width="32" height="32" rx="4"/>
+	</symbol>
+	<symbol id="block-2" viewBox="0 0 76 32">
+		<rect fill="url(#latent-grad)" filter="url(#latent-bg)" y="35" width="76" height="32" rx="4"/>
+	</symbol>
+	<symbol id="block-2-table" viewBox="0 0 76 32">
+		<rect fill="url(#latent-grad)" filter="url(#latent-bg)" y="70" width="70" height="32" rx="4"/>
+	</symbol>
+	<symbol id="block-6" viewBox="0 0 252 32">
+		<rect fill="url(#latent-grad)" filter="url(#latent-bg)" y="70" width="252" height="32" rx="4"/>
+	</symbol>
+	<symbol id="block-6-table" viewBox="0 0 148 68"> <!--大小是146×66-->
+		<path fill="url(#latent-table-grad)" filter="url(#latent-bg)" d="M142,0H4A4,4,0,0,0,0,4V62a4,4,0,0,0,4,4H66a4,4,0,0,0,4-4V36a4,4,0,0,1,4-4h68a4,4,0,0,0,4-4V4A4,4,0,0,0,142,0Z"/>
+	</symbol>
+	<!--<path id="内方角" class="big-latent" d="M142,0H4A4,4,0,0,0,0,4V62a4,4,0,0,0,4,4H66a4,4,0,0,0,4-4V32h72a4,4,0,0,0,4-4V4A4,4,0,0,0,142,0Z"/>-->
+</svg>
