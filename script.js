@@ -670,8 +670,8 @@ class PlayerDataCard {
 			latentNumber >>= 4n;
 			//console.log("读取潜觉格子数",latentNumber.toString(2));
 		}
-		const rightbnum = latentVersion > 6 ? 7n : 5n; //右移的距离
-		const getbnum = 2 ** rightbnum - 1; //逻辑与的数字 //latentVersion > 6 ? 0b1111111n : 0b11111n;
+		const rightbnum = latentVersion > 6n ? 7n : 5n; //右移的距离
+		const getbnum = 2n ** rightbnum - 1n; //逻辑与的数字 //latentVersion > 6 ? 0b1111111n : 0b11111n;
 		while (latentNumber > 0n)
 		{
 			obj.latent.push(Number(latentNumber & getbnum));
