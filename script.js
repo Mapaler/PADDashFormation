@@ -3839,6 +3839,11 @@ function changeid(mon, monDom, latentDom, assist) {
 	fragment.appendChild(monDom);
 	const monId = mon.id;
 	const card = Cards[monId] || Cards[0]; //怪物固定数据
+	if (!card) { //如果搜不到怪物就退出操作
+		parentNode.appendChild(fragment);
+		return;
+	}
+
 	monDom.setAttribute("data-cardid", monId); //设定新的id
 	if (monId < 0) //如果是延迟
 	{
@@ -4121,7 +4126,12 @@ function editMon(teamNum, isAssist, indexInTeam) {
 //编辑窗，修改怪物ID
 function editBoxChangeMonId(id) {
 	const card = Cards[id] ?? Cards[0]; //怪物固定数据
-	if (card.id === 0) {
+	if (!card) { //如果搜不到怪物就直接返回，不做任何操作
+		const errorMsg = "The game data has not been loaded successfully.\n游戏数据尚未加载成功。";
+		alert(errorMsg);
+		throw new Error(errorMsg);
+	}
+	if (card?.id === 0) {
 		id = 0;
 	}
 	//const skill = Skills[card.activeSkillId];
