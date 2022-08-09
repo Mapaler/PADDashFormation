@@ -1561,14 +1561,14 @@ icon.inflicts::after
 	display: inline-block;
 }
 .types-div .type-list input+label,
-.sawoken-div .sawoken-ul input+label,
+.sawoken-div .awoken-ul input+label,
 .dialog-dungeon-enchance input[type="checkbox"]+label
 {
 	opacity: var(--search-icon-unchecked);
 	cursor: pointer;
 }
 .types-div .type-list input:checked+label,
-.sawoken-div .sawoken-ul input:checked+label,
+.sawoken-div .awoken-ul input:checked+label,
 .dialog-dungeon-enchance input[type="checkbox"]:checked+label
 {
 	opacity: 1;
@@ -1698,6 +1698,10 @@ icon.inflicts::after
 /*.search-box .awoken-div::before{
 	content: "觉醒";
 }*/
+.search-box .awoken-div,
+.search-box .sawoken-div{
+	vertical-align: top;
+}
 .search-box .awoken-div::before{
 	display: none;
 }
@@ -1705,16 +1709,13 @@ icon.inflicts::after
 .search-box .sawoken-div.official-awoken-sorting::before
 {
 	display: inline-block;
-	vertical-align: top;
 	line-height: 26px;
 	
 }
-
-.search-box .awoken-div,
-.search-box .sawoken-div{
-	display: inline-block;
-	vertical-align: top;
+.sawoken-div.official-awoken-sorting {
+	margin-left: 10px;
 }
+
 .search-box .brown-button::before
 {
 	min-width: 80px;
@@ -1727,7 +1728,6 @@ icon.inflicts::after
 	vertical-align: top;
 }
 .search-box .rare-clear::before,
-.search-box .sawoken-clear::before,
 .search-box .special-add::before,
 .search-box .special-clear::before,
 .search-box .special-star::before
@@ -1766,25 +1766,31 @@ icon.inflicts::after
 .types-div .type-icon:active,
 .rare-div .rare-icon:active,
 .selected-awokens .awoken-icon:active,
-.awoken-div .awoken-icon:active,
-.sawoken-div .awoken-icon:active
+.awoken-div .awoken-icon:active
 {
 	animation: icon-active 0.2s;
 }
-.awoken-div.official-awoken-sorting .awoken-ul,
-.sawoken-div.official-awoken-sorting .sawoken-ul
-{
-	width: 335px;
+.search-box .awoken-ul {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 32px);
+	grid-auto-rows: 32px;
+	grid-gap: 5px;
+}
+.official-awoken-sorting .awoken-ul {
+	grid-template-columns: repeat(9, 32px);
+}
+.official-awoken-sorting {
+	display: inline-block;
 }
 .awoken-ul .awoken-count
 {
-	font-size: 16px;
-	line-height: 32px;
 	font-family: var(--game-font-family);
 
 	display: inline-block;
-	margin-right: 5px;
-	margin-top: 5px;
+	grid-column: span 1;
+	grid-row: span 1;
+	font-size: 16px;
+	line-height: 32px;
 }
 .awoken-ul .count
 {
@@ -1852,13 +1858,15 @@ icon.inflicts::after
 	content: "超觉醒";
 }*/
 
-.sawoken-div .sawoken-ul .awoken-count
+.sawoken-div .awoken-ul .awoken-count
 {
 	margin-right: 5px;
 	margin-top: 5px;
 	display: inline-block;
 }
-
+.sawoken-div summary {
+	display: inline list-item;
+}
 
 .special-filter-list>li{
 	margin-bottom: 5px;

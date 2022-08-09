@@ -2879,7 +2879,7 @@ function initialize(event) {
 	s_boxHave.onchange(false);
 
 	const s_sawokensDiv = searchBox.querySelector(".sawoken-div");
-	const s_sawokensUl = s_sawokensDiv.querySelector(".sawoken-ul");
+	const s_sawokensUl = s_sawokensDiv.querySelector(".awoken-ul");
 	const s_sawokensLi = Array.from(s_sawokensUl.querySelectorAll(".awoken-count"));
 	s_sawokensUl.originalSorting = s_sawokensLi.map(li => parseInt(li.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10));
 
@@ -2951,17 +2951,14 @@ function initialize(event) {
 	});
 
 	const awokenClear = searchBox.querySelector(".awoken-clear");
-	const sawokenClear = searchBox.querySelector(".sawoken-clear");
 	awokenClear.onclick = function() { //清空觉醒选项
 		s_awokensIcons.forEach(t => {
 			t.setAttribute("data-awoken-count", 0);
 		});
-		s_selectedAwokensUl.innerHTML = "";
-	};
-	sawokenClear.onclick = function() { //清空超觉醒选项
 		s_sawokens.forEach(t => {
 			t.checked = false;
 		});
+		s_selectedAwokensUl.innerHTML = "";
 	};
 
 	//特殊搜索部分
@@ -3242,7 +3239,6 @@ function initialize(event) {
 		s_rareClear.onclick();
 		
 		awokenClear.onclick();
-		sawokenClear.onclick();
 		specialClear.onclick();
 
 		s_canAssist.checked = false;
