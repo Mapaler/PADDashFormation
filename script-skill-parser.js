@@ -232,7 +232,7 @@ class Board
 	//设定横行
 	setRow(rowsNumber, attr = 0)
 	{
-		for (const row of rowsNumber)
+		for (let row of rowsNumber)
 		{
 			if (row >= 2) row++;
 			const rowData = this.data[row];
@@ -1565,11 +1565,11 @@ function renderSkillEntry(skills)
 	if (merge_skill)
 	{
 		let boardChange = skills.filter(skill=>{
+			if (skill.kind == SkillKinds.ActiveTurns) skill = skill.skill;
 			const { kind } = skill;
-			kind == SkillKinds.BoardChange ||
+			return kind == SkillKinds.BoardChange ||
 			kind == SkillKinds.GenerateOrbs ||
-			kind == SkillKinds.FixedOrbs ||
-			kind == SkillKinds.ActiveTurns && (skill.skill.kind == SkillKinds.FixedOrbs || skill.skill.kind == SkillKinds.GenerateOrbs)
+			kind == SkillKinds.FixedOrbs;
 		}).map(skill=>skill.kind == SkillKinds.ActiveTurns ? skill.skill : skill);
 		if (boardChange.length > 0)
 		{
