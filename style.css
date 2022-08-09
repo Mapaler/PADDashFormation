@@ -1770,7 +1770,7 @@ icon.inflicts::after
 {
 	animation: icon-active 0.2s;
 }
-.search-box .awoken-ul {
+.awoken-ul {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 32px);
 	grid-auto-rows: 32px;
@@ -1782,22 +1782,18 @@ icon.inflicts::after
 .official-awoken-sorting {
 	display: inline-block;
 }
+.team-awoken .awoken-ul {
+	grid-template-columns: repeat(auto-fill, 67px);
+}
 .awoken-ul .awoken-count
 {
 	font-family: var(--game-font-family);
 
-	display: inline-block;
 	grid-column: span 1;
 	grid-row: span 1;
 	font-size: 16px;
 	line-height: 32px;
-}
-.awoken-ul .count
-{
-	height: 32px;
-	width: 37px;
-	display: inline-block;
-	vertical-align: middle;
+	white-space: nowrap;
 }
 .awoken-ul .count::before
 {
@@ -2080,16 +2076,19 @@ icon.inflicts::after
 	box-sizing: border-box;
 	vertical-align: top;
 }
+.row-mon-awoken .awoken-ul,
+.row-mon-super-awoken .awoken-ul
+{
+	grid-template-columns: repeat(10, 32px);
+}
+.row-mon-awoken .awoken-count-num,
 .row-mon-awoken .awoken-icon,
 .row-mon-super-awoken .awoken-icon
 {
-	margin-right: 5px;
+	grid-column: span 1;
+	grid-row: span 1;
 }
-.row-mon-awoken .awoken-icon:last-of-type,
-.row-mon-super-awoken .awoken-icon:last-of-type
-{
-	margin-left: unset;
-}
+
 /*未选中的超觉醒半透明，选中的不透明*/
 .row-mon-super-awoken .sawoken-choice{display:none;}
 .row-mon-super-awoken .sawoken-choice+label
