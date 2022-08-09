@@ -3472,12 +3472,12 @@ function initialize(event) {
 	};
 
 	//潜觉
-	const monEditLatentUl = settingBox.querySelector(".m-latent-ul");
+	const monEditLatentUl = settingBox.querySelector(".row-mon-latent .latent-ul");
 	const monEditLatents = Array.from(monEditLatentUl.querySelectorAll("li"));
 	const monEditLatentAllowableUl = settingBox.querySelector(".m-latent-allowable-ul");
 	const monEditLatentsAllowable = Array.from(monEditLatentAllowableUl.querySelectorAll("li"));
 	editBox.refreshLatent = function(latent, monid) {//刷新潜觉
-		refreshLatent(latent, monid, monEditLatents);
+		refreshLatent(latent, monid, monEditLatentUl);
 	};
 
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
@@ -3968,8 +3968,7 @@ function changeid(mon, monDom, latentDom, assist) {
 			if (latent.length < 1) {
 				latentDom.classList.add(className_displayNone);
 			} else {
-				const latentDoms = Array.from(latentDom.querySelectorAll("li"));
-				refreshLatent(latent, mon.id, latentDoms, {sort:true});
+				refreshLatent(latent, mon.id, latentDom, {sort:true});
 				latentDom.classList.remove(className_displayNone);
 			}
 			toggleDomClassName(level > 110, "level-super-break", latentDom); //切换潜觉为120级
@@ -4024,32 +4023,26 @@ function changeid(mon, monDom, latentDom, assist) {
 	parentNode.appendChild(fragment);
 }
 //刷新潜觉
-function refreshLatent(latent, monid, iconArr, option) {
+function refreshLatent(latents, monid, latentsNode, option) {
 	const maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
-	latent = latent.concat();
-	if (option?.sort) latent.sort((a, b) => latentUseHole(b) - latentUseHole(a));
+	const iconArr = latentsNode.querySelectorAll('.latent-icon');
+	latentsNode.classList.toggle("block-8", maxLatentCount>6);
+	latents = latents.concat();
+	if (option?.sort) latents.sort((a, b) => latentUseHole(b) - latentUseHole(a));
 	let latentIndex = 0,
 		usedHoleN = 0;
 	for (let ai = 0; ai < iconArr.length; ai++) {
-		const icon = iconArr[ai];
-		if (latent[latentIndex] != undefined && ai >= usedHoleN && ai < maxLatentCount) //有潜觉
+		const icon = iconArr[ai], latent = latents[latentIndex];
+		if (latent != undefined && ai >= usedHoleN && ai < maxLatentCount) //有潜觉
 		{
-			icon.setAttribute("data-latent-icon", latent[latentIndex]);
-			icon.classList.remove(className_displayNone);
-			usedHoleN += latentUseHole(latent[latentIndex]);
+			const thisHoleN = latentUseHole(latent);
+			icon.setAttribute("data-latent-icon", latent);
+			icon.setAttribute("data-latent-hole", thisHoleN);
+			usedHoleN += thisHoleN;
 			latentIndex++;
-		} else if (ai < usedHoleN) //多格潜觉后方隐藏
-		{
-			icon.classList.add(className_displayNone);
+		} else {
 			icon.removeAttribute("data-latent-icon");
-		} else if (ai < maxLatentCount) //没有使用的空格觉醒
-		{
-			icon.classList.remove(className_displayNone);
-			icon.removeAttribute("data-latent-icon");
-		} else //不需要显示的部分
-		{
-			icon.classList.add(className_displayNone);
-			icon.removeAttribute("data-latent-icon");
+			icon.removeAttribute("data-latent-hole");
 		}
 	}
 };

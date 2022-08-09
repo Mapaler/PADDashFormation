@@ -1067,7 +1067,6 @@ icon.inflicts::after
 	vertical-align: top;
 }
 .team-latents .latent-ul{
-	font-size: 0;
 	width: 152px;
 	transform: scale(0.65);
 	transform-origin: left top;
@@ -1076,11 +1075,28 @@ icon.inflicts::after
 	/*margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);*/
 	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
 	min-height: 47px; /* 为了防止只有一层6格大潜觉的时候，被缩减太多的问题*/
+	/*潜在觉醒布局，使用 gird*/
+	display: inline-grid;
+	grid-template-columns: repeat(4, 32px);
+	grid-auto-rows: 32px;
+	grid-gap: 3px 6px;
 }
-.team-latents .latent-icon
+.team-latents .latent-icon[data-latent-hole="1"] {
+	grid-column: span 1;
+}
+.team-latents .latent-icon[data-latent-hole="2"] {
+	grid-column: span 1;
+	grid-row: span 2;
+}
+.team-latents .latent-icon[data-latent-hole="6"] {
+	grid-column: span 3;
+	grid-row: span 2;
+}
+.team-latents .latent-icon[data-latent-hole="6"]::before,
+.team-latents .latent-icon[data-latent-hole="6"]::after
 {
-	margin-top: 3px;
-	margin-right: 6px;
+	transform: scale(1.54);
+	margin: calc(32px / 4);
 }
 
 /*队长的边框*/
@@ -2293,42 +2309,66 @@ icon.inflicts::after
 }
 /*.edit-box .setting-box .row-mon-latent::before{
 	content: "▼潜在觉醒";
-}*/
-.m-latent-ul-div{
+}
+*/
+.row-mon-latent .latent-ul-div{
 	text-align: center;
 }
-.m-latent-ul{
-	font-size: 0;
-	display: inline-block;
+.row-mon-latent .latent-ul{
 	background: rgba(88,75,56,154);
 	border: 2px ridge #94733f;
 	border-radius: 7px;
-	padding: 2px;
+	padding: 3px;
+	/*潜在觉醒布局，使用 gird*/
+	display: inline-grid;
+	grid-template-columns: repeat(6, 32px);
+	grid-auto-rows: 32px;
+	grid-gap: 12px;
 }
-.m-latent-ul .latent-icon{
-	margin-left: 12px;
+.row-mon-latent .latent-ul.block-8 {
+	grid-template-columns: repeat(8, 32px);
 }
-.m-latent-ul .latent-icon:first-of-type{
-	margin-left: 0;
+/*没有block-8的，7格开始不显示*/
+.latent-ul:not(.block-8)>.latent-icon:nth-of-type(n+7) {
+	display: none;
 }
+.row-mon-latent .latent-icon[data-latent-hole="1"] {
+	grid-column: span 1;
+}
+.row-mon-latent .latent-icon[data-latent-hole="2"] {
+	grid-column: span 2;
+}
+.row-mon-latent .latent-icon[data-latent-hole="6"] {
+	grid-column: span 6;
+}
+.latent-icon[data-latent-hole="2"]+.latent-icon,
+.latent-icon[data-latent-hole="6"]+.latent-icon,
+.latent-icon[data-latent-hole="6"]+.latent-icon+.latent-icon,
+.latent-icon[data-latent-hole="6"]+.latent-icon+.latent-icon+.latent-icon,
+.latent-icon[data-latent-hole="6"]+.latent-icon+.latent-icon+.latent-icon+.latent-icon,
+.latent-icon[data-latent-hole="6"]+.latent-icon+.latent-icon+.latent-icon+.latent-icon+.latent-icon
+{
+	display: none;
+}
+
 .m-latent-allowable-ul{
-	margin-top: 5px;
-	font-size: 0;
+	margin-bottom: 5px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 32px);
+	grid-auto-rows: 32px;
+	grid-gap: 4px;
 }
 .m-latent-allowable-ul .latent-icon{
-	margin-right: 4px;
-	margin-bottom: 4px;
+	grid-column: span 1;
+	grid-row: span 1;
 }
 .m-latent-allowable-ul .latent-icon:last-of-type{
 	margin-right: unset;
 }
 
 /*没有打觉醒的空格，没有手指*/
-.m-latent-ul .latent-icon{
-	cursor: default;
-}
 .m-latent-allowable-ul .latent-icon,
-.m-latent-ul .latent-icon[data-latent-icon]{
+.latent-ul .latent-icon[data-latent-icon]{
 	cursor: pointer;
 }
 /*不允许使用的潜觉，不是手指，半透明，灰度*/
