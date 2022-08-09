@@ -6047,7 +6047,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-custom_elements.js",
-		"f38f6dd1ae1a1b683a30325eb91ce7d5"
+		"1662e8b1175493d983e466ff33143e1c"
 	],
 	[
 		"script-json_data.js",
@@ -6055,7 +6055,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-skill-parser.js",
-		"277a1be69314afc5936abacb16387e44"
+		"e037dcf8114679968ddd88770411a28b"
 	],
 	[
 		"script-universal_function.js",
@@ -6063,7 +6063,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"95c35a2afc253dd5f0a70317b5be58b1"
+		"20cf22848dab03313990e68932b7b207"
 	],
 	[
 		"solo - dev.html",
@@ -6191,7 +6191,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-awoken-count.svg",
-		"64ef89fa10eab3b460b9097ab9500892"
+		"c129f96e33314d17e849c64df5249474"
 	],
 	[
 		"images/icon-awoken.svg",
@@ -6212,6 +6212,10 @@ const cachesMap = new Map([
 	[
 		"images/icon-inflicts.png",
 		"4995a8c58ffd96e37bfff733fdd344c7"
+	],
+	[
+		"images/icon-latent-block-bg.svg",
+		"8cd753af046ca4a333197afe3827fedc"
 	],
 	[
 		"images/icon-latent.png",
