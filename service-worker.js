@@ -363,7 +363,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_091.PNG",
-		"8fbb52d66c8b14661fe91994b51c4a5a"
+		"51a1318a225517a38c9940b319b2cfc2"
+	],
+	[
+		"images/cards_ja/CARDS_092.PNG",
+		"c5cf0c5df6369260e8f1cb8964a543c4"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -2495,7 +2499,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_087.PNG",
-		"255f0fa5424d15f9fbdb479f6c12522e"
+		"df502a652eb1088f62065a09e73d9dcd"
 	],
 	[
 		"images/cards_en/CARDS_088.PNG",
@@ -2507,7 +2511,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_090.PNG",
-		"a1edee575d5d88465ea44a8b40608867"
+		"034ba2bfab1fd39e32e5e993ad646d40"
 	],
 	[
 		"sound/voice/en/padv001.wav",
@@ -4431,7 +4435,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_087.PNG",
-		"255f0fa5424d15f9fbdb479f6c12522e"
+		"df502a652eb1088f62065a09e73d9dcd"
 	],
 	[
 		"images/cards_ko/CARDS_088.PNG",
@@ -4443,7 +4447,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_090.PNG",
-		"a1edee575d5d88465ea44a8b40608867"
+		"034ba2bfab1fd39e32e5e993ad646d40"
 	],
 	[
 		"sound/voice/ko/padv001.wav",
@@ -6066,10 +6070,6 @@ const cachesMap = new Map([
 		"91891b0901d38a0368fc84e6d7d43fb7"
 	],
 	[
-		"solo - dev.html",
-		"eebe432e92d010777f57eb519baa2473"
-	],
-	[
 		"solo.html",
 		"5dbe6b9629720aa26870d6c7fc0d2514"
 	],
@@ -6307,27 +6307,27 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"aed1125e77e7db12d43e5eaab4a4a9af"
+		"d33912ba15960f1e22a3896e2cc64d38"
 	],
 	[
 		"monsters-info/mon_en.json",
-		"fec90def12776ab6ff5a38b4019bdff4"
+		"8546892f1585bec7cb3f03ff72300457"
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"7067c4505d0c3a8d48aa51c227adcd15"
+		"47ea689453f3b53de072813b89915808"
 	],
 	[
 		"monsters-info/mon_ko.json",
-		"d7155c53e1b71c185791fee4e380fd06"
+		"13b04305e4538e6bfaff71962d51506c"
 	],
 	[
 		"monsters-info/skill_en.json",
-		"f5d30b5b06059fb13f8775c9fd6e1277"
+		"86e9c9e9a75255400513bcf557742474"
 	],
 	[
 		"monsters-info/skill_ja.json",
-		"be08abbab2c29936f3c646a4f261bb64"
+		"05e2fe5dd3536ab23d28d29ab5d66d0a"
 	],
 	[
 		"doc/export-player-data.html",
