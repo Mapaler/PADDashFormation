@@ -6170,6 +6170,10 @@ const cachesMap = new Map([
 		"b0102fb737cfe9b6be6cf288f28950c7"
 	],
 	[
+		"images/card-frame.svg",
+		"6138155bddb716d91ba0df6b17a8e876"
+	],
+	[
 		"images/CARDFRAME2.PNG",
 		"2f744d67fba0e3fcfdcb1222daf2d95f"
 	],
@@ -6191,11 +6195,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-awoken-count.svg",
-		"c129f96e33314d17e849c64df5249474"
+		"1cdfd0cb59e447ad039446199e94ca7f"
 	],
 	[
 		"images/icon-awoken.svg",
-		"13cecc7407f4d9af1d37118f5bed309b"
+		"3848e4f032573c3955adfd1187692302"
 	],
 	[
 		"images/icon-bind.png",
@@ -6215,7 +6219,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-latent-block-bg.svg",
-		"8cd753af046ca4a333197afe3827fedc"
+		"bc557a806c57eec5fcccf0ef5a072e19"
 	],
 	[
 		"images/icon-latent.png",
@@ -6259,7 +6263,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-type.svg",
-		"ba3f57a4b0ef72a91ffb15a460457397"
+		"e7925c55f255fd89c9df759144884ae7"
 	],
 	[
 		"images/icon.png",

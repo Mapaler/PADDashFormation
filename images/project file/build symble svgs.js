@@ -37,41 +37,64 @@ class Icon {
 //const dt = new DOMImplementation().createDocumentType('svg:svg', '-//W3C//DTD SVG 1.1//EN', 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd');
 //const svg = new DOMImplementation().createDocument(svgNS, 'svg', dt);
 
-async function main({directory, idPre, svgFilename}) {
+async function main({directory, idPre, svgFilename, rectFunc}) {
 	const files = fs.readdirSync(directory);
 
-	const iconArr = [];
-	for (const file of files)
-	{
-		const icon = new Icon(file, directory);
+	const iconArr = files.map(file=>new Icon(file, directory));
+
+	for (const icon of iconArr) {
 		await icon.init();
-		iconArr.push(icon);
 	}
+
 	iconArr.sort((a,b)=>{
-		function nameNum(fileName){return parseInt(/^\d+/.exec(fileName)[0] || 0)}
+		function nameNum(fileName){return parseInt(/^\d+/.exec(fileName)?.[0] || 0)}
 		return (nameNum(a.fileName) - nameNum(b.fileName)) || //先判断数字
 				(a.fileName.length - b.fileName.length); //然后判断文件名长度
 	});
+	
 	const svgDoc = new DOMImplementation().createDocument(svgNS, 'svg');
 
-	for (const icon of iconArr)
+	let heightSum = 0;
+	for (let i = 0; i < iconArr.length; i++)
 	{
+		const icon = iconArr[i];
 		console.log('正在处理 %s %s', directory, icon.fileName);
-		const symbol = svgDoc.createElement('symbol');
 		const parseName = path.parse(icon.fileName);
-		
 		const regRes = /^(\d+)(.*)$/ig.exec(parseName.name);
-		let aid = regRes ? `${parseInt(regRes[1])}${regRes[2]}` : parseName.name;
-		symbol.setAttribute('id', `${idPre}-${aid}`);
-		symbol.setAttribute('viewBox', `0 0 32 32`);
-		svgDoc.documentElement.appendChild(symbol);
+		const iconId = regRes ? `${parseInt(regRes[1])}${regRes[2]}` : parseName.name;
+		const symbolId = `${idPre}-${iconId}`;
+
+		const imgWidth = icon.webpInfo.width, imgHeight = icon.webpInfo.height;
+		const {x=0, y=0, width=imgWidth, height=imgHeight} = rectFunc ? rectFunc(imgWidth, imgHeight, parseName.name) : {};
 		const image = svgDoc.createElement('image');
-		image.setAttribute('width', icon.webpInfo.width);
-		image.setAttribute('height', icon.webpInfo.height);
+		image.setAttribute('width', imgWidth);
+		image.setAttribute('height', imgHeight);
 		image.setAttribute('href', icon.webpBase64());
 
+		const symbol = svgDoc.createElement('symbol');
+		symbol.setAttribute('id', symbolId);
+		symbol.setAttribute('viewBox', `${x} ${y} ${width} ${height}`);
 		symbol.appendChild(image);
+		svgDoc.documentElement.appendChild(symbol);
+
+		const use = svgDoc.createElement('use');
+		use.setAttribute('href',`#${symbolId}`);
+		use.setAttribute('width', width);
+		use.setAttribute('height', height);
+		use.setAttribute('y', heightSum);
+		svgDoc.documentElement.appendChild(use);
+
+		const text = svgDoc.createElement('text');
+		text.textContent = symbolId;
+		text.setAttribute('dominant-baseline', "hanging");
+		text.setAttribute('x', width);
+		text.setAttribute('y', heightSum);
+		svgDoc.documentElement.appendChild(text);
+
+		heightSum += height;
 	}
+	svgDoc.documentElement.setAttribute('height', heightSum);
+
 	const serialized = new XMLSerializer().serializeToString(svgDoc);
 	const formattedXml = xmlFormatter(serialized, {
 		indentation: '\t', 
@@ -85,6 +108,9 @@ async function main({directory, idPre, svgFilename}) {
 const tasks = [
 	{directory: './awokens', idPre: 'awoken', svgFilename: '../icon-awoken.svg'},
 	{directory: './types', idPre: 'type', svgFilename: '../icon-type.svg'},
+	{directory: './card-frame', idPre: 'card-frame', svgFilename: '../card-frame.svg', rectFunc: (imgWidth, imgHeight, fileName)=>{
+		return {x: fileName.includes("sub") ? -4 : 0, y: fileName.includes("sub") ? -4 : 0, width: 100, height: 100};
+	}},
 ];
 
 tasks.forEach(main);
