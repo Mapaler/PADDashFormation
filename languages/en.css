@@ -452,7 +452,7 @@ label[for="box-have"]::after
 }
 .open-evolutionary-tree::before
 {
-	content: "⛓️Evo Search";
+	content: "⛓️Show Evo Tree";
 }
 .search-evolution-by-this::after
 {
