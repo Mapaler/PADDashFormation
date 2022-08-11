@@ -1269,39 +1269,46 @@ function reloadFormationData(event) {
 
 	if (isGuideMod)
 	{
-		let mid;
-		if (event && event.state && event.state.mid)
-		{
-			mid = event.state.mid;
-		}else
-		{
-			mid = parseInt(getQueryString("id"),10);
-		}
+		const mid = event?.state?.mid ?? parseInt(getQueryString("id"), 10);
 
 		if (!isNaN(mid))
 		{
 			editBox.mid = mid;
 			editBoxChangeMonId(mid);
 		}
-		if (event && event.state && event.state.searchArr)
+		if (event?.state?.searchArr)
 		{
-			showSearch(event.state.searchArr.map(id=>Cards[id]));
+			showSearch(event.state.searchArr);
+		}
+	} else {
+		//编辑模式直接打开编辑框
+		const editingTarget = ((str)=>{
+			try {
+				const arr = JSON.parse(str);
+				return (Array.isArray(arr) && arr.length >= 3 && arr.slice(0,3).every(n=>typeof n == "number")) ? arr : null;
+			} catch (error) {
+				return null;
+			}
+		})(sessionStorage.getItem('editing'));
+		if (editingTarget)
+		{
+			editMon(editingTarget[0], editingTarget[1], editingTarget[2]);
+		} else {
+			editBox.hide();
 		}
 	}
-	//编辑模式直接打开编辑框
-	let editingTarget = event?.state?.editing || ((str)=>{
+	
+	//恢复上一次的搜索状态
+	const searchOptions = ((str)=>{
 		try {
-			const arr = JSON.parse(str);
-			return (Array.isArray(arr) && arr.length >= 3 && arr.slice(0,3).every(n=>typeof n == "number")) ? arr : null;
+			const obj = JSON.parse(str);
+			return obj.attrs ? obj : null;
 		} catch (error) {
 			return null;
 		}
-	})(getQueryString("editing"));
-	if (editingTarget)
-	{
-		editMon(editingTarget[0], editingTarget[1], editingTarget[2]);
-	} else {
-		editBox.hide();
+	})(sessionStorage.getItem('search-options'));
+	if (searchOptions) {
+		editBox?.querySelector(".search-box")?.recoverySearchStatus(searchOptions);
 	}
 }
 window.addEventListener('popstate',reloadFormationData); //前进后退时修改页面
@@ -2531,10 +2538,8 @@ function initialize(event) {
 		this.classList.add(className_displayNone);
 		formationBox.classList.remove("blur-bg");
 		controlBox.classList.remove("blur-bg");
-		//删除编辑模式，不改变页面
-		const locationURL = new URL(location);
-		locationURL.searchParams.delete('editing');
-		history.replaceState(null, null, locationURL);
+		//删除编辑模式
+		sessionStorage.removeItem('editing');
 	};
 
 	const smonsterinfoBox = editBox.querySelector(".monsterinfo-box");
@@ -3056,7 +3061,7 @@ function initialize(event) {
 	//只添加第一个列表，后面的全部通过克隆的方式复现
 	specialFirstSelect.refreshList();
 	specialAdd.onclick = function() {
-		specialFilterUl.appendChild(specialFilterFirstLi.cloneNode(true));
+		return specialFilterUl.appendChild(specialFilterFirstLi.cloneNode(true));
 	}
 	//specialAdd.onclick(); //先运行一次产生两个
 	specialClear.onclick = function() {
@@ -3194,8 +3199,8 @@ function initialize(event) {
 		let attr1, attr2;
 		attr1 = returnRadiosValue(s_attr1s); //获取选中单选框的值
 		attr2 = returnRadiosValue(s_attr2s); //获取选中单选框的值
-		attr1 = isNaN(attr1) ? null : Str2Int(attr1); //将值转为十进制
-		attr2 = isNaN(attr2) ? null : Str2Int(attr2); //将值转为十进制
+		attr1 = isNaN(Number(attr1)) ? null : Str2Int(attr1); //将值转为十进制
+		attr2 = isNaN(Number(attr2)) ? null : Str2Int(attr2); //将值转为十进制
 
 		const typesFilter = returnCheckBoxsValues(s_types).map(Str2Int);
 		const rareFilter = [
@@ -3236,10 +3241,69 @@ function initialize(event) {
 			if (funcObj.addition && !customAdditionalFunction.includes(funcObj.addition)) customAdditionalFunction.push(funcObj.addition); //如果有附加显示，则添加到列表
 			return funcObj.function(pre); //结果进一步筛选
 		}, searchResult);
+
+		const options = {};
+		options.attrs = [attr1, attr2];
+		options.fixMainColor = s_fixMainColor.checked;
+		options.types = typesFilter;
+		options.typeAndOr = s_typeAndOr.checked;
+		options.rares = rareFilter;
+		options.awokens = awokensFilter;
+		options.sawokens = sawokensFilter;
+		options.awokensEquivalent = s_awokensEquivalent.checked;
+		options.includeSuperAwoken = s_includeSuperAwoken.checked;
+		options.canAssist = s_canAssist.checked;
+		options.noHenshin = s_noHenshin.checked;
+		options.specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter"))
+			.map(select=>select.value.split("|").map(Number));
+
+		sessionStorage.setItem('search-options',JSON.stringify(options));
 		
 		showSearch(searchResult, customAdditionalFunction);
 	};
 	searchBox.startSearch = startSearch;
+	searchBox.recoverySearchStatus = function(options) {
+		(s_attr1s.find(opt=>parseInt(opt.value) == options.attrs[0]) || s_attr1s[0]).checked = true;
+		(s_attr2s.find(opt=>parseInt(opt.value) == options.attrs[1]) || s_attr2s[0]).checked = true;
+		s_fixMainColor.checked = options.fixMainColor;
+		s_types.filter(opt=>options.types.includes(parseInt(opt.value))).forEach(opt=>opt.checked = true);
+		s_typeAndOr.checked = options.typeAndOr;
+		(s_rareLows.find(opt=>parseInt(opt.value) == options.rares[0]) || s_rareLows[0]).checked = true;
+		(s_rareHighs.find(opt=>parseInt(opt.value) == options.rares[1]) || s_rareHighs[0]).checked = true;
+
+		//添加觉醒
+		options.awokens.forEach(awokenCount=>{
+			const btn = s_awokensIcons.find(_btn=>parseInt(_btn.getAttribute("data-awoken-icon")) == awokenCount.id);
+			btn.setAttribute("data-awoken-count", awokenCount.num);
+
+			for (let i = 0; i < awokenCount.num; i++) {
+				const iconLi = document.createElement("li");
+				const icon = iconLi.appendChild(document.createElement("icon"));
+				icon.className = "awoken-icon";
+				icon.setAttribute("data-awoken-icon", awokenCount.id);
+				icon.onclick = search_awokenSub1;
+				s_selectedAwokensUl.appendChild(iconLi);
+			}
+		});
+
+		s_sawokens.filter(opt=>options.sawokens.includes(parseInt(opt.value))).forEach(opt=>opt.checked = true);
+		s_awokensEquivalent.checked = options.awokensEquivalent;
+		s_includeSuperAwoken.checked = options.includeSuperAwoken;
+		s_canAssist.checked = options.canAssist;
+		s_noHenshin.checked = options.noHenshin;
+
+		const specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter"));
+		//将筛选个数增加到需要的个数
+		for (let i = specialFilters.length; i < options.specialFilters.length; i++) {
+			specialFilters.push(specialAdd.onclick().querySelector(".special-filter"));
+		}
+		for (let i = 0; i < specialFilters.length; i++) {
+			const filterUl = specialFilters[i];
+			const filter = options.specialFilters[i];
+			console.log(filterUl,filter.join("|"));
+			filterUl.value = filter.join("|");
+		}
+	}
 	searchStart.onclick = function() {
 		startSearch(Cards);
 	};
@@ -3264,6 +3328,8 @@ function initialize(event) {
 		searchMonList.originalHeads = null;
 		searchResultCount.setAttribute("data-search-result-count", 0);
 		searchMonList.innerHTML = "";
+
+		sessionStorage.removeItem('search-options');
 	};
 
 	const s_sortList = s_controlDiv.querySelector(".sort-list");
@@ -4069,10 +4135,8 @@ function editMon(teamNum, isAssist, indexInTeam) {
 	//数据
 	const mon = formation.teams[teamNum][isAssist][indexInTeam];
 
-	//传入编辑模式，不改变页面
-	const locationURL = new URL(location);
-	locationURL.searchParams.set('editing', JSON.stringify([teamNum, isAssist, indexInTeam]));
-	history.replaceState({editing: [teamNum, isAssist, indexInTeam]}, null, locationURL);
+	//设定编辑模式
+	sessionStorage.setItem('editing',JSON.stringify([teamNum, isAssist, indexInTeam]));
 
 	const teamBigBox = teamBigBoxs[teamNum];
 	const teamBox = teamBigBox.querySelector(".team-box");
