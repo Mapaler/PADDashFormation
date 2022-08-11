@@ -1250,13 +1250,9 @@ function loadData(force = false)
 //重新读取URL中的Data数据并刷新页面
 function reloadFormationData(event) {
 	let formationData;
-	if (event && event.state && event.state.outForm)
+	if (!(formationData = event?.state?.outForm))
 	{
-		//直接使用现有数据
-		formationData = event.state.outForm;
-		//console.log("直接读取",formationData);
-	}else
-	{
+		//如果没有现有数据
 		try {
 			const parameterDataString = getQueryString(["d","data"]);
 			formationData = JSON.parse(parameterDataString);
@@ -1291,6 +1287,21 @@ function reloadFormationData(event) {
 		{
 			showSearch(event.state.searchArr.map(id=>Cards[id]));
 		}
+	}
+	//编辑模式直接打开编辑框
+	let editingTarget = event?.state?.editing || ((str)=>{
+		try {
+			const arr = JSON.parse(str);
+			return (Array.isArray(arr) && arr.length >= 3 && arr.slice(0,3).every(n=>typeof n == "number")) ? arr : null;
+		} catch (error) {
+			return null;
+		}
+	})(getQueryString("editing"));
+	if (editingTarget)
+	{
+		editMon(editingTarget[0], editingTarget[1], editingTarget[2]);
+	} else {
+		editBox.hide();
 	}
 }
 window.addEventListener('popstate',reloadFormationData); //前进后退时修改页面
@@ -2376,7 +2387,7 @@ function initialize(event) {
 				const hpRangeMin = hpRange.appendChild(document.createElement("span"));
 				hpRangeMin.className = "hp-range-min";
 				hpRangeMin.textContent = range.min;
-				hpRange.appendChild(document.createTextNode(" ~ "));
+				hpRange.append(" ~ ");
 				const hpRangeMax = hpRange.appendChild(document.createElement("span"));
 				hpRangeMax.className = "hp-range-max";
 				hpRangeMax.textContent = range.max;
@@ -2393,11 +2404,11 @@ function initialize(event) {
 
 				if (range.probability < 1)
 				{
-					reduce.appendChild(document.createTextNode("("));
+					reduce.append("(");
 					const reduceProb = reduce.appendChild(document.createElement("span"));
 					reduceProb.className = "reduce-probability";
 					reduceProb.textContent = `${(range.probability * 100).toFixed(0)}`;
-					reduce.appendChild(document.createTextNode(")"));
+					reduce.append(")");
 				}
 
 				const reduceGeneral = reduceHpRow.insertCell();
@@ -2520,6 +2531,10 @@ function initialize(event) {
 		this.classList.add(className_displayNone);
 		formationBox.classList.remove("blur-bg");
 		controlBox.classList.remove("blur-bg");
+		//删除编辑模式，不改变页面
+		const locationURL = new URL(location);
+		locationURL.searchParams.delete('editing');
+		history.replaceState(null, null, locationURL);
 	};
 
 	const smonsterinfoBox = editBox.querySelector(".monsterinfo-box");
@@ -2752,11 +2767,7 @@ function initialize(event) {
 				const c_addition = cli.appendChild(document.createElement("div"));
 				c_addition.className = "custom-addition";
 				let content = func(card);
-				if (typeof content == "string" || typeof content == "number")
-				{
-					content = document.createTextNode(content);
-				}
-				content && c_addition.appendChild(content);
+				content && c_addition.append(content);
 			});
 		}
 
@@ -3500,7 +3511,7 @@ function initialize(event) {
 	skillLevel.onchange = function() {
 		const card = Cards[editBox.mid] || Cards[0]; //怪物固定数据
 		const skill = Skills[card.activeSkillId];
-		skillCD.textContent = skill.initialCooldown - this.value + 1;
+		skillCD.textContent = skill?.initialCooldown - this.value + 1;
 	};
 	skillLevel_1.ipt = skillLevel;
 	skillLevel_1.onclick = setIptToMyValue;
@@ -4058,6 +4069,11 @@ function editMon(teamNum, isAssist, indexInTeam) {
 	//数据
 	const mon = formation.teams[teamNum][isAssist][indexInTeam];
 
+	//传入编辑模式，不改变页面
+	const locationURL = new URL(location);
+	locationURL.searchParams.set('editing', JSON.stringify([teamNum, isAssist, indexInTeam]));
+	history.replaceState({editing: [teamNum, isAssist, indexInTeam]}, null, locationURL);
+
 	const teamBigBox = teamBigBoxs[teamNum];
 	const teamBox = teamBigBox.querySelector(".team-box");
 	const memberBox = teamBox.querySelector(isAssist ? ".team-assist" : ".team-members");
@@ -4283,17 +4299,17 @@ function editBoxChangeMonId(id) {
 	let frg1 = document.createDocumentFragment(); //创建节点用的临时空间
 	frg1.appendChild(skillBox);
 
-	skillTitle.textContent = activeskill.name;
-	skillTitle.setAttribute("data-skillid", activeskill.id);
+	skillTitle.textContent = activeskill?.name;
+	skillTitle.setAttribute("data-skillid", activeskill?.id);
 	skillDetailOriginal.innerHTML = "";
 	skillDetailOriginal.appendChild(parseSkillDescription(activeskill));
 
-	const t_maxLevel = card.overlay ? 1 : activeskill.maxLevel; //遇到不能升技的，最大等级强制为1
+	const t_maxLevel = card.overlay ? 1 : activeskill?.maxLevel; //遇到不能升技的，最大等级强制为1
 	skillLevel.max = t_maxLevel;
 	skillLevel.value = t_maxLevel;
 	skillLevel_Max.value = t_maxLevel;
 	//skillLevel_Max.textContent = activeskill.maxLevel;
-	skillCD.textContent = activeskill.initialCooldown - t_maxLevel + 1;
+	skillCD.textContent = activeskill?.initialCooldown - t_maxLevel + 1;
 
 	//怪物队长技能
 	const rowLederSkill = settingBox.querySelector(".row-mon-leader-skill");
@@ -4305,8 +4321,8 @@ function editBoxChangeMonId(id) {
 	let frg2 = document.createDocumentFragment(); //创建节点用的临时空间
 	frg2.appendChild(lskillBox);
 
-	lskillTitle.textContent = leaderSkill.name;
-	lskillTitle.setAttribute("data-skillid", leaderSkill.id);
+	lskillTitle.textContent = leaderSkill?.name;
+	lskillTitle.setAttribute("data-skillid", leaderSkill?.id);
 	lskillDetailOriginal.innerHTML = "";
 	lskillDetailOriginal.appendChild(parseSkillDescription(leaderSkill));
 
@@ -4355,9 +4371,7 @@ function refreshAll(formationData) {
 	const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
 	const dungeonEnchanceDom = formationBox.querySelector(".dungeon-enchance"); //地下城强化
 
-	while (formationBox.childNodes.length > 0) {
-		fragment.appendChild(formationBox.childNodes[0]);
-	}
+	fragment.append(...formationBox.childNodes);
 
 	const txtTitle = titleBox.querySelector(".title");
 	const txtDetail = detailBox.querySelector(".detail");
@@ -4605,12 +4619,12 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 	const memberCard = Cards[memberData.id] || Cards[0];
 	const assistCard = Cards[assistData.id] || Cards[0];
 	//队员觉醒
-	let menberAwokens = memberCard.awakenings.slice(0,memberData.awoken);
+	let menberAwokens = memberCard?.awakenings?.slice(0,memberData.awoken) || [];
 	//单人和三人为队员增加超觉醒
 	if ((solo || teamsCount === 3) &&
 		memberData.sawoken != null && //怪物设定了超觉醒
 		memberData.sawoken >= 0 && //怪物超觉醒编号大于0
-		memberCard.superAwakenings.length >= 0 && //卡片有超觉醒
+		memberCard?.superAwakenings?.length >= 0 && //卡片有超觉醒
 		memberData.level >= 100 && //怪物大于100级
 		memberData.plus.every(p=>p>=99) //怪物297了
 	) {
@@ -4618,8 +4632,8 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 	}
 	//menberAwokens.sort();
 	//武器觉醒
-	let assistAwokens = assistCard.awakenings.slice(0,assistData.awoken);
-	if (!assistAwokens.includes(49)) assistAwokens = []; //清空非武器的觉醒
+	let assistAwokens = assistCard?.awakenings?.slice(0,assistData?.awoken);
+	if (!assistAwokens?.includes(49)) assistAwokens = []; //清空非武器的觉醒
 	//assistAwokens.sort();
 	/*if (assistAwokens.includes(49))
 	{
@@ -4834,7 +4848,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		const rarityCount = team[0].slice(0,5).reduce((pre,member)=>{
 			if (member.id <= 0) return pre;
 			const card = Cards[member.id] || Cards[0];
-			return pre + card.rarity;
+			return pre + (card?.rarity ?? 0);
 		},0);
 		rarityDoms.setAttribute(dataAttrName, rarityCount);
 	}
@@ -5048,9 +5062,9 @@ function refreshMemberSkillCD(teamDom, team, idx) {
 	const assist = team[1][idx];
 
 	const memberCard = Cards[member.id] || Cards[0];
-	const memberSkill = Skills[memberCard.activeSkillId];
+	const memberSkill = Skills[memberCard?.activeSkillId];
 	const assistCard = Cards[assist.id] || Cards[0];
-	const assistSkill = Skills[assistCard.activeSkillId];
+	const assistSkill = Skills[assistCard?.activeSkillId];
 
 	const memberSkillCdDom = memberMonDom.querySelector(".skill-cd");
 	const assistSkillCdDom = assistMonDom.querySelector(".skill-cd");
@@ -5060,12 +5074,12 @@ function refreshMemberSkillCD(teamDom, team, idx) {
 	memberSkillCdDom.textContent = memberSkillCd;
 	assistSkillCdDom.textContent = memberSkillCd + assistSkillCd;
 
-	if (member.skilllevel != undefined && member.skilllevel < memberSkill.maxLevel) {
+	if (member?.skilllevel != undefined && member?.skilllevel < memberSkill?.maxLevel) {
 		memberSkillCdDom.classList.remove("max-skill");
 	} else {
 		memberSkillCdDom.classList.add("max-skill");
 	}
-	if (assist.skilllevel != undefined && assist.skilllevel < assistSkill.maxLevel) {
+	if (assist?.skilllevel != undefined && assist?.skilllevel < assistSkill?.maxLevel) {
 		assistSkillCdDom.classList.remove("max-skill");
 	} else {
 		assistSkillCdDom.classList.add("max-skill");

@@ -1492,20 +1492,18 @@ const parsers = {
 };
 
 //将内容添加到代码片段
-DocumentFragment.prototype.ap = function(arg)
+DocumentFragment.prototype.ap = function(...args)
 {
-	if (Array.isArray(arg)) //数组，递归自身
-	{
-		arg.forEach(element=>this.ap(element));
-	}
-	else if (arg instanceof Node) //属于Node的直接添加
-	{
-		this.appendChild(arg);
-	}
-	else //其他内容的转换为文字添加
-	{
-		this.appendChild(document.createTextNode(arg));
-	}
+	args.forEach(arg=>{
+		if (Array.isArray(arg)) //数组，递归自身
+		{
+			arg.forEach(item=>this.ap(item));
+		}
+		else //其他内容的转换为文字添加
+		{
+			this.append(arg);
+		}
+	}, this);
 	return this;
 }
 

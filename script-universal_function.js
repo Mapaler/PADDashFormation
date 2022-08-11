@@ -142,28 +142,19 @@ function tp(strings, ...keys) {
 	return (function(...values) {
 		let dict = values[values.length - 1] || {};
 		let fragment = document.createDocumentFragment();
-		fragment.appendChild(document.createTextNode(strings[0]));
-		//let result = [strings[0]];
+		fragment.append(strings[0]);
 		keys.forEach(function(key, i, arr) {
 			let value = Number.isInteger(key) ? values[key] : dict[key];
-			if (value == undefined)
+			if (value != undefined)
 			{
-				//console.debug("模板字符串中 %s 未找到输入数据",key);
-			}else
-			{
-				if (!(value instanceof Node)) //这里需要用 Node 而不是 HTMLElement，因为 DocumentFragment 从属于 Node
-				{
-					value = document.createTextNode(value);
-				}
 				try{
-					fragment.appendChild(arr.lastIndexOf(key) === i ? value : value.cloneNode(true)); //如果是最后一个匹配的标签，就插入原始的DOM（保留行为），否则插入克隆的DOM
+					fragment.append(arr.lastIndexOf(key) === i ? value : value.cloneNode(true)); //如果是最后一个匹配的标签，就插入原始的DOM（保留行为），否则插入克隆的DOM
 				}catch(e)
 				{
-					console.log(value, e);
-					console.log(keys, values);
+					console.log("模板字符串错误： %o，", e, values, keys, value);
 				}
 			}
-			fragment.appendChild(document.createTextNode(strings[i + 1]));
+			fragment.append(strings[i + 1]);
 		});
 		return fragment;
 	});
@@ -899,7 +890,7 @@ function parseSkillDescription(skill) {
 	//const span = document.createElement("span");
 	//span.innerHTML = descriptionToHTML(skill.description);
 	
-	return descriptionToHTML(skill.description);
+	return descriptionToHTML(skill?.description);
 }
 //大数字缩短长度，默认返回本地定义字符串
 function parseBigNumber(number) {
@@ -923,8 +914,8 @@ function getAllowLatent(card) {
 //计算队伍中有多少血量
 function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 	let memberArr = team[0], assistArr = team[1];
-	const ls1 = Skills[(Cards[leader1id] || Cards[0]).leaderSkillId];
-	const ls2 = Skills[(Cards[leader2id] || Cards[0]).leaderSkillId];
+	const ls1 = Skills[(Cards[leader1id] || Cards[0])?.leaderSkillId];
+	const ls2 = Skills[(Cards[leader2id] || Cards[0])?.leaderSkillId];
 	const mHpArr = memberArr.map((member, idx) => {
 		const ability = noAwoken ? member.abilityNoAwoken : member.ability;
 		let hp = ability ? ability[0] : 0;
@@ -954,9 +945,9 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 			}
 			return 1;
 		}
-		const sk = ls.params;
+		const sk = ls?.params;
 		let scale = 1;
-		switch (ls.type) {
+		switch (ls?.type) {
 			case 23:
 			case 30:
 			case 62:
@@ -1087,6 +1078,7 @@ function getCardActiveSkills(card, skillTypes, searchRandom = false) {
 }
 //查找到真正起作用的那一个技能
 function getActuallySkills(skill, skillTypes, searchRandom = true) {
+	if (!skill) return [];
 	if (skillTypes.includes(skill.type))
 	{
 		return [skill];
@@ -1209,10 +1201,10 @@ function countTeamSB(team, solo) {
 		const assist = team[1][mi];
 		if (member.id < 0) continue;
 		const memberCard = henshinBase(member);
-		let enableAwoken = memberCard.awakenings.slice(0, member.awoken);
+		let enableAwoken = memberCard?.awakenings?.slice(0, member.awoken) || [];
 		//单人、3人时,大于等于100级且297时增加超觉醒
 		if ((solo || teamsCount === 3) && member.sawoken >= 0 && member.level >= 100 && member.plus.every(p=>p>=99)) {
-			const sAwokenT = memberCard.superAwakenings[member.sawoken];
+			const sAwokenT = memberCard?.superAwakenings?.[member.sawoken];
 			if (sAwokenT >= 0)
 				enableAwoken = enableAwoken.concat(sAwokenT);
 		}
