@@ -1263,39 +1263,31 @@ function reloadFormationData(event) {
 			return;
 		}
 	}
-
 	formation.loadObj(formationData);
-	refreshAll(formation);
-
-	if (isGuideMod)
+	
+	//编辑模式直接打开编辑框
+	let editingTarget = ((str)=>{
+		try {
+			const arr = JSON.parse(str);
+			return (Array.isArray(arr) && arr.length >= 3 && arr.slice(0,3).every(n=>typeof n == "number")) ? arr : null;
+		} catch (error) {
+			return null;
+		}
+	})(sessionStorage.getItem('editing'));
+	if (!editingTarget && isGuideMod) editingTarget = [0,0,0];
+	if (editingTarget)
 	{
 		const mid = event?.state?.mid ?? parseInt(getQueryString("id"), 10);
-
-		if (!isNaN(mid))
-		{
-			editBox.mid = mid;
-			editBoxChangeMonId(mid);
+		if (isGuideMod && !isNaN(mid)) {
+			formation.teams[editingTarget[0]][editingTarget[1]][editingTarget[2]].id = mid;
 		}
-		if (event?.state?.searchArr)
+		editMon(editingTarget[0], editingTarget[1], editingTarget[2]);
+		if (editingTarget && event?.state?.searchArr)
 		{
 			showSearch(event.state.searchArr);
 		}
 	} else {
-		//编辑模式直接打开编辑框
-		const editingTarget = ((str)=>{
-			try {
-				const arr = JSON.parse(str);
-				return (Array.isArray(arr) && arr.length >= 3 && arr.slice(0,3).every(n=>typeof n == "number")) ? arr : null;
-			} catch (error) {
-				return null;
-			}
-		})(sessionStorage.getItem('editing'));
-		if (editingTarget)
-		{
-			editMon(editingTarget[0], editingTarget[1], editingTarget[2]);
-		} else {
-			editBox.hide();
-		}
+		editBox.hide();
 	}
 	
 	//恢复上一次的搜索状态
@@ -1310,6 +1302,8 @@ function reloadFormationData(event) {
 	if (searchOptions) {
 		editBox?.querySelector(".search-box")?.recoverySearchStatus(searchOptions);
 	}
+	
+	refreshAll(formation);
 }
 window.addEventListener('popstate',reloadFormationData); //前进后退时修改页面
 //创建新的分享地址
@@ -2539,6 +2533,12 @@ function initialize(event) {
 		formationBox.classList.remove("blur-bg");
 		controlBox.classList.remove("blur-bg");
 		//删除编辑模式
+		if (isGuideMod) {
+			const url = new URL(location);
+			url.searchParams.delete("guide");
+			url.searchParams.delete("id");
+			history.replaceState(null,null,url);
+		}
 		sessionStorage.removeItem('editing');
 	};
 

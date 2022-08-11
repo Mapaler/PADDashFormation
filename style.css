@@ -1239,13 +1239,13 @@ icon.inflicts::after
 	font-size: 2em;
 	font-weight: bold;
 }
-.guide-mod .edit-box-title,
+/*.guide-mod .edit-box-title,
 .guide-mod .button-box .button-null,
 .guide-mod .button-box .button-delay,
 .guide-mod .button-box .button-done
 {
 	display: none;
-}
+}*/
 
 /*.edit-box .edit-box-title::before{
 	content: "修改队员";

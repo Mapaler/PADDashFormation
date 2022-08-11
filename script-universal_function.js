@@ -937,10 +937,10 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 
 		function hpMul(parm, scale) {
 			if (scale == undefined || scale == 0) return 1;
-			if (parm.attrs && memberAttrsTypes.attrs.some(a => parm.attrs.includes(a))) {
+			if (parm.attrs && memberAttrsTypes?.attrs?.some(a => parm.attrs.includes(a))) {
 				return scale / 100;
 			}
-			if (parm.types && memberAttrsTypes.types.some(t => parm.types.includes(t))) {
+			if (parm.types && memberAttrsTypes?.types?.some(t => parm.types.includes(t))) {
 				return scale / 100;
 			}
 			return 1;
