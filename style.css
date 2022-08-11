@@ -1070,7 +1070,7 @@ icon.inflicts::after
 	width: 152px;
 	transform: scale(0.65);
 	transform-origin: left top;
-	margin-left: 6px;
+	margin-left: 4px;
 	margin-bottom: calc(-64px * (1 - 0.65) + 1px);
 	/*margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);*/
 	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
@@ -1080,6 +1080,7 @@ icon.inflicts::after
 	grid-template-columns: repeat(3, 32px);
 	grid-auto-rows: 32px;
 	grid-gap: 3px 6px;
+	place-content: start center;
 }
 .team-latents .latent-ul.block-8{
 	grid-template-columns: repeat(4, 32px);

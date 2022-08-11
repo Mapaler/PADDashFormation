@@ -6079,7 +6079,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"4ea53ceeec4d85201f4c001a1d507282"
+		"b3399c7d4b3dd7e8a163ef19dd0e5b72"
 	],
 	[
 		"temp.js",
