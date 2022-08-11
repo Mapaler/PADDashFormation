@@ -3300,7 +3300,6 @@ function initialize(event) {
 		for (let i = 0; i < specialFilters.length; i++) {
 			const filterUl = specialFilters[i];
 			const filter = options.specialFilters[i];
-			console.log(filterUl,filter.join("|"));
 			filterUl.value = filter.join("|");
 		}
 	}
