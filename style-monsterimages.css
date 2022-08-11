@@ -952,6 +952,38 @@ icon.type
 	width: 76px;
 	background-position-x: -32px;
 }
+/* 潜觉编辑界面，多显示一个需求觉醒 */
+.m-latent-allowable-ul .latent-icon[data-latent-icon='39'],
+.m-latent-allowable-ul .latent-icon[data-latent-icon='40'],
+.m-latent-allowable-ul .latent-icon[data-latent-icon='41'],
+.m-latent-allowable-ul .latent-icon[data-latent-icon='46'],
+.m-latent-allowable-ul .latent-icon[data-latent-icon='47']{
+	grid-column: span 2;
+}
+.m-latent-allowable-ul .latent-icon[data-latent-icon='39']::after,
+.m-latent-allowable-ul .latent-icon[data-latent-icon='40']::after,
+.m-latent-allowable-ul .latent-icon[data-latent-icon='41']::after,
+.m-latent-allowable-ul .latent-icon[data-latent-icon='46']::after,
+.m-latent-allowable-ul .latent-icon[data-latent-icon='47']::after{ /*C珠破吸*/
+	content: "";
+	background-image: url(images/awoken.png);
+	margin-left: 6px;
+}
+.m-latent-allowable-ul .latent-icon[data-latent-icon='39']::after{ /*C珠破吸*/
+	background-position-y: calc(-32px * 62);
+}
+.m-latent-allowable-ul .latent-icon[data-latent-icon='40']::after{ /*心横解转转*/
+	background-position-y: calc(-32px * 20);
+}
+.m-latent-allowable-ul .latent-icon[data-latent-icon='41']::after{ /*U解禁消*/
+	background-position-y: calc(-32px * 27);
+}
+.m-latent-allowable-ul .latent-icon[data-latent-icon='46']::after{ /*心追解云封*/
+	background-position-y: calc(-32px * 45);
+}
+.m-latent-allowable-ul .latent-icon[data-latent-icon='47']::after{ /*心L大SB*/
+	background-position-y: calc(-32px * 59);
+}
 
 /* 额外有 x1.5 的 6格觉醒 */
 .level-super-break .latent-icon[data-latent-icon='13']::after,

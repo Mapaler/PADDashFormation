@@ -876,7 +876,8 @@ class LeaderSkillType{
 
 //切换通用的切换className显示的函数
 function toggleDomClassName(addClass, className, dom = document.body) {
-	dom.classList[addClass ? "add" : "remove"](className);
+	return dom.classList.toggle(className, addClass);
+	//dom.classList[addClass ? "add" : "remove"](className);
 	//if (addClass) {
 	//	dom.classList.add(className);
 	//} else {
@@ -2879,9 +2880,14 @@ function initialize(event) {
 	s_boxHave.onchange(false);
 
 	const s_sawokensDiv = searchBox.querySelector(".sawoken-div");
+	const s_sawokensDetail = s_sawokensDiv.querySelector("details");
 	const s_sawokensUl = s_sawokensDiv.querySelector(".awoken-ul");
 	const s_sawokensLi = Array.from(s_sawokensUl.querySelectorAll(".awoken-count"));
 	s_sawokensUl.originalSorting = s_sawokensLi.map(li => parseInt(li.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10));
+	s_sawokensDetail.open = localStorage_getBoolean(cfgPrefix + 'hide-sawoken');
+	s_sawokensDetail.onclick = function(event) {
+		if (event instanceof MouseEvent) localStorage.setItem(cfgPrefix + 'hide-sawoken', Number(!this.open));
+	}
 
 	const s_sawokens = s_sawokensLi.map(li => li.querySelector(".sawoken-check"));
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
@@ -3470,8 +3476,13 @@ function initialize(event) {
 	//潜觉
 	const monEditLatentUl = settingBox.querySelector(".row-mon-latent .latent-ul");
 	const monEditLatents = Array.from(monEditLatentUl.querySelectorAll("li"));
-	const monEditLatentAllowableUl = settingBox.querySelector(".m-latent-allowable-ul");
+	const monEditLatentAllowableDetail = settingBox.querySelector(".row-mon-latent details");
+	const monEditLatentAllowableUl = monEditLatentAllowableDetail.querySelector(".m-latent-allowable-ul");
 	const monEditLatentsAllowable = Array.from(monEditLatentAllowableUl.querySelectorAll("li"));
+	monEditLatentAllowableDetail.open = localStorage_getBoolean(cfgPrefix + 'hide-latent');
+	monEditLatentAllowableDetail.onclick = function(event) {
+		if (event instanceof MouseEvent) localStorage.setItem(cfgPrefix + 'hide-latent', Number(!this.open));
+	}
 	editBox.refreshLatent = function(latent, monid) {//刷新潜觉
 		refreshLatent(latent, monid, monEditLatentUl);
 	};
@@ -3504,8 +3515,8 @@ function initialize(event) {
 	//显示原文开关
 	const showSkillOriginal = document.getElementById("show-skill-original");
 	showSkillOriginal.checked = localStorage_getBoolean(cfgPrefix + showSkillOriginal.id);
-	showSkillOriginal.onchange = function(e) {
-		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
+	showSkillOriginal.onchange = function(event) {
+		if (event instanceof MouseEvent) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 		toggleDomClassName(this.checked, this.id, skillBox);
 		toggleDomClassName(this.checked, this.id, leaderSkillBox);
 	};
