@@ -13,7 +13,7 @@ const servers = [
 		code:"ko"
 	}
 ];
-function filesHashArr(dirName, extName) {
+function filesHashArr(dirName, extName, excludeName) {
 	const dirFiles = fs.readdirSync(dirName);
 	const hashArr = [];
 	for (let fileName of dirFiles) {
@@ -22,6 +22,11 @@ function filesHashArr(dirName, extName) {
 			extName instanceof RegExp && !extName.test(path.extname(fileName)) || //如果扩展名是正则表达式，不匹配则跳过
 			Array.isArray(extName) && extName.every(ext=>path.extname(fileName) !== ext) //如果扩展名是数组，则多次匹配字符串，不匹配则跳过
 			) continue;
+		if (excludeName && (
+			typeof(excludeName) == "string" && fileName.includes(excludeName) || //如果文件名包含排除名则跳过
+			excludeName instanceof RegExp && excludeName.test(fileName) || //如果是正则表达式，匹配则跳过
+			Array.isArray(excludeName) && excludeName.some(exclude=>fileName.includes(exclude)) //如果扩展名是数组，则多次匹配字符串，不匹配则跳过
+			)) continue;
 		const fullFileName = path.join(dirName, fileName);
 		const file = fs.readFileSync(fullFileName);
 		const cardHash = crypto.createHash('md5');
@@ -35,17 +40,15 @@ function filesHashArr(dirName, extName) {
 const cachesArr = [];
 for (let server of servers) {
 	const cardsHash = filesHashArr(`./images/cards_${server.code}`);
-	const voiceHash = filesHashArr(`./sound/voice/${server.code}`);
 	cachesArr.push(...cardsHash);
+	const voiceHash = filesHashArr(`./sound/voice/${server.code}`);
 	cachesArr.push(...voiceHash);
 }
 //字体
 const fontsHash = filesHashArr("./fonts", /\.woff2?$/i);
 cachesArr.push(...fontsHash);
 //程序
-const programHash = filesHashArr("./", /\.(js|html|css)$/i);
-programHash.splice(programHash.findIndex(item=>item[0] === "service-worker.js"), 1); //不要把service-worker自身加入
-programHash.splice(programHash.findIndex(item=>item[0] === "update-service-worker.js"), 1); //不要把update-service-worker自身加入
+const programHash = filesHashArr("./", /\.(js|html|css)$/i, ["package", "service-worker"]);
 cachesArr.push(...programHash);
 //语言
 const lanuageHash = filesHashArr("./languages", /\.(js|css)$/i);
@@ -60,12 +63,12 @@ const library_aaaHash = filesHashArr("./library/jy4340132-aaa", /\.(js|wasm)$/i)
 cachesArr.push(...library_aaaHash);
 //数据
 const dataHash = filesHashArr("./monsters-info", /\.json$/i);
-dataHash.splice(dataHash.findIndex(item=>item[0] === "package-lock.json"), 1); //不要把package-lock.json加入
 cachesArr.push(...dataHash);
 //文档
 const docHash = filesHashArr("./doc", /\.html$/i);
+cachesArr.push(...docHash);
 const docImageHash = filesHashArr("./doc/images", /\.(png|webp|svg)$/i);
-cachesArr.push(...docHash.concat(docImageHash));
+cachesArr.push(...docImageHash);
 
 const swJs = fs.readFileSync('./service-worker.js', 'utf-8');
 let formatterHashes = true;

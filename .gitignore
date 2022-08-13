@@ -1,7 +1,5 @@
 /monsters-info/Download-pad.skyozora.com
-/monsters-info/opencc
 /node_modules
-*formatting.json
 /monsters-info/official-API/*-dungeon.json
 /monsters-info/official-API/*-player-data-*.json
 /monsters-info/official-API/*-enemy_skill.json
@@ -12,5 +10,3 @@
 /fonts/.font-spider
 /images/*.fw.png
 /monsters-info/package-lock.json
-/images/project file/awokens
-/images/project file/types

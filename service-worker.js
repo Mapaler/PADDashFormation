@@ -6330,6 +6330,10 @@ const cachesMap = new Map([
 		"0b3dd5e5f2a34eb46a4dd39a943f5eb8"
 	],
 	[
+		"monsters-info/skill_ko.json",
+		"faa8b54f7ac7564c9cab3186a8323a05"
+	],
+	[
 		"doc/export-player-data.html",
 		"29394036c361ebfeefc55a0524d4d567"
 	],
