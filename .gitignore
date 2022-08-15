@@ -6,6 +6,7 @@
 /monsters-info/official-API/*-limited_bonus.json
 /monsters-info/official-API/*-mdatadl.json
 /monsters-info/official-API/*-shop_item.json
+*_formatting.json
 /sound/voice/variables.txt
 /fonts/.font-spider
 /images/*.fw.png
