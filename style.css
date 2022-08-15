@@ -1176,11 +1176,10 @@ icon.inflicts::after
 }
 .menber-awoken .awoken-ul
 {
-	display: inline-block;
-}
-.menber-awoken .awoken-ul>li
-{
-	display: inline-block;
+	grid-template-columns: repeat(3, 25.6px);
+	grid-auto-rows:  25.6px;
+	grid-gap: 2px;
+	place-content: start center;
 }
 .menber-awoken .awoken-icon
 {
@@ -1369,7 +1368,13 @@ icon.inflicts::after
 }
 
 /*搜索结果显示觉醒列表的相关css*/
-.awoken-preview .awoken-ul,
+.awoken-preview .awoken-ul
+{
+	grid-template-columns: repeat(3, 24px);
+	grid-auto-rows:  24px;
+	grid-gap: 1px;
+	place-content: start center;
+}
 .custom-addition .awoken-ul
 {
 	width: 75px;
