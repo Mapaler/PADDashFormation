@@ -1791,7 +1791,8 @@ icon.inflicts::after
 .official-awoken-sorting {
 	display: inline-block;
 }
-.team-awoken .awoken-ul {
+.team-awoken .awoken-ul,
+.formation-awoken .awoken-ul {
 	grid-template-columns: repeat(auto-fill, 67px);
 }
 .awoken-ul .awoken-count
