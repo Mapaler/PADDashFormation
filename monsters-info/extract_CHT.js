@@ -5,11 +5,18 @@ const converter = OpenCC.Converter({ from: 'hk', to: 'cn' });
 const tsConverter = OpenCC.CustomConverter([
 	['点阵图', '像素画'],
 	['魔物猎人', '怪物猎人'],
+	
+	//漫威
+	['MARVEL', '漫威'],
 	['铁甲奇侠', '钢铁侠'],
 	['变形侠医', '绿巨人'],
+	['变形女侠', '女绿巨人'],
 	['毒魔', '毒液'],
 	['魁隆', '灭霸'],
 	['福瑞', '弗瑞'],
+	['末日博士', '毁灭博士'],
+	['邪恶史传奇', '邪恶奇异'],
+	//奥特曼
 	['超人系列', '奥特曼系列'],
 	['超人吉田/超人力霸王', '奥特曼【初代】'],
 	['贝塔胶囊', 'β魔棒'],
@@ -45,6 +52,8 @@ const tsConverter = OpenCC.CustomConverter([
 	['超人Z', '泽塔奥特曼'],
 	['暗黑特利卡', '暗黑特利迦'],
 	['超人尼奥/超人雷欧', '雷欧奥特曼'],
+	['阿尔法锋刃', '阿尔法利刃'],
+	['德尔塔升华钩爪', '德尔塔升爪'],
 ]);
 
 const sourceFolder = "Download-pad.skyozora.com/pad.skyozora.com"; //战友网数据的存储问文件夹
