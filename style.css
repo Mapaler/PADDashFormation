@@ -1077,8 +1077,10 @@ icon.inflicts::after
 	min-height: 47px; /* 为了防止只有一层6格大潜觉的时候，被缩减太多的问题*/
 	/*潜在觉醒布局，使用 gird*/
 	display: grid;
-	grid-template-columns: repeat(3, 32px);
-	grid-auto-rows: 32px;
+	grid-template: repeat(2, 32px) / repeat(3, 32px);
+	/*grid-template-columns: repeat(3, 32px);
+	grid-template-rows: repeat(2, 32px);*/
+	grid-auto-flow: column;
 	grid-gap: 3px 6px;
 	place-content: start center;
 }
