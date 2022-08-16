@@ -1368,7 +1368,11 @@ icon.inflicts::after
 .detail-box .detail-mon .monster .id::before {
 	font-size: 15px;
 }
-
+.detail-box .latent-icon {
+	width: 32px;
+	height: 32px;
+	display: inline-block;
+}
 /*搜索结果显示觉醒列表的相关css*/
 .awoken-preview .awoken-ul
 {

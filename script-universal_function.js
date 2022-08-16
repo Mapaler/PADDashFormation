@@ -829,16 +829,29 @@ function descriptionToHTML(str)
 			}
 			return sp;
 		});
-	nodeArr = formatParse(nodeArr, /\%\{m([0-9]{1,5})\}/g, 1,
+	nodeArr = formatParse(nodeArr, /\%\{m(\d+)\}/g, 1,
 		(id)=>{
 			const avatar = cardN(parseInt(id,10));
 			avatar.monDom.onclick = cardNClick;
 			return avatar;
 		});
-	nodeArr = formatParse(nodeArr, /\%\{a([0-9]{1,3})\}/g, 1,
+	nodeArr = formatParse(nodeArr, /\%\{a(\d+)\}/g, 1,
 		(id)=>{
 			const awokenList = renderAwakenings(parseInt(id,10));
 			return awokenList;
+		});
+	nodeArr = formatParse(nodeArr, /\%\{o(\d+)\}/g, 1,
+		(id)=>{
+			const orbsList = renderOrbs(parseInt(id,10));
+			return orbsList;
+		});
+	nodeArr = formatParse(nodeArr, /\%\{l(\d+)\}/g, 1,
+		(id)=>{
+			const latent = document.createElement("icon");
+			latent.className = `latent-icon`;
+			latent.setAttribute("data-latent-icon", id);
+			latent.setAttribute("data-latent-hole", 1);
+			return latent;
 		});
 
 /*	arr = arr.flatMap(item=>{
