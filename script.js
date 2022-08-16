@@ -699,6 +699,7 @@ class EvoTree
 {
 	constructor(mid, parent = null)
 	{
+		if (!mid) return;
 		const _this = this;
 		this.parent = parent;
 		if (parent == null) //如果没有提供父级，则寻找进化根
@@ -826,6 +827,58 @@ class EvoTree
 			li.appendChild(subEvo.toListNode());
 		});
 		return tBox;
+	};
+}
+//进化树
+class RequirementTree extends EvoTree
+{
+	static gemNames = {
+		ja: "希石",
+		en: "Gem",
+		ko: "휘석",
+	};
+	constructor(mid, parent = null)
+	{
+		if (!mid) return;
+		super();
+		const _this = this;
+		this.parent = parent;
+		const card = Cards[mid];
+		
+		this.id = mid;
+		this.idArr = parent ? parent.idArr.concat() : [];
+		this.card = card;
+		this.children = [];
+		this.evoType = "requirement";
+		this.idArr.push(mid);
+
+		let gemName = RequirementTree.gemNames[currentDataSource.code];
+
+		if (card.evoBaseId && card.evoRootId !== mid) {
+			let realMaterials = []
+			for (const materialId of card.evoMaterials.filter(Boolean)) {
+				const materialCard = Cards[materialId];
+				if (!materialCard) continue;
+				if (materialCard.types.includes(0) && materialCard.name.includes(gemName)) { //必须是进化型，并且有稀石字样
+					//console.log("查咨进化素材：", materialCard);
+					let maybeCard = Cards.find(_card =>
+						!_card.types.includes(0) && //必须不是进化类型
+						_card.activeSkillId === materialCard.activeSkillId && //技能一致
+						materialCard.name.includes(_card.name) && //稀石名字包含原始名字
+						_card.evoRootId != _card.id //忽略原始形态没有进化的
+						);
+					//console.log("查询结果：", maybeCard);
+					if (maybeCard && !_this.idArr.includes(maybeCard.id)) {
+						//console.log(card, maybeCard);
+						realMaterials.push(maybeCard.id);
+					};
+				}
+			}
+			
+			let materials = realMaterials.map(materialId=>new RequirementTree(materialId, _this));
+			this.children.push(...materials);
+			this.children.push(new RequirementTree(card.evoBaseId, _this));
+		}
 	};
 }
 
@@ -2675,7 +2728,7 @@ function initialize(event) {
 			card = Cards[id];
 		}
 		cli.card = card;
-		if (card.canAssist)
+		if (card?.canAssist)
 			cli.classList.add("allowable-assist");
 		if (options.showCD)
 		{
@@ -2794,7 +2847,25 @@ function initialize(event) {
 		maskContent.appendChild(fragment);
 	}
 	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
-	openEvolutionaryTree.onclick = function() {evolutionaryTreeMask.show(editBox.mid)};
+	openEvolutionaryTree.onclick = function(event) {
+		if (event.ctrlKey) { //显示进化需求树，不是常用功能，就不做额外的按钮了，所以按住Ctrl点击生效
+			evolutionaryTreeMask.showRequirementTree(editBox.mid);
+		} else {
+			evolutionaryTreeMask.show(editBox.mid);
+		}
+	};
+	//显示进化需求树
+	evolutionaryTreeMask.showRequirementTree = function(monid)
+	{
+		const maskContent = this.querySelector(".mask-content");
+		const fragment = document.createDocumentFragment();
+		const evoTree = new RequirementTree(monid);
+
+		fragment.appendChild(evoTree.toListNode());
+		maskContent.innerHTML = "";
+		maskContent.appendChild(fragment);
+		this.classList.remove(className_displayNone);
+	}
 	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
 	searchEvolutionByThis.onclick = function() {showSearch(Cards.filter(card=>card.evoMaterials.includes(editBox.mid)))};
 
