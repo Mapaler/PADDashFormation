@@ -1043,12 +1043,12 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 				break;
 			}
 			case 229:{ //队员中存在每个属性或Type都算一次
-				const atCount = countTeamTotalAttrsTypes(memberArr, assistArr);
+				const {attrs, types} = countTeamTotalAttrsTypes(memberArr, assistArr);
 
 				let correAttrs = flags(sk[0]), correTypes = flags(sk[1]); //符合的属性/类型
 				 //符合的次数
-				let correTimes = correAttrs.reduce((pre,attr)=>pre + (atCount.attrs.get(attr) || 0),0) +
-								 correTypes.reduce((pre,type)=>pre + (atCount.types.get(type) || 0),0);
+				let correTimes = correAttrs.reduce((pre,attr)=>pre + (attrs[attr] || 0),0) +
+								 correTypes.reduce((pre,type)=>pre + (types[type] || 0),0);
 				scale = sk[2] * correTimes / 100 + 1;
 				console.debug('属性、类型个数动态倍率，当前队长HP倍率为 %s (匹配 %d 次)', scale, correTimes);
 				break;
