@@ -6471,7 +6471,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"90815635ab28282907a015711a680fd8"
+		"2e131206b52449ce5c998f8f5d874d96"
 	],
 	[
 		"monsters-info/mon_en.json",
@@ -6479,7 +6479,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"e5f7b72dac82da60fe8c705bf1e31417"
+		"c5d01e10c1aaf87ec1331567d91c75bf"
 	],
 	[
 		"monsters-info/mon_ko.json",
@@ -6491,7 +6491,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/skill_ja.json",
-		"2a67124722314834f0708d16effe5a78"
+		"4a2d2a1af57e98badca52c19a66d7ce2"
 	],
 	[
 		"monsters-info/skill_ko.json",
