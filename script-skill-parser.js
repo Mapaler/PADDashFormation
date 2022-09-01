@@ -417,6 +417,7 @@ const SkillKinds = {
 	SkillProviso: "skill-proviso",
 	ImpartAwakenings: "impart-awakenings",
 	ObstructOpponent: "obstruct-opponent",
+	IncreaseDamageCap: "increase-damage-cap",
 }
 
 function skillParser(skillId)
@@ -964,6 +965,9 @@ function impartAwakenings(attrs, types, awakenings) {
 function obstructOpponent(type, pos, ids) {
 	return { kind: SkillKinds.ObstructOpponent, type: type, pos: pos, enemy_skills: ids };
 }
+function increaseDamageCap(cap, targets) {
+	return { kind: SkillKinds.IncreaseDamageCap, cap: cap, targets: targets};
+}
 
 const parsers = {
 	parser: (() => []), //这个用来解决代码提示的报错问题，不起实际作用
@@ -1476,6 +1480,13 @@ const parsers = {
 	[237](turns, hp) { //改变HP上限
 		return activeTurns(turns,
 			powerUp(null, null, p.mul({ hp: hp }))
+		);
+	},
+	[241](turns, cap, target = 1) { //改变伤害上限
+		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+		const typeArr = flags(target).map(n => targetTypes[n]);
+		return activeTurns(turns,
+			increaseDamageCap(cap * 1e8, typeArr)
 		);
 	},
 	[1000](type, pos, ...ids) {
@@ -2343,6 +2354,18 @@ function renderSkill(skill, option = {})
 				}
 			}
 			frg.ap(tsp.skill.obstruct_opponent(dict));
+			break;
+		}
+		case SkillKinds.IncreaseDamageCap: { //增加伤害上限
+			const {cap, targets} = skill;
+			dict = {
+				icon: createIcon(skill.kind),
+				targets: targets.map(target=>
+					tsp?.target[target.replaceAll("-","_")]?.())
+					.nodeJoin(tsp.word.slight_pause()),
+				cap: cap.bigNumberToString(),
+			};
+			frg.ap(tsp.skill.increase_damage_cap(dict));
 			break;
 		}
 		

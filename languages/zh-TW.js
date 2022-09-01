@@ -96,6 +96,7 @@
 			obstruct_opponent_after_me: tp`排名比自身低的對手`,
 			obstruct_opponent_before_me: tp`排名比自身高的對手`,
 			obstruct_opponent_designated_position: tp`第${'positions'}排位的對手`,
+			increase_damage_cap: tp`${'targets'}的${'icon'}傷害上限提升到${'cap'}`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,

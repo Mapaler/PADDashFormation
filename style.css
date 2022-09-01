@@ -3959,3 +3959,7 @@ table .orb-icon
 	background-image: url(images/icon-evolved-skill-loop.png);
 	background-size: contain;
 }
+.icon-skill[data-icon-type="increase-damage-cap"]
+{
+	background-position-y:calc(-36px * 36);
+}

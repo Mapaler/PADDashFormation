@@ -113,6 +113,7 @@ let localTranslating = {
 			obstruct_opponent_after_me: tp`The opponent ranked lower than me`,
 			obstruct_opponent_before_me: tp`The opponent ranked higher than me`,
 			obstruct_opponent_designated_position: tp`No.${'positions'} ranked opponents`,
+			increase_damage_cap: tp`The ${'icon'}damage cap of ${'targets'} is increased to ${'cap'}`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
