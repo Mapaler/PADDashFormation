@@ -99,7 +99,7 @@ Array.prototype.deleteLatter = function(item = null) {
 Array.prototype.distinct = function() {
 	const _set = new Set(this);
 	this.length = 0;
-	this.splice(this.length,0,..._set);
+	this.push(..._set);
 	return this.valueOf();
 }
 Array.prototype.randomShift = function() {

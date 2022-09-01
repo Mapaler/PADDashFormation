@@ -100,18 +100,251 @@ class Orb
 {
 	color = null;
 	states = [];
-	enhanced = false; //锁定
-	locked = false; //锁定
-	bound = false;
-	variation = false; //随机变换
-	roulette = false; //轮盘位
-	cloud = false; //云
-	constructor(color)
+	//enhanced = false; //锁定
+	//locked = false; //锁定
+	//bound = false;
+	//variation = false; //随机变换
+	//roulette = false; //轮盘位
+	//cloud = false; //云
+	constructor(color = null)
 	{
 		this.color = color;
 	}
 	valueOf() {
 		return this.color;
+	}
+}
+class Board2
+{
+	rowCount = 0;
+	columnCount = 0;
+	data = [];
+	state = [];
+	constructor(def = null, rowCount = 5, columnCount = 6)
+	{
+		this.rowCount = rowCount;
+		this.columnCount = columnCount;
+		for (let ri=0;ri<this.rowCount;ri++)
+		{
+			const orbCol = [], stateCol = [];
+			for (let ci=0;ci<this.columnCount;ci++)
+			{
+				orbCol.push(new Orb(typeof(def) == "number" ? def : void(0) ));
+				stateCol.push([]);
+			}
+			this.data.push(orbCol);
+			this.state.push(stateCol);
+		}
+		//如果传入的是数组，直接随机分布
+		if (Array.isArray(def))
+		{
+			this.randomFill(def);
+		}
+	}
+	//填充序列
+	sequenceFill(sequence, exclude)
+	{
+		if (!Array.isArray(exclude) && exclude != null)
+			exclude = [exclude];
+		const o = sequence.entries();
+		//65版部分
+		for (let ri=0;ri<this.data.length;ri++)
+		{
+			if (ri == 2) ri++;
+			const row = this.data[ri];
+			for (let ci=0;ci<row.length;ci++)
+			{
+				if (ci == 3) ci++;
+				//从数组中随机取出一个
+				if (exclude && exclude.includes(row[ci].color)) continue;
+				const c = o.next().value?.[1] ?? row[ci].color;
+				if (c == "variation")
+					row[ci].states.push(c);
+				else
+					row[ci].color = c;
+			}
+		}
+		//填充剩下的部分
+		for (let ri=0;ri<this.data.length;ri++)
+		{
+			if (ri == 2) ri++;
+			const row = this.data[ri];
+			if (exclude && exclude.includes(row[3].color)) continue;
+			const c = o.next().value?.[1] ?? row[3].color;
+			if (c == "variation")
+				row[3].states.push(c);
+			else
+				row[3].color = c;
+		}
+		const row = this.data[2];
+		for (let ci=0;ci<row.length;ci++)
+		{
+			if (exclude && exclude.includes(row[ci].color)) continue;
+			const c = o.next().value?.[1] ?? row[3].color;
+			if (c == "variation")
+				row[ci].states.push(c);
+			else
+				row[ci].color = c;
+		}
+	}
+	//将有序数组转为随机的数组
+	sequenceToRandom(valueArray)
+	{
+		const randomData = [];
+		//将65版之后的的提出来
+		const maxCount = this.rowCount * this.columnCount
+		let secondaryData = valueArray.splice((this.rowCount - 1) * (this.columnCount - 1) - (maxCount - valueArray.length));
+		
+		while(valueArray.length > 0)
+		{
+			randomData.push(valueArray.randomShift());
+		}
+		while(secondaryData.length > 0)
+		{
+			randomData.push(secondaryData.randomShift());
+		}
+		return randomData;
+	}
+	//洗版的填充
+	randomFill(attrs, states) 
+	{
+		let valueArray = new Uint8Array(this.rowCount * this.columnCount);
+		crypto.getRandomValues(valueArray); //获取符合密码学要求的安全的随机值
+		valueArray = Array.from(valueArray.map(x => attrs[x % attrs.length])); //用所有宝珠随机填充
+		//之后用每种颜色填充前3个
+		attrs.forEach((attr,idx)=>{
+			valueArray.fill(attr, idx * 3, (idx + 1) * 3);
+		});
+		//将上方数据重新乱序排列
+		const randomData = this.sequenceToRandom(valueArray);
+		this.sequenceFill(randomData);
+	}
+	//生成珠子的填充
+	generateOrbs(attrs, count, exclude, states)
+	{
+		let space = this.rowCount * this.columnCount;
+		if (exclude?.length > 0)
+		{
+			space -= this.data.flat().filter(o=>exclude.includes(o)).length;
+		}
+		
+		const valueArray = new Array(space);
+		attrs.forEach((attr,idx)=>{
+			valueArray.fill(attr, idx * count, (idx + 1) * count);
+		});
+		//将上方数据重新乱序排列
+		const randomData = this.sequenceToRandom(valueArray);
+		this.sequenceFill(randomData, exclude);
+	}
+	//设定横行
+	setRow(rows, state)
+	{
+		const setOrb = typeof(state) == 'number';
+		for (let row of rows)
+		{
+			if (row >= 2) row = this.rowCount - (4 - row) - 1; //第3横开始就反向找
+			const rowData = setOrb ? this.data[row] : this.state[row];
+			for (let ri=0;ri<rowData.length;ri++)
+			{
+				if (setOrb)
+					rowData[ri].color = attr;
+				else
+					rowData[ri].push(state);
+			}
+		}
+	}
+	//设定竖列
+	setColumn(cols, state)
+	{
+		const setOrb = typeof(state) == 'number';
+		for (let col of cols)
+		{
+			if (col >= 3) col = this.colCount - (5 - col) - 1; //第4竖开始就反向找;
+			for (let rowData of setOrb ? this.data : this.state)
+			{
+				if (setOrb)
+					rowData[col].color = attr;
+				else
+					rowData[col].push(state);
+			}
+		}
+	}
+	//设定形状
+	setShape(matrix, state)
+	{
+		const setOrb = typeof(state) == 'number';
+		function fillRow(rowData, inputRow, attr)
+		{
+			for (let col of inputRow)
+			{
+				if (col == 3) {
+					if (attr == "variation")
+						rowData[col].states.push(attr);
+					else
+						rowData[col].color = attr;
+				}
+				if (col >= 3) col++;
+				if (attr == "variation")
+					rowData[col].states.push(attr);
+				else
+					rowData[col].color = attr;
+			}
+		}
+		for (let ri=0; ri<matrix.length; ri++)
+		{
+			if (ri == 2)
+			{
+				fillRow(this.data[ri], matrix[ri], attr);
+			}
+			fillRow(this.data[ri >= 2 ? ri+1 : ri], matrix[ri], attr);
+		}
+	}
+	//面板叠加
+	overlayBoard(board)
+	{	
+		for (let ri=0; ri<board.length; ri++)
+		{
+			const rowNew = board[ri];
+			const rowOld = this.data[ri];
+			for (let ci=0; ci < rowNew.length; ci++)
+			{
+				const orbOld = rowOld[ci], orbNew = rowNew[ci];
+				orbOld.color = orbNew.color;
+				orbOld.state = orbOld.state.concat(orbNew.state).distinct();
+			}
+		}
+	}
+	//导出数组
+	valueOf()
+	{
+		return this.data;
+	}
+	//输出表格
+	toTable()
+	{
+		const table = document.createElement("table");
+		table.boardData = this.data;
+		table.className = "board";
+		this.data.forEach((rowData, ri, rArr) => {
+			const row = table.insertRow();
+			if (ri == 2 && rArr.length > 5) row.classList.add("board-row4");
+	
+			rowData.forEach((orbType, ci, cArr) => {
+				const cell = row.insertCell();
+				const orb = cell.appendChild(document.createElement('icon'));
+				orb.className = "orb";
+				if (orbType.color != null) orb.setAttribute("data-orb-icon", orbType.color);
+				orbType.states.forEach(state=>orb.classList.add(state));
+				if (ci == 3 && cArr.length > 6) cell.classList.add("board-cell5");
+			});
+		});
+		if (this.data.length > 5) {
+			table.onclick = toggle76;
+		}
+		function toggle76() {
+			this.classList.toggle("board-76");
+		}
+		return table;
 	}
 }
 class Board
