@@ -104,6 +104,8 @@ class Orb
 	locked = false; //锁定
 	bound = false;
 	variation = false; //随机变换
+	roulette = false; //轮盘位
+	cloud = false; //云
 	constructor(color)
 	{
 		this.color = color;
@@ -117,6 +119,7 @@ class Board
 	rowCount = 6;
 	columnCount = 7;
 	data = [];
+	state = [];
 	constructor(def = null)
 	{
 		for (let ri=0;ri<this.rowCount;ri++)
@@ -199,7 +202,7 @@ class Board
 		return randomData;
 	}
 	//洗版的填充
-	randomFill(attrs) 
+	randomFill(attrs, states) 
 	{
 		let valueArray = new Uint8Array(this.rowCount * this.columnCount);
 		crypto.getRandomValues(valueArray); //获取符合密码学要求的安全的随机值
@@ -213,7 +216,7 @@ class Board
 		this.sequenceFill(randomData);
 	}
 	//生成珠子的填充
-	generateOrbs(attrs, count, exclude)
+	generateOrbs(attrs, count, exclude, states)
 	{
 		let space = this.rowCount * this.columnCount;
 		if (exclude?.length > 0)
@@ -221,7 +224,7 @@ class Board
 			space -= this.data.flat().filter(o=>exclude.includes(o)).length;
 		}
 		
-		let valueArray = new Array(space);
+		const valueArray = new Array(space);
 		attrs.forEach((attr,idx)=>{
 			valueArray.fill(attr, idx * count, (idx + 1) * count);
 		});
@@ -230,7 +233,7 @@ class Board
 		this.sequenceFill(randomData, exclude);
 	}
 	//设定横行
-	setRow(rowsNumber, attr = 0)
+	setRow(rowsNumber, attr = 0, states)
 	{
 		for (let row of rowsNumber)
 		{
@@ -243,7 +246,7 @@ class Board
 		}
 	}
 	//设定竖列
-	setColumn(colsNumber, attr = 0)
+	setColumn(colsNumber, attr = 0, states)
 	{
 		for (let col of colsNumber)
 		{
@@ -255,7 +258,7 @@ class Board
 		}
 	}
 	//设定形状
-	setShape(matrix, attr = 0)
+	setShape(matrix, attr = 0, states)
 	{
 		function fillRow(rowData, inputRow, attr)
 		{
@@ -418,6 +421,7 @@ const SkillKinds = {
 	ImpartAwakenings: "impart-awakenings",
 	ObstructOpponent: "obstruct-opponent",
 	IncreaseDamageCap: "increase-damage-cap",
+	BoardJammingStates: "board-jamming-states",
 }
 
 function skillParser(skillId)
@@ -873,14 +877,14 @@ function autoHealBuff(value) {
 function fromTo(from, to) {
 	return { from: from, to: to };
 }
-function changeOrbs() {
-	return { kind: SkillKinds.ChangeOrbs, changes: Array.from(arguments) };
+function changeOrbs(...changes) {
+	return { kind: SkillKinds.ChangeOrbs, changes: changes };
 }
 function generateOrbs(orbs, exclude, count, time) {
 	return { kind: SkillKinds.GenerateOrbs, orbs: orbs, exclude: exclude, count: count, time: time};
 }
-function fixedOrbs() {
-	return { kind: SkillKinds.FixedOrbs, generates: Array.from(arguments) };
+function fixedOrbs(...generates) {
+	return { kind: SkillKinds.FixedOrbs, generates: generates };
 }
 function powerUp(attrs, types, value, condition = null, reduceDamageValue = null, additional = []) {
 	if (value.kind === SkillPowerUpKind.Multiplier) {
@@ -962,11 +966,14 @@ function skillProviso(cond) { return { kind: SkillKinds.SkillProviso, cond: cond
 function impartAwakenings(attrs, types, awakenings) {
 	return { kind: SkillKinds.ImpartAwakenings, attrs: attrs, types: types, awakenings: awakenings };
 }
-function obstructOpponent(type, pos, ids) {
-	return { kind: SkillKinds.ObstructOpponent, type: type, pos: pos, enemy_skills: ids };
+function obstructOpponent(typeName, pos, ids) {
+	return { kind: SkillKinds.ObstructOpponent, typeName: typeName, pos: pos, enemy_skills: ids };
 }
 function increaseDamageCap(cap, targets) {
 	return { kind: SkillKinds.IncreaseDamageCap, cap: cap, targets: targets};
+}
+function boardJammingStates(state, posType, options) {
+	return { kind: SkillKinds.BoardJammingStates, state: state, posType: posType, ...options};
 }
 
 const parsers = {
@@ -1406,10 +1413,20 @@ const parsers = {
 		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, min, [100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[207](turns, time, row1, row2, row3, row4, row5, count) {
-		return activeTurns(turns, count ?
+		/*return activeTurns(turns, count ?
 			generateOrbs( ['variation'], null, count, time/100):
 			fixedOrbs( { orbs: ['variation'], time: time/100, type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>flags(row)) })
-		);
+		);*/
+		const options = { time: time/100};
+		if (count) {
+			options.count = count;
+		} else {
+			options.positions = [row1, row2, row3, row4, row5].map(flags);
+		}
+		return activeTurns(turns, 
+			boardJammingStates('roulette', count ? 'random' : 'shape',
+			{ time: time/100 , count: count, positions: [row1, row2, row3, row4, row5].map(flags) }
+		));
 	},
 	[208](count1, to1, exclude1, count2, to2, exclude2) {
 		return [
@@ -1480,6 +1497,11 @@ const parsers = {
 	[237](turns, hp) { //改变HP上限
 		return activeTurns(turns,
 			powerUp(null, null, p.mul({ hp: hp }))
+		);
+	},
+	[238](turns, width, height, pos1, pos2) { //产云
+		return activeTurns(turns,
+			boardJammingStates('cloud', (pos1 && pos2) ? 'fixed' : 'random', { size: [width, height], positions: [pos1, pos2] })
 		);
 	},
 	[241](turns, cap, target = 1) { //改变伤害上限
@@ -2083,14 +2105,14 @@ function renderSkill(skill, option = {})
 			}
 			for (const generate of generates)
 			{
-				let orb = generate.orbs?.[0], time = generate.time;
+				let variationorb = generate.orbs?.[0], time = generate.time;
 				dict = {
 					orbs: renderOrbs(orb, {time}),
 				};
 				if (generate.type == 'shape')
 				{
 					dict.position = tsp.position.shape();
-					if (!merge_skill) board.setShape(generate.positions, orb);
+					if (board) board.setShape(generate.positions, orb);
 				}else
 				{
 					let posFrgs = [];
@@ -2100,20 +2122,20 @@ function renderSkill(skill, option = {})
 						const pos = posSplit(generate.positions, 5);
 						if (pos.sequence.length) posFrgs.push(tsp.position.top({pos: pos.sequence.join(slight_pause)}));
 						if (pos.reverse.length) posFrgs.push(tsp.position.bottom({pos: pos.reverse.join(slight_pause)}));
-						if (!merge_skill) board.setRow(generate.positions, orb);
+						if (board) board.setRow(generate.positions, orb);
 					}else
 					{
 						const pos = posSplit(generate.positions, 6);
 						if (pos.sequence.length) posFrgs.push(tsp.position.left({pos: pos.sequence.join(slight_pause)}));
 						if (pos.reverse.length) posFrgs.push(tsp.position.right({pos: pos.reverse.join(slight_pause)}));
-						if (!merge_skill) board.setColumn(generate.positions, orb);
+						if (board) board.setColumn(generate.positions, orb);
 					}
 					dict.position = posFrgs.nodeJoin(tsp.word.slight_pause());
 				}
 				subDocument.push(tsp.skill.fixed_orbs(dict));
 			}
 			frg.ap(subDocument.nodeJoin(tsp.word.comma()));
-			if (!merge_skill) frg.ap(board.toTable());
+			if (board) frg.ap(board.toTable());
 			
 			break;
 		}
@@ -2366,6 +2388,27 @@ function renderSkill(skill, option = {})
 				cap: cap.bigNumberToString(),
 			};
 			frg.ap(tsp.skill.increase_damage_cap(dict));
+			break;
+		}
+		case SkillKinds.BoardJammingStates: { //版面产生干扰状态
+			const { state, posType, size, positions, count, time } = skill;
+			let board = merge_skill ? null : new Board();
+
+			dict = {
+				state: tsp.board[state](),
+				position: posType == 'random' ? tsp.position.random() : tsp.position.shape(),
+			};
+			if (state == 'roulette') { //轮盘位
+				dict.time = tsp.board.roulette_time({duration: renderValue(v.constant(time), {unit: tsp.unit.seconds})});
+				dict.count = renderValue(v.constant(count || positions.flat().length), {unit: tsp.unit.orbs});
+			}
+			if (state == 'cloud') { //云
+				const [width, height] = size;
+				dict.size = tsp.value.size({ width: width, height: height});
+			}
+			frg.ap(tsp.skill.board_jamming_state(dict));
+
+			if (board) frg.ap(board.toTable());
 			break;
 		}
 		

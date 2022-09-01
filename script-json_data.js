@@ -114,6 +114,7 @@ let localTranslating = {
 			obstruct_opponent_before_me: tp`The opponent ranked higher than me`,
 			obstruct_opponent_designated_position: tp`No.${'positions'} ranked opponents`,
 			increase_damage_cap: tp`The ${'icon'}damage cap of ${'targets'} is increased to ${'cap'}`,
+			board_jamming_state: tp`Creates ${'count'} ${'state'} ${'size'} at ${'position'}${'time'}`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -161,6 +162,7 @@ let localTranslating = {
 			bottom: tp`${'pos'} of bottom rows`,
 			left: tp`${'pos'} of left columns`,
 			right: tp`${'pos'} of right columns`,
+			random: tp`random location`,
 			shape: tp`specified location`,
 		},
 		value: {
@@ -175,6 +177,8 @@ let localTranslating = {
 			random_atk: tp`${'atk'} ×${'min'}${'max'}`,
 			prob: tp`${'value'} chance for `,
 			x_awakenings: tp`count of ${'awakenings'} ×${'value'}`,
+			size: tp`${'width'}×${'height'}`,
+			pos: tp`${'x'}×${'y'}`,
 		},
 		target: {
 			unknown: tp`Unkown Target`,
@@ -250,11 +254,15 @@ let localTranslating = {
 			enhanced: tp`${'icon'}Enhanced`,
 			locked: tp`${'icon'}Locked`,
 			nail: tp`${'icon'}Nail`,
-			variation: tp`${'icon'}Roulette (transforms every ${'time'})`,
 			_5color: tp`${'icon'}5 Att.`,
 			_6color: tp`${'_5color'}+${'orb_rcv'}`,
 			all: tp`All`,
 			any: tp`Any ${'cotent'}`,
+		},
+		board: {
+			cloud: tp`${'icon'}Cloud`,
+			roulette: tp`${'icon'}Roulette`,
+			roulette_time: tp`(transforms every ${'duration'})`,
 		},
 		types: {
 			[0]: tp`${'icon'}Evo Material`,

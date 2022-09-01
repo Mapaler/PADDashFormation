@@ -98,6 +98,7 @@
 			obstruct_opponent_before_me: tp`排名比自身高的对手`,
 			obstruct_opponent_designated_position: tp`第${'positions'}排位的对手`,
 			increase_damage_cap: tp`${'targets'}的${'icon'}伤害上限提升到${'cap'}`,
+			board_jamming_state: tp`在${'position'}生成${'state'}${'size'}${'count'}${'time'}`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,
@@ -145,6 +146,7 @@
 			bottom: tp`下方第${'pos'}横行`,
 			left: tp`左方第${'pos'}竖列`,
 			right: tp`右方第${'pos'}竖列`,
+			random: tp`随机位置`,
 			shape: tp`指定位置`,
 		},
 		value: {
@@ -159,6 +161,8 @@
 			random_atk: tp`${'atk'}×${'min'}${'max'}倍`,
 			prob: tp`有${'value'}几率`,
 			x_awakenings: tp`${'awakenings'}数量×${'value'}`,
+			size: tp`${'width'}×${'height'}`,
+			pos: tp`${'x'}×${'y'}`,
 		},
 		target: {
 			unknown: tp`未知目标`,
@@ -239,6 +243,11 @@
 			_6color: tp`${'_5color'}+${'orb_rcv'}`,
 			all: tp`所有`,
 			any: tp`任何${'cotent'}`,
+		},
+		board: {
+			cloud: tp`${'icon'}云`,
+			roulette: tp`${'icon'}轮盘位`,
+			roulette_time: tp`（每${'duration'}变换）`,
 		},
 		types: {
 			[0]: tp`${'icon'}进化用`,
