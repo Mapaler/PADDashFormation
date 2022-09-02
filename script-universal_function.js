@@ -102,6 +102,23 @@ Array.prototype.distinct = function() {
 	this.push(..._set);
 	return this.valueOf();
 }
+//数组交换元素
+Array.prototype.switch = function(i1, i2) {
+	if (Math.max(i1, i2) >= this.length) return false;
+	let temp = this[i1];
+	this[i1] = this[i2];
+	this[i2] = temp;
+    return true;
+}
+//数组随机排序
+Array.prototype.shuffle = function() {
+    let length = this.length;
+    while (length) {
+        randomIndex = Math.floor(Math.random() * length--);
+		this.switch(length, randomIndex);
+    }
+    return this;
+}
 Array.prototype.randomShift = function() {
 	return this.splice(Math.random() * this.length, 1)?.[0];
 }

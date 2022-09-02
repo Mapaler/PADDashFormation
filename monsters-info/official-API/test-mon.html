@@ -104,6 +104,11 @@ fetch("ja-skill.json").then(async response=>{
 		return skill;
 	});
 });
+let enemySkills;
+fetch("ja-enemy_skill.json").then(async response=>{
+	const originalJSON = await response.json();
+	enemySkills = originalJSON.enemy_skills;
+});
 </script>
 </head>
 
