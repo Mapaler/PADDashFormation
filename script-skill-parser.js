@@ -283,8 +283,18 @@ class Board2
 		}
 	}
 	//生成版面状态
-	generateBlockStates(blockState, count = 1, size = [1,1], position = [1,1])
+	generateBlockStates(blockState, count = 1, size = [1,1], position = [0, 0])
 	{
+		for (let i=0; i<count; i++) {
+			let [width, height] = size, [x, y] = position;
+			if (!x) x = Math.randomInteger(this.columnCount - width); else x--;
+			if (!y) y = Math.randomInteger(this.rowCount - height); else y--;
+			for (let hi=0; hi<height; hi++) {
+				for (let wi=0; wi<height; wi++) {
+					this.setOrbAndBlock(null, this.blocksData[hi][wi], null, null, blockState);
+				}
+			}
+		}
 	}
 	//导出数组
 	valueOf()
