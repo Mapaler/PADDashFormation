@@ -2737,20 +2737,22 @@ icon.inflicts::after
 	height: 36px;
 	background-repeat: no-repeat;
 }
+/*轮盘位，在宝珠后面*/
 .block.roulette::before
 {
 	content: "";
 	background-image: url(images/icon-orbs.png);
 	background-position-x:calc(-36px * 1);
 	background-position-y:calc(-36px * 7);
+	transform: scale(1);
 }
-.block.cloud::before
+/*云，在宝珠前面*/
+.block.cloud::after
 {
 	content: "";
 	background-image: url(images/icon-cloud-1.png);
 	background-size: contain;
 	transform: scale(1.2);
-	z-index: 99;
 }
 .orb-icon
 {
