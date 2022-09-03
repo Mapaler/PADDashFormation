@@ -1994,7 +1994,7 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return `${sk[1].bigNumberToString()}×${sk[0]}T`;
+					return `${(sk[1]*1e8).bigNumberToString()}×${sk[0]}T`;
 				}
 			},
 			{name:"Member ATK rate change",otLangName:{chs:"队员攻击力 buff",cht:"隊員攻擊力 buff"},
