@@ -6391,7 +6391,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"7ed4e2859d652fb83cc7d3b8ba2daec2"
+		"ae7249a544be5b4a26bb52317a82b386"
 	],
 	[
 		"script-skill-parser.js",
@@ -6415,7 +6415,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"f853aaf92d614083ca5a295b7a9a3bd1"
+		"2b98b4d7d8081b82ac127ea9276677de"
 	],
 	[
 		"temp.js",
@@ -6475,7 +6475,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.js",
-		"fc52edf10f5b13d4f086e1cdedd276ad"
+		"5b122fb16c9cdb0f6d6f45f5c535f95a"
 	],
 	[
 		"languages/zh.css",
@@ -6483,7 +6483,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.js",
-		"7b72ddf203f9d1eb798dd2ab7c4064b0"
+		"fe79301efeced17c956c299bf981b333"
 	],
 	[
 		"images/attrs.png",

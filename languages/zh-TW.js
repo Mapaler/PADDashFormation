@@ -89,6 +89,7 @@
 			power_up: tp`${'condition'}${'targets'}${'target'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			power_up_targets: tp`${'attrs_types'}的 `,
 			henshin: tp`變身為${'card'}`,
+			random_henshin: tp`隨機變身為${'cards'}`,
 			void_poison: tp`消除${'poison'}時不會受到毒傷害`,
 			skill_proviso: tp`${'condition'}才能發動後續效果`,
 			impart_awoken: tp`賦予${'attrs_types'}額外的${'awakenings'}`,
@@ -97,6 +98,7 @@
 			obstruct_opponent_before_me: tp`排名比自身高的對手`,
 			obstruct_opponent_designated_position: tp`第${'positions'}排位的對手`,
 			increase_damage_cap: tp`${'targets'}的${'icon'}傷害上限提升到${'cap'}`,
+			board_jamming_state: tp`在${'position'}生成${'state'}${'size'}${'count'}${'time'}`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,
@@ -158,6 +160,8 @@
 			random_atk: tp`${'atk'}×${'min'}${'max'}倍`,
 			prob: tp`有${'value'}幾率`,
 			x_awakenings: tp`${'awakenings'}數量×${'value'}`,
+			size: tp`${'width'}×${'height'}`,
+			pos: tp`${'x'}×${'y'}`,
 		},
 		target: {
 			unknown: tp`未知目標`,
@@ -233,11 +237,15 @@
 			enhanced: tp`${'icon'}強化`,
 			locked: tp`${'icon'}鎖定`,
 			nail: tp`${'icon'}釘子`,
-			variation: tp`${'icon'}變換珠（每${'time'}變換）`,
 			_5color: tp`${'icon'}5色`,
 			_6color: tp`${'_5color'}+${'orb_rcv'}`,
 			all: tp`所有`,
 			any: tp`任何${'cotent'}`,
+		},
+		board: {
+			cloud: tp`${'icon'}雲`,
+			roulette: tp`${'icon'}輪盤位`,
+			roulette_time: tp`（每${'duration'}變換）`,
 		},
 		types: {
 			[0]: tp`${'icon'}進化用`,
@@ -351,6 +359,15 @@
 			[93]: tp`${'icon'}附加木屬性`,
 			[94]: tp`${'icon'}附加光屬性`,
 			[95]: tp`${'icon'}附加暗屬性`,
+			[96]: tp`${'icon'}大U`,
+			[97]: tp`${'icon'}大5色溜`,
+			[98]: tp`${'icon'}大自回`,
+			[99]: tp`${'icon'}大火+`,
+			[100]: tp`${'icon'}大水+`,
+			[101]: tp`${'icon'}大木+`,
+			[102]: tp`${'icon'}大光+`,
+			[103]: tp`${'icon'}大暗+`,
+			[104]: tp`${'icon'}大心+`,
 		}
 	},
 };
@@ -359,7 +376,6 @@ localisation(localTranslating);
 
 //大數字縮短長度
 Number.prototype.bigNumberToString = function() {
-
 	const negative = this < 0;
 
 	let numTemp = negative ? Math.abs(this) : this.valueOf();

@@ -283,13 +283,13 @@ let localTranslating = {
 			[0]: tp`${'icon'}Unknown awoken`,
 			[1]: tp`${'icon'}Enhanced HP`,
 			[2]: tp`${'icon'}Enhanced Attack`,
-			[3]: tp`${'icon'}Enhanced Heal`,
+			[3]: tp`${'icon'}Enhanced Recovery`,
 			[4]: tp`${'icon'}Reduce Fire Damage`,
 			[5]: tp`${'icon'}Reduce Water Damage`,
 			[6]: tp`${'icon'}Reduce Wood Damage`,
 			[7]: tp`${'icon'}Reduce Light Damage`,
 			[8]: tp`${'icon'}Reduce Dark Damage`,
-			[9]: tp`${'icon'}Auto-Heal`,
+			[9]: tp`${'icon'}Auto-Recover`,
 			[10]: tp`${'icon'}Resistance-Bind`,
 			[11]: tp`${'icon'}Resistance-Blind`,
 			[12]: tp`${'icon'}Resistance-Jammers`,
@@ -327,7 +327,7 @@ let localTranslating = {
 			[44]: tp`${'icon'}Guard Break`,
 			[45]: tp`${'icon'}Bonus Attack`,
 			[46]: tp`${'icon'}Enhanced Team HP `,
-			[47]: tp`${'icon'}Enhanced Team RCV`,
+			[47]: tp`${'icon'}Enhanced Team Recovery`,
 			[48]: tp`${'icon'}Damage Void Piercer`,
 			[49]: tp`${'icon'}Awoken Assist`,
 			[50]: tp`${'icon'}Super Bonus Attack`,
@@ -376,6 +376,15 @@ let localTranslating = {
 			[93]: tp`${'icon'}Append Wood Attr.`,
 			[94]: tp`${'icon'}Append Water Attr.`,
 			[95]: tp`${'icon'}Append Dark Attr.`,
+			[96]: tp`${'icon'}Two-Pronged Attack+`,
+			[97]: tp`${'icon'}Skill Charge+`,
+			[98]: tp`${'icon'}Auto-Recover+`,
+			[99]: tp`${'icon'}Enhanced Fire Orbs+`,
+			[100]: tp`${'icon'}Enhanced Water Orbs+`,
+			[101]: tp`${'icon'}Enhanced Wood Orbs+`,
+			[102]: tp`${'icon'}Enhanced Water Orbs+`,
+			[103]: tp`${'icon'}Enhanced Dark Orbs+`,
+			[104]: tp`${'icon'}Enhanced Heal Orbs+`,
 		}
 	},
 };
@@ -1582,46 +1591,6 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
-			{name:"Member ATK rate change",otLangName:{chs:"队员攻击力 buff",cht:"隊員攻擊力 buff"},
-				function:cards=>{
-					const searchTypeArray = [230];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
-				},
-				addition:memberATK_Addition
-			},
-			{name:"Member ATK rate change - Self",otLangName:{chs:"队员攻击力 buff - 自身",cht:"隊員攻擊力 buff - 自身"},
-				function:cards=>{
-					const searchTypeArray = [230];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && Boolean(skill.params[1] & 1<<0);
-					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
-				},
-				addition:memberATK_Addition
-			},
-			{name:"Member ATK rate change - Leader",otLangName:{chs:"队员攻击力 buff - 队长",cht:"隊員攻擊力 buff - 隊長"},
-				function:cards=>{
-					const searchTypeArray = [230];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && Boolean(skill.params[1] & (1<<1 | 1<<2));
-					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
-				},
-				addition:memberATK_Addition
-			},
-			{name:"Member ATK rate change - Member",otLangName:{chs:"队员攻击力 buff - 队员",cht:"隊員攻擊力 buff - 隊員"},
-				function:cards=>{
-					const searchTypeArray = [230];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && Boolean(skill.params[1] & 1<<3);
-					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
-				},
-				addition:memberATK_Addition
-			},
 			{name:"Move time change",otLangName:{chs:"操作时间 buff（顶手指）",cht:"操作時間 buff（頂手指）"},
 				function:cards=>{
 					const searchTypeArray = [132];
@@ -2011,6 +1980,62 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					return skill;
 				})
+			},
+			{name:"Increase Damage Cap",otLangName:{chs:"增加伤害上限 buff",cht:"增加傷害上限 buff"},
+				function:cards=>{
+					const searchTypeArray = [241];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 1));
+				},
+				addition:card=>{
+					const searchTypeArray = [241];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `${sk[1].bigNumberToString()}×${sk[0]}T`;
+				}
+			},
+			{name:"Member ATK rate change",otLangName:{chs:"队员攻击力 buff",cht:"隊員攻擊力 buff"},
+				function:cards=>{
+					const searchTypeArray = [230];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
+				},
+				addition:memberATK_Addition
+			},
+			{name:"Member ATK rate change - Self",otLangName:{chs:"队员攻击力 buff - 自身",cht:"隊員攻擊力 buff - 自身"},
+				function:cards=>{
+					const searchTypeArray = [230];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill && Boolean(skill.params[1] & 1<<0);
+					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
+				},
+				addition:memberATK_Addition
+			},
+			{name:"Member ATK rate change - Leader",otLangName:{chs:"队员攻击力 buff - 队长",cht:"隊員攻擊力 buff - 隊長"},
+				function:cards=>{
+					const searchTypeArray = [230];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill && Boolean(skill.params[1] & (1<<1 | 1<<2));
+					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
+				},
+				addition:memberATK_Addition
+			},
+			{name:"Member ATK rate change - Member",otLangName:{chs:"队员攻击力 buff - 队员",cht:"隊員攻擊力 buff - 隊員"},
+				function:cards=>{
+					const searchTypeArray = [230];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill && Boolean(skill.params[1] & 1<<3);
+					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
+				},
+				addition:memberATK_Addition
 			},
 			{name:"Change self's Attr(sort by turns)",otLangName:{chs:"转换自身属性（按回合数排序）",cht:"轉換自身屬性（按回合數排序）"},
 				function:cards=>{

@@ -2737,6 +2737,19 @@ icon.inflicts::after
 	height: 36px;
 	background-repeat: no-repeat;
 }
+.block::before {
+	z-index: 1;
+}
+.board .orb {
+	z-index: 5;
+}
+.block::after {
+	z-index: 10;
+	transition: opacity 0.3s;
+}
+.block:hover::after {
+	opacity: 0.3;
+}
 /*轮盘位，在宝珠后面*/
 .block.roulette::before
 {
