@@ -2691,7 +2691,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_091.PNG",
-		"18214eef89cc1973a137ffcde0a848b3"
+		"83fd84a05243fb8dee9541dca4c239d7"
 	],
 	[
 		"sound/voice/en/padv001.wav",
@@ -4707,7 +4707,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_091.PNG",
-		"18214eef89cc1973a137ffcde0a848b3"
+		"83fd84a05243fb8dee9541dca4c239d7"
 	],
 	[
 		"sound/voice/ko/padv001.wav",
@@ -6391,19 +6391,19 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"acd3ff3a3ca430c10d8bc9dd564b43ea"
+		"7ed4e2859d652fb83cc7d3b8ba2daec2"
 	],
 	[
 		"script-skill-parser.js",
-		"339597e08ba284485cb2207e2d8f6f78"
+		"318b83fc9368f446a57e834c961af07f"
 	],
 	[
 		"script-universal_function.js",
-		"c07d2bc3aa7c4bca548da9930276766b"
+		"53df4dbb9a09406de876aea6e656e281"
 	],
 	[
 		"script.js",
-		"368508ac105210fc763a198f9e81faeb"
+		"6a4bdad7b031122265ded3cd5c231cef"
 	],
 	[
 		"solo.html",
@@ -6411,11 +6411,11 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"4622805ebf72cee9a924c657e05217da"
+		"3f19dc0ab0954ea77efc9d38d76637cc"
 	],
 	[
 		"style.css",
-		"a461a9a9f415281b900823950d5becec"
+		"4096273933840e59298db168f496c19e"
 	],
 	[
 		"temp.js",
@@ -6475,7 +6475,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.js",
-		"7088082542c4d1bf52c099b2c72bf063"
+		"fc52edf10f5b13d4f086e1cdedd276ad"
 	],
 	[
 		"languages/zh.css",
@@ -6483,7 +6483,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.js",
-		"dda17737f83cdfebbc5401dd24a17cd1"
+		"7b72ddf203f9d1eb798dd2ab7c4064b0"
 	],
 	[
 		"images/attrs.png",
@@ -6542,6 +6542,10 @@ const cachesMap = new Map([
 		"4e8d8b8a11421b0f3100540d7ad85015"
 	],
 	[
+		"images/icon-cloud-1.png",
+		"7b35564262dda9473717c7e694b61599"
+	],
+	[
 		"images/icon-evolved-skill-loop.png",
 		"104ac97dfd9a6558c7cd90cff068572c"
 	],
@@ -6591,7 +6595,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-skills.png",
-		"84c1c7d60828f76fdebe834bf5516b71"
+		"0d2c57f25071fad32a477e69ddceff54"
 	],
 	[
 		"images/icon-switch-leader.png",
@@ -6643,23 +6647,23 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"02eb7db9254bd8e59b09a9e722b44617"
+		"7933797cdffc0f58a2eba9433b758cc9"
 	],
 	[
 		"monsters-info/mon_en.json",
-		"62e7e756ab6e9a3920b590332fe00035"
+		"e2fc5293ea8bb986915b9f1fdabbde90"
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"e0549667df404635721be5fdb444b317"
+		"e019df06630e88be97c0fa9d36abcef9"
 	],
 	[
 		"monsters-info/mon_ko.json",
-		"b777646ec239cf8ab7e3340ce3c866fe"
+		"02b3ce9d30f506fcb919c834d56da215"
 	],
 	[
 		"monsters-info/skill_en.json",
-		"70f5d97fd98bda79f2fa47e42d7fa057"
+		"171616e35c10395e4f3ce9b938704609"
 	],
 	[
 		"monsters-info/skill_ja.json",
@@ -6667,7 +6671,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/skill_ko.json",
-		"794648755936ad9899412a293580cabb"
+		"676f6f05285d6d5c2bab7f335186d2de"
 	],
 	[
 		"doc/export-player-data.html",
