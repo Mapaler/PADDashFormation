@@ -7014,7 +7014,7 @@ self.addEventListener('fetch', async function(event) {
 			let newResponse;
 			try {
 				newResponse = await fetch(event.request);
-				console.debug("%c无相同 md5 缓存，重新在线获取结果", "color: blue;", url, newResponse);
+				console.debug("%c无相同 md5 缓存，重新在线获取结果", "color: blue;", url);
 				const cache = await caches.open(cacheName);
 				await cache.put(url, newResponse.clone());
 				//console.debug("%c储存新的Cache", "color: blue;", url, cache);

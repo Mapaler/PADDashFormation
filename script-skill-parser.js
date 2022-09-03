@@ -121,13 +121,42 @@ class Block
 	//}
 	states = new Set();
 }
-class Board2
+class BoardSet
+{
+	boards = [];
+	node = document.createElement("div");
+	constructor(...boards) {
+		this.boards.push(...(boards.filter(board=>board instanceof Board)));
+		this.boards.forEach((board, idx)=>{
+			this.node.appendChild(board.tableNode);
+			if (idx > 0) board.tableNode.classList.add(className_displayNone);
+		});
+		const _this = this;
+		this.node.onclick = function(event){ //在65、76、54之间循环切换
+			if (event.ctrlKey) { //如果按Ctrl，全部取消隐藏
+				_this.boards.forEach(board=>board.tableNode.classList.remove(className_displayNone));
+				return;
+			}
+			let showIdx = _this.boards.findIndex(board=>!board.tableNode.classList.contains(className_displayNone));
+			if (showIdx < 0 || showIdx >= (_this.boards.length - 1)) showIdx = 0;
+			else showIdx++;
+			for (let i=0;i<_this.boards.length;i++) {
+				_this.boards[i].tableNode.classList.toggle(className_displayNone, i !== showIdx);
+			}
+		}
+	}
+	valueOf() {
+		return this.node;
+	}
+}
+class Board
 {
 	rowCount = 0;
 	columnCount = 0;
 	orbsData = [];
 	blocksData = [];
-	constructor(def = null, rowCount = 5, columnCount = 6)
+	tableNode = document.createElement("table");
+	constructor(def = null, columnCount = 6, rowCount = 5)
 	{
 		const intAttr = typeof(def) == "number" ? def : void(0);
 		this.rowCount = Number(rowCount);
@@ -151,6 +180,20 @@ class Board2
 		{
 			this.randomFill(def);
 		}
+		const table = this.tableNode;
+		table.boardData = this;
+		table.className = "board";
+		for (let ri=0; ri<this.rowCount; ri++)
+		{
+			const row = table.insertRow();
+			for (let ci=0; ci<this.columnCount; ci++)
+			{
+				const cell = row.insertCell();
+				cell.className = "block";
+				const orbIcon = cell.appendChild(document.createElement('icon'));
+				orbIcon.className = "orb";
+			}
+		}
 	}
 	//获取指定行号
 	getTargetRowIndex(rowIndex)
@@ -172,12 +215,14 @@ class Board2
 	}
 	setOrbAndBlock(orb, block, attr, state, blockState)
 	{
-		if (orb && typeof(attr) == 'number')
-			orb.attr = attr;
-		if (orb && typeof(state) == 'string')
-			orb.states.add(state);
-		if (block && typeof(blockState) == 'string')
-			block.states.add(state);
+		if (orb instanceof Orb) {
+			if (typeof(attr) == 'number' && !orb.states.has('locked'))
+				orb.attr = attr;
+			if (typeof(state) == 'string')
+				orb.states.add(state);
+		}
+		if (block instanceof Block && typeof(blockState) == 'string')
+			block.states.add(blockState);
 	}
 	//设定横行
 	setRows(rows, attr, state, blockState)
@@ -185,8 +230,7 @@ class Board2
 		for (let ri of rows)
 		{
 			ri = this.getTargetRowIndex(ri);
-			const orbsRow = this.orbsData[ri];
-			const blocksRow = this.blocksData[ri];
+			const orbsRow = this.orbsData[ri], blocksRow = this.blocksData[ri];
 			for (let ci=0; ci<this.columnCount; ci++)
 			{
 				this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attr, state, blockState);
@@ -201,8 +245,7 @@ class Board2
 			ci = this.getTargetColumnIndex(ci);
 			for (let ri=0; ri<this.rowCount; ri++)
 			{
-				const orbsRow = this.orbsData[ri];
-				const blocksRow = this.blocksData[ri];
+				const orbsRow = this.orbsData[ri], blocksRow = this.blocksData[ri];
 
 				this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attr, state, blockState);
 			}
@@ -214,11 +257,10 @@ class Board2
 		const setOrb = typeof(state) == 'number';
 		function fillRow(ri, inputRow)
 		{
-			const orbsRow = this.orbsData[ri];
-			const blocksRow = this.blocksData[ri];
+			const orbsRow = this.orbsData[ri], blocksRow = this.blocksData[ri];
 			for (let ci of inputRow)
 			{
-				ci = this.getTargetColumnIndex(i);
+				ci = this.getTargetColumnIndex(ci);
 				if (this.columnCount >= 7 && ci == 4)
 				{
 					this.setOrbAndBlock(orbsRow[ci - 1], blocksRow[ci - 1], attr, state, blockState);
@@ -231,14 +273,10 @@ class Board2
 			let ri = this.getTargetRowIndex(i);
 			if (this.rowCount >= 6 && ri == 3)
 			{
-				fillRow(ri - 1, matrix[i]);
+				fillRow.call(this, ri - 1, matrix[i]);
 			}
-			fillRow(ri, matrix[i]);
+			fillRow.call(this, ri, matrix[i]);
 		}
-	}
-	shuffle()
-	{
-		this.orbsData.shuffle()
 	}
 	//洗版的填充
 	randomFill(attrs)
@@ -260,26 +298,37 @@ class Board2
 		attrArray.shuffle(); //整体随机分布一次
 		const flatOrbsData = this.orbsData.flat();
 		flatOrbsData.forEach((orb, idx)=>{
-			orb.attr = attrArray[idx];
+			if (!orb.states.has('locked'))
+				orb.attr = attrArray[idx];
 		});
 	}
 	//生成珠子的填充
-	generateOrbs(attrs, state, count, exclude)
+	generateOrbs(attrs, count, exclude, state)
 	{
 		if (!Array.isArray(attrs) && typeof(attrs) == 'number')
 			attrs = [attrs];
 		if (!Array.isArray(exclude) && typeof(exclude) == 'number')
 			exclude = [exclude];
 
-		const flatOrbsData = this.orbsData.flat().filter(orb=>exclude?.length ? !exclude.includes(orb.attr) : true);
+		let flatOrbsData = this.orbsData.flat()
+		if (exclude?.length) flatOrbsData = flatOrbsData.filter(orb=>!exclude.includes(orb.attr));
 		flatOrbsData.shuffle(); //将所有排除的格子打乱
 
-		const attrArray = attrs?.length ? attrs.map(attr=>new Array(count).fill(attr)).flat() : [];
-		//有属性时，使用产生珠子的长度；如果没有属性时，就保留1个长度，用来添加状态；但是都不能大于排除的宝珠数。
-		const maxLength = Math.min(Math.max(attrArray.length, count), flatOrbsData.length);
-		//直接填充
-		for (let i=0; i<maxLength; i++) {
-			this.setOrbAndBlock(flatOrbsData[i], null, attrArray[i], state);
+		if (!state) { //未输入状态时，为产生珠子
+			const attrArray = attrs?.length ? attrs.map(attr=>new Array(count).fill(attr)).flat() : [];
+			//有属性时，使用产生珠子的长度；如果没有属性时，就保留1个长度，用来添加状态；但是都不能大于排除的宝珠数。
+			const maxLength = Math.min(attrArray.length, flatOrbsData.length);
+			//直接填充
+			for (let i=0; i<maxLength; i++) {
+				this.setOrbAndBlock(flatOrbsData[i], null, attrArray[i]);
+			}
+		} else {
+			//在版面上查询符合的颜色
+			flatOrbsData = flatOrbsData.filter(orb=>attrs.includes(orb.attr));
+			const maxLength = Math.min(count, flatOrbsData.length);
+			for (let i=0; i<maxLength; i++) {
+				this.setOrbAndBlock(flatOrbsData[i], null, null, state);
+			}
 		}
 	}
 	//生成版面状态
@@ -290,8 +339,8 @@ class Board2
 			if (!x) x = Math.randomInteger(this.columnCount - width); else x--;
 			if (!y) y = Math.randomInteger(this.rowCount - height); else y--;
 			for (let hi=0; hi<height; hi++) {
-				for (let wi=0; wi<height; wi++) {
-					this.setOrbAndBlock(null, this.blocksData[hi][wi], null, null, blockState);
+				for (let wi=0; wi<width; wi++) {
+					this.setOrbAndBlock(null, this.blocksData[y+hi][x+wi], null, null, blockState);
 				}
 			}
 		}
@@ -302,224 +351,27 @@ class Board2
 		return this.orbsData;
 	}
 	//输出表格
-	toTable()
+	refreshTable()
 	{
-	}
-}
-class Board
-{
-	rowCount = 6;
-	columnCount = 7;
-	data = [];
-	state = [];
-	constructor(def = null)
-	{
-		for (let ri=0;ri<this.rowCount;ri++)
+		const table = this.tableNode;
+		table.dataset.rowCount = this.rowCount;
+		table.dataset.columnCount = this.columnCount;
+		for (let ri=0; ri<this.rowCount; ri++)
 		{
-			const col = [];
-			for (let ci=0;ci<this.columnCount;ci++)
+			const orbsRow = this.orbsData[ri], blocksRow = this.blocksData[ri];
+			const row = table.rows[ri];
+			for (let ci=0; ci<this.columnCount; ci++)
 			{
-				col.push(new Orb(Array.isArray(def) ? null : def));
-			}
-			this.data.push(col);
-		}
-		//如果传入的是数组，直接随机分布
-		if (Array.isArray(def))
-		{
-			this.randomFill(def);
-		}
-	}
-	//填充序列
-	sequenceFill(sequence, exclude)
-	{
-		if (!Array.isArray(exclude) && exclude != null)
-			exclude = [exclude];
-		const o = sequence.entries();
-		//65版部分
-		for (let ri=0;ri<this.data.length;ri++)
-		{
-			if (ri == 2) ri++;
-			const row = this.data[ri];
-			for (let ci=0;ci<row.length;ci++)
-			{
-				if (ci == 3) ci++;
-				//从数组中随机取出一个
-				if (exclude && exclude.includes(row[ci].color)) continue;
-				const c = o.next().value?.[1] ?? row[ci].color;
-				if (c == "variation")
-					row[ci].states.push(c);
+				const cell = row.cells[ci], orbIcon = cell.querySelector("icon");
+				const orbObj = orbsRow[ci], blockObj = blocksRow[ci];
+				if (orbObj.attr != null)
+					orbIcon.setAttribute("data-orb-icon", orbObj.attr);
 				else
-					row[ci].color = c;
+					orbIcon.removeAttribute("data-orb-icon");
+
+				orbIcon.classList.add(...orbObj.states);
+				cell.classList.add(...blockObj.states);
 			}
-		}
-		//填充剩下的部分
-		for (let ri=0;ri<this.data.length;ri++)
-		{
-			if (ri == 2) ri++;
-			const row = this.data[ri];
-			if (exclude && exclude.includes(row[3].color)) continue;
-			const c = o.next().value?.[1] ?? row[3].color;
-			if (c == "variation")
-				row[3].states.push(c);
-			else
-				row[3].color = c;
-		}
-		const row = this.data[2];
-		for (let ci=0;ci<row.length;ci++)
-		{
-			if (exclude && exclude.includes(row[ci].color)) continue;
-			const c = o.next().value?.[1] ?? row[3].color;
-			if (c == "variation")
-				row[ci].states.push(c);
-			else
-				row[ci].color = c;
-		}
-	}
-	//将有序数组转为随机的数组
-	sequenceToRandom(valueArray)
-	{
-		const randomData = [];
-		//将65版之后的的提出来
-		const maxCount = this.rowCount * this.columnCount
-		let secondaryData = valueArray.splice((this.rowCount - 1) * (this.columnCount - 1) - (maxCount - valueArray.length));
-		
-		while(valueArray.length > 0)
-		{
-			randomData.push(valueArray.randomShift());
-		}
-		while(secondaryData.length > 0)
-		{
-			randomData.push(secondaryData.randomShift());
-		}
-		return randomData;
-	}
-	//洗版的填充
-	randomFill(attrs, states) 
-	{
-		let valueArray = new Uint8Array(this.rowCount * this.columnCount);
-		crypto.getRandomValues(valueArray); //获取符合密码学要求的安全的随机值
-		valueArray = Array.from(valueArray.map(x => attrs[x % attrs.length])); //用所有宝珠随机填充
-		//之后用每种颜色填充前3个
-		attrs.forEach((attr,idx)=>{
-			valueArray.fill(attr, idx * 3, (idx + 1) * 3);
-		});
-		//将上方数据重新乱序排列
-		const randomData = this.sequenceToRandom(valueArray);
-		this.sequenceFill(randomData);
-	}
-	//生成珠子的填充
-	generateOrbs(attrs, count, exclude, states)
-	{
-		let space = this.rowCount * this.columnCount;
-		if (exclude?.length > 0)
-		{
-			space -= this.data.flat().filter(o=>exclude.includes(o)).length;
-		}
-		
-		const valueArray = new Array(space);
-		attrs.forEach((attr,idx)=>{
-			valueArray.fill(attr, idx * count, (idx + 1) * count);
-		});
-		//将上方数据重新乱序排列
-		const randomData = this.sequenceToRandom(valueArray);
-		this.sequenceFill(randomData, exclude);
-	}
-	//设定横行
-	setRow(rowsNumber, attr = 0, states)
-	{
-		for (let row of rowsNumber)
-		{
-			if (row >= 2) row++;
-			const rowData = this.data[row];
-			for (let ri=0;ri<rowData.length;ri++)
-			{
-				rowData[ri].color = attr;
-			}
-		}
-	}
-	//设定竖列
-	setColumn(colsNumber, attr = 0, states)
-	{
-		for (let col of colsNumber)
-		{
-			if (col >= 3) col++;
-			for (const row of this.data)
-			{
-				row[col].color = attr;
-			}
-		}
-	}
-	//设定形状
-	setShape(matrix, attr = 0, states)
-	{
-		function fillRow(rowData, inputRow, attr)
-		{
-			for (let col of inputRow)
-			{
-				if (col == 3) {
-					if (attr == "variation")
-						rowData[col].states.push(attr);
-					else
-						rowData[col].color = attr;
-				}
-				if (col >= 3) col++;
-				if (attr == "variation")
-					rowData[col].states.push(attr);
-				else
-					rowData[col].color = attr;
-			}
-		}
-		for (let ri=0; ri<matrix.length; ri++)
-		{
-			if (ri == 2)
-			{
-				fillRow(this.data[ri], matrix[ri], attr);
-			}
-			fillRow(this.data[ri >= 2 ? ri+1 : ri], matrix[ri], attr);
-		}
-	}
-	//面板叠加
-	overlayBoard(board)
-	{	
-		for (let ri=0; ri<board.length; ri++)
-		{
-			const rowNew = board[ri];
-			const rowOld = this.data[ri];
-			for (let ci=0; ci < rowNew.length; ci++)
-			{
-				rowOld[ci] = Object.assign(rowOld[ci], rowNew[ci]);
-			}
-		}
-	}
-	//导出数组
-	valueOf()
-	{
-		return this.data;
-	}
-	//输出表格
-	toTable()
-	{
-		const table = document.createElement("table");
-		table.boardData = this.data;
-		table.className = "board";
-		this.data.forEach((rowData, ri, rArr) => {
-			const row = table.insertRow();
-			if (ri == 2 && rArr.length > 5) row.classList.add("board-row4");
-	
-			rowData.forEach((orbType, ci, cArr) => {
-				const cell = row.insertCell();
-				const orb = cell.appendChild(document.createElement('icon'));
-				orb.className = "orb";
-				if (orbType.color != null) orb.setAttribute("data-orb-icon", orbType.color);
-				orbType.states.forEach(state=>orb.classList.add(state));
-				if (ci == 3 && cArr.length > 6) cell.classList.add("board-cell5");
-			});
-		});
-		if (this.data.length > 5) {
-			table.onclick = toggle76;
-		}
-		function toggle76() {
-			this.classList.toggle("board-76");
 		}
 		return table;
 	}
@@ -1790,25 +1642,29 @@ function renderSkillEntry(skills)
 		let boardChange = skills.filter(skill=>{
 			if (skill.kind == SkillKinds.ActiveTurns) skill = skill.skill;
 			const { kind } = skill;
-			return kind == SkillKinds.BoardChange ||
-			kind == SkillKinds.GenerateOrbs ||
-			kind == SkillKinds.FixedOrbs;
+			return [
+				SkillKinds.SetOrbState,
+				SkillKinds.BoardChange,
+				SkillKinds.GenerateOrbs,
+				SkillKinds.FixedOrbs,
+				SkillKinds.BoardJammingStates,
+			].includes(kind);
 		}).map(skill=>skill.kind == SkillKinds.ActiveTurns ? skill.skill : skill);
-		if (boardChange.length > 0)
+		if (boardChange.filter(skill=>skill.kind != SkillKinds.SetOrbState).length > 0)
 		{
-			const board = new Board();
+			const boardsBar = new BoardSet(new Board(), new Board(null,7,6), new Board(null,5,4));
 			for (const skill of boardChange)
 			{
 				switch (skill.kind)
 				{
 					case SkillKinds.BoardChange: { //洗版
 						const attrs = skill.attrs;
-						board.randomFill(attrs);
+						boardsBar.boards.forEach(board=>board.randomFill(attrs));
 						break;
 					}
 					case SkillKinds.GenerateOrbs: { //产生珠子
 						let orbs = skill.orbs, exclude = skill.exclude, count = skill.count;
-						board.generateOrbs(orbs, count, exclude);
+						boardsBar.boards.forEach(board=>board.generateOrbs(orbs, count, exclude));
 						break;
 					}
 					case SkillKinds.FixedOrbs: { //固定位置产生珠子
@@ -1816,36 +1672,46 @@ function renderSkillEntry(skills)
 						{
 							let orb = generate.orbs?.[0];
 							if (generate.type == 'shape') {
-								board.setShape(generate.positions, orb);
+								boardsBar.boards.forEach(board=>board.setShape(generate.positions, orb));
 							} else {
 								if (generate.type == 'row')
-									board.setRow(generate.positions, orb);
+									boardsBar.boards.forEach(board=>board.setRows(generate.positions, orb));
 								else
-									board.setColumn(generate.positions, orb);
+									boardsBar.boards.forEach(board=>board.setColumns(generate.positions, orb));
 							}
 						}
 						break;
 					}
-				}
-			}
-			const setOrbState = skills.filter(skill=>skill.kind == SkillKinds.SetOrbState ||
-				skill.kind == SkillKinds.ActiveTurns && (skill.skill.kind == SkillKinds.SetOrbState)
-			).map(skill=>skill.kind == SkillKinds.ActiveTurns ? skill.skill : skill);
-			const boardData = board.data.flat();
-			for (const skill of setOrbState) {
-				if (["enhanced", "locked", "bound"].includes(skill.state)) {
-					//技能内的数量，可能会大于版面内有的数据数量
-					const orbCount = Math.min(skill.arg?.count?.value ?? boardData.length, boardData.length);
-					for (let oi = 0; oi < orbCount; oi++) {
-						const orb = boardData[oi];
-						if (orb && skill.orbs.includes(orb.color)) {
-							orb.states.push(skill.state);
+					case SkillKinds.BoardJammingStates: { //产生版面干扰
+						const { state, posType, size, positions, count, time } = skill;
+						if (state == 'roulette') { //轮盘位
+							boardsBar.boards.forEach(board=>{
+								if (posType == 'random')
+									board.generateBlockStates('roulette', count);
+								else
+									board.setShape(positions, null, null, 'roulette');
+							});
 						}
+						if (state == 'cloud') { //云
+							boardsBar.boards.forEach(board=>{
+								board.generateBlockStates('cloud', count, size, positions);
+							});
+						}
+						break;
+					}
+					case SkillKinds.SetOrbState: { //修改珠子状态
+						const { orbs, state } = skill;
+						const count = skill?.arg?.count?.value ?? 99;
+						boardsBar.boards.forEach(board=>{
+							board.generateOrbs(orbs, count, null, state);
+						});
+						break;
 					}
 				}
 			}
 			const li = ul.appendChild(document.createElement("li"));
-			li.appendChild(board.toTable());
+			boardsBar.boards.forEach(board=>board.refreshTable());
+			li.appendChild(boardsBar.node);
 			li.className = "merge-board";
 		}
 	}
@@ -2158,8 +2024,11 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.board_change(dict));
 			if (!merge_skill)
 			{
-				let board = new Board(attrs);
-				frg.ap(board.toTable());
+				const boardsBar = new BoardSet(new Board(attrs), new Board(attrs,7,6), new Board(attrs,5,4));
+				boardsBar.boards.forEach(board=>{
+					board.refreshTable();
+				});
+				frg.ap(boardsBar.node);
 			}
 			break;
 		}
@@ -2280,9 +2149,12 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.generate_orbs(dict));
 			if (!merge_skill)
 			{
-				let board = new Board();
-				board.generateOrbs(orbs, count, exclude);
-				frg.ap(board.toTable());
+				const boardsBar = new BoardSet(new Board(), new Board(null,7,6), new Board(null,5,4));
+				boardsBar.boards.forEach(board=>{
+					board.generateOrbs(orbs, count, exclude);
+					board.refreshTable();
+				});
+				frg.ap(boardsBar.node);
 			}
 			break;
 		}
@@ -2290,7 +2162,7 @@ function renderSkill(skill, option = {})
 			let generates = skill.generates;
 			let slight_pause = tsp.word.slight_pause().textContent;
 			let subDocument = [];
-			let board = merge_skill ? null : new Board();
+			const boardsBar = merge_skill ? null : new BoardSet(new Board(), new Board(null,7,6), new Board(null,5,4));
 			function posSplit(pos, max)
 			{
 				return {sequence: pos.filter(n=>n<=2).map(n=>n+1), reverse: pos.filter(n=>n>=3).reverse().map(n=>max-n)};
@@ -2304,7 +2176,7 @@ function renderSkill(skill, option = {})
 				if (generate.type == 'shape')
 				{
 					dict.position = tsp.position.shape();
-					if (board) board.setShape(generate.positions, orb);
+					boardsBar?.boards?.forEach(board=>board.setShape(generate.positions, orb));
 				}else
 				{
 					let posFrgs = [];
@@ -2314,20 +2186,23 @@ function renderSkill(skill, option = {})
 						const pos = posSplit(generate.positions, 5);
 						if (pos.sequence.length) posFrgs.push(tsp.position.top({pos: pos.sequence.join(slight_pause)}));
 						if (pos.reverse.length) posFrgs.push(tsp.position.bottom({pos: pos.reverse.join(slight_pause)}));
-						if (board) board.setRow(generate.positions, orb);
+						boardsBar?.boards?.forEach(board=>board.setRows(generate.positions, orb));
 					}else
 					{
 						const pos = posSplit(generate.positions, 6);
 						if (pos.sequence.length) posFrgs.push(tsp.position.left({pos: pos.sequence.join(slight_pause)}));
 						if (pos.reverse.length) posFrgs.push(tsp.position.right({pos: pos.reverse.join(slight_pause)}));
-						if (board) board.setColumn(generate.positions, orb);
+						boardsBar?.boards?.forEach(board=>board.setColumns(generate.positions, orb));
 					}
 					dict.position = posFrgs.nodeJoin(tsp.word.slight_pause());
 				}
 				subDocument.push(tsp.skill.fixed_orbs(dict));
 			}
 			frg.ap(subDocument.nodeJoin(tsp.word.comma()));
-			if (board) frg.ap(board.toTable());
+			if (boardsBar) {
+				boardsBar.boards.forEach(board=>board.refreshTable());
+				frg.ap(boardsBar.node);
+			}
 			
 			break;
 		}
@@ -2584,7 +2459,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.BoardJammingStates: { //版面产生干扰状态
 			const { state, posType, size, positions, count, time } = skill;
-			let board = merge_skill ? null : new Board();
+			const boardsBar = merge_skill ? null : new BoardSet(new Board(), new Board(null,7,6), new Board(null,5,4));
 
 			dict = {
 				state: tsp.board[state](),
@@ -2593,14 +2468,26 @@ function renderSkill(skill, option = {})
 			if (state == 'roulette') { //轮盘位
 				dict.time = tsp.board.roulette_time({duration: renderValue(v.constant(time), {unit: tsp.unit.seconds})});
 				dict.count = renderValue(v.constant(count || positions.flat().length), {unit: tsp.unit.orbs});
+				boardsBar?.boards?.forEach(board=>{
+					if (posType == 'random')
+						board.generateBlockStates('roulette', count);
+					else
+						board.setShape(positions, null, null, 'roulette');
+				});
 			}
 			if (state == 'cloud') { //云
 				const [width, height] = size;
-				dict.size = tsp.value.size({ width: width, height: height});
+				dict.size = tsp.value.size({ width, height});
+				boardsBar?.boards?.forEach(board=>{
+					board.generateBlockStates('cloud', count, size, positions);
+				});
 			}
 			frg.ap(tsp.skill.board_jamming_state(dict));
 
-			if (board) frg.ap(board.toTable());
+			if (boardsBar) {
+				boardsBar.boards.forEach(board=>board.refreshTable());
+				frg.ap(boardsBar.node);
+			}
 			break;
 		}
 		

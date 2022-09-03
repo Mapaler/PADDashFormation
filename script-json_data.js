@@ -1778,23 +1778,90 @@ const specialSearchFunctions = (function() {
 					return `全体×${sk[0]}T`;
 				}
 			},
-			{name:"Creates Roulette Orb",otLangName:{chs:"生成变换位（转转珠）",cht:"生成變換位（轉轉珠）"},
+		]},
+		{group:true,name:"-----Orbs Drop-----",otLangName:{chs:"----- 珠子掉落 类-----",cht:"----- 珠子掉落 類-----"}, functions: [
+			{name:"Drop locked orbs(any color, sort by turns)",otLangName:{chs:"掉锁（不限色，按回合排序）",cht:"掉鎖（不限色，按回合排序）"},
 				function:cards=>{
-					const searchTypeArray = [207];
+					const searchTypeArray = [205];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
+				},
+				addition:dropLock_Addition
+			},
+			{name:"Drop locked orbs(≥5 color, sort by turns)",otLangName:{chs:"掉锁5色+心或全部（按回合排序）",cht:"掉鎖5色+心或全部（按回合排序）"},
+				function:cards=>{
+					const searchTypeArray = [205];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill && (skill.params[0] & 63) === 63;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
+				},
+				addition:dropLock_Addition
+			},
+			{name:"Drop Enhanced Orbs(sort by turns)",otLangName:{chs:"掉落强化宝珠（按回合排序）",cht:"掉落強化寶珠（按回合排序）"},
+				function:cards=>{
+					const searchTypeArray = [180];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
+				},
+				addition:card=>{
+					const searchTypeArray = [180];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `${sk[1]}%×${sk[0]}T`;
+				}
+			},
+			{name:"Drop rate increases",otLangName:{chs:"掉落率提升",cht:"掉落率提升"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [126];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:dropOrb_Addition
+			},
+			{name:"Drop rate - Attr. - Jammers/Poison",otLangName:{chs:"掉落率提升-属性-毒、废（顶毒）",cht:"掉落率提升-屬性-毒、廢（頂毒）"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [126];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && (skill.params[0] & 960); // 960 = 二进制 1111000000
+				}),
+				addition:dropOrb_Addition
+			},
+			{name:"Drop rate - 99 turns",otLangName:{chs:"掉落率提升-持续99回合",cht:"掉落率提升-持續99回合"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [126];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && skill.params[1] >= 99;
+				}),
+				addition:dropOrb_Addition
+			},
+			{name:"Drop rate - 100% rate",otLangName:{chs:"掉落率提升-100%几率",cht:"掉落率提升-100%幾率"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [126];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && skill.params[3] == 100;
+				}),
+				addition:dropOrb_Addition
+			},
+			{name:"Drop Nail Orbs(sort by turns)",otLangName:{chs:"掉落钉珠（按回合排序）",cht:"掉落釘珠（按回合排序）"},
+				function:cards=>{
+					const searchTypeArray = [226];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						return skill;
 					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
 				addition:card=>{
-					const searchTypeArray = [207];
+					const searchTypeArray = [226];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					if (sk[7])
-						return `${sk[7]}个×${sk[0]}T`;
-					else
-						return `特殊形状×${sk[0]}T`;
+					return `📌${sk[1]}%×${sk[0]}T`;
 				}
 			},
 		]},
@@ -2031,117 +2098,6 @@ const specialSearchFunctions = (function() {
 				}
 			},
 		]},
-		{group:true,name:"----- Orbs Lock -----",otLangName:{chs:"-----锁珠类-----",cht:"-----鎖珠類-----"}, functions: [
-			{name:"Unlock",otLangName:{chs:"解锁",cht:"解鎖"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [172];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				})
-			},
-			{name:"Lock(Any color)",otLangName:{chs:"上锁（不限色）",cht:"上鎖（不限色）"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [152];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
-				addition:lock_Addition
-			},
-			{name:"Lock(≥5 color)",otLangName:{chs:"上锁5色+心或全部",cht:"上鎖5色+心或全部"},
-				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [152];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				return skill && (skill.params[0] & 63) === 63;
-				}),
-				addition:lock_Addition
-			},
-		]},
-		{group:true,name:"----- Orbs Drop -----",otLangName:{chs:"----- 珠子掉落 类-----",cht:"----- 珠子掉落 類-----"}, functions: [
-			{name:"Drop locked orbs(any color, sort by turns)",otLangName:{chs:"掉锁（不限色，按回合排序）",cht:"掉鎖（不限色，按回合排序）"},
-				function:cards=>{
-					const searchTypeArray = [205];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
-				},
-				addition:dropLock_Addition
-			},
-			{name:"Drop locked orbs(≥5 color, sort by turns)",otLangName:{chs:"掉锁5色+心或全部（按回合排序）",cht:"掉鎖5色+心或全部（按回合排序）"},
-				function:cards=>{
-					const searchTypeArray = [205];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && (skill.params[0] & 63) === 63;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
-				},
-				addition:dropLock_Addition
-			},
-			{name:"Drop Enhanced Orbs(sort by turns)",otLangName:{chs:"掉落强化宝珠（按回合排序）",cht:"掉落強化寶珠（按回合排序）"},
-				function:cards=>{
-					const searchTypeArray = [180];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
-				},
-				addition:card=>{
-					const searchTypeArray = [180];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					return `${sk[1]}%×${sk[0]}T`;
-				}
-			},
-			{name:"Drop rate increases",otLangName:{chs:"掉落率提升",cht:"掉落率提升"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [126];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
-				addition:dropOrb_Addition
-			},
-			{name:"Drop rate - Attr. - Jammers/Poison",otLangName:{chs:"掉落率提升-属性-毒、废（顶毒）",cht:"掉落率提升-屬性-毒、廢（頂毒）"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [126];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill && (skill.params[0] & 960); // 960 = 二进制 1111000000
-				}),
-				addition:dropOrb_Addition
-			},
-			{name:"Drop rate - 99 turns",otLangName:{chs:"掉落率提升-持续99回合",cht:"掉落率提升-持續99回合"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [126];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill && skill.params[1] >= 99;
-				}),
-				addition:dropOrb_Addition
-			},
-			{name:"Drop rate - 100% rate",otLangName:{chs:"掉落率提升-100%几率",cht:"掉落率提升-100%幾率"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [126];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill && skill.params[3] == 100;
-				}),
-				addition:dropOrb_Addition
-			},
-			{name:"Drop Nail Orbs(sort by turns)",otLangName:{chs:"掉落钉珠（按回合排序）",cht:"掉落釘珠（按回合排序）"},
-				function:cards=>{
-					const searchTypeArray = [226];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-				},
-				addition:card=>{
-					const searchTypeArray = [226];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					return `📌${sk[1]}%×${sk[0]}T`;
-				}
-			},
-		]},
 		{group:true,name:"-----Damage Enemy - Gravity-----",otLangName:{chs:"-----对敌直接伤害类-重力-----",cht:"-----對敵直接傷害類-重力-----"}, functions: [
 			{name:"Gravity - Current HP(sort by rate)",otLangName:{chs:"重力-敌人当前血量（按比例排序）",cht:"重力-敵人當前血量（按比例排序）"},
 				function:cards=>{
@@ -2372,7 +2328,7 @@ const specialSearchFunctions = (function() {
 				})
 			},
 		]},
-		{group:true,name:"-----Board Change-----",otLangName:{chs:"-----洗版类-----",cht:"-----洗版類-----"}, functions: [
+		{group:true,name:"-----Board States Change-----",otLangName:{chs:"-----改变板面状态类-----",cht:"-----改變板面狀態類-----"}, functions: [
 			{name:"Replaces all Orbs",otLangName:{chs:"刷版",cht:"刷版"},
 				function:cards=>cards.filter(card=>{
 				const searchTypeArray = [10];
@@ -2380,6 +2336,100 @@ const specialSearchFunctions = (function() {
 				return skill;
 				})
 			},
+			{name:"Creates Roulette Orb",otLangName:{chs:"生成轮盘位（转转珠）",cht:"生成輪盤位（轉轉珠）"},
+				function:cards=>{
+					const searchTypeArray = [207];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+					const searchTypeArray = [207];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					if (sk[7])
+						return `${sk[7]}个×${sk[0]}T`;
+					else
+						return `特殊形状×${sk[0]}T`;
+				}
+			},
+			{name:"Creates Cloud",otLangName:{chs:"生成云",cht:"生成雲"},
+				function:cards=>{
+					const searchTypeArray = [238];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+					const searchTypeArray = [238];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `${sk[1]}个×${sk[0]}T`;
+				}
+			},
+		]},
+		{group:true,name:"-----Orbs States Change-----",otLangName:{chs:"-----改变宝珠状态类-----",cht:"-----改變寶珠狀態類-----"}, functions: [
+			{name:"Unlock",otLangName:{chs:"解锁",cht:"解鎖"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [172];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				})
+			},
+			{name:"Lock(Any color)",otLangName:{chs:"上锁（不限色）",cht:"上鎖（不限色）"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [152];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:lock_Addition
+			},
+			{name:"Lock(≥5 color)",otLangName:{chs:"上锁5色+心或全部",cht:"上鎖5色+心或全部"},
+				function:cards=>cards.filter(card=>{
+				const searchTypeArray = [152];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				return skill && (skill.params[0] & 63) === 63;
+				}),
+				addition:lock_Addition
+			},
+			{name:"Enhanced Orbs",otLangName:{chs:"强化宝珠",cht:"強化寶珠"},
+				function:cards=>{
+				const searchTypeArray = [52,91,140];
+				return cards.filter(card=>{
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				});
+				},
+				addition:card=>{
+				const searchTypeArray = [52,91,140];
+				const skill = getCardActiveSkill(card, searchTypeArray);
+				if (!skill) return;
+				const sk = skill.params;
+				let attrs = [];
+				switch (skill.type)
+				{
+					case 52:{
+						attrs.push(sk[0]); break;
+					}
+					case 91:{
+						attrs = sk.slice(0,-1); break;
+					}
+					case 140:{
+						attrs = flags(sk[0]); break;
+					}
+				}
+				const fragment = document.createDocumentFragment();
+				fragment.appendChild(document.createTextNode(`强化`));
+				fragment.appendChild(createOrbsList(attrs));
+				return fragment;
+				}
+			},
+		]},
+		{group:true,name:"-----Change all Orbs-----",otLangName:{chs:"-----洗板类-----",cht:"-----洗板類-----"}, functions: [
 			{name:"Changes all Orbs to any",otLangName:{chs:"洗版-任意色",cht:"洗版-任意色"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [71];
@@ -2638,38 +2688,6 @@ const specialSearchFunctions = (function() {
 				}),
 				addition:changeOrbs_Addition
 			},
-			{name:"Enhanced Orbs",otLangName:{chs:"强化宝珠",cht:"強化寶珠"},
-				function:cards=>{
-				const searchTypeArray = [52,91,140];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				});
-				},
-				addition:card=>{
-				const searchTypeArray = [52,91,140];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				if (!skill) return;
-				const sk = skill.params;
-				let attrs = [];
-				switch (skill.type)
-				{
-					case 52:{
-						attrs.push(sk[0]); break;
-					}
-					case 91:{
-						attrs = sk.slice(0,-1); break;
-					}
-					case 140:{
-						attrs = flags(sk[0]); break;
-					}
-				}
-				const fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(`强化`));
-				fragment.appendChild(createOrbsList(attrs));
-				return fragment;
-				}
-			},
 		]},
 		{group:true,name:"-----Create Orbs-----",otLangName:{chs:"-----随机产珠类-----",cht:"-----隨機產珠類-----"}, functions: [
 			{name:"Create 30 Orbs",otLangName:{chs:"固定30个产珠",cht:"固定30個產珠"},
@@ -2792,7 +2810,7 @@ const specialSearchFunctions = (function() {
 				}),
 				addition:generateColumnOrbs_Addition
 			},
-			{name:"Create a vertical include Heart",otLangName:{chs:"产竖（含心）",cht:"產豎（含心）"},
+			{name:"Create a vertical Heart",otLangName:{chs:"产竖心",cht:"產豎心"},
 				function:cards=>cards.filter(card=>{
 					function isHeart(sk)
 					{
@@ -3309,11 +3327,19 @@ const specialSearchFunctions = (function() {
 			},
 		]},
 		{group:true,name:"-----HP Scale-----",otLangName:{chs:"-----血倍率-----",cht:"-----血倍率-----"}, functions: [
-			{name:"HP Scale [2, ∞) (sort by rate)",otLangName:{chs:"队长血倍率[2, ∞)（按倍率排序）",cht:"隊長血倍率[2, ∞)（按倍率排序）"},
+			{name:"HP Scale [3, ∞) (sort by rate)",otLangName:{chs:"队长血倍率[2, ∞)（按倍率排序）",cht:"隊長血倍率[2, ∞)（按倍率排序）"},
 				function:cards=>cards.filter(card=>{
 					const skill = Skills[card.leaderSkillId];
 					const HPscale = getHPScale(skill);
-					return HPscale >= 2;
+					return HPscale >= 3;
+				}).sort(sortByHPScal),
+				addition: HPScal_Addition
+			},
+			{name:"HP Scale [2, 3) (sort by rate)",otLangName:{chs:"队长血倍率[2, ∞)（按倍率排序）",cht:"隊長血倍率[2, ∞)（按倍率排序）"},
+				function:cards=>cards.filter(card=>{
+					const skill = Skills[card.leaderSkillId];
+					const HPscale = getHPScale(skill);
+					return HPscale >= 2 && HPscale < 3;
 				}).sort(sortByHPScal),
 				addition: HPScal_Addition
 			},

@@ -2710,6 +2710,47 @@ icon.inflicts::after
 .board
 {
 	cursor: pointer;
+	display: inline-block;
+	vertical-align: bottom;
+}
+.board[data-column-count="7"] {
+	transform: scale(calc(5 / 6));
+	margin: calc(-140px * (1 - 5 / 6 ) / 2) calc(-168px * (1 - 5 / 6 ) / 2);
+}
+.board[data-column-count="5"] {
+	transform: scale(calc(5 / 4));
+	margin: calc(140px * (5 / 4 - 1) / 2) calc(168px * (5 / 4 - 1) / 2);
+}
+.board .block {
+	position: relative;
+}
+.block::before,
+.block::after
+{
+	transform: scale(0.75);
+	margin: -4px;
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 36px;
+	height: 36px;
+	background-repeat: no-repeat;
+}
+.block.roulette::before
+{
+	content: "";
+	background-image: url(images/icon-orbs.png);
+	background-position-x:calc(-36px * 1);
+	background-position-y:calc(-36px * 7);
+}
+.block.cloud::before
+{
+	content: "";
+	background-image: url(images/icon-cloud-1.png);
+	background-size: contain;
+	transform: scale(1.2);
+	z-index: 99;
 }
 .orb-icon
 {
@@ -3659,39 +3700,6 @@ table .orb-icon
 .skill-datail-parsed .board tr:nth-of-type(2n)>td:nth-of-type(2n)
 {
 	background-color: var(--board-deep-color);
-}
-/*前两行右侧区域*/
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+1)>td:nth-of-type(2n+4),
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n)>td:nth-of-type(2n+5)
-{
-	background-color: var(--board-deep-color);
-}
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n)>td:nth-of-type(2n+4),
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+1)>td:nth-of-type(2n+5)
-{
-	background-color: var(--board-light-color);
-}
-/*后两行左侧区域*/
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+3)>td:nth-of-type(2n),
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+4)>td:nth-of-type(2n+1)
-{
-	background-color: var(--board-deep-color);
-}
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+3)>td:nth-of-type(2n+1),
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+4)>td:nth-of-type(2n)
-{
-	background-color: var(--board-light-color);
-}
-/*后两行右侧区域*/
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+4)>td:nth-of-type(2n+4),
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+3)>td:nth-of-type(2n+5)
-{
-	background-color: var(--board-deep-color);
-}
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+3)>td:nth-of-type(2n+4),
-.skill-datail-parsed .board:not(.board-76) tr:nth-of-type(2n+4)>td:nth-of-type(2n+5)
-{
-	background-color: var(--board-light-color);
 }
 
 .card-skill-list .no-skyfall,
