@@ -6647,7 +6647,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"7933797cdffc0f58a2eba9433b758cc9"
+		"48c61cebf9f793484fbed8059659460d"
 	],
 	[
 		"monsters-info/mon_en.json",
@@ -6655,7 +6655,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"e019df06630e88be97c0fa9d36abcef9"
+		"bedd112b865fa33f9df18d7e5b5b7030"
 	],
 	[
 		"monsters-info/mon_ko.json",
@@ -7011,25 +7011,25 @@ self.addEventListener('fetch', async function(event) {
 		url.searchParams.set("md5", md5);
 		const responseWithMd5 = await caches.match(url, {ignoreSearch: false});
 		if (responseWithMd5) {
-			console.debug("%c已有相同 md5 缓存，直接使用缓存", "color: green;", url);
+			console.debug("%c已有相同 md5 缓存，直接使用缓存：%s，%s", "color: green;", relativePath, md5);
 			event.respondWith(responseWithMd5);
 		} else {
 			//console.debug("%c无相同 md5 缓存，重新在线获取", "color: blue;", url);
 			let newResponse;
 			try {
 				newResponse = await fetch(event.request);
-				console.debug("%c无相同 md5 缓存，重新在线获取结果", "color: blue;", url);
+				console.debug("%c无相同 md5 缓存，重新在线获取结果：%s，%s", "color: blue;", relativePath, md5);
 				const cache = await caches.open(cacheName);
 				await cache.put(url, newResponse.clone());
 				//console.debug("%c储存新的Cache", "color: blue;", url, cache);
 			} catch (error) {
-				console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据", "color: red;", url, error);
+				console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据：%s，%s", "color: red;", relativePath, md5, error);
 				newResponse = await caches.match(url, {ignoreSearch: true});
 			}
 			event.respondWith(newResponse);
 		}
 	} else {
-		console.debug("无 md5 值，重新在线获取", url);
+		console.debug("无 md5 值，重新在线获取：%s", relativePath);
 		let newResponse;
 		try {
 			newResponse = await fetch(event.request);
@@ -7037,7 +7037,7 @@ self.addEventListener('fetch', async function(event) {
 			await cache.put(url, newResponse.clone());
 			event.respondWith(newResponse);
 		} catch (error) {
-			console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据", "color: red;", url, error);
+			console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据：%s", "color: red;", relativePath, error);
 			newResponse = await caches.match(url, {ignoreSearch: true});
 		}
 		event.respondWith(newResponse);
