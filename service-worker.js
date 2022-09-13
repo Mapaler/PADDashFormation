@@ -2683,7 +2683,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_089.PNG",
-		"55943c955519b77c1b8f7510f5bd87b9"
+		"342a481688c509d03d3f38fc79455271"
 	],
 	[
 		"images/cards_en/CARDS_090.PNG",
@@ -2691,7 +2691,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_091.PNG",
-		"148ae623061d03a36cd970c5847de590"
+		"c3483cf49cf9d34b7b0be8a6a4a5d6bf"
+	],
+	[
+		"images/cards_en/CARDS_092.PNG",
+		"6e924379fdbffb275ab8d4b99c049e9c"
 	],
 	[
 		"sound/voice/en/padv001.wav",
@@ -4699,7 +4703,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_089.PNG",
-		"4a7d3087074a854d4e559964c9d48e8c"
+		"dbcf144352b9facc27e7ec8eee8f11c7"
 	],
 	[
 		"images/cards_ko/CARDS_090.PNG",
@@ -4707,7 +4711,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_091.PNG",
-		"148ae623061d03a36cd970c5847de590"
+		"c3483cf49cf9d34b7b0be8a6a4a5d6bf"
+	],
+	[
+		"images/cards_ko/CARDS_092.PNG",
+		"6e924379fdbffb275ab8d4b99c049e9c"
 	],
 	[
 		"sound/voice/ko/padv001.wav",
@@ -6483,7 +6491,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.js",
-		"fe79301efeced17c956c299bf981b333"
+		"d2299f4339141df44463313378504335"
 	],
 	[
 		"images/attrs.png",
@@ -6647,23 +6655,23 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"84593077b3cdb66a6f9c41c9678d706c"
+		"ef776df897f1a793c9b9940602d2b3f6"
 	],
 	[
 		"monsters-info/mon_en.json",
-		"761fa240941f4d65f7c9c4a7c162af97"
+		"fc8e3f6199807af09c6c532425b5a36a"
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"441a6484c13a5d35c3cb07cfd3da0a24"
+		"cd639d207b3798e7024499add2c8faf5"
 	],
 	[
 		"monsters-info/mon_ko.json",
-		"a7e0d737b14abc9a2bc3bd288f92d524"
+		"7994ca0b5ee3ed677ac7d993ac527f7b"
 	],
 	[
 		"monsters-info/skill_en.json",
-		"2dfab8f03901921055d55b39450b0699"
+		"ba6d738d4f55b50b0fb86ad12c3b31de"
 	],
 	[
 		"monsters-info/skill_ja.json",
@@ -6671,7 +6679,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/skill_ko.json",
-		"aeccf01fef950552132b4c5eeda36357"
+		"e542119175ba570acf7412a7ffd39ba8"
 	],
 	[
 		"doc/export-player-data.html",
