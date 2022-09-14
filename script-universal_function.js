@@ -511,7 +511,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	}
 	const latentScale = [ //对应加三维潜在觉醒的序号与增加比例
 		[{ index: 1, scale: 0.015 }, { index: 12, scale: 0.03 }, { index: 28, scale: 0.045 }, { index: 43, scale: 0.10 }], //HP
-		[{ index: 2, scale: 0.01 }, { index: 12, scale: 0.02 }, { index: 29, scale: 0.03 }, { index: 44, scale: 0.05 }], //ATK
+		[{ index: 2, scale: 0.01 }, { index: 12, scale: 0.02 }, { index: 29, scale: 0.03 }, { index: 44, scale: 0.08 }], //ATK
 		[{ index: 3, scale: 0.1 }, { index: 12, scale: 0.2 }, { index: 30, scale: 0.3 }, { index: 45, scale: 0.35 }] //RCV
 	];
 	const memberCurves = [memberCard.hp, memberCard.atk, memberCard.rcv];
@@ -578,9 +578,9 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 			}, 0) :
 			0;
 
-		let reValue = n_base * n_awokenScale + n_base * n_latentScale + n_plus + n_awoken + (n_assist_base + n_assist_plus) * bonusScale[idx];
+		let reValue = Math.round(n_base * n_awokenScale + n_base * n_latentScale) + n_plus + n_awoken + Math.round((n_assist_base + n_assist_plus) * bonusScale[idx]);
 		//因为语音觉醒觉醒无效也生效，所以这里需要计算
-		let reValueNoAwoken = n_base * n_awokenScale + n_plus + (n_assist_base + n_assist_plus) * bonusScale[idx];
+		let reValueNoAwoken = Math.round(n_base * n_awokenScale) + n_plus + Math.round((n_assist_base + n_assist_plus) * bonusScale[idx]);
 
 		//觉醒生效时的协力、语音觉醒等的倍率
 		reValue = reValue * latterAwokenScale[idx].reduce(calculateAwokenScale, 1);
