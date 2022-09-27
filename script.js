@@ -2585,13 +2585,13 @@ function initialize(event) {
 		this.classList.add(className_displayNone);
 		formationBox.classList.remove("blur-bg");
 		controlBox.classList.remove("blur-bg");
+		// if (isGuideMod) {
+		// 	const url = new URL(location);
+		// 	url.searchParams.delete("guide");
+		// 	url.searchParams.delete("id");
+		// 	history.replaceState(null,null,url);
+		// }
 		//删除编辑模式
-		if (isGuideMod) {
-			const url = new URL(location);
-			url.searchParams.delete("guide");
-			url.searchParams.delete("id");
-			history.replaceState(null,null,url);
-		}
 		sessionStorage.removeItem('editing');
 	};
 

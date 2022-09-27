@@ -54,8 +54,10 @@ const tsConverter = OpenCC.CustomConverter([
 	['超人尼奥/超人雷欧', '雷欧奥特曼'],
 	['阿尔法锋刃', '阿尔法利刃'],
 	['德尔塔升华钩爪', '德尔塔升爪'],
-	
+	//海贼王
 	['ONE PIECE FILM RED', '海贼王'],
+	['骗人布', '乌索普'],
+	['香吉士', '山治'],
 ]);
 
 const sourceFolder = "Download-pad.skyozora.com/pad.skyozora.com"; //战友网数据的存储问文件夹
