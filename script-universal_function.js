@@ -871,54 +871,10 @@ function descriptionToHTML(str)
 			return latent;
 		});
 
-/*	arr = arr.flatMap(item=>{
-		if (typeof item == "string") {
-			const subArr = item.split(/\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm);
-			const newArr = [];
-			for (let i = 0; i < subArr.length; i += 3) {
-				newArr.push(subArr[i]);
-				if (subArr[i+2] !== undefined) {
-					const sp = document.createElement("span");
-					sp.style.color = `#${subArr[i+1]}`;
-					sp.textContent = subArr[i+2];
-					newArr.push(sp);
-				}
-			}
-			return newArr;
-		} else {
-			return item;
-		}
-	});
-
-	arr = arr.flatMap(item=>{
-		if (typeof item == "string") {
-			const subArr = item.split(/\%\{m([0-9]{1,4})\}/g);
-			const newArr = [];
-			for (let i = 0; i < subArr.length; i += 2) {
-				newArr.push(subArr[i]);
-				if (subArr[i+1] !== undefined) {
-					const avatar = cardN(parseInt(subArr[i+1],10));
-					avatar.monDom.onclick = cardNClick;
-					newArr.push(avatar);
-				}
-			}
-			return newArr;
-		} else {
-			return item;
-		}
-	});*/
-
-	//str = str.replace(/\n/ig,"<br>"); //换行
-	//str = str.replace(/ /ig,"&nbsp;"); //换行
-
-	//str = str.replace(/\^([a-fA-F0-9]+?)\^([^\^]+?)\^p/igm,'<span style="color:#$1;">$2</span>'); //文字颜色
-	//str = str.replace(/\%\{m([0-9]{1,4})\}/g,function (str, p1, offset, s){return cardN(parseInt(p1,10)).outerHTML;}); //怪物头像
 	return nodeArr.nodeJoin();
 }
 //默认的技能解释的显示行为
 function parseSkillDescription(skill) {
-	//const span = document.createElement("span");
-	//span.innerHTML = descriptionToHTML(skill.description);
 	
 	return descriptionToHTML(skill?.description);
 }
