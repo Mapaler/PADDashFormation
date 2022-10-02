@@ -6399,7 +6399,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"e18e48eb9c1ae0f38736582ab0e02d4e"
+		"c76d3fda4d477a02d99de4ce87a18bb0"
 	],
 	[
 		"script-custom_elements.js",
@@ -6407,7 +6407,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"dc7ce7f365392bca88a9def634ee4612"
+		"751bb68922130e91189c1d094ed9009b"
 	],
 	[
 		"script-skill-parser.js",
@@ -6415,15 +6415,15 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"4c030bf76932b3bf47b18d3a5f67b3c1"
+		"4cb9b257c297c652b00ce78d70d47e82"
 	],
 	[
 		"script.js",
-		"dc10d964f5356ee5d6cdddcdd411ce7f"
+		"72234822ac67b450717118fedd64565d"
 	],
 	[
 		"solo.html",
-		"e9948cac374dcc4fff6a507cff4e03cf"
+		"28002c336a8cd1e3055160136221ec72"
 	],
 	[
 		"style-monsterimages.css",
@@ -6439,11 +6439,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"85818d0e5c2f518efbda39f02a2968e1"
+		"6bdbef90c9be623c8418d6e85e1bdfd4"
 	],
 	[
 		"languages/en.css",
-		"a0e99cbe80895139c745a8eb824434f7"
+		"916da57389442ee2ff1382a027a1c454"
 	],
 	[
 		"languages/en.js",
@@ -6459,7 +6459,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"1c90c494624d353499a6c893d256e71c"
+		"ef87697939803aa7086140a20590597b"
 	],
 	[
 		"languages/ja.js",
@@ -6467,7 +6467,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"b498ee4e2f8f53eb180de6e83ef97231"
+		"a03e01bfe3263aeb93d695cfab690771"
 	],
 	[
 		"languages/ko.js",
@@ -6487,19 +6487,19 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.css",
-		"8f971d16aab6419ed25677fd259b5d44"
+		"1b75fe15131d9e68fb8d55a28f96d16f"
 	],
 	[
 		"languages/zh-TW.js",
-		"5b122fb16c9cdb0f6d6f45f5c535f95a"
+		"ec242d205f1137d8e2f83047ff5a8873"
 	],
 	[
 		"languages/zh.css",
-		"6da45a781e0a56c0b80d5cf281e5f1b7"
+		"a6909be95641149c5b99086fbf63ec6f"
 	],
 	[
 		"languages/zh.js",
-		"d2299f4339141df44463313378504335"
+		"cec01b272a515dbe5f164a983ebdf00c"
 	],
 	[
 		"images/attrs.png",
@@ -6663,19 +6663,19 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"b1b5b29c060b03bd78d9e6a1ee0664e7"
+		"962261c9140e8597f41a25f4215aef20"
 	],
 	[
 		"monsters-info/mon_en.json",
-		"c8b5c6d18cd02d012f7348949ee836f9"
+		"393e03dbc77205ab214a3dbfd05b829e"
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"ff0a36101c8f1b46daf93510aa329c4c"
+		"b4defb93f006875b7575c8b5e04ff926"
 	],
 	[
 		"monsters-info/mon_ko.json",
-		"898d9e14e52e9277e193639438004a21"
+		"924aeb0e2ebd4bf1ca49c506e9406aa6"
 	],
 	[
 		"monsters-info/skill_en.json",
@@ -6695,7 +6695,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/index.html",
-		"f09aa5740a7b4bf0794b38b251963a00"
+		"59ef0b56f90307a2c6820a08ea26640e"
 	],
 	[
 		"doc/images/player-bind-box.webp",

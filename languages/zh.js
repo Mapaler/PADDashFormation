@@ -173,6 +173,7 @@
 			sub_members: tp`队员`,
 			leader_self: tp`左边队长`,
 			leader_helper: tp`右边队长`,
+			collab_id: tp`合作ID为${'id'}的角色`,
 			enemy: tp`敌人`,
 			enemy_all: tp`敌方全体`,
 			enemy_one: tp`敌方1体`,

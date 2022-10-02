@@ -638,6 +638,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "Effective Types:";
 }
+.dialog-dungeon-enchance .collab-list::before
+{
+	content: "Effective Collab ID：";
+}
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "Enhancement Rate:";

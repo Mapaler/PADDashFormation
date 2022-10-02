@@ -189,6 +189,7 @@ let localTranslating = {
 			sub_members: tp`sub-members`,
 			leader_self: tp`left leader`,
 			leader_helper: tp`right leader`,
+			collab_id: tp`card with collab ID of ${'id'} `,
 			enemy: tp`Enemy`,
 			enemy_all: tp`all enemys`,
 			enemy_one: tp`1 enemy`,

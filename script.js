@@ -282,6 +282,7 @@ var Formation = function(teamCount, memberCount) {
 		attrs: [],
 		types: [],
 		rarities: [],
+		collabs: [],
 		rate: {
 			hp: 1,
 			atk: 1,
@@ -320,7 +321,7 @@ Formation.prototype.outObj = function() {
 	});
 	let dge = this.dungeonEnchance;
 	if (Object.values(dge.rate).some(rate => rate != 1)) obj.r = [
-		[reflags(dge.types),reflags(dge.attrs),reflags(dge.rarities)].deleteLatter(0), //类型,属性,星级
+		[reflags(dge.types),reflags(dge.attrs),reflags(dge.rarities),dge.collabs.length ? dge.collabs : 0].deleteLatter(0), //类型,属性,星级
 		[dge.rate.hp,dge.rate.atk,dge.rate.rcv].deleteLatter(1)
 	];
 	obj.v = dataStructure;
@@ -409,6 +410,7 @@ Formation.prototype.loadObj = function(f) {
 			dge.types = flags(effective[0] ?? 0);
 			dge.attrs = flags(effective[1] ?? 0);
 			dge.rarities = flags(effective[2] ?? 0);
+			dge.collabs = effective[3]?.length ? effective[3] : [];
 			dge.rate.hp = rates[0] ?? 1;
 			dge.rate.atk = rates[1] ?? 1;
 			dge.rate.rcv = rates[2] ?? 1;
@@ -2508,6 +2510,7 @@ function initialize(event) {
 		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
 		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
 		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
+		const collabIdIpt = dialogContent.querySelector("#dungeon-collab-id");
 
 		const dge = formation.dungeonEnchance;
 		function runCheck(checkBox){
@@ -2516,6 +2519,7 @@ function initialize(event) {
 		rareDoms.forEach(runCheck,dge.rarities);
 		attrDoms.forEach(runCheck,dge.attrs);
 		typeDoms.forEach(runCheck,dge.types);
+		collabIdIpt.value = dge.collabs.join();
 
 		const {hp, atk, rcv} = dge.rate;
 		dialogContent.querySelector("#dungeon-hp").value = hp;
@@ -2536,6 +2540,7 @@ function initialize(event) {
 		const rarities = returnCheckBoxsValues(rareDoms).map(Str2Int);
 		const attrs = returnCheckBoxsValues(attrDoms).map(Str2Int);
 		const types = returnCheckBoxsValues(typeDoms).map(Str2Int);
+		const collabIdIpt = dialogContent.querySelector("#dungeon-collab-id");
 		
 		const dge = formation.dungeonEnchance;
 		dge.rarities = rarities;
@@ -2544,6 +2549,7 @@ function initialize(event) {
 		dge.rate.hp = Number(dialogContent.querySelector("#dungeon-hp").value);
 		dge.rate.atk = Number(dialogContent.querySelector("#dungeon-atk").value);
 		dge.rate.rcv = Number(dialogContent.querySelector("#dungeon-rcv").value);
+		dge.collabs = collabIdIpt.value.split(',').map(str=>Number(str)).filter(Boolean);
 		dungeonEnchanceDialog.close();
 		creatNewUrl();
 		refreshAll(formation);
@@ -2554,12 +2560,14 @@ function initialize(event) {
 		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
 		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
 		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
+		const collabIdIpt = dialogContent.querySelector("#dungeon-collab-id");
 		function unchecked(checkBox) {
 			checkBox.checked = false;
 		}
 		rareDoms.forEach(unchecked);
 		attrDoms.forEach(unchecked);
 		typeDoms.forEach(unchecked);
+		collabIdIpt.value = '';
 		dialogContent.querySelector("#dungeon-hp").value = 1;
 		dialogContent.querySelector("#dungeon-atk").value = 1;
 		dialogContent.querySelector("#dungeon-rcv").value = 1;
@@ -4546,6 +4554,10 @@ function refreshAll(formationData) {
 				icon.setAttribute("data-rare-icon", rarity);
 			})
 		}
+		if (dge.collabs.length) { //添加合作的ID名称
+			dungeonEnchanceDom.appendChild(localTranslating?.skill_parse?.target?.collab_id({id:dge.collabs.join()}));
+		}
+		
 		let skill = powerUp(dge.attrs, dge.types, p.mul({hp: dge.rate.hp * 100, atk: dge.rate.atk * 100, rcv: dge.rate.rcv * 100}));
 		dungeonEnchanceDom.appendChild(renderSkill(skill));
 		dungeonEnchanceDom.classList.remove(className_displayNone);

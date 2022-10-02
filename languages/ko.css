@@ -588,6 +588,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "유효한 형식:";
 }
+.dialog-dungeon-enchance .collab-list::before
+{
+	content: "유효한 콜라보 ID：";
+}
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "배율을 강화합니다:";

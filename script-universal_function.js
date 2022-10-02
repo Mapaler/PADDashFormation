@@ -519,7 +519,10 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 
 	const dge = formation.dungeonEnchance;
 	const dgeRate = [dge.rate.hp, dge.rate.atk, dge.rate.rcv];
-	const isDge = dge.rarities.includes(memberCard.rarity) || memberCard.attrs.some(attr=>dge.attrs.includes(attr)) || memberCard.types.some(type=>dge.types.includes(type));
+	const isDge = dge.rarities.includes(memberCard.rarity) || //符合星级
+				memberCard.attrs.some(attr=>dge.attrs.includes(attr)) || //符合属性
+				memberCard.types.some(type=>dge.types.includes(type)) || //符合类型
+				dge.collabs.includes(memberCard.collabId); //符合合作
 	
 	//储存点亮的觉醒
 	let awokenList = memberCard.awakenings.slice(0, member.awoken);
