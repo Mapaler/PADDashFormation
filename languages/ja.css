@@ -258,6 +258,9 @@ label[for="merge-skill"]::after{
 .control-box .lbl-henshin-change::before{
 	content: "🕴️変身";
 }
+.control-box .lbl-remove-assist::before{
+	content: "⛔アシストを解除";
+}
 .control-box .show-mon-id-lbl::after{
 	content:"🆔モンスターIDを表示";
 }
@@ -265,7 +268,7 @@ label[for="merge-skill"]::after{
 	content:"❄️スキル クールを表示";
 }
 .control-box .show-mon-awoken-lbl::after{
-	content:"👁カードの覚醒を表示します";
+	content:"👁カードの覚醒を表示";
 }
 .control-box .show-awoken-count-lbl::after{
 	content:"⚔️総覚醒と能力値の表示";

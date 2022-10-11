@@ -255,6 +255,9 @@ label[for="merge-skill"]::after{
 .control-box .lbl-henshin-change::before{
 	content: "🕴️변신";
 }
+.control-box .lbl-remove-assist::before{
+	content: "⛔보조를 해제합";
+}
 .control-box .show-mon-id-lbl::after{
 	content:"🆔몬스터 ID 표시";
 }
@@ -262,7 +265,7 @@ label[for="merge-skill"]::after{
 	content:"❄️스킬의 사용 대기 시간 표시";
 }
 .control-box .show-mon-awoken-lbl::after{
-	content:"👁카드 각성을 표시합니다";
+	content:"👁카드 각성을 표시합";
 }
 .control-box .show-awoken-count-lbl::after{
 	content:"⚔️각성 통계 및 기능 값 표시";

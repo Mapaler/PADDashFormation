@@ -520,6 +520,16 @@ Formation.prototype.getQrStr = function(type)
 		return this.getPdcQrStr();
 	}
 }
+Formation.prototype.removeAssist = function() {
+	this.teams.forEach(team=>{
+		const assists = team[1];
+		for (let i = 0; i < assists.length; i++) {
+			assists[i] = new MemberAssist();
+		}
+	});
+	creatNewUrl();
+	refreshAll(formation);
+}
 
 class PlayerData
 {

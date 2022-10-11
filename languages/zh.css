@@ -260,6 +260,9 @@ label[for="merge-skill"]::after{
 .control-box .lbl-henshin-change::before{
 	content: "🕴️变身";
 }
+.control-box .lbl-remove-assist::before{
+	content: "⛔解除辅助";
+}
 .control-box .show-mon-id-lbl::after{
 	content:"🆔显示怪物ID";
 }

@@ -2683,7 +2683,7 @@ icon.inflicts::after
 */
 .control-box .lbl-henshin-change button
 {
-	font-size: 2em;
+	font-size: 1.5em;
 }
 .control-box .btn-henshin-back::before{
 	content: "◀️";
@@ -2691,7 +2691,18 @@ icon.inflicts::after
 .control-box .btn-henshin-forward::before{
 	content: "▶️";
 }
-
+.control-box .btn-remove-assist{
+	vertical-align: bottom;
+}
+.control-box .btn-remove-assist::before{
+	content: "";
+	background-image: url(images/icon-assist-bind.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	display: block;
+	width: 2em;
+	height: 2em;
+}
 #interchange-line{
 	pointer-events: none;
 	position: absolute;

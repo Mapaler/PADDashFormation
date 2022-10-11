@@ -265,6 +265,9 @@ label[for="merge-skill"]::after{
 .control-box .lbl-henshin-change::before{
 	content: "🕴️Henshin";
 }
+.control-box .lbl-remove-assist::before{
+	content: "⛔Remove Assist";
+}
 .control-box .show-mon-id-lbl::after{
 	content:"🆔Show monster ID";
 }
