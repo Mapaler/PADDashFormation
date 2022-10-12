@@ -6411,11 +6411,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"751bb68922130e91189c1d094ed9009b"
+		"eee1fbbcdb27dfcd85dfb999dec34893"
 	],
 	[
 		"script-skill-parser.js",
-		"318b83fc9368f446a57e834c961af07f"
+		"b8d6e652d1ca38358d46816cb093749e"
 	],
 	[
 		"script-universal_function.js",
@@ -6435,7 +6435,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"00aed1d757798c01338fbae7237b913f"
+		"4ccfe1b0717399397bcbe46d85e20646"
 	],
 	[
 		"temp.js",
@@ -6495,7 +6495,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.js",
-		"ec242d205f1137d8e2f83047ff5a8873"
+		"8a536ceda4bcbdfdb2ed4a16ea6a0fb1"
 	],
 	[
 		"languages/zh.css",
@@ -6503,7 +6503,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.js",
-		"cec01b272a515dbe5f164a983ebdf00c"
+		"5774931127a656c8122e164e56b1013b"
 	],
 	[
 		"images/attrs.png",
@@ -6576,6 +6576,10 @@ const cachesMap = new Map([
 	[
 		"images/icon-HP.png",
 		"7a1115ae32d7d68ee665ffa6420093f1"
+	],
+	[
+		"images/icon-immobility.png",
+		"e597db4ec669fc2618225700be66c0f1"
 	],
 	[
 		"images/icon-inflicts.png",

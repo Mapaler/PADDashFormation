@@ -79,7 +79,6 @@ let localTranslating = {
 			drop_refresh: tp`Replaces all orbs`,
 			drum: tp`Plus a drumming sound is made when Orbs are moved`,
 			auto_path: tp`Shows 3 combo path (Norm. Dungeon & 3 linked Orbs only)`,
-			board7x6: tp`[${'icon'}7x6 board]`,
 			counter_attack: tp`When attacked by an ${'target'}, ${'chance'}${'value'} ${'attr'} ${'icon'}counterattack`,	
 			change_orbs: tp`Changes ${'from'} to ${'to'} orbs`,
 			generate_orbs: tp`Creates ${'value'} ${'orbs'} orbs each at random ${'exclude'}`,
@@ -150,7 +149,8 @@ let localTranslating = {
 			compo_type_card: tp`When ${'ids'} are all on team, `,
 			compo_type_series: tp`When all subs from ${'ids'} collab (Needs at least 1 sub), `,
 			compo_type_evolution: tp`When all monsters in team are ${'ids'}, `,
-			compo_type_rarity: tp`When the total ★ rarity of the team is ≤${'rarity'}, `,
+			compo_type_team_total_rarity: tp`When the total ★ rarity of the team is ≤${'rarity'}, `,
+			compo_type_team_rarity_different: tp`When the team's rarity is different, `,
 
 			stage_less_or_equal: tp`When ${'stage'} ≤ ${'max'}, `,
 			stage_greater_or_equal: tp`When ${'stage'} ≥ ${'min'}, `,
@@ -2112,6 +2112,22 @@ const specialSearchFunctions = (function() {
 					return strArr.join(',');
 				}
 			},
+			{name:"Change team maximum HP",otLangName:{chs:"队伍最大 HP 变化",cht:"队伍最大 HP 變化"},
+				function:cards=>{
+					const searchTypeArray = [237];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
+				},
+				addition:card=>{
+					const searchTypeArray = [237];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `最大HP ${sk[1].bigNumberToString()}%×${sk[0]}T`;
+				}
+			},
 			{name:"Damage self(sort by rate)",otLangName:{chs:"玩家自残（HP 减少，按减少比率排序）",cht:"玩家自殘（HP 減少，按減少比率排序）"},
 				function:cards=>{
 					return cards.filter(card=>damageSelf_Rate(card)>0)
@@ -2412,7 +2428,14 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return `${sk[1]}个×${sk[0]}T`;
+					const colums = flags(sk[1]), rows = flags(sk[2]);
+					const fragment = document.createDocumentFragment();
+					if (colums.length)
+						fragment.append(`${colums.length}竖`);
+					if (rows.length)
+						fragment.append(`${rows.length}横`);
+					fragment.append(`×${sk[0]}T`);
+					return fragment;
 				}
 			},
 		]},
@@ -3102,14 +3125,29 @@ const specialSearchFunctions = (function() {
 					const searchTypeArray = [125];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
 					return skill;
-				})
+				}),
+				addition:card=>{
+					const searchTypeArray = [125];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					
+					return `队员:${sk.slice(0,5).filter(Boolean).join('\n')}`;
+				}
 			},
 			{name:"Designate collab ID",otLangName:{chs:"指定队伍队员合作编号",cht:"指定隊伍隊員合作編號"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [175];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
 					return skill;
-				})
+				}),
+				addition:card=>{
+					const searchTypeArray = [175];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `合作:${sk[0]}`;
+				}
 			},
 			{name:"Designate Evo type",otLangName:{chs:"指定队伍队员进化类型",cht:"指定隊伍隊員進化類型"},
 				function:cards=>cards.filter(card=>{
@@ -3121,6 +3159,40 @@ const specialSearchFunctions = (function() {
 			{name:"Floating rate based on the number of attrs/types",otLangName:{chs:"根据属性/类型个数浮动倍率",cht:"根據屬性/類型個數浮動倍率"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [229];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [229];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					const attrs = flags(sk[0]), types = flags(sk[1]);
+					const fragment = document.createDocumentFragment();
+					if (attrs.length)
+						fragment.appendChild(createOrbsList(attrs));
+					if (types.length)
+						fragment.appendChild(createTypesList(types));
+					return fragment;
+				}
+			},
+			{name:"Limit the total rarity of the team",otLangName:{chs:"限制队伍总稀有度",cht:"限制隊伍總稀有度"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [217];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [217];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `★≤${sk[0]}`;
+				}
+			},
+			{name:"Team's rarity required different",otLangName:{chs:"要求队员稀有度各不相同",cht:"要求隊員稀有度各不相同"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [245];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
 					return skill;
 				})
@@ -3182,6 +3254,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [15,185];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
 					const value = skill.params[0];
 					return `${value > 0 ? "+" : ""}${value/100}s`;
 				}
@@ -3197,6 +3270,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [178];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
 					const value = skill.params[0];
 					return `固定${value}s`;
 				}
@@ -3210,6 +3284,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [213];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					let attrs = flags(sk[0]), types = flags(sk[1]), awakenings = sk.slice(2);
 					const fragment = document.createDocumentFragment();
@@ -3680,6 +3755,10 @@ const specialSearchFunctions = (function() {
 			{name:"Sell Price",otLangName:{chs:"售卖金钱",cht:"售賣金錢"},
 				function:cards=>cards.filter(card=>card.sellPrice > 0).sort((a,b)=>a.sellPrice * a.maxLevel - b.sellPrice * b.maxLevel),
 				addition:card=>`Coin ${Math.round(card.sellPrice * card.maxLevel / 10).bigNumberToString()}`
+			},
+			{name:"Card Types",otLangName:{chs:"角色类型",cht:"角色類型"},
+				function:cards=>cards,
+				addition:card=>createTypesList(card.types)
 			},
 		]},
 	];

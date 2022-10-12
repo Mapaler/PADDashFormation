@@ -64,7 +64,6 @@
 			drop_refresh: tp`全板刷新`,
 			drum: tp`寶珠移動和消除的聲音變成太鼓達人的音效`,
 			auto_path: tp`顯示3連擊的轉珠路徑（只匹配3珠，並只適用於普通地下城）`,
-			board7x6: tp`【${'icon'}7×6版面】`,
 			counter_attack: tp`受到${'target'}攻擊時，${'chance'}進行受到傷害${'value'}的${'attr'}${'icon'}反擊`,	
 			change_orbs: tp`${'from'}→${'to'}`,
 			generate_orbs: tp`${'exclude'}生成${'orbs'}各${'value'}個`,
@@ -98,7 +97,8 @@
 			obstruct_opponent_before_me: tp`排名比自身高的對手`,
 			obstruct_opponent_designated_position: tp`第${'positions'}排位的對手`,
 			increase_damage_cap: tp`${'targets'}的${'icon'}傷害上限提升到${'cap'}`,
-			board_jamming_state: tp`在${'position'}生成${'state'}${'size'}${'count'}${'time'}`,
+			board_jamming_state: tp`在${'position'}生成${'icon'}${'state'}${'size'}${'count'}${'time'}`,
+			board_size_change: tp`版面大小改變為${'icon'}${'size'}`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,
@@ -133,7 +133,8 @@
 			compo_type_card: tp`隊伍中同時存在 ${'ids'} 時`,
 			compo_type_series: tp`隊員組成全為 ${'ids'} 合作時`,
 			compo_type_evolution: tp`隊員組成全為 ${'ids'} 進化時`,
-			compo_type_rarity: tp`隊伍的總★稀有度 ≤${'rarity'} 時`,
+			compo_type_team_total_rarity: tp`隊伍的總★稀有度 ≤${'rarity'} 時`,
+			compo_type_team_rarity_different: tp`隊伍的稀有度各不相同時`,
 
 			stage_less_or_equal: tp`${'stage'} ≤ ${'max'} 時`, //地下城层数
 			stage_greater_or_equal: tp`${'stage'} ≥ ${'min'} 時`,

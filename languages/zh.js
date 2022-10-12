@@ -64,7 +64,6 @@
 			drop_refresh: tp`全板刷新`,
 			drum: tp`宝珠移动和消除的声音变成太鼓达人的音效`,
 			auto_path: tp`显示3连击的转珠路径（只匹配3珠，并只适用于普通地下城）`,
-			board7x6: tp`【${'icon'}7×6版面】`,
 			counter_attack: tp`受到${'target'}攻击时，${'chance'}进行受到伤害${'value'}的${'attr'}${'icon'}反击`,	
 			change_orbs: tp`${'from'}→${'to'}`,
 			generate_orbs: tp`${'exclude'}生成${'orbs'}各${'value'}个`,
@@ -134,7 +133,8 @@
 			compo_type_card: tp`队伍中同时存在 ${'ids'} 时`,
 			compo_type_series: tp`队员组成全为 ${'ids'} 合作时`,
 			compo_type_evolution: tp`队员组成全为 ${'ids'} 进化时`,
-			compo_type_rarity: tp`队伍的总★稀有度 ≤${'rarity'} 时`,
+			compo_type_team_total_rarity: tp`队伍的总★稀有度 ≤${'rarity'} 时`,
+			compo_type_team_rarity_different: tp`队伍的稀有度各不相同时`,
 
 			stage_less_or_equal: tp`${'stage'} ≤ ${'max'} 时`, //地下城层数
 			stage_greater_or_equal: tp`${'stage'} ≥ ${'min'} 时`,

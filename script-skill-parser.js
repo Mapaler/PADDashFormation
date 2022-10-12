@@ -1497,7 +1497,7 @@ const parsers = {
 
 	[217](rarity, hp, atk, rcv) {
 		return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }),
-		c.compo('rarity', rarity));
+		c.compo('team-total-rarity', rarity));
 	},
 	[218](turns) { return skillBoost(v.constant(-turns)); },
 
@@ -1579,7 +1579,10 @@ const parsers = {
 				height = 5;
 			}
 		}
-		return activeTurns(turns, boardSizeChange());
+		return activeTurns(turns, boardSizeChange(width, height));
+	},
+	[245](_1, _2, _3, hp, atk, rcv) { //全员满足某种情况，现在是全部星级不一样
+ 		return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('team-rarity-diffrent', flags(_2))); 
 	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -2785,9 +2788,13 @@ function renderCondition(cond) {
 				frg.ap(tsp.cond.compo_type_evolution(dict));
 				break;
 			}
-			case 'rarity':{
+			case 'team-total-rarity':{
 				dict.rarity = cond.compo.ids;
-				frg.ap(tsp.cond.compo_type_rarity(dict));
+				frg.ap(tsp.cond.compo_type_team_total_rarity(dict));
+				break;
+			}
+			case 'team-rarity-diffrent':{
+				frg.ap(tsp.cond.compo_type_team_rarity_different(dict));
 				break;
 			}
 		}
