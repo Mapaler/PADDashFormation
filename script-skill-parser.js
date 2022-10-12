@@ -248,6 +248,9 @@ class Board
 				const orbsRow = this.orbsData[ri], blocksRow = this.blocksData[ri];
 
 				this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attr, state, blockState);
+				if (blockState == 'immobility') { //如果是封条，额外添加需要旋转的信息
+					this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attr, state, 'rotate');
+				}
 			}
 		}
 	}
@@ -457,7 +460,7 @@ const SkillKinds = {
 	FixedTime: "fixed-time",
 	Drum: "drum",
 	AutoPath: "auto-path",
-	Board7x6: "7x6-board",
+	BoardSizeChange: "board-size-change",
 	NoSkyfall: "no-skyfall",
 	Henshin: "henshin",
 	VoidPoison: "void-poison",
@@ -995,7 +998,6 @@ function dropRefresh() { return { kind: SkillKinds.DropRefresh }; }
 function drum() { return { kind: SkillKinds.Drum }; }
 function autoPath() { return { kind: SkillKinds.AutoPath }; }
 function leaderChange(type = 0) { return { kind: SkillKinds.LeaderChange, type: type }; }
-function board7x6() { return { kind: SkillKinds.Board7x6 }; }
 function noSkyfall() { return { kind: SkillKinds.NoSkyfall }; }
 function henshin(id, random = false) {
 	return {
@@ -1018,6 +1020,9 @@ function increaseDamageCap(cap, targets) {
 }
 function boardJammingStates(state, posType, options) {
 	return { kind: SkillKinds.BoardJammingStates, state: state, posType: posType, ...options};
+}
+function boardSizeChange(width=7, height=6) {
+	return { kind: SkillKinds.BoardSizeChange, width, height };
 }
 
 const parsers = {
@@ -1291,7 +1296,7 @@ const parsers = {
 	[159](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [base, 100], [bonus, 0])); },
 	[160](turns, combo) { return activeTurns(turns, addCombo(combo)); },
 	[161](percent) { return gravity(v.xMaxHP(percent)); },
-	[162]() { return board7x6(); },
+	[162]() { return boardSizeChange(); },
 	[163](attrs, types, hp, atk, rcv, rAttrs, rPercent) {
 	  return [
 		noSkyfall(),
@@ -1386,7 +1391,7 @@ const parsers = {
 	},
 	[186](attrs, types, hp, atk, rcv) {
 	  return [
-		board7x6(),
+		boardSizeChange(),
 		(hp || atk ||rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
 	  ].filter(Boolean);
 	},
@@ -1545,7 +1550,13 @@ const parsers = {
 	},
 	[238](turns, width, height, pos1, pos2) { //产云
 		return activeTurns(turns,
-			boardJammingStates('cloud', (pos1 && pos2) ? 'fixed' : 'random', { size: [width, height], positions: [pos1, pos2] })
+			boardJammingStates('clouds', (pos1 && pos2) ? 'fixed' : 'random', { size: [width, height], positions: [pos1, pos2] })
+		);
+	},
+	[239](turns, colum, row) { //产封条
+		//const colums = flags(colum), rows = flags(row);
+		return activeTurns(turns,
+			boardJammingStates('immobility', 'fixed', { positions: {colums: flags(colum), rows: flags(row)} })
 		);
 	},
 	[241](turns, cap, target = 1) { //改变伤害上限
@@ -1554,6 +1565,21 @@ const parsers = {
 		return activeTurns(turns,
 			increaseDamageCap(cap * 1e8, typeArr)
 		);
+	},
+	[244](turns, type) { //改变版面大小
+		let width, height;
+		switch (type) {
+			case 1: {
+				width = 7;
+				height = 6;
+				break;
+			}
+			default: {
+				width = 6;
+				height = 5;
+			}
+		}
+		return activeTurns(turns, boardSizeChange());
 	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -1692,9 +1718,16 @@ function renderSkillEntry(skills)
 									board.setShape(positions, null, null, 'roulette');
 							});
 						}
-						if (state == 'cloud') { //云
+						if (state == 'clouds') { //云
 							boardsBar.boards.forEach(board=>{
-								board.generateBlockStates('cloud', count, size, positions);
+								board.generateBlockStates('clouds', count, size, positions);
+							});
+						}
+						if (state == 'immobility') { //封条
+							const {colums, rows} = skill.positions;
+							boardsBar.boards.forEach(board=>{
+								board.setColumns(colums, null, null, 'immobility');
+								board.setRows(rows, null, null, 'immobility');
 							});
 						}
 						break;
@@ -1718,6 +1751,16 @@ function renderSkillEntry(skills)
 
 	return ul;
 }
+//行列拆分成顺序和逆序的正常数字
+function posSplit(pos, axis = 'row')
+{
+	const max = axis == 'row' ? 5 : 6;
+	return [
+		pos.filter(n=>n<=2).map(n=>n+1),
+		pos.filter(n=>n>=3).reverse().map(n=>max-n),
+	];
+	//return {sequence: pos.filter(n=>n<=2).map(n=>n+1), reverse: pos.filter(n=>n>=3).reverse().map(n=>max-n)};
+}
 function renderSkill(skill, option = {})
 {
 	const frg = document.createDocumentFragment();
@@ -1730,7 +1773,7 @@ function renderSkill(skill, option = {})
 		idoc.setAttribute("data-icon-type", iconType);
 		return idoc;
 	}
-	
+
 	if (Array.isArray(skill))
 	{
 		frg.ap(skill.map(_skill=>renderSkill(_skill)));
@@ -2091,13 +2134,6 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.auto_path());
 			break;
 		}
-		case SkillKinds.Board7x6: { //76版
-			let dict = {
-				icon: createIcon(skill.kind),
-			};
-			frg.ap(tsp.skill.board7x6(dict));
-			break;
-		}
 		case SkillKinds.Vampire: { //吸血
 			let attr = skill.attr, damage = skill.damage, heal = skill.heal;
 			let _dict = {
@@ -2140,10 +2176,10 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.GenerateOrbs: { //产生珠子
-			let orbs = skill.orbs, exclude = skill.exclude, count = skill.count, time = skill.time;
+			let orbs = skill.orbs, exclude = skill.exclude, count = skill.count;
 			dict = {
 				exclude: exclude?.length ? tsp.word.affix_exclude({cotent: renderOrbs(exclude)}) : void 0,
-				orbs: renderOrbs(orbs, {time}),
+				orbs: renderOrbs(orbs),
 				value: count,
 			};
 			frg.ap(tsp.skill.generate_orbs(dict));
@@ -2163,15 +2199,12 @@ function renderSkill(skill, option = {})
 			let slight_pause = tsp.word.slight_pause().textContent;
 			let subDocument = [];
 			const boardsBar = merge_skill ? null : new BoardSet(new Board(), new Board(null,7,6), new Board(null,5,4));
-			function posSplit(pos, max)
-			{
-				return {sequence: pos.filter(n=>n<=2).map(n=>n+1), reverse: pos.filter(n=>n>=3).reverse().map(n=>max-n)};
-			}
+
 			for (const generate of generates)
 			{
-				let orb = generate.orbs?.[0], time = generate.time;
+				let orb = generate.orbs?.[0];
 				dict = {
-					orbs: renderOrbs(orb, {time}),
+					orbs: renderOrbs(orb),
 				};
 				if (generate.type == 'shape')
 				{
@@ -2183,15 +2216,15 @@ function renderSkill(skill, option = {})
 					if (generate.positions.length == 0) continue;
 					if (generate.type == 'row')
 					{
-						const pos = posSplit(generate.positions, 5);
-						if (pos.sequence.length) posFrgs.push(tsp.position.top({pos: pos.sequence.join(slight_pause)}));
-						if (pos.reverse.length) posFrgs.push(tsp.position.bottom({pos: pos.reverse.join(slight_pause)}));
+						const [sequence, reverse] = posSplit(generate.positions, 'row');
+						if (sequence.length) posFrgs.push(tsp.position.top({pos: sequence.join(slight_pause)}));
+						if (reverse.length) posFrgs.push(tsp.position.bottom({pos: reverse.join(slight_pause)}));
 						boardsBar?.boards?.forEach(board=>board.setRows(generate.positions, orb));
 					}else
 					{
-						const pos = posSplit(generate.positions, 6);
-						if (pos.sequence.length) posFrgs.push(tsp.position.left({pos: pos.sequence.join(slight_pause)}));
-						if (pos.reverse.length) posFrgs.push(tsp.position.right({pos: pos.reverse.join(slight_pause)}));
+						const [sequence, reverse] = posSplit(generate.positions, 'colum');
+						if (sequence.length) posFrgs.push(tsp.position.left({pos: sequence.join(slight_pause)}));
+						if (reverse.length) posFrgs.push(tsp.position.right({pos: reverse.join(slight_pause)}));
 						boardsBar?.boards?.forEach(board=>board.setColumns(generate.positions, orb));
 					}
 					dict.position = posFrgs.nodeJoin(tsp.word.slight_pause());
@@ -2458,10 +2491,12 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.BoardJammingStates: { //版面产生干扰状态
-			const { state, posType, size, positions, count, time } = skill;
+			const { state, posType, positions, count, time } = skill;
 			const boardsBar = merge_skill ? null : new BoardSet(new Board(), new Board(null,7,6), new Board(null,5,4));
+			const slight_pause = tsp.word.slight_pause().textContent;
 
 			dict = {
+				icon: createIcon('board-' + state),
 				state: tsp.board[state](),
 				position: posType == 'random' ? tsp.position.random() : tsp.position.shape(),
 			};
@@ -2475,12 +2510,31 @@ function renderSkill(skill, option = {})
 						board.setShape(positions, null, null, 'roulette');
 				});
 			}
-			if (state == 'cloud') { //云
-				const [width, height] = size;
+			if (state == 'clouds') { //云
+				const [width, height] = skill.size;
 				dict.size = tsp.value.size({ width, height});
 				boardsBar?.boards?.forEach(board=>{
-					board.generateBlockStates('cloud', count, size, positions);
+					board.generateBlockStates('clouds', count, size, positions);
 				});
+			}
+			if (state == 'immobility') { //封条
+				const {colums, rows} = skill.positions;
+
+				let posFrgs = [];
+				const [sequenceCols, reverseCols] = posSplit(colums, 'colum');
+				if (sequenceCols.length) posFrgs.push(tsp.position.left({pos: sequenceCols.join(slight_pause)}));
+				if (reverseCols.length) posFrgs.push(tsp.position.right({pos: reverseCols.join(slight_pause)}));
+
+				const [sequenceRows, reverseRows] = posSplit(rows, 'row');
+				if (sequenceRows.length) posFrgs.push(tsp.position.top({pos: sequenceRows.join(slight_pause)}));
+				if (reverseRows.length) posFrgs.push(tsp.position.bottom({pos: reverseRows.join(slight_pause)}));
+				
+				boardsBar?.boards?.forEach(board=>{
+					board.setColumns(colums, null, null, 'immobility');
+					board.setRows(rows, null, null, 'immobility');
+				});
+
+				dict.position = posFrgs.nodeJoin(tsp.word.slight_pause());
 			}
 			frg.ap(tsp.skill.board_jamming_state(dict));
 
@@ -2488,6 +2542,16 @@ function renderSkill(skill, option = {})
 				boardsBar.boards.forEach(board=>board.refreshTable());
 				frg.ap(boardsBar.node);
 			}
+			break;
+		}
+		case SkillKinds.BoardSizeChange: { //改变版面大小
+			const { width, height } = skill;
+
+			dict = {
+				icon: createIcon(skill.kind),
+				size: tsp.value.size({ width, height}),
+			};
+			frg.ap(tsp.skill.board_size_change(dict));
 			break;
 		}
 		
@@ -2571,14 +2635,10 @@ function renderOrbs(attrs, option = {}) {
 			const icon = document.createElement("icon");
 			icon.className = "orb";
 			if (option.className) icon.className += " " + option.className;
-			if (attr == 'variation')
-				icon.classList.add('variation');
-			else
-				icon.setAttribute("data-orb-icon",attr);
+			icon.setAttribute("data-orb-icon",attr);
 			let dict = {
 				icon: icon,
 			}
-			if (attr == 'variation') dict.time = renderValue(v.constant(option.time), {unit: tsp.unit.seconds}) ;
 			return tsp.orbs?.[attr](dict);
 		})
 		.nodeJoin(tsp.word.slight_pause());

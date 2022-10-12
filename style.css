@@ -2771,12 +2771,25 @@ icon.inflicts::after
 	transform: scale(1);
 }
 /*云，在宝珠前面*/
-.block.cloud::after
+.block.clouds::after
 {
 	content: "";
 	background-image: url(images/icon-cloud-1.png);
 	background-size: contain;
 	transform: scale(1.2);
+}
+/*封条，在宝珠前面*/
+.block.immobility::after
+{
+	content: "";
+	background-image: url(images/icon-immobility.png);
+	background-size: cover;
+}
+/*需要旋转的，比如封条*/
+.block.rotate::after,
+.block.rotate::before
+{
+	transform: rotate(90deg);
 }
 .orb-icon
 {
@@ -2883,19 +2896,6 @@ table .orb-icon
 .orb-icon[data-orb-icon="9"]::before
 {
 	content: "💣";
-}
-.board .board-row4,
-.board .board-cell5
-{
-	display: none;
-}
-.board-76 .board-row4
-{
-	display: table-row;
-}
-.board-76 .board-cell5
-{
-	display: table-cell;
 }
 .team-flags .team-member-icon {
 	display: inline-block;
@@ -3732,7 +3732,7 @@ table .orb-icon
 .card-skill-list .no-skyfall,
 .card-skill-list .fixed-time,
 .card-skill-list .min-match-len,
-.card-skill-list .\37x6-board
+.row-mon-leader-skill .card-skill-list .board-size-change
 {
 	color: #ff3600;
 }
@@ -3928,7 +3928,7 @@ table .orb-icon
 	left: 10px;
 	top: 5px;
 }
-.icon-skill[data-icon-type="7x6-board"]
+.icon-skill[data-icon-type="board-size-change"]
 {
 	background-position-y:calc(-36px * 21);
 }
@@ -3985,6 +3985,22 @@ table .orb-icon
 {
 	background-position-y:calc(-36px * 33);
 }
+.icon-skill[data-icon-type="board-roulette"]
+{
+	background-position-y:calc(-36px * 34);
+}
+.icon-skill[data-icon-type="board-clouds"]
+{
+	background-position: center;
+	background-size: contain;
+	background-image: url(images/icon-cloud-1.png);
+}
+.icon-skill[data-icon-type="board-immobility"]
+{
+	background-position: center;
+	background-size: cover;
+	background-image: url(images/icon-immobility.png);
+}
 .icon-skill[data-icon-type="orb-nail"]
 {
 	background-position-y:calc(-36px * 35);
@@ -3993,6 +4009,10 @@ table .orb-icon
 {
 	background-image: url(images/icon-evolved-skill-loop.png);
 	background-size: contain;
+}
+.icon-skill[data-icon-type="increase-damage-cap"]
+{
+	background-position-y:calc(-36px * 36);
 }
 .icon-skill[data-icon-type="increase-damage-cap"]
 {

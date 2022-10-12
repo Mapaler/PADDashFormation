@@ -114,7 +114,8 @@ let localTranslating = {
 			obstruct_opponent_before_me: tp`The opponent ranked higher than me`,
 			obstruct_opponent_designated_position: tp`No.${'positions'} ranked opponents`,
 			increase_damage_cap: tp`The ${'icon'}damage cap of ${'targets'} is increased to ${'cap'}`,
-			board_jamming_state: tp`Creates ${'count'} ${'state'} ${'size'} at ${'position'}${'time'}`,
+			board_jamming_state: tp`Creates ${'count'} ${'icon'}${'state'} ${'size'} at ${'position'}${'time'}`,
+			board_size_change: tp`Board size changed to ${'icon'}${'size'}`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -261,7 +262,8 @@ let localTranslating = {
 			any: tp`Any ${'cotent'}`,
 		},
 		board: {
-			cloud: tp`${'icon'}Cloud`,
+			clouds: tp`${'icon'}Clouds`,
+			immobility: tp`${'icon'}Immobility`,
 			roulette: tp`${'icon'}Roulette`,
 			roulette_time: tp`(transforms every ${'duration'})`,
 		},
@@ -2391,6 +2393,22 @@ const specialSearchFunctions = (function() {
 				},
 				addition:card=>{
 					const searchTypeArray = [238];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `${sk[1]}个×${sk[0]}T`;
+				}
+			},
+			{name:"Creates Cloud",otLangName:{chs:"生成封条",cht:"生成封条"},
+				function:cards=>{
+					const searchTypeArray = [239];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+					const searchTypeArray = [239];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
