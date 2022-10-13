@@ -989,7 +989,7 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 			case 158:
 				scale = hpMul({ attrs: flags(sk[1]), types: flags(sk[2]) }, sk[4]);
 				break;
-			case 175: //队伍组成全为合作
+			case 175: //队伍组成全为合作，不包括双方队长
 				const needCollabIdIdArr = sk.slice(0, 3).filter(s => s > 0);
 				const memberCollabIdArr = memberArr.slice(1, 5).filter(m => m.id > 0).map(m => Cards[m.id].collabId);
 				scale = memberCollabIdArr.every(cid => needCollabIdIdArr.includes(cid)) ? sk[3] / 100 : 1;
@@ -1027,6 +1027,12 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 								 correTypes.reduce((pre,type)=>pre + (types[type] || 0),0);
 				scale = sk[2] * correTimes / 100 + 1;
 				console.debug('属性、类型个数动态倍率，当前队长HP倍率为 %s (匹配 %d 次)', scale, correTimes);
+				break;
+			}
+			case 245: { //全员满足某种情况，不包括好友队长，现在是全部星级不一样
+				let cardsRarity = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => m.card.rarity); //所有的卡片星级
+				if (new Set(cardsRarity).size === cardsRarity.length) //如果星级去重后数量一致，即各不相同
+					scale = sk[3] / 100;
 				break;
 			}
 			case 138: //调用其他队长技

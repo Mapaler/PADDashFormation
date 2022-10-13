@@ -710,6 +710,9 @@ const specialSearchFunctions = (function() {
 			case 203: case 217:
 				scale = sk[1]/100;
 				break;
+			case 245:
+				scale = sk[3]/100;
+				break;
 			case 138: //调用其他队长技
 				scale = sk.reduce((pmul,skid)=>pmul * getHPScale(Skills[skid]),1);
 				break;
@@ -1131,7 +1134,7 @@ const specialSearchFunctions = (function() {
 	
 	function healImmediately_Rate(card)
 	{
-		const searchTypeArray = [7, //宠物回复力
+		const searchTypeArray = [7, //自身回复力
 			8, //固定点数
 			35,115, //吸血
 			117
@@ -3587,6 +3590,13 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"After Henshin",otLangName:{chs:"变身后",cht:"變身後"},
 				function:cards=>cards.filter(card=>Array.isArray(card.henshinFrom))
+			},
+			{name:"Random Henshin",otLangName:{chs:"随机变身",cht:"隨機變身"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [236];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				})
 			},
 			{name:"Except Before Henshin(No Henshin+After Henshin)",otLangName:{chs:"除了变身前（非变身+变身后）",cht:"除了變身前（非變身+變身后）"},
 				function:cards=>cards.filter(card=>!Array.isArray(card.henshinTo))
