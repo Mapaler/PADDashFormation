@@ -384,9 +384,9 @@ ul{
 	width: 22px;
 	height: 22px;
 	box-sizing: border-box;
-	border: 1px solid white;
+	border: 1px solid lightgreen;
 	border-radius: 50%;
-	box-shadow: 0 0 3px white,0 0 3px white,0 0 3px white;
+	box-shadow: 0 0 3px lightgreen,0 0 3px lightgreen,0 0 3px lightgreen;
 	display: block;
 	position: absolute;
 }
