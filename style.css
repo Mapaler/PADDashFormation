@@ -377,6 +377,19 @@ ul{
 	background-image: url(images/CARDFRAME2.PNG);
 	background-position: 100px 100px; /*默认都不显示*/
 }
+.subproperty.changed-sub-attr::before {
+	content: "111";
+	right: 3px;
+	bottom: 5px;
+	width: 22px;
+	height: 22px;
+	box-sizing: border-box;
+	border: 1px solid white;
+	border-radius: 50%;
+	box-shadow: 0 0 3px white,0 0 3px white,0 0 3px white;
+	display: block;
+	position: absolute;
+}
 /*怪物-加值*/
 .monster .plus{
 	color: yellow;
@@ -615,18 +628,17 @@ ul{
 	opacity: 0.5;
 }
 
-.not-show-awoken-count .formation-box .team-total-info, /*单个队伍血量统计*/
+.not-show-awoken-count:not(.solo) .formation-box .team-total-info, /*单个队伍血量统计*/
 .not-show-awoken-count .formation-box .team-ability, /*单个队伍三维*/
-.not-show-awoken-count .formation-box .team-awoken, /*单个队伍觉醒统计*/
-.not-show-awoken-count .formation-box .team-total-info /*单个队伍血量统计*/
+.not-show-awoken-count .formation-box .team-awoken /*单个队伍觉醒统计*/
 {
 	display: none !important;
 }
-.not-show-awoken-count .formation-box .team-bigbox
+.not-show-awoken-count:not(.solo) .formation-box .team-bigbox
 {
 	margin-bottom: 5px;
 }
-.not-show-awoken-count .formation-box .team-badge
+.not-show-awoken-count:not(.solo) .formation-box .team-badge
 {
 	position: absolute;
 	z-index: 10;
@@ -1163,27 +1175,37 @@ icon.inflicts::after
 .abilitys .rcv::before{
 	content: "回复：";
 }*/
+.types-ul {
+	display: grid;
+	grid-auto-flow: column;
+}
 /*队员觉醒统计*/
-.menber-awoken
+.member-awoken,
+.member-types
 {
 	width: var(--head-block-width);
 	display: inline-block;
 	vertical-align: top;
 }
-.team-menber-awoken,
+.team-member-awoken,
 .team-assist-awoken
 {
 	margin-top: 3px;
 	display : none;	
 }
-.menber-awoken .awoken-ul
+.member-awoken .awoken-ul,
+.member-types .types-ul
 {
-	grid-template-columns: repeat(3, 25.6px);
 	grid-auto-rows:  25.6px;
 	grid-gap: 2px;
 	place-content: start center;
 }
-.menber-awoken .awoken-icon
+.member-awoken .awoken-ul
+{
+	grid-template-columns: repeat(3, 25.6px);
+}
+.member-awoken .awoken-icon,
+.member-types .type
 {
 	filter: unset;
 	transform: scale(0.80);
@@ -1191,13 +1213,15 @@ icon.inflicts::after
 }
 .tIf-addition-info,
 .team-assist-awoken,
-.team-menber-awoken
+.team-member-awoken,
+.team-member-types
 {
 	display : none;	
 }
 .show-mon-awoken .tIf-addition-info,
 .show-mon-awoken .team-assist-awoken,
-.show-mon-awoken .team-menber-awoken
+.show-mon-awoken .team-member-awoken,
+.show-mon-awoken .team-member-types
 {
 	display : block;	
 }
@@ -1785,7 +1809,8 @@ icon.inflicts::after
 {
 	animation: icon-active 0.2s;
 }
-.awoken-ul {
+.awoken-ul
+{
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 32px);
 	grid-auto-rows: 32px;

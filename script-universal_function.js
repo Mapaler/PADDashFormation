@@ -1302,8 +1302,8 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 		];
 
 		moveTime.duration.awoken += latentMoveTime.reduce((duration, la) =>
-			duration + team[0].reduce((count, menber) =>
-				count + (menber.latent ? menber.latent.filter(l => l == la.index).length : 0), 0) * la.value, 0);
+			duration + team[0].reduce((count, member) =>
+				count + (member.latent ? member.latent.filter(l => l == la.index).length : 0), 0) * la.value, 0);
 
 	}
 

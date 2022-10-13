@@ -61,6 +61,7 @@ var formation = new Formation(teamsCount,6);
 		<div>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-id" id="show-mon-id"><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-skill-cd" id="show-mon-skill-cd"><label class="config-checkbox-lbl show-mon-skill-cd-lbl" for="show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
+			<input type="checkbox" class="config-checkbox-ipt" name="show-awoken-count" id="show-awoken-count" checked><label class="config-checkbox-lbl show-awoken-count-lbl" for="show-awoken-count"><div class="config-checkbox-lbl-cicle"></div></label>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-awoken" id="show-mon-awoken"><label class="config-checkbox-lbl show-mon-awoken-lbl" for="show-mon-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
 			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"></label>
 		</div>
@@ -310,6 +311,7 @@ var formation = new Formation(teamsCount,6);
 									<div class="awoken-count-num"></div>
 									<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
 									<div class="level"></div>
+									<div class="rarity"></div>
 									<div class="id"></div>
 									<div class="skill-cd"></div>
 									<div class="switch-leader display-none"></div>
@@ -323,6 +325,7 @@ var formation = new Formation(teamsCount,6);
 									<div class="awoken-count-num"></div>
 									<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
 									<div class="level"></div>
+									<div class="rarity"></div>
 									<div class="id"></div>
 									<div class="skill-cd"></div>
 									<div class="switch-leader display-none"></div>
@@ -336,6 +339,7 @@ var formation = new Formation(teamsCount,6);
 									<div class="awoken-count-num"></div>
 									<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
 									<div class="level"></div>
+									<div class="rarity"></div>
 									<div class="id"></div>
 									<div class="skill-cd"></div>
 									<div class="switch-leader display-none"></div>
@@ -349,6 +353,7 @@ var formation = new Formation(teamsCount,6);
 									<div class="awoken-count-num"></div>
 									<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
 									<div class="level"></div>
+									<div class="rarity"></div>
 									<div class="id"></div>
 									<div class="skill-cd"></div>
 									<div class="switch-leader display-none"></div>
@@ -362,6 +367,7 @@ var formation = new Formation(teamsCount,6);
 									<div class="awoken-count-num"></div>
 									<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
 									<div class="level"></div>
+									<div class="rarity"></div>
 									<div class="id"></div>
 									<div class="skill-cd"></div>
 									<div class="switch-leader display-none"></div>
@@ -375,6 +381,7 @@ var formation = new Formation(teamsCount,6);
 									<div class="awoken-count-num"></div>
 									<div class="super-awoken display-none"><div class="awoken-icon"></div></div>
 									<div class="level"></div>
+									<div class="rarity"></div>
 									<div class="id"></div>
 									<div class="skill-cd"></div>
 									<div class="switch-leader display-none"></div>
@@ -383,54 +390,80 @@ var formation = new Formation(teamsCount,6);
 						</ul>
 					</div>
 				</div>
-				<ul class="team-menber-awoken">
-					<li class="menber-awoken menber-awoken-1">
+				<ul class="team-member-types">
+					<li class="member-types member-types-1">
+						<ul class="types-ul">
+						</ul>
+					</li>
+					<li class="member-types member-types-2">
+						<ul class="types-ul">
+						</ul>
+					</li>
+					<li class="member-types member-types-3">
+						<ul class="types-ul">
+						</ul>
+					</li>
+					<li class="member-types member-types-4">
+						<ul class="types-ul">
+						</ul>
+					</li>
+					<li class="member-types member-types-5">
+						<ul class="types-ul">
+						</ul>
+					</li>
+					<li class="member-types member-types-6">
+						<ul class="types-ul">
+						</ul>
+					</li>
+				</ul>
+				<ul class="team-member-awoken">
+					<li class="member-awoken member-awoken-1">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
-					<li class="menber-awoken menber-awoken-2">
+					<li class="member-awoken member-awoken-2">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
-					<li class="menber-awoken menber-awoken-3">
+					<li class="member-awoken member-awoken-3">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
-					<li class="menber-awoken menber-awoken-4">
+					<li class="member-awoken member-awoken-4">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
-					<li class="menber-awoken menber-awoken-5">
+					<li class="member-awoken member-awoken-5">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
-					<li class="menber-awoken menber-awoken-6">
+					<li class="member-awoken member-awoken-6">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
 				</ul>
 				<ul class="team-assist-awoken">
-					<li class="menber-awoken menber-awoken-1">
+					<li class="member-awoken member-awoken-1">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
-					<li class="menber-awoken menber-awoken-2">
+					<li class="member-awoken member-awoken-2">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
-					<li class="menber-awoken menber-awoken-3">
+					<li class="member-awoken member-awoken-3">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
-					<li class="menber-awoken menber-awoken-4">
+					<li class="member-awoken member-awoken-4">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
-					<li class="menber-awoken menber-awoken-5">
+					<li class="member-awoken member-awoken-5">
 						<ul class="awoken-ul">
 						</ul>
 					</li>
-					<li class="menber-awoken menber-awoken-6">
+					<li class="member-awoken member-awoken-6">
 						<ul class="awoken-ul">
 						</ul>
 					</li>

@@ -6403,7 +6403,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"ad66ab8834ff0bfd303ef03b845ba3ed"
+		"a1c212daf1fe94a33b221bd16e470dc0"
 	],
 	[
 		"script-custom_elements.js",
@@ -6419,15 +6419,15 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"a955fc3128b5eac6c706f68f81b4a542"
+		"8ebe963ec3181f8107c2cd1efa6bc331"
 	],
 	[
 		"script.js",
-		"ef50bfa5710dde66406306022babe2ea"
+		"42ff3fbd5ef69f883990ee6ce5f2374c"
 	],
 	[
 		"solo.html",
-		"3b847e1d747d10bbc3eadc77b59262f2"
+		"4a34d4cca701980ed12b011b32191fe5"
 	],
 	[
 		"style-monsterimages.css",
@@ -6435,7 +6435,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"4ccfe1b0717399397bcbe46d85e20646"
+		"85229ae25fda96a6126c20ae41aaddac"
 	],
 	[
 		"temp.js",
@@ -6443,7 +6443,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"831ab332be5a0d35e1c8ff48d79c3ca2"
+		"8fbb7d75b4d3c69b338f61f76f2fb74e"
 	],
 	[
 		"languages/en.css",

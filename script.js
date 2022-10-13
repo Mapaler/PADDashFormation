@@ -112,19 +112,19 @@ DBOpenRequest.onupgradeneeded = function(event) {
 
 /*class Member2
 {
-	constructor(oldMenber, isAssist)
+	constructor(oldmember, isAssist)
 	{
-		//this.index = oldMenber?.index ?? 0;
-		this.id = oldMenber?.id ?? 0;
-		//this.exp = oldMenber?.exp ?? 0;
-		this.level = oldMenber?.level ?? 1;
-		this.plus = oldMenber?.plus ?? {hp:0,atk:0,rcv:0};
-		this.awoken = oldMenber.awoken ?? 0;
-		this.superAwoken = oldMenber.superAwoken ?? null;
-		this.latent = oldMenber?.latent.concat() ?? [];
-		this.skillLevel = oldMenber.skillLevel ?? 0;
-		this.assist = oldMenber.assist ?? null;
-		this.isAssist = Boolean(isAssist !== undefined ? isAssist : oldMenber?.isAssist);
+		//this.index = oldmember?.index ?? 0;
+		this.id = oldmember?.id ?? 0;
+		//this.exp = oldmember?.exp ?? 0;
+		this.level = oldmember?.level ?? 1;
+		this.plus = oldmember?.plus ?? {hp:0,atk:0,rcv:0};
+		this.awoken = oldmember.awoken ?? 0;
+		this.superAwoken = oldmember.superAwoken ?? null;
+		this.latent = oldmember?.latent.concat() ?? [];
+		this.skillLevel = oldmember.skillLevel ?? 0;
+		this.assist = oldmember.assist ?? null;
+		this.isAssist = Boolean(isAssist !== undefined ? isAssist : oldmember?.isAssist);
 	}
 	calculateAbility(solo,teamCount){
 		const card = Cards[this.id];
@@ -1665,7 +1665,7 @@ function initialize(event) {
 
 	//显示CD开关
 	const btnShowMonSkillCd = document.getElementById("show-mon-skill-cd");
-	btnShowMonSkillCd.checked = localStorage_getBoolean(cfgPrefix + btnShowMonSkillCd.id);
+	btnShowMonSkillCd.checked = localStorage_getBoolean(cfgPrefix + btnShowMonSkillCd.id, true);
 	btnShowMonSkillCd.onchange = function(e){
 		toggleDomClassName(this.checked, this.id);
 		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
@@ -1682,12 +1682,14 @@ function initialize(event) {
 	btnShowMonAwoken.onchange(false);
 	
 	//3P显示觉醒统计开关
-	let btnShowAwokenCount = document.getElementById("show-awoken-count");
+	const btnShowAwokenCount = document.getElementById("show-awoken-count");
 	if (btnShowAwokenCount) {
-		btnShowAwokenCount.onclick = function() {
-			toggleDomClassName(!this.checked, 'not-show-awoken-count');
-		}
-		btnShowAwokenCount.onclick();
+		btnShowAwokenCount.checked = localStorage_getBoolean(cfgPrefix + btnShowAwokenCount.id, true);
+		btnShowAwokenCount.onchange = function(e){
+			toggleDomClassName(this.checked, this.id);
+			if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
+		};
+		btnShowAwokenCount.onchange(false);
 	}
 
 	//默认等级
@@ -2202,9 +2204,9 @@ function initialize(event) {
 	//将所有怪物头像添加到全局数组
 	teamBigBoxs.forEach(teamBigBox => {
 		const teamBox = teamBigBox.querySelector(".team-box");
-		const menbers = Array.from(teamBox.querySelectorAll(".team-members .monster"));
+		const members = Array.from(teamBox.querySelectorAll(".team-members .monster"));
 		const assist = Array.from(teamBox.querySelectorAll(".team-assist .monster"));
-		menbers.forEach(m => {
+		members.forEach(m => {
 			allMembers.push(m);
 		});
 		assist.forEach(m => {
@@ -3857,9 +3859,12 @@ function initialize(event) {
 			const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 			if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 	
-			const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+			const teamMemberTypesDom = teamBigBox.querySelector(".team-member-types"); //队员类型
+			if (teamMemberTypesDom) refreshmemberTypes(teamMemberTypesDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+
+			const teamMemberAwokenDom = teamBigBox.querySelector(".team-member-awoken"); //队员觉醒
 			const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
-			if (teamMenberAwokenDom && teamAssistAwokenDom) refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+			if (teamMemberAwokenDom && teamAssistAwokenDom) refreshmemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
 
 			const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 			if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
@@ -3931,9 +3936,9 @@ function initialize(event) {
 		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 
-		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+		const teamMemberAwokenDom = teamBigBox.querySelector(".team-member-awoken"); //队员觉醒
 		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
-		if (teamMenberAwokenDom && teamAssistAwokenDom) refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+		if (teamMemberAwokenDom && teamAssistAwokenDom) refreshmemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
 
 		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
@@ -4057,11 +4062,15 @@ function changeid(mon, monDom, latentDom, assist) {
 		monDom.querySelector(".property").setAttribute("data-property", card.attrs[0]); //主属性
 		let subAttribute = card.attrs[1]; //正常的副属性
 		let assistCard = Cards[assist?.id];
-		if (assistCard && assistCard.awakenings.includes(49)) {  //如果传入了辅助武器
-			let changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95); //搜索改副属性的觉醒
-			if (changeAttr) subAttribute = changeAttr - 91; //更改副属性
+		let changeAttr;
+		if (assistCard && assistCard.awakenings.includes(49) &&  //如果传入了辅助武器
+			(changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95)) //搜索改副属性的觉醒
+		) {
+			subAttribute = changeAttr - 91; //更改副属性
 		}
-		monDom.querySelector(".subproperty").setAttribute("data-property", subAttribute); //副属性
+		const subAttrDom = monDom.querySelector(".subproperty"); //副属性
+		subAttrDom.setAttribute("data-property", subAttribute); //副属性
+		subAttrDom.classList.toggle("changed-sub-attr", Boolean(changeAttr));
 
 		monDom.title = "No." + monId + " " + (card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name);
 		monDom.href = currentLanguage.guideURL(monId, card.name);
@@ -4597,8 +4606,10 @@ function refreshAll(formationData) {
 		const latentsDom = teamBox.querySelector(".team-latents");
 		const assistsDom = teamBox.querySelector(".team-assist");
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
-		const teamMenberAwokenDom = teamBigBox.querySelector(".team-menber-awoken"); //队员觉醒
+		const teamMemberTypesDom = teamBigBox.querySelector(".team-member-types"); //队员类型
+		const teamMemberAwokenDom = teamBigBox.querySelector(".team-member-awoken"); //队员觉醒
 		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
+		
 		for (let ti = 0, ti_len = membersDom.querySelectorAll(".member").length; ti < ti_len; ti++) {
 			//开始设置换队长
 			const leaderIdx = teamData[3];
@@ -4606,9 +4617,9 @@ function refreshAll(formationData) {
 			const latentLi = latentsDom.querySelector(`.latents-${ti+1}`);
 			const assistsLi = assistsDom.querySelector(`.member-${ti+1}`);
 			const teamAbilityLi = teamAbilityDom ? teamAbilityDom.querySelector(`.abilitys-${ti+1}`) : undefined;
-			const teamMenberAwokenLi = teamAbilityDom ? teamMenberAwokenDom.querySelector(`.menber-awoken-${ti+1}`) : undefined;
-			const teamAssistAwokenLi = teamAbilityDom ? teamAssistAwokenDom.querySelector(`.menber-awoken-${ti+1}`) : undefined;
-			[memberLi,latentLi,assistsLi,teamAbilityLi,teamMenberAwokenLi,teamAssistAwokenLi].forEach(dom=>{
+			const teamMemberAwokenLi = teamAbilityDom ? teamMemberAwokenDom.querySelector(`.member-awoken-${ti+1}`) : undefined;
+			const teamAssistAwokenLi = teamAbilityDom ? teamAssistAwokenDom.querySelector(`.member-awoken-${ti+1}`) : undefined;
+			[memberLi,latentLi,assistsLi,teamAbilityLi,teamMemberAwokenLi,teamAssistAwokenLi].forEach(dom=>{
 				if (!dom)
 				{
 					return;
@@ -4651,7 +4662,8 @@ function refreshAll(formationData) {
 			}
 			refreshMemberSkillCD(teamBox, teamData, ti); //技能CD
 			refreshAbility(teamAbilityDom, teamData, ti); //本人能力值
-			refreshMenberAwoken(teamMenberAwokenDom, teamAssistAwokenDom, teamData, ti); //本人觉醒
+			refreshmemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, ti); //本人觉醒
+			refreshmemberTypes(teamMemberTypesDom, teamData, ti); //本人类型
 
 		}
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
@@ -4774,9 +4786,25 @@ function refreshAbility(abilityDom, team, idx) {
 		}
 	});
 }
+//刷新队员
+function refreshmemberTypes(memberTypesDom, team, idx) {
+	if (!memberTypesDom) return; //如果没有dom，直接跳过
+	const member = team[0][idx];
+	const assist = team[1][idx];
+	const {types = []} = member.getAttrsTypesWithWeapon(assist) || {};
+	const memberTypesUl = memberTypesDom.querySelector(`.member-types-${idx + 1} .types-ul`);
+	memberTypesUl.innerHTML = '';
+	types.forEach(akc=>{
+		const iconLi = document.createElement("li");
+		const icon = iconLi.appendChild(document.createElement("icon"))
+		icon.className = "type";
+		icon.setAttribute("data-type-icon", akc);
+		memberTypesUl.appendChild(iconLi);
+	});
+}
 //刷新队员觉醒
-function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
-	if (!menberAwokenDom) return; //如果没有dom，直接跳过
+function refreshmemberAwoken(memberAwokenDom, assistAwokenDom, team, idx) {
+	if (!memberAwokenDom) return; //如果没有dom，直接跳过
 
 	const memberData = team[0][idx];
 	const assistData = team[1][idx];
@@ -4784,7 +4812,7 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 	const memberCard = Cards[memberData.id] || Cards[0];
 	const assistCard = Cards[assistData.id] || Cards[0];
 	//队员觉醒
-	let menberAwokens = memberCard?.awakenings?.slice(0,memberData.awoken) || [];
+	let memberAwokens = memberCard?.awakenings?.slice(0,memberData.awoken) || [];
 	//单人和三人为队员增加超觉醒
 	if ((solo || teamsCount === 3) &&
 		memberData.sawoken != null && //怪物设定了超觉醒
@@ -4793,20 +4821,20 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 		memberData.level >= 100 && //怪物大于100级
 		memberData.plus.every(p=>p>=99) //怪物297了
 	) {
-		menberAwokens.push(memberCard.superAwakenings[memberData.sawoken]);
+		memberAwokens.push(memberCard.superAwakenings[memberData.sawoken]);
 	}
-	//menberAwokens.sort();
+	//memberAwokens.sort();
 	//武器觉醒
 	let assistAwokens = assistCard?.awakenings?.slice(0,assistData?.awoken);
 	if (!assistAwokens?.includes(49)) assistAwokens = []; //清空非武器的觉醒
 	//assistAwokens.sort();
 	/*if (assistAwokens.includes(49))
 	{
-		menberAwokens = menberAwokens.concat(assistAwokens);
+		memberAwokens = memberAwokens.concat(assistAwokens);
 	}*/
 
-	const menberAwokenUl = menberAwokenDom.querySelector(`.menber-awoken-${idx + 1} .awoken-ul`);
-	const assistAwokenUl = assistAwokenDom.querySelector(`.menber-awoken-${idx + 1} .awoken-ul`);
+	const memberAwokenUl = memberAwokenDom.querySelector(`.member-awoken-${idx + 1} .awoken-ul`);
+	const assistAwokenUl = assistAwokenDom.querySelector(`.member-awoken-${idx + 1} .awoken-ul`);
 	/* //通用的
 	function countNum(arr) {
 		const map = arr.reduce(function(preMap, value){
@@ -4830,16 +4858,16 @@ function refreshMenberAwoken(menberAwokenDom, assistAwokenDom, team, idx) {
 	/*const hideAwokens = [49,1,2,3,63];
 	if (solo) hideAwokens.push(30); //协力觉醒
 	if (!solo) hideAwokens.push(63); //掉落觉醒
-	menberAwokens = menberAwokens.filter(ak=>!hideAwokens.includes(ak));*/
-	let menberAwokensCount = countAwokenNum(menberAwokens);
-	menberAwokenUl.innerHTML = '';
-	menberAwokensCount.forEach(akc=>{
+	memberAwokens = memberAwokens.filter(ak=>!hideAwokens.includes(ak));*/
+	let memberAwokensCount = countAwokenNum(memberAwokens);
+	memberAwokenUl.innerHTML = '';
+	memberAwokensCount.forEach(akc=>{
 		const iconLi = document.createElement("li");
 		const icon = iconLi.appendChild(document.createElement("icon"))
 		icon.className = "awoken-icon";
 		icon.setAttribute("data-awoken-icon", akc[0]);
 		icon.setAttribute("data-awoken-count", akc[1]);
-		menberAwokenUl.appendChild(iconLi);
+		memberAwokenUl.appendChild(iconLi);
 	});
 	let assistAwokensCount = countAwokenNum(assistAwokens);
 	assistAwokenUl.innerHTML = '';
