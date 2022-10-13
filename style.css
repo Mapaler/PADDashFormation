@@ -378,7 +378,7 @@ ul{
 	background-position: 100px 100px; /*默认都不显示*/
 }
 .subproperty.changed-sub-attr::before {
-	content: "111";
+	content: "";
 	right: 3px;
 	bottom: 5px;
 	width: 22px;
