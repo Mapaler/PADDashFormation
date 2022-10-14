@@ -157,17 +157,21 @@ Member.prototype.getAttrsTypesWithWeapon = function(assist) {
 	if (this.id <= 0 || !memberCard) return null; //跳过 id 0
 	let attrs = [...memberCard.attrs]; //属性只有两个，因此用固定的数组
 	let types = new Set(memberCard.types); //Type 用Set，确保不会重复
+	let changeAttr, appendTypes;
 	if (assistCard?.awakenings?.includes(49)) { //如果有武器
 		//更改副属性
-		let changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95);
+		changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95);
 		if (changeAttr) attrs[1] = changeAttr - 91;
 		//添加类型
-		let appendTypes = assistCard.awakenings.filter(ak=>ak >= 83 && ak <= 90);
+		appendTypes = assistCard.awakenings.filter(ak=>ak >= 83 && ak <= 90);
 		appendTypes = appendTypes.map(type=>
 			typekiller_for_type.find(t=>(type - 52) === t.awoken).type);
 		appendTypes.forEach(appendType=>types.add(appendType));
 	}
-	return {attrs: attrs, types: Array.from(types)};
+	return {
+		attrs: attrs, changeAttr: Boolean(changeAttr),
+		types: Array.from(types), appendType: Boolean(appendTypes?.length)
+	};
 }
 Member.prototype.outObj = function() {
 	const m = this;
@@ -3936,6 +3940,9 @@ function initialize(event) {
 		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 
+		const teamMemberTypesDom = teamBigBox.querySelector(".team-member-types"); //队员类型
+		if (teamMemberTypesDom) refreshmemberTypes(teamMemberTypesDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+
 		const teamMemberAwokenDom = teamBigBox.querySelector(".team-member-awoken"); //队员觉醒
 		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
 		if (teamMemberAwokenDom && teamAssistAwokenDom) refreshmemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
@@ -4791,16 +4798,17 @@ function refreshmemberTypes(memberTypesDom, team, idx) {
 	if (!memberTypesDom) return; //如果没有dom，直接跳过
 	const member = team[0][idx];
 	const assist = team[1][idx];
-	const {types = []} = member.getAttrsTypesWithWeapon(assist) || {};
+	const {types = [], appendType = false} = member.getAttrsTypesWithWeapon(assist) || {};
 	const memberTypesUl = memberTypesDom.querySelector(`.member-types-${idx + 1} .types-ul`);
 	memberTypesUl.innerHTML = '';
-	types.forEach(akc=>{
+	for (let i = 0;i < types.length; i++) {
 		const iconLi = document.createElement("li");
 		const icon = iconLi.appendChild(document.createElement("icon"))
 		icon.className = "type";
-		icon.setAttribute("data-type-icon", akc);
+		if (appendType && i == (types.length - 1)) icon.classList.add('append-type');
+		icon.setAttribute("data-type-icon", types[i]);
 		memberTypesUl.appendChild(iconLi);
-	});
+	}
 }
 //刷新队员觉醒
 function refreshmemberAwoken(memberAwokenDom, assistAwokenDom, team, idx) {
