@@ -942,17 +942,6 @@ class LeaderSkillType{
 		};
 	}
 }
-
-//切换通用的切换className显示的函数
-function toggleDomClassName(addClass, className, dom = document.body) {
-	return dom.classList.toggle(className, addClass);
-	//dom.classList[addClass ? "add" : "remove"](className);
-	//if (addClass) {
-	//	dom.classList.add(className);
-	//} else {
-	//	dom.classList.remove(className);
-	//}
-}
 //清除数据
 function clearData()
 {
@@ -1662,7 +1651,7 @@ function initialize(event) {
 	const btnShowMonId = document.getElementById("show-mon-id");
 	btnShowMonId.checked = localStorage_getBoolean(cfgPrefix + btnShowMonId.id, true);
 	btnShowMonId.onchange = function(e){
-		toggleDomClassName(!this.checked, 'not-show-mon-id');
+		document.body.classList.toggle(this.id, this.checked);
 		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 	};
 	btnShowMonId.onchange(false);
@@ -1671,7 +1660,7 @@ function initialize(event) {
 	const btnShowMonSkillCd = document.getElementById("show-mon-skill-cd");
 	btnShowMonSkillCd.checked = localStorage_getBoolean(cfgPrefix + btnShowMonSkillCd.id, true);
 	btnShowMonSkillCd.onchange = function(e){
-		toggleDomClassName(this.checked, this.id);
+		document.body.classList.toggle(this.id, this.checked);
 		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 	};
 	btnShowMonSkillCd.onchange(false);
@@ -1680,7 +1669,7 @@ function initialize(event) {
 	const btnShowMonAwoken = document.getElementById("show-mon-awoken");
 	btnShowMonAwoken.checked = localStorage_getBoolean(cfgPrefix + btnShowMonAwoken.id);
 	btnShowMonAwoken.onchange = function(e){
-		toggleDomClassName(this.checked, this.id);
+		document.body.classList.toggle(this.id, this.checked);
 		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 	};
 	btnShowMonAwoken.onchange(false);
@@ -1690,7 +1679,7 @@ function initialize(event) {
 	if (btnShowAwokenCount) {
 		btnShowAwokenCount.checked = localStorage_getBoolean(cfgPrefix + btnShowAwokenCount.id, true);
 		btnShowAwokenCount.onchange = function(e){
-			toggleDomClassName(this.checked, this.id);
+			document.body.classList.toggle(this.id, this.checked);
 			if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 		};
 		btnShowAwokenCount.onchange(false);
@@ -2904,7 +2893,7 @@ function initialize(event) {
 
 	function s_types_onchange(){
 		const newClassName = `type-killer-${this.value}`;
-		toggleDomClassName(this.checked && s_typeAndOr.checked, newClassName, s_typesUl);
+		s_typesUl.classList.toggle(newClassName, this.checked && s_typeAndOr.checked);
 	}
 	s_types.forEach(checkBox=>checkBox.onchange = s_types_onchange);
 
@@ -2922,7 +2911,7 @@ function initialize(event) {
 
 	s_typeAndOr.onchange = function(){
 		s_types.forEach(checkBox=>checkBox.onchange());
-		toggleDomClassName(this.checked, className_displayNone, s_types_latentUl);
+		s_types_latentUl.classList.toggle(className_displayNone, this.checked);;
 	};
 	s_typeAndOr.onchange();
 
@@ -2985,7 +2974,7 @@ function initialize(event) {
 	const s_boxHave = document.getElementById("box-have");
 	s_boxHave.checked = localStorage_getBoolean(cfgPrefix + s_boxHave.id);
 	s_boxHave.onchange = function(e) {
-		toggleDomClassName(this.checked, "emphasize-box-have");
+		document.body.classList.toggle("emphasize-box-have", this.checked);;
 		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 	};
 	s_boxHave.onchange(false);
@@ -3003,7 +2992,7 @@ function initialize(event) {
 	const s_sawokens = s_sawokensLi.map(li => li.querySelector(".sawoken-check"));
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onchange = function() {
-		toggleDomClassName(this.checked, className_displayNone, s_sawokensDiv);
+		s_sawokensDiv.classList.toggle(className_displayNone, this.checked);;
 	};
 	s_includeSuperAwoken.onchange();
 
@@ -3029,8 +3018,8 @@ function initialize(event) {
 		sawokenSorting.forEach(appendLi, {iconLis: s_sawokensLi, fragment: fragmentSawoken});
 		
 		const className = "official-awoken-sorting";
-		toggleDomClassName(checked, className, s_awokensDiv);
-		toggleDomClassName(checked, className, s_sawokensDiv);
+		s_awokensDiv.classList.toggle(className, checked);;
+		s_sawokensDiv.classList.toggle(className, checked);;
 
 		s_awokensUl.appendChild(fragmentAwoken);
 		s_sawokensUl.appendChild(fragmentSawoken);
@@ -3529,7 +3518,7 @@ function initialize(event) {
 		const card = Cards[editBox.mid ?? 0];
 		const value = parseInt(this.value, 10);
 		awokenCountLabel.setAttribute(dataAttrName, value);
-		toggleDomClassName(value > 0 && value == card.awakenings.length, "full-awoken", awokenCountLabel);
+		awokenCountLabel.classList.toggle("full-awoken", value > 0 && value == card.awakenings.length);;
 
 		reCalculateAbility();
 	}
@@ -3697,8 +3686,8 @@ function initialize(event) {
 	showSkillOriginal.checked = localStorage_getBoolean(cfgPrefix + showSkillOriginal.id);
 	showSkillOriginal.onchange = function(event) {
 		if (event instanceof MouseEvent) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
-		toggleDomClassName(this.checked, this.id, skillBox);
-		toggleDomClassName(this.checked, this.id, leaderSkillBox);
+		skillBox.classList.toggle(this.id, this.checked);;
+		leaderSkillBox.classList.toggle(this.id, this.checked);;
 	};
 	showSkillOriginal.onchange(false);
 
@@ -3792,7 +3781,7 @@ function initialize(event) {
 		};
 
 		const abilitys = calculateAbility(tempMon, null, solo, teamsCount);
-		toggleDomClassName(level > 110, "level-super-break", monEditLatentUl); //切换潜觉为120级
+		monEditLatentUl.classList.toggle("level-super-break", level > 110);; //切换潜觉为120级
 
 		monEditHpValue.textContent = abilitys ? abilitys[0][0].toLocaleString() : 0;
 		monEditAtkValue.textContent = abilitys ? abilitys[1][0].toLocaleString() : 0;
@@ -4091,9 +4080,9 @@ function changeid(mon, monDom, latentDom, assist) {
 
 		monDom.title = "No." + monId + " " + (card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name);
 		monDom.href = currentLanguage.guideURL(monId, card.name);
-		toggleDomClassName(card.canAssist, "allowable-assist", monDom); //可作为辅助
+		monDom.classList.toggle("allowable-assist", card.canAssist);; //可作为辅助
 
-		toggleDomClassName(card.awakenings.includes(49), "wepon", monDom); //武器
+		monDom.classList.toggle("wepon", card.awakenings.includes(49));; //武器
 	}
 	const levelDom = monDom.querySelector(".level");
 	if (levelDom) { //如果提供了等级
@@ -4101,7 +4090,7 @@ function changeid(mon, monDom, latentDom, assist) {
 			const level = mon.level ?? 1;
 			levelDom.setAttribute(dataAttrName, level);
 	
-			toggleDomClassName(level === card.maxLevel, "max", levelDom);
+			levelDom.classList.toggle("max", level === card.maxLevel);;
 			//如果等级刚好等于最大等级，则修改为“最大”的字
 			if (level >= 111 && level <= 120 && card.limitBreakIncr) {
 				levelDom.setAttribute("data-level-range", "120");
@@ -4121,7 +4110,7 @@ function changeid(mon, monDom, latentDom, assist) {
 	if (awokenIcon) {
 		awokenIcon.setAttribute(dataAttrName, mon.awoken || 0);
 		if (mon.awoken != null) { //如果提供了觉醒
-			toggleDomClassName(card.awakenings.length > 0 && mon.awoken >= card.awakenings.length, "full-awoken", awokenIcon);
+			awokenIcon.classList.toggle("full-awoken", card.awakenings.length > 0 && mon.awoken >= card.awakenings.length);;
 		}else if(card.awakenings.length) {
 			awokenIcon.classList.add("full-awoken");
 		}
@@ -4178,7 +4167,7 @@ function changeid(mon, monDom, latentDom, assist) {
 				refreshLatent(latent, mon.id, latentDom, {sort:true});
 				latentDom.classList.remove(className_displayNone);
 			}
-			toggleDomClassName(level > 110, "level-super-break", latentDom); //切换潜觉为120级
+			latentDom.classList.toggle("level-super-break", level > 110);; //切换潜觉为120级
 		} else {
 			latentDom.classList.add(className_displayNone);
 		}
@@ -4187,7 +4176,7 @@ function changeid(mon, monDom, latentDom, assist) {
 	const skillCdDom = monDom.querySelector(".skill-cd");
 	if (skillCdDom) //如果存在技能CD DOM
 	{
-		toggleDomClassName(!card.activeSkillId, className_displayNone, skillCdDom);
+		skillCdDom.classList.toggle(className_displayNone, !card.activeSkillId);;
 	}
 
 	const switchLeaderDom = monDom.querySelector(".switch-leader");
@@ -4195,7 +4184,7 @@ function changeid(mon, monDom, latentDom, assist) {
 	{
 		const skills = getCardActiveSkills(card, [93, 227]); //更换队长的技能
 		
-		toggleDomClassName(!skills.length, className_displayNone, switchLeaderDom);
+		switchLeaderDom.classList.toggle(className_displayNone, !skills.length);;
 	}
 
 	const m_rarity = monDom.querySelector(".rarity");
@@ -4316,9 +4305,9 @@ function editMon(teamNum, isAssist, indexInTeam) {
 		editBox.latent = mon.latent ? mon.latent.concat() : [];
 		editBox.refreshLatent(editBox.latent, mon.id);
 	}
-	toggleDomClassName(isAssist, className_displayNone, rowMonLatent);
-	toggleDomClassName(isAssist, "edit-box-title-assist", editBoxTitle);
-	toggleDomClassName(!isAssist, className_displayNone, btnDelay);
+	rowMonLatent.classList.toggle(className_displayNone, isAssist);;
+	editBoxTitle.classList.toggle("edit-box-title-assist", isAssist);;
+	btnDelay.classList.toggle(className_displayNone, !isAssist);;
 
 	editBox.reCalculateExp();
 	if (mon.awoken !== undefined && monEditAwokens[mon.awoken])
@@ -4359,13 +4348,13 @@ function editBoxChangeMonId(id) {
 	//mSeriesId.textContent = card.seriesId;
 	mSeriesId.setAttribute(dataAttrName, card.seriesId);
 
-	toggleDomClassName(!card.seriesId, className_displayNone, mSeriesId);
+	mSeriesId.classList.toggle(className_displayNone, !card.seriesId);;
 
 	const mCollabId = monInfoBox.querySelector(".monster-collabId");
 	//mCollabId.textContent = card.collabId;
 	mCollabId.setAttribute(dataAttrName, card.collabId);
 
-	toggleDomClassName(!card.collabId, className_displayNone, mCollabId);
+	mCollabId.classList.toggle(className_displayNone, !card.collabId);;
 
 	const mAltName = monInfoBox.querySelector(".monster-altName");
 	//mAltName.textContent = card.altName.join("|");
@@ -4373,7 +4362,7 @@ function editBoxChangeMonId(id) {
 	//mAltName.setAttribute("data-monId", card.id);
 
 	//没有合作名就隐藏
-	toggleDomClassName(card.altName.length < 1 && card?.otTags?.length < 1, className_displayNone, mAltName);
+	mAltName.classList.toggle(className_displayNone, card.altName.length < 1 && card?.otTags?.length < 1);;
 
 	const evoLinkCardsIdArray = buildEvoTreeIdsArray(card);
 
@@ -4400,7 +4389,7 @@ function editBoxChangeMonId(id) {
 	}
 	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
 	//对于进化型才显示
-	toggleDomClassName(!card.types.includes(0), className_displayNone, searchEvolutionByThis);
+	searchEvolutionByThis.classList.toggle(className_displayNone, !card.types.includes(0));;
 
 	const mType = monInfoBox.querySelectorAll(".monster-type li");
 	for (let ti = 0; ti < mType.length; ti++) {
@@ -4416,12 +4405,12 @@ function editBoxChangeMonId(id) {
 	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken .awoken-ul");
 	const mAwokenIcon = monEditAwokensRow.querySelectorAll(".awoken-icon");
 	const mAwokenIpt = monEditAwokensRow.querySelectorAll("input[name='awoken-number']");
-	toggleDomClassName(card.canAssist, "allowable-assist", monEditAwokensRow);
+	monEditAwokensRow.classList.toggle("allowable-assist", card.canAssist);;
 	for (let ai = 0; ai < mAwokenIcon.length; ai++) {
 		if (ai < card.awakenings.length) {
 			mAwokenIcon[ai].setAttribute("data-awoken-icon", card.awakenings[ai]);
 		}
-		toggleDomClassName(ai >= card.awakenings.length, className_displayNone, mAwokenIcon[ai]);
+		mAwokenIcon[ai].classList.toggle(className_displayNone, ai >= card.awakenings.length);;
 	}
 	mAwokenIpt[card.awakenings.length].click(); //选择最后一个觉醒
 
@@ -4434,7 +4423,7 @@ function editBoxChangeMonId(id) {
 			if (ai < card.superAwakenings.length) {
 				mSAwoken[ai].setAttribute("data-awoken-icon", card.superAwakenings[ai]);
 			}
-			toggleDomClassName(ai >= card.superAwakenings.length, className_displayNone, mSAwoken[ai]);
+			mSAwoken[ai].classList.toggle(className_displayNone, ai >= card.superAwakenings.length);;
 		}
 		monEditSAwokensRow.classList.remove(className_displayNone);
 	} else {
@@ -4452,8 +4441,8 @@ function editBoxChangeMonId(id) {
 	const monEditLv120 = settingBox.querySelector(".m-level-btn-120");
 
 	monEditLv110.setAttribute("data-limit-break-incr",card.limitBreakIncr);
-	toggleDomClassName(!card.limitBreakIncr, className_displayNone, monEditLv110);
-	toggleDomClassName(!card.limitBreakIncr, className_displayNone, monEditLv120);
+	monEditLv110.classList.toggle(className_displayNone, !card.limitBreakIncr);;
+	monEditLv120.classList.toggle(className_displayNone, !card.limitBreakIncr);;
 
 	const mCost = settingBox.querySelector(".monster-cost");
 	mCost.textContent = card.cost;
@@ -4467,7 +4456,7 @@ function editBoxChangeMonId(id) {
 	const latentIcons = Array.from(monLatentAllowUl.querySelectorAll(`.latent-icon[data-latent-icon]`));
 	latentIcons.forEach(icon => { //显示允许的潜觉，隐藏不允许的潜觉
 		const ltId = parseInt(icon.getAttribute("data-latent-icon"),10);
-		toggleDomClassName(!allowLatent.includes(ltId), "unallowable-latent", icon);
+		icon.classList.toggle("unallowable-latent", !allowLatent.includes(ltId));;
 	});
 
 	//怪物主动技能
@@ -4575,8 +4564,8 @@ function refreshAll(formationData) {
 	txtDetailDisplay.innerHTML = '';
 	txtDetailDisplay.appendChild(descriptionToHTML(txtDetail.value));
 	
-	toggleDomClassName(!txtTitle.value.length, "edit", titleBox);
-	toggleDomClassName(!txtDetail.value.length, "edit", detailBox);
+	titleBox.classList.toggle("edit", !txtTitle.value.length);;
+	detailBox.classList.toggle("edit", !txtDetail.value.length);;
 	
 	//地下城强化的显示，稀有度没有现成的，所以这里来循环生成
 	const dge = formationData.dungeonEnchance;

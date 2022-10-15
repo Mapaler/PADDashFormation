@@ -540,7 +540,7 @@ ul{
 	left: 5px;
 	bottom: 15px;
 }
-.not-show-mon-id .monster .id{
+body:not(.show-mon-id) .monster .id{
 	display: none;
 }
 .monster .id::before{
@@ -553,7 +553,7 @@ ul{
 	content:"CD";
 	font-size: 10px;
 }
-.monster .skill-cd{
+.monster .skill-cd {
 	font-size: 13px;
 	line-height: 13px;
 	color:white;
@@ -562,11 +562,8 @@ ul{
 	right:0;
 	bottom:0;
 }
-.monster .skill-cd.max-skill{
+body:not(.show-mon-skill-cd) .monster .skill-cd.max-skill {
 	display: none;
-}
-.show-mon-skill-cd .monster .skill-cd.max-skill{
-	display: block;
 }
 /*显示怪物星级*/
 .show-mon-awoken .monster .rarity::before{
@@ -632,17 +629,17 @@ ul{
 	opacity: 0.5;
 }
 
-.not-show-awoken-count:not(.solo) .formation-box .team-total-info, /*单个队伍血量统计*/
-.not-show-awoken-count .formation-box .team-ability, /*单个队伍三维*/
-.not-show-awoken-count .formation-box .team-awoken /*单个队伍觉醒统计*/
+body:not(.show-awoken-count):not(.solo) .formation-box .team-total-info, /*单个队伍血量统计*/
+body:not(.show-awoken-count) .formation-box .team-ability, /*单个队伍三维*/
+body:not(.show-awoken-count) .formation-box .team-awoken /*单个队伍觉醒统计*/
 {
 	display: none !important;
 }
-.not-show-awoken-count:not(.solo) .formation-box .team-bigbox
+body:not(.show-awoken-count):not(.solo) .formation-box .team-bigbox
 {
 	margin-bottom: 5px;
 }
-.not-show-awoken-count:not(.solo) .formation-box .team-badge
+body:not(.show-awoken-count):not(.solo) .formation-box .team-badge
 {
 	position: absolute;
 	z-index: 10;
@@ -2694,10 +2691,8 @@ icon.inflicts::after
 .control-box .multi-link::before{
 	content: "Jump To 2-Player Version";
 }
-/*.control-box .btn-show-mon-id::before{
-	content: "隐藏怪物ID";
-}
-.not-show-mon-id .control-box .btn-show-mon-skill-cd::before{
+/*
+.control-box .btn-show-mon-skill-cd::before{
 	content: "显示怪物ID";
 }
 .show-mon-skill-cd .control-box .btn-show-mon-skill-cd::before{
