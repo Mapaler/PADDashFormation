@@ -25,6 +25,7 @@
 	force_reload_data: "強制刷新數據",
 	skill_parse: {
 		skill: {
+			error: tp`😫技能解析发生错误，请将角色 ID 反馈给开发者。`,
 			unknown: tp`未知的技能類型：${'type'}`, //type
 			active_turns: tp`${'turns'} 回合內，${'actionSkill'}`, //turns, actionSkill
 			random_skills: tp`隨機發動以下技能：${'skills'}`, //skills

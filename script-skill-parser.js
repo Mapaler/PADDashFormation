@@ -417,6 +417,7 @@ const SkillPowerUpKind = {
 };
 
 const SkillKinds = {
+	Error: "error",
 	Unknown: "unknown",
 	ActiveTurns: "active-turns",
 	DamageEnemy: "damage-enemy",
@@ -1783,6 +1784,11 @@ function renderSkill(skill, option = {})
 		return frg;
 	}
 	switch (skill.kind) {
+		case SkillKinds.Error: {
+			let dict = { type: skill.kind };
+			frg.ap(tsp.skill.error(dict));
+			break;
+		}
 		case SkillKinds.Unknown: {
 			let dict = {
 				type: skill.kind
@@ -1984,7 +1990,7 @@ function renderSkill(skill, option = {})
 		case SkillKinds.DamageEnemy: { //大炮和固伤
 			let attr = skill.attr, target = skill.target, damage = skill.damage, times = skill.times;
 			if (attr == null) break; //没有属性时，编号为0的空技能
-			dict = {
+			let dict = {
 				target: target === 'all' ? tsp.target.enemy_all() : target === 'single' ? tsp.target.enemy_one() : tsp.target.enemy_attr({attr: renderAttrs(target, {affix: true})}),
 				damage: renderValue(damage, {unit: tsp.unit.point}),
 				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true}),
@@ -2056,7 +2062,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.BindSkill: {
-			dict = {
+			let dict = {
 				icon: createIcon(skill.kind)
 			};
 			frg.ap(tsp.skill.bind_skill(dict));
@@ -2064,7 +2070,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.BoardChange: { //洗版
 			const attrs = skill.attrs;
-			dict = {
+			let dict = {
 				orbs: renderOrbs(attrs),
 			};
 			frg.ap(tsp.skill.board_change(dict));
@@ -2144,7 +2150,7 @@ function renderSkill(skill, option = {})
 				damage: renderValue(damage),
 				attr: renderAttrs(attr, {affix: (attr === 'self' || attr === 'fixed') ? false : true}),
 			};
-			dict = {
+			let dict = {
 				icon: createIcon("heal", "hp-incr"),
 				damage_enemy: tsp.skill.damage_enemy(_dict),
 				heal: renderValue(heal, {percent: true}),
@@ -2154,7 +2160,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.CounterAttack: { //反击
 			let attr = skill.attr, prob = skill.prob, value = skill.value;
-			dict = {
+			let dict = {
 				icon: createIcon(skill.kind),
 				target: tsp.target.enemy(),
 				chance: prob.value < 1 ? tsp.value.prob({value: renderValue(prob, { percent:true })}) : null,
@@ -2169,7 +2175,7 @@ function renderSkill(skill, option = {})
 			let subDocument = [];
 			for (const change of changes)
 			{
-				dict = {
+				let dict = {
 					from: renderOrbs(change.from),
 					to: renderOrbs(change.to),
 				};
@@ -2180,7 +2186,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.GenerateOrbs: { //产生珠子
 			let orbs = skill.orbs, exclude = skill.exclude, count = skill.count;
-			dict = {
+			let dict = {
 				exclude: exclude?.length ? tsp.word.affix_exclude({cotent: renderOrbs(exclude)}) : void 0,
 				orbs: renderOrbs(orbs),
 				value: count,
@@ -2206,7 +2212,7 @@ function renderSkill(skill, option = {})
 			for (const generate of generates)
 			{
 				let orb = generate.orbs?.[0];
-				dict = {
+				let dict = {
 					orbs: renderOrbs(orb),
 				};
 				if (generate.type == 'shape')
@@ -2245,7 +2251,7 @@ function renderSkill(skill, option = {})
 		case SkillKinds.OrbDropIncrease: { //增加天降
 			let attrs = skill.attrs, value = skill.value, flag = skill.flag;
 			
-			dict = {
+			let dict = {
 				value: value && renderValue(value, {percent: true}) || null,
 				chance: value && tsp.value.prob({
 					value: renderValue(value, {percent: true})
@@ -2274,7 +2280,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.ChangeAttribute: {
 			let attr = skill.attr, target = skill.target;
-			dict = {
+			let dict = {
 				attrs: renderAttrs(attr, {affix: true}),
 				target: target === 'opponent' ? tsp.target.enemy_all() : tsp.target.self(),
 			};
@@ -2283,7 +2289,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.SetOrbState: {
 			let orbs = skill.orbs, state = skill.state, arg = skill.arg;
-			dict = {
+			let dict = {
 				orbs: renderOrbs(orbs, {className: state, affix: true}),
 				icon: createIcon('orb-' + state),
 			};
@@ -2313,7 +2319,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.RateMultiply: {
 			let rate = skill.rate, value = skill.value;
-			dict = {
+			let dict = {
 				rate: tsp.skill["rate_multiply_" + rate]({icon: createIcon(skill.kind + "-" + rate)}),
 				value: renderValue(value),
 			};
@@ -2322,7 +2328,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.ReduceDamage: {
 			let attrs = skill.attrs, percent = skill.percent, condition = skill.condition, prob = skill.prob;
-			dict = {
+			let dict = {
 				icon: createIcon(skill.kind),
 				attrs: renderAttrs(attrs, {affix: true}),
 				value: renderValue(percent, {percent: true}),
@@ -2334,7 +2340,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.PowerUp: {
 			let attrs = skill.attrs, types = skill.types, targets = skill.targets, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage, additional = skill.additional;
-			dict = {
+			let dict = {
 				icon: createIcon(skill.kind),
 			};
 			if (condition) dict.condition = renderCondition(condition);
@@ -2403,7 +2409,7 @@ function renderSkill(skill, option = {})
 				let dom = cardN(id);
 				dom.monDom.onclick = changeToIdInSkillDetail;
 				return dom;	})
-			dict = {
+			let dict = {
 				cards: doms.nodeJoin(),
 			}
 			frg.ap(random ? 
@@ -2413,7 +2419,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.VoidPoison: { //毒无效
-			dict = {
+			let dict = {
 				poison: renderOrbs([7,8], {affix: true})
 			}
 			frg.ap(tsp.skill.void_poison(dict));
@@ -2421,7 +2427,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.SkillProviso: { //条件限制才能用技能
 			let cond = skill.cond;
-			dict = {
+			let dict = {
 				condition: renderCondition(cond)
 			}
 			frg.ap(tsp.skill.skill_proviso(dict));
@@ -2429,7 +2435,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.ImpartAwakenings: { //赋予队员觉醒
 			let attrs = skill.attrs, types = skill.types, awakenings = skill.awakenings;
-			dict = {
+			let dict = {
 				awakenings: renderAwakenings(awakenings, {affix: true}),
 			}
 			
@@ -2455,7 +2461,7 @@ function renderSkill(skill, option = {})
 		case SkillKinds.ObstructOpponent: { //条件限制才能用技能
 			let type = skill.type, pos = skill.pos, enemy_skills = skill.enemy_skills;
 			let slight_pause = tsp.word.slight_pause().textContent;
-			dict = {
+			let dict = {
 				skills: enemy_skills.join(slight_pause)
 			}
 			let targetDict = { positions: pos?.map(p=>p+1).join(slight_pause)}
@@ -2483,7 +2489,7 @@ function renderSkill(skill, option = {})
 		}
 		case SkillKinds.IncreaseDamageCap: { //增加伤害上限
 			const {cap, targets} = skill;
-			dict = {
+			let dict = {
 				icon: createIcon(skill.kind),
 				targets: targets.map(target=>
 					tsp?.target[target.replaceAll("-","_")]?.())
@@ -2498,7 +2504,7 @@ function renderSkill(skill, option = {})
 			const boardsBar = merge_skill ? null : new BoardSet(new Board(), new Board(null,7,6), new Board(null,5,4));
 			const slight_pause = tsp.word.slight_pause().textContent;
 
-			dict = {
+			let dict = {
 				icon: createIcon('board-' + state),
 				state: tsp.board[state](),
 				position: posType == 'random' ? tsp.position.random() : tsp.position.shape(),
@@ -2517,7 +2523,7 @@ function renderSkill(skill, option = {})
 				const [width, height] = skill.size;
 				dict.size = tsp.value.size({ width, height});
 				boardsBar?.boards?.forEach(board=>{
-					board.generateBlockStates('clouds', count, size, positions);
+					board.generateBlockStates('clouds', count, [width, height], positions);
 				});
 			}
 			if (state == 'immobility') { //封条
@@ -2550,7 +2556,7 @@ function renderSkill(skill, option = {})
 		case SkillKinds.BoardSizeChange: { //改变版面大小
 			const { width, height } = skill;
 
-			dict = {
+			let dict = {
 				icon: createIcon(skill.kind),
 				size: tsp.value.size({ width, height}),
 			};

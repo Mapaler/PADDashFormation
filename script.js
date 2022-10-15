@@ -3709,14 +3709,24 @@ function initialize(event) {
 		const card = Cards[this.mid] || Cards[0];
 		if (!card) return;
 		
-		const activeSkill = skillParser(card.activeSkillId);
-		toggleDomClassName(
-			activeSkill.some(skill=>skill.kind == SkillKinds.EvolvedSkills),
-			"evolved-skill", skillBox);
-		skillDetailParsed.innerHTML = "";
-		skillDetailParsed.appendChild(renderSkillEntry(activeSkill));
-		lskillDetailParsed.innerHTML = "";
-		lskillDetailParsed.appendChild(renderSkillEntry(skillParser(card.leaderSkillId)));
+		try {
+			skillDetailParsed.innerHTML = "";
+			const parsedActiveSkill = skillParser(card.activeSkillId);
+			const isEvolvedSkill = parsedActiveSkill.some(skill=>skill.kind == SkillKinds.EvolvedSkills);
+			skillBox.classList.toggle("evolved-skill", isEvolvedSkill);
+			skillDetailParsed.appendChild(renderSkillEntry(parsedActiveSkill));
+		} catch (error) {
+			console.error("%o 主动技 %d 解析出错", card, card.activeSkillId, error);
+			skillDetailParsed.appendChild(renderSkillEntry([{kind: SkillKinds.Error}]));
+		}
+		try {
+			lskillDetailParsed.innerHTML = "";
+			const parsedLeaderSkill = skillParser(card.leaderSkillId);
+			lskillDetailParsed.appendChild(renderSkillEntry(parsedLeaderSkill));
+		} catch (error) {
+			console.error("%o 队长技 %d 解析出错", card, card.leaderSkillId, error);
+			lskillDetailParsed.appendChild(renderSkillEntry([{kind: SkillKinds.Error}]));
+		}
 	};
 
 	//合并技能开关

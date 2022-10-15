@@ -878,7 +878,6 @@ function descriptionToHTML(str)
 }
 //默认的技能解释的显示行为
 function parseSkillDescription(skill) {
-	
 	return descriptionToHTML(skill?.description);
 }
 //大数字缩短长度，默认返回本地定义字符串

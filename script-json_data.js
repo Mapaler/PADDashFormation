@@ -39,6 +39,7 @@ let localTranslating = {
 	force_reload_data: `Force refresh data`,
 	skill_parse: {
 		skill: {
+			error: tp`😫An error occurred in skill parsing, please feedback the Card ID to the developer.`,
 			unknown: tp`Unkonwn skill type: ${'type'}`,
 			active_turns: tp`${'actionSkill'}, for ${'turns'} turns`,
 			random_skills: tp`Random Activates these skills:${'skills'}`,
