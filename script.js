@@ -4321,7 +4321,8 @@ function editBoxChangeMonId(id) {
 	if (!card) { //如果搜不到怪物就直接返回，不做任何操作
 		const errorMsg = "The game data has not been loaded successfully.\n游戏数据尚未加载成功。";
 		alert(errorMsg);
-		throw new Error(errorMsg);
+		console.error(errorMsg);
+		return;
 	}
 	if (card?.id === 0) {
 		id = 0;
