@@ -75,9 +75,7 @@ Uint8Array.prototype.toHex = function() {
 }
 
 //大数字缩短长度，默认返回本地定义字符串
-Number.prototype.bigNumberToString = function() {
-	return this.toLocaleString();
-}
+Number.prototype.bigNumberToString = Number.prototype.toLocaleString;
 //最多保留N位小数，不留0
 Number.prototype.keepCounts = function(decimalDigits = 2, plusSign = false)
 {
