@@ -99,7 +99,7 @@
 			obstruct_opponent_designated_position: tp`第${'positions'}排位的对手`,
 			increase_damage_cap: tp`${'targets'}的${'icon'}伤害上限提升到${'cap'}`,
 			board_jamming_state: tp`在${'position'}生成${'icon'}${'state'}${'size'}${'count'}${'time'}`,
-			board_size_change: tp`版面大小改变为${'icon'}${'size'}`,
+			board_size_change: tp`板面大小改变为${'icon'}${'size'}`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,

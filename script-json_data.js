@@ -2442,6 +2442,26 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
+			{name:"Change Board Size",otLangName:{chs:"改变板面大小",cht:"改變板面大小"},
+				function:cards=>{
+					const searchTypeArray = [244];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+					const searchTypeArray = [244];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+
+					if (sk[1])
+						return `[7×6]×${sk[0]}T`;
+					else
+						return `[6×5]×${sk[0]}T`;
+				}
+			},
 		]},
 		{group:true,name:"-----Orbs States Change-----",otLangName:{chs:"-----改变宝珠状态类-----",cht:"-----改變寶珠狀態類-----"}, functions: [
 			{name:"Unlock",otLangName:{chs:"解锁",cht:"解鎖"},
@@ -3089,14 +3109,14 @@ const specialSearchFunctions = (function() {
 			{name:"Type Enchantment",otLangName:{chs:"类型增强",cht:"類型增强"},
 				function:cards=>cards.filter(card=>card.leaderSkillTypes.restriction.typeEnhance)
 			},
-			{name:"[7×6 board]",otLangName:{chs:"【7×6 版面】",cht:"【7×6 版面】"},
+			{name:"[7×6 board]",otLangName:{chs:"【7×6 板面】",cht:"【7×6 板面】"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [162,186];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
 					return skill;
 				})
 			},
-			{name:"[No skyfall]",otLangName:{chs:"【无天降版面】",cht:"【無天降版面】"},
+			{name:"[No skyfall]",otLangName:{chs:"【无天降板面】",cht:"【無天降板面】"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [163,177];
 					const skill = getCardLeaderSkill(card, searchTypeArray);

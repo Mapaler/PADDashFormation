@@ -445,7 +445,7 @@ function parseSkillDescription(skill) {
 				dataArray.push(valueArray.splice(Math.randomInteger(valueArray.length - 1),1));
 			}
 			
-			//创建版面数据，依次填入
+			//创建板面数据，依次填入
 			var data = new Array(5).fill(null).map(()=>new Array(6).fill(null));
 
 			let da = dataArray.entries();
@@ -914,7 +914,7 @@ function parseSkillDescription(skill) {
 			str = `造成敌人 HP 上限${sk[0]}%的伤害`;
 			break;
 		case 162:
-			str = '<span class="spColor">【7×6版面】</span>';
+			str = '<span class="spColor">【7×6板面】</span>';
 			break;
 		case 163:
 			str = '<span class="spColor">【没有天降消除】</span>';
@@ -1245,7 +1245,7 @@ function parseSkillDescription(skill) {
 			if (sk[0]) str += `，操作时间${sk[0]>0?`延长`:`减少`}${Math.abs(sk[0]/100)}秒`;
 			break;
 		case 186:
-			str = '<span class="spColor">【7×6版面】</span>';
+			str = '<span class="spColor">【7×6板面】</span>';
 			if (sk[0] || sk[1]) str += getAttrTypeString(flags(sk[0]),flags(sk[1])) + "宠物的" + getFixedHpAtkRcvString({hp:sk[2],atk:sk[3],rcv:sk[4]});
 			break;
 		case 188: //多次单体固伤

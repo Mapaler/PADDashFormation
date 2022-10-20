@@ -326,7 +326,7 @@ class Board
 				this.setOrbAndBlock(flatOrbsData[i], null, attrArray[i]);
 			}
 		} else {
-			//在版面上查询符合的颜色
+			//在板面上查询符合的颜色
 			flatOrbsData = flatOrbsData.filter(orb=>attrs.includes(orb.attr));
 			const maxLength = Math.min(count, flatOrbsData.length);
 			for (let i=0; i<maxLength; i++) {
@@ -334,7 +334,7 @@ class Board
 			}
 		}
 	}
-	//生成版面状态
+	//生成板面状态
 	generateBlockStates(blockState, count = 1, size = [1,1], position = [0, 0])
 	{
 		for (let i=0; i<count; i++) {
@@ -1554,20 +1554,20 @@ const parsers = {
 			boardJammingStates('clouds', (pos1 && pos2) ? 'fixed' : 'random', { size: [width, height], positions: [pos1, pos2] })
 		);
 	},
-	[239](turns, colum, row) { //产封条
+	[239](colum, turns, row) { //产封条
 		//const colums = flags(colum), rows = flags(row);
 		return activeTurns(turns,
 			boardJammingStates('immobility', 'fixed', { positions: {colums: flags(colum), rows: flags(row)} })
 		);
 	},
-	[241](turns, cap, target = 1) { //改变伤害上限
+	[241](turns, cap, target = 1) { //改变伤害上限主动技
 		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
 		const typeArr = flags(target).map(n => targetTypes[n]);
 		return activeTurns(turns,
 			increaseDamageCap(cap * 1e8, typeArr)
 		);
 	},
-	[244](turns, type) { //改变版面大小
+	[244](turns, type) { //改变板面大小主动技
 		let width, height;
 		switch (type) {
 			case 1: {
@@ -1712,7 +1712,7 @@ function renderSkillEntry(skills)
 						}
 						break;
 					}
-					case SkillKinds.BoardJammingStates: { //产生版面干扰
+					case SkillKinds.BoardJammingStates: { //产生板面干扰
 						const { state, posType, size, positions, count, time } = skill;
 						if (state == 'roulette') { //轮盘位
 							boardsBar.boards.forEach(board=>{
@@ -2499,7 +2499,7 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.increase_damage_cap(dict));
 			break;
 		}
-		case SkillKinds.BoardJammingStates: { //版面产生干扰状态
+		case SkillKinds.BoardJammingStates: { //板面产生干扰状态
 			const { state, posType, positions, count, time } = skill;
 			const boardsBar = merge_skill ? null : new BoardSet(new Board(), new Board(null,7,6), new Board(null,5,4));
 			const slight_pause = tsp.word.slight_pause().textContent;
@@ -2553,7 +2553,7 @@ function renderSkill(skill, option = {})
 			}
 			break;
 		}
-		case SkillKinds.BoardSizeChange: { //改变版面大小
+		case SkillKinds.BoardSizeChange: { //改变板面大小
 			const { width, height } = skill;
 
 			let dict = {
