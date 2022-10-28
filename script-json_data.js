@@ -1101,6 +1101,7 @@ const specialSearchFunctions = (function() {
 	function numericalATK_Addition(card)
 	{
 		const searchTypeArray = [0,1,2,35,37,42,58,59,84,85,86,87,110,115,143,144];
+		const typeArray_Rate = [0,2,35,37,58,59,84,85,115];
 		const skill = getCardActiveSkill(card, searchTypeArray);
 		if (!skill) return;
 		//const sk = skill.params;
@@ -1108,8 +1109,32 @@ const specialSearchFunctions = (function() {
 		const colors = [getCannonAttr(skill)];
 		
 		const fragment = document.createDocumentFragment();
-		fragment.appendChild(document.createTextNode(`射`));
-		fragment.appendChild(createOrbsList(colors));
+		fragment.append(`射`);
+		fragment.append(createOrbsList(colors));
+
+		if (typeArray_Rate.includes(skill.type)) {
+			function getNumber(skill){
+				const sk = skill.params;
+				switch(skill.type)
+				{
+					case 0:
+					case 37:
+					case 58:
+					case 59:
+					case 84:
+					case 85:
+					case 115:
+						return sk[1];
+					case 2:
+					case 35:
+						return sk[0];
+					default:
+						return 0;
+				}
+			}
+			fragment.append(`×${(getNumber(skill)/100).bigNumberToString()}倍`);
+			
+		}
 		return fragment;
 	}
 	function memberATK_Addition(card)
@@ -1131,6 +1156,23 @@ const specialSearchFunctions = (function() {
 		str +=`${sk[2] / 100}倍×${sk[0]}T`;
 		fragment.appendChild(document.createTextNode(str));
 		return fragment;
+	}
+	function dixedDamage_Addition(card)
+	{
+		const searchTypeArray = [55, 188, 56];
+		const skills = getCardActiveSkills(card, searchTypeArray, true);
+		if (!skills.length) return;
+		const skill = skills[0];
+		const sk = skill.params;
+		return `${skill.type==56?"全体":"单体"}${sk[0].bigNumberToString()}点${skills.length>1?`×${skills.length}`:''}`;
+	}
+	function gravity_Addition(card)
+	{
+		const searchTypeArray = [6, 161];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		if (!skill) return;
+		const sk = skill.params;
+		return `${skill.type==6?"当前":"最大"}${sk[0]}%`;
 	}
 	
 	function healImmediately_Rate(card)
@@ -2147,25 +2189,25 @@ const specialSearchFunctions = (function() {
 			},
 		]},
 		{group:true,name:"-----Damage Enemy - Gravity-----",otLangName:{chs:"-----对敌直接伤害类-重力-----",cht:"-----對敵直接傷害類-重力-----"}, functions: [
+			{name:"Gravity - Any(sort by rate)",otLangName:{chs:"重力-任意（按比例排序）",cht:"重力-任意（按比例排序）"},
+				function:cards=>{
+					const searchTypeArray = [6, 161];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition: gravity_Addition
+			},
 			{name:"Gravity - Current HP(sort by rate)",otLangName:{chs:"重力-敌人当前血量（按比例排序）",cht:"重力-敵人當前血量（按比例排序）"},
 				function:cards=>{
 					const searchTypeArray = [6];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						return skill;
-					}).sort((a,b)=>{
-						const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
-						let a_pC = a_s.params[0],b_pC = b_s.params[0];
-						return a_pC - b_pC;
-					})
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
-				addition:card=>{
-					const searchTypeArray = [6];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					return `当前${sk[0]}%`;
-				}
+				addition: gravity_Addition
 			},
 			{name:"Gravity - Max HP(sort by rate)",otLangName:{chs:"重力-敌人最大血量（按比例排序）",cht:"重力-敵人最大血量（按比例排序）"},
 				function:cards=>{
@@ -2173,22 +2215,26 @@ const specialSearchFunctions = (function() {
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						return skill;
-					}).sort((a,b)=>{
-						const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
-						let a_pC = a_s.params[0],b_pC = b_s.params[0];
-						return a_pC - b_pC;
-					})
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
-				addition:card=>{
-					const searchTypeArray = [161];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					return `最大${sk[0]}%`;
-				}
+				addition: gravity_Addition
 			},
 		]},
 		{group:true,name:"-----Damage Enemy - Fixed damage-----",otLangName:{chs:"-----对敌直接伤害类-无视防御固伤-----",cht:"-----對敵直接傷害類-無視防禦固傷-----"}, functions: [
+			{name:"Fixed damage - Any(sort by damage)",otLangName:{chs:"无视防御固伤-任意（按总伤害排序）",cht:"無視防禦固傷-任意（按總傷害排序）"},
+				function:cards=>{
+					const searchTypeArray = [55,188,56];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>{
+						const a_ss = getCardActiveSkills(a, searchTypeArray), b_ss = getCardActiveSkills(b, searchTypeArray);
+						let a_pC = a_ss.reduce((p,v)=>p+v.params[0],0), b_pC = b_ss.reduce((p,v)=>p+v.params[0],0);
+						return a_pC - b_pC;
+					});
+				},
+				addition:dixedDamage_Addition
+			},
 			{name:"Fixed damage - Single(sort by damage)",otLangName:{chs:"无视防御固伤-单体（按总伤害排序）",cht:"無視防禦固傷-單體（按總傷害排序）"},
 				function:cards=>{
 					const searchTypeArray = [55,188];
@@ -2201,13 +2247,7 @@ const specialSearchFunctions = (function() {
 						return a_pC - b_pC;
 					});
 				},
-				addition:card=>{
-					const searchTypeArray = [55,188];
-					const skills = getCardActiveSkills(card, searchTypeArray, true);
-					const sk = skills[0].params;
-		
-					return `${sk[0].bigNumberToString()}点` + (skills.length > 1 ? `×${skills.length}` : '');
-				}
+				addition:dixedDamage_Addition
 			},
 			{name:"Fixed damage - Mass(sort by damage)",otLangName:{chs:"无视防御固伤-全体（按伤害数排序）",cht:"無視防禦固傷-全體（按傷害數排序）"},
 				function:cards=>{
@@ -2217,14 +2257,7 @@ const specialSearchFunctions = (function() {
 						return skill;
 					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
-				addition:card=>{
-					const searchTypeArray = [56];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-		
-					return `固伤${sk[0].bigNumberToString()}`;
-				}
+				addition:dixedDamage_Addition
 			},
 		]},
 		{group:true,name:"-----Damage Enemy - Numerical damage-----",otLangName:{chs:"-----对敌直接伤害类-大炮-----",cht:"-----對敵直接傷害類-大炮-----"}, functions: [
