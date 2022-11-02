@@ -1336,13 +1336,23 @@ function reloadFormationData(event) {
 	if (editingTarget)
 	{
 		const mid = event?.state?.mid ?? parseInt(getQueryString("id"), 10);
+		const searchArr = event?.state?.searchArr ?? (str=>{
+			try {
+				const arr = JSON.parse(str);
+				if (Array.isArray(arr) && arr.every(item=>Number.isInteger(item))) {
+					return arr;
+				} else return;
+			} catch (error) {
+				return;
+			}
+		})(getQueryString("show-search")); //显示指定的ID数组
 		if (isGuideMod && !isNaN(mid)) {
 			formation.teams[editingTarget[0]][editingTarget[1]][editingTarget[2]].id = mid;
 		}
 		editMon(editingTarget[0], editingTarget[1], editingTarget[2]);
-		if (editingTarget && event?.state?.searchArr)
+		if (editingTarget && searchArr)
 		{
-			showSearch(event.state.searchArr);
+			showSearch(searchArr);
 		}
 	} else {
 		editBox.hide();
