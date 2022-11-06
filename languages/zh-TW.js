@@ -127,9 +127,9 @@
 			multi_player: tp`協力時`,
 			remain_orbs: tp`剩餘寶珠 ≤ ${'value'} 時`,
 			exact_combo: tp`剛好${'value'}連擊時`,
-			exact_match_length: tp`相連消除剛好${'value'}${'orbs'}時`,
+			exact_length: tp`剛好${'value'}`,
+			exact_match_length: tp`相連消除${'length'}${'orbs'}時，${'times'}`,
 			exact_match_enhanced: tp`並且其中包含至少一個強化寶珠`,
-			exact_match_length_multiple: tp`每相連消除剛好${'value'}${'orbs'}1次時`,
 
 			compo_type_card: tp`隊伍中同時存在 ${'ids'} 時`,
 			compo_type_series: tp`隊員組成全為 ${'ids'} 合作時`,
@@ -213,6 +213,7 @@
 			affix_type: tp`${'cotent'}類型`, //詞綴-類型
 			affix_awakening: tp`${'cotent'}覺醒`, //詞綴-覺醒
 			affix_exclude: tp`${'cotent'}以外`, //詞綴-屬性
+			each_time: tp`每一次`,
 		},
 		attrs: {
 			[0]: tp`${'icon'}火`,
