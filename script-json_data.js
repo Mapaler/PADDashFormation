@@ -143,9 +143,9 @@ let localTranslating = {
 			multi_player: tp`When in Multiplayer Mode `,
 			remain_orbs: tp`When ≤ ${'value'} Orbs on the board `,
 			exact_combo: tp`When exactly ${'value'} combos `,
-			exact_match_length: tp`When matching exactly of ${'value'}${'orbs'} `,
+			exact_length: tp`exactly of ${'value'} `,
+			exact_match_length: tp`When matching ${'length'}${'value'}${'orbs'}, ${'times'} `,
 			exact_match_enhanced: tp` orbs including enhanced`,
-			exact_match_length_multiple: tp`When matching each exactly of ${'value'}${'orbs'} `,
 
 			compo_type_card: tp`When ${'ids'} are all on team, `,
 			compo_type_series: tp`When all subs from ${'ids'} collab (Needs at least 1 sub), `,
@@ -230,6 +230,7 @@ let localTranslating = {
 			affix_type: tp`${'cotent'} types`,
 			affix_awakening: tp`${'cotent'} awoken`,
 			affix_exclude: tp`, exclude ${'cotent'}`,
+			each_time: tp`each time`,
 		},
 		attrs: {
 			[0]: tp`${'icon'}Fire`,

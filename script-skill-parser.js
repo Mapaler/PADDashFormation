@@ -2727,18 +2727,22 @@ function renderCondition(cond) {
 		};
 		frg.ap(tsp.cond.remain_orbs(dict));
 	} else if (cond.exact) {
-		if (cond.exact.type === 'combo') {
-			let dict = {value: cond.exact.value};
+		const { type, attrs , value, multiple } = cond.exact;
+		if (type === 'combo') {
+			let dict = { value };
 			frg.ap(tsp.cond.exact_combo(dict));
-		} else if (cond.exact.type === 'match-length') {
+		} else if (type === 'match-length') {
 			let dict = {
-				value: renderValue(v.constant(cond.exact.value), {unit: tsp.unit.orbs}),
-				orbs: cond.exact.attrs === 'enhanced' ? tsp.cond.exact_match_enhanced() : renderOrbs(cond.exact.attrs, {affix: true})
+				orbs: attrs === 'enhanced' ? tsp.cond.exact_match_enhanced() : renderOrbs(attrs, {affix: true})
 			};
-			
-			frg.ap(cond.exact.multiple ?
-				tsp.cond.exact_match_length_multiple(dict) :
-				tsp.cond.exact_match_length(dict));
+			if (value) {
+				dict.length = tsp.cond.exact_length({value:renderValue(v.constant(value), {unit: tsp.unit.orbs})});
+			}
+			if (multiple) {
+				dict.times = tsp.word.each_time();
+			}
+
+			frg.ap(tsp.cond.exact_match_length(dict));
 		}
 	} else if (cond.compo) {
 		let dict = {};

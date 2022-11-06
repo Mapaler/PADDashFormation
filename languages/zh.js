@@ -127,9 +127,9 @@
 			multi_player: tp`协力时`,
 			remain_orbs: tp`剩余宝珠 ≤ ${'value'} 时`,
 			exact_combo: tp`刚好${'value'}连击时`,
-			exact_match_length: tp`相连消除刚好${'value'}${'orbs'}时`,
+			exact_length: tp`刚好${'value'}`,
+			exact_match_length: tp`相连消除${'length'}${'orbs'}时，${'times'}`,
 			exact_match_enhanced: tp`并且其中包含至少一个强化宝珠`,
-			exact_match_length_multiple: tp`每相连消除刚好${'value'}${'orbs'}1次时`,
 
 			compo_type_card: tp`队伍中同时存在 ${'ids'} 时`,
 			compo_type_series: tp`队员组成全为 ${'ids'} 合作时`,
@@ -214,6 +214,7 @@
 			affix_type: tp`${'cotent'}类型`, //词缀-类型
 			affix_awakening: tp`${'cotent'}觉醒`, //词缀-觉醒
 			affix_exclude: tp`${'cotent'}以外`, //词缀-属性
+			each_time: tp`每一次`,
 		},
 		attrs: {
 			[0]: tp`${'icon'}火`,
