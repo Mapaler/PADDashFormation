@@ -3539,7 +3539,7 @@ function initialize(event) {
 	function playVoiceAwoken() { //点击label才播放语音
 		if (parseInt(this.getAttribute("data-awoken-icon"), 10) === 63) {
 			const card = Cards[editBox.mid];
-			const sndURL = `sound/voice/${currentDataSource.code}/padv${card.voiceId.toString().padStart(2,'0')}.wav`;
+			const sndURL = `sound/voice/${currentDataSource.code}/padv${card.voiceId.toString().padStart(3,'0')}.wav`;
 			//美韩的王者天下音效不知道怎么变成了普通PCM WAV
 			if (currentDataSource.code != 'ja' && card.voiceId >= 428) {
 				const audio = new Audio(sndURL);
