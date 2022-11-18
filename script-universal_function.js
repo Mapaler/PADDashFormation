@@ -132,6 +132,33 @@ Array.prototype.groupBy = function(func) {
 	}, []);
 	return groups;
 }
+//将内容添加到代码片段
+DocumentFragment.prototype.ap = function(...args)
+{
+	args.forEach(arg=>{
+		if (Array.isArray(arg)) //数组，递归自身
+		{
+			arg.forEach(item=>this.ap(item));
+		}
+		else //其他内容的转换为文字添加
+		{
+			this.append(arg);
+		}
+	}, this);
+	return this;
+}
+
+//将数组和分隔符添加到一个代码片段，类似join
+Array.prototype.nodeJoin = function(separator)
+{
+	const frg = document.createDocumentFragment();
+	this.forEach((item, idx, arr)=>{
+		frg.ap(item);
+		if (idx < (arr.length - 1) && separator !== undefined)
+			frg.ap(separator instanceof Node ? separator.cloneNode(true) : separator);
+	});
+	return frg;
+}
 
 Math.randomInteger = function(max, min = 0) {
 	return this.floor(this.random() * (max - min + 1) + min);
@@ -871,7 +898,6 @@ function descriptionToHTML(str)
 			latent.setAttribute("data-latent-hole", 1);
 			return latent;
 		});
-
 	return nodeArr.nodeJoin();
 }
 //默认的技能解释的显示行为
@@ -1027,9 +1053,14 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 				break;
 			}
 			case 245: { //全员满足某种情况，不包括好友队长，现在是全部星级不一样
-				let cardsRarity = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => m.card.rarity); //所有的卡片星级
-				if (new Set(cardsRarity).size === cardsRarity.length) //如果星级去重后数量一致，即各不相同
+				const cardsRarity = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => m.card.rarity); //所有的卡片星级
+				const distinctRarity = cardsRarity.concat().distinct(); //数组拷贝去重
+				if (sk[0] == -1 && distinctRarity.length === cardsRarity.length || //全部不同
+					sk[0] == -2 && distinctRarity.length === 1 || //全部相同
+					sk[0] > 0 && distinctRarity.length === 1 && distinctRarity[0] === sk[0] //指定稀有度
+				) {
 					scale = sk[3] / 100;
+				}
 				break;
 			}
 			case 138: //调用其他队长技

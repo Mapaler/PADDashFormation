@@ -135,7 +135,7 @@
 			compo_type_series: tp`队员组成全为 ${'ids'} 合作时`,
 			compo_type_evolution: tp`队员组成全为 ${'ids'} 进化时`,
 			compo_type_team_total_rarity: tp`队伍的总★稀有度 ≤${'rarity'} 时`,
-			compo_type_team_rarity_different: tp`队伍的稀有度各不相同时`,
+			compo_type_team_same_rarity: tp`队伍的稀有度都为${'rarity'}时`,
 
 			stage_less_or_equal: tp`${'stage'} ≤ ${'max'} 时`, //地下城层数
 			stage_greater_or_equal: tp`${'stage'} ≥ ${'min'} 时`,
@@ -215,6 +215,8 @@
 			affix_awakening: tp`${'cotent'}觉醒`, //词缀-觉醒
 			affix_exclude: tp`${'cotent'}以外`, //词缀-属性
 			each_time: tp`每一次`,
+			different: tp`不同`,
+			same: tp`相同`,
 		},
 		attrs: {
 			[0]: tp`${'icon'}火`,

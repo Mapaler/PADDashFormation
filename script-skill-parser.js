@@ -1098,7 +1098,7 @@ const parsers = {
 	[58](attr, min, max) { return damageEnemy('all', attr, v.randomATK(min, max)); },
 	[59](attr, min, max) { return damageEnemy('single', attr, v.randomATK(min, max)); },
 	[60](turns, mul, attr) { return activeTurns(turns, counterAttack(attr, v.percent(100), v.percent(mul))); },
-	[61](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, max ?? min, [base, 100], [bonus, 0])); },
+	[61](attrs, min, base, bonus, stage) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (stage ?? 0), [base, 100], [bonus, 0])); },
 	[62](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, atk: mul })); },
 	[63](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, rcv: mul })); },
 	[64](type, mul) { return powerUp(null, [type], p.mul({ atk: mul, rcv: mul })); },
@@ -1582,8 +1582,8 @@ const parsers = {
 		}
 		return activeTurns(turns, boardSizeChange(width, height));
 	},
-	[245](_1, _2, _3, hp, atk, rcv) { //全员满足某种情况，现在是全部星级不一样
- 		return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('team-rarity-diffrent', flags(_2))); 
+	[245](rarity, _2, _3, hp, atk, rcv) { //全员满足某种情况，现在是全部星级不一样
+ 		return powerUp(flags(_2), null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('team-same-rarity', rarity)); 
 	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -1598,40 +1598,6 @@ const parsers = {
 	},
 };
 
-//将内容添加到代码片段
-DocumentFragment.prototype.ap = function(...args)
-{
-	args.forEach(arg=>{
-		if (Array.isArray(arg)) //数组，递归自身
-		{
-			arg.forEach(item=>this.ap(item));
-		}
-		else //其他内容的转换为文字添加
-		{
-			this.append(arg);
-		}
-	}, this);
-	return this;
-}
-
-//将数组和分隔符添加到一个代码片段，类似join
-Array.prototype.nodeJoin = function(separator)
-{
-	const frg = document.createDocumentFragment();
-	this.forEach((item, idx, arr)=>{
-		frg.ap(item);
-		if (idx < (arr.length - 1) && separator !== undefined)
-			frg.ap(separator instanceof Node ? separator.cloneNode(true) : separator);
-	});
-	return frg;
-}
-//按住Ctrl点击技能在控制台输出技能的对象
-function showParsedSkill(event) {
-	if (event.ctrlKey) {
-		//const skillId = parseInt(this.getAttribute("data-skill-id"));
-		console.log(this.skill);
-	}
-}
 
 function renderSkillTitle(skillId) {
 	const skill = Skills[skillId];
@@ -1656,6 +1622,13 @@ function renderSkillTitle(skillId) {
 
 function renderSkillEntry(skills)
 {
+	//按住Ctrl点击技能在控制台输出技能的对象
+	function showParsedSkill(event) {
+		if (event.ctrlKey) {
+			//const skillId = parseInt(this.getAttribute("data-skill-id"));
+			console.log(this.skill);
+		}
+	}
 	const ul = document.createElement("ul");
 	ul.className = "card-skill-list";
 	skills.forEach(skill=>{
@@ -2803,8 +2776,19 @@ function renderCondition(cond) {
 				frg.ap(tsp.cond.compo_type_team_total_rarity(dict));
 				break;
 			}
-			case 'team-rarity-diffrent':{
-				frg.ap(tsp.cond.compo_type_team_rarity_different(dict));
+			case 'team-same-rarity':{
+				let rarity = cond.compo.ids;
+				switch (rarity) {
+					case -1:
+						dict.rarity = tsp.word.different();
+						break;
+					case -2:
+						dict.rarity = tsp.word.same();
+						break;
+					default:
+						dict.rarity = rarity;
+				}
+				frg.ap(tsp.cond.compo_type_team_same_rarity(dict));
 				break;
 			}
 		}

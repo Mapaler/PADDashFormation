@@ -151,7 +151,7 @@ let localTranslating = {
 			compo_type_series: tp`When all subs from ${'ids'} collab (Needs at least 1 sub), `,
 			compo_type_evolution: tp`When all monsters in team are ${'ids'}, `,
 			compo_type_team_total_rarity: tp`When the total ★ rarity of the team is ≤${'rarity'}, `,
-			compo_type_team_rarity_different: tp`When the team's rarity is different, `,
+			compo_type_team_same_rarity: tp`When the ★ rarity of the team is ${'rarity'}, `,
 
 			stage_less_or_equal: tp`When ${'stage'} ≤ ${'max'}, `,
 			stage_greater_or_equal: tp`When ${'stage'} ≥ ${'min'}, `,
@@ -231,6 +231,8 @@ let localTranslating = {
 			affix_awakening: tp`${'cotent'} awoken`,
 			affix_exclude: tp`, exclude ${'cotent'}`,
 			each_time: tp`each time`,
+			different: tp`different`,
+			same: tp`the same`,
 		},
 		attrs: {
 			[0]: tp`${'icon'}Fire`,
@@ -3248,12 +3250,26 @@ const specialSearchFunctions = (function() {
 					return `★≤${sk[0]}`;
 				}
 			},
-			{name:"Team's rarity required different",otLangName:{chs:"要求队员稀有度各不相同",cht:"要求隊員稀有度各不相同"},
+			{name:"Team's rarity required different",otLangName:{chs:"要求队员稀有度相同/各不相同",cht:"要求隊員稀有度相同/各不相同"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [245];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
 					return skill;
-				})
+				}),
+				addition:card=>{
+					const searchTypeArray = [245];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					switch (sk[0]) {
+						case -1:
+							return `★各不相同`;
+						case -2:
+							return `★全部相同`;
+						default:
+							return `★全为${sk[0]}`;
+					}
+				}
 			},
 		]},
 		{group:true,name:"-----Extra Effects-----",otLangName:{chs:"-----附加效果-----",cht:"-----附加效果-----"}, functions: [
