@@ -1583,7 +1583,7 @@ const parsers = {
 		return activeTurns(turns, boardSizeChange(width, height));
 	},
 	[245](rarity, _2, _3, hp, atk, rcv) { //全员满足某种情况，现在是全部星级不一样
- 		return powerUp(flags(_2), null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('team-same-rarity', rarity)); 
+ 		return powerUp(flags(_2), flags(_3), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('team-same-rarity', rarity)); 
 	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
