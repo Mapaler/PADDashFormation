@@ -235,21 +235,32 @@ const pcmImportObj = {
 let pcmPlayer = null;
 let adpcm_wasm = null;
 
-function decodeAudio(fileName, decodeCallback) {
+async function decodeAudio(fileName, decodeCallback) {
 	if (pcmPlayer != null) {
 		pcmPlayer.close();
 	}
 	pcmPlayer = new PCMPlayer(1, 44100);
-	fetch(fileName).then((response) => response.arrayBuffer())
-		.then((bytes) => {
-			let audioData = new Uint8Array(bytes);
-			let step = 160;
-			for (let i = 0; i < audioData.byteLength; i += step) {
-				let pcm16BitData = decodeCallback(audioData.slice(i, i + step));
-				let pcmFloat32Data = Std.shortToFloatData(pcm16BitData);
-				pcmPlayer.feed(pcmFloat32Data);
-			}
-		});
+	let request = await fetch(fileName);
+	let buffer = await request.arrayBuffer();
+	
+	let audioData = new Uint8Array(buffer);
+	if (audioData[16] == 0x10) { //普通WAV，建立一个audio来播放
+		console.debug('当前 WAV 为 普通 WAV');
+		const audioCtx = new AudioContext();
+		const decodedData = await audioCtx.decodeAudioData(buffer);
+		const source = new AudioBufferSourceNode(audioCtx);
+		source.buffer = decodedData;
+		source.connect(audioCtx.destination);
+		source.start(0);
+	} else { //audioData[16] == 0x14
+		console.debug('当前 WAV 为 PCM WAV');
+		let step = 160;
+		for (let i = 0; i < audioData.byteLength; i += step) {
+			let pcm16BitData = decodeCallback(audioData.slice(i, i + step));
+			let pcmFloat32Data = Std.shortToFloatData(pcm16BitData);
+			pcmPlayer.feed(pcmFloat32Data);
+		}
+	}
 }
 
 fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffer())
