@@ -3284,6 +3284,7 @@ const specialSearchFunctions = (function() {
 				},
 				addition:card=>{
 					const value = getSkillFixedDamage(card);
+					if (value <= 0 ) return;
 					let nodeArr = [`${value.bigNumberToString()}固伤`];
 					let skill;
 					if (skill = getCardLeaderSkill(card, [235])) {
@@ -3305,6 +3306,7 @@ const specialSearchFunctions = (function() {
 				},
 				addition:card=>{
 					const value = getSkillAddCombo(card);
+					if (value <= 0 ) return;
 					let nodeArr = [`+${value.bigNumberToString()}C`];
 					let skill;
 					if (skill = getCardLeaderSkill(card, [210])) {
