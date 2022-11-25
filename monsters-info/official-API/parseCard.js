@@ -67,9 +67,10 @@ class Card{
 		card.latentAwakeningId = data[i++]; //潜在觉醒ID
 		card.collabId = data[i++]; //合作ID
 		const flags = data[i++]; //一个旗子？
-		card.unk08 = flags; //未知08
+		card.flags = flags; //未知08
 		card.canAssist = Boolean(flags & 1<<0); //是否能当二技
 		card.enabled = Boolean(flags & 1<<1); //是否已启用
+		card.skillBanner = Boolean(flags & 1<<6); //是否有技能横幅
 		
 		card.types = card.types.filter(t=>t>=0); //type里面去掉-1
 		card.overlay = !Boolean(flags & 1<<3) && //flag有1<<3时，不合并，没有时则判断
@@ -78,7 +79,7 @@ class Card{
 		card.altName = data[i++].split("|").filter(str=>str.length); //替换名字（分类标签）
 		card.limitBreakIncr = data[i++]; //110级增长
 		card.voiceId = data[i++]; //语音觉醒的ID
-		card.blockSkinId = data[i++]; //珠子皮肤ID
+		card.blockSkinOrBgmId = data[i++]; //珠子皮肤ID
 		card.specialAttribute = data[i++]; //特别属性，比如黄龙
 		card.searchFlags = [data[i++], data[i++]]; //队长技搜索类型，解析写在这里会导致文件太大，所以写到前端去了
 		if ((i + 1) < data.length)

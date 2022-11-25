@@ -3819,10 +3819,18 @@ const specialSearchFunctions = (function() {
 				function:cards=>cards.filter(card=>card.attrs.filter(a=>a>=0 && a<6))
 			},
 			{name:"2 attrs are different",otLangName:{chs:"主副属性不一致",cht:"主副屬性不一致"},
-				function:cards=>cards.filter(card=>card.attrs[0]<6 && card.attrs[1]>=0 && card.attrs[0] != card.attrs[1])
+				function:cards=>cards.filter(({attrs:[attr1, attr2]})=>attr1<6 && attr2>=0 && attr1 != attr2)
 			},
 			{name:"Will get Orbs skin",otLangName:{chs:"能获得宝珠皮肤",cht:"能獲得寶珠皮膚"},
-				function:cards=>cards.filter(card=>card.blockSkinId>0)
+				function:cards=>cards.filter(({blockSkinOrBgmId})=>blockSkinOrBgmId>0 && blockSkinOrBgmId<1e4),
+				addition:({blockSkinOrBgmId})=>`ID.${blockSkinOrBgmId}`
+			},
+			{name:"Will get BGM",otLangName:{chs:"能获得背景音乐",cht:"能獲得背景音樂"},
+				function:cards=>cards.filter(({blockSkinOrBgmId})=>blockSkinOrBgmId>=1e4),
+				addition:({blockSkinOrBgmId})=>`ID.${blockSkinOrBgmId}`
+			},
+			{name:"Hava banner when use skill",otLangName:{chs:"使用技能时有横幅",cht:"使用技能時有橫幅"},
+				function:cards=>cards.filter(card=>card.skillBanner)
 			},
 			{name:"All Latent TAMADRA",otLangName:{chs:"所有潜觉蛋龙",cht:"所有潛覺蛋龍"},
 				function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)
