@@ -619,7 +619,7 @@ class PlayerDataCard {
 		//叠加型用他们的经验来表示数量
 		const card = Cards[this.id];
 		this.count = 1;
-		if (card && card.overlay)
+		if (card && card.stacking)
 		{
 			this.count = this.exp;
 			this.exp = 0;
@@ -3827,7 +3827,7 @@ function initialize(event) {
 			mon.sawoken = mSAwokenChoIpt ? parseInt(mSAwokenChoIpt.value, 10) : -1;
 		}
 
-		if (card.overlay || card.types.some(t=>[0,12,14,15].includes(t)) &&
+		if (card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) &&
 			mon.level >= card.maxLevel) { //当4种特殊type的时候是无法297和打觉醒的，但是不能叠加的在未满级时可以
 			mon.plus = [0, 0, 0];
 		} else {
@@ -4483,7 +4483,7 @@ function editBoxChangeMonId(id) {
 	skillDetailOriginal.innerHTML = "";
 	skillDetailOriginal.appendChild(parseSkillDescription(activeskill));
 
-	const t_maxLevel = card.overlay ? 1 : activeskill?.maxLevel; //遇到不能升技的，最大等级强制为1
+	const t_maxLevel = card.stacking ? 1 : activeskill?.maxLevel; //遇到不能升技的，最大等级强制为1
 	skillLevel.max = t_maxLevel;
 	skillLevel.value = t_maxLevel;
 	skillLevel_Max.value = t_maxLevel;
@@ -4509,7 +4509,7 @@ function editBoxChangeMonId(id) {
 	rowSkill.appendChild(frg1);
 	rowLederSkill.appendChild(frg2);
 
-	if (card.overlay || card.types.some(t=>[0,12,14,15].includes(t)) &&
+	if (card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) &&
 		card.maxLevel <= 1) { //当可以叠加时，不能打297和潜觉
 		rowPlus.classList.add("disabled");
 		rowPlus.querySelector(".m-plus-hp").value = 0;

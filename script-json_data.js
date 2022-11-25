@@ -3679,7 +3679,7 @@ const specialSearchFunctions = (function() {
 			},
 			//{name:"",otLangName:{chs:"非8格潜觉",cht:"非8格潛覺"},function:cards=>cards.filter(card=>!card.is8Latent)},
 			{name:"Reincarnation/Super Re..",otLangName:{chs:"转生、超转生进化",cht:"轉生、超轉生進化"},
-				function:cards=>cards.filter(card=>isReincarnated(card))
+				function:cards=>cards.filter(isReincarnated)
 			}, //evoBaseId可能为0
 			//{name:"",otLangName:{chs:"仅超转生进化",cht:"僅超轉生進化"},function:cards=>cards.filter(card=>isReincarnated(card) && !Cards[card.evoBaseId].isUltEvo)},
 			{name:"Super Ult Evo",otLangName:{chs:"超究极进化",cht:"超究極進化"},
@@ -3834,6 +3834,12 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"All Latent TAMADRA",otLangName:{chs:"所有潜觉蛋龙",cht:"所有潛覺蛋龍"},
 				function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)
+			},
+			{name:"Stacked material",otLangName:{chs:"堆叠的素材",cht:"堆疊的素材"},
+				function:cards=>cards.filter(card=>card.stacking),
+			},
+			{name:"Not stacked material",otLangName:{chs:"不堆叠的素材",cht:"不堆疊的素材"},
+				function:cards=>cards.filter(card=>!card.stacking && card.types.some(t=>[0,12,14,15].includes(t))),
 			},
 			{name:"Original Name",otLangName:{chs:"怪物原始名称",cht:"怪物原始名稱"},
 				function:cards=>cards,

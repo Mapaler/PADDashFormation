@@ -92,7 +92,7 @@ fetch("ja-card.json").then(async response=>{
 		card.unk05bin = card.unk05.toString(2);
 		card.unk06bin = card.unk06.toString(2);
 		card.unk07bin = card.unk07.toString(2);
-		card.unk08bin = card.unk08.toString(2); //已知一些flag
+		card.flagsbin = card.flags.toString(2); //已知一些flag
 		return card;
 	});
 });
