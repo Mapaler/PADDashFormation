@@ -6855,7 +6855,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"e2278490e53d95688eb223dd9f9b3ae8"
+		"35fb0133e050344105d372bf34505eae"
 	],
 	[
 		"script-skill-parser.js",
@@ -6867,7 +6867,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"337d1ca9d001ae9aa32f3a678a0ea3fa"
+		"c9a20b6bd18a0114cd6f905bfb6b697b"
 	],
 	[
 		"solo.html",
@@ -6875,11 +6875,11 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"4ed903caecf58e157377f781341d47f0"
+		"c6f9371e004c2a978b539320fefa1f8c"
 	],
 	[
 		"style.css",
-		"7e73196e98955e5591f606e2560cc7a4"
+		"21dd5e9c2b98c0d6c85c1cb584a2bda2"
 	],
 	[
 		"temp.js",
@@ -6891,7 +6891,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/en.css",
-		"010471876fb55dcab194ad1b483f1aa3"
+		"5f3d957700f9f78fa23a897624853a34"
 	],
 	[
 		"languages/en.js",
@@ -6915,7 +6915,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"cb347f8b755508c078b21ec06ff6e6f5"
+		"fdcf992a2ba8301acadbb38719df8f15"
 	],
 	[
 		"languages/ko.js",
@@ -6943,7 +6943,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.css",
-		"6d248ba4ebfc76f57a0c6db5b45c7f0b"
+		"69226218c7ea21c069349defe7fb37ff"
 	],
 	[
 		"languages/zh.js",
@@ -6967,7 +6967,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"b0102fb737cfe9b6be6cf288f28950c7"
+		"4ebdde62e578e4fe0ee2955fd2275955"
 	],
 	[
 		"images/card-frame.svg",
@@ -7067,7 +7067,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-skills.png",
-		"0d2c57f25071fad32a477e69ddceff54"
+		"2af3f785004cf41231be04b1a2bb4c6d"
 	],
 	[
 		"images/icon-switch-leader.png",
