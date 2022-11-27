@@ -7067,7 +7067,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-skills.png",
-		"2af3f785004cf41231be04b1a2bb4c6d"
+		"a4e80cb11ffc6d23d333967430fe6bea"
 	],
 	[
 		"images/icon-switch-leader.png",
