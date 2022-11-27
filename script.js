@@ -1632,9 +1632,6 @@ function initialize() {
 		document.body.classList.add('guide-mod');
 	}
 
-	//const helpLink = controlBox.querySelector(".help-link");
-	//if (location.hostname.includes("gitee")) { helpLink.hostname = "gitee.com"; }
-
 	//▼添加语言列表开始
 	const langSelectDom = controlBox.querySelector(".languages");
 	languageList.forEach(lang =>
@@ -1654,7 +1651,8 @@ function initialize() {
 	const dataSourceOptionArray = Array.from(dataSelectDom.options);
 	dataSourceOptionArray.find(dataOpt => dataOpt.value == currentDataSource.code).selected = true;
 	//添加数据class
-	document.body.classList.add("ds-" + currentDataSource.code);
+	document.body.dataset.gameSource = currentDataSource.code;
+	//document.body.classList.add("ds-" + currentDataSource.code);
 	//▲添加数据来源列表结束
 
 	//设定初始的显示设置

@@ -1,5 +1,4 @@
 ﻿@charset "utf-8";
-@import "icon-en.css";
 .status.loading-check-version .text::before{
 	content: "데이터 버전을 확인 합니다.";
 }
@@ -636,16 +635,4 @@ label[for="qr-data-type-pdchu"]::before {
 	transform: scaleX(0.7);
 	margin: calc(-64px * (1 - 0.7) / 2);
 	width: 64px;
-}
-.badge[data-badge-icon='1']::before,
-.badge[data-badge-icon='20']::before
-{
-	background-position-x: calc(-36px * 2);
-}
-.badge[data-badge-icon='3']::before
-{
-	background-position-x: -36px;
-}
-.icon-skill[data-icon-type="resolve"] {
-	background-position-x: calc(-36px * 2);
 }

@@ -858,6 +858,14 @@ icon.poison-no-effect::after,
 	display: none;
 }
 
+:where(:lang(en), :lang(ko)) :where(
+	.tIf-total-hp .awoken-bind,
+	.tIf-total-move .awoken-bind,
+	.tIf-total-hp .reduce .reduce-scale,
+)::before
+{
+	background-position-x: -20px;
+}
 .reduce-details
 {
 	cursor: pointer;
@@ -4062,4 +4070,20 @@ table .orb-icon
 .icon-skill[data-icon-type="increase-damage-cap"]
 {
 	background-position-y:calc(-36px * 36);
+}
+
+:where(:lang(en), :lang(ko)) .icon-skill:where(
+	[data-icon-type="mass-attack"],
+	[data-icon-type="unbind-awakenings"],
+	[data-icon-type="reduce-damage"],
+	[data-icon-type="damage-absorb"],
+	[data-icon-type="damage-void"],
+){
+	background-position-x: -36px;
+}
+:lang(en) .icon-skill[data-icon-type="resolve"] {
+	background-position-x: calc(-36px * 1);
+}
+:lang(ko) .icon-skill[data-icon-type="resolve"] {
+	background-position-x: calc(-36px * 2);
 }

@@ -1,5 +1,4 @@
 @charset "utf-8";
-@import "icon-en.css";
 .status.loading-check-version .text::before{
 	content: "Checking the data version, please wait...";
 }
@@ -683,14 +682,4 @@ label[for="qr-data-type-pdchu"]::before {
 .player-card .stama::before
 {
 	content: "STA";
-}
-
-.badge[data-badge-icon='1']::before,
-.badge[data-badge-icon='3']::before,
-.badge[data-badge-icon='20']::before
-{
-	background-position-x: -36px;
-}
-.icon-skill[data-icon-type="resolve"] {
-	background-position-x: calc(-36px * 1);
 }

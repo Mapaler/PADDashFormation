@@ -1,5 +1,4 @@
 @charset "utf-8";
-@import "icon-zh.css";
 .status.loading-check-version .text::before{
 	content: "正在检查数据版本，请稍候……";
 }
@@ -633,7 +632,6 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "体力";
 }
-
 
 .edit-box .monsterinfo-box .monster-name,
 .evo-panel-right .monster-name
