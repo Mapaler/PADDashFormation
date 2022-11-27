@@ -3289,83 +3289,6 @@ function initialize() {
 	s_add_show_abilities.onchange = reShowSearch;
 	s_add_show_abilities_with_awoken.onchange = reShowSearch;
 
-	const startSearch = function(cards, customAdditionalFunction = []) {
-		let attr1, attr2;
-		attr1 = returnRadiosValue(s_attr1s); //获取选中单选框的值
-		attr2 = returnRadiosValue(s_attr2s); //获取选中单选框的值
-		attr1 = isNaN(Number(attr1)) ? null : Str2Int(attr1); //将值转为十进制
-		attr2 = isNaN(Number(attr2)) ? null : Str2Int(attr2); //将值转为十进制
-
-		const types = returnCheckBoxsValues(s_types).map(Str2Int);
-		const rares = [
-			returnCheckBoxsValues(s_rareLows).map(Str2Int)[0],
-			returnCheckBoxsValues(s_rareHighs).map(Str2Int)[0],
-		];
-		const sawokens = returnCheckBoxsValues(s_sawokens).map(Str2Int);
-		const awokens = s_awokensIcons.filter(btn => parseInt(btn.getAttribute("data-awoken-count"), 10) > 0).map(btn => {
-			const awokenIndex = parseInt(btn.getAttribute("data-awoken-icon"), 10);
-			return {
-				id: awokenIndex,
-				num: parseInt(btn.getAttribute("data-awoken-count"), 10)
-			};
-		});
-		
-		const options = {
-			cards,
-			attr1, attr2,
-			fixMainColor: s_fixMainColor.checked,
-			types,
-			typeAndOr: s_typeAndOr.checked,
-			rares,
-			awokens,
-			sawokens,
-			equalAk: s_awokensEquivalent.checked,
-			incSawoken: s_includeSuperAwoken.checked,
-			canAssist: s_canAssist.checked,
-			canLv110: s_canLevelLimitBreakthrough.checked,
-			is8Latent: s_have8LatentSlot.checked,
-		};
-
-		let searchResult = searchCards(options);
-
-		//进行特殊附加搜索
-		const specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter")).map(select=>{
-			const indexs = select.value.split("|").map(Number);
-			const funcObj = indexs.length > 1 ? specialSearchFunctions[indexs[0]].functions[indexs[1]] : specialSearchFunctions[indexs[0]];
-			return funcObj;
-		});
-		searchResult = specialFilters.reduce((pre,funcObj)=>
-		{
-			if (!funcObj) return pre;
-			if (funcObj.addition && !customAdditionalFunction.includes(funcObj.addition)) customAdditionalFunction.push(funcObj.addition); //如果有附加显示，则添加到列表
-			return funcObj.function(pre); //结果进一步筛选
-		}, searchResult);
-
-		//储存设置用于页面刷新的状态恢复
-		options.specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter"))
-			.map(select=>select.value.split("|").map(Number));
-
-		sessionStorage.setItem('search-options',JSON.stringify(options, [
-			"attr1",
-			"attr2",
-			"fixMainColor",
-			"types",
-			"typeAndOr",
-			"rares",
-			"awokens",
-			"sawokens",
-			"equalAk",
-			"incSawoken",
-			"canAssist",
-			"canLv110",
-			"is8Latent",
-			"specialFilters",
-		]));
-		
-		//显示搜索结果
-		showSearch(searchResult, customAdditionalFunction);
-	};
-	searchBox.startSearch = startSearch;
 	searchBox.recoverySearchStatus = function(options) {
 		(s_attr1s.find(opt=>parseInt(opt.value) == options.attrs[0]) || s_attr1s[0]).checked = true;
 		(s_attr2s.find(opt=>parseInt(opt.value) == options.attrs[1]) || s_attr2s[0]).checked = true;
@@ -3408,8 +3331,77 @@ function initialize() {
 			filterUl.value = filter.join("|");
 		}
 	}
-	searchStart.onclick = function() {
-		startSearch(Cards);
+	searchStart.onclick = function(event) {
+		let customAdditionalFunction = [];
+		let attr1 = Number(returnRadiosValue(s_attr1s)) || 0;
+		let attr2 = Number(returnRadiosValue(s_attr2s)) || 0;
+
+		const types = returnCheckBoxsValues(s_types).map(Str2Int);
+		const rares = [
+			returnCheckBoxsValues(s_rareLows).map(Str2Int)[0],
+			returnCheckBoxsValues(s_rareHighs).map(Str2Int)[0],
+		];
+		const sawokens = returnCheckBoxsValues(s_sawokens).map(Str2Int);
+		const awokens = s_awokensIcons.filter(btn => parseInt(btn.getAttribute("data-awoken-count"), 10) > 0).map(btn => {
+			return {
+				id: parseInt(btn.getAttribute("data-awoken-icon"), 10),
+				num: parseInt(btn.getAttribute("data-awoken-count"), 10)
+			};
+		});
+		
+		const options = {
+			attr:[attr1, attr2],
+			fixMainColor: s_fixMainColor.checked,
+			types,
+			typeAndOr: s_typeAndOr.checked,
+			rares,
+			awokens,
+			sawokens,
+			equalAk: s_awokensEquivalent.checked,
+			incSawoken: s_includeSuperAwoken.checked,
+			canAssist: s_canAssist.checked,
+			canLv110: s_canLevelLimitBreakthrough.checked,
+			is8Latent: s_have8LatentSlot.checked,
+		};
+
+		let searchResult = searchCards(Cards, options);
+
+		//进行特殊附加搜索
+		const specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter")).map(select=>{
+			const indexs = select.value.split("|").map(Number);
+			const funcObj = indexs.length > 1 ? specialSearchFunctions[indexs[0]].functions[indexs[1]] : specialSearchFunctions[indexs[0]];
+			return funcObj;
+		});
+		searchResult = specialFilters.reduce((pre,funcObj)=>
+		{
+			if (!funcObj) return pre;
+			if (funcObj.addition && !customAdditionalFunction.includes(funcObj.addition)) customAdditionalFunction.push(funcObj.addition); //如果有附加显示，则添加到列表
+			return funcObj.function(pre); //结果进一步筛选
+		}, searchResult);
+
+		//储存设置用于页面刷新的状态恢复
+		options.specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter"))
+			.map(select=>select.value.split("|").map(Number));
+
+		sessionStorage.setItem('search-options',JSON.stringify(options, [
+			"attr1",
+			"attr2",
+			"fixMainColor",
+			"types",
+			"typeAndOr",
+			"rares",
+			"awokens",
+			"sawokens",
+			"equalAk",
+			"incSawoken",
+			"canAssist",
+			"canLv110",
+			"is8Latent",
+			"specialFilters",
+		]));
+		
+		//显示搜索结果
+		showSearch(searchResult, customAdditionalFunction);
 	};
 	searchClose.onclick = function() {
 		searchBox.classList.add(className_displayNone);
@@ -4080,7 +4072,7 @@ function changeid(mon, monDom, latentDom, assist) {
 		monDom.setAttribute("data-cards-pic-y", Math.floor(idxInPage / 10)); //添加Y方向序号
 
 		monDom.querySelector(".property").setAttribute("data-property", card.attrs[0]); //主属性
-		let subAttribute = card.attrs[1]; //正常的副属性
+		let subAttribute = card.attrs[1] ?? 6; //正常的副属性
 		let assistCard = Cards[assist?.id];
 		let changeAttr;
 		if (assistCard && assistCard.awakenings.includes(49) &&  //如果传入了辅助武器

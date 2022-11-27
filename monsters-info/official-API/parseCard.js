@@ -74,8 +74,9 @@ class Card{
 			card.types.some(t=>[0,12,14,15].includes(t)); //0進化用;12能力覺醒用;14強化合成用;15販賣用默认合并
 		card.is8Latent = Boolean(flags & 1<<5); //是否支持8个潜觉
 		card.skillBanner = Boolean(flags & 1<<6); //是否有技能横幅
-		
-		card.types = card.types.filter(t=>t>=0); //type里面去掉-1
+		card.attrs = card.attrs.filter(n=>n>=0); //attr里面去掉-1
+		card.types = card.types.filter(n=>n>=0); //type里面去掉-1
+
 		card.altName = data[i++].split("|").filter(str=>str.length); //替换名字（分类标签）
 		card.limitBreakIncr = data[i++]; //110级增长
 		card.voiceId = data[i++]; //语音觉醒的ID

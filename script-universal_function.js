@@ -676,37 +676,40 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 	}
 }
 //搜索卡片用
-function searchCards({cards, attr1, attr2, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent}) {
+function searchCards(cards, {attr:[attr1, attr2], fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent}) {
 	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	if (canAssist) cardsRange = cardsRange.filter(card=>card.canAssist);
 	if (canLv110) cardsRange = cardsRange.filter(card=>card.limitBreakIncr>0);
 	if (is8Latent) cardsRange = cardsRange.filter(card=>card.is8Latent);
 	//属性
-	if (attr1 != null && attr1 === attr2 || //主副属性一致并不为空
-		(attr1 === 6 && attr2 === -1)) //主副属性都为“无”
-	{ //当两个颜色相同时，主副一样颜色的只需判断一次
-		cardsRange = cardsRange.filter(c => c.attrs[0] === attr1 && c.attrs[1] === attr2);
-	}
-	else if (fixMainColor) //如果固定了顺序
-	{
-		const a1IsNull = attr1 === null,
-			a2IsNull = attr2 === null;
-		if (!a1IsNull || !a2IsNull) { //当a1、a2任一不为null（任意）时才需要筛选
-			cardsRange = cardsRange.filter(c =>
-				(a2IsNull ? c.attrs[0] === 6 && c.attrs[1] === attr1 : false) || //当2为随机，只有属性1时，也专门搜只有副属性=属性1的怪物
-				(a1IsNull ? true : c.attrs[0] === attr1) &&
-				(a2IsNull ? true : c.attrs[1] === attr2)
+	const anyAttr = 0b1111101;
+	const anyA1 = (attr1 & anyAttr) == anyAttr, anyA2 = (attr2 & anyAttr) == anyAttr;
+	if (!anyA1 || !anyA2) { //当a1、a2任一不为所有颜色时才需要筛选属性
+		const attr1s = flags(attr1), attr2s = flags(attr2);
+		const nullAttrArr = [undefined,-1,6];
+		if (fixMainColor) //如果固定了顺序
+		{
+			cardsRange = cardsRange.filter(({attrs:[cAttr1, cAttr2]}) =>
+				(anyA2 ? cAttr1 === 6 && attr1s.includes(cAttr2) : false) || //当A2为随机，只有属性1时，也专门搜只有副属性=属性1的怪物
+				(anyA1 ? true : attr1s.includes(cAttr1)) && //当A1不为随机，保证有1
+				(anyA2 ? true : attr2s.includes(cAttr2) || //当A2不为随机，保证有2
+					attr2s.includes(6) && nullAttrArr.includes(cAttr2)) //当A2有6时，副属性3种没有的数值都算
 			);
 		}
-	}
-	else //不限定顺序时
-	{
-		const search_attrs = [attr1, attr2].filter(a => a != null && a >= 0 && a <= 5); //所有非空属性
-		const aNone = attr1 === 6 || attr2 === -1; //是否有“无”属性
-		cardsRange = cardsRange.filter(c =>
-			search_attrs.every(a => c.attrs.includes(a)) &&
-			(aNone ? (c.attrs.includes(6) || c.attrs.includes(-1)) : true)
-		);
+		else //不限定顺序时
+		{
+			cardsRange = cardsRange.filter(({attrs:[cAttr1, cAttr2]}) => {
+				let hasA1 = anyA1 || attr1s.includes(cAttr1); //如果任意A1或者有A1
+				if (hasA1) { //直接判断A2即可
+					return (anyA2 ? true : attr2s.includes(cAttr2) || //当A2不为随机，保证有2
+						attr2s.includes(6) && nullAttrArr.includes(cAttr2)); //当2有6时，副属性3种没有的数值都算
+				} else if (attr1s.includes(cAttr2) || attr1s.includes(6) && nullAttrArr.includes(cAttr2)) { //如果是A1有2
+					return anyA2 ? true : attr2s.includes(cAttr1); //当A2不为随机，保证有1
+				} else {
+					return false;
+				}
+			});
+		}
 	}
 	//类型
 	if (types.length > 0) {
