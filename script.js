@@ -3208,7 +3208,6 @@ function initialize() {
 		const idArr = searchMonList.originalHeads?.map(head=>head.card.id) ?? [];
 		locationURL.searchParams.set('show-search', JSON.stringify(idArr));
 		showAnyStringDialog.show(locationURL.toString());
-		//prompt(undefined, locationURL.toString());
 	}
 	const showAnyStringDialog = settingBox.querySelector(".dialog-show-any-string");
 	showAnyStringDialog.initialing = function(str) {
@@ -3419,15 +3418,17 @@ function initialize() {
 
 		const optionJSON = JSON.stringify(options);
 		sessionStorage.setItem('search-options', optionJSON);
-		// if (event.ctrlKey) {
-		// 	const locationURL = new URL(location);
-		// 	locationURL.searchParams.set('search-options', optionJSON);
-		// 	locationURL.searchParams.set('show-search', JSON.stringify(searchResult.map(card=>card.id)));
-		// 	history.replaceState(null, null, locationURL);
-		// }
 		
 		//显示搜索结果
 		showSearch(searchResult, customAdditionalFunction);
+		
+		if (location.search.includes("search-options=")) {
+			//去掉URL内的搜索内容分享，避免干扰
+			const locationURL = new URL(location);
+			locationURL.searchParams.delete('search-options');
+			locationURL.searchParams.delete('show-search');
+			history.replaceState(null, null, locationURL);
+		}
 	};
 	searchClose.onclick = function() {
 		searchBox.classList.add(className_displayNone);
@@ -3511,12 +3512,11 @@ function initialize() {
 					const locationURL = new URL(location);
 					if (newId === 0) {
 						locationURL.searchParams.delete('id');
-						history.pushState(state, null, locationURL);
 					}else
 					{
 						locationURL.searchParams.set('id', newId);
-						history.pushState(state, null, locationURL);
 					}
+					history.pushState(state, null, locationURL);
 				}
 
 				editBoxChangeMonId(newId);
