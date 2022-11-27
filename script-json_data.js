@@ -2031,7 +2031,13 @@ const specialSearchFunctions = (function() {
 					const searchTypeArray = [93, 227];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					return skill;
-				})
+				}),
+				addition:card=>{
+					const searchTypeArray = [93, 227];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					return skill.type == 93 ? '换自身' : '换最后队员';
+				}
 			},
 			{name:"Increase Damage Cap",otLangName:{chs:"增加伤害上限 buff",cht:"增加傷害上限 buff"},
 				function:cards=>{
@@ -3727,64 +3733,13 @@ const specialSearchFunctions = (function() {
 				}
 				})
 			},
-			/*
-			{name:"3 same Killer Awoken, or 2 with same latent",otLangName:{chs:"3个相同杀觉醒，或2个杀觉醒并可打相同潜觉",cht:"3個相同殺覺醒，或2個殺覺醒並可打相同潛覺"},
-				function:cards=>cards.filter(card=>{
-				const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length>=2);
-				if (hasAwokenKiller)
-				{ //大于2个杀的进行判断
-					if (card.awakenings.filter(ak=>ak===hasAwokenKiller.awoken).length>=3)
-					{ //大于3个杀的直接过
-						return true;
-					}else
-					{ //2个杀的
-						const isAllowLatent = card.types.filter(i=>
-								i>=0 //去掉-1的type
-							).map(type=>
-								type_allowable_latent[type] //得到允许打的潜觉杀
-							).some(ls=>
-								ls.includes(hasAwokenKiller.latent) //判断是否有这个潜觉杀
-							);
-						return isAllowLatent
-					}
-				}else
-				{
-					return false;
-				}
-				})
-			},
-			{name:"4 same Killer Awoken(include super awoken), or 3 with same latent",otLangName:{chs:"4个相同杀觉醒（含超觉），或相同潜觉",cht:"4個相同殺覺醒（含超覺），或相同潛覺"},
-				function:cards=>cards.filter(card=>{
-				const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length+(card.superAwakenings.includes(type.awoken)?1:0)>=3);
-				if (hasAwokenKiller)
-				{ //大于2个杀的进行判断
-					if (card.awakenings.filter(ak=>ak===hasAwokenKiller.awoken).length+(card.superAwakenings.includes(hasAwokenKiller.awoken)?1:0)>=4)
-					{ //大于3个杀的直接过
-						return true;
-					}else
-					{ //2个杀的
-						const isAllowLatent = card.types.filter(i=>
-								i>=0 //去掉-1的type
-							).map(type=>
-								type_allowable_latent[type] //得到允许打的潜觉杀
-							).some(ls=>
-								ls.includes(hasAwokenKiller.latent) //判断是否有这个潜觉杀
-							);
-						return isAllowLatent
-					}
-				}else
-				{
-					return false;
-				}
-				})
-			},
-			{name:"8P dedicated hostile skills",otLangName:{chs:"8P专用敌对技能",cht:"8P專用敵對技能"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [1000];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				})
-			},*/
+			// {name:"8P dedicated hostile skills",otLangName:{chs:"8P专用敌对技能",cht:"8P專用敵對技能"},
+			// 	function:cards=>cards.filter(card=>{
+			// 		const searchTypeArray = [1000];
+			// 		const skill = getCardActiveSkill(card, searchTypeArray);
+			// 		return skill;
+			// 	})
+			// },
 		]},
 		{group:true,name:"======Others Search======",otLangName:{chs:"======其他搜索======",cht:"======其他搜索======"}, functions: [
 			{name:"Water Att. & Attacker Type(Tanjiro)",otLangName:{chs:"攻击型或水属性（炭治郎队员）",cht:"攻擊型或水屬性（炭治郎隊員）"},
@@ -3795,9 +3750,6 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Level limit unable break",otLangName:{chs:"不能突破等级限制",cht:"不能突破等級限制"},
 				function:cards=>cards.filter(card=>card.limitBreakIncr===0)
-			},
-			{name:"Able to lv110",otLangName:{chs:"能突破等级限制",cht:"能突破等級限制"},
-				function:cards=>cards.filter(card=>card.limitBreakIncr > 0)
 			},
 			{name:"Able to lv110, but no Super Awoken",otLangName:{chs:"能突破等级限制但没有超觉醒",cht:"能突破等級限制但沒有超覺醒"},
 				function:cards=>cards.filter(card=>card.limitBreakIncr > 0 && card.superAwakenings.length == 0)

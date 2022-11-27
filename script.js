@@ -2977,7 +2977,8 @@ function initialize() {
 
 	const s_awokensEquivalent = searchBox.querySelector("#consider-equivalent-awoken"); //搜索等效觉醒
 	const s_canAssist = searchBox.querySelector("#can-assist"); //只搜索辅助
-	const s_noHenshin = searchBox.querySelector("#no-henshin"); //只搜索非变身
+	const s_canLevelLimitBreakthrough = searchBox.querySelector("#can-level-limit-breakthrough"); //可以突破等级上限
+	const s_have8LatentSlot = searchBox.querySelector("#have-8-latent-slot"); //有8格潜觉
 
 	//强调箱子拥有开关
 	const s_boxHave = document.getElementById("box-have");
@@ -3295,32 +3296,37 @@ function initialize() {
 		attr1 = isNaN(Number(attr1)) ? null : Str2Int(attr1); //将值转为十进制
 		attr2 = isNaN(Number(attr2)) ? null : Str2Int(attr2); //将值转为十进制
 
-		const typesFilter = returnCheckBoxsValues(s_types).map(Str2Int);
-		const rareFilter = [
+		const types = returnCheckBoxsValues(s_types).map(Str2Int);
+		const rares = [
 			returnCheckBoxsValues(s_rareLows).map(Str2Int)[0],
 			returnCheckBoxsValues(s_rareHighs).map(Str2Int)[0],
 		];
-		const sawokensFilter = returnCheckBoxsValues(s_sawokens).map(Str2Int);
-		const awokensFilter = s_awokensIcons.filter(btn => parseInt(btn.getAttribute("data-awoken-count"), 10) > 0).map(btn => {
+		const sawokens = returnCheckBoxsValues(s_sawokens).map(Str2Int);
+		const awokens = s_awokensIcons.filter(btn => parseInt(btn.getAttribute("data-awoken-count"), 10) > 0).map(btn => {
 			const awokenIndex = parseInt(btn.getAttribute("data-awoken-icon"), 10);
 			return {
 				id: awokenIndex,
 				num: parseInt(btn.getAttribute("data-awoken-count"), 10)
 			};
 		});
-		let searchResult = searchCards(cards,
+		
+		const options = {
+			cards,
 			attr1, attr2,
-			s_fixMainColor.checked,
-			typesFilter,
-			s_typeAndOr.checked,
-			rareFilter,
-			awokensFilter,
-			sawokensFilter,
-			s_awokensEquivalent.checked,
-			s_includeSuperAwoken.checked,
-			s_canAssist.checked,
-			s_noHenshin.checked,
-		);
+			fixMainColor: s_fixMainColor.checked,
+			types,
+			typeAndOr: s_typeAndOr.checked,
+			rares,
+			awokens,
+			sawokens,
+			equalAk: s_awokensEquivalent.checked,
+			incSawoken: s_includeSuperAwoken.checked,
+			canAssist: s_canAssist.checked,
+			canLv110: s_canLevelLimitBreakthrough.checked,
+			is8Latent: s_have8LatentSlot.checked,
+		};
+
+		let searchResult = searchCards(options);
 
 		//进行特殊附加搜索
 		const specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter")).map(select=>{
@@ -3335,23 +3341,28 @@ function initialize() {
 			return funcObj.function(pre); //结果进一步筛选
 		}, searchResult);
 
-		const options = {};
-		options.attrs = [attr1, attr2];
-		options.fixMainColor = s_fixMainColor.checked;
-		options.types = typesFilter;
-		options.typeAndOr = s_typeAndOr.checked;
-		options.rares = rareFilter;
-		options.awokens = awokensFilter;
-		options.sawokens = sawokensFilter;
-		options.awokensEquivalent = s_awokensEquivalent.checked;
-		options.includeSuperAwoken = s_includeSuperAwoken.checked;
-		options.canAssist = s_canAssist.checked;
-		options.noHenshin = s_noHenshin.checked;
+		//储存设置用于页面刷新的状态恢复
 		options.specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter"))
 			.map(select=>select.value.split("|").map(Number));
 
-		sessionStorage.setItem('search-options',JSON.stringify(options));
+		sessionStorage.setItem('search-options',JSON.stringify(options, [
+			"attr1",
+			"attr2",
+			"fixMainColor",
+			"types",
+			"typeAndOr",
+			"rares",
+			"awokens",
+			"sawokens",
+			"equalAk",
+			"incSawoken",
+			"canAssist",
+			"canLv110",
+			"is8Latent",
+			"specialFilters",
+		]));
 		
+		//显示搜索结果
 		showSearch(searchResult, customAdditionalFunction);
 	};
 	searchBox.startSearch = startSearch;
@@ -3383,7 +3394,8 @@ function initialize() {
 		s_awokensEquivalent.checked = options.awokensEquivalent;
 		s_includeSuperAwoken.checked = options.includeSuperAwoken;
 		s_canAssist.checked = options.canAssist;
-		s_noHenshin.checked = options.noHenshin;
+		s_canLevelLimitBreakthrough.checked = options.canLevelLimitBreakthrough;
+		s_have8LatentSlot.checked = options.have8LatentSlot;
 
 		const specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter"));
 		//将筛选个数增加到需要的个数
@@ -3415,7 +3427,8 @@ function initialize() {
 		specialClear.onclick();
 
 		s_canAssist.checked = false;
-		s_noHenshin.checked = false;
+		s_canLevelLimitBreakthrough.checked = false;
+		s_have8LatentSlot.checked = false;
 		
 		searchMonList.originalHeads = null;
 		searchResultCount.setAttribute("data-search-result-count", 0);

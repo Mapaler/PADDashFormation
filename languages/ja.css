@@ -339,9 +339,6 @@ label[for="default-level"]::after
 .search-box .consider-equivalent-awoken-label::after{
 	content: "同時に同等の覚醒を検索";
 }
-.search-box .can-assist-label::after{
-	content: "アシスト可能";
-}
 .search-box .include-super-awoken-label::after{
 	content: "超覚醒を含む";
 }
@@ -407,9 +404,16 @@ label[for="default-level"]::after
 .search-box .fast-switch::before {
     content: "クイックスイッチ:";
 }
-label[for="no-henshin"]::after
+label[for="can-assist"]::after{
+	content: "アシスト可能";
+}
+label[for="can-level-limit-breakthrough"]::after
 {
-	content: "非変身";
+	content: "レベル限界突破可能";
+}
+label[for="have-8-latent-slot"]::after
+{
+	content: "8格潜在覚醒";
 }
 label[for="box-have"]::after
 {

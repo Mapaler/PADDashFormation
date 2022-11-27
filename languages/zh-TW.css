@@ -343,9 +343,6 @@ label[for="default-level"]::after
 .search-box .consider-equivalent-awoken-label::after{
 	content: "同時搜索等效覺醒";
 }
-.search-box .can-assist-label::after{
-	content: "可以作爲輔助";
-}
 .search-box .include-super-awoken-label::after{
 	content: "包括超覺醒";
 }
@@ -411,9 +408,16 @@ label[for="default-level"]::after
 .search-box .fast-switch::before {
     content: "快速開關：";
 }
-label[for="no-henshin"]::after
+label[for="can-assist"]::after{
+	content: "可以作爲輔助";
+}
+label[for="can-level-limit-breakthrough"]::after
 {
-	content: "非變身";
+	content: "可以突破等級上限";
+}
+label[for="have-8-latent-slot"]::after
+{
+	content: "有8格潛覺";
 }
 label[for="box-have"]::after
 {

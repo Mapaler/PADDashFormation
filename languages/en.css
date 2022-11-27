@@ -345,9 +345,6 @@ label[for="default-level"]::after
 .search-box .consider-equivalent-awoken-label::after{
 	content: "Search for Equivalent Awoken";
 }
-.search-box .can-assist-label::after{
-	content: "Can be assist";
-}
 .search-box .include-super-awoken-label::after{
 	content: "Including Super Awoken";
 }
@@ -413,9 +410,16 @@ label[for="default-level"]::after
 .search-box .fast-switch::before {
     content: "Quick switch:";
 }
-label[for="no-henshin"]::after
+label[for="can-assist"]::after{
+	content: "Can be assist";
+}
+label[for="can-level-limit-breakthrough"]::after
 {
-	content: "Not Henshin";
+	content: "Level limit can be Breakthrough";
+}
+label[for="have-8-latent-slot"]::after
+{
+	content: "Have 8 latent blocks";
 }
 label[for="box-have"]::after
 {

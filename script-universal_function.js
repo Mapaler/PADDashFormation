@@ -676,10 +676,11 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 	}
 }
 //搜索卡片用
-function searchCards(cards, attr1, attr2, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, noHenshin) {
+function searchCards({cards, attr1, attr2, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent}) {
 	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	if (canAssist) cardsRange = cardsRange.filter(card=>card.canAssist);
-	if (noHenshin) cardsRange = cardsRange.filter(card=>!Array.isArray(card.henshinFrom) || card.limitBreakIncr);
+	if (canLv110) cardsRange = cardsRange.filter(card=>card.limitBreakIncr>0);
+	if (is8Latent) cardsRange = cardsRange.filter(card=>card.is8Latent);
 	//属性
 	if (attr1 != null && attr1 === attr2 || //主副属性一致并不为空
 		(attr1 === 6 && attr2 === -1)) //主副属性都为“无”
