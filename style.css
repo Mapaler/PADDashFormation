@@ -281,12 +281,17 @@ ul{
 	content: "关闭";
 }
 */
+.dialog-show-any-string {
+	width: 400px;
+	top: 100px;
+	position: fixed;
+}
 .dialog-search-string
 {
 	width: 260px;
 }
-.dialog-search-string .string-copy,
-.dialog-search-string .string-search
+.dialog .string-copy,
+.dialog .string-search
 {
 	box-sizing: border-box;
 	width: 45px;
@@ -298,23 +303,22 @@ ul{
 	border-radius: 5px;
 	padding: 0;
 }
-.dialog-search-string .string-copy::before
+.dialog .string-copy::before
 {
 	content: "📋";
 }
-.dialog-search-string .string-search::before
+.dialog .string-search::before
 {
 	content: "🔍";
 }
-.dialog-search-string .string-value
-{
-	box-sizing: border-box;
-	width: calc(100% - 50px * 2);
-}
-.dialog-search-string .additional-string .string-value
+.dialog .string-value
 {
 	box-sizing: border-box;
 	width: calc(100% - 50px * 1);
+}
+.dialog .additional-string .string-value
+{
+	width: calc(100% - 50px * 2);
 }
 
 /*单个怪物*/

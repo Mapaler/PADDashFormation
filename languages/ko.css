@@ -429,6 +429,9 @@ label[for="have-8-latent-slot"]::after
 .control-div .search-close::before{
 	content: "찾기 닫기";
 }
+.control-div .search-share::before{
+	content: "검색 공유하기";
+}
 .dialog-search-string .dialog-title::before
 {
 	content: "태그로 검색";

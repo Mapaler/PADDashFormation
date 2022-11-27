@@ -1366,7 +1366,7 @@ function reloadFormationData(event) {
 		} catch (error) {
 			return null;
 		}
-	})(sessionStorage.getItem('search-options'));
+	})(getQueryString('search-options') || sessionStorage.getItem('search-options'));
 	if (searchOptions) {
 		editBox?.querySelector(".search-box")?.recoverySearchStatus(searchOptions);
 	}
@@ -2421,7 +2421,7 @@ function initialize() {
 
 	//显示HP的详细值
 	const hpDetailDialog = formationBox.querySelector(".dialog-hp-detail");
-	hpDetailDialog.show = function(reduceAttrRanges, tHP, tHPNoAwoken)
+	hpDetailDialog.initialing = function(reduceAttrRanges, tHP, tHPNoAwoken)
 	{
 		const dialogContent = this.querySelector(".dialog-content");
 		const fragment = document.createDocumentFragment();
@@ -2501,14 +2501,10 @@ function initialize() {
 		
 		dialogContent.innerHTML = "";
 		dialogContent.appendChild(fragment);
-		this.classList.remove(className_displayNone);
 	}
-	hpDetailDialog.close = function()
-	{
-		this.classList.add(className_displayNone);
-	}
-	const hpDetailDialog_Close = hpDetailDialog.querySelector(".dialog-close");
-	hpDetailDialog_Close.onclick = function(){hpDetailDialog.close();};
+	//初始化Dialog
+	dialogInitialing(hpDetailDialog);
+
 	const reduceDetailsBars = Array.from(formationBox.querySelectorAll(".tIf-total-hp .reduce-details"));
 	reduceDetailsBars.forEach(bar => {
 		bar.onclick = function(){
@@ -2518,7 +2514,7 @@ function initialize() {
 	
 	//设置地下城倍率
 	const dungeonEnchanceDialog = document.body.querySelector(".dialog-dungeon-enchance");
-	dungeonEnchanceDialog.show = function(formation)
+	dungeonEnchanceDialog.initialing = function(formation)
 	{
 		const dialogContent = this.querySelector(".dialog-content");
 		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
@@ -2542,9 +2538,8 @@ function initialize() {
 
 		this.classList.remove(className_displayNone);
 	}
-	dungeonEnchanceDialog.close = function(){
-		this.classList.add(className_displayNone);
-	}
+	//初始化Dialog
+	dialogInitialing(dungeonEnchanceDialog);
 	const dungeonEnchanceDialogConfirm = dungeonEnchanceDialog.querySelector(".dialog-confirm");
 	dungeonEnchanceDialogConfirm.onclick = function(){
 		const dialogContent = dungeonEnchanceDialog.querySelector(".dialog-content");
@@ -2667,12 +2662,14 @@ function initialize() {
 	{
 		input.focus(); //设input为焦点
 		input.select(); //选择全部
-		if (document.execCommand('copy')) {
+		if (navigator?.clipboard?.writeText) { //优先使用新API
+			navigator.clipboard.writeText(input.value);
+		} else if (document.execCommand('copy')) {
 			document.execCommand('copy');
 		}
 		//input.blur(); //取消焦点
 	}
-	stringSearchDialog.show = function(originalStrArr = [], additionalStrArr = [])
+	stringSearchDialog.initialing = function(originalStrArr = [], additionalStrArr = [])
 	{
 		const stringSearchContent = this.querySelector(".dialog-content");
 		const fragment = document.createDocumentFragment();
@@ -2713,14 +2710,30 @@ function initialize() {
 		}
 		stringSearchContent.innerHTML = "";
 		stringSearchContent.appendChild(fragment);
-		this.classList.remove(className_displayNone);
 	}
 	stringSearchDialog.close = function()
 	{
 		this.classList.add(className_displayNone);
 	}
-	const stringSearchDialog_Close = stringSearchDialog.querySelector(".dialog-close");
-	stringSearchDialog_Close.onclick = function(){stringSearchDialog.close();};
+
+	function dialogShowFunction(...arg){
+		this?.initialing(...arg); //自身初始化
+		this.classList.remove(className_displayNone);
+	};
+	function dialogCloseFunction(){
+		this.classList.add(className_displayNone);
+	};
+	function dialogCloseButtonFunction(){
+		this.parentElement.parentElement.close();
+	};
+	function dialogInitialing(dialog){
+		dialog.show = dialogShowFunction;
+		dialog.close = dialogCloseFunction;
+		const closeButton = dialog.querySelector(".dialog-close");
+		closeButton.onclick = dialogCloseButtonFunction;
+	}
+	//初始化Dialog
+	dialogInitialing(stringSearchDialog);
 
 	const mAltName = smonsterinfoBox.querySelector(".monster-altName");
 	mAltName.onclick = function() { //搜索合作
@@ -3186,7 +3199,27 @@ function initialize() {
 	const searchStart = s_controlDiv.querySelector(".search-start");
 	const searchClose = s_controlDiv.querySelector(".search-close");
 	const searchClear = s_controlDiv.querySelector(".search-clear");
-
+	const searchShare = s_controlDiv.querySelector(".search-share");
+	searchShare.onclick = function() {
+		const options = searchBox.getSearchOptions();
+		const optionJSON = JSON.stringify(options);
+		const locationURL = new URL(location);
+		locationURL.searchParams.set('search-options', optionJSON);
+		const idArr = searchMonList.originalHeads?.map(head=>head.card.id) ?? [];
+		locationURL.searchParams.set('show-search', JSON.stringify(idArr));
+		showAnyStringDialog.show(locationURL.toString());
+		//prompt(undefined, locationURL.toString());
+	}
+	const showAnyStringDialog = settingBox.querySelector(".dialog-show-any-string");
+	showAnyStringDialog.initialing = function(str) {
+		const ipt = this.querySelector(".string-value");
+		ipt.value = str;
+	}
+	showAnyStringDialog.querySelector('.string-copy').onclick = function(){
+		copyString(showAnyStringDialog.querySelector(".string-value"));
+	}
+	//初始化Dialog
+	dialogInitialing(showAnyStringDialog);
 
 	function returnCheckedInput(ipt) {
 		return ipt.checked;
@@ -3331,8 +3364,7 @@ function initialize() {
 			filterUl.value = filter.join("|");
 		}
 	}
-	searchStart.onclick = function(event) {
-		let customAdditionalFunction = [];
+	searchBox.getSearchOptions = function(){
 		let attr1 = Number(returnRadiosValue(s_attr1s)) || 0;
 		let attr2 = Number(returnRadiosValue(s_attr2s)) || 0;
 
@@ -3350,7 +3382,7 @@ function initialize() {
 		});
 		
 		const options = {
-			attr:[attr1, attr2],
+			attrs:[attr1, attr2],
 			fixMainColor: s_fixMainColor.checked,
 			types,
 			typeAndOr: s_typeAndOr.checked,
@@ -3362,16 +3394,22 @@ function initialize() {
 			canAssist: s_canAssist.checked,
 			canLv110: s_canLevelLimitBreakthrough.checked,
 			is8Latent: s_have8LatentSlot.checked,
+			specialFilters: Array.from(specialFilterUl.querySelectorAll(".special-filter"))
+			.map(select=>select.value.split("|").map(Number)) //储存设置用于页面刷新的状态恢复
 		};
+		return options;
+	}
+	searchStart.onclick = function(event) {
+		let customAdditionalFunction = [];
+
+		const options = searchBox.getSearchOptions();
 
 		let searchResult = searchCards(Cards, options);
 
 		//进行特殊附加搜索
-		const specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter")).map(select=>{
-			const indexs = select.value.split("|").map(Number);
-			const funcObj = indexs.length > 1 ? specialSearchFunctions[indexs[0]].functions[indexs[1]] : specialSearchFunctions[indexs[0]];
-			return funcObj;
-		});
+		const specialFilters = options.specialFilters.map(([name1, name2])=>
+			name2 !== undefined ? specialSearchFunctions[name1].functions[name2] : specialSearchFunctions[name1]
+		);
 		searchResult = specialFilters.reduce((pre,funcObj)=>
 		{
 			if (!funcObj) return pre;
@@ -3379,26 +3417,14 @@ function initialize() {
 			return funcObj.function(pre); //结果进一步筛选
 		}, searchResult);
 
-		//储存设置用于页面刷新的状态恢复
-		options.specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter"))
-			.map(select=>select.value.split("|").map(Number));
-
-		sessionStorage.setItem('search-options',JSON.stringify(options, [
-			"attr1",
-			"attr2",
-			"fixMainColor",
-			"types",
-			"typeAndOr",
-			"rares",
-			"awokens",
-			"sawokens",
-			"equalAk",
-			"incSawoken",
-			"canAssist",
-			"canLv110",
-			"is8Latent",
-			"specialFilters",
-		]));
+		const optionJSON = JSON.stringify(options);
+		sessionStorage.setItem('search-options', optionJSON);
+		// if (event.ctrlKey) {
+		// 	const locationURL = new URL(location);
+		// 	locationURL.searchParams.set('search-options', optionJSON);
+		// 	locationURL.searchParams.set('show-search', JSON.stringify(searchResult.map(card=>card.id)));
+		// 	history.replaceState(null, null, locationURL);
+		// }
 		
 		//显示搜索结果
 		showSearch(searchResult, customAdditionalFunction);
@@ -3480,7 +3506,7 @@ function initialize() {
 				
 				if (isGuideMod)
 				{
-					const idArr = searchMonList.originalHeads ? searchMonList.originalHeads.map(head=>head.card.id) : [];
+					const idArr = searchMonList.originalHeads?.map(head=>head.card.id) ?? [];
 					const state = {searchArr:idArr,mid:newId};
 					const locationURL = new URL(location);
 					if (newId === 0) {

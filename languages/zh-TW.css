@@ -441,6 +441,9 @@ label[for="box-have"]::after
 .control-div .search-close::before{
 	content: "關閉搜索";
 }
+.control-div .search-share::before{
+	content: "分享搜索";
+}
 .dialog-search-string .dialog-title::before
 {
 	content: "以標簽搜索";

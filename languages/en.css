@@ -443,9 +443,12 @@ label[for="box-have"]::after
 .control-div .search-close::before{
 	content: "Close Search Panel";
 }
+.control-div .search-share::before{
+	content: "Share Search";
+}
 .dialog-search-string .dialog-title::before
 {
-	content: "Search By Tags";
+	content: "Search by Tags";
 }
 .dialog-close::before,
 .mask-close::before

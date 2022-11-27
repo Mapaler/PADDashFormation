@@ -437,6 +437,9 @@ label[for="box-have"]::after
 .control-div .search-close::before{
 	content: "検索を閉じる";
 }
+.control-div .search-share::before{
+	content: "検索を分け合う";
+}
 .dialog-search-string .dialog-title::before
 {
 	content: "タグで検索";
