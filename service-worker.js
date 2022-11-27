@@ -6839,7 +6839,7 @@ const cachesMap = new Map([
 	],
 	[
 		"browser-compatibility.js",
-		"91b2a026dff2d78dc9bc27d6b37c0e88"
+		"12b22e62af685685caf8dc72475353a0"
 	],
 	[
 		"index.html",

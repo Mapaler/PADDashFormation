@@ -1,9 +1,11 @@
 ﻿const unsupportFeatures = (()=>{
 	const features = [
-		{name: "Optional chaining (?.) / 可选链操作符(?.)", url: "https://caniuse.com/mdn-javascript_operators_optional_chaining", test: ()=>!Boolean(eval("undefined?.undefined || true"))},
-		{name: "Nullish coalescing operator (??) / 空值合并操作符(??)", url: "https://caniuse.com/mdn-javascript_operators_nullish_coalescing", test: ()=>!Boolean(eval("undefined ?? true"))},
-		{name: "BigInt value (1n) / BigInt 数据类型(1n)", url: "https://caniuse.com/bigint", test: ()=>!Boolean(eval("1n"))},
-		//{name: "Private class fields (#name) / 类私有域(#name)", url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>!Boolean(eval("class test {#v = 0;}; true;"))},
+		{name: "Optional chaining (?.) / 可选链操作符(?.)", version:{firefox:74,chrome:80,safari:13.4}, url: "https://caniuse.com/mdn-javascript_operators_optional_chaining", test: ()=>!Boolean(eval("undefined?.undefined || true"))},
+		{name: "Nullish coalescing operator (??) / 空值合并操作符(??)", version:{firefox:72,chrome:80,safari:13.4}, url: "https://caniuse.com/mdn-javascript_operators_nullish_coalescing", test: ()=>!Boolean(eval("undefined ?? true"))},
+		{name: "BigInt value (1n) / BigInt 数据类型(1n)", version:{firefox:79,chrome:67,safari:14}, url: "https://caniuse.com/bigint", test: ()=>!Boolean(eval("1n"))},
+		{name: "CSS selector: :is() / CSS选择器: :is()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/css-matches-pseudo", test: ()=>!Boolean(eval("document.querySelector(':is()') || true"))},
+		{name: "CSS selector: :where() / CSS选择器: :where()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/mdn-css_selectors_where", test: ()=>!Boolean(eval("document.querySelector(':where()') || true"))},
+		//{name: "Private class fields (#name) / 类私有域(#name)", version:{firefox:90,chrome:74,safari:14.5}, url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>!Boolean(eval("class test {#v = 0;}; true;"))},
 	]
 	return features.filter(feature=>{
 		try {
@@ -26,6 +28,13 @@ if (unsupportFeatures.length) {
 			UA;
 		}
 	})(navigator.userAgent);
+	//支持的最低版本
+	const needBrowserVersion = unsupportFeatures.reduce((pre,{version})=>{
+		pre.firefox = Math.max(pre.firefox,version.firefox);
+		pre.chrome = Math.max(pre.chrome,version.chrome);
+		pre.safari = Math.max(pre.safari,version.safari);
+		return pre;
+	}, {firefox:0,chrome:0,safari:0});
 
 	let alertStr;
 	if (/^zh-(?:han(?:s|t)-)?/.test(navigator.language)) {
@@ -36,7 +45,7 @@ if (unsupportFeatures.length) {
 <ol>
 ${unsupportFeatures.map(feature=>`<li><a href="${feature.url}">${feature.name}</a></li>`).join('')}
 </ol>
-请更新您的浏览器内核到 Firefox(火狐) ≥ 90 或 Chrome(谷歌) ≥ 80 或 Safari ≥ 14.5。`;
+请更新您的浏览器内核到 Firefox(火狐) ≥ ${needBrowserVersion.firefox} 或 Chrome(谷歌) ≥ ${needBrowserVersion.chrome} 或 Safari ≥ ${needBrowserVersion.safari}。`;
 	} else {
 		alertStr = 
 `🙁Browser kernel is too old<br>
@@ -45,7 +54,7 @@ Your browser kernel does not support the following technologies used by this pro
 <ol>
 ${unsupportFeatures.map(feature=>`<li><a href="${feature.url}">${feature.name}</a></li>`).join('')}
 </ol>
-Please update your browser core to Firefox ≥ 90 or Chrome ≥ 80 or Safari ≥ 14.5`;
+Please update your browser core to Firefox ≥ ${needBrowserVersion.firefox} or Chrome ≥ ${needBrowserVersion.chrome} or Safari ≥ ${needBrowserVersion.safari}`;
 	}
 
 //alert(alertStr);
