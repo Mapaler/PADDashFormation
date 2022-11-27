@@ -3809,7 +3809,7 @@ const specialSearchFunctions = (function() {
 			{name:"Max level is lv1",otLangName:{chs:"满级只有1级",cht:"滿級只有1級"},
 				function:cards=>cards.filter(card=>card.maxLevel==1)
 			},
-			{name:"Less than 100mp",otLangName:{chs:"低于100mp",cht:"低於100mp"},
+			{name:"Tradable(Less than 100MP)",otLangName:{chs:"可交易(低于100MP)",cht:"可交易(低於100MP)"},
 				function:cards=>cards.filter(card=>card.sellMP<100)
 			},
 			{name:"Have 3 types",otLangName:{chs:"有3个type",cht:"有3個type"},
@@ -3853,9 +3853,17 @@ const specialSearchFunctions = (function() {
 				function:cards=>cards.filter(card=>card.sellPrice > 0).sort((a,b)=>a.sellPrice * a.maxLevel - b.sellPrice * b.maxLevel),
 				addition:card=>`Coin ${Math.round(card.sellPrice * card.maxLevel / 10).bigNumberToString()}`
 			},
+			{name:"Sell Monster Point(MP)",otLangName:{chs:"售卖怪物点数(MP)",cht:"售賣怪物點數(MP)"},
+				function:cards=>cards,
+				addition:card=>`MP ${card.sellMP.bigNumberToString()}`
+			},
 			{name:"Card Types",otLangName:{chs:"角色类型",cht:"角色類型"},
 				function:cards=>cards,
 				addition:card=>createTypesList(card.types)
+			},
+			{name:"Card Cost",otLangName:{chs:"角色消耗",cht:"角色消耗"},
+				function:cards=>cards,
+				addition:card=>`COST ${card.cost}`
 			},
 		]},
 	];

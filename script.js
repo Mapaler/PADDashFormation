@@ -1616,7 +1616,8 @@ function capture() {
 window.onload = initialize; //界面初始化
 
 //初始化
-function initialize(event) {
+function initialize() {
+	document.body.lang = currentLanguage.i18n;
 
 	qrcodeReader = new ZXing.BrowserQRCodeReader(); //二维码读取
 	qrcodeWriter = new ZXing.BrowserQRCodeSvgWriter(); //二维码生成
