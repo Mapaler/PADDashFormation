@@ -4806,7 +4806,7 @@ function refreshmemberTypes(memberTypesDom, team, idx) {
 	for (let i = 0;i < types.length; i++) {
 		const iconLi = document.createElement("li");
 		const icon = iconLi.appendChild(document.createElement("icon"))
-		icon.className = "type";
+		icon.className = "type-icon";
 		if (appendType && i == (types.length - 1)) icon.classList.add('append-type');
 		icon.setAttribute("data-type-icon", types[i]);
 		memberTypesUl.appendChild(iconLi);

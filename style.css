@@ -390,7 +390,7 @@ ul{
 	display: block;
 	position: absolute;
 }
-.type.append-type {
+.type-icon.append-type {
 	background-color: lightgreen;
 	box-shadow: 1px 1px 3px lightgreen,1px 1px  3px lightgreen,1px 1px  3px lightgreen;
 }
@@ -1206,7 +1206,7 @@ icon.inflicts::after
 	grid-template-columns: repeat(3, 25.6px);
 }
 .member-awoken .awoken-icon,
-.member-types .type
+.member-types .type-icon
 {
 	filter: unset;
 	transform: scale(0.80);
@@ -2742,19 +2742,55 @@ icon.inflicts::after
 }
 
 /*面板相关*/
-.board
-{
-	cursor: pointer;
+.board {
 	display: inline-block;
-	vertical-align: bottom;
+	vertical-align: middle;
 }
-.board[data-column-count="7"] {
-	transform: scale(calc(5 / 6));
-	margin: calc(-140px * (1 - 5 / 6 ) / 2) calc(-168px * (1 - 5 / 6 ) / 2);
+.board-set>span {
+	cursor: pointer;
+	margin: 0 3px;
 }
-.board[data-column-count="5"] {
-	transform: scale(calc(5 / 4));
-	margin: calc(140px * (5 / 4 - 1) / 2) calc(168px * (5 / 4 - 1) / 2);
+.board-set>span::before {
+	content: attr(data-column-count)"×"attr(data-row-count)"🔁";
+}
+.board.display-none+span {
+	display: none;
+}
+/*因为比例不一样，为了保证高度一致，应该以高度来算而不是宽度来算*/
+.skill-datail-parsed .board {
+	/* 缩小的基础倍率 */
+	--base-scale: 0.75;
+	/* 画面缩小的倍率 */
+	transform: scale(var(--scale));
+	/* 缩小后内缩的范围 */
+	margin: calc(-36px * var(--row) * (1 - var(--scale)) / 2) calc(-36px * var(--colum) * (1 - var(--scale)) / 2);
+}
+.skill-datail-parsed .board[data-row-count="5"] {
+	--scale: calc(var(--base-scale) * 4 / 5);
+	--colum: 6;
+	--row: 5;
+}
+.skill-datail-parsed .board[data-row-count="6"] {
+	--scale: calc(var(--base-scale) * 4 / 6);
+	--colum: 7;
+	--row: 6;
+}
+.skill-datail-parsed .board[data-row-count="4"] {
+	--scale: calc(var(--base-scale) * 4 / 4);
+	--colum: 5;
+	--row: 4;
+}
+.board .orb
+{
+	transform: unset;
+	margin: unset;
+}
+.board .orb.enhanced::after,
+.board .orb.locked::after,
+.board .orb.bound::after
+{
+	content: "";
+	transform: unset;
 }
 .board .block {
 	position: relative;
@@ -3697,10 +3733,7 @@ table .orb-icon
 }
 .icon-skill,
 .attrs-div .attr-list .attr,
-.skill-datail-parsed icon.attr,
-.skill-datail-parsed icon.orb,
-.skill-datail-parsed icon.type,
-.skill-datail-parsed icon.awoken-icon
+.skill-datail-parsed icon:where(.attr,.orb,.type-icon,.awoken-icon)
 {
 	vertical-align: bottom;
 	transform: scale(0.75);
@@ -3731,18 +3764,6 @@ table .orb-icon
 	background-position: 0 0;
 	--board-light-color: unset;
 	--board-deep-color: rgba(0,0,0,0.4);
-}
-.board .orb
-{
-	transform: unset;
-	margin: unset;
-}
-.board .orb.enhanced::after,
-.board .orb.locked::after,
-.board .orb.bound::after
-{
-	content: "";
-	transform: unset;
 }
 .skill-datail-parsed .board td {
 	padding: 0;

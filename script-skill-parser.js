@@ -124,26 +124,41 @@ class Block
 class BoardSet
 {
 	boards = [];
-	node = document.createElement("div");
+	boardsLabel = [];
+	node = (()=>{
+		const div = document.createElement("div");
+		div.className = "board-set";
+		return div;
+	})();
 	constructor(...boards) {
+		const boardSet = this;
+		const switchFunction = function(event){ //在65、76、54之间循环切换
+			if (event.ctrlKey) {
+				boardSet.boards.forEach(board=>board.tableNode.classList.remove(className_displayNone));
+				return;
+			}
+
+			let showIdx = boardSet.boards.findIndex(board=>!board.tableNode.classList.contains(className_displayNone));
+			if (showIdx < 0 || showIdx >= (boardSet.boards.length - 1)) showIdx = 0;
+			else showIdx++;
+			for (let i=0;i<boardSet.boards.length;i++) {
+				boardSet.boards[i].tableNode.classList.toggle(className_displayNone, i !== showIdx);
+			}
+		}
+
 		this.boards.push(...(boards.filter(board=>board instanceof Board)));
 		this.boards.forEach((board, idx)=>{
 			this.node.appendChild(board.tableNode);
-			if (idx > 0) board.tableNode.classList.add(className_displayNone);
+			const span = document.createElement("span");
+			span.dataset.columnCount = board.columnCount;
+			span.dataset.rowCount = board.rowCount;
+			span.onclick = switchFunction;
+			this.boardsLabel.push(span);
+			this.node.appendChild(span);
+			if (idx > 0) {
+				board.tableNode.classList.add(className_displayNone);
+			}
 		});
-		const _this = this;
-		this.node.onclick = function(event){ //在65、76、54之间循环切换
-			if (event.ctrlKey) { //如果按Ctrl，全部取消隐藏
-				_this.boards.forEach(board=>board.tableNode.classList.remove(className_displayNone));
-				return;
-			}
-			let showIdx = _this.boards.findIndex(board=>!board.tableNode.classList.contains(className_displayNone));
-			if (showIdx < 0 || showIdx >= (_this.boards.length - 1)) showIdx = 0;
-			else showIdx++;
-			for (let i=0;i<_this.boards.length;i++) {
-				_this.boards[i].tableNode.classList.toggle(className_displayNone, i !== showIdx);
-			}
-		}
 	}
 	valueOf() {
 		return this.node;
@@ -2642,7 +2657,7 @@ function renderTypes(types, option = {}) {
 	const tsp = localTranslating.skill_parse;
 	let contentFrg = types.map(type => {
 		const icon = document.createElement("icon");
-		icon.className = "type";
+		icon.className = "type-icon";
 		icon.setAttribute("data-type-icon",type);
 		return tsp.types?.[type]({icon: icon});
 	})
