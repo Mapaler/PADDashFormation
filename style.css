@@ -316,7 +316,7 @@ ul{
 	box-sizing: border-box;
 	width: calc(100% - 50px * 1);
 }
-.dialog .additional-string .string-value
+.dialog-search-string .original-string .string-value
 {
 	width: calc(100% - 50px * 2);
 }
