@@ -3365,6 +3365,7 @@ function initialize() {
 			filterSelection.value = filter.join("|");
 		}
 	}
+	//导出当前的搜索状态
 	searchBox.getSearchOptions = function(){
 		const attrs = [
 			parseInt(returnRadiosValue(s_attr1s), 2) || 0,
