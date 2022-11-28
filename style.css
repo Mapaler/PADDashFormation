@@ -2174,7 +2174,7 @@ icon.inflicts::after
 	display: inline-block;
 }
 .row-mon-ability .ability-value{
-	width: 85px;
+	width: 70px;
 	display: inline-block;
 	text-align: right;
 }
@@ -2187,11 +2187,12 @@ icon.inflicts::after
 .row-mon-ability ul,
 .row-mon-plus ul,
 .row-mon-level .level-value,
-.row-mon-level .monster-cost
+.row-mon-level .monster-cost,
+.row-mon-plus li
 {
 	font-family: var(--game-font-family );
-	font-size: 22px;
-	line-height: 35px;
+	font-size: 20px;
+	line-height: 28px;
 	text-shadow: black 2px 2px 0;
 }
 .row-mon-level .monster-cost
@@ -2213,7 +2214,6 @@ icon.inflicts::after
 	white-space: nowrap; /*避免纵向297跑到下一行*/
 }
 .row-mon-plus li{
-	height: 35px;
 	padding: 0 5px;
 }
 /*.m-plus-hp-li::before{content: "HP";}
@@ -2232,9 +2232,9 @@ icon.inflicts::after
 	font-size: inherit;
 	text-shadow: inherit;
 	box-sizing: border-box;
-	width: 2em;
-	line-height: 30px;
-	height: 30px;
+	width: 4em;
+	line-height: 28px;
+	height: 28px;
 	padding: 0;
 	-moz-appearance: textfield; /*火狐去掉数字加减*/
 }
@@ -2244,37 +2244,23 @@ icon.inflicts::after
 	-webkit-appearance: none !important;
 	margin: 0;
 }
-.row-mon-plus .m-plus-btn::before,
-.row-mon-plus .m-plus-btn-297 span::before
+.row-mon-plus .m-plus-fast-setting::before
 {
-	content: "+";
+	content: "+"attr(value);
 }
-.row-mon-plus .m-plus-btn::after
-{
-	content: attr(value);
-}
-.row-mon-plus .m-plus-btn
+.row-mon-plus .m-plus-fast-setting
 {
 	padding: 0 3px;
 	box-sizing: border-box;
 	font-size: inherit;
-	line-height: 20px;;
+	line-height: 20px;
 	height: 30px;
-}
-.m-plus-btn-297{
-	padding: 0;
-	box-sizing: border-box;
-	height: 105px;
-	font-size: 22px;
-	writing-mode: vertical-lr;
-	min-width: 32px; /*先给297一个默认宽度*/
 }
 .m-plus-btn-297 span{
 	/*Chrome浏览器不支持按钮本身的纵向，只能加一层*/
 	-webkit-writing-mode: vertical-lr;
 }
-.row-mon-plus .plus-box ul,
-.m-plus-btn-297
+.row-mon-plus .plus-box ul
 {
 	display: inline-block;
 	vertical-align: top;
@@ -2503,7 +2489,15 @@ icon.inflicts::after
 	padding: 0 10px 0 2px;
 	text-shadow:black 3px 3px 0;
 }
-
+.skill-box .skill-title .skill-name
+{
+	cursor: pointer;
+}
+.skill-box .skill-title .skill-name:hover::after
+{
+	content: "🔍";
+}
+/*主动技能、队长技能、进化技能的图形设置*/
 .skill-title .type-title{
 	background-color: #774433;
 	border: #BBAA55 solid 2px;
@@ -2514,7 +2508,6 @@ icon.inflicts::after
 	display: inline-block;
 	position: relative;
 }
-
 .skill-title .type-title::after{
 	-webkit-background-clip: text;
 	background-clip: text;
@@ -2523,40 +2516,36 @@ icon.inflicts::after
 	position: absolute;
 	left: 5px;
 }
-
 .skill-title .type-title::before{
 	text-shadow: none;
 	-webkit-text-stroke: 3px black;
 }
-/*.row-mon-skill .type-title::before,
-.row-mon-skill .type-title::after
-{
-	content: "主動技能";
-}*/
+/* 主动技能 */
 .row-mon-skill .type-title::after
 {
 	background-image: linear-gradient(white 25%, #3377AA 80%);
 }
-
-.row-mon-skill .evolved-skill .type-title::after
+.row-mon-skill .skill-title .skill-name,
+.evolved-skill-title .skill-name
 {
-	background-image: linear-gradient(#228899 25%, #44DDDD 80%);
+	color: #84BAFC;
 }
-
-/*.row-mon-leader-skill .type-title::before,
-.row-mon-leader-skill .type-title::after
-{
-	content: "隊長技能";
-}*/
+/* 队长技能 */
 .row-mon-leader-skill .type-title::after
 {
 	background-image: linear-gradient(#FFFF99 25%, #EE7744 80%);
 }
-
-
-.evolved-skill-title
+.row-mon-leader-skill .skill-title .skill-name{
+	color: #85FD80;
+}
+/* 进化技能 */
+.row-mon-skill .evolved-skill .type-title::after
 {
-	background-color: #00000044;
+	background-image: linear-gradient(#228899 25%, #44DDDD 80%);
+}
+.row-mon-skill .evolved-skill-title
+{
+	background-color: rgba(0,0,0,0.5);
 	font-family: var(--game-font-family);
 	font-weight: normal;
 	color: white;
@@ -2564,30 +2553,13 @@ icon.inflicts::after
 	text-shadow:black 2px 2px 0;
 }
 .evolved-skill-title .skill-level-label,
-.evolved-skill-title .skill-cd
-{
-	float: right;
-}
-.row-mon-skill .skill-title .skill-name,
-.evolved-skill-title .skill-name
-{
-	color: #84BAFC;
-	cursor: pointer;
-}
-.row-mon-leader-skill .skill-title .skill-name{
-	color: #85FD80;
-	cursor: pointer;
-}
-.row-mon-skill .skill-title .skill-name:hover::after,
-.row-mon-leader-skill .skill-title .skill-name:hover::after
-{
-	content: "🔍";
-}
+.evolved-skill-title .skill-cd,
 .skill-box .skill-cd-control,
 .skill-box .skill-parse-control
 {
 	float: right;
 }
+
 .skill-box .skill-cd{
 	margin-left: 10px;
 }

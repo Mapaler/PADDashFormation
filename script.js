@@ -3662,28 +3662,21 @@ function initialize() {
 	monEditAddAtk.onchange = reCalculateAbility;
 	const monEditAddRcv = monEditAddRcvLi.querySelector(".m-plus-rcv");
 	monEditAddRcv.onchange = reCalculateAbility;
-	//3个快速设置按钮
-	const monEditAddHpBtn = monEditAddHpLi.querySelector(".m-plus-btn");
-	monEditAddHpBtn.ipt = monEditAddHp;
-	monEditAddHpBtn.onclick = setIptToMyValue;
-	const monEditAddAtkBtn = monEditAddAtkLi.querySelector(".m-plus-btn");
-	monEditAddAtkBtn.ipt = monEditAddAtk;
-	monEditAddAtkBtn.onclick = setIptToMyValue;
-	const monEditAddRcvBtn = monEditAddRcvLi.querySelector(".m-plus-btn");
-	monEditAddRcvBtn.ipt = monEditAddRcv;
-	monEditAddRcvBtn.onclick = setIptToMyValue;
 	//297按钮
-	const monEditAdd297 = rowMonPlus.querySelector(".m-plus-btn-297");
-	monEditAdd297.onclick = function() {
-		monEditAddHp.value = 99;
-		monEditAddAtk.value = 99;
-		monEditAddRcv.value = 99;
+	const monEditPlusFastSettings = Array.from(rowMonPlus.querySelectorAll(".m-plus-fast-setting"));
+	monEditPlusFastSettings.forEach(btn=>btn.onclick=plusFastSetting);
+	function plusFastSetting(){
+		const sumPlus = parseInt(this.value, 10);
+		let one_plus = Math.floor(sumPlus / 3);
+		monEditAddHp.value = one_plus;
+		monEditAddAtk.value = one_plus;
+		monEditAddRcv.value = one_plus;
 		reCalculateAbility();
-	};
+	}
 
 	//潜觉
 	const monEditLatentUl = settingBox.querySelector(".row-mon-latent .latent-ul");
-	const monEditLatents = Array.from(monEditLatentUl.querySelectorAll("li"));
+	const monEditLatents = Array.from(monEditLatentUl?.querySelectorAll("li"));
 	const monEditLatentAllowableDetail = settingBox.querySelector(".row-mon-latent details");
 	const monEditLatentAllowableUl = monEditLatentAllowableDetail.querySelector(".m-latent-allowable-ul");
 	const monEditLatentsAllowable = Array.from(monEditLatentAllowableUl.querySelectorAll("li"));
@@ -4336,7 +4329,7 @@ function editMon(teamNum, isAssist, indexInTeam) {
 	if (mon.skilllevel) {
 		skillLevel.value = mon.skilllevel;
 	}
-	skillLevel.onchange();
+	skillLevel?.onchange();
 
 	const editBoxTitle = editBox.querySelector(".edit-box-title");
 	const btnDelay = editBox.querySelector(".button-box .button-delay");
