@@ -3167,8 +3167,11 @@ function initialize() {
 	}
 	//只添加第一个列表，后面的全部通过克隆的方式复现
 	specialFirstSelect.refreshList();
-	specialAdd.onclick = function() {
-		return specialFilterUl.appendChild(specialFilterFirstLi.cloneNode(true));
+	specialAdd.onclick = function(event) {
+		const specialFilterLi = specialFilterFirstLi.cloneNode(true);
+		const specialFilterSelection = specialFilterLi.querySelector(".special-filter");
+		specialFilterUl.appendChild(specialFilterLi);
+		return specialFilterSelection;
 	}
 	//specialAdd.onclick(); //先运行一次产生两个
 	specialClear.onclick = function() {
@@ -3321,56 +3324,56 @@ function initialize() {
 	s_add_show_abilities.onchange = reShowSearch;
 	s_add_show_abilities_with_awoken.onchange = reShowSearch;
 
-	searchBox.recoverySearchStatus = function(options) {
-		(s_attr1s.find(opt=>parseInt(opt.value) == options.attrs[0]) || s_attr1s[0]).checked = true;
-		(s_attr2s.find(opt=>parseInt(opt.value) == options.attrs[1]) || s_attr2s[0]).checked = true;
-		s_fixMainColor.checked = options.fixMainColor;
-		s_types.filter(opt=>options.types.includes(parseInt(opt.value))).forEach(opt=>opt.checked = true);
-		s_typeAndOr.checked = options.typeAndOr;
-		(s_rareLows.find(opt=>parseInt(opt.value) == options.rares[0]) || s_rareLows[0]).checked = true;
-		(s_rareHighs.find(opt=>parseInt(opt.value) == options.rares[1]) || s_rareHighs[0]).checked = true;
+	//恢复搜索状态
+	searchBox.recoverySearchStatus = function({attrs:[attr1, attr2], fixMainColor, types, typeAndOr, rares:[rareLow, rareHigh], awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent, specialFilters}) {
+		//属性这里是用的2进制写
+		(s_attr1s.find(opt=>parseInt(opt.value,2) == attr1) || s_attr1s[0]).checked = true;
+		(s_attr2s.find(opt=>parseInt(opt.value,2) == attr2) || s_attr2s[0]).checked = true;
+		s_fixMainColor.checked = fixMainColor;
+		s_types.filter(opt=>types.includes(parseInt(opt.value,10))).forEach(opt=>opt.checked = true);
+		s_typeAndOr.checked = typeAndOr;
+		(s_rareLows.find(opt=>parseInt(opt.value,10) == rareLow) || s_rareLows[0]).checked = true;
+		(s_rareHighs.find(opt=>parseInt(opt.value,10) == rareHigh) || s_rareHighs[s_rareHighs.length-1]).checked = true;
 
+		s_selectedAwokensUl.innerHTML = "";
 		//添加觉醒
-		options.awokens.forEach(awokenCount=>{
-			const btn = s_awokensIcons.find(_btn=>parseInt(_btn.getAttribute("data-awoken-icon")) == awokenCount.id);
-			btn.setAttribute("data-awoken-count", awokenCount.num);
+		awokens.forEach(ak=>{
+			const btn = s_awokensIcons.find(_btn=>parseInt(_btn.getAttribute("data-awoken-icon"), 10) == ak.id);
 
-			for (let i = 0; i < awokenCount.num; i++) {
-				const iconLi = document.createElement("li");
-				const icon = iconLi.appendChild(document.createElement("icon"));
-				icon.className = "awoken-icon";
-				icon.setAttribute("data-awoken-icon", awokenCount.id);
-				icon.onclick = search_awokenSub1;
-				s_selectedAwokensUl.appendChild(iconLi);
+			for (let i = 0; i < ak.num; i++) {
+				btn.onclick();
 			}
 		});
 
-		s_sawokens.filter(opt=>options.sawokens.includes(parseInt(opt.value))).forEach(opt=>opt.checked = true);
-		s_awokensEquivalent.checked = options.awokensEquivalent;
-		s_includeSuperAwoken.checked = options.includeSuperAwoken;
-		s_canAssist.checked = options.canAssist;
-		s_canLevelLimitBreakthrough.checked = options.canLevelLimitBreakthrough;
-		s_have8LatentSlot.checked = options.have8LatentSlot;
+		s_sawokens.filter(opt=>sawokens.includes(parseInt(opt.value,10))).forEach(opt=>opt.checked = true);
+		s_awokensEquivalent.checked = equalAk;
+		s_includeSuperAwoken.checked = incSawoken;
+		s_canAssist.checked = canAssist;
+		s_canLevelLimitBreakthrough.checked = canLv110;
+		s_have8LatentSlot.checked = is8Latent;
 
-		const specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter"));
+		//保留之前的特殊搜索，不需要完全新增
+		const specialFilterSelections = Array.from(specialFilterUl.querySelectorAll(".special-filter"));
 		//将筛选个数增加到需要的个数
-		for (let i = specialFilters.length; i < options.specialFilters.length; i++) {
-			specialFilters.push(specialAdd.onclick().querySelector(".special-filter"));
+		for (let i = specialFilterSelections.length; i < specialFilters.length; i++) {
+			specialFilterSelections.push(specialAdd.onclick());
 		}
+		//将每一个搜索都设置好
 		for (let i = 0; i < specialFilters.length; i++) {
-			const filterUl = specialFilters[i];
-			const filter = options.specialFilters[i];
-			filterUl.value = filter.join("|");
+			const filterSelection = specialFilterSelections[i];
+			const filter = specialFilters[i];
+			filterSelection.value = filter.join("|");
 		}
 	}
 	searchBox.getSearchOptions = function(){
-		let attr1 = Number(returnRadiosValue(s_attr1s)) || 0;
-		let attr2 = Number(returnRadiosValue(s_attr2s)) || 0;
-
+		const attrs = [
+			parseInt(returnRadiosValue(s_attr1s), 2) || 0,
+			parseInt(returnRadiosValue(s_attr2s), 2) || 0
+		];
 		const types = returnCheckBoxsValues(s_types).map(Str2Int);
 		const rares = [
-			returnCheckBoxsValues(s_rareLows).map(Str2Int)[0],
-			returnCheckBoxsValues(s_rareHighs).map(Str2Int)[0],
+			parseInt(returnRadiosValue(s_rareLows), 10),
+			parseInt(returnRadiosValue(s_rareHighs), 10),
 		];
 		const sawokens = returnCheckBoxsValues(s_sawokens).map(Str2Int);
 		const awokens = s_awokensIcons.filter(btn => parseInt(btn.getAttribute("data-awoken-count"), 10) > 0).map(btn => {
@@ -3379,9 +3382,13 @@ function initialize() {
 				num: parseInt(btn.getAttribute("data-awoken-count"), 10)
 			};
 		});
+		//储存设置用于页面刷新的状态恢复
+		const specialFilters = Array.from(specialFilterUl.querySelectorAll(".special-filter"))
+			.map(select=>select.value.split("|").map(Number)) //将字符串"1|2"转换成数组[1,2]
+			.filter(([f1, f2])=>!(f1===0&&f2===undefined)); //去掉0号筛选
 		
 		const options = {
-			attrs:[attr1, attr2],
+			attrs,
 			fixMainColor: s_fixMainColor.checked,
 			types,
 			typeAndOr: s_typeAndOr.checked,
@@ -3393,8 +3400,7 @@ function initialize() {
 			canAssist: s_canAssist.checked,
 			canLv110: s_canLevelLimitBreakthrough.checked,
 			is8Latent: s_have8LatentSlot.checked,
-			specialFilters: Array.from(specialFilterUl.querySelectorAll(".special-filter"))
-			.map(select=>select.value.split("|").map(Number)) //储存设置用于页面刷新的状态恢复
+			specialFilters,
 		};
 		return options;
 	}

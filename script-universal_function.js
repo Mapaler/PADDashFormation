@@ -676,14 +676,14 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 	}
 }
 //搜索卡片用
-function searchCards(cards, {attrs:[attr1, attr2], fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent}) {
+function searchCards(cards, {attrs:[attr1, attr2], fixMainColor, types, typeAndOr, rares:[rareLow, rareHigh], awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent}) {
 	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	if (canAssist) cardsRange = cardsRange.filter(card=>card.canAssist);
 	if (canLv110) cardsRange = cardsRange.filter(card=>card.limitBreakIncr>0);
 	if (is8Latent) cardsRange = cardsRange.filter(card=>card.is8Latent);
 	//属性
 	const anyAttr = 0b1111101;
-	const anyA1 = (attr1 & anyAttr) == anyAttr, anyA2 = (attr2 & anyAttr) == anyAttr;
+	const anyA1 = attr1 === 0 || (attr1 & anyAttr) == anyAttr, anyA2 = attr2 === 0 || (attr2 & anyAttr) == anyAttr;
 	if (!anyA1 || !anyA2) { //当a1、a2任一不为所有颜色时才需要筛选属性
 		const attr1s = flags(attr1), attr2s = flags(attr2);
 		const nullAttrArr = [undefined,-1,6];
@@ -713,14 +713,14 @@ function searchCards(cards, {attrs:[attr1, attr2], fixMainColor, types, typeAndO
 	}
 	//类型
 	if (types.length > 0) {
-		cardsRange = cardsRange.filter(c => typeAndOr ?
-			types.every(t => c.types.includes(t)) : //所有type都满足
-			types.some(t => c.types.includes(t)) //只需要满足一个type
+		cardsRange = cardsRange.filter(({types: cTypes}) =>
+			//所有type都满足，或只需要满足一个type
+			types[typeAndOr ? 'every' : 'some'](t => cTypes.includes(t))
 		);
 	}
 	//稀有度
-	if (rares.length > 1) {
-		cardsRange = cardsRange.filter(c => c.rarity >= rares[0] && c.rarity <= rares[1]);
+	if (rareLow !== 1 || rareHigh !== 10) { //不是1~10时才进行筛选
+		cardsRange = cardsRange.filter(({rarity}) => rarity >= rareLow && rarity <= rareHigh);
 	}
 	//觉醒
 	//等效觉醒时，事先去除大觉醒
