@@ -72,7 +72,7 @@
 	content: "보조 수정";
 }
 .edit-box .setting-box .row-mon-id::before{
-	content: "▼몬스터 ID";
+	content: "▼ID 및 검색";
 }
 .monsterinfo-box .monster-id::before{
 	content: "No.";
@@ -90,17 +90,17 @@
 	content: "필요한 Exp:";
 }
 .edit-box .setting-box .row-mon-awoken::before{
-	content: "▼몬스터 각성";
+	content: "▼각성";
 }
 .edit-box .setting-box .row-mon-super-awoken::before{
-	content: "▼몬스터 슈퍼 각성";
+	content: "▼슈퍼 각성";
 }
 
 .edit-box .setting-box .row-mon-ability::before{
-	content: "▼몬스터 능력";
+	content: "▼능력";
 }
 .edit-box .setting-box .row-mon-plus::before{
-	content: "▼몬스터 플러스";
+	content: "▼+ 강화";
 }
 .row-mon-ability .m-hp-li::before,
 .dialog-dungeon-enchance label[for="dungeon-hp"]::before
@@ -119,7 +119,7 @@
 }
 
 .edit-box .setting-box .row-mon-level::before{
-	content: "▼몬스터 레벨";
+	content: "▼레벨";
 }
 .edit-box .setting-box .monster-cost::before{
 	content: "코스트:";

@@ -73,7 +73,7 @@
 	content: "Edit Assist";
 }
 .edit-box .setting-box .row-mon-id::before{
-	content: "▼Monster ID";
+	content: "▼ID and Search";
 }
 .monsterinfo-box .monster-id::before{
 	content: "No.";
@@ -91,17 +91,19 @@
 	content: "Need Exp:";
 }
 .edit-box .setting-box .row-mon-awoken::before{
-	content: "▼Monster Awoken";
+	content: "▼Awoken";
 }
 .edit-box .setting-box .row-mon-super-awoken::before{
 	content: "▼Super Awoken";
 }
 
 .edit-box .setting-box .row-mon-ability::before{
-	content: "▼Monster Abilitys";
+	content: "▼Parameter";
 }
 .edit-box .setting-box .row-mon-plus::before{
-	content: "▼Monster Plus";
+	content: "▼+ Enhancement";
+	transform: scaleX(0.5);
+	margin: 0 -35px;
 }
 .row-mon-ability .m-hp-li::before,
 .dialog-dungeon-enchance label[for="dungeon-hp"]::before
@@ -119,7 +121,7 @@
 	content: "RCV:";
 }
 .edit-box .setting-box .row-mon-level::before{
-	content: "▼Monster Level";
+	content: "▼Level";
 }
 .edit-box .setting-box .monster-cost::before{
 	content: "COST:";

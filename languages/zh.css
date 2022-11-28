@@ -75,7 +75,7 @@
 	content: "修改辅助";
 }
 .edit-box .setting-box .row-mon-id::before{
-	content: "▼怪物ID";
+	content: "▼ID 和 搜索";
 }
 .monsterinfo-box .monster-id::before{
 	content: "No.";
@@ -93,17 +93,17 @@
 	content: "需要经验值：";
 }
 .edit-box .setting-box .row-mon-awoken::before{
-	content: "▼怪物觉醒";
+	content: "▼觉醒";
 }
 .edit-box .setting-box .row-mon-super-awoken::before{
 	content: "▼超觉醒";
 }
 
 .edit-box .setting-box .row-mon-ability::before{
-	content: "▼怪物能力";
+	content: "▼能力";
 }
 .edit-box .setting-box .row-mon-plus::before{
-	content: "▼怪物加值";
+	content: "▼+ 强化";
 }
 .row-mon-ability .m-hp-li::before,
 .dialog-dungeon-enchance label[for="dungeon-hp"]::before
@@ -121,7 +121,7 @@
 	content: "回復:";
 }
 .edit-box .setting-box .row-mon-level::before{
-	content: "▼怪物等级";
+	content: "▼等级";
 }
 .edit-box .setting-box .monster-cost::before{
 	content: "消耗:";

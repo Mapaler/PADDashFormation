@@ -2170,11 +2170,11 @@ icon.inflicts::after
 	margin-top: var(--border-width);
 }
 .row-mon-ability ul li::before{
-	width: 55px;
+	width: 2.5em;
 	display: inline-block;
 }
 .row-mon-ability .ability-value{
-	width: 70px;
+	width: 4em;
 	display: inline-block;
 	text-align: right;
 }
@@ -2232,7 +2232,7 @@ icon.inflicts::after
 	font-size: inherit;
 	text-shadow: inherit;
 	box-sizing: border-box;
-	width: 4em;
+	width: 2em;
 	line-height: 28px;
 	height: 28px;
 	padding: 0;
@@ -2468,7 +2468,7 @@ icon.inflicts::after
 }
 .skill-box .m-skill-level {
 	height: 30px;
-	width: 3em;
+	width: 3.5em;
 	line-height: 25px;
 	box-sizing: border-box;
 	font-size: inherit;

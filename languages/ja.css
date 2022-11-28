@@ -72,7 +72,7 @@
 	content: "変更継承";
 }
 .edit-box .setting-box .row-mon-id::before{
-	content: "▼モンスターID";
+	content: "▼ID と検索";
 }
 .monsterinfo-box .monster-id::before{
 	content: "No.";
@@ -90,17 +90,17 @@
 	content: "必要な経験値:";
 }
 .edit-box .setting-box .row-mon-awoken::before{
-	content: "▼モンスター覚醒";
+	content: "▼覚醒";
 }
 .edit-box .setting-box .row-mon-super-awoken::before{
-	content: "▼モンスター超覚醒";
+	content: "▼超覚醒";
 }
 
 .edit-box .setting-box .row-mon-ability::before{
-	content: "▼モンスター能力";
+	content: "▼能力";
 }
 .edit-box .setting-box .row-mon-plus::before{
-	content: "▼モンスタープラス";
+	content: "▼+ 強化";
 }
 .row-mon-ability .m-hp-li::before,
 .dialog-dungeon-enchance label[for="dungeon-hp"]::before
@@ -119,7 +119,7 @@
 }
 
 .edit-box .setting-box .row-mon-level::before{
-	content: "▼モンスターレベル";
+	content: "▼レベル";
 }
 .edit-box .setting-box .monster-cost::before{
 	content: "コスト:";
