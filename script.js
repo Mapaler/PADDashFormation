@@ -3502,9 +3502,10 @@ function initialize() {
 	});
 
 	//id搜索
+	settingBox.changeMonId = editBoxChangeMonId;
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
 	const btnSearchByString = settingBox.querySelector(".row-mon-id .search-by-string");
-	function idChange(e)
+	function idChange(event)
 	{
 		if (/^\d+$/.test(this.value)) {
 			const newId = parseInt(this.value, 10);
@@ -3512,6 +3513,7 @@ function initialize() {
 			{
 				editBox.mid = newId;
 				
+				//图鉴模式记录上一次的内容
 				if (isGuideMod)
 				{
 					const idArr = searchMonList.originalHeads?.map(head=>head.card.id) ?? [];
@@ -3526,7 +3528,7 @@ function initialize() {
 					history.pushState(state, null, locationURL);
 				}
 
-				editBoxChangeMonId(newId);
+				settingBox.changeMonId(newId);
 			}
 			return true;
 		}else
@@ -3535,9 +3537,9 @@ function initialize() {
 		}
 	}
 	monstersID.onchange = idChange;
-	monstersID.onkeydown = function(e) {
+	monstersID.onkeydown = function(event) {
 		//如果键入回车，字符串长度大于0，且不是数字，则执行字符串搜索
-		if (e.key == "Enter" && this.value.length > 0 && !/^\d+$/.test(this.value))
+		if (event.key === "Enter" && this.value.length > 0 && !/^\d+$/.test(this.value))
 		{
 			showSearch(searchByString(this.value));
 		}
@@ -3593,11 +3595,12 @@ function initialize() {
 		const value = parseInt(this.value, 10);
 		if (value >= 0 && monEditSAwokensRow.swaokenIndex === value) {
 			monEditSAwokens[0].click();
+			return false;
 		} else {
 			monEditSAwokensRow.swaokenIndex = value;
 			const plusArr = [monEditAddHp,monEditAddAtk,monEditAddRcv];
 			//自动打上297
-			if (!monEditSAwokensRow.classList.contains(className_displayNone) && plusArr.some(ipt=>parseInt(ipt.value)<99))
+			if (value >= 0 && plusArr.some(ipt=>parseInt(ipt.value)<99))
 			{
 				console.debug("点亮超觉醒，自动设定297");
 				plusArr.forEach(ipt=>ipt.value=99);
@@ -3753,8 +3756,8 @@ function initialize() {
 	//合并技能开关
 	const mergeSill = document.getElementById("merge-skill");
 	mergeSill.checked = localStorage_getBoolean(cfgPrefix + mergeSill.id);
-	mergeSill.onchange = function(e){
-		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
+	mergeSill.onchange = function(event){
+		if (event) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 		merge_skill = this.checked;
 		editBox.refreshSkillParse();
 	};
@@ -4378,22 +4381,18 @@ function editBoxChangeMonId(id) {
 	mName.textContent = returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code)[0];
 	mName.title = card.name;
 	const mSeriesId = monInfoBox.querySelector(".monster-seriesId");
-	//mSeriesId.textContent = card.seriesId;
+	mSeriesId.textContent = card.seriesId;
 	mSeriesId.setAttribute(dataAttrName, card.seriesId);
 
 	mSeriesId.classList.toggle(className_displayNone, !card.seriesId);;
 
 	const mCollabId = monInfoBox.querySelector(".monster-collabId");
-	//mCollabId.textContent = card.collabId;
+	mCollabId.textContent = card.collabId;
 	mCollabId.setAttribute(dataAttrName, card.collabId);
 
 	mCollabId.classList.toggle(className_displayNone, !card.collabId);;
 
 	const mAltName = monInfoBox.querySelector(".monster-altName");
-	//mAltName.textContent = card.altName.join("|");
-	
-	//mAltName.setAttribute("data-monId", card.id);
-
 	//没有合作名就隐藏
 	mAltName.classList.toggle(className_displayNone, card.altName.length < 1 && card?.otTags?.length < 1);;
 
@@ -4449,20 +4448,28 @@ function editBoxChangeMonId(id) {
 
 	//超觉醒
 	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
-	const mSAwoken = monEditSAwokensRow.querySelectorAll(".awoken-ul .awoken-icon");
+	const mSAwoken = Array.from(monEditSAwokensRow.querySelectorAll(".awoken-ul .awoken-icon"));
+	let prevSAwokens = mSAwoken.map(icon=>parseInt(icon.getAttribute("data-awoken-icon") || 0, 10)).filter(Boolean);
 	if (card.superAwakenings.length > 0) //辅助时也还是加入超觉醒吧
 	{
-		for (let ai = 0; ai < mSAwoken.length; ai++) {
-			if (ai < card.superAwakenings.length) {
-				mSAwoken[ai].setAttribute("data-awoken-icon", card.superAwakenings[ai]);
+		if (card.superAwakenings.length == prevSAwokens.length &&
+			card.superAwakenings.every((sak, idx)=>sak===prevSAwokens[idx]))
+		{
+			//切换前后超觉相同，什么都不做
+		} else {
+			for (let ai = 0; ai < mSAwoken.length; ai++) {
+				if (ai < card.superAwakenings.length) {
+					mSAwoken[ai].setAttribute("data-awoken-icon", card.superAwakenings[ai]);
+				}
+				mSAwoken[ai].classList.toggle(className_displayNone, ai >= card.superAwakenings.length);;
 			}
-			mSAwoken[ai].classList.toggle(className_displayNone, ai >= card.superAwakenings.length);;
+			monEditSAwokensRow.querySelector("#sawoken-choice--1").click(); //选中隐藏的空超觉
 		}
 		monEditSAwokensRow.classList.remove(className_displayNone);
 	} else {
 		monEditSAwokensRow.classList.add(className_displayNone);
+		monEditSAwokensRow.querySelector("#sawoken-choice--1").click(); //选中隐藏的空超觉
 	}
-	monEditSAwokensRow.querySelector("#sawoken-choice--1").click(); //选中隐藏的空超觉
 
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
 	//monEditLvMax.textContent = monEditLvMax.value = card.maxLevel;

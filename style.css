@@ -1999,9 +1999,11 @@ icon.inflicts::after
 .monsterinfo-box .monster-id{
 	width:120px;
 }
-.monsterinfo-box .monster-seriesId,
-.monsterinfo-box .monster-collabId,
-.monsterinfo-box .monster-altName
+.monsterinfo-box :is(
+	.monster-seriesId,
+	.monster-collabId,
+	.monster-altName,
+)
 {
 	cursor: pointer;
 	font-size: 14px;
@@ -2012,18 +2014,11 @@ icon.inflicts::after
 	text-overflow:ellipsis;
 	overflow:hidden;
 }
-.monsterinfo-box .monster-seriesId::after,
-.monsterinfo-box .monster-collabId::after
-{
-	content: attr(data-value);
-}
-.monsterinfo-box .monster-seriesId:hover::after,
-.monsterinfo-box .monster-collabId:hover::after,
-.monsterinfo-box .monster-altName:hover::after
-{
-	content: attr(data-value) "🔍";
-}
-.monsterinfo-box .monster-altName:hover::after
+.monsterinfo-box :is(
+	.monster-seriesId,
+	.monster-collabId,
+	.monster-altName,
+):hover::after
 {
 	content: "🔍";
 }
@@ -2032,7 +2027,7 @@ icon.inflicts::after
 }*/
 
 .monsterinfo-box .monster-rare{
-	width: 260px;
+	width: 100px;
 }
 .monsterinfo-box .monster-rare::before,
 .monsterinfo-box .monster-rare::after
@@ -2051,12 +2046,19 @@ icon.inflicts::after
 .monster-rare[data-rarity='3']::after{content: "★★★";}
 .monster-rare[data-rarity='4']::after{content: "★★★★";}
 .monster-rare[data-rarity='5']::after{content: "★★★★★";}
-.monster-rare[data-rarity='6']::after{content: "★★★★★★";}
-.monster-rare[data-rarity='7']::after{content: "★★★★★★★";}
-.monster-rare[data-rarity='8']::after{content: "★★★★★★★★";}
-.monster-rare[data-rarity='9']::after{content: "★★★★★★★★★";}
-.monster-rare[data-rarity='10']::after{content: "★★★★★★★★★★";}
+.monster-rare[data-rarity='6']::after{content: "★★★★★\A★";}
+.monster-rare[data-rarity='7']::after{content: "★★★★★\A★★";}
+.monster-rare[data-rarity='8']::after{content: "★★★★★\A★★★";}
+.monster-rare[data-rarity='9']::after{content: "★★★★★\A★★★★";}
+.monster-rare[data-rarity='10']::after{content: "★★★★★\A★★★★★";}
 .monster-rare::before{content: attr(data-rarity);}
+.monster-rare::after{
+	font-size: 0.5em;
+	line-height: 1em;
+	display: inline-block;
+	white-space: break-spaces;
+	vertical-align: top;
+}
 
 .monsterinfo-box .monster-mp::before
 {
