@@ -4438,7 +4438,8 @@ function editBoxChangeMonId(id) {
 	mAwokenIpt[card.awakenings.length].click(); //选择最后一个觉醒
 
 	//超觉醒
-	const monEditSAwokensUl = settingBox.querySelector(".row-mon-super-awoken .awoken-ul");
+	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
+	const monEditSAwokensUl = monEditSAwokensRow.querySelector(".awoken-ul");
 	const monEditSAwokensIcons = Array.from(monEditSAwokensUl.querySelectorAll(".awoken-icon"));
 	const noSAwokenRadio = settingBox.querySelector("#sawoken-choice-nosawoken"); //不选超觉醒的选项
 	//获得之前的所有超觉醒
@@ -4475,6 +4476,8 @@ function editBoxChangeMonId(id) {
 			}
 		}
 	}
+	//怪物没有超觉醒时隐藏超觉醒
+	monEditSAwokensRow.classList.toggle(className_displayNone, card.superAwakenings.length == 0);
 	if (card.superAwakenings.length == prevSAwokens.length &&
 		card.superAwakenings.every((sak, idx)=>sak===prevSAwokens[idx])
 		)
