@@ -1209,20 +1209,20 @@ icon.inflicts::after
 .member-awoken .awoken-ul,
 .member-types .types-ul
 {
-	grid-auto-rows:  25.6px;
+	grid-auto-rows: 21px;
 	place-content: start center;
 }
 .member-awoken .awoken-ul
 {
 	grid-gap: 2px;
-	grid-template-columns: repeat(3, 25.6px);
+	grid-template-columns: repeat(4, 21px);
 }
 .member-awoken .awoken-icon,
 .member-types .type-icon
 {
 	filter: unset;
-	transform: scale(0.80);
-	margin: calc(-32px * (1 - 0.80) / 2);
+	transform: scale(0.65);
+	margin: calc(-32px * (1 - 0.65) / 2);
 }
 .tIf-addition-info,
 .team-assist-awoken,
@@ -2147,13 +2147,9 @@ icon.inflicts::after
 
 /*未选中的超觉醒半透明，选中的不透明*/
 .row-mon-super-awoken .sawoken-choice{display:none;}
-.row-mon-super-awoken .sawoken-choice+label
+.row-mon-super-awoken .sawoken-choice:not(:checked)+label
 {
 	opacity: var(--search-icon-unchecked);
-}
-.row-mon-super-awoken .sawoken-choice:checked+label
-{
-	opacity: unset;
 }
 /*怪物能力横条*/
 /*.row-ability{
@@ -2274,11 +2270,10 @@ icon.inflicts::after
 {
 	margin-left: 10px;
 }
-.row-mon-level .level-value::before,
-.row-mon-level .m-level-btn-min::before,
-.row-mon-level .m-level-btn-max::before,
-.row-mon-level .m-level-btn-110::before,
-.row-mon-level .m-level-btn-120::before
+.row-mon-level :is(
+	.level-value,
+	button
+)::before
 {
 	content: "Lv.";
 }
@@ -2286,11 +2281,9 @@ icon.inflicts::after
 {
 	font-family: var(--game-font-family );
 	font-size: 22px;
-	line-height: 35px;
+	line-height: 22px;
 }
-/*.row-mon-level .level-value::before{
-	content: "Lv.";
-}*/
+
 .edit-box .setting-box .m-level
 {
 	color: inherit;
@@ -2302,27 +2295,30 @@ icon.inflicts::after
 	width: 100px;
 	height: 40px;
 }
-.m-level-btn-min,
-.m-level-btn-max,
-.m-level-btn-110,
-.m-level-btn-120
+.row-mon-level button
 {
 	box-sizing: border-box;
 	font-size: 18px;
 	padding: 0 3px;
+	vertical-align: top;
 }
-.row-mon-level .m-level-btn-min::after,
-.row-mon-level .m-level-btn-max::after
+.row-mon-level button::before
+{
+	font-size: 0.75em;
+}
+.row-mon-level :where(
+	.m-level-btn-min,
+	.m-level-btn-max,
+)::after
 {
 	content: attr(value);
 }
 .row-mon-level .m-level-btn-110::after
 {
-	content: attr(value) " (+" attr(data-limit-break-incr) "%)";
-}
-.row-mon-level .m-level-btn-120::after
-{
-	content: attr(value);
+	content: "(+" attr(data-limit-break-incr) "%)";
+	color: #00A0D8;
+	font-size: 0.75em;
+	display: block;
 }
 .m-level-btn-110
 {

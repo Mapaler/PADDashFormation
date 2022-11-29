@@ -20,11 +20,12 @@ let qrcodeReader; //二维码读取
 let qrcodeWriter; //二维码输出
 let selectedDeviceId; //视频源id
 
-const dataStructure = 4; //阵型输出数据的结构版本
+const dataStructure = 5; //阵型输出数据的结构版本
 const cfgPrefix = "PADDF-"; //设置名称的前缀
 const className_displayNone = "display-none";
 const dataAttrName = "data-value"; //用于储存默认数据的属性名
 const isGuideMod = !unsupportFeatures.length && Boolean(Number(getQueryString("guide"))); //是否以图鉴模式启动
+const PAD_PASS_BADGE = 1<<7 | 1; //月卡徽章编号，129
 
 if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
@@ -186,8 +187,8 @@ Member.prototype.outObj = function() {
 			obj[3] = m.plus;
 		}
 	}
-	if (m.latent != undefined && Array.isArray(m.latent) && m.latent.length >= 1) obj[4] = m.latent;
-	if (m.sawoken != undefined && m.sawoken >= 0) obj[5] = m.sawoken;
+	if (Array.isArray(m?.latent) && m.latent.length >= 1) obj[4] = m.latent;
+	if (m?.sawoken >= 0) obj[5] = m.sawoken;
 	const card = Cards[m.id] || Cards[0]; //怪物固定数据
 	const skill = Skills[card.activeSkillId];
 	//有技能等级，并且技能等级低于最大等级时才记录技能
@@ -218,7 +219,11 @@ Member.prototype.loadObj = function(m, dataVersion) {
 	this.latent = dataVersion > 1 ? m[4] : m.latent;
 	if (Array.isArray(this.latent) && dataVersion <= 2) this.latent = this.latent.map(l => l >= 13 ? l + 3 : l); //修复以前自己编的潜觉编号为官方编号
 	if (!Array.isArray(this.latent)) this.latent = []; //如果潜觉不是数组，则改变
-	this.sawoken = dataVersion > 1 ? m[5] : m.sawoken;
+	this.sawoken = dataVersion > 1 ?
+						(dataStructure < 5 ? 
+						Cards[this.id].superAwakenings[m[5]] //第四版前，是超觉醒的顺序
+						: m[5] ) //第5版开始，超觉醒使用觉醒编号而不是顺序
+					: m.sawoken;
 	this.skilllevel = m[6] || null;
 };
 Member.prototype.loadFromMember = function(m) {
@@ -374,7 +379,9 @@ Formation.prototype.loadObj = function(f) {
 				const fm = tf[1][mi];
 				m.loadObj(fm, dataVeision);
 			});
-			t[2] = tf[2] != undefined ? (dataVeision > 3 ? tf[2] : badgeConvert(tf[2])) : 1; //徽章
+			t[2] = dataVeision > 3 ? //徽章
+					(dataVeision < 5 && tf[2] == 50 ? PAD_PASS_BADGE : tf[2]) //5版开始月卡徽章用开关1<<7来识别
+					: badgeConvert(tf[2]); //1、2版老数据的徽章
 			t[3] = tf[3] ?? 0; //队长
 		}
 	});
@@ -400,8 +407,8 @@ Formation.prototype.loadObj = function(f) {
 			case 15:case 16:case 17: {
 				return old - 3;
 			}
-			case 18: {
-				return 50;
+			case 18: { //月卡
+				return 1<<7 | 1 ;
 			}
 			default: return 1;
 		}
@@ -450,8 +457,8 @@ Formation.prototype.getPdcQrStr = function()
 		o.set(4, m.plus[0]);
 		o.set(5, m.plus[1]);
 		o.set(6, m.plus[2]);
-		o.set(7, (m.awoken != null && m.awoken >= Cards[m.id].awakenings.length) ? -1 : m.awoken);
-		o.set(8, (m.sawoken != null && m.sawoken >= 0) ? Cards[m.id].superAwakenings[m.sawoken] : 0);
+		o.set(7, (m?.awoken >= Cards[m.id].awakenings.length) ? -1 : m.awoken);
+		o.set(8, m?.sawoken ?? 0);
 		if (a.id != 0)
 		{
 			o.set(9, a.id);
@@ -574,9 +581,9 @@ class PlayerDataDeck {
 	{
 		let datas = decks1.concat(decks2 ?? []);
 		let decks = datas.map(deck=>new PlayerDataDeck(deck, parsedCards));
-		if (Boolean(decks2))
+		if (Boolean(decks2)) //如果开了月卡
 		{
-			decks.forEach(deck=>{if (deck.badge === 1) deck.badge = 50;});
+			decks.forEach(deck=>{if (deck.badge === 1) deck.badge |= 1 << 7;}); //觉醒1打开月卡flag
 		}
 		return decks;
 	}
@@ -592,12 +599,12 @@ class PlayerDataDeck {
 			const ta = tAssists[idx];
 			if (member) {
 				tm.loadFromMember(member);
-				tm.sawoken = Cards[member.id].superAwakenings.indexOf(member.superAwoken);
+				tm.sawoken = member.superAwoken;
 				tm.plus = Object.values(member.plus);
 				tm.skilllevel = member.skillLevel;
 				if (member.assist) {
 					ta.loadFromMember(member.assist);
-					ta.sawoken = Cards[member.assist.id].superAwakenings.indexOf(member.assist.superAwoken);
+					ta.sawoken = member.assist.superAwoken;
 					ta.plus = Object.values(member.assist.plus);
 					ta.skilllevel = member.assist.skillLevel;
 				}
@@ -654,7 +661,7 @@ class PlayerDataCard {
 		m.awoken = this.awoken;
 		m.skilllevel = this.skillLevel;
 		m.plus = [this.plus.hp,this.plus.atk,this.plus.rcv];
-		m.sawoken = Cards[this.id].superAwakenings.indexOf(this.superAwoken);
+		m.sawoken = this.superAwoken;
 		m.latent = this.latent.concat();
 		return m;
 	}
@@ -1349,7 +1356,7 @@ function reloadFormationData(event) {
 		if (isGuideMod && !isNaN(mid)) {
 			formation.teams[editingTarget[0]][editingTarget[1]][editingTarget[2]].id = mid;
 		}
-		editMon(editingTarget[0], editingTarget[1], editingTarget[2]);
+		editBox.editMon(editingTarget[0], editingTarget[1], editingTarget[2]);
 		if (editingTarget && searchArr)
 		{
 			showSearch(searchArr);
@@ -1442,7 +1449,7 @@ function inputFromQrString(string)
 {
 	const re = {code: 0, message: null};
 	//code 1~99 为各种编码
-	if (string.substr(0,1) == "{" && string.substr(-1,1) == "}")
+	if (string[0] === "{" && string[string.length-1] === "}")
 	{
 		try{
 			let jo = JSON.parse(string);
@@ -1517,14 +1524,14 @@ function pdcFotmationToPdfFotmation(inputString)
 				}
 				team.members = membersStr.map(memberStr=>{
 					let memberArr = memberStr.split(',').map(valueStr=>{
-						let idx = parseInt(valueStr.substr(0,2),36);
-						let value = valueStr.substr(2);
+						let idx = parseInt(valueStr.substring(0,2),36);
+						let value = valueStr.substring(2);
 						if (idx !== 2)
 						{
 							value = parseInt(value,36);
 						}else
 						{
-							value = value.split(/(\w{2})/).filter(Boolean).map(v=>parseInt(v,36));
+							value = value.match(/\w{2}/g).map(v=>parseInt(v,36));
 						}
 						return [idx, value];
 					});
@@ -1550,7 +1557,7 @@ function pdcFotmationToPdfFotmation(inputString)
 		if (team2Leader)
 		{
 			team2Leader.set(15,0);
-			team2.splice(0,0,team2Leader);
+			team2.unshift(team2Leader);
 			team1.splice(team1.indexOf(team2Leader),1);
 		}
 	}
@@ -1580,7 +1587,7 @@ function pdcFotmationToPdfFotmation(inputString)
 
 			m.awoken = member.get(7) >= 0 ? member.get(7) : Cards[m.id].awakenings.length;
 			a.awoken = member.get(14) >= 0 ? member.get(14) : (a.id > 0 ? Cards[a.id].awakenings.length : 0);
-			m.sawoken = member.get(8) ? Cards[m.id].superAwakenings.indexOf(member.get(8)) : null;
+			m.sawoken = member.get(8);
 		});
 	});
 	return f;
@@ -1626,6 +1633,7 @@ function initialize() {
 	statusLine = controlBox.querySelector(".status"); //显示当前状态的
 	formationBox = document.body.querySelector(".formation-box");
 	editBox = document.body.querySelector(".edit-box");
+	editBox.editMon = editMember;
 
 	if (isGuideMod) {
 		console.info('现在是 怪物图鉴 模式');
@@ -2227,7 +2235,7 @@ function initialize() {
 	//编辑界面点击每个怪物的头像的处理
 	function clickMonHead(e) {
 		const arr = getMemberArrayIndexFromMonHead(this);
-		editMon(arr[0], arr[1], arr[2]);
+		editBox.editMon(arr[0], arr[1], arr[2]);
 		return false; //没有false将会打开链接
 	}
 	//编辑界面每个怪物的头像的拖动
@@ -3502,7 +3510,7 @@ function initialize() {
 	});
 
 	//id搜索
-	settingBox.changeMonId = editBoxChangeMonId;
+	editBox.changeMonId = editBoxChangeMonId;
 	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
 	const btnSearchByString = settingBox.querySelector(".row-mon-id .search-by-string");
 	function idChange(event)
@@ -3528,7 +3536,7 @@ function initialize() {
 					history.pushState(state, null, locationURL);
 				}
 
-				settingBox.changeMonId(newId);
+				editBox.changeMonId(newId);
 			}
 			return true;
 		}else
@@ -3588,29 +3596,7 @@ function initialize() {
 
 	//超觉醒
 	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
-	monEditSAwokensRow.swaokenIndex = -1;
-	const monEditSAwokens = Array.from(monEditSAwokensRow.querySelectorAll(".awoken-ul input[name='sawoken-choice']"));
 
-	function notCheckMyself() {
-		const value = parseInt(this.value, 10);
-		if (value >= 0 && monEditSAwokensRow.swaokenIndex === value) {
-			monEditSAwokens[0].click();
-			return false;
-		} else {
-			monEditSAwokensRow.swaokenIndex = value;
-			const plusArr = [monEditAddHp,monEditAddAtk,monEditAddRcv];
-			//自动打上297
-			if (value >= 0 && plusArr.some(ipt=>parseInt(ipt.value)<99))
-			{
-				console.debug("点亮超觉醒，自动设定297");
-				plusArr.forEach(ipt=>ipt.value=99);
-				reCalculateAbility();
-			}
-		}
-	}
-	monEditSAwokens.forEach(akDom => {
-		akDom.onclick = notCheckMyself;
-	});
 	//3个快速设置this.ipt为自己的value
 	function setIptToMyValue() {
 		if (this.ipt.value != this.value) {
@@ -3857,7 +3843,7 @@ function initialize() {
 		if (card.superAwakenings.length) //如果支持超觉醒
 		{
 			const mSAwokenChoIpt = monEditSAwokensRow.querySelector("input[name='sawoken-choice']:checked");
-			mon.sawoken = mSAwokenChoIpt ? parseInt(mSAwokenChoIpt.value, 10) : -1;
+			mon.sawoken = parseInt(mSAwokenChoIpt?.value, 10) || 0;
 		}
 
 		if (card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) &&
@@ -4152,15 +4138,14 @@ function changeid(mon, monDom, latentDom, assist) {
 	}
 	const sawoken = monDom.querySelector(".super-awoken");
 	if (sawoken) { //如果存在超觉醒的DOM
-		if (mon.sawoken != null && //怪物设定了超觉醒
-			mon?.sawoken >= 0 && //怪物超觉醒编号大于0
-			card.superAwakenings.length && //卡片有超觉醒
+		if (mon?.sawoken > 0 && //怪物超觉醒编号大于0
+			//card.superAwakenings.length && //卡片有超觉醒
 			mon.level >= 100 && //怪物大于100级
 			mon.plus.every(p=>p>=99) //怪物297了
 		) {
 			sawoken.classList.remove(className_displayNone);
 			const sawokenIcon = sawoken.querySelector(".awoken-icon");
-			sawokenIcon.setAttribute("data-awoken-icon", card.superAwakenings[mon.sawoken]);
+			sawokenIcon.setAttribute("data-awoken-icon", mon.sawoken);
 		} else {
 			sawoken.classList.add(className_displayNone);
 		}
@@ -4278,7 +4263,7 @@ function refreshLatent(latents, monid, latentsNode, option) {
 	}
 };
 //点击怪物头像，出现编辑窗
-function editMon(teamNum, isAssist, indexInTeam) {
+function editMember(teamNum, isAssist, indexInTeam) {
 	//数据
 	const mon = formation.teams[teamNum][isAssist][indexInTeam];
 
@@ -4313,9 +4298,10 @@ function editMon(teamNum, isAssist, indexInTeam) {
 	//if (mon.awoken > 0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下，为了减少计算次数，把这一条移动到了最后面
 	//超觉醒
 	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
-	const monEditSAwokens = monEditSAwokensRow.querySelectorAll(".awoken-ul input[name='sawoken-choice']"); //单选框，0号是隐藏的
-	monEditSAwokens[(mon.sawoken >= 0 && monEditSAwokens[mon.sawoken + 1]) ? mon.sawoken + 1 : 0].checked = true;
-	monEditSAwokensRow.swaokenIndex = mon.sawoken;
+	const monEditSAwokens = Array.from(monEditSAwokensRow.querySelectorAll(".awoken-ul input[name='sawoken-choice']")); //单选框，0号是隐藏的
+	const noSAwokenRadio = settingBox.querySelector("#sawoken-choice-nosawoken"); //不选超觉醒的选项
+	(monEditSAwokens.find(ipt=>mon.sawoken === parseInt(ipt.value,10)) || noSAwokenRadio).checked = true;
+	monEditSAwokensRow.swaoken = mon.sawoken;
 
 	const monEditLv = settingBox.querySelector(".row-mon-level .m-level");
 	monEditLv.value = mon.level || 1;
@@ -4447,28 +4433,66 @@ function editBoxChangeMonId(id) {
 	mAwokenIpt[card.awakenings.length].click(); //选择最后一个觉醒
 
 	//超觉醒
-	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
-	const mSAwoken = Array.from(monEditSAwokensRow.querySelectorAll(".awoken-ul .awoken-icon"));
-	let prevSAwokens = mSAwoken.map(icon=>parseInt(icon.getAttribute("data-awoken-icon") || 0, 10)).filter(Boolean);
-	if (card.superAwakenings.length > 0) //辅助时也还是加入超觉醒吧
-	{
-		if (card.superAwakenings.length == prevSAwokens.length &&
-			card.superAwakenings.every((sak, idx)=>sak===prevSAwokens[idx]))
-		{
-			//切换前后超觉相同，什么都不做
+	const monEditSAwokensUl = settingBox.querySelector(".row-mon-super-awoken .awoken-ul");
+	const monEditSAwokensIcons = Array.from(monEditSAwokensUl.querySelectorAll(".awoken-icon"));
+	const noSAwokenRadio = settingBox.querySelector("#sawoken-choice-nosawoken"); //不选超觉醒的选项
+	//获得之前的所有超觉醒
+	const prevSAwokens = monEditSAwokensIcons.map(icon=>parseInt(icon.getAttribute("data-awoken-icon") || 0, 10)).filter(Boolean);
+
+	function notCheckMyself() {
+		const sawoken = parseInt(this.value, 10);
+		if (monEditSAwokensUl.swaoken === sawoken && this != noSAwokenRadio) {
+			noSAwokenRadio.click();
+			monEditSAwokensUl.swaoken = 0;
+			return false;
 		} else {
-			for (let ai = 0; ai < mSAwoken.length; ai++) {
-				if (ai < card.superAwakenings.length) {
-					mSAwoken[ai].setAttribute("data-awoken-icon", card.superAwakenings[ai]);
+			monEditSAwokensUl.swaoken = sawoken;
+			const level = settingBox.querySelector(".row-mon-level .m-level");
+			const plusArr = [...settingBox.querySelectorAll(".row-mon-plus input[type='number']")];
+			if (sawoken > 0)
+			{
+				let recalFlag = false;
+				//自动100级
+				if (parseInt(level.value, 10)<100)
+				{
+					console.debug("点亮超觉醒，自动设定100级");
+					level.value = 100;
+					recalFlag = true;
 				}
-				mSAwoken[ai].classList.toggle(className_displayNone, ai >= card.superAwakenings.length);;
+				//自动打上297
+				if (plusArr.some(ipt=>parseInt(ipt.value, 10)<99))
+				{
+					console.debug("点亮超觉醒，自动设定297");
+					plusArr.forEach(ipt=>ipt.value=99);
+					recalFlag = true;
+				}
+				if (recalFlag) editBox.reCalculateAbility();
 			}
-			monEditSAwokensRow.querySelector("#sawoken-choice--1").click(); //选中隐藏的空超觉
 		}
-		monEditSAwokensRow.classList.remove(className_displayNone);
+	}
+	if (card.superAwakenings.length == prevSAwokens.length &&
+		card.superAwakenings.every((sak, idx)=>sak===prevSAwokens[idx])
+		)
+	{
+		//切换前后超觉相同，什么都不做
+		//console.debug('与上一个超觉醒完全相同，不用修改超觉醒');
 	} else {
-		monEditSAwokensRow.classList.add(className_displayNone);
-		monEditSAwokensRow.querySelector("#sawoken-choice--1").click(); //选中隐藏的空超觉
+		const optionIconTemplate = settingBox.querySelector('#sawoken-option-icon');
+		monEditSAwokensUl.innerHTML = ''; //清空旧的超觉醒
+		monEditSAwokensUl.swaoken = 0;
+		card.superAwakenings.forEach((sak,idx)=>{
+			const clone = document.importNode(optionIconTemplate.content, true);
+			const input = clone.querySelector('input');
+			const label = clone.querySelector('label');
+			input.value = sak;
+			input.onclick = notCheckMyself;
+			label.setAttribute("data-awoken-icon", sak);
+			const id = `sawoken-choice-${idx}`;
+			input.id = id;
+			label.setAttribute('for', id);
+			monEditSAwokensUl.append(clone);
+		});
+		noSAwokenRadio.click(); //选中隐藏的空超觉
 	}
 
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
@@ -4862,13 +4886,12 @@ function refreshmemberAwoken(memberAwokenDom, assistAwokenDom, team, idx) {
 	let memberAwokens = memberCard?.awakenings?.slice(0,memberData.awoken) || [];
 	//单人和三人为队员增加超觉醒
 	if ((solo || teamsCount === 3) &&
-		memberData.sawoken != null && //怪物设定了超觉醒
-		memberData.sawoken >= 0 && //怪物超觉醒编号大于0
-		memberCard?.superAwakenings?.length >= 0 && //卡片有超觉醒
+		memberData.sawoken > 0 && //怪物超觉醒编号大于0
+		//memberCard?.superAwakenings?.length > 0 && //卡片有超觉醒
 		memberData.level >= 100 && //怪物大于100级
 		memberData.plus.every(p=>p>=99) //怪物297了
 	) {
-		memberAwokens.push(memberCard.superAwakenings[memberData.sawoken]);
+		memberAwokens.push(memberData.sawoken);
 	}
 	//memberAwokens.sort();
 	//武器觉醒

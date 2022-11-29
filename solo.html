@@ -96,7 +96,7 @@ var formation = new Formation(teamsCount,6);
 					<li><input type="radio" name="team-1-badge" class="badge-radio" value="12" id="team-1-badge-12"><label class="badge" data-badge-icon="12" for="team-1-badge-12"></label></li>
 					<li><input type="radio" name="team-1-badge" class="badge-radio" value="13" id="team-1-badge-13"><label class="badge" data-badge-icon="13" for="team-1-badge-13"></label></li>
 					<li><input type="radio" name="team-1-badge" class="badge-radio" value="14" id="team-1-badge-14"><label class="badge" data-badge-icon="14" for="team-1-badge-14"></label></li>
-					<li><input type="radio" name="team-1-badge" class="badge-radio" value="50" id="team-1-badge-50"><label class="badge" data-badge-icon="50" for="team-1-badge-50"></label></li>
+					<li><input type="radio" name="team-1-badge" class="badge-radio" value="129" id="team-1-badge-129"><label class="badge" data-badge-icon="129" for="team-1-badge-129"></label></li>
 					<!--<li><input type="radio" name="team-1-badge" class="badge-radio" value="15" id="team-1-badge-15"><label class="badge" data-badge-icon="15" for="team-1-badge-15"></label></li>
 					<li><input type="radio" name="team-1-badge" class="badge-radio" value="16" id="team-1-badge-16"><label class="badge" data-badge-icon="16" for="team-1-badge-16"></label></li>-->
 				</ul>
@@ -978,18 +978,10 @@ var formation = new Formation(teamsCount,6);
 				</div>
 				<div class="row-mon-super-awoken">
 					<!--怪物超觉醒-->
+					<input type="radio" name="sawoken-choice" class="sawoken-choice" value="0" id="sawoken-choice-nosawoken" />
+					<template id="sawoken-option-icon"><input type="radio" name="sawoken-choice" class="sawoken-choice" /><label class="awoken-icon"></label></template>
 					<div class="awoken-ul">
-						<input type="radio" name="sawoken-choice" class="sawoken-choice" value="-1" id="sawoken-choice--1" /><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="0" id="sawoken-choice-0" /><label for="sawoken-choice-0" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="1" id="sawoken-choice-1" /><label for="sawoken-choice-1" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="2" id="sawoken-choice-2" /><label for="sawoken-choice-2" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="3" id="sawoken-choice-3" /><label for="sawoken-choice-3" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="4" id="sawoken-choice-4" /><label for="sawoken-choice-4" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="5" id="sawoken-choice-5" /><label for="sawoken-choice-5" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="6" id="sawoken-choice-6" /><label for="sawoken-choice-6" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="7" id="sawoken-choice-7" /><label for="sawoken-choice-7" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="8" id="sawoken-choice-8" /><label for="sawoken-choice-8" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="9" id="sawoken-choice-9" /><label for="sawoken-choice-9" class="awoken-icon"></label>
+						<input type="radio" name="sawoken-choice" class="sawoken-choice" id="sawoken-choice-1" /><label for="sawoken-choice-1" class="awoken-icon"></label>
 					</div>
 				</div>
 			</div>
@@ -1022,9 +1014,8 @@ var formation = new Formation(teamsCount,6);
 					</div>
 					<div class="subrow">
 						<button class="m-level-btn-min" value="1"></button>~<button class="m-level-btn-max" value="99"></button>
-						<br>
-						<button class="m-level-btn-110 display-none" value="110"></button>
-						<button class="m-level-btn-120 display-none" value="120"></button>
+						<button class="m-level-btn-110 display-none" value="110">110</button>
+						<button class="m-level-btn-120 display-none" value="120">120</button>
 					</div>
 					<div class="m-level-exp"></div>
 				</div>

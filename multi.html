@@ -1132,18 +1132,10 @@ var formation = new Formation(teamsCount,5);
 				</div>
 				<div class="row-mon-super-awoken">
 					<!--怪物超觉醒-->
+					<input type="radio" name="sawoken-choice" class="sawoken-choice" value="0" id="sawoken-choice-nosawoken" />
+					<template id="sawoken-option-icon"><input type="radio" name="sawoken-choice" class="sawoken-choice" /><label class="awoken-icon"></label></template>
 					<div class="awoken-ul">
-						<input type="radio" name="sawoken-choice" class="sawoken-choice" value="-1" id="sawoken-choice--1" /><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="0" id="sawoken-choice-0" /><label for="sawoken-choice-0" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="1" id="sawoken-choice-1" /><label for="sawoken-choice-1" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="2" id="sawoken-choice-2" /><label for="sawoken-choice-2" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="3" id="sawoken-choice-3" /><label for="sawoken-choice-3" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="4" id="sawoken-choice-4" /><label for="sawoken-choice-4" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="5" id="sawoken-choice-5" /><label for="sawoken-choice-5" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="6" id="sawoken-choice-6" /><label for="sawoken-choice-6" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="7" id="sawoken-choice-7" /><label for="sawoken-choice-7" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="8" id="sawoken-choice-8" /><label for="sawoken-choice-8" class="awoken-icon"></label><!--
-						--><input type="radio" name="sawoken-choice" class="sawoken-choice" value="9" id="sawoken-choice-9" /><label for="sawoken-choice-9" class="awoken-icon"></label>
+						<input type="radio" name="sawoken-choice" class="sawoken-choice" id="sawoken-choice-1" /><label for="sawoken-choice-1" class="awoken-icon"></label>
 					</div>
 				</div>
 			</div>
@@ -1176,9 +1168,8 @@ var formation = new Formation(teamsCount,5);
 					</div>
 					<div class="subrow">
 						<button class="m-level-btn-min" value="1"></button>~<button class="m-level-btn-max" value="99"></button>
-						<br>
-						<button class="m-level-btn-110 display-none" value="110"></button>
-						<button class="m-level-btn-120 display-none" value="120"></button>
+						<button class="m-level-btn-110 display-none" value="110">110</button>
+						<button class="m-level-btn-120 display-none" value="120">120</button>
 					</div>
 					<div class="m-level-exp"></div>
 				</div>

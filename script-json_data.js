@@ -488,7 +488,7 @@ const pdcBadgeMap = [
 	{pdf:12,pdc:15}, //墨镜
 	{pdf:13,pdc:17}, //防废
 	{pdf:14,pdc:16}, //防毒
-	{pdf:50,pdc:14}, //月卡
+	{pdf:129,pdc:14}, //月卡
 ];
 //pdc的潜觉对应数字
 const pdcLatentMap = [

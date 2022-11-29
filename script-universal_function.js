@@ -448,13 +448,11 @@ function awokenCountInTeam(team, awokenIndex, solo, teamsCount) {
 		//启用的觉醒数组片段
 		let enableAwoken = card.awakenings.slice(0, mon.awoken);
 		//单人、3人时,大于等于100级且297时增加超觉醒
-		if ((solo || teamsCount === 3) && mon.sawoken >= 0 && mon.level >= 100 && mon.plus.every(p=>p>=99)) {
-			const sAwokenT = card.superAwakenings[mon.sawoken];
-			if (sAwokenT >= 0)
-				enableAwoken = enableAwoken.concat(sAwokenT);
+		if ((solo || teamsCount === 3) && mon.sawoken > 0 && mon.level >= 100 && mon.plus.every(p=>p>=99)) {
+			enableAwoken.push(mon.sawoken);
 		}
 		if (assistCard && assistCard.enabled && assistCard.awakenings.includes(49)) { //如果卡片未启用
-			enableAwoken = enableAwoken.concat(assistCard.awakenings.slice(0, assist.awoken));
+			enableAwoken.push(...assistCard.awakenings.slice(0, assist.awoken));
 		}
 
 		//相同的觉醒数
@@ -567,9 +565,8 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	//储存点亮的觉醒
 	let awokenList = memberCard.awakenings.slice(0, member.awoken);
 	//单人、3人时,大于等于100级且297时增加超觉醒
-	if ((solo || teamsCount === 3) && member.sawoken >= 0 && member.level >= 100 && member.plus.every(p=>p>=99)) {
-		const sAwokenT = memberCard.superAwakenings[member.sawoken];
-		if (sAwokenT >= 0) awokenList.push(sAwokenT)
+	if ((solo || teamsCount === 3) && member.sawoken > 0 && member.level >= 100 && member.plus.every(p=>p>=99)) {
+		awokenList.push(member.sawoken)
 	}
 	//如果有武器还要计算武器的觉醒
 	let enableBouns = false;
@@ -1247,13 +1244,11 @@ function countTeamSB(team, solo) {
 		const memberCard = henshinBase(member);
 		let enableAwoken = memberCard?.awakenings?.slice(0, member.awoken) || [];
 		//单人、3人时,大于等于100级且297时增加超觉醒
-		if ((solo || teamsCount === 3) && member.sawoken >= 0 && member.level >= 100 && member.plus.every(p=>p>=99)) {
-			const sAwokenT = memberCard?.superAwakenings?.[member.sawoken];
-			if (sAwokenT >= 0)
-				enableAwoken = enableAwoken.concat(sAwokenT);
+		if ((solo || teamsCount === 3) && member.sawoken > 0 && member.level >= 100 && member.plus.every(p=>p>=99)) {
+			enableAwoken.push(member.sawoken);
 		}
-		if (assist.card && assist.card.enabled && assist.card.awakenings.includes(49)) { //如果卡片未启用
-			enableAwoken = enableAwoken.concat(assist.card.awakenings.slice(0, assist.awoken));
+		if (assist.card && assist.card.enabled && assist.card.awakenings.includes(49)) {
+			enableAwoken.push(...assist.card.awakenings.slice(0, assist.awoken));
 		}
 
 		//大SB 56，小SB 21
@@ -1319,7 +1314,7 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 				case 21: //大手指
 					moveTime.duration.badge = 2;
 					break;
-				case 50: //月卡
+				case PAD_PASS_BADGE: //月卡
 					moveTime.duration.badge = 3;
 					break;
 			}
