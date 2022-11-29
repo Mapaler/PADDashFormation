@@ -491,6 +491,38 @@ function skillParser(skillId)
 {
 	function merge(skills)
 	{
+		//主动技部分的合并
+		let activeTurns = skills.filter(skill=>skill.kind == SkillKinds.ActiveTurns);
+		if (activeTurns.length>1)
+		{ //把后面的全都合并到第一个
+			//按回合数拆分组
+			let diffTurnsGroup = activeTurns.groupBy((a,b)=>a.turns === b.turns);
+			let diffTurnsSkills = diffTurnsGroup.flatMap(group=>{
+				if (group.length>1) { //大于一个技能的可以合并
+					group[0].skills = group.flatMap(s=>s.skills);
+					// group.reduce((pre,cur)=>{
+					// 	pre.skills.push(...cur.skills);
+					// 	return pre
+					// });
+					let firstSkill = group.shift(); //从筛选中去除第一个
+					group.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+					return [firstSkill];
+				} else { //1个技能的跳过
+					return group[0];
+				}
+			});
+			//进行具体技能效果的合并
+			diffTurnsSkills.forEach(turnsSkill=>{
+				//破吸部分的合并
+				let voidBuff = turnsSkill.skills.filter(skill=>skill.kind == SkillKinds.VoidEnemyBuff);
+				if (voidBuff.length>1)
+				{ //把后面的全都合并到第一个
+					voidBuff[0].buffs = voidBuff.flatMap(s=>s.buffs);
+					voidBuff.shift(); //从筛选中去除第一个
+					voidBuff.forEach(skill=>turnsSkill.skills.splice(turnsSkill.skills.indexOf(skill),1)); //去掉所有后面的
+				}
+			});
+		}
 		//解封部分的合并
 		let unbinds = skills.filter(skill=>skill.kind == SkillKinds.Unbind);
 		if (unbinds.length>1)
@@ -503,15 +535,6 @@ function skillParser(skillId)
 			});
 			unbinds.shift(); //从筛选中去除第一个
 			unbinds.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
-		}
-		//破吸部分的合并
-		let voidBuff = skills.filter(skill=>skill.kind == SkillKinds.ActiveTurns &&
-			skill.skill.kind == SkillKinds.VoidEnemyBuff);
-		if (voidBuff.length>1 && voidBuff.every((s,i,a)=>s.turns == a[0].turns))
-		{ //把后面的全都合并到第一个
-			voidBuff[0].skill.buffs = voidBuff.flatMap(s=>s.skill.buffs);
-			voidBuff.shift(); //从筛选中去除第一个
-			voidBuff.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
 		}
 		let fixedDamages = skills.filter(skill=>skill.kind == SkillKinds.DamageEnemy && skill.attr === 'fixed').filter((skill,idx,arr)=>skill.id==arr[0].id);
 		if (fixedDamages.length>1)
@@ -736,16 +759,16 @@ function skillParser(skillId)
 	const skill = Skills[skillId];
 	if (!skill) return [];
 	//此处用apply将这个parser传递到后面解析函数的this里，用于递归解析
-	const result = parsers?.[skill.type]?.apply({ parser: skillParser }, skill.params) 
-		?? { kind: SkillKinds.Unknown };
-	let skills = (Array.isArray(result) ? result : [result])
-		.filter(Boolean)
-		.map(s => ({ id: skillId, type: skill.type, params: skill.params, ...s }));
+	const result = skillObjectParsers?.[skill.type]?.apply({ parser: skillParser }, skill.params) 
+		?? { kind: SkillKinds.Unknown }; //没有时返回未知技能
+	let skills = (Array.isArray(result) ? result : [result]) //确保技能是数组
+		.filter(Boolean) //去除无效技能
+		.map(s => ({ id: skillId, type: skill.type, params: skill.params, ...s })); //额外增加技能id、type、原始参数
 
 	function splitProvisoSkill(skills)
 	{
-		let idx = skills.findIndex(skill=>skill.kind == SkillKinds.SkillProviso);
-		if (idx>=0)
+		let idx = skills.findIndex(skill=>skill.kind == SkillKinds.SkillProviso); //搜索HP、层数限制技能的位置
+		if (idx>=0) //如果找到，就拆分成3份
 		{
 			return [
 				skills.slice(0,idx),
@@ -757,9 +780,12 @@ function skillParser(skillId)
 			return [skills];
 		}
 	}
+	//技能原始对象的合并，技能显示效果的合并在“function renderSkillEntry”里
 	if (merge_skill)
 	{
+		//将技能拆分成3部分后分别合并技能
 		let skillsSplit = splitProvisoSkill(skills).map(_skills=>merge(_skills));
+		//再展平，重新回到一层技能
 		skills = skillsSplit.flat(1);
 	}
 	
@@ -916,8 +942,8 @@ const p = {
 	},
 }
 
-function activeTurns(turns, skill) {
-	return skill ? { kind: SkillKinds.ActiveTurns, turns: turns, skill: skill } : null;
+function activeTurns(turns, ...skills) {
+	return skills.length ? { kind: SkillKinds.ActiveTurns, turns, skills } : null;
 }
 function damageEnemy(target, attr, damage) {
 	return { kind: SkillKinds.DamageEnemy, target: target, attr: attr, damage: damage };
@@ -1041,8 +1067,8 @@ function boardSizeChange(width=7, height=6) {
 	return { kind: SkillKinds.BoardSizeChange, width, height };
 }
 
-const parsers = {
-	parser: (() => []), //这个用来解决代码提示的报错问题，不起实际作用
+const skillObjectParsers = {
+	//parser: (() => []), //这个用来解决代码提示的报错问题，不起实际作用
   
 	[0](attr, mul) { return damageEnemy('all', attr, v.xATK(mul)); },
 	[1](attr, value) { return damageEnemy('all', attr, v.constant(value)); },
@@ -1655,19 +1681,27 @@ function renderSkillEntry(skills)
 		li.addEventListener("click", showParsedSkill);
 	});
 
+	//技能显示效果的合并，技能原始对象的合并在“function skillParser”里
 	if (merge_skill)
 	{
+		const searchKind = [ //需要配合并的技能类型
+			SkillKinds.SetOrbState,
+			SkillKinds.BoardChange,
+			SkillKinds.GenerateOrbs,
+			SkillKinds.FixedOrbs,
+			SkillKinds.BoardJammingStates,
+		];
 		let boardChange = skills.filter(skill=>{
-			if (skill.kind == SkillKinds.ActiveTurns) skill = skill.skill;
-			const { kind } = skill;
-			return [
-				SkillKinds.SetOrbState,
-				SkillKinds.BoardChange,
-				SkillKinds.GenerateOrbs,
-				SkillKinds.FixedOrbs,
-				SkillKinds.BoardJammingStates,
-			].includes(kind);
-		}).map(skill=>skill.kind == SkillKinds.ActiveTurns ? skill.skill : skill);
+			if (skill.kind == SkillKinds.ActiveTurns) {
+				//如果是主动技，任一子技能属于这个范围就可以了
+				return skill.skills.some(subSkill=>searchKind.includes(subSkill.kind))
+			} else {
+				return searchKind.includes(skill.kind);
+			}
+		}).flatMap(skill=>skill.kind == SkillKinds.ActiveTurns ?
+			//主动技还需要再筛选一遍子技能
+			skill.skills.filter(subSkill=>searchKind.includes(subSkill.kind)) :
+			skill);
 		if (boardChange.filter(skill=>skill.kind != SkillKinds.SetOrbState).length > 0)
 		{
 			const boardsBar = new BoardSet(new Board(), new Board(null,7,6), new Board(null,5,4));
@@ -1785,10 +1819,10 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.ActiveTurns: { //有回合的行动
-			let turns = skill.turns, actionSkill = skill.skill;
+			let { turns, skills } = skill;
 			let dict = {
 				turns: Array.isArray(turns) ? turns.join(tsp.word.range_hyphen().textContent) : turns,
-				actionSkill: renderSkill(actionSkill),
+				skills: skills?.map(renderSkill)?.nodeJoin(tsp.word.comma()),
 			};
 			frg.ap(tsp.skill.active_turns(dict));
 			break;

@@ -27,7 +27,7 @@
 		skill: {
 			error: tp`😫技能解析发生错误，请将角色 ID 反馈给开发者。`,
 			unknown: tp`未知的技能類型：${'type'}`, //type
-			active_turns: tp`${'turns'} 回合內，${'actionSkill'}`, //turns, actionSkill
+			active_turns: tp`${'turns'} 回合內，${'skills'}`, //turns, skills
 			random_skills: tp`隨機發動以下技能：${'skills'}`, //skills
 			evolved_skills: tp`技能使用後會進化為下一階段：${'skills'}`, //skills
 			evolved_skills_loop: tp`${`icon`}使用後返回第一階段`,
