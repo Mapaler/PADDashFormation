@@ -2332,6 +2332,11 @@ function initialize() {
 		const isCopy = changeSwapToCopy.checked;
 		let from = formation.teams[formArr[0]][formArr[1]][formArr[2]];
 		let to = formation.teams[toArr[0]][toArr[1]][toArr[2]];
+		let fromCard = from.card, toCard = to.card;
+		if (toArr[1] && !fromCard?.canAssist && fromCard?.id > 0 || formArr[1] && !toCard?.canAssist && toCard?.id > 0) {
+			console.warn("该角色不能作为辅助");
+			return;
+		}
 		if (formArr[1] != toArr[1]) //从武器拖到非武器才改变类型
 		{
 			from = changeType(from, formArr[1]);

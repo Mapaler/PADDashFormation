@@ -552,8 +552,8 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		[{ index: 2, scale: 0.01 }, { index: 12, scale: 0.02 }, { index: 29, scale: 0.03 }, { index: 44, scale: 0.08 }], //ATK
 		[{ index: 3, scale: 0.1 }, { index: 12, scale: 0.2 }, { index: 30, scale: 0.3 }, { index: 45, scale: 0.35 }] //RCV
 	];
-	const memberCurves = [memberCard.hp, memberCard.atk, memberCard.rcv];
-	const assistCurves = assistCard ? [assistCard.hp, assistCard.atk, assistCard.rcv] : null;
+	const memberCurves = [memberCard?.hp, memberCard?.atk, memberCard?.rcv];
+	const assistCurves = assistCard?.canAssist && [assistCard.hp, assistCard.atk, assistCard.rcv];
 
 	const dge = formation.dungeonEnchance;
 	const dgeRate = [dge.rate.hp, dge.rate.atk, dge.rate.rcv];
@@ -585,7 +585,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		let n_assist_base = 0,
 			n_assist_plus = 0; //辅助的bonus
 		//计算辅助的额外血量
-		if (assistCard?.id > 0 && assistCard.enabled && enableBouns) {
+		if (assistCurves && enableBouns) {
 			n_assist_base = Math.round(curve(assistCurves[idx], assist.level, assistCard.maxLevel, assistCard.limitBreakIncr, limitBreakIncr120[idx])); //辅助等级基础三维
 			n_assist_plus = assist.plus[idx] * plusAdd[idx]; //辅助加值增加量
 		}
