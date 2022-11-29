@@ -220,7 +220,7 @@ Member.prototype.loadObj = function(m, dataVersion) {
 	if (Array.isArray(this.latent) && dataVersion <= 2) this.latent = this.latent.map(l => l >= 13 ? l + 3 : l); //修复以前自己编的潜觉编号为官方编号
 	if (!Array.isArray(this.latent)) this.latent = []; //如果潜觉不是数组，则改变
 	this.sawoken = dataVersion > 1 ?
-						(dataStructure < 5 ? 
+						(dataVersion < 5 ? 
 						Cards[this.id].superAwakenings[m[5]] //第四版前，是超觉醒的顺序
 						: m[5] ) //第5版开始，超觉醒使用觉醒编号而不是顺序
 					: m.sawoken;
@@ -364,7 +364,7 @@ Formation.prototype.loadObj = function(f) {
 		dge.rate.rcv = 1;
 		return;
 	}
-	const dataVeision = f.v ? f.v : (f.f ? 2 : 1); //是第几版格式
+	const dataVeision = f?.v ?? (f.f ? 2 : 1); //是第几版格式
 	this.title = dataVeision > 1 ? f.t : f.title;
 	this.detail = dataVeision > 1 ? f.d : f.detail;
 	const loadTeamArr = dataVeision > 1 ? f.f : f.team;
