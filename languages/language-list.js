@@ -1,7 +1,7 @@
 ﻿const languageList = [
 	{
 		name:"English",i18n:"en",searchlist:["en","ja"],
-		guideURL:id=>`http://www.puzzledragonx.com/en/monster.asp?n=${id}` //or (id,name)=>`http://www.puzzledragonx.com/en/search.asp?q=${name}`
+		guideURL:id=>`https://ilmina.com/#/CARD/${id}` //or (id,name)=>`http://www.puzzledragonx.com/en/search.asp?q=${name}`
 	},
 	{
 		name:"中文（繁體）",i18n:"zh-TW",i18n_RegExp:/^zh-(?:hant-)?TW/i,searchlist:["cht","ja"],
