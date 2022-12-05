@@ -46,12 +46,6 @@ body{
 	--head-block-width: 108px;
 	--head-block-height: 108px;
 	--search-icon-unchecked: 0.4;
-	--team-1-bgcolor : pink;
-	--team-2-bgcolor : lightblue;
-	--team-3-bgcolor : lightgreen;
-	--team-1-color : red;
-	--team-2-color : blue;
-	--team-3-color : green;
 	--font-family : "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--icon-font-family : 'Font Awesome 5 Free', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--game-font-family : 'FOT-KurokaneStd-EB',"Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
@@ -684,26 +678,25 @@ body:not(.show-awoken-count):not(.solo) .formation-box .team-badge
 	display: inline-block;
 }
 /*队伍的背景色*/
-.team-1 .team-members,
-.team-1 .team-latents,
-.team-1 .team-box-name::before,
-.team-1 .team-box-name::after
-{
-	background-color: var(--team-1-bgcolor);
+.teams {
+	counter-reset: team;
 }
-.team-2 .team-members,
-.team-2 .team-latents,
-.team-2 .team-box-name::before,
-.team-2 .team-box-name::after
-{
-	background-color: var(--team-2-bgcolor);
+.teams .team-bigbox:nth-child(1) {
+	--team-ft-color: red;
+	--team-bg-color : pink;
 }
-.team-3 .team-members,
-.team-3 .team-latents,
-.team-3 .team-box-name::before,
-.team-3 .team-box-name::after
+.teams .team-bigbox:nth-child(2) {
+	--team-ft-color: blue;
+	--team-bg-color : lightblue;
+}
+.teams .team-bigbox:nth-child(3) {
+	--team-ft-color: green;
+	--team-bg-color : lightgreen;
+}
+.team-members,
+.team-latents
 {
-	background-color: var(--team-3-bgcolor);
+	background-color: var(--team-bg-color);
 }
 .team-bigbox{
 	position: relative;
@@ -714,82 +707,50 @@ body:not(.show-awoken-count):not(.solo) .formation-box .team-badge
 	margin-bottom:0;
 }
 /*队伍A、B的文字*/
-.team-box-name::after,
-.team-box-name::before
-{
-	font-size: 30px;
-	font-weight: bold;
-	text-align: center;
-	line-height: 54px;
-	white-space: pre-wrap;
-	display: none;
-	width: var(--head-block-width);
-	height: var(--head-block-height);
-}
-.show-team-name-left .team-box-name::before,
-.show-team-name-right .team-box-name::after
-{
-	display: inline-block;
-}
-
-.reverse-member-assist .team-box-name::after,
-.reverse-member-assist .team-box-name::before
-{
-	vertical-align:top;
-}
-.team-1 .team-box-name::after,
-.team-1 .team-box-name::before,
-.team-1 .team-assist .member::after,
-.team-1 .team-assist .member::before
-{
-	color: var(--team-1-color);
-}
-.team-2 .team-box-name::after,
-.team-2 .team-box-name::before,
-.team-2 .team-assist .member::after,
-.team-2 .team-assist .member::before
-{
-	color: var(--team-2-color);
-	/*vertical-align:top;*/
-}
-.team-3 .team-box-name::after,
-.team-3 .team-box-name::before,
-.team-3 .team-assist .member::after,
-.team-3 .team-assist .member::before
-{
-	color: var(--team-3-color);
-}
 .team-box{
 	display: inline-block;
 	vertical-align:bottom;
 }
-
-.team-box .team-assist .member::after,
-.team-box .team-assist .member::before
+.team-box-name .box-name
 {
+	color: var(--team-ft-color);
+	background-color: var(--team-bg-color);
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
 	width: var(--head-block-width);
+	height: var(--head-block-height);
+	display: inline flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.team-box-name .box-name::before,
+.team-box-name .box-name::after
+{
+	vertical-align: middle;
+}
+.team-box-name .box-name::after
+{
+	counter-increment: team;
+	content: counter(team, upper-alpha);
+}
+.reverse-member-assist .team-box-name .box-name
+{
+	vertical-align:top;
+}
+.team-assist-label .assist-label {
+	width: var(--head-block-width);
+	color: var(--team-ft-color);
+	display: inline-block;
 	text-align: center;
 	font-size: 18px;
 	font-weight: bold;
-	position: relative;
 }
-/*平时的显示*/
-.team-box .team-assist .member::after
-{
-	display: inline-block;
+.team-assist-label .assist-label::before {
+	content: "▼";
 }
-.team-box .team-assist .member::before
-{
-	display: none;
-}
-/*反向时的显示*/
-.reverse-member-assist .team-assist .member::after
-{
-	display: none;
-}
-.reverse-member-assist .team-assist .member::before
-{
-	display: inline-block;
+.reverse-member-assist .team-assist-label .assist-label::before {
+	content: "▲";
 }
 
 .formation-box .formation-total-info,
@@ -1134,7 +1095,7 @@ icon.inflicts::after
 }
 
 /*队长的边框*/
-.team-box .team-members .team-leader .monster
+.team-members .team-leader .monster
 {
 	border-radius: 10px;
 	border-width:4px;
@@ -1142,17 +1103,8 @@ icon.inflicts::after
 	box-sizing: initial;
 	margin: 0;
 }
-.team-1 .team-members .team-leader .monster
-{
-	border-color: var(--team-1-color);
-}
-.team-2 .team-members .team-leader .monster
-{
-	border-color: var(--team-2-color);
-}
-.team-3 .team-members .team-leader .monster
-{
-	border-color: var(--team-3-color);
+.team-leader .monster {
+	border-color: var(--team-ft-color);
 }
 
 /*三维计算值*/

@@ -23,28 +23,13 @@
 .monster .id::before{
 	content: "No.";
 }
-.team-1 .team-box-name::after,
-.team-1 .team-box-name::before
+.team-box-name .box-name::before
 {
-	content: "チーム\A A";
+	content: "チーム";
 }
-.team-2 .team-box-name::after,
-.team-2 .team-box-name::before
+.team-assist-label .assist-label::after
 {
-	content: "チーム\A B";
-}
-.team-3 .team-box-name::after,
-.team-3 .team-box-name::before
-{
-	content: "チーム\A C";
-}
-.team-box .team-assist .member::after
-{
-	content: "▼継承";
-}
-.team-box .team-assist .member::before
-{
-	content: "▲継承";
+	content: "継承";
 }
 .abilitys .hp::before,
 .search-mon-list .hp-preview::before

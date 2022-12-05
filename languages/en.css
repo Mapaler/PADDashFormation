@@ -24,28 +24,13 @@
 .monster .id::before{
 	content: "No.";
 }
-.team-1 .team-box-name::after,
-.team-1 .team-box-name::before
+.team-box-name .box-name::before
 {
-	content: "Team\A A";
+	content: "Team";
 }
-.team-2 .team-box-name::after,
-.team-2 .team-box-name::before
+.team-assist-label .assist-label::after
 {
-	content: "Team\A B";
-}
-.team-3 .team-box-name::after,
-.team-3 .team-box-name::before
-{
-	content: "Team\A C";
-}
-.team-box .team-assist .member::after
-{
-	content: "▼Assist";
-}
-.team-box .team-assist .member::before
-{
-	content: "▲Assist";
+	content: "Assist";
 }
 .abilitys .hp::before,
 .search-mon-list .hp-preview::before
