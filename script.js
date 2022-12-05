@@ -4052,9 +4052,9 @@ function buildEvoTreeIdsArray(card, includeHenshin = true) {
 
 //改变一个怪物头像
 function changeid(mon, monDom, latentDom, assist) {
-	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-	const parentNode = monDom.parentNode;
-	fragment.appendChild(monDom);
+	//let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+	//const parentNode = monDom.parentNode;
+	//fragment.appendChild(monDom);
 	const monId = mon.id;
 	const card = Cards[monId] || Cards[0]; //怪物固定数据
 	if (!card) { //如果搜不到怪物就退出操作
@@ -4069,7 +4069,7 @@ function changeid(mon, monDom, latentDom, assist) {
 		monDom.removeAttribute("title");
 		monDom.classList.add("delay");
 		monDom.classList.remove("null");
-		parentNode.appendChild(fragment);
+		//parentNode.appendChild(fragment);
 		if (latentDom) latentDom.classList.add(className_displayNone);
 		return;
 	} else if (monId == 0) //如果是空
@@ -4078,7 +4078,7 @@ function changeid(mon, monDom, latentDom, assist) {
 		monDom.removeAttribute("title");
 		monDom.classList.add("null");
 		monDom.classList.remove("delay");
-		parentNode.appendChild(fragment);
+		//parentNode.appendChild(fragment);
 		if (latentDom) latentDom.classList.add(className_displayNone);
 		return;
 	} else if (monId > -1) //如果提供了id
@@ -4241,7 +4241,7 @@ function changeid(mon, monDom, latentDom, assist) {
 		}
 	}
 
-	parentNode.appendChild(fragment);
+	//parentNode.appendChild(fragment);
 }
 //刷新潜觉
 function refreshLatent(latents, monid, latentsNode, option) {
@@ -4689,8 +4689,7 @@ function refreshAll(formationData) {
 		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
 		
 		for (let ti = 0, ti_len = membersDom.querySelectorAll(".member").length; ti < ti_len; ti++) {
-			//开始设置换队长
-			const leaderIdx = teamData[3];
+			const leaderIdx = teamData[3]; //开始设置换队长
 			const memberLi = membersDom.querySelector(`.member-${ti+1}`);
 			const latentLi = latentsDom.querySelector(`.latents-${ti+1}`);
 			const assistsLi = assistsDom.querySelector(`.member-${ti+1}`);
@@ -4698,10 +4697,7 @@ function refreshAll(formationData) {
 			const teamMemberAwokenLi = teamAbilityDom ? teamMemberAwokenDom.querySelector(`.member-awoken-${ti+1}`) : undefined;
 			const teamAssistAwokenLi = teamAbilityDom ? teamAssistAwokenDom.querySelector(`.member-awoken-${ti+1}`) : undefined;
 			[memberLi,latentLi,assistsLi,teamAbilityLi,teamMemberAwokenLi,teamAssistAwokenLi].forEach(dom=>{
-				if (!dom)
-				{
-					return;
-				}
+				if (!dom) return;
 				if (leaderIdx > 0 && ti == 0) //队长
 				{
 					dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-leaderIdx)*-108}px)` : `translateX(${leaderIdx*108}px)`;
@@ -4718,17 +4714,20 @@ function refreshAll(formationData) {
 			const memberDom = memberLi.querySelector(`.monster`);
 			const assistDom = assistsLi.querySelector(`.monster`);
 			const latentDom = latentLi.querySelector(`.latent-ul`);
-			let member = teamData[0][ti], assist = teamData[1][ti];
+			const member = teamData[0][ti], assist = teamData[1][ti];
+			const memberCard = member.card, assistCard = assist.card;
 			changeid(member, memberDom, latentDom, assist); //队员
 			changeid(assist, assistDom); //辅助
+			const enableBouns = memberCard.attrs[0] === assistCard.attrs[0] || //如果主属性相等
+				[memberCard.attrs[0], assistCard.attrs[0]].some(attr=>attr===6); //或任一为仅副属性
+			teamAbilityLi.classList.toggle("enable-bouns", enableBouns);
+			
 			//隐藏队长的自身换为换队长的技能
 			if (ti == 5 || //好友队长永远隐藏
 				leaderIdx == 0 && ti == 0 ) //当没换队长时，自身队长的欢队长技能隐藏
 			{
-				const card_m = Cards[member.id] || Cards[0];
-				const card_a = Cards[assist.id] || Cards[0];
-				const skills_m = getCardActiveSkills(card_m, [93, 227]); //更换队长的技能
-				const skills_a = getCardActiveSkills(card_a, [93, 227]); //更换队长的技能
+				const skills_m = getCardActiveSkills(memberCard, [93, 227]); //更换队长的技能
+				const skills_a = getCardActiveSkills(assistCard, [93, 227]); //更换队长的技能
 				if (skills_m.length == 0 || skills_m[0].type != 227)
 				{
 					memberDom.querySelector(".switch-leader").classList.add(className_displayNone);

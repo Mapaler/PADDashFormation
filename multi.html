@@ -37,15 +37,11 @@ var formation = new Formation(teamsCount,5);
 {
 	display: inline-block;
 }
-.show-team-name-right .team-total-info .team-awoken::before,
-.show-team-name-left .team-total-info .team-awoken::before
-{
-	display: none;
-}
-.show-team-name-left .team-member-awoken,
-.show-team-name-left .team-assist-awoken,
-.show-team-name-left .team-member-types
-{
+.show-team-name-left :where(
+	.team-member-awoken,
+	.team-assist-awoken,
+	.team-member-types
+){
 	padding-left: var(--head-block-width);
 }
 </style>

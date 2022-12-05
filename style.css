@@ -1090,7 +1090,7 @@ icon.inflicts::after
 .team-latents .latent-icon[data-latent-hole="6"]::before,
 .team-latents .latent-icon[data-latent-hole="6"]::after
 {
-	transform: scale(1.54);
+	transform: scale(1.50);
 	margin: calc(32px / 4);
 }
 
@@ -1108,30 +1108,22 @@ icon.inflicts::after
 }
 
 /*三维计算值*/
-.team-ability::after,
-.team-ability::before,
 .team-ability .abilitys
 {
 	padding-left: 5px;
 	box-sizing: border-box;
 	font-size: 15px;
 	width: var(--head-block-width);
-}
-.team-ability .abilitys
-{
 	display: inline-block;
 }
-.team-ability::after,
-.team-ability::before
+.team-ability .enable-bouns
 {
-	display: none;
-	content: "";
+	color: cornflowerblue;
 }
-.abilitys .hp::before,
-.abilitys .atk::before,
-.abilitys .rcv::before
+.abilitys>div::before
 {
-	width: 45px;
+	font-size: 0.75em;
+	width: 2.5em;
 	display: inline-block;
 }
 /*.abilitys .hp::before{
