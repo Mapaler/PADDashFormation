@@ -378,10 +378,10 @@ label[for="default-level"]::after
 {
 	content: "清除";
 }
-.search-box .awoken-div::before{
-	content: "▼添加觉醒";
+.search-box .awoken-div .all-awokens::before{
+	content: "▼觉醒";
 }
-.search-box .sawoken-div details summary::before{
+.search-box .sawoken-detail summary::before{
 	content: "超觉醒（OR）";
 }
 .search-box .special-div::before{

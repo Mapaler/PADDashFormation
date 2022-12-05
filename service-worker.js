@@ -6843,7 +6843,7 @@ const cachesMap = new Map([
 	],
 	[
 		"browser-compatibility.js",
-		"12b22e62af685685caf8dc72475353a0"
+		"cd34f33d1c77c7fff4ae17b448eac5ad"
 	],
 	[
 		"index.html",
@@ -6851,7 +6851,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"e961af84e5d8e3389ba46056ffc9b563"
+		"41308c655aac13cd6c68cd445cca84e2"
 	],
 	[
 		"script-custom_elements.js",
@@ -6871,11 +6871,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"0869835436b0f3de8268c43a926ae09a"
+		"b9b5881643200973f4a5b7669707cc7e"
 	],
 	[
 		"solo.html",
-		"f357b98d831a080884bfd17bbc4d15fb"
+		"fcb04c0636a26f1b9118fb7e5fcb5b01"
 	],
 	[
 		"style-monsterimages.css",
@@ -6883,7 +6883,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"94f63b477593f60b0454e50a76b33ff0"
+		"10ab4cd9b74d539bda9f7ade1d05ee39"
 	],
 	[
 		"temp.js",
@@ -6891,11 +6891,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"236a3197fd055f5c9ecda62a9a499788"
+		"49dedb29c7c0c869192373316d5ce746"
 	],
 	[
 		"languages/en.css",
-		"d5ed63d0dae6a05ebf220473eaadc56b"
+		"e9400cd3b11e3e10024ca40baee32525"
 	],
 	[
 		"languages/en.js",
@@ -6903,7 +6903,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"9abdfde84350c69cfde69f715ec24674"
+		"8c740efc008311f7e292a07eded08141"
 	],
 	[
 		"languages/ja.js",
@@ -6911,7 +6911,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"7e59e394673202bd2acf04c3467eff08"
+		"c54d51440de15a89c2d2b5848a001757"
 	],
 	[
 		"languages/ko.js",
@@ -6919,7 +6919,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/language-list.js",
-		"ed47a51e8af39f09c5b07af6014d6d6d"
+		"9378e3d0930a5a841fdfed4b2dead003"
 	],
 	[
 		"languages/zh-CN.css",
@@ -6931,7 +6931,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.css",
-		"8a888b7951f0dce6c2f55bb638dbeee2"
+		"c62e83572e466f3cfdaa0d3bb5a99949"
 	],
 	[
 		"languages/zh-TW.js",
@@ -6939,7 +6939,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.css",
-		"0433e8d7e050408e17e74a5883cab271"
+		"346ed7d71feb09fe3d1a54bfa030c607"
 	],
 	[
 		"languages/zh.js",

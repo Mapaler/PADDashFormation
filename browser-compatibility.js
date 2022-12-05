@@ -5,6 +5,7 @@
 		{name: "BigInt value (1n) / BigInt 数据类型(1n)", version:{firefox:79,chrome:67,safari:14}, url: "https://caniuse.com/bigint", test: ()=>!Boolean(eval("1n"))},
 		{name: "CSS selector: :is() / CSS选择器: :is()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/css-matches-pseudo", test: ()=>!Boolean(eval("document.querySelector(':is()') || true"))},
 		{name: "CSS selector: :where() / CSS选择器: :where()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/mdn-css_selectors_where", test: ()=>!Boolean(eval("document.querySelector(':where()') || true"))},
+		{name: "CSS selector: :not() / CSS选择器: :not()", version:{firefox:84,chrome:88,safari:9}, url: "https://caniuse.com/css-not-sel-list", test: ()=>!Boolean(eval("document.querySelector(':not(html)') || true"))},
 		//{name: "Private class fields (#name) / 类私有域(#name)", version:{firefox:90,chrome:74,safari:14.5}, url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>!Boolean(eval("class test {#v = 0;}; true;"))},
 	]
 	return features.filter(feature=>{

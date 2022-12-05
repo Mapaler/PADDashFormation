@@ -377,10 +377,10 @@ label[for="default-level"]::after
 {
 	content: "クリア";
 }
-.search-box .awoken-div::before{
-	content: "▼追加覚醒";
+.search-box .awoken-div .all-awokens::before{
+	content: "▼覚醒";
 }
-.search-box .sawoken-div details summary::before{
+.search-box .sawoken-detail summary::before{
 	content: "超覚醒（OR）";
 }
 .search-box .special-div::before{

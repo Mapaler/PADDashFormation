@@ -385,10 +385,10 @@ label[for="default-level"]::after
 {
 	content: "Clear";
 }
-.search-box .awoken-div::before{
-	content: "▼Add Awoken";
+.search-box .awoken-div .all-awokens::before{
+	content: "▼Awoken";
 }
-.search-box .sawoken-div details summary::before{
+.search-box .sawoken-detail summary::before{
 	content: "Super Awoken (OR)";
 }
 .search-box .special-div::before{

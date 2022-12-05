@@ -1559,18 +1559,14 @@ icon.inflicts::after
 {
 	display: inline-block;
 }
-.types-div .type-list input+label,
-.sawoken-div .awoken-ul input+label,
-.dialog-dungeon-enchance input[type="checkbox"]+label
+:where(
+	.type-list,
+	.awoken-ul,
+	.rare-list,
+	.attr-list,
+) input[type="checkbox"]:not(:checked)+label
 {
 	opacity: var(--search-icon-unchecked);
-	cursor: pointer;
-}
-.types-div .type-list input:checked+label,
-.sawoken-div .awoken-ul input:checked+label,
-.dialog-dungeon-enchance input[type="checkbox"]:checked+label
-{
-	opacity: 1;
 }
 
 .types-div .type-and-or-label{
@@ -1682,8 +1678,10 @@ icon.inflicts::after
 {
 	margin-left: 5px;
 }
-
-.search-box .awoken-option .selected-awokens{
+.search-box .selected-awokens-div {
+	margin-bottom: 5px;
+}
+.search-box .selected-awokens-div .selected-awokens{
 	min-height: 32px;
 	box-sizing: border-box;
 	width: calc(100% - 90px);
@@ -1691,27 +1689,27 @@ icon.inflicts::after
 	background-color: #00000044;
 	border-radius: 6px;
 	box-shadow: inset black 0 0 3px;
-	display: inline-block;
-	vertical-align: top;
+	display: inline grid;
+	vertical-align: bottom;
+	grid-gap: 0;
 }
 /*.search-box .awoken-div::before{
 	content: "觉醒";
 }*/
-.search-box .awoken-div,
-.search-box .sawoken-div{
-	vertical-align: top;
-}
-.search-box .awoken-div::before{
+.search-box .awoken-div .all-awokens::before {
 	display: none;
 }
-.search-box .awoken-div.official-awoken-sorting::before,
-.search-box .sawoken-div.official-awoken-sorting::before
-{
+.search-box .awoken-div.official-awoken-sorting :where(
+	.all-awokens,
+	.sawoken-detail,
+){
 	display: inline-block;
-	line-height: 26px;
-	
 }
-.sawoken-div.official-awoken-sorting {
+.search-box .awoken-div.official-awoken-sorting .all-awokens::before
+{
+	display: block;
+}
+.official-awoken-sorting .sawoken-detail {
 	margin-left: 10px;
 }
 
@@ -1720,11 +1718,10 @@ icon.inflicts::after
 	min-width: 80px;
 	background-size: 100px 100px;
 	background-position-y: 40px;
-	vertical-align: top;
 	font-size: 18px;
 	line-height: 28px;
 	padding: 0;
-	vertical-align: top;
+	vertical-align: bottom;
 }
 .search-box .rare-clear::before,
 .search-box .special-add::before,
@@ -1813,16 +1810,9 @@ icon.inflicts::after
 	text-align: left;
 }
 
-.search-box .awoken-div .awoken-icon:not([data-awoken-count]),
-.search-box .awoken-div .awoken-icon[data-awoken-count="0"]
+.awoken-icon::before
 {
-	opacity: var(--search-icon-unchecked);
-}
-
-.awoken-icon:not([data-awoken-count="0"])::before
-{
-	content: attr(data-awoken-count);
-	display: inline-block;
+	display: block;
 	position: absolute;
 	line-height: 18px;
 	font-size: 18px;
@@ -1831,9 +1821,19 @@ icon.inflicts::after
 	-webkit-text-stroke: 1px black;
 	text-shadow: black 1px 1px 1px;
 }
-.search-box .awoken-ul .awoken-count.zero{
+.awoken-icon[data-awoken-count]:not([data-awoken-count="0"])::before
+{
+	content: attr(data-awoken-count);
+}
+
+/*搜索框有数字的觉醒才变亮*/
+.search-box .all-awokens .awoken-icon{
 	opacity: var(--search-icon-unchecked);
 }
+.search-box .all-awokens .awoken-icon[data-awoken-count]:not([data-awoken-count="0"]){
+	opacity: 1;
+}
+
 .search-box .awoken-ul .count{
 	width: 1em;
 	height: auto;
@@ -3627,6 +3627,9 @@ table .orb-icon
 {
 	margin-top: 100px;
 	margin-left: calc(50% - 270px);
+}
+.dialog-dungeon-enchance label {
+	cursor: pointer;
 }
 .dialog-dungeon-enchance .dialog-content>ul>li
 {

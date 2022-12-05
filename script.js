@@ -2993,7 +2993,7 @@ function initialize() {
 	//const s_rare = s_rareLi.map(li=>li.querySelector(".rare-check"));  //checkbox集合
 
 	const s_awokensDiv = searchBox.querySelector(".awoken-div");
-	const s_awokensUl = s_awokensDiv.querySelector(".all-awokens");
+	const s_awokensUl = s_awokensDiv.querySelector(":scope .all-awokens .awoken-ul");
 	const s_awokensLi = Array.from(s_awokensUl.querySelectorAll(".awoken-count"));
 	const s_awokensIcons = s_awokensLi.map(li => li.querySelector(".awoken-icon"));
 	s_awokensUl.originalSorting = s_awokensIcons.map(icon => parseInt(icon.getAttribute("data-awoken-icon"), 10)); //储存觉醒列表的原始排序
@@ -3015,20 +3015,19 @@ function initialize() {
 	};
 	s_boxHave.onchange(false);
 
-	const s_sawokensDiv = searchBox.querySelector(".sawoken-div");
-	const s_sawokensDetail = s_sawokensDiv.querySelector("details");
-	const s_sawokensUl = s_sawokensDiv.querySelector(".awoken-ul");
+	const s_sawokensDetail = searchBox.querySelector(".sawoken-detail");
+	s_sawokensDetail.open = localStorage_getBoolean(cfgPrefix + 'hide-sawoken');
+	s_sawokensDetail.querySelector("summary").onclick = function(event) {
+		if (event instanceof MouseEvent) localStorage.setItem(cfgPrefix + 'hide-sawoken', Number(!s_sawokensDetail.open));
+	}
+	const s_sawokensUl = s_sawokensDetail.querySelector(".awoken-ul");
 	const s_sawokensLi = Array.from(s_sawokensUl.querySelectorAll(".awoken-count"));
 	s_sawokensUl.originalSorting = s_sawokensLi.map(li => parseInt(li.querySelector(".awoken-icon").getAttribute("data-awoken-icon"), 10));
-	s_sawokensDetail.open = localStorage_getBoolean(cfgPrefix + 'hide-sawoken');
-	s_sawokensDetail.onclick = function(event) {
-		if (event instanceof MouseEvent) localStorage.setItem(cfgPrefix + 'hide-sawoken', Number(!this.open));
-	}
 
 	const s_sawokens = s_sawokensLi.map(li => li.querySelector(".sawoken-check"));
 	const s_includeSuperAwoken = searchBox.querySelector("#include-super-awoken"); //搜索超觉醒
 	s_includeSuperAwoken.onchange = function() {
-		s_sawokensDiv.classList.toggle(className_displayNone, this.checked);;
+		s_sawokensDetail.classList.toggle(className_displayNone, this.checked);;
 	};
 	s_includeSuperAwoken.onchange();
 
@@ -3054,8 +3053,7 @@ function initialize() {
 		sawokenSorting.forEach(appendLi, {iconLis: s_sawokensLi, fragment: fragmentSawoken});
 		
 		const className = "official-awoken-sorting";
-		s_awokensDiv.classList.toggle(className, checked);;
-		s_sawokensDiv.classList.toggle(className, checked);;
+		s_awokensDiv.classList.toggle(className, checked);
 
 		s_awokensUl.appendChild(fragmentAwoken);
 		s_sawokensUl.appendChild(fragmentSawoken);
@@ -4721,7 +4719,7 @@ function refreshAll(formationData) {
 			const enableBouns = memberCard.attrs[0] === assistCard.attrs[0] || //如果主属性相等
 				[memberCard.attrs[0], assistCard.attrs[0]].some(attr=>attr===6); //或任一为仅副属性
 			teamAbilityLi.classList.toggle("enable-bouns", enableBouns);
-			
+
 			//隐藏队长的自身换为换队长的技能
 			if (ti == 5 || //好友队长永远隐藏
 				leaderIdx == 0 && ti == 0 ) //当没换队长时，自身队长的欢队长技能隐藏

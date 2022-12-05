@@ -373,10 +373,10 @@ label[for="default-level"]::after
 {
 	content: "명확한";
 }
-.search-box .awoken-div::before{
-	content: "▼각성 추가";
+.search-box .awoken-div .all-awokens::before{
+	content: "▼각성";
 }
-.search-box .sawoken-div details summary::before{
+.search-box .sawoken-detail summary::before{
 	content: "슈퍼 각성（OR）";
 }
 .search-box .special-div::before{
