@@ -4718,7 +4718,7 @@ function refreshAll(formationData) {
 			changeid(assist, assistDom); //辅助
 			const enableBouns = memberCard.attrs[0] === assistCard.attrs[0] || //如果主属性相等
 				[memberCard.attrs[0], assistCard.attrs[0]].some(attr=>attr===6); //或任一为仅副属性
-			teamAbilityLi.classList.toggle("enable-bouns", enableBouns);
+			teamAbilityLi?.classList?.toggle("enable-bouns", enableBouns);
 
 			//隐藏队长的自身换为换队长的技能
 			if (ti == 5 || //好友队长永远隐藏
