@@ -1759,6 +1759,27 @@ icon.inflicts::after
 		transform: scale(1);
 	}
 }
+@keyframes show-disabled-action {
+	0% {
+		box-shadow: red 0 0 0;
+	}
+	25% {
+		transform: skewX(5deg);
+	}
+	50% {
+		box-shadow: red 0 0 7px;
+	}
+	75% {
+		transform: skewX(-5deg);
+	}
+	100% {
+		box-shadow: red 0 0 0;
+	}
+}
+.show-disabled-action {
+	animation: show-disabled-action 0.3s;
+	animation-iteration-count: 2;
+}
 .types-div .type-icon:active,
 .rare-div .rare-icon:active,
 .selected-awokens .awoken-icon:active,

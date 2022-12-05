@@ -469,6 +469,7 @@ const official_awoken_sorting = [
 
 //pdc的徽章对应数字
 const pdcBadgeMap = [
+	{pdf:undefined,pdc:0}, //什么都没有
 	{pdf:1,pdc:10}, //无限cost
 	{pdf:2,pdc:12}, //小手指
 	{pdf:3,pdc:9}, //全体攻击

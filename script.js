@@ -485,7 +485,7 @@ Formation.prototype.getPdcQrStr = function()
 
 	let pdcTeamsStr = this.teams.map((t,idx,arr)=>{
 		let teamArr = [
-			pdcBadgeMap.find(badge=>badge.pdf === t[2]).pdc //徽章
+			pdcBadgeMap.find(badge=>badge.pdf === t[2])?.pdc || 0 //徽章
 		];
 		const membersArr = t[0];
 		const assistArr = t[1];
@@ -2247,8 +2247,8 @@ function initialize() {
 		e.preventDefault();
 	}
 	//编辑界面每个怪物的头像的放下
-	function dropMonHead(e) {
-		const dataFrom = JSON.parse(e.dataTransfer.getData('from'));
+	function dropMonHead(event) {
+		const dataFrom = JSON.parse(event.dataTransfer.getData('from'));
 		const dataTo = getMemberArrayIndexFromMonHead(this);
 
 		if ((dataTo[0] !== dataFrom[0]) ||
@@ -2319,6 +2319,9 @@ function initialize() {
 		console.log("移动取消", e, this);
 	}
 	function interchangeCard(formArr, toArr) {
+		const [fromTeamNum, fromIsAssist, fromIndexInTeam] = formArr;
+		const [toTeamNum, toIsAssist, toIndexInTeam] = toArr;
+
 		function changeType(member, isAssist) {
 			if (member.id == 0 || (isAssist && member.id == -1)) {
 				return new Member();
@@ -2330,24 +2333,44 @@ function initialize() {
 		}
 		const changeSwapToCopy = controlBox.querySelector("#change-swap-to-copy"); //储存交换“复制”和“替换”
 		const isCopy = changeSwapToCopy.checked;
-		let from = formation.teams[formArr[0]][formArr[1]][formArr[2]];
-		let to = formation.teams[toArr[0]][toArr[1]][toArr[2]];
+		let from = formation.teams[fromTeamNum][fromIsAssist][fromIndexInTeam];
+		let to = formation.teams[toTeamNum][toIsAssist][toIndexInTeam];
 		let fromCard = from.card, toCard = to.card;
-		if (toArr[1] && !fromCard?.canAssist && fromCard?.id > 0 || formArr[1] && !toCard?.canAssist && toCard?.id > 0) {
-			console.warn("该角色不能作为辅助");
+		if (toIsAssist && !fromCard?.canAssist && from.id > 0 ||
+			fromIsAssist && !toCard?.canAssist && to.id > 0) {
+			[formArr, toArr].filter(([teamNum, isAssist, indexInTeam])=>{
+				const member = formation.teams[teamNum][isAssist][indexInTeam];
+				const card = member.card;
+				if (member.id>0 && !card?.canAssist) {
+					const teamBigBox = teamBigBoxs[teamNum];
+					const teamBox = teamBigBox.querySelector(".team-box");
+					const memberBox = teamBox.querySelector(isAssist ? ".team-assist" : ".team-members");
+					const memberLi = memberBox.querySelector(`.member-${indexInTeam+1}`);
+					const monsterHead = memberLi.querySelector(".monster");
+					monsterHead.classList.add("show-disabled-action");
+					monsterHead.onanimationend = function() {
+						this.classList.remove("show-disabled-action");
+						this.onanimationend = null;
+					}
+					console.warn("该角色不能作为辅助 %o", card);
+				} else {
+					return false;
+				}
+			})
+
 			return;
 		}
-		if (formArr[1] != toArr[1]) //从武器拖到非武器才改变类型
+		if (fromIsAssist != toIsAssist) //从武器拖到非武器才改变类型
 		{
-			from = changeType(from, formArr[1]);
-			if (!isCopy) to = changeType(to, toArr[1]);
+			from = changeType(from, fromIsAssist);
+			if (!isCopy) to = changeType(to, toIsAssist);
 		} else if (isCopy) {
 			const newFrom = new from.constructor();
 			newFrom.loadFromMember(from);
 			from = newFrom;
 		}
-		formation.teams[toArr[0]][toArr[1]][toArr[2]] = from;
-		if (!isCopy) formation.teams[formArr[0]][formArr[1]][formArr[2]] = to;
+		formation.teams[toTeamNum][toIsAssist][toIndexInTeam] = from;
+		if (!isCopy) formation.teams[fromTeamNum][fromIsAssist][fromIndexInTeam] = to;
 	
 		creatNewUrl(); //刷新URL
 		refreshAll(formation); //刷新全部
