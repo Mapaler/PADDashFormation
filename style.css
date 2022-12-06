@@ -18,7 +18,7 @@
 	font-style: normal;
 }
 @font-face {
-	font-family: 'Font Awesome 5 Free';
+	font-family: 'Font Awesome';
 	src:
 		local("FontAwesome"),
 		url("fonts/fa-solid-900.woff2") format("woff2");
@@ -47,7 +47,7 @@ body{
 	--head-block-height: 108px;
 	--search-icon-unchecked: 0.4;
 	--font-family : "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
-	--icon-font-family : 'Font Awesome 5 Free', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
+	--icon-font-family : 'Font Awesome', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--game-font-family : 'FOT-KurokaneStd-EB',"Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--border-width: 2px;
 
@@ -2660,10 +2660,10 @@ icon.inflicts::after
 	font-size: 1.5em;
 }
 .control-box .btn-henshin::before{
-	content: "◀";
+	content: "▷";
 }
 .control-box .btn-henshin[data-step^="-"]::before{
-	content: "▶";
+	content: "◁";
 }
 #btn-set-dungeon-enchance {
 	margin-left: 1em;
