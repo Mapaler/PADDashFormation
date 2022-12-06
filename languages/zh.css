@@ -559,7 +559,7 @@ label[for="qr-data-type-pdc"]::before
 label[for="qr-data-type-pdchu"]::before {
 	content: "Valeria(pdchu)";
 }
-.btn-set-dungeon-enchance::before
+#btn-set-dungeon-enchance::before
 {
 	content: "\f6d9 地下城强化";
 }

@@ -2659,11 +2659,14 @@ icon.inflicts::after
 {
 	font-size: 1.5em;
 }
-.control-box .btn-henshin-back::before{
-	content: "◀️";
+.control-box .btn-henshin::before{
+	content: "◀";
 }
-.control-box .btn-henshin-forward::before{
-	content: "▶️";
+.control-box .btn-henshin[data-step^="-"]::before{
+	content: "▶";
+}
+#btn-set-dungeon-enchance {
+	margin-left: 1em;
 }
 .control-box .btn-remove-assist{
 	vertical-align: bottom;

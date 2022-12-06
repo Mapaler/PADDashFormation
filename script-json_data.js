@@ -3141,7 +3141,7 @@ const specialSearchFunctions = (function() {
 				function:cards=>cards.filter(card=>{
 				const searchTypeArray = [177];
 				const skill = getCardLeaderSkill(card, searchTypeArray);
-				return skill;
+				return skill?.params[5];
 				})
 			},
 		]},

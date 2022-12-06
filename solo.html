@@ -49,7 +49,6 @@ var formation = new Formation(teamsCount,6);
 			<a class="down-capture display-none" target="_blank"></a>
 			<button class="btn-qrcode"></button>
 			<button class="btn-capture" onclick="capture();"></button>
-			<button class="btn-set-dungeon-enchance"></button>
 			<label for="default-level"></label><input id="default-level" type="number" min="1" max="120" list="level-list" placeholder="110"/>
 			<datalist id="level-list">
 				<option>1</option>
@@ -67,8 +66,9 @@ var formation = new Formation(teamsCount,6);
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
 		<div>
-			<span class="lbl-henshin-change"><button class="btn-henshin-back" onclick="henshinStep(-1);"></button><button class="btn-henshin-forward" onclick="henshinStep(+1);"></button></span>
+			<span class="lbl-henshin-change"><button class="btn-henshin" data-step="-1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button><button class="btn-henshin" data-step="+1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button></span>
 			<span class="lbl-remove-assist"><button class="btn-remove-assist" onclick="formation.removeAssist();"></span>
+			<button id="btn-set-dungeon-enchance"></button>
 		</div>
 	</div>
 	<div class="formation-box">

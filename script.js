@@ -1706,9 +1706,9 @@ function initialize() {
 	const iptDefaultLevel = document.getElementById("default-level");
 	iptDefaultLevel.value = localStorage.getItem(cfgPrefix + iptDefaultLevel.id);
 	iptDefaultLevel.onchange = function(e){
-		let num = Number(this.value || this.placeholder);
-		defaultLevel = num;
-		if (e) localStorage.setItem(cfgPrefix + this.id, defaultLevel);
+		let num = Number(this.value);
+		defaultLevel = num || this.placeholder;
+		if (e) localStorage.setItem(cfgPrefix + this.id, this.value);
 	}
 	iptDefaultLevel.onchange(false);
 
@@ -2618,7 +2618,7 @@ function initialize() {
 		dialogContent.querySelector("#dungeon-atk").value = 1;
 		dialogContent.querySelector("#dungeon-rcv").value = 1;
 	};
-	const dungeonEnchanceDialogOpen = controlBox.querySelector(".btn-set-dungeon-enchance");
+	const dungeonEnchanceDialogOpen = controlBox.querySelector("#btn-set-dungeon-enchance");
 	dungeonEnchanceDialogOpen.onclick = function(){
 		dungeonEnchanceDialog.show(formation);
 	};
