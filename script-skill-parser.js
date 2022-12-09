@@ -1616,6 +1616,16 @@ const skillObjectParsers = {
 				height = 6;
 				break;
 			}
+			case 2: {
+				width = 5;
+				height = 3;
+				break;
+			}
+			case 3: {
+				width = 6;
+				height = 5;
+				break;
+			}
 			default: {
 				width = 6;
 				height = 5;
