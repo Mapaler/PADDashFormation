@@ -892,29 +892,34 @@ function descriptionToHTML(str)
 			}
 			return sp;
 		});
-	nodeArr = formatParse(nodeArr, /\%\{m(\d+)\}/g, 1,
-		(id)=>{
-			const avatar = cardN(parseInt(id,10));
-			avatar.monDom.onclick = cardNClick;
-			return avatar;
-		});
-	nodeArr = formatParse(nodeArr, /\%\{a(\d+)\}/g, 1,
-		(id)=>{
-			const awokenList = renderAwakenings(parseInt(id,10));
-			return awokenList;
-		});
-	nodeArr = formatParse(nodeArr, /\%\{o(\d+)\}/g, 1,
-		(id)=>{
-			const orbsList = renderOrbs(parseInt(id,10));
-			return orbsList;
-		});
-	nodeArr = formatParse(nodeArr, /\%\{l(\d+)\}/g, 1,
-		(id)=>{
-			const latent = document.createElement("icon");
-			latent.className = `latent-icon`;
-			latent.setAttribute("data-latent-icon", id);
-			latent.setAttribute("data-latent-hole", 1);
-			return latent;
+	nodeArr = formatParse(nodeArr, /\%\{([a-z])(\d+)\}/ig, 2,
+		(type, id)=>{
+			switch(type) {
+				case 'm':case 'M': { //卡片头像
+					const avatar = cardN(parseInt(id,10));
+					avatar.monDom.onclick = cardNClick;
+					return avatar;
+				}
+				case 'a':case 'A': { //觉醒
+					const awokenList = renderAwakenings(parseInt(id,10));
+					return awokenList;
+				}
+				case 't':case 'T': { //类型
+					const awokenList = renderTypes(parseInt(id,10));
+					return awokenList;
+				}
+				case 'o':case 'O': { //宝珠
+					const orbsList = renderOrbs(parseInt(id,10));
+					return orbsList;
+				}
+				case 'l':case 'L': { //潜觉
+					const latent = document.createElement("icon");
+					latent.className = `latent-icon`;
+					latent.setAttribute("data-latent-icon", id);
+					latent.setAttribute("data-latent-hole", 1);
+					return latent;
+				}
+			}
 		});
 	return nodeArr.nodeJoin();
 }
