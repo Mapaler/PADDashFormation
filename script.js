@@ -4740,8 +4740,10 @@ function refreshAll(formationData) {
 			const memberCard = member.card, assistCard = assist.card;
 			changeid(member, memberDom, latentDom, assist); //队员
 			changeid(assist, assistDom); //辅助
-			const enableBouns = memberCard.attrs[0] === assistCard.attrs[0] || //如果主属性相等
-				[memberCard.attrs[0], assistCard.attrs[0]].some(attr=>attr===6); //或任一为仅副属性
+			const enableBouns = member.id > 0 && assist.id > 0 && ( //基底和武器都不是空
+				memberCard.attrs[0] === assistCard.attrs[0] || //如果主属性相等
+				memberCard.attrs[0]===6 || assistCard.attrs[0]===6 //或任一为仅副属性
+			);
 			teamAbilityLi?.classList?.toggle("enable-bouns", enableBouns);
 
 			//隐藏队长的自身换为换队长的技能
