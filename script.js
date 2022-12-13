@@ -1600,8 +1600,7 @@ function capture() {
 	const txtTitle = titleBox.querySelector(".title-code");
 	const txtDetail = detailBox.querySelector(".detail-code");
 	//去掉可能的空白文字的编辑状态
-	titleBox.classList.remove("edit");
-	detailBox.classList.remove("edit");
+	formationBox.classList.remove("edit-code");
 	const downLink = controlBox.querySelector(".down-capture");
 	html2canvas(formationBox, {backgroundColor: null}).then(canvas => {
 		canvas.toBlob(function(blob) {
@@ -1610,11 +1609,6 @@ function capture() {
 			downLink.download = `${document.title}.png`;
 			downLink.click();
 			statusLine.classList.remove("prepare-capture");
-			//如果是空白文字，加回编辑状态
-			if (txtTitle.value.length == 0)
-				titleBox.classList.add("edit");
-			if (txtDetail.value.length == 0)
-				detailBox.classList.add("edit");
 		});
 		//document.body.appendChild(canvas);
 	});
@@ -2165,7 +2159,7 @@ function initialize() {
 		}
 	}
 
-
+	let docSelection = document.getSelection();
 	//标题和介绍文本框
 	const titleBox = formationBox.querySelector(".title-box");
 	const detailBox = formationBox.querySelector(".detail-box");
@@ -2183,9 +2177,97 @@ function initialize() {
 	const insertAwokenIcon = document.getElementById("insert-awoken-icon");
 	const insertLatentIcon = document.getElementById("insert-latent-icon");
 	const insertOrbIcon = document.getElementById("insert-orb-icon");
+	//切换代码模式
 	siwtchCodeMode.onclick = function(){
-		titleBox.classList.toggle("edit", this.checked);
-		detailBox.classList.toggle("edit", this.checked);
+		if (this.checked) txtDetail.style.height = txtDetailDisplay.scrollHeight + "px";
+		formationBox.classList.toggle("edit-code", this.checked);
+	}
+	siwtchCodeMode.checked = false;
+	//设置文字颜色
+	function setSelectionFontColor(color) {
+		if (docSelection.rangeCount < 1) return;
+		const range = docSelection.getRangeAt(0);
+		let target;
+		if (target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
+			|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay)) {
+			const docObj = range.extractContents(); //移动了Range 中的内容从文档树到DocumentFragment（文档片段对象)。
+			let dom
+			if (color === "#000000") {
+				dom = document.createTextNode(docObj);
+			} else {
+				dom = document.createElement('span');
+				dom.style.color = color;
+				dom.append(docObj.textContent);
+			}
+			range.insertNode(dom);
+			target.onblur();
+		} else if (color !== "#000000" &&
+			(target = (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
+			|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail))) {
+				let str = target.value.substring(target.selectionStart, target.selectionEnd)
+				.replace(/\^(\w+?)\^([^\^]+?)\^p/igm, "$2");
+				let colorStr = `^${color.substring(1)}^${str}^p`;
+				target.setRangeText(colorStr);
+		}
+	}
+	setFontColor.onclick = function(){
+		setSelectionFontColor(colorChooser.value);
+	}
+	colorChooser.onchange = function(){
+		setFontColor.style.color = this.value;
+		setSelectionFontColor(this.value);
+	}
+	setFontColor.style.color = colorChooser.value;
+	//添加图标
+	insertCardAvatar.onclick = function(){
+		let id = prompt("请输入角色 ID");
+		id = parseInt(id,10);
+		if (id) {
+			const range = docSelection.getRangeAt(0);
+			let target;
+			if (target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
+				|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay)) {
+				let dom = createIndexedIcon('card', id);
+				range.insertNode(dom);
+				target.onblur();
+			} else if (target = (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
+				|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail)) {
+					let str = `%{m${id}}`;
+				target.setRangeText(str);
+			}
+		}
+	}
+
+	function richTextToCode(parentElement){
+		let code = [];
+		for (let node of parentElement.childNodes) {
+			if (node.nodeName == "#text"){
+				code.push(node.nodeValue);
+			}
+			else if(node.classList.contains("detail-mon")) { //卡片头像
+				const mon = node.querySelector(".monster");
+				code.push(`%{m${mon.getAttribute("data-cardid")}}`);
+			}
+			else if(node.classList.contains("awoken-icon")) { //觉醒
+				code.push(`%{a${node.getAttribute("data-awoken-icon")}}`);
+			}
+			else if(node.classList.contains("type-icon")) { //类型
+				code.push(`%{a${node.getAttribute("data-type-icon")}}`);
+			}
+			else if(node.classList.contains("orb")) { //宝珠
+				code.push(`%{a${node.getAttribute("data-orb-icon")}}`);
+			}
+			else if(node.classList.contains("latent")) { //潜觉
+				code.push(`%{a${node.getAttribute("data-latent-icon")}}`);
+			}
+		}
+		return code.join('');
+	}
+	txtTitleDisplay.onblur = function(){
+		txtTitle.value = richTextToCode(this);
+	}
+	txtDetailDisplay.onblur = function(){
+		txtDetail.value = richTextToCode(this);
 	}
 
 	// txtTitle.onchange = function() {
@@ -4664,17 +4746,12 @@ function refreshAll(formationData) {
 	txtDetail.value = formationData.detail || "";
 	const txtTitleDisplay = titleBox.querySelector(".title-display");
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
-	//txtTitleDisplay.innerHTML = descriptionToHTML(txtTitle.value);
 	txtTitleDisplay.innerHTML = '';
-	txtTitleDisplay.appendChild(descriptionToHTML(txtTitle.value));
+	txtTitleDisplay.append(descriptionToHTML(txtTitle.value));
 	let titleStr = txtTitleDisplay.textContent.trim();
 	document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
-	//txtDetailDisplay.innerHTML = descriptionToHTML(txtDetail.value);
 	txtDetailDisplay.innerHTML = '';
-	txtDetailDisplay.appendChild(descriptionToHTML(txtDetail.value));
-	
-	titleBox.classList.toggle("edit", !txtTitle.value.length);;
-	detailBox.classList.toggle("edit", !txtDetail.value.length);;
+	txtDetailDisplay.append(descriptionToHTML(txtDetail.value));
 	
 	//地下城强化的显示，稀有度没有现成的，所以这里来循环生成
 	const dge = formationData.dungeonEnchance;
@@ -5412,8 +5489,8 @@ function fastShowSkill(event) {
 function localisation($tra) {
 	if (!$tra) return;
 	document.title = $tra.webpage_title;
-	formationBox.querySelector(".title-box .title").placeholder = $tra.title_blank;
-	formationBox.querySelector(".detail-box .detail").placeholder = $tra.detail_blank;
+	formationBox.querySelector(".title-box .title-code").placeholder = $tra.title_blank;
+	formationBox.querySelector(".detail-box .detail-code").placeholder = $tra.detail_blank;
 	controlBox.querySelector(".datasource-updatetime").title = $tra.force_reload_data;
 
 	const s_sortList = editBox.querySelector(".search-box .sort-div .sort-list");

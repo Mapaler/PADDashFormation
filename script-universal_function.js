@@ -858,7 +858,41 @@ function searchCollab(event) {
 	showSearch(Cards.filter(card => card.collabId == collabId));
 	return false;
 }
-
+//创建序号类图标
+function createIndexedIcon(type, index) {
+	if (type == 'card') {//卡片头像
+		const avatar = cardN(index);
+		avatar.monDom.contentEditable = false;
+		avatar.monDom.setAttribute("onclick", "cardNClick.call(this);return false;")
+		return avatar;
+	}
+	const icon = document.createElement("icon");
+	//icon.contentEditable = false;
+	switch(type) {
+		case 'awoken': { //觉醒
+			icon.className = "awoken-icon";
+			icon.setAttribute("data-awoken-icon", index);
+			break;
+		}
+		case 'type': { //类型
+			icon.className = "type-icon";
+			icon.setAttribute("data-type-icon", index);
+			break;
+		}
+		case 'orb': { //宝珠
+			icon.className = "orb";
+			icon.setAttribute("data-orb-icon", index);
+			break;
+		}
+		case 'latent': { //潜觉
+			icon.className = `latent-icon`;
+			icon.setAttribute("data-latent-icon", index);
+			icon.setAttribute("data-latent-hole", 1);
+			break;
+		}
+	}
+	return icon;
+}
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)
 {
@@ -894,30 +928,22 @@ function descriptionToHTML(str)
 		});
 	nodeArr = formatParse(nodeArr, /\%\{([a-z])(\d+)\}/ig, 2,
 		(type, id)=>{
+			id = parseInt(id,10);
 			switch(type) {
 				case 'm':case 'M': { //卡片头像
-					const avatar = cardN(parseInt(id,10));
-					avatar.monDom.onclick = cardNClick;
-					return avatar;
+					return createIndexedIcon('card', id);
 				}
 				case 'a':case 'A': { //觉醒
-					const awokenList = renderAwakenings(parseInt(id,10));
-					return awokenList;
+					return createIndexedIcon('awoken', id);
 				}
 				case 't':case 'T': { //类型
-					const awokenList = renderTypes(parseInt(id,10));
-					return awokenList;
+					return createIndexedIcon('type', id);
 				}
 				case 'o':case 'O': { //宝珠
-					const orbsList = renderOrbs(parseInt(id,10));
-					return orbsList;
+					return createIndexedIcon('orb', id);
 				}
 				case 'l':case 'L': { //潜觉
-					const latent = document.createElement("icon");
-					latent.className = `latent-icon`;
-					latent.setAttribute("data-latent-icon", id);
-					latent.setAttribute("data-latent-hole", 1);
-					return latent;
+					return createIndexedIcon('latent', id);
 				}
 			}
 		});

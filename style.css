@@ -85,11 +85,12 @@ details>summary {
 	position: sticky;
 	bottom: 0;
 	margin-top: 10px;
+	backdrop-filter: blur(3px);
+	padding: 3px;
+	border-radius: 3px;
 }
 #rich-text-tools button
 {
-	font-size: 1.5em;
-	min-width: 48px;
 	height: 32px;
 	vertical-align: middle;
 	text-align: center;
@@ -121,6 +122,11 @@ label[for="siwtch-code-mode"]::after {
 }
 #set-font-color::before {
 	content: "A";
+	font-size: 1.5em;
+}
+#color-chooser {
+	width: 20px;
+	vertical-align: middle;
 }
 #insert-card-avatar::before {
 	width: 100px;
@@ -199,21 +205,16 @@ label[for="siwtch-code-mode"]::after {
 {
 	display: block;
 }
-.title-code:focus,
-.detail-code:focus
-{
-	border: black solid 1px;;
-	background-color: #eee;
-	padding: 0;
-}
-.title-box:not(.edit) .title-code,
-.detail-box:not(.edit) .detail-code
-{
+.formation-box:not(.edit-code) :where(
+	.title-code,
+	.detail-code,
+){
 	display: none;
 }
-.edit .title-display,
-.edit .detail-display
-{
+.edit-code :where(
+	.title-display,
+	.detail-display,
+){
 	display: none;
 }
 
@@ -1285,15 +1286,6 @@ icon.inflicts::after
 .blur-bg{
 	pointer-events: none; /*打开编辑窗后禁止后方有鼠标反应*/
 }
- /*因为火狐还不支持 backdrop-filter 此部分只对火狐生效*/
-@-moz-document url-prefix(){
-	.blur-bg{
-		filter: blur(5px);
-	}
-	.guide-mod .blur-bg{
-		filter: unset;
-	}
-}
 
 .edit-box{
 	background-color: rgba(82, 53, 30, 0.8);
@@ -1306,6 +1298,9 @@ icon.inflicts::after
 	min-width:664px;
 	
 	backdrop-filter: blur(5px);
+}
+.edit-box::backdrop{
+	filter: blur(5px);
 }
 .guide-mod .edit-box{
 	background-color: rgb(102, 73, 50);
@@ -3054,6 +3049,8 @@ table .orb-icon
 	top: 0;
 	background-color: rgba(0,0,0,0.8);
 	z-index: 20;
+
+	backdrop-filter: blur(5px);
 }
 .mask-content
 {
