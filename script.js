@@ -2443,7 +2443,7 @@ function initialize() {
 			event.preventDefault();
 			const [teamNum, isAssist, indexInTeam] = JSON.parse(formStr);
 			const mon = formation.teams[teamNum][isAssist][indexInTeam]
-			event.target.appendChild(createIndexedIcon('card', mon.id));
+			event.target.insertAdjacentElement('afterbegin', createIndexedIcon('card', mon.id));
 		} 
 	}
 	txtTitleDisplay.ondrop = richTextDropHandler;
