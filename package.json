@@ -2,7 +2,7 @@
   "dependencies": {
     "@xmldom/xmldom": "^0.8.2",
     "mime": "^3.0.0",
-    "opencc-js": "^1.0.4",
+    "opencc-js": "^1.0.5",
     "sharp": "^0.31.0",
     "xml-formatter": "^2.6.1"
   }
