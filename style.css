@@ -330,6 +330,8 @@ ul{
 	margin-top: 30px;
 	font-family: var(--game-font-family);
 	text-shadow: black 2px 2px 0;
+
+	backdrop-filter: blur(3px);
 }
 .dialog .dialog-title
 {
