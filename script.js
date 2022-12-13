@@ -2243,7 +2243,7 @@ function initialize() {
 			const docObj = range.extractContents(); //移动了Range 中的内容从文档树到DocumentFragment（文档片段对象)。
 			let dom
 			if (color === "#000000") {
-				dom = document.createTextNode(docObj);
+				dom = document.createTextNode(docObj.textContent);
 			} else {
 				dom = document.createElement('span');
 				dom.style.color = color;
@@ -2323,13 +2323,11 @@ function initialize() {
 		}
 		const range = docSelection.getRangeAt(0);
 		let target;
-		console.log(range);
 		if (target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
 			|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay))
 		{
 			let dom = createIndexedIcon(type, id);
 			range.insertNode(dom);
-			console.log(target);
 			target.onblur();
 		} else if (target = (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
 			|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail))
@@ -2361,8 +2359,18 @@ function initialize() {
 	function richTextToCode(parentElement){
 		let code = [];
 		for (let node of parentElement.childNodes) {
-			if (node.nodeName == "#text"){
+			if (node.nodeName == "#text"){ //纯文本
 				code.push(node.nodeValue);
+				continue;
+			} else if (node.nodeName == "SPAN" && node.style.color) { //文字颜色
+				let colorStr = rgbToHex(node.style.color);
+				code.push(`^${colorStr}^${node.textContent}^p`);
+				continue;
+			} else if (node.nodeName == "DIV") {
+				code.push(richTextToCode(node)+'\n');
+				continue;
+			} else if (node.nodeName == "BR") {
+				code.push('\n');
 				continue;
 			}
 			let type, id;
@@ -2397,7 +2405,17 @@ function initialize() {
 		formationBox.refreshDocumentTitle();
 		creatNewUrl();
 	}
+	//标题凡是输入就删除所有的换行
+	txtTitleDisplay.oninput = function(){
+		for (let node of this.children) {
+			if (node.nodeName == "BR") node.remove();
+		}
+	}
 	txtDetailDisplay.onblur = function(){
+		//没有内容或者只有一个换行时，清空内容
+		if (this.textContent.length == 0 || this.textContent == "\n") {
+			this.innerHTML = '';
+		}
 		formation.detail = txtDetail.value = richTextToCode(this);
 		creatNewUrl();
 	}
@@ -5633,9 +5651,11 @@ function fastShowSkill(event) {
 function localisation($tra) {
 	if (!$tra) return;
 	document.title = $tra.webpage_title;
-	formationBox.querySelector(".title-box .title-code").placeholder = $tra.title_blank;
-	formationBox.querySelector(".detail-box .detail-code").placeholder = $tra.detail_blank;
 	controlBox.querySelector(".datasource-updatetime").title = $tra.force_reload_data;
+	formationBox.querySelector(".title-box .title-code").placeholder = $tra.title_blank;
+	formationBox.querySelector(".title-box .title-display").dataset.placeholder = $tra.title_blank;
+	formationBox.querySelector(".detail-box .detail-code").placeholder = $tra.detail_blank;
+	formationBox.querySelector(".detail-box .detail-display").dataset.placeholder = $tra.detail_blank;
 
 	const s_sortList = editBox.querySelector(".search-box .sort-div .sort-list");
 	const sortOptions = Array.from(s_sortList.options);

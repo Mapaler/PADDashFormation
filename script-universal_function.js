@@ -858,6 +858,24 @@ function searchCollab(event) {
 	showSearch(Cards.filter(card => card.collabId == collabId));
 	return false;
 }
+function rgbToHex(str) {  //RGB(A)颜色转换为HEX十六进制的颜色值
+	let res = /rgba?\((\d{1,3}),(\d{1,3}),(\d{1,3})(,([.\d]+))?\)/ig.exec(str.replace(/\s/g,''));
+	if (res) {
+		let [,r,g,b,a] = res;
+		let rgb = [r,g,b].map(s=>parseInt(s,10));
+		if (a) {
+			rgb.push(Math.round(Number(a) * 255));
+		}
+		return rgb.map(n=>n.toString(16).padStart(2,'0')).join('');
+	}
+	else if (res = /#([a-fA-F0-9]{6,8})/i.exec(str))
+	{
+		return res[1];
+	}
+	else {
+		return '000000';
+	}
+}
 //创建序号类图标
 function createIndexedIcon(type, index) {
 	if (type == 'card') {//卡片头像
