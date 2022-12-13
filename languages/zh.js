@@ -2,6 +2,7 @@
 	webpage_title: `智龙迷城${teamsCount}人队伍图制作`,
 	title_blank: "输入队伍标题",
 	detail_blank: "输入说明",
+	request_input: tp`请输入${'info'}`,
 	sort_name:{
 		sort_none: "无",
 		sort_id: "怪物ID",

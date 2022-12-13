@@ -17,6 +17,7 @@ let localTranslating = {
 	addition_display: "💬",
 	title_blank: "Input Formation Title",
 	detail_blank: "Input Detail",
+	request_input: tp`Please Input ${'info'}`,
 	sort_name:{
 		sort_none: "Nope",
 		sort_id: "Cards Id",

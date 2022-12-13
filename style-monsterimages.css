@@ -1261,7 +1261,7 @@
 ){ /*占两格*/
 	grid-column: span 2;
 }
-.m-latent-allowable-ul .latent-icon:where(
+.edit-box .m-latent-allowable-ul .latent-icon:where(
 	[data-latent-icon='39'],
 	[data-latent-icon='40'],
 	[data-latent-icon='41'],

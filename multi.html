@@ -73,12 +73,12 @@ var formation = new Formation(teamsCount,5);
 				<option>110</option>
 				<option>120</option>
 			</datalist>
+			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"></label>
 		</div>
 		<div>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-id" id="show-mon-id"><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-skill-cd" id="show-mon-skill-cd"><label class="config-checkbox-lbl show-mon-skill-cd-lbl" for="show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-awoken" id="show-mon-awoken"><label class="config-checkbox-lbl show-mon-awoken-lbl" for="show-mon-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"></label>
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
 		<div>
@@ -88,7 +88,7 @@ var formation = new Formation(teamsCount,5);
 		</div>
 	</div>
 	<div class="formation-box">
-		<div class="title-box edit"><input type="text" class="title" placeholder="输入队伍标题" /><h1 class="title-display"></h1></div>
+		<div class="title-box"><input type="text" class="title-code" placeholder="输入队伍标题" /><h1 class="title-display rich-text" contenteditable="true"></h1></div>
 		<div class="dungeon-enchance"></div>
 		<div class="formation-total-info">
 			<div class="tIf-total-skill-boost">
@@ -756,12 +756,22 @@ var formation = new Formation(teamsCount,5);
 				<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="55"></span><span class="count"></span></li><!--防封条-->
 			</ul>
 		</div>
-		<div class="detail-box edit"><textarea class="detail" placeholder="输入说明"></textarea><div class="detail-display"></div></div>
+		<div class="detail-box"><textarea class="detail-code" placeholder="输入说明"></textarea><div class="detail-display rich-text" contenteditable="true"></div></div>
+
 		<div class="dialog dialog-hp-detail display-none">
 			<div class="dialog-title"></div>
 			<div class="dialog-content"></div>
 			<div class="dialog-control"><button class="dialog-close brown-button"></button></div>
 		</div>
+	</div>
+	<div id="rich-text-tools">
+		<button id="set-font-color"></button><input id="color-chooser" type="color" />
+		<button id="insert-card-avatar"></button>
+		<button id="insert-awoken-icon"></button>
+		<button id="insert-latent-icon"></button>
+		<button id="insert-type-icon"></button>
+		<button id="insert-orb-icon"></button>
+		<input type="checkbox" class="config-checkbox-ipt" id="siwtch-code-mode"><label class="config-checkbox-lbl" for="siwtch-code-mode"><div class="config-checkbox-lbl-cicle"></div></label>
 	</div>
 	<div class="edit-box display-none">
 		<div class="edit-box-title"><!--修改怪物--></div>

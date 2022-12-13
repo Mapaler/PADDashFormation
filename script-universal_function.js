@@ -862,7 +862,7 @@ function searchCollab(event) {
 function createIndexedIcon(type, index) {
 	if (type == 'card') {//卡片头像
 		const avatar = cardN(index);
-		avatar.monDom.contentEditable = false;
+		avatar.contentEditable = false;
 		avatar.monDom.setAttribute("onclick", "cardNClick.call(this);return false;")
 		return avatar;
 	}

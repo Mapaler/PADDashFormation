@@ -3,6 +3,7 @@
 	addition_display: "追加の表示",
 	title_blank: "入力タイトル",
 	detail_blank: "入力詳細",
+	request_input: tp`${'info'}を入力してください`,
 	sort_name:{
 		sort_none: "いいえ",
 		sort_id: "カード ID",

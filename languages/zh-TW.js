@@ -2,6 +2,7 @@
 	webpage_title: `龍族拼圖${teamsCount}人隊伍圖製作`,
 	title_blank: "輸入隊伍標題",
 	detail_blank: "輸入説明",
+	request_input: tp`請輸入${'info'}`,
 	sort_name:{
 		sort_none: "無",
 		sort_id: "怪物ID",

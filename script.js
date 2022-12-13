@@ -1629,6 +1629,11 @@ function initialize() {
 	editBox = document.body.querySelector(".edit-box");
 	editBox.editMon = editMember;
 
+	formationBox.refreshDocumentTitle = function() {
+		let titleStr = txtTitleDisplay.textContent.trim();
+		document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
+	}
+
 	if (isGuideMod) {
 		console.info('现在是 怪物图鉴 模式');
 		document.body.classList.add('guide-mod');
@@ -2168,15 +2173,56 @@ function initialize() {
 	const txtTitleDisplay = titleBox.querySelector(".title-display");
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
 
-	//const richTextTools = document.getElementById("rich-text-tools");
+	const richTextTools = document.getElementById("rich-text-tools");
 	const siwtchCodeMode = document.getElementById("siwtch-code-mode");
 	const setFontColor = document.getElementById("set-font-color");
 	const colorChooser = document.getElementById("color-chooser");
 	const insertCardAvatar = document.getElementById("insert-card-avatar");
-	const insertTypeIcon = document.getElementById("insert-type-icon");
 	const insertAwokenIcon = document.getElementById("insert-awoken-icon");
 	const insertLatentIcon = document.getElementById("insert-latent-icon");
+	const insertTypeIcon = document.getElementById("insert-type-icon");
 	const insertOrbIcon = document.getElementById("insert-orb-icon");
+
+	const insertAwokenIconList = insertAwokenIcon.list = document.createElement("ul");
+	insertAwokenIconList.className = "awoken-ul " + className_displayNone;
+	const insertLatentIconList = insertLatentIcon.list = document.createElement("ul");
+	insertLatentIconList.className = "m-latent-allowable-ul " + className_displayNone;
+	const insertTypeIconList = insertTypeIcon.list = document.createElement("ul");
+	insertTypeIconList.className = "types-ul " + className_displayNone;
+	const insertOrbList = insertOrbIcon.list = document.createElement("ul");
+	insertOrbList.className = "orb-ul " + className_displayNone;
+
+	for (let id of official_awoken_sorting) {
+		const li = document.createElement("li");
+		const icon = li.appendChild(createIndexedIcon('awoken', id));
+		icon.onclick = insertIconToText;
+		insertAwokenIconList.appendChild(li);
+	}
+	for (let id of new Set(pdcLatentMap.map(obj=>obj.pdf))) {
+		const li = document.createElement("li");
+		const icon = li.appendChild(createIndexedIcon('latent', id));
+		icon.onclick = insertIconToText;
+		insertLatentIconList.appendChild(li);
+	}
+	for (let obj of typekiller_for_type) {
+		const li = document.createElement("li");
+		const icon = li.appendChild(createIndexedIcon('type', obj.type));
+		icon.onclick = insertIconToText;
+		insertTypeIconList.appendChild(li);
+	}
+	for (let i=0;i<10;i++) {
+		const li = document.createElement("li");
+		const icon = li.appendChild(createIndexedIcon('orb', i));
+		icon.onclick = insertIconToText;
+		insertOrbList.appendChild(li);
+	}
+	richTextTools.append(
+		insertTypeIconList,
+		insertAwokenIconList,
+		insertLatentIconList,
+		insertOrbList
+	);
+
 	//切换代码模式
 	siwtchCodeMode.onclick = function(){
 		if (this.checked) txtDetail.style.height = txtDetailDisplay.scrollHeight + "px";
@@ -2185,11 +2231,15 @@ function initialize() {
 	siwtchCodeMode.checked = false;
 	//设置文字颜色
 	function setSelectionFontColor(color) {
+		//如果并没有任何选择区，则返回
 		if (docSelection.rangeCount < 1) return;
 		const range = docSelection.getRangeAt(0);
+		//如果并没有选中文字，则返回
+		if (range.startOffset === range.endOffset) return;
 		let target;
 		if (target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
-			|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay)) {
+			|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay))
+		{
 			const docObj = range.extractContents(); //移动了Range 中的内容从文档树到DocumentFragment（文档片段对象)。
 			let dom
 			if (color === "#000000") {
@@ -2203,11 +2253,13 @@ function initialize() {
 			target.onblur();
 		} else if (color !== "#000000" &&
 			(target = (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
-			|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail))) {
-				let str = target.value.substring(target.selectionStart, target.selectionEnd)
-				.replace(/\^(\w+?)\^([^\^]+?)\^p/igm, "$2");
-				let colorStr = `^${color.substring(1)}^${str}^p`;
-				target.setRangeText(colorStr);
+			|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail)))
+		{
+			let str = target.value.substring(target.selectionStart, target.selectionEnd)
+			.replace(/\^(\w+?)\^([^\^]+?)\^p/igm, "$2");
+			let colorStr = `^${color.substring(1)}^${str}^p`;
+			target.setRangeText(colorStr);
+			target.onchange();
 		}
 	}
 	setFontColor.onclick = function(){
@@ -2215,60 +2267,153 @@ function initialize() {
 	}
 	colorChooser.onchange = function(){
 		setFontColor.style.color = this.value;
-		setSelectionFontColor(this.value);
 	}
 	setFontColor.style.color = colorChooser.value;
-	//添加图标
+	//添加头像图标
 	insertCardAvatar.onclick = function(){
-		let id = prompt("请输入角色 ID");
-		id = parseInt(id,10);
-		if (id) {
-			const range = docSelection.getRangeAt(0);
+		if (docSelection.rangeCount < 1) return;
+		const range = docSelection.getRangeAt(0);
+		//优先获取选中部分的数字
+		let id = parseInt(range.toString().trim(), 10);
+		if (!Number.isInteger(id)) {
+			id = prompt(localTranslating.request_input({info: localTranslating.sort_name.sort_id}).textContent);
+			id = parseInt(id,10);
+		}
+		if (Number.isInteger(id)) {
 			let target;
 			if (target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
-				|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay)) {
+				|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay))
+			{
 				let dom = createIndexedIcon('card', id);
+				range.deleteContents();
 				range.insertNode(dom);
 				target.onblur();
 			} else if (target = (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
-				|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail)) {
+				|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail))
+			{
 					let str = `%{m${id}}`;
 				target.setRangeText(str);
+				target.onchange();
 			}
 		}
 	}
+	//添加其他序号图标
+	function insertIconToText() {
+		if (docSelection.rangeCount < 1) return;
+		let type, stype, id;
+		if(this.classList.contains("awoken-icon")) { //觉醒
+			type = 'awoken';
+			stype = 'a';
+			id = this.getAttribute("data-awoken-icon");
+		}
+		else if(this.classList.contains("type-icon")) { //类型
+			type = 'type';
+			stype = 't';
+			id = this.getAttribute("data-type-icon");
+		}
+		else if(this.classList.contains("orb")) { //宝珠
+			type = 'orb';
+			stype = 'o';
+			id = this.getAttribute("data-orb-icon");
+		}
+		else if(this.classList.contains("latent-icon")) { //潜觉
+			type = 'latent';
+			stype = 'l';
+			id = this.getAttribute("data-latent-icon");
+		}
+		const range = docSelection.getRangeAt(0);
+		let target;
+		console.log(range);
+		if (target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
+			|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay))
+		{
+			let dom = createIndexedIcon(type, id);
+			range.insertNode(dom);
+			console.log(target);
+			target.onblur();
+		} else if (target = (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
+			|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail))
+		{
+				let str = `%{${stype}${id}}`;
+			target.setRangeText(str);
+			target.onchange();
+		}
+	}
+	function showInsertIconList() {
+		//如果自身的列表已经打开了，则隐藏
+		if (!this.list.classList.contains(className_displayNone)) {
+			this.list.classList.add(className_displayNone);
+			return;
+		}
+		//否则隐藏其他的列表
+		[
+			insertAwokenIcon.list,
+			insertLatentIcon.list,
+			insertTypeIcon.list,
+			insertOrbIcon.list,
+		].forEach(ul=>ul.classList.toggle(className_displayNone, ul != this.list));
+	}
+	insertAwokenIcon.onclick = showInsertIconList;
+	insertLatentIcon.onclick = showInsertIconList;
+	insertTypeIcon.onclick = showInsertIconList;
+	insertOrbIcon.onclick = showInsertIconList;
 
 	function richTextToCode(parentElement){
 		let code = [];
 		for (let node of parentElement.childNodes) {
 			if (node.nodeName == "#text"){
 				code.push(node.nodeValue);
+				continue;
 			}
-			else if(node.classList.contains("detail-mon")) { //卡片头像
+			let type, id;
+			if(node.classList.contains("detail-mon")) { //卡片头像
 				const mon = node.querySelector(".monster");
-				code.push(`%{m${mon.getAttribute("data-cardid")}}`);
+				if (!mon) continue;
+				type = 'm';
+				id = mon.getAttribute("data-cardid");
 			}
 			else if(node.classList.contains("awoken-icon")) { //觉醒
-				code.push(`%{a${node.getAttribute("data-awoken-icon")}}`);
+				type = 'a';
+				id = node.getAttribute("data-awoken-icon");
 			}
 			else if(node.classList.contains("type-icon")) { //类型
-				code.push(`%{a${node.getAttribute("data-type-icon")}}`);
+				type = 't';
+				id = node.getAttribute("data-type-icon");
 			}
 			else if(node.classList.contains("orb")) { //宝珠
-				code.push(`%{a${node.getAttribute("data-orb-icon")}}`);
+				type = 'o';
+				id = node.getAttribute("data-orb-icon");
 			}
-			else if(node.classList.contains("latent")) { //潜觉
-				code.push(`%{a${node.getAttribute("data-latent-icon")}}`);
+			else if(node.classList.contains("latent-icon")) { //潜觉
+				type = 'l';
+				id = node.getAttribute("data-latent-icon");
 			}
+			code.push(`%{${type}${id}}`);
 		}
 		return code.join('');
 	}
 	txtTitleDisplay.onblur = function(){
-		txtTitle.value = richTextToCode(this);
+		formation.title = txtTitle.value = richTextToCode(this);
+		formationBox.refreshDocumentTitle();
+		creatNewUrl();
 	}
 	txtDetailDisplay.onblur = function(){
-		txtDetail.value = richTextToCode(this);
+		formation.detail = txtDetail.value = richTextToCode(this);
+		creatNewUrl();
 	}
+	txtTitle.onchange = function() {
+		formation.title = this.value;
+		txtTitleDisplay.innerHTML = '';
+		txtTitleDisplay.append(descriptionToHTML(this.value));
+		formationBox.refreshDocumentTitle();
+		creatNewUrl();
+	};
+	txtDetail.onchange = function() {
+		formation.detail = this.value;
+		txtDetailDisplay.innerHTML = '';
+		txtDetailDisplay.append(descriptionToHTML(this.value));
+		creatNewUrl();
+	};
 
 	// txtTitle.onchange = function() {
 	// 	formation.title = this.value;
@@ -4748,8 +4893,7 @@ function refreshAll(formationData) {
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
 	txtTitleDisplay.innerHTML = '';
 	txtTitleDisplay.append(descriptionToHTML(txtTitle.value));
-	let titleStr = txtTitleDisplay.textContent.trim();
-	document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
+	formationBox.refreshDocumentTitle();
 	txtDetailDisplay.innerHTML = '';
 	txtDetailDisplay.append(descriptionToHTML(txtDetail.value));
 	

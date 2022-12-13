@@ -3,6 +3,7 @@
 	addition_display: "추가 표시입니다",
 	title_blank: "입력 제목",
 	detail_blank: "입력 내용",
+	request_input: tp`${'info'}를 입력하십시오`,
 	sort_name:{
 		sort_none: "없음",
 		sort_id: "카드 ID",

@@ -86,8 +86,8 @@ details>summary {
 	bottom: 0;
 	margin-top: 10px;
 	backdrop-filter: blur(3px);
-	padding: 3px;
-	border-radius: 3px;
+	padding: 5px;
+	user-select: none; /*让内容不可选中*/
 }
 #rich-text-tools button
 {
@@ -97,8 +97,8 @@ details>summary {
 }
 #rich-text-tools button::before {
 	font-family: var(--icon-font-family);
+	vertical-align: middle;
 }
-/*添加卡片头像*/
 :where(
 	#insert-card-avatar,
 	#insert-type-icon,
@@ -173,7 +173,24 @@ label[for="siwtch-code-mode"]::after {
 	transform: scale(calc(25 / 36));
 	margin: calc(-36px * (1 - (25 / 36)) / 2);
 }
+#rich-text-tools>ul icon {
+	cursor: pointer;
+}
+#rich-text-tools>ul {
+	margin-top: 10px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 32px);
+	grid-auto-rows: 32px;
+	grid-gap: 4px;
+}
+#rich-text-tools>.orb-ul{
+	grid-template-columns: repeat(auto-fill, 36px);
+	grid-auto-rows: 36px;
+}
 
+.rich-text icon{
+	vertical-align: middle;
+}
 .title-code,
 .title-display
 {
@@ -1423,22 +1440,22 @@ icon.inflicts::after
 	top: 20px;
 }
 
-.detail-box .detail-mon{
+.rich-text .detail-mon{
 	width: 50px;
 	height: 50px;
 }
-.detail-box .detail-mon .monster{
+.rich-text .detail-mon .monster{
 	transform: scale(0.5);
 	margin: calc(-100px * (1 - 0.5) / 2);
 }
-.detail-box .detail-mon .monster .id{
+.rich-text .detail-mon .monster .id{
 	font-weight: bold;
 	font-size: 23px;
 }
-.detail-box .detail-mon .monster .id::before {
+.rich-text .detail-mon .monster .id::before {
 	font-size: 15px;
 }
-.detail-box .latent-icon {
+.rich-text .latent-icon {
 	width: 32px;
 	height: 32px;
 	display: inline-block;
@@ -2889,6 +2906,13 @@ icon.inflicts::after
 .block.rotate::before
 {
 	transform: rotate(90deg);
+}
+.orb-ul
+{
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 36px);
+	grid-auto-rows: 36px;
+	grid-gap: 5px;
 }
 .orb-icon
 {
