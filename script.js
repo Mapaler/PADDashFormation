@@ -2436,40 +2436,18 @@ function initialize() {
 		txtDetailDisplay.append(descriptionToHTML(this.value));
 		creatNewUrl();
 	};
-
-	// txtTitle.onchange = function() {
-	// 	formation.title = this.value;
-	// 	//txtTitleDisplay.innerHTML = descriptionToHTML(this.value);
-	// 	txtTitleDisplay.innerHTML = '';
-	// 	txtTitleDisplay.appendChild(descriptionToHTML(this.value));
-	// 	let titleStr = txtTitleDisplay.textContent.trim();
-	// 	document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
-	// 	creatNewUrl();
-	// };
-	// txtTitle.onblur = function() {
-	// 	if (this.value.length > 0)
-	// 		titleBox.classList.remove("edit");
-	// };
-	// txtDetail.onchange = function() {
-	// 	formation.detail = this.value;
-	// 	//txtDetailDisplay.innerHTML = descriptionToHTML(this.value);
-	// 	txtDetailDisplay.innerHTML = '';
-	// 	txtDetailDisplay.appendChild(descriptionToHTML(this.value));
-	// 	creatNewUrl();
-	// };
-	// txtDetail.onblur = function() {
-	// 	if (this.value.length > 0)
-	// 		detailBox.classList.remove("edit");
-	// 	this.style.height = txtDetailDisplay.scrollHeight + "px";
-	// };
-	// txtTitleDisplay.onclick = function() {
-	// 	titleBox.classList.add("edit");
-	// 	txtTitle.focus();
-	// };
-	// txtDetailDisplay.onclick = function() {
-	// 	detailBox.classList.add("edit");
-	// 	txtDetail.focus();
-	// };
+	//设置为可以拖放已经编辑好的队伍
+	function richTextDropHandler(event) {
+		let formStr = event.dataTransfer.getData('from');
+		if (formStr) {
+			event.preventDefault();
+			const [teamNum, isAssist, indexInTeam] = JSON.parse(formStr);
+			const mon = formation.teams[teamNum][isAssist][indexInTeam]
+			event.target.appendChild(createIndexedIcon('card', mon.id));
+		} 
+	}
+	txtTitleDisplay.ondrop = richTextDropHandler;
+	txtDetailDisplay.ondrop = richTextDropHandler;
 
 	//这个写法的目的其实是为了确保添加顺序与1、2、3一致，即便打乱了顺序，也能正确添加
 	for (let ti = 0, ti_len = formationBox.querySelectorAll(".team-bigbox").length; ti < ti_len; ti++) {
@@ -2505,6 +2483,8 @@ function initialize() {
 	}
 	//编辑界面每个怪物的头像的拖动
 	function dragStartMonHead(e) {
+		// const changeSwapToCopy = controlBox.querySelector("#change-swap-to-copy"); //储存交换“复制”和“替换”
+		// e.dataTransfer.dropEffect = changeSwapToCopy.checked ? 'copy' : 'move';
 		e.dataTransfer.setData('from', JSON.stringify(getMemberArrayIndexFromMonHead(this)));
 	}
 	//编辑界面每个怪物的头像的经过，阻止事件发生
@@ -2513,7 +2493,9 @@ function initialize() {
 	}
 	//编辑界面每个怪物的头像的放下
 	function dropMonHead(event) {
-		const dataFrom = JSON.parse(event.dataTransfer.getData('from'));
+		let formStr = event.dataTransfer.getData('from');
+		if (!formStr) return false;
+		const dataFrom = JSON.parse(formStr);
 		const dataTo = getMemberArrayIndexFromMonHead(this);
 
 		if ((dataTo[0] !== dataFrom[0]) ||
