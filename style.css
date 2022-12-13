@@ -930,14 +930,14 @@ icon.poison-no-effect::after,
 {
 	background-image: url(images/icon-reduce.png);
 }
-.tIf-total-hp .reduce .reduce-scale::after{
-	content: "%⇔";
-}
-.tIf-total-hp .reduce.no-reduce .reduce-scale::after,
+.tIf-total-hp .reduce .reduce-scale::after,
 .hp-range-table .hp-range td span:after,
 .hp-range-table .reduce-scale td span:after
 {
 	content: "%";
+}
+.tIf-total-hp .reduce:not(.no-reduce)::before {
+	content: "⇔";
 }
 .tIf-total-hp .reduce.no-reduce .general,
 .tIf-total-hp .reduce.no-reduce .awoken-bind

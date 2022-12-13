@@ -2746,10 +2746,10 @@ function initialize() {
 				hpRangeMax.textContent = range.max;
 
 				const hpGeneral = rageHpRow.insertCell();
-				hpGeneral.textContent = `${Math.round(tHP * (range.min / 100))} ~ ${Math.round(tHP * (range.max/100))}`;
+				hpGeneral.textContent = `${Math.round(tHP * (range.min / 100)).bigNumberToString()} ~ ${Math.round(tHP * (range.max/100)).bigNumberToString()}`;
 
 				const hpAwokenBind = rageHpNoAwokenRow.insertCell();
-				hpAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100))} ~ ${Math.round(tHPNoAwoken * (range.max/100))}`;
+				hpAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100)).bigNumberToString()} ~ ${Math.round(tHPNoAwoken * (range.max/100)).bigNumberToString()}`;
 
 				const reduce = reduceRow.insertCell();
 				const reduceScale = reduce.appendChild(document.createElement("span"));
@@ -2765,10 +2765,10 @@ function initialize() {
 				}
 
 				const reduceGeneral = reduceHpRow.insertCell();
-				reduceGeneral.textContent = `${Math.round(tHP * (range.min / 100) / (1 - range.scale))} ~ ${Math.round(tHP * (range.max/100) / (1 - range.scale))}`;
+				reduceGeneral.textContent = `${Math.round(tHP * (range.min / 100) / (1 - range.scale)).bigNumberToString()} ~ ${Math.round(tHP * (range.max/100) / (1 - range.scale)).bigNumberToString()}`;
 				
 				const reduceAwokenBind = reduceHpNoAwokenRow.insertCell();
-				reduceAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100) / (1 - range.scale))} ~ ${Math.round(tHPNoAwoken * (range.max/100) / (1 - range.scale))}`;
+				reduceAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100) / (1 - range.scale)).bigNumberToString()} ~ ${Math.round(tHPNoAwoken * (range.max/100) / (1 - range.scale)).bigNumberToString()}`;
 			});
 			return table;
 		}
@@ -5338,10 +5338,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
-		if (totalReduce > 0)
-			tHpDom_reduce.classList.remove("no-reduce");
-		else
-			tHpDom_reduce.classList.add("no-reduce");
+		tHpDom_reduce.classList.toggle("no-reduce", totalReduce == 0);
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
