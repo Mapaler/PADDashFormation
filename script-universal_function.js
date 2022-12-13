@@ -872,6 +872,9 @@ function rgbToHex(str) {  //RGB(A)颜色转换为HEX十六进制的颜色值
 	{
 		return res[1];
 	}
+	else if (str === "blue"){ //特殊翻译
+		return 'qs';
+	}
 	else {
 		return '000000';
 	}
