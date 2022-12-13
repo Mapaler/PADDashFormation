@@ -6851,7 +6851,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"6de135a43bab6af4f21b3439de96bbde"
+		"45c619b4800069c3fa79052e7547a042"
 	],
 	[
 		"script-custom_elements.js",
@@ -6859,7 +6859,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"a1aae6760c5f0488c91471ad5ec9a302"
+		"15a4d0b74f9bdee1c62dc7a463935f51"
 	],
 	[
 		"script-skill-parser.js",
@@ -6867,23 +6867,23 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"a787d0c56cd7b1fa37a5c1acfe7f86bf"
+		"df6f7a9a58150cc96a16b7ffb3f6b60e"
 	],
 	[
 		"script.js",
-		"869046d5461e0e8c2f1c5fe02540c429"
+		"139aeea04156e8c09ea47ef7be7a5b89"
 	],
 	[
 		"solo.html",
-		"23a40bd00c41369b3bcaea2866a2ec3d"
+		"a43e25c955f8877dfaccb2c79b2f6852"
 	],
 	[
 		"style-monsterimages.css",
-		"9fb602ff8aa0e1c4bbb33692ee4122b2"
+		"aaec92612fcfacceb5acf23f26e11963"
 	],
 	[
 		"style.css",
-		"1eff0d2ae51a6864bbc6128f4c39fe12"
+		"4ee88c37d667151df61d80906c053561"
 	],
 	[
 		"temp.js",
@@ -6891,7 +6891,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"a6fd1ac23814d33f4654c2df34f32eb3"
+		"98d75f55989ee4b16af33220aeefac7e"
 	],
 	[
 		"languages/en.css",
@@ -6907,7 +6907,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.js",
-		"73f6111cb77e306a474d4defe802423d"
+		"17f837f31da46113606f8acb7d863dba"
 	],
 	[
 		"languages/ko.css",
@@ -6915,7 +6915,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.js",
-		"a1c9e763adaa584e7cf7389d8ecd7996"
+		"9c016e79d84c2c008d6e5a4b2a16d885"
 	],
 	[
 		"languages/language-list.js",
@@ -6935,7 +6935,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.js",
-		"81c2b834d3f5988c382e8e4d2b240503"
+		"74b6d673b6b5bcfec385eb5e0e861852"
 	],
 	[
 		"languages/zh.css",
@@ -6943,7 +6943,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.js",
-		"434235da7bdc18a5a7067248a42c5f47"
+		"5e7578ef97832ddf0a8b605ccf447eab"
 	],
 	[
 		"images/attrs.png",
@@ -7115,7 +7115,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"fbcc099ae4ea7e0ebc51369d7b377460"
+		"0bfee643eeca7efbdadc419ea73bdbd8"
 	],
 	[
 		"monsters-info/mon_en.json",
@@ -7139,7 +7139,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/skill_ko.json",
-		"f5e8cb016d8826d50f31e0f69d61dc93"
+		"93be986b5d2aea8d6ccd463035782379"
 	],
 	[
 		"doc/export-player-data.html",

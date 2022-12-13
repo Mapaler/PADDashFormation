@@ -195,6 +195,9 @@ label[for="siwtch-code-mode"]::after {
 	font-size: 2em;
 	font-weight: bold;
 }
+.title-display br{ /*隐藏所有换行*/
+	display: none;
+}
 .detail-code,
 .detail-display
 {

@@ -2271,8 +2271,15 @@ function initialize() {
 	setFontColor.style.color = colorChooser.value;
 	//添加头像图标
 	insertCardAvatar.onclick = function(){
+		//没有选择则返回
 		if (docSelection.rangeCount < 1) return;
 		const range = docSelection.getRangeAt(0);
+		let target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
+		|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay)
+		|| (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
+		|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail);
+		//选择位置不对也返回
+		if (!target) return;
 		//优先获取选中部分的数字
 		let id = parseInt(range.toString().trim(), 10);
 		if (!Number.isInteger(id)) {
@@ -2280,18 +2287,15 @@ function initialize() {
 			id = parseInt(id,10);
 		}
 		if (Number.isInteger(id)) {
-			let target;
-			if (target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
-				|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay))
+			if (target == txtTitleDisplay || target == txtDetailDisplay)
 			{
 				let dom = createIndexedIcon('card', id);
 				range.deleteContents();
 				range.insertNode(dom);
 				target.onblur();
-			} else if (target = (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
-				|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail))
+			} else if (target == txtTitle || target == txtDetail)
 			{
-					let str = `%{m${id}}`;
+				let str = `%{m${id}}`;
 				target.setRangeText(str);
 				target.onchange();
 			}
@@ -2395,21 +2399,21 @@ function initialize() {
 			else if(node.classList.contains("latent-icon")) { //潜觉
 				type = 'l';
 				id = node.getAttribute("data-latent-icon");
+			} else {
+				continue;
 			}
 			code.push(`%{${type}${id}}`);
 		}
 		return code.join('');
 	}
+	//标题删除所有的换行
 	txtTitleDisplay.onblur = function(){
-		formation.title = txtTitle.value = richTextToCode(this);
-		formationBox.refreshDocumentTitle();
-		creatNewUrl();
-	}
-	//标题凡是输入就删除所有的换行
-	txtTitleDisplay.oninput = function(){
-		for (let node of this.children) {
+		for (let node of Array.from(this.children)) {
 			if (node.nodeName == "BR") node.remove();
 		}
+		formation.title = txtTitle.value = richTextToCode(this).replaceAll('\n','');
+		formationBox.refreshDocumentTitle();
+		creatNewUrl();
 	}
 	txtDetailDisplay.onblur = function(){
 		//没有内容或者只有一个换行时，清空内容
