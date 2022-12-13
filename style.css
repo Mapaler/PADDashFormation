@@ -52,7 +52,15 @@ body{
 	--border-width: 2px;
 
 	font-family: var(--font-family);
+	margin: 0;
 }
+.control-box,
+.formation-box
+{
+	margin: 5px;
+}
+.control-box{margin-bottom: 0;}
+.formation-box{margin-top: 0;}
 .noscript {
 	color: red;
 	font-size: 2em;
@@ -70,6 +78,86 @@ details>summary {
 }
 .help-link::before{
 	content: "ℹ️Help & Tips";
+}
+
+#rich-text-tools {
+	background-color: rgba(0,0,0,0.5);
+	position: sticky;
+	bottom: 0;
+	margin-top: 10px;
+}
+#rich-text-tools button{
+	font-size: 1.5em;
+	min-width: 48px;
+	height: 32px;
+	vertical-align: middle;
+	text-align: center;
+}
+#rich-text-tools button::before {
+	font-family: var(--icon-font-family);
+}
+/*添加卡片头像*/
+:where(
+	#insert-card-avatar,
+	#insert-type-icon,
+	#insert-awoken-icon,
+	#insert-latent-icon,
+	#insert-orb-icon
+)::before {
+	display: inline-block;
+	content: "";
+	background-repeat: no-repeat;
+}
+#siwtch-code-mode::before {
+	content: "\f121";
+}
+#set-font-color::before {
+	content: "A";
+}
+#insert-card-avatar::before {
+	width: 100px;
+	height: 100px;
+	background-image: url(images/CARDFRAME2.PNG), url(images/CARDFRAME2.PNG);
+	background-position: -102px -104px, 0 0;
+	transform: scale(calc(25 / 100));
+	margin: calc(-100px * (1 - (25 / 100)) / 2);
+}
+#insert-type-icon::before {
+	width: 32px;
+	height: 32px;
+	background-image: url(images/type.png);
+	background-position-y: calc(-32px * 4);
+	transform: scale(calc(25 / 32));
+	margin: calc(-32px * (1 - (25 / 32)) / 2);
+}
+#insert-awoken-icon::before {
+	width: 32px;
+	height: 32px;
+	background-image: url(images/awoken.png);
+	background-position-y: calc(-32px * 43);
+	transform: scale(calc(25 / 32));
+	margin: calc(-32px * (1 - (25 / 32)) / 2);
+}
+#insert-latent-icon::before {
+	width: 32px;
+	height: 32px;
+	background-color: #4499EE;
+	border: 2px ridge #CCEEFF;
+	box-shadow: inset 0 1px 0 0 rgba(0,0,0,0.5);
+	border-radius: 5px;
+	box-sizing: border-box;
+	background-image: url(images/icon-latent.png);
+	background-position-x: -2px;
+	background-position-y: calc(-32px * 11 - 2px);
+	transform: scale(calc(25 / 32));
+	margin: calc(-32px * (1 - (25 / 32)) / 2);
+}
+#insert-orb-icon::before {
+	width: 36px;
+	height: 36px;
+	background-image: url(images/icon-orbs.png);
+	transform: scale(calc(25 / 36));
+	margin: calc(-36px * (1 - (25 / 36)) / 2);
 }
 
 .title,

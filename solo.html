@@ -56,13 +56,13 @@ var formation = new Formation(teamsCount,6);
 				<option>110</option>
 				<option>120</option>
 			</datalist>
+			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"></label>
 		</div>
 		<div>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-id" id="show-mon-id"><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-skill-cd" id="show-mon-skill-cd"><label class="config-checkbox-lbl show-mon-skill-cd-lbl" for="show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-awoken-count" id="show-awoken-count" checked><label class="config-checkbox-lbl show-awoken-count-lbl" for="show-awoken-count"><div class="config-checkbox-lbl-cicle"></div></label>
 			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-awoken" id="show-mon-awoken"><label class="config-checkbox-lbl show-mon-awoken-lbl" for="show-mon-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"></label>
 		</div>
 		<div class="status"><span class="icon"></span><span class="text"></span></div>
 		<div>
@@ -72,7 +72,7 @@ var formation = new Formation(teamsCount,6);
 		</div>
 	</div>
 	<div class="formation-box">
-		<div class="title-box edit"><input type="text" class="title" placeholder="输入队伍标题" /><h1 class="title-display"></h1></div>
+		<div class="title-box edit"><input type="text" class="title" placeholder="输入队伍标题" /><h1 class="title-display rich-text"></h1></div>
 		<div class="dungeon-enchance"></div>
 		<ul class="teams">
 			<li class="team-bigbox team-1">
@@ -598,7 +598,16 @@ var formation = new Formation(teamsCount,6);
 				</div>
 			</li>
 		</ul>
-		<div class="detail-box edit"><textarea class="detail" placeholder="输入说明"></textarea><div class="detail-display"></div></div>
+		<div class="detail-box edit"><textarea class="detail" placeholder="输入说明"></textarea><div class="detail-display rich-text"></div></div>
+		<div id="rich-text-tools">
+			<button id="siwtch-code-mode"></button>
+			<button id="set-font-color"></button><input id="color-chooser" class="display-none" type="color" />
+			<button id="insert-card-avatar"></button>
+			<button id="insert-type-icon"></button>
+			<button id="insert-awoken-icon"></button>
+			<button id="insert-latent-icon"></button>
+			<button id="insert-orb-icon"></button>
+		</div>
 		<div class="dialog dialog-hp-detail display-none">
 			<div class="dialog-title"></div>
 			<div class="dialog-content"></div>
