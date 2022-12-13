@@ -1597,8 +1597,8 @@ function capture() {
 	statusLine.classList.add("prepare-capture");
 	const titleBox = formationBox.querySelector(".title-box");
 	const detailBox = formationBox.querySelector(".detail-box");
-	const txtTitle = titleBox.querySelector(".title");
-	const txtDetail = detailBox.querySelector(".detail");
+	const txtTitle = titleBox.querySelector(".title-code");
+	const txtDetail = detailBox.querySelector(".detail-code");
 	//去掉可能的空白文字的编辑状态
 	titleBox.classList.remove("edit");
 	detailBox.classList.remove("edit");
@@ -2169,43 +2169,58 @@ function initialize() {
 	//标题和介绍文本框
 	const titleBox = formationBox.querySelector(".title-box");
 	const detailBox = formationBox.querySelector(".detail-box");
-	const txtTitle = titleBox.querySelector(".title");
-	const txtDetail = detailBox.querySelector(".detail");
+	const txtTitle = titleBox.querySelector(".title-code");
+	const txtDetail = detailBox.querySelector(".detail-code");
 	const txtTitleDisplay = titleBox.querySelector(".title-display");
 	const txtDetailDisplay = detailBox.querySelector(".detail-display");
-	txtTitle.onchange = function() {
-		formation.title = this.value;
-		//txtTitleDisplay.innerHTML = descriptionToHTML(this.value);
-		txtTitleDisplay.innerHTML = '';
-		txtTitleDisplay.appendChild(descriptionToHTML(this.value));
-		let titleStr = txtTitleDisplay.textContent.trim();
-		document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
-		creatNewUrl();
-	};
-	txtTitle.onblur = function() {
-		if (this.value.length > 0)
-			titleBox.classList.remove("edit");
-	};
-	txtDetail.onchange = function() {
-		formation.detail = this.value;
-		//txtDetailDisplay.innerHTML = descriptionToHTML(this.value);
-		txtDetailDisplay.innerHTML = '';
-		txtDetailDisplay.appendChild(descriptionToHTML(this.value));
-		creatNewUrl();
-	};
-	txtDetail.onblur = function() {
-		if (this.value.length > 0)
-			detailBox.classList.remove("edit");
-		this.style.height = txtDetailDisplay.scrollHeight + "px";
-	};
-	txtTitleDisplay.onclick = function() {
-		titleBox.classList.add("edit");
-		txtTitle.focus();
-	};
-	txtDetailDisplay.onclick = function() {
-		detailBox.classList.add("edit");
-		txtDetail.focus();
-	};
+
+	//const richTextTools = document.getElementById("rich-text-tools");
+	const siwtchCodeMode = document.getElementById("siwtch-code-mode");
+	const setFontColor = document.getElementById("set-font-color");
+	const colorChooser = document.getElementById("color-chooser");
+	const insertCardAvatar = document.getElementById("insert-card-avatar");
+	const insertTypeIcon = document.getElementById("insert-type-icon");
+	const insertAwokenIcon = document.getElementById("insert-awoken-icon");
+	const insertLatentIcon = document.getElementById("insert-latent-icon");
+	const insertOrbIcon = document.getElementById("insert-orb-icon");
+	siwtchCodeMode.onclick = function(){
+		titleBox.classList.toggle("edit", this.checked);
+		detailBox.classList.toggle("edit", this.checked);
+	}
+
+	// txtTitle.onchange = function() {
+	// 	formation.title = this.value;
+	// 	//txtTitleDisplay.innerHTML = descriptionToHTML(this.value);
+	// 	txtTitleDisplay.innerHTML = '';
+	// 	txtTitleDisplay.appendChild(descriptionToHTML(this.value));
+	// 	let titleStr = txtTitleDisplay.textContent.trim();
+	// 	document.title = titleStr.length > 0 ? `${titleStr.trim()} - ${localTranslating.webpage_title}` : localTranslating.webpage_title;
+	// 	creatNewUrl();
+	// };
+	// txtTitle.onblur = function() {
+	// 	if (this.value.length > 0)
+	// 		titleBox.classList.remove("edit");
+	// };
+	// txtDetail.onchange = function() {
+	// 	formation.detail = this.value;
+	// 	//txtDetailDisplay.innerHTML = descriptionToHTML(this.value);
+	// 	txtDetailDisplay.innerHTML = '';
+	// 	txtDetailDisplay.appendChild(descriptionToHTML(this.value));
+	// 	creatNewUrl();
+	// };
+	// txtDetail.onblur = function() {
+	// 	if (this.value.length > 0)
+	// 		detailBox.classList.remove("edit");
+	// 	this.style.height = txtDetailDisplay.scrollHeight + "px";
+	// };
+	// txtTitleDisplay.onclick = function() {
+	// 	titleBox.classList.add("edit");
+	// 	txtTitle.focus();
+	// };
+	// txtDetailDisplay.onclick = function() {
+	// 	detailBox.classList.add("edit");
+	// 	txtDetail.focus();
+	// };
 
 	//这个写法的目的其实是为了确保添加顺序与1、2、3一致，即便打乱了顺序，也能正确添加
 	for (let ti = 0, ti_len = formationBox.querySelectorAll(".team-bigbox").length; ti < ti_len; ti++) {
@@ -4643,8 +4658,8 @@ function refreshAll(formationData) {
 
 	fragment.append(...formationBox.childNodes);
 
-	const txtTitle = titleBox.querySelector(".title");
-	const txtDetail = detailBox.querySelector(".detail");
+	const txtTitle = titleBox.querySelector(".title-code");
+	const txtDetail = detailBox.querySelector(".detail-code");
 	txtTitle.value = formationData.title || "";
 	txtDetail.value = formationData.detail || "";
 	const txtTitleDisplay = titleBox.querySelector(".title-display");
@@ -4779,7 +4794,7 @@ function refreshAll(formationData) {
 	if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
 
 	formationBox.appendChild(fragment);
-	txtDetail.onblur(); //这个需要放在显示出来后再改才能生效
+	// txtDetail.onblur(); //这个需要放在显示出来后再改才能生效
 }
 
 function awokenSetCount(aicon, number) {
