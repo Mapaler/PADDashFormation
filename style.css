@@ -1362,6 +1362,12 @@ icon.inflicts::after
 	border-bottom: #72941D ridge 7px;
 	box-shadow: black 0 3px 3px;
 	padding: 5px 10px;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+.monsterinfo-box .row-awoken-sawoken {
+	margin-top: 5px;
 }
 .edit-box .search-box,
 .edit-box .setting-box{

@@ -2895,18 +2895,18 @@ function initialize() {
 		sessionStorage.removeItem('editing');
 	};
 
-	const smonsterinfoBox = editBox.querySelector(".monsterinfo-box");
+	const monInfoBox = editBox.querySelector(".monsterinfo-box");
 	const searchBox = editBox.querySelector(".search-box");
 	const settingBox = editBox.querySelector(".setting-box");
 
-	const mSeriesId = smonsterinfoBox.querySelector(".monster-seriesId");
+	const mSeriesId = monInfoBox.querySelector(".monster-seriesId");
 	mSeriesId.onclick = function() { //搜索系列
 		const seriesId = parseInt(this.getAttribute(dataAttrName), 10);
 		if (seriesId > 0) {
 			showSearch(Cards.filter(card => card.seriesId == seriesId));
 		}
 	};
-	const mCollabId = smonsterinfoBox.querySelector(".monster-collabId");
+	const mCollabId = monInfoBox.querySelector(".monster-collabId");
 	mCollabId.onclick = function() { //搜索合作
 		const collabId = parseInt(this.getAttribute(dataAttrName), 10);
 		if (collabId > 0); {
@@ -3018,7 +3018,7 @@ function initialize() {
 	//初始化Dialog
 	dialogInitialing(stringSearchDialog);
 
-	const mAltName = smonsterinfoBox.querySelector(".monster-altName");
+	const mAltName = monInfoBox.querySelector(".monster-altName");
 	mAltName.onclick = function() { //搜索合作
 		//const mid = parseInt(this.getAttribute('data-monId'));
 		const card = Cards[editBox.mid];
@@ -3840,7 +3840,7 @@ function initialize() {
 		showSearch(searchByString(monstersID.value));
 	};
 	//觉醒
-	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken");
+	const monEditAwokensRow = monInfoBox.querySelector(".row-mon-awoken");
 	const awokenCountLabel = monEditAwokensRow.querySelector(".awoken-count-num");
 	const monEditAwokens = Array.from(monEditAwokensRow.querySelectorAll(".awoken-ul input[name='awoken-number']"));
 
@@ -3868,7 +3868,7 @@ function initialize() {
 	monEditAwokensLabel.forEach(akDom => akDom.onclick = playVoiceAwoken);
 
 	//超觉醒
-	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
+	const monEditSAwokensRow = monInfoBox.querySelector(".row-mon-super-awoken");
 
 	//3个快速设置this.ipt为自己的value
 	function setIptToMyValue() {
@@ -4567,12 +4567,12 @@ function editMember(teamNum, isAssist, indexInTeam) {
 	monstersID.value = mon.id > 0 ? mon.id : 0;
 	monstersID.onchange();
 	//觉醒
-	const monEditAwokens = settingBox.querySelectorAll(".row-mon-awoken .awoken-ul input[name='awoken-number']");
+	const monEditAwokens = editBox.querySelectorAll(".row-mon-awoken .awoken-ul input[name='awoken-number']");
 	//if (mon.awoken > 0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下，为了减少计算次数，把这一条移动到了最后面
 	//超觉醒
-	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
+	const monEditSAwokensRow = editBox.querySelector(".row-mon-super-awoken");
 	const monEditSAwokens = Array.from(monEditSAwokensRow.querySelectorAll(".awoken-ul input[name='sawoken-choice']")); //单选框，0号是隐藏的
-	const noSAwokenRadio = settingBox.querySelector("#sawoken-choice-nosawoken"); //不选超觉醒的选项
+	const noSAwokenRadio = editBox.querySelector("#sawoken-choice-nosawoken"); //不选超觉醒的选项
 	(monEditSAwokens.find(ipt=>mon.sawoken === parseInt(ipt.value,10)) || noSAwokenRadio).checked = true;
 	monEditSAwokensRow.swaoken = mon.sawoken;
 
@@ -4693,7 +4693,7 @@ function editBoxChangeMonId(id) {
 		}
 	}
 
-	const monEditAwokensRow = settingBox.querySelector(".row-mon-awoken .awoken-ul");
+	const monEditAwokensRow = monInfoBox.querySelector(".row-mon-awoken .awoken-ul");
 	const mAwokenIcon = monEditAwokensRow.querySelectorAll(".awoken-icon");
 	const mAwokenIpt = monEditAwokensRow.querySelectorAll("input[name='awoken-number']");
 	monEditAwokensRow.classList.toggle("allowable-assist", card.canAssist);;
@@ -4706,10 +4706,10 @@ function editBoxChangeMonId(id) {
 	mAwokenIpt[card.awakenings.length].click(); //选择最后一个觉醒
 
 	//超觉醒
-	const monEditSAwokensRow = settingBox.querySelector(".row-mon-super-awoken");
+	const monEditSAwokensRow = monInfoBox.querySelector(".row-mon-super-awoken");
 	const monEditSAwokensUl = monEditSAwokensRow.querySelector(".awoken-ul");
 	const monEditSAwokensIcons = Array.from(monEditSAwokensUl.querySelectorAll(".awoken-icon"));
-	const noSAwokenRadio = settingBox.querySelector("#sawoken-choice-nosawoken"); //不选超觉醒的选项
+	const noSAwokenRadio = editBox.querySelector("#sawoken-choice-nosawoken"); //不选超觉醒的选项
 	//获得之前的所有超觉醒
 	const prevSAwokens = monEditSAwokensIcons.map(icon=>parseInt(icon.getAttribute("data-awoken-icon") || 0, 10)).filter(Boolean);
 
@@ -4753,7 +4753,7 @@ function editBoxChangeMonId(id) {
 		//切换前后超觉相同，什么都不做
 		//console.debug('与上一个超觉醒完全相同，不用修改超觉醒');
 	} else {
-		const optionIconTemplate = settingBox.querySelector('#sawoken-option-icon');
+		const optionIconTemplate = editBox.querySelector('#sawoken-option-icon');
 		monEditSAwokensUl.innerHTML = ''; //清空旧的超觉醒
 		monEditSAwokensUl.swaoken = 0;
 		card.superAwakenings.forEach((sak,idx)=>{
