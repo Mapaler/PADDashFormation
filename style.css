@@ -3279,7 +3279,7 @@ table .orb-icon
 }
 #qr-code-frame .brown-button::before
 {
-	font-family: 'Font Awesome 5 Free';
+	font-family: var(--icon-font-family);
 	font-weight: normal;
 	width: unset;
 }
