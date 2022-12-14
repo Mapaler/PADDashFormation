@@ -6879,7 +6879,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"aaec92612fcfacceb5acf23f26e11963"
+		"1e522dc988b648fad4aa4c03ff141edc"
 	],
 	[
 		"style.css",

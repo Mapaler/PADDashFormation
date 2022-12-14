@@ -1405,7 +1405,7 @@
 	[data-badge-icon='1'],
 	[data-badge-icon='10'],
 	[data-badge-icon='20'],
-	[data-badge-icon='50'],
+	[data-badge-icon='129'],
 )::before {
 	background-position-x: calc(-36px * 3);
 }
