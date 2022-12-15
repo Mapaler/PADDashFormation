@@ -4693,7 +4693,12 @@ function editBoxChangeMonId(id) {
 		}
 	}
 
-	const monEditAwokensRow = monInfoBox.querySelector(".row-mon-awoken .awoken-ul");
+	//觉醒
+	const monEditOuterAwokensRow = monInfoBox.querySelector(".row-awoken-sawoken");
+	//没有觉醒时整体隐藏
+	monEditOuterAwokensRow.classList.toggle(className_displayNone, card.awakenings.length == 0 && card.superAwakenings.length == 0);
+
+	const monEditAwokensRow = monEditOuterAwokensRow.querySelector(".row-mon-awoken");
 	const mAwokenIcon = monEditAwokensRow.querySelectorAll(".awoken-icon");
 	const mAwokenIpt = monEditAwokensRow.querySelectorAll("input[name='awoken-number']");
 	monEditAwokensRow.classList.toggle("allowable-assist", card.canAssist);;
@@ -4706,7 +4711,7 @@ function editBoxChangeMonId(id) {
 	mAwokenIpt[card.awakenings.length].click(); //选择最后一个觉醒
 
 	//超觉醒
-	const monEditSAwokensRow = monInfoBox.querySelector(".row-mon-super-awoken");
+	const monEditSAwokensRow = monEditOuterAwokensRow.querySelector(".row-mon-super-awoken");
 	const monEditSAwokensUl = monEditSAwokensRow.querySelector(".awoken-ul");
 	const monEditSAwokensIcons = Array.from(monEditSAwokensUl.querySelectorAll(".awoken-icon"));
 	const noSAwokenRadio = editBox.querySelector("#sawoken-choice-nosawoken"); //不选超觉醒的选项

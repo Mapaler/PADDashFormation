@@ -1366,9 +1366,6 @@ icon.inflicts::after
 	top: 0;
 	z-index: 1;
 }
-.monsterinfo-box .row-awoken-sawoken {
-	margin-top: 5px;
-}
 .edit-box .search-box,
 .edit-box .setting-box{
 	padding: 10px;
@@ -2079,7 +2076,7 @@ icon.inflicts::after
 }
 .monsterinfo-box .monsterinfo-line{
 	font-size: 22px;
-	line-height: 25px;
+	line-height: 30px;
 	height: auto;
 }
 .monsterinfo-box .monsterinfo-line>div
