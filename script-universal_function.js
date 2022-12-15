@@ -400,7 +400,7 @@ function latentUseHole(latentId) {
 		}
 		case 13: case 14: case 15: case 37: case 38:
 		case 39: case 40: case 41: case 42: case 46:
-		case 47:
+		case 47: case 48:
 		{
 			return 6;
 		}
@@ -1306,6 +1306,8 @@ function countTeamSB(team, solo) {
 		//大SB 56，小SB 21
 		sbn += enableAwoken.filter(n=>n===21).length;
 		sbn += enableAwoken.filter(n=>n===56).length * 2;
+		//负sb 105
+		sbn -= enableAwoken.filter(n=>n===105).length;
 		//心L 59，心L大SB潜觉 47
 		sbn += enableAwoken.filter(n=>n===59).length ? member.latent.filter(n=>n===47).length * 3 : 0;
 	}

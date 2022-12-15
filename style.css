@@ -1465,11 +1465,12 @@ icon.inflicts::after
 	margin: calc(-100px * (1 - 0.5) / 2);
 }
 .rich-text .detail-mon .monster .id{
-	font-weight: bold;
+	background-color: rgba(0,0,0,0.8);
+	padding: 2px;
 	font-size: 23px;
 }
 .rich-text .detail-mon .monster .id::before {
-	font-size: 15px;
+	display: none;
 }
 .rich-text .latent-icon {
 	width: 32px;

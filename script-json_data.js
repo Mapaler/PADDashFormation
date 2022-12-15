@@ -393,6 +393,7 @@ let localTranslating = {
 			[102]: tp`${'icon'}Enhanced Water Orbs+`,
 			[103]: tp`${'icon'}Enhanced Dark Orbs+`,
 			[104]: tp`${'icon'}Enhanced Heal Orbs+`,
+			[105]: tp`${'icon'}Skill Boost Minus`,
 		}
 	},
 };
@@ -428,7 +429,7 @@ typekiller_for_type.forEach(t=>
 const common_allowable_latent = [
 	1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,
 	28,29,30,31,32,33,34,35,36,37,38,
-	39,40,41,46,47 //需要拥有觉醒的才能打，但是有武器
+	39,40,41,46,47,48 //需要拥有觉醒的才能打，但是有武器
 ];
 //120级才能打的潜觉
 const v120_allowable_latent = [
@@ -465,7 +466,7 @@ const official_awoken_sorting = [
 	65, 66, 67, 20, 71, 72, 30, 64, 63,
 	73, 74, 75, 76, 77, 78, 79, 80, 81,
 	82, 84, 83, 85, 86, 87, 88, 89, 90,
-	91, 92, 93, 94, 95, 
+	91, 92, 93, 94, 95, 105,
 ];
 
 //pdc的徽章对应数字
@@ -549,6 +550,8 @@ const pdcLatentMap = [
 	{pdf:46,pdc:52}, //心追解云封 ×1.5
 	{pdf:47,pdc:53}, //心L大SB
 	{pdf:47,pdc:54}, //心L大SB ×1.5
+	{pdf:48,pdc:55}, //L解禁武器
+	{pdf:48,pdc:56}, //L解禁武器 ×1.8
 ];
 //排序程序列表
 const sort_function_list = [
