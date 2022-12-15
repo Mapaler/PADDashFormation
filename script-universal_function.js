@@ -982,17 +982,6 @@ function parseBigNumber(number) {
 function isReincarnated(card) {
 	return card.is8Latent && !card.isUltEvo && (card.evoBaseId || card.evoRootId) != card.id && (card.awakenings.includes(49) ? isReincarnated(Cards[card.evoBaseId]) : true);
 }
-//获取类型允许的潜觉
-function getAllowLatent(card) {
-	const latentSet = new Set(common_allowable_latent);
-	card.types.filter(i => i >= 0)
-		.map(type => type_allowable_latent[type])
-		.forEach(tA => tA.forEach(t => latentSet.add(t)));
-	if (card.limitBreakIncr) {
-		v120_allowable_latent.forEach(t => latentSet.add(t));
-	}
-	return Array.from(latentSet);
-}
 //计算队伍中有多少血量
 function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 	let memberArr = team[0], assistArr = team[1];

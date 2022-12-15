@@ -1212,6 +1212,14 @@ icon.inflicts::after
 	transform: scale(1.50);
 	margin: calc(32px / 4);
 }
+.team-latents .latent-icon.unallowable-latent {
+	opacity: unset;
+	filter: unset;
+}
+.team-latents .latent-icon.unallowable-latent::before {
+	opacity: var(--search-icon-unchecked);
+	filter: grayscale(1);
+}
 
 /*队长的边框*/
 .team-members .team-leader .monster
@@ -2179,9 +2187,6 @@ icon.inflicts::after
 	content: "▼怪物觉醒";
 }
 */
-.row-mon-awoken{
-	margin-right: 20px;
-}
 .row-mon-awoken .awoken-count-num{
 	display: inline-block;
 	transform: scale(0.84) translateY(-2px);
@@ -2219,10 +2224,16 @@ icon.inflicts::after
 	box-sizing: border-box;
 	vertical-align: top;
 }
+.row-mon-super-awoken::before {
+	content: "+";
+	vertical-align: top;
+}
 .row-mon-awoken .awoken-ul,
 .row-mon-super-awoken .awoken-ul
 {
 	grid-template-columns: repeat(10, 32px);
+	display: inline grid;
+	vertical-align: bottom;
 }
 .row-mon-awoken .awoken-count-num,
 .row-mon-awoken .awoken-icon,

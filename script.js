@@ -144,8 +144,8 @@ DBOpenRequest.onupgradeneeded = function(event) {
 }*/
 
 //队员基本的留空
-var Member = function() {
-	this.id = 0;
+var Member = function(id = 0) {
+	this.id = id;
 	this.ability = [0, 0, 0];
 	this.abilityNoAwoken = [0, 0, 0];
 };
@@ -153,6 +153,19 @@ var Member = function() {
 Object.defineProperty(Member.prototype, "card", {
 	get() { return Cards[this.id]; }
 })
+Member.prototype.effectiveAwokens = function(assist) {
+	const memberCard = this.card;
+	let enableAwoken = memberCard?.awakenings?.slice(0, this.awoken) || [];
+	//单人、3人时,大于等于100级且297时增加超觉醒
+	if ((solo || teamsCount === 3) && this.sawoken > 0 && this.level >= 100 && this.plus.every(p=>p>=99)) {
+		enableAwoken.push(this.sawoken);
+	}
+	//添加武器
+	if (assist instanceof Member && assist.card.awakenings.includes(49)) {
+		enableAwoken.push(...assist.card.awakenings.slice(0, assist.awoken));
+	}
+	return enableAwoken;
+}
 Member.prototype.getAttrsTypesWithWeapon = function(assist) {
 	let memberCard = this.card, assistCard = assist?.card;
 	if (this.id <= 0 || !memberCard) return null; //跳过 id 0
@@ -3915,14 +3928,11 @@ function initialize() {
 	const monEditRcvValue = rowMonAbility.querySelector(".m-rcv-li .ability-value");
 	//加蛋
 	const rowMonPlus = settingBox.querySelector(".row-mon-plus");
-	const monEditAddHpLi = rowMonPlus.querySelector(".m-hp-li");
-	const monEditAddAtkLi = rowMonPlus.querySelector(".m-atk-li");
-	const monEditAddRcvLi = rowMonPlus.querySelector(".m-rcv-li");
-	const monEditAddHp = monEditAddHpLi.querySelector(".m-plus-hp");
+	const monEditAddHp = rowMonPlus.querySelector(".m-plus-hp");
 	monEditAddHp.onchange = reCalculateAbility;
-	const monEditAddAtk = monEditAddAtkLi.querySelector(".m-plus-atk");
+	const monEditAddAtk = rowMonPlus.querySelector(".m-plus-atk");
 	monEditAddAtk.onchange = reCalculateAbility;
-	const monEditAddRcv = monEditAddRcvLi.querySelector(".m-plus-rcv");
+	const monEditAddRcv = rowMonPlus.querySelector(".m-plus-rcv");
 	monEditAddRcv.onchange = reCalculateAbility;
 	//297按钮
 	const monEditPlusFastSettings = Array.from(rowMonPlus.querySelectorAll(".m-plus-fast-setting"));
@@ -3947,7 +3957,7 @@ function initialize() {
 		if (event instanceof MouseEvent) localStorage.setItem(cfgPrefix + 'hide-latent', Number(!this.open));
 	}
 	editBox.refreshLatent = function(latent, monid) {//刷新潜觉
-		refreshLatent(latent, monid, monEditLatentUl);
+		refreshLatent(latent, new Member(monid), monEditLatentUl);
 	};
 
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
@@ -4135,7 +4145,10 @@ function initialize() {
 		if (skillLevelNum < skill.maxLevel) {
 			mon.skilllevel = skillLevelNum;
 		}
-		changeid(mon, editBox.monsterHead, editBox.memberIdx[1] ? null : editBox.latentBox);
+		changeid(mon, editBox.monsterHead,
+			editBox.memberIdx[1] ? null : editBox.latentBox, //潜觉Node
+			editBox.memberIdx[1] ? null : teamData[1][editBox.memberIdx[2]] //assist数据
+		);
 
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
 		refreshAbility(teamAbilityDom, teamData, editBox.memberIdx[2]); //本人能力值
@@ -4457,7 +4470,7 @@ function changeid(mon, monDom, latentDom, assist) {
 			if (latent.length < 1) {
 				latentDom.classList.add(className_displayNone);
 			} else {
-				refreshLatent(latent, mon.id, latentDom, {sort:true});
+				refreshLatent(latent, mon, latentDom, {sort:true, assist});
 				latentDom.classList.remove(className_displayNone);
 			}
 			latentDom.classList.toggle("level-super-break", level > 110);; //切换潜觉为120级
@@ -4512,14 +4525,15 @@ function changeid(mon, monDom, latentDom, assist) {
 	//parentNode.appendChild(fragment);
 }
 //刷新潜觉
-function refreshLatent(latents, monid, latentsNode, option) {
-	const maxLatentCount = getMaxLatentCount(monid); //最大潜觉数量
+function refreshLatent(latents, member, latentsNode, option) {
+	const maxLatentCount = getMaxLatentCount(member.id); //最大潜觉数量
 	const iconArr = latentsNode.querySelectorAll('.latent-icon');
 	latentsNode.classList.toggle("block-8", maxLatentCount>6);
 	latents = latents.concat();
 	if (option?.sort) latents.sort((a, b) => latentUseHole(b) - latentUseHole(a));
-	let latentIndex = 0,
-		usedHoleN = 0;
+	let effectiveAwokens = option?.assist instanceof Member ? member.effectiveAwokens(option.assist) : null;
+	let latentIndex = 0, usedHoleN = 0;
+	//如果传入了武器，就添加有效觉醒
 	for (let ai = 0; ai < iconArr.length; ai++) {
 		const icon = iconArr[ai], latent = latents[latentIndex];
 		if (latent != undefined && ai >= usedHoleN && ai < maxLatentCount) //有潜觉
@@ -4527,6 +4541,12 @@ function refreshLatent(latents, monid, latentsNode, option) {
 			const thisHoleN = latentUseHole(latent);
 			icon.setAttribute("data-latent-icon", latent);
 			icon.setAttribute("data-latent-hole", thisHoleN);
+			let enableLatent = true;
+			if (effectiveAwokens) {
+				let obj = allowable_latent.needAwoken.find(obj=>obj.latent == latent);
+				if (obj && !effectiveAwokens.includes(obj.awoken)) enableLatent = false;
+			}
+			icon.classList.toggle('unallowable-latent', !enableLatent);
 			usedHoleN += thisHoleN;
 			latentIndex++;
 		} else {
@@ -4792,17 +4812,33 @@ function editBoxChangeMonId(id) {
 	const mCost = settingBox.querySelector(".monster-cost");
 	mCost.textContent = card.cost;
 
-	const rowPlus = settingBox.querySelector(".row-mon-plus");
-	const rowLatent = settingBox.querySelector(".row-mon-latent");
-	const monLatentAllowUl = rowLatent.querySelector(".m-latent-allowable-ul");
-	//该宠Type允许的杀，set不会出现重复的
-	const allowLatent = getAllowLatent(card);
+	const rowMonPlus = settingBox.querySelector(".row-mon-plus");
+	const rowMonLatent = settingBox.querySelector(".row-mon-latent");
+	const monLatentAllowUl = rowMonLatent.querySelector(".m-latent-allowable-ul");
 
-	const latentIcons = Array.from(monLatentAllowUl.querySelectorAll(`.latent-icon[data-latent-icon]`));
-	latentIcons.forEach(icon => { //显示允许的潜觉，隐藏不允许的潜觉
-		const ltId = parseInt(icon.getAttribute("data-latent-icon"),10);
-		icon.classList.toggle("unallowable-latent", !allowLatent.includes(ltId));;
-	});
+	let allowLatent = [];
+	if (!editBox.isAssist) {
+		//该宠Type允许的杀，set不会出现重复的
+
+		//获取类型允许的潜觉
+		function getAllowLatent(card) {
+			const latentSet = new Set(allowable_latent.common);
+			allowable_latent.needAwoken.forEach(obj=>latentSet.add(obj.latent));
+			card.types.filter(i => i >= 0)
+				.map(type => typekiller_for_type.find(t=>t.type==type).allowableLatent)
+				.forEach(tA => tA.forEach(t => latentSet.add(t)));
+			if (card.limitBreakIncr) {
+				allowable_latent.v120.forEach(t => latentSet.add(t));
+			}
+			return Array.from(latentSet);
+		}
+		allowLatent = getAllowLatent(card);
+		const latentIcons = Array.from(monLatentAllowUl.querySelectorAll(`.latent-icon[data-latent-icon]`));
+		latentIcons.forEach(icon => { //显示允许的潜觉，隐藏不允许的潜觉
+			const ltId = parseInt(icon.getAttribute("data-latent-icon"),10);
+			icon.classList.toggle("unallowable-latent", !allowLatent.includes(ltId));;
+		});
+	}
 
 	//怪物主动技能
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
@@ -4851,30 +4887,20 @@ function editBoxChangeMonId(id) {
 	rowSkill.appendChild(frg1);
 	rowLederSkill.appendChild(frg2);
 
-	if (card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) &&
-		card.maxLevel <= 1) { //当可以叠加时，不能打297和潜觉
-		rowPlus.classList.add("disabled");
-		rowPlus.querySelector(".m-plus-hp").value = 0;
-		rowPlus.querySelector(".m-plus-atk").value = 0;
-		rowPlus.querySelector(".m-plus-rcv").value = 0;
-
-		rowLatent.classList.add("disabled");
-		skillLevel.setAttribute("readonly", true);
-	} else {
-		rowPlus.classList.remove("disabled");
-		rowLatent.classList.remove("disabled");
-		skillLevel.removeAttribute("readonly");
+	let noPowerup = card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) && card.maxLevel <= 1
+	skillLevel.readOnly = noPowerup;
+	rowMonPlus.classList.toggle("disabled", noPowerup);
+	rowMonLatent.classList.toggle("disabled", noPowerup);
+	if (noPowerup) { //当可以叠加时，不能打297和潜觉
+		rowMonPlus.querySelector(".m-plus-hp").value = 0;
+		rowMonPlus.querySelector(".m-plus-atk").value = 0;
+		rowMonPlus.querySelector(".m-plus-rcv").value = 0;
 	}
 
 	if (editBox.isAssist) {
 		const btnDone = editBox.querySelector(".button-done");
-		if (!card.canAssist) {
-			btnDone.classList.add("cant-assist");
-			btnDone.disabled = true;
-		} else {
-			btnDone.classList.remove("cant-assist");
-			btnDone.disabled = false;
-		}
+		btnDone.classList.toggle("cant-assist", !card.canAssist);
+		btnDone.disabled = !card.canAssist;
 	}
 
 	//去除所有不能再打的潜觉

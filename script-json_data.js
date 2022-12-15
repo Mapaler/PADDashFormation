@@ -415,26 +415,30 @@ const typekiller_for_type = [
 	{type:9,awoken:null,latent:null,typeKiller:[]}, //特殊保护
 ];
 //类型允许的潜觉杀
-const type_allowable_latent = [];
 typekiller_for_type.forEach(t=>
 	{
 		t.allowableLatent = t.typeKiller.concat([0,12,14,15]) //补充4种特殊杀
 		.map(tn=>
 			typekiller_for_type.find(_t=>_t.type == tn).latent
 		);
-		type_allowable_latent[t.type] = t.allowableLatent;
 	}
 );
-//一般共同能打的潜觉
-const common_allowable_latent = [
-	1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,
-	28,29,30,31,32,33,34,35,36,37,38,
-	39,40,41,46,47,48 //需要拥有觉醒的才能打，但是有武器
-];
-//120级才能打的潜觉
-const v120_allowable_latent = [
-	42,43,44,45
-];
+const allowable_latent = {
+	common: [ //一般能打的潜觉
+		1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,
+		28,29,30,31,32,33,34,35,36,37,38
+	],
+	killer: [16,17,18,19,20,21,22,23,24,25,26,27], //杀潜觉
+	v120: [42,43,44,45], //120才能打的潜觉
+	needAwoken: [ //需要觉醒才能打的潜觉
+		{latent:39,awoken:62}, //C珠破吸
+		{latent:40,awoken:20}, //心横解转转
+		{latent:41,awoken:27}, //U解禁消
+		{latent:46,awoken:45}, //心追解云封
+		{latent:47,awoken:59}, //心L大SB
+		{latent:48,awoken:60}, //L解禁武器
+	]
+}
 //等效觉醒列表
 const equivalent_awoken = [
 	{small:10,big:52,times:2}, //防封
@@ -3726,7 +3730,7 @@ const specialSearchFunctions = (function() {
 						const isAllowLatent = card.types.filter(i=>
 								i>=0 //去掉-1的type
 							).map(type=>
-								type_allowable_latent[type] //得到允许打的潜觉杀
+								typekiller_for_type.find(t=>t.type==type).allowableLatent //得到允许打的潜觉杀
 							).some(ls=>
 								ls.includes(hasAwokenKiller.latent) //判断是否有这个潜觉杀
 							);
