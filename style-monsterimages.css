@@ -1316,10 +1316,11 @@
 {
 	font-family: var(--game-font-family);
 	font-size: 10px;
+	line-height: 14px;
 	text-shadow: black -1px -1px 1px,black 1px -1px 1px,black -1px 1px 1px,black 1px 1px 1px;
 	text-align: center;
 	color: orange;
-	content: "x1.5";
+	content: "×1.5";
 	margin-left: 3px;
 	background-position-x: -64px;
 	background-position-y: calc(-32px * 42);
@@ -1329,7 +1330,7 @@
 	[data-latent-icon='48'],
 )::after
 {
-	content: "x1.8";
+	content: "×1.8";
 }
 
 /* 徽章背景 */
