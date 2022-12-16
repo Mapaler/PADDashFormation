@@ -2278,10 +2278,15 @@ function initialize() {
 	setFontColor.onclick = function(){
 		setSelectionFontColor(colorChooser.value);
 	}
-	colorChooser.onchange = function(){
+	colorChooser.value = localStorage.getItem(cfgPrefix + colorChooser.id) || "#FF0000";
+	colorChooser.onchange = function(event){
 		setFontColor.style.color = this.value;
+		if (event) {
+			localStorage.setItem(cfgPrefix + this.id, this.value);
+			setFontColor.onclick(); //改变一次颜色
+		}
 	}
-	setFontColor.style.color = colorChooser.value;
+	colorChooser.onchange(false);
 	//添加头像图标
 	insertCardAvatar.onclick = function(){
 		//没有选择则返回
