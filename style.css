@@ -840,7 +840,7 @@ body:not(.show-awoken-count):not(.solo) .formation-box .team-badge
 	text-align: center;
 	width: var(--head-block-width);
 	height: var(--head-block-height);
-	display: inline flex;
+	display: inline-flex;
 	flex-direction: column;
 	justify-content: center;
 }
@@ -1815,7 +1815,7 @@ icon.inflicts::after
 	background-color: #00000044;
 	border-radius: 6px;
 	box-shadow: inset black 0 0 3px;
-	display: inline grid;
+	display: inline-grid;
 	vertical-align: bottom;
 	grid-gap: 0;
 }
@@ -2229,14 +2229,14 @@ icon.inflicts::after
 	vertical-align: top;
 }
 .row-mon-super-awoken::before {
-	content: "+";
+	/* content: "+"; */
 	vertical-align: top;
 }
 .row-mon-awoken .awoken-ul,
 .row-mon-super-awoken .awoken-ul
 {
 	grid-template-columns: repeat(10, 32px);
-	display: inline grid;
+	display: inline-grid;
 	vertical-align: bottom;
 }
 .row-mon-awoken .awoken-count-num,
