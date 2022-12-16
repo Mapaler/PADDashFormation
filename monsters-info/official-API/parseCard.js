@@ -83,6 +83,8 @@ class Card{
 		card.blockSkinOrBgmId = data[i++]; //珠子皮肤ID
 		card.specialAttribute = data[i++]; //特别属性，比如黄龙
 		card.searchFlags = [data[i++], data[i++]]; //队长技搜索类型，解析写在这里会导致文件太大，所以写到前端去了
+		card.gachaId = data[i++]; //目前猜测是桶ID
+		card.unk08 = data[i++]; //未知08
 		if ((i + 1) < data.length)
 			console.log(`有新增数据/residue data for #${card.id}: ${i} ${data.length}`);
 	}

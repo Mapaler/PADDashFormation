@@ -333,6 +333,7 @@ ul{
 	margin-top: 30px;
 	font-family: var(--game-font-family);
 	text-shadow: black 2px 2px 0;
+	z-index: 1;
 
 	backdrop-filter: blur(3px);
 }
@@ -2087,10 +2088,13 @@ icon.inflicts::after
 	line-height: 30px;
 	height: auto;
 }
-.monsterinfo-box .monsterinfo-line>div
+.monsterinfo-box .monsterinfo-line > div
 {
-	display:inline-block;
+	display:inline;
 	vertical-align: middle;
+}
+.monsterinfo-box .monsterinfo-line .monsterinfo-cell{
+	display:inline-block;
 }
 .monsterinfo-box .monster-id{
 	width:120px;

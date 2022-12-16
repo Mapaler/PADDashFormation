@@ -379,11 +379,15 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_095.PNG",
-		"8006a5e7651eff75066ba4be937d67f0"
+		"ddda0cec0f6f02e5fd27c891040f287c"
 	],
 	[
 		"images/cards_ja/CARDS_096.PNG",
-		"0f177bf88462a66f5e7e11b8d3c7a8e0"
+		"a1c4d53b59e532e89d71482c4358ab75"
+	],
+	[
+		"images/cards_ja/CARDS_097.PNG",
+		"8a8869639bee31cff42f37b0cf177d4e"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -3138,6 +3142,10 @@ const cachesMap = new Map([
 		"9295d3d4cfda0fd8fa6fa2e2ebec5675"
 	],
 	[
+		"images/cards_en/CARDS_096.PNG",
+		"39bf2dcc97727144bf9dbbf1572bcc78"
+	],
+	[
 		"sound/voice/en/padv001.wav",
 		"5d5cfc2aea6aa9e69299e2fd8f5657d2"
 	],
@@ -5174,6 +5182,10 @@ const cachesMap = new Map([
 		"9295d3d4cfda0fd8fa6fa2e2ebec5675"
 	],
 	[
+		"images/cards_ko/CARDS_096.PNG",
+		"39bf2dcc97727144bf9dbbf1572bcc78"
+	],
+	[
 		"sound/voice/ko/padv001.wav",
 		"5d5cfc2aea6aa9e69299e2fd8f5657d2"
 	],
@@ -6851,7 +6863,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"211499c57e87d62dc492496a0d885ab7"
+		"59d828f86b1b682e5c46956ec7438776"
 	],
 	[
 		"script-custom_elements.js",
@@ -6875,15 +6887,15 @@ const cachesMap = new Map([
 	],
 	[
 		"solo.html",
-		"19ae06ab6d2de3ab2738f480b5c54489"
+		"7b94897aa6fe33391746fc95d4b3c456"
 	],
 	[
 		"style-monsterimages.css",
-		"ae40349497411e1f3ad9210b7d76a62c"
+		"4998514bf0ab912f46f0e9bd1f4503c6"
 	],
 	[
 		"style.css",
-		"eba308329b92141c7dc9560a11951498"
+		"4646f5517719e4345223a9f66ad19b42"
 	],
 	[
 		"temp.js",
@@ -6891,7 +6903,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"6c366e9476ba28300fc8836d22d48152"
+		"401fe1feea1a5c531f2f3478f8454a2b"
 	],
 	[
 		"languages/en.css",
@@ -7031,7 +7043,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-latent.png",
-		"3f70b372d5e7caadb2aeca05f6c1c658"
+		"71ae3880a0632ccfc8f74480d9a9031f"
 	],
 	[
 		"images/icon-MP.png",
@@ -7115,31 +7127,31 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"b9b949526f8c6d9cd57b5e4c4f1f0dc7"
+		"582cabd153490a5b7b77cdef87931b75"
 	],
 	[
 		"monsters-info/mon_en.json",
-		"afe720c17c3681ae79745f6bc39b39af"
+		"64aae5a3c0595e859289db5e2e7bc3b2"
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"e6273d4a9e0a64b851fc5ca74e36d8b2"
+		"4046a466431722679399da28225d248b"
 	],
 	[
 		"monsters-info/mon_ko.json",
-		"32d2470e56758944683ee3842782f8a0"
+		"a4705a421e8371d873b09643ff82fb69"
 	],
 	[
 		"monsters-info/skill_en.json",
-		"22f6ba96617a8d51aeff4e4857a81589"
+		"8292f98894fd84a81447d88e45817614"
 	],
 	[
 		"monsters-info/skill_ja.json",
-		"dd29046d0534e6e5eda030f94417e671"
+		"27964b7225df6b90260791354c0c5177"
 	],
 	[
 		"monsters-info/skill_ko.json",
-		"286c68a4c960901ad3f7360bd09d8c65"
+		"f676445ec6b8a209f27eafed1ab7e591"
 	],
 	[
 		"doc/export-player-data.html",

@@ -1314,15 +1314,16 @@
 	[data-latent-icon='48'],
 )::after
 {
-	font-family: var(--game-font-family);
+	/*font-family: var(--game-font-family);
 	font-size: 10px;
 	line-height: 14px;
 	text-shadow: black -1px -1px 1px,black 1px -1px 1px,black -1px 1px 1px,black 1px 1px 1px;
 	text-align: center;
 	color: orange;
-	content: "×1.5";
+	content: "×1.5";*/
+	content: "";
 	margin-left: 3px;
-	background-position-x: -64px;
+	background-position-x: calc(-32px * 1);
 	background-position-y: calc(-32px * 42);
 }
 /* 额外有 x1.5 的 6格觉醒 */
@@ -1330,7 +1331,7 @@
 	[data-latent-icon='48'],
 )::after
 {
-	content: "×1.8";
+	background-position-x: calc(-32px * 2);
 }
 
 /* 徽章背景 */
