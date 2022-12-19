@@ -3286,7 +3286,7 @@ function initialize() {
 	const s_awokensIcons = s_awokensLi.map(li => li.querySelector(".awoken-icon"));
 	s_awokensUl.originalSorting = s_awokensIcons.map(icon => parseInt(icon.getAttribute("data-awoken-icon"), 10)); //储存觉醒列表的原始排序
 
-	const searchMonList = searchBox.querySelector(".search-mon-list"); //搜索结果列表
+	const searchMonList = editBox.querySelector(".search-mon-list"); //搜索结果列表
 	searchMonList.originalHeads = null; //用于存放原始搜索结果
 
 	const s_awokensEquivalent = searchBox.querySelector("#consider-equivalent-awoken"); //搜索等效觉醒
@@ -4132,6 +4132,8 @@ function initialize() {
 		{
 			const mSAwokenChoIpt = monEditSAwokensRow.querySelector("input[name='sawoken-choice']:checked");
 			mon.sawoken = parseInt(mSAwokenChoIpt?.value, 10) || 0;
+			// const mSAwokenIcon = monEditSAwokensRow.querySelector("#current-super-awoken-icon");
+			// mon.sawoken = parseInt(mSAwokenIcon.getAttribute("data-awoken-icon"), 10) || 0;
 		}
 
 		if (card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) &&

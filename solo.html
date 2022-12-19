@@ -938,8 +938,8 @@ var formation = new Formation(teamsCount,6);
 					<div class="search-list-length"></div>
 				</div>
 			</div>
-			<ul class="search-mon-list"></ul><!--搜索结果的显示列表-->
 		</div>
+		<ul class="search-mon-list"></ul><!--搜索结果的显示列表-->
 		<div class="monsterinfo-box">
 			<div class="monster-head">
 				<a class="monster null" target="_blank">
@@ -947,13 +947,13 @@ var formation = new Formation(teamsCount,6);
 					<div class="subproperty"></div>
 				</a>
 			</div>
-			<div class="monsterinfo-line">
+			<div class="monsterinfo-line line1">
 				<div class="monster-id"></div><div class="monster-rare"></div><div class="monster-mp"></div>
 			</div>
-			<div class="monsterinfo-line">
+			<div class="monsterinfo-line line2">
 				<div class="monster-name"></div>
 			</div>
-			<div class="monsterinfo-line">
+			<div class="monsterinfo-line line3">
 				<ul class="monster-type">
 					<li class="type-name"><span class="type-icon"></span></li><li class="type-name"><span class="type-icon"></span></li><li class="type-name"><span class="type-icon"></span></li>
 				</ul>
@@ -963,21 +963,24 @@ var formation = new Formation(teamsCount,6);
 					<div class="monster-altName"></div>
 				</div>
 			</div>
-			<div class="monsterinfo-line row-awoken-sawoken">
+			<div class="monsterinfo-line line4 row-awoken-sawoken">
 				<div class="row-mon-awoken">
 					<!--怪物觉醒-->
 					<div class="awoken-ul">
-						<label for="awoken-number-0" class="awoken-count-num" title="0"></label><input type="radio" name="awoken-number" class="awoken-number" value="0" id="awoken-number-0" /><!--
-						--><label for="awoken-number-1" class="awoken-icon" title="1"></label><input type="radio" name="awoken-number" class="awoken-number" value="1" id="awoken-number-1" /><!--
-						--><label for="awoken-number-2" class="awoken-icon" title="2"></label><input type="radio" name="awoken-number" class="awoken-number" value="2" id="awoken-number-2" /><!--
-						--><label for="awoken-number-3" class="awoken-icon" title="3"></label><input type="radio" name="awoken-number" class="awoken-number" value="3" id="awoken-number-3" /><!--
-						--><label for="awoken-number-4" class="awoken-icon" title="4"></label><input type="radio" name="awoken-number" class="awoken-number" value="4" id="awoken-number-4" /><!--
-						--><label for="awoken-number-5" class="awoken-icon" title="5"></label><input type="radio" name="awoken-number" class="awoken-number" value="5" id="awoken-number-5" /><!--
-						--><label for="awoken-number-6" class="awoken-icon" title="6"></label><input type="radio" name="awoken-number" class="awoken-number" value="6" id="awoken-number-6" /><!--
-						--><label for="awoken-number-7" class="awoken-icon" title="7"></label><input type="radio" name="awoken-number" class="awoken-number" value="7" id="awoken-number-7" /><!--
-						--><label for="awoken-number-8" class="awoken-icon" title="8"></label><input type="radio" name="awoken-number" class="awoken-number" value="8" id="awoken-number-8" /><!--
-						--><label for="awoken-number-9" class="awoken-icon" title="9"></label><input type="radio" name="awoken-number" class="awoken-number" value="9" id="awoken-number-9" />
+						<label for="awoken-number-0" class="awoken-count-num" title="0"></label><input type="radio" name="awoken-number" class="awoken-number" value="0" id="awoken-number-0" />
+						<label for="awoken-number-1" class="awoken-icon" title="1"></label><input type="radio" name="awoken-number" class="awoken-number" value="1" id="awoken-number-1" />
+						<label for="awoken-number-2" class="awoken-icon" title="2"></label><input type="radio" name="awoken-number" class="awoken-number" value="2" id="awoken-number-2" />
+						<label for="awoken-number-3" class="awoken-icon" title="3"></label><input type="radio" name="awoken-number" class="awoken-number" value="3" id="awoken-number-3" />
+						<label for="awoken-number-4" class="awoken-icon" title="4"></label><input type="radio" name="awoken-number" class="awoken-number" value="4" id="awoken-number-4" />
+						<label for="awoken-number-5" class="awoken-icon" title="5"></label><input type="radio" name="awoken-number" class="awoken-number" value="5" id="awoken-number-5" />
+						<label for="awoken-number-6" class="awoken-icon" title="6"></label><input type="radio" name="awoken-number" class="awoken-number" value="6" id="awoken-number-6" />
+						<label for="awoken-number-7" class="awoken-icon" title="7"></label><input type="radio" name="awoken-number" class="awoken-number" value="7" id="awoken-number-7" />
+						<label for="awoken-number-8" class="awoken-icon" title="8"></label><input type="radio" name="awoken-number" class="awoken-number" value="8" id="awoken-number-8" />
+						<label for="awoken-number-9" class="awoken-icon" title="9"></label><input type="radio" name="awoken-number" class="awoken-number" value="9" id="awoken-number-9" />
 					</div>
+				</div>
+				<div class="current-super-awoken">
+					<icon id="current-super-awoken-icon" class="awoken-icon"></icon>
 				</div>
 				<div class="row-mon-super-awoken">
 					<!--怪物超觉醒-->

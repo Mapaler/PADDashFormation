@@ -548,6 +548,9 @@ ul{
 /*怪物-觉醒*/
 .awoken-count-num
 {
+	font-family: var(--game-font-family);
+	font-size: 20px;
+	line-height: 28px;
 	color: yellow;
 	text-shadow: black 0 0 4px;
 	text-align: center;
@@ -566,9 +569,6 @@ ul{
 /*显示怪物觉醒的数字*/
 .awoken-count-num
 {
-	font-family: var(--game-font-family);
-	font-size: 20px;
-	line-height: 28px;
 }
 .awoken-count-num::before
 {
@@ -1362,6 +1362,10 @@ icon.inflicts::after
 	content: "修改辅助";
 }*/
 .edit-box .monsterinfo-box{
+	display: grid;
+	grid-auto-rows: min-content;
+	grid-template-columns: 100px auto;
+	gap: 5px;
 	font-family: var(--game-font-family);
 	color: white;
 	text-shadow: black 2px 2px 0;
@@ -1375,6 +1379,29 @@ icon.inflicts::after
 	top: 0;
 	z-index: 1;
 }
+.monsterinfo-box .monster-head {
+	grid-row: 1 / 4;
+}
+.monsterinfo-box .monsterinfo-line {
+	display: flex;
+}
+.monsterinfo-box .row-awoken-sawoken {
+	grid-column: 1 / 3;
+	display: flex;
+	gap: 5px;
+	flex-wrap: wrap;
+}
+.row-awoken-sawoken .awoken-ul,
+.row-awoken-sawoken .current-super-awoken
+{
+	display: inline-flex;
+	vertical-align: top;
+}
+.row-awoken-sawoken .current-super-awoken::before{
+	content:"+";
+	line-height: 25px;
+}
+
 .edit-box .search-box,
 .edit-box .setting-box{
 	padding: 10px;
@@ -1419,7 +1446,7 @@ icon.inflicts::after
 	font-size: 25px;
 }
 .edit-box .setting-box .row-mon-id .evo-card-list>li,
-.edit-box .search-box .search-mon-list>li
+.edit-box .search-mon-list>li
 {
 	display: inline-block;
 	vertical-align: top;
@@ -1430,7 +1457,7 @@ icon.inflicts::after
 	vertical-align: bottom;
 }
 .edit-box .setting-box .row-mon-id .evo-card-list .monster,
-.edit-box .search-box .search-mon-list .monster,
+.edit-box .search-mon-list .monster,
 .detail-mon .monster,
 .mask-evolutionary-tree .evo-panel-left>.monster-head>.monster
 {
@@ -1439,7 +1466,7 @@ icon.inflicts::after
 	margin: calc(-100px * (1 - 0.75) / 2);
 }
 .edit-box .setting-box .row-mon-id .evo-card-list .monster .id,
-.edit-box .search-box .search-mon-list .monster .id,
+.edit-box .search-mon-list .monster .id,
 .detail-mon .monster .id{
 	bottom: 5px;
 	font-size: 20px;
@@ -1455,10 +1482,10 @@ icon.inflicts::after
 	font-weight: bold;
 	text-shadow: black -3px -3px 3px, black 3px -3px 3px, black -3px 3px 3px, black 3px 3px 3px, ;
 }
-.edit-box .search-box .search-mon-list .monster .level {
+.edit-box .search-mon-list .monster .level {
 	bottom: 23px;
 }
-.edit-box .search-box .search-mon-list .monster .plus {
+.edit-box .search-mon-list .monster .plus {
 	top: 20px;
 }
 
@@ -2039,7 +2066,7 @@ icon.inflicts::after
 	content: "关闭搜索";
 }*/
 
-.search-box .search-mon-list{
+.search-mon-list{
 	border: 1px solid white;
 	border-radius: 5px;
 	background: grey;
@@ -2057,7 +2084,7 @@ icon.inflicts::after
 {
 	content: attr(data-search-result-count);
 }
-.guide-mod .search-box .search-mon-list{
+.guide-mod .search-mon-list{
 	max-height: 790px;
 	overflow: auto;
 }
@@ -2079,19 +2106,9 @@ icon.inflicts::after
 .edit-box .setting-row{
 	width: 100%;
 }
-.monsterinfo-box .monster-head{
-	float: left;
-	margin-right:5px;
-}
 .monsterinfo-box .monsterinfo-line{
 	font-size: 22px;
 	line-height: 30px;
-	height: auto;
-}
-.monsterinfo-box .monsterinfo-line > div
-{
-	display:inline;
-	vertical-align: middle;
 }
 .monsterinfo-box .monsterinfo-line .monsterinfo-cell{
 	display:inline-block;
@@ -2193,7 +2210,8 @@ icon.inflicts::after
 */
 .row-mon-awoken .awoken-count-num{
 	display: inline-block;
-	transform: scale(0.84) translateY(-2px);
+	transform: scale(0.84);
+	margin: -3px -1px;
 }
 .edit-box .awoken-ul .awoken-icon,
 .row-mon-awoken .awoken-count-num
@@ -2225,23 +2243,12 @@ icon.inflicts::after
 .row-mon-super-awoken
 {
 	display: inline-block;
-	box-sizing: border-box;
-	vertical-align: top;
 }
 .row-mon-super-awoken::before {
 	/* content: "+"; */
-	vertical-align: top;
 }
-.row-mon-awoken .awoken-ul,
-.row-mon-super-awoken .awoken-ul
-{
-	grid-template-columns: repeat(10, 32px);
-	display: inline-grid;
-	vertical-align: bottom;
-}
-.row-mon-awoken .awoken-count-num,
-.row-mon-awoken .awoken-icon,
-.row-mon-super-awoken .awoken-icon
+.row-awoken-sawoken .awoken-count-num,
+.row-awoken-sawoken .awoken-icon
 {
 	grid-column: span 1;
 	grid-row: span 1;
