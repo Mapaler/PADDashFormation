@@ -2028,10 +2028,15 @@ icon.inflicts::after
 }*/
 
 .search-mon-list{
+	box-sizing: border-box;
 	border: 1px solid white;
 	border-radius: 5px;
 	background: grey;
+	display: grid;
 	width: 100%;
+	grid-template-columns: repeat(auto-fill, 75px);
+	grid-auto-rows: min-content;
+	grid-gap: 5px;
 }
 .search-box .search-list-length
 {
@@ -2046,8 +2051,14 @@ icon.inflicts::after
 	content: attr(data-search-result-count);
 }
 .guide-mod .search-mon-list{
-	max-height: 790px;
+	max-height: 30vh;
 	overflow: auto;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+.guide-mod .edit-box .monsterinfo-box{
+	top: 30vh;
 }
 
 .setting-box .row-mon-id .real-time-change-card-label
@@ -2063,7 +2074,6 @@ icon.inflicts::after
 {
 	margin-left: 5px;
 }
-
 .edit-box .setting-row{
 	width: 100%;
 }

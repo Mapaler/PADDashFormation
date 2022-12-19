@@ -2933,7 +2933,9 @@ function initialize() {
 	function searchByString(str)
 	{ // 考虑了一下onlyInTag被废弃了，因为和游戏内搜索不符
 		str = str.trim();
-		if (str.length>0)
+		if (str === '0') { //如果搜索0，则打开最新的50个
+			return Cards.filter(card=>card.enabled).slice(-50);
+		} else if (str.length>0)
 		{
 			return Cards.filter(card =>
 				{
@@ -3563,6 +3565,7 @@ function initialize() {
 		}
 
 		searchBox.classList.remove(className_displayNone);
+		searchMonList.classList.remove(className_displayNone);
 		editBox.show();
 		const createCardHead = editBox.createCardHead;
 
@@ -3735,6 +3738,7 @@ function initialize() {
 	};
 	searchClose.onclick = function() {
 		searchBox.classList.add(className_displayNone);
+		searchMonList.classList.add(className_displayNone);
 	};
 	searchClear.onclick = function() { //清空搜索选项
 		s_attr1s[0].checked = true;

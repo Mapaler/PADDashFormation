@@ -838,7 +838,7 @@ var formation = new Formation(teamsCount,5);
 			<div class="awoken-div"><!--觉醒-->
 				<div class="awoken-option"><!--觉醒搜索选项开关-->
 					<input type="checkbox" name="consider-equivalent-awoken" id="consider-equivalent-awoken" checked><label class="config-checkbox-lbl consider-equivalent-awoken-label" for="consider-equivalent-awoken"></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="include-super-awoken" id="include-super-awoken" checked><label class="config-checkbox-lbl include-super-awoken-label" for="include-super-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" class="config-checkbox-ipt" name="include-super-awoken" id="include-super-awoken"><label class="config-checkbox-lbl include-super-awoken-label" for="include-super-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
 					<input type="checkbox" class="config-checkbox-ipt" name="show-official-awoken-sorting" id="show-official-awoken-sorting"><label class="config-checkbox-lbl show-official-awoken-sorting-label" for="show-official-awoken-sorting"><div class="config-checkbox-lbl-cicle"></div></label>
 				</div>
 				<div class="selected-awokens-div"><!--选中的觉醒列表-->
@@ -1096,8 +1096,8 @@ var formation = new Formation(teamsCount,5);
 					<div class="search-list-length"></div>
 				</div>
 			</div>
-			<ul class="search-mon-list"></ul><!--搜索结果的显示列表-->
 		</div>
+		<ul class="search-mon-list"></ul><!--搜索结果的显示列表-->
 		<div class="monsterinfo-box">
 			<div class="monster-head">
 				<a class="monster null" target="_blank">
@@ -1105,46 +1105,47 @@ var formation = new Formation(teamsCount,5);
 					<div class="subproperty"></div>
 				</a>
 			</div>
-			<div class="monsterinfo-line">
+			<div class="monsterinfo-line line1">
 				<div class="monster-id"></div><div class="monster-rare"></div><div class="monster-mp"></div>
 			</div>
-			<div class="monsterinfo-line">
+			<div class="monsterinfo-line line2">
 				<div class="monster-name"></div>
 			</div>
-			<div class="monsterinfo-line">
+			<div class="monsterinfo-line line3">
 				<ul class="monster-type">
 					<li class="type-name"><span class="type-icon"></span></li><li class="type-name"><span class="type-icon"></span></li><li class="type-name"><span class="type-icon"></span></li>
 				</ul>
-				<div class="monsterinfo-cell">
-					<div class="monster-seriesId"></div>
-					<div class="monster-collabId"></div>
-					<div class="monster-altName"></div>
-				</div>
 			</div>
-			<div class="monsterinfo-line row-awoken-sawoken">
+			<div class="monsterinfo-line line4 row-awoken-sawoken">
 				<div class="row-mon-awoken">
 					<!--怪物觉醒-->
 					<div class="awoken-ul">
-						<label for="awoken-number-0" class="awoken-count-num" title="0"></label><input type="radio" name="awoken-number" class="awoken-number" value="0" id="awoken-number-0" /><!--
-						--><label for="awoken-number-1" class="awoken-icon" title="1"></label><input type="radio" name="awoken-number" class="awoken-number" value="1" id="awoken-number-1" /><!--
-						--><label for="awoken-number-2" class="awoken-icon" title="2"></label><input type="radio" name="awoken-number" class="awoken-number" value="2" id="awoken-number-2" /><!--
-						--><label for="awoken-number-3" class="awoken-icon" title="3"></label><input type="radio" name="awoken-number" class="awoken-number" value="3" id="awoken-number-3" /><!--
-						--><label for="awoken-number-4" class="awoken-icon" title="4"></label><input type="radio" name="awoken-number" class="awoken-number" value="4" id="awoken-number-4" /><!--
-						--><label for="awoken-number-5" class="awoken-icon" title="5"></label><input type="radio" name="awoken-number" class="awoken-number" value="5" id="awoken-number-5" /><!--
-						--><label for="awoken-number-6" class="awoken-icon" title="6"></label><input type="radio" name="awoken-number" class="awoken-number" value="6" id="awoken-number-6" /><!--
-						--><label for="awoken-number-7" class="awoken-icon" title="7"></label><input type="radio" name="awoken-number" class="awoken-number" value="7" id="awoken-number-7" /><!--
-						--><label for="awoken-number-8" class="awoken-icon" title="8"></label><input type="radio" name="awoken-number" class="awoken-number" value="8" id="awoken-number-8" /><!--
-						--><label for="awoken-number-9" class="awoken-icon" title="9"></label><input type="radio" name="awoken-number" class="awoken-number" value="9" id="awoken-number-9" />
+						<label for="awoken-number-0" class="awoken-count-num" title="0"></label><input type="radio" name="awoken-number" class="awoken-number" value="0" id="awoken-number-0" />
+						<label for="awoken-number-1" class="awoken-icon" title="1"></label><input type="radio" name="awoken-number" class="awoken-number" value="1" id="awoken-number-1" />
+						<label for="awoken-number-2" class="awoken-icon" title="2"></label><input type="radio" name="awoken-number" class="awoken-number" value="2" id="awoken-number-2" />
+						<label for="awoken-number-3" class="awoken-icon" title="3"></label><input type="radio" name="awoken-number" class="awoken-number" value="3" id="awoken-number-3" />
+						<label for="awoken-number-4" class="awoken-icon" title="4"></label><input type="radio" name="awoken-number" class="awoken-number" value="4" id="awoken-number-4" />
+						<label for="awoken-number-5" class="awoken-icon" title="5"></label><input type="radio" name="awoken-number" class="awoken-number" value="5" id="awoken-number-5" />
+						<label for="awoken-number-6" class="awoken-icon" title="6"></label><input type="radio" name="awoken-number" class="awoken-number" value="6" id="awoken-number-6" />
+						<label for="awoken-number-7" class="awoken-icon" title="7"></label><input type="radio" name="awoken-number" class="awoken-number" value="7" id="awoken-number-7" />
+						<label for="awoken-number-8" class="awoken-icon" title="8"></label><input type="radio" name="awoken-number" class="awoken-number" value="8" id="awoken-number-8" />
+						<label for="awoken-number-9" class="awoken-icon" title="9"></label><input type="radio" name="awoken-number" class="awoken-number" value="9" id="awoken-number-9" />
 					</div>
+				</div>
+				<div class="current-super-awoken">
+					<!--怪物当前超觉醒-->
+					<button id="current-super-awoken-icon" class="awoken-icon"></button>
 				</div>
 				<div class="row-mon-super-awoken">
-					<!--怪物超觉醒-->
-					<input type="radio" name="sawoken-choice" class="sawoken-choice" value="0" id="sawoken-choice-nosawoken" />
-					<div class="awoken-ul">
-						<input type="radio" name="sawoken-choice" class="sawoken-choice" id="sawoken-choice-1" /><label for="sawoken-choice-1" class="awoken-icon"></label>
-					</div>
-					<template id="sawoken-option-icon"><input type="radio" name="sawoken-choice" class="sawoken-choice" /><label class="awoken-icon"></label></template>
+					<!--怪物超觉醒选择列表-->
+					<div class="awoken-ul"></div>
 				</div>
+			</div>
+			<div class="monsterinfo-groupId">
+				<div class="monster-seriesId"></div>
+				<div class="monster-collabId"></div>
+				<div class="monster-gachaId"></div>
+				<div class="monster-altName"></div>
 			</div>
 		</div>
 		<div class="setting-box">
@@ -1388,6 +1389,9 @@ var formation = new Formation(teamsCount,5);
 			</ul>
 			<ul class="collab-list">
 				<li><label for="dungeon-collab-id"></label><input id="dungeon-collab-id" type="text" /></li>
+			</ul>
+			<ul class="gacha-list display-none">
+				<li><label for="dungeon-gacha-id"></label><input id="dungeon-gacha-id" type="text" /></li>
 			</ul>
 			<ul class="stats-list">
 				<li><label for="dungeon-hp"></label><input id="dungeon-hp" type="number" min=0 step=1 value=1 /></li>
