@@ -69,6 +69,9 @@
 .monsterinfo-box .monster-collabId::before{
 	content: "Collab ID：";
 }
+.monsterinfo-box .monster-gachaId::before{
+	content: "Gacha ID：";
+}
 .monsterinfo-box .monster-altName::before{
 	content: "Tags";
 }

@@ -2931,6 +2931,13 @@ function initialize() {
 			showSearch(Cards.filter(card => card.collabId == collabId));
 		}
 	};
+	const mGachaId = monInfoBox.querySelector(".monster-gachaId");
+	mGachaId.onclick = function() { //搜索合作
+		const gachaId = parseInt(this.getAttribute(dataAttrName), 10);
+		if (gachaId > 0); {
+			showSearch(Cards.filter(card => card.gachaId == gachaId));
+		}
+	};
 	//以字符串搜索窗口
 	const stringSearchDialog = settingBox.querySelector(".dialog-search-string");
 	function searchByString(str)
@@ -4669,14 +4676,17 @@ function editBoxChangeMonId(id) {
 	const mSeriesId = monInfoBox.querySelector(".monster-seriesId");
 	mSeriesId.textContent = card.seriesId;
 	mSeriesId.setAttribute(dataAttrName, card.seriesId);
-
-	mSeriesId.classList.toggle(className_displayNone, !card.seriesId);;
+	mSeriesId.classList.toggle(className_displayNone, !card.seriesId);
 
 	const mCollabId = monInfoBox.querySelector(".monster-collabId");
 	mCollabId.textContent = card.collabId;
 	mCollabId.setAttribute(dataAttrName, card.collabId);
+	mCollabId.classList.toggle(className_displayNone, !card.collabId);
 
-	mCollabId.classList.toggle(className_displayNone, !card.collabId);;
+	const mGachaId = monInfoBox.querySelector(".monster-gachaId");
+	mGachaId.textContent = card.gachaId;
+	mGachaId.setAttribute(dataAttrName, card.gachaId);
+	mGachaId.classList.toggle(className_displayNone, !card.gachaId);
 
 	const mAltName = monInfoBox.querySelector(".monster-altName");
 	//没有合作名就隐藏

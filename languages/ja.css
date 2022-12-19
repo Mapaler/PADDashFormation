@@ -68,6 +68,9 @@
 .monsterinfo-box .monster-collabId::before{
 	content: "コラボ ID:";
 }
+.monsterinfo-box .monster-gachaId::before{
+	content: "ガチャ ID：";
+}
 .monsterinfo-box .monster-altName::before{
 	content: "タグで";
 }
