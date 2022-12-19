@@ -92,6 +92,9 @@ officialAPI.forEach(function (lang) {
 		delete card.unk05;
 		delete card.unk06;
 		delete card.unk07;
+		if (card.unk08 > 0) {
+			console.log('%d 的 unk08 有值了',cardIndex)
+		}
 		delete card.unk08;
 		if (card.searchFlags.every(num => isNaN(num)))
 			delete card.searchFlags;
