@@ -77,7 +77,10 @@ details>summary {
 	cursor: pointer;
 }
 .help-link::before{
-	content: "ℹ️Help & Tips";
+	content: "\f05a Help & Tips";
+}
+.feedback-link::before{
+	content: "\f4ad Feedback";
 }
 
 #rich-text-tools {

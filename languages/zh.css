@@ -12,7 +12,10 @@
 	content: "正在准备截图，请稍候……";
 }
 .help-link::before{
-	content: "ℹ️帮助和提示";
+	content: "\f05a 帮助和提示";
+}
+.feedback-link::before{
+	content: "\f4ad 反馈";
 }
 .monster.delay::before{
 	content: "应 对\A威 吓";
