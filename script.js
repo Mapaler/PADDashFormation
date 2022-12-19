@@ -305,6 +305,7 @@ var Formation = function(teamCount, memberCount) {
 		types: [],
 		rarities: [],
 		collabs: [],
+		gachas: [],
 		rate: {
 			hp: 1,
 			atk: 1,
@@ -2815,14 +2816,13 @@ function initialize() {
 	
 	//设置地下城倍率
 	const dungeonEnchanceDialog = document.body.querySelector(".dialog-dungeon-enchance");
-	dungeonEnchanceDialog.initialing = function(formation)
-	{
-		const dialogContent = this.querySelector(".dialog-content");
-		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
-		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
-		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
-		const collabIdIpt = dialogContent.querySelector("#dungeon-collab-id");
-
+	const dialogContent = dungeonEnchanceDialog.querySelector(".dialog-content");
+	const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
+	const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
+	const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
+	const collabIdIpt = dialogContent.querySelector("#dungeon-collab-id");
+	const gachaIdIpt = dialogContent.querySelector("#dungeon-gacha-id");
+	dungeonEnchanceDialog.initialing = function(formation){
 		const dge = formation.dungeonEnchance;
 		function runCheck(checkBox){
 			checkBox.checked = this.includes(parseInt(checkBox.value));
@@ -2831,6 +2831,7 @@ function initialize() {
 		attrDoms.forEach(runCheck,dge.attrs);
 		typeDoms.forEach(runCheck,dge.types);
 		collabIdIpt.value = dge.collabs.join();
+		gachaIdIpt.value = dge.gachas.join();
 
 		const {hp, atk, rcv} = dge.rate;
 		dialogContent.querySelector("#dungeon-hp").value = hp;
@@ -2842,16 +2843,7 @@ function initialize() {
 	//初始化Dialog
 	dialogInitialing(dungeonEnchanceDialog);
 	const dungeonEnchanceDialogConfirm = dungeonEnchanceDialog.querySelector(".dialog-confirm");
-	dungeonEnchanceDialogConfirm.onclick = function(){
-		const dialogContent = dungeonEnchanceDialog.querySelector(".dialog-content");
-		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
-		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
-		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
-		const rarities = returnCheckBoxsValues(rareDoms).map(Str2Int);
-		const attrs = returnCheckBoxsValues(attrDoms).map(Str2Int);
-		const types = returnCheckBoxsValues(typeDoms).map(Str2Int);
-		const collabIdIpt = dialogContent.querySelector("#dungeon-collab-id");
-		
+	dungeonEnchanceDialogConfirm.onclick = function(){		
 		const dge = formation.dungeonEnchance;
 		dge.rarities = rarities;
 		dge.attrs = attrs;
@@ -2860,17 +2852,14 @@ function initialize() {
 		dge.rate.atk = Number(dialogContent.querySelector("#dungeon-atk").value);
 		dge.rate.rcv = Number(dialogContent.querySelector("#dungeon-rcv").value);
 		dge.collabs = collabIdIpt.value.split(',').map(str=>Number(str)).filter(Boolean);
+		dge.gachas = gachaIdIpt.value.split(',').map(str=>Number(str)).filter(Boolean);
+
 		dungeonEnchanceDialog.close();
 		creatNewUrl();
 		refreshAll(formation);
 	};
 	const dungeonEnchanceDialogClear = dungeonEnchanceDialog.querySelector(".dialog-clear");
 	dungeonEnchanceDialogClear.onclick = function(){
-		const dialogContent = dungeonEnchanceDialog.querySelector(".dialog-content");
-		const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
-		const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
-		const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
-		const collabIdIpt = dialogContent.querySelector("#dungeon-collab-id");
 		function unchecked(checkBox) {
 			checkBox.checked = false;
 		}
@@ -2878,6 +2867,7 @@ function initialize() {
 		attrDoms.forEach(unchecked);
 		typeDoms.forEach(unchecked);
 		collabIdIpt.value = '';
+		gachaIdIpt.value = '';
 		dialogContent.querySelector("#dungeon-hp").value = 1;
 		dialogContent.querySelector("#dungeon-atk").value = 1;
 		dialogContent.querySelector("#dungeon-rcv").value = 1;
@@ -3865,6 +3855,7 @@ function initialize() {
 		showSearch(searchByString(monstersID.value));
 	};
 	//觉醒
+	const monEditOuterAwokensRow = editBox.querySelector(".row-awoken-sawoken");
 	const monEditAwokensRow = monInfoBox.querySelector(".row-mon-awoken");
 	const awokenCountLabel = monEditAwokensRow.querySelector(".awoken-count-num");
 	const monEditAwokens = Array.from(monEditAwokensRow.querySelectorAll(".awoken-ul input[name='awoken-number']"));
@@ -3893,7 +3884,10 @@ function initialize() {
 	monEditAwokensLabel.forEach(akDom => akDom.onclick = playVoiceAwoken);
 
 	//超觉醒
-	const monEditSAwokensRow = monInfoBox.querySelector(".row-mon-super-awoken");
+	const mSAwokenIcon = monEditOuterAwokensRow.querySelector("#current-super-awoken-icon");
+	mSAwokenIcon.onclick = function(){
+		this.setAttribute("data-awoken-icon", 0);
+	}
 
 	//3个快速设置this.ipt为自己的value
 	function setIptToMyValue() {
@@ -4137,10 +4131,7 @@ function initialize() {
 		mon.awoken = mAwokenNumIpt ? parseInt(mAwokenNumIpt.value, 10) : 0;
 		if (card.superAwakenings.length) //如果支持超觉醒
 		{
-			const mSAwokenChoIpt = monEditSAwokensRow.querySelector("input[name='sawoken-choice']:checked");
-			mon.sawoken = parseInt(mSAwokenChoIpt?.value, 10) || 0;
-			// const mSAwokenIcon = monEditSAwokensRow.querySelector("#current-super-awoken-icon");
-			// mon.sawoken = parseInt(mSAwokenIcon.getAttribute("data-awoken-icon"), 10) || 0;
+			mon.sawoken = parseInt(mSAwokenIcon.getAttribute("data-awoken-icon"), 10) || 0;
 		}
 
 		if (card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) &&
@@ -4601,14 +4592,13 @@ function editMember(teamNum, isAssist, indexInTeam) {
 	monstersID.value = mon.id > 0 ? mon.id : 0;
 	monstersID.onchange();
 	//觉醒
-	const monEditAwokens = editBox.querySelectorAll(".row-mon-awoken .awoken-ul input[name='awoken-number']");
+	const monEditOuterAwokensRow = editBox.querySelector(".row-awoken-sawoken");
+	const monEditAwokens = monEditOuterAwokensRow.querySelectorAll(".row-mon-awoken .awoken-ul input[name='awoken-number']");
 	//if (mon.awoken > 0 && monEditAwokens[mon.awoken]) monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下，为了减少计算次数，把这一条移动到了最后面
 	//超觉醒
-	const monEditSAwokensRow = editBox.querySelector(".row-mon-super-awoken");
-	const monEditSAwokens = Array.from(monEditSAwokensRow.querySelectorAll(".awoken-ul input[name='sawoken-choice']")); //单选框，0号是隐藏的
-	const noSAwokenRadio = editBox.querySelector("#sawoken-choice-nosawoken"); //不选超觉醒的选项
-	(monEditSAwokens.find(ipt=>mon.sawoken === parseInt(ipt.value,10)) || noSAwokenRadio).checked = true;
-	monEditSAwokensRow.swaoken = mon.sawoken;
+	//const monEditCurrentSAwokenRow = monEditOuterAwokensRow.querySelector(".current-super-awoken");
+	const mSAwokenIcon = monEditOuterAwokensRow.querySelector("#current-super-awoken-icon");
+	mSAwokenIcon.setAttribute("data-awoken-icon", mon.sawoken);
 
 	const monEditLv = settingBox.querySelector(".row-mon-level .m-level");
 	monEditLv.value = mon.level || 1;
@@ -4748,70 +4738,55 @@ function editBoxChangeMonId(id) {
 	mAwokenIpt[card.awakenings.length].click(); //选择最后一个觉醒
 
 	//超觉醒
+	const mSAwokenIcon = monEditOuterAwokensRow.querySelector("#current-super-awoken-icon");
 	const monEditSAwokensRow = monEditOuterAwokensRow.querySelector(".row-mon-super-awoken");
 	const monEditSAwokensUl = monEditSAwokensRow.querySelector(".awoken-ul");
-	const monEditSAwokensIcons = Array.from(monEditSAwokensUl.querySelectorAll(".awoken-icon"));
-	const noSAwokenRadio = editBox.querySelector("#sawoken-choice-nosawoken"); //不选超觉醒的选项
 	//获得之前的所有超觉醒
-	const prevSAwokens = monEditSAwokensIcons.map(icon=>parseInt(icon.getAttribute("data-awoken-icon") || 0, 10)).filter(Boolean);
+	const prevSAwoken = parseInt(mSAwokenIcon.getAttribute("data-awoken-icon"), 10) || 0;
 
-	function notCheckMyself() {
-		const sawoken = parseInt(this.value, 10);
-		if (monEditSAwokensUl.swaoken === sawoken && this != noSAwokenRadio) {
-			noSAwokenRadio.click();
-			monEditSAwokensUl.swaoken = 0;
-			return false;
-		} else {
-			monEditSAwokensUl.swaoken = sawoken;
-			const level = settingBox.querySelector(".row-mon-level .m-level");
-			const plusArr = [...settingBox.querySelectorAll(".row-mon-plus input[type='number']")];
-			if (sawoken > 0)
+	function setSAwoken() {
+		const sawoken = parseInt(this.getAttribute("data-awoken-icon"), 10) || 0;
+		mSAwokenIcon.setAttribute("data-awoken-icon", sawoken);
+
+		const level = settingBox.querySelector(".row-mon-level .m-level");
+		const plusArr = [...settingBox.querySelectorAll(".row-mon-plus input[type='number']")];
+		if (sawoken > 0)
+		{
+			let recalFlag = false;
+			//自动100级
+			if (parseInt(level.value, 10)<100)
 			{
-				let recalFlag = false;
-				//自动100级
-				if (parseInt(level.value, 10)<100)
-				{
-					console.debug("点亮超觉醒，自动设定100级");
-					level.value = 100;
-					recalFlag = true;
-				}
-				//自动打上297
-				if (plusArr.some(ipt=>parseInt(ipt.value, 10)<99))
-				{
-					console.debug("点亮超觉醒，自动设定297");
-					plusArr.forEach(ipt=>ipt.value=99);
-					recalFlag = true;
-				}
-				if (recalFlag) editBox.reCalculateAbility();
+				console.debug("点亮超觉醒，自动设定100级");
+				level.value = 100;
+				recalFlag = true;
 			}
+			//自动打上297
+			if (plusArr.some(ipt=>parseInt(ipt.value, 10)<99))
+			{
+				console.debug("点亮超觉醒，自动设定297");
+				plusArr.forEach(ipt=>ipt.value=99);
+				recalFlag = true;
+			}
+			if (recalFlag) editBox.reCalculateAbility();
 		}
 	}
 	//怪物没有超觉醒时隐藏超觉醒
+	const monEditCurrentSAwokenRow = monEditOuterAwokensRow.querySelector(".current-super-awoken");
+	monEditCurrentSAwokenRow.classList.toggle(className_displayNone, card.superAwakenings.length == 0);
 	monEditSAwokensRow.classList.toggle(className_displayNone, card.superAwakenings.length == 0);
-	if (card.superAwakenings.length == prevSAwokens.length &&
-		card.superAwakenings.every((sak, idx)=>sak===prevSAwokens[idx])
-		)
-	{
-		//切换前后超觉相同，什么都不做
-		//console.debug('与上一个超觉醒完全相同，不用修改超觉醒');
-	} else {
-		const optionIconTemplate = editBox.querySelector('#sawoken-option-icon');
-		monEditSAwokensUl.innerHTML = ''; //清空旧的超觉醒
-		monEditSAwokensUl.swaoken = 0;
-		card.superAwakenings.forEach((sak,idx)=>{
-			const clone = document.importNode(optionIconTemplate.content, true);
-			const input = clone.querySelector('input');
-			const label = clone.querySelector('label');
-			input.value = sak;
-			input.onclick = notCheckMyself;
-			label.setAttribute("data-awoken-icon", sak);
-			const id = `sawoken-choice-${idx}`;
-			input.id = id;
-			label.setAttribute('for', id);
-			monEditSAwokensUl.append(clone);
-		});
-		noSAwokenRadio.click(); //选中隐藏的空超觉
+	
+	if (!card.superAwakenings.includes(prevSAwoken)){
+		mSAwokenIcon.setAttribute("data-awoken-icon", 0);
+		//切换后没有相同超觉，则直接撤销这个超觉
 	}
+	monEditSAwokensUl.innerHTML = ''; //清空旧的超觉醒
+	card.superAwakenings.forEach((sak,idx)=>{
+		const btn = document.createElement("button");
+		btn.className = "awoken-icon";
+		btn.setAttribute("data-awoken-icon", sak);
+		btn.onclick = setSAwoken;
+		monEditSAwokensUl.append(btn);
+	});
 
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
 	//monEditLvMax.textContent = monEditLvMax.value = card.maxLevel;
@@ -4961,8 +4936,11 @@ function refreshAll(formationData) {
 				icon.setAttribute("data-rare-icon", rarity);
 			})
 		}
-		if (dge.collabs.length) { //添加合作的ID名称
+		if (dge?.collabs?.length) { //添加合作的ID名称
 			dungeonEnchanceDom.appendChild(localTranslating?.skill_parse?.target?.collab_id({id:dge.collabs.join()}));
+		}
+		if (dge?.gachas?.length) { //添加抽蛋的ID名称
+			dungeonEnchanceDom.appendChild(localTranslating?.skill_parse?.target?.gacha_id({id:dge.gachas.join()}));
 		}
 		
 		let skill = powerUp(dge.attrs, dge.types, p.mul({hp: dge.rate.hp * 100, atk: dge.rate.atk * 100, rcv: dge.rate.rcv * 100}));

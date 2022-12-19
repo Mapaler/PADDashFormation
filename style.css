@@ -1896,7 +1896,8 @@ icon.inflicts::after
 .types-div .type-icon:active,
 .rare-div .rare-icon:active,
 .selected-awokens .awoken-icon:active,
-.awoken-div .awoken-icon:active
+.awoken-div .awoken-icon:active,
+.row-awoken-sawoken .awoken-icon:active
 {
 	animation: icon-active 0.2s;
 }
@@ -2223,26 +2224,17 @@ icon.inflicts::after
 /*.edit-box .setting-box .row-mon-super-awoken::before{
 	content: "▼超觉醒";
 }*/
-
-.row-mon-awoken,
-.row-mon-super-awoken
-{
-	display: inline-block;
-}
-.row-mon-super-awoken::before {
-	/* content: "+"; */
-}
 .row-awoken-sawoken .awoken-count-num,
 .row-awoken-sawoken .awoken-icon
 {
 	grid-column: span 1;
 	grid-row: span 1;
 }
-
+.current-super-awoken {
+	margin-right: 5px;
+}
 /*未选中的超觉醒半透明，选中的不透明*/
-.row-mon-super-awoken .sawoken-choice{display:none;}
-.row-mon-super-awoken .sawoken-choice:not(:checked)+label
-{
+.row-mon-super-awoken .awoken-icon{
 	opacity: var(--search-icon-unchecked);
 }
 /*怪物能力横条*/

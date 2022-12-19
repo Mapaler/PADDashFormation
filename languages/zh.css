@@ -590,6 +590,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "生效合作ID：";
 }
+.dialog-dungeon-enchance .gacha-list::before
+{
+	content: "生效抽蛋ID：";
+}
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "強化倍率：";

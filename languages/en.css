@@ -641,6 +641,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "Effective Collab ID：";
 }
+.dialog-dungeon-enchance .gacha-list::before
+{
+	content: "Effective Gacha ID：";
+}
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "Enhancement Rate:";

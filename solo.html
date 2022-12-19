@@ -975,15 +975,12 @@ var formation = new Formation(teamsCount,6);
 					</div>
 				</div>
 				<div class="current-super-awoken">
-					<icon id="current-super-awoken-icon" class="awoken-icon"></icon>
+					<!--怪物当前超觉醒-->
+					<button id="current-super-awoken-icon" class="awoken-icon"></button>
 				</div>
 				<div class="row-mon-super-awoken">
-					<!--怪物超觉醒-->
-					<input type="radio" name="sawoken-choice" class="sawoken-choice" value="0" id="sawoken-choice-nosawoken" />
-					<div class="awoken-ul">
-						<input type="radio" name="sawoken-choice" class="sawoken-choice" id="sawoken-choice-1" /><label for="sawoken-choice-1" class="awoken-icon"></label>
-					</div>
-					<template id="sawoken-option-icon"><input type="radio" name="sawoken-choice" class="sawoken-choice" /><label class="awoken-icon"></label></template>
+					<!--怪物超觉醒选择列表-->
+					<div class="awoken-ul"></div>
 				</div>
 			</div>
 			<div class="monsterinfo-groupId">
@@ -1234,6 +1231,9 @@ var formation = new Formation(teamsCount,6);
 			</ul>
 			<ul class="collab-list">
 				<li><label for="dungeon-collab-id"></label><input id="dungeon-collab-id" type="text" /></li>
+			</ul>
+			<ul class="gacha-list display-none">
+				<li><label for="dungeon-gacha-id"></label><input id="dungeon-gacha-id" type="text" /></li>
 			</ul>
 			<ul class="stats-list">
 				<li><label for="dungeon-hp"></label><input id="dungeon-hp" type="number" min=0 step=1 value=1 /></li>

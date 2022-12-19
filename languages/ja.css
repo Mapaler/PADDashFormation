@@ -604,6 +604,10 @@ label[for="qr-data-type-pdchu"]::before {
 {
 	content: "有効コラボID：";
 }
+.dialog-dungeon-enchance .gacha-list::before
+{
+	content: "有効ガチャID：";
+}
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "強化倍率：";
