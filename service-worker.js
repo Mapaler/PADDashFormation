@@ -6863,7 +6863,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"59d828f86b1b682e5c46956ec7438776"
+		"1ef781f0286837ddf18d06784992af68"
 	],
 	[
 		"script-custom_elements.js",
@@ -6871,7 +6871,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"c1d16c7c5b25ae5c3dd906d8aad87d5f"
+		"5bef76ef0483cdea60b444fb9aeb16dc"
 	],
 	[
 		"script-skill-parser.js",
@@ -6879,15 +6879,15 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"06dc948c0ef17d5cd2ec5fb31f9b90e5"
+		"a586571c5e43f8f52bc2fe1d36b1afd7"
 	],
 	[
 		"script.js",
-		"874aeb913204f3c9224d3bd4198e7547"
+		"0cc57043ce3fc24a11597f1e538e8b1d"
 	],
 	[
 		"solo.html",
-		"7b94897aa6fe33391746fc95d4b3c456"
+		"e8feb027ec5ac6d7e627e5ad10281030"
 	],
 	[
 		"style-monsterimages.css",
@@ -6895,7 +6895,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"9b2683503d12326ff052f8c8689440ef"
+		"7adb58362de0f74871443ddd3c424267"
 	],
 	[
 		"temp.js",
@@ -6903,11 +6903,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"401fe1feea1a5c531f2f3478f8454a2b"
+		"1e5b3a2ff515fb7043537ac417390afb"
 	],
 	[
 		"languages/en.css",
-		"2bbb252843fde8db9395efe270076647"
+		"322967fd42c3bd496b8de60730f84ea3"
 	],
 	[
 		"languages/en.js",
@@ -6915,7 +6915,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"615e8242b4def368a92e8b9e87b018ac"
+		"cb3f65aad2acce3ee36cf110c471b61f"
 	],
 	[
 		"languages/ja.js",
@@ -6923,7 +6923,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"60d95c1c13af6e9f2a93f12567884510"
+		"a6206f07f2b358353d3d148fe2649415"
 	],
 	[
 		"languages/ko.js",
@@ -6943,19 +6943,19 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.css",
-		"649aecfcc72b32bd6d02ad78698c905a"
+		"45d066248f2191df288818c7c1d23d9e"
 	],
 	[
 		"languages/zh-TW.js",
-		"8cda04a8e8c67525299f8bae21eb3b9e"
+		"ff4ea609b4074b067511d2e78ea956e9"
 	],
 	[
 		"languages/zh.css",
-		"33c8f1399349e75730876fefb7b18794"
+		"6b9dd1df19fff86223a4ce346cf18b85"
 	],
 	[
 		"languages/zh.js",
-		"c74ca28ab07ad0114f8c8f6db32376e0"
+		"8d3c3fdb4887f4ba12be36b1609ba79e"
 	],
 	[
 		"images/attrs.png",

@@ -105,7 +105,7 @@ let localTranslating = {
 			reduce_damage: tp`${'condition'}${'chance'}${'icon'}Reduces ${'attrs'} damage taken by ${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			power_up_targets: tp`[${'attrs_types'}]'s `, //attrs, types, attrs_types
-			henshin: tp`Transforms into ${'card'}`,
+			henshin: tp`Transforms into ${'cards'}`,
 			random_henshin: tp`Random transforms into ${'cards'}`,
 			void_poison: tp`Voids ${'poison'} damage`,
 			skill_proviso: tp`The follow-up effect can only be activates ${'condition'}`,

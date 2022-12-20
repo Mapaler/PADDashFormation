@@ -2120,6 +2120,7 @@ icon.inflicts::after
 	display: flex;
 	gap: 5px;
 	flex-wrap: wrap;
+	align-items: flex-start;
 }
 .monsterinfo-groupId{
 	grid-row: 1 / 3;
