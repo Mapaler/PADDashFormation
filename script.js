@@ -5162,15 +5162,18 @@ function refreshmemberTypes(memberTypesDom, team, idx) {
 	if (!memberTypesDom) return; //如果没有dom，直接跳过
 	const member = team[0][idx];
 	const assist = team[1][idx];
-	const {types = [], appendType = false} = member.getAttrsTypesWithWeapon(assist) || {};
+	let {types = [], appendType = false} = member.getAttrsTypesWithWeapon(assist) || {};
+	appendType = appendType && (types.length > member.card.types.length); //appendType还需要满足type数量大于角色真实的type
 	const memberTypesUl = memberTypesDom.querySelector(`.member-types-${idx + 1} .types-ul`);
 	memberTypesUl.innerHTML = '';
 	for (let i = 0;i < types.length; i++) {
 		const iconLi = document.createElement("li");
 		const icon = iconLi.appendChild(document.createElement("icon"))
 		icon.className = "type-icon";
-		if (appendType && i == (types.length - 1)) icon.classList.add('append-type');
 		icon.setAttribute("data-type-icon", types[i]);
+		if (appendType && i == (types.length - 1)) {
+			iconLi.classList.add('append-type');
+		}
 		memberTypesUl.appendChild(iconLi);
 	}
 }

@@ -514,7 +514,15 @@ ul{
 	display: block;
 	position: absolute;
 }
-.type-icon.append-type {
+.member-types .append-type::before {
+	font-family: var(--game-font-family);
+	content: "+";
+	font-size: 15px;
+	line-height: 10px;
+	color: yellow;
+	text-shadow: black 0 0 1px,black 0 0 2px, black 2px 2px 0;
+}
+.member-types .append-type .type-icon{
 	background-color: lightgreen;
 	box-shadow: 1px 1px 3px lightgreen,1px 1px  3px lightgreen,1px 1px  3px lightgreen;
 }
