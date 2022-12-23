@@ -43,7 +43,7 @@ let localTranslating = {
 			error: tp`😫An error occurred in skill parsing, please feedback the Card ID to the developer.`,
 			unknown: tp`Unkonwn skill type: ${'type'}`,
 			active_turns: tp`${'skills'}, for ${'turns'} turns`,
-			delay_active_turns: tp`[Activated after ${'turns'} turns]:${`icon`}${'skills'}`,
+			delay_active_turns: tp`${`icon`}[Activated after ${'turns'} turns]:${'skills'}`,
 			random_skills: tp`Random Activates these skills:${'skills'}`,
 			evolved_skills: tp`Skills evolve to the next stage when used:${'skills'}`,
 			evolved_skills_loop: tp`${`icon`}Returns to the first stage after use`,

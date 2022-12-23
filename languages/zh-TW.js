@@ -29,7 +29,7 @@
 			error: tp`😫技能解析發生錯誤，請將角色 ID 反饋給開發者。`,
 			unknown: tp`未知的技能類型：${'type'}`, //type
 			active_turns: tp`${'turns'} 回合內，${'skills'}`, //turns, skills
-			delay_active_turns: tp`【${'turns'}回合以後生效】:${`icon`}${'skills'}`,
+			delay_active_turns: tp`${`icon`}【${'turns'}回合以後生效】:${'skills'}`,
 			random_skills: tp`隨機發動以下技能：${'skills'}`, //skills
 			evolved_skills: tp`技能使用後會進化為下一階段：${'skills'}`, //skills
 			evolved_skills_loop: tp`${`icon`}使用後返回第一階段`,
