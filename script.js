@@ -344,7 +344,7 @@ Formation.prototype.outObj = function() {
 	});
 	let dge = this.dungeonEnchance;
 	if (Object.values(dge.rate).some(rate => rate != 1)) obj.r = [
-		[reflags(dge.types),reflags(dge.attrs),reflags(dge.rarities),dge.collabs.length ? dge.collabs : 0].deleteLatter(0), //类型,属性,星级
+		[reflags(dge.types),reflags(dge.attrs),reflags(dge.rarities),dge.collabs.length ? dge.collabs : 0,dge.gachas.length ? dge.gachas : 0].deleteLatter(0), //类型,属性,星级
 		[dge.rate.hp,dge.rate.atk,dge.rate.rcv].deleteLatter(1)
 	];
 	obj.v = dataStructure;
@@ -436,6 +436,7 @@ Formation.prototype.loadObj = function(f) {
 			dge.attrs = flags(effective[1] ?? 0);
 			dge.rarities = flags(effective[2] ?? 0);
 			dge.collabs = effective[3]?.length ? effective[3] : [];
+			dge.gachas = effective[4]?.length ? effective[4] : [];
 			dge.rate.hp = rates[0] ?? 1;
 			dge.rate.atk = rates[1] ?? 1;
 			dge.rate.rcv = rates[2] ?? 1;
@@ -2843,7 +2844,11 @@ function initialize() {
 	//初始化Dialog
 	dialogInitialing(dungeonEnchanceDialog);
 	const dungeonEnchanceDialogConfirm = dungeonEnchanceDialog.querySelector(".dialog-confirm");
-	dungeonEnchanceDialogConfirm.onclick = function(){		
+	dungeonEnchanceDialogConfirm.onclick = function(){	
+		const rarities = returnCheckBoxsValues(rareDoms).map(Str2Int);
+		const attrs = returnCheckBoxsValues(attrDoms).map(Str2Int);
+		const types = returnCheckBoxsValues(typeDoms).map(Str2Int);
+
 		const dge = formation.dungeonEnchance;
 		dge.rarities = rarities;
 		dge.attrs = attrs;

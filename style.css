@@ -2049,6 +2049,9 @@ icon.inflicts::after
 	grid-auto-rows: min-content;
 	grid-gap: 5px;
 }
+.search-mon-list:empty {
+	display: none;
+}
 .search-box .search-list-length
 {
 	float: right;
@@ -2064,12 +2067,11 @@ icon.inflicts::after
 .guide-mod .search-mon-list{
 	max-height: 30vh;
 	overflow: auto;
+}
+.guide-mod .sticky-box {
 	position: sticky;
 	top: 0;
 	z-index: 1;
-}
-.guide-mod .edit-box .monsterinfo-box{
-	top: 30vh;
 }
 
 .setting-box .row-mon-id .real-time-change-card-label
@@ -3823,6 +3825,12 @@ table .orb-icon
 .dialog-dungeon-enchance .dialog-control>button
 {
 	margin-right: 5px;
+}
+.dialog-dungeon-enchance .collab-list::after {
+	content: "(Will be deprecated)"
+}
+:lang(zh) .dialog-dungeon-enchance .collab-list::after {
+	content: "(即将弃用)"
 }
 
 .icon-skill,

@@ -1845,7 +1845,7 @@ function renderSkill(skill, option = {})
 			skills.forEach((subSkill, idx)=>{
 				const li = ul.appendChild(document.createElement("li"));
 				const details = li.appendChild(document.createElement("details"));
-				details.open = true;
+				details.open = false; //随机类技能默认关闭
 				details.className = "skill-details";
 				details.appendChild(renderSkillTitle(skill.params[idx]));
 				details.appendChild(renderSkillEntry(subSkill));
@@ -1863,7 +1863,7 @@ function renderSkill(skill, option = {})
 			skills.forEach((subSkill, idx)=>{
 				const li = ul.appendChild(document.createElement("li"));
 				const details = li.appendChild(document.createElement("details"));
-				details.open = true;
+				details.open = true; //进化类技能默认打开
 				details.className = "skill-details";
 				details.appendChild(renderSkillTitle(skill.params[idx], { showTurns:true }));
 				details.appendChild(renderSkillEntry(subSkill));
