@@ -26,9 +26,10 @@
 	force_reload_data: "強制刷新數據",
 	skill_parse: {
 		skill: {
-			error: tp`😫技能解析发生错误，请将角色 ID 反馈给开发者。`,
+			error: tp`😫技能解析發生錯誤，請將角色 ID 反饋給開發者。`,
 			unknown: tp`未知的技能類型：${'type'}`, //type
 			active_turns: tp`${'turns'} 回合內，${'skills'}`, //turns, skills
+			delay_active_turns: tp`【${'turns'}回合以後生效】:${`icon`}${'skills'}`,
 			random_skills: tp`隨機發動以下技能：${'skills'}`, //skills
 			evolved_skills: tp`技能使用後會進化為下一階段：${'skills'}`, //skills
 			evolved_skills_loop: tp`${`icon`}使用後返回第一階段`,
@@ -54,7 +55,8 @@
 			follow_attack_fixed: tp`追加${'damage'}的${'attr'}傷害`,
 			auto_heal_buff: tp`行動結束後${'icon'}回復${'value'}的${'stats'}`,
 			auto_heal: tp`${'icon'}消除寶珠的回合，回復${'belong_to'}${'value'}的${'stats'}`,
-			ctw: tp`${'icon'}${'value'}內時間停止，可以任意移動寶珠`,
+			ctw: tp`${'icon'}${'time'}內時間停止，可以任意移動寶珠${'addition'}`,
+			ctw_addition: tp`，達成${'cond'}時，${'skill'}`,
 			gravity: tp`${'icon'}造成${'target'}${'value'}的傷害`,
 			resolve: tp`${'icon'}如${'stats'}≧${'min'}，受到單一次致命攻擊時，將會以1點 HP 生還`,
 			board_change: tp`全畫面的寶珠變為${'orbs'}`,
@@ -86,10 +88,10 @@
 			rate_multiply_drop: tp`${'icon'}怪物蛋掉落率`,
 			rate_multiply_coin: tp`${'icon'}金幣掉落率`,
 			rate_multiply_exp: tp`${'icon'}等級經驗倍率`,
-			reduce_damage: tp`${'condition'}受到的${'attrs'}傷害${'icon'}減少${'value'}`,
+			reduce_damage: tp`${'condition'}受到的${'attrs'}傷害${'chance'}${'icon'}減少${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'target'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
 			power_up_targets: tp`${'attrs_types'}的 `,
-			henshin: tp`變身為${'card'}`,
+			henshin: tp`變身為${'cards'}`,
 			random_henshin: tp`隨機變身為${'cards'}`,
 			void_poison: tp`消除${'poison'}時不會受到毒傷害`,
 			skill_proviso: tp`${'condition'}才能發動後續效果`,
@@ -138,7 +140,7 @@
 			compo_type_team_total_rarity: tp`隊伍的總★稀有度 ≤${'rarity'} 時`,
 			compo_type_team_same_rarity: tp`隊伍的稀有度都為${'rarity'}時`,
 
-			stage_less_or_equal: tp`${'stage'} ≤ ${'max'} 時`, //地下城层数
+			stage_less_or_equal: tp`${'stage'} ≤ ${'max'} 時`, //地下城層數
 			stage_greater_or_equal: tp`${'stage'} ≥ ${'min'} 時`,
 
 			L_shape: tp`以L字形式消除5個${'orbs'}時`,
@@ -149,6 +151,7 @@
 			bottom: tp`下方第${'pos'}橫行`,
 			left: tp`左方第${'pos'}豎列`,
 			right: tp`右方第${'pos'}豎列`,
+			random: tp`隨機位置`,
 			shape: tp`指定位置`,
 		},
 		value: {
@@ -251,7 +254,8 @@
 			any: tp`任何${'cotent'}`,
 		},
 		board: {
-			cloud: tp`${'icon'}雲`,
+			clouds: tp`${'icon'}雲`,
+			immobility: tp`${'icon'}封條`,
 			roulette: tp`${'icon'}輪盤位`,
 			roulette_time: tp`（每${'duration'}變換）`,
 		},
@@ -336,7 +340,7 @@
 			[62]: tp`${'icon'}c珠`,
 			[63]: tp`${'icon'}語音`,
 			[64]: tp`${'icon'}獎勵增加`,
-			[65]: tp`${'icon'} HP -`,
+			[65]: tp`${'icon'}HP -`,
 			[66]: tp`${'icon'}攻擊-`,
 			[67]: tp`${'icon'}回復-`,
 			[68]: tp`${'icon'}大防暗`,
@@ -354,8 +358,8 @@
 			[80]: tp`${'icon'}4色`,
 			[81]: tp`${'icon'}5色`,
 			[82]: tp`${'icon'}12珠`,
-			[83]: tp`${'icon'}附加神類型`,
-			[84]: tp`${'icon'}附加龍類型`,
+			[83]: tp`${'icon'}附加龍類型`,
+			[84]: tp`${'icon'}附加神類型`,
 			[85]: tp`${'icon'}附加惡魔類型`,
 			[86]: tp`${'icon'}附加機械類型`,
 			[87]: tp`${'icon'}附加平衡類型`,
@@ -380,6 +384,7 @@
 		}
 	},
 };
+
 deepMerge(localTranslating, _localTranslating);
 localisation(localTranslating);
 

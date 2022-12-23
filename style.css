@@ -3891,7 +3891,8 @@ table .orb-icon
 {
 	color: #ff3600;
 }
-.card-skill-list .skill-proviso
+.card-skill-list .skill-proviso,
+.delay-active-turns::first-line /*延迟生效技能的第一行*/
 {
 	color: blue;
 }

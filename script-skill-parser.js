@@ -435,6 +435,7 @@ const SkillKinds = {
 	Error: "error",
 	Unknown: "unknown",
 	ActiveTurns: "active-turns",
+	DelayActiveTurns: "delay-active-turns",
 	DamageEnemy: "damage-enemy",
 	Vampire: "vampire",
 	ReduceDamage: "reduce-damage",
@@ -950,6 +951,9 @@ const p = {
 
 function activeTurns(turns, ...skills) {
 	return skills.length ? { kind: SkillKinds.ActiveTurns, turns, skills } : null;
+}
+function delayActiveTurns(turns, ...skills) {
+	return skills.length ? { kind: SkillKinds.DelayActiveTurns, turns, skills } : null;
 }
 function damageEnemy(target, attr, damage) {
 	return { kind: SkillKinds.DamageEnemy, target: target, attr: attr, damage: damage };
@@ -1650,6 +1654,11 @@ const skillObjectParsers = {
 	[247](time, attr, min, cap) { //限定时间内转出多少色提高伤害上限
  		return CTW(v.constant(time), c.attrs(flags(attr), min) , increaseDamageCap(cap * 1e8, ["self"]));
 	},
+	[248](turns, ...ids) { //几回合后才生效的技能
+		return delayActiveTurns(turns,
+			...ids.flatMap(id => this.parser(id))
+		);
+	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -1850,6 +1859,19 @@ function renderSkill(skill, option = {})
 				skills: skills?.map(renderSkill)?.nodeJoin(tsp.word.comma()),
 			};
 			frg.ap(tsp.skill.active_turns(dict));
+			break;
+		}
+		case SkillKinds.DelayActiveTurns: { //有推迟回合的行动
+			let { turns, skills } = skill;
+			let dict = {
+				turns: Array.isArray(turns) ? turns.join(tsp.word.range_hyphen().textContent) : turns,
+				icon: createIcon(SkillKinds.Delay),
+				skills: renderSkillEntry(skills),
+			};
+			
+			frg.ap(tsp.skill.delay_active_turns(dict));
+			//独立出来
+			//frg.ap();
 			break;
 		}
 		case SkillKinds.RandomSkills: { //随机技能
