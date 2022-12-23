@@ -69,7 +69,8 @@ let localTranslating = {
 			follow_attack_fixed: tp`inflicts ${'damage'} ${'attr'} damage`,
 			auto_heal_buff: tp`${'icon'}Heal ${'value'} ${'stats'} every turn`,
 			auto_heal: tp`${'icon'}Heal ${'stats'} by ${'belong_to'} ${'value'} after matching orbs`,
-			ctw: tp`${'icon'}Move orbs freely for ${'value'}`,
+			ctw: tp`${'icon'}Move orbs freely for ${'time'}${'addition'}`,
+			ctw_addition: tp`, ${'cond'} is achieved, ${'skill'}`,
 			gravity: tp`${'icon'}Reduce ${'target'} ${'value'}`,
 			resolve: tp`${'icon'}Survive a single hit when ${'stats'}≧${'min'}`,
 			board_change: tp`Change all orbs to ${'orbs'}`,
@@ -2051,18 +2052,54 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Increase Damage Cap",otLangName:{chs:"增加伤害上限 buff",cht:"增加傷害上限 buff"},
 				function:cards=>{
-					const searchTypeArray = [241];
+					function getIncreaseDamageCap(skill)
+					{
+						let cap = 0;
+						switch (skill.type) {
+							case 241:
+								cap = skill.params[1];
+								break;
+							case 246:
+								cap = skill.params[2];
+								break;
+							case 247:
+								cap = skill.params[3];
+								break;
+						}
+						return cap;
+					}
+					const searchTypeArray = [241, 246, 247];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						return skill;
-					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 1));
+					}).sort((a,b)=>{
+						const a_ss = getCardActiveSkill(a, searchTypeArray), b_ss = getCardActiveSkill(b, searchTypeArray);
+						let a_pC = getIncreaseDamageCap(a_ss), b_pC = getIncreaseDamageCap(b_ss);
+						return a_pC - b_pC;
+					});
 				},
 				addition:card=>{
-					const searchTypeArray = [241];
+					const searchTypeArray = [241, 246, 247];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return `${(sk[1]*1e8).bigNumberToString()}×${sk[0]}T`;
+					let cap;
+					switch (skill.type) {
+						case 241:
+							cap = sk[1];
+							break;
+						case 246:
+							cap = sk[2];
+							break;
+						case 247:
+							cap = sk[3];
+							break;
+					}
+					if (skill.type == 241) {
+						return `${(cap*1e8).bigNumberToString()}×${sk[0]}T`;
+					} else {
+						return `${(cap*1e8).bigNumberToString()} in ${sk[0]}S`;
+					}
 				}
 			},
 			{name:"Member ATK rate change",otLangName:{chs:"队员攻击力 buff",cht:"隊員攻擊力 buff"},
@@ -3054,14 +3091,14 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Time pause(sort by time)",otLangName:{chs:"时间暂停（按停止时间排序）",cht:"時間暫停（按停止時間排序）"},
 				function:cards=>{
-				const searchTypeArray = [5];
+				const searchTypeArray = [5, 246, 247];
 				return cards.filter(card=>{
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					return skill;
 				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
 				addition:card=>{
-				const searchTypeArray = [5];
+					const searchTypeArray = [5, 246, 247];
 				const skill = getCardActiveSkill(card, searchTypeArray);
 				const value = skill.params[0];
 				return `时停${value}s`;

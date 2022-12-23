@@ -2064,14 +2064,17 @@ icon.inflicts::after
 {
 	content: attr(data-search-result-count);
 }
-.guide-mod .search-mon-list{
-	max-height: 30vh;
-	overflow: auto;
-}
+/*图鉴模式使用粘性定位*/
 .guide-mod .sticky-box {
 	position: sticky;
 	top: 0;
 	z-index: 1;
+}
+/*图鉴模式默认高度为30%设备高度，可修改大小*/
+.guide-mod .search-mon-list{
+	overflow: auto;
+	height: 30vh;
+	resize: vertical;
 }
 
 .setting-box .row-mon-id .real-time-change-card-label
@@ -3825,12 +3828,6 @@ table .orb-icon
 .dialog-dungeon-enchance .dialog-control>button
 {
 	margin-right: 5px;
-}
-.dialog-dungeon-enchance .collab-list::after {
-	content: "(Will be deprecated)"
-}
-:lang(zh) .dialog-dungeon-enchance .collab-list::after {
-	content: "(即将弃用)"
 }
 
 .icon-skill,

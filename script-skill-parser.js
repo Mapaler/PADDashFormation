@@ -862,6 +862,12 @@ const c = {
 		if (attrs === void 0) { attrs = Attributes.all(); }
 		return { exact: { type: type, value: value, attrs: attrs, multiple: multiple} };
 	},
+	combos: function (min) {
+		return { combos: { min } };
+	},
+	attrs: function (attrs, min) {
+		return { attrs: { attrs, min} };
+	},
 	compo: function (type, ids) {
 		return { compo: { type: type, ids: ids } };
 	},
@@ -1029,7 +1035,9 @@ function fixedTime(value) { return { kind: SkillKinds.FixedTime, value: v.consta
 function addCombo(value) { return { kind: SkillKinds.AddCombo, value: value }; }
 function defBreak(value) { return { kind: SkillKinds.DefenseBreak, value: value }; }
 function poison(value) { return { kind: SkillKinds.Poison, value: value }; }
-function CTW(value) { return { kind: SkillKinds.CTW, value: value }; }
+function CTW(time, cond, skill) {
+	return { kind: SkillKinds.CTW, time, cond, skill };
+}
 function followAttack(value) { return { kind: SkillKinds.FollowAttack, value: value }; }
 function followAttackFixed(value) { return { kind: SkillKinds.FollowAttackFixed, value: v.constant(value) }; }
 function autoHeal(value) { return { kind: SkillKinds.AutoHeal, value: value }; }
@@ -1601,11 +1609,11 @@ const skillObjectParsers = {
 			boardJammingStates('immobility', 'fixed', { positions: {colums: flags(colum), rows: flags(row)} })
 		);
 	},
-	[241](turns, cap, target = 1) { //改变伤害上限主动技
-		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
-		const typeArr = flags(target).map(n => targetTypes[n]);
+	[241](turns, cap) { //改变伤害上限主动技
+		// const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+		// const typeArr = flags(target).map(n => targetTypes[n]);
 		return activeTurns(turns,
-			increaseDamageCap(cap * 1e8, typeArr)
+			increaseDamageCap(cap * 1e8, ["self"])
 		);
 	},
 	[244](turns, type) { //改变板面大小主动技
@@ -1635,6 +1643,12 @@ const skillObjectParsers = {
 	},
 	[245](rarity, _2, _3, hp, atk, rcv) { //全员满足某种情况，现在是全部星级不一样
  		return powerUp(flags(_2), flags(_3), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('team-same-rarity', rarity)); 
+	},
+	[246](time, combo, cap) { //限定时间内转出多少C提高伤害上限
+ 		return CTW(v.constant(time), c.combos(combo) , increaseDamageCap(cap * 1e8, ["self"]));
+	},
+	[247](time, attr, min, cap) { //限定时间内转出多少色提高伤害上限
+ 		return CTW(v.constant(time), c.attrs(flags(attr), min) , increaseDamageCap(cap * 1e8, ["self"]));
 	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -1994,10 +2008,18 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.CTW: { //时间暂停
+			let {time, cond, skill: subSkill} = skill;
 			let dict = {
 				icon: createIcon(skill.kind),
-				value: renderValue(skill.value, { unit: tsp.unit.seconds }),
+				time: renderValue(time, { unit: tsp.unit.seconds }),
 			};
+			if (cond) {
+				let dict2 = {
+					cond: renderCondition(cond),
+					skill: renderSkill(subSkill)
+				}
+				dict.addition = tsp.skill.ctw_addition(dict2);
+			}
 			frg.ap(tsp.skill.ctw(dict));
 			break;
 		}
@@ -2761,6 +2783,17 @@ function renderCondition(cond) {
 			value: renderValue(v.constant(cond.remainOrbs.count), {unit: tsp.unit.orbs}),
 		};
 		frg.ap(tsp.cond.remain_orbs(dict));
+	} else if (cond.combos) {
+		const { min } = cond.combos;
+		let dict = { min };
+		frg.ap(tsp.power.scale_combos(dict));
+	} else if (cond.attrs) {
+		const { attrs, min} = cond.attrs;
+		let dict = {
+			min,
+			orbs: renderOrbs(attrs, {affix: true})
+		};
+		frg.ap(tsp.power.scale_attributes(dict));
 	} else if (cond.exact) {
 		const { type, attrs , value, multiple } = cond.exact;
 		if (type === 'combo') {
