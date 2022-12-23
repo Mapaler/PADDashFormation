@@ -2506,7 +2506,7 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return `${sk[1]}个×${sk[0]}T`;
+					return `${sk[1] * sk[2]}个×${sk[0]}T`;
 				}
 			},
 			{name:"Creates Cloud",otLangName:{chs:"生成封条",cht:"生成封条"},

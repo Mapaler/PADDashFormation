@@ -2897,7 +2897,6 @@ icon.inflicts::after
 .block::after
 {
 	transform: scale(0.75);
-	margin: -4px;
 	display: block;
 	position: absolute;
 	left: 0;
@@ -2926,7 +2925,7 @@ icon.inflicts::after
 	background-image: url(images/icon-orbs.png);
 	background-position-x:calc(-36px * 1);
 	background-position-y:calc(-36px * 7);
-	transform: scale(1);
+	transform: scale(1.3);
 }
 /*云，在宝珠前面*/
 .block.clouds::after
@@ -2934,7 +2933,7 @@ icon.inflicts::after
 	content: "";
 	background-image: url(images/icon-cloud-1.png);
 	background-size: contain;
-	transform: scale(1.2);
+	transform: scale(1.4);
 }
 /*封条，在宝珠前面*/
 .block.immobility::after
