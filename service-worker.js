@@ -8071,7 +8071,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"e7baa9224af3134c62a8b62e19d12197"
+		"a4090df41cf38ae6903771338aa84ac1"
 	],
 	[
 		"solo.html",

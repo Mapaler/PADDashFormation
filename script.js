@@ -4545,6 +4545,7 @@ function refreshLatent(latents, member, latentsNode, option) {
 	latentsNode.classList.toggle("block-8", maxLatentCount>6);
 	latents = latents.concat();
 	if (option?.sort) latents.sort((a, b) => latentUseHole(b) - latentUseHole(a));
+	//如果传入了辅助，才进行有效觉醒的计算，否则算作只有本人的。
 	let effectiveAwokens = option?.assist instanceof Member ? member.effectiveAwokens(option.assist) : null;
 	let latentIndex = 0, usedHoleN = 0;
 	//如果传入了武器，就添加有效觉醒
@@ -4556,9 +4557,22 @@ function refreshLatent(latents, member, latentsNode, option) {
 			icon.setAttribute("data-latent-icon", latent);
 			icon.setAttribute("data-latent-hole", thisHoleN);
 			let enableLatent = true;
-			if (effectiveAwokens) {
-				let obj = allowable_latent.needAwoken.find(obj=>obj.latent == latent);
-				if (obj && !effectiveAwokens.includes(obj.awoken)) enableLatent = false;
+			//搜索需要觉醒的潜觉
+			if (effectiveAwokens) { //如果有有效觉醒，说明需要计算辅助，否则在单人编辑状态是不需要判断是否需要觉醒的
+				let needAwokenLatent = allowable_latent.needAwoken.find(obj=>obj.latent == latent);
+				if (needAwokenLatent) { //如果是需要觉醒的潜觉
+					let needAwokens = new Set([needAwokenLatent.awoken]);
+					equivalent_awoken.forEach(obj=>{
+						//如果搜索到等效觉醒，把大小值都添加到需要的觉醒
+						if (obj.small === needAwokenLatent.awoken || obj.big === needAwokenLatent.awoken) {
+							needAwokens.add(obj.small);
+							needAwokens.add(obj.big);
+						}
+					});
+					//如果需要的觉醒，在有效觉醒里全都没有
+					if ([...needAwokens].every(ak=>!effectiveAwokens.includes(ak)))
+						enableLatent = false;
+				}
 			}
 			icon.classList.toggle('unallowable-latent', !enableLatent);
 			usedHoleN += thisHoleN;
