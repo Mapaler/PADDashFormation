@@ -1391,7 +1391,7 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 
 		moveTime.duration.awoken += latentMoveTime.reduce((duration, la) =>
 			duration + team[0].reduce((count, member) =>
-				count + (member.latent ? member.latent.filter(l => l == la.index).length : 0), 0) * la.value, 0);
+				count + (member?.latent?.filter(l => l == la.index)?.length ?? 0), 0) * la.value, 0);
 
 	}
 
@@ -1463,6 +1463,36 @@ function getReduceRange(reduceScales)
 		}
 	});
 	return attrsRanges;
+}
+//获取盾潜觉的减伤比例组
+function getAttrShieldAwokenReduceScales(team) {
+	//5种盾潜觉
+	return [
+		{awoken:4,latent1:6,latent2:32},
+		{awoken:5,latent1:7,latent2:33},
+		{awoken:6,latent1:8,latent2:34},
+		{awoken:7,latent1:9,latent2:35},
+		{awoken:8,latent1:10,latent2:36},
+	].map((shield, attrIdx)=>{
+		const akNum = awokenCountInTeam(team, shield.awoken, solo, teamsCount); //获取盾觉醒个数，没有大觉醒
+		const latent1Num = team[0].reduce((count, member) => count + (member?.latent?.filter(l => l == shield.latent1)?.length ?? 0), 0);
+		const latent2Num = team[0].reduce((count, member) => count + (member?.latent?.filter(l => l == shield.latent2)?.length ?? 0), 0);
+		
+		const reduce = {
+			scale: 0,
+			hp: {
+				max: 100,
+				min: 0
+			},
+			probability: 1,
+			attrs: 31, //5色是31
+		};
+
+		reduce.scale = Math.min(akNum * 0.07 + latent1Num * 0.01 + latent2Num * 0.025, 1);
+		if (reduce.scale == 0) return false;
+		reduce.attrs = 1 << attrIdx;
+		return reduce;
+	}).filter(Boolean);
 }
 //获取盾减伤比例组
 function getReduceScales(leaderid) {

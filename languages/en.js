@@ -8,6 +8,7 @@ Number.prototype.bigNumberToString = function() {
 
 	let numTemp = negative ? Math.abs(this) : this.valueOf();
 	if (!numTemp) return "0";
+	if (numTemp == Infinity) return "Infinity";
 	const grouping = 1e3;
 	const unit = ['', 'K', 'M', 'G', 'T', 'P'];
 	const numParts = [];

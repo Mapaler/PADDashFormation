@@ -394,6 +394,7 @@ Number.prototype.bigNumberToString = function() {
 
 	let numTemp = negative ? Math.abs(this) : this.valueOf();
 	if (!numTemp) return "0";
+	if (numTemp == Infinity) return "無窮大";
 	const grouping = 1e4;
 	const unit = ['','萬','億','兆','京','垓'];
 	const numParts = [];

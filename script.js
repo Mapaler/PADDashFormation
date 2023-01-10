@@ -2724,12 +2724,12 @@ function initialize() {
 
 	//显示HP的详细值
 	const hpDetailDialog = formationBox.querySelector(".dialog-hp-detail");
-	hpDetailDialog.initialing = function(reduceAttrRanges, tHP, tHPNoAwoken)
+	hpDetailDialog.initialing = function(reduceAttrRanges, reduceAttrRangesWithOutAwoken, tHP, tHPNoAwoken)
 	{
 		const dialogContent = this.querySelector(".dialog-content");
 		const fragment = document.createDocumentFragment();
 		
-		function insertHpRangeTable(reduceRanges, tHP, tHPNoAwoken, attr)
+		function insertHpRangeTable(reduceRanges, reduceRangesWithOutAwoken, tHP, tHPNoAwoken, attr)
 		{
 			const table = document.createElement("table");
 			table.className = "hp-range-table";
@@ -2751,11 +2751,17 @@ function initialize() {
 			reduceRow.appendChild(document.createElement("th"));
 			const reduceHpRow = tBody.insertRow();
 			reduceHpRow.className = "reduce-general";
-			reduceHpRow.appendChild(document.createElement("th"));
+			const reduceHpRowTitle = reduceHpRow.appendChild(document.createElement("th"));
+			const reduceHpRowTitleSheild = reduceHpRowTitle.appendChild(document.createElement("icon"));
+			reduceHpRowTitleSheild.className = "sheild";
 			const reduceHpNoAwokenRow = tBody.insertRow();
 			reduceHpNoAwokenRow.className = "reduce-awoken-bind";
-			reduceHpNoAwokenRow.appendChild(document.createElement("th"));
-			reduceRanges.forEach(range=>{
+			const reduceHpNoAwokenRowTitle = reduceHpNoAwokenRow.appendChild(document.createElement("th"));
+			const reduceHpNoAwokenRowTitleSheild = reduceHpNoAwokenRowTitle.appendChild(document.createElement("icon"));
+			reduceHpNoAwokenRowTitleSheild.className = "sheild";
+			for (let ri=0;ri<reduceRanges.length;ri++) {
+				const range = reduceRanges[ri];
+				const rangeWOA = reduceRangesWithOutAwoken[ri];
 				const hpRange = rangeRow.insertCell();
 				const hpRangeMin = hpRange.appendChild(document.createElement("span"));
 				hpRangeMin.className = "hp-range-min";
@@ -2774,6 +2780,11 @@ function initialize() {
 				const reduce = reduceRow.insertCell();
 				const reduceScale = reduce.appendChild(document.createElement("span"));
 				reduceScale.textContent = `${parseFloat((range.scale * 100).toFixed(2))}`;
+				if (rangeWOA.scale !== range.scale) {
+					reduce.appendChild(document.createTextNode("/"));
+					const reduceScaleWithOutAwoken = reduce.appendChild(document.createElement("span"));
+					reduceScaleWithOutAwoken.textContent = `${parseFloat((rangeWOA.scale * 100).toFixed(2))}`;
+				}
 
 				if (range.probability < 1)
 				{
@@ -2788,18 +2799,19 @@ function initialize() {
 				reduceGeneral.textContent = `${Math.round(tHP * (range.min / 100) / (1 - range.scale)).bigNumberToString()} ~ ${Math.round(tHP * (range.max/100) / (1 - range.scale)).bigNumberToString()}`;
 				
 				const reduceAwokenBind = reduceHpNoAwokenRow.insertCell();
-				reduceAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100) / (1 - range.scale)).bigNumberToString()} ~ ${Math.round(tHPNoAwoken * (range.max/100) / (1 - range.scale)).bigNumberToString()}`;
-			});
+				reduceAwokenBind.textContent = `${Math.round(tHPNoAwoken * (rangeWOA.min / 100) / (1 - rangeWOA.scale)).bigNumberToString()} ~ ${Math.round(tHPNoAwoken * (rangeWOA.max/100) / (1 - rangeWOA.scale)).bigNumberToString()}`;
+			}
 			return table;
 		}
 		if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0])) //有指定属性减伤
 		{
-			reduceAttrRanges.forEach((reduceRanges, ridx)=>fragment.appendChild(insertHpRangeTable(reduceRanges, tHP, tHPNoAwoken, ridx)));
+			for (let ri=0;ri<reduceAttrRanges.length;ri++) {
+				fragment.appendChild(insertHpRangeTable(reduceAttrRanges[ri], reduceAttrRangesWithOutAwoken[ri], tHP, tHPNoAwoken, ri));
+			}
 		}
 		else //只有阶梯盾
 		{
-			const reduceRanges = reduceAttrRanges[0];
-			fragment.appendChild(insertHpRangeTable(reduceRanges, tHP, tHPNoAwoken, 31));
+			fragment.appendChild(insertHpRangeTable(reduceAttrRanges[0], reduceAttrRangesWithOutAwoken[0], tHP, tHPNoAwoken, 31));
 		}
 		
 		dialogContent.innerHTML = "";
@@ -2811,7 +2823,7 @@ function initialize() {
 	const reduceDetailsBars = Array.from(formationBox.querySelectorAll(".tIf-total-hp .reduce-details"));
 	reduceDetailsBars.forEach(bar => {
 		bar.onclick = function(){
-			hpDetailDialog.show(this.reduceAttrRanges, this.tHP, this.tHPNoAwoken);
+			hpDetailDialog.show(this.reduceAttrRangesWithShieldAwoken, this.reduceAttrRanges, this.tHP, this.tHPNoAwoken);
 		};
 	});
 	
@@ -5338,15 +5350,19 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
 		const reduceScales2 = getReduceScales(leader2id);
+		const reduceAttrSeildAwokenScales = getAttrShieldAwokenReduceScales(team);
 		const reduceAttrRanges = getReduceRange(reduceScales1.concat(reduceScales2));
+		const reduceAttrRangesWithShieldAwoken = getReduceRange(reduceScales1.concat(reduceScales2, reduceAttrSeildAwokenScales));
 		//将所有范围平铺，然后选择盾最少那个作为基础盾值
 		const leastScale = reduceAttrRanges.flat().sort((a,b)=>a.scale-b.scale)[0];
 
 		const hpBar = totalDom.querySelector(".reduce-details");
 
-		if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0]) || reduceAttrRanges[0].length > 1 || reduceAttrRanges[0][0].probability < 1) //有阶梯盾或者有指定属性减伤或者减伤比例不是100%
+		if (reduceAttrRangesWithShieldAwoken.some(r=>r != reduceAttrRangesWithShieldAwoken[0]) ||
+			reduceAttrRangesWithShieldAwoken[0].length > 1 ||
+			reduceAttrRangesWithShieldAwoken[0][0].probability < 1) //有HP阶梯盾或者有指定属性减伤或者减伤几率不是100%
 		{
-			drawHpInfo(hpBar, reduceAttrRanges);
+			drawHpInfo(hpBar, reduceAttrRangesWithShieldAwoken);
 			hpBar.classList.remove(className_displayNone);
 		}else
 		{
@@ -5377,11 +5393,13 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		tHPNoAwoken = Math.round(Math.round(tHPNoAwoken) * badgeHPScale);
 
 		//记录到bar中，方便打开详情时调用
-		hpBar.reduceAttrRanges = reduceAttrRanges;
+		hpBar.reduceAttrRangesWithShieldAwoken = reduceAttrRangesWithShieldAwoken; //有盾觉醒的
+		hpBar.reduceAttrRanges = reduceAttrRanges; //没有盾觉醒的
 		hpBar.tHP = tHP;
 		hpBar.tHPNoAwoken = tHPNoAwoken;
 
 		const tReduceHP = Math.floor(tHP / (1 - totalReduce)); //队伍正常满血加上盾能承受的最大伤害
+
 		const tReduceHPNoAwoken = Math.floor(tHPNoAwoken / (1 - totalReduce)); //队伍封觉醒满血加上盾能承受的最大伤害
 
 		const tHpDom_general = tHpDom.querySelector(".general");
