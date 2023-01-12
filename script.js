@@ -1846,9 +1846,9 @@ function initialize() {
 		const qrImg = this.content.saveBox.qrImage;
 		URL.revokeObjectURL(qrImg.src);
 
-		const EncodeHintType = ZXing.EncodeHintType;
 		const hints = new Map();
-		hints.set(EncodeHintType.MARGIN, 0);
+		const EncodeHintType = ZXing.EncodeHintType;
+		//hints.set(EncodeHintType.MARGIN, 0);
 		//hints.set(EncodeHintType.CHARACTER_SET, "UTF8");
 		const qrWidth = 500,qrHeight = 500;
 		let svgElement = qrcodeWriter.write(string, qrWidth, qrHeight, hints);
