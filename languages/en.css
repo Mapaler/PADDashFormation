@@ -574,7 +574,7 @@ label[for="box-have"]::after
 	content: "Generate QR code:";
 }
 
-.formation-from-string::before
+.formation-link-from-string>a::before
 {
 	content: "A formation link read from string";
 }

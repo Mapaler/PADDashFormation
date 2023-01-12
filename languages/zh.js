@@ -2,7 +2,22 @@
 	webpage_title: `智龙迷城${teamsCount}人队伍图制作`,
 	title_blank: "输入队伍标题",
 	detail_blank: "输入说明",
+	force_reload_data: "强制刷新数据",
 	request_input: tp`请输入${'info'}`,
+	link_read_message: {
+		success: tp`发现 ${'type'} 格式。`,
+		type: {
+			"1": "智龙急速阵型",
+			"2": "PDC",
+			"3": "PADDB",
+		},
+		error: {
+			1: "不支持的格式。",
+			2: "无队伍数据。",
+			3: "错误的 JSON 格式。",
+			4: "错误的 网址 格式。",
+		}
+	},
 	sort_name:{
 		sort_none: "无",
 		sort_id: "怪物ID",
@@ -23,7 +38,6 @@
 		sort_rcvMax120_awoken: "最大回复（+觉醒）",
 		sort_abilityIndex_awoken: "最大加权能力指数（+觉醒）",
 	},
-	force_reload_data: "强制刷新数据",
 	skill_parse: {
 		skill: {
 			error: tp`😫技能解析发生错误，请将角色 ID 反馈给开发者。`,

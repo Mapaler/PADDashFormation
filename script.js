@@ -1462,30 +1462,32 @@ function ObjToUrl(obj)
 //解析从QR图里获取的字符串
 function inputFromQrString(string)
 {
-	const re = {code: 0, message: null};
+	console.log(string);
+	const re = {type: 0, error: 0};
 	//code 1~99 为各种编码
 	if (string[0] === "{" && string[string.length-1] === "}")
-	{
+	{ //生成的二维码
+		console.log(string);
 		try{
 			let jo = JSON.parse(string);
 			if (jo.d && typeof jo.d == "object")
 			{
-				re.code = 1;
-				re.message = "发现队伍数据 | Formation data founded";
+				re.type = 1;
+				//re.message = "发现队伍数据 | Formation data founded";
 				re.url = ObjToUrl(jo);
 			}else
 			{
-				re.code = 100;
-				re.message = "无队伍数据 | No formation data";
+				re.error = 2;
+				//re.message = "无队伍数据 | No formation data";
 			}
 		}catch(e)
 		{
-			re.code = 111;
-			re.message = "错误的 JSON 格式 | The illegal JSON format";
+			re.error = 3;
+			//re.message = "错误的 JSON 格式 | The illegal JSON format";
 		}
 	}
 	else if (/^(https?|file):\/\//i.test(string))
-	{
+	{ //网址二维码
 		let url = new URL(string);
 		if (url.searchParams.get('d'))
 		{
@@ -1494,32 +1496,34 @@ function inputFromQrString(string)
 					d: JSON.parse(url.searchParams.get('d')),
 					s: url.searchParams.get('s'),
 				}
-				re.code = 1;
-				re.message = "发现队伍数据 | Formation data founded";
+				re.type = 1;
+				//re.message = "发现队伍数据 | Formation data founded";
 				re.url = ObjToUrl(jo);
-			}catch(e)
-			{
-				re.code = 112;
-				re.message = "错误的 网址 格式 | The illegal URL format";
+			} catch(e) {
+				re.error = 4;
+				//re.message = "错误的 网址 格式 | The illegal URL format";
 			}
 		}
-		else
-		{
-			re.code = 100;
-			re.message = "无队伍数据 | No formation data";
+		else if(/^https?:\/\/paddb\.net\/team\/[a-f0-9]+/i.test(string)) {
+			re.type = 3;
+			//re.message = "发现 PADDB 网址 | PADDB URL found";
+		}
+		else {
+			re.error = 2;
+			//re.message = "无队伍数据 | No formation data";
 		}
 	}
 	else if(/^\d[\d\-\w,\]}]+}/.test(string))
 	{ //PDC
-		re.code = 2;
-		re.message = "发现 PDC 格式 | PDC format found";
+		re.type = 2;
+		//re.message = "发现 PDC 格式 | PDC format found";
 		const newFotmation = pdcFotmationToPdfFotmation(string);
 		re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
 	}
 	else
 	{
-		re.code = 110;
-		re.message = "不支持的格式 | Unsupported format";
+		re.error = 1;
+		//re.message = "不支持的格式 | Unsupported format";
 	}
 	return re;
 }
@@ -1760,13 +1764,13 @@ function initialize() {
 		qrCodeFrame.show();
 	};
 	qrCodeFrame.initialize = function(){
-		const saveBox = this.content.saveBox;
-		const readBox = this.content.readBox;
-		readBox.info.textContent  = "";
+		const qrSaveBox = this.content.saveBox;
+		const qrReadBox = this.content.readBox;
+		qrReadBox.info.show('');
 
-		readBox.videoBox.classList.add(className_displayNone);
+		qrReadBox.videoBox.classList.add(className_displayNone);
 		
-		let qrTypeRadio = saveBox.qrDataType.find(radio=>radio.checked);
+		let qrTypeRadio = qrSaveBox.qrDataType.find(radio=>radio.checked);
 		if (qrTypeRadio) qrTypeRadio.onclick(); //打开二维码窗口就先产生二维码
 	};
 	qrCodeFrame.hide = function(){qrcodeReader.reset();};
@@ -1779,25 +1783,39 @@ function initialize() {
 	qrReadBox.readQrFile = qrReadBox.querySelector(".read-qr-file");
 	qrReadBox.filePicker = qrReadBox.querySelector(".file-select");
 	qrReadBox.info = qrReadBox.querySelector(".info");
+	qrReadBox.info.code = qrReadBox.info.querySelector(".result-code");
+	qrReadBox.info.message = qrReadBox.info.querySelector(".result-message");
+	qrReadBox.info.newLink = qrReadBox.info.querySelector(".formation-link-from-string>a");
 	qrReadBox.video = qrReadBox.querySelector("#video");
 	qrReadBox.videoBox = qrReadBox.querySelector(".video-box");
 	qrReadBox.sourceSelect = qrReadBox.querySelector("#sourceSelect");
 	qrReadBox.qrStr = qrReadBox.querySelector(".string-input");
+	qrReadBox.info.show = function(message, code = 0, error = false, url="") {
+		
+		qrReadBox.info.message.innerHTML = '';
+		qrReadBox.info.message.append(message);
+		qrReadBox.info.code.textContent = code;
+		qrReadBox.info.code.classList.toggle(className_displayNone, code===0);
+		qrReadBox.info.code.classList.toggle("error", error);
+		qrReadBox.info.newLink.classList.toggle(className_displayNone, url.length===0);
+		qrReadBox.info.newLink.href = url;
+	}
 	qrReadBox.readString.onclick = function()
 	{
 		let inputResult = inputFromQrString(qrReadBox.qrStr.value);
-		if (inputResult.code < 100)
-		{
-			qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
-			const newLink = document.createElement("a");
-			newLink.className = "formation-from-string";
-			newLink.href = inputResult.url;
-			newLink.target = "_blank";
-			qrReadBox.info.appendChild(newLink);
-		}else
-		{
-			qrReadBox.info.textContent = 'Code ' + inputResult.code + ':' + inputResult.message;
+		let lrm = localTranslating.link_read_message;
+		let message;
+		if (inputResult.type) {
+			message = lrm.success({type: lrm.type[inputResult.type]});
+		} else {
+			message = lrm.error[inputResult.error];
 		}
+		qrReadBox.info.show(
+			message,
+			inputResult.type || inputResult.error,
+			Boolean(inputResult.error),
+			inputResult.url
+		)
 	}
 
 	qrSaveBox.qrImage = qrSaveBox.querySelector(".qr-code-image");
@@ -1890,49 +1908,15 @@ function initialize() {
 				console.error(err);
 				if (err) {
 					if (err instanceof ZXing.NotFoundException) {
-						qrReadBox.info.textContent = 'No QR code found.';
-						// console.debug('Try crop PDC original QR');
-						// let cropLeft = 0, cropTop = 0, cropWidth = 300, cropHeight = 300, //裁剪尺寸
-						// 	scale = 3, //放大倍率
-						// 	extraLeft = 100, extraTop = 100, extraRight = 100, extraBottom = 100; //额外增加的宽度
-						// let cavans = document.createElement("canvas");
-						// cavans.width = cropWidth * scale + extraLeft + extraRight;
-						// cavans.height = cropHeight * scale + extraTop + extraBottom;
-						// let ctx = cavans.getContext('2d');
-						// ctx.fillStyle="white";
-						// ctx.fillRect(0, 0, cavans.width, cavans.height);
-
-						// ctx.drawImage(img, cropLeft, cropTop, cropWidth, cropHeight, extraLeft, extraTop, cropWidth * scale, cropHeight * scale);
-						// //qrReadBox.appendChild(cavans);
-
-						// qrcodeReader.decodeFromImageUrl(cavans.toDataURL()).then((result2) => {
-						// 	console.debug('Found QR code!', result2);
-						// 	qrReadBox.qrStr.value = result2.text;
-						// 	qrReadBox.readString.onclick();
-						// }).catch((err2) => {
-						// 	console.error(err2);
-						// 	if (err2) {
-						// 		if (err2 instanceof ZXing.NotFoundException) {
-						// 			qrReadBox.info.textContent = 'No QR code found.';
-						// 		}
-					
-						// 		if (err2 instanceof ZXing.ChecksumException) {
-						// 			qrReadBox.info.textContent = 'A code was found, but it\'s read value was not valid.';
-						// 		}
-					
-						// 		if (err2 instanceof ZXing.FormatException) {
-						// 			qrReadBox.info.textContent = 'A code was found, but it was in a invalid format.';
-						// 		}
-						// 	}
-						// });
+						qrReadBox.info.show('No QR code found.');
 					}
 		
 					if (err instanceof ZXing.ChecksumException) {
-						qrReadBox.info.textContent = 'A code was found, but it\'s read value was not valid.';
+						qrReadBox.info.show('A code was found, but it\'s read value was not valid.');
 					}
 		
 					if (err instanceof ZXing.FormatException) {
-						qrReadBox.info.textContent = 'A code was found, but it was in a invalid format.';
+						qrReadBox.info.show('A code was found, but it was in a invalid format.');
 					}
 				}
 			});
@@ -1964,15 +1948,15 @@ function initialize() {
 		
 				if (err) {
 					if (err instanceof ZXing.NotFoundException) {
-					console.debug('No QR code found.')
+						console.debug('No QR code found.')
 					}
 		
 					if (err instanceof ZXing.ChecksumException) {
-					console.debug('A code was found, but it\'s read value was not valid.')
+						console.debug('A code was found, but it\'s read value was not valid.')
 					}
 		
 					if (err instanceof ZXing.FormatException) {
-					console.debug('A code was found, but it was in a invalid format.')
+						console.debug('A code was found, but it was in a invalid format.')
 					}
 				}
 			});
@@ -2011,7 +1995,7 @@ function initialize() {
 				{
 					qrcodeReader.reset();
 					qrReadBox.videoBox.classList.add(className_displayNone);
-					qrReadBox.info.textContent  = "";
+					qrReadBox.info.show('');
 	
 				}else
 				{

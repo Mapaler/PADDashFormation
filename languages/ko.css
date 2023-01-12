@@ -518,7 +518,7 @@ label[for="have-8-latent-slot"]::after
 	content: "QR 코드 생성:";
 }
 
-.formation-from-string::before
+.formation-link-from-string>a::before
 {
 	content: "문자열에서 읽은 팀 링크입니다";
 }

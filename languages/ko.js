@@ -3,7 +3,22 @@
 	addition_display: "추가 표시입니다",
 	title_blank: "입력 제목",
 	detail_blank: "입력 내용",
+	force_reload_data: "데이터 강제 새로 고침",
 	request_input: tp`${'info'}를 입력하십시오`,
+	link_read_message: {
+		success: tp`검색 ${'type'} 형식입니다. `,
+		type: {
+			1: "PADDF",
+			2: "PDC",
+			3: "PADDB",
+		},
+		error: {
+			1: "지원되지 않는 형식입니다." ,
+			2: "팀 데이터가 없습니다." ,
+			3: "잘못된 JSON 형식입니다." ,
+			4: "잘못된 URL 형식입니다." ,
+		}
+	},
 	sort_name:{
 		sort_none: "없음",
 		sort_id: "카드 ID",
@@ -24,7 +39,6 @@
 		sort_rcvMax120_awoken: "최대 회복 (+각성)",
 		sort_abilityIndex_awoken: "최대 가중 능력 지수 (+각성)",
 	},
-	force_reload_data: "데이터 강제 새로 고침",
 }
 deepMerge(localTranslating, _localTranslating);
 localisation(localTranslating);

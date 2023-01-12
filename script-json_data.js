@@ -17,7 +17,22 @@ let localTranslating = {
 	addition_display: "💬",
 	title_blank: "Input Formation Title",
 	detail_blank: "Input Detail",
+	force_reload_data: `Force refresh data`,
 	request_input: tp`Please Input ${'info'}`,
+	link_read_message: {
+		success: tp`Find the ${'type'} format.`,
+		type: {
+			1: "PADDF",
+			2: "PDC",
+			3: "PADDB",
+		},
+		error: {
+			1: "Unsupported format.",
+			2: "No formation data.",
+			3: "The illegal JSON format.",
+			4: "The illegal URL format.",
+		}
+	},
 	sort_name:{
 		sort_none: "Nope",
 		sort_id: "Cards Id",
@@ -37,7 +52,6 @@ let localTranslating = {
 		sort_rcvMax120_awoken: "Max RCV (+Awoken)",
 		sort_abilityIndex_awoken: "Maximum Weighted Ability Index (+Awakening)",
 	},
-	force_reload_data: `Force refresh data`,
 	skill_parse: {
 		skill: {
 			error: tp`😫An error occurred in skill parsing, please feedback the Card ID to the developer.`,

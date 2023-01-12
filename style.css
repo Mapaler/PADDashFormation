@@ -3356,11 +3356,21 @@ table .orb-icon
 	font-size: 20px;
 	padding: 5px;
 }
-.formation-from-string
+.formation-link-from-string
 {
 	font-size: 1.5em;
-	display: block;
 }
+.read-qr-box .result-code::before {
+	content: "Code ";
+}
+.read-qr-box .result-code.error::before {
+	content: "Error ";
+	color: red;
+}
+.read-qr-box .result-code::after {
+	content: ":";
+}
+
 .qr-code-image
 {
 	background-color: white;

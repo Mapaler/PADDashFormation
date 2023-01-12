@@ -2,7 +2,21 @@
 	webpage_title: `龍族拼圖${teamsCount}人隊伍圖製作`,
 	title_blank: "輸入隊伍標題",
 	detail_blank: "輸入説明",
+	force_reload_data: "強制刷新數據",
 	request_input: tp`請輸入${'info'}`,
+	link_read_message: {
+		success: tp`發現 ${'type'} 格式。`,
+		type: {
+			"1": "智龍急速陣型",
+			"2": "PDC",
+			"3": "PADDB",
+		},
+		error: {
+			1: "No formation data.",
+			2: "The illegal JSON format.",
+			3: "The illegal URL format.",
+		}
+	},
 	sort_name:{
 		sort_none: "無",
 		sort_id: "怪物ID",
@@ -23,7 +37,6 @@
 		sort_rcvMax120_awoken: "最大回復（+覺醒）",
 		sort_abilityIndex_awoken: "最大加權能力指數（+覺醒）",
 	},
-	force_reload_data: "強制刷新數據",
 	skill_parse: {
 		skill: {
 			error: tp`😫技能解析發生錯誤，請將角色 ID 反饋給開發者。`,

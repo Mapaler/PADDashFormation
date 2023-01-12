@@ -526,7 +526,13 @@ label[for="box-have"]::after
 	content: "生成二维码：";
 }
 
-.formation-from-string::before
+.read-qr-box .result-code::before {
+	content: "代码 ";
+}
+.read-qr-box .result-code.error::before {
+	content: "错误 ";
+}
+.formation-link-from-string>a::before
 {
 	content: "从字符串中读取的队伍链接";
 }

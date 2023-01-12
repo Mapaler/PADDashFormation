@@ -528,7 +528,13 @@ label[for="box-have"]::after
 	content: "生成二維碼：";
 }
 
-.formation-from-string::before
+.read-qr-box .result-code::before {
+	content: "代碼 ";
+}
+.read-qr-box .result-code.error::before {
+	content: "錯誤 ";
+}
+.formation-link-from-string>a::before
 {
 	content: "從字串中讀取的隊伍連結";
 }

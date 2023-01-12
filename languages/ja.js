@@ -3,7 +3,22 @@
 	addition_display: "追加の表示",
 	title_blank: "入力タイトル",
 	detail_blank: "入力詳細",
+	force_reload_data: "データの強制更新",
 	request_input: tp`${'info'}を入力してください`,
+	link_read_message: {
+		success: tp`発見 ${'type'} 形式.`,
+		type: {
+			1: "PADDF",
+			2: "PDC",
+			3: "PADDB",
+		},
+		error: {
+			1: "サポートされていない形式。" ,
+			2: "チームデータがありません" ,
+			3: "間違った JSON 形式です。" ,
+			4: "間違った URL 形式です。 ",
+		}
+	},
 	sort_name:{
 		sort_none: "いいえ",
 		sort_id: "カード ID",
@@ -24,7 +39,6 @@
 		sort_rcvMax120_awoken: "最大回復 (+覚醒)",
 		sort_abilityIndex_awoken: "最大加重能力指数 (+覚醒)",
 	},
-	force_reload_data: "データの強制更新",
 }
 deepMerge(localTranslating, _localTranslating);
 localisation(localTranslating);

@@ -8051,7 +8051,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"7a8c2f2cdd08036c0b18d0fd82ca5213"
+		"2a9044e1ed123093a4b70d0b07164662"
 	],
 	[
 		"script-custom_elements.js",
@@ -8059,7 +8059,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"cbc8a5c4829cb92fb5d1d58acafb2de5"
+		"258b3e94b42b220da59305f70dd8920d"
 	],
 	[
 		"script-skill-parser.js",
@@ -8071,11 +8071,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"78a0521d1e288053f00e4551adb05ec7"
+		"7e691cad4b7b2a710e4130a44e8749a6"
 	],
 	[
 		"solo.html",
-		"9a82c31d52533ebc37f1a04e5753fb63"
+		"9525defd39f2d93ab421200bb38638ac"
 	],
 	[
 		"style-monsterimages.css",
@@ -8083,7 +8083,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"f10faaee49b6b30d3869e648111d5823"
+		"f11cfc4fb3d9757ca12f73845048e61a"
 	],
 	[
 		"temp.js",
@@ -8091,11 +8091,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"a5deb7b8a7a1c2a9e077e079fb18271c"
+		"fe7bb80b2f946a477a12b446ab265c5a"
 	],
 	[
 		"languages/en.css",
-		"dcb34cceaac4619cba3cf18223b2e107"
+		"a81b75df76c97c6d07e279c9471d7f42"
 	],
 	[
 		"languages/en.js",
@@ -8103,19 +8103,19 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"d8906770c2dae573aca31c74db035a07"
+		"c37d6381c0d2a7b26bfe8ab695c4a7bc"
 	],
 	[
 		"languages/ja.js",
-		"17f837f31da46113606f8acb7d863dba"
+		"763894608375030a3596927f9cae6753"
 	],
 	[
 		"languages/ko.css",
-		"056bbecb3193dab6d55f0e99fcfdc7af"
+		"3155f19e216d42d3ac114e126392cfd8"
 	],
 	[
 		"languages/ko.js",
-		"9c016e79d84c2c008d6e5a4b2a16d885"
+		"1256cbdc3d696a57f60e2586142d6dac"
 	],
 	[
 		"languages/language-list.js",
@@ -8131,19 +8131,19 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.css",
-		"a643b0b9d040a9553240b0b9c72c1f68"
+		"0d7584c238d91463daace4d0c0c4aa57"
 	],
 	[
 		"languages/zh-TW.js",
-		"b97067d6ff6412a2ace98f8aa425dc08"
+		"50c0fc87d11998c3df71e9abc5bbc1da"
 	],
 	[
 		"languages/zh.css",
-		"e5c3d7d1c2bc7268a88566ec4fa663d9"
+		"509b89a6de160b5bcdab42d66eac5021"
 	],
 	[
 		"languages/zh.js",
-		"c7d9f3adbcaf1d71bb8326ea2b33f0af"
+		"7ca07cb61affa6dd16fa92e226315e17"
 	],
 	[
 		"images/attrs.png",

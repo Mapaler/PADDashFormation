@@ -537,7 +537,7 @@ label[for="box-have"]::after
 	content: "QRコードを生成します:";
 }
 
-.formation-from-string::before
+.formation-link-from-string>a::before
 {
 	content: "文字列から読み取られた列リンク";
 }
