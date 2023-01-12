@@ -261,8 +261,8 @@ label[for="merge-skill"]::after{
 .control-box .show-awoken-count-lbl::after{
 	content:"⚔️総覚醒と能力値の表示";
 }
-.control-box .change-swap-to-copy-lbl::after{
-	content:"ドラッグ時にコピー";
+label[for="change-swap-to-copy"]::after{
+	content:"ドラッグ時にコピー (またはCtrlを押したまま)";
 }
 label[for="default-level"]::after
 {

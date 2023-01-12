@@ -2502,14 +2502,14 @@ function initialize() {
 		return false; //没有false将会打开链接
 	}
 	//编辑界面每个怪物的头像的拖动
-	function dragStartMonHead(e) {
+	function dragStartMonHead(event) {
 		// const changeSwapToCopy = controlBox.querySelector("#change-swap-to-copy"); //储存交换“复制”和“替换”
 		// e.dataTransfer.dropEffect = changeSwapToCopy.checked ? 'copy' : 'move';
-		e.dataTransfer.setData('from', JSON.stringify(getMemberArrayIndexFromMonHead(this)));
+		event.dataTransfer.setData('from', JSON.stringify(getMemberArrayIndexFromMonHead(this)));
 	}
 	//编辑界面每个怪物的头像的经过，阻止事件发生
-	function dropOverMonHead(e) {
-		e.preventDefault();
+	function dropOverMonHead(event) {
+		event.preventDefault();
 	}
 	//编辑界面每个怪物的头像的放下
 	function dropMonHead(event) {
@@ -2521,7 +2521,7 @@ function initialize() {
 		if ((dataTo[0] !== dataFrom[0]) ||
 			(dataTo[1] !== dataFrom[1]) ||
 			(dataTo[2] !== dataFrom[2])) { //必须有所不同才继续交换
-			interchangeCard(dataFrom, dataTo);
+			interchangeCard(dataFrom, dataTo, !event.ctrlKey);
 		}
 		return false; //没有false将会打开链接
 	}
@@ -2581,11 +2581,13 @@ function initialize() {
 		}
 	}
 	//移动端编辑界面每个怪物的头像的取消
-	function touchcancelMonHead(e) {
+	function touchcancelMonHead(event) {
 		interchangeSVG.style.display = "none";
-		console.log("移动取消", e, this);
+		console.log("移动取消", event, this);
 	}
-	function interchangeCard(formArr, toArr) {
+	function interchangeCard(formArr, toArr, isCopy) {
+		//优先使用传入的复制，然后才是考虑开关
+		isCopy = isCopy || controlBox.querySelector("#change-swap-to-copy").checked; //储存交换“复制”和“替换”
 		const [fromTeamNum, fromIsAssist, fromIndexInTeam] = formArr;
 		const [toTeamNum, toIsAssist, toIndexInTeam] = toArr;
 
@@ -2598,8 +2600,7 @@ function initialize() {
 				return newMember;
 			}
 		}
-		const changeSwapToCopy = controlBox.querySelector("#change-swap-to-copy"); //储存交换“复制”和“替换”
-		const isCopy = changeSwapToCopy.checked;
+		
 		let from = formation.teams[fromTeamNum][fromIsAssist][fromIndexInTeam];
 		let to = formation.teams[toTeamNum][toIsAssist][toIndexInTeam];
 		let fromCard = from.card, toCard = to.card;

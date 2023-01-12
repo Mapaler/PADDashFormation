@@ -269,8 +269,8 @@ label[for="merge-skill"]::after{
 .control-box .show-awoken-count-lbl::after{
 	content:"⚔️Show awoken count and ability";
 }
-.control-box .change-swap-to-copy-lbl::after{
-	content:"\"Copy\" when dragging";
+label[for="change-swap-to-copy"]::after{
+	content:"\"Copy\" when dragging (or hold down Ctrl)";
 }
 label[for="default-level"]::after
 {

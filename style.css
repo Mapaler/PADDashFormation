@@ -3323,6 +3323,10 @@ table .orb-icon
 	width: calc(100% - 170px);
 	box-sizing: border-box;
 }
+:lang(en) #qr-code-frame .string-input
+{
+	width: calc(100% - 220px);
+}
 #qr-code-frame .string-output
 {
 	width: calc(100% - 20px);

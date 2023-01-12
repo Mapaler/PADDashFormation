@@ -257,8 +257,8 @@ label[for="merge-skill"]::after{
 .control-box .show-awoken-count-lbl::after{
 	content:"⚔️각성 통계 및 기능 값 표시";
 }
-.control-box .change-swap-to-copy-lbl::after{
-	content:"끌 때 복사";
+label[for="change-swap-to-copy"]::after{
+	content:"끌 때 복사 (또는 Ctrl 키를 누른 채)";
 }
 label[for="default-level"]::after
 {

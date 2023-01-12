@@ -267,8 +267,8 @@ label[for="merge-skill"]::after{
 .control-box .show-awoken-count-lbl::after{
 	content:"⚔️顯示覺醒統計和能力值";
 }
-.control-box .change-swap-to-copy-lbl::after{
-	content:"拖拽時使用“複製”";
+label[for="change-swap-to-copy"]::after{
+	content:"拖拽時使用“複製”（或按住 Ctrl）";
 }
 label[for="default-level"]::after
 {
