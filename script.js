@@ -161,7 +161,7 @@ Member.prototype.effectiveAwokens = function(assist) {
 		enableAwoken.push(this.sawoken);
 	}
 	//添加武器
-	if (assist instanceof Member && assist.card.awakenings.includes(49)) {
+	if (assist instanceof Member && assist?.card?.awakenings?.includes(49)) {
 		enableAwoken.push(...assist.card.awakenings.slice(0, assist.awoken));
 	}
 	return enableAwoken;
