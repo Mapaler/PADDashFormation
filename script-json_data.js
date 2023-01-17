@@ -2560,10 +2560,29 @@ const specialSearchFunctions = (function() {
 					if (!skill) return;
 					const sk = skill.params;
 
-					if (sk[1])
-						return `[7×6]×${sk[0]}T`;
-					else
-						return `[6×5]×${sk[0]}T`;
+					let width, height;
+					switch (type) {
+						case 1: {
+							width = 7;
+							height = 6;
+							break;
+						}
+						case 2: {
+							width = 5;
+							height = 3;
+							break;
+						}
+						case 3: {
+							width = 6;
+							height = 5;
+							break;
+						}
+						default: {
+							width = 6;
+							height = 5;
+						}
+					}
+					return `[${width}×${height}]×${sk[0]}T`;
 				}
 			},
 		]},
