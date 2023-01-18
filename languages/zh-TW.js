@@ -102,7 +102,7 @@
 			rate_multiply_coin: tp`${'icon'}金幣掉落率`,
 			rate_multiply_exp: tp`${'icon'}等級經驗倍率`,
 			reduce_damage: tp`${'condition'}受到的${'attrs'}傷害${'chance'}${'icon'}減少${'value'}`,
-			power_up: tp`${'condition'}${'targets'}${'target'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
+			power_up: tp`${'condition'}${'targets'}${'target'}${'each_time'}${'value'}${'reduceDamage'}${'additional'}`,
 			power_up_targets: tp`${'attrs_types'}的 `,
 			henshin: tp`變身為${'cards'}`,
 			random_henshin: tp`隨機變身為${'cards'}`,
@@ -129,8 +129,7 @@
 			scale_match_length_bonus: tp`，每多1個${'bonus'}，最大${'max'}個時${'stats_max'}`,
 			scale_remain_orbs: tp`剩餘寶珠 ≤ ${'max'} 時${'stats'}${'bonus'}`,
 			scale_remain_orbs_bonus: tp`，每少1個${'bonus'}，最少${'min'}個時${'stats_max'}`,
-			scale_cross: tp`每以十字形式消除5個${'orbs'}1次時${'stats'}`,
-			scale_cross_single: tp`以十字形式消除5個${'orbs'}時${'stats'}`,
+			scale_cross: tp`以十字形式消除5個${'orbs'}時${'each_time'}${'stats'}`,
 			scale_state_kind_count: tp`以隊伍中[${'awakenings'}${'attrs'}${'types'}]的數量提升，每個${'stats'}`,
 		},
 		cond: {
@@ -144,7 +143,7 @@
 			remain_orbs: tp`剩餘寶珠 ≤ ${'value'} 時`,
 			exact_combo: tp`剛好${'value'}連擊時`,
 			exact_length: tp`剛好${'value'}`,
-			exact_match_length: tp`相連消除${'length'}${'orbs'}時，${'times'}`,
+			exact_match_length: tp`相連消除${'length'}${'orbs'}時，`,
 			exact_match_enhanced: tp`並且其中包含至少一個強化寶珠`,
 
 			compo_type_card: tp`隊伍中同時存在 ${'ids'} 時`,

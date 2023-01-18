@@ -119,7 +119,7 @@ let localTranslating = {
 			rate_multiply_coin: tp`${'icon'}Coins`,
 			rate_multiply_exp: tp`${'icon'}Rank EXP`,
 			reduce_damage: tp`${'condition'}${'chance'}${'icon'}Reduces ${'attrs'} damage taken by ${'value'}`,
-			power_up: tp`${'condition'}${'targets'}${'value'}${'reduceDamage'}${'addCombo'}${'followAttack'}`,
+			power_up: tp`${'condition'}${'targets'}${'each_time'}${'value'}${'reduceDamage'}${'additional'}`,
 			power_up_targets: tp`[${'attrs_types'}]'s `, //attrs, types, attrs_types
 			henshin: tp`Transforms into ${'cards'}`,
 			random_henshin: tp`Random transforms into ${'cards'}`,
@@ -146,9 +146,8 @@ let localTranslating = {
 			scale_match_length_bonus: tp`, ${'bonus'} per orbs additional，up to ${'stats_max'} for ${'max'} orbs`,
 			scale_remain_orbs: tp`When ≤ ${'max'} orbs remain on the board ${'stats'}${'bonus'}`,
 			scale_remain_orbs_bonus: tp`, ${'bonus'} for each fewer orb, up to ${'stats_max'} for ${'min'} orbs`,
-			scale_cross: tp`When matching each cross of 5 ${'orbs'} ${'stats'}`,
-			scale_cross_single: tp`When matching a cross of 5 ${'orbs'} ${'stats'}`,
-			scale_state_kind_count: tp`${'stats'} for each [${'awakenings'}${'attrs'}${'types'}] in team`,
+			scale_cross: tp`When matching cross of 5 ${'orbs'} ${'each_time'}${'stats'}`,
+			scale_state_kind: tp`${'stats'} for each [${'awakenings'}${'attrs'}${'types'}] in team`,
 		},
 		cond: {
 			unknown: tp`[ Unknown condition ]`,
@@ -161,7 +160,7 @@ let localTranslating = {
 			remain_orbs: tp`When ≤ ${'value'} Orbs on the board `,
 			exact_combo: tp`When exactly ${'value'} combos `,
 			exact_length: tp`exactly of ${'value'} `,
-			exact_match_length: tp`When matching ${'length'}${'value'}${'orbs'}, ${'times'} `,
+			exact_match_length: tp`When matching ${'length'}${'value'}${'orbs'}, `,
 			exact_match_enhanced: tp` orbs including enhanced`,
 
 			compo_type_card: tp`When ${'ids'} are all on team, `,
@@ -248,7 +247,7 @@ let localTranslating = {
 			affix_type: tp`${'cotent'} types`,
 			affix_awakening: tp`${'cotent'} awoken`,
 			affix_exclude: tp`, exclude ${'cotent'}`,
-			each_time: tp`each time`,
+			each_time: tp`each time `,
 			different: tp`different`,
 			same: tp`the same`,
 		},
@@ -1405,7 +1404,7 @@ const specialSearchFunctions = (function() {
 		ul.className = "board";
 		orbs.forEach(orbType => {
 			const li = ul.appendChild(document.createElement("li"));
-			li.className = `orb-icon`;
+			li.className = `orb`;
 			li.setAttribute("data-orb-icon", orbType);
 		});	
 		return ul;
@@ -2552,7 +2551,7 @@ const specialSearchFunctions = (function() {
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
 				},
 				addition:card=>{
 					const searchTypeArray = [244];
@@ -2561,7 +2560,7 @@ const specialSearchFunctions = (function() {
 					const sk = skill.params;
 
 					let width, height;
-					switch (type) {
+					switch (sk[1]) {
 						case 1: {
 							width = 7;
 							height = 6;
@@ -3183,6 +3182,22 @@ const specialSearchFunctions = (function() {
 					return `层 ${strArr.join(" ")}`;
 				}
 			},
+			{name:"Delay active after skill use",otLangName:{chs:"技能使用后延迟生效",cht:"技能使用后延迟生效"},
+				function:cards=>{
+					const searchTypeArray = [248];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray))
+				},
+				addition:card=>{
+					const searchTypeArray = [248];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `延迟${sk[0]}T`;
+				}
+			},
 		]},
 		
 		{group:true,name:"======Leader Skills=====",otLangName:{chs:"======队长技======",cht:"======隊長技======"}, functions: [
@@ -3203,19 +3218,56 @@ const specialSearchFunctions = (function() {
 			{name:"L Shape Matching",otLangName:{chs:"L消除",cht:"L消除"},
 				function:cards=>cards.filter(card=>card.leaderSkillTypes.matchMode.LShape)
 			},
-			{name:"Cross(十) of Heal Orbs",otLangName:{chs:"十字心",cht:"十字心"},
+			{name:"5 Orbs including enhanced Matching",otLangName:{chs:"5珠含强化消除",cht:"5珠含強化消除"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [151,209];
-				const skill = getCardLeaderSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [150];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					return skill;
 				})
 			},
-			{name:"Cross(十) of Color Orbs",otLangName:{chs:"N个十字",cht:"N個十字"},
+			{name:"Cross(十) of Heal Orbs",otLangName:{chs:"十字心",cht:"十字心"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [157];
-				const skill = getCardLeaderSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [151,209];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					return skill;
 				})
+			},
+			{name:"Stacked Magnifications of Cross(十)",otLangName:{chs:"十字叠加倍率",cht:"十字疊加倍率"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [157];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					return skill;
+				})
+			},
+			{name:"Stacked Magnifications of Matching",otLangName:{chs:"指定长度消除叠加倍率",cht:"指定長度消除疊加倍率"},
+				function:cards=>{
+					const searchTypeArray = [235];
+					return cards.filter(card=>{
+						const skill = getCardLeaderSkill(card, searchTypeArray);
+						if (!skill) return false;
+						const sk = skill.params;
+						if (!sk[3] || sk[3] === 100) return false;
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,2));
+				},
+				addition:card=>{
+					const searchTypeArray = [235];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					if (!sk[3] || sk[3] === 100) return;
+					const fragment = document.createDocumentFragment();
+					const sup = document.createElement("sup");
+					sup.textContent = "N";
+					const orbs = createOrbsList(flags(sk[0]));
+					fragment.append(`ATK×${sk[3]/100}`,sup,"/",orbs);
+					if (sk[1]) {
+						fragment.append(`×≥${sk[1]}`);
+					} else {
+						fragment.append(`×${sk[2]}`);
+					}
+					return fragment;
+				}
 			},
 			{name:"Less remain on the board",otLangName:{chs:"剩珠倍率",cht:"剩珠倍率"},
 				function:cards=>cards.filter(card=>{

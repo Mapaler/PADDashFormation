@@ -1522,6 +1522,11 @@ icon.inflicts::after
 	transform: scale(0.75);
 	margin: calc(-32px * (1 - 0.75) / 2);
 }
+.custom-addition .board .orb {
+	filter: unset;
+	transform: scale(0.5);
+	margin: calc(-36px * (1 - 0.5) / 2);
+}
 
 .cd-preview .cd-max,
 .cd-preview .cd-min,

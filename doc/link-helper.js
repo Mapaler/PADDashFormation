@@ -19,7 +19,7 @@
 	}
 	GM_xmlhttpRequest({
 		method: "POST",
-		url: `https://api2.paddb.net/getTeam`, //版本文件
+		url: `https://api2.paddb.net/getTeam`,
 		data: '{"id":"63b287659b239a72f6cc79b1"}',
 		headers: {
 			"Content-Type": "application/json",

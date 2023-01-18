@@ -428,7 +428,7 @@ const SkillPowerUpKind = {
 	ScaleMatchAttrs: 'scale-match-attrs',
 	ScaleCross: 'scale-cross',
 	ScaleRemainOrbs: 'scale-remain-orbs',
-	ScaleStateKindCount: 'scale-state-kind-count',
+	ScaleStateKind: 'scale-state-kind',
 };
 
 const SkillKinds = {
@@ -545,7 +545,7 @@ function skillParser(skillId)
 			fixedDamages.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
 		}
 		let skillPowerUp = skills.filter(skill=>skill.kind == SkillKinds.PowerUp);
-		if (skillPowerUp.length>1)
+		if (skillPowerUp.length > 1 || (skillPowerUp[0] && skillPowerUp[0]?.value?.kind === SkillPowerUpKind.ScaleCross))
 		{
 			//合并技能效果
 			function combinePowerUp(target, source) {
@@ -589,7 +589,7 @@ function skillParser(skillId)
 					skill.value.crosses.splice(1);
 				}
 			}
-			//每个十字技能，先把所有属性合并
+			//每个十字技能，先把所有属性合并到自身
 			scaleCross.forEach(mergeScaleCrossAttr);
 			//筛选出所有倍率一样的子技能
 			scaleCross = scaleCross.filter((skill,idx,arr)=>{
@@ -926,10 +926,7 @@ const p = {
 		return { kind: SkillPowerUpKind.ScaleCombos ,...this.scale(min, max, baseMul, bonusMul) };
 	},
 	scaleMatchLength: function (attrs, min, max, baseMul, bonusMul, matchAll = false) {
-		/*if (min <= 3 && min === max)
-			return this.scaleAttrs(attrs, matchAll ? attrs.length : 1, matchAll ? attrs.length : 1, baseMul, bonusMul);
-		else*/
-		return { kind: SkillPowerUpKind.ScaleMatchLength, attrs: attrs, matchAll: matchAll ,...this.scale(min, max, baseMul, bonusMul) };
+		return { kind: SkillPowerUpKind.ScaleMatchLength, attrs, matchAll,...this.scale(min, max, baseMul, bonusMul) };
 	},
 	scaleMatchAttrs: function (matches, min, max, baseMul, bonusMul) {
 		const flatMatches = matches.flat(); //当匹配的全是不同颜色时，切换成匹配颜色的技能
@@ -944,8 +941,11 @@ const p = {
 	scaleRemainOrbs: function (max, baseMul, bonusMul) {
 		return { kind: SkillPowerUpKind.ScaleRemainOrbs ,...this.scale(bonusMul ? 0 : max, max, baseMul, bonusMul) };
 	},
-	scaleStateKindCount: function (awakenings, attrs, types, value) {
-		return { kind: SkillPowerUpKind.ScaleStateKindCount, awakenings: awakenings, attrs: attrs, types: types, value: value };
+	scaleStateKind: function (awakenings, attrs, types, value) {
+		return { kind: SkillPowerUpKind.ScaleStateKind, awakenings: awakenings, attrs: attrs, types: types, value: value };
+	},
+	scaleMatchLengthTimes: function (attrs, min, exact, bonusMul) {
+		return { kind: SkillPowerUpKind.ScaleMatchLengthTimes, attrs, min, exact, bonusMul };
 	},
 }
 
@@ -985,16 +985,15 @@ function generateOrbs(orbs, exclude, count, time) {
 function fixedOrbs(...generates) {
 	return { kind: SkillKinds.FixedOrbs, generates: generates };
 }
-function powerUp(attrs, types, value, condition = null, reduceDamageValue = null, additional = []) {
+function powerUp(attrs, types, value, condition = null, reduceDamage = null, additional = [], eachTime = false) {
 	if (value.kind === SkillPowerUpKind.Multiplier) {
 		let hp = value.hp, atk = value.atk, rcv = value.rcv;
 		if (hp === 1 && atk === 1 && rcv === 1 && !reduceDamage)
 			return null;
 	}
-	if (attrs?.targets != undefined) {
-		return { kind: SkillKinds.PowerUp, targets: attrs.targets, attrs: null, types: null, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
-	}
-	return { kind: SkillKinds.PowerUp, attrs: attrs, types: types, condition: condition, value: value, reduceDamage: reduceDamageValue, additional: additional};
+	let targets = attrs?.targets;
+	if (targets) {attrs = null; types = null;}
+	return { kind: SkillKinds.PowerUp, targets, attrs, types, condition, value, reduceDamage, additional, eachTime};
 }
 function counterAttack(attr, prob, value) {
 	return { kind: SkillKinds.CounterAttack, attr: attr, prob: prob, value: value };
@@ -1328,7 +1327,7 @@ const skillObjectParsers = {
 		}else
 		{
 			return activeTurns(turns, type === 2 ?
-				powerUp(null, null, p.scaleStateKindCount([awoken1, awoken2, awoken3].filter(Boolean), null, null, p.mul({atk: mul - 100, hp:0, rcv:0}))) :
+				powerUp(null, null, p.scaleStateKind([awoken1, awoken2, awoken3].filter(Boolean), null, null, p.mul({atk: mul - 100, hp:0, rcv:0}))) :
 				reduceDamage('all', v.percentAwakenings([awoken1, awoken2, awoken3].filter(Boolean), v.percent(mul)))
 			);
 		}
@@ -1370,7 +1369,7 @@ const skillObjectParsers = {
 	[167](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
 	[168](turns, awoken1, awoken2, awoken3, awoken4, awoken5, awoken6, mul) {
 		return activeTurns(turns, 
-			powerUp(null, null, p.scaleStateKindCount([awoken1, awoken2, awoken3, awoken4, awoken5, awoken6].filter(Boolean), null, null, p.mul({atk: mul, hp:0, rcv:0})))
+			powerUp(null, null, p.scaleStateKind([awoken1, awoken2, awoken3, awoken4, awoken5, awoken6].filter(Boolean), null, null, p.mul({atk: mul, hp:0, rcv:0})))
 		);
 	},
 	[169](min, base, percent, bonus, max) { return powerUp(null, null, p.scaleCombos(min, max ?? min, [base || 100, 100], [bonus, 0]), null, v.percent(percent)); },
@@ -1574,11 +1573,11 @@ const skillObjectParsers = {
 	[227]() { return leaderChange(1); },
 	[228](turns, attrs, types, atk, rcv) {
 		return activeTurns(turns,
-			powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({atk: atk, rcv: rcv ?? 0, hp:0})))
+			powerUp(null, null, p.scaleStateKind(null, flags(attrs), flags(types), p.mul({atk: atk, rcv: rcv ?? 0, hp:0})))
 		);
 	},
 	[229](attrs, types, hp, atk, rcv) {
-		return powerUp(null, null, p.scaleStateKindCount(null, flags(attrs), flags(types), p.mul({hp: hp || 0, atk: atk || 0, rcv: rcv || 0})));
+		return powerUp(null, null, p.scaleStateKind(null, flags(attrs), flags(types), p.mul({hp: hp || 0, atk: atk || 0, rcv: rcv || 0})));
 	},
 	[230](turns, target, mul) {
 		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
@@ -1586,13 +1585,26 @@ const skillObjectParsers = {
 		return activeTurns(turns, powerUp({targets: typeArr}, null, p.mul({ atk: mul })));
 	},
 	[231](turns, awoken1, awoken2, awoken3, awoken4, awoken5, atk, rcv) {
-		return activeTurns(turns, powerUp(null, null, p.scaleStateKindCount([awoken1, awoken2, awoken3, awoken4, awoken5].filter(Boolean), null, null, p.mul({atk: atk, hp:0, rcv: rcv}))));
+		return activeTurns(turns, powerUp(null, null, p.scaleStateKind([awoken1, awoken2, awoken3, awoken4, awoken5].filter(Boolean), null, null, p.mul({atk: atk, hp:0, rcv: rcv}))));
 	},
 	[232](...ids) { return evolvedSkills(false, ids.map(id => this.parser(id))); },
 	[233](...ids) { return evolvedSkills(true, ids.map(id => this.parser(id))); },
 	[234](min, max) { return skillProviso(c.stage(min ?? 0, max ?? 0)); },
-	[235](attr, _, len, atk, percent, combo, damage) {
-		return powerUp(null, null, p.mul({ atk: atk || 100}), c.exact('match-length', len, flags(attr), true), v.percent(percent), [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean));
+	[235](attrs, lenMin, lenExact, atk, reducePercent, combo, damage) {
+		const len = lenMin || lenExact; //宝珠长度
+		const ee = Boolean(lenExact); //是否为刚好等于
+		//第二个参数为多少以上就算，第三个参数为多少以上才算
+		//return powerUp(null, null, p.mul({ atk: atk || 100}), c.exact('match-length', lenExact, flags(attr)), v.percent(percent), [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean), true);
+		//let powerup, condition;
+		let powerup = Boolean(lenMin)
+			? p.scaleMatchLength(flags(attrs), lenMin, lenMin, [atk, 100], [0, 0])
+			: p.mul({ atk: atk || 100});
+		let condition = Boolean(lenExact)
+			? c.exact('match-length', lenExact, flags(attrs))
+			: null;
+		let additional = [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean);
+		const eachTime = true;
+		return powerUp(null, null, powerup, condition, v.percent(reducePercent), additional, eachTime);
 	},
 	[236](...ids) { //随机变身
 		return henshin(ids.distinct(), true);
@@ -2418,10 +2430,11 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.PowerUp: {
-			let attrs = skill.attrs, types = skill.types, targets = skill.targets, condition = skill.condition, value = skill.value, reduceDamage = skill.reduceDamage, additional = skill.additional;
+			let { attrs, types, targets, condition, value, reduceDamage, additional, eachTime } = skill;
 			let dict = {
 				icon: createIcon(skill.kind),
 			};
+			let comma = tsp.word.comma;
 			if (condition) dict.condition = renderCondition(condition);
 			
 			let targetDict = {}, attrs_types = [];
@@ -2449,7 +2462,6 @@ function renderSkill(skill, option = {})
 			
 			if (attrs_types.length) dict.targets = tsp.skill.power_up_targets(targetDict);
 
-			let subDocument = [];
 			if (value){
 				/*if (attrs?.includes(5) && value.kind == SkillPowerUpKind.Multiplier)
 				{ //如果属性有5，则是回复力
@@ -2463,22 +2475,23 @@ function renderSkill(skill, option = {})
 					//不显示 value
 				}else
 				{
-					subDocument.push(renderPowerUp(value));
+					dict.value = renderPowerUp(value);
 				}
 			}
 			if (reduceDamage && reduceDamage.value > 0) {
-				subDocument.push(tsp.skill.reduce_damage({
+				let reduceDamageNode = tsp.skill.reduce_damage({
 					value: renderValue(reduceDamage, {percent: true}),
 					icon: createIcon("reduce-damage"),
-				}));
+				});
+				dict.reduceDamage = [comma(), reduceDamageNode].nodeJoin();
 			}
 			if (additional?.length) {
-				for (const subSkill of additional.filter(Boolean))
-				{
-					subDocument.push(renderSkill(subSkill, option));
-				}
+				let additionalNode = additional.filter(Boolean).map(subSkill=>renderSkill(subSkill, option));
+				dict.additional = [comma(), additionalNode.nodeJoin(comma())].nodeJoin();
 			}
-			dict.value = subDocument.filter(Boolean).nodeJoin(tsp.word.comma());
+			if (eachTime) {
+				dict.each_time = tsp.word.each_time();
+			}
 			frg.ap(tsp.skill.power_up(dict));
 			break;
 		}
@@ -2817,7 +2830,7 @@ function renderCondition(cond) {
 		};
 		frg.ap(tsp.power.scale_attributes(dict));
 	} else if (cond.exact) {
-		const { type, attrs , value, multiple } = cond.exact;
+		const { type, attrs , value} = cond.exact;
 		if (type === 'combo') {
 			let dict = { value };
 			frg.ap(tsp.cond.exact_combo(dict));
@@ -2827,9 +2840,6 @@ function renderCondition(cond) {
 			};
 			if (value) {
 				dict.length = tsp.cond.exact_length({value:renderValue(v.constant(value), {unit: tsp.unit.orbs})});
-			}
-			if (multiple) {
-				dict.times = tsp.word.each_time();
 			}
 
 			frg.ap(tsp.cond.exact_match_length(dict));
@@ -3076,8 +3086,9 @@ function renderPowerUp(powerUp) {
 					let dict = {
 						orbs: renderOrbs(cross.attr, {affix: true, any: true}),
 						stats: renderStats(1, cross.atk, cross.rcv),
+						each_time: cross.single ? null : tsp.word.each_time(),
 					}
-					return cross.single ? tsp.power.scale_cross_single(dict) : tsp.power.scale_cross(dict);
+					return tsp.power.scale_cross(dict);
 				});
 				frg.ap(subDocument.nodeJoin(tsp.word.comma()));
 			//}
@@ -3103,7 +3114,7 @@ function renderPowerUp(powerUp) {
 			
 			break;
 		}
-		case SkillPowerUpKind.ScaleStateKindCount: {
+		case SkillPowerUpKind.ScaleStateKind: {
 			let awakenings = powerUp.awakenings, attrs = powerUp.attrs, types = powerUp.types, value = powerUp.value;
 			let dict = {
 				stats: renderStats(value.hp, value.atk, value.rcv, {mul: false, percent: true}),
@@ -3111,7 +3122,7 @@ function renderPowerUp(powerUp) {
 				attrs: attrs?.length && renderAttrs(attrs, {affix: true}) || null,
 				types: types?.length && renderTypes(types, {affix: true}) || null,
 			}
-			frg.ap(tsp.power.scale_state_kind_count(dict));
+			frg.ap(tsp.power.scale_state_kind(dict));
 			break;
 		}
 		default:
