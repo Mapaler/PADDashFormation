@@ -7,10 +7,12 @@
 	request_input: tp`${'info'}を入力してください`,
 	link_read_message: {
 		success: tp`発見 ${'type'} 形式.`,
+		need_user_script: `PADDB はドメイン間であるため、この機能をサポートするには、ユーザー スクリプト マネージャ内にこのセカンダリ スクリプトをインストールする必要があります。`,
+		user_script_link: `スクリプトへのリンク`,
 		type: {
-			1: "PADDF",
-			2: "PDC",
-			3: "PADDB",
+			"PADDF": "PADDF",
+			"PDC": "PDC",
+			"PADDB": "PADDB",
 		},
 		error: {
 			1: "サポートされていない形式。" ,

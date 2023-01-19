@@ -534,7 +534,7 @@ label[for="box-have"]::after
 .read-qr-box .result-code.error::before {
 	content: "錯誤 ";
 }
-.formation-link-from-string>a::before
+.formation-link-from-string>a:empty::before
 {
 	content: "從字串中讀取的隊伍連結";
 }
@@ -544,11 +544,11 @@ label[for="sourceSelect"]::before
 }
 #qr-code-frame .save-qr-img::before
 {
-	content: "\f0c7 保存二維碼圖片";
+	content: "\f0c7  保存二維碼圖片";
 }
 #qr-code-frame .read-qr-camera::before
 {
-	content: "\f030 使用相機掃描";
+	content: "\f030  使用相機掃描";
 }
 #qr-code-frame .read-qr-camera.running::before
 {
@@ -556,10 +556,14 @@ label[for="sourceSelect"]::before
 }
 #qr-code-frame .read-qr-file::before
 {
-	content: "\f1c5 讀取二維碼圖片";
+	content: "\f1c5  讀取二維碼圖片";
+}
+#qr-code-frame .read-external-link::before
+{
+	content: "\f0c1  解析 PADDB 鏈接";
 }
 #qr-code-frame .read-string::before {
-	content: "\f891 读取字符串";
+	content: "\f891  读取字符串";
 }
 
 label[for="qr-data-type-pdf"]::before

@@ -6,10 +6,12 @@
 	request_input: tp`请输入${'info'}`,
 	link_read_message: {
 		success: tp`发现 ${'type'} 格式。`,
+		need_user_script: `由于 PADDB 跨域，您需要在用户脚本管理器内安装此辅助脚本以支持此功能。`,
+		user_script_link: `辅助脚本的链接`,
 		type: {
-			"1": "智龙急速阵型",
-			"2": "PDC",
-			"3": "PADDB",
+			"PADDF": "智龙急速阵型",
+			"PDC": "PDC",
+			"PADDB": "PADDB",
 		},
 		error: {
 			1: "不支持的格式。",

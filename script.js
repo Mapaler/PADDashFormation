@@ -1462,27 +1462,33 @@ function ObjToUrl(obj)
 //解析从QR图里获取的字符串
 function inputFromQrString(string)
 {
-	console.log(string);
 	const re = {type: 0, error: 0};
+	const ERROR_Unsupported_format = 1,
+		  ERROR_No_formation_data = 2,
+		  ERROR_illegal_JSON_format = 3,
+		  ERROR_illegal_URL_format = 4;
 	//code 1~99 为各种编码
 	if (string[0] === "{" && string[string.length-1] === "}")
 	{ //生成的二维码
-		console.log(string);
 		try{
 			let jo = JSON.parse(string);
-			if (jo.d && typeof jo.d == "object")
-			{
-				re.type = 1;
+			if (typeof jo?.d == "object") {
+				re.type = "PADDF";
 				//re.message = "发现队伍数据 | Formation data founded";
 				re.url = ObjToUrl(jo);
-			}else
-			{
-				re.error = 2;
+			}
+			else if (typeof jo?.team == "string" && jo.team[0] === "{" && jo.team[jo.team.length-1] === "}") {
+				re.type = "PADDB";
+				const newFotmation = paddbFotmationToPdfFotmation(jo);
+				re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
+			}
+			else {
+				re.error = ERROR_No_formation_data;
 				//re.message = "无队伍数据 | No formation data";
 			}
 		}catch(e)
 		{
-			re.error = 3;
+			re.error = ERROR_illegal_JSON_format;
 			//re.message = "错误的 JSON 格式 | The illegal JSON format";
 		}
 	}
@@ -1496,33 +1502,55 @@ function inputFromQrString(string)
 					d: JSON.parse(url.searchParams.get('d')),
 					s: url.searchParams.get('s'),
 				}
-				re.type = 1;
+				re.type = "PADDF";
 				//re.message = "发现队伍数据 | Formation data founded";
 				re.url = ObjToUrl(jo);
 			} catch(e) {
-				re.error = 4;
+				re.error = ERROR_illegal_URL_format;
 				//re.message = "错误的 网址 格式 | The illegal URL format";
 			}
 		}
 		else if(/^https?:\/\/paddb\.net\/team\/[a-f0-9]+/i.test(string)) {
-			re.type = 3;
+			re.type = "PADDB";
 			//re.message = "发现 PADDB 网址 | PADDB URL found";
+			const qrDialog = document.querySelector("#qr-code-frame");
+			const actionButtonBox = qrDialog.querySelector(".action-button-box");
+			//const txtStringInput = actionButtonBox.querySelector(".string-input"); //输入的字符串
+			//const btnReadString = actionButtonBox.querySelector(".read-string"); //读取字符串按钮
+			const btnReadExternalLink = actionButtonBox.querySelector(".read-external-link");
+			if (btnReadExternalLink?.readExternalLink) {
+				const request = btnReadExternalLink.readExternalLink(string);
+				request.then(response=>{
+					try{
+						let jo = JSON.parse(response.response);
+						const newFotmation = paddbFotmationToPdfFotmation(jo);
+						re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
+					} catch(e) {
+						re.error = ERROR_illegal_JSON_format;
+					}
+				});
+			} else {
+				re.error = ERROR_Unsupported_format;
+				re.message = localTranslating.link_read_message.need_user_script;
+				re.url = "https://greasyfork.org/scripts/458521";
+				re.urlName = localTranslating.link_read_message.user_script_link;
+			}
 		}
 		else {
-			re.error = 2;
+			re.error = ERROR_No_formation_data;
 			//re.message = "无队伍数据 | No formation data";
 		}
 	}
 	else if(/^\d[\d\-\w,\]}]+}/.test(string))
 	{ //PDC
-		re.type = 2;
+		re.type = "PDC";
 		//re.message = "发现 PDC 格式 | PDC format found";
 		const newFotmation = pdcFotmationToPdfFotmation(string);
 		re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
 	}
 	else
 	{
-		re.error = 1;
+		re.error = ERROR_Unsupported_format;
 		//re.message = "不支持的格式 | Unsupported format";
 	}
 	return re;
@@ -1610,6 +1638,11 @@ function pdcFotmationToPdfFotmation(inputString)
 		});
 	});
 	return f;
+}
+//解析PADDB的数据
+function paddbFotmationToPdfFotmation(inputString)
+{
+
 }
 //截图
 function capture() {
@@ -1790,7 +1823,7 @@ function initialize() {
 	qrReadBox.videoBox = qrReadBox.querySelector(".video-box");
 	qrReadBox.sourceSelect = qrReadBox.querySelector("#sourceSelect");
 	qrReadBox.qrStr = qrReadBox.querySelector(".string-input");
-	qrReadBox.info.show = function(message, code = 0, error = false, url="") {
+	qrReadBox.info.show = function(message, code = 0, error = false, url="", urlName="") {
 		
 		qrReadBox.info.message.innerHTML = '';
 		qrReadBox.info.message.append(message);
@@ -1799,22 +1832,28 @@ function initialize() {
 		qrReadBox.info.code.classList.toggle("error", error);
 		qrReadBox.info.newLink.classList.toggle(className_displayNone, url.length===0);
 		qrReadBox.info.newLink.href = url;
+		qrReadBox.info.newLink.textContent = urlName;
 	}
 	qrReadBox.readString.onclick = function()
 	{
 		let inputResult = inputFromQrString(qrReadBox.qrStr.value);
 		let lrm = localTranslating.link_read_message;
 		let message;
-		if (inputResult.type) {
+		if (inputResult.message) {
+			message = inputResult.message;
+		}
+		else if (inputResult.type) {
 			message = lrm.success({type: lrm.type[inputResult.type]});
-		} else {
+		}
+		else {
 			message = lrm.error[inputResult.error];
 		}
 		qrReadBox.info.show(
 			message,
 			inputResult.type || inputResult.error,
 			Boolean(inputResult.error),
-			inputResult.url
+			inputResult.url,
+			inputResult.urlName
 		)
 	}
 

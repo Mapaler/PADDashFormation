@@ -6,10 +6,12 @@
 	request_input: tp`請輸入${'info'}`,
 	link_read_message: {
 		success: tp`發現 ${'type'} 格式。`,
+		need_user_script: `由於 PADDB 跨域，您需要在用戶腳本管理器內安裝此輔助腳本以支持此功能。`,
+		user_script_link: `輔助腳本的鏈接`,
 		type: {
-			"1": "智龍急速陣型",
-			"2": "PDC",
-			"3": "PADDB",
+			"PADDF": "龍圖急速陣型",
+			"PDC": "PDC",
+			"PADDB": "PADDB",
 		},
 		error: {
 			1: "No formation data.",

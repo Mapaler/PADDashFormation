@@ -574,7 +574,7 @@ label[for="box-have"]::after
 	content: "Generate QR code:";
 }
 
-.formation-link-from-string>a::before
+.formation-link-from-string>a:empty::before
 {
 	content: "A formation link read from string";
 }
@@ -598,8 +598,12 @@ label[for="sourceSelect"]::before
 {
 	content: "\f1c5  Read image file";
 }
+#qr-code-frame .read-external-link::before
+{
+	content: "\f0c1  Parse PADDB link";
+}
 #qr-code-frame .read-string::before {
-	content: "\f891 Read string";
+	content: "\f891  Read string";
 }
 
 label[for="qr-data-type-pdf"]::before

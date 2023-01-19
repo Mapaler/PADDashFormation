@@ -532,7 +532,7 @@ label[for="box-have"]::after
 .read-qr-box .result-code.error::before {
 	content: "错误 ";
 }
-.formation-link-from-string>a::before
+.formation-link-from-string>a:empty::before
 {
 	content: "从字符串中读取的队伍链接";
 }
@@ -556,8 +556,12 @@ label[for="sourceSelect"]::before
 {
 	content: "\f1c5  读取二维码图片";
 }
+#qr-code-frame .read-external-link::before
+{
+	content: "\f0c1  解析 PADDB 链接";
+}
 #qr-code-frame .read-string::before {
-	content: "\f891 读取字符串";
+	content: "\f891  读取字符串";
 }
 
 label[for="qr-data-type-pdf"]::before

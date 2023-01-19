@@ -21,10 +21,12 @@ let localTranslating = {
 	request_input: tp`Please Input ${'info'}`,
 	link_read_message: {
 		success: tp`Find the ${'type'} format.`,
+		need_user_script: `Because PADDB is cross-domain, you need to install this helper script within the User Script Manager to support this feature.`,
+		user_script_link: `Link to the helper script`,
 		type: {
-			1: "PADDF",
-			2: "PDC",
-			3: "PADDB",
+			"PADDF": "PADDF",
+			"PDC": "PDC",
+			"PADDB": "PADDB",
 		},
 		error: {
 			1: "Unsupported format.",

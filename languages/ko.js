@@ -7,10 +7,12 @@
 	request_input: tp`${'info'}를 입력하십시오`,
 	link_read_message: {
 		success: tp`검색 ${'type'} 형식입니다. `,
+		need_user_script: `PADDB는 도메인에 걸쳐 있으므로 이 기능을 지원하려면 사용자 스크립트 관리자 내에 이 보조 스크립트를 설치해야 합니다.`,
+		user_script_link: `스크립트에 연결`,
 		type: {
-			1: "PADDF",
-			2: "PDC",
-			3: "PADDB",
+			"PADDF": "PADDF",
+			"PDC": "PDC",
+			"PADDB": "PADDB",
 		},
 		error: {
 			1: "지원되지 않는 형식입니다." ,
