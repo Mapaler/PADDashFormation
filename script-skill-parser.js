@@ -986,11 +986,6 @@ function fixedOrbs(...generates) {
 	return { kind: SkillKinds.FixedOrbs, generates: generates };
 }
 function powerUp(attrs, types, value, condition = null, reduceDamage = null, additional = [], eachTime = false) {
-	if (value.kind === SkillPowerUpKind.Multiplier) {
-		let hp = value.hp, atk = value.atk, rcv = value.rcv;
-		if (hp === 1 && atk === 1 && rcv === 1 && !reduceDamage)
-			return null;
-	}
 	let targets = attrs?.targets;
 	if (targets) {attrs = null; types = null;}
 	return { kind: SkillKinds.PowerUp, targets, attrs, types, condition, value, reduceDamage, additional, eachTime};
@@ -1558,7 +1553,9 @@ const skillObjectParsers = {
 		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[220](attrs, combo) {
-		return powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, combo ? [addCombo(combo)] : null);
+		var skill = powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, combo ? [addCombo(combo)] : null);
+		console.log(skill)
+		return skill;
 	},
 	[221](attrs, damage) {
 		return powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, damage ? [followAttackFixed(damage)] : null);
@@ -1858,6 +1855,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.Unknown: {
+			console.log(skill);
 			let dict = {
 				type: skill.kind
 			};

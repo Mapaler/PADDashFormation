@@ -133,7 +133,7 @@
 			scale_remain_orbs: tp`剩余宝珠 ≤ ${'max'} 时${'stats'}${'bonus'}`,
 			scale_remain_orbs_bonus: tp`，每少1个${'bonus'}，最少${'min'}个时${'stats_max'}`,
 			scale_cross: tp`以十字形式消除5个${'orbs'}时${'each_time'}${'stats'}`,
-			scale_state_kind_count: tp`以队伍中[${'awakenings'}${'attrs'}${'types'}]的数量提升，每个${'stats'}`,
+			scale_state_kind: tp`以队伍中[${'awakenings'}${'attrs'}${'types'}]的数量提升，每个${'stats'}`,
 		},
 		cond: {
 			unknown: tp`[ 未知条件 ]`,
