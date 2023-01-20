@@ -1460,7 +1460,7 @@ function ObjToUrl(obj)
 	return newUrl;
 }
 //解析从QR图里获取的字符串
-function inputFromQrString(string)
+async function inputFromQrString(string)
 {
 	const re = {type: 0, error: 0};
 	const ERROR_Unsupported_format = 1,
@@ -1471,23 +1471,23 @@ function inputFromQrString(string)
 	if (string[0] === "{" && string[string.length-1] === "}")
 	{ //生成的二维码
 		try{
-			let jo = JSON.parse(string);
-			if (typeof jo?.d == "object") {
+			let obj = JSON.parse(string);
+			if (typeof obj?.d == "object") { //PADDF的对象格式
 				re.type = "PADDF";
 				//re.message = "发现队伍数据 | Formation data founded";
-				re.url = ObjToUrl(jo);
+				re.url = ObjToUrl(obj);
 			}
-			else if (typeof jo?.team == "string" && jo.team[0] === "{" && jo.team[jo.team.length-1] === "}") {
+			else if (typeof obj?.team == "string" && obj.team[0] === "{" && obj.team[obj.team.length-1] === "}") { //PADDB的对象格式
 				re.type = "PADDB";
-				const newFotmation = paddbFotmationToPdfFotmation(jo);
+				const newFotmation = paddbFotmationToPdfFotmation(obj);
 				re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
 			}
 			else {
 				re.error = ERROR_No_formation_data;
 				//re.message = "无队伍数据 | No formation data";
 			}
-		}catch(e)
-		{
+		}catch(error){
+			console.error(error);
 			re.error = ERROR_illegal_JSON_format;
 			//re.message = "错误的 JSON 格式 | The illegal JSON format";
 		}
@@ -1495,21 +1495,22 @@ function inputFromQrString(string)
 	else if (/^(https?|file):\/\//i.test(string))
 	{ //网址二维码
 		let url = new URL(string);
-		if (url.searchParams.get('d'))
-		{
+		if (url.searchParams.get('d')) { //PADDF的网址格式
 			try{
-				let jo = {
+				let obj = {
 					d: JSON.parse(url.searchParams.get('d')),
 					s: url.searchParams.get('s'),
 				}
 				re.type = "PADDF";
 				//re.message = "发现队伍数据 | Formation data founded";
-				re.url = ObjToUrl(jo);
-			} catch(e) {
+				re.url = ObjToUrl(obj);
+			} catch(error) {
+				console.error(error);
 				re.error = ERROR_illegal_URL_format;
 				//re.message = "错误的 网址 格式 | The illegal URL format";
 			}
 		}
+		//PADDB 的网址格式，之后要调用脚本功能获取跨域JSON
 		else if(/^https?:\/\/paddb\.net\/team\/[a-f0-9]+/i.test(string)) {
 			re.type = "PADDB";
 			//re.message = "发现 PADDB 网址 | PADDB URL found";
@@ -1520,15 +1521,15 @@ function inputFromQrString(string)
 			const btnReadExternalLink = actionButtonBox.querySelector(".read-external-link");
 			if (btnReadExternalLink?.readExternalLink) {
 				const request = btnReadExternalLink.readExternalLink(string);
-				request.then(response=>{
-					try{
-						let jo = JSON.parse(response.response);
-						const newFotmation = paddbFotmationToPdfFotmation(jo);
-						re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
-					} catch(e) {
-						re.error = ERROR_illegal_JSON_format;
-					}
-				});
+				const response = await request;
+				try{
+					let obj = JSON.parse(response.response);
+					const newFotmation = paddbFotmationToPdfFotmation(obj);
+					re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
+				} catch(error) {
+					console.error(error);
+					re.error = ERROR_illegal_JSON_format;
+				}
 			} else {
 				re.error = ERROR_Unsupported_format;
 				re.message = localTranslating.link_read_message.need_user_script;
@@ -1640,9 +1641,36 @@ function pdcFotmationToPdfFotmation(inputString)
 	return f;
 }
 //解析PADDB的数据
-function paddbFotmationToPdfFotmation(inputString)
+function paddbFotmationToPdfFotmation(obj)
 {
-
+	const team = JSON.parse(obj.team);
+	console.log(team);
+	const f = new Formation(1, 6);
+	f.title = team.name;
+	f.detail = team.memo;
+	const t = f.teams[0];
+	//队伍徽章
+	t[2] = paddbBadgeMap.find(badge=>badge.paddb === team.badge).pdf;
+	const members = t[0], assists = t[1];
+	for (let i = 0; i< members.length; i++) {
+		const m = members[i], a = assists[i], dm = team.monsters[i], da = team.assists[i];
+		if (dm) {
+			m.id = dm.transform || dm.num;
+			m.level = dm.level;
+			m.plus = dm.plus.concat();
+			m.awoken = dm.awoken;
+			m.sawoken = dm.super_awoken - 2;
+			m.latent = dm.latent_awokens.map(paddbLatent=>paddbLatentMap.find(latent=>latent.paddb === paddbLatent)?.pdf ?? 0);
+			m.skilllevel = dm.active_skill_level;
+		}
+		if (da) {
+			a.id = da.num;
+			a.level = da.level;
+			a.plus = da.plus ? [99,99,99]:[0,0,0];
+			a.skilllevel = da.active_skill_level;
+		}
+	}
+	return f;
 }
 //截图
 function capture() {
@@ -1834,9 +1862,9 @@ function initialize() {
 		qrReadBox.info.newLink.href = url;
 		qrReadBox.info.newLink.textContent = urlName;
 	}
-	qrReadBox.readString.onclick = function()
+	qrReadBox.readString.onclick = async function()
 	{
-		let inputResult = inputFromQrString(qrReadBox.qrStr.value);
+		let inputResult = await inputFromQrString(qrReadBox.qrStr.value);
 		let lrm = localTranslating.link_read_message;
 		let message;
 		if (inputResult.message) {

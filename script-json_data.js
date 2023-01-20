@@ -575,6 +575,81 @@ const pdcLatentMap = [
 	{pdf:48,pdc:55}, //L解禁武器
 	{pdf:48,pdc:56}, //L解禁武器 ×1.8
 ];
+//paddb的徽章对应数字
+const paddbBadgeMap = [
+	{pdf:undefined,paddb:0}, //什么都没有
+	{pdf:1,paddb:1}, //无限cost
+	{pdf:2,paddb:2}, //小手指
+	{pdf:3,paddb:3}, //全体攻击
+	{pdf:4,paddb:4}, //小回复
+	{pdf:5,paddb:5}, //小血量
+	{pdf:6,paddb:6}, //小攻击
+	{pdf:7,paddb:7}, //SB
+	{pdf:8,paddb:8}, //队长防封
+	{pdf:9,paddb:9}, //SX
+	{pdf:11,paddb:14}, //无天降
+	{pdf:17,paddb:10}, //大回复
+	{pdf:18,paddb:11}, //大血量
+	{pdf:19,paddb:12}, //大攻击
+	{pdf:20,paddb:null}, //三维
+	{pdf:21,paddb:13}, //大手指
+	{pdf:10,paddb:18}, //加经验
+	{pdf:12,paddb:15}, //墨镜
+	{pdf:13,paddb:16}, //防废
+	{pdf:14,paddb:17}, //防毒
+	{pdf:129,paddb:19}, //月卡
+];
+//paddb的潜觉对应数字
+const paddbLatentMap = [
+	{pdf:1,paddb:13}, //HP
+	{pdf:2,paddb:14}, //攻击
+	{pdf:3,paddb:15}, //回复
+	{pdf:4,paddb:16}, //手指
+	{pdf:5,paddb:17}, //自回
+	{pdf:6,paddb:19}, //火盾
+	{pdf:7,paddb:20}, //水盾
+	{pdf:8,paddb:21}, //木盾
+	{pdf:9,paddb:22}, //光盾
+	{pdf:10,paddb:23}, //暗盾
+	{pdf:11,paddb:18}, //防坐
+	{pdf:12,paddb:27}, //三维
+	{pdf:13,paddb:38}, //不被换队长
+	{pdf:14,paddb:37}, //不掉废
+	{pdf:15,paddb:36}, //不掉毒
+	{pdf:16,paddb:12}, //进化杀
+	{pdf:17,paddb:9}, //觉醒杀
+	{pdf:18,paddb:10}, //强化杀
+	{pdf:19,paddb:11}, //卖钱杀
+	{pdf:20,paddb:2}, //神杀
+	{pdf:21,paddb:1}, //龙杀
+	{pdf:22,paddb:3}, //恶魔杀
+	{pdf:23,paddb:4}, //机械杀
+	{pdf:24,paddb:8}, //平衡杀
+	{pdf:25,paddb:5}, //攻击杀
+	{pdf:26,paddb:6}, //体力杀
+	{pdf:27,paddb:7}, //回复杀
+	{pdf:28,paddb:24}, //大HP
+	{pdf:29,paddb:25}, //大攻击
+	{pdf:30,paddb:26}, //大回复
+	{pdf:31,paddb:33}, //大手指
+	{pdf:32,paddb:28}, //大火盾
+	{pdf:33,paddb:29}, //大水盾
+	{pdf:34,paddb:30}, //大木盾
+	{pdf:35,paddb:31}, //大光盾
+	{pdf:36,paddb:32}, //大暗盾
+	{pdf:37,paddb:35}, //6色破无效
+	{pdf:38,paddb:34}, //3色破属吸
+	{pdf:39,paddb:41}, //C珠破吸
+	{pdf:40,paddb:40}, //心横解转转
+	{pdf:41,paddb:39}, //U解禁消
+	{pdf:42,paddb:42}, //伤害上限解除
+	{pdf:43,paddb:43}, //HP++
+	{pdf:44,paddb:44}, //攻击++
+	{pdf:45,paddb:45}, //回复++
+	{pdf:46,paddb:46}, //心追解云封
+	{pdf:47,paddb:47}, //心L大SB
+	{pdf:48,paddb:48}, //L解禁武器
+];
 //排序程序列表
 const sort_function_list = [
 	{tag:"sort_none",name:"无",function:()=>0},
