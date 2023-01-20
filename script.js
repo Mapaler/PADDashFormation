@@ -2544,7 +2544,7 @@ function initialize() {
 		if ((dataTo[0] !== dataFrom[0]) ||
 			(dataTo[1] !== dataFrom[1]) ||
 			(dataTo[2] !== dataFrom[2])) { //必须有所不同才继续交换
-			interchangeCard(dataFrom, dataTo, !event.ctrlKey);
+			interchangeCard(dataFrom, dataTo, event.ctrlKey);
 		}
 		return false; //没有false将会打开链接
 	}
