@@ -8323,19 +8323,19 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"ad9cfd33c5ca62016709fa33e8694e2a"
+		"3907edd11fce9ead16e4fdd303a527b4"
 	],
 	[
 		"monsters-info/mon_en.json",
-		"f64cc6686e5a9933a91c79ee24546f3e"
+		"343e68b54e1b5d811429937a0e76da4a"
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"6096c67d1837698ca2d5d2bab83c4971"
+		"0b7f14388e4a6f78e246038721b45400"
 	],
 	[
 		"monsters-info/mon_ko.json",
-		"6fd31517961c8bab419114650e0a29f8"
+		"738073ee7d6ce1a28fb3a3be42a9e01b"
 	],
 	[
 		"monsters-info/skill_en.json",
