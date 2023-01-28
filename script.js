@@ -26,6 +26,8 @@ const className_displayNone = "display-none";
 const dataAttrName = "data-value"; //用于储存默认数据的属性名
 const isGuideMod = !unsupportFeatures.length && Boolean(Number(getQueryString("guide"))); //是否以图鉴模式启动
 const PAD_PASS_BADGE = 1<<7 | 1; //月卡徽章编号，129
+//用油猴扩展装上，把GM_xmlhttpRequest引入的脚本
+const ExternalLinkScriptURL = "https://greasyfork.org/scripts/458521";
 
 if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
@@ -1425,7 +1427,7 @@ function creatNewUrl(arg) {
 	}
 }
 
-function ObjToUrl(obj)
+function qrObjToUrl(obj)
 {
 	let fileName;
 	switch (obj.d.f.length)
@@ -1445,6 +1447,7 @@ function ObjToUrl(obj)
 	}
 	const newUrl = new URL(fileName, location);
 	newUrl.searchParams.set("d",JSON.stringify(obj.d));
+	//数据服版本
 	if (!obj.s || obj.s == "ja")
 	{
 		newUrl.searchParams.delete("s");
@@ -1452,10 +1455,16 @@ function ObjToUrl(obj)
 	{
 		newUrl.searchParams.set("s", obj.s);
 	}
+	//保持当前的语言
 	let l = getQueryString("l");
 	if (l)
 	{
 		newUrl.searchParams.set("l", l);
+	}
+	//数据服版本
+	if (obj.paddbId)
+	{
+		newUrl.searchParams.set("_id", obj.paddbId);
 	}
 	return newUrl;
 }
@@ -1467,7 +1476,7 @@ async function inputFromQrString(string)
 		  ERROR_No_formation_data = 2,
 		  ERROR_illegal_JSON_format = 3,
 		  ERROR_illegal_URL_format = 4;
-	//code 1~99 为各种编码
+	//JSON 类
 	if (string[0] === "{" && string[string.length-1] === "}")
 	{ //生成的二维码
 		try{
@@ -1475,12 +1484,14 @@ async function inputFromQrString(string)
 			if (typeof obj?.d == "object") { //PADDF的对象格式
 				re.type = "PADDF";
 				//re.message = "发现队伍数据 | Formation data founded";
-				re.url = ObjToUrl(obj);
+				re.url = qrObjToUrl(obj);
 			}
 			else if (typeof obj?.team == "string" && obj.team[0] === "{" && obj.team[obj.team.length-1] === "}") { //PADDB的对象格式
 				re.type = "PADDB";
 				const newFotmation = paddbFotmationToPdfFotmation(obj);
-				re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
+				const qrObj = newFotmation.getPdfQrObj(false);
+				qrObj.paddbId = obj._id;
+				re.url = qrObjToUrl(qrObj);
 			}
 			else {
 				re.error = ERROR_No_formation_data;
@@ -1492,6 +1503,7 @@ async function inputFromQrString(string)
 			//re.message = "错误的 JSON 格式 | The illegal JSON format";
 		}
 	}
+	//URL 类
 	else if (/^(https?|file):\/\//i.test(string))
 	{ //网址二维码
 		let url = new URL(string);
@@ -1503,7 +1515,7 @@ async function inputFromQrString(string)
 				}
 				re.type = "PADDF";
 				//re.message = "发现队伍数据 | Formation data founded";
-				re.url = ObjToUrl(obj);
+				re.url = qrObjToUrl(obj);
 			} catch(error) {
 				console.error(error);
 				re.error = ERROR_illegal_URL_format;
@@ -1516,16 +1528,18 @@ async function inputFromQrString(string)
 			//re.message = "发现 PADDB 网址 | PADDB URL found";
 			const qrDialog = document.querySelector("#qr-code-frame");
 			const actionButtonBox = qrDialog.querySelector(".action-button-box");
-			//const txtStringInput = actionButtonBox.querySelector(".string-input"); //输入的字符串
+			const txtStringInput = actionButtonBox.querySelector(".string-input"); //输入的字符串
 			//const btnReadString = actionButtonBox.querySelector(".read-string"); //读取字符串按钮
 			const btnReadExternalLink = actionButtonBox.querySelector(".read-external-link");
 			if (btnReadExternalLink?.readExternalLink) {
 				const request = btnReadExternalLink.readExternalLink(string);
 				const response = await request;
 				try{
-					let obj = JSON.parse(response.response);
+					let obj = JSON.parse(txtStringInput.value = response.response);
 					const newFotmation = paddbFotmationToPdfFotmation(obj);
-					re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
+					const qrObj = newFotmation.getPdfQrObj(false);
+					qrObj.paddbId = obj._id;
+					re.url = qrObjToUrl(qrObj);
 				} catch(error) {
 					console.error(error);
 					re.error = ERROR_illegal_JSON_format;
@@ -1533,7 +1547,7 @@ async function inputFromQrString(string)
 			} else {
 				re.error = ERROR_Unsupported_format;
 				re.message = localTranslating.link_read_message.need_user_script;
-				re.url = "https://greasyfork.org/scripts/458521";
+				re.url = ExternalLinkScriptURL;
 				re.urlName = localTranslating.link_read_message.user_script_link;
 			}
 		}
@@ -1542,19 +1556,61 @@ async function inputFromQrString(string)
 			//re.message = "无队伍数据 | No formation data";
 		}
 	}
+	//PDC
 	else if(/^\d[\d\-\w,\]}]+}/.test(string))
-	{ //PDC
+	{
 		re.type = "PDC";
 		//re.message = "发现 PDC 格式 | PDC format found";
 		const newFotmation = pdcFotmationToPdfFotmation(string);
-		re.url = ObjToUrl(newFotmation.getPdfQrObj(false));
+		re.url = qrObjToUrl(newFotmation.getPdfQrObj(false));
 	}
+	// //快速输入类，仅为评估支持
+	// else if(/^>\s\d+(?:|\d+)?(?:,\s*\d+(?:|\d+)?)*\s*$/.test(string))
+	// {
+	// 	re.type = "FastInput";
+	// 	const newFotmation = FastInputToPdfFotmation(string);
+	// 	re.url = qrObjToUrl(newFotmation.getPdfQrObj(false));
+	// }
 	else
 	{
 		re.error = ERROR_Unsupported_format;
 		//re.message = "不支持的格式 | Unsupported format";
 	}
 	return re;
+	// //解析PADDB的数据
+	// function FastInputToPdfFotmation(string)
+	// {
+	// 	let str = string.replace(/^>\s/,'');
+	// 	let teams = str.split(/\s*,\s*/);
+	// 	const team = JSON.parse(obj.team);
+	// 	console.log(team);
+	// 	const f = new Formation(1, 6);
+	// 	f.title = team.name;
+	// 	f.detail = team.memo;
+	// 	const t = f.teams[0];
+	// 	//队伍徽章
+	// 	t[2] = paddbBadgeMap.find(badge=>badge.paddb === team.badge).pdf;
+	// 	const members = t[0], assists = t[1];
+	// 	for (let i = 0; i< members.length; i++) {
+	// 		const m = members[i], a = assists[i], dm = team.monsters[i], da = team.assists[i];
+	// 		if (dm) {
+	// 			m.id = dm.transform || dm.num;
+	// 			m.level = dm.level;
+	// 			m.plus = dm.plus.concat();
+	// 			m.awoken = dm.awoken;
+	// 			m.sawoken = dm.super_awoken - 2;
+	// 			m.latent = dm.latent_awokens.map(paddbLatent=>paddbLatentMap.find(latent=>latent.paddb === paddbLatent)?.pdf ?? 0);
+	// 			m.skilllevel = dm.active_skill_level;
+	// 		}
+	// 		if (da) {
+	// 			a.id = da.num;
+	// 			a.level = da.level;
+	// 			a.plus = da.plus ? [99,99,99]:[0,0,0];
+	// 			a.skilllevel = da.active_skill_level;
+	// 		}
+	// 	}
+	// 	return f;
+	// }
 }
 
 //解析PDC的数据
@@ -1852,7 +1908,6 @@ function initialize() {
 	qrReadBox.sourceSelect = qrReadBox.querySelector("#sourceSelect");
 	qrReadBox.qrStr = qrReadBox.querySelector(".string-input");
 	qrReadBox.info.show = function(message, code = 0, error = false, url="", urlName="") {
-		
 		qrReadBox.info.message.innerHTML = '';
 		qrReadBox.info.message.append(message);
 		qrReadBox.info.code.textContent = code;
@@ -2076,6 +2131,16 @@ function initialize() {
 			console.error(err)
 		});
 	}
+
+	const paddbTeamEdit = qrContent.querySelector(".paddb-team-edit");
+	//paddb的用户名和密码
+	const paddbUsername = paddbTeamEdit.querySelector("#paddb-username");
+	const paddbPassword = paddbTeamEdit.querySelector("#paddb-password");
+	paddbUsername.value = localStorage.getItem(cfgPrefix + paddbUsername.id);
+	paddbPassword.value = localStorage.getItem(cfgPrefix + paddbPassword.id);
+	paddbUsername.onchange = paddbPassword.onchange = function(e){
+		if (e) localStorage.setItem(cfgPrefix + this.id, this.value);
+	}
 	
 	const playerDataFrame = document.body.querySelector("#player-data-frame");
 	const btnPlayerData = controlBox.querySelector(`.btn-player-data`);
@@ -2195,7 +2260,7 @@ function initialize() {
 				changeid(deck.members[idx]?.assist ?? {id: 0}, li.querySelector(".monster.assist"));
 			});
 			const newFotmation = deck.toFormation();
-			teamLink.href = ObjToUrl(newFotmation.getPdfQrObj(true));
+			teamLink.href = qrObjToUrl(newFotmation.getPdfQrObj(true));
 		}
 		return clone;
 	}

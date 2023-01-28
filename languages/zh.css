@@ -514,7 +514,7 @@ label[for="box-have"]::after
 }
 
 .control-box .btn-qrcode::before{
-	content: "\f029 二维码";
+	content: "\f029 二维码 和 \f0ec 数据交换";
 }
 
 .read-qr-box::before
@@ -555,6 +555,34 @@ label[for="sourceSelect"]::before
 #qr-code-frame .read-qr-file::before
 {
 	content: "\f1c5  读取二维码图片";
+}
+
+#qr-code-frame .paddb-team-edit::before
+{
+	content: "将队伍数据上传至 PADDB：";
+}
+label[for="paddb-username"]::before
+{
+	content: "PADDB 用户名：";
+}
+label[for="paddb-password"]::before
+{
+	content: "PADDB 密码：";
+}
+label[for="paddb-team-id"]::before
+{
+	content: "PADDB 队伍 ID：";
+}
+#paddb-save-or-upload-team::before
+{
+	content: "保存";
+}
+#paddb-team-id:placeholder-shown+#paddb-save-or-upload-team::before {
+	content: "上传新队伍";
+}
+body:not(.external-link-support) #external-support::before
+{
+	content: "\f552  安装辅助脚本以使用 PADDB 相关功能";
 }
 #qr-code-frame .read-external-link::before
 {

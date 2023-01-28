@@ -1813,7 +1813,7 @@ icon.inflicts::after
 .search-box .selected-awokens-div .selected-awokens{
 	min-height: 32px;
 	box-sizing: border-box;
-	width: calc(100% - 90px);
+	width: calc(100% - 95px);
 	min-width: 320px;
 	background-color: #00000044;
 	border-radius: 6px;
@@ -3345,11 +3345,26 @@ table .orb-icon
 		padding-bottom: 10px;
 }
 
-.read-qr-box::before,
-.save-qr-box::before
+#qr-code-frame .read-qr-box::before,
+#qr-code-frame .save-qr-box::before,
+#qr-code-frame .paddb-team-edit::before
 {
 	display: block;
 	text-align: left;
+}
+body:not(.solo.external-link-support) .paddb-team-edit{
+	/*没有装插件的不显示PADDB上传功能*/
+	display: none;
+}
+body.external-link-support #external-support{
+	/*装了插件的不显示请求装插件的消息*/
+	display: none;
+}
+#qr-code-frame #external-support {
+	float: right;
+}
+#paddb-team-id {
+	width: 200px;
 }
 
 .qr-data-type-ul .qr-data-type-radio

@@ -1167,6 +1167,7 @@ var formation = new Formation(teamsCount,6);
 	</svg>
 	<div id="qr-code-frame" class="mask display-none">
 		<button class="mask-close brown-button"></button>
+		<button id="external-support" class="brown-button"></button>
 		<div class="mask-content">
 			<div class="read-qr-box">
 				<div class="action-button-box">
@@ -1195,6 +1196,16 @@ var formation = new Formation(teamsCount,6);
 				<input class="string-output" type="text" readonly/>
 				<div class="qr-box"><img class="qr-code-image" /></div>
 				<a download="" class="save-qr-img brown-button"><!--保存QR 图片--></a>
+			</div>
+			<div class="paddb-team-edit">
+				<div class="user">
+					<label for="paddb-username"></label><input id="paddb-username" type="text" placeholder="ID (2~12)">
+					<label for="paddb-password"></label><input id="paddb-password" type="password" placeholder="password (4~20)">
+				</div>
+				<div class="action">
+					<label for="paddb-team-id"></label><input id="paddb-team-id" type="text" placeholder="Team ID">
+					<button id="paddb-save-or-upload-team" class="brown-button"></button>
+				</div>
 			</div>
 		</div>
 	</div>
