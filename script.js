@@ -1700,7 +1700,6 @@ function pdcFotmationToPdfFotmation(inputString)
 function paddbFotmationToPdfFotmation(obj)
 {
 	const team = JSON.parse(obj.team);
-	console.log(team);
 	const f = new Formation(1, 6);
 	f.title = team.name;
 	f.detail = team.memo;
