@@ -1,13 +1,12 @@
 ﻿const _localTranslating = {
 	webpage_title: `パズル＆ドラゴンズ${teamsCount}人のチーム図作成ツール`,
-	addition_display: "追加の表示",
 	title_blank: "入力タイトル",
 	detail_blank: "入力詳細",
 	force_reload_data: "データの強制更新",
 	request_input: tp`${'info'}を入力してください`,
 	link_read_message: {
 		success: tp`発見 ${'type'} 形式.`,
-		need_user_script: `PADDB はドメイン間であるため、この機能をサポートするには、ユーザー スクリプト マネージャ内にこのセカンダリ スクリプトをインストールする必要があります。`,
+		need_user_script: `PADDB はドメイン間であるため、この機能をサポートするには、ユーザー スクリプト マネージャ内にセカンダリ スクリプトをインストールする必要があります。`,
 		user_script_link: `スクリプトへのリンク`,
 		type: {
 			"PADDF": "PADDF",
@@ -15,11 +14,14 @@
 			"PADDB": "PADDB",
 		},
 		error: {
+			0: "不明なエラーです",
 			1: "サポートされていない形式。" ,
 			2: "チームデータがありません" ,
 			3: "間違った JSON 形式です。" ,
 			4: "間違った URL 形式です。 ",
-		}
+		},
+		paddb_success: `操作は成功`,
+		paddb_unauthorized: `認証に失敗しました (アカウントまたはパスワードが正しくありません)`,
 	},
 	sort_name:{
 		sort_none: "いいえ",

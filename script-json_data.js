@@ -21,7 +21,7 @@ let localTranslating = {
 	request_input: tp`Please Input ${'info'}`,
 	link_read_message: {
 		success: tp`Find the ${'type'} format.`,
-		need_user_script: `Because PADDB is cross-domain, you need to install this helper script within the User Script Manager to support this feature.`,
+		need_user_script: `Because PADDB is cross-domain, you need to install helper script within the User Script Manager to support this feature.`,
 		user_script_link: `Link to the helper script`,
 		type: {
 			"PADDF": "PADDF",
@@ -29,11 +29,14 @@ let localTranslating = {
 			"PADDB": "PADDB",
 		},
 		error: {
-			1: "Unsupported format.",
-			2: "No formation data.",
-			3: "The illegal JSON format.",
-			4: "The illegal URL format.",
-		}
+			0: "Unknown Error",
+			1: "Unsupported format",
+			2: "No formation data",
+			3: "The illegal JSON format",
+			4: "The illegal URL format",
+		},
+		paddb_success: `Sucess`,
+		paddb_unauthorized: `Certification Faild (ID or password is incorrect)`,
 	},
 	sort_name:{
 		sort_none: "Nope",

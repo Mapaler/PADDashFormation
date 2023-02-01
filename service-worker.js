@@ -387,7 +387,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_097.PNG",
-		"dca0c16718379a8ee2e43cfdad815e55"
+		"d2705248cbdb75314d5a9720b15c1133"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -3668,6 +3668,18 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv825.wav",
 		"21e944d995ae180c27851336b11dd34d"
+	],
+	[
+		"sound/voice/ja/padv826.wav",
+		"b0c1b0d91d54dc6ee8ccf2eea2ba0436"
+	],
+	[
+		"sound/voice/ja/padv827.wav",
+		"ee9a5c640125a2259c58b445db5b1bb0"
+	],
+	[
+		"sound/voice/ja/padv828.wav",
+		"eab765585155ab27b331075c629f2a02"
 	],
 	[
 		"images/cards_en/CARDS_001.PNG",
@@ -8051,7 +8063,7 @@ const cachesMap = new Map([
 	],
 	[
 		"browser-compatibility.js",
-		"1d3c87e415212a226eb81ed0de77e4ed"
+		"36903e3a30e841cc2d1c6dc413fc1143"
 	],
 	[
 		"index.html",
@@ -8059,7 +8071,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"2a9044e1ed123093a4b70d0b07164662"
+		"471ac44aef472aa0f1cfe3bf4fe6dd52"
 	],
 	[
 		"script-custom_elements.js",
@@ -8067,7 +8079,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"b92fe1f20c46fac4a0d446520c0fe521"
+		"bbb482f9cccec94a3fcce4c9109a8f0a"
 	],
 	[
 		"script-skill-parser.js",
@@ -8079,11 +8091,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"3eb1cffc7f05db75fce5cec377c4320a"
+		"afd1b8136c41a5dd3a9a0f062532196b"
 	],
 	[
 		"solo.html",
-		"9525defd39f2d93ab421200bb38638ac"
+		"f6c82f0d0bb00cf18cfb7f4d09639e8f"
 	],
 	[
 		"style-monsterimages.css",
@@ -8091,7 +8103,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"788f5e3725d3f02b5e79627f8f43cb26"
+		"80c278fc3294d8a9b4a00ccc6c555631"
 	],
 	[
 		"temp.js",
@@ -8099,11 +8111,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"fe7bb80b2f946a477a12b446ab265c5a"
+		"ffa058b5503450f9a9d8e30893050a85"
 	],
 	[
 		"languages/en.css",
-		"01a71b977730cf42b84b0274d9bf8186"
+		"0e307553e3be48fb29de5bce6924d023"
 	],
 	[
 		"languages/en.js",
@@ -8111,19 +8123,19 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"25b3cc9706399d8d0465bae3e1706a9d"
+		"db33a415d46db7374fd515446de29ddb"
 	],
 	[
 		"languages/ja.js",
-		"2021d7816a1e93a61c13681f919ae516"
+		"af299de66ed04a21158ee6e8598659fa"
 	],
 	[
 		"languages/ko.css",
-		"019d037cd2d06e4fa4bc13ea247bd34b"
+		"c92fabeca91f3e045ba11c77795f04fd"
 	],
 	[
 		"languages/ko.js",
-		"431a22bfe0a1c1da77a12445ab278a6d"
+		"1b44d13355077fcf8a032d82a3056c22"
 	],
 	[
 		"languages/language-list.js",
@@ -8139,19 +8151,19 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.css",
-		"fb8476fc546ffb285f2f16a7f90f0fab"
+		"23387b734f568a2b37381d4f62d0b820"
 	],
 	[
 		"languages/zh-TW.js",
-		"cdfdc37822c99ce8ed1cf5317c0e6381"
+		"4ffa03c49bc1541ea99ce236c4d8c7ee"
 	],
 	[
 		"languages/zh.css",
-		"0cc3ab916b3f45139138c7712a2e2096"
+		"a81d9fa1cad525c2825535661ecb7536"
 	],
 	[
 		"languages/zh.js",
-		"c07e6af7ed7109dbea79526b6cd4ec77"
+		"23f5c84f17523c730c68cd2f9ab5c63b"
 	],
 	[
 		"images/attrs.png",
@@ -8323,7 +8335,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"3907edd11fce9ead16e4fdd303a527b4"
+		"4f444c434a51a580963939d3898fafa3"
 	],
 	[
 		"monsters-info/mon_en.json",
@@ -8331,7 +8343,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"0b7f14388e4a6f78e246038721b45400"
+		"b57685b43d7a3bdb3a7f8bd4c04f7871"
 	],
 	[
 		"monsters-info/mon_ko.json",
@@ -8339,11 +8351,11 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/skill_en.json",
-		"486d6a5a49f8cac5b34f78e5b2b1c3af"
+		"9f7dd0a1ac30289521a129cbd7e8af5f"
 	],
 	[
 		"monsters-info/skill_ja.json",
-		"08ef15d3be53fa316536731812d15b8e"
+		"e0582f2b94142d3a877ad148e36e74e6"
 	],
 	[
 		"monsters-info/skill_ko.json",
@@ -8355,7 +8367,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/index.html",
-		"31e760f0569061597832fc91187f2d9f"
+		"b76648dd229ac25cfe97e670cf925ba9"
 	],
 	[
 		"doc/images/player-bind-box.webp",
@@ -8572,6 +8584,30 @@ const cachesMap = new Map([
 	[
 		"doc/images/tips-interchangeCard.png",
 		"42a5d7f2361970fe16b750b92ab6a3c1"
+	],
+	[
+		"doc/images/tips-paddb-copy-team-link.png",
+		"d9c9be2f49032d4aff7cc3bb9c79ceaa"
+	],
+	[
+		"doc/images/tips-paddb-install-script.webp",
+		"12908c73da4051b026d699af5b0f0bca"
+	],
+	[
+		"doc/images/tips-paddb-read-link.png",
+		"97302425016c0371d1dff061e47d744a"
+	],
+	[
+		"doc/images/tips-paddb-search-team-in-paddb.png",
+		"669d0f5c6e56496dcaef020128869b41"
+	],
+	[
+		"doc/images/tips-paddb-upload-region.png",
+		"18f4a144fe56b1b5ff260ee530add7e9"
+	],
+	[
+		"doc/images/tips-paddb-upload-team-in-paddb.png",
+		"263b69acc202b11ea01cbfa307a90716"
 	],
 	[
 		"doc/images/tips-qr-found.png",

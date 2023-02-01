@@ -3360,11 +3360,8 @@ body.external-link-support #external-support{
 	/*装了插件的不显示请求装插件的消息*/
 	display: none;
 }
-#qr-code-frame #external-support {
-	float: right;
-}
 #paddb-team-id {
-	width: 200px;
+	width: 350px;
 }
 
 .qr-data-type-ul .qr-data-type-radio

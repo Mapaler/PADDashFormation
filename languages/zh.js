@@ -6,7 +6,7 @@
 	request_input: tp`请输入${'info'}`,
 	link_read_message: {
 		success: tp`发现 ${'type'} 格式。`,
-		need_user_script: `由于 PADDB 跨域，您需要在用户脚本管理器内安装此辅助脚本以支持此功能。`,
+		need_user_script: `由于 PADDB 跨域，您需要在用户脚本管理器内安装辅助脚本以支持此功能。`,
 		user_script_link: `辅助脚本的链接`,
 		type: {
 			"PADDF": "智龙急速阵型",
@@ -14,11 +14,14 @@
 			"PADDB": "PADDB",
 		},
 		error: {
-			1: "不支持的格式。",
-			2: "无队伍数据。",
-			3: "错误的 JSON 格式。",
-			4: "错误的 网址 格式。",
-		}
+			0: "未知错误",
+			1: "不支持的格式",
+			2: "无队伍数据",
+			3: "错误的 JSON 格式",
+			4: "错误的 网址 格式",
+		},
+		paddb_success: `操作成功`,
+		paddb_unauthorized: `认证失败（账号或密码错误）`,
 	},
 	sort_name:{
 		sort_none: "无",

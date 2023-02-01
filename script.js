@@ -28,6 +28,7 @@ const isGuideMod = !unsupportFeatures.length && Boolean(Number(getQueryString("g
 const PAD_PASS_BADGE = 1<<7 | 1; //月卡徽章编号，129
 //用油猴扩展装上，把GM_xmlhttpRequest引入的脚本
 const ExternalLinkScriptURL = "https://greasyfork.org/scripts/458521";
+const paddbPathPrefix = "/team/"; //PADDB的获取队伍网址格式
 
 if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
@@ -538,14 +539,77 @@ Formation.prototype.getPdcQrStr = function()
 	outArr = outArr.concat(pdcTeamsStr);
 	return outArr.join(']');
 }
+Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
+{
+	//PADDB目前只支持单人队伍
+	const t = this.teams[0];
+	let teamObj = {
+		name: this.title,
+		badge: paddbBadgeMap.find(badge=>badge.pdf === t[2]).paddb,
+		memo: this.detail,
+		monsters: {},
+		assists: {},
+	}
+	//返回一个变身角色的变身根ID
+	function returnHenshinRootId(mid)
+	{
+		const m = Cards[mid];
+		if (Array.isArray(m.henshinFrom) && m.henshinFrom[0] < m.id)
+		{ //只有变身来源小于目前id的，才继续找base
+			mid = returnHenshinRootId(m.henshinFrom[0]);
+		}
+		return mid;
+	}
+	for (let i = 0; i < t[0].length; i++) {
+		const m = t[0][i], a = t[1][i];
+		//计算基底的变身情况
+		let num = m.id, transform = null;
+		if (m.card?.henshinFrom?.length > 0 //是变身
+			&& m.level <= m.card.maxLevel //等级不超过99
+		) {
+			transform = m.id;
+			num = returnHenshinRootId(m.id);
+		}
+		teamObj.monsters[i] = m.id <= 0 ? null : {
+			num: num,
+			level: m.level,
+			awoken: m.awoken,
+			plus: m.plus.concat(),
+			active_skill_level: m.skilllevel ?? Skills[m.card.activeSkillId].maxLevel,
+			transform: transform,
+			super_awoken: m.sawoken + 2,
+			latent_awokens: m.latent.map(n=>paddbLatentMap.find(latent=>latent.pdf === n).paddb),
+		};
+		teamObj.assists[i] = a.id <= 0 ? null : {
+			num: a.id,
+			level: a.level,
+			plus: a.plus.every(n=>n>=99), //只需要true和false
+			active_skill_level: a.skilllevel ?? Skills[a.card.activeSkillId].maxLevel,
+		};
+	}
+	let qrObj = {
+		// userId:"",
+		// password:"",
+		name: this.title,
+		// "tags":[""],
+		mons: t[0].concat(t[1]).map(m=>m.id > 0 ? m.id : ""),
+		team: JSON.stringify(teamObj),
+	};
+	return qrObj;
+}
 Formation.prototype.getQrStr = function(type)
 {
-	if (type == 'pdf' || type == 0)
-	{
-		return JSON.stringify(this.getPdfQrObj());
-	}else
-	{
-		return this.getPdcQrStr();
+	switch (type) {
+		case 'paddf': {
+			return JSON.stringify(this.getPdfQrObj());
+		}
+		case 'paddb': {
+			return JSON.stringify(this.getPaddbQrObj());
+		}
+		case 'pdc':
+		default: {
+			return this.getPdcQrStr();
+		}
 	}
 }
 Formation.prototype.removeAssist = function() {
@@ -555,7 +619,7 @@ Formation.prototype.removeAssist = function() {
 			assists[i] = new MemberAssist();
 		}
 	});
-	creatNewUrl();
+	createNewUrl();
 	refreshAll(formation);
 }
 
@@ -744,6 +808,7 @@ class EvoTree
 		this.parent = parent;
 		if (parent == null) //如果没有提供父级，则寻找进化根
 		{
+			//返回一个角色的根ID
 			function returnRootId(mid)
 			{
 				mid = Cards[mid].evoRootId;
@@ -972,6 +1037,7 @@ function clearData()
 	const locationURL = new URL(location);
 	locationURL.searchParams.delete('d'); //删除数据
 	locationURL.searchParams.delete('l'); //删除语言
+	locationURL.searchParams.delete('_id'); //删除PADDB的ID
 	location = locationURL.toString();
 }
 //轮换ABC队伍
@@ -979,7 +1045,7 @@ function swapABCteam()
 {
 	if (formation.teams.length > 1) {
 		formation.teams.push(formation.teams.splice(0, 1)[0]); //将队伍1移动到最后
-		creatNewUrl();
+		createNewUrl();
 		refreshAll(formation);
 	}
 }
@@ -1016,7 +1082,7 @@ function henshinStep(step)
 		});
 	});
 	
-	creatNewUrl();
+	createNewUrl();
 	refreshAll(formation);
 }
 //在单人和多人之间转移数据
@@ -1066,7 +1132,7 @@ function turnPage(toPage, e = null) {
 			pagename = "triple.html";
 			break;
 	}
-	const newURL = creatNewUrl({ url: pagename, notPushState: true });
+	const newURL = createNewUrl({ url: pagename, notPushState: true });
 	if (e && e.ctrlKey) {
 		window.open(newURL);
 	} else {
@@ -1346,6 +1412,12 @@ function reloadFormationData(event) {
 		}
 	}
 	formation.loadObj(formationData);
+
+	const _id = getQueryString("_id");
+	if (_id) {
+		const paddbTeamId = document.querySelector("#paddb-team-id");
+		paddbTeamId.value = `https://paddb.net/team/${_id}`;
+	}
 	
 	//编辑模式直接打开编辑框
 	let editingTarget = ((str)=>{
@@ -1399,11 +1471,12 @@ function reloadFormationData(event) {
 }
 window.addEventListener('popstate',reloadFormationData); //前进后退时修改页面
 //创建新的分享地址
-function creatNewUrl(arg) {
+function createNewUrl(arg) {
 	if (arg == undefined) arg = {};
-	if (!!(window.history && history.pushState)) { // 支持History API
+	if (window.history?.pushState) { // 支持History API
 		const language_i18n = arg.language || getQueryString(["l","lang"]); //获取参数指定的语言
 		const datasource = arg.datasource || getQueryString("s");
+		const _id = arg._id || getQueryString("_id");
 		const outObj = formation.outObj();
 
 		const newSearch = new URLSearchParams();
@@ -1416,6 +1489,7 @@ function creatNewUrl(arg) {
 			const dataJsonStr = JSON.stringify(outObj); //数据部分的字符串
 			newSearch.set("d", dataJsonStr);
 		}
+		if (_id) newSearch.set("_id", _id);
 
 		const newUrl = (arg.url || "") + (newSearch.toString().length > 0 ? '?' + newSearch.toString() : "");
 
@@ -1476,6 +1550,12 @@ async function inputFromQrString(string)
 		  ERROR_No_formation_data = 2,
 		  ERROR_illegal_JSON_format = 3,
 		  ERROR_illegal_URL_format = 4;
+	function paddbObjToURL(obj) {
+		const newFotmation = paddbFotmationToPdfFotmation(obj);
+		const qrObj = newFotmation.getPdfQrObj(false);
+		qrObj.paddbId = obj._id;
+		return qrObjToUrl(qrObj);
+	}
 	//JSON 类
 	if (string[0] === "{" && string[string.length-1] === "}")
 	{ //生成的二维码
@@ -1488,10 +1568,7 @@ async function inputFromQrString(string)
 			}
 			else if (typeof obj?.team == "string" && obj.team[0] === "{" && obj.team[obj.team.length-1] === "}") { //PADDB的对象格式
 				re.type = "PADDB";
-				const newFotmation = paddbFotmationToPdfFotmation(obj);
-				const qrObj = newFotmation.getPdfQrObj(false);
-				qrObj.paddbId = obj._id;
-				re.url = qrObjToUrl(qrObj);
+				re.url = paddbObjToURL(obj)
 			}
 			else {
 				re.error = ERROR_No_formation_data;
@@ -1523,23 +1600,29 @@ async function inputFromQrString(string)
 			}
 		}
 		//PADDB 的网址格式，之后要调用脚本功能获取跨域JSON
-		else if(/^https?:\/\/paddb\.net\/team\/[a-f0-9]+/i.test(string)) {
+		else if(url.host == "paddb.net" && url.pathname.startsWith(paddbPathPrefix)) {
+			const teamId = url.pathname.substring(url.pathname.indexOf(paddbPathPrefix) + paddbPathPrefix.length);
 			re.type = "PADDB";
 			//re.message = "发现 PADDB 网址 | PADDB URL found";
-			const qrDialog = document.querySelector("#qr-code-frame");
-			const actionButtonBox = qrDialog.querySelector(".action-button-box");
-			const txtStringInput = actionButtonBox.querySelector(".string-input"); //输入的字符串
-			//const btnReadString = actionButtonBox.querySelector(".read-string"); //读取字符串按钮
-			const btnReadExternalLink = actionButtonBox.querySelector(".read-external-link");
-			if (btnReadExternalLink?.readExternalLink) {
-				const request = btnReadExternalLink.readExternalLink(string);
-				const response = await request;
+			const txtStringInput = document.body.querySelector("#qr-code-frame .action-button-box .string-input"); //输入的字符串
+			const btnExternalSupport = document.body.querySelector("#external-support");
+			if (btnExternalSupport?.asyncGM_xmlhttpRequest) {
+				let postBody = JSON.stringify({id: teamId});
+				const options = {
+					method: "POST",
+					url: "https://api2.paddb.net/getTeam",
+					data: postBody,
+					headers: {
+						"Content-Type": "application/json",
+						"User-Agent": "okhttp/4.9.2",
+						//如果只有ascii字符可以用postBody.length
+						"Content-Length": new Blob([postBody], {type: "application/json"}).size,
+					}
+				};
+				const response = await btnExternalSupport.asyncGM_xmlhttpRequest(options);
 				try{
 					let obj = JSON.parse(txtStringInput.value = response.response);
-					const newFotmation = paddbFotmationToPdfFotmation(obj);
-					const qrObj = newFotmation.getPdfQrObj(false);
-					qrObj.paddbId = obj._id;
-					re.url = qrObjToUrl(qrObj);
+					re.url = paddbObjToURL(obj)
 				} catch(error) {
 					console.error(error);
 					re.error = ERROR_illegal_JSON_format;
@@ -1577,40 +1660,6 @@ async function inputFromQrString(string)
 		//re.message = "不支持的格式 | Unsupported format";
 	}
 	return re;
-	// //解析PADDB的数据
-	// function FastInputToPdfFotmation(string)
-	// {
-	// 	let str = string.replace(/^>\s/,'');
-	// 	let teams = str.split(/\s*,\s*/);
-	// 	const team = JSON.parse(obj.team);
-	// 	console.log(team);
-	// 	const f = new Formation(1, 6);
-	// 	f.title = team.name;
-	// 	f.detail = team.memo;
-	// 	const t = f.teams[0];
-	// 	//队伍徽章
-	// 	t[2] = paddbBadgeMap.find(badge=>badge.paddb === team.badge).pdf;
-	// 	const members = t[0], assists = t[1];
-	// 	for (let i = 0; i< members.length; i++) {
-	// 		const m = members[i], a = assists[i], dm = team.monsters[i], da = team.assists[i];
-	// 		if (dm) {
-	// 			m.id = dm.transform || dm.num;
-	// 			m.level = dm.level;
-	// 			m.plus = dm.plus.concat();
-	// 			m.awoken = dm.awoken;
-	// 			m.sawoken = dm.super_awoken - 2;
-	// 			m.latent = dm.latent_awokens.map(paddbLatent=>paddbLatentMap.find(latent=>latent.paddb === paddbLatent)?.pdf ?? 0);
-	// 			m.skilllevel = dm.active_skill_level;
-	// 		}
-	// 		if (da) {
-	// 			a.id = da.num;
-	// 			a.level = da.level;
-	// 			a.plus = da.plus ? [99,99,99]:[0,0,0];
-	// 			a.skilllevel = da.active_skill_level;
-	// 		}
-	// 	}
-	// 	return f;
-	// }
 }
 
 //解析PDC的数据
@@ -1713,7 +1762,9 @@ function paddbFotmationToPdfFotmation(obj)
 			m.id = dm.transform || dm.num;
 			m.level = dm.level;
 			m.plus = dm.plus.concat();
-			m.awoken = dm.awoken;
+			m.awoken = (dm.transform && dm.transform !== dm.numdm) //有变身状态时
+						? Cards[dm.transform].awakenings.length //变身后的觉醒全满
+						: dm.awoken;
 			m.sawoken = dm.super_awoken - 2;
 			m.latent = dm.latent_awokens.map(paddbLatent=>paddbLatentMap.find(latent=>latent.paddb === paddbLatent)?.pdf ?? 0);
 			m.skilllevel = dm.active_skill_level;
@@ -1721,6 +1772,7 @@ function paddbFotmationToPdfFotmation(obj)
 		if (da) {
 			a.id = da.num;
 			a.level = da.level;
+			a.awoken = Cards[da.num].awakenings.length;
 			a.plus = da.plus ? [99,99,99]:[0,0,0];
 			a.skilllevel = da.active_skill_level;
 		}
@@ -1918,7 +1970,10 @@ function initialize() {
 	}
 	qrReadBox.readString.onclick = async function()
 	{
+		if (qrReadBox.qrStr.value.length === 0) return;
+		this.disabled = true;
 		let inputResult = await inputFromQrString(qrReadBox.qrStr.value);
+		this.disabled = false;
 		let lrm = localTranslating.link_read_message;
 		let message;
 		if (inputResult.message) {
@@ -1936,7 +1991,7 @@ function initialize() {
 			Boolean(inputResult.error),
 			inputResult.url,
 			inputResult.urlName
-		)
+		);
 	}
 
 	qrSaveBox.qrImage = qrSaveBox.querySelector(".qr-code-image");
@@ -2131,6 +2186,9 @@ function initialize() {
 		});
 	}
 
+	const btnExternalSupport = qrCodeFrame.querySelector("#external-support");
+	btnExternalSupport.href = ExternalLinkScriptURL;
+
 	const paddbTeamEdit = qrContent.querySelector(".paddb-team-edit");
 	//paddb的用户名和密码
 	const paddbUsername = paddbTeamEdit.querySelector("#paddb-username");
@@ -2139,6 +2197,56 @@ function initialize() {
 	paddbPassword.value = localStorage.getItem(cfgPrefix + paddbPassword.id);
 	paddbUsername.onchange = paddbPassword.onchange = function(e){
 		if (e) localStorage.setItem(cfgPrefix + this.id, this.value);
+	}
+	const paddbTeamId = document.querySelector("#paddb-team-id");
+	paddbTeamId.onchange = function(){
+		try {
+			let str = this.value;
+			const teamId = str.substring(str.indexOf(paddbPathPrefix) + paddbPathPrefix.length);
+			createNewUrl({_id:teamId});
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	const paddbSaveOrUpload = document.querySelector("#paddb-save-or-upload-team");
+	paddbSaveOrUpload.onclick = async function(){
+		this.disabled = true;
+		const btnExternalSupport = document.body.querySelector("#external-support");
+		if (!btnExternalSupport?.asyncGM_xmlhttpRequest) {
+			alert(localTranslating.link_read_message.need_user_script);
+			return;
+		}
+		let obj = formation.getPaddbQrObj();
+		obj.userId = paddbUsername.value;
+		obj.password = paddbPassword.value;
+		obj.tags = [obj.userId];
+		let postBody = JSON.stringify(obj);
+		const options = {
+			method: "POST",
+			data: postBody,
+			headers: {
+				"Content-Type": "application/json",
+				"User-Agent": "okhttp/4.9.2",
+				//如果只有ascii字符可以用postBody.length
+				"Content-Length": new Blob([postBody], {type: "application/json"}).size,
+			}
+		};
+		const isNewUpload = paddbTeamId.value.length === 0;
+		if (isNewUpload) {
+			options.url = "https://api2.paddb.net/uploadTeam";
+		} else {
+			const teamId = paddbTeamId.value.substring(paddbTeamId.value.indexOf(paddbPathPrefix) + paddbPathPrefix.length);
+			options.url = `https://api2.paddb.net/editTeam/${teamId}`;
+		}
+		const response = await btnExternalSupport.asyncGM_xmlhttpRequest(options);
+		if (response.status === 401) {
+			alert(localTranslating.link_read_message.paddb_unauthorized);
+		} else if (response.status === 200)  {
+			alert(localTranslating.link_read_message.paddb_success);
+		} else {
+			alert(localTranslating.link_read_message.error[0]);
+		}
+		this.disabled = false;
 	}
 	
 	const playerDataFrame = document.body.querySelector("#player-data-frame");
@@ -2548,7 +2656,7 @@ function initialize() {
 		}
 		formation.title = txtTitle.value = richTextToCode(this).replaceAll('\n','');
 		formationBox.refreshDocumentTitle();
-		creatNewUrl();
+		createNewUrl();
 	}
 	txtDetailDisplay.onblur = function(){
 		//没有内容或者只有一个换行时，清空内容
@@ -2556,20 +2664,20 @@ function initialize() {
 			this.innerHTML = '';
 		}
 		formation.detail = txtDetail.value = richTextToCode(this);
-		creatNewUrl();
+		createNewUrl();
 	}
 	txtTitle.onchange = function() {
 		formation.title = this.value;
 		txtTitleDisplay.innerHTML = '';
 		txtTitleDisplay.append(descriptionToHTML(this.value));
 		formationBox.refreshDocumentTitle();
-		creatNewUrl();
+		createNewUrl();
 	};
 	txtDetail.onchange = function() {
 		formation.detail = this.value;
 		txtDetailDisplay.innerHTML = '';
 		txtDetailDisplay.append(descriptionToHTML(this.value));
-		creatNewUrl();
+		createNewUrl();
 	};
 	//设置为可以拖放已经编辑好的队伍
 	function richTextDropHandler(event) {
@@ -2755,7 +2863,7 @@ function initialize() {
 		formation.teams[toTeamNum][toIsAssist][toIndexInTeam] = from;
 		if (!isCopy) formation.teams[fromTeamNum][fromIsAssist][fromIndexInTeam] = to;
 	
-		creatNewUrl(); //刷新URL
+		createNewUrl(); //刷新URL
 		refreshAll(formation); //刷新全部
 	}
 	function switchLeader(e)
@@ -2791,7 +2899,7 @@ function initialize() {
 				team[3] = arr[2]; //接换成新队长
 			}
 		}
-		creatNewUrl(); //刷新URL
+		createNewUrl(); //刷新URL
 		refreshAll(formation); //刷新全部
 
 		e.stopPropagation();
@@ -2830,7 +2938,7 @@ function initialize() {
 				team[2] = parseInt(this.value, 10);
 				const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 				refreshTeamTotalHP(teamTotalInfoDom, team, teamIdx);
-				creatNewUrl();
+				createNewUrl();
 			} else {
 				teamBadge.classList.add(className_ChoseBadges);
 			}
@@ -2988,7 +3096,7 @@ function initialize() {
 		dge.gachas = gachaIdIpt.value.split(',').map(str=>Number(str)).filter(Boolean);
 
 		dungeonEnchanceDialog.close();
-		creatNewUrl();
+		createNewUrl();
 		refreshAll(formation);
 	};
 	const dungeonEnchanceDialogClear = dungeonEnchanceDialog.querySelector(".dialog-clear");
@@ -4327,7 +4435,7 @@ function initialize() {
 			refreshMemberSkillCD(teamBox, teamData, editBox.memberIdx[2]);
 		}
 
-		creatNewUrl();
+		createNewUrl();
 		editBox.hide();
 	};
 	window.addEventListener("keydown",function(event) {
@@ -4369,7 +4477,7 @@ function initialize() {
 
 		refreshAll(formation);
 		
-		creatNewUrl();
+		createNewUrl();
 		editBox.hide();
 	};
 	btnDelay.onclick = function() { //应对威吓
@@ -4403,20 +4511,20 @@ function initialize() {
 		//刷新改队员的CD
 		refreshMemberSkillCD(teamBigBox, teamData, editBox.memberIdx[2]);
 
-		creatNewUrl();
+		createNewUrl();
 		editBox.hide();
 	};
 
 	//语言选择
 	const langList = controlBox.querySelector(".languages");
 	langList.onchange = function() {
-		creatNewUrl({ "language": this.value });
+		createNewUrl({ "language": this.value });
 		history.go();
 	};
 	//数据源选择
 	const dataList = controlBox.querySelector(".datasource");
 	dataList.onchange = function() {
-		creatNewUrl({ datasource: this.value });
+		createNewUrl({ datasource: this.value });
 		history.go();
 	};
 
@@ -4432,13 +4540,12 @@ function initialize() {
 		//if (monstersID.value.length == 0) editBoxChangeMonId(0);
 	}
 }
-
 //搜出一个卡片包含变身的的完整进化树，用于平铺显示
 function buildEvoTreeIdsArray(card, includeHenshin = true) {
 
-	function idToCard(id) {return Cards[id]}
 	function loopAddHenshin(card, cardSet)
 	{
+		function idToCard(id) {return Cards[id]}
 		function filterCard(_card) {
 			return _card && !cardSet.has(_card);
 		}

@@ -1167,7 +1167,6 @@ var formation = new Formation(teamsCount,6);
 	</svg>
 	<div id="qr-code-frame" class="mask display-none">
 		<button class="mask-close brown-button"></button>
-		<button id="external-support" class="brown-button"></button>
 		<div class="mask-content">
 			<div class="read-qr-box">
 				<div class="action-button-box">
@@ -1190,8 +1189,9 @@ var formation = new Formation(teamsCount,6);
 			</div>
 			<div class="save-qr-box">
 				<ul class="qr-data-type-ul">
-					<li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdf" id="qr-data-type-pdf" checked/><label for="qr-data-type-pdf"></label></li><!--本程序
-					--><li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdc" id="qr-data-type-pdc" /><label for="qr-data-type-pdc"></label></li><!--PDC-->
+					<li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="paddf" id="qr-data-type-pdf" checked/><label for="qr-data-type-pdf"></label></li><!--本程序
+					--><li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdc" id="qr-data-type-pdc" /><label for="qr-data-type-pdc"></label></li><!--PDC
+					--><li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="paddb" id="qr-data-type-paddb" /><label for="qr-data-type-paddb"></label></li><!--PADDB-->
 				</ul>
 				<input class="string-output" type="text" readonly/>
 				<div class="qr-box"><img class="qr-code-image" /></div>
@@ -1203,11 +1203,12 @@ var formation = new Formation(teamsCount,6);
 					<label for="paddb-password"></label><input id="paddb-password" type="password" placeholder="password (4~20)">
 				</div>
 				<div class="action">
-					<label for="paddb-team-id"></label><input id="paddb-team-id" type="text" placeholder="Team ID">
+					<label for="paddb-team-id"></label><input id="paddb-team-id" type="text" placeholder="Team URL">
 					<button id="paddb-save-or-upload-team" class="brown-button"></button>
 				</div>
 			</div>
 		</div>
+		<a id="external-support" class="brown-button" href=""></a>
 	</div>
 	
 	<div class="dialog dialog-dungeon-enchance display-none">

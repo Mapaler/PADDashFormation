@@ -516,7 +516,7 @@ label[for="box-have"]::after
 }
 
 .control-box .btn-qrcode::before{
-	content: "\f029 二維碼";
+	content: "\f029 二維碼 和 \f0ec 數據交換";
 }
 
 .read-qr-box::before
@@ -558,12 +558,36 @@ label[for="sourceSelect"]::before
 {
 	content: "\f1c5  讀取二維碼圖片";
 }
-#qr-code-frame .read-external-link::before
-{
-	content: "\f0c1  解析 PADDB 鏈接";
-}
 #qr-code-frame .read-string::before {
 	content: "\f891  读取字符串";
+}
+
+#qr-code-frame .paddb-team-edit::before
+{
+	content: "將隊伍數據上傳至 PADDB：";
+}
+label[for="paddb-username"]::before
+{
+	content: "PADDB 用戶名：";
+}
+label[for="paddb-password"]::before
+{
+	content: "PADDB 密碼：";
+}
+label[for="paddb-team-id"]::before
+{
+	content: "PADDB 隊伍鏈接：";
+}
+#paddb-save-or-upload-team::before
+{
+	content: "保存";
+}
+#paddb-team-id:placeholder-shown+#paddb-save-or-upload-team::before {
+	content: "上傳新隊伍";
+}
+body:not(.external-link-support) #external-support::before
+{
+	content: "\f552  安裝輔助腳本以使用 PADDB 相關功能";
 }
 
 label[for="qr-data-type-pdf"]::before
@@ -572,10 +596,14 @@ label[for="qr-data-type-pdf"]::before
 }
 label[for="qr-data-type-pdc"]::before
 {
-	content: "龍族拼圖傷害計算器(PDC)";
+	content: "龍族拼圖傷害計算器 (PDC)";
 }
 label[for="qr-data-type-pdchu"]::before {
-	content: "Valeria(pdchu)";
+	content: "Valeria (pdchu)";
+}
+label[for="qr-data-type-paddb"]::before
+{
+	content: "PADDB (僅單人)";
 }
 #btn-set-dungeon-enchance::before
 {

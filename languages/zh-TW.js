@@ -6,18 +6,22 @@
 	request_input: tp`請輸入${'info'}`,
 	link_read_message: {
 		success: tp`發現 ${'type'} 格式。`,
-		need_user_script: `由於 PADDB 跨域，您需要在用戶腳本管理器內安裝此輔助腳本以支持此功能。`,
+		need_user_script: `由於 PADDB 跨域，您需要在用戶腳本管理器內安裝輔助腳本以支持此功能。`,
 		user_script_link: `輔助腳本的鏈接`,
 		type: {
-			"PADDF": "龍圖急速陣型",
+			"PADDF": "智龍急速陣型",
 			"PDC": "PDC",
 			"PADDB": "PADDB",
 		},
 		error: {
-			1: "No formation data.",
-			2: "The illegal JSON format.",
-			3: "The illegal URL format.",
-		}
+			0: "未知錯誤",
+			1: "不支持的格式",
+			2: "無隊伍數據",
+			3: "錯誤的 JSON 格式",
+			4: "錯誤的 網址 格式",
+		},
+		paddb_success: `操作成功`,
+		paddb_unauthorized: `認證失敗（賬號或密碼錯誤）`,
 	},
 	sort_name:{
 		sort_none: "無",

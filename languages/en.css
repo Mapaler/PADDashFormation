@@ -562,7 +562,7 @@ label[for="box-have"]::after
 	margin: calc(-100px * (1 - 0.6) / 2);
 }
 .control-box .btn-qrcode::before{
-	content: "\f029 QR Code";
+	content: "\f029 QR Code and \f0ec Data exchange";
 }
 
 .read-qr-box::before
@@ -598,12 +598,36 @@ label[for="sourceSelect"]::before
 {
 	content: "\f1c5  Read image file";
 }
-#qr-code-frame .read-external-link::before
-{
-	content: "\f0c1  Parse PADDB link";
-}
 #qr-code-frame .read-string::before {
 	content: "\f891  Read string";
+}
+
+#qr-code-frame .paddb-team-edit::before
+{
+	content: "Upload Team Data to PADDB：";
+}
+label[for="paddb-username"]::before
+{
+	content: "PADDB user ID:";
+}
+label[for="paddb-password"]::before
+{
+	content: "PADDB password:";
+}
+label[for="paddb-team-id"]::before
+{
+	content: "PADDB Team Link:";
+}
+#paddb-save-or-upload-team::before
+{
+	content: "Save";
+}
+#paddb-team-id:placeholder-shown+#paddb-save-or-upload-team::before {
+	content: "Upload new Team";
+}
+body:not(.external-link-support) #external-support::before
+{
+	content: "\f552  Install helper scripts to use PADDB-related features";
 }
 
 label[for="qr-data-type-pdf"]::before
@@ -615,7 +639,11 @@ label[for="qr-data-type-pdc"]::before
 	content: "P&D Damage Caculater (PDC)";
 }
 label[for="qr-data-type-pdchu"]::before {
-	content: "Valeria(pdchu)";
+	content: "Valeria (pdchu)";
+}
+label[for="qr-data-type-paddb"]::before
+{
+	content: "PADDB (Only for Solo)";
 }
 #btn-set-dungeon-enchance::before
 {

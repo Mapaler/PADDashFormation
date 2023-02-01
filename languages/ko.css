@@ -1,6 +1,6 @@
 ﻿@charset "utf-8";
 .status.loading-check-version .text::before{
-	content: "데이터 버전을 확인 합니다.";
+	content: "데이터 버전을 확인 .";
 }
 .status.loading-mon-info .text::before{
 	content: "몬스터 데이터를 로드 하 고 있습니다.";
@@ -327,7 +327,7 @@ label[for="default-level"]::after
 	content: "슈퍼 각성 포함";
 }
 .search-box .show-official-awoken-sorting-label::after{
-	content: "공식 각성 순서를 사용합니다";
+	content: "공식 각성 순서를 사용";
 }
 .search-box .search-list-length::before{
 	content: "결과 수:";
@@ -443,7 +443,7 @@ label[for="have-8-latent-slot"]::after
 }
 .real-time-change-card-label::after
 {
-	content: "카드를 즉시 업데이트합니다";
+	content: "카드를 즉시 업데이트";
 }
 .base .evo-type::before,
 .base .evo-type::after
@@ -506,7 +506,7 @@ label[for="have-8-latent-slot"]::after
 }
 
 .control-box .btn-qrcode::before{
-	content: "\f029 QR 코드";
+	content: "\f029 QR 코드 및 \f0ec 데이터 교환";
 }
 
 .read-qr-box::before
@@ -536,18 +536,42 @@ label[for="sourceSelect"]::before
 }
 #qr-code-frame .read-qr-camera.running::before
 {
-	content: "\f28d  카메라 사용을 중지합니다";
+	content: "\f28d  카메라 사용을 중지";
 }
 #qr-code-frame .read-qr-file::before
 {
 	content: "\f1c5  이미지 파일 읽기";
 }
-#qr-code-frame .read-external-link::before
-{
-	content: "\f0c1  PADDB 링크 구문 분석";
-}
 #qr-code-frame .read-string::before {
 	content: "\f891  문자열을 읽습니다";
+}
+
+#qr-code-frame .paddb-team-edit::before
+{
+	content: "팀 데이터를 PADDB에 업로드하려면 다음을 수행.";
+}
+label[for="paddb-username"]::before
+{
+	content: "PADDB 사용자 ID:";
+}
+label[for="paddb-password"]::before
+{
+	content: "PADDB 암호:";
+}
+label[for="paddb-team-id"]::before
+{
+	content: "PADDB 팀 링크:";
+}
+#paddb-save-or-upload-team::before
+{
+	content: "저장";
+}
+#paddb-team-id:placeholder-shown+#paddb-save-or-upload-team::before {
+	content: "새 팀을 업로드";
+}
+body:not(.external-link-support) #external-support::before
+{
+	content: "\f552 PADDB 관련 기능을 사용하도록 보조 스크립트를 설치";
 }
 
 label[for="qr-data-type-pdf"]::before
@@ -559,7 +583,11 @@ label[for="qr-data-type-pdc"]::before
 	content: "퍼즐앤드래곤 데미지 카큐라터 (PDC)";
 }
 label[for="qr-data-type-pdchu"]::before {
-	content: "Valeria(pdchu)";
+	content: "Valeria (pdchu)";
+}
+label[for="qr-data-type-paddb"]::before
+{
+	content: "PADDB (솔로 전용)";
 }
 #btn-set-dungeon-enchance::before
 {
@@ -595,7 +623,7 @@ label[for="qr-data-type-pdchu"]::before {
 }
 .dialog-dungeon-enchance .stats-list::before
 {
-	content: "배율을 강화합니다:";
+	content: "배율을 강화:";
 }
 
 #player-data-frame .player-box-title::before

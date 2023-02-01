@@ -405,7 +405,7 @@ label[for="have-8-latent-slot"]::after
 }
 label[for="box-have"]::after
 {
-	content: "ケースに所有することを強調します";
+	content: "ケースに所有することを強調";
 }
 .special-div .special-add::before {
 	content: "➕";
@@ -451,7 +451,7 @@ label[for="box-have"]::after
 }
 .real-time-change-card-label::after
 {
-	content: "カードを即座に更新します";
+	content: "カードを即座に更新";
 }
 .base .evo-type::before,
 .base .evo-type::after
@@ -525,7 +525,7 @@ label[for="box-have"]::after
 }
 
 .control-box .btn-qrcode::before{
-	content: "\f029 QRコード";
+	content: "\f029 QR コード と \f0ec データ交換";
 }
 
 .read-qr-box::before
@@ -534,7 +534,7 @@ label[for="box-have"]::after
 }
 .save-qr-box::before
 {
-	content: "QRコードを生成します:";
+	content: "QRコードを生成:";
 }
 
 .formation-link-from-string>a:empty::before
@@ -555,18 +555,42 @@ label[for="sourceSelect"]::before
 }
 #qr-code-frame .read-qr-camera.running::before
 {
-	content: "\f28d  カメラの使用を停止します";
+	content: "\f28d  カメラの使用を停止";
 }
 #qr-code-frame .read-qr-file::before
 {
 	content: "\f1c5  画像ファイルを読み取る";
 }
-#qr-code-frame .read-external-link::before
-{
-	content: "\f0c1  PADDB リンクの解析";
-}
 #qr-code-frame .read-string::before {
 	content: "\f891  文字列を読み取ります";
+}
+
+#qr-code-frame .paddb-team-edit::before
+{
+	content: "チーム データを PADDB にアップロード:";
+}
+label[for="paddb-username"]::before
+{
+	content: "PADDB ユーザー ID:";
+}
+label[for="paddb-password"]::before
+{
+	content: "PADDB パスワード:";
+}
+label[for="paddb-team-id"]::before
+{
+	content: "PADDBチームリンク:";
+}
+#paddb-save-or-upload-team::before
+{
+	content: "保存";
+}
+#paddb-team-id:placeholder-shown+#paddb-save-or-upload-team::before {
+	content: "新しいチームをアップロード";
+}
+body:not(.external-link-support) #external-support::before
+{
+	content: "\f552 PADDB 関連機能を使用するセカンダリ スクリプトをインストール";
 }
 
 label[for="qr-data-type-pdf"]::before
@@ -578,7 +602,11 @@ label[for="qr-data-type-pdc"]::before
 	content: "パズドラダメージ計算 (PDC)";
 }
 label[for="qr-data-type-pdchu"]::before {
-	content: "Valeria(pdchu)";
+	content: "Valeria (pdchu)";
+}
+label[for="qr-data-type-paddb"]::before
+{
+	content: "PADDB (ソロのみ)";
 }
 #btn-set-dungeon-enchance::before
 {

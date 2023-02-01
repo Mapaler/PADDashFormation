@@ -1,13 +1,12 @@
 ﻿const _localTranslating = {
 	webpage_title: `퍼즐앤드래곤 ${teamsCount} 명의 팀 다이어그램 작성 도구`,
-	addition_display: "추가 표시입니다",
 	title_blank: "입력 제목",
 	detail_blank: "입력 내용",
 	force_reload_data: "데이터 강제 새로 고침",
 	request_input: tp`${'info'}를 입력하십시오`,
 	link_read_message: {
 		success: tp`검색 ${'type'} 형식입니다. `,
-		need_user_script: `PADDB는 도메인에 걸쳐 있으므로 이 기능을 지원하려면 사용자 스크립트 관리자 내에 이 보조 스크립트를 설치해야 합니다.`,
+		need_user_script: `PADDB는 도메인에 걸쳐 있으므로 이 기능을 지원하려면 사용자 스크립트 관리자 내에 보조 스크립트를 설치해야 합니다.`,
 		user_script_link: `스크립트에 연결`,
 		type: {
 			"PADDF": "PADDF",
@@ -15,11 +14,14 @@
 			"PADDB": "PADDB",
 		},
 		error: {
+			0: "알 수 없는 오류입니다",
 			1: "지원되지 않는 형식입니다." ,
 			2: "팀 데이터가 없습니다." ,
 			3: "잘못된 JSON 형식입니다." ,
 			4: "잘못된 URL 형식입니다." ,
-		}
+		},
+		paddb_success: `작업이 성공했습니다`,
+		paddb_unauthorized: `인증 실패(계정 번호 또는 잘못된 암호)`,
 	},
 	sort_name:{
 		sort_none: "없음",

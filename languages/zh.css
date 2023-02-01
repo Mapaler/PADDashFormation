@@ -556,6 +556,9 @@ label[for="sourceSelect"]::before
 {
 	content: "\f1c5  读取二维码图片";
 }
+#qr-code-frame .read-string::before {
+	content: "\f891  读取字符串";
+}
 
 #qr-code-frame .paddb-team-edit::before
 {
@@ -571,7 +574,7 @@ label[for="paddb-password"]::before
 }
 label[for="paddb-team-id"]::before
 {
-	content: "PADDB 队伍 ID：";
+	content: "PADDB 队伍链接：";
 }
 #paddb-save-or-upload-team::before
 {
@@ -584,13 +587,6 @@ body:not(.external-link-support) #external-support::before
 {
 	content: "\f552  安装辅助脚本以使用 PADDB 相关功能";
 }
-#qr-code-frame .read-external-link::before
-{
-	content: "\f0c1  解析 PADDB 链接";
-}
-#qr-code-frame .read-string::before {
-	content: "\f891  读取字符串";
-}
 
 label[for="qr-data-type-pdf"]::before
 {
@@ -598,10 +594,14 @@ label[for="qr-data-type-pdf"]::before
 }
 label[for="qr-data-type-pdc"]::before
 {
-	content: "智龙迷城伤害计算器(PDC)";
+	content: "智龙迷城伤害计算器 (PDC)";
 }
 label[for="qr-data-type-pdchu"]::before {
-	content: "Valeria(pdchu)";
+	content: "Valeria (pdchu)";
+}
+label[for="qr-data-type-paddb"]::before
+{
+	content: "PADDB (仅单人)";
 }
 #btn-set-dungeon-enchance::before
 {
