@@ -2072,11 +2072,24 @@ function initialize() {
 	{
 		imagesSelected(this.files);
 	}
-	function imagesSelected(myFiles) {
+	async function imagesSelected(myFiles) {
 		if (myFiles.length < 1) return;
 		const file = myFiles[0];
-		loadImage(URL.createObjectURL(file)).then(function(img) {
-			qrcodeReader.decodeFromImage(img).then((result) => {
+		let img = await loadImage(URL.createObjectURL(file));
+		let cavans = document.createElement("canvas");
+		cavans.width =  img.width + 100;
+		cavans.height = img.height + 100;
+		let ctx = cavans.getContext('2d');
+		ctx.fillStyle="white";
+		ctx.fillRect(0, 0, cavans.width, cavans.height);
+
+		ctx.drawImage(img, 100, 100);
+
+		cavans.toBlob(async function(blob){
+			let newFileURL = URL.createObjectURL(blob),
+				newImg = await loadImage(newFileURL);
+		
+			qrcodeReader.decodeFromImage(newImg).then((result) => {
 				console.debug('Found QR code!', result);
 				qrReadBox.qrStr.value = result.text;
 				qrReadBox.readString.onclick();
@@ -2096,10 +2109,32 @@ function initialize() {
 					}
 				}
 			});
-			console.debug(`Started decode for image from ${img.src}`)
-		}, function(err) {
-			console.debug(err);
+			console.debug(`Started decode for image from ${newImg.src}`);
 		});
+
+
+		// qrcodeReader.decodeFromImage(img).then((result) => {
+		// 	console.debug('Found QR code!', result);
+		// 	qrReadBox.qrStr.value = result.text;
+		// 	qrReadBox.readString.onclick();
+		// }).catch((err) => {
+		// 	console.error(err);
+		// 	if (err) {
+		// 		if (err instanceof ZXing.NotFoundException) {
+		// 			qrReadBox.info.show('No QR code found.');
+		// 		}
+	
+		// 		if (err instanceof ZXing.ChecksumException) {
+		// 			qrReadBox.info.show('A code was found, but it\'s read value was not valid.');
+		// 		}
+	
+		// 		if (err instanceof ZXing.FormatException) {
+		// 			qrReadBox.info.show('A code was found, but it was in a invalid format.');
+		// 		}
+		// 	}
+		// });
+		// console.debug(`Started decode for image from ${img.src}`);
+		
 	}
 
 	if (location.protocol == "http:" && location.host != "localhost" && location.host != "127.0.0.1")
@@ -2242,6 +2277,10 @@ function initialize() {
 		if (response.status === 401) {
 			alert(localTranslating.link_read_message.paddb_unauthorized);
 		} else if (response.status === 200)  {
+			if (isNewUpload) {
+				paddbTeamId.value = response.response;
+				paddbTeamId.onchange();
+			}
 			alert(localTranslating.link_read_message.paddb_success);
 		} else {
 			alert(localTranslating.link_read_message.error[0]);

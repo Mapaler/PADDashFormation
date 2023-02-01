@@ -8091,7 +8091,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"afd1b8136c41a5dd3a9a0f062532196b"
+		"910c1850224619f8c574087b1b5e0e8f"
 	],
 	[
 		"solo.html",
@@ -8315,7 +8315,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/zxing.umd.min.js",
-		"1259d50407597e5cd08b72255e33b062"
+		"8d375c0f8d57d8504a91cbcd9e9fe82d"
 	],
 	[
 		"library/jy4340132-aaa/adpcm.js",
