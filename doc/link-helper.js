@@ -4,7 +4,7 @@
 // @name:zh-HK   龍圖急速陣型鏈接助手
 // @name:zh-TW   龍圖急速陣型鏈接助手
 // @namespace	 http://www.mapaler.com/
-// @version      1.0.2
+// @version      1.0.3
 // @description  Helps obtain team data from external cross-domain servers such as PADDB
 // @description:zh-CN  帮助获取 PADDB 等外部跨域服务器的队伍分享数据
 // @description:zh-HK  幫助獲取 PADDB 等外部跨域服務器的隊伍分享數據
@@ -42,5 +42,4 @@
 			GM_xmlhttpRequest(options);
 		});
 	};
-	document.body.classList.add("external-link-support");
 })();

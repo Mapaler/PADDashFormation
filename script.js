@@ -1932,6 +1932,10 @@ function initialize() {
 		qrCodeFrame.show();
 	};
 	qrCodeFrame.initialize = function(){
+		//如果检测到功能
+		if (btnExternalSupport?.asyncGM_xmlhttpRequest) {
+			document.body.classList.add("external-link-support");
+		}
 		const qrSaveBox = this.content.saveBox;
 		const qrReadBox = this.content.readBox;
 		qrReadBox.info.show('');
@@ -2246,7 +2250,6 @@ function initialize() {
 	const paddbSaveOrUpload = document.querySelector("#paddb-save-or-upload-team");
 	paddbSaveOrUpload.onclick = async function(){
 		this.disabled = true;
-		const btnExternalSupport = document.body.querySelector("#external-support");
 		if (!btnExternalSupport?.asyncGM_xmlhttpRequest) {
 			alert(localTranslating.link_read_message.need_user_script);
 			return;

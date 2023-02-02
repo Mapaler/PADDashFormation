@@ -8091,7 +8091,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"910c1850224619f8c574087b1b5e0e8f"
+		"bc145197afe8fe38b0090b2930a69e15"
 	],
 	[
 		"solo.html",
@@ -8367,7 +8367,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/index.html",
-		"b76648dd229ac25cfe97e670cf925ba9"
+		"16d7e69c328a122a2d6a2e14251c5f9a"
 	],
 	[
 		"doc/images/player-bind-box.webp",
