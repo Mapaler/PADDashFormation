@@ -27,7 +27,6 @@
 	if (GM?.xmlHttpRequest) { //For Greasemonkey 4.x
 		window["GM_xmlhttpRequest"] = GM.xmlHttpRequest;
 	}
-	document.body.classList.add("external-link-support");
 	//新增的按钮
 	const btnExternalSupport = document.querySelector("#external-support");
 	if (!btnExternalSupport) return;
@@ -42,5 +41,6 @@
 			};
 			GM_xmlhttpRequest(options);
 		});
-	}
+	};
+	document.body.classList.add("external-link-support");
 })();
