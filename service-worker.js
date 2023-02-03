@@ -8083,7 +8083,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"bbb482f9cccec94a3fcce4c9109a8f0a"
+		"94389dc9c590284d5954381c14cf0e09"
 	],
 	[
 		"script-skill-parser.js",
@@ -8091,7 +8091,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"429cfed7bc5fc12a2152555e45241e61"
+		"e39612ba401bd55089a15475dd9844b3"
 	],
 	[
 		"script.js",

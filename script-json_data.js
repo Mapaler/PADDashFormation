@@ -766,9 +766,15 @@ const specialSearchFunctions = (function() {
 		if (skillTypes.includes(skill.type))
 		{
 			return skill;
-		}else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138 || skill.type == 232 || skill.type == 233)
-		{
-			const subSkills = skill.params.map(id=>Skills[id]);
+		}else if (skill.type == 116 || //多个主动技
+			(searchRandom && skill.type == 118) || //随机主动技
+			skill.type == 138 || //多个队长技
+			skill.type == 232 || //进化技能不循环
+			skill.type == 233 || //进化技能循环
+			skill.type == 248 //延迟生效技能
+		){
+			let params = skill.type == 248 ? skill.params.slice(1) : skill.params;
+			const subSkills = params.map(id=>Skills[id]);
 			for(let i = 0;i < subSkills.length; i++)
 			{ //因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
 				let foundSubSkill = getActuallySkill(subSkills[i], skillTypes, searchRandom);
