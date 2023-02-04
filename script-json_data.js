@@ -912,12 +912,18 @@ const specialSearchFunctions = (function() {
 		}
 	}
 	
-	function sortByParams(a,b,searchTypeArray,pidx = 0)
+	function sortByParams(a,b,searchTypeArray,...pidxs)
 	{
 		const a_s = getCardLeaderSkill(a, searchTypeArray) || getCardActiveSkill(a, searchTypeArray),
 			  b_s = getCardLeaderSkill(b, searchTypeArray) || getCardActiveSkill(b, searchTypeArray);
-		let a_pC = a_s.params[pidx],b_pC = b_s.params[pidx];
-		return a_pC - b_pC;
+		if (pidxs.length==0) pidxs.push(0);
+		let newPos = 0;
+		//按所有顺序依次比较大小，凡是有一次比出来就使用，否则继续比较下一个大小
+		for (let pidx of pidxs) {
+			newPos = a_s.params[pidx] - b_s.params[pidx];
+			if (newPos !== 0) break;
+		}
+		return newPos;
 	}
 	
 	function sortByHPScal(a,b)
@@ -1593,38 +1599,6 @@ const specialSearchFunctions = (function() {
 					return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
 				}
 			},
-			{name:"Bind self matchable",otLangName:{chs:"自封消珠",cht:"自封消珠"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [215];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
-				addition:card=>{
-					const searchTypeArray = [215];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					const fragment = document.createDocumentFragment();
-					fragment.appendChild(document.createTextNode(`自封`));
-					fragment.appendChild(createOrbsList(flags(sk[1] || 1)));
-					fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
-					return fragment;
-				}
-			},
-			{name:"Bind self active skill",otLangName:{chs:"自封技能",cht:"自封技能"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [214];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
-				addition:card=>{
-					const searchTypeArray = [214];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					return document.createTextNode(`自封技${sk[0]}T`);
-				}
-			},
 		]},
 		{group:true,name:"-----For player team-----",otLangName:{chs:"-----对自身队伍生效类-----",cht:"-----對自身隊伍生效類-----"}, functions: [
 			{name:"↑Increase skills charge(sort by turns)",otLangName:{chs:"【溜】减少CD（按回合排序）",cht:"【溜】減少CD（按回合排序）"},
@@ -1786,6 +1760,20 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
+			{name:"Bind self active skill",otLangName:{chs:"自封技能 debuff",cht:"自封技能 debuff"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [214];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [214];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return document.createTextNode(`自封技${sk[0]}T`);
+				}
+			},
 		]},
 		{group:true,name:"-----Player's HP change-----",otLangName:{chs:"-----玩家HP操纵类-----",cht:"-----玩家HP操縱類-----"}, functions: [
 			{name:"Heal after turn",otLangName:{chs:"回合结束回血 buff",cht:"回合結束回血 buff"},
@@ -1922,13 +1910,55 @@ const specialSearchFunctions = (function() {
 				return fragment;
 				}
 			},
-		]},
-		{group:true,name:"----- Buff -----",otLangName:{chs:"----- buff 类-----",cht:"----- buff 類-----"}, functions: [
-			{name:"Rate by state count(Jewel Princess)",otLangName:{chs:"以状态数量为倍率类技能（宝石姬）",cht:"以狀態數量爲倍率類技能（寶石姬）"},
+			{name:"Bind self matchable",otLangName:{chs:"自封消珠 debuff",cht:"自封消珠 debuff"},
 				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [156,168,228,231];
+					const searchTypeArray = [215];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [215];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(document.createTextNode(`自封`));
+					fragment.appendChild(createOrbsList(flags(sk[1] || 1)));
+					fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
+					return fragment;
+				}
+			},
+		]},
+		{group:true,name:"----- Buff -----",otLangName:{chs:"----- buff 类-----",cht:"----- buff 類-----"}, functions: [
+			{name:"Seamless Buff (Round ≥CD)",otLangName:{chs:"无缝 Buff (回合≥CD)",cht:"無縫 Buff (回合≥CD)"},
+				function:cards=>cards.filter(card=>{
+					function isLoopBuff(parsedSkill, cd) {
+						return parsedSkill.some(skill=>skill.kind == SkillKinds.ActiveTurns
+							&& skill.turns >= cd);
+					}
+					//跳过0号技能的、会变身成别人的和无技能数据的
+					if (card.activeSkillId == 0 || card.henshinTo?.length>0) return false;
+					const skill = Skills[card.activeSkillId];
+					if (!skill) return false;
+
+					let cd = skill.initialCooldown - (skill.maxLevel - 1); //技能最短CD
+					//解析技能，如果是一般的技能，直接搜索有没有就可以了
+					let parsedActiveSkill = skillParser(card.activeSkillId);
+					if (isLoopBuff(parsedActiveSkill, cd)) return true;
+					//对于其他的多组类技能，则需要进一步判断，但是这类技能一般只需要看第一个就行
+					let parsedGroupSkill = parsedActiveSkill?.[0];
+					if (parsedGroupSkill.kind == SkillKinds.RandomSkills) { //随机类技能,CD固定,需要每个技能都符合
+						return parsedGroupSkill.skills.every(parsedSubSkill=>isLoopBuff(parsedSubSkill, cd));
+					}
+					//进化类技能，排除循环进化，并只计算最后一级
+					if (parsedGroupSkill.kind == SkillKinds.EvolvedSkills && !parsedGroupSkill.loop) {
+						let lastIdx = parsedGroupSkill.params.length - 1;
+						let subSkill = Skills[parsedGroupSkill.params[lastIdx]];
+						let subCd = subSkill.initialCooldown - (subSkill.maxLevel - 1); //技能最短CD
+						let parsedSubSkill = parsedGroupSkill.skills[lastIdx];
+						if (isLoopBuff(parsedSubSkill, subCd)) return true;
+					}
+					return false;
 				})
 			},
 			{name:"RCV rate change",otLangName:{chs:"回复力 buff（顶回复）",cht:"回覆力 buff（頂回復）"},
@@ -2037,22 +2067,6 @@ const specialSearchFunctions = (function() {
 					if (sk[2]) str += `x${sk[2]/100}`;
 					str += `x${sk[0]}T`;
 					return str;
-				}
-			},
-			{name:"No Skyfall(sort by turns)",otLangName:{chs:"无天降 buff（按回合排序）",cht:"無天降 buff（按回合排序）"},
-				function:cards=>{
-					const searchTypeArray = [184];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-				},
-				addition:card=>{
-					const searchTypeArray = [184];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					return `无↓×${sk[0]}T`;
 				}
 			},
 			{name:"Adds combo(sort by combo)",otLangName:{chs:"加C buff（按C数排列）",cht:"加C buff（按C數排列）"},
@@ -2170,6 +2184,13 @@ const specialSearchFunctions = (function() {
 					return `全体×${sk[0]}T`;
 				}
 			},
+			{name:"Rate by state count(Jewel Princess)",otLangName:{chs:"以状态数量为倍率类技能（宝石姬）",cht:"以狀態數量爲倍率類技能（寶石姬）"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [156,168,228,231];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				})
+			},
 		]},
 		{group:true,name:"-----For Enemy-----",otLangName:{chs:"-----对敌 buff 类-----",cht:"-----對敵 buff 類-----"}, functions: [
 			{name:"Menace(sort by turns)",otLangName:{chs:"威吓（按推迟回合排序）",cht:"威嚇（按推遲迴合排序）"},
@@ -2194,30 +2215,14 @@ const specialSearchFunctions = (function() {
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1,0));
 				},
 				addition:card=>{
 					const searchTypeArray = [19];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return `破防${sk[1]}%`;
-				}
-			},
-			{name:"Voids enemies' DEF(sort by turns)",otLangName:{chs:"100% 破防（按回合排序）",cht:"100% 破防（按回合排序）"},
-				function:cards=>{
-					const searchTypeArray = [19];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && skill.params[1]>=100;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-				},
-				addition:card=>{
-					const searchTypeArray = [19];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-							return `全破×${sk[0]}T`;
+					return `破防${sk[1]}%×${sk[0]}T`;
 				}
 			},
 			{name:"Poisons enemies(sort by rate)",otLangName:{chs:"中毒（按毒伤比率排序）",cht:"中毒（按毒傷比率排序）"},
@@ -2286,7 +2291,23 @@ const specialSearchFunctions = (function() {
 				return skill;
 				})
 			},
-			{name:"Creates Roulette Orb",otLangName:{chs:"生成轮盘位（转转珠）",cht:"生成輪盤位（轉轉珠）"},
+			{name:"No Skyfall(sort by turns)",otLangName:{chs:"无天降 buff（按回合排序）",cht:"無天降 buff（按回合排序）"},
+				function:cards=>{
+					const searchTypeArray = [184];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+					const searchTypeArray = [184];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `无↓×${sk[0]}T`;
+				}
+			},
+			{name:"Creates Roulette Orb",otLangName:{chs:"生成轮盘位 buff（转转）",cht:"生成輪盤位 buff（轉轉）"},
 				function:cards=>{
 					const searchTypeArray = [207];
 					return cards.filter(card=>{
@@ -2305,7 +2326,7 @@ const specialSearchFunctions = (function() {
 						return `特殊形状×${sk[0]}T`;
 				}
 			},
-			{name:"Creates Cloud",otLangName:{chs:"生成云",cht:"生成雲"},
+			{name:"Creates Cloud",otLangName:{chs:"生成云 debuff",cht:"生成雲 debuff"},
 				function:cards=>{
 					const searchTypeArray = [238];
 					return cards.filter(card=>{
@@ -2321,7 +2342,7 @@ const specialSearchFunctions = (function() {
 					return `${sk[1] * sk[2]}个×${sk[0]}T`;
 				}
 			},
-			{name:"Creates Cloud",otLangName:{chs:"生成封条",cht:"生成封条"},
+			{name:"Creates Cloud",otLangName:{chs:"生成封条 debuff",cht:"生成封条 debuff"},
 				function:cards=>{
 					const searchTypeArray = [239];
 					return cards.filter(card=>{
@@ -2344,7 +2365,7 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
-			{name:"Change Board Size",otLangName:{chs:"改变板面大小",cht:"改變板面大小"},
+			{name:"Change Board Size",otLangName:{chs:"改变板面大小 buff",cht:"改變板面大小 buff"},
 				function:cards=>{
 					const searchTypeArray = [244];
 					return cards.filter(card=>{
@@ -2405,7 +2426,7 @@ const specialSearchFunctions = (function() {
 				},
 				addition:dropLock_Addition
 			},
-			{name:"Drop Enhanced Orbs(sort by turns)",otLangName:{chs:"掉落强化宝珠（按回合排序）",cht:"掉落強化寶珠（按回合排序）"},
+			{name:"Drop Enhanced Orbs(sort by turns)",otLangName:{chs:"掉落强化宝珠（按回合排序）buff",cht:"掉落強化寶珠（按回合排序）buff"},
 				function:cards=>{
 					const searchTypeArray = [180];
 					return cards.filter(card=>{
@@ -2421,7 +2442,7 @@ const specialSearchFunctions = (function() {
 					return `${sk[1]}%×${sk[0]}T`;
 				}
 			},
-			{name:"Drop rate increases",otLangName:{chs:"掉落率提升",cht:"掉落率提升"},
+			{name:"Drop rate increases",otLangName:{chs:"掉落率提升 buff",cht:"掉落率提升 buff"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [126];
 					const skill = getCardActiveSkill(card, searchTypeArray);
@@ -2453,7 +2474,7 @@ const specialSearchFunctions = (function() {
 				}),
 				addition:dropOrb_Addition
 			},
-			{name:"Drop Nail Orbs(sort by turns)",otLangName:{chs:"掉落钉珠（按回合排序）",cht:"掉落釘珠（按回合排序）"},
+			{name:"Drop Nail Orbs(sort by turns)",otLangName:{chs:"掉落钉珠（按回合排序）buff",cht:"掉落釘珠（按回合排序）buff"},
 				function:cards=>{
 					const searchTypeArray = [226];
 					return cards.filter(card=>{
@@ -3171,39 +3192,44 @@ const specialSearchFunctions = (function() {
 					return minCD > 1 && realCD <= 4;
 				})
 			},
-			{name:"Buff rounds equal to card's CD, being able to keep looping",otLangName:{chs:"Buff 回合等于自身 CD，能保持循环",cht:"Buff 回合等於自身 CD，能保持循環"},
-				function:cards=>cards.filter(card=>{
-					if (card.activeSkillId == 0) return false;
-					const skill = Skills[card.activeSkillId];
-					const cd = skill.initialCooldown - (skill.maxLevel - 1); //最短CD
-					return false;
-				})
-			},
 			{name:"Time pause(sort by time)",otLangName:{chs:"时间暂停（按停止时间排序）",cht:"時間暫停（按停止時間排序）"},
 				function:cards=>{
-				const searchTypeArray = [5, 246, 247];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+					const searchTypeArray = [5, 246, 247];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
 				addition:card=>{
 					const searchTypeArray = [5, 246, 247];
-				const skill = getCardActiveSkill(card, searchTypeArray);
-				const value = skill.params[0];
-				return `时停${value}s`;
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const value = skill.params[0];
+					return `时停${value}s`;
 				}
 			},
 			{
 				name:"Random effect active",otLangName:{chs:"随机效果技能",cht:"隨機效果技能"},
-				function:cards=>cards.filter(card=>Skills[card.activeSkillId].type == 118)
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [118];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				})
 			},
 			{
 				name:"Evolved active",otLangName:{chs:"进化类技能",cht:"進化類技能"},
 				function:cards=>cards.filter(card=>{
-					let skType = Skills[card.activeSkillId].type;
-					return skType == 232 || skType == 233;
-				})
+					const searchTypeArray = [232, 233];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [232, 233];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const value = skill.params[0];
+					return `${skill.type == 232 ? "单向进化" : "🔁循环变化"}`;
+				}
 			},
 			{name:"Enable require HP range",otLangName:{chs:"技能使用血线要求",cht:"技能使用血線要求"},
 				function:cards=>cards.filter(card=>{
