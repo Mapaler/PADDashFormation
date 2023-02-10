@@ -2226,7 +2226,7 @@ function initialize() {
 	}
 
 	const btnExternalSupport = qrCodeFrame.querySelector("#external-support");
-	btnExternalSupport.href = ExternalLinkScriptURL;
+	//btnExternalSupport.href = ExternalLinkScriptURL;
 
 	const paddbTeamEdit = qrContent.querySelector(".paddb-team-edit");
 	//paddb的用户名和密码

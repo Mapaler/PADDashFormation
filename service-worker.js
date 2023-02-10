@@ -8075,7 +8075,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"471ac44aef472aa0f1cfe3bf4fe6dd52"
+		"abcb1a93b5a2d662ac48236543f25ac6"
 	],
 	[
 		"script-custom_elements.js",
@@ -8095,11 +8095,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"bc145197afe8fe38b0090b2930a69e15"
+		"deee9c2cc2cd2b88a8f38918ebd9400a"
 	],
 	[
 		"solo.html",
-		"f6c82f0d0bb00cf18cfb7f4d09639e8f"
+		"e0ed886d50eb539eb7992a4452521728"
 	],
 	[
 		"style-monsterimages.css",
@@ -8115,7 +8115,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"ffa058b5503450f9a9d8e30893050a85"
+		"ea35361243693f6e521a1229b1eb9c25"
 	],
 	[
 		"languages/en.css",
@@ -8371,7 +8371,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/index.html",
-		"16d7e69c328a122a2d6a2e14251c5f9a"
+		"e9f7203cfe4ed7e02c229f96932743c3"
 	],
 	[
 		"doc/images/player-bind-box.webp",
