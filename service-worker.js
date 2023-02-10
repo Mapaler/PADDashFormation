@@ -8083,7 +8083,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"bbb482f9cccec94a3fcce4c9109a8f0a"
+		"c046491cb3831d3523be6d8f7da53d5d"
 	],
 	[
 		"script-skill-parser.js",
@@ -8091,7 +8091,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"429cfed7bc5fc12a2152555e45241e61"
+		"e39612ba401bd55089a15475dd9844b3"
 	],
 	[
 		"script.js",
@@ -8371,7 +8371,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/index.html",
-		"e9f7203cfe4ed7e02c229f96932743c3"
+		"8ebc8a48817648880c8fcb73d54f176d"
 	],
 	[
 		"doc/images/player-bind-box.webp",

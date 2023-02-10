@@ -1166,10 +1166,16 @@ function getActuallySkills(skill, skillTypes, searchRandom = true) {
 	{
 		return [skill];
 	}
-	else if (skill.type == 116 || (searchRandom && skill.type == 118) || skill.type == 138 || skill.type == 232 || skill.type == 233)
-	{
+	else if (skill.type == 116 || //多个主动技
+		(searchRandom && skill.type == 118) || //随机主动技
+		skill.type == 138 || //多个队长技
+		skill.type == 232 || //进化技能不循环
+		skill.type == 233 || //进化技能循环
+		skill.type == 248 //延迟生效技能
+	){
+		let params = skill.type == 248 ? skill.params.slice(1) : skill.params;
 		//因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
-		const subSkills = skill.params.flatMap(id => getActuallySkills(Skills[id], skillTypes, searchRandom)).filter(s=>s);
+		const subSkills = params.flatMap(id => getActuallySkills(Skills[id], skillTypes, searchRandom)).filter(s=>s);
 		return subSkills;
 	}
 	else
