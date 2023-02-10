@@ -33,7 +33,7 @@ function sameCard(m1, m2) {
 		if (m1.types[i] != m2.types[i]) return false;
 	}
 	if (m1.maxLevel != m2.maxLevel) return false; //最大等级
-	if (m1.collabId != m2.collabId) return false; //合作ID
+	if (m1.seriesId != m2.seriesId) return false; //系列ID
 	return true;
 }
 
