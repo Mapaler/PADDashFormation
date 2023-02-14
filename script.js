@@ -3495,8 +3495,10 @@ function initialize() {
 	const s_typesUl = s_typesDiv.querySelector(".type-list");
 	const s_typesLi = Array.from(s_typesUl.querySelectorAll("li"));
 	const s_types = s_typesLi.map(li=>li.querySelector(".type-check")); //checkbox集合
-
-	const s_attr_preview_attrs = Array.from(searchBox.querySelectorAll(".attrs-div .monster .attrs .attr"));
+	const attrPreview = searchBox.querySelector(".attrs-div .monster");
+	
+	//3种属性选择的预览
+	const s_attr_preview_attrs = Array.from(attrPreview.querySelectorAll(".attrs .attr"));
 	function s_attr_onclick(){
 		const attrIdx = parseInt(this.name[this.name.length-1],10) - 1;
 		const valueFlag = parseInt(this.value, 2);
@@ -3506,6 +3508,14 @@ function initialize() {
 		s_attr_preview_attrs[attrIdx].dataset.attr = attr;
 	}
 	s_attr_lists.forEach(s_attr_list=>s_attr_list.forEach(s_attr=>s_attr.onclick = s_attr_onclick));
+	//可以自行打开图片设定头像的彩蛋
+	const avatarSelect = attrPreview.querySelector("#avatar-select");
+	const customAvatar = attrPreview.querySelector(".custom-avatar");
+	avatarSelect.onchange = function(event){
+		let fileUrl = URL.createObjectURL(this.files[0]);
+		customAvatar.style.backgroundImage = `url(${fileUrl})`;
+	};
+
 	function s_types_onchange(){
 		const newClassName = `type-killer-${this.value}`;
 		s_typesUl.classList.toggle(newClassName, this.checked && s_typeAndOr.checked);

@@ -311,14 +311,8 @@ label[for="default-level"]::after
 .search-box::before{
 	content: "몬스터 검색";
 }
-.search-box .attrs-div .attr-list-1::before{
-	content: "속성 1:";
-}
-.search-box .attrs-div .attr-list-2::before{
-	content: "속성 1:";
-}
 .search-box .attrs-div .fix-main-color-label::after{
-	content: "제한 속성 1은 기본 속성 이며 속성 2 하위 속성입니다.";
+	content: "속성 순서는 선택한 순서와 일치합니다";
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "동시에 해당 경계를 각성";

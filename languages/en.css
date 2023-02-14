@@ -323,14 +323,8 @@ label[for="default-level"]::after
 .search-box::before{
 	content: "Search Cards";
 }
-.search-box .attrs-div .attr-list-1::before{
-	content: "Attribute 1:";
-}
-.search-box .attrs-div .attr-list-2::before{
-	content: "Attribute 2:";
-}
 .search-box .attrs-div .fix-main-color-label::after{
-	content: "Fix attr-1 for main-attr, attr-2 for sub-attr.";
+	content: "The order of the attributes is consistent with the order you selected";
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "Search for Equivalent Awoken";

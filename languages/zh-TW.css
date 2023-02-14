@@ -321,14 +321,8 @@ label[for="default-level"]::after
 .search-box::before{
 	content: "搜索怪物";
 }
-.search-box .attrs-div .attr-list-1::before{
-	content: "屬性 1：";
-}
-.search-box .attrs-div .attr-list-2::before{
-	content: "屬性 2：";
-}
 .search-box .attrs-div .fix-main-color-label::after{
-	content: "限制屬性 1 爲主屬性，屬性 2 爲副屬性";
+	content: "強制屬性順序與選擇順序一致";
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "同時搜索等效覺醒";

@@ -793,15 +793,15 @@ var formation = new Formation(teamsCount,5);
 		<div class="edit-box-title"><!--修改怪物--></div>
 		<div class="search-box display-none">
 			<div class="attrs-div"><!--属性-->
-				<div class="monster">
-					<input type="file" id="avatar-select" />
+				<label class="monster">
+					<input type="file" accept="image/*" id="avatar-select" />
 					<div class="custom-avatar"></div>
 					<div class="attrs">
 						<div class="attr"></div>
 						<div class="attr"></div>
 						<div class="attr"></div>
 					</div>
-				</div>
+				</label>
 				<ul class="attr-list attr-list-1">
 					<li><input type="radio" name="attr-1" class="attr-radio" value="1111111" id="search-attr-1-any" checked/><label for="search-attr-1-any"><span class="attr" data-attr-icon="any"></span></label></li><!--任意-->
 					<li><input type="radio" name="attr-1" class="attr-radio" value="0000001" id="search-attr-1-0" /><label for="search-attr-1-0"><span class="attr" data-attr-icon="0"></span></label></li><!--火-->

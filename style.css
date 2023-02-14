@@ -1622,16 +1622,21 @@ icon.inflicts::after
 }
 .attrs-div .monster {
 	grid-row: 1 / 4;
-	background-image: url(images/avatar.webp);
-	background-repeat: no-repeat;
-	background-position: 2px 2px;
-}
-.attrs-div .monster #avatar-select {
-	display: none;
 }
 .attrs-div .monster .custom-avatar {
 	width: 100%;
 	height: 100%;
+	box-sizing: border-box;
+	padding: 2px;
+	border-radius: 5px;
+	background-image: url(images/avatar.webp);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-clip: content-box;
+}
+.attrs-div .monster #avatar-select {
+	display: none;
 }
 .attrs-div .options {
 	grid-column: 1 / 3;
