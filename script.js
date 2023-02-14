@@ -3488,9 +3488,7 @@ function initialize() {
 	}
 	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
 	searchEvolutionByThis.onclick = function() {showSearch(Cards.filter(card=>card.evoMaterials.includes(editBox.mid)))};
-
-	const s_attr1s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-1 [name=\"attr-1\"]"));
-	const s_attr2s = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list-2 [name=\"attr-2\"]"));
+	const s_attr_lists = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list")).map(list=>Array.from(list.querySelectorAll("input[type=\"radio\"]")));
 	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
 	const s_typesDiv = searchBox.querySelector(".types-div");
 	const s_typeAndOr = s_typesDiv.querySelector("#type-and-or");
@@ -3498,6 +3496,16 @@ function initialize() {
 	const s_typesLi = Array.from(s_typesUl.querySelectorAll("li"));
 	const s_types = s_typesLi.map(li=>li.querySelector(".type-check")); //checkbox集合
 
+	const s_attr_preview_attrs = Array.from(searchBox.querySelectorAll(".attrs-div .monster .attrs .attr"));
+	function s_attr_onclick(){
+		const attrIdx = parseInt(this.name[this.name.length-1],10) - 1;
+		const valueFlag = parseInt(this.value, 2);
+		const values = flags(valueFlag);
+		let attr = values.length === 1 ? values[0] : 'any';
+		if (attrIdx>0 && attr === 6) attr = -1;
+		s_attr_preview_attrs[attrIdx].dataset.attr = attr;
+	}
+	s_attr_lists.forEach(s_attr_list=>s_attr_list.forEach(s_attr=>s_attr.onclick = s_attr_onclick));
 	function s_types_onchange(){
 		const newClassName = `type-killer-${this.value}`;
 		s_typesUl.classList.toggle(newClassName, this.checked && s_typeAndOr.checked);
@@ -3909,10 +3917,14 @@ function initialize() {
 	s_add_show_abilities_with_awoken.onchange = reShowSearch;
 
 	//恢复搜索状态
-	searchBox.recoverySearchStatus = function({attrs:[attr1, attr2], fixMainColor, types, typeAndOr, rares:[rareLow, rareHigh], awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent, specialFilters}) {
+	searchBox.recoverySearchStatus = function({attrs, fixMainColor, types, typeAndOr, rares:[rareLow, rareHigh], awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent, specialFilters}) {
 		//属性这里是用的2进制写
-		(s_attr1s.find(opt=>parseInt(opt.value,2) == attr1) || s_attr1s[0]).checked = true;
-		(s_attr2s.find(opt=>parseInt(opt.value,2) == attr2) || s_attr2s[0]).checked = true;
+		attrs.forEach((attr, ai)=>{
+			const attr_list = s_attr_lists[ai];
+			let ipt = attr_list.find(opt=>parseInt(opt.value,2) == attr) || attr_list[0];
+			//ipt.checked = true;
+			ipt.click();
+		});
 		s_fixMainColor.checked = fixMainColor;
 		s_types.filter(opt=>types.includes(parseInt(opt.value,10))).forEach(opt=>opt.checked = true);
 		s_typeAndOr.checked = typeAndOr;
@@ -3951,10 +3963,7 @@ function initialize() {
 	}
 	//导出当前的搜索状态
 	searchBox.getSearchOptions = function(){
-		const attrs = [
-			parseInt(returnRadiosValue(s_attr1s), 2) || 0,
-			parseInt(returnRadiosValue(s_attr2s), 2) || 0
-		];
+		const attrs = s_attr_lists.map(list=>parseInt(returnRadiosValue(list), 2) || 0);
 		const types = returnCheckBoxsValues(s_types).map(Str2Int);
 		const rares = [
 			parseInt(returnRadiosValue(s_rareLows), 10),
@@ -4026,8 +4035,7 @@ function initialize() {
 		searchMonList.classList.add(className_displayNone);
 	};
 	searchClear.onclick = function() { //清空搜索选项
-		s_attr1s[0].checked = true;
-		s_attr2s[0].checked = true;
+		s_attr_lists.forEach(list=>list[0].checked = true);
 		s_types.forEach(t => {
 			t.checked = false;
 		});

@@ -319,14 +319,8 @@ label[for="default-level"]::after
 .search-box::before{
 	content: "搜索怪物";
 }
-.search-box .attrs-div .attr-list-1::before{
-	content: "属性 1：";
-}
-.search-box .attrs-div .attr-list-2::before{
-	content: "属性 2：";
-}
 .search-box .attrs-div .fix-main-color-label::after{
-	content: "限制属性 1 为主属性，属性 2 为副属性";
+	content: "强制属性顺序与选择顺序一致";
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "同时搜索等效觉醒";

@@ -28,10 +28,26 @@
 .monster .attrs .attr[data-attr='4'] {
 	background-position-x: calc(-102px * 4); /*暗*/
 }
-.monster .attrs .attr[data-attr='6'] { /*无主属性*/
+.monster .attrs .attr:nth-of-type(1):where([data-attr='6'],[data-attr='any']) { /*无主属性和任意属性*/
 	background-image: url(images/CARDFRAMEW.PNG);
 	background-position: 0 0;
 }
+.monster .attrs .attr:nth-of-type(1)[data-attr='6'] { /*无主属性*/
+	background-position: 0 0;
+}
+.monster .attrs .attr:nth-of-type(1)[data-attr='any'] { /*任意主属性*/
+	background-position: -100px 0;
+}
+/*
+.monster .attrs .attr:nth-of-type(2)[data-attr='any']{
+	transform: rotate(180deg);
+	display: none;
+}
+.monster .attrs .attr:nth-of-type(3)[data-attr='any']{
+	transform: rotate(270deg);
+	display: none;
+}
+*/
 /*宠物头像所用的图片*/
 .monster[data-cards-pic-idx='1']{background-image: url(images/cards_ja/CARDS_001.PNG);}
 .monster[data-cards-pic-idx='2']{background-image: url(images/cards_ja/CARDS_002.PNG);}

@@ -1714,6 +1714,15 @@ var formation = new Formation(teamsCount,6);
 		<div class="edit-box-title"><!--修改怪物--></div>
 		<div class="search-box display-none">
 			<div class="attrs-div"><!--属性-->
+				<div class="monster">
+					<input type="file" id="avatar-select" />
+					<div class="custom-avatar"></div>
+					<div class="attrs">
+						<div class="attr"></div>
+						<div class="attr"></div>
+						<div class="attr"></div>
+					</div>
+				</div>
 				<ul class="attr-list attr-list-1">
 					<li><input type="radio" name="attr-1" class="attr-radio" value="1111111" id="search-attr-1-any" checked/><label for="search-attr-1-any"><span class="attr" data-attr-icon="any"></span></label></li><!--任意-->
 					<li><input type="radio" name="attr-1" class="attr-radio" value="0000001" id="search-attr-1-0" /><label for="search-attr-1-0"><span class="attr" data-attr-icon="0"></span></label></li><!--火-->
@@ -1732,7 +1741,16 @@ var formation = new Formation(teamsCount,6);
 					<li><input type="radio" name="attr-2" class="attr-radio" value="0010000" id="search-attr-2-4" /><label for="search-attr-2-4"><span class="attr" data-attr-icon="4"></span></label></li><!--暗-->
 					<li><input type="radio" name="attr-2" class="attr-radio" value="1000000" id="search-attr-2-6" /><label for="search-attr-2-6"><span class="attr" data-attr-icon="6"></span></label></li><!--无副属性-->
 				</ul>
-				<input type="checkbox" name="fix-main-color" id="fix-main-color" checked><label class="config-checkbox-lbl fix-main-color-label" for="fix-main-color"></label>
+				<ul class="attr-list attr-list-3">
+					<li><input type="radio" name="attr-3" class="attr-radio" value="1111111" id="search-attr-3-any" checked/><label for="search-attr-3-any"><span class="attr" data-attr-icon="any"></span></label></li><!--任意-->
+					<li><input type="radio" name="attr-3" class="attr-radio" value="0000001" id="search-attr-3-0" /><label for="search-attr-3-0"><span class="attr" data-attr-icon="0"></span></label></li><!--火-->
+					<li><input type="radio" name="attr-3" class="attr-radio" value="0000010" id="search-attr-3-1" /><label for="search-attr-3-1"><span class="attr" data-attr-icon="1"></span></label></li><!--水-->
+					<li><input type="radio" name="attr-3" class="attr-radio" value="0000100" id="search-attr-3-2" /><label for="search-attr-3-2"><span class="attr" data-attr-icon="2"></span></label></li><!--木-->
+					<li><input type="radio" name="attr-3" class="attr-radio" value="0001000" id="search-attr-3-3" /><label for="search-attr-3-3"><span class="attr" data-attr-icon="3"></span></label></li><!--光-->
+					<li><input type="radio" name="attr-3" class="attr-radio" value="0010000" id="search-attr-3-4" /><label for="search-attr-3-4"><span class="attr" data-attr-icon="4"></span></label></li><!--暗-->
+					<li><input type="radio" name="attr-3" class="attr-radio" value="1000000" id="search-attr-3-6" /><label for="search-attr-3-6"><span class="attr" data-attr-icon="6"></span></label></li><!--无副属性-->
+				</ul>
+				<div class="options"><input type="checkbox" name="fix-main-color" id="fix-main-color" checked><label class="config-checkbox-lbl fix-main-color-label" for="fix-main-color"></label></div>
 			</div>
 			<div class="types-div"><!--类型-->
 				<ul class="type-list">

@@ -679,38 +679,38 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 	}
 }
 //搜索卡片用
-function searchCards(cards, {attrs:[attr1, attr2], fixMainColor, types, typeAndOr, rares:[rareLow, rareHigh], awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent}) {
+function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rares:[rareLow, rareHigh], awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent}) {
 	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	if (canAssist) cardsRange = cardsRange.filter(card=>card.canAssist);
 	if (canLv110) cardsRange = cardsRange.filter(card=>card.limitBreakIncr>0);
 	if (is8Latent) cardsRange = cardsRange.filter(card=>card.is8Latent);
 	//属性
-	const anyAttr = 0b1111101;
-	const anyA1 = attr1 === 0 || (attr1 & anyAttr) == anyAttr, anyA2 = attr2 === 0 || (attr2 & anyAttr) == anyAttr;
-	if (!anyA1 || !anyA2) { //当a1、a2任一不为所有颜色时才需要筛选属性
-		const attr1s = flags(attr1), attr2s = flags(attr2);
-		const nullAttrArr = [undefined,-1,6];
-		if (fixMainColor) //如果固定了顺序
-		{
-			cardsRange = cardsRange.filter(({attrs:[cAttr1, cAttr2]}) =>
-				(anyA2 ? cAttr1 === 6 && attr1s.includes(cAttr2) : false) || //当A2为随机，只有属性1时，也专门搜只有副属性=属性1的怪物
-				(anyA1 ? true : attr1s.includes(cAttr1)) && //当A1不为随机，保证有1
-				(anyA2 ? true : attr2s.includes(cAttr2) || //当A2不为随机，保证有2
-					attr2s.includes(6) && nullAttrArr.includes(cAttr2)) //当A2有6时，副属性3种没有的数值都算
-			);
+	const anyAttrsFlag = 0b1111101;
+	const anyAttrs = sAttrs.map(attr=>attr === 0 || (attr & anyAttrsFlag) == anyAttrsFlag);
+	if (anyAttrs.some(any=>!any)) { //当任一属性不为任意颜色时才需要筛选属性
+		const attrNums = sAttrs.filter(attr=>fixMainColor || attr > 0 && (attr & anyAttrsFlag) !== anyAttrsFlag) //如果固定顺序就全部返回，否则只返回不为任意色的不考虑顺序 
+			.map(attr=>{
+				let attrNum = flags(attr);
+				if (attrNum.includes(6)) attrNum.push(undefined,-1); //如果是包含6的，就添加-1和undefined的值
+				return attrNum;
+			});
+		if (fixMainColor) {//如果固定了顺序
+			cardsRange = cardsRange.filter(({attrs:cAttrs}) => {
+				//默认逻辑为，只要不是any，就判断这个颜色是否包含了对应的颜色
+				//只选第一属性的时候，且第一属性为无主属性的时候，也显示副属性等于主属性的
+				return (anyAttrs[0] || attrNums[0].includes(cAttrs[0]) || anyAttrs[1] && cAttrs[0] === 6 && attrNums[0].includes(cAttrs[1])) &&
+					   (anyAttrs[1] || attrNums[1].includes(cAttrs[1])) &&
+					   (anyAttrs[2] || attrNums[2].includes(cAttrs[2]));
+			});
 		}
-		else //不限定顺序时
-		{
-			cardsRange = cardsRange.filter(({attrs:[cAttr1, cAttr2]}) => {
-				let hasA1 = anyA1 || attr1s.includes(cAttr1); //如果任意A1或者有A1
-				if (hasA1) { //直接判断A2即可
-					return (anyA2 ? true : attr2s.includes(cAttr2) || //当A2不为随机，保证有2
-						attr2s.includes(6) && nullAttrArr.includes(cAttr2)); //当2有6时，副属性3种没有的数值都算
-				} else if (attr1s.includes(cAttr2) || attr1s.includes(6) && nullAttrArr.includes(cAttr2)) { //如果是A1有2
-					return anyA2 ? true : attr2s.includes(cAttr1); //当A2不为随机，保证有1
-				} else {
-					return false;
-				}
+		else {//不限定顺序时
+			cardsRange = cardsRange.filter(({attrs:cAttrs}) => {
+				let remainAttrNum = cAttrs.reduce((pre, attr)=>{
+					let findIndex = pre.findIndex(attrNum=>attrNum.includes(attr)); //每找到一组属性就去掉一个
+					if (findIndex >= 0) return pre.slice(0,findIndex).concat(pre.slice(findIndex+1));
+					else return pre;
+				}, attrNums);
+				return remainAttrNum.length === 0;
 			});
 		}
 	}
