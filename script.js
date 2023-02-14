@@ -1291,8 +1291,6 @@ function loadData(force = false)
 				
 				monstersList.appendChild(fragment);
 			}
-			Cards[772].attrs.push(2);
-			Cards[9001].attrs.push(0);
 
 			if (statusLine) statusLine.classList.remove("loading-mon-info");
 

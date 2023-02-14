@@ -5,6 +5,8 @@ const converter = OpenCC.Converter({ from: 'hk', to: 'cn' });
 const tsConverter = OpenCC.CustomConverter([
 	['点阵图', '像素画'],
 	['魔物猎人', '怪物猎人'],
+	['结他', '吉他'],
+	['琴键', '键盘'],
 	
 	//漫威
 	['MARVEL', '漫威'],
