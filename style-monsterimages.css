@@ -983,6 +983,9 @@
 .awoken-icon[data-awoken-icon='105']{/*S-*/
 	background-position-y:calc(-32px * 105);
 }
+.awoken-icon[data-awoken-icon='106']{/*浮游*/
+	background-position-y:calc(-32px * 106);
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],

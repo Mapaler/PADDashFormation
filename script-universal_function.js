@@ -627,9 +627,14 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		reValue = reValue * latterAwokenScale[idx].reduce(calculateAwokenScale, 1);
 
 		//都要做四舍五入
-		if (isDge && dgeRate[idx] != 1)
+		if (isDge && dgeRate[idx] !== 1)
 		{
 			let rate = dgeRate[idx];
+			//计算攻击力，有浮游觉醒，且比例小于1时
+			if (idx === 1 && rate < 1 && awokenList.includes(106)) {
+				//比例乘以20，但是不得大于1
+				rate = Math.min(1, rate * 20);
+			}
 			reValue = Math.round(reValue * rate);
 			reValueNoAwoken = Math.round(reValueNoAwoken * rate);
 		}else
