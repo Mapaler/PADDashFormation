@@ -1,30 +1,34 @@
 @charset "utf-8";
 /*怪物边框*/
-.property{ /*主属性*/
+.monster .attrs .attr:nth-of-type(1){ /*主属性*/
 	background-position-y: 0;
 }
-.subproperty{ /*副属性*/
+.monster .attrs .attr:nth-of-type(2),
+.monster .attrs .attr:nth-of-type(3){ /*副属性*/
 	background-position-y: -104px;
 }
-:where(.property, .subproperty)[data-property='-1'] {
+.monster .attrs .attr:nth-of-type(3){
+	transform: rotate(90deg);
+}
+.monster .attrs .attr[data-attr='-1'] {
 	background: none; /*无*/
 }
-:where(.property, .subproperty)[data-property='0'] {
+.monster .attrs .attr[data-attr='0'] {
 	background-position-x: calc(-102px * 0); /*火*/
 }
-:where(.property, .subproperty)[data-property='1'] {
+.monster .attrs .attr[data-attr='1'] {
 	background-position-x: calc(-102px * 1); /*水*/
 }
-:where(.property, .subproperty)[data-property='2'] {
+.monster .attrs .attr[data-attr='2'] {
 	background-position-x: calc(-102px * 2); /*木*/
 }
-:where(.property, .subproperty)[data-property='3'] {
+.monster .attrs .attr[data-attr='3'] {
 	background-position-x: calc(-102px * 3); /*光*/
 }
-:where(.property, .subproperty)[data-property='4'] {
+.monster .attrs .attr[data-attr='4'] {
 	background-position-x: calc(-102px * 4); /*暗*/
 }
-.property[data-property='6'] {
+.monster .attrs .attr[data-attr='6'] { /*无主属性*/
 	background-image: url(images/CARDFRAMEW.PNG);
 	background-position: 0 0;
 }

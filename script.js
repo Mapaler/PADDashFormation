@@ -1291,6 +1291,8 @@ function loadData(force = false)
 				
 				monstersList.appendChild(fragment);
 			}
+			Cards[772].attrs.push(2);
+			Cards[9001].attrs.push(0);
 
 			if (statusLine) statusLine.classList.remove("loading-mon-info");
 
@@ -4663,8 +4665,9 @@ function changeid(mon, monDom, latentDom, assist) {
 		monDom.setAttribute("data-cards-pic-x", idxInPage % 10); //添加X方向序号
 		monDom.setAttribute("data-cards-pic-y", Math.floor(idxInPage / 10)); //添加Y方向序号
 
-		monDom.querySelector(".property").setAttribute("data-property", card.attrs[0]); //主属性
-		let subAttribute = card.attrs[1] ?? 6; //正常的副属性
+		const attrDoms = monDom.querySelectorAll(".attr"); //所有属性边框
+		attrDoms[0].setAttribute("data-attr", card.attrs[0]); //主属性
+		let subAttribute = card.attrs[1] ?? -1; //正常的副属性
 		let assistCard = Cards[assist?.id];
 		let changeAttr;
 		if (assistCard && assistCard.awakenings.includes(49) &&  //如果传入了辅助武器
@@ -4672,9 +4675,10 @@ function changeid(mon, monDom, latentDom, assist) {
 		) {
 			subAttribute = changeAttr - 91; //更改副属性
 		}
-		const subAttrDom = monDom.querySelector(".subproperty"); //副属性
-		subAttrDom.setAttribute("data-property", subAttribute); //副属性
-		subAttrDom.classList.toggle("changed-sub-attr", Boolean(changeAttr));
+		attrDoms[1].setAttribute("data-attr", subAttribute); //副属性
+		attrDoms[1].classList.toggle("changed-sub-attr", Boolean(changeAttr));
+
+		attrDoms[2].setAttribute("data-attr", card.attrs[2] ?? -1); //第三属性
 
 		monDom.title = "No." + monId + " " + (card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name);
 		monDom.href = currentLanguage.guideURL(monId, card.name);
