@@ -4048,7 +4048,10 @@ function initialize() {
 		searchMonList.classList.add(className_displayNone);
 	};
 	searchClear.onclick = function() { //清空搜索选项
-		s_attr_lists.forEach(list=>list[0].checked = true);
+		s_attr_lists.forEach(list=>{
+			list[0].checked = true;
+			list[0].onclick();
+		});
 		s_types.forEach(t => {
 			t.checked = false;
 		});
