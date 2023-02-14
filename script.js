@@ -3507,7 +3507,12 @@ function initialize() {
 		if (attrIdx>0 && attr === 6) attr = -1;
 		s_attr_preview_attrs[attrIdx].dataset.attr = attr;
 	}
-	s_attr_lists.forEach(s_attr_list=>s_attr_list.forEach(s_attr=>s_attr.onclick = s_attr_onclick));
+	s_attr_lists.forEach(s_attr_list=>
+		s_attr_list.forEach(s_attr=>{
+			s_attr.onclick = s_attr_onclick;
+			if (s_attr.checked) s_attr.onclick();
+		})
+	);
 	//可以自行打开图片设定头像的彩蛋
 	const avatarSelect = attrPreview.querySelector("#avatar-select");
 	const customAvatar = attrPreview.querySelector(".custom-avatar");
@@ -3932,8 +3937,8 @@ function initialize() {
 		attrs.forEach((attr, ai)=>{
 			const attr_list = s_attr_lists[ai];
 			let ipt = attr_list.find(opt=>parseInt(opt.value,2) == attr) || attr_list[0];
-			//ipt.checked = true;
-			ipt.click();
+			ipt.checked = true;
+			ipt.onclick();
 		});
 		s_fixMainColor.checked = fixMainColor;
 		s_types.filter(opt=>types.includes(parseInt(opt.value,10))).forEach(opt=>opt.checked = true);

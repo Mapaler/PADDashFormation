@@ -387,11 +387,15 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_097.PNG",
-		"d2705248cbdb75314d5a9720b15c1133"
+		"3debaba572b82626550eedb582b546c4"
 	],
 	[
 		"images/cards_ja/CARDS_098.PNG",
 		"83292dbed5fd895fa0d20fb09435b7bd"
+	],
+	[
+		"images/cards_ja/CARDS_099.PNG",
+		"92f3b5f8789330944ec169d9d03f61b2"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -8075,7 +8079,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"abcb1a93b5a2d662ac48236543f25ac6"
+		"cd72a091f109da66e25db1df3cddc855"
 	],
 	[
 		"script-custom_elements.js",
@@ -8083,7 +8087,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"c046491cb3831d3523be6d8f7da53d5d"
+		"ce1606d9b6ce0f64812306fa27b1d95a"
 	],
 	[
 		"script-skill-parser.js",
@@ -8091,23 +8095,23 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"e39612ba401bd55089a15475dd9844b3"
+		"64fb2c5cd60a5f576e725b833aa69b5e"
 	],
 	[
 		"script.js",
-		"deee9c2cc2cd2b88a8f38918ebd9400a"
+		"400184eae8cd0a836205b789cd488ece"
 	],
 	[
 		"solo.html",
-		"e0ed886d50eb539eb7992a4452521728"
+		"2b2dfcaf794dea279401396a23a01ec0"
 	],
 	[
 		"style-monsterimages.css",
-		"4998514bf0ab912f46f0e9bd1f4503c6"
+		"6b03aa3f4069ea38f6be0f42a309f5f4"
 	],
 	[
 		"style.css",
-		"80c278fc3294d8a9b4a00ccc6c555631"
+		"1da8df49536808c08e14c06f5b5596a9"
 	],
 	[
 		"temp.js",
@@ -8115,11 +8119,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"ea35361243693f6e521a1229b1eb9c25"
+		"cfe810b08daaa0246c3b8c3dbfb26fd2"
 	],
 	[
 		"languages/en.css",
-		"0e307553e3be48fb29de5bce6924d023"
+		"976ce0962da5080a1113c57c35a1d5e7"
 	],
 	[
 		"languages/en.js",
@@ -8127,7 +8131,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"db33a415d46db7374fd515446de29ddb"
+		"3d16f3e384be4169a980a21d4b553aeb"
 	],
 	[
 		"languages/ja.js",
@@ -8135,7 +8139,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"c92fabeca91f3e045ba11c77795f04fd"
+		"932b9acfd9d1ecc4decc5ba052a23d68"
 	],
 	[
 		"languages/ko.js",
@@ -8155,23 +8159,27 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.css",
-		"23387b734f568a2b37381d4f62d0b820"
+		"dd83018ff0f384d126d7595747db34c7"
 	],
 	[
 		"languages/zh-TW.js",
-		"4ffa03c49bc1541ea99ce236c4d8c7ee"
+		"58c72be1357c34c63d44a6aa130efee4"
 	],
 	[
 		"languages/zh.css",
-		"a81d9fa1cad525c2825535661ecb7536"
+		"dc9566b1a82ccd9d22063bb0356d95d3"
 	],
 	[
 		"languages/zh.js",
-		"23f5c84f17523c730c68cd2f9ab5c63b"
+		"606eababd8fb71dd480b2fd6939e0b71"
 	],
 	[
 		"images/attrs.png",
 		"88a4427ab2a5a6434955dc4632c173c1"
+	],
+	[
+		"images/avatar.webp",
+		"b5c595084a72bbf5f75a6bc2d6d90aad"
 	],
 	[
 		"images/awoken-count-bg.png",
@@ -8179,7 +8187,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"b0292c1fbdc8ead34afff0835616dd1e"
+		"0d2d9a334fb12f7e6a03b715cbb219b4"
 	],
 	[
 		"images/badge-bg.png",
@@ -8199,7 +8207,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/CARDFRAMEW.PNG",
-		"54d696bcecec70de291995be2b0acb90"
+		"a4daf23e2206f0d5516f03f35ab1871c"
 	],
 	[
 		"images/icon-76board.png",
@@ -8339,19 +8347,19 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"e102c9a6b117946bd09166ac6c5880c3"
+		"61707bf8cb7e1e65abd8ab98639b77b2"
 	],
 	[
 		"monsters-info/mon_en.json",
-		"7ebb040231ed8506a553ca1e5b3aa8c5"
+		"808fee2940411bee73e73b35366b499e"
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"0d7db29e40677f05a391b115310389ad"
+		"0532d6395347ab07c454c297cf7d278a"
 	],
 	[
 		"monsters-info/mon_ko.json",
-		"2818635983f327f21a2ce8d4cd9e4bbb"
+		"231ccd7e0220d3e877cf1ab2a5837a1f"
 	],
 	[
 		"monsters-info/skill_en.json",
@@ -8359,7 +8367,7 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/skill_ja.json",
-		"7b9534898124da9dea5b6a5283e6af4c"
+		"3820d1b718b51824fc0d3aadefb2eb6f"
 	],
 	[
 		"monsters-info/skill_ko.json",
