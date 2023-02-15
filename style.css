@@ -1614,16 +1614,16 @@ icon.inflicts::after
 	text-align: center;
 }
 
-.attrs-div {
+.search-box .attrs-div {
 	display: grid;
 	grid-auto-rows: min-content;
 	grid-template-columns: 100px auto;
 	grid-gap: 3px;
 }
-.attrs-div .monster {
+.search-box .attrs-div .monster {
 	grid-row: 1 / 4;
 }
-.attrs-div .monster .custom-avatar {
+.search-box .attrs-div .monster .custom-avatar {
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
@@ -1635,17 +1635,17 @@ icon.inflicts::after
 	background-position: center;
 	background-clip: content-box;
 }
-.attrs-div .monster #avatar-select {
+.search-box .attrs-div .monster #avatar-select {
 	display: none;
 }
-.attrs-div .options {
+.search-box .attrs-div .options {
 	grid-column: 1 / 3;
 }
-.attr-list {
+.search-box .attrs-div .attr-list {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 55px);
 }
-.attr-list label {
+.search-box .attrs-div .attr-list label {
 	width: 100%;
 	height: 100%;
 }
