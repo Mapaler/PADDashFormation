@@ -92,28 +92,15 @@ officialAPI.forEach(function (lang) {
 		delete card.unk05;
 		delete card.unk06;
 		delete card.unk07;
-		if (card.unk08 > 0) {
-			console.log('%d 的 unk08 有值了',cardIndex)
+		if (card.unk08 !== undefined && card.unk08 != 0) {
+			console.log('%d 的 unk08 有值了 %s',cardIndex, card.unk08)
+		} else {
+			delete card.unk08;
 		}
-		delete card.unk08;
 		if (card.searchFlags.every(num => isNaN(num)))
 			delete card.searchFlags;
 		monCards.push(card);
 	}
-	/*
-	//测试附加属性与类型的武器用
-	for (let i = 83; i <= 95; i++)
-	{
-		let testCard = new Card(oCards[0]);
-		testCard.id = monCards.length;
-		testCard.canAssist = true;
-		if (i >= 83 && i<= 90) testCard.attrs[0] = 6;
-		if (i >= 91) testCard.attrs = [i - 91, i - 91];
-		testCard.name = "v20.0 new awoken debug test ID." + i;
-		testCard.awakenings.push(49, i);
-		monCards.push(testCard);
-	}
-	*/
 
 	//加入自定义的语言
 	lang.customName.forEach(function (lcode) {
