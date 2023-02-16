@@ -3,12 +3,11 @@
 .monster .attrs .attr:nth-of-type(1){ /*主属性*/
 	background-position-y: 0;
 }
-.monster .attrs .attr:nth-of-type(2),
-.monster .attrs .attr:nth-of-type(3){ /*副属性*/
+.monster .attrs .attr:nth-of-type(2){ /*副属性*/
 	background-position-y: -104px;
 }
-.monster .attrs .attr:nth-of-type(3){
-	transform: rotate(90deg);
+.monster .attrs .attr:nth-of-type(3){ /*三属性*/
+	background-position-y: -208px;
 }
 .monster .attrs .attr[data-attr='-1'] {
 	background: none; /*无*/
@@ -28,24 +27,14 @@
 .monster .attrs .attr[data-attr='4'] {
 	background-position-x: calc(-102px * 4); /*暗*/
 }
-.monster .attrs .attr:nth-of-type(1):where([data-attr='6'],[data-attr='any']) { /*无主属性和任意属性*/
+.monster .attrs .attr:nth-of-type(1):where([data-attr='6'],[data-attr='any']) { /*无主属性*/
 	background-image: url(images/CARDFRAMEW.PNG);
 	background-position: 0 0;
 }
-.monster .attrs .attr:nth-of-type(1)[data-attr='6'] { /*无主属性*/
-	background-position: 0 0;
-}
-.monster .attrs .attr:nth-of-type(1)[data-attr='any'] { /*任意主属性*/
-	background-position: -100px 0;
-}
 /*
-.monster .attrs .attr:nth-of-type(2)[data-attr='any']{
-	transform: rotate(180deg);
-	display: none;
-}
-.monster .attrs .attr:nth-of-type(3)[data-attr='any']{
-	transform: rotate(270deg);
-	display: none;
+.monster .attrs .attr[data-attr='any'] {
+	background-image: url(images/card-frame-any.png);
+	background-position-x: 0;
 }
 */
 /*宠物头像所用的图片*/
