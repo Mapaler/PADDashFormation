@@ -74,8 +74,6 @@ class Card{
 			card.types.some(t=>[0,12,14,15].includes(t)); //0進化用;12能力覺醒用;14強化合成用;15販賣用默认合并
 		card.is8Latent = Boolean(flags & 1<<5); //是否支持8个潜觉
 		card.skillBanner = Boolean(flags & 1<<6); //是否有技能横幅
-		card.attrs = card.attrs.filter(n=>n>=0); //attr里面去掉-1
-		card.types = card.types.filter(n=>n>=0); //type里面去掉-1
 
 		card.altName = data[i++].split("|").filter(str=>str.length); //替换名字（分类标签）
 		card.limitBreakIncr = data[i++]; //110级增长
@@ -85,8 +83,16 @@ class Card{
 		card.searchFlags = [data[i++], data[i++]]; //队长技搜索类型，解析写在这里会导致文件太大，所以写到前端去了
 		card.gachaId = data[i++]; //目前猜测是桶ID
 		card.unk08 = data[i++]; //未知08
-		if ((i + 1) < data.length)
-			console.log(`有新增数据/residue data for #${card.id}: ${i} ${data.length}`);
+		card.attrs.push(data[i++]); //属性3
+		
+		card.attrs = card.attrs.filter(Number.isInteger);
+		if (card.attrs.indexOf(-1)>0)
+			card.attrs = card.attrs.slice(0,card.attrs.indexOf(-1)); //attr里面去掉-1之后的
+		card.types = card.types.filter(Number.isInteger);
+		if (card.types.indexOf(-1)>0)
+			card.types = card.types.slice(0,card.types.indexOf(-1)); //type里面去掉-1
+		if (i < data.length)
+			console.log(`有新增数据/residue data for #${card.id}: ${i} ${data[i]}`);
 	}
 }
 //对于Nodejs输出成模块

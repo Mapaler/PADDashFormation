@@ -79,7 +79,7 @@ function g(id)
 		m[41],m[42],m[43],m[44],m[45], //进化素材ID 1-5
 	);
 }
-fetch("ko-card.json").then(async response=>{
+fetch("ja-card.json").then(async response=>{
 	const originalJSON = await response.json();
 	cards = originalJSON.card;
 	pcards = cards.map(c=>{

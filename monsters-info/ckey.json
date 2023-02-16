@@ -1,1 +1,26 @@
-[{"code":"ja","ckey":{"card":"186da01f08ed72289f6773793564384d","skill":"3820d1b718b51824fc0d3aadefb2eb6f"},"updateTime":1676536625356},{"code":"en","ckey":{"card":"24cdd9efe2912958c15f4ef725586400","skill":"1577d8e41d83a382d466d23335017d24"},"updateTime":1676536625356},{"code":"ko","ckey":{"card":"06e3e6f9035523d447ec0c39f15a9991","skill":"76b6ae56c534699009288fbf145b5c86"},"updateTime":1676536625356}]
+[
+	{
+		"code": "ja",
+		"ckey": {
+			"card": "186da01f08ed72289f6773793564384d",
+			"skill": "3820d1b718b51824fc0d3aadefb2eb6f"
+		},
+		"updateTime": 1676536625356
+	},
+	{
+		"code": "en",
+		"ckey": {
+			"card": "24cdd9efe2912958c15f4ef725586400",
+			"skill": "1577d8e41d83a382d466d23335017d24"
+		},
+		"updateTime": 1676536625356
+	},
+	{
+		"code": "ko",
+		"ckey": {
+			"card": "06e3e6f9035523d447ec0c39f15a9991",
+			"skill": "76b6ae56c534699009288fbf145b5c86"
+		},
+		"updateTime": 1676536625356
+	}
+]

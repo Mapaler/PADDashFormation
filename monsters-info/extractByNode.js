@@ -295,7 +295,7 @@ fs.readFile('./ckey.json', 'utf-8', function (err, data) {
 			}
 		}
 	}
-	fs.writeFile('./ckey.json', JSON.stringify(ckeyObjs), function (err) {
+	fs.writeFile('./ckey.json', JSON.stringify(ckeyObjs, null, '\t'), function (err) {
 		if (err) {
 			console.error(err);
 		}
