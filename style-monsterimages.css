@@ -27,8 +27,12 @@
 .monster .attrs .attr[data-attr='4'] {
 	background-position-x: calc(-102px * 4); /*暗*/
 }
-.monster .attrs .attr:nth-of-type(1):where([data-attr='6'],[data-attr='any']) { /*无主属性*/
+.monster .attrs .attr:nth-of-type(1)[data-attr='6'] { /*无主属性*/
 	background-image: url(images/CARDFRAMEW.PNG);
+	background-position: 0 0;
+}
+.monster .attrs .attr:nth-of-type(1)[data-attr='any'] {
+	background-image: url(images/card-frame-any.png);
 	background-position: 0 0;
 }
 /*
