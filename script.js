@@ -3515,6 +3515,9 @@ function initialize() {
 	const avatarSelect = attrPreview.querySelector("#avatar-select");
 	const customAvatar = attrPreview.querySelector(".custom-avatar");
 	avatarSelect.onchange = function(event){
+		let fileUrlmatch = /url\("(blob:.+?)"\)/.exec(customAvatar.style.backgroundImage);
+		if (fileUrlmatch?.[1]) URL.revokeObjectURL(fileUrlmatch[1]); //如果找到旧的blob网址，就删除
+
 		let fileUrl = URL.createObjectURL(this.files[0]);
 		customAvatar.style.backgroundImage = `url(${fileUrl})`;
 	};
