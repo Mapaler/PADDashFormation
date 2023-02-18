@@ -379,15 +379,15 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_095.PNG",
-		"ddda0cec0f6f02e5fd27c891040f287c"
+		"47189c57cf71ebceb12e32eb1ad2a2e2"
 	],
 	[
 		"images/cards_ja/CARDS_096.PNG",
-		"a1c4d53b59e532e89d71482c4358ab75"
+		"0f196bf1ce25bde121949824e45bab7f"
 	],
 	[
 		"images/cards_ja/CARDS_097.PNG",
-		"8a8869639bee31cff42f37b0cf177d4e"
+		"3debaba572b82626550eedb582b546c4"
 	],
 	[
 		"images/cards_ja/CARDS_098.PNG",
