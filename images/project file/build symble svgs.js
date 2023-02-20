@@ -47,9 +47,20 @@ async function main({directory, idPre, svgFilename, rectFunc}) {
 	}
 
 	iconArr.sort((a,b)=>{
-		function nameNum(fileName){return parseInt(/^\d+/.exec(fileName)?.[0] || 0)}
-		return (nameNum(a.fileName) - nameNum(b.fileName)) || //先判断数字
-				(a.fileName.length - b.fileName.length); //然后判断文件名长度
+		function nameNum(fileName){
+			let fileNameWithOutExtName = path.parse(fileName).name;
+			let reg = /^(\D*)(\d+)/.exec(fileNameWithOutExtName);
+			let parse = {str: "", num: 0};
+			if (reg) {
+				parse.str = reg[1];
+				parse.num = parseInt(reg[2], 10);
+			} else {
+				parse.str = fileNameWithOutExtName;
+			}
+			return parse;
+		}
+		let pa = nameNum(a.fileName), pb = nameNum(b.fileName);
+		return pa.str.localeCompare(pb.str) || (pa.num - pb.num);
 	});
 	
 	const svgDoc = new DOMImplementation().createDocument(svgNS, 'svg');
