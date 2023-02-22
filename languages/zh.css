@@ -212,13 +212,13 @@ label[for="merge-skill"]::after{
 	content: "特別保護";
 }
 .control-box .languages-label::before{
-	content: "🌐语言：";
+	content: "\f1ab 语言：";
 }
 .control-box .datasource-label::before{
 	content: "🕹️数据来源：";
 }
 .control-box .datasource-updatetime::before{
-	content: "⌚更新时间：";
+	content: "🗓️更新时间：";
 }
 .control-box .btn-solo-link::before{
 	content: "🧑转到单人游戏";
@@ -248,7 +248,7 @@ label[for="merge-skill"]::after{
 	content: "🔄轮换ABC队";
 }
 .control-box .lbl-henshin-change::before{
-	content: "🕴️变身";
+	content: "🦸变身";
 }
 .control-box .lbl-remove-assist::before{
 	content: "⛔解除辅助";
@@ -259,8 +259,11 @@ label[for="merge-skill"]::after{
 .control-box .show-mon-skill-cd-lbl::after{
 	content:"❄️显示技能冷却";
 }
+label[for="show-mon-rarity"]::after{
+	content:"⭐️显示稀有度";
+}
 .control-box .show-mon-awoken-lbl::after{
-	content:"👁显示卡片觉醒";
+	content:"👁️显示卡片觉醒";
 }
 .control-box .show-awoken-count-lbl::after{
 	content:"⚔️显示觉醒统计和能力值";

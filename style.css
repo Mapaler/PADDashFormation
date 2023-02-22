@@ -704,7 +704,7 @@ body:not(.show-mon-skill-cd) .monster .skill-cd.max-skill {
 	display: none;
 }
 /*显示怪物星级*/
-.show-mon-awoken .monster .rarity::before{
+.show-mon-rarity .monster .rarity::before{
 	position: absolute;
 	left: 3px;
 	top: 10px;
@@ -2805,7 +2805,7 @@ icon.inflicts::after
 	margin-bottom: 2px;
 }
 .control-box .languages-label::before{
-	content: "🌐Lanuage:";
+	content: "\f1ab Lanuage:";
 }
 .control-box .lbl-henshin-change,
 .help-link

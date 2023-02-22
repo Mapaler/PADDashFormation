@@ -222,7 +222,7 @@ label[for="merge-skill"]::after{
 	content: "🕹️Data source:";
 }
 .control-box .datasource-updatetime::before{
-	content: "⌚Update Time:";
+	content: "🗓️Update Time:";
 }
 .control-box .btn-solo-link::before{
 	content: "🧑Jump To Solo Mode";
@@ -252,19 +252,22 @@ label[for="merge-skill"]::after{
 	content: "🔄Rotating ABC Team";
 }
 .control-box .lbl-henshin-change::before{
-	content: "🕴️Henshin";
+	content: "🦸Henshin";
 }
 .control-box .lbl-remove-assist::before{
 	content: "⛔Remove Assist";
 }
 .control-box .show-mon-id-lbl::after{
-	content:"🆔Show monster ID";
+	content:"🆔Show card's ID";
 }
 .control-box .show-mon-skill-cd-lbl::after{
 	content:"❄️Show skill's cooldown";
 }
+label[for="show-mon-rarity"]::after{
+	content:"⭐️Show Rarity";
+}
 .control-box .show-mon-awoken-lbl::after{
-	content:"👁Show card awoken";
+	content:"👁️Show card awoken";
 }
 .control-box .show-awoken-count-lbl::after{
 	content:"⚔️Show awoken count and ability";

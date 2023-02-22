@@ -210,7 +210,7 @@ label[for="merge-skill"]::after{
 	content: "🕹️데이터 소스:";
 }
 .control-box .datasource-updatetime::before{
-	content: "⌚업데이트 시간:";
+	content: "🗓️업데이트 시간:";
 }
 .control-box .btn-solo-link::before{
 	content: "🧑1인 모드 이동";
@@ -240,7 +240,7 @@ label[for="merge-skill"]::after{
 	content: "🔄로테이션 ABC 팀";
 }
 .control-box .lbl-henshin-change::before{
-	content: "🕴️변신";
+	content: "🦸변신";
 }
 .control-box .lbl-remove-assist::before{
 	content: "⛔보조를 해제합";
@@ -251,8 +251,11 @@ label[for="merge-skill"]::after{
 .control-box .show-mon-skill-cd-lbl::after{
 	content:"❄️스킬의 사용 대기 시간 표시";
 }
+label[for="show-mon-rarity"]::after{
+	content:"⭐️희귀도 표시";
+}
 .control-box .show-mon-awoken-lbl::after{
-	content:"👁카드 각성을 표시합";
+	content:"👁️카드 각성을 표시합";
 }
 .control-box .show-awoken-count-lbl::after{
 	content:"⚔️각성 통계 및 기능 값 표시";

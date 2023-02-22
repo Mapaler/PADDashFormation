@@ -1850,58 +1850,48 @@ function initialize() {
 	//▲添加数据来源列表结束
 
 	//设定初始的显示设置
+	//初始化开关
+	function initializeSwitch(checkbox) {
+		//开关设置的快速保存
+		function switchFastSave(event) {
+			document.body.classList.toggle(this.id, this.checked);
+			if (event instanceof Event) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
+		}
+		if (!checkbox) return;
+		checkbox.onchange = switchFastSave;
+		checkbox.checked = localStorage_getBoolean(cfgPrefix + checkbox.id, true);
+		checkbox.onchange(false);
+		return checkbox;
+	}
 	//显示ID开关
-	const btnShowMonId = document.getElementById("show-mon-id");
-	btnShowMonId.checked = localStorage_getBoolean(cfgPrefix + btnShowMonId.id, true);
-	btnShowMonId.onchange = function(e){
-		document.body.classList.toggle(this.id, this.checked);
-		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
-	};
-	btnShowMonId.onchange(false);
+	const btnShowMonId = initializeSwitch(document.getElementById("show-mon-id"));
 
 	//显示CD开关
-	const btnShowMonSkillCd = document.getElementById("show-mon-skill-cd");
-	btnShowMonSkillCd.checked = localStorage_getBoolean(cfgPrefix + btnShowMonSkillCd.id, true);
-	btnShowMonSkillCd.onchange = function(e){
-		document.body.classList.toggle(this.id, this.checked);
-		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
-	};
-	btnShowMonSkillCd.onchange(false);
+	const btnShowMonSkillCd = initializeSwitch(document.getElementById("show-mon-skill-cd"));
+
+	//显示星级开关
+	const btnShowMonRarity = initializeSwitch(document.getElementById("show-mon-rarity"));
 
 	//显示卡片觉醒开关
-	const btnShowMonAwoken = document.getElementById("show-mon-awoken");
-	btnShowMonAwoken.checked = localStorage_getBoolean(cfgPrefix + btnShowMonAwoken.id);
-	btnShowMonAwoken.onchange = function(e){
-		document.body.classList.toggle(this.id, this.checked);
-		if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
-	};
-	btnShowMonAwoken.onchange(false);
+	const btnShowMonAwoken = initializeSwitch(document.getElementById("show-mon-awoken"));
 	
 	//3P显示觉醒统计开关
-	const btnShowAwokenCount = document.getElementById("show-awoken-count");
-	if (btnShowAwokenCount) {
-		btnShowAwokenCount.checked = localStorage_getBoolean(cfgPrefix + btnShowAwokenCount.id, true);
-		btnShowAwokenCount.onchange = function(e){
-			document.body.classList.toggle(this.id, this.checked);
-			if (e) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
-		};
-		btnShowAwokenCount.onchange(false);
-	}
+	const btnShowAwokenCount = initializeSwitch(document.getElementById("show-awoken-count"));
 
 	//默认等级
 	const iptDefaultLevel = document.getElementById("default-level");
 	iptDefaultLevel.value = localStorage.getItem(cfgPrefix + iptDefaultLevel.id);
-	iptDefaultLevel.onchange = function(e){
+	iptDefaultLevel.onchange = function(event){
 		let num = Number(this.value);
 		defaultLevel = num || this.placeholder;
-		if (e) localStorage.setItem(cfgPrefix + this.id, this.value);
+		if (event instanceof Event) localStorage.setItem(cfgPrefix + this.id, this.value);
 	}
 	iptDefaultLevel.onchange(false);
 
 	//触屏使用的切换显示的线条
-	interchangeSVG = document.body.querySelector("#interchange-line");
-	interchangeSVG.line = interchangeSVG.querySelector("g line");
-	interchangeSVG.changePoint = function(p1, p2) {
+	interchangeSvg = document.body.querySelector("#interchange-line");
+	interchangeSvg.line = interchangeSvg.querySelector("g line");
+	interchangeSvg.changePoint = function(p1, p2) {
 		const line = this.line;
 		if (p1 && p1.x != undefined)
 			line.setAttribute("x1", p1.x);
@@ -2797,8 +2787,8 @@ function initialize() {
 		const tc = e.changedTouches[0];
 		const pX = tc.pageX,
 			pY = tc.pageY;
-		interchangeSVG.style.display = "none";
-		interchangeSVG.changePoint({ x: pX, y: pY }, { x: pX, y: pY });
+		interchangeSvg.style.display = "none";
+		interchangeSvg.changePoint({ x: pX, y: pY }, { x: pX, y: pY });
 	}
 	//移动端编辑界面每个怪物的头像的移动
 	function touchmoveMonHead(e) {
@@ -2811,10 +2801,10 @@ function initialize() {
 		const left = rect.left + document.documentElement.scrollLeft;
 		if ((pY < top) || (pY > (top + rect.height)) ||
 			(pX < left) || (pX > (left + rect.width))) {
-			interchangeSVG.style.display = "block";
-			interchangeSVG.changePoint(null, { x: pX, y: pY });
+			interchangeSvg.style.display = "block";
+			interchangeSvg.changePoint(null, { x: pX, y: pY });
 		} else {
-			interchangeSVG.style.display = "none";
+			interchangeSvg.style.display = "none";
 		}
 	}
 	//移动端编辑界面每个怪物的头像的结束
@@ -2823,8 +2813,8 @@ function initialize() {
 		const pX = tc.pageX,
 			pY = tc.pageY;
 		//console.log("移动结束",pX,pY,e,this);
-		interchangeSVG.style.display = "none";
-		interchangeSVG.changePoint(null, { x: pX, y: pY });
+		interchangeSvg.style.display = "none";
+		interchangeSvg.changePoint(null, { x: pX, y: pY });
 		const target = allMembers.find(m => {
 			const rect = m.getBoundingClientRect();
 			const top = rect.top + document.documentElement.scrollTop;
@@ -2847,7 +2837,7 @@ function initialize() {
 	}
 	//移动端编辑界面每个怪物的头像的取消
 	function touchcancelMonHead(event) {
-		interchangeSVG.style.display = "none";
+		interchangeSvg.style.display = "none";
 		console.log("移动取消", event, this);
 	}
 	function interchangeCard(formArr, toArr, isCopy) {
@@ -4309,7 +4299,6 @@ function initialize() {
 
 	//显示原文开关
 	const showSkillOriginal = document.getElementById("show-skill-original");
-	console.log(cfgPrefix + showSkillOriginal.id, localStorage_getBoolean(cfgPrefix + showSkillOriginal.id))
 	showSkillOriginal.checked = localStorage_getBoolean(cfgPrefix + showSkillOriginal.id);
 	showSkillOriginal.onchange = function(event) {
 		if (event instanceof Event) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));

@@ -214,7 +214,7 @@ label[for="merge-skill"]::after{
 	content: "🕹️データ ソース:";
 }
 .control-box .datasource-updatetime::before{
-	content: "⌚更新時刻:";
+	content: "🗓️更新時刻:";
 }
 .control-box .btn-solo-link::before{
 	content: "🧑ソロモードに移動";
@@ -244,7 +244,7 @@ label[for="merge-skill"]::after{
 	content: "🔄ローテーションABCチーム";
 }
 .control-box .lbl-henshin-change::before{
-	content: "🕴️変身";
+	content: "🦸変身";
 }
 .control-box .lbl-remove-assist::before{
 	content: "⛔アシストを解除";
@@ -255,8 +255,11 @@ label[for="merge-skill"]::after{
 .control-box .show-mon-skill-cd-lbl::after{
 	content:"❄️スキル クールを表示";
 }
+label[for="show-mon-rarity"]::after{
+	content:"⭐️希少性を表示";
+}
 .control-box .show-mon-awoken-lbl::after{
-	content:"👁カードの覚醒を表示";
+	content:"👁️カードの覚醒を表示";
 }
 .control-box .show-awoken-count-lbl::after{
 	content:"⚔️総覚醒と能力値の表示";
