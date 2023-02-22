@@ -679,7 +679,7 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 	}
 }
 //搜索卡片用
-function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rares:[rareLow, rareHigh], awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent}) {
+function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent}) {
 	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	if (canAssist) cardsRange = cardsRange.filter(card=>card.canAssist);
 	if (canLv110) cardsRange = cardsRange.filter(card=>card.limitBreakIncr>0);
@@ -716,14 +716,13 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 	}
 	//类型
 	if (types.length > 0) {
-		cardsRange = cardsRange.filter(({types: cTypes}) =>
-			//所有type都满足，或只需要满足一个type
-			types[typeAndOr ? 'every' : 'some'](t => cTypes.includes(t))
-		);
+		//所有type都满足，或只需要满足一个type
+		let logicFunc = typeAndOr ? Array.prototype.every : Array.prototype.some;
+		cardsRange = cardsRange.filter(({types: cTypes}) => logicFunc.call(types, t => cTypes.includes(t)));
 	}
 	//稀有度
-	if (rareLow !== 1 || rareHigh !== 10) { //不是1~10时才进行筛选
-		cardsRange = cardsRange.filter(({rarity}) => rarity >= rareLow && rarity <= rareHigh);
+	if (rares.length < 10) { //不是1~10时才进行筛选
+		cardsRange = cardsRange.filter(({rarity}) => rares.includes(rarity));
 	}
 	//觉醒
 	let searchAwokens = [];

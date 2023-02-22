@@ -3539,44 +3539,11 @@ function initialize() {
 	//稀有度筛选
 	const s_rareDiv = searchBox.querySelector(".rare-div");
 	const s_rareLst = s_rareDiv.querySelector(".rare-list");
-	const s_rareIcons = Array.from(s_rareLst.querySelectorAll(".rare-icon"));
-	const s_rareLows = Array.from(s_rareLst.querySelectorAll("input[name='rare-low']"));
-	const s_rareHighs = Array.from(s_rareLst.querySelectorAll("input[name='rare-high']"));
-	function s_rareIcons_onclick()
-	{
-		const thisValue = parseInt(this.getAttribute("data-rare-icon"),10);
-		const radioLow = s_rareLows.find(radio=>radio.checked);
-		const radioHigh = s_rareHighs.find(radio=>radio.checked);
-		const rangeLow = radioLow ? parseInt(radioLow.value,10) : 1;
-		const rangeHigh = radioHigh ? parseInt(radioHigh.value,10) : 10;
-		
-		s_rareLows.find(radio=>parseInt(radio.value,10) == (
-			rangeLow != rangeHigh ?
-			thisValue :
-			(
-				thisValue == rangeLow ?
-				1 :
-				Math.min(thisValue,rangeLow)
-			)
-		)).checked = true;
-		s_rareHighs.find(radio=>parseInt(radio.value,10) == (
-			rangeLow != rangeHigh ?
-			thisValue :
-			(
-				thisValue == rangeLow ?
-				10 :
-				Math.max(thisValue,rangeHigh)
-			)
-		)).checked = true;
-	}
-	s_rareIcons.forEach(icon=>icon.onclick = s_rareIcons_onclick);
+	const s_rareChecks = Array.from(s_rareLst.querySelectorAll("input[name='search-rare']"));
 	const s_rareClear = s_rareDiv.querySelector(".rare-clear");
 	s_rareClear.onclick = function(){
-		s_rareLows[0].checked = true;
-		s_rareHighs[s_rareHighs.length-1].checked = true;
+		s_rareChecks.forEach(i => i.checked = true);
 	}
-
-	//const s_rare = s_rareLi.map(li=>li.querySelector(".rare-check"));  //checkbox集合
 
 	const s_awokensDiv = searchBox.querySelector(".awoken-div");
 	const s_awokensUl = s_awokensDiv.querySelector(":scope .all-awokens .awoken-ul");
@@ -3923,7 +3890,7 @@ function initialize() {
 	s_add_show_abilities_with_awoken.onchange = reShowSearch;
 
 	//恢复搜索状态
-	searchBox.recoverySearchStatus = function({attrs, fixMainColor, types, typeAndOr, rares:[rareLow, rareHigh], awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent, specialFilters}) {
+	searchBox.recoverySearchStatus = function({attrs, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent, specialFilters}) {
 		//属性这里是用的2进制写
 		attrs.forEach((attr, ai)=>{
 			const attr_list = s_attr_lists[ai];
@@ -3934,8 +3901,7 @@ function initialize() {
 		s_fixMainColor.checked = fixMainColor;
 		s_types.filter(opt=>types.includes(parseInt(opt.value,10))).forEach(opt=>opt.checked = true);
 		s_typeAndOr.checked = typeAndOr;
-		(s_rareLows.find(opt=>parseInt(opt.value,10) == rareLow) || s_rareLows[0]).checked = true;
-		(s_rareHighs.find(opt=>parseInt(opt.value,10) == rareHigh) || s_rareHighs[s_rareHighs.length-1]).checked = true;
+		s_rareChecks.filter(opt=>rares.includes(parseInt(opt.value,10))).forEach(opt=>opt.checked = true);
 
 		s_selectedAwokensUl.innerHTML = "";
 		//添加觉醒
@@ -3971,10 +3937,7 @@ function initialize() {
 	searchBox.getSearchOptions = function(){
 		const attrs = s_attr_lists.map(list=>parseInt(returnRadiosValue(list), 2) || 0);
 		const types = returnCheckBoxsValues(s_types).map(Str2Int);
-		const rares = [
-			parseInt(returnRadiosValue(s_rareLows), 10),
-			parseInt(returnRadiosValue(s_rareHighs), 10),
-		];
+		const rares = returnCheckBoxsValues(s_rareChecks).map(Str2Int);
 		const sawokens = returnCheckBoxsValues(s_sawokens).map(Str2Int);
 		const awokens = s_awokensIcons.filter(btn => parseInt(btn.getAttribute("data-awoken-count"), 10) > 0).map(btn => {
 			return {
