@@ -408,6 +408,10 @@ label[for="have-8-latent-slot"]::after
 {
 	content: "Have 8 latent blocks";
 }
+label[for="not-weapon"]::after
+{
+	content: "Not Weapon";
+}
 label[for="box-have"]::after
 {
 	content: "Emphasize my box";

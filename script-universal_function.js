@@ -679,11 +679,12 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 	}
 }
 //搜索卡片用
-function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent}) {
+function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent, notWeapon}) {
 	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	if (canAssist) cardsRange = cardsRange.filter(card=>card.canAssist);
 	if (canLv110) cardsRange = cardsRange.filter(card=>card.limitBreakIncr>0);
 	if (is8Latent) cardsRange = cardsRange.filter(card=>card.is8Latent);
+	if (notWeapon) cardsRange = cardsRange.filter(card=>!card.awakenings.includes(49));
 	//属性
 	const anyAttrsFlag = 0b1111101;
 	const anyAttrs = sAttrs.map(attr=>attr === 0 || (attr & anyAttrsFlag) == anyAttrsFlag);
@@ -721,7 +722,7 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 		cardsRange = cardsRange.filter(({types: cTypes}) => logicFunc.call(types, t => cTypes.includes(t)));
 	}
 	//稀有度
-	if (rares.length < 10) { //不是1~10时才进行筛选
+	if (rares.length > 0 && rares.length < 10) { //不是1~10时才进行筛选
 		cardsRange = cardsRange.filter(({rarity}) => rares.includes(rarity));
 	}
 	//觉醒
@@ -746,14 +747,17 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 	}
 	if (searchAwokens.length > 0) {
 		cardsRange = cardsRange.filter(card => {
-			let cardAwakeningsArray = [];
-			if (incSawoken && card.superAwakenings.length > 0) { //如果搜索超觉醒，产生原始觉醒分别加上每个超觉醒的多个数组
-				cardAwakeningsArray = card.superAwakenings.map(sak => card.awakenings.concat(sak));
+			let cardAwakeningsCombos= []; //加上超觉醒的数种组合
+			if (incSawoken && //搜索超觉醒
+				card.superAwakenings.length > 0 && //卡片有超觉醒
+				!searchAwokens.includes(49) //搜索觉醒里不包含武器觉醒，因为武器觉醒必定不考虑超觉醒，这一条是属于优化，可以不要
+			) { //如果搜索超觉醒，产生原始觉醒分别加上每个超觉醒的多个数组
+				cardAwakeningsCombos = card.superAwakenings.map(sak => card.awakenings.concat(sak));
 			} else { //单个原始觉醒数组
-				cardAwakeningsArray.push(card.awakenings);
+				cardAwakeningsCombos.push(card.awakenings);
 			}
 
-			return cardAwakeningsArray.some(cardAwakening => //重复每种包含超觉醒的觉醒数组，只要有一组符合要求就行
+			return cardAwakeningsCombos.some(cardAwakening => //重复每种包含超觉醒的觉醒数组，只要有一组符合要求就行
 				searchAwokens.every(ak => { //判断需要搜索的觉醒是不是全都在觉醒数组里
 					let akNum = cardAwakening.filter(cak => cak === ak.id).length;
 					let equivalentAwoken;

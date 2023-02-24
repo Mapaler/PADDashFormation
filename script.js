@@ -3542,7 +3542,7 @@ function initialize() {
 	const s_rareChecks = Array.from(s_rareLst.querySelectorAll("input[name='search-rare']"));
 	const s_rareClear = s_rareDiv.querySelector(".rare-clear");
 	s_rareClear.onclick = function(){
-		s_rareChecks.forEach(i => i.checked = true);
+		s_rareChecks.forEach(i => i.checked = false);
 	}
 
 	const s_awokensDiv = searchBox.querySelector(".awoken-div");
@@ -3558,6 +3558,16 @@ function initialize() {
 	const s_canAssist = searchBox.querySelector("#can-assist"); //只搜索辅助
 	const s_canLevelLimitBreakthrough = searchBox.querySelector("#can-level-limit-breakthrough"); //可以突破等级上限
 	const s_have8LatentSlot = searchBox.querySelector("#have-8-latent-slot"); //有8格潜觉
+	const s_notWeapon = searchBox.querySelector("#not-weapon"); //不是武器
+	s_notWeapon.onchange = function(){
+		//勾选不是武器时，去掉觉醒里的武器
+		if (this.checked) {
+			const awokenBtn = s_awokensIcons.find(btn => parseInt(btn.getAttribute("data-awoken-icon"), 10) == 49);
+			if (awokenBtn) awokenBtn.removeAttribute("data-awoken-count");
+			const addedAwokenIcons = Array.from(s_selectedAwokensUl.querySelectorAll('[data-awoken-icon="49"]'));
+			addedAwokenIcons.forEach(icon=>icon.parentNode.remove());
+		}
+	}
 
 	//强调箱子拥有开关
 	const s_boxHave = document.getElementById("box-have");
@@ -3639,8 +3649,23 @@ function initialize() {
 		}
 		this.parentNode.remove();
 	}
-	s_awokensIcons.forEach(b => {
-		b.onclick = search_awokenAdd1; //每种觉醒增加1
+	s_awokensIcons.forEach(btn => {
+		btn.onclick = search_awokenAdd1; //每种觉醒增加1
+		const aid = parseInt(btn.getAttribute("data-awoken-icon"), 10);
+		if (aid == 49) { //如果是武器
+			btn.addEventListener('click', function(){
+				//自动去掉勾选可以110
+				s_canLevelLimitBreakthrough.checked = false;
+				//自动去掉勾选8格潜觉
+				s_have8LatentSlot.checked = false;
+				//自动去掉勾选仅武器
+				s_notWeapon.checked = false;
+				//自动恢复所有类型
+				s_types.forEach(chk=>chk.checked=false);
+				//自动恢复所有星级
+				s_rareClear.onclick();
+			});
+		}
 	});
 
 	const awokenClear = searchBox.querySelector(".awoken-clear");
@@ -3890,7 +3915,7 @@ function initialize() {
 	s_add_show_abilities_with_awoken.onchange = reShowSearch;
 
 	//恢复搜索状态
-	searchBox.recoverySearchStatus = function({attrs, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent, specialFilters}) {
+	searchBox.recoverySearchStatus = function({attrs, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent, notWeapon, specialFilters}) {
 		//属性这里是用的2进制写
 		attrs.forEach((attr, ai)=>{
 			const attr_list = s_attr_lists[ai];
@@ -3899,26 +3924,29 @@ function initialize() {
 			ipt.onclick();
 		});
 		s_fixMainColor.checked = fixMainColor;
-		s_types.filter(opt=>types.includes(parseInt(opt.value,10))).forEach(opt=>opt.checked = true);
+		s_types.forEach(opt=>opt.checked = types.includes(parseInt(opt.value,10)));
 		s_typeAndOr.checked = typeAndOr;
-		s_rareChecks.filter(opt=>rares.includes(parseInt(opt.value,10))).forEach(opt=>opt.checked = true);
+		s_rareChecks.forEach(opt=>opt.checked = rares.includes(parseInt(opt.value,10)));
 
 		s_selectedAwokensUl.innerHTML = "";
-		//添加觉醒
-		awokens.forEach(ak=>{
-			const btn = s_awokensIcons.find(_btn=>parseInt(_btn.getAttribute("data-awoken-icon"), 10) == ak.id);
 
-			for (let i = 0; i < ak.num; i++) {
+		//添加觉醒
+		s_awokensIcons.forEach(btn=>{
+			btn.removeAttribute("data-awoken-count"); //先移除旧的所有数值
+			const aid = parseInt(btn.getAttribute("data-awoken-icon"), 10);
+			const awoken = awokens.find(ak=>ak.id === aid); //获取觉醒添加个数
+			for (let i = 0; i < awoken?.num; i++) { //循环点击那么多次
 				btn.onclick();
 			}
 		});
 
-		s_sawokens.filter(opt=>sawokens.includes(parseInt(opt.value,10))).forEach(opt=>opt.checked = true);
+		s_sawokens.forEach(opt=>opt.checked = sawokens.includes(parseInt(opt.value,10)));
 		s_awokensEquivalent.checked = equalAk;
 		s_includeSuperAwoken.checked = incSawoken;
 		s_canAssist.checked = canAssist;
 		s_canLevelLimitBreakthrough.checked = canLv110;
 		s_have8LatentSlot.checked = is8Latent;
+		s_notWeapon.checked = notWeapon;
 
 		//保留之前的特殊搜索，不需要完全新增
 		const specialFilterSelections = Array.from(specialFilterUl.querySelectorAll(".special-filter"));
@@ -3963,6 +3991,7 @@ function initialize() {
 			canAssist: s_canAssist.checked,
 			canLv110: s_canLevelLimitBreakthrough.checked,
 			is8Latent: s_have8LatentSlot.checked,
+			notWeapon: s_notWeapon.checked,
 			specialFilters,
 		};
 		return options;

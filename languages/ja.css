@@ -400,6 +400,10 @@ label[for="have-8-latent-slot"]::after
 {
 	content: "8格潜在覚醒";
 }
+label[for="not-weapon"]::after
+{
+	content: "武器ではない";
+}
 label[for="box-have"]::after
 {
 	content: "ケースに所有することを強調";

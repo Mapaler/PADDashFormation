@@ -396,6 +396,10 @@ label[for="have-8-latent-slot"]::after
 {
 	content: "8 블록 잠잠";
 }
+label[for="not-weapon"]::after
+{
+	content: "무기가 아님";
+}
 .special-div .special-add::before {
 	content: "➕";
 }

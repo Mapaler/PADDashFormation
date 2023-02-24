@@ -406,6 +406,10 @@ label[for="have-8-latent-slot"]::after
 {
 	content: "有8格潛覺";
 }
+label[for="not-weapon"]::after
+{
+	content: "不是武器";
+}
 label[for="box-have"]::after
 {
 	content: "强調箱子擁有";

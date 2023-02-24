@@ -3922,9 +3922,6 @@ const specialSearchFunctions = (function() {
 			{name:"Less than 9 awokens",otLangName:{chs:"不足9个觉醒",cht:"不足9個覺醒"},
 				function:cards=>cards.filter(card=>card.awakenings.length<9)
 			},
-			{name:"Not weapon",otLangName:{chs:"不是武器",cht:"不是武器"},
-				function:cards=>cards.filter(card=>!card.awakenings.includes(49))
-			},
 			{name:"3 same Killer Awoken(include super awoken), or 2 with same latent",otLangName:{chs:"3个相同杀觉醒（含超觉），或相同潜觉",cht:"3個相同殺覺醒（含超覺），或相同潛覺"},
 				function:cards=>cards.filter(card=>{
 				const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length+(card.superAwakenings.includes(type.awoken)?1:0)>=2);
