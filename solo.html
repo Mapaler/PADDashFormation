@@ -1038,41 +1038,6 @@ var formation = new Formation(teamsCount,6);
 				<datalist id="monsters-name-list"></datalist>
 				<ul class="evo-card-list"></ul>
 			</div>
-			<div class="setting-row row-ability">
-				<div class="row-mon-ability">
-					<!--怪物三维-->
-					<ul>
-						<li class="m-hp-li"><span class="ability-value"></span></li>
-						<li class="m-atk-li"><span class="ability-value"></span></li>
-						<li class="m-rcv-li"><span class="ability-value"></span></li>
-					</ul>
-				</div>
-				<div class="row-mon-plus">
-					<!--怪物加值-->
-					<div class="plus-box">
-						<ul>
-							<li class="m-hp-li"><span class="plus-value"><input type="number" class="m-plus-hp" min=0 max=99 value=99 /></span></li>
-							<li class="m-atk-li"><span class="plus-value"><input type="number" class="m-plus-atk" min=0 max=99 value=99 /></span></li>
-							<li class="m-rcv-li"><span class="plus-value"><input type="number" class="m-plus-rcv" min=0 max=99 value=99 /></span></li>
-						</ul>
-					</div>
-					<button class="m-plus-fast-setting" value="0"></button>
-					<button class="m-plus-fast-setting" value="297"></button>
-				</div>
-				<div class="row-mon-level">
-					<!--怪物等级-->
-					<div class="subrow">
-						<span class="level-value"><input type="number" class="m-level" min=1 max=110/></span>
-						<span class="monster-cost"></span>
-					</div>
-					<div class="subrow">
-						<button class="m-level-btn-min" value="1"></button>~<button class="m-level-btn-max" value="99"></button>
-						<button class="m-level-btn-110 display-none" value="110">110</button>
-						<button class="m-level-btn-120 display-none" value="120">120</button>
-					</div>
-					<div class="m-level-exp"></div>
-				</div>
-			</div>
 			<div class="setting-row row-mon-latent">
 				<!--潜在觉醒-->
 				<div class="latent-ul-div">
@@ -1141,31 +1106,71 @@ var formation = new Formation(teamsCount,6);
 					</ul>
 				</details>
 			</div>
-			<div class="setting-row row-mon-skill">
-				<!--怪物技能-->
-				<div class="skill-box">
-					<div class="skill-title"><div class="type-title"></div><span class="skill-name"></span>
-						<div class="skill-cd-control">
-							<label class="skill-level-label"><input type="number" class="m-skill-level" min=1 max=99 defaultValue=1 /></label>
-							<button class="m-skill-lv-1" value="1"></button>~<button class="m-skill-lv-max" value="1"></button>
-							<span class="skill-cd"></span>
-						</div>
+			<div class="ability-box">
+				<div class="setting-row row-ability">
+					<div class="row-mon-ability">
+						<!--怪物三维-->
+						<ul>
+							<li class="m-hp-li"><span class="ability-value"></span></li>
+							<li class="m-atk-li"><span class="ability-value"></span></li>
+							<li class="m-rcv-li"><span class="ability-value"></span></li>
+						</ul>
 					</div>
-					<div class="skill-datail-original"></div>
-					<div class="skill-datail-parsed"></div>
+					<div class="row-mon-plus">
+						<!--怪物加值-->
+						<div class="plus-box">
+							<ul>
+								<li class="m-hp-li"><span class="plus-value"><input type="number" class="m-plus-hp" min=0 max=99 value=99 /></span></li>
+								<li class="m-atk-li"><span class="plus-value"><input type="number" class="m-plus-atk" min=0 max=99 value=99 /></span></li>
+								<li class="m-rcv-li"><span class="plus-value"><input type="number" class="m-plus-rcv" min=0 max=99 value=99 /></span></li>
+							</ul>
+						</div>
+						<button class="m-plus-fast-setting" value="0"></button>
+						<button class="m-plus-fast-setting" value="297"></button>
+					</div>
+					<div class="row-mon-level">
+						<!--怪物等级-->
+						<div class="subrow">
+							<span class="level-value"><input type="number" class="m-level" min=1 max=110/></span>
+						</div>
+						<div class="subrow">
+							<button class="m-level-btn-min" value="1"></button>~<button class="m-level-btn-max" value="99"></button>
+							<button class="m-level-btn-110 display-none" value="110">110</button>
+							<button class="m-level-btn-120 display-none" value="120">120</button>
+						</div>
+						<div class="m-level-exp"></div>
+					</div>
+					<div class="row-mon-cost">
+						<!--怪物cost-->
+						<span class="monster-cost"></span>
+					</div>
 				</div>
-			</div>
-			<div class="setting-row row-mon-leader-skill">
-				<!--怪物队长技能-->
-				<div class="skill-box">
-					<div class="skill-title"><div class="type-title"></div><span class="skill-name"></span>
-						<div class="skill-parse-control">
-							<input type="checkbox" class="config-checkbox-ipt" name="show-skill-original" id="show-skill-original"><label class="config-checkbox-lbl" for="show-skill-original"><div class="config-checkbox-lbl-cicle"></div></label>
-							<input type="checkbox" class="config-checkbox-ipt" name="merge-skill" id="merge-skill" checked><label class="config-checkbox-lbl" for="merge-skill"><div class="config-checkbox-lbl-cicle"></div></label>
+				<div class="setting-row row-mon-skill">
+					<!--怪物技能-->
+					<div class="skill-box">
+						<div class="skill-title"><div class="type-title"></div><span class="skill-name"></span>
+							<div class="skill-cd-control">
+								<label class="skill-level-label"><input type="number" class="m-skill-level" min=1 max=99 defaultValue=1 /></label>
+								<button class="m-skill-lv-1" value="1"></button>~<button class="m-skill-lv-max" value="1"></button>
+								<span class="skill-cd"></span>
+							</div>
 						</div>
+						<div class="skill-datail-original"></div>
+						<div class="skill-datail-parsed"></div>
 					</div>
-					<div class="skill-datail-original"></div>
-					<div class="skill-datail-parsed"></div>
+				</div>
+				<div class="setting-row row-mon-leader-skill">
+					<!--怪物队长技能-->
+					<div class="skill-box">
+						<div class="skill-title"><div class="type-title"></div><span class="skill-name"></span>
+							<div class="skill-parse-control">
+								<input type="checkbox" class="config-checkbox-ipt" name="show-skill-original" id="show-skill-original"><label class="config-checkbox-lbl" for="show-skill-original"><div class="config-checkbox-lbl-cicle"></div></label>
+								<input type="checkbox" class="config-checkbox-ipt" name="merge-skill" id="merge-skill" checked><label class="config-checkbox-lbl" for="merge-skill"><div class="config-checkbox-lbl-cicle"></div></label>
+							</div>
+						</div>
+						<div class="skill-datail-original"></div>
+						<div class="skill-datail-parsed"></div>
+					</div>
 				</div>
 			</div>
 			<div class="dialog dialog-show-any-string display-none">

@@ -1379,8 +1379,7 @@ icon.inflicts::after
 	content: "修改辅助";
 }*/
 
-.edit-box .search-box,
-.edit-box .setting-box{
+.edit-box .search-box{
 	padding: 10px;
 	position: relative;
 }
@@ -2101,7 +2100,7 @@ icon.inflicts::after
 .guide-mod .sticky-box {
 	position: sticky;
 	top: 0;
-	z-index: 1;
+	z-index: 2;
 }
 /*图鉴模式默认高度为30%设备高度，可修改大小*/
 .guide-mod .search-mon-list{
@@ -2297,15 +2296,24 @@ icon.inflicts::after
 .row-mon-super-awoken .awoken-icon{
 	opacity: var(--search-icon-unchecked);
 }
-/*怪物能力横条*/
-/*.row-ability{
-	border-color: #D5AF5B;
-	border-style: solid;
-	border-width: var(--border-width);
-	border-radius: 8px;
-	background-color: #B68E4A;
-	background-image: radial-gradient(ellipse at top,#B68E4A, #60492C);
-}*/
+.setting-box .ability-box {
+	box-sizing: border-box;
+	border: #FFDA70 solid 2px;
+	border-radius: 15px;
+	background-image: url("images/dragon-totem.svg"),
+					radial-gradient(circle at top, #f3c67178 0%,transparent 30%),
+					linear-gradient(#9E7841, #60492C 30%, #382716);/*, radial-gradient(circle at top, #B48C49,transparent);*/
+	background-size: 250px, 100%, 100%;
+	background-repeat: no-repeat;
+	background-position: 0 -30px, 0 , 0;
+	padding: 9px;
+	position: relative;
+	overflow: hidden;
+}
+.setting-box .ability-box>div{
+	position: relative;
+	z-index: 1;
+}
 
 /*.edit-box .setting-box .row-mon-ability::before{
 	content: "▼怪物能力";
@@ -2331,7 +2339,7 @@ icon.inflicts::after
 .row-mon-ability ul,
 .row-mon-plus ul,
 .row-mon-level .level-value,
-.row-mon-level .monster-cost,
+.row-ability .monster-cost,
 .row-mon-plus li
 {
 	font-family: var(--game-font-family );
@@ -2339,13 +2347,12 @@ icon.inflicts::after
 	line-height: 28px;
 	text-shadow: black 2px 2px 0;
 }
-.row-mon-level .monster-cost
+.row-ability .monster-cost
 {
 	background-color: #2F2B28;
 	border: solid 3px #563E22;
 	border-radius: 12px;
 	padding: 0 5px;
-	font-size: 0.8em;
 	box-shadow: inset 0 3px 3px black;
 }
 .row-mon-plus .plus-box{
@@ -2485,11 +2492,15 @@ icon.inflicts::after
 
 .row-mon-ability,
 .row-mon-plus,
-.row-mon-level
+.row-mon-level,
+.row-mon-cost
 {
 	display: inline-block;
 	box-sizing: border-box;
 	vertical-align: top;
+}
+.row-mon-cost {
+	float: right;
 }
 .m-level,
 .m-plus-hp,.m-plus-atk,.m-plus-rcv,
@@ -2540,6 +2551,12 @@ icon.inflicts::after
 .latent-icon[data-latent-hole="6"]+.latent-icon+.latent-icon+.latent-icon+.latent-icon+.latent-icon
 {
 	display: none;
+}
+.row-mon-latent details{
+	margin-top: -18px;
+}
+.row-mon-latent details>summary {
+	width: max-content;
 }
 
 .m-latent-allowable-ul{

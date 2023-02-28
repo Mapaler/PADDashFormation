@@ -90,12 +90,6 @@
 	content: "▼超觉醒";
 }
 
-.edit-box .setting-box .row-mon-ability::before{
-	content: "▼能力";
-}
-.edit-box .setting-box .row-mon-plus::before{
-	content: "▼+ 强化";
-}
 .row-mon-ability .m-hp-li::before,
 .dialog-dungeon-enchance label[for="dungeon-hp"]::before
 {
@@ -110,9 +104,6 @@
 .dialog-dungeon-enchance label[for="dungeon-rcv"]::before
 {
 	content: "回復:";
-}
-.edit-box .setting-box .row-mon-level::before{
-	content: "▼等级";
 }
 .edit-box .setting-box .monster-cost::before{
 	content: "消耗:";
