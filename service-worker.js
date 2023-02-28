@@ -391,11 +391,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_098.PNG",
-		"4bb8931e1f947f21ad238c9228610b88"
+		"f4cf65daf933c31a2783020bd9b59dab"
 	],
 	[
 		"images/cards_ja/CARDS_099.PNG",
-		"b8a9ce84e690c6a60ce1744a0b0979fa"
+		"505b6e21e6cff1b47b2acfd1fa9a9bb2"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -9699,7 +9699,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"e48ff996aed522de32e3c8774b798be1"
+		"645686f51ca27e33d00ffdd9e7ec869a"
 	],
 	[
 		"temp.js",

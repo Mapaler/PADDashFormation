@@ -2122,8 +2122,11 @@ icon.inflicts::after
 {
 	margin-left: 5px;
 }
-.edit-box .setting-row{
+.setting-box>.setting-row{
 	width: 100%;
+	box-sizing: border-box;
+	padding: 0 7px;
+	margin-top: 5px;
 }
 .edit-box .monsterinfo-box{
 	display: grid;
