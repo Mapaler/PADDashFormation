@@ -1379,8 +1379,11 @@ icon.inflicts::after
 	content: "修改辅助";
 }*/
 
-.edit-box .search-box{
-	padding: 10px;
+.edit-box .search-box {
+	padding: 0 10px;
+	position: relative;
+}
+.edit-box .setting-box {
 	position: relative;
 }
 /*.edit-box .setting-box .row-mon-id::before{
@@ -2357,6 +2360,8 @@ icon.inflicts::after
 	border-radius: 12px;
 	padding: 0 5px;
 	box-shadow: inset 0 3px 3px black;
+	font-size: 15px;
+	line-height: unset;
 }
 .row-mon-plus .plus-box{
 	border-color: #A07740;
@@ -2554,12 +2559,6 @@ icon.inflicts::after
 .latent-icon[data-latent-hole="6"]+.latent-icon+.latent-icon+.latent-icon+.latent-icon+.latent-icon
 {
 	display: none;
-}
-.row-mon-latent details{
-	margin-top: -18px;
-}
-.row-mon-latent details>summary {
-	width: max-content;
 }
 
 .m-latent-allowable-ul{
