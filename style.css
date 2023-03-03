@@ -1626,6 +1626,7 @@ icon.inflicts::after
 	grid-row: 1 / 4;
 }
 .search-box .attrs-div .monster .custom-avatar {
+	display: block;
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
@@ -1660,15 +1661,7 @@ icon.inflicts::after
 	margin-right: 3px;
 	display: inline-block;
 }
-/*.search-box .attrs-div-div .attr-list-1::before{
-	content: "属性1";
-}
-.search-box .attrs-div-div .attr-list-2::before{
-	content: "属性2";
-}
-.search-box .attrs-div-div .fix-main-color-label::after{
-	content: "限制属性1为主属性，属性2为副属性";
-}*/
+
 .attr-radio,
 .attr-check,
 .type-check,

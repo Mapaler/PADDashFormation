@@ -3504,13 +3504,38 @@ function initialize() {
 	//可以自行打开图片设定头像的彩蛋
 	const avatarSelect = attrPreview.querySelector("#avatar-select");
 	const customAvatar = attrPreview.querySelector(".custom-avatar");
-	avatarSelect.onchange = function(event){
-		let fileUrlmatch = /url\("(blob:.+?)"\)/.exec(customAvatar.style.backgroundImage);
-		if (fileUrlmatch?.[1]) URL.revokeObjectURL(fileUrlmatch[1]); //如果找到旧的blob网址，就删除
+	avatarSelect.onchange = async function(event){
+		
+		let img = await createImageBitmap(event.target.files[0]);
 
-		let fileUrl = URL.createObjectURL(this.files[0]);
-		customAvatar.style.backgroundImage = `url(${fileUrl})`;
+		customAvatar.style.backgroundImage = `none`;
+		const ctx = customAvatar.getContext("2d");
+		let imgScale = Math.max(customAvatar.offsetWidth / img.width,  customAvatar.offsetHeight / img.height);
+		//清空画布
+		ctx.clearRect(0, 0, customAvatar.offsetWidth, customAvatar.offsetHeight);
+		//保持比例居中填充画图
+		ctx.drawImage(img,
+			-(img.width * imgScale - customAvatar.offsetWidth) / 2,
+			-(img.height * imgScale - customAvatar.offsetHeight) / 2,
+			img.width * imgScale,
+			img.height * imgScale
+		);
+		img.close();
+		btnCustomAvatarSave.classList.remove(className_displayNone);
 	};
+	const btnCustomAvatarSave = searchBox.querySelector(".attrs-div #avatar-save");
+	btnCustomAvatarSave.onclick = function(event) {
+		const downLink = controlBox.querySelector(".down-capture");
+		html2canvas(attrPreview, {backgroundColor: null}).then(canvas => {
+			canvas.toBlob(function(blob) {
+				window.URL.revokeObjectURL(downLink.href);
+				downLink.href = URL.createObjectURL(blob);
+				downLink.download = `custom-avatar.png`;
+				downLink.click();
+			});
+		});
+	}
+
 
 	function s_types_onchange(){
 		const newClassName = `type-killer-${this.value}`;
