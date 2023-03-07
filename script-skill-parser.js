@@ -999,8 +999,8 @@ function setOrbState(orbs, state, arg) {
 function rateMultiply(value, rate) {
 	return { kind: SkillKinds.RateMultiply, value: value, rate: rate };
 }
-function orbDropIncrease(value, attrs, flag) {
-	return { kind: SkillKinds.OrbDropIncrease, value: value, attrs: attrs, flag: flag };
+function orbDropIncrease(prob, attrs, flag, value) {
+	return { kind: SkillKinds.OrbDropIncrease, prob, attrs, flag, value };
 }
 function resolve(min, max) {
 	return { kind: SkillKinds.Resolve, min: min, max: max };
@@ -1588,8 +1588,8 @@ const skillObjectParsers = {
 	[233](...ids) { return evolvedSkills(true, ids.map(id => this.parser(id))); },
 	[234](min, max) { return skillProviso(c.stage(min ?? 0, max ?? 0)); },
 	[235](attrs, lenMin, lenExact, atk, reducePercent, combo, damage) {
-		const len = lenMin || lenExact; //宝珠长度
-		const ee = Boolean(lenExact); //是否为刚好等于
+		// const len = lenMin || lenExact; //宝珠长度
+		// const ee = Boolean(lenExact); //是否为刚好等于
 		//第二个参数为多少以上就算，第三个参数为多少以上才算
 		//return powerUp(null, null, p.mul({ atk: atk || 100}), c.exact('match-length', lenExact, flags(attr)), v.percent(percent), [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean), true);
 		//let powerup, condition;
@@ -1628,6 +1628,9 @@ const skillObjectParsers = {
 		return activeTurns(turns,
 			increaseDamageCap(cap * 1e8, ["self"])
 		);
+	},
+	[243](turns, attrs, hpPercent, probPercent) { //掉落荆棘珠
+		return activeTurns(turns, orbDropIncrease(v.percent(probPercent), flags(attrs), 'thorn', v.xMaxHP(hpPercent)));
 	},
 	[244](turns, type) { //改变板面大小主动技
 		let width, height;
@@ -1830,19 +1833,21 @@ function posSplit(pos, axis = 'row')
 	];
 	//return {sequence: pos.filter(n=>n<=2).map(n=>n+1), reverse: pos.filter(n=>n>=3).reverse().map(n=>max-n)};
 }
+
+function createSkillIcon(iconType, className){
+	const idoc = document.createElement("icon");
+	idoc.className = `icon-skill${className ? ` ${className}` : ''}`;
+	idoc.setAttribute("data-icon-type", iconType);
+	return idoc;
+}
+
 function renderSkill(skill, option = {})
 {
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
 	const tsp = localTranslating.skill_parse;
-
-	function createIcon(iconType, className){
-		const idoc = document.createElement("icon");
-		idoc.className = `icon-skill${className ? ` ${className}` : ''}`;
-		idoc.setAttribute("data-icon-type", iconType);
-		return idoc;
-	}
-
+	const createIcon = createSkillIcon;
+	
 	if (Array.isArray(skill))
 	{
 		frg.ap(skill.map(_skill=>renderSkill(_skill)));
@@ -1866,7 +1871,7 @@ function renderSkill(skill, option = {})
 			let { turns, skills } = skill;
 			let dict = {
 				turns: Array.isArray(turns) ? turns.join(tsp.word.range_hyphen().textContent) : turns,
-				skills: skills?.map(renderSkill)?.nodeJoin(tsp.word.comma()),
+				skills: skills?.map(renderSkill)?.nodeJoin(tsp.word.semicolon()),
 			};
 			frg.ap(tsp.skill.active_turns(dict));
 			break;
@@ -2338,16 +2343,16 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.OrbDropIncrease: { //增加天降
-			let attrs = skill.attrs, value = skill.value, flag = skill.flag;
-			
+			let {prob, attrs, flag, value} = skill;
+			prob = prob || v.percent(100);
 			let dict = {
-				value: value && renderValue(value, {percent: true}) || null,
-				chance: value && tsp.value.prob({
-					value: renderValue(value, {percent: true})
-				}) || null,
+				prob: renderValue(prob, {percent: true}),
 				orbs: renderOrbs(attrs, {className: "drop", affix: true}),
 				flag: flag && tsp.orbs[flag]({icon: createIcon("orb-" + flag)}) || null,
 			};
+			if (value?.kind == SkillValueKind.xMaxHP) {
+				dict.value = tsp.skill.orb_thorn({value: renderValue(value, {percent: true})})
+			}
 			frg.ap(flag ? tsp.skill.orb_drop_increase_flag(dict) : tsp.skill.orb_drop_increase(dict));
 			break;
 		}
@@ -2953,7 +2958,7 @@ function renderPowerUp(powerUp) {
 		option.percent = !mul;
 		const frg = document.createDocumentFragment();
 		const operator = mul ? ' ' : '+';
-		let list = [['hp', hp], ['atk', atk], ['rcv', rcv]];
+		let list = [['maxhp', hp], ['atk', atk], ['rcv', rcv]];
 		//去除不改变的值
 		list = list.filter(([, value]) => value !== (mul ? 1 : 0));
 		//&&!(name === 'hp' && value === 0));

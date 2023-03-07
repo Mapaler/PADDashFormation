@@ -91,8 +91,9 @@
 			change_orbs: tp`${'from'}→${'to'}`,
 			generate_orbs: tp`${'exclude'}生成${'orbs'}各${'value'}个`,
 			fixed_orbs: tp`在${'position'}产生${'orbs'}`,
-			orb_drop_increase: tp`${'orbs'}的掉落率提高到${'value'}`,
-			orb_drop_increase_flag: tp`${'chance'}掉落${'flag'}${'orbs'}`,
+			orb_drop_increase: tp`${'orbs'}的掉落率提高到${'prob'}`,
+			orb_drop_increase_flag: tp`${'prob'}掉落${'flag'}状态${'orbs'}${'value'}`,
+			orb_thorn: tp`，每次碰到减少${'value'}`,
 			attr_absorb: tp`${'icon'}属性吸收`,
 			combo_absorb: tp`${'icon'}连击吸收`,
 			damage_absorb: tp`${'icon'}伤害吸收`,
@@ -225,6 +226,7 @@
 		},
 		word: {
 			comma: tp`，`, //逗号
+			semicolon: tp`； `, //分号
 			slight_pause: tp`、`, //顿号
 			range_hyphen: tp`~`, //范围连字符
 			in_once: tp`同时`,
@@ -266,6 +268,7 @@
 			enhanced: tp`${'icon'}强化`,
 			locked: tp`${'icon'}锁定`,
 			nail: tp`${'icon'}钉子`,
+			thorn: tp`${'icon'}荆棘`,
 			_5color: tp`${'icon'}5色`,
 			_6color: tp`${'_5color'}+${'orb_rcv'}`,
 			all: tp`所有`,

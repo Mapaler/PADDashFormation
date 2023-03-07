@@ -61,7 +61,7 @@ let localTranslating = {
 		skill: {
 			error: tp`😫An error occurred in skill parsing, please feedback the Card ID to the developer.`,
 			unknown: tp`Unkonwn skill type: ${'type'}`,
-			active_turns: tp`${'skills'}, for ${'turns'} turns`,
+			active_turns: tp`Within ${'turns'} turns, ${'skills'}`,
 			delay_active_turns: tp`${`icon`}[Activated after ${'turns'} turns]:${'skills'}`,
 			random_skills: tp`Random Activates these skills:${'skills'}`,
 			evolved_skills: tp`Skills evolve to the next stage when used:${'skills'}`,
@@ -106,9 +106,9 @@ let localTranslating = {
 			change_orbs: tp`Changes ${'from'} to ${'to'} orbs`,
 			generate_orbs: tp`Creates ${'value'} ${'orbs'} orbs each at random ${'exclude'}`,
 			fixed_orbs: tp`Changes the ${'position'} to ${'orbs'} orbs`,
-			orb_drop_increase: tp`Increases the skyfall of ${'orbs'} to ${'value'}`,
-			orb_drop_increase_flag: tp`${'orbs'} skyfall ${'chance'}${'flag'}`,
-			orb_drop_increase_chance: tp`by ${'value'}`,
+			orb_drop_increase: tp`Increases the skyfall of ${'orbs'} to ${'prob'}`,
+			orb_drop_increase_flag: tp`${'orbs'} skyfall ${'prob'} chance for ${'flag'}${'value'}`,
+			orb_thorn: tp`, reduces ${'value'} per encounter`,
 			attr_absorb: tp`${'icon'}Attribute absorption`,
 			combo_absorb: tp`${'icon'}Combo absorption`,
 			damage_absorb: tp`${'icon'}Damage absorption`,
@@ -241,6 +241,7 @@ let localTranslating = {
 		},
 		word: {
 			comma: tp`, `,
+			semicolon: tp`; `,
 			slight_pause: tp`, `,
 			range_hyphen: tp`~`,
 			in_once: tp`in once `,
@@ -282,6 +283,7 @@ let localTranslating = {
 			enhanced: tp`${'icon'}Enhanced`,
 			locked: tp`${'icon'}Locked`,
 			nail: tp`${'icon'}Nail`,
+			thorn: tp`${'icon'}Thorn`,
 			_5color: tp`${'icon'}5 Att.`,
 			_6color: tp`${'_5color'}+${'orb_rcv'}`,
 			all: tp`All`,
@@ -954,13 +956,15 @@ const specialSearchFunctions = (function() {
 		const skill = getCardActiveSkill(card, searchTypeArray);
 		if (!skill) return;
 		const sk = skill.params;
-		if (sk[1] && sk[3])
-		{
-			return `双吸×${sk[0]}T`;
-		}else
-		{
-			return `${['属','C','伤'][sk.slice(1).findIndex(Boolean)]}吸×${sk[0]}T`;
-		}
+		const fragment = document.createDocumentFragment();
+		const icons = [
+			sk[1] && 'attr-absorb',
+			sk[2] && 'combo-absorb',
+			sk[3] && 'damage-absorb'
+		].filter(buff => typeof buff === 'string').map(buff=>createSkillIcon(buff))
+		fragment.append(...icons);
+		fragment.append(`×${sk[0]}T`);
+		return fragment;
 	}
 	function unbind_Turns(card)
 	{
@@ -981,20 +985,20 @@ const specialSearchFunctions = (function() {
 	function unbind_Addition(card)
 	{
 		const turns = unbind_Turns(card);
-		let strArr = [];
-		if (turns.normal > 0 && turns.normal == turns.awoken)
-		{
-			return `${turns.normal == 9999 ? "全" : turns.normal + "T"}解封+觉`;
-		}
+		
+		const fragment = document.createDocumentFragment();
 		if (turns.normal > 0)
 		{
-			strArr.push(`${turns.normal >= 9999 ? "全" : turns.normal + "T"}解封`);
+			fragment.append(createSkillIcon('unbind-normal'));
+			if (turns.normal != turns.awoken)
+				fragment.append(`-${turns.normal>=9999 ? '全' : `${turns.normal}T` }`);
 		}
 		if (turns.awoken > 0)
 		{
-			strArr.push(`${turns.awoken >= 9999 ? "全" : turns.awoken + "T"}解觉`);
+			fragment.append(createSkillIcon('unbind-awakenings'));
+			fragment.append(`-${turns.awoken>=9999 ? '全' : `${turns.awoken}T` }`);
 		}
-		return strArr.join('，');
+		return fragment;
 	}
 	function boardChange_ColorTypes(skill)
 	{
@@ -1111,7 +1115,7 @@ const specialSearchFunctions = (function() {
 		if (!skill) return;
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
-		fragment.appendChild(document.createTextNode(`锁`));
+		fragment.appendChild(createSkillIcon('orb-locked'));
 		fragment.appendChild(createOrbsList(flags(sk[0] || 1)));
 		return fragment;
 	}
@@ -1122,8 +1126,8 @@ const specialSearchFunctions = (function() {
 		if (!skill) return;
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
-		fragment.appendChild(document.createTextNode(`掉锁`));
-		fragment.appendChild(createOrbsList(flags(sk[0] != -1 ? sk[0] : 0b1111111111)));
+		fragment.append(createSkillIcon('orb-locked'));
+		fragment.appendChild(createOrbsList(flags(sk[0] != -1 ? sk[0] : 0b1111111111), 'drop'));
 		fragment.appendChild(document.createTextNode(`×${sk[1]}T`));
 		return fragment;
 	}
@@ -1137,7 +1141,7 @@ const specialSearchFunctions = (function() {
 		const colors = flags(sk[0]);
 		
 		const fragment = document.createDocumentFragment();
-		fragment.appendChild(createOrbsList(colors));
+		fragment.appendChild(createOrbsList(colors, 'drop'));
 		fragment.appendChild(document.createTextNode(`↓${sk[3]}%×${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}T`));
 		return fragment;
 	}
@@ -1446,7 +1450,7 @@ const specialSearchFunctions = (function() {
 		return ul;
 	}
 	//产生宝珠列表
-	function createOrbsList(orbs)
+	function createOrbsList(orbs, className)
 	{
 		if (orbs == undefined) orbs = [0];
 		else if (!Array.isArray(orbs)) orbs = [orbs];
@@ -1454,7 +1458,7 @@ const specialSearchFunctions = (function() {
 		ul.className = "board";
 		orbs.forEach(orbType => {
 			const li = ul.appendChild(document.createElement("li"));
-			li.className = `orb`;
+			li.className = className ? `orb ${className}` :`orb`;
 			li.setAttribute("data-orb-icon", orbType);
 		});	
 		return ul;
@@ -1530,7 +1534,10 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return document.createTextNode(`破贯×${sk[0]}T`);
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('damage-void'));
+					fragment.append(`×${sk[0]}T`);
+					return fragment;
 				}
 			},
 		]},
@@ -1596,8 +1603,10 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					const value = sk[0];
-					return document.createTextNode(`${value == 9999 ? "全" : value + "T"}解禁消`);
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('unbind-matches'));
+					fragment.append(`-${sk[0]>=9999 ? '全' : `${sk[0]}T` }`);
+					return fragment;
 				}
 			},
 		]},
@@ -1615,7 +1624,10 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return document.createTextNode(`${sk[0]}${sk[0]!=sk[1]?`~${sk[1]}`:""}溜`);
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('skill-boost', 'boost-incr'), sk[0]);
+					if (sk[1] !== undefined && sk[0]!=sk[1]) fragment.append(`~${sk[1]}`);
+					return fragment;
 				}
 			},
 			{name:"↓Reduce skills charge(sort by turns)",otLangName:{chs:"【坐】增加CD（按回合排序）",cht:"【坐】增加CD（按回合排序）"},
@@ -1631,20 +1643,32 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return document.createTextNode(`坐下${sk[0]}${sk[1] && sk[0]!=sk[1]?`~${sk[1]}`:""}`);
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('skill-boost', 'boost-decr'), sk[0]);
+					if (sk[1] !== undefined && sk[0]!=sk[1]) fragment.append(`~${sk[1]}`);
+					return fragment;
 				}
 			},
 			{name:"Change Leader",otLangName:{chs:"更换队长",cht:"更換隊長"},
-				function:cards=>cards.filter(card=>{
+				function:cards=>{
 					const searchTypeArray = [93, 227];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>{
+						const a_s = getCardActiveSkill(a, searchTypeArray),
+							  b_s = getCardActiveSkill(b, searchTypeArray);
+						return a_s.type - b_s.type;
+					});
+				},
 				addition:card=>{
 					const searchTypeArray = [93, 227];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
-					return skill.type == 93 ? '换自身' : '换最后队员';
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('leader-change'));
+					fragment.append(skill.type == 93 ? '换自身' : '换最后');
+					return fragment;
 				}
 			},
 			{name:"Increase Damage Cap",otLangName:{chs:"增加伤害上限 buff",cht:"增加傷害上限 buff"},
@@ -2488,7 +2512,32 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return `📌${sk[1]}%×${sk[0]}T`;
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('orb-nail'), `${sk[1]}%×${sk[0]}T`);
+					return fragment;
+				}
+			},
+			{name:"Drop Thorn Orbs(sort by turns)",otLangName:{chs:"掉落荆棘（按回合排序）debuff",cht:"掉落荊棘（按回合排序）debuff"},
+				function:cards=>{
+					const searchTypeArray = [243];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+					const searchTypeArray = [243];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('orb-thorn'));
+					if ((sk[1] & 0b1111111111) != 1023) {
+						let attrs = flags(sk[1]);
+						fragment.append(createOrbsList(attrs));
+					}
+					fragment.append(`${sk[3]}%×${sk[0]}T`, document.createElement("br"), "/" ,createSkillIcon('maxhp-locked'), `${sk[2]}%`);
+					return fragment;
 				}
 			},
 		]},

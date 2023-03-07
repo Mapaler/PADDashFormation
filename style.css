@@ -1429,7 +1429,6 @@ icon.inflicts::after
 {
 	display: inline-block;
 	vertical-align: top;
-	margin: 2px;
 }
 .detail-mon{
 	display: inline-block;
@@ -3920,6 +3919,10 @@ body.external-link-support #external-support{
 	margin: -4px;
 	position: relative;
 }
+.custom-addition .icon-skill{
+	transform: scale(0.5);
+	margin: -10px;
+}
 .skill-datail-parsed a.detail-search
 {
 	cursor: pointer;
@@ -4240,9 +4243,13 @@ body.external-link-support #external-support{
 {
 	background-position-y:calc(-36px * 36);
 }
-.icon-skill[data-icon-type="increase-damage-cap"]
+.icon-skill[data-icon-type="orb-thorn"]
 {
-	background-position-y:calc(-36px * 36);
+	background-position-y:calc(-36px * 37);
+}
+.icon-skill[data-icon-type="maxhp-locked"]
+{
+	background-position-y:calc(-36px * 38);
 }
 
 :where(:lang(en), :lang(ko)) .icon-skill:where(
