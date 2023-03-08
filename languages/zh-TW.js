@@ -92,7 +92,7 @@
 			generate_orbs: tp`${'exclude'}生成${'orbs'}各${'value'}個`,
 			fixed_orbs: tp`在${'position'}產生${'orbs'}`,
 			orb_drop_increase: tp`${'orbs'}的掉落率提高到${'prob'}`,
-			orb_drop_increase_flag: tp`${'prob'}掉落${'flag'}狀態${'orbs'}${'value'}`,
+			orb_drop_increase_flag: tp`${'prob'}幾率掉落${'flag'}狀態${'orbs'}${'value'}`,
 			orb_thorn: tp`，每次碰到減少${'value'}`,
 			attr_absorb: tp`${'icon'}屬性吸收`,
 			combo_absorb: tp`${'icon'}連擊吸收`,

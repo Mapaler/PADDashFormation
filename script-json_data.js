@@ -1126,8 +1126,7 @@ const specialSearchFunctions = (function() {
 		if (!skill) return;
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
-		fragment.append(createSkillIcon('orb-locked'));
-		fragment.appendChild(createOrbsList(flags(sk[0] != -1 ? sk[0] : 0b1111111111), 'drop'));
+		fragment.appendChild(createOrbsList(flags(sk[0] != -1 ? sk[0] : 0b1111111111), 'locked'));
 		fragment.appendChild(document.createTextNode(`×${sk[1]}T`));
 		return fragment;
 	}
@@ -1142,7 +1141,7 @@ const specialSearchFunctions = (function() {
 		
 		const fragment = document.createDocumentFragment();
 		fragment.appendChild(createOrbsList(colors, 'drop'));
-		fragment.appendChild(document.createTextNode(`↓${sk[3]}%×${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}T`));
+		fragment.appendChild(document.createTextNode(`${sk[3]}%×${sk[1]}${sk[1] != sk[2]?`~${sk[2]}`:""}T`));
 		return fragment;
 	}
 	function generateColumnOrbs_Addition(card)
@@ -1814,7 +1813,10 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return `回复${sk[1]?`${sk[1].bigNumberToString()}`:`${sk[2]}%`}×${sk[0]}T`;
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('auto-heal'));
+					fragment.append(`${sk[1]? sk[1].bigNumberToString() :`${sk[2]}%`}×${sk[0]}T`);
+					return fragment;
 				}
 			},
 			{name:"Heal immediately",otLangName:{chs:"玩家立刻回血",cht:"玩家立刻回血"},
@@ -1837,16 +1839,17 @@ const specialSearchFunctions = (function() {
 				},
 				addition:card=>{
 					const heal = healImmediately_Rate(card);
-					let strArr = [];
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('heal', 'hp-incr'));
 					if (heal.scale)
-						strArr.push(`${heal.scale}%最大HP`);
+						fragment.append(`${heal.scale}%`);
 					if (heal.const)
-						strArr.push(`${heal.const.bigNumberToString()}点HP`);
+						fragment.append(`${heal.const.bigNumberToString()}点`);
 					if (heal.selfRcv)
-						strArr.push(`${heal.selfRcv/100}倍回复力`);
+						fragment.append(`${heal.selfRcv/100}倍回复力`, );
 					if (heal.vampire)
-						strArr.push(`${heal.vampire}%伤害`);
-					return strArr.join(',');
+						fragment.append(`${heal.vampire}%伤害`);
+					return fragment;
 				}
 			},
 			{name:"Change team maximum HP",otLangName:{chs:"队伍最大 HP 变化",cht:"队伍最大 HP 變化"},
@@ -1862,7 +1865,9 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return `最大HP ${sk[1].bigNumberToString()}%×${sk[0]}T`;
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('maxhp-locked'), `${sk[1].bigNumberToString()}%×${sk[0]}T`);
+					return fragment;
 				}
 			},
 			{name:"Damage self(sort by rate)",otLangName:{chs:"玩家自残（HP 减少，按减少比率排序）",cht:"玩家自殘（HP 減少，按減少比率排序）"},
