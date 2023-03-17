@@ -5342,7 +5342,6 @@ function refreshAll(formationData) {
 			const latentDom = latentLi.querySelector(`.latent-ul`);
 			const member = teamData[0][ti], assist = teamData[1][ti];
 			const memberCard = member.card || Cards[0], assistCard = assist.card || Cards[0];
-			console.log(member, memberCard)
 			changeid(member, memberDom, latentDom, assist); //队员
 			changeid(assist, assistDom); //辅助
 			const enableBouns = member.id > 0 && assist.id > 0 && ( //基底和武器都不是空
