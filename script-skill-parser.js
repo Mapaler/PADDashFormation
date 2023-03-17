@@ -1554,7 +1554,6 @@ const skillObjectParsers = {
 	},
 	[220](attrs, combo) {
 		var skill = powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, combo ? [addCombo(combo)] : null);
-		console.log(skill)
 		return skill;
 	},
 	[221](attrs, damage) {

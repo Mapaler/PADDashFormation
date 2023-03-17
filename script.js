@@ -2923,8 +2923,8 @@ function initialize() {
 		{
 			if (skill.type == 227) //固定与右侧换队长
 			{
-				let myTeam = team.slice(0,5);
-				team[3] = myTeam.length - 1 - team.slice(0,5).reverse().findIndex(m=>m.id>0);
+				let myTeam = team[0].slice(0,5);
+				team[3] = myTeam.length - 1 - myTeam.concat().reverse().findIndex(m=>m.id>0);
 			}
 			else if(arr[2] > 0) //如果点的不是原队长
 			{
