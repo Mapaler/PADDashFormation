@@ -5158,7 +5158,7 @@ function editBoxChangeMonId(id) {
 				.map(type => typekiller_for_type.find(t=>t.type==type).allowableLatent)
 				.forEach(tA => tA.forEach(t => latentSet.add(t)));
 			if (card.limitBreakIncr) {
-				allowable_latent.v120.forEach(t => latentSet.add(t));
+				allowable_latent.v120.forEach(t => (t!==49 || t===49 && card.attrs[0]===6) && latentSet.add(t));
 			}
 			return Array.from(latentSet);
 		}

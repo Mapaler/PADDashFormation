@@ -453,7 +453,7 @@ const allowable_latent = {
 		28,29,30,31,32,33,34,35,36,37,38
 	],
 	killer: [16,17,18,19,20,21,22,23,24,25,26,27], //杀潜觉
-	v120: [42,43,44,45], //120才能打的潜觉
+	v120: [42,43,44,45,49], //120才能打的潜觉
 	needAwoken: [ //需要觉醒才能打的潜觉
 		{latent:39,awoken:62}, //C珠破吸
 		{latent:40,awoken:20}, //心横解转转
@@ -570,7 +570,7 @@ const pdcLatentMap = [
 	{pdf:40,pdc:49}, //心横解转转 ×1.5
 	{pdf:41,pdc:38}, //U解禁消
 	{pdf:41,pdc:48}, //U解禁消 ×1.5
-	{pdf:42,pdc:41}, //伤害上限解除
+	{pdf:42,pdc:41}, //伤害上限×2
 	{pdf:43,pdc:42}, //HP++
 	{pdf:44,pdc:43}, //攻击++
 	{pdf:45,pdc:44}, //回复++
@@ -580,6 +580,7 @@ const pdcLatentMap = [
 	{pdf:47,pdc:54}, //心L大SB ×1.5
 	{pdf:48,pdc:55}, //L解禁武器
 	{pdf:48,pdc:56}, //L解禁武器 ×1.8
+	{pdf:49,paddb:57}, //伤害上限×3
 ];
 //paddb的徽章对应数字
 const paddbBadgeMap = [
@@ -648,13 +649,14 @@ const paddbLatentMap = [
 	{pdf:39,paddb:41}, //C珠破吸
 	{pdf:40,paddb:40}, //心横解转转
 	{pdf:41,paddb:39}, //U解禁消
-	{pdf:42,paddb:42}, //伤害上限解除
+	{pdf:42,paddb:42}, //伤害上限×2
 	{pdf:43,paddb:43}, //HP++
 	{pdf:44,paddb:44}, //攻击++
 	{pdf:45,paddb:45}, //回复++
 	{pdf:46,paddb:46}, //心追解云封
 	{pdf:47,paddb:47}, //心L大SB
 	{pdf:48,paddb:48}, //L解禁武器
+	{pdf:49,paddb:49}, //伤害上限×3
 ];
 //排序程序列表
 const sort_function_list = [

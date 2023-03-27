@@ -400,7 +400,7 @@ function latentUseHole(latentId) {
 		}
 		case 13: case 14: case 15: case 37: case 38:
 		case 39: case 40: case 41: case 42: case 46:
-		case 47: case 48:
+		case 47: case 48: case 49:
 		{
 			return 6;
 		}

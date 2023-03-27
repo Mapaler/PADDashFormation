@@ -1238,7 +1238,7 @@
 .latent-icon[data-latent-icon='41']::before{ /*U解禁消*/
 	background-position-y: calc(-32px * 41);
 }
-.latent-icon[data-latent-icon='42']::before{ /*伤害上限解除*/
+.latent-icon[data-latent-icon='42']::before{ /*伤害上限×2*/
 	background-position-y: calc(-32px * 42);
 }
 .latent-icon[data-latent-icon='43']::before{ /*HP++*/
@@ -1258,6 +1258,9 @@
 }
 .latent-icon[data-latent-icon='48']::before{ /*L解禁武器*/
 	background-position-y: calc(-32px * 48);
+}
+.latent-icon[data-latent-icon='49']::before{ /*伤害上限×3*/
+	background-position-y: calc(-32px * 49);
 }
 :is(:lang(en), :lang(ko)) .latent-icon:where(
 	[data-latent-icon='17'],
@@ -1342,7 +1345,7 @@
 	background-position-x: calc(-32px * 1);
 	background-position-y: calc(-32px * 42);
 }
-/* 额外有 x1.5 的 6格觉醒 */
+/* 额外有 x1.8 的 6格觉醒 */
 .level-super-break .latent-icon:where(
 	[data-latent-icon='48'],
 )::after
