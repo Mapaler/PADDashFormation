@@ -44,7 +44,7 @@ class Card{
 			coin: data[i++],
 			exp: data[i++]
 		};
-		card.evoBaseId = data[i++]; //进化基础ID
+		card.evoBaseId = Card.fixId(data[i++]); //进化基础ID
 		card.evoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]].map(Card.fixId); //进化素材
 		card.unevoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]].map(Card.fixId); //退化素材
 		card.unk02 = data[i++]; //未知02
@@ -65,7 +65,7 @@ class Card{
 			card.awakenings[ai] = data[i++];
 		}
 		card.superAwakenings = data[i++].split(',').filter(Boolean).map(strN=>parseInt(strN,10)); //超觉醒
-		card.evoRootId = data[i++]; //进化链根ID
+		card.evoRootId = Card.fixId(data[i++]); //进化链根ID
 		card.seriesId = data[i++]; //系列ID
 		card.types.push(data[i++]); //类型3
 		card.sellMP = data[i++]; //卖多少MP
