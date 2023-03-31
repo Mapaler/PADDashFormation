@@ -1,4 +1,5 @@
-﻿//分析卡片的函数,Code From https://github.com/kiootic/pad-rikuu
+﻿const Card = require('./parseCard');
+//分析卡片的函数,Code From https://github.com/kiootic/pad-rikuu
 class Skill{
     constructor(i,data){
 		let skill = this;
@@ -10,6 +11,11 @@ class Skill{
 		skill.initialCooldown = data[4];
 		skill.unk = data[5];
 		skill.params = data.slice(6);
+		switch(skill.type) {
+			case 202: case 236: {
+				skill.params = skill.params.map(Card.fixId);
+			}
+		}
 	}
 }
 //对于Nodejs输出成模块

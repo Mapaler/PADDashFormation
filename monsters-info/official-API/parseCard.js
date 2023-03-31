@@ -1,5 +1,8 @@
 ﻿//分析卡片的函数,Code From https://github.com/kiootic/pad-rikuu
 class Card{
+	static fixId(id){
+		return id > 10000 ? id - 100 : id;
+	}
     constructor(data){
 		let card = this;
 		card.attrs=[];
@@ -12,7 +15,7 @@ class Card{
 				scale: data[i++],
 			};
 		}
-		card.id = data[i++]; //ID
+		card.id = Card.fixId(data[i++]); //ID
 		card.name = data[i++]; //名字
 		card.attrs.push(data[i++]); //属性1
 		card.attrs.push(data[i++]); //属性2
@@ -42,8 +45,8 @@ class Card{
 			exp: data[i++]
 		};
 		card.evoBaseId = data[i++]; //进化基础ID
-		card.evoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]]; //进化素材
-		card.unevoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]]; //退化素材
+		card.evoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]].map(Card.fixId); //进化素材
+		card.unevoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]].map(Card.fixId); //退化素材
 		card.unk02 = data[i++]; //未知02
 		card.unk03 = data[i++]; //未知03
 		card.unk04 = data[i++]; //未知04
@@ -57,9 +60,11 @@ class Card{
 			rnd: data[i++]
 		}));
 		const numAwakening = data[i++]; //觉醒个数
-		card.awakenings = Array.from(new Array(numAwakening)).map(() => data[i++]);
-		const sAwakeningStr = data[i++];
-		card.superAwakenings = sAwakeningStr.length>0?(sAwakeningStr.split(',')).map(Number):[]; //超觉醒
+		card.awakenings = new Array(numAwakening);
+		for (let ai=0; ai<numAwakening; ai++) {
+			card.awakenings[ai] = data[i++];
+		}
+		card.superAwakenings = data[i++].split(',').filter(Boolean).map(strN=>parseInt(strN,10)); //超觉醒
 		card.evoRootId = data[i++]; //进化链根ID
 		card.seriesId = data[i++]; //系列ID
 		card.types.push(data[i++]); //类型3
@@ -67,7 +72,7 @@ class Card{
 		card.latentAwakeningId = data[i++]; //潜在觉醒ID
 		card.collabId = data[i++]; //合作ID
 		const flags = data[i++]; //一个旗子？
-		card.flags = flags; //未知08
+		card.flags = flags;
 		card.canAssist = Boolean(flags & 1<<0); //是否能当二技
 		card.enabled = Boolean(flags & 1<<1); //是否已启用
 		card.stacking = !Boolean(flags & 1<<3) && //flag有1<<3时，不合并占一格，没有时则根据类型进行合并（目前合并已经不占格子）
@@ -75,7 +80,7 @@ class Card{
 		card.is8Latent = Boolean(flags & 1<<5); //是否支持8个潜觉
 		card.skillBanner = Boolean(flags & 1<<6); //是否有技能横幅
 
-		card.altName = data[i++].split("|").filter(str=>str.length); //替换名字（分类标签）
+		card.altName = data[i++].split("|").filter(Boolean); //替换名字（分类标签）
 		card.limitBreakIncr = data[i++]; //110级增长
 		card.voiceId = data[i++]; //语音觉醒的ID
 		card.blockSkinOrBgmId = data[i++]; //珠子皮肤ID

@@ -82,7 +82,7 @@ officialAPI.forEach(function (lang) {
 			nCard.specialVersion[Math.floor(mid / 100000)] = new Card(oCard);
 		}
 	});*/
-	for (let cardIndex = 0; oCards[cardIndex][0] === cardIndex; cardIndex++) {
+	for (let cardIndex = 0; oCards[cardIndex][0] < 1e5; cardIndex++) {
 		const card = new Card(oCards[cardIndex]);
 		delete card.enemy;
 		delete card.unk01;
@@ -128,21 +128,21 @@ officialAPI.forEach(function (lang) {
 	const oSkills = lang.skillOriginal = skillJsonObj.skill;//将字符串转换为json对象
 	lang.skills = oSkills.map((oc, idx) => new Skill(idx, oc)); //每一项生成分析对象
 
-	lang.cards.forEach((m, idx, cardArr) => {
+	lang.cards.forEach((m, cardId, cardArr) => {
 		let henshinTo = null;
 		const henshinSkill = getActuallySkills(lang.skills, m.activeSkillId, [202, 236]);
 		if (henshinSkill.length) {
 			const skill = henshinSkill[0];
-			henshinTo = skill.params.distinct();
+			henshinTo = skill.params.map(Card.fixId).distinct();
 			if (Array.isArray(henshinTo)) {
 				m.henshinTo = henshinTo;
 				//变身来源可能有多个，因此将变身来源修改为数组
 				for (let toId of henshinTo) {
 					let henshinFrom = cardArr[toId].henshinFrom;
 					if (Array.isArray(henshinFrom)) {
-						henshinFrom.push(idx);
+						henshinFrom.push(cardId);
 					} else {
-						cardArr[toId].henshinFrom = [idx];
+						cardArr[toId].henshinFrom = [cardId];
 					}
 				}
 			}
