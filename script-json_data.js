@@ -136,7 +136,7 @@ let localTranslating = {
 			obstruct_opponent_before_me: tp`The opponent ranked higher than me`,
 			obstruct_opponent_designated_position: tp`No.${'positions'} ranked opponents`,
 			increase_damage_cap: tp`The ${'icon'}damage cap of ${'targets'} is increased to ${'cap'}`,
-			board_jamming_state: tp`Creates ${'count'} ${'icon'}${'state'} ${'size'} at ${'position'}${'time'}`,
+			board_jamming_state: tp`Creates ${'count'} ${'icon'}${'state'} ${'size'} at ${'position'}${'comment'}`,
 			board_size_change: tp`Board size changed to ${'icon'}${'size'}`,
 		},
 		power: {
@@ -240,6 +240,7 @@ let localTranslating = {
 			turns: tp` turns`,
 		},
 		word: {
+			comment: tp`(${'content'}) `,
 			comma: tp`, `,
 			semicolon: tp`; `,
 			slight_pause: tp`, `,
@@ -293,7 +294,8 @@ let localTranslating = {
 			clouds: tp`${'icon'}Clouds`,
 			immobility: tp`${'icon'}Immobility`,
 			roulette: tp`${'icon'}Roulette`,
-			roulette_time: tp`(transforms every ${'duration'})`,
+			roulette_time: tp`transforms every ${'duration'}`,
+			roulette_attrs: tp`only ${'orbs'} will appear`,
 		},
 		types: {
 			[0]: tp`${'icon'}Evo Material`,
@@ -2341,21 +2343,28 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Creates Roulette Orb",otLangName:{chs:"生成轮盘位 buff（转转）",cht:"生成輪盤位 buff（轉轉）"},
 				function:cards=>{
-					const searchTypeArray = [207];
+					const searchTypeArray = [207, 249];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+					}).sort((a,b)=>{
+						const a_s = getCardActiveSkill(a, searchTypeArray),
+							  b_s = getCardActiveSkill(b, searchTypeArray);
+						return (a_s.type - b_s.type) || !a_s.params[7] - !b_s.params[7] || a_s.params[0] - b_s.params[0];
+					});
 				},
 				addition:card=>{
-					const searchTypeArray = [207];
+					const searchTypeArray = [207, 249];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					if (sk[7])
-						return `${sk[7]}个×${sk[0]}T`;
-					else
-						return `特殊形状×${sk[0]}T`;
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('board-roulette'));
+					if (skill.type == 249) {
+						fragment.append(createOrbsList(flags(sk[1])));
+					}
+					fragment.append(`${sk[7]? sk[7] : '固定'+sk.slice(2,7).flatMap(flags).length }`,`×${sk[0]}T`);
+					return fragment;
 				}
 			},
 			{name:"Creates Cloud",otLangName:{chs:"生成云 debuff",cht:"生成雲 debuff"},

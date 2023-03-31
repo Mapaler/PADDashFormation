@@ -121,7 +121,7 @@
 			obstruct_opponent_before_me: tp`排名比自身高的对手`,
 			obstruct_opponent_designated_position: tp`第${'positions'}排位的对手`,
 			increase_damage_cap: tp`${'targets'}的${'icon'}伤害上限提升到${'cap'}`,
-			board_jamming_state: tp`在${'position'}生成${'icon'}${'state'}${'size'}${'count'}${'time'}`,
+			board_jamming_state: tp`在${'position'}生成${'icon'}${'state'}${'size'}${'count'}${'comment'}`,
 			board_size_change: tp`板面大小改变为${'icon'}${'size'}`,
 		},
 		power: {
@@ -225,6 +225,7 @@
 			turns: tp`回合`,
 		},
 		word: {
+			comment: tp`（${'content'}）`,
 			comma: tp`，`, //逗号
 			semicolon: tp`； `, //分号
 			slight_pause: tp`、`, //顿号
@@ -278,7 +279,8 @@
 			clouds: tp`${'icon'}云`,
 			immobility: tp`${'icon'}封条`,
 			roulette: tp`${'icon'}轮盘位`,
-			roulette_time: tp`（每${'duration'}变换）`,
+			roulette_time: tp`每${'duration'}变换`,
+			roulette_attrs: tp`只会出现${'orbs'}`,
 		},
 		types: {
 			[0]: tp`${'icon'}进化用`,

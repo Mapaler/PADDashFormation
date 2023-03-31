@@ -1521,9 +1521,8 @@ const skillObjectParsers = {
 			options.positions = [row1, row2, row3, row4, row5].map(flags);
 		}
 		return activeTurns(turns, 
-			boardJammingStates('roulette', count ? 'random' : 'shape',
-			{ time: time/100 , count: count, positions: [row1, row2, row3, row4, row5].map(flags) }
-		));
+			boardJammingStates('roulette', count ? 'random' : 'shape', options)
+		);
 	},
 	[208](count1, to1, exclude1, count2, to2, exclude2) {
 		return [
@@ -1668,6 +1667,19 @@ const skillObjectParsers = {
 	[248](turns, ...ids) { //几回合后才生效的技能
 		return delayActiveTurns(turns,
 			...ids.flatMap(id => this.parser(id))
+		);
+	},
+	[249](turns, attr, row1, row2, row3, row4, row5, count) {
+		const options = {
+			attrs: flags(attr),
+		};
+		if (count) {
+			options.count = count;
+		} else {
+			options.positions = [row1, row2, row3, row4, row5].map(flags);
+		}
+		return activeTurns(turns, 
+			boardJammingStates('roulette', count ? 'random' : 'shape', options)
 		);
 	},
 	[1000](type, pos, ...ids) {
@@ -2594,7 +2606,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.BoardJammingStates: { //板面产生干扰状态
-			const { state, posType, positions, count, time } = skill;
+			const { state, posType, positions, count, time, attrs } = skill;
 			const boardsBar = merge_skill ? null : new BoardSet(new Board(), new Board(null,7,6), new Board(null,5,4));
 			const slight_pause = tsp.word.slight_pause().textContent;
 
@@ -2604,7 +2616,11 @@ function renderSkill(skill, option = {})
 				position: posType == 'random' ? tsp.position.random() : tsp.position.shape(),
 			};
 			if (state == 'roulette') { //轮盘位
-				dict.time = tsp.board.roulette_time({duration: renderValue(v.constant(time), {unit: tsp.unit.seconds})});
+				const commentContent = [];
+				time && commentContent.push(tsp.board.roulette_time({duration: renderValue(v.constant(time), {unit: tsp.unit.seconds})}));
+				Array.isArray(attrs) && attrs.length && commentContent.push(tsp.board.roulette_attrs({orbs: renderOrbs(attrs)}));
+				dict.comment = tsp.word.comment({content: commentContent.nodeJoin(tsp.word.slight_pause())});
+				
 				dict.count = renderValue(v.constant(count || positions.flat().length), {unit: tsp.unit.orbs});
 				boardsBar?.boards?.forEach(board=>{
 					if (posType == 'random')
