@@ -999,6 +999,12 @@
 .awoken-icon[data-awoken-icon='106']{/*浮游*/
 	background-position-y:calc(-32px * 106);
 }
+.awoken-icon[data-awoken-icon='107']{/*大7c*/
+	background-position-y:calc(-32px * 107);
+}
+.awoken-icon[data-awoken-icon='108']{/*大L解锁*/
+	background-position-y:calc(-32px * 108);
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],

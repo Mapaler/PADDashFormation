@@ -11891,7 +11891,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"53304233f441fedd1a2dc338d11b0149"
+		"accfd4ac5667061fe78b6090ffa06355"
 	],
 	[
 		"script-custom_elements.js",
@@ -11899,7 +11899,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"850815b1b0ccc9901125d6778a71b8a3"
+		"f5830f20bf75d2cc60e6475cc0924020"
 	],
 	[
 		"script-skill-parser.js",
@@ -11915,11 +11915,11 @@ const cachesMap = new Map([
 	],
 	[
 		"solo.html",
-		"c489838a4ac278f9221a50385723bf90"
+		"0540923b170278b4cf62a47c4fee6108"
 	],
 	[
 		"style-monsterimages.css",
-		"b1a1b6c43554aa9cf627ec3fe3005a01"
+		"06915149ba0d15c57c000fe2609dffd6"
 	],
 	[
 		"style.css",
@@ -11931,7 +11931,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"1d1824e55919f65e97bb42f5fa90a09b"
+		"27702b3236b09687376c9e34476228a7"
 	],
 	[
 		"languages/en.css",
@@ -11975,7 +11975,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.js",
-		"805b29c5db5ceed3738b5c932779478d"
+		"1423e46eccbd05613a0a8dc4ffff581b"
 	],
 	[
 		"languages/zh.css",
@@ -11983,7 +11983,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.js",
-		"0eb078923fc8ce131827f2d9104bc867"
+		"8aff62c8a5ebe7d6540217adde60b8c7"
 	],
 	[
 		"images/attrs.png",
@@ -11999,7 +11999,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"0d2d9a334fb12f7e6a03b715cbb219b4"
+		"dae80c14df21a81fa11a8e59a6f83f37"
 	],
 	[
 		"images/badge-bg.png",

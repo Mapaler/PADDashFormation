@@ -420,6 +420,8 @@ let localTranslating = {
 			[104]: tp`${'icon'}Enhanced Heal Orbs+`,
 			[105]: tp`${'icon'}Skill Boost Minus`,
 			[106]: tp`${'icon'}Floating`,
+			[107]: tp`${'icon'}Enhanced Combos+`,
+			[108]: tp`${'icon'}L Increased Attack+`,
 		}
 	},
 };
@@ -482,6 +484,8 @@ const equivalent_awoken = [
 	{small:17,big:102,times:2},//光+
 	{small:18,big:103,times:2},//暗+
 	{small:29,big:104,times:2},//心+
+	{small:43,big:107,times:2},//7c
+	{small:60,big:108,times:2},//L
 ];
 //官方的觉醒排列顺序
 const official_awoken_sorting = [
@@ -496,7 +500,7 @@ const official_awoken_sorting = [
 	65, 66, 67, 20, 71, 72, 30, 64, 63,
 	73, 74, 75, 76, 77, 78, 79, 80, 81,
 	82, 84, 83, 85, 86, 87, 88, 89, 90,
-	91, 92, 93, 94, 95,105,106,
+	91, 92, 93, 94, 95,105,106,107,108,
 ];
 
 //pdc的徽章对应数字
