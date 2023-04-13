@@ -586,7 +586,7 @@ const pdcLatentMap = [
 	{pdf:47,pdc:54}, //心L大SB ×1.5
 	{pdf:48,pdc:55}, //L解禁武器
 	{pdf:48,pdc:56}, //L解禁武器 ×1.8
-	{pdf:49,paddb:57}, //伤害上限×3
+	{pdf:49,pdc:57}, //伤害上限×3
 ];
 //paddb的徽章对应数字
 const paddbBadgeMap = [
