@@ -155,6 +155,9 @@ label[for="merge-skill"]::after{
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "継承できない";
 }
+.edit-box .button-box .button-done.only-assist::after{
+	content: "継承のみ可能";
+}
 .team-awoken::before{
 	content: "チーム覚醒:";
 }

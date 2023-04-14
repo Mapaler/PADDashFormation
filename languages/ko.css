@@ -149,7 +149,10 @@ label[for="merge-skill"]::after{
 	content: "수정 확인";
 }
 .edit-box .button-box .button-done.cant-assist::after{
-	content: "협조 할 수 없음";
+	content: "상속 없음";
+}
+.edit-box .button-box .button-done.only-assist::after{
+	content: "상속만 가능";
 }
 .team-awoken::before{
 	content: "팀 각성:";

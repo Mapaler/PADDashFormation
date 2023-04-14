@@ -157,6 +157,9 @@ label[for="merge-skill"]::after{
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "不能辅助";
 }
+.edit-box .button-box .button-done.only-assist::after{
+	content: "只能辅助";
+}
 .team-awoken::before{
 	content: "队伍觉醒总计：";
 }

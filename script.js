@@ -1265,6 +1265,7 @@ function loadData(force = false)
 			{
 				const card = _cards[i];
 				if (card.searchFlags) card.leaderSkillTypes = new LeaderSkillType(...card.searchFlags);
+				card.onlyAssist = Boolean(card.flags & 1<<4);
 				/*card.unk01p = flags(card.unk01);
 				card.unk02p = flags(card.unk02);
 				card.unk03p = flags(card.unk03);
@@ -2859,12 +2860,14 @@ function initialize() {
 		let from = formation.teams[fromTeamNum][fromIsAssist][fromIndexInTeam];
 		let to = formation.teams[toTeamNum][toIsAssist][toIndexInTeam];
 		let fromCard = from.card, toCard = to.card;
-		if (toIsAssist && !fromCard?.canAssist && from.id > 0 ||
-			fromIsAssist && !toCard?.canAssist && to.id > 0) {
+
+		if (toIsAssist && (!fromCard?.canAssist && from.id > 0 || !fromIsAssist && toCard.onlyAssist) ||
+			fromIsAssist && (!toCard?.canAssist && to.id > 0 || !toIsAssist && fromCard.onlyAssist))
+		{
 			[formArr, toArr].filter(([teamNum, isAssist, indexInTeam])=>{
 				const member = formation.teams[teamNum][isAssist][indexInTeam];
 				const card = member.card;
-				if (member.id>0 && !card?.canAssist) {
+				if (member.id>0 && (!card?.canAssist || card.onlyAssist)) {
 					const teamBigBox = teamBigBoxs[teamNum];
 					const teamBox = teamBigBox.querySelector(".team-box");
 					const memberBox = teamBox.querySelector(isAssist ? ".team-assist" : ".team-members");
@@ -2875,7 +2878,10 @@ function initialize() {
 						this.classList.remove("show-disabled-action");
 						this.onanimationend = null;
 					}
-					console.warn("该角色不能作为辅助 %o", card);
+					console.warn("该角色%s%s能作为辅助 %o",
+						!card?.canAssist ? "不能" : "",
+						card?.onlyAssist ? "只能" : "",
+						card);
 				} else {
 					return false;
 				}
@@ -5217,20 +5223,23 @@ function editBoxChangeMonId(id) {
 	rowSkill.appendChild(frg1);
 	rowLederSkill.appendChild(frg2);
 
-	let noPowerup = card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) && card.maxLevel <= 1
+	let noPowerup = card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) && card.maxLevel <= 1;
 	skillLevel.readOnly = noPowerup;
 	rowMonPlus.classList.toggle("disabled", noPowerup);
-	rowMonLatent.classList.toggle("disabled", noPowerup);
+	rowMonLatent.classList.toggle("disabled", noPowerup || card.onlyAssist); //极少数情况会出现仅允许当武器的，不能打潜觉
 	if (noPowerup) { //当可以叠加时，不能打297和潜觉
 		rowMonPlus.querySelector(".m-plus-hp").value = 0;
 		rowMonPlus.querySelector(".m-plus-atk").value = 0;
 		rowMonPlus.querySelector(".m-plus-rcv").value = 0;
 	}
 
+	const btnDone = editBox.querySelector(".button-done");
 	if (editBox.isAssist) {
-		const btnDone = editBox.querySelector(".button-done");
 		btnDone.classList.toggle("cant-assist", !card.canAssist);
 		btnDone.disabled = !card.canAssist;
+	} else {
+		btnDone.classList.toggle("only-assist", card.onlyAssist);
+		btnDone.disabled = card.onlyAssist;
 	}
 
 	//去除所有不能再打的潜觉

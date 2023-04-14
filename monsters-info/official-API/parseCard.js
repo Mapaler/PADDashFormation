@@ -77,6 +77,7 @@ class Card{
 		card.enabled = Boolean(flags & 1<<1); //是否已启用
 		card.stacking = !Boolean(flags & 1<<3) && //flag有1<<3时，不合并占一格，没有时则根据类型进行合并（目前合并已经不占格子）
 			card.types.some(t=>[0,12,14,15].includes(t)); //0進化用;12能力覺醒用;14強化合成用;15販賣用默认合并
+		//card.onlyAssist = Boolean(flags & 1<<4); //是否只能当二技
 		card.is8Latent = Boolean(flags & 1<<5); //是否支持8个潜觉
 		card.skillBanner = Boolean(flags & 1<<6); //是否有技能横幅
 
