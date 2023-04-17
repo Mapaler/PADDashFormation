@@ -15,7 +15,7 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 | ![3人协力界面预览](doc/images/preview-capture-3p.png) | ![手机端预览](doc/images/preview-mobile.jpg) |
 
 # 如何使用 | HOW TO USE
-推荐[![][firefox]火狐浏览器](//www.mozilla.org/firefox/new/) | [![][firefox]Firefox](//www.mozilla.org/firefox/new/) is recommended
+推荐[![][firefox]火狐浏览器](https://www.mozilla.org/firefox/new/) | [![][firefox]Firefox](https://www.mozilla.org/firefox/new/) is recommended
 ## 快速使用在线版（推荐） | Online Quick Start (Recommended)
 * <https://mapaler.github.io/PADDashFormation/> (Github Pages)
 * <https://mapaler.com/PADDashFormation/> (我自己的镜像 | my own mirror)
@@ -76,17 +76,17 @@ This is an Object for a language list item.
 Please refer to existing files.
 
 # 权利归属 | Copyright
-> 本软件灵感来源于[PDC 智龙迷城伤害计算器](//play.google.com/store/apps/details?id=com.corombo13.paddamagecal)  
-> This software is inspired by [PDC パズドラダメージ計算](//play.google.com/store/apps/details?id=com.corombo13.paddamagecal)
+> 本软件灵感来源于[PDC 智龙迷城伤害计算器](https://play.google.com/store/apps/details?id=com.corombo13.paddamagecal)  
+> This software is inspired by [PDC パズドラダメージ計算](https://play.google.com/store/apps/details?id=com.corombo13.paddamagecal)
 
 > © GungHo Online Entertainment Inc. All Cards Images && Info Right Reserved.  
 > 所有图片素材版权与怪物信息归属于GungHo在线娱乐有限公司。  
 > パズル&ドラゴンズに関する画像及び情報等の権利はGungHo Online Entertainment Inc.に帰属します。
 > ### 智龙迷城官网 | Puzzle & Dragons Official Website
-> * [パズル＆ドラゴンズ](//pad.gungho.jp)
-> * [龍族拼圖](//pad.gungho.jp/hktw/pad/)
-> * [Puzzle & Dragons](//www.puzzleanddragons.us/)
-> * [퍼즐앤드래곤](//pad.neocyon.com/W/)
+> * [パズル＆ドラゴンズ](https://pad.gungho.jp)
+> * [龍族拼圖](https://pad.gungho.jp/hktw/pad/)
+> * [Puzzle & Dragons](https://www.puzzleanddragons.us/)
+> * [퍼즐앤드래곤](https://pad.neocyon.com/W/)
 
 > © Fontworks Inc. Font Kurokane Right Reserved.  
 > くろかね字体版权归属于Fontworks有限公司。  
@@ -95,14 +95,14 @@ Please refer to existing files.
 > 卡片中文名、中文分类来自于[Puzzle & Dragons 戰友系統及資訊網](//pad.skyozora.com/)
 
 # 使用开源软件 | Open source software used
-* [pad-rikuu](//github.com/kiootic/pad-rikuu) //Data structure and parser
-* [Puzzle-and-Dragons-Texture-Tool](//github.com/codywatts/Puzzle-and-Dragons-Texture-Tool) //Extract Images
-* [zxing-js](//github.com/zxing-js/library) //Read, Write QR Code
-* [html2canvas](//github.com/niklasvh/html2canvas) //Capture Image
-* [aaa](//github.com/jy4340132/aaa) //Play voice(ADPCM wav)
-* [Font Awesome Free](//github.com/FortAwesome/Font-Awesome) //Font Icon
-* [Zpix (最像素)](//github.com/SolidZORO/zpix-pixel-font) //Pixel Font
-* [font-spider](//github.com/aui/font-spider) //Compression Font file
-* [opencc-js](//github.com/nk2028/opencc-js) //繁转简
+* [pad-rikuu](https://github.com/kiootic/pad-rikuu) //Data structure and parser
+* [Puzzle-and-Dragons-Texture-Tool](https://github.com/codywatts/Puzzle-and-Dragons-Texture-Tool) //Extract Images
+* [zxing-js](https://github.com/zxing-js/library) //Read, Write QR Code
+* [html2canvas](https://github.com/niklasvh/html2canvas) //Capture Image
+* [aaa](https://github.com/jy4340132/aaa) //Play voice(ADPCM wav)
+* [Font Awesome Free](https://github.com/FortAwesome/Font-Awesome) //Font Icon
+* [Zpix (最像素)](https://github.com/SolidZORO/zpix-pixel-font) //Pixel Font
+* [font-spider](https://github.com/aui/font-spider) //Compression Font file
+* [opencc-js](https://github.com/nk2028/opencc-js) //繁转简
 
 [firefox]: https://www.mozilla.org/media/img/firefox/favicon.ico
