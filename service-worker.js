@@ -11971,11 +11971,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"b9a0719e5501f20dc509b5be06f39fc2"
+		"0c7921500706af51496d51b543ad642d"
 	],
 	[
 		"script.js",
-		"bc576345dbede0d9dc8085377fdbcaf9"
+		"4c42f4e64a26d9f3b3404e2cb54e699e"
 	],
 	[
 		"solo.html",
