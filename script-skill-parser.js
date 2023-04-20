@@ -2983,7 +2983,7 @@ function renderPowerUp(powerUp) {
 		if (list.every(([, value]) => value === list[0][1])) {
 			let value = list[0][1];
 			//三个值一样
-			frg.ap(list.map(([name]) => renderStat(name)).nodeJoin(tsp.word.slight_pause()));
+			frg.ap(list.map(([name]) => renderStat(name,name=='maxhp'?{icon:createSkillIcon("maxhp-locked")}:null)).nodeJoin(tsp.word.slight_pause()));
 			frg.ap(operator);
 			frg.ap(renderValue(v.percent(value * 100), option));
 		} else {

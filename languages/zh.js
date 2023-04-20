@@ -207,7 +207,7 @@
 		},
 		stats: {
 			unknown: tp`[ 未知状态: ${'type'}]`, //type
-			maxhp: tp`最大HP`,
+			maxhp: tp`${'icon'}最大HP`,
 			hp: tp`HP`,
 			chp: tp`当前HP`,
 			atk: tp`攻击力`,

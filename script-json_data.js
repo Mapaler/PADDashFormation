@@ -222,7 +222,7 @@ let localTranslating = {
 		},
 		stats: {
 			unknown: tp`[ Unknown: ${'type'}]`, //type
-			maxhp: tp`Max HP`,
+			maxhp: tp`${'icon'}Max HP`,
 			hp: tp`HP`,
 			chp: tp`current HP`,
 			atk: tp`ATK`,

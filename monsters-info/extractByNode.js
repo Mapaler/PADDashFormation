@@ -27,7 +27,7 @@ Array.prototype.distinct = function () {
 function sameCard(m1, m2) {
 	if (m1 == undefined || m2 == undefined) return false; //是否存在
 	if (m1.attrs[0] != m2.attrs[0]) return false; //主属性
-	if (m1.attrs[1] != m2.attrs[1]) return false; //副属性
+	//if (m1.attrs[1] != m2.attrs[1]) return false; //副属性
 	//全部类型有任意不同的时候也返回false，但是考虑到上修，不要求总数一致
 	for (let i = 0; i < Math.min(m1.types.length, m2.types.length); i++) {
 		if (m1.types[i] != m2.types[i]) return false;
@@ -168,13 +168,11 @@ for (let li = 0; li < officialAPI.length; li++) {
 		//名字对象
 		otherLangs.forEach((otLang) => {
 			let _m = otLang.cards[mi]; //获得这种其他语言的当前这个怪物数据
-			let isSame = sameCard(m, _m); //与原语言怪物是否是同一只
+			let isSame = false; //与原语言怪物是否是同一只
 			const l1 = lang.code, l2 = otLang.code;
-			if (!isSame && //如果不同时，判断特殊情况
-				(
-					l1 == 'ja' && (l2 == 'en' || l2 == 'ko') ||
-					l2 == 'ja' && (l1 == 'en' || l1 == 'ko')
-				)
+			if (
+				l1 == 'ja' && (l2 == 'en' || l2 == 'ko') ||
+				l2 == 'ja' && (l1 == 'en' || l1 == 'ko')
 			) { //当同id两者不同，日服和英韩服比较时的一些人工确认相同的特殊id差异卡片
 				const langIsJa = l1 == 'ja' ? true : false; //原始语言是否是日语
 				let diff = 0; //日语和其它语言的id差异
@@ -205,6 +203,8 @@ for (let li = 0; li < officialAPI.length; li++) {
 					isSame = true;
 				}
 			}
+			if (!isSame) isSame = sameCard(m, _m); //不属于特殊指定区间的情况下，判断与原语言怪物是否是同一只
+
 			if (_m && isSame) //如果有这个怪物，且与原语言怪物是同一只
 			{
 				const otName = _m.name;

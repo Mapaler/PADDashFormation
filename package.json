@@ -1,10 +1,11 @@
 {
   "dependencies": {
-    "@xmldom/xmldom": "^0.8.6",
-    "@zxing/library": "^0.19.2",
+    "@xmldom/xmldom": "^0.8.7",
+    "@zxing/library": "^0.20.0",
+    "html2canvas": "^1.4.1",
     "mime": "^3.0.0",
     "opencc-js": "^1.0.5",
-    "sharp": "^0.31.3",
-    "xml-formatter": "^3.2.0"
+    "sharp": "^0.32.0",
+    "xml-formatter": "^3.3.2"
   }
 }
