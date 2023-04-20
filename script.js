@@ -541,6 +541,10 @@ Formation.prototype.getPdcQrStr = function()
 }
 Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 {
+	//PadDb服务器出现没有的怪物就会崩溃，在这里主动保护一下，转换为 1319
+	function protectPadDbId(cardid) {
+		return cardid > 9934 ? 1319 : cardFixId(cardid, true);
+	}
 	//PADDB目前只支持单人队伍
 	const t = this.teams[0];
 	let teamObj = {
@@ -563,7 +567,7 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 	for (let i = 0; i < t[0].length; i++) {
 		const m = t[0][i], a = t[1][i];
 		//计算基底的变身情况
-		let num = m.id, transform = null;
+		let num = protectPadDbId(m.id, true), transform = null;
 		if (m.card?.henshinFrom?.length > 0 //是变身
 			&& m.level <= m.card.maxLevel //等级不超过99
 		) {
@@ -592,7 +596,7 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 		// password:"",
 		name: this.title,
 		// "tags":[""],
-		mons: t[0].concat(t[1]).map(m=>m.id > 0 ? m.id : ""),
+		mons: t[0].concat(t[1]).map(m=>m.id > 0 ? protectPadDbId(m.id, true) : ""),
 		team: JSON.stringify(teamObj),
 	};
 	return qrObj;
@@ -1590,6 +1594,7 @@ async function inputFromQrString(string)
 				let obj = {
 					d: JSON.parse(url.searchParams.get('d')),
 					s: url.searchParams.get('s'),
+					paddbId: url.searchParams.get('_id'),
 				}
 				re.type = "PADDF";
 				//re.message = "发现队伍数据 | Formation data founded";
