@@ -50,13 +50,13 @@ Place the certificate file in the Android system certificate folder
 	1. 双击`Root.vhd`挂载到 Windows 磁盘管理中。  
 	Double-click `Root.vhd` to mount it into Windows Disk Management.
 	1. 运行 [Ext2Fsd](https://github.com/matt-wu/Ext3Fsd/releases) 的 **Ext2 Volume Manager**，选中刚刚挂载的 EXT4 格式磁盘，右键菜单选择“加载装配点盘符”或按`F4`快捷键，给虚拟磁盘分配一个盘符。  
-	Run **Ext2 Volume Manager** of [Ext2Fsd](https://github.com/matt-wu/Ext3Fsd/releases), select the EXT4 format disk you just mounted, right-click the menu and select "Load Assembly Point Drive Letter" or press the `F4` shortcut key to assign a drive letter to the virtual disk.
+	Run **Ext2 Volume Manager** of [Ext2Fsd](https://github.com/matt-wu/Ext3Fsd/releases), select the EXT4 format disk you just mounted, right-click the menu and select "Assign Drive Letter" or press the `F4` shortcut key to assign a drive letter to the virtual disk.
 	1. 在 Windows 下，将证书复制到`X:\android\system\etc\security\cacerts\`  
 	Under Windows, copy the certificate to `X:\android\system\etc\security\cacerts\`
 	1. **Ext2 Volume Manager** 内，在虚拟磁盘的右键菜单选择“保存系统缓冲”或按`F11`快捷键。  
-	In **Ext2 Volume Manager**, select "Save System Buffer" or press the `F11` shortcut from the context menu of the virtual disk.   
+	In **Ext2 Volume Manager**, select "Flush Cache to Disk" or press the `F11` shortcut from the context menu of the virtual disk.   
 	1. **Ext2 Volume Manager** 内，在虚拟磁盘的右键菜单选择“更改装配点盘符”或按`F10`快捷键，删除分配的盘符。  
-	In **Ext2 Volume Manager**, select "Change Assembly Point Letter" or press the `F10` shortcut key to delete the assigned drive letter.  
+	In **Ext2 Volume Manager**, select "Change Drive Letter" or press the `F10` shortcut key to delete the assigned drive letter.  
 	1. 运行 `diskmgmt.msc` 打开系统磁盘管理，在虚拟磁盘上点击右键，选择“分离VHD”。  
 	Run `diskmgmt.msc` to open System Disk Management, right-click on the virtual disk and select "Detach VHD".
 	1. 运行模拟器，在 设置-高级 内打开 Android调试(ADB)，并记下调试 IP 和端口，默认为`127.0.0.1:5555`  
