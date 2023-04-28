@@ -133,7 +133,7 @@ officialAPI.forEach(function (lang) {
 		const henshinSkill = getActuallySkills(lang.skills, m.activeSkillId, [202, 236]);
 		if (henshinSkill.length) {
 			const skill = henshinSkill[0];
-			henshinTo = skill.params.map(Card.fixId).distinct();
+			henshinTo = skill.params.distinct();
 			if (Array.isArray(henshinTo)) {
 				m.henshinTo = henshinTo;
 				//变身来源可能有多个，因此将变身来源修改为数组
