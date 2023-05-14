@@ -30,7 +30,7 @@ Find an **openssl.exe** program on computer, or install [Win32OpenSSL](http://sl
 
 * 执行代码，获取证书的hash  
 Execute the code to get the hash of the certificate  
-`openssl x509 -inform PEM -subject_hash_old -noout -in FiddlerRoot.cer`
+`openssl x509 -inform DER -in FiddlerRoot.cer -subject_hash_old -noout`
 
 * 执行代码，将证书由 *CER* 转换为 *PEM* 格式  
 Execute the code to convert the certificate from *CER* to *PEM* format  
