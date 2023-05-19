@@ -687,7 +687,11 @@ body:not(.show-mon-id) .monster .id{
 /*.monster .id::before{
 	content: "No.";
 }*/
+.monster .skill-cd{
+	text-align: right;
+}
 .monster .skill-cd::before{
+	display: inline-block;
 	content:"CD";
 	font-size: 10px;
 }
