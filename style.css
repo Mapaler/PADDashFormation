@@ -691,6 +691,9 @@ body:not(.show-mon-id) .monster .id{
 	content:"CD";
 	font-size: 10px;
 }
+.monster .skill-cd.loop-skill::before{
+	content:"🔁CD";
+}
 .monster .skill-cd {
 	font-size: 13px;
 	line-height: 13px;

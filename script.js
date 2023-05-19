@@ -5989,8 +5989,23 @@ function refreshMemberSkillCD(teamDom, team, idx) {
 
 	const memberSkillCd = memberSkill ? (memberSkill.initialCooldown - (member.skilllevel || memberSkill.maxLevel) + 1) : 0;
 	const assistSkillCd = assistSkill ? (assistSkill.initialCooldown - (assist.skilllevel || assistSkill.maxLevel) + 1) : 0;
-	memberSkillCdDom.textContent = memberSkillCd;
-	assistSkillCdDom.textContent = memberSkillCd + assistSkillCd;
+	memberSkillCdDom.innerHTML = '';
+	assistSkillCdDom.innerHTML = '';
+	memberSkillCdDom.classList.toggle("loop-skill", memberSkill.type == 233);
+	if (memberSkill.type == 232 || memberSkill.type == 233) //232是单向进化技能，显示。233是循环进化技能，就不显示了
+	{
+		memberSkillCdDom.append(memberSkillCd);
+		assistSkillCdDom.append(memberSkillCd+ assistSkillCd);
+		memberSkill.params.slice(1).forEach(subSkillId=>{
+			const subSkill = Skills[subSkillId];
+			const memberEvoSkillCd = subSkill.initialCooldown - subSkill.maxLevel + 1;
+			memberSkillCdDom.append(document.createElement("br"),memberEvoSkillCd);
+			assistSkillCdDom.append(document.createElement("br"),memberEvoSkillCd+ assistSkillCd);
+		});
+	} else {
+		memberSkillCdDom.append(memberSkillCd);
+		assistSkillCdDom.append(memberSkillCd + assistSkillCd);
+	}
 
 	if (member?.skilllevel != undefined && member?.skilllevel < memberSkill?.maxLevel) {
 		memberSkillCdDom.classList.remove("max-skill");
