@@ -4198,7 +4198,7 @@ function initialize() {
 		const card = Cards[editBox.mid ?? 0];
 		const value = parseInt(this.value, 10);
 		awokenCountLabel.setAttribute(dataAttrName, value);
-		awokenCountLabel.classList.toggle("full-awoken", value > 0 && value == card.awakenings.length);;
+		awokenCountLabel.classList.toggle("full-awoken", value > 0 && value == card?.awakenings?.length);
 
 		reCalculateAbility();
 	}

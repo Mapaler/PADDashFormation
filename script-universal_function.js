@@ -1121,7 +1121,7 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 				break;
 			}
 			case 245: { //全员满足某种情况，不包括好友队长，现在是全部星级不一样
-				const cardsRarity = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => m.card.rarity); //所有的卡片星级
+				const cardsRarity = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => m.card?.rarity); //所有的卡片星级
 				const distinctRarity = cardsRarity.concat().distinct(); //数组拷贝去重
 				if (sk[0] == -1 && distinctRarity.length === cardsRarity.length || //全部不同
 					sk[0] == -2 && distinctRarity.length === 1 || //全部相同
