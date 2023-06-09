@@ -53,6 +53,7 @@ body{
 
 	font-family: var(--font-family);
 	margin: 0;
+	background-color: white;
 }
 .control-box,
 .formation-box
@@ -827,15 +828,15 @@ body:not(.show-awoken-count):not(.solo) .formation-box .team-badge
 }
 .teams .team-bigbox:nth-child(1) {
 	--team-ft-color: red;
-	--team-bg-color : pink;
+	--team-bg-color : rgba(255,0,0,0.2);
 }
 .teams .team-bigbox:nth-child(2) {
 	--team-ft-color: blue;
-	--team-bg-color : lightblue;
+	--team-bg-color : rgba(0,125,255,0.2);
 }
 .teams .team-bigbox:nth-child(3) {
 	--team-ft-color: green;
-	--team-bg-color : lightgreen;
+	--team-bg-color : rgba(0,255,0,0.2);
 }
 .team-members,
 .team-latents
@@ -922,8 +923,6 @@ body:not(.show-awoken-count):not(.solo) .formation-box .team-badge
 .tIf-total-skill-boost .general::before,
 .tIf-total-move .general::before,
 .tIf-total-move .awoken-bind::before,
-.tIf-effect icon::before,
-icon.poison-no-effect::after,
 .hp-range-table th::before
 {
 	content: " ";
@@ -1069,14 +1068,6 @@ icon.poison-no-effect::after,
 		opacity: 0;
 	}
 }
-icon.poison-no-effect::after
-{
-	background-image: url(images/icon-bind.png);
-	position: absolute;
-	left: 0;
-	top: 0;
-	animation: hidden-visible-animate 0.5s infinite ease-in alternate;
-}
 /*单人时的协力觉醒和多人时的掉落觉醒显示无效*/
 body.solo .awoken-icon[data-awoken-icon="30"]::after,
 body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
@@ -1094,44 +1085,26 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	position: relative;
 }
-icon._76board::before
-{
-	background-image: url(images/icon-76board.png);
-}
-icon.no-skyfall::before
-{
-	background-image: url(images/icon-no-skyfall.png);
-}
-icon.poison-no-effect::before
-{
-	background-image: url(images/icon-poison.png);
-}
-icon.add-combo
-{
-	margin-right: 7px;
-}
-icon.add-combo::before
-{
-	background-image: url(images/icon-add-combo.png);
-}
-icon.add-combo::after
-{
-	color: white;
-	text-shadow: black 1px 1px 0,black -1px 0px 0,black 0 0 1px;
-	font-family: var(--game-font-family);
-	font-size: 12px;
-	position: absolute;
-	top: -7px;
-	left: 10px;
-	content: attr(data-add-combo);
-}
-icon.inflicts::before
-{
-	background-image: url(images/icon-inflicts.png);
-}
-icon.inflicts::after
+.tIf-effect .inflicts::after
 {
 	content: attr(data-inflicts);
+}
+.tIf-effect .icon-skill,
+.tIf-effect .poison-no-effect,
+.tIf-effect .inflicts icon
+{
+	transform: scale(0.63);
+	margin: -8px;
+}
+.tIf-effect .poison-no-effect::after
+{
+	content: " ";
+	background-image: url(images/icon-bind.png);
+	background-position: center;
+	position: absolute;
+	left: 0;
+	top: 0;
+	animation: hidden-visible-animate 0.5s infinite ease-in alternate;
 }
 
 /*队伍内属性、type的个数统计*/
@@ -1252,7 +1225,7 @@ icon.inflicts::after
 	border-radius: 10px;
 	border-width:4px;
 	border-style:solid;
-	box-sizing: initial;
+	box-sizing: content-box;
 	margin: 0;
 }
 .team-leader .monster {

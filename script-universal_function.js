@@ -1209,37 +1209,7 @@ function henshinBase(cardid, firstId)
 	}
 	return card;
 }
-//计算队伍是否为76
-function tIf_Effect_76board(leader1id, leader2id) {
-	const searchTypeArray = [162, 186];
-	const ls1 = getCardLeaderSkills(henshinBase(leader1id), searchTypeArray)[0];
-	const ls2 = getCardLeaderSkills(henshinBase(leader2id), searchTypeArray)[0];
-
-	return Boolean(ls1 || ls2);
-}
-//计算队伍是否为无天降
-function tIf_Effect_noSkyfall(leader1id, leader2id) {
-	const searchTypeArray = [163, 177];
-	const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
-	const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
-
-	return Boolean(ls1 || ls2);
-}
-//计算队伍是否为毒无效
-function tIf_Effect_poisonNoEffect(leader1id, leader2id) {
-	const searchTypeArray = [197];
-	const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
-	const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
-
-	return Boolean(ls1 || ls2);
-}
-//计算队伍的+C
-function tIf_Effect_addCombo(leader1id, leader2id) {
-	return [
-		getSkillAddCombo(Cards[leader1id]),
-		getSkillAddCombo(Cards[leader2id])
-	];
-}
+//计算卡片队长技+C
 function getSkillAddCombo(card) {
 	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220, 235];
 	const skill = getCardLeaderSkills(card, searchTypeArray)[0];
@@ -1263,13 +1233,7 @@ function getSkillAddCombo(card) {
 			return 0;
 	}
 }
-//计算队伍的追打
-function tIf_Effect_inflicts(leader1id, leader2id) {
-	return [
-		getSkillFixedDamage(Cards[leader1id]),
-		getSkillFixedDamage(Cards[leader2id])
-	];
-}
+//计算卡片队长技追打
 function getSkillFixedDamage(card) {
 	const searchTypeArray = [199, 200, 201, 223, 235];
 	const skill = getCardLeaderSkills(card, searchTypeArray)[0];
@@ -1288,6 +1252,51 @@ function getSkillFixedDamage(card) {
 			return 0;
 	}
 }
+function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original) {
+	let effect = {
+		board76: false,
+		noSkyfall: false,
+		poisonNoEffect: false,
+		resolve: false,
+		addCombo: [0,0],
+		inflicts: [0,0],
+	};
+	const card1 = Cards[leader1id], card2 = Cards[leader2id];
+	{ //计算队伍是否为76
+		const searchTypeArray = [162, 186];
+		const ls1 = getCardLeaderSkills(henshinBase(leader1id_original), searchTypeArray)[0];
+		const ls2 = getCardLeaderSkills(henshinBase(leader2id_original), searchTypeArray)[0];
+		effect.board76 = Boolean(ls1 || ls2);
+	}
+	{ //计算队伍是否为无天降
+		const searchTypeArray = [163, 177];
+		const ls1 = getCardLeaderSkills(card1, searchTypeArray)[0];
+		const ls2 = getCardLeaderSkills(card2, searchTypeArray)[0];
+		effect.noSkyfall = Boolean(ls1 || ls2);
+	}
+	{ //计算队伍是否为毒无效
+		const searchTypeArray = [197];
+		const ls1 = getCardLeaderSkills(card1, searchTypeArray)[0];
+		const ls2 = getCardLeaderSkills(card2, searchTypeArray)[0];
+		effect.poisonNoEffect = Boolean(ls1 || ls2);
+	}
+	{ //计算队伍是否有根性
+		const searchTypeArray = [14];
+		const ls1 = getCardLeaderSkills(card1, searchTypeArray)[0];
+		const ls2 = getCardLeaderSkills(card2, searchTypeArray)[0];
+		effect.resolve = Boolean(ls1 || ls2);
+	}
+	{ //计算队伍的+C
+		effect.addCombo[0] = getSkillAddCombo(card1);
+		effect.addCombo[1] = getSkillAddCombo(card2);
+	}
+	{ //计算队伍的追打
+		effect.inflicts[0] = getSkillFixedDamage(card1);
+		effect.inflicts[1] = getSkillFixedDamage(card2);
+	}
+	return effect;
+}
+
 //计算队伍SB
 function countTeamSB(team, solo) {
 	let sbn = 0;

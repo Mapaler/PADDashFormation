@@ -5791,53 +5791,37 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	}
 
 	if (tEffectDom)	{
-		const _76board = tEffectDom.querySelector("._76board");
-		//76版队长技能不被欢队长所影响
+		//76版队长技能不被换队长所影响
 		const leader1id_original = team[0][0].id;
 		const leader2id_original = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][0].id : teams[1][0][0].id) : team[0][5].id;
-		if (tIf_Effect_76board(leader1id_original,leader2id_original))
-		{
-			_76board.classList.remove(className_displayNone);
-		}else
-		{
-			_76board.classList.add(className_displayNone);
-		}
-		const noSkyfall = tEffectDom.querySelector(".no-skyfall");
-		if (tIf_Effect_noSkyfall(leader1id,leader2id))
-		{
-			noSkyfall.classList.remove(className_displayNone);
-		}else
-		{
-			noSkyfall.classList.add(className_displayNone);
-		}
-		const poisonNoEffect = tEffectDom.querySelector(".poison-no-effect");
-		if (tIf_Effect_poisonNoEffect(leader1id,leader2id))
-		{
-			poisonNoEffect.classList.remove(className_displayNone);
-		}else
-		{
-			poisonNoEffect.classList.add(className_displayNone);
-		}
-		const addCombo = tEffectDom.querySelector(".add-combo");
-		const addComboValue = tIf_Effect_addCombo(leader1id,leader2id);
-		if ((addComboValue[0] | addComboValue[1]) > 0)
-		{
-			addCombo.classList.remove(className_displayNone);
-			addCombo.setAttribute("data-add-combo", addComboValue.filter(v=>v).join("/"));
-		}else
-		{
-			addCombo.classList.add(className_displayNone);
-		}
-		const inflicts = tEffectDom.querySelector(".inflicts");
-		const inflictsValue = tIf_Effect_inflicts(leader1id,leader2id);
-		if ((inflictsValue[0] | inflictsValue[1]) > 0)
-		{
-			inflicts.classList.remove(className_displayNone);
-			inflicts.setAttribute("data-inflicts", inflictsValue.filter(v=>v).map(v=>v.bigNumberToString()).join("/"));
-		}else
-		{
-			inflicts.classList.add(className_displayNone);
-		}
+		let effect = tIf_Effect(leader1id,leader2id, leader1id_original,leader2id_original);
+		refreshEffectDom(tEffectDom, effect);
+	}
+}
+function refreshEffectDom(tEffectDom, effect) {
+	const _76board = tEffectDom.querySelector(".icon-skill[data-icon-type='board-size-change']");
+	console.log(_76board)
+	_76board && _76board.classList.toggle(className_displayNone, !effect.board76);
+
+	const noSkyfall = tEffectDom.querySelector(".icon-skill[data-icon-type='no-skyfall']");
+	noSkyfall && noSkyfall.classList.toggle(className_displayNone, !effect.noSkyfall);
+
+	const poisonNoEffect = tEffectDom.querySelector(".poison-no-effect");
+	poisonNoEffect && poisonNoEffect.classList.toggle(className_displayNone, !effect.poisonNoEffect);
+
+	const resolve = tEffectDom.querySelector(".icon-skill[data-icon-type='resolve']");
+	resolve && resolve.classList.toggle(className_displayNone, !effect.resolve);
+
+	const addCombo = tEffectDom.querySelector(".icon-skill[data-icon-type='add-combo']");
+	if (addCombo) {
+		addCombo.classList.toggle(className_displayNone, effect.addCombo.every(n=>n<1));
+		addCombo.setAttribute("data-add-combo", effect.addCombo.filter(Boolean).join("/"));
+	}
+
+	const inflicts = tEffectDom.querySelector(".inflicts");
+	if (inflicts) {
+		inflicts.classList.toggle(className_displayNone, effect.inflicts.every(n=>n<1));
+		inflicts.setAttribute("data-inflicts", effect.inflicts.filter(Boolean).map(v=>v.bigNumberToString()).join("/"));
 	}
 }
 //刷新所有队伍能力值合计
@@ -5923,53 +5907,11 @@ function refreshFormationTotalHP(totalDom, teams) {
 	}
 
 	if (tEffectDom)	{
-		const _76board = tEffectDom.querySelector("._76board");
-		//76版队长技能不被欢队长所影响
+		//76版队长技能不被换队长所影响
 		const leader1id_original = teams[0][0][0].id;
 		const leader2id_original = teams[1][0][0].id;
-		if (tIf_Effect_76board(leader1id_original,leader2id_original))
-		{
-			_76board.classList.remove(className_displayNone);
-		}else
-		{
-			_76board.classList.add(className_displayNone);
-		}
-		const noSkyfall = tEffectDom.querySelector(".no-skyfall");
-		if (tIf_Effect_noSkyfall(leader1id,leader2id))
-		{
-			noSkyfall.classList.remove(className_displayNone);
-		}else
-		{
-			noSkyfall.classList.add(className_displayNone);
-		}
-		const poisonNoEffect = tEffectDom.querySelector(".poison-no-effect");
-		if (tIf_Effect_poisonNoEffect(leader1id,leader2id))
-		{
-			poisonNoEffect.classList.remove(className_displayNone);
-		}else
-		{
-			poisonNoEffect.classList.add(className_displayNone);
-		}
-		const addCombo = tEffectDom.querySelector(".add-combo");
-		const addComboValue = tIf_Effect_addCombo(leader1id,leader2id);
-		if ((addComboValue[0] | addComboValue[1]) > 0)
-		{
-			addCombo.classList.remove(className_displayNone);
-			addCombo.setAttribute("data-add-combo", addComboValue.filter(v=>v).join("/"));
-		}else
-		{
-			addCombo.classList.add(className_displayNone);
-		}
-		const inflicts = tEffectDom.querySelector(".inflicts");
-		const inflictsValue = tIf_Effect_inflicts(leader1id,leader2id);
-		if ((inflictsValue[0] | inflictsValue[1]) > 0)
-		{
-			inflicts.classList.remove(className_displayNone);
-			inflicts.setAttribute("data-inflicts", inflictsValue.filter(v=>v).map(v=>v.bigNumberToString()).join("/"));
-		}else
-		{
-			inflicts.classList.add(className_displayNone);
-		}
+		let effect = tIf_Effect(leader1id,leader2id, leader1id_original,leader2id_original);
+		refreshEffectDom(tEffectDom, effect);
 	}
 }
 //刷新单人技能CD
