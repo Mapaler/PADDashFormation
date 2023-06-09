@@ -5800,7 +5800,6 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 }
 function refreshEffectDom(tEffectDom, effect) {
 	const _76board = tEffectDom.querySelector(".icon-skill[data-icon-type='board-size-change']");
-	console.log(_76board)
 	_76board && _76board.classList.toggle(className_displayNone, !effect.board76);
 
 	const noSkyfall = tEffectDom.querySelector(".icon-skill[data-icon-type='no-skyfall']");
