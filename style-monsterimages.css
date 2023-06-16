@@ -897,19 +897,19 @@
 .awoken-icon[data-awoken-icon='72']{/*掉毒*/
 	background-position-y:calc(-32px * 72);
 }
-.awoken-icon[data-awoken-icon='73']{/*2串火*/
+.awoken-icon[data-awoken-icon='73']{/*火串*/
 	background-position-y:calc(-32px * 73);
 }
-.awoken-icon[data-awoken-icon='74']{/*2串水*/
+.awoken-icon[data-awoken-icon='74']{/*水串*/
 	background-position-y:calc(-32px * 74);
 }
-.awoken-icon[data-awoken-icon='75']{/*2串木*/
+.awoken-icon[data-awoken-icon='75']{/*木串*/
 	background-position-y:calc(-32px * 75);
 }
-.awoken-icon[data-awoken-icon='76']{/*2串光*/
+.awoken-icon[data-awoken-icon='76']{/*光串*/
 	background-position-y:calc(-32px * 76);
 }
-.awoken-icon[data-awoken-icon='77']{/*2串暗*/
+.awoken-icon[data-awoken-icon='77']{/*暗串*/
 	background-position-y:calc(-32px * 77);
 }
 .awoken-icon[data-awoken-icon='78']{/*十字*/
@@ -1004,6 +1004,60 @@
 }
 .awoken-icon[data-awoken-icon='108']{/*大L解锁*/
 	background-position-y:calc(-32px * 108);
+}
+.awoken-icon[data-awoken-icon='109']{/*大破无效*/
+	background-position-y:calc(-32px * 109);
+}
+.awoken-icon[data-awoken-icon='110']{/*大十字*/
+	background-position-y:calc(-32px * 110);
+}
+.awoken-icon[data-awoken-icon='111']{/*大10c*/
+	background-position-y:calc(-32px * 111);
+}
+.awoken-icon[data-awoken-icon='112']{/*大3色*/
+	background-position-y:calc(-32px * 112);
+}
+.awoken-icon[data-awoken-icon='113']{/*大4色*/
+	background-position-y:calc(-32px * 113);
+}
+.awoken-icon[data-awoken-icon='114']{/*大5色*/
+	background-position-y:calc(-32px * 114);
+}
+.awoken-icon[data-awoken-icon='115']{/*大心解*/
+	background-position-y:calc(-32px * 115);
+}
+.awoken-icon[data-awoken-icon='116']{/*3火横*/
+	background-position-y:calc(-32px * 116);
+}
+.awoken-icon[data-awoken-icon='117']{/*3水横*/
+	background-position-y:calc(-32px * 117);
+}
+.awoken-icon[data-awoken-icon='118']{/*3木横*/
+	background-position-y:calc(-32px * 118);
+}
+.awoken-icon[data-awoken-icon='119']{/*3光横*/
+	background-position-y:calc(-32px * 119);
+}
+.awoken-icon[data-awoken-icon='120']{/*3暗横*/
+	background-position-y:calc(-32px * 120);
+}
+.awoken-icon[data-awoken-icon='121']{/*大火串*/
+	background-position-y:calc(-32px * 121);
+}
+.awoken-icon[data-awoken-icon='122']{/*大水串*/
+	background-position-y:calc(-32px * 122);
+}
+.awoken-icon[data-awoken-icon='123']{/*大木串*/
+	background-position-y:calc(-32px * 123);
+}
+.awoken-icon[data-awoken-icon='124']{/*大光串*/
+	background-position-y:calc(-32px * 124);
+}
+.awoken-icon[data-awoken-icon='125']{/*大暗串*/
+	background-position-y:calc(-32px * 125);
+}
+.awoken-icon[data-awoken-icon='126']{/*T字*/
+	background-position-y:calc(-32px * 126);
 }
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],

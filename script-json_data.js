@@ -422,6 +422,24 @@ let localTranslating = {
 			[106]: tp`${'icon'}Floating`,
 			[107]: tp`${'icon'}Enhanced Combos+`,
 			[108]: tp`${'icon'}L Increased Attack+`,
+			[109]: tp`${'icon'}Damage Void Piercer+`,
+			[110]: tp`${'icon'}Cross Attack+`,
+			[111]: tp`${'icon'}Super Enhanced Combos+`,
+			[112]: tp`${'icon'}3 Att. Enhanced Attack+`,
+			[113]: tp`${'icon'}4 Att. Enhanced Attack+`,
+			[114]: tp`${'icon'}5 Att. Enhanced Attack+`,
+			[115]: tp`${'icon'}Recover Bind+`,
+			[116]: tp`${'icon'}Enhanced Fire Rows×3`,
+			[117]: tp`${'icon'}Enhanced Water Rows×3`,
+			[118]: tp`${'icon'}Enhanced Wood Rows×3`,
+			[119]: tp`${'icon'}Enhanced Water Rows×3`,
+			[120]: tp`${'icon'}Enhanced Dark Rows×3`,
+			[121]: tp`${'icon'}Enhanced Fire Combos+`,
+			[122]: tp`${'icon'}Enhanced Water Combos+`,
+			[123]: tp`${'icon'}Enhanced Wood Combos+`,
+			[124]: tp`${'icon'}Enhanced Light Combos+`,
+			[125]: tp`${'icon'}Enhanced Dark Combos+`,
+			[126]: tp`${'icon'}T Increased Attack`,
 		}
 	},
 };
@@ -486,21 +504,41 @@ const equivalent_awoken = [
 	{small:29,big:104,times:2},//心+
 	{small:43,big:107,times:2},//7c
 	{small:60,big:108,times:2},//L
+	{small:48,big:109,times:2},//破无效
+	{small:78,big:110,times:2},//十字
+	{small:61,big:111,times:2},//10c
+	{small:79,big:112,times:2},//3色
+	{small:80,big:113,times:2},//4色
+	{small:81,big:114,times:2},//5色
+	{small:20,big:115,times:2},//心解
+	{small:22,big:116,times:3},//火横
+	{small:23,big:117,times:3},//水横
+	{small:24,big:118,times:3},//木横
+	{small:25,big:119,times:3},//光横
+	{small:26,big:120,times:3},//暗横
+	{small:73,big:121,times:2},//火串
+	{small:74,big:122,times:2},//水串
+	{small:75,big:123,times:2},//木串
+	{small:76,big:124,times:2},//光串
+	{small:77,big:125,times:2},//暗串
 ];
+
 //官方的觉醒排列顺序
 const official_awoken_sorting = [
-	21, 19, 43, 45, 10, 11, 12, 13, 49,
-	56, 53, 61, 50, 52, 68, 69, 70, 28,
-	48, 62, 57, 58, 60, 59, 54, 55, 44,
-	14, 15, 16, 17, 18, 29,  9, 27, 51,
-	99,100,101,102,103,104, 98, 96, 97,
-	22, 23, 24, 25, 26, 32, 31, 33, 34,
-	 4,  5,  6,  7,  8, 35, 36, 37, 38,
-	 1,  2,  3, 46, 47, 39, 40, 41, 42,
-	65, 66, 67, 20, 71, 72, 30, 64, 63,
-	73, 74, 75, 76, 77, 78, 79, 80, 81,
-	82, 84, 83, 85, 86, 87, 88, 89, 90,
-	91, 92, 93, 94, 95,105,106,107,108,
+	 21, 19, 43, 45, 10, 11, 12, 13, 49,
+	 56, 53, 61, 50, 52, 68, 69, 70, 28,
+	 48, 62, 57, 58, 60, 59, 54, 55, 44,
+	 14, 15, 16, 17, 18, 29,  9, 27, 51,
+	 99,100,101,102,103,104, 98, 96, 97,
+	 22, 23, 24, 25, 26, 32, 31, 33, 34,
+	  4,  5,  6,  7,  8, 35, 36, 37, 38,
+	  1,  2,  3, 46, 47, 39, 40, 41, 42,
+	 65, 66, 67, 20, 71, 72, 30, 64, 63,
+	 73, 74, 75, 76, 77, 78, 79, 80, 81,
+	 82, 84, 83, 85, 86, 87, 88, 89, 90,
+	 91, 92, 93, 94, 95,105,106,107,108,
+	109,110,111,112,113,114,115,116,117,
+	118,119,120,121,122,123,124,125,126,
 ];
 
 //pdc的徽章对应数字
