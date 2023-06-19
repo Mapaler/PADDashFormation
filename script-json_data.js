@@ -177,6 +177,9 @@ let localTranslating = {
 			stage_less_or_equal: tp`When ${'stage'} ≤ ${'max'}, `,
 			stage_greater_or_equal: tp`When ${'stage'} ≥ ${'min'}, `,
 
+			orbs_less_or_equal: tp`When ${'orbs'} ≤ ${'max'} on board, `,
+			orbs_greater_or_equal: tp`When ${'orbs'} ≥ ${'min'} on board, `,
+
 			L_shape: tp`When matching an L shape of 5 ${'orbs'} `,
 			heal: tp`When healing at least ${'heal'} ${'stats'} with ${'orbs'} `,
 		},
@@ -3387,6 +3390,22 @@ const specialSearchFunctions = (function() {
 					if (!skill) return;
 					const sk = skill.params;
 					return `延迟${sk[0]}T`;
+				}
+			},
+			{name:"Enable require number of Orbs",otLangName:{chs:"技能使用珠子数量要求",cht:"技能使用珠子数量要求"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [255];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [255];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					const fragment = document.createDocumentFragment();
+					fragment.append(createOrbsList(flags(sk[0])), sk[2] ? `≤${sk[2]}` : `≥${sk[1]}`);
+					return fragment;
 				}
 			},
 		]},

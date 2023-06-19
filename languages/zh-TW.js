@@ -162,6 +162,9 @@
 			stage_less_or_equal: tp`${'stage'} ≤ ${'max'} 時`, //地下城層數
 			stage_greater_or_equal: tp`${'stage'} ≥ ${'min'} 時`,
 
+			orbs_less_or_equal: tp`盤面上 ${'orbs'} ≤ ${'max'} 時`, //盤面上珠子數
+			orbs_greater_or_equal: tp`盤面上 ${'orbs'} ≥ ${'min'} 時`,
+
 			L_shape: tp`以L字形式消除5個${'orbs'}時`,
 			heal: tp`以${'orbs'}回復${'heal'}${'stats'}時`,
 		},

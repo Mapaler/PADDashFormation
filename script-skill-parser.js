@@ -881,6 +881,9 @@ const c = {
 	stage: function (min, max) {
 		return { stage: { min: min ?? 0, max: max ?? 0 } };
 	},
+	remainAttrOrbs: function (attrs, min, max) {
+		return { remainAttrOrbs: { attrs, min, max} };
+	},
 }
 
 const p = {
@@ -1682,6 +1685,7 @@ const skillObjectParsers = {
 			boardJammingStates('roulette', count ? 'random' : 'shape', options)
 		);
 	},
+	[255](attr, min, max) { return skillProviso(c.remainAttrOrbs(flags(attr), min ?? 0, max ?? 0)); },
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -2959,6 +2963,16 @@ function renderCondition(cond) {
 			frg.ap(tsp.cond.stage_greater_or_equal(dict));
 		else if (cond.stage.max > 0)
 			frg.ap(tsp.cond.stage_less_or_equal(dict));
+	} else if (cond.remainAttrOrbs) {
+		let dict = {
+			orbs: renderOrbs(cond.remainAttrOrbs.attrs, {affix: true}),
+			min: renderValue(v.constant(cond.remainAttrOrbs.min)),
+			max: renderValue(v.constant(cond.remainAttrOrbs.max)),
+		};
+		if (cond.remainAttrOrbs.min > 0)
+			frg.ap(tsp.cond.orbs_greater_or_equal(dict));
+		else if (cond.remainAttrOrbs.max > 0)
+			frg.ap(tsp.cond.orbs_less_or_equal(dict));
 	} else {
 		frg.ap(tsp.cond.unknown());
 	}

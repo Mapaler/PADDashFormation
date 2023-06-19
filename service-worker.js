@@ -13807,11 +13807,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"a6a97e40a4cc2e28d8230ca98d4026cc"
+		"05dee3b1d091d22aeae374aee859a6c9"
 	],
 	[
 		"script-skill-parser.js",
-		"962642b309288e0553652754d9113c5e"
+		"c6960913c3aa3c91f277f62be24b31fb"
 	],
 	[
 		"script-universal_function.js",
@@ -13883,7 +13883,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.js",
-		"69db4a69505ea899a49a6a28900d8556"
+		"57c71cc1d49f3f24cabc3d1b9ff588b0"
 	],
 	[
 		"languages/zh.css",
@@ -13891,7 +13891,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.js",
-		"06ff4367086bccc642f6a13d6410e0bf"
+		"1ee1997c68c00995d178dc9c0a8ec96b"
 	],
 	[
 		"images/attrs.png",
@@ -13907,7 +13907,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"80c96a6f12905ba490c90f5ddd54ba17"
+		"8802d090bb0be32fbe08bc48bc5b6c8d"
 	],
 	[
 		"images/badge-bg.png",
