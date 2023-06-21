@@ -897,6 +897,7 @@ function createIndexedIcon(type, index) {
 		return avatar;
 	}
 	const icon = document.createElement("icon");
+	icon.setAttribute("contenteditable", false);
 	//icon.contentEditable = false;
 	switch(type) {
 		case 'awoken': { //觉醒
@@ -948,7 +949,7 @@ function descriptionToHTML(str)
 	nodeArr = formatParse(nodeArr, /\^(\w+?)\^([^\^]+?)\^p/igm, 2,
 		(color, content)=>{
 			const sp = document.createElement("span");
-			sp.textContent = content;
+			sp.appendChild(descriptionToHTML(content))
 			if (/^[a-fA-F0-9]+$/g.test(color)) {
 				sp.style.color = `#${color}`;
 			} else if (/qs/i.test(color)) {

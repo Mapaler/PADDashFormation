@@ -228,7 +228,7 @@ label[for="siwtch-code-mode"]::after {
 ):empty::before{
 	color: grey;
 	position: absolute;
-	content: attr(data-placeholder);
+	content: attr(placeholder);
 }
 .guide-mod .control-box>div.status
 {

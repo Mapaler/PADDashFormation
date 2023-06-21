@@ -2510,13 +2510,39 @@ function initialize() {
 		//如果并没有任何选择区，则返回
 		if (docSelection.rangeCount < 1) return;
 		const range = docSelection.getRangeAt(0);
-		//如果并没有选中文字，则返回
-		if (range.startOffset === range.endOffset) return;
-		let target;
-		if (target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
-			|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay))
-		{
+		let editingCode = formationBox.classList.contains("edit-code");
+		let target; //编辑目标
+		if (titleBox.contains(range.commonAncestorContainer)) {
+			target = editingCode ? txtTitle : txtTitleDisplay;
+		}
+		else if (detailBox.contains(range.commonAncestorContainer)) {
+			target = editingCode ? txtDetail : txtDetailDisplay;
+		}
+		else {
+			return;
+		}
+
+		if (editingCode)
+		{ //文本编辑模式
+			let startPos = target.selectionStart;
+			let endPos = target.selectionEnd;
+			let restoreTop = target.scrollTop;
+			let str = target.value.substring(startPos, endPos) //选择区域
+				.replace(/\^(\w+?)\^([^\^]+?)\^p/igm, "$2"); //去除之前的颜色
+			let colorStr = `^${color.substring(1)}^${str}^p`; //加上新的颜色
+			target.setRangeText(str);
+			if (restoreTop > 0) {
+				target.scrollTop = restoreTop;
+			}
+			target.setRangeText(colorStr);
+			target.focus();
+			target.onchange();
+		} else
+		{ //富文本模式
 			const docObj = range.extractContents(); //移动了Range 中的内容从文档树到DocumentFragment（文档片段对象)。
+			let parent = range.commonAncestorContainer.parentElement;
+			if (parent !== target && parent.textContent.length == 0) parent.remove();
+			range.deleteContents();
 			let dom
 			if (color === "#000000") {
 				dom = document.createTextNode(docObj.textContent);
@@ -2526,16 +2552,9 @@ function initialize() {
 				dom.append(docObj.textContent);
 			}
 			range.insertNode(dom);
+			range.setStartAfter(dom);
 			target.onblur();
-		} else if (color !== "#000000" &&
-			(target = (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
-			|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail)))
-		{
-			let str = target.value.substring(target.selectionStart, target.selectionEnd)
-			.replace(/\^(\w+?)\^([^\^]+?)\^p/igm, "$2");
-			let colorStr = `^${color.substring(1)}^${str}^p`;
-			target.setRangeText(colorStr);
-			target.onchange();
+			target.focus();
 		}
 	}
 	setFontColor.onclick = function(){
@@ -2551,83 +2570,103 @@ function initialize() {
 	}
 	colorChooser.onchange(false);
 	//添加头像图标
-	insertCardAvatar.onclick = function(){
-		//没有选择则返回
-		if (docSelection.rangeCount < 1) return;
-		const range = docSelection.getRangeAt(0);
-		let target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
-		|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay)
-		|| (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
-		|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail);
-		//选择位置不对也返回
-		if (!target) return;
-		//优先获取选中部分的数字
-		let id = parseInt(range.toString().trim(), 10);
-		if (!Number.isInteger(id)) {
-			id = prompt(localTranslating.request_input({info: localTranslating.sort_name.sort_id}).textContent);
-			id = parseInt(id,10);
-		}
-		if (Number.isInteger(id)) {
-			if (target == txtTitleDisplay || target == txtDetailDisplay)
-			{
-				let dom = createIndexedIcon('card', id);
-				range.deleteContents();
-				range.insertNode(dom);
-				target.onblur();
-			} else if (target == txtTitle || target == txtDetail)
-			{
-				let str = `%{m${id}}`;
-				target.setRangeText(str);
-				target.onchange();
-			}
-		}
-	}
+	insertCardAvatar.onclick = insertIconToText
 	//添加其他序号图标
 	function insertIconToText() {
+		//如果并没有任何选择区，则返回
 		if (docSelection.rangeCount < 1) return;
-		let type, stype, id;
-		if(this.classList.contains("awoken-icon")) { //觉醒
+		const range = docSelection.getRangeAt(0);
+		let editingCode = formationBox.classList.contains("edit-code");
+		let target; //编辑目标
+		if (titleBox.contains(range.commonAncestorContainer)) {
+			target = editingCode ? txtTitle : txtTitleDisplay;
+		}
+		else if (detailBox.contains(range.commonAncestorContainer)) {
+			target = editingCode ? txtDetail : txtDetailDisplay;
+		}
+		else {
+			return;
+		}
+
+		let type, sType, id;
+		if (this == insertCardAvatar) { //插入怪物头像
+			type = 'card';
+			sType = 'm';
+			
+			//首先读取选择的数字
+			id = parseInt(
+					editingCode
+					? target.value.substring(target.selectionStart, target.selectionEnd)
+					: range.toString().trim()
+				, 10);
+			//如果选择区域不是数字，则请求输入
+			if (!Number.isInteger(id)) {
+				id = prompt(localTranslating.request_input({info: localTranslating.sort_name.sort_id}).textContent);
+				id = parseInt(id,10);
+				if (!Number.isInteger(id)) { return; }
+			}
+		}
+		else if(this.classList.contains("awoken-icon")) { //觉醒
 			type = 'awoken';
-			stype = 'a';
+			sType = 'a';
 			id = this.getAttribute("data-awoken-icon");
 		}
 		else if(this.classList.contains("type-icon")) { //类型
 			type = 'type';
-			stype = 't';
+			sType = 't';
 			id = this.getAttribute("data-type-icon");
 		}
 		else if(this.classList.contains("orb")) { //宝珠
 			type = 'orb';
-			stype = 'o';
+			sType = 'o';
 			id = this.getAttribute("data-orb-icon");
 		}
 		else if(this.classList.contains("latent-icon")) { //潜觉
 			type = 'latent';
-			stype = 'l';
+			sType = 'l';
 			id = this.getAttribute("data-latent-icon");
 		}
-		const range = docSelection.getRangeAt(0);
-		let target;
-		if (target = (txtTitleDisplay.contains(range.commonAncestorContainer) && txtTitleDisplay)
-			|| (txtDetailDisplay.contains(range.commonAncestorContainer) && txtDetailDisplay))
-		{
-			let dom = createIndexedIcon(type, id);
-			range.insertNode(dom);
-			target.onblur();
-		} else if (target = (txtTitle.contains(range.commonAncestorContainer) && txtTitle)
-			|| (txtDetail.contains(range.commonAncestorContainer) && txtDetail))
-		{
-				let str = `%{${stype}${id}}`;
-			target.setRangeText(str);
+		if (editingCode)
+		{ //文本编辑模式
+			let str = `%{${sType}${id}}`;
+			// target.setRangeText(str);
+			//保持编辑光标在原来的位置
+			if (target.selectionStart || target.selectionStart == '0') {
+				let startPos = target.selectionStart;
+				// let endPos = target.selectionEnd;
+				let restoreTop = target.scrollTop;
+				// target.value = target.value.substring(0, startPos) + str + target.value.substring(endPos, target.value.length);
+				target.setRangeText(str);
+				if (restoreTop > 0) {
+					target.scrollTop = restoreTop;
+				}
+				target.focus();
+				target.selectionStart = startPos + str.length;
+				target.selectionEnd = startPos + str.length;
+			} else {
+				target.setRangeText(str);
+				// target.value += str;
+				target.focus();
+			}
 			target.onchange();
+		} else
+		{ //富文本模式
+			let dom = createIndexedIcon(type, id);
+			if (range.commonAncestorContainer == target && range.startOffset === 0 && range.endOffset === 0)
+			{ //内容为空时
+				target.appendChild(dom);
+			} else {
+				range.deleteContents();
+				range.insertNode(dom);
+			}
+			range.setStartAfter(dom);
+			target.onblur();
+			target.focus();
 		}
 	}
 	function showInsertIconList() {
 		//如果自身的列表已经打开了，则隐藏
-		if (!this.list.classList.contains(className_displayNone)) {
-			this.list.classList.add(className_displayNone);
-			return;
-		}
+		if (this.list.classList.toggle(className_displayNone)) return;
 		//否则隐藏其他的列表
 		[
 			insertAwokenIcon.list,
@@ -2644,14 +2683,20 @@ function initialize() {
 	function richTextToCode(parentElement){
 		let code = [];
 		for (let node of parentElement.childNodes) {
+			if (node?.lastChild?.nodeName == "BR") node.lastChild.revome();
 			if (node.nodeName == "#text"){ //纯文本
 				code.push(node.nodeValue);
 				continue;
-			} else if (node.nodeName == "SPAN" && node.style.color) { //文字颜色
-				let colorStr = rgbToHex(node.style.color);
-				code.push(`^${colorStr}^${node.textContent}^p`);
+			} else if (node.nodeName == "FONT" && node.color || node.nodeName == "SPAN" && node.style.color) { //文字颜色
+				let colorStr = rgbToHex(node.color || node.style.color);
+				code.push(`^${colorStr}^${richTextToCode(node)}^p`);
 				continue;
 			} else if (node.nodeName == "DIV") {
+				let lastStr = code[code.length-1];
+				console.log(lastStr);
+				if (lastStr[lastStr.length-1] !== '\n') {
+					code.push('\n');
+				}
 				code.push(richTextToCode(node)+'\n');
 				continue;
 			} else if (node.nodeName == "BR") {
@@ -2699,7 +2744,11 @@ function initialize() {
 	txtDetailDisplay.onblur = function(){
 		//没有内容或者只有一个换行时，清空内容
 		if (this.textContent.length == 0 || this.textContent == "\n") {
-			this.innerHTML = '';
+			for (let node of this.childNodes) {
+				if (node.nodeName == "#text" || node.nodeName == "BR") {
+					node.remove();
+				}
+			}
 		}
 		formation.detail = txtDetail.value = richTextToCode(this);
 		createNewUrl();
@@ -5979,9 +6028,9 @@ function localisation($tra) {
 	document.title = $tra.webpage_title;
 	controlBox.querySelector(".datasource-updatetime").title = $tra.force_reload_data;
 	formationBox.querySelector(".title-box .title-code").placeholder = $tra.title_blank;
-	formationBox.querySelector(".title-box .title-display").dataset.placeholder = $tra.title_blank;
+	formationBox.querySelector(".title-box .title-display").setAttribute("placeholder",$tra.title_blank);
 	formationBox.querySelector(".detail-box .detail-code").placeholder = $tra.detail_blank;
-	formationBox.querySelector(".detail-box .detail-display").dataset.placeholder = $tra.detail_blank;
+	formationBox.querySelector(".detail-box .detail-display").setAttribute("placeholder",$tra.detail_blank);
 
 	const s_sortList = editBox.querySelector(".search-box .sort-div .sort-list");
 	const sortOptions = Array.from(s_sortList.options);
