@@ -13815,11 +13815,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"c02f356fdfa610ec5a19460a470eb2d1"
+		"5d40482e59761cb6ea4c33e60e9da32b"
 	],
 	[
 		"script.js",
-		"bad6cad3650e7d8ca62281a39956e7a9"
+		"8d8c430dc0ca0acc487512ad48ff328c"
 	],
 	[
 		"solo.html",
@@ -14107,7 +14107,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/index.html",
-		"8ebc8a48817648880c8fcb73d54f176d"
+		"eadecaca6a10b072fc2f8dbbadae7193"
 	],
 	[
 		"doc/images/player-bind-box.webp",

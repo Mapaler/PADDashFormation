@@ -2628,7 +2628,7 @@ function initialize() {
 		}
 		if (editingCode)
 		{ //文本编辑模式
-			let str = `%{${sType}${id}}`;
+			let str = createIndexedIconCode(sType, id);
 			// target.setRangeText(str);
 			//保持编辑光标在原来的位置
 			if (target.selectionStart || target.selectionStart == '0') {
@@ -2664,6 +2664,9 @@ function initialize() {
 			target.focus();
 		}
 	}
+	function createIndexedIconCode(type, id) {
+		return `{${type}.${id}}`;
+	}
 	function showInsertIconList() {
 		//如果自身的列表已经打开了，则隐藏
 		if (this.list.classList.toggle(className_displayNone)) return;
@@ -2693,8 +2696,7 @@ function initialize() {
 				continue;
 			} else if (node.nodeName == "DIV") {
 				let lastStr = code[code.length-1];
-				console.log(lastStr);
-				if (lastStr[lastStr.length-1] !== '\n') {
+				if (lastStr && lastStr[lastStr.length-1] !== '\n') {
 					code.push('\n');
 				}
 				code.push(richTextToCode(node)+'\n');
@@ -2703,32 +2705,32 @@ function initialize() {
 				code.push('\n');
 				continue;
 			}
-			let type, id;
+			let sType, id;
 			if(node.classList.contains("detail-mon")) { //卡片头像
 				const mon = node.querySelector(".monster");
 				if (!mon) continue;
-				type = 'm';
+				sType = 'm';
 				id = mon.getAttribute("data-cardid");
 			}
 			else if(node.classList.contains("awoken-icon")) { //觉醒
-				type = 'a';
+				sType = 'a';
 				id = node.getAttribute("data-awoken-icon");
 			}
 			else if(node.classList.contains("type-icon")) { //类型
-				type = 't';
+				sType = 't';
 				id = node.getAttribute("data-type-icon");
 			}
 			else if(node.classList.contains("orb")) { //宝珠
-				type = 'o';
+				sType = 'o';
 				id = node.getAttribute("data-orb-icon");
 			}
 			else if(node.classList.contains("latent-icon")) { //潜觉
-				type = 'l';
+				sType = 'l';
 				id = node.getAttribute("data-latent-icon");
 			} else {
 				continue;
 			}
-			code.push(`%{${type}${id}}`);
+			code.push(createIndexedIconCode(sType, id));
 		}
 		return code.join('');
 	}

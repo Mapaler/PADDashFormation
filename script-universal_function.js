@@ -957,27 +957,28 @@ function descriptionToHTML(str)
 			}
 			return sp;
 		});
-	nodeArr = formatParse(nodeArr, /\%\{([a-z])(\d+)\}/ig, 2,
-		(type, id)=>{
-			id = parseInt(id,10);
-			switch(type) {
-				case 'm':case 'M': { //卡片头像
-					return createIndexedIcon('card', id);
-				}
-				case 'a':case 'A': { //觉醒
-					return createIndexedIcon('awoken', id);
-				}
-				case 't':case 'T': { //类型
-					return createIndexedIcon('type', id);
-				}
-				case 'o':case 'O': { //宝珠
-					return createIndexedIcon('orb', id);
-				}
-				case 'l':case 'L': { //潜觉
-					return createIndexedIcon('latent', id);
-				}
+	function iconTrans(type, id){
+		id = parseInt(id,10);
+		switch(type) {
+			case 'm':case 'M': { //卡片头像
+				return createIndexedIcon('card', id);
 			}
-		});
+			case 'a':case 'A': { //觉醒
+				return createIndexedIcon('awoken', id);
+			}
+			case 't':case 'T': { //类型
+				return createIndexedIcon('type', id);
+			}
+			case 'o':case 'O': { //宝珠
+				return createIndexedIcon('orb', id);
+			}
+			case 'l':case 'L': { //潜觉
+				return createIndexedIcon('latent', id);
+			}
+		}
+	}
+	nodeArr = formatParse(nodeArr, /\%\{([a-z]+)(\d+)\}/ig, 2, iconTrans); //抛弃的老格式%{m1}
+	nodeArr = formatParse(nodeArr, /\{(\w+)\.(\w+)\}/ig, 2, iconTrans);  //新格式{m.1}
 	return nodeArr.nodeJoin();
 }
 //默认的技能解释的显示行为
