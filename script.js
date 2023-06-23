@@ -25,7 +25,7 @@ const cfgPrefix = "PADDF-"; //设置名称的前缀
 const className_displayNone = "display-none";
 const dataAttrName = "data-value"; //用于储存默认数据的属性名
 const isGuideMod = !unsupportFeatures.length && Boolean(Number(getQueryString("guide"))); //是否以图鉴模式启动
-const PAD_PASS_BADGE = 1<<7 | 1; //月卡徽章编号，129
+
 //用油猴扩展装上，把GM_xmlhttpRequest引入的脚本
 const ExternalLinkScriptURL = "https://greasyfork.org/scripts/458521";
 const paddbPathPrefix = "/team/"; //PADDB的获取队伍网址格式
@@ -1032,6 +1032,7 @@ class LeaderSkillType{
 			autoHeal: Boolean(flags1 & 1 << 31),
 			unbindAwokenBind: Boolean(flags1 & 1 << 19),
 			resolve: Boolean(flags2 & 1 << 0),
+			predictionFalling: Boolean(flags2 & 1 << 1),
 		};
 	}
 }

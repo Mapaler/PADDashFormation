@@ -2966,6 +2966,14 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	background-image: url(images/icon-immobility.png);
 	background-size: cover;
 }
+/*超暗闇，在宝珠前面*/
+.block.deep-dark::after
+{
+	content: "";
+	background-image: url(images/icon-deep-dark.png);
+	background-size: contain;
+	transform: scale(1);
+}
 /*需要旋转的，比如封条*/
 .block.rotate::after,
 .block.rotate::before
@@ -3940,12 +3948,14 @@ body.external-link-support #external-support{
 .card-skill-list .no-skyfall,
 .card-skill-list .fixed-time,
 .card-skill-list .min-match-len,
-.row-mon-leader-skill .card-skill-list .board-size-change
+.row-mon-leader-skill .card-skill-list .board-size-change,
+.row-mon-leader-skill .card-skill-list .prediction-falling
 {
 	color: #ff3600;
 }
 .card-skill-list .skill-proviso,
-.delay-active-turns::first-line /*延迟生效技能的第一行*/
+.card-skill-list .delay-active-turns::first-line, /*延迟生效技能的第一行*/
+.card-skill-list .remove-assist
 {
 	color: blue;
 }
@@ -4233,6 +4243,27 @@ body.external-link-support #external-support{
 }
 .row-mon-leader-skill .icon-skill[data-icon-type="maxhp-locked"] {
 	display:none;
+}
+.icon-skill[data-icon-type="remove-assist"]
+{
+	background-position-y:calc(-36px * 39);
+}
+.icon-skill[data-icon-type="board-deep-dark"]
+{
+	background-position-y:calc(-36px * 40);
+}
+.icon-skill[data-icon-type="prediction-falling"]
+{
+	background-position-y:calc(-36px * 41);
+}
+.icon-skill[data-icon-type="drop-refresh"]::before
+{
+	content: "🔃";
+	font-size: 1.5em;
+	line-height: 1.5em;
+}
+.skill-datail-parsed .team-flags {
+	display: inline-block;
 }
 
 :where(:lang(en), :lang(ko)) .icon-skill:where(

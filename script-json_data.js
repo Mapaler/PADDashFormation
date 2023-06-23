@@ -99,7 +99,7 @@ let localTranslating = {
 			add_combo: tp`Adds ${'value'} combos${'icon'}`,
 			fixed_time: tp`[${'icon'}Fixed orb move time: ${'value'}]`,
 			min_match_length: tp`[Only able to erase ≥${'matchable'} orbs]`, //matchable, unmatchable
-			drop_refresh: tp`Replaces all orbs`,
+			drop_refresh: tp`${'icon'}Replaces all orbs`,
 			drum: tp`Plus a drumming sound is made when Orbs are moved`,
 			auto_path: tp`Shows 3 combo path (Norm. Dungeon & 3 linked Orbs only)`,
 			counter_attack: tp`When attacked by an ${'target'}, ${'chance'}${'value'} ${'attr'} ${'icon'}counterattack`,	
@@ -138,6 +138,8 @@ let localTranslating = {
 			increase_damage_cap: tp`The ${'icon'}damage cap of ${'targets'} is increased to ${'cap'}`,
 			board_jamming_state: tp`Creates ${'count'} ${'icon'}${'state'} ${'size'} at ${'position'}${'comment'}`,
 			board_size_change: tp`Board size changed to ${'icon'}${'size'}`,
+			remove_assist: tp`${'icon'}Remove this assist card (until end of dungeon)`,
+			prediction_falling: tp`${'icon'}Prediction of falling on board`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -297,6 +299,7 @@ let localTranslating = {
 			clouds: tp`${'icon'}Clouds`,
 			immobility: tp`${'icon'}Immobility`,
 			roulette: tp`${'icon'}Roulette`,
+			deep_dark: tp`${'icon'}Deep Dark`,
 			roulette_time: tp`transforms every ${'duration'}`,
 			roulette_attrs: tp`only ${'orbs'} will appear`,
 		},
@@ -543,6 +546,7 @@ const official_awoken_sorting = [
 	 91, 92, 93, 94, 95, 65, 66, 67,105,
 	 84, 83, 85, 86, 87, 88, 89, 90, 64,
 ];
+const PAD_PASS_BADGE = 1<<7 | 1; //本程序的月卡徽章编号，129
 
 //pdc的徽章对应数字
 const pdcBadgeMap = [
@@ -566,7 +570,7 @@ const pdcBadgeMap = [
 	{pdf:12,pdc:15}, //墨镜
 	{pdf:13,pdc:17}, //防废
 	{pdf:14,pdc:16}, //防毒
-	{pdf:129,pdc:14}, //月卡
+	{pdf:PAD_PASS_BADGE,pdc:14}, //月卡
 ];
 //pdc的潜觉对应数字
 const pdcLatentMap = [
@@ -1847,6 +1851,13 @@ const specialSearchFunctions = (function() {
 					return document.createTextNode(`自封技${sk[0]}T`);
 				}
 			},
+			{name:"Remove assist",otLangName:{chs:"移除武器",cht:"移除武器"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [250];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				})
+			},
 		]},
 		{group:true,name:"-----Player's HP change-----",otLangName:{chs:"-----玩家HP操纵类-----",cht:"-----玩家HP操縱類-----"}, functions: [
 			{name:"Heal after turn",otLangName:{chs:"回合结束回血 buff",cht:"回合結束回血 buff"},
@@ -2451,6 +2462,22 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
+			{name:"Creates Deep Dark Orb",otLangName:{chs:"生成超暗闇 debuff",cht:"生成超暗闇 debuff"},
+				function:cards=>{
+					const searchTypeArray = [251];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+					const searchTypeArray = [251];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `${sk[1] == sk[2] ? sk[1] : sk[1] +"~"+ sk[2]}个×${sk[0]}T`;
+				}
+			},
 			{name:"Change Board Size",otLangName:{chs:"改变板面大小 buff",cht:"改變板面大小 buff"},
 				function:cards=>{
 					const searchTypeArray = [244];
@@ -2492,6 +2519,22 @@ const specialSearchFunctions = (function() {
 			},
 		]},
 		{group:true,name:"-----Orbs Drop-----",otLangName:{chs:"----- 珠子掉落 类-----",cht:"----- 珠子掉落 類-----"}, functions: [
+			{name:"Drop Enhanced Orbs(sort by turns)",otLangName:{chs:"掉落强化宝珠（按回合排序）buff",cht:"掉落強化寶珠（按回合排序）buff"},
+				function:cards=>{
+					const searchTypeArray = [180];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
+				},
+				addition:card=>{
+					const searchTypeArray = [180];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `${sk[1]}%×${sk[0]}T`;
+				}
+			},
 			{name:"Drop locked orbs(any color, sort by turns)",otLangName:{chs:"掉锁（不限色，按回合排序）",cht:"掉鎖（不限色，按回合排序）"},
 				function:cards=>{
 					const searchTypeArray = [205];
@@ -2511,22 +2554,6 @@ const specialSearchFunctions = (function() {
 					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
 				},
 				addition:dropLock_Addition
-			},
-			{name:"Drop Enhanced Orbs(sort by turns)",otLangName:{chs:"掉落强化宝珠（按回合排序）buff",cht:"掉落強化寶珠（按回合排序）buff"},
-				function:cards=>{
-					const searchTypeArray = [180];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1));
-				},
-				addition:card=>{
-					const searchTypeArray = [180];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					return `${sk[1]}%×${sk[0]}T`;
-				}
 			},
 			{name:"Drop rate increases",otLangName:{chs:"掉落率提升 buff",cht:"掉落率提升 buff"},
 				function:cards=>cards.filter(card=>{
@@ -2598,6 +2625,25 @@ const specialSearchFunctions = (function() {
 						fragment.append(createOrbsList(attrs));
 					}
 					fragment.append(`${sk[3]}%×${sk[0]}T`, document.createElement("br"), "/" ,createSkillIcon('maxhp-locked'), `${sk[2]}%`);
+					return fragment;
+				}
+			},
+			{name:"Prediction of falling",otLangName:{chs:"预测掉落 buff",cht:"預測掉落 buff"},
+				function:cards=>{
+					const searchTypeArray = [253];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+					const searchTypeArray = [253];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('prediction-falling'));
+					fragment.append(`×${sk[0]}T`);
 					return fragment;
 				}
 			},
@@ -3822,6 +3868,15 @@ const specialSearchFunctions = (function() {
 					const skill = getCardLeaderSkill(card, searchTypeArray);
 					const value = skill.params[0];
 				return `HP≥${value}%`;
+				}
+			},
+			{name:"Prediction of falling (LS)",otLangName:{chs:"预测掉落 队长技",cht:"預測掉落 队长技"},
+				function:cards=>{
+					const searchTypeArray = [254];
+					return cards.filter(card=>{
+						const skill = getCardLeaderSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				}
 			},
 			{name:"Increase item drop rate(sort by rate)",otLangName:{chs:"增加道具掉落率（按增加倍率排序）",cht:"增加道具掉落率（按增加倍率排序）"},

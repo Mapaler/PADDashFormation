@@ -84,7 +84,7 @@
 			add_combo: tp`結算時連擊數增加${'value'}${'icon'}`,
 			fixed_time: tp`【${'icon'}操作時間固定${'value'}】`,
 			min_match_length: tp`【限定≥${'matchable'}珠才能消除】`,
-			drop_refresh: tp`全板刷新`,
+			drop_refresh: tp`${'icon'}全板刷新`,
 			drum: tp`寶珠移動和消除的聲音變成太鼓達人的音效`,
 			auto_path: tp`顯示3連擊的轉珠路徑（只匹配3珠，並只適用於普通地下城）`,
 			counter_attack: tp`受到${'target'}攻擊時，${'chance'}進行受到傷害${'value'}的${'attr'}${'icon'}反擊`,	
@@ -123,6 +123,8 @@
 			increase_damage_cap: tp`${'targets'}的${'icon'}傷害上限提升到${'cap'}`,
 			board_jamming_state: tp`在${'position'}生成${'icon'}${'state'}${'size'}${'count'}${'time'}`,
 			board_size_change: tp`板面大小改變為${'icon'}${'size'}`,
+			remove_assist: tp`${'icon'}移除自身的輔助寵物（直到地下城結束）`,
+			prediction_falling: tp`盤面上可以${'icon'}預知寶珠掉落`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,
@@ -281,7 +283,9 @@
 			clouds: tp`${'icon'}雲`,
 			immobility: tp`${'icon'}封條`,
 			roulette: tp`${'icon'}輪盤位`,
-			roulette_time: tp`（每${'duration'}變換）`,
+			deep_dark: tp`${'icon'}超暗闇`,
+			roulette_time: tp`每${'duration'}變換`,
+			roulette_attrs: tp`只會出現${'orbs'}`,
 		},
 		types: {
 			[0]: tp`${'icon'}進化用`,

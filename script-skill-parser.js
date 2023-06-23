@@ -22,10 +22,8 @@ const Attributes = {
 	MPoison: 8,
 	Bomb: 9,
 }
-for (let name in Attributes)
-{
-	Attributes[Attributes[name]] = name;
-}
+Object.entries(Attributes).forEach(([name, oid])=>Attributes[oid] = name)
+
 Attributes.all = function () {
 	return [
 		this.Fire,
@@ -486,6 +484,8 @@ const SkillKinds = {
 	ObstructOpponent: "obstruct-opponent",
 	IncreaseDamageCap: "increase-damage-cap",
 	BoardJammingStates: "board-jamming-states",
+	RemoveAssist: "remove-assist",
+	PredictionFalling: "prediction-falling",
 }
 
 function skillParser(skillId)
@@ -1074,6 +1074,12 @@ function boardJammingStates(state, posType, options) {
 }
 function boardSizeChange(width=7, height=6) {
 	return { kind: SkillKinds.BoardSizeChange, width, height };
+}
+function removeAssist() {
+	return { kind: SkillKinds.RemoveAssist };
+}
+function predictionFalling() {
+	return { kind: SkillKinds.PredictionFalling };
 }
 
 const skillObjectParsers = {
@@ -1685,6 +1691,21 @@ const skillObjectParsers = {
 			boardJammingStates('roulette', count ? 'random' : 'shape', options)
 		);
 	},
+	[250]() { //去除自身辅助
+	  return removeAssist();
+	},
+	[251](turns, min, max) { //产超暗暗珠
+		return activeTurns(turns,
+			boardJammingStates('deep-dark', 'random', { min, max })
+		);
+	},
+	[253](turns) { //预测掉落主动技
+		return activeTurns(turns, predictionFalling());
+	},
+	[254](turns) { //预测掉落队长技
+		return predictionFalling();
+	},
+	//剩余多少个属性珠才能使用技能
 	[255](attr, min, max) { return skillProviso(c.remainAttrOrbs(flags(attr), min ?? 0, max ?? 0)); },
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -1815,6 +1836,15 @@ function renderSkillEntry(skills)
 							boardsBar.boards.forEach(board=>{
 								board.setColumns(colums, null, null, 'immobility');
 								board.setRows(rows, null, null, 'immobility');
+							});
+						}
+						if (state == 'deep-dark') { //超暗暗
+							const { min, max } = skill;
+							boardsBar?.boards?.forEach(board=>{
+								if (posType == 'random')
+									board.generateBlockStates('deep-dark', min == max ? min : Math.randomInteger(max, min));
+								else
+									board.setShape(positions, null, null, 'deep-dark');
 							});
 						}
 						break;
@@ -2468,9 +2498,19 @@ function renderSkill(skill, option = {})
 			}
 			if (targets != undefined)
 			{
-				targetDict.target = targets.map(target=>
+				targetDict.target = document.createDocumentFragment();
+				const ul = targetDict.target.appendChild(document.createElement("ul"));
+				ul.className = "team-flags";
+				for (let i = 0; i<6; i++) {
+					const li = ul.appendChild(document.createElement("li"));
+					li.className = "team-member-icon";
+				}
+				targets.forEach(n=>ul.classList.add(n));
+				
+				targetDict.target.appendChild(targets.map(target=>
 					tsp?.target[target.replaceAll("-","_")]?.())
-					.nodeJoin(tsp.word.slight_pause());
+					.nodeJoin(tsp.word.slight_pause()));
+
 				attrs_types.push(targetDict.target);
 			}
 			if (attrs_types.length)
@@ -2616,7 +2656,7 @@ function renderSkill(skill, option = {})
 
 			let dict = {
 				icon: createIcon('board-' + state),
-				state: tsp.board[state](),
+				state: tsp.board[state.replaceAll("-","_")](),
 				position: posType == 'random' ? tsp.position.random() : tsp.position.shape(),
 			};
 			if (state == 'roulette') { //轮盘位
@@ -2659,6 +2699,20 @@ function renderSkill(skill, option = {})
 
 				dict.position = posFrgs.nodeJoin(tsp.word.slight_pause());
 			}
+			if (state == 'deep-dark') { //超暗暗
+				const { min, max } = skill;
+
+				dict.count = renderValue(v.constant(min), {unit: tsp.unit.orbs});
+				if (min !== max) {
+					dict.count.append(tsp.word.range_hyphen(),renderValue(v.constant(max), {unit: tsp.unit.orbs}));
+				}
+				boardsBar?.boards?.forEach(board=>{
+					if (posType == 'random')
+						board.generateBlockStates('deep-dark', min == max ? min : Math.randomInteger(max, min));
+					else
+						board.setShape(positions, null, null, 'deep-dark');
+				});
+			}
 			frg.ap(tsp.skill.board_jamming_state(dict));
 
 			if (boardsBar) {
@@ -2675,6 +2729,20 @@ function renderSkill(skill, option = {})
 				size: tsp.value.size({ width, height}),
 			};
 			frg.ap(tsp.skill.board_size_change(dict));
+			break;
+		}
+		case SkillKinds.RemoveAssist: { //去除武器
+			let dict = {
+				icon: createIcon(skill.kind)
+			};
+			frg.ap(tsp.skill.remove_assist(dict));
+			break;
+		}
+		case SkillKinds.PredictionFalling: { //预知掉落
+			let dict = {
+				icon: createIcon(skill.kind)
+			};
+			frg.ap(tsp.skill.prediction_falling(dict));
 			break;
 		}
 		
