@@ -121,7 +121,7 @@
 			obstruct_opponent_before_me: tp`排名比自身高的對手`,
 			obstruct_opponent_designated_position: tp`第${'positions'}排位的對手`,
 			increase_damage_cap: tp`${'targets'}的${'icon'}傷害上限提升到${'cap'}`,
-			board_jamming_state: tp`在${'position'}生成${'icon'}${'state'}${'size'}${'count'}${'time'}`,
+			board_jamming_state: tp`在${'position'}生成${'icon'}${'state'}${'size'}${'count'}${'comment'}`,
 			board_size_change: tp`板面大小改變為${'icon'}${'size'}`,
 			remove_assist: tp`${'icon'}移除自身的輔助寵物（直到地下城結束）`,
 			prediction_falling: tp`盤面上可以${'icon'}預知寶珠掉落`,
