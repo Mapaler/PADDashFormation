@@ -7,6 +7,7 @@ let currentPlayerData; //当前玩家数据
 let markedFilter = []; //收藏的特殊搜索
 let defaultLevel = 99; //默认等级
 
+
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
 
@@ -299,7 +300,7 @@ MemberTeam.prototype.loadFromMember = function(m) {
 	if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 
-var Formation = function(teamCount, memberCount) {
+let Formation = function(teamCount, memberCount) {
 	this.title = "";
 	this.detail = "";
 	this.teams = [];
@@ -329,10 +330,12 @@ var Formation = function(teamCount, memberCount) {
 		this.teams.push(team);
 	}
 };
+//初始化队伍结构
+let formation = new Formation(teamsCount, teamsCount == 2 ? 5 : 6);
 Formation.prototype.outObj = function() {
 	const obj = {};
-	if (this.title != undefined && this.title.length > 0) obj.t = this.title;
-	if (this.detail != undefined && this.detail.length > 0) obj.d = this.detail;
+	if (this?.title?.length > 0) obj.t = this.title;
+	if (this?.detail?.length > 0) obj.d = this.detail;
 	obj.f = this.teams.map(t => {
 		const teamArr = [];
 		teamArr[0] = t[0].map(m =>
