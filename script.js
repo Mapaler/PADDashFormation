@@ -2502,7 +2502,14 @@ function initialize() {
 
 	//切换代码模式
 	siwtchCodeMode.onclick = function(){
-		if (this.checked) txtDetail.style.height = txtDetailDisplay.scrollHeight + "px";
+		if (this.checked) { //进入代码模式
+			txtDetail.style.height = txtDetailDisplay.scrollHeight + "px";
+			txtTitleDisplay.onblur();
+			txtDetailDisplay.onblur();
+		} else { //退出代码模式
+			txtTitle.onchange();
+			txtDetail.onchange();
+		}
 		formationBox.classList.toggle("edit-code", this.checked);
 	}
 	siwtchCodeMode.checked = false;
@@ -2685,6 +2692,27 @@ function initialize() {
 	insertOrbIcon.onclick = showInsertIconList;
 
 	function richTextToCode(parentElement){
+		function rgbToHex(str) {  //RGB(A)颜色转换为HEX十六进制的颜色值
+			let res = /rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*([.\d]+)\s*)?\)/ig.exec(str.replace(/\s/g,''));
+			if (res) {
+				let [,r,g,b,a] = res;
+				let rgb = [r,g,b].map(s=>parseInt(s,10));
+				if (a) { //将小数点的Alpha转成8位
+					rgb.push(Math.round(parseFloat(a) * 0xFF));
+				}
+				return rgb.map(n=>n.toString(16).padStart(2,'0')).join('');
+			}
+			else if (res = /#([a-fA-F0-9]{6,8})/i.exec(str))
+			{
+				return res[1];
+			}
+			else if (str === "blue"){ //特殊翻译
+				return 'qs';
+			}
+			else {
+				return str;
+			}
+		}
 		let code = [];
 		for (let node of parentElement.childNodes) {
 			if (node?.lastChild?.nodeName == "BR") node.lastChild.revome();
@@ -2692,7 +2720,7 @@ function initialize() {
 				code.push(node.nodeValue);
 				continue;
 			} else if (node.nodeName == "FONT" && node.color || node.nodeName == "SPAN" && node.style.color) { //文字颜色
-				let colorStr = rgbToHex(node.color || node.style.color);
+				let colorStr = rgbToHex(node.nodeName == "FONT" && node.color || node.nodeName == "SPAN" && node.style.color);
 				code.push(`^${colorStr}^${richTextToCode(node)}^p`);
 				continue;
 			} else if (node.nodeName == "DIV") {

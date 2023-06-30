@@ -867,27 +867,6 @@ function searchCollab(event) {
 	showSearch(Cards.filter(card => card.collabId == collabId));
 	return false;
 }
-function rgbToHex(str) {  //RGB(A)颜色转换为HEX十六进制的颜色值
-	let res = /rgba?\((\d{1,3}),(\d{1,3}),(\d{1,3})(,([.\d]+))?\)/ig.exec(str.replace(/\s/g,''));
-	if (res) {
-		let [,r,g,b,a] = res;
-		let rgb = [r,g,b].map(s=>parseInt(s,10));
-		if (a) {
-			rgb.push(Math.round(Number(a) * 255));
-		}
-		return rgb.map(n=>n.toString(16).padStart(2,'0')).join('');
-	}
-	else if (res = /#([a-fA-F0-9]{6,8})/i.exec(str))
-	{
-		return res[1];
-	}
-	else if (str === "blue"){ //特殊翻译
-		return 'qs';
-	}
-	else {
-		return '000000';
-	}
-}
 //创建序号类图标
 function createIndexedIcon(type, index) {
 	if (type == 'card') {//卡片头像
@@ -927,58 +906,65 @@ function createIndexedIcon(type, index) {
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)
 {
-	function formatParse(arr, reg, subMatchCount, returnFunc){
-		//const subMatchCount = returnFunc.length;
-		return arr.flatMap(item=>{
+	function formatParse(reg, subMatchCount, transFunc) {
+		//const subMatchCount = transFunc.length;
+		return function(item){
 			if (typeof item == "string") {
 				const subArr = item.split(new RegExp(reg));
 				const newArr = [];
 				for (let i = 0; i < subArr.length; i += (subMatchCount+1)) {
 					newArr.push(subArr[i]);
 					if (subArr[i+subMatchCount] !== undefined) {
-						newArr.push(returnFunc(...subArr.slice(i + 1, i + subMatchCount + 1)));
+						newArr.push(transFunc(...subArr.slice(i + 1, i + subMatchCount + 1)));
 					}
 				}
 				return newArr;
 			} else {
 				return item;
 			}
-		});
+		};
 	}
 	let nodeArr = [str];
-	nodeArr = formatParse(nodeArr, /\^(\w+?)\^([^\^]+?)\^p/igm, 2,
-		(color, content)=>{
-			const sp = document.createElement("span");
-			sp.appendChild(descriptionToHTML(content))
-			if (/^[a-fA-F0-9]+$/g.test(color)) {
-				sp.style.color = `#${color}`;
-			} else if (/qs/i.test(color)) {
-				sp.style.color = `blue`;
-			}
-			return sp;
-		});
+	nodeArr = nodeArr.flatMap(formatParse(/\^(\w+?)\^([^\^]+?)\^p/igm, 2, fontcolorTrans)); //文字颜色
+	nodeArr = nodeArr.flatMap(formatParse(/\%\{([a-z]+)(\d+)\}/ig, 2, iconTrans)); //抛弃的老格式%{m1}
+	nodeArr = nodeArr.flatMap(formatParse(/\{(\w+)\.(\w+)\}/ig, 2, iconTrans)); //新格式{m.1}
+
+	function fontcolorTrans(color, content){
+		const sp = document.createElement("span");
+		sp.appendChild(descriptionToHTML(content))
+		if (/^[a-fA-F0-9]+$/g.test(color)) {
+			sp.style.color = `#${color}`;
+		} else if (/qs/i.test(color)) {
+			sp.style.color = `blue`;
+		} else {
+			sp.style.color = color;
+		}
+		return sp;
+	}
 	function iconTrans(type, id){
 		id = parseInt(id,10);
+		type = type.toLowerCase();
 		switch(type) {
-			case 'm':case 'M': { //卡片头像
+			case 'card':case 'm': { //卡片头像
 				return createIndexedIcon('card', id);
 			}
-			case 'a':case 'A': { //觉醒
+			case 'awoken':case 'a': { //觉醒
 				return createIndexedIcon('awoken', id);
 			}
-			case 't':case 'T': { //类型
+			case 'type':case 't': { //类型
 				return createIndexedIcon('type', id);
 			}
-			case 'o':case 'O': { //宝珠
+			case 'orb':case 'o': { //宝珠
 				return createIndexedIcon('orb', id);
 			}
-			case 'l':case 'L': { //潜觉
+			case 'latent':case 'l': { //潜觉
 				return createIndexedIcon('latent', id);
+			}
+			default: {
+				return `{${type}.${id}}`;
 			}
 		}
 	}
-	nodeArr = formatParse(nodeArr, /\%\{([a-z]+)(\d+)\}/ig, 2, iconTrans); //抛弃的老格式%{m1}
-	nodeArr = formatParse(nodeArr, /\{(\w+)\.(\w+)\}/ig, 2, iconTrans);  //新格式{m.1}
 	return nodeArr.nodeJoin();
 }
 //默认的技能解释的显示行为
