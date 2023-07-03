@@ -1,9 +1,16 @@
-﻿const _localTranslating = {
+﻿{
+const _localTranslating = {
 	webpage_title: `퍼즐앤드래곤 ${teamsCount} 명의 팀 다이어그램 작성 도구`,
 	title_blank: "입력 제목",
 	detail_blank: "입력 내용",
 	force_reload_data: "데이터 강제 새로 고침",
 	request_input: tp`${'info'}를 입력하십시오`,
+	status_message: {
+		loading_check_version: "데이터 버전을 확인 .",
+		loading_mon_info: "몬스터 데이터를 로드 하 고 있습니다.",
+		loading_skill_info: "기술 데이터를 로드 하 고 있습니다.",
+		prepare_capture: "스크린 샷을 준비 하 고 있습니다.",
+	},
 	link_read_message: {
 		success: tp`검색 ${'type'} 형식입니다. `,
 		need_user_script: `PADDB는 도메인에 걸쳐 있으므로 이 기능을 지원하려면 사용자 스크립트 관리자 내에 보조 스크립트를 설치해야 합니다.`,
@@ -45,6 +52,7 @@
 	},
 }
 deepMerge(localTranslating, _localTranslating);
+}
 localisation(localTranslating);
 
 //大数字缩短长度

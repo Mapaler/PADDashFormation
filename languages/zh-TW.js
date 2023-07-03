@@ -1,9 +1,16 @@
-﻿const _localTranslating = {
+﻿{
+const _localTranslating = {
 	webpage_title: `龍族拼圖${teamsCount}人隊伍圖製作`,
 	title_blank: "輸入隊伍標題",
 	detail_blank: "輸入説明",
 	force_reload_data: "強制刷新數據",
 	request_input: tp`請輸入${'info'}`,
+	status_message: {
+		loading_check_version: "正在檢查數據版本，請稍候……",
+		loading_mon_info: "正在加載怪物數據，請稍候……",
+		loading_skill_info: "正在加載技能數據，請稍候……",
+		prepare_capture: "正在準備截圖，請稍候……",
+	},
 	link_read_message: {
 		success: tp`發現 ${'type'} 格式。`,
 		need_user_script: `由於 PADDB 跨域，您需要在用戶腳本管理器內安裝輔助腳本以支持此功能。`,
@@ -435,6 +442,7 @@
 };
 
 deepMerge(localTranslating, _localTranslating);
+}
 localisation(localTranslating);
 
 //大數字縮短長度

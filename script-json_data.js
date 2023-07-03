@@ -19,6 +19,12 @@ let localTranslating = {
 	detail_blank: "Input Detail",
 	force_reload_data: `Force refresh data`,
 	request_input: tp`Please Input ${'info'}`,
+	status_message: {
+		loading_check_version: "Checking the data version, please wait...",
+		loading_mon_info: "Loading monster data, please wait...",
+		loading_skill_info: "Loading skill data, please wait...",
+		prepare_capture: "Preparing a screenshot, please wait...",
+	},
 	link_read_message: {
 		success: tp`Find the ${'type'} format.`,
 		need_user_script: `Because PADDB is cross-domain, you need to install helper script within the User Script Manager to support this feature.`,

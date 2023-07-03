@@ -1,27 +1,12 @@
 ﻿@charset "utf-8";
-.status.loading-check-version .text::before{
-	content: "データバージョンをチェックしています。";
-}
-.status.loading-mon-info .text::before{
-	content: "モンスターデータを読み込んでいます。";
-}
-.status.loading-skill-info .text::before{
-	content: "スキル データを読み込んでいます。";
-}
-.status.prepare-capture .text::before{
-	content: "スクリーンショットを準備しています。";
-}
 .monster.delay::before{
 	content: "遅 延\A対 策";
 }
-.monster .level.max::before{
-	content: "Lv.最大";
+.monster .level.max::after{
+	content: "最大";
 }
 .monster .level::before{
 	content: "Lv.";
-}
-.monster .id::before{
-	content: "No.";
 }
 .team-box-name .box-name::before
 {
@@ -242,19 +227,22 @@ label[for="merge-skill"]::after{
 .control-box .lbl-remove-assist::before{
 	content: "⛔アシストを解除";
 }
-.control-box .show-mon-id-lbl::after{
+.control-box .config-display-list summary::before{
+	content:"表示内容の開閉器一覧";
+}
+label[for="show-mon-id"]::after{
 	content:"🆔モンスターIDを表示";
 }
-.control-box .show-mon-skill-cd-lbl::after{
+label[for="show-mon-skill-cd"]::after{
 	content:"❄️スキル クールを表示";
 }
 label[for="show-mon-rarity"]::after{
 	content:"⭐️希少性を表示";
 }
-.control-box .show-mon-awoken-lbl::after{
+label[for="show-mon-awoken"]::after{
 	content:"👁️カードの覚醒を表示";
 }
-.control-box .show-awoken-count-lbl::after{
+label[for="show-awoken-count"]::after{
 	content:"⚔️総覚醒と能力値の表示";
 }
 label[for="change-swap-to-copy"]::after{
@@ -311,16 +299,16 @@ label[for="default-level"]::after
 .search-box::before{
 	content: "モンスターの検索";
 }
-.search-box .attrs-div .fix-main-color-label::after{
+.search-box .attrs-div label[for="fix-main-color"]::after{
 	content: "属性の順序は、選択した順序と一致";
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "同時に同等の覚醒を検索";
 }
-.search-box .include-super-awoken-label::after{
+.search-box label[for="include-super-awoken"]::after{
 	content: "超覚醒を含む";
 }
-.search-box .show-official-awoken-sorting-label::after{
+.search-box label[for="show-official-awoken-sorting"]::after{
 	content: "公式の覚醒ソートを使用";
 }
 .search-box .search-list-length::before{
@@ -329,22 +317,22 @@ label[for="default-level"]::after
 .search-box .sort-div::before{
 	content: "並べ替え:";
 }
-.search-box .sort-reverse-label::after{
+.search-box label[for="sort-reverse"]::after{
 	content: "逆序";
 }
 .search-box .additional-div::before{
 	content: "追加の表示:";
 }
-.search-box .add-show-awoken-label::after{
+.search-box label[for="add-show-awoken"]::after{
 	content: "覚醒リスト";
 }
-.search-box .add-show-CD-label::after{
+.search-box label[for="add-show-CD"]::after{
 	content: "スキルターン";
 }
-.search-box .add-show-abilities-label::after{
+.search-box label[for="add-show-abilities"]::after{
 	content: "能力値";
 }
-.search-box .add-show-abilities-with-awoken-label::after{
+.search-box label[for="add-show-abilities-with-awoken"]::after{
 	content: "能力値 (+覚醒)";
 }
 .attrs-div .attr[data-attr-icon='-1']::before{
@@ -443,7 +431,7 @@ label[for="box-have"]::after
 {
 	content: "このカードを進化的な素材として必要とするカード";
 }
-.real-time-change-card-label::after
+label[for="real-time-change-card"]::after
 {
 	content: "カードを即座に更新";
 }

@@ -1157,7 +1157,7 @@ function loadData(force = false)
 	//开始读取解析怪物数据
 	const sourceDataFolder = "monsters-info";
 
-	if (statusLine) statusLine.classList.add("loading-check-version");
+	statusLine?.writeText(localTranslating.status_message.loading_check_version);
 	GM_xmlhttpRequest({
 		method: "GET",
 		url: `${sourceDataFolder}/ckey.json${force?`?t=${_time}`:''}`, //版本文件
@@ -1204,8 +1204,7 @@ function loadData(force = false)
 			lastCkeys.push(lastCurrentCkey);
 		}
 
-		if (statusLine) statusLine.classList.remove("loading-check-version");
-		if (statusLine) statusLine.classList.add("loading-mon-info");
+		statusLine?.writeText(localTranslating.status_message.loading_mon_info);
 		if (!force && db && currentCkey.ckey.card == lastCurrentCkey.ckey.card) {
 			console.debug("Cards ckey相等，直接读取已有的数据。");
 			const transaction = db.transaction([`cards`]);
@@ -1301,9 +1300,7 @@ function loadData(force = false)
 				monstersList.appendChild(fragment);
 			}
 
-			if (statusLine) statusLine.classList.remove("loading-mon-info");
-
-			if (statusLine) statusLine.classList.add("loading-skill-info");
+			statusLine?.writeText(localTranslating.status_message.loading_skill_info);
 			if (!force && db && currentCkey.ckey.skill == lastCurrentCkey.ckey.skill) {
 				console.debug("Skills ckey相等，直接读取已有的数据。");
 				const transaction = db.transaction([`skills`]);
@@ -1379,7 +1376,7 @@ function loadData(force = false)
 				}
 	
 				//initialize(); //初始化
-				if (statusLine) statusLine.classList.remove("loading-skill-info");
+				statusLine?.writeText();
 
 				//如果通过的话就载入URL中的怪物数据
 				let formationBoxHook = setInterval(checkFormationBox, 500); //循环检测formationBox
@@ -1790,25 +1787,23 @@ function paddbFotmationToPdfFotmation(obj)
 	return f;
 }
 //截图
-function capture() {
-	statusLine.classList.add("prepare-capture");
-	const titleBox = formationBox.querySelector(".title-box");
-	const detailBox = formationBox.querySelector(".detail-box");
-	const txtTitle = titleBox.querySelector(".title-code");
-	const txtDetail = detailBox.querySelector(".detail-code");
+function captureScreenshot(target) {
+	statusLine?.writeText(localTranslating.status_message.prepare_capture);
 	//去掉可能的空白文字的编辑状态
 	formationBox.classList.remove("edit-code");
 	const downLink = controlBox.querySelector(".down-capture");
-	html2canvas(formationBox, {backgroundColor: null}).then(canvas => {
-		canvas.toBlob(function(blob) {
-			window.URL.revokeObjectURL(downLink.href);
-			downLink.href = URL.createObjectURL(blob);
-			downLink.download = `${document.title}.png`;
-			downLink.click();
-			statusLine.classList.remove("prepare-capture");
+	setTimeout(()=>{
+		html2canvas(target, {backgroundColor: null}).then(canvas => {
+			canvas.toBlob(function(blob) {
+				window.URL.revokeObjectURL(downLink.href);
+				downLink.href = URL.createObjectURL(blob);
+				downLink.download = `${document.title}.png`;
+				downLink.click();
+				statusLine?.writeText();
+			});
+			//document.body.appendChild(canvas);
 		});
-		//document.body.appendChild(canvas);
-	});
+	},500);
 }
 
 window.onload = initialize; //界面初始化
@@ -1822,6 +1817,10 @@ function initialize() {
 
 	controlBox = document.body.querySelector(".control-box");
 	statusLine = controlBox.querySelector(".status"); //显示当前状态的
+	statusLine.writeText = function(text) {
+		this.innerHTML = '';
+		if (text) this.textContent = text;
+	};
 	formationBox = document.body.querySelector(".formation-box");
 	editBox = document.body.querySelector(".edit-box");
 	editBox.editMon = editMember;
@@ -1873,20 +1872,8 @@ function initialize() {
 		checkbox.onchange(false);
 		return checkbox;
 	}
-	//显示ID开关
-	const btnShowMonId = initializeSwitch(document.getElementById("show-mon-id"));
-
-	//显示CD开关
-	const btnShowMonSkillCd = initializeSwitch(document.getElementById("show-mon-skill-cd"));
-
-	//显示星级开关
-	const btnShowMonRarity = initializeSwitch(document.getElementById("show-mon-rarity"));
-
-	//显示卡片觉醒开关
-	const btnShowMonAwoken = initializeSwitch(document.getElementById("show-mon-awoken"));
-	
-	//3P显示觉醒统计开关
-	const btnShowAwokenCount = initializeSwitch(document.getElementById("show-awoken-count"));
+	const displaySwitchList = Array.from(document.querySelectorAll(".config-display-list .switch-ipt"));
+	displaySwitchList.forEach(initializeSwitch);
 
 	//默认等级
 	const iptDefaultLevel = document.getElementById("default-level");
@@ -5483,52 +5470,50 @@ function refreshAll(formationData) {
 	// txtDetail.onblur(); //这个需要放在显示出来后再改才能生效
 }
 
-function awokenSetCount(aicon, number) {
-	if (!aicon) return; //没有这个觉醒就撤回 
-	const ali = aicon.parentNode;
-	const countDom = ali.querySelector(".count");
-	countDom.textContent = number;
-	if (number)
-		ali.classList.remove(className_displayNone);
-	else
-		ali.classList.add(className_displayNone);
-}
 //刷新队伍觉醒统计
 function refreshTeamAwokenCount(awokenDom, team) {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-	const awokenUL = fragment.appendChild(awokenDom.querySelector(".awoken-ul"));
 
-	const aicons = Array.from(awokenUL.querySelectorAll(`.awoken-icon[data-awoken-icon]`));
-	const acs = aicons.map(aicon=>{
-		const ai = parseInt(aicon.getAttribute("data-awoken-icon"),10);
+	official_awoken_sorting.forEach(ak=>{
 		let totalNum = 0;
 		//搜索等效觉醒
-		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ai || eak.big === ai);
-		if (equivalentAwoken)
-		{
-			if (equivalentAwoken.small === ai)
-			{
-				totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
-					awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
-			}
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ak || eak.big === ak);
+		if (equivalentAwoken?.small === ak)
+		{ //等效觉醒
+			totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
+				awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 		} else
-		{
-			totalNum = awokenCountInTeam(team, ai, solo, teamsCount);
+		{ //普通觉醒
+			totalNum = awokenCountInTeam(team, ak, solo, teamsCount);
 		}
-		awokenSetCount(aicon, totalNum);
-		return {a:ai,c:totalNum};
+		if (totalNum == 0) return;
+		const li = document.createElement("li");
+		li.className = "awoken-count";
+		const icon = li.appendChild(document.createElement("icon"));
+		icon.className = "awoken-icon";
+		icon.setAttribute("data-awoken-icon", ak);
+		const span = li.appendChild(document.createElement("span"));
+		span.className = "count";
+		span.textContent = totalNum;
+		fragment.appendChild(li);
 	});
-	if (acs.every(ac=>ac.c==0))
-	{
-		awokenDom.classList.add(className_displayNone);
-	} else
-	{
-		awokenDom.classList.remove(className_displayNone);
-	}
-	awokenDom.appendChild(fragment);
+
+	const awokenUL = awokenDom.querySelector(".awoken-ul");
+	awokenUL.innerHTML = '';
+	awokenUL.append(fragment);
 }
 //刷新阵型觉醒统计
 function refreshFormationAwokenCount(awokenDom, teams) {
+	function awokenSetCount(aicon, number) {
+		if (!aicon) return; //没有这个觉醒就撤回 
+		const ali = aicon.parentNode;
+		const countDom = ali.querySelector(".count");
+		countDom.textContent = number;
+		if (number)
+			ali.classList.remove(className_displayNone);
+		else
+			ali.classList.add(className_displayNone);
+	}
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
 	const awokenUL = fragment.appendChild(awokenDom.querySelector(".awoken-ul"));
 

@@ -1,16 +1,4 @@
 ﻿@charset "utf-8";
-.status.loading-check-version .text::before{
-	content: "正在檢查数据版本，請稍候……";
-}
-.status.loading-mon-info .text::before{
-	content: "正在載入怪物數據，請稍候……";
-}
-.status.loading-skill-info .text::before{
-	content: "正在載入技能数据，请稍候……";
-}
-.status.prepare-capture .text::before{
-	content: "正在准備截圖，請稍後……";
-}
 .help-link::before{
 	content: "\f05a 幫助和提示";
 }
@@ -20,14 +8,11 @@
 .monster.delay::before{
 	content: "應 對\A威 嚇";
 }
-.monster .level.max::before{
-	content: "Lv.最大";
+.monster .level.max::after{
+	content: "最大";
 }
 .monster .level::before{
 	content: "Lv.";
-}
-.monster .id::before{
-	content: "No.";
 }
 .team-box-name .box-name::before
 {
@@ -248,19 +233,22 @@ label[for="merge-skill"]::after{
 .control-box .lbl-remove-assist::before{
 	content: "⛔解除輔助";
 }
-.control-box .show-mon-id-lbl::after{
+.control-box .config-display-list summary::before{
+	content:"展示內容開關列表";
+}
+label[for="show-mon-id"]::after{
 	content:"🆔顯示怪物ID";
 }
-.control-box .show-mon-skill-cd-lbl::after{
+label[for="show-mon-skill-cd"]::after{
 	content:"❄️顯示技能冷卻";
 }
 label[for="show-mon-rarity"]::after{
 	content:"⭐️顯示稀有度";
 }
-.control-box .show-mon-awoken-lbl::after{
+label[for="show-mon-awoken"]::after{
 	content:"👁️顯示卡片覺醒";
 }
-.control-box .show-awoken-count-lbl::after{
+label[for="show-awoken-count"]::after{
 	content:"⚔️顯示覺醒統計和能力值";
 }
 label[for="change-swap-to-copy"]::after{
@@ -317,16 +305,16 @@ label[for="default-level"]::after
 .search-box::before{
 	content: "搜索怪物";
 }
-.search-box .attrs-div .fix-main-color-label::after{
+.search-box .attrs-div label[for="fix-main-color"]::after{
 	content: "強制屬性順序與選擇順序一致";
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "同時搜索等效覺醒";
 }
-.search-box .include-super-awoken-label::after{
+.search-box label[for="include-super-awoken"]::after{
 	content: "包括超覺醒";
 }
-.search-box .show-official-awoken-sorting-label::after{
+.search-box label[for="show-official-awoken-sorting"]::after{
 	content: "使用官方覺醒排序";
 }
 .search-box .search-list-length::before{
@@ -335,22 +323,22 @@ label[for="default-level"]::after
 .search-box .sort-div::before{
 	content: "排序：";
 }
-.search-box .sort-reverse-label::after{
+.search-box label[for="sort-reverse"]::after{
 	content: "逆序";
 }
 .search-box .additional-div::before{
 	content: "附加顯示：";
 }
-.search-box .add-show-awoken-label::after{
+.search-box label[for="add-show-awoken"]::after{
 	content: "覺醒清單";
 }
-.search-box .add-show-CD-label::after{
+.search-box label[for="add-show-CD"]::after{
 	content: "技能回合";
 }
-.search-box .add-show-abilities-label::after{
+.search-box label[for="add-show-abilities"]::after{
 	content: "能力值";
 }
-.search-box .add-show-abilities-with-awoken-label::after{
+.search-box label[for="add-show-abilities-with-awoken"]::after{
 	content: "能力值（+覺醒）";
 }
 .attrs-div .attr[data-attr-icon='-1']::before{
@@ -449,7 +437,7 @@ label[for="box-have"]::after
 {
 	content: "需要此寵物作為進化素材的寵物";
 }
-.real-time-change-card-label::after
+label[for="real-time-change-card"]::after
 {
 	content: "即時更新卡片";
 }

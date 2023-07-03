@@ -247,10 +247,20 @@ label[for="siwtch-code-mode"]::after {
 	display: none;
 }
 
-.config-checkbox-ipt{
+.config-display-list:not([open]) {
+	background-color: #1155AA55;
+}
+
+.switch-ipt{
 	display:none;
 }
-.config-checkbox-lbl .config-checkbox-lbl-cicle{
+.switch-lbl{
+	cursor: pointer;
+	line-height: 25px;
+	margin-right: 20px;
+	display: inline-block;
+}
+.switch-lbl>circle{
 	width: 28px;
 	height: 12px;
 	display: inline-block;
@@ -259,7 +269,7 @@ label[for="siwtch-code-mode"]::after {
 	border-radius: 16px;
 	margin-right: 5px;
 }
-.config-checkbox-lbl .config-checkbox-lbl-cicle::before{
+.switch-lbl>circle::before{
 	content:"";
 	width: 20px;
 	height: 20px;
@@ -271,38 +281,30 @@ label[for="siwtch-code-mode"]::after {
 	left: -4px;
 	top: -4px;
 }
-.config-checkbox-ipt:checked+.config-checkbox-lbl .config-checkbox-lbl-cicle {
+.switch-ipt:checked+.switch-lbl>circle {
 	background: rgba(0,160,216,0.8);
 }
-.config-checkbox-ipt:checked+.config-checkbox-lbl .config-checkbox-lbl-cicle::before {
+.switch-ipt:checked+.switch-lbl>circle::before {
 	background: #00A0D8;
 	box-shadow: 0 2px 4px 0 rgba(0,160,216,0.4);
 	left: calc(100% - 16px);
 }
-.config-checkbox-lbl{
-	cursor: pointer;
-	line-height: 25px;
-	margin-right: 20px;
-	display: inline-block;
-}
-.config-checkbox-lbl[for$=and-or]::after{
+.switch-lbl[for$=and-or]::after{
 	content: "OR";
 }
-input:checked+ .config-checkbox-lbl[for$=and-or]::after{
+input:checked+ .switch-lbl[for$=and-or]::after{
 	content: "AND";
 }
 
 .status{
 	line-height: 16px;
 }
-/*.status.loading-mon-info .text::before{
-	content: "正在加载怪物数据";
-}*/
-.status.loading-check-version .icon,
-.status.loading-mon-info .icon,
-.status.loading-skill-info .icon,
-.status.prepare-capture .icon
-{
+.status:empty{
+	display: none;
+}
+/*状态栏不为空时*/
+.status:not(:empty)::before {
+	content: "";
 	display: inline-block;
 	width: 16px;
 	height: 16px;
@@ -648,10 +650,6 @@ ul{
 {
 	color: #FEFF85;
 }
-.monster .level.max::after
-{
-	display: none;
-}
 .monster .level[data-level-range="110"]{
 	color: #85BCFF;
 }
@@ -679,15 +677,10 @@ ul{
 	left: 5px;
 	bottom: 15px;
 }
-body:not(.show-mon-id) .monster .id{
-	display: none;
-}
 .monster .id::before{
+	content: "No.";
 	font-size: 12px;
 }
-/*.monster .id::before{
-	content: "No.";
-}*/
 .monster .skill-cd{
 	text-align: right;
 }
@@ -708,11 +701,8 @@ body:not(.show-mon-id) .monster .id{
 	right:0;
 	bottom:0;
 }
-body:not(.show-mon-skill-cd) .monster .skill-cd.max-skill {
-	display: none;
-}
 /*显示怪物星级*/
-.show-mon-rarity .monster .rarity::before{
+.monster .rarity::before{
 	position: absolute;
 	left: 3px;
 	top: 10px;
@@ -721,6 +711,17 @@ body:not(.show-mon-skill-cd) .monster .skill-cd.max-skill {
 	color: yellow;
 	-webkit-text-stroke: 1px black;
 	text-shadow: black 1px 1px 1px;
+}
+body:not(.show-card-id) .monster .id, /*卡片id*/
+body:not(.show-card-rarity) .monster .rarity, /*卡片稀有度*/
+body:not(.show-member-skill-cd) .monster .skill-cd.max-skill, /*队员CD*/
+body:not(.show-member-ability) .team-ability, /*队员三维*/
+body:not(.show-member-awoken) :where(.team-assist-awoken , .team-member-awoken, .team-member-types), /*武器觉醒、队员觉醒、队员类型*/
+body:not(.show-team-awoken-count) .team-awoken, /*队伍觉醒统计*/
+body:not(.show-team-attrtype-count) .tIf-addition-info, /*稀有度、属性与类型计数*/
+body:not(.show-team-awoken-effect) .team-awoken-effect /*队伍觉醒效果统计*/
+{
+	display: none;
 }
 
 /*交换队长技的图标*/
@@ -774,18 +775,15 @@ body:not(.show-mon-skill-cd) .monster .skill-cd.max-skill {
 {
 	opacity: 0.5;
 }
-
-body:not(.show-awoken-count):not(.solo) .formation-box .team-total-info, /*单个队伍血量统计*/
-body:not(.show-awoken-count) .formation-box .team-ability, /*单个队伍三维*/
-body:not(.show-awoken-count) .formation-box .team-awoken /*单个队伍觉醒统计*/
+body:not(.show-3P-team-total-info):not(.solo) .formation-box .team-total-info /*3P下隐藏队伍血量统计*/
 {
-	display: none !important;
+	display: none;
 }
-body:not(.show-awoken-count):not(.solo) .formation-box .team-bigbox
+body:not(.show-3P-team-total-info):not(.solo) .formation-box .team-bigbox
 {
 	margin-bottom: 5px;
 }
-body:not(.show-awoken-count):not(.solo) .formation-box .team-badge
+body:not(.show-3P-team-total-info):not(.solo) .formation-box .team-badge
 {
 	position: absolute;
 	z-index: 10;
@@ -1276,7 +1274,6 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-assist-awoken
 {
 	margin-top: 3px;
-	display : none;	
 }
 .member-awoken .awoken-ul,
 .member-types .types-ul
@@ -1295,20 +1292,6 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	filter: unset;
 	transform: scale(0.65);
 	margin: calc(-32px * (1 - 0.65) / 2);
-}
-.tIf-addition-info,
-.team-assist-awoken,
-.team-member-awoken,
-.team-member-types
-{
-	display : none;	
-}
-.show-mon-awoken .tIf-addition-info,
-.show-mon-awoken .team-assist-awoken,
-.show-mon-awoken .team-member-awoken,
-.show-mon-awoken .team-member-types
-{
-	display : block;	
 }
 .show-mon-awoken .monster .super-awoken
 {

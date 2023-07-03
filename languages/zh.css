@@ -1,16 +1,4 @@
 @charset "utf-8";
-.status.loading-check-version .text::before{
-	content: "正在检查数据版本，请稍候……";
-}
-.status.loading-mon-info .text::before{
-	content: "正在加载怪物数据，请稍候……";
-}
-.status.loading-skill-info .text::before{
-	content: "正在加载技能数据，请稍候……";
-}
-.status.prepare-capture .text::before{
-	content: "正在准备截图，请稍候……";
-}
 .help-link::before{
 	content: "\f05a 帮助和提示";
 }
@@ -20,14 +8,11 @@
 .monster.delay::before{
 	content: "应 对\A威 吓";
 }
-.monster .level.max::before{
-	content: "Lv.最大";
+.monster .level.max::after{
+	content: "最大";
 }
 .monster .level::before{
 	content: "Lv.";
-}
-.monster .id::before{
-	content: "No.";
 }
 .team-box-name .box-name::before
 {
@@ -247,20 +232,35 @@ label[for="merge-skill"]::after{
 .control-box .lbl-remove-assist::before{
 	content: "⛔解除辅助";
 }
-.control-box .show-mon-id-lbl::after{
-	content:"🆔显示怪物ID";
+.control-box .config-display-list summary::before{
+	content:"展示内容开关列表";
 }
-.control-box .show-mon-skill-cd-lbl::after{
-	content:"❄️显示技能冷却";
+label[for="show-card-id"]::after{
+	content:"🆔卡片ID";
 }
-label[for="show-mon-rarity"]::after{
-	content:"⭐️显示稀有度";
+label[for="show-card-rarity"]::after{
+	content:"⭐️卡片稀有度";
 }
-.control-box .show-mon-awoken-lbl::after{
-	content:"👁️显示卡片觉醒";
+label[for="show-member-skill-cd"]::after{
+	content:"❄️队员技能冷却";
 }
-.control-box .show-awoken-count-lbl::after{
-	content:"⚔️显示觉醒统计和能力值";
+label[for="show-member-ability"]::after{
+	content:"⚔️队员能力值";
+}
+label[for="show-member-awoken"]::after{
+	content:"👁️队员觉醒";
+}
+label[for="show-3P-team-total-info"]::after{
+	content:"队伍信息统计";
+}
+label[for="show-team-awoken-count"]::after{
+	content:"队伍觉醒计数";
+}
+label[for="show-team-awoken-effect"]::after{
+	content:"队伍觉醒效果统计";
+}
+label[for="show-team-attrtype-count"]::after{
+	content:"队伍稀有度、属性与类型计数";
 }
 label[for="change-swap-to-copy"]::after{
 	content:"拖拽时使用“复制”（或按住 Ctrl）";
@@ -316,16 +316,16 @@ label[for="default-level"]::after
 .search-box::before{
 	content: "搜索怪物";
 }
-.search-box .attrs-div .fix-main-color-label::after{
+.search-box .attrs-div label[for="fix-main-color"]::after{
 	content: "强制属性顺序与选择顺序一致";
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "同时搜索等效觉醒";
 }
-.search-box .include-super-awoken-label::after{
+.search-box label[for="include-super-awoken"]::after{
 	content: "包括超觉醒";
 }
-.search-box .show-official-awoken-sorting-label::after{
+.search-box label[for="show-official-awoken-sorting"]::after{
 	content: "使用官方觉醒排序";
 }
 .search-box .search-list-length::before{
@@ -334,22 +334,22 @@ label[for="default-level"]::after
 .search-box .sort-div::before{
 	content: "排序：";
 }
-.search-box .sort-reverse-label::after{
+.search-box label[for="sort-reverse"]::after{
 	content: "逆序";
 }
 .search-box .additional-div::before{
 	content: "附加显示：";
 }
-.search-box .add-show-awoken-label::after{
+.search-box label[for="add-show-awoken"]::after{
 	content: "觉醒列表";
 }
-.search-box .add-show-CD-label::after{
+.search-box label[for="add-show-CD"]::after{
 	content: "冷却回合";
 }
-.search-box .add-show-abilities-label::after{
+.search-box label[for="add-show-abilities"]::after{
 	content: "能力值";
 }
-.search-box .add-show-abilities-with-awoken-label::after{
+.search-box label[for="add-show-abilities-with-awoken"]::after{
 	content: "能力值（+觉醒）";
 }
 .attrs-div .attr[data-attr-icon='-1']::before{
@@ -448,7 +448,7 @@ label[for="box-have"]::after
 {
 	content: "需要此宠物作为进化素材的宠物";
 }
-.real-time-change-card-label::after
+label[for="real-time-change-card"]::after
 {
 	content: "即时更新卡片";
 }

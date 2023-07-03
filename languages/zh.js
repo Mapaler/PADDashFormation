@@ -1,9 +1,16 @@
-﻿const _localTranslating = {
+﻿{
+const _localTranslating = {
 	webpage_title: `智龙迷城${teamsCount}人队伍图制作`,
 	title_blank: "输入队伍标题",
 	detail_blank: "输入说明",
 	force_reload_data: "强制刷新数据",
 	request_input: tp`请输入${'info'}`,
+	status_message: {
+		loading_check_version: "正在检查数据版本，请稍候……",
+		loading_mon_info: "正在加载怪物数据，请稍候……",
+		loading_skill_info: "正在加载技能数据，请稍候……",
+		prepare_capture: "正在准备截图，请稍候……",
+	},
 	link_read_message: {
 		success: tp`发现 ${'type'} 格式。`,
 		need_user_script: `由于 PADDB 跨域，您需要在用户脚本管理器内安装辅助脚本以支持此功能。`,
@@ -435,6 +442,7 @@
 	},
 };
 deepMerge(localTranslating, _localTranslating);
+}
 localisation(localTranslating);
 
 //大数字缩短长度

@@ -1,27 +1,12 @@
 ﻿@charset "utf-8";
-.status.loading-check-version .text::before{
-	content: "데이터 버전을 확인 .";
-}
-.status.loading-mon-info .text::before{
-	content: "몬스터 데이터를 로드 하 고 있습니다.";
-}
-.status.loading-skill-info .text::before{
-	content: "기술 데이터를 로드 하 고 있습니다.";
-}
-.status.prepare-capture .text::before{
-	content: "스크린 샷을 준비 하 고 있습니다.";
-}
 .monster.delay::before{
 	content: "지 연\A방 지";
 }
-.monster .level.max::before{
-	content: "Lv.최대";
+.monster .level.max::after{
+	content: "최대";
 }
 .monster .level::before{
 	content: "Lv.";
-}
-.monster .id::before{
-	content: "No.";
 }
 .team-box-name .box-name::before
 {
@@ -238,19 +223,22 @@ label[for="merge-skill"]::after{
 .control-box .lbl-remove-assist::before{
 	content: "⛔보조를 해제합";
 }
-.control-box .show-mon-id-lbl::after{
+.control-box .config-display-list summary::before{
+	content:"디스플레이 스위치 목록";
+}
+label[for="show-mon-id"]::after{
 	content:"🆔몬스터 ID 표시";
 }
-.control-box .show-mon-skill-cd-lbl::after{
+label[for="show-mon-skill-cd"]::after{
 	content:"❄️스킬의 사용 대기 시간 표시";
 }
 label[for="show-mon-rarity"]::after{
 	content:"⭐️희귀도 표시";
 }
-.control-box .show-mon-awoken-lbl::after{
+label[for="show-mon-awoken"]::after{
 	content:"👁️카드 각성을 표시합";
 }
-.control-box .show-awoken-count-lbl::after{
+label[for="show-awoken-count"]::after{
 	content:"⚔️각성 통계 및 기능 값 표시";
 }
 label[for="change-swap-to-copy"]::after{
@@ -307,16 +295,16 @@ label[for="default-level"]::after
 .search-box::before{
 	content: "몬스터 검색";
 }
-.search-box .attrs-div .fix-main-color-label::after{
+.search-box .attrs-div label[for="fix-main-color"]::after{
 	content: "속성 순서는 선택한 순서와 일치합니다";
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "동시에 해당 경계를 각성";
 }
-.search-box .include-super-awoken-label::after{
+.search-box label[for="include-super-awoken"]::after{
 	content: "슈퍼 각성 포함";
 }
-.search-box .show-official-awoken-sorting-label::after{
+.search-box label[for="show-official-awoken-sorting"]::after{
 	content: "공식 각성 순서를 사용";
 }
 .search-box .search-list-length::before{
@@ -325,22 +313,22 @@ label[for="default-level"]::after
 .search-box .sort-div::before{
 	content: "정렬:";
 }
-.search-box .sort-reverse-label::after{
+.search-box label[for="sort-reverse"]::after{
 	content: "역순";
 }
 .search-box .additional-div::before{
 	content: "추가 표시:";
 }
-.search-box .add-show-awoken-label::after{
+.search-box label[for="add-show-awoken"]::after{
 	content: "각성 목록";
 }
-.search-box .add-show-CD-label::after{
+.search-box label[for="add-show-CD"]::after{
 	content: "스킬 턴";
 }
-.search-box .add-show-abilities-label::after{
+.search-box label[for="add-show-abilities"]::after{
 	content: "능력";
 }
-.search-box .add-show-abilities-with-awoken-label::after{
+.search-box label[for="add-show-abilities-with-awoken"]::after{
 	content: "능력 (+각성)";
 }
 .attrs-div .attr[data-attr-icon='-1']::before{
@@ -435,7 +423,7 @@ label[for="not-weapon"]::after
 {
 	content: "진화 자료로이 카드를 필요로하는 카드";
 }
-.real-time-change-card-label::after
+label[for="real-time-change-card"]::after
 {
 	content: "카드를 즉시 업데이트";
 }

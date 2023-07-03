@@ -57,18 +57,23 @@ const teamsCount = 3;
 		<div>
 			<a class="down-capture display-none" target="_blank"></a>
 			<button class="btn-qrcode"></button>
-			<button class="btn-capture" onclick="capture();"></button>
+			<button class="btn-capture" onclick="captureScreenshot(formationBox);"></button>
 			<label for="default-level"></label><input id="default-level" type="number" min="1" max="120" placeholder="110"/>
 			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"></label>
 		</div>
-		<div>
-			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-id" id="show-mon-id"><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-skill-cd" id="show-mon-skill-cd"><label class="config-checkbox-lbl show-mon-skill-cd-lbl" for="show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-rarity" id="show-mon-rarity"><label class="config-checkbox-lbl" for="show-mon-rarity"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" class="config-checkbox-ipt" name="show-awoken-count" id="show-awoken-count" checked><label class="config-checkbox-lbl show-awoken-count-lbl" for="show-awoken-count"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-awoken" id="show-mon-awoken"><label class="config-checkbox-lbl show-mon-awoken-lbl" for="show-mon-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
-		</div>
-		<div class="status"><span class="icon"></span><span class="text"></span></div>
+		<details class="config-display-list">
+			<summary></summary>
+			<input type="checkbox" class="switch-ipt" id="show-card-id"><label class="switch-lbl" for="show-card-id"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-card-rarity"><label class="switch-lbl" for="show-card-rarity"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-member-skill-cd"><label class="switch-lbl" for="show-member-skill-cd"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-member-ability"><label class="switch-lbl" for="show-member-ability"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-member-awoken"><label class="switch-lbl" for="show-member-awoken"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-3P-team-total-info"><label class="switch-lbl" for="show-3P-team-total-info"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-awoken-count"><label class="switch-lbl" for="show-team-awoken-count"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-attrtype-count"><label class="switch-lbl" for="show-team-attrtype-count"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label class="switch-lbl" for="show-team-awoken-effect"><circle></circle></label>
+		</details>
+		<div class="status"></div>
 		<div>
 			<span class="lbl-henshin-change"><button class="btn-henshin" data-step="-1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button><button class="btn-henshin" data-step="+1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button></span>
 			<span class="lbl-remove-assist"><button class="btn-remove-assist" onclick="formation.removeAssist();"></span>
@@ -516,106 +521,7 @@ const teamsCount = 3;
 				</ul>
 				<div class="team-awoken">
 					<!--怪物觉醒-->
-					<ul class="awoken-ul">
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="21"></span><span class="count"></span></li><!--S+ -->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="105"></span><span class="count"></span></li><!--S- -->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="28"></span><span class="count"></span></li><!--SX-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="11"></span><span class="count"></span></li><!--防暗-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="12"></span><span class="count"></span></li><!--防废-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="13"></span><span class="count"></span></li><!--防毒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="54"></span><span class="count"></span></li><!--防云-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="55"></span><span class="count"></span></li><!--防封条-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="45"></span><span class="count"></span></li><!--心追-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="50"></span><span class="count"></span></li><!--方块心追-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="1"></span><span class="count"></span></li><!--HP+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="2"></span><span class="count"></span></li><!--攻击+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="3"></span><span class="count"></span></li><!--回复+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="4"></span><span class="count"></span></li><!--火盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="5"></span><span class="count"></span></li><!--水盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="6"></span><span class="count"></span></li><!--木盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="7"></span><span class="count"></span></li><!--光盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="8"></span><span class="count"></span></li><!--暗盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="9"></span><span class="count"></span></li><!--自回-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="10"></span><span class="count"></span></li><!--防封-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="14"></span><span class="count"></span></li><!--火+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="15"></span><span class="count"></span></li><!--水+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="16"></span><span class="count"></span></li><!--木+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="17"></span><span class="count"></span></li><!--光+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="18"></span><span class="count"></span></li><!--暗+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="19"></span><span class="count"></span></li><!--手指-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="20"></span><span class="count"></span></li><!--心解-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="22"></span><span class="count"></span></li><!--火横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="23"></span><span class="count"></span></li><!--水横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="24"></span><span class="count"></span></li><!--木横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="25"></span><span class="count"></span></li><!--光横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="26"></span><span class="count"></span></li><!--暗横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="27"></span><span class="count"></span></li><!--U-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="29"></span><span class="count"></span></li><!--心+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="30"></span><span class="count"></span></li><!--协力-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="31"></span><span class="count"></span></li><!--龙杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="32"></span><span class="count"></span></li><!--神杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="33"></span><span class="count"></span></li><!--恶魔杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="34"></span><span class="count"></span></li><!--机杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="35"></span><span class="count"></span></li><!--平衡杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="36"></span><span class="count"></span></li><!--攻击杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="37"></span><span class="count"></span></li><!--体力杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="38"></span><span class="count"></span></li><!--回复杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="39"></span><span class="count"></span></li><!--进化杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="40"></span><span class="count"></span></li><!--觉醒杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="41"></span><span class="count"></span></li><!--强化杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="42"></span><span class="count"></span></li><!--卖钱杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="43"></span><span class="count"></span></li><!--7c-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="44"></span><span class="count"></span></li><!--5色破防-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="46"></span><span class="count"></span></li><!--全体HP-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="47"></span><span class="count"></span></li><!--全体回复-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="48"></span><span class="count"></span></li><!--破无效-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="49"></span><span class="count"></span></li><!--武器觉醒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="51"></span><span class="count"></span></li><!--5色溜-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="52"></span><span class="count"></span></li><!--大防封-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="53"></span><span class="count"></span></li><!--大手指-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="56"></span><span class="count"></span></li><!--大SB-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="57"></span><span class="count"></span></li><!--满血强化-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="58"></span><span class="count"></span></li><!--下半血强化-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="59"></span><span class="count"></span></li><!--L盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="60"></span><span class="count"></span></li><!--L解锁-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="61"></span><span class="count"></span></li><!--10c-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="62"></span><span class="count"></span></li><!--c珠-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="63"></span><span class="count"></span></li><!--语音-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="64"></span><span class="count"></span></li><!--奖励增加-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="65"></span><span class="count"></span></li><!--HP--->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="66"></span><span class="count"></span></li><!--攻击--->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="67"></span><span class="count"></span></li><!--回复--->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="68"></span><span class="count"></span></li><!--大防暗-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="69"></span><span class="count"></span></li><!--大防废-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="70"></span><span class="count"></span></li><!--大防毒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="71"></span><span class="count"></span></li><!--掉废-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="72"></span><span class="count"></span></li><!--掉毒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="73"></span><span class="count"></span></li><!--2串火-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="74"></span><span class="count"></span></li><!--2串水-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="75"></span><span class="count"></span></li><!--2串木-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="76"></span><span class="count"></span></li><!--2串光-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="77"></span><span class="count"></span></li><!--2串暗-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="78"></span><span class="count"></span></li><!--十字-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="79"></span><span class="count"></span></li><!--3色-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="80"></span><span class="count"></span></li><!--4色-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="81"></span><span class="count"></span></li><!--5色-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="82"></span><span class="count"></span></li><!--12珠-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="83"></span><span class="count"></span></li><!--附加神类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="84"></span><span class="count"></span></li><!--附加龙类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="85"></span><span class="count"></span></li><!--附加恶魔类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="86"></span><span class="count"></span></li><!--附加机械类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="87"></span><span class="count"></span></li><!--附加平衡类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="88"></span><span class="count"></span></li><!--附加攻击类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="89"></span><span class="count"></span></li><!--附加体力类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="90"></span><span class="count"></span></li><!--附加回复类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="91"></span><span class="count"></span></li><!--附加火属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="92"></span><span class="count"></span></li><!--附加水属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="93"></span><span class="count"></span></li><!--附加木属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="94"></span><span class="count"></span></li><!--附加光属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="95"></span><span class="count"></span></li><!--附加暗属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="106"></span><span class="count"></span></li><!--浮游-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="126"></span><span class="count"></span></li><!--T字-->
-					</ul>
+					<ul class="awoken-ul"></ul>
 				</div>
 			</li>
 			<li class="team-bigbox team-2 show-team-name-right">
@@ -1712,7 +1618,7 @@ const teamsCount = 3;
 		<button id="insert-latent-icon" title="Insert Latent Icon"></button>
 		<button id="insert-type-icon" title="Insert Type Icon"></button>
 		<button id="insert-orb-icon" title="Insert Orb Icon"></button>
-		<input type="checkbox" class="config-checkbox-ipt" id="siwtch-code-mode"><label class="config-checkbox-lbl" for="siwtch-code-mode" title="Code Mode"><div class="config-checkbox-lbl-cicle"></div></label>
+		<input type="checkbox" class="switch-ipt" id="siwtch-code-mode"><label class="config-checkbox-lbl" for="siwtch-code-mode" title="Code Mode"><circle></circle></label>
 	</div>
 	<div class="edit-box display-none">
 		<div class="edit-box-title"><!--修改怪物--></div>
@@ -1754,7 +1660,7 @@ const teamsCount = 3;
 					<li><input type="radio" name="attr-3" class="attr-radio" value="0010000" id="search-attr-3-4" /><label for="search-attr-3-4"><span class="attr" data-attr-icon="4"></span></label></li><!--暗-->
 					<li><input type="radio" name="attr-3" class="attr-radio" value="1000000" id="search-attr-3-6" /><label for="search-attr-3-6"><span class="attr" data-attr-icon="6"></span></label></li><!--无副属性-->
 				</ul>
-				<div class="options"><button id="avatar-save" class="display-none">💾</button><input type="checkbox" name="fix-main-color" id="fix-main-color" checked><label class="config-checkbox-lbl fix-main-color-label" for="fix-main-color"></label></div>
+				<div class="options"><button id="avatar-save" class="display-none">💾</button><input type="checkbox" name="fix-main-color" id="fix-main-color" checked><label class="switch-lbl" for="fix-main-color"></label></div>
 			</div>
 			<div class="types-div"><!--类型-->
 				<ul class="type-list">
@@ -1772,7 +1678,7 @@ const teamsCount = 3;
 					<li data-type-icon="15"><input type="checkbox" class="type-check" name="types" value="15" id="search-type-15" /><label class="type-icon" data-type-icon="15" for="search-type-15"><!--販賣用--></label></li>
 					<!--<li><input type="checkbox" class="type-check" name="types" value="9" id="search-type-9" /><label class="display-none" data-type-icon="9" for="search-type-9"></label></li>--><!--特别保护-->
 				</ul>
-				<input type="checkbox" class="config-checkbox-ipt" name="type-and-or" id="type-and-or" checked><label class="config-checkbox-lbl type-and-or-label" for="type-and-or"><div class="config-checkbox-lbl-cicle"></div></label>
+				<input type="checkbox" class="switch-ipt" name="type-and-or" id="type-and-or" checked><label class="switch-lbl" for="type-and-or"><circle></circle></label>
 				<ul class="latent-list">
 					<li class="latent-icon" data-latent-icon="20"></li><!--神杀-->
 					<li class="latent-icon" data-latent-icon="21"></li><!--龙杀-->
@@ -1801,9 +1707,9 @@ const teamsCount = 3;
 			</div>
 			<div class="awoken-div"><!--觉醒-->
 				<div class="awoken-option"><!--觉醒搜索选项开关-->
-					<input type="checkbox" name="consider-equivalent-awoken" id="consider-equivalent-awoken" checked><label class="config-checkbox-lbl consider-equivalent-awoken-label" for="consider-equivalent-awoken"></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="include-super-awoken" id="include-super-awoken" checked><label class="config-checkbox-lbl include-super-awoken-label" for="include-super-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="show-official-awoken-sorting" id="show-official-awoken-sorting"><label class="config-checkbox-lbl show-official-awoken-sorting-label" for="show-official-awoken-sorting"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" name="consider-equivalent-awoken" id="consider-equivalent-awoken" checked><label class="switch-lbl" for="consider-equivalent-awoken"></label>
+					<input type="checkbox" class="switch-ipt" name="include-super-awoken" id="include-super-awoken" checked><label class="switch-lbl" for="include-super-awoken"><circle></circle></label>
+					<input type="checkbox" class="switch-ipt" name="show-official-awoken-sorting" id="show-official-awoken-sorting"><label class="switch-lbl" for="show-official-awoken-sorting"><circle></circle></label>
 				</div>
 				<div class="selected-awokens-div"><!--选中的觉醒列表-->
 					<ul class="awoken-ul selected-awokens">
@@ -2081,7 +1987,7 @@ const teamsCount = 3;
 				</ul>
 			</div>
 			<div class="fast-switch">
-				<input type="checkbox" name="can-assist" id="can-assist"><label class="config-checkbox-lbl can-assist-label" for="can-assist"></label>
+				<input type="checkbox" name="can-assist" id="can-assist"><label class="switch-lbl" for="can-assist"></label>
 				<input type="checkbox" name="can-level-limit-breakthrough" id="can-level-limit-breakthrough"><label class="config-checkbox-lbl" for="can-level-limit-breakthrough"></label>
 				<input type="checkbox" name="have-8-latent-slot" id="have-8-latent-slot"><label class="config-checkbox-lbl" for="have-8-latent-slot"></label>
 				<input type="checkbox" name="not-weapon" id="not-weapon"><label class="config-checkbox-lbl" for="not-weapon"></label>
@@ -2092,14 +1998,14 @@ const teamsCount = 3;
 				<button class="search-clear"><!--清空搜索条件--></button>
 				<button class="search-share"><!--分享搜索内容--></button>
 				<div class="additional-div"><!--额外显示栏-->
-					<input type="checkbox" class="config-checkbox-ipt" name="add-show-CD" id="add-show-CD"><label class="config-checkbox-lbl add-show-CD-label" for="add-show-CD"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="add-show-abilities" id="add-show-abilities"><label class="config-checkbox-lbl add-show-abilities-label" for="add-show-abilities"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="add-show-abilities-with-awoken" id="add-show-abilities-with-awoken"><label class="config-checkbox-lbl add-show-abilities-with-awoken-label" for="add-show-abilities-with-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="add-show-awoken" id="add-show-awoken"><label class="config-checkbox-lbl add-show-awoken-label" for="add-show-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-CD" id="add-show-CD"><label class="switch-lbl" for="add-show-CD"><circle></circle></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-abilities" id="add-show-abilities"><label class="switch-lbl" for="add-show-abilities"><circle></circle></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-abilities-with-awoken" id="add-show-abilities-with-awoken"><label class="switch-lbl" for="add-show-abilities-with-awoken"><circle></circle></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-awoken" id="add-show-awoken"><label class="switch-lbl" for="add-show-awoken"><circle></circle></label>
 				</div>
 				<div class="sort-div"><!--排序栏-->
 					<select class="sort-list"></select>
-					<input type="checkbox" class="config-checkbox-ipt" name="sort-reverse" id="sort-reverse"><label class="config-checkbox-lbl sort-reverse-label" for="sort-reverse"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" class="switch-ipt" name="sort-reverse" id="sort-reverse"><label class="switch-lbl" for="sort-reverse"><circle></circle></label>
 					<div class="search-list-length"></div>
 				</div>
 			</div>
@@ -2160,7 +2066,7 @@ const teamsCount = 3;
 		</div>
 		<div class="setting-box">
 			<div class="setting-row row-mon-id">
-				<input type="checkbox" class="config-checkbox-ipt" name="real-time-change-card" id="real-time-change-card"><label class="config-checkbox-lbl real-time-change-card-label" for="real-time-change-card"><div class="config-checkbox-lbl-cicle"></div></label>
+				<input type="checkbox" class="switch-ipt" name="real-time-change-card" id="real-time-change-card"><label class="switch-lbl" for="real-time-change-card"><circle></circle></label>
 				<button class="open-evolutionary-tree display-none"></button>
 				<button class="search-evolution-by-this display-none"><icon class="type-icon" data-type-icon="0"></icon></button>
 				<input type="search" class="m-id" list="monsters-name-list"/><button class="search-by-string"></button>
@@ -2294,8 +2200,8 @@ const teamsCount = 3;
 					<div class="skill-box">
 						<div class="skill-title"><div class="type-title"></div><span class="skill-name"></span>
 							<div class="skill-parse-control">
-								<input type="checkbox" class="config-checkbox-ipt" name="show-skill-original" id="show-skill-original"><label class="config-checkbox-lbl" for="show-skill-original"><div class="config-checkbox-lbl-cicle"></div></label>
-								<input type="checkbox" class="config-checkbox-ipt" name="merge-skill" id="merge-skill" checked><label class="config-checkbox-lbl" for="merge-skill"><div class="config-checkbox-lbl-cicle"></div></label>
+								<input type="checkbox" class="switch-ipt" name="show-skill-original" id="show-skill-original"><label class="switch-lbl" for="show-skill-original"><circle></circle></label>
+								<input type="checkbox" class="switch-ipt" name="merge-skill" id="merge-skill" checked><label class="switch-lbl" for="merge-skill"><circle></circle></label>
 							</div>
 						</div>
 						<div class="skill-datail-original"></div>

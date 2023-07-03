@@ -63,17 +63,22 @@ const teamsCount = 2;
 		<div>
 			<a class="down-capture display-none" target="_blank"></a>
 			<button class="btn-qrcode"></button>
-			<button class="btn-capture" onclick="capture();"></button>
+			<button class="btn-capture" onclick="captureScreenshot(formationBox);"></button>
 			<label for="default-level"></label><input id="default-level" type="number" min="1" max="120" placeholder="110"/>
 			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"></label>
 		</div>
-		<div>
-			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-id" id="show-mon-id"><label class="config-checkbox-lbl show-mon-id-lbl" for="show-mon-id"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-skill-cd" id="show-mon-skill-cd"><label class="config-checkbox-lbl show-mon-skill-cd-lbl" for="show-mon-skill-cd"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-rarity" id="show-mon-rarity"><label class="config-checkbox-lbl" for="show-mon-rarity"><div class="config-checkbox-lbl-cicle"></div></label>
-			<input type="checkbox" class="config-checkbox-ipt" name="show-mon-awoken" id="show-mon-awoken"><label class="config-checkbox-lbl show-mon-awoken-lbl" for="show-mon-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
-		</div>
-		<div class="status"><span class="icon"></span><span class="text"></span></div>
+		<details class="config-display-list">
+			<summary></summary>
+			<input type="checkbox" class="switch-ipt" id="show-card-id"><label class="switch-lbl" for="show-card-id"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-card-rarity"><label class="switch-lbl" for="show-card-rarity"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-member-skill-cd"><label class="switch-lbl" for="show-member-skill-cd"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-member-ability"><label class="switch-lbl" for="show-member-ability"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-member-awoken"><label class="switch-lbl" for="show-member-awoken"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-awoken-count"><label class="switch-lbl" for="show-team-awoken-count"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label class="switch-lbl" for="show-team-awoken-effect"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-attrtype-count"><label class="switch-lbl" for="show-team-attrtype-count"><circle></circle></label>
+		</details>
+		<div class="status"></div>
 		<div>
 			<span class="lbl-henshin-change"><button class="btn-henshin" data-step="-1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button><button class="btn-henshin" data-step="+1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button></span>
 			<span class="lbl-remove-assist"><button class="btn-remove-assist" onclick="formation.removeAssist();"></span>
@@ -786,7 +791,7 @@ const teamsCount = 2;
 		<button id="insert-latent-icon" title="Insert Latent Icon"></button>
 		<button id="insert-type-icon" title="Insert Type Icon"></button>
 		<button id="insert-orb-icon" title="Insert Orb Icon"></button>
-		<input type="checkbox" class="config-checkbox-ipt" id="siwtch-code-mode"><label class="config-checkbox-lbl" for="siwtch-code-mode" title="Code Mode"><div class="config-checkbox-lbl-cicle"></div></label>
+		<input type="checkbox" class="switch-ipt" id="siwtch-code-mode"><label class="config-checkbox-lbl" for="siwtch-code-mode" title="Code Mode"><circle></circle></label>
 	</div>
 	<div class="edit-box display-none">
 		<div class="edit-box-title"><!--修改怪物--></div>
@@ -828,7 +833,7 @@ const teamsCount = 2;
 					<li><input type="radio" name="attr-3" class="attr-radio" value="0010000" id="search-attr-3-4" /><label for="search-attr-3-4"><span class="attr" data-attr-icon="4"></span></label></li><!--暗-->
 					<li><input type="radio" name="attr-3" class="attr-radio" value="1000000" id="search-attr-3-6" /><label for="search-attr-3-6"><span class="attr" data-attr-icon="6"></span></label></li><!--无副属性-->
 				</ul>
-				<div class="options"><button id="avatar-save" class="display-none">💾</button><input type="checkbox" name="fix-main-color" id="fix-main-color" checked><label class="config-checkbox-lbl fix-main-color-label" for="fix-main-color"></label></div>
+				<div class="options"><button id="avatar-save" class="display-none">💾</button><input type="checkbox" name="fix-main-color" id="fix-main-color" checked><label class="switch-lbl" for="fix-main-color"></label></div>
 			</div>
 			<div class="types-div"><!--类型-->
 				<ul class="type-list">
@@ -846,7 +851,7 @@ const teamsCount = 2;
 					<li data-type-icon="15"><input type="checkbox" class="type-check" name="types" value="15" id="search-type-15" /><label class="type-icon" data-type-icon="15" for="search-type-15"><!--販賣用--></label></li>
 					<!--<li><input type="checkbox" class="type-check" name="types" value="9" id="search-type-9" /><label class="display-none" data-type-icon="9" for="search-type-9"></label></li>--><!--特别保护-->
 				</ul>
-				<input type="checkbox" class="config-checkbox-ipt" name="type-and-or" id="type-and-or" checked><label class="config-checkbox-lbl type-and-or-label" for="type-and-or"><div class="config-checkbox-lbl-cicle"></div></label>
+				<input type="checkbox" class="switch-ipt" name="type-and-or" id="type-and-or" checked><label class="switch-lbl" for="type-and-or"><circle></circle></label>
 				<ul class="latent-list">
 					<li class="latent-icon" data-latent-icon="20"></li><!--神杀-->
 					<li class="latent-icon" data-latent-icon="21"></li><!--龙杀-->
@@ -875,9 +880,9 @@ const teamsCount = 2;
 			</div>
 			<div class="awoken-div"><!--觉醒-->
 				<div class="awoken-option"><!--觉醒搜索选项开关-->
-					<input type="checkbox" name="consider-equivalent-awoken" id="consider-equivalent-awoken" checked><label class="config-checkbox-lbl consider-equivalent-awoken-label" for="consider-equivalent-awoken"></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="include-super-awoken" id="include-super-awoken"><label class="config-checkbox-lbl include-super-awoken-label" for="include-super-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="show-official-awoken-sorting" id="show-official-awoken-sorting"><label class="config-checkbox-lbl show-official-awoken-sorting-label" for="show-official-awoken-sorting"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" name="consider-equivalent-awoken" id="consider-equivalent-awoken" checked><label class="switch-lbl" for="consider-equivalent-awoken"></label>
+					<input type="checkbox" class="switch-ipt" name="include-super-awoken" id="include-super-awoken"><label class="switch-lbl" for="include-super-awoken"><circle></circle></label>
+					<input type="checkbox" class="switch-ipt" name="show-official-awoken-sorting" id="show-official-awoken-sorting"><label class="switch-lbl" for="show-official-awoken-sorting"><circle></circle></label>
 				</div>
 				<div class="selected-awokens-div"><!--选中的觉醒列表-->
 					<ul class="awoken-ul selected-awokens">
@@ -1155,7 +1160,7 @@ const teamsCount = 2;
 				</ul>
 			</div>
 			<div class="fast-switch">
-				<input type="checkbox" name="can-assist" id="can-assist"><label class="config-checkbox-lbl can-assist-label" for="can-assist"></label>
+				<input type="checkbox" name="can-assist" id="can-assist"><label class="switch-lbl" for="can-assist"></label>
 				<input type="checkbox" name="can-level-limit-breakthrough" id="can-level-limit-breakthrough"><label class="config-checkbox-lbl" for="can-level-limit-breakthrough"></label>
 				<input type="checkbox" name="have-8-latent-slot" id="have-8-latent-slot"><label class="config-checkbox-lbl" for="have-8-latent-slot"></label>
 				<input type="checkbox" name="not-weapon" id="not-weapon"><label class="config-checkbox-lbl" for="not-weapon"></label>
@@ -1166,14 +1171,14 @@ const teamsCount = 2;
 				<button class="search-clear"><!--清空搜索条件--></button>
 				<button class="search-share"><!--分享搜索内容--></button>
 				<div class="additional-div"><!--额外显示栏-->
-					<input type="checkbox" class="config-checkbox-ipt" name="add-show-CD" id="add-show-CD"><label class="config-checkbox-lbl add-show-CD-label" for="add-show-CD"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="add-show-abilities" id="add-show-abilities"><label class="config-checkbox-lbl add-show-abilities-label" for="add-show-abilities"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="add-show-abilities-with-awoken" id="add-show-abilities-with-awoken"><label class="config-checkbox-lbl add-show-abilities-with-awoken-label" for="add-show-abilities-with-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
-					<input type="checkbox" class="config-checkbox-ipt" name="add-show-awoken" id="add-show-awoken"><label class="config-checkbox-lbl add-show-awoken-label" for="add-show-awoken"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-CD" id="add-show-CD"><label class="switch-lbl" for="add-show-CD"><circle></circle></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-abilities" id="add-show-abilities"><label class="switch-lbl" for="add-show-abilities"><circle></circle></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-abilities-with-awoken" id="add-show-abilities-with-awoken"><label class="switch-lbl" for="add-show-abilities-with-awoken"><circle></circle></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-awoken" id="add-show-awoken"><label class="switch-lbl" for="add-show-awoken"><circle></circle></label>
 				</div>
 				<div class="sort-div"><!--排序栏-->
 					<select class="sort-list"></select>
-					<input type="checkbox" class="config-checkbox-ipt" name="sort-reverse" id="sort-reverse"><label class="config-checkbox-lbl sort-reverse-label" for="sort-reverse"><div class="config-checkbox-lbl-cicle"></div></label>
+					<input type="checkbox" class="switch-ipt" name="sort-reverse" id="sort-reverse"><label class="switch-lbl" for="sort-reverse"><circle></circle></label>
 					<div class="search-list-length"></div>
 				</div>
 			</div>
@@ -1234,7 +1239,7 @@ const teamsCount = 2;
 		</div>
 		<div class="setting-box">
 			<div class="setting-row row-mon-id">
-				<input type="checkbox" class="config-checkbox-ipt" name="real-time-change-card" id="real-time-change-card"><label class="config-checkbox-lbl real-time-change-card-label" for="real-time-change-card"><div class="config-checkbox-lbl-cicle"></div></label>
+				<input type="checkbox" class="switch-ipt" name="real-time-change-card" id="real-time-change-card"><label class="switch-lbl" for="real-time-change-card"><circle></circle></label>
 				<button class="open-evolutionary-tree display-none"></button>
 				<button class="search-evolution-by-this display-none"><icon class="type-icon" data-type-icon="0"></icon></button>
 				<input type="search" class="m-id" list="monsters-name-list"/><button class="search-by-string"></button>
@@ -1368,8 +1373,8 @@ const teamsCount = 2;
 					<div class="skill-box">
 						<div class="skill-title"><div class="type-title"></div><span class="skill-name"></span>
 							<div class="skill-parse-control">
-								<input type="checkbox" class="config-checkbox-ipt" name="show-skill-original" id="show-skill-original"><label class="config-checkbox-lbl" for="show-skill-original"><div class="config-checkbox-lbl-cicle"></div></label>
-								<input type="checkbox" class="config-checkbox-ipt" name="merge-skill" id="merge-skill" checked><label class="config-checkbox-lbl" for="merge-skill"><div class="config-checkbox-lbl-cicle"></div></label>
+								<input type="checkbox" class="switch-ipt" name="show-skill-original" id="show-skill-original"><label class="switch-lbl" for="show-skill-original"><circle></circle></label>
+								<input type="checkbox" class="switch-ipt" name="merge-skill" id="merge-skill" checked><label class="switch-lbl" for="merge-skill"><circle></circle></label>
 							</div>
 						</div>
 						<div class="skill-datail-original"></div>

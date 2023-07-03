@@ -1,28 +1,13 @@
 @charset "utf-8";
-.status.loading-check-version .text::before{
-	content: "Checking the data version, please wait...";
-}
-.status.loading-mon-info .text::before{
-	content: "Loading monster data, please wait...";
-}
-.status.loading-skill-info .text::before{
-	content: "Loading skill data, please wait...";
-}
-.status.prepare-capture .text::before{
-	content: "Preparing a screenshot, please wait...";
-}
 .monster.delay::before{
 	content: "Prevent\A Delay";
 	font-size: 22px;
 }
-.monster .level.max::before{
-	content: "Lv.Max";
+.monster .level.max::after{
+	content: "Max";
 }
 .monster .level::before{
 	content: "Lv.";
-}
-.monster .id::before{
-	content: "No.";
 }
 .team-box-name .box-name::before
 {
@@ -249,6 +234,9 @@ label[for="merge-skill"]::after{
 .control-box .lbl-remove-assist::before{
 	content: "⛔Remove Assist";
 }
+.control-box .config-display-list summary::before{
+	content:"Display Switchs List";
+}
 .control-box .show-mon-id-lbl::after{
 	content:"🆔Show card's ID";
 }
@@ -318,16 +306,16 @@ label[for="default-level"]::after
 .search-box::before{
 	content: "Search Cards";
 }
-.search-box .attrs-div .fix-main-color-label::after{
+.search-box .attrs-div label[for="fix-main-color"]::after{
 	content: "The order of the attributes is consistent with the order you selected";
 }
 .search-box .consider-equivalent-awoken-label::after{
 	content: "Search for Equivalent Awoken";
 }
-.search-box .include-super-awoken-label::after{
+.search-box label[for="include-super-awoken"]::after{
 	content: "Including Super Awoken";
 }
-.search-box .show-official-awoken-sorting-label::after{
+.search-box label[for="show-official-awoken-sorting"]::after{
 	content: "Use the official Awoken sorting";
 }
 .search-box .search-list-length::before{
@@ -336,22 +324,22 @@ label[for="default-level"]::after
 .search-box .sort-div::before{
 	content: "Sort by:";
 }
-.search-box .sort-reverse-label::after{
+.search-box label[for="sort-reverse"]::after{
 	content: "Reverse";
 }
 .search-box .additional-div::before{
 	content: "Additional display:";
 }
-.search-box .add-show-awoken-label::after{
+.search-box label[for="add-show-awoken"]::after{
 	content: "Awoken list";
 }
-.search-box .add-show-CD-label::after{
+.search-box label[for="add-show-CD"]::after{
 	content: "Cooldown";
 }
-.search-box .add-show-abilities-label::after{
+.search-box label[for="add-show-abilities"]::after{
 	content: "Abilities";
 }
-.search-box .add-show-abilities-with-awoken-label::after{
+.search-box label[for="add-show-abilities-with-awoken"]::after{
 	content: "Abilities(+Awoken)";
 }
 .attrs-div .attr[data-attr-icon='-1']::before{
@@ -450,7 +438,7 @@ label[for="box-have"]::after
 {
 	content: "Cards that need this card as evolutionary material";
 }
-.real-time-change-card-label::after
+label[for="real-time-change-card"]::after
 {
 	content: "Real-Time change card";
 }

@@ -1,9 +1,16 @@
-﻿const _localTranslating = {
+﻿{
+const _localTranslating = {
 	webpage_title: `パズル＆ドラゴンズ${teamsCount}人のチーム図作成ツール`,
 	title_blank: "入力タイトル",
 	detail_blank: "入力詳細",
 	force_reload_data: "データの強制更新",
 	request_input: tp`${'info'}を入力してください`,
+	status_message: {
+		loading_check_version: "データバージョンをチェックしています。",
+		loading_mon_info: "モンスターデータを読み込んでいます。",
+		loading_skill_info: "スキル データを読み込んでいます。",
+		prepare_capture: "スクリーンショットを準備しています。",
+	},
 	link_read_message: {
 		success: tp`発見 ${'type'} 形式.`,
 		need_user_script: `PADDB はドメイン間であるため、この機能をサポートするには、ユーザー スクリプト マネージャ内にセカンダリ スクリプトをインストールする必要があります。`,
@@ -45,6 +52,7 @@
 	},
 }
 deepMerge(localTranslating, _localTranslating);
+}
 localisation(localTranslating);
 
 //大数字缩短长度
