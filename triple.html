@@ -42,11 +42,11 @@ const teamsCount = 3;
 	<noscript>您的浏览器不支持 JavaScript！<br/>Your browser does not support JavaScript!</noscript>
 	<div class="control-box">
 		<div>
-			<label class="languages-label"><select class="languages"></select></label>
+			<label class="languages-label fa" for="languages"></label><select class="languages" id="languages"></select>
 			<label class="datasource-label"><select class="datasource"></select></label>
 			<button onclick="loadData(true);" class="datasource-updatetime" title="强制刷新数据"></button>
-			<a class="help-link" target="_blank" href="doc/index.html"></a>
-			<a class="feedback-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/issues"></a>
+			<a class="help-link fa" target="_blank" href="doc/index.html"></a>
+			<a class="feedback-link fa" target="_blank" href="https://github.com/Mapaler/PADDashFormation/issues"></a>
 		</div>
 		<div>
 			<button class="btn-clear-data" onclick="clearData();"></button>
@@ -56,10 +56,10 @@ const teamsCount = 3;
 		</div>
 		<div>
 			<a class="down-capture display-none" target="_blank"></a>
-			<button class="btn-qrcode"></button>
+			<button class="btn-qrcode fa"></button>
 			<button class="btn-capture" onclick="captureScreenshot(formationBox);"></button>
 			<label for="default-level"></label><input id="default-level" type="number" min="1" max="120" placeholder="110"/>
-			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label class="config-checkbox-lbl change-swap-to-copy-lbl" for="change-swap-to-copy"></label>
+			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label class="switch-lbl" for="change-swap-to-copy"></label>
 		</div>
 		<details class="config-display-list">
 			<summary></summary>
@@ -77,7 +77,7 @@ const teamsCount = 3;
 		<div>
 			<span class="lbl-henshin-change"><button class="btn-henshin" data-step="-1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button><button class="btn-henshin" data-step="+1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button></span>
 			<span class="lbl-remove-assist"><button class="btn-remove-assist" onclick="formation.removeAssist();"></span>
-			<button id="btn-set-dungeon-enchance"></button>
+			<button id="btn-set-dungeon-enchance" class="fa"></button>
 		</div>
 	</div>
 	<div class="formation-box">
@@ -139,7 +139,7 @@ const teamsCount = 3;
 					<div class="tIf-total-hp">
 						<span class="general"></span>
 						<span class="awoken-bind"></span>
-						<span class="reduce">
+						<span class="reduce fa">
 							<span class="reduce-scale"></span>
 							<span class="general"></span>
 							<span class="awoken-bind"></span>
@@ -621,7 +621,7 @@ const teamsCount = 3;
 					<div class="tIf-total-hp">
 						<span class="general"></span>
 						<span class="awoken-bind"></span>
-						<span class="reduce">
+						<span class="reduce fa">
 							<span class="reduce-scale"></span>
 							<span class="general"></span>
 							<span class="awoken-bind"></span>
@@ -1103,7 +1103,7 @@ const teamsCount = 3;
 					<div class="tIf-total-hp">
 						<span class="general"></span>
 						<span class="awoken-bind"></span>
-						<span class="reduce">
+						<span class="reduce fa">
 							<span class="reduce-scale"></span>
 							<span class="general"></span>
 							<span class="awoken-bind"></span>
@@ -1546,11 +1546,12 @@ const teamsCount = 3;
 		<button id="insert-latent-icon" title="Insert Latent Icon"></button>
 		<button id="insert-type-icon" title="Insert Type Icon"></button>
 		<button id="insert-orb-icon" title="Insert Orb Icon"></button>
-		<input type="checkbox" class="switch-ipt" id="siwtch-code-mode"><label class="config-checkbox-lbl" for="siwtch-code-mode" title="Code Mode"><circle></circle></label>
+		<input type="checkbox" class="switch-ipt" id="siwtch-code-mode"><label class="switch-lbl" for="siwtch-code-mode" title="Code Mode"><circle></circle></label>
 	</div>
 	<div class="edit-box display-none">
 		<div class="edit-box-title"><!--修改怪物--></div>
-		<div class="search-box display-none">
+		<details class="search-box">
+			<summary></summary>
 			<div class="attrs-div"><!--属性-->
 				<label class="monster" for="avatar-select">
 					<input type="file" accept="image/*" id="avatar-select" />
@@ -1916,9 +1917,9 @@ const teamsCount = 3;
 			</div>
 			<div class="fast-switch">
 				<input type="checkbox" name="can-assist" id="can-assist"><label class="switch-lbl" for="can-assist"></label>
-				<input type="checkbox" name="can-level-limit-breakthrough" id="can-level-limit-breakthrough"><label class="config-checkbox-lbl" for="can-level-limit-breakthrough"></label>
-				<input type="checkbox" name="have-8-latent-slot" id="have-8-latent-slot"><label class="config-checkbox-lbl" for="have-8-latent-slot"></label>
-				<input type="checkbox" name="not-weapon" id="not-weapon"><label class="config-checkbox-lbl" for="not-weapon"></label>
+				<input type="checkbox" name="can-level-limit-breakthrough" id="can-level-limit-breakthrough"><label class="switch-lbl" for="can-level-limit-breakthrough"></label>
+				<input type="checkbox" name="have-8-latent-slot" id="have-8-latent-slot"><label class="switch-lbl" for="have-8-latent-slot"></label>
+				<input type="checkbox" name="not-weapon" id="not-weapon"><label class="switch-lbl" for="not-weapon"></label>
 			</div>
 			<div class="control-div"><!--控制栏-->
 				<button class="search-start"><!--开始搜索--></button>
@@ -1937,7 +1938,7 @@ const teamsCount = 3;
 					<div class="search-list-length"></div>
 				</div>
 			</div>
-		</div>
+		</details>
 		<div class="sticky-box">
 			<ul class="search-mon-list"></ul><!--搜索结果的显示列表-->
 			<div class="monsterinfo-box">
@@ -2177,10 +2178,10 @@ const teamsCount = 3;
 				<div class="action-button-box">
 					<div class="read-text-box">
 						<input class="string-input" type="text"/>
-						<button class="read-string brown-button"><!--读字符串--></button>
+						<button class="read-string brown-button fa"><!--读字符串--></button>
 					</div>
-					<button class="read-qr-camera brown-button"><!--相机扫--></button>
-					<button class="read-qr-file brown-button"><!--读文件--></button>
+					<button class="read-qr-camera brown-button fa"><!--相机扫--></button>
+					<button class="read-qr-file brown-button fa"><!--读文件--></button>
 					<input type="file" accept="image/*" class="file-select display-none">
 				</div>
 				<div class="info">
@@ -2199,7 +2200,7 @@ const teamsCount = 3;
 				</ul>
 				<input class="string-output" type="text" readonly/>
 				<div class="qr-box"><img class="qr-code-image" /></div>
-				<a download="" class="save-qr-img brown-button"><!--保存QR 图片--></a>
+				<a download="" class="save-qr-img brown-button fa"><!--保存QR 图片--></a>
 			</div>
 			<div class="paddb-team-edit">
 				<div class="user">
@@ -2212,7 +2213,7 @@ const teamsCount = 3;
 				</div>
 			</div>
 		</div>
-		<a id="external-support" class="brown-button" href="doc/index.html#data-exchange-with-paddb"></a>
+		<a id="external-support" class="brown-button fa" href="doc/index.html#data-exchange-with-paddb"></a>
 	</div>
 	
 	<div class="dialog dialog-dungeon-enchance display-none">
@@ -2267,13 +2268,13 @@ const teamsCount = 3;
 	</div>
 	
 	<div id="player-data-frame" class="mask display-none">
-		<div class="player-box-title"><!--玩家数据子--></div>
+		<div class="player-box-title fa"><!--玩家数据子--></div>
 		<div class="control-button-box">
-			<button class="upload-data brown-button"></button>
+			<button class="mask-close brown-button fa"></button>
+			<button class="upload-data brown-button fa"></button>
 			<input type="file" class="file-select display-none" multiple/>
-			<button class="mask-close brown-button"></button>
 			<a class="how-to-use" target="_blank" href="doc/export-player-data.html"></a>
-			<input type="checkbox" name="box-have" id="box-have"><label class="config-checkbox-lbl" for="box-have"></label>
+			<input type="checkbox" name="box-have" id="box-have"><label class="switch-lbl" for="box-have"></label>
 		</div>
 		<div class="mask-content">
 			<ul class="player-datas-list"></ul>
@@ -2291,7 +2292,7 @@ const teamsCount = 3;
 									</div>
 								</td>
 								<td class="name"></td>
-								<td class="control"><button class="brown-button set-default"></button><button class="brown-button delete"></button></td>
+								<td class="control"><button class="brown-button set-default fa"></button><button class="brown-button delete fa"></button></td>
 							</tr>
 							<tr>
 								<td class="lvexp"><div class="progress-bar"><div class="bar"></div></div><div class="level"></div></td>
@@ -2386,7 +2387,7 @@ const teamsCount = 3;
 							</tr>
 							<tr>
 								<td colspan="4">
-									<button class="brown-button open-show-box"></button>
+									<button class="brown-button open-show-box fa"></button>
 								</td>
 							</tr>
 						</tbody>

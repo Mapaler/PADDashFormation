@@ -316,7 +316,7 @@ label[for="default-level"]::after
 	content: "Dark Attribute Enemy";
 }
 
-.search-box::before{
+.search-box>summary::after{
 	content: "Search Cards";
 }
 .search-box .attrs-div label[for="fix-main-color"]::after{
@@ -434,8 +434,8 @@ label[for="box-have"]::after
 {
 	content: "Search by Tags";
 }
-.dialog-close::before,
-.mask-close::before
+.dialog-close::after,
+.mask-close::after
 {
 	content: "Close";
 }
@@ -555,8 +555,8 @@ label[for="real-time-change-card"]::after
 	transform: scaleX(0.6);
 	margin: calc(-100px * (1 - 0.6) / 2);
 }
-.control-box .btn-qrcode::before{
-	content: "\f029 QR Code and \f0ec Data exchange";
+.control-box .btn-qrcode::after{
+	content: "QR Code and Data exchange";
 }
 
 .read-qr-box::before
@@ -576,24 +576,24 @@ label[for="sourceSelect"]::before
 {
 	content: "Video source selection:";
 }
-#qr-code-frame .save-qr-img::before
+#qr-code-frame .save-qr-img::after
 {
-	content: "\f0c7  Save QR code image";
+	content: "Save QR code image";
 }
-#qr-code-frame .read-qr-camera::before
+#qr-code-frame .read-qr-camera::after
 {
-	content: "\f030  Scan with camera";
+	content: "Scan with camera";
 }
-#qr-code-frame .read-qr-camera.running::before
+#qr-code-frame .read-qr-camera.running::after
 {
-	content: "\f28d  Stop using camera";
+	content: "Stop using camera";
 }
-#qr-code-frame .read-qr-file::before
+#qr-code-frame .read-qr-file::after
 {
-	content: "\f1c5  Read image file";
+	content: "Read image file";
 }
-#qr-code-frame .read-string::before {
-	content: "\f891  Read string";
+#qr-code-frame .read-string::after {
+	content: "Read string";
 }
 
 #qr-code-frame .paddb-team-edit::before
@@ -619,9 +619,9 @@ label[for="paddb-team-id"]::before
 #paddb-team-id:placeholder-shown+#paddb-save-or-upload-team::before {
 	content: "Upload new Team";
 }
-body:not(.external-link-support) #external-support::before
+body:not(.external-link-support) #external-support::after
 {
-	content: "\f552  Install helper scripts to use PADDB-related features";
+	content: "Install helper scripts to use PADDB-related features";
 }
 
 label[for="qr-data-type-pdf"]::before
@@ -639,9 +639,9 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "PADDB (Only for Solo)";
 }
-#btn-set-dungeon-enchance::before
+#btn-set-dungeon-enchance::after
 {
-	content: "\f6d9 Dungeon Enchanced";
+	content: "Dungeon Enchanced";
 }
 .dialog-dungeon-enchance .dialog-title::before
 {
@@ -676,25 +676,25 @@ label[for="qr-data-type-paddb"]::before
 	content: "Enhancement Rate:";
 }
 
-#player-data-frame .player-box-title::before
+#player-data-frame .player-box-title::after
 {
-	content: "\f2bd\A Player Data";
+	content: "Player Data";
 }
-#player-data-frame .how-to-use::before
+#player-data-frame .how-to-use::after
 {
-	content: "📕How To Use";
+	content: "How To Use";
 }
-#player-data-frame .upload-data::before
+#player-data-frame .upload-data::after
 {
-	content: "\f07c Open Data";
+	content: "Open Data";
 }
-.player-card .set-default::before
+.player-card .set-default::after
 {
-	content: "\f468 Bind Data";
+	content: "Bind Data";
 }
-.player-card .open-show-box::before
+.player-card .open-show-box::after
 {
-	content: "\f468\A Show Box Data";
+	content: "Show Box Data";
 }
 .player-card .lvexp::before
 {

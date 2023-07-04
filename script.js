@@ -3963,7 +3963,7 @@ function initialize() {
 			customAdditionalFunction = searchMonList.customAddition;
 		}
 
-		searchBox.classList.remove(className_displayNone);
+		searchBox.open = true;
 		searchMonList.classList.remove(className_displayNone);
 		editBox.show();
 		const createCardHead = editBox.createCardHead;
@@ -4137,7 +4137,7 @@ function initialize() {
 		}
 	};
 	searchClose.onclick = function() {
-		searchBox.classList.add(className_displayNone);
+		searchBox.open = false;
 		searchMonList.classList.add(className_displayNone);
 	};
 	searchClear.onclick = function() { //清空搜索选项

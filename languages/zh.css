@@ -1,9 +1,12 @@
 @charset "utf-8";
-.help-link::before{
-	content: "\f05a 帮助和提示";
+label[for="languages"]::after{
+	content: "语言：";
 }
-.feedback-link::before{
-	content: "\f4ad 反馈";
+.help-link::after{
+	content: "帮助和提示";
+}
+.feedback-link::after{
+	content: "反馈";
 }
 .monster.delay::before{
 	content: "应 对\A威 吓";
@@ -193,9 +196,6 @@ label[for="merge-skill"]::after{
 .type-name[data-type-name='9']::after{
 	content: "特別保護";
 }
-.control-box .languages-label::before{
-	content: "\f1ab 语言：";
-}
 .control-box .datasource-label::before{
 	content: "🕹️数据来源：";
 }
@@ -316,7 +316,7 @@ label[for="default-level"]::after
 	content: "暗属性敵人";
 }
 
-.search-box::before{
+.search-box>summary::after{
 	content: "搜索怪物";
 }
 .search-box .attrs-div label[for="fix-main-color"]::after{
@@ -434,8 +434,8 @@ label[for="box-have"]::after
 {
 	content: "以標簽搜索";
 }
-.dialog-close::before,
-.mask-close::before
+.dialog-close::after,
+.mask-close::after
 {
 	content: "关闭";
 }
@@ -511,8 +511,8 @@ label[for="real-time-change-card"]::after
 	content: "循環変身";
 }
 
-.control-box .btn-qrcode::before{
-	content: "\f029 二维码 和 \f0ec 数据交换";
+.control-box .btn-qrcode::after{
+	content: "二维码 和 数据交换";
 }
 
 .read-qr-box::before
@@ -538,24 +538,24 @@ label[for="sourceSelect"]::before
 {
 	content: "视频源选择：";
 }
-#qr-code-frame .save-qr-img::before
+#qr-code-frame .save-qr-img::after
 {
-	content: "\f0c7  保存二维码图片";
+	content: "保存二维码图片";
 }
-#qr-code-frame .read-qr-camera::before
+#qr-code-frame .read-qr-camera::after
 {
-	content: "\f030  使用相机扫描";
+	content: "使用相机扫描";
 }
-#qr-code-frame .read-qr-camera.running::before
+#qr-code-frame .read-qr-camera.running::after
 {
-	content: "\f28d  停止使用相机";
+	content: "停止使用相机";
 }
-#qr-code-frame .read-qr-file::before
+#qr-code-frame .read-qr-file::after
 {
-	content: "\f1c5  读取二维码图片";
+	content: "读取二维码图片";
 }
-#qr-code-frame .read-string::before {
-	content: "\f891  读取字符串";
+#qr-code-frame .read-string::after {
+	content: "读取字符串";
 }
 
 #qr-code-frame .paddb-team-edit::before
@@ -581,9 +581,9 @@ label[for="paddb-team-id"]::before
 #paddb-team-id:placeholder-shown+#paddb-save-or-upload-team::before {
 	content: "上传新队伍";
 }
-body:not(.external-link-support) #external-support::before
+body:not(.external-link-support) #external-support::after
 {
-	content: "\f552  安装辅助脚本以使用 PADDB 相关功能";
+	content: "安装辅助脚本以使用 PADDB 相关功能";
 }
 
 label[for="qr-data-type-pdf"]::before
@@ -601,9 +601,9 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "PADDB (仅单人)";
 }
-#btn-set-dungeon-enchance::before
+#btn-set-dungeon-enchance::after
 {
-	content: "\f6d9 地下城强化";
+	content: "地下城强化";
 }
 .dialog-dungeon-enchance .dialog-title::before
 {
@@ -611,7 +611,7 @@ label[for="qr-data-type-paddb"]::before
 }
 .dialog-dungeon-enchance .dialog-confirm::before
 {
-	content: "確認";
+	content: "确认";
 }
 .dialog-dungeon-enchance .rare-list::before
 {
@@ -638,25 +638,25 @@ label[for="qr-data-type-paddb"]::before
 	content: "強化倍率：";
 }
 
-#player-data-frame .player-box-title::before
+#player-data-frame .player-box-title::after
 {
-	content: "\f2bd\A 玩家数据";
+	content: "玩家数据";
 }
-#player-data-frame .how-to-use::before
+#player-data-frame .how-to-use::after
 {
-	content: "📕如何使用";
+	content: "如何使用";
 }
-#player-data-frame .upload-data::before
+#player-data-frame .upload-data::after
 {
-	content: "\f07c 打开数据";
+	content: "打开数据";
 }
-.player-card .set-default::before
+.player-card .set-default::after
 {
-	content: "\f56c\A 绑定数据";
+	content: "绑定数据";
 }
-.player-card .open-show-box::before
+.player-card .open-show-box::after
 {
-	content: "\f468\A 显示箱子数据";
+	content: "显示箱子数据";
 }
 .player-card .lvexp::before
 {

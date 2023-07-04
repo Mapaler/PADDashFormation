@@ -14511,7 +14511,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"cc3105410a7546063b6f174cdd0e2f77"
+		"6d0ed40cdf19540bf46434b87bac3262"
 	],
 	[
 		"script-custom_elements.js",
@@ -14519,7 +14519,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"208135f7df7441d0a84c50441c3c28c8"
+		"ed7a7feed11513ee71dab550f95949ef"
 	],
 	[
 		"script-skill-parser.js",
@@ -14527,23 +14527,23 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"5d40482e59761cb6ea4c33e60e9da32b"
+		"971b821c3df41a47e770b3eef5777dd7"
 	],
 	[
 		"script.js",
-		"b7d40e720ab564a519dae36b4bf74633"
+		"269cc9a234450e31be34d11595acd6ea"
 	],
 	[
 		"solo.html",
-		"e01838b1f876fa4b6f26c4f5b9769f50"
+		"fd11f7b2b4689cd1cce760f1b2f85d61"
 	],
 	[
 		"style-monsterimages.css",
-		"ac3c9d4df246d57e84f2d9f8575bd4d5"
+		"720805416c884f6f45a72444b16a65c8"
 	],
 	[
 		"style.css",
-		"863855a1e37fefd71a15828bf4683307"
+		"f70bb1e1643bf9f68b7c8c1b05e24bde"
 	],
 	[
 		"temp.js",
@@ -14551,11 +14551,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"0839b8d4a75e5b038a20b600627fc686"
+		"e3c317f1d59d0ebea38500ea8c1a73d9"
 	],
 	[
 		"languages/en.css",
-		"be4ff22a4856ea07b9e1ccd2d6b21ecf"
+		"90c998c5b219256fc263d69696bbc850"
 	],
 	[
 		"languages/en.js",
@@ -14563,19 +14563,19 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"86bd71a928dbdf830113a5920a17ace4"
+		"96546277ecd638a397b91850c43af7ac"
 	],
 	[
 		"languages/ja.js",
-		"af299de66ed04a21158ee6e8598659fa"
+		"d48cb875653cb3508091172f513ee559"
 	],
 	[
 		"languages/ko.css",
-		"b00133e80be5718c76db8ade2367471e"
+		"55db32fb713759ae217a4195b6c37a74"
 	],
 	[
 		"languages/ko.js",
-		"1b44d13355077fcf8a032d82a3056c22"
+		"6cf0e875eb00bccbfbe8e201ee32eb82"
 	],
 	[
 		"languages/language-list.js",
@@ -14591,19 +14591,19 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.css",
-		"e6d0461ff89e2b626625bdfcd8140af4"
+		"1fbcb1a0f4ac96abbd16d9abdb541f9a"
 	],
 	[
 		"languages/zh-TW.js",
-		"4bfa1a9a215c7225ace0d05454069ead"
+		"ba545c79188a0d012f48100edfb0c9ba"
 	],
 	[
 		"languages/zh.css",
-		"710c8593141bc5bb381a7a127dfc5ff7"
+		"1cc836b7cf14c87fed6457bcdb8fb9f4"
 	],
 	[
 		"languages/zh.js",
-		"8282483b02c7ac7f2043a0b7ad81d46c"
+		"094941223c52038cb8375c588c653788"
 	],
 	[
 		"images/attrs.png",

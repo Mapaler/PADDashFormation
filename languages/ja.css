@@ -1,4 +1,7 @@
 ﻿@charset "utf-8";
+label[for="languages"]::after{
+	content: "言語:";
+}
 .monster.delay::before{
 	content: "遅 延\A対 策";
 }
@@ -310,7 +313,7 @@ label[for="default-level"]::after
 	content: "暗属性の敵";
 }
 
-.search-box::before{
+.search-box>summary::after{
 	content: "モンスターの検索";
 }
 .search-box .attrs-div label[for="fix-main-color"]::after{
@@ -428,8 +431,8 @@ label[for="box-have"]::after
 {
 	content: "タグで検索";
 }
-.dialog-close::before,
-.mask-close::before
+.dialog-close::after,
+.mask-close::after
 {
 	content: "閉じる";
 }
@@ -520,8 +523,8 @@ label[for="real-time-change-card"]::after
 	content: "ループ変身";
 }
 
-.control-box .btn-qrcode::before{
-	content: "\f029 QR コード と \f0ec データ交換";
+.control-box .btn-qrcode::after{
+	content: "QR コード と データ交換";
 }
 
 .read-qr-box::before
@@ -541,24 +544,24 @@ label[for="sourceSelect"]::before
 {
 	content: "ビデオ ソースの選択:";
 }
-#qr-code-frame .save-qr-img::before
+#qr-code-frame .save-qr-img::after
 {
-	content: "\f0c7  QRコードイメージを保存";
+	content: "QRコードイメージを保存";
 }
-#qr-code-frame .read-qr-camera::before
+#qr-code-frame .read-qr-camera::after
 {
-	content: "\f030  カメラでスキャンする";
+	content: "カメラでスキャンする";
 }
-#qr-code-frame .read-qr-camera.running::before
+#qr-code-frame .read-qr-camera.running::after
 {
-	content: "\f28d  カメラの使用を停止";
+	content: "カメラの使用を停止";
 }
-#qr-code-frame .read-qr-file::before
+#qr-code-frame .read-qr-file::after
 {
-	content: "\f1c5  画像ファイルを読み取る";
+	content: "画像ファイルを読み取る";
 }
-#qr-code-frame .read-string::before {
-	content: "\f891  文字列を読み取ります";
+#qr-code-frame .read-string::after {
+	content: "文字列を読み取ります";
 }
 
 #qr-code-frame .paddb-team-edit::before
@@ -584,9 +587,9 @@ label[for="paddb-team-id"]::before
 #paddb-team-id:placeholder-shown+#paddb-save-or-upload-team::before {
 	content: "新しいチームをアップロード";
 }
-body:not(.external-link-support) #external-support::before
+body:not(.external-link-support) #external-support::after
 {
-	content: "\f552 PADDB 関連機能を使用するセカンダリ スクリプトをインストール";
+	content: "PADDB 関連機能を使用するセカンダリ スクリプトをインストール";
 }
 
 label[for="qr-data-type-pdf"]::before
@@ -604,9 +607,9 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "PADDB (ソロのみ)";
 }
-#btn-set-dungeon-enchance::before
+#btn-set-dungeon-enchance::after
 {
-	content: "\f6d9 ダンジョン強化";
+	content: "ダンジョン強化";
 }
 .dialog-dungeon-enchance .dialog-title::before
 {
@@ -641,25 +644,25 @@ label[for="qr-data-type-paddb"]::before
 	content: "強化倍率：";
 }
 
-#player-data-frame .player-box-title::before
+#player-data-frame .player-box-title::after
 {
-	content: "\f2bd\A プレイヤー データ";
+	content: "プレイヤー データ";
 }
-#player-data-frame .how-to-use::before
+#player-data-frame .how-to-use::after
 {
-	content: "📕使い方";
+	content: "使い方";
 }
-#player-data-frame .upload-data::before
+#player-data-frame .upload-data::after
 {
-	content: "\f07c データを開きます";
+	content: "データを開きます";
 }
-.player-card .set-default::before
+.player-card .set-default::after
 {
-	content: "\f468\A データをバインド";
+	content: "データをバインド";
 }
-.player-card .open-show-box::before
+.player-card .open-show-box::after
 {
-	content: "\f468\A Box データを表示";
+	content: "Box データを表示";
 }
 .player-card .lvexp::before
 {

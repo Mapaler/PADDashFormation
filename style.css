@@ -16,7 +16,7 @@
 		url("./fonts/zpix.woff2") format('woff2');
 	font-weight: normal;
 	font-style: normal;
-}
+}	
 @font-face {
 	font-family: 'Font Awesome';
 	src:
@@ -55,6 +55,10 @@ body{
 	margin: 0;
 	background-color: white;
 }
+.fa::before {
+	font-family: var(--icon-font-family);
+	margin-right: 3px;
+}
 .control-box,
 .formation-box
 {
@@ -78,10 +82,19 @@ details>summary {
 	cursor: pointer;
 }
 .help-link::before{
-	content: "\f05a Help & Tips";
+	content: "\f05a";
+}
+.help-link::after{
+	content: "Help & Tips";
 }
 .feedback-link::before{
-	content: "\f4ad Feedback";
+	content: "\f4ad";
+}
+.feedback-link::after{
+	content: "Feedback";
+}
+.control-box .btn-qrcode::before {
+    content: "\f029";
 }
 
 #rich-text-tools {
@@ -247,17 +260,13 @@ label[for="siwtch-code-mode"]::after {
 	display: none;
 }
 
-.config-display-list:not([open]) {
-	background-color: #1155AA55;
-}
-
 .switch-ipt{
 	display:none;
 }
 .switch-lbl{
 	cursor: pointer;
 	line-height: 25px;
-	margin-right: 20px;
+	margin-right: 10px;
 	display: inline-block;
 }
 .switch-lbl>circle{
@@ -296,8 +305,13 @@ input:checked+ .switch-lbl[for$=and-or]::after{
 	content: "AND";
 }
 
+.config-display-list>summary:hover {
+	background-color: lightblue;
+}
+
 .status{
 	line-height: 16px;
+	background-color: pink;
 }
 .status:empty{
 	display: none;
@@ -366,19 +380,6 @@ ul{
 }
 .brown-button
 {
-	background-image: linear-gradient(to bottom,#C38E5F,#2F2008);
-	border: none;
-	border-radius: 5px;
-	padding: 2px;
-	cursor: pointer;
-	transition: transform 0.1s;
-}
-.brown-button:active
-{
-	transform: scale(1.1);
-}
-.brown-button::before
-{
 	display: inline-block;
 	box-sizing: border-box;
 	min-width: 100px;
@@ -386,13 +387,22 @@ ul{
 	background-color: #956A42;
 	background-image: url(images/slate.svg);
 	background-size: 120px 120px;
-	border-radius: 2px;
+	border-style: solid;
+	border-width: 2px;
+	border-image: linear-gradient(to bottom,#C38E5F,#2F2008) 1;
+	clip-path: inset(0 round 5px);
 	font-size: 20px;
 	line-height: 20px;
 	vertical-align: middle;
 	color: white;
 	font-family: var(--game-font-family);
 	text-shadow: black 2px 2px 0;
+	cursor: pointer;
+	transition: transform 0.1s;
+}
+.brown-button:active
+{
+	transform: scale(1.1);
 }
 /*
 .dialog-search-string .dialog-title::before
@@ -960,7 +970,7 @@ body:not(.show-team-total-info):not(.solo) .formation-box .team-badge
 	content: "%";
 }
 .tIf-total-hp .reduce:not(.no-reduce)::before {
-	content: "⇔";
+	content: "\f0ec";
 }
 .tIf-total-hp .reduce.no-reduce .general,
 .tIf-total-hp .reduce.no-reduce .awoken-bind
@@ -1547,21 +1557,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	max-width: 75px;
 }
 
-
-/*.setting-box .row-mon-id .open-search::before{
-	content: "搜索怪物";
-}
-.search-box::before{
-	content: "▼简易搜索";
-}
-*/
-.search-box::before{
+.search-box>summary {
 	font-weight: bold;
 	font-size: 1.2em;
 }
-.search-box>div{
-	margin-bottom: 5px;
-}
+
 .search-box .attrs-div-div>ul{
 	display: block;
 }
@@ -1828,7 +1828,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	margin-left: 10px;
 }
 
-.search-box .brown-button::before
+.search-box .brown-button
 {
 	min-width: 80px;
 	background-size: 100px 100px;
@@ -1838,10 +1838,10 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	padding: 0;
 	vertical-align: bottom;
 }
-.search-box .rare-clear::before,
-.search-box .special-add::before,
-.search-box .special-clear::before,
-.search-box .special-star::before
+.search-box .rare-clear,
+.search-box .special-add,
+.search-box .special-clear,
+.search-box .special-star
 {
 	min-width: 50px;
 	font-size: 14px;
@@ -2517,6 +2517,9 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	display: none;
 }
 
+.row-mon-latent details summary:hover {
+	background-color: #00000044;
+}
 .m-latent-allowable-ul{
 	margin-bottom: 5px;
 	display: grid;
@@ -2854,21 +2857,13 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	margin-bottom: 2px;
 }
-.control-box .languages-label::before{
-	content: "\f1ab Lanuage:";
+label[for="languages"]::before{
+	content: "\f1ab";
 }
-.control-box .lbl-henshin-change,
-.help-link
-{
-	display: inline-block;
+label[for="languages"]::after{
+	content: "Lanuage:";
 }
 
-.control-box .solo-link::before{
-	content: "Jump To Solo Version";
-}
-.control-box .multi-link::before{
-	content: "Jump To 2-Player Version";
-}
 /*
 .control-box .btn-show-mon-skill-cd::before{
 	content: "显示怪物ID";
@@ -2895,6 +2890,10 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 }
 #btn-set-dungeon-enchance {
 	margin-left: 1em;
+}
+#btn-set-dungeon-enchance::before
+{
+	content: "\f6d9";
 }
 .control-box .btn-remove-assist{
 	vertical-align: bottom;
@@ -3390,13 +3389,36 @@ table .orb-icon
 	width: 50px;
 }
 
+#qr-code-frame .save-qr-img::before
+{
+	content: "\f0c7";
+}
+#qr-code-frame .read-qr-camera::before
+{
+	content: "\f030";
+}
+#qr-code-frame .read-qr-camera.running::before
+{
+	content: "\f28d";
+}
+#qr-code-frame .read-qr-file::before
+{
+	content: "\f1c5";
+}
+#qr-code-frame .read-string::before {
+	content: "\f891";
+}
+body:not(.external-link-support) #external-support::before
+{
+	content: "\f552";
+}
 #qr-code-frame
 {
 	color: white;
 }
-#qr-code-frame .brown-button::before
+#qr-code-frame .brown-button::after
 {
-	font-family: var(--icon-font-family);
+	font-family: var(--font-family);
 	font-weight: normal;
 	width: unset;
 }
@@ -3491,8 +3513,7 @@ body.external-link-support #external-support{
 }
 #player-data-frame .upload-data
 {
-	float: right;
-	margin-right: 5px;
+	margin-left: 5px;
 }
 #player-data-frame .how-to-use
 {
@@ -3500,6 +3521,27 @@ body.external-link-support #external-support{
 	font-weight: bold;
 	font-size: 1.2em;
 	margin-left: 15px;
+}
+
+#player-data-frame .player-box-title::before
+{
+	content: "\f2bd";
+}
+#player-data-frame .how-to-use::before
+{
+	content: "📕";
+}
+#player-data-frame .upload-data::before
+{
+	content: "\f07c";
+}
+.player-card .set-default::before
+{
+	content: "\f56c";
+}
+.player-card .open-show-box::before
+{
+	content: "\f468";
 }
 
 .player-datas-list>li
@@ -3520,10 +3562,12 @@ body.external-link-support #external-support{
 	font-family: var(--game-font-family);
 	border-spacing: 4px 0;
 }
+.player-card .delete {
+	min-width: 40px;
+}
 .player-card .delete::before
 {
 	content: "\f2ed";
-	min-width: 40px;
 }
 .player-card .delete
 {
