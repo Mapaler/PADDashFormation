@@ -2764,19 +2764,17 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "不能辅助";
 }*/
-.formation-awoken::before,
-.team-awoken::before
-{
-	font-size: 20px;
-	margin-top:5px;
-	/*content: "觉醒总计：";*/
-}
+
+.formation-awoken,
+.team-awoken,
 .team-awoken-effect {
 	font-family: var(--game-font-family);
 	font-size: 16px;
 	line-height: 32px;
 }
-.team-awoken-effect::before{
+.formation-awoken::before,
+.team-awoken::before,
+.team-awoken-effect::before {
 	font-family: var(--font-family);
 }
 .team-awoken-effect>ul {
@@ -2784,12 +2782,13 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	grid-template-columns: repeat(6, 110px);
 }
 .team-awoken-effect .team-flags {
-	display: inline-block;
+	display: inline-flex;
 	vertical-align: middle;
+	align-items: flex-end;
 }
 .team-awoken-effect .team-flags .team-member-icon {
-	width: 15px;
-	height: 15px;
+	width: 20px;
+	height: 20px;
 }
 .team-awoken-effect .team-flags .team-member-icon[data-percent="0"] {
 	background-color: red;
@@ -2830,6 +2829,8 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 }
 .team-awoken-effect .orb-list .orb {
 	font-size: 16px;
+	transform: scale(0.75);
+	margin: calc((36px - 36px * 0.75) / -2);
 }
 
 .team-awoken-effect .orb-list .orb:not([data-value]),
@@ -2839,6 +2840,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-awoken-effect .orb-list .orb[data-value]:not([data-value="0"])::before {
 	content: "x"attr(data-value);
 	color: white;
+	font-size: 1.25em;
 	-webkit-text-stroke: 1px black;
 	text-stroke: 1px black;
 	text-shadow: black 1px 1px 1px;

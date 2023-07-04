@@ -148,6 +148,9 @@ label[for="merge-skill"]::after{
 .edit-box .button-box .button-done.only-assist::after{
 	content: "只能輔助";
 }
+.team-awoken-effect::before{
+	content: "隊伍覺醒效果：";
+}
 .team-awoken::before{
 	content: "隊伍覺醒總計：";
 }

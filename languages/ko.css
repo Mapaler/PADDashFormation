@@ -142,6 +142,9 @@ label[for="merge-skill"]::after{
 .edit-box .button-box .button-done.only-assist::after{
 	content: "상속만 가능";
 }
+.team-awoken-effect::before{
+	content: "각성팀 효과:";
+}
 .team-awoken::before{
 	content: "팀 각성:";
 }
