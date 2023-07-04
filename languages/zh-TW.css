@@ -234,22 +234,34 @@ label[for="merge-skill"]::after{
 	content: "⛔解除輔助";
 }
 .control-box .config-display-list summary::before{
-	content:"展示內容開關列表";
+	content:"展示信息開關列表";
 }
-label[for="show-mon-id"]::after{
-	content:"🆔顯示怪物ID";
+label[for="show-card-id"]::after{
+	content:"🆔卡片ID";
 }
-label[for="show-mon-skill-cd"]::after{
-	content:"❄️顯示技能冷卻";
+label[for="show-card-rarity"]::after{
+	content:"⭐️卡片稀有度";
 }
-label[for="show-mon-rarity"]::after{
-	content:"⭐️顯示稀有度";
+label[for="show-member-skill-cd"]::after{
+	content:"❄️隊員技能冷卻";
 }
-label[for="show-mon-awoken"]::after{
-	content:"👁️顯示卡片覺醒";
+label[for="show-member-ability"]::after{
+	content:"⚔️隊員能力值";
 }
-label[for="show-awoken-count"]::after{
-	content:"⚔️顯示覺醒統計和能力值";
+label[for="show-member-awoken"]::after{
+	content:"👁️隊員覺醒";
+}
+label[for="show-team-total-info"]::after{
+	content:"隊伍生命值等信息統計";
+}
+label[for="show-team-awoken-count"]::after{
+	content:"隊伍覺醒計數";
+}
+label[for="show-team-awoken-effect"]::after{
+	content:"隊伍覺醒效果計算";
+}
+label[for="show-team-attrtype-count"]::after{
+	content:"隊伍稀有度、屬性與類型計數";
 }
 label[for="change-swap-to-copy"]::after{
 	content:"拖拽時使用“複製”（或按住 Ctrl）";
@@ -308,7 +320,7 @@ label[for="default-level"]::after
 .search-box .attrs-div label[for="fix-main-color"]::after{
 	content: "強制屬性順序與選擇順序一致";
 }
-.search-box .consider-equivalent-awoken-label::after{
+.search-box label[for="consider-equivalent-awoken"]::after{
 	content: "同時搜索等效覺醒";
 }
 .search-box label[for="include-super-awoken"]::after{

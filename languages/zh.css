@@ -145,6 +145,9 @@ label[for="merge-skill"]::after{
 .edit-box .button-box .button-done.only-assist::after{
 	content: "只能辅助";
 }
+.team-awoken-effect::before{
+	content: "队伍觉醒效果：";
+}
 .team-awoken::before{
 	content: "队伍觉醒总计：";
 }
@@ -233,7 +236,7 @@ label[for="merge-skill"]::after{
 	content: "⛔解除辅助";
 }
 .control-box .config-display-list summary::before{
-	content:"展示内容开关列表";
+	content:"展示信息开关列表";
 }
 label[for="show-card-id"]::after{
 	content:"🆔卡片ID";
@@ -250,14 +253,14 @@ label[for="show-member-ability"]::after{
 label[for="show-member-awoken"]::after{
 	content:"👁️队员觉醒";
 }
-label[for="show-3P-team-total-info"]::after{
-	content:"队伍信息统计";
+label[for="show-team-total-info"]::after{
+	content:"队伍生命值等信息统计";
 }
 label[for="show-team-awoken-count"]::after{
 	content:"队伍觉醒计数";
 }
 label[for="show-team-awoken-effect"]::after{
-	content:"队伍觉醒效果统计";
+	content:"队伍觉醒效果计算";
 }
 label[for="show-team-attrtype-count"]::after{
 	content:"队伍稀有度、属性与类型计数";
@@ -319,7 +322,7 @@ label[for="default-level"]::after
 .search-box .attrs-div label[for="fix-main-color"]::after{
 	content: "强制属性顺序与选择顺序一致";
 }
-.search-box .consider-equivalent-awoken-label::after{
+.search-box label[for="consider-equivalent-awoken"]::after{
 	content: "同时搜索等效觉醒";
 }
 .search-box label[for="include-super-awoken"]::after{

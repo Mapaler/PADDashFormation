@@ -235,23 +235,36 @@ label[for="merge-skill"]::after{
 	content: "⛔Remove Assist";
 }
 .control-box .config-display-list summary::before{
-	content:"Display Switchs List";
+	content:"Displayed Information Switchs List";
 }
-.control-box .show-mon-id-lbl::after{
-	content:"🆔Show card's ID";
+label[for="show-card-id"]::after{
+	content:"🆔Card's ID";
 }
-.control-box .show-mon-skill-cd-lbl::after{
-	content:"❄️Show skill's cooldown";
+label[for="show-card-rarity"]::after{
+	content:"⭐️Card's Rarity";
 }
-label[for="show-mon-rarity"]::after{
-	content:"⭐️Show Rarity";
+label[for="show-member-skill-cd"]::after{
+	content:"❄️Member's Skill CD";
 }
-.control-box .show-mon-awoken-lbl::after{
-	content:"👁️Show card awoken";
+label[for="show-member-ability"]::after{
+	content:"⚔️Member's Ability";
 }
-.control-box .show-awoken-count-lbl::after{
-	content:"⚔️Show awoken count and ability";
+label[for="show-member-awoken"]::after{
+	content:"👁️Member's Awoken";
 }
+label[for="show-team-total-info"]::after{
+	content:"Team's HP Info";
+}
+label[for="show-team-awoken-count"]::after{
+	content:"Team's Awoken Count";
+}
+label[for="show-team-awoken-effect"]::after{
+	content:"Team's Awoken Effect Calculate";
+}
+label[for="show-team-attrtype-count"]::after{
+	content:"Team's Rarity, Attributes, Types Count";
+}
+
 label[for="change-swap-to-copy"]::after{
 	content:"\"Copy\" when dragging (or hold down Ctrl)";
 }
@@ -309,7 +322,7 @@ label[for="default-level"]::after
 .search-box .attrs-div label[for="fix-main-color"]::after{
 	content: "The order of the attributes is consistent with the order you selected";
 }
-.search-box .consider-equivalent-awoken-label::after{
+.search-box label[for="consider-equivalent-awoken"]::after{
 	content: "Search for Equivalent Awoken";
 }
 .search-box label[for="include-super-awoken"]::after{

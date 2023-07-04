@@ -1194,7 +1194,7 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 			case 217:{ //限定队伍星级，不包括好友队长
 				let cardsArr = memberArr.slice(0, 5).filter(m => m.id > 0).map(m => m.card); //所有的卡片
 				const rarityCount = cardsArr.reduce((pre, memberCard)=>{
-					return pre + memberCard.rarity;
+					return pre + (memberCard?.rarity || 1);
 				}, 0);
 				scale = rarityCount <= sk[0] ? sk[1] / 100 : 1;
 				break;

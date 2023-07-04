@@ -3050,7 +3050,9 @@ function initialize() {
 				teamBadge.classList.remove(className_ChoseBadges);
 				team[2] = parseInt(this.value, 10);
 				const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-				refreshTeamTotalHP(teamTotalInfoDom, team, teamIdx);
+				if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, team, teamIdx);
+				const teamAwokenEffectDom = teamBigBox.querySelector(".team-awoken-effect"); //队伍觉醒效果计算
+				if (teamAwokenEffectDom) refreshTeamAwokenEfeect(teamAwokenEffectDom, team, teamIdx);
 				createNewUrl();
 			} else {
 				teamBadge.classList.add(className_ChoseBadges);
@@ -4575,15 +4577,19 @@ function initialize() {
 		} else {
 			const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 			if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
+
 			const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 			if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
+
+			const teamAwokenEffectDom = teamBigBox.querySelector(".team-awoken-effect"); //队伍觉醒效果计算
+			if (teamAwokenEffectDom) refreshTeamAwokenEfeect(teamAwokenEffectDom, teamData, editBox.memberIdx[0]);
 	
 			const teamMemberTypesDom = teamBigBox.querySelector(".team-member-types"); //队员类型
-			if (teamMemberTypesDom) refreshmemberTypes(teamMemberTypesDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+			if (teamMemberTypesDom) refreshMemberTypes(teamMemberTypesDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
 
 			const teamMemberAwokenDom = teamBigBox.querySelector(".team-member-awoken"); //队员觉醒
 			const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
-			if (teamMemberAwokenDom && teamAssistAwokenDom) refreshmemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+			if (teamMemberAwokenDom && teamAssistAwokenDom) refreshMemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
 
 			const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 			if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
@@ -4656,11 +4662,11 @@ function initialize() {
 		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 
 		const teamMemberTypesDom = teamBigBox.querySelector(".team-member-types"); //队员类型
-		if (teamMemberTypesDom) refreshmemberTypes(teamMemberTypesDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+		if (teamMemberTypesDom) refreshMemberTypes(teamMemberTypesDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
 
 		const teamMemberAwokenDom = teamBigBox.querySelector(".team-member-awoken"); //队员觉醒
 		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
-		if (teamMemberAwokenDom && teamAssistAwokenDom) refreshmemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
+		if (teamMemberAwokenDom && teamAssistAwokenDom) refreshMemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, editBox.memberIdx[2]); //刷新本人觉醒
 
 		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
@@ -5451,8 +5457,8 @@ function refreshAll(formationData) {
 			}
 			refreshMemberSkillCD(teamBox, teamData, ti); //技能CD
 			refreshAbility(teamAbilityDom, teamData, ti); //本人能力值
-			refreshmemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, ti); //本人觉醒
-			refreshmemberTypes(teamMemberTypesDom, teamData, ti); //本人类型
+			refreshMemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, ti); //本人觉醒
+			refreshMemberTypes(teamMemberTypesDom, teamData, ti); //本人类型
 
 		}
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
@@ -5460,6 +5466,9 @@ function refreshAll(formationData) {
 
 		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
+
+		const teamAwokenEffectDom = teamBigBox.querySelector(".team-awoken-effect"); //队伍觉醒效果计算
+		if (teamAwokenEffectDom) refreshTeamAwokenEfeect(teamAwokenEffectDom, teamData, teamNum);
 	});
 
 	if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
@@ -5470,6 +5479,295 @@ function refreshAll(formationData) {
 	// txtDetail.onblur(); //这个需要放在显示出来后再改才能生效
 }
 
+//刷新队伍觉醒效果计算
+function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
+	let targetIcon;
+	//防绑
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"52\"]")) {
+		const teamFlagsMembers = Array.from(targetIcon.parentElement.querySelectorAll(".team-flags li"));
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.big === 52);
+		//储存附加 52 即大防绑的队长技能
+		const leader1 = team[0][0], leader2 = team[0][5];
+		const parseLSkill = skillParser(leader1?.card?.leaderSkillId).concat(skillParser(leader2?.card?.leaderSkillId));
+		let lsAwoken = parseLSkill.filter(skill=>skill.kind == SkillKinds.ImpartAwakenings);
+
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			const assistData = team[1][mi];
+			let thisAwokenNum = 0;
+			if (team[2] === 8 && mi === 0) {
+				thisAwokenNum = 2;
+			} else {
+				let effectiveAwokens = memberData.effectiveAwokens(assistData);
+				if (lsAwoken.length) { //增加队长技赋予的觉醒
+					const {attrs, types} = memberData.getAttrsTypesWithWeapon(assistData);
+					lsAwoken.forEach(pls=>{
+						if (attrs.some(a => pls.attrs.includes(a)) || types.some(t => pls.types.includes(t))) {
+							effectiveAwokens.push(...pls.awakenings);
+						}
+					});
+				}
+				thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+			}
+			teamFlagsMembers[mi].setAttribute("data-percent", Math.round(Math.min(thisAwokenNum/2,1)*100));
+		}
+	}
+	//SX
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"28\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const thisAwokenNum = awokenCountInTeam(team, 28, solo, teamsCount);
+		let prob = thisAwokenNum / 5;
+		if (team[2] == 9) prob += 0.5;
+		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+	}
+	//暗
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"68\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.big === 68);
+		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
+		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+		let prob = thisAwokenNum / 5;
+		if (team[2] == 12) prob += 0.5;
+		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+	}
+	//废
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"69\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.big === 69);
+		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
+		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+		let prob = thisAwokenNum / 5;
+		if (team[2] == 13) prob += 0.5;
+		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+	}
+	//毒
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"70\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.big === 70);
+		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
+		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+		let prob = thisAwokenNum / 5;
+		if (team[2] == 14) prob += 0.5;
+		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+	}
+	//云
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"54\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const thisAwokenNum = awokenCountInTeam(team, 54, solo, teamsCount);
+		let prob = thisAwokenNum / 1;
+		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+	}
+	//封条
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"55\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const thisAwokenNum = awokenCountInTeam(team, 55, solo, teamsCount);
+		let prob = thisAwokenNum / 1;
+		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+	}
+	//掉废
+	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"14\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		let prob = team[0].some(member=>member?.latent?.includes(14)) ? 1 : 0;
+		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+	}
+	//掉毒
+	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"15\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		let prob = team[0].some(member=>member.latent.includes(15)) ? 1 : 0;
+		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+	}
+	//心横解转转
+	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"40\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".count");
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 20);
+		let count = 0;
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			const assistData = team[1][mi];
+			if (memberData.latent.includes(40)) {
+				let effectiveAwokens = memberData.effectiveAwokens(assistData);
+				count += effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+			} else {
+				continue;
+			}
+		}
+		targetValue.setAttribute(dataAttrName, count);
+	}
+	//心追解云封
+	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"46\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".count");
+		let count = 0;
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			const assistData = team[1][mi];
+			if (memberData.latent.includes(46)) {
+				let effectiveAwokens = memberData.effectiveAwokens(assistData);
+				count += effectiveAwokens.filter(ak=>ak==45).length;
+			} else {
+				continue;
+			}
+		}
+		targetValue.setAttribute(dataAttrName, count);
+	}
+	//普通L
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"60\"]")) {
+		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 60);
+		let count = new Array(orbs.length).fill(0);
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			const assistData = team[1][mi];
+			let effectiveAwokens = memberData?.effectiveAwokens(assistData);
+			let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+			if (thisAwokenNum == 0) continue;
+			const {attrs=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
+			attrs.distinct().forEach(attr=>{
+				count[attr] += thisAwokenNum;
+			});
+		}
+		orbs.forEach((orb,oi)=>{
+			orb.setAttribute(dataAttrName,count[oi]);
+		});
+	}
+	//L解禁武器
+	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"48\"]")) {
+		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 60);
+		let count = new Array(orbs.length).fill(0);
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			//const assistData = team[1][mi]; //L解禁武器，武器上的L无意义
+			if (memberData.latent.includes(48)) {
+				let effectiveAwokens = memberData.effectiveAwokens();
+				let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+				if (thisAwokenNum == 0) continue;
+				const {attrs=[]} = memberData.getAttrsTypesWithWeapon() || {};
+				attrs.distinct().forEach(attr=>{
+					count[attr] += thisAwokenNum;
+				});
+			} else {
+				continue;
+			}
+		}
+		orbs.forEach((orb,oi)=>{
+			orb.setAttribute(dataAttrName,count[oi]);
+		});
+	}
+	//普通十字
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"78\"]")) {
+		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 78);
+		let count = new Array(orbs.length).fill(0);
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			const assistData = team[1][mi];
+			let effectiveAwokens = memberData.effectiveAwokens(assistData);
+			let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+			if (thisAwokenNum == 0) continue;
+			const {attrs=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
+			attrs.distinct().forEach(attr=>{
+				count[attr] += thisAwokenNum;
+			});
+		}
+		orbs.forEach((orb,oi)=>{
+			orb.setAttribute(dataAttrName,count[oi]);
+		});
+	}
+	//U解禁消
+	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"41\"]")) {
+		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 27);
+		let count = new Array(orbs.length).fill(0);
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			//const assistData = team[1][mi]; //L解禁武器，武器上的L无意义
+			if (memberData.latent.includes(41)) {
+				let effectiveAwokens = memberData.effectiveAwokens();
+				let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+				if (thisAwokenNum == 0) continue;
+				const {attrs=[]} = memberData.getAttrsTypesWithWeapon() || {};
+				attrs.distinct().forEach(attr=>{
+					count[attr] += thisAwokenNum;
+				});
+			} else {
+				continue;
+			}
+		}
+		orbs.forEach((orb,oi)=>{
+			orb.setAttribute(dataAttrName,count[oi]);
+		});
+	}
+	//普通C珠
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"62\"]")) {
+		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		//目前没有大觉醒
+		//const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 78);
+		let count = new Array(orbs.length).fill(0);
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			const assistData = team[1][mi];
+			let effectiveAwokens = memberData.effectiveAwokens(assistData);
+			//let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+			let thisAwokenNum = effectiveAwokens.filter(ak=>ak==62).length;
+			if (thisAwokenNum == 0) continue;
+			const {attrs=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
+			attrs.distinct().forEach(attr=>{
+				count[attr] += thisAwokenNum;
+			});
+		}
+		orbs.forEach((orb,oi)=>{
+			orb.setAttribute(dataAttrName,count[oi]);
+		});
+	}
+	//C珠破吸
+	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"39\"]")) {
+		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		//目前没有大觉醒
+		//const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 27);
+		let count = new Array(orbs.length).fill(0);
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			//const assistData = team[1][mi]; //L解禁武器，武器上的L无意义
+			if (memberData.latent.includes(39)) {
+				let effectiveAwokens = memberData.effectiveAwokens();
+				//let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+				let thisAwokenNum = effectiveAwokens.filter(ak=>ak==62).length;
+				if (thisAwokenNum == 0) continue;
+				const {attrs=[]} = memberData.getAttrsTypesWithWeapon() || {};
+				attrs.distinct().forEach(attr=>{
+					count[attr] += thisAwokenNum;
+				});
+			} else {
+				continue;
+			}
+		}
+		orbs.forEach((orb,oi)=>{
+			orb.setAttribute(dataAttrName,count[oi]);
+		});
+	}
+	//普通T字
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"126\"]")) {
+		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		//目前没有大觉醒
+		//const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 78);
+		let count = new Array(orbs.length).fill(0);
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			const assistData = team[1][mi];
+			let effectiveAwokens = memberData.effectiveAwokens(assistData);
+			//let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+			let thisAwokenNum = effectiveAwokens.filter(ak=>ak==126).length;
+			if (thisAwokenNum == 0) continue;
+			const {attrs=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
+			attrs.distinct().forEach(attr=>{
+				count[attr] += thisAwokenNum;
+			});
+		}
+		orbs.forEach((orb,oi)=>{
+			orb.setAttribute(dataAttrName,count[oi]);
+		});
+	}
+}
 //刷新队伍觉醒统计
 function refreshTeamAwokenCount(awokenDom, team) {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
@@ -5574,7 +5872,7 @@ function refreshAbility(abilityDom, team, idx) {
 	});
 }
 //刷新队员
-function refreshmemberTypes(memberTypesDom, team, idx) {
+function refreshMemberTypes(memberTypesDom, team, idx) {
 	if (!memberTypesDom) return; //如果没有dom，直接跳过
 	const member = team[0][idx];
 	const assist = team[1][idx];
@@ -5594,7 +5892,7 @@ function refreshmemberTypes(memberTypesDom, team, idx) {
 	}
 }
 //刷新队员觉醒
-function refreshmemberAwoken(memberAwokenDom, assistAwokenDom, team, idx) {
+function refreshMemberAwoken(memberAwokenDom, assistAwokenDom, team, idx) {
 	if (!memberAwokenDom) return; //如果没有dom，直接跳过
 
 	const memberData = team[0][idx];
@@ -5603,19 +5901,10 @@ function refreshmemberAwoken(memberAwokenDom, assistAwokenDom, team, idx) {
 	const memberCard = Cards[memberData.id] || Cards[0];
 	const assistCard = Cards[assistData.id] || Cards[0];
 	//队员觉醒
-	let memberAwokens = memberCard?.awakenings?.slice(0,memberData.awoken) || [];
-	//单人和三人为队员增加超觉醒
-	if ((solo || teamsCount === 3) &&
-		memberData.sawoken > 0 && //怪物超觉醒编号大于0
-		//memberCard?.superAwakenings?.length > 0 && //卡片有超觉醒
-		memberData.level >= 100 && //怪物大于100级
-		memberData.plus.every(p=>p>=99) //怪物297了
-	) {
-		memberAwokens.push(memberData.sawoken);
-	}
+	let memberAwokens = memberData.effectiveAwokens() || [];
 	//memberAwokens.sort();
 	//武器觉醒
-	let assistAwokens = assistCard?.awakenings?.slice(0,assistData?.awoken);
+	let assistAwokens = assistData.effectiveAwokens() || [];
 	if (!assistAwokens?.includes(49)) assistAwokens = []; //清空非武器的觉醒
 	//assistAwokens.sort();
 	/*if (assistAwokens.includes(49))

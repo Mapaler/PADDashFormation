@@ -68,7 +68,7 @@ const teamsCount = 3;
 			<input type="checkbox" class="switch-ipt" id="show-member-skill-cd"><label class="switch-lbl" for="show-member-skill-cd"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-member-ability"><label class="switch-lbl" for="show-member-ability"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-member-awoken"><label class="switch-lbl" for="show-member-awoken"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-3P-team-total-info"><label class="switch-lbl" for="show-3P-team-total-info"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-total-info"><label class="switch-lbl" for="show-team-total-info"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-team-awoken-count"><label class="switch-lbl" for="show-team-awoken-count"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-team-attrtype-count"><label class="switch-lbl" for="show-team-attrtype-count"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label class="switch-lbl" for="show-team-awoken-effect"><circle></circle></label>
@@ -519,6 +519,48 @@ const teamsCount = 3;
 						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
 					</li>
 				</ul>
+				<div class="team-awoken-effect">
+					<ul class="passive">
+						<!--防绑--><li style="grid-column: span 2;"><icon class="awoken-icon" data-awoken-icon="52"></icon>
+							<ul class="team-flags">
+								<li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li>
+							</ul>
+						</li>
+						<!--SX--><li><icon class="awoken-icon" data-awoken-icon="28"></icon><span class="prob"></span></li>
+						<!--暗--><li><icon class="awoken-icon" data-awoken-icon="68"></icon><span class="prob"></span></li>
+						<!--废--><li><icon class="awoken-icon" data-awoken-icon="69"></icon><span class="prob"></span></li>
+						<!--毒--><li><icon class="awoken-icon" data-awoken-icon="70"></icon><span class="prob"></span></li>
+						<!--云--><li><icon class="awoken-icon" data-awoken-icon="54"></icon><span class="prob"></span></li>
+						<!--封条--><li><icon class="awoken-icon" data-awoken-icon="55"></icon><span class="prob"></span></li>
+						<!--掉废--><li><icon class="latent-icon" data-latent-icon="14" data-latent-hole="1"></icon><span class="prob"></span></li>
+						<!--掉毒--><li><icon class="latent-icon" data-latent-icon="15" data-latent-hole="1"></icon><span class="prob"></span></li>
+						<!--心横解转转--><li><icon class="latent-icon show-enabling-awokwn" data-latent-icon="40"></icon><span class="count"></span></li>
+						<!--竖心追解云封--><li><icon class="latent-icon show-enabling-awokwn" data-latent-icon="46"></icon><span class="count"></span></li>
+					</ul>
+					<ul class="active">
+						<!--普通L--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="60"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--L解禁武器--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="48"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通十字--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="78"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--U解禁消--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="41"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通C珠--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="62"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--C珠破吸--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="39"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通T字--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="126"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+					</ul>
+				</div>
 				<div class="team-awoken">
 					<!--怪物觉醒-->
 					<ul class="awoken-ul"></ul>
@@ -959,108 +1001,51 @@ const teamsCount = 3;
 						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
 					</li>
 				</ul>
+				<div class="team-awoken-effect">
+					<ul class="passive">
+						<!--防绑--><li style="grid-column: span 2;"><icon class="awoken-icon" data-awoken-icon="52"></icon>
+							<ul class="team-flags">
+								<li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li>
+							</ul>
+						</li>
+						<!--SX--><li><icon class="awoken-icon" data-awoken-icon="28"></icon><span class="prob"></span></li>
+						<!--暗--><li><icon class="awoken-icon" data-awoken-icon="68"></icon><span class="prob"></span></li>
+						<!--废--><li><icon class="awoken-icon" data-awoken-icon="69"></icon><span class="prob"></span></li>
+						<!--毒--><li><icon class="awoken-icon" data-awoken-icon="70"></icon><span class="prob"></span></li>
+						<!--云--><li><icon class="awoken-icon" data-awoken-icon="54"></icon><span class="prob"></span></li>
+						<!--封条--><li><icon class="awoken-icon" data-awoken-icon="55"></icon><span class="prob"></span></li>
+						<!--掉废--><li><icon class="latent-icon" data-latent-icon="14" data-latent-hole="1"></icon><span class="prob"></span></li>
+						<!--掉毒--><li><icon class="latent-icon" data-latent-icon="15" data-latent-hole="1"></icon><span class="prob"></span></li>
+						<!--心横解转转--><li><icon class="latent-icon show-enabling-awokwn" data-latent-icon="40"></icon><span class="count"></span></li>
+						<!--竖心追解云封--><li><icon class="latent-icon show-enabling-awokwn" data-latent-icon="46"></icon><span class="count"></span></li>
+					</ul>
+					<ul class="active">
+						<!--普通L--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="60"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--L解禁武器--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="48"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通十字--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="78"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--U解禁消--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="41"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通C珠--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="62"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--C珠破吸--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="39"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通T字--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="126"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+					</ul>
+				</div>
 				<div class="team-awoken">
 					<!--怪物觉醒-->
-					<ul class="awoken-ul">
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="21"></span><span class="count"></span></li><!--S+ -->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="105"></span><span class="count"></span></li><!--S- -->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="28"></span><span class="count"></span></li><!--SX-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="11"></span><span class="count"></span></li><!--防暗-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="12"></span><span class="count"></span></li><!--防废-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="13"></span><span class="count"></span></li><!--防毒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="54"></span><span class="count"></span></li><!--防云-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="55"></span><span class="count"></span></li><!--防封条-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="45"></span><span class="count"></span></li><!--心追-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="50"></span><span class="count"></span></li><!--方块心追-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="1"></span><span class="count"></span></li><!--HP+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="2"></span><span class="count"></span></li><!--攻击+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="3"></span><span class="count"></span></li><!--回复+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="4"></span><span class="count"></span></li><!--火盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="5"></span><span class="count"></span></li><!--水盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="6"></span><span class="count"></span></li><!--木盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="7"></span><span class="count"></span></li><!--光盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="8"></span><span class="count"></span></li><!--暗盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="9"></span><span class="count"></span></li><!--自回-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="10"></span><span class="count"></span></li><!--防封-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="14"></span><span class="count"></span></li><!--火+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="15"></span><span class="count"></span></li><!--水+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="16"></span><span class="count"></span></li><!--木+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="17"></span><span class="count"></span></li><!--光+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="18"></span><span class="count"></span></li><!--暗+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="19"></span><span class="count"></span></li><!--手指-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="20"></span><span class="count"></span></li><!--心解-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="22"></span><span class="count"></span></li><!--火横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="23"></span><span class="count"></span></li><!--水横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="24"></span><span class="count"></span></li><!--木横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="25"></span><span class="count"></span></li><!--光横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="26"></span><span class="count"></span></li><!--暗横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="27"></span><span class="count"></span></li><!--U-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="29"></span><span class="count"></span></li><!--心+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="30"></span><span class="count"></span></li><!--协力-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="31"></span><span class="count"></span></li><!--龙杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="32"></span><span class="count"></span></li><!--神杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="33"></span><span class="count"></span></li><!--恶魔杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="34"></span><span class="count"></span></li><!--机杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="35"></span><span class="count"></span></li><!--平衡杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="36"></span><span class="count"></span></li><!--攻击杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="37"></span><span class="count"></span></li><!--体力杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="38"></span><span class="count"></span></li><!--回复杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="39"></span><span class="count"></span></li><!--进化杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="40"></span><span class="count"></span></li><!--觉醒杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="41"></span><span class="count"></span></li><!--强化杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="42"></span><span class="count"></span></li><!--卖钱杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="43"></span><span class="count"></span></li><!--7c-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="44"></span><span class="count"></span></li><!--5色破防-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="46"></span><span class="count"></span></li><!--全体HP-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="47"></span><span class="count"></span></li><!--全体回复-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="48"></span><span class="count"></span></li><!--破无效-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="49"></span><span class="count"></span></li><!--武器觉醒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="51"></span><span class="count"></span></li><!--5色溜-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="52"></span><span class="count"></span></li><!--大防封-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="53"></span><span class="count"></span></li><!--大手指-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="56"></span><span class="count"></span></li><!--大SB-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="57"></span><span class="count"></span></li><!--满血强化-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="58"></span><span class="count"></span></li><!--下半血强化-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="59"></span><span class="count"></span></li><!--L盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="60"></span><span class="count"></span></li><!--L解锁-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="61"></span><span class="count"></span></li><!--10c-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="62"></span><span class="count"></span></li><!--c珠-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="63"></span><span class="count"></span></li><!--语音-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="64"></span><span class="count"></span></li><!--奖励增加-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="65"></span><span class="count"></span></li><!--HP--->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="66"></span><span class="count"></span></li><!--攻击--->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="67"></span><span class="count"></span></li><!--回复--->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="68"></span><span class="count"></span></li><!--大防暗-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="69"></span><span class="count"></span></li><!--大防废-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="70"></span><span class="count"></span></li><!--大防毒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="71"></span><span class="count"></span></li><!--掉废-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="72"></span><span class="count"></span></li><!--掉毒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="73"></span><span class="count"></span></li><!--2串火-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="74"></span><span class="count"></span></li><!--2串水-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="75"></span><span class="count"></span></li><!--2串木-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="76"></span><span class="count"></span></li><!--2串光-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="77"></span><span class="count"></span></li><!--2串暗-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="78"></span><span class="count"></span></li><!--十字-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="79"></span><span class="count"></span></li><!--3色-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="80"></span><span class="count"></span></li><!--4色-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="81"></span><span class="count"></span></li><!--5色-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="82"></span><span class="count"></span></li><!--12珠-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="83"></span><span class="count"></span></li><!--附加神类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="84"></span><span class="count"></span></li><!--附加龙类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="85"></span><span class="count"></span></li><!--附加恶魔类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="86"></span><span class="count"></span></li><!--附加机械类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="87"></span><span class="count"></span></li><!--附加平衡类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="88"></span><span class="count"></span></li><!--附加攻击类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="89"></span><span class="count"></span></li><!--附加体力类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="90"></span><span class="count"></span></li><!--附加回复类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="91"></span><span class="count"></span></li><!--附加火属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="92"></span><span class="count"></span></li><!--附加水属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="93"></span><span class="count"></span></li><!--附加木属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="94"></span><span class="count"></span></li><!--附加光属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="95"></span><span class="count"></span></li><!--附加暗属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="106"></span><span class="count"></span></li><!--浮游-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="126"></span><span class="count"></span></li><!--T字-->
-					</ul>
+					<ul class="awoken-ul"></ul>
 				</div>
 			</li>
 			<li class="team-bigbox team-3 show-team-name-right">
@@ -1498,108 +1483,51 @@ const teamsCount = 3;
 						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
 					</li>
 				</ul>
+				<div class="team-awoken-effect">
+					<ul class="passive">
+						<!--防绑--><li style="grid-column: span 2;"><icon class="awoken-icon" data-awoken-icon="52"></icon>
+							<ul class="team-flags">
+								<li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li>
+							</ul>
+						</li>
+						<!--SX--><li><icon class="awoken-icon" data-awoken-icon="28"></icon><span class="prob"></span></li>
+						<!--暗--><li><icon class="awoken-icon" data-awoken-icon="68"></icon><span class="prob"></span></li>
+						<!--废--><li><icon class="awoken-icon" data-awoken-icon="69"></icon><span class="prob"></span></li>
+						<!--毒--><li><icon class="awoken-icon" data-awoken-icon="70"></icon><span class="prob"></span></li>
+						<!--云--><li><icon class="awoken-icon" data-awoken-icon="54"></icon><span class="prob"></span></li>
+						<!--封条--><li><icon class="awoken-icon" data-awoken-icon="55"></icon><span class="prob"></span></li>
+						<!--掉废--><li><icon class="latent-icon" data-latent-icon="14" data-latent-hole="1"></icon><span class="prob"></span></li>
+						<!--掉毒--><li><icon class="latent-icon" data-latent-icon="15" data-latent-hole="1"></icon><span class="prob"></span></li>
+						<!--心横解转转--><li><icon class="latent-icon show-enabling-awokwn" data-latent-icon="40"></icon><span class="count"></span></li>
+						<!--竖心追解云封--><li><icon class="latent-icon show-enabling-awokwn" data-latent-icon="46"></icon><span class="count"></span></li>
+					</ul>
+					<ul class="active">
+						<!--普通L--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="60"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--L解禁武器--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="48"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通十字--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="78"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--U解禁消--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="41"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通C珠--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="62"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--C珠破吸--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="39"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通T字--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="126"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+					</ul>
+				</div>
 				<div class="team-awoken">
 					<!--怪物觉醒-->
-					<ul class="awoken-ul">
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="21"></span><span class="count"></span></li><!--S+ -->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="105"></span><span class="count"></span></li><!--S- -->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="28"></span><span class="count"></span></li><!--SX-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="11"></span><span class="count"></span></li><!--防暗-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="12"></span><span class="count"></span></li><!--防废-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="13"></span><span class="count"></span></li><!--防毒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="54"></span><span class="count"></span></li><!--防云-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="55"></span><span class="count"></span></li><!--防封条-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="45"></span><span class="count"></span></li><!--心追-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="50"></span><span class="count"></span></li><!--方块心追-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="1"></span><span class="count"></span></li><!--HP+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="2"></span><span class="count"></span></li><!--攻击+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="3"></span><span class="count"></span></li><!--回复+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="4"></span><span class="count"></span></li><!--火盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="5"></span><span class="count"></span></li><!--水盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="6"></span><span class="count"></span></li><!--木盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="7"></span><span class="count"></span></li><!--光盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="8"></span><span class="count"></span></li><!--暗盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="9"></span><span class="count"></span></li><!--自回-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="10"></span><span class="count"></span></li><!--防封-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="14"></span><span class="count"></span></li><!--火+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="15"></span><span class="count"></span></li><!--水+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="16"></span><span class="count"></span></li><!--木+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="17"></span><span class="count"></span></li><!--光+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="18"></span><span class="count"></span></li><!--暗+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="19"></span><span class="count"></span></li><!--手指-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="20"></span><span class="count"></span></li><!--心解-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="22"></span><span class="count"></span></li><!--火横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="23"></span><span class="count"></span></li><!--水横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="24"></span><span class="count"></span></li><!--木横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="25"></span><span class="count"></span></li><!--光横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="26"></span><span class="count"></span></li><!--暗横-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="27"></span><span class="count"></span></li><!--U-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="29"></span><span class="count"></span></li><!--心+-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="30"></span><span class="count"></span></li><!--协力-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="31"></span><span class="count"></span></li><!--龙杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="32"></span><span class="count"></span></li><!--神杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="33"></span><span class="count"></span></li><!--恶魔杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="34"></span><span class="count"></span></li><!--机杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="35"></span><span class="count"></span></li><!--平衡杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="36"></span><span class="count"></span></li><!--攻击杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="37"></span><span class="count"></span></li><!--体力杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="38"></span><span class="count"></span></li><!--回复杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="39"></span><span class="count"></span></li><!--进化杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="40"></span><span class="count"></span></li><!--觉醒杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="41"></span><span class="count"></span></li><!--强化杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="42"></span><span class="count"></span></li><!--卖钱杀-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="43"></span><span class="count"></span></li><!--7c-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="44"></span><span class="count"></span></li><!--5色破防-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="46"></span><span class="count"></span></li><!--全体HP-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="47"></span><span class="count"></span></li><!--全体回复-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="48"></span><span class="count"></span></li><!--破无效-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="49"></span><span class="count"></span></li><!--武器觉醒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="51"></span><span class="count"></span></li><!--5色溜-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="52"></span><span class="count"></span></li><!--大防封-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="53"></span><span class="count"></span></li><!--大手指-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="56"></span><span class="count"></span></li><!--大SB-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="57"></span><span class="count"></span></li><!--满血强化-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="58"></span><span class="count"></span></li><!--下半血强化-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="59"></span><span class="count"></span></li><!--L盾-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="60"></span><span class="count"></span></li><!--L解锁-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="61"></span><span class="count"></span></li><!--10c-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="62"></span><span class="count"></span></li><!--c珠-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="63"></span><span class="count"></span></li><!--语音-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="64"></span><span class="count"></span></li><!--奖励增加-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="65"></span><span class="count"></span></li><!--HP--->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="66"></span><span class="count"></span></li><!--攻击--->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="67"></span><span class="count"></span></li><!--回复--->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="68"></span><span class="count"></span></li><!--大防暗-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="69"></span><span class="count"></span></li><!--大防废-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="70"></span><span class="count"></span></li><!--大防毒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="71"></span><span class="count"></span></li><!--掉废-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="72"></span><span class="count"></span></li><!--掉毒-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="73"></span><span class="count"></span></li><!--2串火-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="74"></span><span class="count"></span></li><!--2串水-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="75"></span><span class="count"></span></li><!--2串木-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="76"></span><span class="count"></span></li><!--2串光-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="77"></span><span class="count"></span></li><!--2串暗-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="78"></span><span class="count"></span></li><!--十字-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="79"></span><span class="count"></span></li><!--3色-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="80"></span><span class="count"></span></li><!--4色-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="81"></span><span class="count"></span></li><!--5色-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="82"></span><span class="count"></span></li><!--12珠-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="83"></span><span class="count"></span></li><!--附加神类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="84"></span><span class="count"></span></li><!--附加龙类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="85"></span><span class="count"></span></li><!--附加恶魔类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="86"></span><span class="count"></span></li><!--附加机械类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="87"></span><span class="count"></span></li><!--附加平衡类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="88"></span><span class="count"></span></li><!--附加攻击类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="89"></span><span class="count"></span></li><!--附加体力类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="90"></span><span class="count"></span></li><!--附加回复类型-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="91"></span><span class="count"></span></li><!--附加火属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="92"></span><span class="count"></span></li><!--附加水属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="93"></span><span class="count"></span></li><!--附加木属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="94"></span><span class="count"></span></li><!--附加光属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="95"></span><span class="count"></span></li><!--附加暗属性-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="106"></span><span class="count"></span></li><!--浮游-->
-						<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="126"></span><span class="count"></span></li><!--T字-->
-					</ul>
+					<ul class="awoken-ul"></ul>
 				</div>
 			</li>
 		</ul>
@@ -2133,12 +2061,12 @@ const teamsCount = 3;
 						<li class="latent-icon" data-latent-icon="38"></li><!--3色破属吸-->
 						<li class="latent-icon" data-latent-icon="42"></li><!--伤害上限×2-->
 						<li class="latent-icon" data-latent-icon="49"></li><!--伤害上限×3-->
-						<li class="latent-icon" data-latent-icon="39"></li><!--C珠破吸-->
-						<li class="latent-icon" data-latent-icon="40"></li><!--心横解转转-->
-						<li class="latent-icon" data-latent-icon="41"></li><!--U解禁消-->
-						<li class="latent-icon" data-latent-icon="46"></li><!--心追解云封-->
-						<li class="latent-icon" data-latent-icon="47"></li><!--心L大SB-->
-						<li class="latent-icon" data-latent-icon="48"></li><!--L解禁武器-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="39"></li><!--C珠破吸-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="40"></li><!--心横解转转-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="41"></li><!--U解禁消-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="46"></li><!--心追解云封-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="47"></li><!--心L大SB-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="48"></li><!--L解禁武器-->
 					</ul>
 				</details>
 			</div>

@@ -775,15 +775,16 @@ body:not(.show-team-awoken-effect) .team-awoken-effect /*队伍觉醒效果统�
 {
 	opacity: 0.5;
 }
-body:not(.show-3P-team-total-info):not(.solo) .formation-box .team-total-info /*3P下隐藏队伍血量统计*/
+ /*3P下隐藏队伍血量统计*/
+body:not(.show-team-total-info) .formation-box .team-total-info
 {
 	display: none;
 }
-body:not(.show-3P-team-total-info):not(.solo) .formation-box .team-bigbox
+body:not(.show-team-total-info):not(.solo) .formation-box .team-bigbox
 {
 	margin-bottom: 5px;
 }
-body:not(.show-3P-team-total-info):not(.solo) .formation-box .team-badge
+body:not(.show-team-total-info):not(.solo) .formation-box .team-badge
 {
 	position: absolute;
 	z-index: 10;
@@ -1246,7 +1247,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .abilitys>div::before
 {
 	font-size: 0.75em;
-	width: 2.5em;
+	width: 3em;
 	display: inline-block;
 }
 /*.abilitys .hp::before{
@@ -2767,6 +2768,81 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	margin-top:5px;
 	/*content: "觉醒总计：";*/
 }
+.team-awoken-effect {
+	font-family: var(--game-font-family);
+	font-size: 16px;
+	line-height: 32px;
+}
+.team-awoken-effect::before{
+	font-family: var(--font-family);
+}
+.team-awoken-effect>ul {
+	display: grid;
+	grid-template-columns: repeat(6, 110px);
+}
+.team-awoken-effect .team-flags {
+	display: inline-block;
+	vertical-align: middle;
+}
+.team-awoken-effect .team-flags .team-member-icon {
+	width: 15px;
+	height: 15px;
+}
+.team-awoken-effect .team-flags .team-member-icon[data-percent="0"] {
+	background-color: red;
+}
+.team-awoken-effect .team-flags .team-member-icon[data-percent="50"] {
+	background-color: pink;
+}
+.team-awoken-effect .team-flags .team-member-icon[data-percent="100"] {
+	background-color: lightgreen;
+}
+.team-awoken-effect .prob[data-value="100"] {
+	color: #28c031;
+	text-shadow: black 1px 1px 1px;
+}
+.team-awoken-effect .prob::before{
+	content: attr(data-value);
+}
+.team-awoken-effect .prob::after{
+	content: "%";
+}
+.team-awoken-effect .count::before{
+	content: "×";
+}
+.team-awoken-effect .count::after{
+	content: attr(data-value);
+}
+.team-awoken-effect .latent-icon {
+	display: inline-flex;
+	width: 32px;
+	vertical-align: middle;
+}
+.team-awoken-effect .latent-icon.show-enabling-awokwn {
+	width: 64px;
+}
+.team-awoken-effect .orb-list {
+	display: inline-block;
+	vertical-align: middle;
+}
+.team-awoken-effect .orb-list .orb {
+	font-size: 16px;
+}
+
+.team-awoken-effect .orb-list .orb:not([data-value]),
+.team-awoken-effect .orb-list .orb[data-value="0"]{
+	filter: grayscale(100%);
+}
+.team-awoken-effect .orb-list .orb[data-value]:not([data-value="0"])::before {
+	content: "x"attr(data-value);
+	color: white;
+	-webkit-text-stroke: 1px black;
+	text-stroke: 1px black;
+	text-shadow: black 1px 1px 1px;
+	position: relative;
+	text-align: center;
+}
+
 .detail-box{
 	margin-top:5px;
 }
@@ -3310,11 +3386,6 @@ table .orb-icon
 	-webkit-text-stroke: 3px black; /*非W3C标准，但都支持*/
 }
 
-.control-box,
-.control-box button
-{
-	font-family: var(--icon-font-family);
-}
 #default-level {
 	width: 50px;
 }
@@ -3417,11 +3488,6 @@ body.external-link-support #external-support{
 	color: white;
 	text-align: center;
 	font-size: 2em;
-	font-family: var(--icon-font-family);
-}
-#player-data-frame .brown-button::before
-{
-	font-family: var(--icon-font-family);
 }
 #player-data-frame .upload-data
 {

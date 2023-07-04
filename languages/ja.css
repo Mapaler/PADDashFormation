@@ -228,23 +228,37 @@ label[for="merge-skill"]::after{
 	content: "⛔アシストを解除";
 }
 .control-box .config-display-list summary::before{
-	content:"表示内容の開閉器一覧";
+	content:"情報表示内容の開閉器一覧";
 }
-label[for="show-mon-id"]::after{
-	content:"🆔モンスターIDを表示";
+
+label[for="show-card-id"]::after{
+	content:"🆔カード番号";
 }
-label[for="show-mon-skill-cd"]::after{
-	content:"❄️スキル クールを表示";
+label[for="show-card-rarity"]::after{
+	content:"⭐️カードの希少性";
 }
-label[for="show-mon-rarity"]::after{
-	content:"⭐️希少性を表示";
+label[for="show-member-skill-cd"]::after{
+	content:"❄️メンバーズスキルCD";
 }
-label[for="show-mon-awoken"]::after{
-	content:"👁️カードの覚醒を表示";
+label[for="show-member-ability"]::after{
+	content:"⚔️メンバーの能力";
 }
-label[for="show-awoken-count"]::after{
-	content:"⚔️総覚醒と能力値の表示";
+label[for="show-member-awoken"]::after{
+	content:"👁️メンバーの覚醒";
 }
+label[for="show-team-total-info"]::after{
+	content:"チームのHP情報";
+}
+label[for="show-team-awoken-count"]::after{
+	content:"チームの覚醒合計";
+}
+label[for="show-team-awoken-effect"]::after{
+	content:"チームの覚醒効果の計算";
+}
+label[for="show-team-attrtype-count"]::after{
+	content:"チームの希少性、属性、タイプの合計";
+}
+
 label[for="change-swap-to-copy"]::after{
 	content:"ドラッグ時にコピー (またはCtrlを押したまま)";
 }
@@ -302,7 +316,7 @@ label[for="default-level"]::after
 .search-box .attrs-div label[for="fix-main-color"]::after{
 	content: "属性の順序は、選択した順序と一致";
 }
-.search-box .consider-equivalent-awoken-label::after{
+.search-box label[for="consider-equivalent-awoken"]::after{
 	content: "同時に同等の覚醒を検索";
 }
 .search-box label[for="include-super-awoken"]::after{

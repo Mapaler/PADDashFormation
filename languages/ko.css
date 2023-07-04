@@ -224,25 +224,38 @@ label[for="merge-skill"]::after{
 	content: "⛔보조를 해제합";
 }
 .control-box .config-display-list summary::before{
-	content:"디스플레이 스위치 목록";
+	content:"표시된 정보 전환 목록";
 }
-label[for="show-mon-id"]::after{
-	content:"🆔몬스터 ID 표시";
+label[for="show-card-id"]::after{
+	content:"🆔카드 ID";
 }
-label[for="show-mon-skill-cd"]::after{
-	content:"❄️스킬의 사용 대기 시간 표시";
+label[for="show-card-rarity"]::after{
+	content:"⭐️카드의 희귀도";
 }
-label[for="show-mon-rarity"]::after{
-	content:"⭐️희귀도 표시";
+label[for="show-member-skill-cd"]::after{
+	content:"❄️회원의 CD";
 }
-label[for="show-mon-awoken"]::after{
-	content:"👁️카드 각성을 표시합";
+label[for="show-member-ability"]::after{
+	content:"⚔️회원의 능력";
 }
-label[for="show-awoken-count"]::after{
-	content:"⚔️각성 통계 및 기능 값 표시";
+label[for="show-member-awoken"]::after{
+	content:"👁️회원이 깨어났다";
 }
+label[for="show-team-total-info"]::after{
+	content:"팀의 HP 정보";
+}
+label[for="show-team-awoken-count"]::after{
+	content:"팀의 각성 카운트";
+}
+label[for="show-team-awoken-effect"]::after{
+	content:"팀의 각성 효과 계산";
+}
+label[for="show-team-attrtype-count"]::after{
+	content:"팀의 희귀도, 속성, 유형 수";
+}
+
 label[for="change-swap-to-copy"]::after{
-	content:"끌 때 복사 (또는 Ctrl 키를 누른 채)";
+	content:"끌 때 복사(또는 Ctrl 키를 누른 채)";
 }
 label[for="default-level"]::after
 {
@@ -298,7 +311,7 @@ label[for="default-level"]::after
 .search-box .attrs-div label[for="fix-main-color"]::after{
 	content: "속성 순서는 선택한 순서와 일치합니다";
 }
-.search-box .consider-equivalent-awoken-label::after{
+.search-box label[for="consider-equivalent-awoken"]::after{
 	content: "동시에 해당 경계를 각성";
 }
 .search-box label[for="include-super-awoken"]::after{

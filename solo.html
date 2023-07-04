@@ -57,9 +57,10 @@ const teamsCount = 1;
 			<input type="checkbox" class="switch-ipt" id="show-member-skill-cd"><label class="switch-lbl" for="show-member-skill-cd"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-member-ability"><label class="switch-lbl" for="show-member-ability"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-member-awoken"><label class="switch-lbl" for="show-member-awoken"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-total-info"><label class="switch-lbl" for="show-team-total-info"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-team-awoken-count"><label class="switch-lbl" for="show-team-awoken-count"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label class="switch-lbl" for="show-team-awoken-effect"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-team-attrtype-count"><label class="switch-lbl" for="show-team-attrtype-count"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label class="switch-lbl" for="show-team-awoken-effect"><circle></circle></label>
 		</details>
 		<div class="status"></div>
 		<div>
@@ -506,7 +507,48 @@ const teamsCount = 1;
 						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
 					</li>
 				</ul>
-				<div class="team-awoken-effect"></div>
+				<div class="team-awoken-effect">
+					<ul class="passive">
+						<!--防绑--><li style="grid-column: span 2;"><icon class="awoken-icon" data-awoken-icon="52"></icon>
+							<ul class="team-flags">
+								<li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li><li class="team-member-icon"></li>
+							</ul>
+						</li>
+						<!--SX--><li><icon class="awoken-icon" data-awoken-icon="28"></icon><span class="prob"></span></li>
+						<!--暗--><li><icon class="awoken-icon" data-awoken-icon="68"></icon><span class="prob"></span></li>
+						<!--废--><li><icon class="awoken-icon" data-awoken-icon="69"></icon><span class="prob"></span></li>
+						<!--毒--><li><icon class="awoken-icon" data-awoken-icon="70"></icon><span class="prob"></span></li>
+						<!--云--><li><icon class="awoken-icon" data-awoken-icon="54"></icon><span class="prob"></span></li>
+						<!--封条--><li><icon class="awoken-icon" data-awoken-icon="55"></icon><span class="prob"></span></li>
+						<!--掉废--><li><icon class="latent-icon" data-latent-icon="14" data-latent-hole="1"></icon><span class="prob"></span></li>
+						<!--掉毒--><li><icon class="latent-icon" data-latent-icon="15" data-latent-hole="1"></icon><span class="prob"></span></li>
+						<!--心横解转转--><li><icon class="latent-icon show-enabling-awokwn" data-latent-icon="40"></icon><span class="count"></span></li>
+						<!--竖心追解云封--><li><icon class="latent-icon show-enabling-awokwn" data-latent-icon="46"></icon><span class="count"></span></li>
+					</ul>
+					<ul class="active">
+						<!--普通L--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="60"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--L解禁武器--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="48"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通十字--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="78"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--U解禁消--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="41"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通C珠--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="62"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--C珠破吸--><li style="grid-column: span 3;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="39"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+						<!--普通T字--><li style="grid-column: span 3;"><icon class="awoken-icon" data-awoken-icon="126"></icon>
+							<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
+						</li>
+					</ul>
+				</div>
 				<div class="team-awoken">
 					<!--怪物觉醒-->
 					<ul class="awoken-ul"></ul>
@@ -1043,12 +1085,12 @@ const teamsCount = 1;
 						<li class="latent-icon" data-latent-icon="38"></li><!--3色破属吸-->
 						<li class="latent-icon" data-latent-icon="42"></li><!--伤害上限×2-->
 						<li class="latent-icon" data-latent-icon="49"></li><!--伤害上限×3-->
-						<li class="latent-icon" data-latent-icon="39"></li><!--C珠破吸-->
-						<li class="latent-icon" data-latent-icon="40"></li><!--心横解转转-->
-						<li class="latent-icon" data-latent-icon="41"></li><!--U解禁消-->
-						<li class="latent-icon" data-latent-icon="46"></li><!--心追解云封-->
-						<li class="latent-icon" data-latent-icon="47"></li><!--心L大SB-->
-						<li class="latent-icon" data-latent-icon="48"></li><!--L解禁武器-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="39"></li><!--C珠破吸-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="40"></li><!--心横解转转-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="41"></li><!--U解禁消-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="46"></li><!--心追解云封-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="47"></li><!--心L大SB-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="48"></li><!--L解禁武器-->
 					</ul>
 				</details>
 			</div>

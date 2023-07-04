@@ -1347,7 +1347,7 @@
 ){ /*所以横向占两格*/
 	grid-column: span 2;
 }
-.edit-box .m-latent-allowable-ul .latent-icon:where(
+.latent-icon.show-enabling-awokwn:where(
 	[data-latent-icon='39'],
 	[data-latent-icon='40'],
 	[data-latent-icon='41'],
@@ -1361,22 +1361,22 @@
 	margin-left: 6px;
 	opacity: 0.5;
 }
-.m-latent-allowable-ul .latent-icon[data-latent-icon='39']::after{ /*C珠破吸*/
+.latent-icon.show-enabling-awokwn[data-latent-icon='39']::after{ /*C珠破吸*/
 	background-position-y: calc(-32px * 62);
 }
-.m-latent-allowable-ul .latent-icon[data-latent-icon='40']::after{ /*心横解转转*/
+.latent-icon.show-enabling-awokwn[data-latent-icon='40']::after{ /*心横解转转*/
 	background-position-y: calc(-32px * 20);
 }
-.m-latent-allowable-ul .latent-icon[data-latent-icon='41']::after{ /*U解禁消*/
+.latent-icon.show-enabling-awokwn[data-latent-icon='41']::after{ /*U解禁消*/
 	background-position-y: calc(-32px * 27);
 }
-.m-latent-allowable-ul .latent-icon[data-latent-icon='46']::after{ /*心追解云封*/
+.latent-icon.show-enabling-awokwn[data-latent-icon='46']::after{ /*心追解云封*/
 	background-position-y: calc(-32px * 45);
 }
-.m-latent-allowable-ul .latent-icon[data-latent-icon='47']::after{ /*心L大SB*/
+.latent-icon.show-enabling-awokwn[data-latent-icon='47']::after{ /*心L大SB*/
 	background-position-y: calc(-32px * 59);
 }
-.m-latent-allowable-ul .latent-icon[data-latent-icon='48']::after{ /*心L大SB*/
+.latent-icon.show-enabling-awokwn[data-latent-icon='48']::after{ /*心L大SB*/
 	background-position-y: calc(-32px * 60);
 }
 

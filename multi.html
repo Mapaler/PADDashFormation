@@ -37,7 +37,8 @@ const teamsCount = 2;
 .show-team-name-left :where(
 	.team-member-awoken,
 	.team-assist-awoken,
-	.team-member-types
+	.team-member-types,
+	.team-ability
 ){
 	padding-left: var(--head-block-width);
 }
@@ -74,9 +75,10 @@ const teamsCount = 2;
 			<input type="checkbox" class="switch-ipt" id="show-member-skill-cd"><label class="switch-lbl" for="show-member-skill-cd"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-member-ability"><label class="switch-lbl" for="show-member-ability"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-member-awoken"><label class="switch-lbl" for="show-member-awoken"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-total-info"><label class="switch-lbl" for="show-team-total-info"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-team-awoken-count"><label class="switch-lbl" for="show-team-awoken-count"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label class="switch-lbl" for="show-team-awoken-effect"><circle></circle></label>
 			<input type="checkbox" class="switch-ipt" id="show-team-attrtype-count"><label class="switch-lbl" for="show-team-attrtype-count"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label class="switch-lbl" for="show-team-awoken-effect"><circle></circle></label>
 		</details>
 		<div class="status"></div>
 		<div>
@@ -144,14 +146,24 @@ const teamsCount = 2;
 						<span class="general"></span>
 						<span class="awoken-bind"></span>
 					</div>
-					<div class="team-awoken">
-						<!--怪物觉醒-->
-						<ul class="awoken-ul">
-							<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="45"></span><span class="count"></span></li><!--心追-->
-							<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="50"></span><span class="count"></span></li><!--方块心追-->
-						</ul>
-					</div>
 				</div>
+				<ul class="team-ability">
+					<li class="abilitys abilitys-1">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
+					<li class="abilitys abilitys-2">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
+					<li class="abilitys abilitys-3">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
+					<li class="abilitys abilitys-4">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
+					<li class="abilitys abilitys-5">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
+				</ul>
 				<ul class="team-member-awoken">
 					<li class="member-awoken member-awoken-1">
 						<ul class="awoken-ul">
@@ -722,17 +734,27 @@ const teamsCount = 2;
 						</ul>
 					</li>
 				</ul>
+				<ul class="team-ability">
+					<li class="abilitys abilitys-2">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
+					<li class="abilitys abilitys-3">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
+					<li class="abilitys abilitys-4">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
+					<li class="abilitys abilitys-5">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
+					<li class="abilitys abilitys-1">
+						<div class="hp"></div><div class="atk"></div><div class="rcv"></div>
+					</li>
+				</ul>
 				<div class="team-total-info">
 					<div class="tIf-total-move">
 						<span class="general"></span>
 						<span class="awoken-bind"></span>
-					</div>
-					<div class="team-awoken">
-						<!--怪物觉醒-->
-						<ul class="awoken-ul">
-							<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="45"></span><span class="count"></span></li><!--心追-->
-							<li class="awoken-count display-none"><span class="awoken-icon" data-awoken-icon="50"></span><span class="count"></span></li><!--方块心追-->
-						</ul>
 					</div>
 					<div class="tIf-addition-info">
 						<ul class="tIf-rarity">
@@ -1306,12 +1328,12 @@ const teamsCount = 2;
 						<li class="latent-icon" data-latent-icon="38"></li><!--3色破属吸-->
 						<li class="latent-icon" data-latent-icon="42"></li><!--伤害上限×2-->
 						<li class="latent-icon" data-latent-icon="49"></li><!--伤害上限×3-->
-						<li class="latent-icon" data-latent-icon="39"></li><!--C珠破吸-->
-						<li class="latent-icon" data-latent-icon="40"></li><!--心横解转转-->
-						<li class="latent-icon" data-latent-icon="41"></li><!--U解禁消-->
-						<li class="latent-icon" data-latent-icon="46"></li><!--心追解云封-->
-						<li class="latent-icon" data-latent-icon="47"></li><!--心L大SB-->
-						<li class="latent-icon" data-latent-icon="48"></li><!--L解禁武器-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="39"></li><!--C珠破吸-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="40"></li><!--心横解转转-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="41"></li><!--U解禁消-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="46"></li><!--心追解云封-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="47"></li><!--心L大SB-->
+						<li class="latent-icon show-enabling-awokwn" data-latent-icon="48"></li><!--L解禁武器-->
 					</ul>
 				</details>
 			</div>
