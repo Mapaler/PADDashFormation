@@ -5777,9 +5777,12 @@ function refreshTeamAwokenCount(awokenDom, team) {
 		//搜索等效觉醒
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ak || eak.big === ak);
 		if (equivalentAwoken?.small === ak)
-		{ //等效觉醒
+		{ //等效觉醒小
 			totalNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 				awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+		} else if (equivalentAwoken?.big === ak)
+		{ //等效觉醒大就跳过
+			return;
 		} else
 		{ //普通觉醒
 			totalNum = awokenCountInTeam(team, ak, solo, teamsCount);
