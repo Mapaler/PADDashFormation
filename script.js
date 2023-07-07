@@ -5482,14 +5482,16 @@ function refreshAll(formationData) {
 //刷新队伍觉醒效果计算
 function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	let targetIcon;
+	//解析两个队长技
+	const leader1 = team[0][0], leader2 = team[0][5];
+	const parseLSkill1 = skillParser(leader1?.card?.leaderSkillId),
+		  parseLSkill2 = skillParser(leader2?.card?.leaderSkillId);
 	//防绑
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"52\"]")) {
 		const teamFlagsMembers = Array.from(targetIcon.parentElement.querySelectorAll(".team-flags li"));
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.big === 52);
 		//储存附加 52 即大防绑的队长技能
-		const leader1 = team[0][0], leader2 = team[0][5];
-		const parseLSkill = skillParser(leader1?.card?.leaderSkillId).concat(skillParser(leader2?.card?.leaderSkillId));
-		let lsAwoken = parseLSkill.filter(skill=>skill.kind == SkillKinds.ImpartAwakenings);
+		let lsAwoken = parseLSkill1.concat(parseLSkill2).filter(skill=>skill.kind == SkillKinds.ImpartAwakenings);
 
 		for (let mi=0; mi < team[0].length; mi++) {
 			const memberData = team[0][mi];
@@ -5509,9 +5511,71 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 				}
 				thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
 			}
-			teamFlagsMembers[mi].setAttribute("data-percent", Math.round(Math.min(thisAwokenNum/2,1)*100));
+			teamFlagsMembers[mi].setAttribute(dataAttrName, Math.round(Math.min(thisAwokenNum/2,1)*100));
 		}
 	}
+	//自动回复
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"9\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".count");
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 9);
+		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
+		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+		let count = thisAwokenNum * 1000; //普通觉醒每个加1000
+
+		//储存附加 52 即大防绑的队长技能
+		let lsAwoken1 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal),
+			lsAwoken2 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal);
+		if (lsAwoken1.length) {
+			count += leader1.ability[2] * lsAwoken1[0].value.value;
+		}
+		if (lsAwoken2.length) {
+			count += leader2.ability[2] * lsAwoken2[0].value.value;
+		}
+
+		for (let mi=0; mi < team[0].length; mi++) {
+			const memberData = team[0][mi];
+			let latentCount = memberData.latent.filter(l=>l===5).length;
+			if (latentCount>0) { //自动回复潜觉，不考虑任何297和觉醒
+				let memberCard = memberData.card;
+				//计算没有297的纯三维
+				let memberRCV = Math.round(curve(memberCard.rcv, memberData.level, memberCard.maxLevel, memberCard.limitBreakIncr, 5));
+				count += Math.round(memberRCV * 0.15 * latentCount); //回复力的15%
+			} else {
+				continue;
+			}
+		}
+		targetValue.setAttribute(dataAttrName, count.bigNumberToString());
+	}
+	
+	//颜色盾
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"4\"]")) {
+		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		const teamLatents = team[0].flatMap(m=>m.latent); //因为盾是固定值，所以直接平面化所有的潜觉
+		for (let oi=0; oi < orbs.length; oi++) {
+			let orb = orbs[oi];
+			const thisAwokenNum = awokenCountInTeam(team, 4+oi, solo, teamsCount);
+			let prob = thisAwokenNum * 0.07 //普通觉醒7%
+					 + teamLatents.filter(l=>l===6+oi).length * 0.01  //小潜觉 1%
+					 + teamLatents.filter(l=>l===32+oi).length * 0.03; //大潜觉 3%
+			orb.setAttribute(dataAttrName,Math.round(Math.min(prob,1)*100));
+		}
+	}
+
+	//掉+珠
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"14\"]")) {
+		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+
+		for (let oi=0; oi < orbs.length; oi++) {
+			let orb = orbs[oi];
+			const equivalentAwoken = equivalent_awoken.find(eak => eak.small === (oi < 5 ? 14+oi : 29));
+			const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
+			awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+			let prob = thisAwokenNum * 0.2; //普通觉醒20%
+			console.log(thisAwokenNum, prob)
+			orb.setAttribute(dataAttrName,Math.round(Math.min(prob,1)*100));
+		}
+	}
+
 	//SX
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"28\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");

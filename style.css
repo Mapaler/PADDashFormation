@@ -2790,30 +2790,47 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	width: 20px;
 	height: 20px;
 }
-.team-awoken-effect .team-flags .team-member-icon[data-percent="0"] {
+.team-awoken-effect .team-flags .team-member-icon[data-value="0"] {
 	background-color: red;
 }
-.team-awoken-effect .team-flags .team-member-icon[data-percent="50"] {
+.team-awoken-effect .team-flags .team-member-icon[data-value="50"] {
 	background-color: pink;
 }
-.team-awoken-effect .team-flags .team-member-icon[data-percent="100"] {
+.team-awoken-effect .team-flags .team-member-icon[data-value="100"] {
 	background-color: lightgreen;
 }
+
+.team-awoken-effect .orb-list .orb {
+	color: white;
+	white-space: nowrap;
+	text-shadow: black 1px 1px 1px;
+	position: relative;
+	text-align: center;
+}
+
 .team-awoken-effect .prob[data-value="100"] {
 	color: #28c031;
 	text-shadow: black 1px 1px 1px;
 }
-.team-awoken-effect .prob::before{
-	content: attr(data-value);
-}
-.team-awoken-effect .prob::after{
-	content: "%";
-}
-.team-awoken-effect .count::before{
+.team-awoken-effect .count[data-value]::before,
+.team-awoken-effect .orb-list .orb[data-value]::before
+{
 	content: "×";
 }
-.team-awoken-effect .count::after{
+.team-awoken-effect .count[data-value]::after,
+.team-awoken-effect .orb-list .orb[data-value]::after
+{
+	content: attr(data-value)attr(data-postfix);
+}
+.team-awoken-effect .prob[data-value]::before,
+.team-awoken-effect .orb-list .prob[data-value]::before
+{
 	content: attr(data-value);
+}
+.team-awoken-effect .prob[data-value]::after,
+.team-awoken-effect .orb-list .prob[data-value]::after
+{
+	content: "%";
 }
 .team-awoken-effect .latent-icon {
 	display: inline-flex;
@@ -2829,23 +2846,24 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 }
 .team-awoken-effect .orb-list .orb {
 	font-size: 16px;
-	transform: scale(0.75);
-	margin: calc((36px - 36px * 0.75) / -2);
+	transform: scale(0.8);
+	margin: calc((36px - 36px * 0.8) / -2);
 }
 
 .team-awoken-effect .orb-list .orb:not([data-value]),
 .team-awoken-effect .orb-list .orb[data-value="0"]{
 	filter: grayscale(100%);
 }
-.team-awoken-effect .orb-list .orb[data-value]:not([data-value="0"])::before {
-	content: "x"attr(data-value);
-	color: white;
-	font-size: 1.25em;
-	-webkit-text-stroke: 1px black;
-	text-stroke: 1px black;
-	text-shadow: black 1px 1px 1px;
+.team-awoken-effect .orb-list .orb::before,
+.team-awoken-effect .orb-list .orb::after
+{
+	width: unset;
+	height: unset;
 	position: relative;
-	text-align: center;
+}
+.team-awoken-effect .orb-list .orb[data-value="0"]::before,
+.team-awoken-effect .orb-list .orb[data-value="0"]::after {
+	display: none;
 }
 
 .detail-box{
