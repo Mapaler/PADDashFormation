@@ -916,6 +916,7 @@ body:not(.show-team-total-info):not(.solo) .formation-box .team-badge
 .formation-box .team-total-info
 {
 	display: inline-block;
+	max-width: calc(100% - 60px);
 }
 /*各种信息统计的图标*/
 .tIf-total-skill-boost,
