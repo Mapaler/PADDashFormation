@@ -5534,7 +5534,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 
 		for (let mi=0; mi < team[0].length; mi++) {
 			const memberData = team[0][mi];
-			let latentCount = memberData.latent.filter(l=>l===5).length;
+			let latentCount = memberData?.latent?.filter(l=>l===5).length;
 			if (latentCount>0) { //自动回复潜觉，不考虑任何297和觉醒
 				let memberCard = memberData.card;
 				//计算没有297的纯三维
@@ -5571,7 +5571,6 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 			const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 			awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 			let prob = thisAwokenNum * 0.2; //普通觉醒20%
-			console.log(thisAwokenNum, prob)
 			orb.setAttribute(dataAttrName,Math.round(Math.min(prob,1)*100));
 		}
 	}
@@ -5637,7 +5636,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	//掉毒
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"15\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
-		let prob = team[0].some(member=>member.latent.includes(15)) ? 1 : 0;
+		let prob = team[0].some(member=>member?.latent?.includes(15)) ? 1 : 0;
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//心横解转转
@@ -5648,7 +5647,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		for (let mi=0; mi < team[0].length; mi++) {
 			const memberData = team[0][mi];
 			const assistData = team[1][mi];
-			if (memberData.latent.includes(40)) {
+			if (memberData?.latent?.includes(40)) {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
 				count += effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
 			} else {
@@ -5664,7 +5663,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		for (let mi=0; mi < team[0].length; mi++) {
 			const memberData = team[0][mi];
 			const assistData = team[1][mi];
-			if (memberData.latent.includes(46)) {
+			if (memberData?.latent?.includes(46)) {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
 				count += effectiveAwokens.filter(ak=>ak==45).length;
 			} else {
@@ -5701,7 +5700,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		for (let mi=0; mi < team[0].length; mi++) {
 			const memberData = team[0][mi];
 			//const assistData = team[1][mi]; //L解禁武器，武器上的L无意义
-			if (memberData.latent.includes(48)) {
+			if (memberData?.latent?.includes(48)) {
 				let effectiveAwokens = memberData.effectiveAwokens();
 				let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
 				if (thisAwokenNum == 0) continue;
@@ -5745,7 +5744,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		for (let mi=0; mi < team[0].length; mi++) {
 			const memberData = team[0][mi];
 			//const assistData = team[1][mi]; //L解禁武器，武器上的L无意义
-			if (memberData.latent.includes(41)) {
+			if (memberData?.latent?.includes(41)) {
 				let effectiveAwokens = memberData.effectiveAwokens();
 				let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
 				if (thisAwokenNum == 0) continue;
