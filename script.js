@@ -5483,9 +5483,10 @@ function refreshAll(formationData) {
 function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	let targetIcon;
 	//解析两个队长技
-	const leader1 = team[0][0], leader2 = team[0][5];
-	const parseLSkill1 = skillParser(leader1?.card?.leaderSkillId),
-		  parseLSkill2 = skillParser(leader2?.card?.leaderSkillId);
+	let leader1 = team[0][team[3] || 0], //换队长或者默认队长
+		leader2 = team[0][5];
+	let parseLSkill1 = skillParser(leader1?.card?.leaderSkillId),
+		parseLSkill2 = skillParser(leader2?.card?.leaderSkillId);
 	//防绑
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"52\"]")) {
 		const teamFlagsMembers = Array.from(targetIcon.parentElement.querySelectorAll(".team-flags li"));
@@ -5502,7 +5503,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 			} else {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
 				if (lsAwoken.length) { //增加队长技赋予的觉醒
-					const {attrs, types} = memberData.getAttrsTypesWithWeapon(assistData);
+					const {attrs=[], types=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
 					lsAwoken.forEach(pls=>{
 						if (attrs.some(a => pls.attrs.includes(a)) || types.some(t => pls.types.includes(t))) {
 							effectiveAwokens.push(...pls.awakenings);
