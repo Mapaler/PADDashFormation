@@ -2832,6 +2832,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-awoken-effect .orb-list .prob[data-value]::after
 {
 	content: "%";
+	font-size: 0.75em;
 }
 .team-awoken-effect .latent-icon {
 	display: inline-flex;

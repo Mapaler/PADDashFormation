@@ -1271,7 +1271,8 @@ function getActuallySkills(skill, skillTypes, searchRandom = true) {
 		skill.type == 233 || //进化技能循环
 		skill.type == 248 //延迟生效技能
 	){
-		let params = skill.type == 248 ? skill.params.slice(1) : skill.params;
+		let params = skill.type == 248 ? skill.params.slice(1) : skill.params.concat();
+		params.reverse(); //将技能反转，让进化类技能优先搜索最终技能
 		//因为可能有多层调用，特别是随机118再调用组合116的，所以需要递归
 		const subSkills = params.flatMap(id => getActuallySkills(Skills[id], skillTypes, searchRandom)).filter(s=>s);
 		return subSkills;
