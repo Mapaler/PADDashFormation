@@ -55,6 +55,9 @@ body{
 	margin: 0;
 	background-color: white;
 }
+details>summary:hover {
+	background-color: #00000044;
+}
 .fa::before {
 	font-family: var(--icon-font-family);
 	margin-right: 3px;
@@ -303,10 +306,6 @@ label[for="siwtch-code-mode"]::after {
 }
 input:checked+ .switch-lbl[for$=and-or]::after{
 	content: "AND";
-}
-
-.config-display-list>summary:hover {
-	background-color: lightblue;
 }
 
 .status{
@@ -2518,9 +2517,6 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	display: none;
 }
 
-.row-mon-latent details summary:hover {
-	background-color: #00000044;
-}
 .m-latent-allowable-ul{
 	margin-bottom: 5px;
 	display: grid;
