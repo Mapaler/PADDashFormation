@@ -2499,13 +2499,18 @@ function renderSkill(skill, option = {})
 			if (targets != undefined)
 			{
 				targetDict.target = document.createDocumentFragment();
-				const ul = targetDict.target.appendChild(document.createElement("ul"));
-				ul.className = "team-flags";
-				for (let i = 0; i<6; i++) {
-					const li = ul.appendChild(document.createElement("li"));
-					li.className = "team-member-icon";
+
+				//增加队员伤害的技能的目标，删选出来，其他的目标则不显示
+				let atkUpTarget = targets.filter(n=>["self","leader-self","leader-helper","sub-members"].includes(n));
+				if (atkUpTarget.length) {
+					const ul = targetDict.target.appendChild(document.createElement("ul"));
+					ul.className = "team-flags";
+					for (let i = 0; i<6; i++) {
+						const li = ul.appendChild(document.createElement("li"));
+						li.className = "team-member-icon";
+					}
+					atkUpTarget.forEach(n=>ul.classList.add(n));
 				}
-				targets.forEach(n=>ul.classList.add(n));
 				
 				targetDict.target.appendChild(targets.map(target=>
 					tsp?.target[target.replaceAll("-","_")]?.())
