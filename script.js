@@ -1563,7 +1563,7 @@ async function inputFromQrString(string)
 		return qrObjToUrl(qrObj);
 	}
 	//JSON 类
-	if (string[0] === "{" && string[string.length-1] === "}")
+	if (string.startsWith("{") && string.endsWith("}"))
 	{ //生成的二维码
 		try{
 			let obj = JSON.parse(string);
@@ -1587,7 +1587,7 @@ async function inputFromQrString(string)
 		}
 	}
 	//URL 类
-	else if (/^(https?|file):\/\//i.test(string))
+	else if (string.startsWith("https://") || string.startsWith("http://") || string.startsWith("file://"))
 	{ //网址二维码
 		let url = new URL(string);
 		if (url.searchParams.get('d')) { //PADDF的网址格式
@@ -2082,7 +2082,9 @@ function initialize() {
 		
 			qrcodeReader.decodeFromImage(newImg).then((result) => {
 				console.debug('Found QR code!', result);
-				qrReadBox.qrStr.value = result.text;
+				let reText = result.text;
+				if (reText.startsWith("\u001a")) reText = reText.substring(1);
+				qrReadBox.qrStr.value = reText;
 				qrReadBox.readString.onclick();
 			}).catch((err) => {
 				console.error(err);

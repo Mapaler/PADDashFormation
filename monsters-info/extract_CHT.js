@@ -179,13 +179,13 @@ fs.readdir(sourceFolder,function(err,files){
 			return a.id - b.id;
 		});
 
-		fs.writeFile(outJSON_cht, JSON.stringify(monArr_cht) ,function(err){
+		fs.writeFile(outJSON_cht, JSON.stringify(monArr_cht, null, '\t') ,function(err){
 			if(err){
 				console.error(err);
 			}
 			console.log("---繁体中文导出成功，共 %d 个名称---", monArr_cht.length);
 		});
-		fs.writeFile(outJSON_chs, JSON.stringify(monArr_chs) ,function(err){
+		fs.writeFile(outJSON_chs, JSON.stringify(monArr_chs, null, '\t') ,function(err){
 			if(err){
 				console.error(err);
 			}

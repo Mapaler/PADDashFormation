@@ -13,14 +13,11 @@ The current acquisition API is
 * 但是有加密的参数，我不知道如何生成，所以我只能从游戏的下载过程截获。  
 But there are encrypted parameters that I don't know how to generate. So I intercepted from the game's download process.
 
-* 使用 [Fidder](https://www.telerik.com/download/fiddler)，执行 *HTTPS 中间人攻击*从游戏内抓包获得怪物信息。  
-Use [Fidder](https://www.telerik.com/download/fiddler), do *HTTPS man-in-the-middle attack* to capture monster information from in-game capture.  
+* 使用 [Fiddler](https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe)，执行 *HTTPS 中间人攻击*从游戏内抓包获得怪物信息。  
+Use [Fiddler](https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe), do *HTTPS man-in-the-middle attack* to capture monster information from in-game capture.  
 
-* 安卓5可以直接在安卓系统里安装 *CER* 证书，但安卓7开始，系统不再信任用户证书。  
-Android 5 can install *CER* certificates directly in Android. Starting with Android 7, the system no longer trusts user certificates.
-
-* 由于需要安卓 7 才能玩智龙迷城，所以要先创建安卓 7 的模拟器，再安装智龙迷城。  
-Since Android 7 is required to play PAD, you must create an emulator for Android 7 before installing PAD.
+* 安卓5可以直接在安卓系统里安装 *CER* 证书，但安卓7开始，系统不再信任用户证书。由于需要安卓 7 才能玩智龙迷城，所以要先创建安卓 7 的模拟器，再安装智龙迷城。   
+Android 5 can install *CER* certificates directly in Android. Starting with Android 7, the system no longer trusts user certificates. Since Android 7 is required to play PAD, you must create an emulator for Android 7 before installing PAD.
 
 * 将 Fidder 根证书导出到桌面  
 Export the Fidder Root Certificate to desktop
@@ -36,8 +33,8 @@ Execute the code to get the hash of the certificate
 Execute the code to convert the certificate from *CER* to *PEM* format  
 `openssl x509 -inform DER -in FiddlerRoot.cer -outform PEM -out [hash].0`
 
-* 将证书文件放入安卓系统证书文件夹  
-Place the certificate file in the Android system certificate folder  
+* 将证书文件放入安卓系统证书文件夹`/system/etc/security/cacerts/`  
+Place the certificate file in the Android system certificate folder`/system/etc/security/cacerts/`  
 参考/Reference: https://www.jianshu.com/p/035f7d7a0f7e
 
 	<details>
@@ -93,49 +90,30 @@ Now that you're running the game inside the simulator, Fidder will be able to in
 
 	```js
 	//自动储存智龙迷城数据
-	var PADDataPath = "D:\\PADDashFormation\\monsters-info\\official-API\\";
-	if (oSession.HostnameIs("api-adr.padsv.gungho.jp") //日服域名
-		|| oSession.HostnameIs("api-ht-adr.padsv.gungho.jp") //港台服域名
-		|| oSession.HostnameIs("api-na-adrv2.padsv.gungho.jp") //美服域名
-		|| oSession.HostnameIs("api-kr-adrv2.padsv.gungho.jp") //韩服域名
-	) {
-		var serverName;
-		switch (oSession.hostname)
-		{
-			case "api-adr.padsv.gungho.jp": //日服域名
-			case "api-ht-adr.padsv.gungho.jp": //港台服域名
-				serverName = "ja"
-				break;
-			case "api-na-adrv2.padsv.gungho.jp": //美服域名
-				serverName = "en"
-				break;
-			case "api-kr-adrv2.padsv.gungho.jp": //韩服域名
-				serverName = "ko"
-				break;
+	switch (oSession.hostname) {
+		case "api-adr.padsv.gungho.jp": //日服域名
+		case "api-ht-adr.padsv.gungho.jp":{ //港台服域名
+			savePADData("ja");
+			break;
 		}
+		case "api-na-adrv2.padsv.gungho.jp":{ //美服域名
+			savePADData("en");
+			break;
+		}
+		case "api-kr-adrv2.padsv.gungho.jp":{ //韩服域名
+			savePADData("ko");
+			break;
+		}
+	}
+	function savePADData(serverName: String) {
+		//智龙迷城数据文件位置
+		var PADDataPath: String = "D:\\www\\PADDashFormation\\monsters-info\\official-API\\";
 		if (oSession.uriContains("download_card_data")) { //自动保存怪物数据
-			oSession.SaveResponseBody(PADDataPath + serverName + "-card.json")
+			oSession.SaveResponseBody(Path.Combine(PADDataPath, serverName + "-card.json"));
 		}
 		if (oSession.uriContains("download_skill_data")) { //自动保存技能数据
-			oSession.SaveResponseBody(PADDataPath + serverName + "-skill.json")
+			oSession.SaveResponseBody(Path.Combine(PADDataPath, serverName + "-skill.json"));
 		}
-		/*
-		if (oSession.uriContains("download_dungeon_data")) { //自动保存地下城数据
-			oSession.SaveResponseBody(PADDataPath + serverName + "-dungeon.json")
-		}
-		if (oSession.uriContains("download_limited_bonus_data")) { //自动保存limited_bonus数据
-			oSession.SaveResponseBody(PADDataPath + serverName + "-limited_bonus.json")
-		}
-		if (oSession.uriContains("download_enemy_skill_data")) { //自动保存敌人技能数据
-			oSession.SaveResponseBody(PADDataPath + serverName + "-enemy_skill.json")
-		}
-		if (oSession.uriContains("shop_item")) { //自动保存商店数据
-			oSession.SaveResponseBody(PADDataPath + serverName + "-shop_item.json")
-		}
-		if (oSession.uriContains("mdatadl")) { //自动保存交换所数据
-			oSession.SaveResponseBody(PADDataPath + serverName + "-mdatadl.json")
-		}
-		*/
 	}
 	```
 
