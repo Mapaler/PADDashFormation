@@ -481,9 +481,6 @@ ul{
 	border: none;
 	box-shadow: inset black 0 0 7px;
 }
-.member{
-	vertical-align: top;
-}
 .monster.delay{
 	background-color: yellow;
 	box-shadow: inset orange 0 0 7px;
@@ -1174,7 +1171,14 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	text-stroke: 1px black;
 	text-shadow: black 1px 1px 1px;
 }
-
+.team-members .member,
+.team-assist .member,
+.team-latents .latents,
+.team-member-types .member-types,
+.team-member-awoken .member-awoken,
+.team-assist-awoken .member-awoken{
+	transition: transform 0.4s ease-in-out;
+}
 /*队伍的潜觉*/
 .team-latents .latents{
 	width: var(--head-block-width);

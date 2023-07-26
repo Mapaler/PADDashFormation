@@ -5411,10 +5411,19 @@ function refreshAll(formationData) {
 			const memberLi = membersDom.querySelector(`.member-${ti+1}`);
 			const latentLi = latentsDom.querySelector(`.latents-${ti+1}`);
 			const assistsLi = assistsDom.querySelector(`.member-${ti+1}`);
-			const teamAbilityLi = teamAbilityDom ? teamAbilityDom.querySelector(`.abilitys-${ti+1}`) : undefined;
-			const teamMemberAwokenLi = teamAbilityDom ? teamMemberAwokenDom.querySelector(`.member-awoken-${ti+1}`) : undefined;
-			const teamAssistAwokenLi = teamAbilityDom ? teamAssistAwokenDom.querySelector(`.member-awoken-${ti+1}`) : undefined;
-			[memberLi,latentLi,assistsLi,teamAbilityLi,teamMemberAwokenLi,teamAssistAwokenLi].forEach(dom=>{
+			const teamAbilityLi = teamAbilityDom && teamAbilityDom.querySelector(`.abilitys-${ti+1}`);
+			const teamMemberTypesLi = teamMemberTypesDom && teamMemberTypesDom.querySelector(`.member-types-${ti+1}`);
+			const teamMemberAwokenLi = teamAbilityDom && teamMemberAwokenDom.querySelector(`.member-awoken-${ti+1}`);
+			const teamAssistAwokenLi = teamAbilityDom && teamAssistAwokenDom.querySelector(`.member-awoken-${ti+1}`);
+			[
+				memberLi,
+				latentLi,
+				assistsLi,
+				teamAbilityLi,
+				teamMemberTypesLi,
+				teamMemberAwokenLi,
+				teamAssistAwokenLi
+			].forEach(dom=>{
 				if (!dom) return;
 				if (leaderIdx > 0 && ti == 0) //队长
 				{
