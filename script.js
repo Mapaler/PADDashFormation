@@ -1787,13 +1787,13 @@ function paddbFotmationToPdfFotmation(obj)
 	return f;
 }
 //截图
-function captureScreenshot(target) {
+function captureScreenshot(target, transparent) {
 	statusLine?.writeText(localTranslating.status_message.prepare_capture);
 	//去掉可能的空白文字的编辑状态
 	formationBox.classList.remove("edit-code");
 	const downLink = controlBox.querySelector(".down-capture");
 	setTimeout(()=>{
-		html2canvas(target, {backgroundColor: null}).then(canvas => {
+		html2canvas(target, transparent ? {backgroundColor: null} : undefined).then(canvas => {
 			canvas.toBlob(function(blob) {
 				window.URL.revokeObjectURL(downLink.href);
 				downLink.href = URL.createObjectURL(blob);
@@ -1810,6 +1810,14 @@ window.onload = initialize; //界面初始化
 
 //初始化
 function initialize() {
+	const drawScreenshot = document.querySelector("#draw-screenshot");
+	const screenshotTransparent = document.querySelector("#screenshot-transparent");
+	drawScreenshot.onclick = function(event) {
+		if (event.target == this) {
+			captureScreenshot(formationBox, screenshotTransparent.checked);
+		}
+	}
+
 	document.body.lang = currentLanguage.i18n;
 
 	qrcodeReader = new ZXing.BrowserQRCodeReader(); //二维码读取
@@ -2004,8 +2012,8 @@ function initialize() {
 	qrCodeFrame.ondrop = function(e)
 	{
 		imagesSelected(e.dataTransfer.files); 
-		e.stopPropagation();  
-		e.preventDefault();   
+		e.stopPropagation();
+		e.preventDefault();
 	}
 
 	qrCodeFrame.refreshQrCode = function(string)
