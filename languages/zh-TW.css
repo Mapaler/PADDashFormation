@@ -217,8 +217,11 @@ label[for="merge-skill"]::after{
 .control-box .btn-clear-data::before{
 	content: "🗑️清除數據";
 }
-.control-box .btn-capture::before{
-	content: "📷截圖";
+#draw-screenshot::before{
+	content: "📷繪製截圖";
+}
+label[for="screenshot-transparent"]::after{
+	content: "透明";
 }
 .control-box .btn-player-data::before{
 	content: "📦我的箱子";

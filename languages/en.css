@@ -219,8 +219,11 @@ label[for="merge-skill"]::after{
 .control-box .btn-clear-data::before{
 	content: "🗑️Clear data";
 }
-.control-box .btn-capture::before{
-	content: "📷Screenshot";
+#draw-screenshot::before{
+	content: "📷Draw screenshot";
+}
+label[for="screenshot-transparent"]::after{
+	content: "Transparent";
 }
 .control-box .btn-player-data::before{
 	content: "📦My Box";

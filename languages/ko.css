@@ -211,8 +211,11 @@ label[for="merge-skill"]::after{
 .control-box .btn-clear-data::before{
 	content: "🗑️데이터 지우기";
 }
-.control-box .btn-capture::before{
-	content: "📷스크린샷";
+#draw-screenshot::before{
+	content: "📷스크린 샷 그리기";
+}
+label[for="screenshot-transparent"]::after{
+	content: "투명한";
 }
 .control-box .btn-player-data::before{
 	content: "📦내 상자";

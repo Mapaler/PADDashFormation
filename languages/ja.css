@@ -215,8 +215,11 @@ label[for="merge-skill"]::after{
 .control-box .btn-clear-data::before{
 	content: "🗑️データの消去";
 }
-.control-box .btn-capture::before{
-	content: "📷スクリーンショット";
+#draw-screenshot::before{
+	content: "📷スクリーンショットを描く";
+}
+label[for="screenshot-transparent"]::after{
+	content: "透明";
 }
 .control-box .btn-player-data::before{
 	content: "📦私の箱";
