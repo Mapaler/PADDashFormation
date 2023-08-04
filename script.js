@@ -30,6 +30,7 @@ const isGuideMod = !unsupportFeatures.length && Boolean(Number(getQueryString("g
 //用油猴扩展装上，把GM_xmlhttpRequest引入的脚本
 const ExternalLinkScriptURL = "https://greasyfork.org/scripts/458521";
 const paddbPathPrefix = "/team/"; //PADDB的获取队伍网址格式
+const uploadMessage = "Use PADDashFormation to read the Team URL and restore correct team for ID > 9934.\nhttps://github.com/Mapaler/PADDashFormation";
 
 if (location.search.includes('&amp;')) {
 	location.search = location.search.replace(/&amp;/ig, '&');
@@ -546,14 +547,19 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 {
 	//PadDb服务器出现没有的怪物就会崩溃，在这里主动保护一下，转换为 1319
 	function protectPadDbId(cardid) {
+		if (cardid === null) return cardid;
 		return cardid > 9934 ? 1319 : cardFixId(cardid, true);
+	}
+	//PadDb服务器出现没有的怪物就会崩溃，在这里主动保护一下，转换为 1319
+	function changePadDbIdLevel(cardid) {
+		return cardid > 9934 ;
 	}
 	//PADDB目前只支持单人队伍
 	const t = this.teams[0];
 	let teamObj = {
 		name: this.title,
 		badge: paddbBadgeMap.find(badge=>badge.pdf === t[2]).paddb,
-		memo: this.detail,
+		memo: (this.detail || '') + '\n' + uploadMessage,
 		monsters: {},
 		assists: {},
 	}
@@ -570,26 +576,32 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 	for (let i = 0; i < t[0].length; i++) {
 		const m = t[0][i], a = t[1][i];
 		//计算基底的变身情况
-		let num = protectPadDbId(m.id, true), transform = null;
+		let num, transform;
 		if (m.card?.henshinFrom?.length > 0 //是变身
 			&& m.level <= m.card.maxLevel //等级不超过99
 		) {
-			transform = m.id;
 			num = returnHenshinRootId(m.id);
+			transform = m.id;
+		} else {
+			num = m.id;
+			transform = null;
 		}
+
+		let memberIdChange = changePadDbIdLevel(transform || num);
 		teamObj.monsters[i] = m.id <= 0 ? null : {
-			num: num,
-			level: m.level,
+			num: memberIdChange ? m.level : num,// protectPadDbId(num, true),
+			level: memberIdChange ? (transform || num) : m.level,
 			awoken: m.awoken,
 			plus: m.plus.concat(),
 			active_skill_level: m.skilllevel ?? Skills[m.card.activeSkillId].maxLevel,
-			transform: transform,
+			transform: memberIdChange ? m.level : num,
 			super_awoken: m.sawoken + 2,
 			latent_awokens: m.latent.map(n=>paddbLatentMap.find(latent=>latent.pdf === n).paddb),
 		};
+		let assistIdChange = changePadDbIdLevel(a.id);
 		teamObj.assists[i] = a.id <= 0 ? null : {
-			num: a.id,
-			level: a.level,
+			num: assistIdChange ? a.level : a.id,
+			level: assistIdChange ? a.id : a.level,
 			plus: a.plus.every(n=>n>=99), //只需要true和false
 			active_skill_level: a.skilllevel ?? Skills[a.card.activeSkillId].maxLevel,
 		};
@@ -1758,7 +1770,7 @@ function paddbFotmationToPdfFotmation(obj)
 	const team = JSON.parse(obj.team);
 	const f = new Formation(1, 6);
 	f.title = team.name;
-	f.detail = team.memo;
+	f.detail = team.memo.replace(new RegExp('\\n?'+uploadMessage,"i"),"");
 	const t = f.teams[0];
 	//队伍徽章
 	t[2] = paddbBadgeMap.find(badge=>badge.paddb === team.badge).pdf;
@@ -1766,20 +1778,30 @@ function paddbFotmationToPdfFotmation(obj)
 	for (let i = 0; i< members.length; i++) {
 		const m = members[i], a = assists[i], dm = team.monsters[i], da = team.assists[i];
 		if (dm) {
-			m.id = dm.transform || dm.num;
-			m.level = dm.level;
+			if (dm.level > 9934) { //如果等级大于9934，说明是被我改过的，所以需要交换
+				m.id = dm.level;
+				m.level = dm.transform || dm.num;
+			} else {
+				m.id = cardFixId(dm.transform || dm.num, false);
+				m.level = dm.level;
+			}
 			m.plus = dm.plus.concat();
-			m.awoken = (dm.transform && dm.transform !== dm.numdm) //有变身状态时
-						? Cards[dm.transform].awakenings.length //变身后的觉醒全满
+			m.awoken = (dm.transform && dm.transform !== dm.num) //有变身状态时
+						? Cards[m.id].awakenings.length //变身后的觉醒全满
 						: dm.awoken;
 			m.sawoken = dm.super_awoken - 2;
 			m.latent = dm.latent_awokens.map(paddbLatent=>paddbLatentMap.find(latent=>latent.paddb === paddbLatent)?.pdf ?? 0);
 			m.skilllevel = dm.active_skill_level;
 		}
 		if (da) {
-			a.id = da.num;
-			a.level = da.level;
-			a.awoken = Cards[da.num].awakenings.length;
+			if (da.level > 9934) { //如果等级大于9934，说明是被我改过的，所以需要交换
+				a.id = da.level;
+				a.level = da.num;
+			} else {
+				a.id = cardFixId(da.num, false);
+				a.level = da.level;
+			}
+			a.awoken = Cards[a.id].awakenings.length;
 			a.plus = da.plus ? [99,99,99]:[0,0,0];
 			a.skilllevel = da.active_skill_level;
 		}
@@ -2254,7 +2276,7 @@ function initialize() {
 		let obj = formation.getPaddbQrObj();
 		obj.userId = paddbUsername.value;
 		obj.password = paddbPassword.value;
-		obj.tags = [obj.userId];
+		obj.tags = [obj.userId,"PADDashFormation"];
 		let postBody = JSON.stringify(obj);
 		const options = {
 			method: "POST",
