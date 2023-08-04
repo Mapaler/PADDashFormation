@@ -1179,6 +1179,39 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-assist-awoken .member-awoken{
 	transition: transform 0.4s ease-in-out;
 }
+
+.latent-icon{
+	border-width: 2px;
+	border-style: ridge;
+	border-radius: 5px;
+	border-color: rgba(82,82,60,0.5);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+.latent-icon::before,
+.latent-icon::after
+{
+	margin: -2px;
+	width: 32px;
+	height: 32px;
+	background-image: url(images/icon-latent.png);
+	background-repeat: no-repeat;
+}
+.latent-icon::before{
+	content: "";
+}
+.latent-icon:not([data-latent-icon]){
+	background-color: rgba(33,28,21,0.5);
+	box-shadow:inset 1px 2px 1px -1px rgba(0,0,0,0.5);
+}
+.latent-icon[data-latent-icon]{
+	background-image: linear-gradient(#4499EE 33%,  #2277EE 80%);
+	border-color: #CCEEFF;
+	box-shadow: black 1px 2px 1px -1px inset, black 1px 1px 1px 0;
+}
 /*队伍的潜觉*/
 .team-latents .latents{
 	width: var(--head-block-width);
@@ -1190,10 +1223,9 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	transform: scale(0.65);
 	transform-origin: left top;
 	margin-left: 4px;
-	margin-bottom: calc(-64px * (1 - 0.65) + 1px);
+	margin-bottom: calc( -64px * (1 - 0.65) + 1px);
 	/*margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);*/
 	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
-	min-height: 47px; /* 为了防止只有一层6格大潜觉的时候，被缩减太多的问题*/
 	/*潜在觉醒布局，使用 gird*/
 	display: grid;
 	grid-template: repeat(2, 32px) / repeat(3, 32px);
