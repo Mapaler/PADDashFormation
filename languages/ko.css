@@ -270,6 +270,9 @@ label[for="default-level"]::after
 {
 	content: "기본 Lv.";
 }
+label[for="show-rich-text-tools"]::after{
+	content:"서식 있는 텍스트 도구 모음";
+}
 
 .tIf-total-move .general::after,
 .tIf-total-move .awoken-bind::after

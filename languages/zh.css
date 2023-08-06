@@ -275,6 +275,9 @@ label[for="default-level"]::after
 {
 	content: "默认等级：";
 }
+label[for="show-rich-text-tools"]::after{
+	content:"富文本工具栏";
+}
 
 .tIf-total-move .general::after,
 .tIf-total-move .awoken-bind::after

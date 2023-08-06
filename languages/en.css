@@ -278,6 +278,9 @@ label[for="default-level"]::after
 {
 	content: "Default Lv.";
 }
+label[for="show-rich-text-tools"]::after{
+	content:"Rich text toolbar";
+}
 
 .tIf-total-move .general::after,
 .tIf-total-move .awoken-bind::after

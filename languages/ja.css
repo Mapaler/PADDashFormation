@@ -275,6 +275,9 @@ label[for="default-level"]::after
 {
 	content: "デフォルト Lv.";
 }
+label[for="show-rich-text-tools"]::after{
+	content:"リッチテキストツールバー";
+}
 
 .tIf-total-move .general::after,
 .tIf-total-move .awoken-bind::after

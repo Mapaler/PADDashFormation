@@ -45,8 +45,8 @@ class Card{
 			exp: data[i++]
 		};
 		card.evoBaseId = Card.fixId(data[i++]); //进化基础ID
-		card.evoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]].map(Card.fixId); //进化素材
-		card.unevoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]].map(Card.fixId); //退化素材
+		card.evoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]].map(n=>Card.fixId(n,false)); //进化素材
+		card.unevoMaterials = [data[i++], data[i++], data[i++], data[i++], data[i++]].map(n=>Card.fixId(n,false)); //退化素材
 		card.unk02 = data[i++]; //未知02
 		card.unk03 = data[i++]; //未知03
 		card.unk04 = data[i++]; //未知04

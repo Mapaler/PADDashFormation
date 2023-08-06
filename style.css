@@ -725,7 +725,8 @@ body:not(.show-member-ability) .team-ability, /*队员三维*/
 body:not(.show-member-awoken) :where(.team-assist-awoken , .team-member-awoken, .team-member-types), /*武器觉醒、队员觉醒、队员类型*/
 body:not(.show-team-awoken-count) .team-awoken, /*队伍觉醒统计*/
 body:not(.show-team-attrtype-count) .tIf-addition-info, /*稀有度、属性与类型计数*/
-body:not(.show-team-awoken-effect) .team-awoken-effect /*队伍觉醒效果统计*/
+body:not(.show-team-awoken-effect) .team-awoken-effect, /*队伍觉醒效果统计*/
+body:not(.show-rich-text-tools) #rich-text-tools /*队伍觉醒效果统计*/
 {
 	display: none;
 }
