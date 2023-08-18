@@ -3001,12 +3001,13 @@ const specialSearchFunctions = (function() {
 				function:cards=>cards.filter(card=>{
 					function is3x3(sk)
 					{
+						const lineNum = 0b111;
 						for (let si=0;si<3;si++)
 						{
 							if (sk[si] === sk[si+1] && sk[si] === sk[si+2] && //3行连续相等
 								(si>0?(sk[si-1] & sk[si]) ===0:true) && //如果上一行存在，并且无交集(and为0)
 								(si+2<4?(sk[si+3] & sk[si]) ===0:true) && //如果下一行存在，并且无交集(and为0)
-								(sk[si] === 7 || sk[si] === 7<<1 || sk[si] === 7<<2 || sk[si] === 7<<3) //如果这一行满足任意2珠并联（二进制111=十进制7）
+								(sk[si] >= lineNum && Math.isPowerOfTwo(sk[si] / lineNum)) //如果这一行满足大于等于0b111并且除以0b111的倍数为2的幂（因为<<1等于乘以2）
 							)
 							return true;
 						}
@@ -3027,6 +3028,37 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
+			/*{name:"Create L shape",otLangName:{chs:"生成L字",cht:"生成L字"},
+				function:cards=>cards.filter(card=>{
+					function isL(sk)
+					{
+						const lineNum = 0b111;
+						for (let si=0;si<3;si++)
+						{
+							if (sk[si] === sk[si+1] && sk[si] === sk[si+2] && //3行连续相等
+								(si>0?(sk[si-1] & sk[si]) ===0:true) && //如果上一行存在，并且无交集(and为0)
+								(si+2<4?(sk[si+3] & sk[si]) ===0:true) && //如果下一行存在，并且无交集(and为0)
+								(sk[si] >= lineNum && Math.isPowerOfTwo(sk[si] / lineNum)) //如果这一行满足大于等于0b111并且除以0b111的倍数为2的幂（因为<<1等于乘以2）
+							)
+							return true;
+						}
+						return false;
+					}
+					const searchTypeArray = [176];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && is3x3(skill.params);
+				}),
+				addition:card=>{
+					const searchTypeArray = [176];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(document.createTextNode(`3×3`));
+					fragment.appendChild(createOrbsList(sk[5]));
+					return fragment;
+				}
+			},*/
 			{name:"Create a vertical",otLangName:{chs:"产竖",cht:"產豎"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [127];
@@ -3091,17 +3123,14 @@ const specialSearchFunctions = (function() {
 					function isRow(skill)
 					{
 						const sk = skill.params;
-						if (skill.type === 128) //普通横
-						{return true;}
-						else if (skill.type === 71) //花火
-						{return sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined).length === 1}
-						else if (skill.type === 176) //特殊形状
-						{
-							for (let si=0;si<5;si++)
-							{
-								if ((sk[si] & 63) === 63)
-									return true;
-							}
+						if (skill.type === 128) {//普通横
+							return true;
+						}
+						else if (skill.type === 71) {//花火
+							return sk.slice(0,sk.includes(-1)?sk.indexOf(-1):undefined).length === 1
+						}
+						else if (skill.type === 176) {//特殊形状
+							return sk.some(n=>(n & 0b111111) === 0b111111)
 						}
 						return false;
 					}

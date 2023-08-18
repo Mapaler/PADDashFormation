@@ -265,7 +265,16 @@ Array.prototype.nodeJoin = function(separator)
 Math.randomInteger = function(max, min = 0) {
 	return this.floor(this.random() * (max - min + 1) + min);
 }
-
+Math.isPowerOfTwo = function(n) {
+	if (Number.isInteger(0) && n > 0)
+		return (n & (n - 1)) === 0;
+	else
+		return false;
+}
+Number.prototype.notNeighbour = function() {
+	const num = this.valueOf();
+	return ~num & (num << 1 | num >> 1);
+}
 //将二进制flag转为数组
 function flags(num) {
 	const arr = [];
