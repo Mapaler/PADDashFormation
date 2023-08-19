@@ -184,6 +184,11 @@ Number.prototype.keepCounts = function(decimalDigits = 2, plusSign = false)
 	let newNumber = Number(this.toFixed(decimalDigits));
 	return (plusSign && this > 0 ? '+' : '') + newNumber.bigNumberToString();
 }
+//Bitwise
+Number.prototype.notNeighbour = function() {
+	const num = this.valueOf();
+	return ~num & (num << 1 | num >> 1);
+}
 //数组删除自己尾部的空元素
 Array.prototype.deleteLatter = function(item = null) {
 	let index = this.length - 1;
@@ -270,10 +275,6 @@ Math.isPowerOfTwo = function(n) {
 		return (n & (n - 1)) === 0;
 	else
 		return false;
-}
-Number.prototype.notNeighbour = function() {
-	const num = this.valueOf();
-	return ~num & (num << 1 | num >> 1);
 }
 //将二进制flag转为数组
 function flags(num) {

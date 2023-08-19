@@ -1489,6 +1489,77 @@ const specialSearchFunctions = (function() {
 		}
 		return outObj;
 	}
+
+	function shapeThisRowOk(line, lineNumber) {
+		if (lineNumber <= 0) return true;
+		return line >= 0 && (line & lineNumber) === lineNumber && //含有这个形状
+		(line & lineNumber.notNeighbour()) === 0; //形状四周都没有
+	}
+	function shapeUpsideDownRowOk(line, lineNumber) {
+		if (lineNumber <= 0) return true;
+		return line > 0 ? (line & lineNumber) === 0 : true;
+	}
+	function shapeIsCross(sk) { //产珠是十字
+		const baseLineNum = 0b111;
+		const lineNumArr = []; //同一行内所有的可能存在 既 0b111, 0b1110, 0b11100, 0b111000
+		for (let _lineNum=baseLineNum; _lineNum<0b1000000; _lineNum<<=1){
+			lineNumArr.push(_lineNum);
+		}
+
+		for (let ri=1; ri<4; ri++)
+		{
+			//搜索所有可能的行存在
+			let maybeLineNum = lineNumArr.filter(lineNum=>shapeThisRowOk(sk[ri], lineNum));
+			if (maybeLineNum.length < 1) continue;
+			
+			maybeLineNum = maybeLineNum.filter(lineNum=>{
+				const lineNum2 = (lineNum << 1) & (lineNum >> 1);
+				return shapeThisRowOk(sk[ri-1], lineNum2) &&
+					   shapeThisRowOk(sk[ri+1], lineNum2) &&
+					   shapeUpsideDownRowOk(sk[ri-2], lineNum2) &&
+					   shapeUpsideDownRowOk(sk[ri+2], lineNum2);
+			});
+			if (maybeLineNum.length > 0) return true;
+		}
+		return false;
+	}
+	function shapeIsLShape(sk) { //产珠是L字
+		const baseLineNum = 0b111;
+		const lineNumArr = []; //同一行内所有的可能存在 既 0b111, 0b1110, 0b11100, 0b111000
+		for (let _lineNum=baseLineNum; _lineNum<0b1000000; _lineNum<<=1){
+			lineNumArr.push(_lineNum);
+		}
+
+		for (let ri=0; ri<5; ri++)
+		{
+			//搜索所有可能的行存在
+			let maybeLineNum = lineNumArr.filter(lineNum=>shapeThisRowOk(sk[ri], lineNum));
+			if (maybeLineNum.length < 1) continue;
+			
+			maybeLineNum = maybeLineNum.filter(lineNum=>{
+				const lineNum2 = lineNum & ~(lineNum >> 1); //左边
+				const lineNum3 = lineNum & ~(lineNum << 1); //右边
+
+				return  shapeUpsideDownRowOk(sk[ri+1], lineNum) && ( //朝上
+						shapeThisRowOk(sk[ri-1], lineNum2) &&
+						shapeThisRowOk(sk[ri-2], lineNum2) &&
+						shapeUpsideDownRowOk(sk[ri-3], lineNum2) ||
+						shapeThisRowOk(sk[ri-1], lineNum3) &&
+						shapeThisRowOk(sk[ri-2], lineNum3) &&
+						shapeUpsideDownRowOk(sk[ri-3], lineNum3)) 
+						||
+						shapeUpsideDownRowOk(sk[ri-1], lineNum) && ( //朝下
+						shapeThisRowOk(sk[ri+1], lineNum2) &&
+						shapeThisRowOk(sk[ri+2], lineNum2) &&
+						shapeUpsideDownRowOk(sk[ri+3], lineNum2) ||
+						shapeThisRowOk(sk[ri+1], lineNum3) &&
+						shapeThisRowOk(sk[ri+2], lineNum3) &&
+						shapeUpsideDownRowOk(sk[ri+3], lineNum3));
+			});
+			if (maybeLineNum.length > 0) return true;
+		}
+		return false;
+	}
 	//创建1个觉醒图标
 	function createAwokenIcon(awokenId)
 	{
@@ -2995,27 +3066,74 @@ const specialSearchFunctions = (function() {
 					const searchTypeArray = [176];
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					return skill;
-				})
+				}),
+				addition:card=>{
+					const searchTypeArray = [176];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					if (!skills.length) return;
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(document.createTextNode(`形状`));
+					skills.forEach(skill=>fragment.appendChild(createOrbsList(skill.params[5])));
+					return fragment;
+				}
+			},
+			{name:"Create outer edges",otLangName:{chs:"生成四周一圈",cht:"生成四周一圈"},
+				function:cards=>cards.filter(card=>{
+					function isOuterEdges(sk)
+					{
+						const baseLineNum1 = 0b111111;
+						const baseLineNum2 = 0b100001;
+						return  shapeThisRowOk(sk[0], baseLineNum1) &&
+								shapeThisRowOk(sk[1], baseLineNum2) && //第2行含有这个形状
+								shapeThisRowOk(sk[2], baseLineNum2) && //第2行含有这个形状
+								shapeThisRowOk(sk[3], baseLineNum2) && //第2行含有这个形状
+								shapeThisRowOk(sk[4], baseLineNum1);
+					}
+					const searchTypeArray = [176];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && isOuterEdges(skill.params);
+				}),
+				addition:card=>{
+					const searchTypeArray = [176];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(document.createTextNode(`外圈`));
+					fragment.appendChild(createOrbsList(sk[5]));
+					return fragment;
+				}
 			},
 			{name:"Create 3×3 block",otLangName:{chs:"生成3×3方块",cht:"生成3×3方塊"},
 				function:cards=>cards.filter(card=>{
 					function is3x3(sk)
 					{
-						const lineNum = 0b111;
-						for (let si=0;si<3;si++)
+						const baseLineNum = 0b111;
+						const lineNumArr = []; //同一行内所有的可能存在 既 0b111, 0b1110, 0b11100, 0b111000
+						for (let _lineNum=baseLineNum; _lineNum<0b1000000; _lineNum<<=1)
 						{
-							if (sk[si] === sk[si+1] && sk[si] === sk[si+2] && //3行连续相等
-								(si>0?(sk[si-1] & sk[si]) ===0:true) && //如果上一行存在，并且无交集(and为0)
-								(si+2<4?(sk[si+3] & sk[si]) ===0:true) && //如果下一行存在，并且无交集(and为0)
-								(sk[si] >= lineNum && Math.isPowerOfTwo(sk[si] / lineNum)) //如果这一行满足大于等于0b111并且除以0b111的倍数为2的幂（因为<<1等于乘以2）
-							)
-							return true;
+							lineNumArr.push(_lineNum);
+						}
+
+						for (let ri=0; ri<3; ri++)
+						{
+							//搜索所有可能的行存在
+							let maybeLineNum = lineNumArr.filter(lineNum=>shapeThisRowOk(sk[ri], lineNum));
+							if (maybeLineNum.length < 1) continue;
+							
+							maybeLineNum = maybeLineNum.filter(lineNum=>
+								shapeUpsideDownRowOk(sk[ri-1], lineNum) && //如果上一行存在，并且无交集(and为0)
+								shapeUpsideDownRowOk(sk[ri+3], lineNum) && //如果第四行存在，并且无交集(and为0)
+								shapeThisRowOk(sk[ri+1], lineNum) && //第2行含有这个形状
+								shapeThisRowOk(sk[ri+2], lineNum)    //第3行含有这个形状
+							);
+							if (maybeLineNum.length > 0) return true;
 						}
 						return false;
 					}
 					const searchTypeArray = [176];
 					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill && is3x3(skill.params);
+					return skill && is3x3(skill.params.slice(0,5));
 				}),
 				addition:card=>{
 					const searchTypeArray = [176];
@@ -3028,38 +3146,39 @@ const specialSearchFunctions = (function() {
 					return fragment;
 				}
 			},
-			/*{name:"Create L shape",otLangName:{chs:"生成L字",cht:"生成L字"},
+			{name:"Create cross",otLangName:{chs:"生成十字",cht:"生成十字"},
 				function:cards=>cards.filter(card=>{
-					function isL(sk)
-					{
-						const lineNum = 0b111;
-						for (let si=0;si<3;si++)
-						{
-							if (sk[si] === sk[si+1] && sk[si] === sk[si+2] && //3行连续相等
-								(si>0?(sk[si-1] & sk[si]) ===0:true) && //如果上一行存在，并且无交集(and为0)
-								(si+2<4?(sk[si+3] & sk[si]) ===0:true) && //如果下一行存在，并且无交集(and为0)
-								(sk[si] >= lineNum && Math.isPowerOfTwo(sk[si] / lineNum)) //如果这一行满足大于等于0b111并且除以0b111的倍数为2的幂（因为<<1等于乘以2）
-							)
-							return true;
-						}
-						return false;
-					}
 					const searchTypeArray = [176];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill && is3x3(skill.params);
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					return skills.filter(skill=>shapeIsCross(skill.params.slice(0,5))).length;
 				}),
-				addition:card=>{
+				addition:function(card){
 					const searchTypeArray = [176];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
+					const skills = getCardActiveSkills(card, searchTypeArray).filter(skill=>shapeIsCross(skill.params.slice(0,5)));
+					if (!skills.length) return;
 					const fragment = document.createDocumentFragment();
-					fragment.appendChild(document.createTextNode(`3×3`));
-					fragment.appendChild(createOrbsList(sk[5]));
+					fragment.appendChild(document.createTextNode(`十字`));
+					skills.forEach(skill=>fragment.appendChild(createOrbsList(skill.params[5])));
 					return fragment;
-				}
-			},*/
-			{name:"Create a vertical",otLangName:{chs:"产竖",cht:"產豎"},
+				},
+			},
+			{name:"Create L shape",otLangName:{chs:"生成L字",cht:"生成L字"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [176];
+					const skills = getCardActiveSkills(card, searchTypeArray);
+					return skills.filter(skill=>shapeIsLShape(skill.params.slice(0,5))).length;
+				}),
+				addition:function(card){
+					const searchTypeArray = [176];
+					const skills = getCardActiveSkills(card, searchTypeArray).filter(skill=>shapeIsLShape(skill.params.slice(0,5)));
+					if (!skills.length) return;
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(document.createTextNode(`L字`));
+					skills.forEach(skill=>fragment.appendChild(createOrbsList(skill.params[5])));
+					return fragment;
+				},
+			},
+			{name:"Create verticals",otLangName:{chs:"产竖",cht:"產豎"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [127];
 					const skill = getCardActiveSkill(card, searchTypeArray);
@@ -3067,7 +3186,7 @@ const specialSearchFunctions = (function() {
 				}),
 				addition:generateColumnOrbs_Addition
 			},
-			{name:"Create a vertical Heart",otLangName:{chs:"产竖心",cht:"產豎心"},
+			{name:"Create vertical Heart",otLangName:{chs:"产竖心",cht:"產豎心"},
 				function:cards=>cards.filter(card=>{
 					function isHeart(sk)
 					{
@@ -3085,7 +3204,7 @@ const specialSearchFunctions = (function() {
 				}),
 				addition:generateColumnOrbs_Addition
 			},
-			{name:"Create a horizontal",otLangName:{chs:"产横",cht:"產橫"},
+			{name:"Create horizontals",otLangName:{chs:"产横",cht:"產橫"},
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [128];
 					const skill = getCardActiveSkill(card, searchTypeArray);
