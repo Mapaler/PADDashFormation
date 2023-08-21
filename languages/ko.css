@@ -247,8 +247,11 @@ label[for="show-member-skill-cd"]::after{
 label[for="show-member-ability"]::after{
 	content:"⚔️회원의 능력";
 }
+label[for="show-member-types"]::after{
+	content:"멤버의 타입";
+}
 label[for="show-member-awoken"]::after{
-	content:"👁️회원이 깨어났다";
+	content:"👁️멤버의 유형";
 }
 label[for="show-team-total-info"]::after{
 	content:"팀의 HP 정보";

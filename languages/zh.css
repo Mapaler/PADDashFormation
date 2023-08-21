@@ -253,6 +253,9 @@ label[for="show-member-skill-cd"]::after{
 label[for="show-member-ability"]::after{
 	content:"⚔️队员能力值";
 }
+label[for="show-member-types"]::after{
+	content:"队员类型";
+}
 label[for="show-member-awoken"]::after{
 	content:"👁️队员觉醒";
 }

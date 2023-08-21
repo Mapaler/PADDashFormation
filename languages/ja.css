@@ -252,6 +252,9 @@ label[for="show-member-skill-cd"]::after{
 label[for="show-member-ability"]::after{
 	content:"⚔️メンバーの能力";
 }
+label[for="show-member-types"]::after{
+	content:"メンバーのタイプ";
+}
 label[for="show-member-awoken"]::after{
 	content:"👁️メンバーの覚醒";
 }

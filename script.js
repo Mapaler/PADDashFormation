@@ -4468,7 +4468,7 @@ function initialize() {
 
 	//合并技能开关
 	const mergeSill = document.getElementById("merge-skill");
-	mergeSill.checked = localStorage_getBoolean(cfgPrefix + mergeSill.id);
+	mergeSill.checked = localStorage_getBoolean(cfgPrefix + mergeSill.id, true);
 	mergeSill.onchange = function(event){
 		if (event) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 		merge_skill = this.checked;

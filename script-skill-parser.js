@@ -1720,29 +1720,6 @@ const skillObjectParsers = {
 	},
 };
 
-
-function renderSkillTitle(skillId, { showTurns } = {}) {
-	const skill = Skills[skillId];
-	const div = document.createElement("summary");
-	div.className = "evolved-skill-title";
-	const name = div.appendChild(document.createElement("span"));
-	name.className = "skill-name";
-	name.textContent = skill.name;
-	name.setAttribute("data-skillid", skillId);
-	//name.onclick = fastShowSkill;
-	if (showTurns) {
-		const cd = div.appendChild(document.createElement("span"));
-		cd.className = "skill-cd";
-		cd.textContent = skill.initialCooldown - skill.maxLevel + 1;
-		if (skill.maxLevel > 1) {
-			const level = div.appendChild(document.createElement("span"));
-			level.className = "skill-level-label";
-			level.textContent = skill.maxLevel;
-		}
-	}
-	return div;
-}
-
 function renderSkillEntry(skills)
 {
 	//按住Ctrl点击技能在控制台输出技能的对象
@@ -1888,6 +1865,32 @@ function createSkillIcon(iconType, className){
 
 function renderSkill(skill, option = {})
 {
+	function renderSkillTitle(skillId, { showTurns } = {}) {
+		const skill = Skills[skillId];
+		const div = document.createElement("summary");
+		div.className = "evolved-skill-title";
+		const name = div.appendChild(document.createElement("span"));
+		name.className = "skill-name";
+		name.textContent = skill.name;
+		name.setAttribute("data-skillid", skillId);
+		//name.onclick = fastShowSkill;
+		if (showTurns) {
+			const cd = div.appendChild(document.createElement("span"));
+			cd.className = "skill-cd";
+			cd.textContent = skill.initialCooldown - skill.maxLevel + 1;
+			if (skill.maxLevel > 1) {
+				const level = div.appendChild(document.createElement("span"));
+				level.className = "skill-level-label";
+				level.textContent = skill.maxLevel;
+			}
+		}
+		const originalSkill = document.createElement("div");
+		originalSkill.className = "skill-datail-original";
+		originalSkill.append(parseSkillDescription(skill));
+
+		return [div, originalSkill].nodeJoin();
+	}
+
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
 	const tsp = localTranslating.skill_parse;

@@ -254,6 +254,9 @@ label[for="show-member-skill-cd"]::after{
 label[for="show-member-ability"]::after{
 	content:"⚔️隊員能力值";
 }
+label[for="show-member-types"]::after{
+	content:"隊員類型";
+}
 label[for="show-member-awoken"]::after{
 	content:"👁️隊員覺醒";
 }

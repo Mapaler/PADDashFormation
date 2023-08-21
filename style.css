@@ -722,7 +722,8 @@ body:not(.show-card-id) .monster .id, /*卡片id*/
 body:not(.show-card-rarity) .monster .rarity, /*卡片稀有度*/
 body:not(.show-member-skill-cd) .monster .skill-cd.max-skill, /*队员CD*/
 body:not(.show-member-ability) .team-ability, /*队员三维*/
-body:not(.show-member-awoken) :where(.team-assist-awoken , .team-member-awoken, .team-member-types), /*武器觉醒、队员觉醒、队员类型*/
+body:not(.show-member-types) .team-member-types, /*武器觉醒、队员觉醒、队员类型*/
+body:not(.show-member-awoken) :where(.team-assist-awoken , .team-member-awoken), /*武器觉醒、队员觉醒、队员类型*/
 body:not(.show-team-awoken-count) .team-awoken, /*队伍觉醒统计*/
 body:not(.show-team-attrtype-count) .tIf-addition-info, /*稀有度、属性与类型计数*/
 body:not(.show-team-awoken-effect) .team-awoken-effect, /*队伍觉醒效果统计*/
@@ -2737,6 +2738,8 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .skill-datail-original
 {
 	border-bottom: #9C743E solid 2px;
+	font-family: var(--game-font-family);
+	font-weight: normal;
 }
 .skill-datail-parsed .detail-search::before{
 	content: "🔍";
