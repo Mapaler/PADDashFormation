@@ -6179,7 +6179,6 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 			badgeHPScale = 1.10;
 		}
 
-		console.debug(teamHPArr, tHP, teamHPAwoken, badgeHPScale);
 		tHP = Math.round(tHP * (1 + 0.05 * teamHPAwoken) * badgeHPScale);
 		tHPNoAwoken = Math.round(tHPNoAwoken * badgeHPScale);
 

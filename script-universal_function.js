@@ -176,8 +176,38 @@ Uint8Array.prototype.toHex = function() {
 	return [...this].map(n=>n.toString(16).padStart(2,'0')).join('');
 }
 
-//大数字缩短长度，默认返回本地定义字符串
-Number.prototype.bigNumberToString = Number.prototype.toLocaleString;
+//大数字缩短长度
+function BigNumberToStringLocalise(separators, splitDigits = 3 ) {
+	
+	return function(){
+		if (splitDigits < 1) throw new Error('数字分割数量至少是1位');
+		if (Number.isNaN(this)) return 0..bigNumberToString();
+		if (this === Infinity || this === -Infinity) return this.toLocaleString();
+		const grouping = 10 ** splitDigits;
+		const numParts = [];
+		let numTemp = Math.abs(this);
+		do {
+			numParts.push(numTemp % grouping);
+			numTemp = Math.floor(numTemp / grouping);
+		} while (numTemp > 0 && numParts.length < (separators.length - 1))
+		if (numTemp > 0) {
+			numParts.push(numTemp);
+		}
+		let numPartsStr = numParts.map((num, idx) => {
+			if (num > 0) {
+				return num + separators[idx];
+			} else
+				return '';
+		});
+	
+		numPartsStr.reverse(); //反向
+		let outStr = numPartsStr.join('');
+		const negative = this < 0;
+		return (negative ? "-" : "") + outStr;
+	}
+}
+Number.prototype.bigNumberToString = BigNumberToStringLocalise(['', 'K ', 'M ', 'G ', 'T ', 'P ', 'E ', 'Z ', 'Y ', 'R ', 'Q '], 3);
+
 //最多保留N位小数，不留0
 Number.prototype.keepCounts = function(decimalDigits = 2, plusSign = false)
 {
@@ -1105,8 +1135,7 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 
 		//演示用代码
 		//console.log("%s 第1次倍率血量：%s，第2次倍率血量：%s",Cards[m.id].otLangName["chs"],hp1,hp2);
-			
-		console.debug(hp, mulHP);
+
 		return Math.round(mulHP);
 
 	});
