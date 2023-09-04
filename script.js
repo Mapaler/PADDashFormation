@@ -5522,10 +5522,11 @@ function refreshAll(formationData) {
 
 //刷新队伍觉醒效果计算
 function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
+	const [members, assists, badge, swapId] = team;
 	let targetIcon;
 	//解析两个队长技
-	let leader1 = team[0][team[3] || 0], //换队长或者默认队长
-		leader2 = team[0][5];
+	let leader1 = members[swapId || 0], //换队长或者默认队长
+		leader2 = members[5];
 	let parseLSkill1 = skillParser(leader1?.card?.leaderSkillId),
 		parseLSkill2 = skillParser(leader2?.card?.leaderSkillId);
 	//防绑
@@ -5535,11 +5536,11 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		//储存附加 52 即大防绑的队长技能
 		let lsAwoken = parseLSkill1.concat(parseLSkill2).filter(skill=>skill.kind == SkillKinds.ImpartAwakenings);
 
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
-			const assistData = team[1][mi];
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
 			let thisAwokenNum = 0;
-			if (team[2] === 8 && mi === 0) {
+			if (badge === 8 && mi === 0) {
 				thisAwokenNum = 2;
 			} else {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
@@ -5564,18 +5565,20 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 		let count = thisAwokenNum * 1000; //普通觉醒每个加1000
 
-		//储存附加 52 即大防绑的队长技能
+		//自动回复的队长技能
 		let lsAwoken1 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal),
 			lsAwoken2 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal);
 		if (lsAwoken1.length) {
-			count += leader1.ability[2] * lsAwoken1[0].value.value;
+			const [,,rcv] = leader1.ability[2];
+			count += rcv * lsAwoken1[0].value.value;
 		}
 		if (lsAwoken2.length) {
-			count += leader2.ability[2] * lsAwoken2[0].value.value;
+			const [,,rcv] = leader2.ability[2];
+			count += rcv * lsAwoken2[0].value.value;
 		}
 
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
 			let latentCount = memberData?.latent?.filter(l=>l===5).length;
 			if (latentCount>0) { //自动回复潜觉，不考虑任何297和觉醒
 				let memberCard = memberData.card;
@@ -5592,7 +5595,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	//颜色盾
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"4\"]")) {
 		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
-		const teamLatents = team[0].flatMap(m=>m.latent); //因为盾是固定值，所以直接平面化所有的潜觉
+		const teamLatents = members.flatMap(m=>m.latent); //因为盾是固定值，所以直接平面化所有的潜觉
 		for (let oi=0; oi < orbs.length; oi++) {
 			let orb = orbs[oi];
 			const thisAwokenNum = awokenCountInTeam(team, 4+oi, solo, teamsCount);
@@ -5622,7 +5625,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
 		const thisAwokenNum = awokenCountInTeam(team, 28, solo, teamsCount);
 		let prob = thisAwokenNum / 5;
-		if (team[2] == 9) prob += 0.5;
+		if (badge == 9) prob += 0.5;
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//暗
@@ -5632,7 +5635,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 		let prob = thisAwokenNum / 5;
-		if (team[2] == 12) prob += 0.5;
+		if (badge == 12) prob += 0.5;
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//废
@@ -5642,7 +5645,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 		let prob = thisAwokenNum / 5;
-		if (team[2] == 13) prob += 0.5;
+		if (badge == 13) prob += 0.5;
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//毒
@@ -5652,7 +5655,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 		let prob = thisAwokenNum / 5;
-		if (team[2] == 14) prob += 0.5;
+		if (badge == 14) prob += 0.5;
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//云
@@ -5672,13 +5675,13 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	//掉废
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"14\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
-		let prob = team[0].some(member=>member?.latent?.includes(14)) ? 1 : 0;
+		let prob = members.some(member=>member?.latent?.includes(14)) ? 1 : 0;
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//掉毒
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"15\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
-		let prob = team[0].some(member=>member?.latent?.includes(15)) ? 1 : 0;
+		let prob = members.some(member=>member?.latent?.includes(15)) ? 1 : 0;
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//心横解转转
@@ -5686,9 +5689,9 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const targetValue = targetIcon.parentElement.querySelector(".count");
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 20);
 		let count = 0;
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
-			const assistData = team[1][mi];
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
 			if (memberData?.latent?.includes(40)) {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
 				count += effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
@@ -5702,9 +5705,9 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"46\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".count");
 		let count = 0;
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
-			const assistData = team[1][mi];
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
 			if (memberData?.latent?.includes(46)) {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
 				count += effectiveAwokens.filter(ak=>ak==45).length;
@@ -5719,9 +5722,9 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 60);
 		let count = new Array(orbs.length).fill(0);
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
-			const assistData = team[1][mi];
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
 			let effectiveAwokens = memberData?.effectiveAwokens(assistData);
 			let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
 			if (thisAwokenNum == 0) continue;
@@ -5739,9 +5742,9 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 60);
 		let count = new Array(orbs.length).fill(0);
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
-			//const assistData = team[1][mi]; //L解禁武器，武器上的L无意义
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			//const assistData = assists[mi]; //L解禁武器，武器上的L无意义
 			if (memberData?.latent?.includes(48)) {
 				let effectiveAwokens = memberData.effectiveAwokens();
 				let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
@@ -5763,9 +5766,9 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 78);
 		let count = new Array(orbs.length).fill(0);
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
-			const assistData = team[1][mi];
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
 			let effectiveAwokens = memberData.effectiveAwokens(assistData);
 			let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
 			if (thisAwokenNum == 0) continue;
@@ -5783,14 +5786,14 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 27);
 		let count = new Array(orbs.length).fill(0);
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
-			//const assistData = team[1][mi]; //L解禁武器，武器上的L无意义
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
 			if (memberData?.latent?.includes(41)) {
-				let effectiveAwokens = memberData.effectiveAwokens();
+				let effectiveAwokens = memberData.effectiveAwokens(assistData);
 				let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
 				if (thisAwokenNum == 0) continue;
-				const {attrs=[]} = memberData.getAttrsTypesWithWeapon() || {};
+				const {attrs=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
 				attrs.distinct().forEach(attr=>{
 					count[attr] += thisAwokenNum;
 				});
@@ -5808,9 +5811,9 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		//目前没有大觉醒
 		//const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 78);
 		let count = new Array(orbs.length).fill(0);
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
-			const assistData = team[1][mi];
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
 			let effectiveAwokens = memberData.effectiveAwokens(assistData);
 			//let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
 			let thisAwokenNum = effectiveAwokens.filter(ak=>ak==62).length;
@@ -5830,15 +5833,15 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		//目前没有大觉醒
 		//const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 27);
 		let count = new Array(orbs.length).fill(0);
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
-			//const assistData = team[1][mi]; //L解禁武器，武器上的L无意义
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
 			if (memberData.latent.includes(39)) {
-				let effectiveAwokens = memberData.effectiveAwokens();
+				let effectiveAwokens = memberData.effectiveAwokens(assistData);
 				//let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
 				let thisAwokenNum = effectiveAwokens.filter(ak=>ak==62).length;
 				if (thisAwokenNum == 0) continue;
-				const {attrs=[]} = memberData.getAttrsTypesWithWeapon() || {};
+				const {attrs=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
 				attrs.distinct().forEach(attr=>{
 					count[attr] += thisAwokenNum;
 				});
@@ -5856,9 +5859,9 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		//目前没有大觉醒
 		//const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 78);
 		let count = new Array(orbs.length).fill(0);
-		for (let mi=0; mi < team[0].length; mi++) {
-			const memberData = team[0][mi];
-			const assistData = team[1][mi];
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
 			let effectiveAwokens = memberData.effectiveAwokens(assistData);
 			//let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
 			let thisAwokenNum = effectiveAwokens.filter(ak=>ak==126).length;
@@ -6006,8 +6009,8 @@ function refreshMemberAwoken(memberAwokenDom, assistAwokenDom, team, idx) {
 	const memberData = team[0][idx];
 	const assistData = team[1][idx];
 
-	const memberCard = Cards[memberData.id] || Cards[0];
-	const assistCard = Cards[assistData.id] || Cards[0];
+	// const memberCard = Cards[memberData.id] || Cards[0];
+	// const assistCard = Cards[assistData.id] || Cards[0];
 	//队员觉醒
 	let memberAwokens = memberData.effectiveAwokens() || [];
 	//memberAwokens.sort();
@@ -6120,14 +6123,19 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const tMoveDom = totalDom.querySelector(".tIf-total-move");
 	const tEffectDom = totalDom.querySelector(".tIf-effect");
 
-	const teams = formation.teams;
+	const [members, assists, badge, swapId] = team;
 
-	const leader1id = team[0][team[3] || 0].id;
-	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][teams[0][3] || 0].id : teams[1][0][teams[1][3] || 0].id) : team[0][5].id;
+	const teams = formation.teams;
+	const [teamsA=[], teamsB=[], teamsC=[]] = teams;
+	const [teamsA_members, teamsA_assists, teamsA_badge] = teamsA;
+	const [teamsB_members, teamsB_assists, teamsB_badge] = teamsB;
+
+	const leader1id = members[swapId || 0].id;
+	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teamsA_members[teamsA_badge || 0].id : teamsB_members[teamsB_badge || 0].id) : members[5].id;
 
 	//计算当前队伍，2P时则是需要特殊处理
-	const team_2p = teamsCount===2 ? team[0].concat((teamIdx === 1 ? teams[0][0][0] : teams[1][0][0])) : team[0];
-	const assistTeam_2p = teamsCount===2 ? team[1].concat((teamIdx === 1 ? teams[0][1][0] : teams[1][1][0])) : team[1];
+	const team_2p = teamsCount===2 ? members.concat((teamIdx === 1 ? teamsA_members[0] : teamsB_members[0])) : members;
+	const assistTeam_2p = teamsCount===2 ? assists.concat((teamIdx === 1 ? teamsA_assists[0] : teamsB_assists[0])) : assists;
 
 	if (tHpDom) {
 		const reduceScales1 = getReduceScales(leader1id);
@@ -6163,16 +6171,17 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
 
 		let badgeHPScale = 1; //徽章倍率
-		if (team[2] == 5 && (solo || teamsCount === 3)) {
+		if (badge === 5 && (solo || teamsCount === 3)) {
 			badgeHPScale = 1.05;
-		} else if (team[2] == 18 && (solo || teamsCount === 3)) {
+		} else if (badge === 18 && (solo || teamsCount === 3)) {
 			badgeHPScale = 1.15;
-		} else if (team[2] == 20 && (solo || teamsCount === 3)) {
+		} else if (badge === 20 && (solo || teamsCount === 3)) {
 			badgeHPScale = 1.10;
 		}
 
-		tHP = Math.round(Math.round(tHP * (1 + 0.05 * teamHPAwoken)) * badgeHPScale);
-		tHPNoAwoken = Math.round(Math.round(tHPNoAwoken) * badgeHPScale);
+		console.debug(teamHPArr, tHP, teamHPAwoken, badgeHPScale);
+		tHP = Math.round(tHP * (1 + 0.05 * teamHPAwoken) * badgeHPScale);
+		tHPNoAwoken = Math.round(tHPNoAwoken * badgeHPScale);
 
 		//记录到bar中，方便打开详情时调用
 		hpBar.reduceAttrRangesWithShieldAwoken = reduceAttrRangesWithShieldAwoken; //有盾觉醒的
@@ -6228,9 +6237,9 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	if (tRarityDom)
 	{
 		const rarityDoms = tRarityDom.querySelector(".rarity");
-		const rarityCount = team[0].slice(0,5).reduce((pre,member)=>{
+		const rarityCount = members.slice(0,5).reduce((pre,member)=>{
 			if (member.id <= 0) return pre;
-			const card = Cards[member.id] || Cards[0];
+			const card = member.card;
 			return pre + (card?.rarity ?? 0);
 		},0);
 		rarityDoms.setAttribute(dataAttrName, rarityCount);
@@ -6257,8 +6266,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 	if (tEffectDom)	{
 		//76版队长技能不被换队长所影响
-		const leader1id_original = team[0][0].id;
-		const leader2id_original = teamsCount===2 ? (teamIdx === 1 ? teams[0][0][0].id : teams[1][0][0].id) : team[0][5].id;
+		const leader1id_original = members[0].id;
+		const leader2id_original = teamsCount===2 ? (teamIdx === 1 ? teamsA_members[0].id : teamsB_members[0].id) : members[5].id;
 		let effect = tIf_Effect(leader1id,leader2id, leader1id_original,leader2id_original);
 		refreshEffectDom(tEffectDom, effect);
 	}
@@ -6295,10 +6304,14 @@ function refreshFormationTotalHP(totalDom, teams) {
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
 	const tSBDom = totalDom.querySelector(".tIf-total-skill-boost");
 	const tEffectDom = totalDom.querySelector(".tIf-effect");
+
+	const [teamsA=[], teamsB=[], teamsC=[]] = teams;
+	const [teamsA_members,,teamsA_badge] = teamsA;
+	const [teamsB_members,,teamsB_badge] = teamsB;
 	
 	//因为目前仅用于2P，所以直接在外面固定写了
-	const leader1id = teams[0][0][teams[0][3] || 0].id;
-	const leader2id = teams[1][0][teams[1][3] || 0].id;
+	const leader1id = teamsA_members[teamsA_badge || 0].id;
+	const leader2id = teamsB_members[teamsB_badge || 0].id;
 
 	if (tHpDom) {
 
@@ -6363,8 +6376,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 	}
 	
 	if (tSBDom) {
-		const sbn1 = countTeamSB(teams[0], solo);
-		const sbn2 = countTeamSB(teams[1], solo);
+		const sbn1 = countTeamSB(teamsA, solo);
+		const sbn2 = countTeamSB(teamsB, solo);
 		const tSBDom_general = tSBDom.querySelector(".general");
 		
 		setTextContentAndAttribute(tSBDom_general, sbn1 + sbn2);
@@ -6372,8 +6385,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 
 	if (tEffectDom)	{
 		//76版队长技能不被换队长所影响
-		const leader1id_original = teams[0][0][0].id;
-		const leader2id_original = teams[1][0][0].id;
+		const leader1id_original = teamsA_members[0].id;
+		const leader2id_original = teamsB_members[0].id;
 		let effect = tIf_Effect(leader1id,leader2id, leader1id_original,leader2id_original);
 		refreshEffectDom(tEffectDom, effect);
 	}

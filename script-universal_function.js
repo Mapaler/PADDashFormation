@@ -543,8 +543,7 @@ function awokenCountInFormation(formationTeams, awokenIndex, solo, teamsCount) {
 }
 //计算单个队伍中有多少个该觉醒
 function awokenCountInTeam(team, awokenIndex, solo, teamsCount) {
-	const memberArray = team[0];
-	const assistArray = team[1];
+	const [memberArray, assistArray] = team;
 
 	const teamAwokenCount = memberArray.reduce(function(previous, mon, idx) {
 		if (mon.id <= 0) { //如果是delay和null
@@ -774,16 +773,17 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 	};
 	const abilities = calculateAbility(tempMon, null, solo, teamsCount);
 	if (abilities) {
+	const [[hp,hpNA], [atk,atkNA], [rcv,rcvNA]] = abilities;
 		return {
-			noAwoken: {
-				hp: abilities[0][1],
-				atk: abilities[1][1],
-				rcv: abilities[2][1],
-			},
 			withAwoken: {
-				hp: abilities[0][0],
-				atk: abilities[1][0],
-				rcv: abilities[2][0],
+				hp: hp,
+				atk: atk,
+				rcv: rcv,
+			},
+			noAwoken: {
+				hp: hpNA,
+				atk: atkNA,
+				rcv: rcvNA,
 			},
 		};
 	} else {
@@ -1098,15 +1098,16 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 	const ls2 = Skills[(Cards[leader2id] || Cards[0])?.leaderSkillId];
 	const mHpArr = memberArr.map((member, idx) => {
 		const ability = noAwoken ? member.abilityNoAwoken : member.ability;
-		let hp = ability ? ability[0] : 0;
+		const hp = ability ? ability[0] : 0;
 		if (!hp) return 0;
-		let hp1 = hp = Math.round(hp * memberHpMul(member, assistArr[idx], ls2, memberArr, solo)); //战友队长技
-		let hp2 = hp = Math.round(hp * memberHpMul(member, assistArr[idx], ls1, memberArr, solo)); //我方队长技
+		const mulHP = hp * memberHpMul(member, assistArr[idx], ls2, memberArr, solo) //战友队长技
+						 * memberHpMul(member, assistArr[idx], ls1, memberArr, solo);//我方队长技
 
 		//演示用代码
 		//console.log("%s 第1次倍率血量：%s，第2次倍率血量：%s",Cards[m.id].otLangName["chs"],hp1,hp2);
-				
-		return hp;
+			
+		console.debug(hp, mulHP);
+		return Math.round(mulHP);
 
 	});
 
@@ -1365,27 +1366,23 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original)
 	const card1 = Cards[leader1id], card2 = Cards[leader2id];
 	{ //计算队伍是否为76
 		const searchTypeArray = [162, 186];
-		const ls1 = getCardLeaderSkills(henshinBase(leader1id_original), searchTypeArray)[0];
-		const ls2 = getCardLeaderSkills(henshinBase(leader2id_original), searchTypeArray)[0];
-		effect.board76 = Boolean(ls1 || ls2);
+		effect.board76 = Boolean(getCardLeaderSkills(henshinBase(leader1id_original), searchTypeArray).length) ||
+						 Boolean(getCardLeaderSkills(henshinBase(leader2id_original), searchTypeArray).length);
 	}
 	{ //计算队伍是否为无天降
 		const searchTypeArray = [163, 177];
-		const ls1 = getCardLeaderSkills(card1, searchTypeArray)[0];
-		const ls2 = getCardLeaderSkills(card2, searchTypeArray)[0];
-		effect.noSkyfall = Boolean(ls1 || ls2);
+		effect.noSkyfall = Boolean(getCardLeaderSkills(henshinBase(leader1id_original), searchTypeArray).length) ||
+						   Boolean(getCardLeaderSkills(henshinBase(leader2id_original), searchTypeArray).length);
 	}
 	{ //计算队伍是否为毒无效
 		const searchTypeArray = [197];
-		const ls1 = getCardLeaderSkills(card1, searchTypeArray)[0];
-		const ls2 = getCardLeaderSkills(card2, searchTypeArray)[0];
-		effect.poisonNoEffect = Boolean(ls1 || ls2);
+		effect.poisonNoEffect = Boolean(getCardLeaderSkills(henshinBase(leader1id_original), searchTypeArray).length) ||
+								Boolean(getCardLeaderSkills(henshinBase(leader2id_original), searchTypeArray).length);
 	}
 	{ //计算队伍是否有根性
 		const searchTypeArray = [14];
-		const ls1 = getCardLeaderSkills(card1, searchTypeArray)[0];
-		const ls2 = getCardLeaderSkills(card2, searchTypeArray)[0];
-		effect.resolve = Boolean(ls1 || ls2);
+		effect.resolve = Boolean(getCardLeaderSkills(henshinBase(leader1id_original), searchTypeArray).length) ||
+						 Boolean(getCardLeaderSkills(henshinBase(leader2id_original), searchTypeArray).length);
 	}
 	{ //计算队伍的+C
 		effect.addCombo[0] = getSkillAddCombo(card1);
@@ -1401,11 +1398,11 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original)
 //计算队伍SB
 function countTeamSB(team, solo) {
 	let sbn = 0;
-	const badge = team[2];
+	const [members, assists, badge] = team;
 	
-	for (let mi = 0; mi < team[0].length; mi++) {
-		const member = team[0][mi];
-		const assist = team[1][mi];
+	for (let mi = 0; mi < members.length; mi++) {
+		const member = members[mi];
+		const assist = assists[mi];
 		if (member.id < 0) continue;
 		const memberCard = henshinBase(member);
 		let enableAwoken = memberCard?.awakenings?.slice(0, member.awoken) || [];
@@ -1431,9 +1428,10 @@ function countTeamSB(team, solo) {
 }
 //计算队伍操作时间
 function countMoveTime(team, leader1id, leader2id, teamIdx) {
+	const [members, assists, badge] = team;
 	const searchTypeArray = [178, 15, 185];
-	const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)[0];
-	const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)[0];
+	const ls1 = getCardLeaderSkills(Cards[leader1id], searchTypeArray)?.[0];
+	const ls2 = getCardLeaderSkills(Cards[leader2id], searchTypeArray)?.[0];
 	const time1 = leaderSkillMoveTime(ls1);
 	const time2 = leaderSkillMoveTime(ls2);
 
@@ -1473,9 +1471,10 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 	} else {
 		moveTime.duration.leader = time1.duration + time2.duration;
 
+		let _team = team.concat();
 		//1人、3人计算徽章
 		if (solo || teamsCount === 3) {
-			switch (team[2]) {
+			switch (badge) {
 				case 2: //小手指
 					moveTime.duration.badge = 1;
 					break;
@@ -1490,14 +1489,15 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 		{
 			const teams = formation.teams;
 			const team2 = teamIdx === 1 ? teams[0] : teams[1]; //获取队伍2
+			const [members2, assists2, badge2, swapId2] = team2;
 			//复制队伍1，这里参数里的 team 换成了一个新的数组
-			team = [
-				team[0].concat(),
-				team[1].concat()
+			_team = [
+				members.concat(),
+				assists.concat()
 			];
 			//把队伍2的队长和武器添加到复制的队伍1里面
-			team[0].push(team2[0][team2[3]]);
-			team[1].push(team2[1][team2[3]]);
+			_team[0].push(members2[swapId2]);
+			_team[1].push(assists2[swapId2]);
 		}
 
 		//觉醒
@@ -1506,7 +1506,7 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 			{ index: 53, value: 1 }, //大手指
 		];
 		moveTime.duration.awoken += awokenMoveTime.reduce((duration, aw) =>
-			duration + awokenCountInTeam(team, aw.index, solo, teamsCount) * aw.value, 0);
+			duration + awokenCountInTeam(_team, aw.index, solo, teamsCount) * aw.value, 0);
 		//潜觉
 		const latentMoveTime = [
 			{ index: 4, value: 0.05 }, //小手指潜觉
@@ -1514,7 +1514,7 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 		];
 
 		moveTime.duration.awoken += latentMoveTime.reduce((duration, la) =>
-			duration + team[0].reduce((count, member) =>
+			duration + _team[0].reduce((count, member) =>
 				count + (member?.latent?.filter(l => l == la.index)?.length ?? 0), 0) * la.value, 0);
 
 	}
