@@ -137,8 +137,7 @@ class BoardSet
 			}
 
 			let showIdx = boardSet.boards.findIndex(board=>!board.tableNode.classList.contains(className_displayNone));
-			if (showIdx < 0 || showIdx >= (boardSet.boards.length - 1)) showIdx = 0;
-			else showIdx++;
+			showIdx = (showIdx + 1) % boardSet.boards.length;
 			for (let i=0;i<boardSet.boards.length;i++) {
 				boardSet.boards[i].tableNode.classList.toggle(className_displayNone, i !== showIdx);
 			}
@@ -222,7 +221,7 @@ class Board
 	{
 		switch (this.columnCount) {
 			case 7: return columnIndex >= 3 ? columnIndex + 1 : columnIndex;
-			case 5: return columnIndex >= 4 ? columnIndex - 1 : columnIndex;
+			case 5: return columnIndex >= 3 ? columnIndex - 1 : columnIndex;
 			case 6: default: return columnIndex;
 		}
 	}
@@ -270,7 +269,7 @@ class Board
 	//设定形状
 	setShape(matrix, attr, state, blockState)
 	{
-		const setOrb = typeof(state) == 'number';
+		//const setOrb = typeof(state) == 'number';
 		function fillRow(ri, inputRow)
 		{
 			const orbsRow = this.orbsData[ri], blocksRow = this.blocksData[ri];
