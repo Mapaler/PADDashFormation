@@ -32,25 +32,26 @@ const GM_xmlhttpRequest = function(GM_param) {
 function getQueryString(name, url) {
 	const urlObj = new URL(url || document.location);
 	if (!Array.isArray(name)) name = [name];
-	let n_e = name.entries(), n;
-	let value;
-	do
-	{
+	const n_e = name.entries();
+	let n, value;
+	do {
 		n = n_e.next();
 		if (!n.done)
 		{
 			value = urlObj.searchParams.get(n.value[1]);
 		}
-	}while(!n.done && value == undefined)
+	}while(!n.done && value === undefined)
 	return value;
 }
 
-function localStorage_getBoolean(name, defaultValue = false){
-	let value = localStorage.getItem(name);
-	if (value === "true") return true;
-	else return Boolean(Number(localStorage.getItem(name) ?? defaultValue));
+localStorage_getBoolean = function(name, defaultValue = false) {
+	const value = localStorage.getItem(name);
+	if (value === null) return defaultValue;
+	else if (typeof value === 'string' && /^\s*true\s*$/i.test(value)) return true;
+	else return Boolean(Number(value));
 }
 
+/* 写了，但是暂时不用
 // 将字符串转为二进制字符串
 String.prototype.toUTF8Blob = function() {
 	return new Blob([this.valueOf()], {
@@ -175,15 +176,25 @@ const Base64 = {
 Uint8Array.prototype.toHex = function() {
 	return [...this].map(n=>n.toString(16).padStart(2,'0')).join('');
 }
+*/
 
-//大数字缩短长度
+/**
+ * 大数字以数字量级分隔符形式输出
+ * @param {Array} separators 数字量级分隔符数组，从低到高排列
+ * @param {number} splitDigits 分隔位数
+ * @returns {function} 数字量级分隔符形式输出数字的函数
+ */
 function BigNumberToStringLocalise(separators, splitDigits = 3 ) {
+	if (!Array.isArray(separators)) throw new TypeError('分隔符需要使用数组列出数字量级');
+	if (!Number.isInteger(splitDigits)) throw new TypeError('数字分隔位数必须为整数');
+	if (splitDigits < 1) throw new RangeError('数字分隔位数至少是1位');
+
+	const grouping = 10 ** splitDigits;
+	separators = separators.map(s=>s.toString());
 	
 	return function(){
-		if (splitDigits < 1) throw new Error('数字分割数量至少是1位');
 		if (Number.isNaN(this)) return 0..bigNumberToString();
 		if (this === Infinity || this === -Infinity) return this.toLocaleString();
-		const grouping = 10 ** splitDigits;
 		const numParts = [];
 		let numTemp = Math.abs(this);
 		do {
@@ -193,24 +204,19 @@ function BigNumberToStringLocalise(separators, splitDigits = 3 ) {
 		if (numTemp > 0) {
 			numParts.push(numTemp);
 		}
-		let numPartsStr = numParts.map((num, idx) => {
-			if (num > 0) {
-				return num + separators[idx];
-			} else
-				return '';
-		});
-	
-		numPartsStr.reverse(); //反向
-		let outStr = numPartsStr.join('');
-		const negative = this < 0;
-		return (negative ? "-" : "") + outStr;
+		
+		let outStr = this < 0 ? '-' : '';
+		for (let i = numParts.length; i--; ) {
+			outStr += numParts[i].toString() + separators[i];
+		}
+
+		return outStr;
 	}
 }
 Number.prototype.bigNumberToString = BigNumberToStringLocalise(['', 'K ', 'M ', 'G ', 'T ', 'P ', 'E ', 'Z ', 'Y ', 'R ', 'Q '], 3);
 
 //最多保留N位小数，不留0
-Number.prototype.keepCounts = function(decimalDigits = 2, plusSign = false)
-{
+Number.prototype.keepCounts = function(decimalDigits = 2, plusSign = false) {
 	let newNumber = Number(this.toFixed(decimalDigits));
 	return (plusSign && this > 0 ? '+' : '') + newNumber.bigNumberToString();
 }
@@ -254,6 +260,7 @@ Array.prototype.shuffle = function() {
     }
     return this;
 }
+//数组随机移除元素
 Array.prototype.randomShift = function() {
 	return this.splice(Math.random() * this.length, 1)?.[0];
 }
@@ -297,11 +304,12 @@ Array.prototype.nodeJoin = function(separator)
 	return frg;
 }
 
-Math.randomInteger = function(max, min = 0) {
+Math.randomInteger = function(num1, num2 = 0) {
+	let max = Math.max(num1, num2), min = Math.min(num1, num2);
 	return this.floor(this.random() * (max - min + 1) + min);
 }
 Math.isPowerOfTwo = function(n) {
-	if (Number.isInteger(0) && n > 0)
+	if (Number.isInteger(n) && n > 0)
 		return (n & (n - 1)) === 0;
 	else
 		return false;
@@ -320,26 +328,30 @@ function flags(num) {
 function reflags(arr) {
 	return arr.reduce((pre,cur)=>pre | 1 << cur, 0);
 }
-
+function aaa(...args) {
+	console.log(args);
+}
 //带标签的模板字符串
-function tp(strings, ...keys) {
-	return (function(...values) {
-		let dict = values[values.length - 1] || {};
-		let fragment = document.createDocumentFragment();
-		fragment.append(strings[0]);
-		keys.forEach(function(key, i, arr) {
-			let value = Number.isInteger(key) ? values[key] : dict[key];
-			if (value != undefined)
-			{
-				try{
-					fragment.append(arr.lastIndexOf(key) === i ? value : value.cloneNode(true)); //如果是最后一个匹配的标签，就插入原始的DOM（保留行为），否则插入克隆的DOM
-				}catch(e)
-				{
-					console.log("模板字符串错误： %o，", e, values, keys, value);
+function tp(stringsArr, ...keys) {
+	return ((...values)=>{
+		const dict = values[values.length - 1] || {};
+		const fragment = document.createDocumentFragment();
+		for (let i = 0; i < keys.length; i++) {
+			fragment.append(stringsArr[i]);
+			const key = keys[i];
+			const value = Number.isInteger(key) ? values[key] : dict[key];
+			if (value !== undefined) {
+				try {
+					fragment.append((value instanceof Node && keys.lastIndexOf(key) !== i) ? value.cloneNode(true) : value); //如果是不最后一个匹配的标签，就插入克隆的DOM，否则可以插入原始的DOM（保留行为）
+				}
+				catch(e) {
+					console.error("模板字符串错误： %o，", e, values, keys, value);
 				}
 			}
-			fragment.append(strings[i + 1]);
-		});
+		}
+		//补上最后一个字符串
+		fragment.append(stringsArr[keys.length]);
+
 		return fragment;
 	});
 }
@@ -420,7 +432,7 @@ fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffe
 // 加载 image
 function loadImage(url) {
 	return new Promise(function(resolve, reject) {
-		var image = new Image();
+		const image = new Image();
 
 		image.src = url;
 		image.type = "svg"
@@ -486,12 +498,12 @@ function dbCount (db, tableName, key) {
 
 function dbReadAll (db, tableName) {
 	return new Promise(async function (resolve, reject) {
-		let datas = [];
+		const datas = [];
 		const transaction = db.transaction([tableName]);
 		const objectStore = transaction.objectStore(tableName);
 		const request = objectStore.openCursor();
 		request.onsuccess = function(event) {
-			var cursor = event.target.result;
+			const cursor = event.target.result;
 			if (cursor) {
 				// cursor.value 包含正在被遍历的当前记录
 				// 这里你可以对 result 做些什么
@@ -529,7 +541,7 @@ function dbDelete (db, tableName, keys) {
 		request.onerror = reject;
 	});
 }
-
+//1个潜觉需要用多少格子
 function latentUseHole(latentId) {
 	switch (latentId) {
 		case 12: case 16: case 17: case 18: case 19:
