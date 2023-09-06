@@ -304,9 +304,10 @@ Array.prototype.nodeJoin = function(separator)
 	return frg;
 }
 
-Math.randomInteger = function(num1, num2 = 0) {
-	let max = Math.max(num1, num2), min = Math.min(num1, num2);
-	return this.floor(this.random() * (max - min + 1) + min);
+Math.randomInteger = function(max, min = 0) {
+	let _max = Math.max(max, min),
+		_min = Math.min(max, min);
+	return this.floor(this.random()*(_max-_min+1)+_min);
 }
 Math.isPowerOfTwo = function(n) {
 	if (Number.isInteger(n) && n > 0)
@@ -328,9 +329,7 @@ function flags(num) {
 function reflags(arr) {
 	return arr.reduce((pre,cur)=>pre | 1 << cur, 0);
 }
-function aaa(...args) {
-	console.log(args);
-}
+
 //带标签的模板字符串
 function tp(stringsArr, ...keys) {
 	return ((...values)=>{
