@@ -170,7 +170,7 @@ class Board
 	tableNode = document.createElement("table");
 	constructor(def = null, columnCount = 6, rowCount = 5)
 	{
-		const intAttr = typeof(def) == "number" ? def : void(0);
+		const intAttr = typeof(def) == "number" ? def : void 0;
 		this.rowCount = Number(rowCount);
 		this.columnCount = Number(columnCount);
 
@@ -1046,7 +1046,7 @@ function delay() { return { kind: SkillKinds.Delay }; }
 function massAttack() { return { kind: SkillKinds.MassAttack }; }
 function dropRefresh() { return { kind: SkillKinds.DropRefresh }; }
 function drum() { return { kind: SkillKinds.Drum }; }
-function autoPath() { return { kind: SkillKinds.AutoPath }; }
+function autoPath(number) { return { kind: SkillKinds.AutoPath, matchesNumber:v.constant(number) }; }
 function leaderChange(type = 0) { return { kind: SkillKinds.LeaderChange, type: type }; }
 function noSkyfall() { return { kind: SkillKinds.NoSkyfall }; }
 function henshin(id, random = false) {
@@ -1459,7 +1459,7 @@ const skillObjectParsers = {
 	  return [
 		setOrbState(Attributes.orbs(), 'unlocked'),
 		boardChange([0,1,2,3]),
-		autoPath(),
+		autoPath(3),
 	  ];
 	},
 
@@ -1706,6 +1706,14 @@ const skillObjectParsers = {
 	},
 	//剩余多少个属性珠才能使用技能
 	[255](attr, min, max) { return skillProviso(c.remainAttrOrbs(flags(attr), min ?? 0, max ?? 0)); },
+	
+	[257]() {
+		return [
+		  setOrbState(Attributes.orbs(), 'unlocked'),
+		  boardChange([0,1,2,3,4,5]),
+		  autoPath(5),
+		];
+	  },
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -2281,7 +2289,11 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.AutoPath: { //小龙的萌新技能
-			frg.ap(tsp.skill.auto_path());
+			const {matchesNumber} = skill;
+			frg.ap(tsp.skill.auto_path({
+				icon: createIcon(skill.kind),
+				matchesNumber: renderValue(matchesNumber),
+			}));
 			break;
 		}
 		case SkillKinds.Vampire: { //吸血
@@ -3260,7 +3272,7 @@ function renderValue(_value, option = {}) {
 		case SkillValueKind.Constant: {
 			dict = {
 				value: _value.value.keepCounts(od,os),
-				unit: option.unit ? option.unit() : null,
+				unit: option.unit ? option.unit() : void 0,
 			};
 			frg.ap(tspv.const(dict));
 			break;

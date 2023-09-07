@@ -107,7 +107,7 @@ let localTranslating = {
 			min_match_length: tp`[Only able to erase ≥${'matchable'} orbs]`, //matchable, unmatchable
 			drop_refresh: tp`${'icon'}Replaces all orbs`,
 			drum: tp`Plus a drumming sound is made when Orbs are moved`,
-			auto_path: tp`Shows 3 combo path (Norm. Dungeon & 3 linked Orbs only)`,
+			auto_path: tp`Shows ${'matchesNumber'} ${'icon'}combo path guidance`,
 			counter_attack: tp`When attacked by an ${'target'}, ${'chance'}${'value'} ${'attr'} ${'icon'}counterattack`,	
 			change_orbs: tp`Changes ${'from'} to ${'to'} orbs`,
 			generate_orbs: tp`Creates ${'value'} ${'orbs'} orbs each at random ${'exclude'}`,

@@ -4416,6 +4416,10 @@ body.external-link-support #external-support{
 .skill-datail-parsed .team-flags {
 	display: inline-block;
 }
+.icon-skill[data-icon-type="auto-path"]
+{
+	background-position-y:calc(-36px * 42);
+}
 
 :where(:lang(en), :lang(ko)) .icon-skill:where(
 	[data-icon-type="mass-attack"],

@@ -93,7 +93,7 @@ const _localTranslating = {
 			min_match_length: tp`【限定≥${'matchable'}珠才能消除】`,
 			drop_refresh: tp`${'icon'}全板刷新`,
 			drum: tp`寶珠移動和消除的聲音變成太鼓達人的音效`,
-			auto_path: tp`顯示3連擊的轉珠路徑（只匹配3珠，並只適用於普通地下城）`,
+			auto_path: tp`顯示${'matchesNumber'}連擊的${'icon'}轉珠路徑指引`,
 			counter_attack: tp`受到${'target'}攻擊時，${'chance'}進行受到傷害${'value'}的${'attr'}${'icon'}反擊`,	
 			change_orbs: tp`${'from'}→${'to'}`,
 			generate_orbs: tp`${'exclude'}生成${'orbs'}各${'value'}個`,
