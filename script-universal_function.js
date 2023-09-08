@@ -284,7 +284,7 @@ DocumentFragment.prototype.ap = function(...args)
 		{
 			arg.forEach(item=>this.ap(item));
 		}
-		else //其他内容的转换为文字添加
+		else if (arg !== null && arg !== void 0) //其他内容的转换为文字添加
 		{
 			this.append(arg);
 		}
@@ -298,8 +298,9 @@ Array.prototype.nodeJoin = function(separator)
 	const frg = document.createDocumentFragment();
 	this.forEach((item, idx, arr)=>{
 		frg.ap(item);
-		if (idx < (arr.length - 1) && separator !== undefined)
+		if (idx < (arr.length - 1) && separator !== null && separator !== void 0) {
 			frg.ap(separator instanceof Node ? separator.cloneNode(true) : separator);
+		}
 	});
 	return frg;
 }
@@ -339,7 +340,7 @@ function tp(stringsArr, ...keys) {
 			fragment.append(stringsArr[i]);
 			const key = keys[i];
 			const value = Number.isInteger(key) ? values[key] : dict[key];
-			if (value !== undefined) {
+			if (value !== null && value !== void 0) {
 				try {
 					fragment.append((value instanceof Node && keys.lastIndexOf(key) !== i) ? value.cloneNode(true) : value); //如果是不最后一个匹配的标签，就插入克隆的DOM，否则可以插入原始的DOM（保留行为）
 				}
