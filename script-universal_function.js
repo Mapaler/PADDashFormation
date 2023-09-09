@@ -193,21 +193,30 @@ function BigNumberToStringLocalise(separators, splitDigits = 3 ) {
 	separators = separators.map(s=>s.toString());
 	
 	return function(){
-		if (Number.isNaN(this)) return 0..bigNumberToString();
-		if (this === Infinity || this === -Infinity) return this.toLocaleString();
-		const numParts = [];
-		let numTemp = Math.abs(this);
+		const thisValue = this.valueOf();
+		if (thisValue === 0 ||
+			thisValue === Infinity ||
+			thisValue === -Infinity
+		) {
+			return this.toLocaleString();
+		}
+		if (Number.isNaN(thisValue)) return 0..bigNumberToString();
+		
+		const numLevels = [];
+		let numTemp = Math.abs(thisValue);
+
 		do {
-			numParts.push(numTemp % grouping);
+			numLevels.push(numTemp % grouping); //这一段数量级的数字
 			numTemp = Math.floor(numTemp / grouping);
-		} while (numTemp > 0 && numParts.length < (separators.length - 1))
+		} while (numTemp > 0 && numLevels.length < (separators.length - 1))
 		if (numTemp > 0) {
-			numParts.push(numTemp);
+			numLevels.push(numTemp);
 		}
 		
-		let outStr = this < 0 ? '-' : '';
-		for (let i = numParts.length; i--; ) {
-			outStr += numParts[i].toString() + separators[i];
+		let outStr = thisValue < 0 ? '-' : '';
+		for (let i = numLevels.length; i--; ) {
+			if (numLevels[i] > 0)
+				outStr += numLevels[i].toString(10) + separators[i];
 		}
 
 		return outStr;
