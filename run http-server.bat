@@ -1,3 +1,3 @@
 @echo off
 cd ..
-http-server -p 80
+http-server -p 8080
