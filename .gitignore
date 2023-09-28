@@ -11,3 +11,4 @@
 /fonts/.font-spider
 /images/*.fw.png
 /package-lock.json
+/run http-server.bat

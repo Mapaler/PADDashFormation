@@ -2,25 +2,25 @@
 	{
 		"code": "ja",
 		"ckey": {
-			"card": "a3e1f54938525959f95520ffbfbe5001",
-			"skill": "9f4a4ef277415f1cf97344846f493d6f"
+			"card": "7d84186f41a98a42b21ac2c7a39b0484",
+			"skill": "d575310666766530a66277db51b450a5"
 		},
-		"updateTime": 1695384923998
+		"updateTime": 1695912731596
 	},
 	{
 		"code": "en",
 		"ckey": {
-			"card": "ae151a56761c211c8a3dfd7544beffd4",
-			"skill": "c898eef5ee7a3262fa169d88f1f2eb33"
+			"card": "c991c22d91538591355f9c127b7adc2d",
+			"skill": "ecc5048a588406aef26f94c4c4e5a4fb"
 		},
-		"updateTime": 1695384923998
+		"updateTime": 1695912731596
 	},
 	{
 		"code": "ko",
 		"ckey": {
-			"card": "e028676ae0967f0574fc44ea71f4739a",
-			"skill": "70e5905ba2e32b42af0265a1fbd5f2b3"
+			"card": "b365c0641732dbc563ffa8ed31edcc45",
+			"skill": "6dbdb843ab9865264864b7d69fd99290"
 		},
-		"updateTime": 1695384923998
+		"updateTime": 1695912731596
 	}
 ]
