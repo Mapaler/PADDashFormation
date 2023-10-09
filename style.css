@@ -1941,6 +1941,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	animation: icon-active 0.2s;
 }
+.awoken-icon.unallowable-awoken:active,
+input[disabled]+.awoken-icon:active,
+.latent-icon.unallowable-latent:active {
+	animation: none;
+}
 .awoken-ul
 {
 	display: grid;
@@ -2577,9 +2582,10 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 }
 /*不允许使用的潜觉，不是手指，半透明，灰度*/
 .awoken-icon.unallowable-awoken,
+input[disabled]+.awoken-icon,
 .latent-icon.unallowable-latent
 {
-	cursor: default;
+	cursor: default !important;
 	opacity: var(--search-icon-unchecked);
 	filter: grayscale(100%);
 }
@@ -2847,6 +2853,10 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 
 .team-awoken-effect .prob[data-value="100"] {
 	color: #28c031;
+	text-shadow: black 1px 1px 1px;
+}
+.team-awoken-effect .prob.gt100 /*大于100*/{
+	color: #c7ff2b;
 	text-shadow: black 1px 1px 1px;
 }
 .team-awoken-effect .count[data-value]::before,

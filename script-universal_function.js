@@ -693,15 +693,15 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		[{ index: 2, value: 100 }, { index: 66, value: -1000 }], //ATK
 		[{ index: 3, value: 200 }, { index: 67, value: -2000 }] //RCV
 	];
-	const previousAwokenScale = [ //在297之前，对应比例加三维觉醒的序号与倍率值，就是 63 语音觉醒, 127 三维觉醒
-		[{ index: 63, scale: 1.1 },{ index: 127, scale: 1.5 }], //HP
-		[{ index: 63, scale: 1.1 },{ index: 127, scale: 1.5 }], //ATK
-		[{ index: 63, scale: 1.1 },{ index: 127, scale: 1.5 }] //RCV
+	const previousAwokenScale = [ //在297之前，对应比例加三维觉醒的序号与倍率值，就是 63 语音觉醒
+		[{ index: 63, scale: 1.1 }], //HP
+		[{ index: 63, scale: 1.1 }], //ATK
+		[{ index: 63, scale: 1.1 }] //RCV
 	];
-	const latterAwokenScale = [ //在297之后，对应比例加三维觉醒的序号与倍率值
-		[], //HP
-		[], //ATK
-		[] //RCV
+	const latterAwokenScale = [ //在297之后，对应比例加三维觉醒的序号与倍率值，30 协力觉醒、127 三维觉醒
+		[{ index: 127, scale: 1.5 }], //HP
+		[{ index: 127, scale: 1.5 }], //ATK
+		[{ index: 127, scale: 1.5 }] //RCV
 	];
 
 	if (!solo) { //协力时计算协力觉醒
@@ -741,7 +741,6 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		enableBouns = memberCard.attrs[0] === assistCard.attrs[0] || memberCard.attrs[0] == 6 || assistCard.attrs[0] == 6;
 	}
 
-
 	const abilitys = memberCurves.map((ab, idx) => {
 		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr, limitBreakIncr120[idx])); //等级基础三维
 		const n_plus = member.plus[idx] * plusAdd[idx]; //加值增加量
@@ -761,7 +760,6 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 
 		//倍率类觉醒的比例，直接从1开始乘
 		const n_awokenScale = previousAwokenScale[idx].reduce(calculateAwokenScale, 1);
-
 		//觉醒增加的数值
 		const n_awoken = awokenList.length > 0 ?
 			Math.round(awokenAdd[idx].reduce((previous, aw) => {
@@ -786,7 +784,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		let reValueNoAwoken = Math.round(n_base * n_awokenScale) + n_plus + Math.round((n_assist_base + n_assist_plus) * bonusScale[idx]);
 
 		//觉醒生效时的协力、语音觉醒等的倍率
-		reValue = reValue * latterAwokenScale[idx].reduce(calculateAwokenScale, 1);
+		reValue = Math.floor(reValue * latterAwokenScale[idx].reduce(calculateAwokenScale, 1));
 
 		//都要做四舍五入
 		if (isDge && dgeRate[idx] !== 1)
@@ -821,7 +819,12 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 		level: card.limitBreakIncr ? maxLevel : card.maxLevel,
 		plus: (card.stacking || card.types[0] == 15 && card.types[1] == -1) ? [0, 0, 0] : [99, 99, 99], //当可以叠加时，不能打297
 		awoken: card.awakenings.length,
+		sawoken: 0
 	};
+	/*强制计算超觉醒
+	if (card.superAwakenings.includes(127)) {
+		tempMon.sawoken = 127;
+	}*/
 	const abilities = calculateAbility(tempMon, null, solo, teamsCount);
 	if (abilities) {
 	const [[hp,hpNA], [atk,atkNA], [rcv,rcvNA]] = abilities;

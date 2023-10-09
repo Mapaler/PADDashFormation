@@ -4325,6 +4325,7 @@ function initialize() {
 	const mSAwokenIcon = monEditOuterAwokensRow.querySelector("#current-super-awoken-icon");
 	mSAwokenIcon.onclick = function(){
 		this.setAttribute("data-awoken-icon", 0);
+		reCalculateAbility();
 	}
 
 	//3个快速设置this.ipt为自己的value
@@ -4509,11 +4510,12 @@ function initialize() {
 
 	//编辑界面重新计算怪物的能力
 	function reCalculateAbility() {
-		const monid = editBox.mid;
+		const id = editBox.mid;
 		const level = parseInt(monEditLv.value || 0, 10);
 
 		const mAwokenNumIpt = monEditAwokensRow.querySelector("input[name='awoken-number']:checked");
 		const awoken = mAwokenNumIpt ? parseInt(mAwokenNumIpt.value, 10) : 0;
+		const sawoken = mSAwokenIcon ? parseInt(mSAwokenIcon.getAttribute("data-awoken-icon"), 10) : 0;
 		const plus = [
 			parseInt(monEditAddHp.value || 0, 10),
 			parseInt(monEditAddAtk.value || 0, 10),
@@ -4521,11 +4523,12 @@ function initialize() {
 		];
 		const latent = editBox.latent;
 		const tempMon = {
-			id: monid,
-			level: level,
-			plus: plus,
-			awoken: awoken,
-			latent: latent
+			id,
+			level,
+			plus,
+			awoken,
+			sawoken,
+			latent
 		};
 
 		const abilitys = calculateAbility(tempMon, null, solo, teamsCount);
@@ -5207,25 +5210,21 @@ function editBoxChangeMonId(id) {
 
 		const level = settingBox.querySelector(".row-mon-level .m-level");
 		const plusArr = [...settingBox.querySelectorAll(".row-mon-plus input[type='number']")];
-		if (sawoken > 0)
-		{
-			let recalFlag = false;
+		if (sawoken > 0) {
 			//自动100级
 			if (parseInt(level.value, 10)<100)
 			{
 				console.debug("点亮超觉醒，自动设定100级");
 				level.value = 100;
-				recalFlag = true;
 			}
 			//自动打上297
 			if (plusArr.some(ipt=>parseInt(ipt.value, 10)<99))
 			{
 				console.debug("点亮超觉醒，自动设定297");
 				plusArr.forEach(ipt=>ipt.value=99);
-				recalFlag = true;
 			}
-			if (recalFlag) editBox.reCalculateAbility();
 		}
+		editBox.reCalculateAbility();
 	}
 	//怪物没有超觉醒时隐藏超觉醒
 	const monEditCurrentSAwokenRow = monEditOuterAwokensRow.querySelector(".current-super-awoken");
@@ -5616,7 +5615,8 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 			const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 			awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 			let prob = thisAwokenNum * 0.2; //普通觉醒20%
-			orb.setAttribute(dataAttrName,Math.round(Math.min(prob,1)*100));
+			orb.setAttribute(dataAttrName,Math.round(prob*100));
+			orb.classList.toggle("gt100", prob > 1);
 		}
 	}
 
