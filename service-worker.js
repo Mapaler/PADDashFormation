@@ -18475,7 +18475,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"f65838d55e9a5bf6943ee03177e2d6f1"
+		"aad8d283962fa916af057fed529db7ba"
 	],
 	[
 		"script-skill-parser.js",
@@ -18739,31 +18739,31 @@ const cachesMap = new Map([
 	],
 	[
 		"monsters-info/ckey.json",
-		"6e3affe87bf64bacf4fbc3d699d9f84e"
+		"739ed75e5bfb001cea6986ffced5fe2a"
 	],
 	[
 		"monsters-info/mon_en.json",
-		"914a56c4967c1da4d45c430149d58a30"
+		"466b876e6fa339b5528d74935e33dd80"
 	],
 	[
 		"monsters-info/mon_ja.json",
-		"e90d0e23576a209302a60ae7fec1267b"
+		"c536c2a4b4e2cff647a7f433201dbefa"
 	],
 	[
 		"monsters-info/mon_ko.json",
-		"3fa2c36394c7f9912fb3aeae3f1b3694"
+		"9c31524b17c98a708a4fc289bdfe3ac7"
 	],
 	[
 		"monsters-info/skill_en.json",
-		"fdadced1d770616794539a13c95fed7b"
+		"685fc52f4696ab88da142b1351f09314"
 	],
 	[
 		"monsters-info/skill_ja.json",
-		"8b4a8de710383851d7b0fef0c25a4200"
+		"267a19e5b35cb52cd0d8fda6c80e63dd"
 	],
 	[
 		"monsters-info/skill_ko.json",
-		"6689997b9b04c74f56fdd3cfabe942a6"
+		"801e7ee57c40b7fc9b0218b488e456e4"
 	],
 	[
 		"doc/export-player-data.html",
