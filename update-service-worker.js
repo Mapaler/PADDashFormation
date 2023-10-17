@@ -62,8 +62,8 @@ cachesArr.push(...libraryHash);
 const library_aaaHash = filesHashArr("./library/jy4340132-aaa", /\.(js|wasm)$/i); //播放语音的库
 cachesArr.push(...library_aaaHash);
 //数据
-const dataHash = filesHashArr("./monsters-info", /\.json$/i);
-cachesArr.push(...dataHash);
+// const dataHash = filesHashArr("./monsters-info", /\.json$/i);
+// cachesArr.push(...dataHash);
 //文档
 const docHash = filesHashArr("./doc", /\.html$/i);
 cachesArr.push(...docHash);

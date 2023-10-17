@@ -642,6 +642,11 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "生效抽蛋ID：";
 }
+.dialog-dungeon-enchance .collab-list::after,
+.dialog-dungeon-enchance .gacha-list::after
+{
+	content: "（使用“,”分隔多个ID）";
+}
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "強化倍率：";

@@ -651,6 +651,11 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "有効ガチャID：";
 }
+.dialog-dungeon-enchance .collab-list::after,
+.dialog-dungeon-enchance .gacha-list::after
+{
+	content: "(複数のIDは\",\"で区切ります)";
+}
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "強化倍率：";

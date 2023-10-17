@@ -665,23 +665,28 @@ label[for="qr-data-type-paddb"]::before
 }
 .dialog-dungeon-enchance .rare-list::before
 {
-	content: "Effective Rarity:";
+	content: "Rarity:";
 }
 .dialog-dungeon-enchance .attr-list::before
 {
-	content: "Effective Attr.:";
+	content: "Attr.:";
 }
 .dialog-dungeon-enchance .type-list::before
 {
-	content: "Effective Types:";
+	content: "Types:";
 }
 .dialog-dungeon-enchance .collab-list::before
 {
-	content: "Effective Collab ID：";
+	content: "Collab ID：";
 }
 .dialog-dungeon-enchance .gacha-list::before
 {
-	content: "Effective Gacha ID：";
+	content: "Gacha ID：";
+}
+.dialog-dungeon-enchance .collab-list::after,
+.dialog-dungeon-enchance .gacha-list::after
+{
+	content: "(separate multiple IDs with \",\")";
 }
 .dialog-dungeon-enchance .stats-list::before
 {

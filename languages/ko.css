@@ -631,6 +631,11 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "유효한 가챠 ID：";
 }
+.dialog-dungeon-enchance .collab-list::after,
+.dialog-dungeon-enchance .gacha-list::after
+{
+	content: "(여러 ID를 \",\"로 구분)";
+}
 .dialog-dungeon-enchance .stats-list::before
 {
 	content: "배율을 강화:";
