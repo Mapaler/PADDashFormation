@@ -5566,7 +5566,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 
 		//自动回复的队长技能
 		let lsAwoken1 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal),
-			lsAwoken2 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal);
+			lsAwoken2 = parseLSkill2.filter(skill=>skill.kind == SkillKinds.AutoHeal);
 		if (lsAwoken1.length) {
 			const [,,rcv] = leader1.ability;
 			count += rcv * lsAwoken1[0].value.value;
