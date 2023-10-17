@@ -5526,7 +5526,6 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	//解析两个队长技
 	let leader1 = members[swapId || 0], //换队长或者默认队长
 		leader2 = members[5];
-	console.log(leader1.ability)
 	let parseLSkill1 = skillParser(leader1?.card?.leaderSkillId),
 		parseLSkill2 = skillParser(leader2?.card?.leaderSkillId);
 	//防绑
