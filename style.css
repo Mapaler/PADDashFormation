@@ -804,6 +804,9 @@ body:not(.show-team-total-info):not(.solo) .formation-box .team-badge
 	position: relative;
 	width: var(--head-block-width);
 }
+.team-box .member {
+	vertical-align: middle;
+}
 .formation-box .monster{
 	margin: 4px; /*留给队长边框的*/
 }
