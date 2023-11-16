@@ -1,6 +1,7 @@
 ﻿//分析卡片的函数,Code From https://github.com/kiootic/pad-rikuu
 class Card{
 	static fixId(id, reverse = false){
+		if (id === 0xFFFF) return id;
 		return reverse ? (id >= 9900 ? id + 100 : id) : (id >= 10000 ? id - 100 : id);
 	}
     constructor(data){

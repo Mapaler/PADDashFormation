@@ -3454,6 +3454,7 @@ table .orb-icon
 {
 	/*text-shadow: black 1px 1px 0,black -1px 1px 0,black 1px -1px 0,black -1px -1px 0;*/
 	-webkit-text-stroke: 3px black; /*非W3C标准，但都支持*/
+	text-shadow: 0 3px 2px black;
 }
 
 #default-level {
@@ -3956,6 +3957,10 @@ body.external-link-support #external-support{
 { /*像素進化*/
 	background-image: linear-gradient(#FFDD77 33%, #EEBB33 34%, #EEBB33 66%, #BB7700 67%);
 }
+.pixel-evo .evo-type::before
+{ /*像素進化没有阴影*/
+	text-shadow: none;
+}
 .pixel-evo
 {
 	background-color: #B1AB94;
@@ -3999,6 +4004,24 @@ body.external-link-support #external-support{
 .super-ult-evo .evo-panel-right
 {
 	border-color: #DBE721;
+}
+.ordeal-evo .evo-type::after
+{ /*试练进化*/
+	background-image: linear-gradient(#89F700 30%,#F3F593 60%, #25D6CD);
+	-webkit-text-stroke: 0.5px black;
+}
+.ordeal-evo .evo-type::before
+{ /*试练进化*/
+	-webkit-text-stroke: 4px white;
+	text-shadow: 0 5px 2px black;
+}
+.ordeal-evo
+{
+	background-image: linear-gradient(#89F700, #25d6cd);
+}
+.ordeal-evo .evo-panel-right
+{
+	border-color: #F3F593;
 }
 .evo-panel.henshin .evo-type::after,
 .evo-panel.henshin-loop .evo-type::after

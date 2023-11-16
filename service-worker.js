@@ -407,7 +407,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_102.PNG",
-		"514622b71255477dde6b3bb691d0983d"
+		"3e4746888115efa2555c13c986f161ae"
 	],
 	[
 		"images/cards_ja/CARDS_103.PNG",
@@ -4148,6 +4148,10 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv1767.wav",
 		"63f114c1bd80e9360b3e56127ce5d0aa"
+	],
+	[
+		"sound/voice/ja/padv1768.wav",
+		"9a71a6c0a424417fc0377c3cf94ca553"
 	],
 	[
 		"sound/voice/ja/padv177.wav",
@@ -18591,7 +18595,7 @@ const cachesMap = new Map([
 	],
 	[
 		"fonts/fa-solid-900.woff2",
-		"44f8148f80e6c3d60fa6425b0cbb862a"
+		"d5e647388e2415268b700d3df2e30a0d"
 	],
 	[
 		"fonts/FOT-KurokaneStd-EB.woff2",
@@ -18619,7 +18623,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"aad8d283962fa916af057fed529db7ba"
+		"f86d9520941b79de6aa6894ceda08442"
 	],
 	[
 		"script-skill-parser.js",
@@ -18627,11 +18631,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"0d84923652d71fcf7cdcee27618e18d9"
+		"5101e4bf6261efba36ce614d13b82735"
 	],
 	[
 		"script.js",
-		"d401579fb09b3d804a4baad3fc233e0d"
+		"06b8d6008889cb90c22135c2f05295f8"
 	],
 	[
 		"solo.html",
@@ -18643,7 +18647,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"0472bf747aba6bbf7ef21d3ecaa365e7"
+		"fb2bdbada3d29341b08650a64000f883"
 	],
 	[
 		"temp.js",
@@ -18655,7 +18659,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/en.css",
-		"23b996f79ae263d6acac870f043ca7e4"
+		"c9dc45ad0c9bbc519f039d1ebba8b814"
 	],
 	[
 		"languages/en.js",
@@ -18663,7 +18667,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"319c5770b5ca74e43db46d69f59d3ac1"
+		"d3145270883efac4462cdfd00bfc081a"
 	],
 	[
 		"languages/ja.js",
@@ -18671,7 +18675,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"dbaeb751bbfba1a01c0e44f5b7cb7527"
+		"259ec3d87e43f750cc4ea1d3e2bae3cd"
 	],
 	[
 		"languages/ko.js",
@@ -18683,7 +18687,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.css",
-		"ab2952f23f328d33b0dafbf9dbc88b23"
+		"e7d2bc02b6b648428dc74c11446af03b"
 	],
 	[
 		"languages/zh-TW.js",
@@ -18691,7 +18695,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh.css",
-		"e72e39b660da15978d399efb936a2f28"
+		"a28be57c1d1600457c219481708c832f"
 	],
 	[
 		"languages/zh.js",

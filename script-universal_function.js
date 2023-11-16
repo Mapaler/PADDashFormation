@@ -1790,5 +1790,6 @@ function getReduceScales(leaderid) {
 	return lss.map(leaderReduceScale).filter(re=>re.scale > 0);
 }
 function cardFixId(id, reverse = false) {
+	if (id === 0xFFFF) return id;
 	return reverse ? (id >= 9900 ? id + 100 : id) : (id >= 10000 ? id - 100 : id);
 }

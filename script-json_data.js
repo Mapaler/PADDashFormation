@@ -3935,6 +3935,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [12];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
 					const value = skill.params[0];
 					return `攻击×${(value/100).bigNumberToString()}倍`;
 				}
@@ -3950,6 +3951,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [13];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
 					const value = skill.params[0];
 					return `回复×${(value/100).bigNumberToString()}倍`;
 				}
@@ -3963,10 +3965,11 @@ const specialSearchFunctions = (function() {
 				}).sort((a,b)=>sortByParams(a,b,searchTypeArray,2));
 				},
 				addition:card=>{
-				const searchTypeArray = [198];
-				const skill = getCardLeaderSkill(card, searchTypeArray);
-				const sk = skill.params;
-				return `回复${sk[0].bigNumberToString()}，减伤${sk[2]}%`;
+					const searchTypeArray = [198];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `回复${sk[0].bigNumberToString()}，减伤${sk[2]}%`;
 				}
 			},
 			{name:"Recover Awkn Skill bind when rcv(sort by turns)",otLangName:{chs:"回血解觉（以解觉数排序）",cht:"回血解覺（以解覺數排序）"},
@@ -3978,10 +3981,11 @@ const specialSearchFunctions = (function() {
 				}).sort((a,b)=>sortByParams(a,b,searchTypeArray,3));
 				},
 				addition:card=>{
-				const searchTypeArray = [198];
-				const skill = getCardLeaderSkill(card, searchTypeArray);
-				const sk = skill.params;
-				return `回复${sk[0].bigNumberToString()}，解觉${sk[3]}T`;
+					const searchTypeArray = [198];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `回复${sk[0].bigNumberToString()}，解觉${sk[3]}T`;
 				}
 			},
 			{name:"Counterattack(sort by rate)",otLangName:{chs:"队长技受伤反击",cht:"隊長技受傷反擊"},
@@ -3995,6 +3999,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [41];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					const fragment = document.createDocumentFragment();
 					fragment.appendChild(createOrbsList(sk[2] || 0));
@@ -4005,9 +4010,9 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Voids Poison dmg",otLangName:{chs:"毒无效",cht:"毒無效"},
 				function:cards=>cards.filter(card=>{
-				const searchTypeArray = [197];
-				const skill = getCardLeaderSkill(card, searchTypeArray);
-				return skill;
+					const searchTypeArray = [197];
+					const skill = getCardLeaderSkill(card, searchTypeArray);
+					return skill;
 				})
 			},
 			{name:"Resolve",otLangName:{chs:"根性",cht:"根性"},
@@ -4021,8 +4026,9 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [14];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
 					const value = skill.params[0];
-				return `HP≥${value}%`;
+					return `HP≥${value}%`;
 				}
 			},
 			{name:"Prediction of falling (LS)",otLangName:{chs:"预测掉落 队长技",cht:"預測掉落 队长技"},
@@ -4045,6 +4051,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [53];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return `掉率x${sk[0]/100}`;
 				}
@@ -4060,6 +4067,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [54];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return `金币x${sk[0]/100}`;
 				}
@@ -4075,6 +4083,7 @@ const specialSearchFunctions = (function() {
 				addition:card=>{
 					const searchTypeArray = [148];
 					const skill = getCardLeaderSkill(card, searchTypeArray);
+					if (!skill) return;
 					const sk = skill.params;
 					return `经验x${sk[0]/100}`;
 				}
@@ -4207,7 +4216,8 @@ const specialSearchFunctions = (function() {
 				},
 				addition:card=>{
 					const skill = Skills[card.leaderSkillId];
-					return `无条件${Math.round(getReduceScale_unconditional(skill) * 100)}%`;
+					const scale = getReduceScale_unconditional(skill)
+					return scale > 0 && `无条件${Math.round(getReduceScale_unconditional(skill) * 100)}%`;
 				}
 			},
 		]},
@@ -4246,6 +4256,10 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Evo from Weapon",otLangName:{chs:"由武器进化而来",cht:"由武器進化而來"},
 				function:cards=>cards.filter(card=>card.isUltEvo && Cards[card.evoBaseId].awakenings.includes(49))
+			},
+			{name:"Ordeal Evo",otLangName:{chs:"试练进化",cht:"試練進化"},
+				function:cards=>cards.filter(card=>card.evoMaterials[0] === 0xFFFF),
+				addition:card=>card.evoMaterials[0] === 0xFFFF && `地下城ID:${card.evoMaterials[1]}`
 			},
 		]},
 		{group:true,name:"====== Awoken ======",otLangName:{chs:"======觉醒类======",cht:"======覺醒類======"}, functions: [

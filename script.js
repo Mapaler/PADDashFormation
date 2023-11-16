@@ -866,7 +866,10 @@ class EvoTree
 		}
 		else
 		{
-			if (card.evoMaterials.includes(3826)) //像素进化
+			if (card.evoMaterials[0] === 0xFFFF) //试练进化
+			{
+				this.evoType = "Ordeal Evo";
+			}else if (card.evoMaterials.includes(3826)) //像素进化
 			{
 				this.evoType = "Pixel Evo";
 			}else if (card.awakenings.includes(49)) //武器
@@ -913,6 +916,7 @@ class EvoTree
 		if (this.evoType != "Henshin")
 			this.children.push(...Cards.filter(scard=>scard.evoBaseId == mid && scard.id != mid).map(scard=>new EvoTree(scard.id,_this)));
 		//this.children = (card.henshinTo && card.henshinTo != card.evoRootId ? [new EvoTree(card.henshinTo,_this)] : []).concat(Cards.filter(scard=>scard.evoBaseId == mid && scard.id != mid).map(scard=>new EvoTree(scard.id,_this)));
+		
 	};
 	toListNode()
 	{
@@ -939,7 +943,7 @@ class EvoTree
 
 		const evotMaterials = evotPanel_R.appendChild(document.createElement("ul"));
 		evotMaterials.className = "evo-materials";
-		this.card.evoMaterials.forEach(mid=>{
+		(this.evoType === "Ordeal Evo" ? [0,0,0,0,0] : this.card.evoMaterials).forEach(mid=>{
 			//const li = evotMaterials.appendChild(document.createElement("li"));
 			evotMaterials.appendChild(createCardHead(mid, {noTreeCount: true}));
 		});

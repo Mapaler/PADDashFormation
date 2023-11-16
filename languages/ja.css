@@ -504,6 +504,11 @@ label[for="real-time-change-card"]::after
 {
 	content: "超究極進化";
 }
+.ordeal-evo .evo-type::before,
+.ordeal-evo .evo-type::after
+{
+	content: "試練進化";
+}
 .pixel-evo .evo-type
 {
 	transform: scaleX(0.90);

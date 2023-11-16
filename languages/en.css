@@ -507,6 +507,11 @@ label[for="real-time-change-card"]::after
 {
 	content: "Super Ult Evo";
 }
+.ordeal-evo .evo-type::before,
+.ordeal-evo .evo-type::after
+{
+	content: "Ordeal  Evo";
+}
 
 .evolution .evo-type
 {
@@ -538,6 +543,12 @@ label[for="real-time-change-card"]::after
 	transform: scaleX(0.43);
 	margin: calc(-100px * 1 / 2);
 }
+.ordeal-evo .evo-type
+{
+	transform: scaleX(0.75);
+	margin: calc(-100px * (1 - 0.75) / 2);
+}
+
 .henshin .evo-type::before,
 .henshin .evo-type::after
 {
@@ -567,6 +578,7 @@ label[for="real-time-change-card"]::after
 	transform: scaleX(0.6);
 	margin: calc(-100px * (1 - 0.6) / 2);
 }
+
 .control-box .btn-qrcode::after{
 	content: "QR Code and Data exchange";
 }
