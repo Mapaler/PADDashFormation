@@ -11,16 +11,16 @@
 		"code": "en",
 		"ckey": {
 			"card": "c49bb1df1431c555d04422792d63bde2",
-			"skill": "e90db70606f88c69c56218fce4529acb"
+			"skill": "8b58bb057d34cdc213f5570c729170cd"
 		},
-		"updateTime": 1701973055663
+		"updateTime": 1702029188904
 	},
 	{
 		"code": "ko",
 		"ckey": {
 			"card": "f9c75b6ad47337dd23e8ee76632f8ed5",
-			"skill": "13fcc751ef4e25709530722e389d7ab0"
+			"skill": "1d90f202b48ffa4ce71b1de1bc0a4683"
 		},
-		"updateTime": 1701973055663
+		"updateTime": 1702029188904
 	}
 ]
