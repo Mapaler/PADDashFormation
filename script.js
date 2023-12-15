@@ -172,17 +172,18 @@ Member.prototype.effectiveAwokens = function(assist) {
 	return enableAwoken;
 }
 Member.prototype.getAttrsTypesWithWeapon = function(assist) {
-	let memberCard = this.card, assistCard = assist?.card;
+	let memberCard = this.card, assistCard = assist?.card,
+		assistAwakenings = assistCard?.awakenings?.slice(0, assist.awoken);
 	if (this.id <= 0 || !memberCard) return null; //跳过 id 0
 	let attrs = [...memberCard.attrs]; //属性只有两个，因此用固定的数组
 	let types = new Set(memberCard.types); //Type 用Set，确保不会重复
 	let changeAttr, appendTypes;
-	if (assistCard?.awakenings?.includes(49)) { //如果有武器
+	if (assistAwakenings?.includes(49)) { //如果有武器
 		//更改副属性
-		changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95);
+		changeAttr = assistAwakenings.find(ak=>ak >= 91 && ak <= 95);
 		if (changeAttr) attrs[1] = changeAttr - 91;
 		//添加类型
-		appendTypes = assistCard.awakenings.filter(ak=>ak >= 83 && ak <= 90);
+		appendTypes = assistAwakenings.filter(ak=>ak >= 83 && ak <= 90);
 		appendTypes = appendTypes.map(type=>
 			typekiller_for_type.find(t=>(type - 52) === t.awoken).type);
 		appendTypes.forEach(appendType=>types.add(appendType));
@@ -4828,10 +4829,10 @@ function changeid(mon, monDom, latentDom, assist) {
 		const attrDoms = monDom.querySelectorAll(".attr"); //所有属性边框
 		attrDoms[0].setAttribute("data-attr", card.attrs[0]); //主属性
 		let subAttribute = card.attrs[1] ?? -1; //正常的副属性
-		let assistCard = Cards[assist?.id];
+		let assistCard = Cards[assist?.id], assistAwakenings = assistCard?.awakenings?.slice(0, assist.awoken);
 		let changeAttr;
-		if (assistCard && assistCard.awakenings.includes(49) &&  //如果传入了辅助武器
-			(changeAttr = assistCard.awakenings.find(ak=>ak >= 91 && ak <= 95)) //搜索改副属性的觉醒
+		if (assistAwakenings?.includes(49) &&  //如果传入了辅助武器
+			(changeAttr = assistAwakenings.find(ak=>ak >= 91 && ak <= 95)) //搜索改副属性的觉醒
 		) {
 			subAttribute = changeAttr - 91; //更改副属性
 		}

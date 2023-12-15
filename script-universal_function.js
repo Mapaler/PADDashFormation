@@ -1150,19 +1150,26 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 	let memberArr = team[0], assistArr = team[1];
 	const ls1 = Skills[(Cards[leader1id] || Cards[0])?.leaderSkillId];
 	const ls2 = Skills[(Cards[leader2id] || Cards[0])?.leaderSkillId];
-	const mHpArr = memberArr.map((member, idx) => {
-		const ability = noAwoken ? member.abilityNoAwoken : member.ability;
+	const mHpArr = [];
+	for (let idx = 0; idx < memberArr.length ; idx++) {
+		let tMember = new MemberTeam(),
+			tAssist = new MemberAssist();
+		tMember.loadFromMember(memberArr[idx]);
+		tAssist.loadFromMember(assistArr[idx]);
+		if (noAwoken) { //封觉醒时本体有语音觉醒，不能直接去掉觉醒
+			tAssist.awoken = 0;
+		}
+		const ability = noAwoken ? tMember.abilityNoAwoken : tMember.ability;
 		const hp = ability ? ability[0] : 0;
 		if (!hp) return 0;
-		const mulHP = hp * memberHpMul(member, assistArr[idx], ls2, memberArr, solo) //战友队长技
-						 * memberHpMul(member, assistArr[idx], ls1, memberArr, solo);//我方队长技
+		const mulHP = hp * memberHpMul(tMember, tAssist, ls2, memberArr, solo) //战友队长技
+						 * memberHpMul(tMember, tAssist, ls1, memberArr, solo);//我方队长技
 
 		//演示用代码
 		//console.log("%s 第1次倍率血量：%s，第2次倍率血量：%s",Cards[m.id].otLangName["chs"],hp1,hp2);
 
-		return Math.round(mulHP);
-
-	});
+		mHpArr.push(Math.round(mulHP));
+	}
 
 	//console.log('单个队伍血量：',mHpArr,mHpArr.reduce((p,c)=>p+c));
 
