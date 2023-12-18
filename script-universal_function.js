@@ -1160,8 +1160,9 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 			tAssist.awoken = 0;
 		}
 		const ability = noAwoken ? tMember.abilityNoAwoken : tMember.ability;
-		const hp = ability ? ability[0] : 0;
-		if (!hp) return 0;
+		const hp = ability?.[0] ?? 0;
+		if (!hp) continue;
+		
 		const mulHP = hp * memberHpMul(tMember, tAssist, ls2, memberArr, solo) //战友队长技
 						 * memberHpMul(tMember, tAssist, ls1, memberArr, solo);//我方队长技
 
