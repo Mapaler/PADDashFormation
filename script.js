@@ -6170,8 +6170,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		const teamHPNoAwokenArr = countTeamHp(team, leader1id, leader2id, solo, true);
 
 
-		let tHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
-		let tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v) => pv + v); //队伍计算的总HP无觉醒
+		let tHP = teamHPArr.reduce((pv, v) => pv + v, 0); //队伍计算的总HP
+		let tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v) => pv + v, 0); //队伍计算的总HP无觉醒
 
 		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
 

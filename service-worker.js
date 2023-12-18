@@ -20567,7 +20567,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"6981e3ee58350d6d2cac2ff5182ace40"
+		"14d66cff2d0b7c16d22005300c715db5"
 	],
 	[
 		"solo.html",
