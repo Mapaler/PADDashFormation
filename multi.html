@@ -1043,6 +1043,8 @@ const teamsCount = 2;
 						<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="124"></button><!--大光串--></li>
 						<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="125"></button><!--大暗串--></li>
 						<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="127"></button><!--三维--></li>
+						<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="128"></button><!--养殖加护--></li>
+						<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="129"></button><!--音质加护--></li>
 					</ul>
 				</div>
 				<details class="sawoken-detail"><!--超觉醒列表-->
@@ -1175,6 +1177,8 @@ const teamsCount = 2;
 						<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="124" id="search-awoken-124" /><label class="awoken-icon" data-awoken-icon="124" for="search-awoken-124"></label><!--大光串--></li>
 						<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="125" id="search-awoken-125" /><label class="awoken-icon" data-awoken-icon="125" for="search-awoken-125"></label><!--大暗串--></li>
 						<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="127" id="search-awoken-127" /><label class="awoken-icon" data-awoken-icon="127" for="search-awoken-127"></label><!--三维--></li>
+						<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="128" id="search-awoken-128" /><label class="awoken-icon" data-awoken-icon="128" for="search-awoken-128"></label><!--养殖加护--></li>
+						<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="129" id="search-awoken-129" /><label class="awoken-icon" data-awoken-icon="129" for="search-awoken-129"></label><!--音质加护--></li>
 					</ul>
 				</details>
 			</div>
@@ -1533,6 +1537,11 @@ const teamsCount = 2;
 				<li><label for="dungeon-hp"></label><input id="dungeon-hp" type="number" min=0 step=1 value=1 /></li>
 				<li><label for="dungeon-atk"></label><input id="dungeon-atk" type="number" min=0 step=1 value=1 /></li>
 				<li><label for="dungeon-rcv"></label><input id="dungeon-rcv" type="number" min=0 step=1 value=1 /></li>
+			</ul>
+			<ul class="benefit-list"><!--阴阳加护-->
+				<li><input type="radio" class="benefit-check" name="dungeon-benefit" value="0" id="dungeon-benefit-0" /><label class="awoken-icon" data-awoken-icon="0" for="dungeon-benefit-0"></label></li><!--无-->
+				<li><input type="radio" class="benefit-check" name="dungeon-benefit" value="1" id="dungeon-benefit-1" /><label class="awoken-icon" data-awoken-icon="128" for="dungeon-benefit-1"></label></li><!--养殖-->
+				<li><input type="radio" class="benefit-check" name="dungeon-benefit" value="2" id="dungeon-benefit-2" /><label class="awoken-icon" data-awoken-icon="129" for="dungeon-benefit-2"></label></li><!--音质-->
 			</ul>
 		</div>
 		<div class="dialog-control"><button class="dialog-clear brown-button"></button><button class="dialog-close brown-button"></button><button class="dialog-confirm brown-button"></button></div>

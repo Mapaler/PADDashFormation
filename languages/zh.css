@@ -647,6 +647,10 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "生效抽蛋ID：";
 }
+.dialog-dungeon-enchance .benefit-list::before
+{
+	content: "生效陰陽：";
+}
 .dialog-dungeon-enchance .collab-list::after,
 .dialog-dungeon-enchance .gacha-list::after
 {

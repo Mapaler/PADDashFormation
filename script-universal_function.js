@@ -709,6 +709,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 			ab.push({ index: 30, scale: 1.5 });
 		});
 	}
+
 	const latentScale = [ //对应加三维潜在觉醒的序号与增加比例
 		[{ index: 1, scale: 0.015 }, { index: 12, scale: 0.03 }, { index: 28, scale: 0.045 }, { index: 43, scale: 0.10 }], //HP
 		[{ index: 2, scale: 0.01 }, { index: 12, scale: 0.02 }, { index: 29, scale: 0.03 }, { index: 44, scale: 0.08 }], //ATK
@@ -725,6 +726,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 				dge?.collabs?.includes(memberCard.collabId) || //符合合作
 				dge?.gachas?.includes(memberCard.gachaId); //符合抽蛋桶
 	
+	
 	//储存点亮的觉醒
 	let awokenList = memberCard.awakenings.slice(0, member.awoken);
 	//单人、3人时,大于等于100级且297时增加超觉醒
@@ -739,6 +741,14 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 			awokenList.push(...assistAwokenList);
 		}
 		enableBouns = memberCard.attrs[0] === assistCard.attrs[0] || memberCard.attrs[0] == 6 || assistCard.attrs[0] == 6;
+	}
+
+	//地下城阴阳加护强化
+	if (dge.benefit) { //当存在加护
+		const benefitAwoken = dge.benefit == 1 ? 128 : 129; //得到加护觉醒编号
+		latterAwokenScale[0].push({ index: benefitAwoken, scale: 1.2 }); //HP
+		latterAwokenScale[1].push({ index: benefitAwoken, scale: 1.5 }); //ATK
+		latterAwokenScale[2].push({ index: benefitAwoken, scale: 1.2 }); //RCV
 	}
 
 	const abilitys = memberCurves.map((ab, idx) => {

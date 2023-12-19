@@ -371,7 +371,7 @@ let localTranslating = {
 			[43]: tp`${'icon'}Enhanced Combos`,
 			[44]: tp`${'icon'}Guard Break`,
 			[45]: tp`${'icon'}Bonus Attack`,
-			[46]: tp`${'icon'}Enhanced Team HP `,
+			[46]: tp`${'icon'}Enhanced Team HP`,
 			[47]: tp`${'icon'}Enhanced Team Recovery`,
 			[48]: tp`${'icon'}Damage Void Piercer`,
 			[49]: tp`${'icon'}Awoken Assist`,
@@ -452,6 +452,9 @@ let localTranslating = {
 			[124]: tp`${'icon'}Enhanced Light Combos+`,
 			[125]: tp`${'icon'}Enhanced Dark Combos+`,
 			[126]: tp`${'icon'}T Increased Attack`,
+			[127]: tp`${'icon'}Enhanced All Abilities`,
+			[128]: tp`${'icon'}Benefits of the Yang`,
+			[129]: tp`${'icon'}Benefits of the Yin`,
 		}
 	},
 };
@@ -551,7 +554,7 @@ const official_awoken_sorting = [
 	121,122,123,124,125, 39, 40, 41, 42,
 	 91, 92, 93, 94, 95, 65, 66, 67,105,
 	 84, 83, 85, 86, 87, 88, 89, 90, 64,
-	 63,
+	 63,128,129
 ];
 const PAD_PASS_BADGE = 1<<7 | 1; //本程序的月卡徽章编号，129
 

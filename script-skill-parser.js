@@ -754,6 +754,16 @@ function skillParser(skillId)
 				multiplier.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
 			}
 		}
+		let changeOrbs = skills.filter(skill=>skill.kind == SkillKinds.ChangeOrbs);
+		if (changeOrbs.length>1)
+		{ //把后面的全都合并到第一个
+			changeOrbs.reduce((pre,cur)=>{
+				pre.changes.push(...cur.changes);
+				return pre
+			});
+			changeOrbs.shift(); //从筛选中去除第一个
+			changeOrbs.forEach(skill=>skills.splice(skills.indexOf(skill),1)); //去掉所有后面的
+		}
 		return skills;
 	}
 	const skill = Skills[skillId];

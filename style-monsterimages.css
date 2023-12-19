@@ -1062,6 +1062,15 @@
 .awoken-icon[data-awoken-icon='127']{/*三维*/
 	background-position-y:calc(-32px * 127);
 }
+.awoken-icon[data-awoken-icon='127']{/*三维*/
+	background-position-y:calc(-32px * 127);
+}
+.awoken-icon[data-awoken-icon='128']{/*阳之加护*/
+	background-position-y:calc(-32px * 128);
+}
+.awoken-icon[data-awoken-icon='129']{/*阴之加护*/
+	background-position-y:calc(-32px * 129);
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],

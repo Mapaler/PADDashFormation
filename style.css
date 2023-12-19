@@ -1670,7 +1670,8 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .attr-check,
 .type-check,
 .rare-check,
-.sawoken-check
+.sawoken-check,
+.benefit-check
 {
 	display: none;
 }
@@ -1720,7 +1721,8 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	.awoken-ul,
 	.rare-list,
 	.attr-list,
-) input[type="checkbox"]:not(:checked)+label
+) input[type="checkbox"]:not(:checked)+label,
+.benefit-list input[type="radio"]:not(:checked)+label
 {
 	opacity: var(--search-icon-unchecked);
 }

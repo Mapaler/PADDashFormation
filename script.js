@@ -351,9 +351,10 @@ Formation.prototype.outObj = function() {
 		return teamArr;
 	});
 	let dge = this.dungeonEnchance;
-	if (Object.values(dge.rate).some(rate => rate != 1)) obj.r = [
+	if (Object.values(dge.rate).some(rate => rate != 1) || dge.benefit) obj.r = [
 		[reflags(dge.types),reflags(dge.attrs),reflags(dge.rarities),dge.collabs.length ? dge.collabs : 0,dge.gachas.length ? dge.gachas : 0].deleteLatter(0), //类型,属性,星级
-		[dge.rate.hp,dge.rate.atk,dge.rate.rcv].deleteLatter(1)
+		[dge.rate.hp,dge.rate.atk,dge.rate.rcv].deleteLatter(1),
+		dge.benefit || 0 //地下城阴阳加护
 	];
 	obj.v = dataStructure;
 	/*if (obj.f.every(team=>team[0].length == 0 && team[1].length == 0 && team[2] == undefined) &&
@@ -384,6 +385,7 @@ Formation.prototype.loadObj = function(f) {
 		dge.rate.hp = 1;
 		dge.rate.atk = 1;
 		dge.rate.rcv = 1;
+		dge.benefit = 0;
 		return;
 	}
 	const dataVeision = f?.v ?? (f.f ? 2 : 1); //是第几版格式
@@ -438,16 +440,19 @@ Formation.prototype.loadObj = function(f) {
 	if (f.r)
 	{
 		if (Array.isArray(f.r[0])) {
-			let effective = f.r[0];
-			let rates = f.r[1];
-			dge.types = flags(effective[0] ?? 0);
-			dge.attrs = flags(effective[1] ?? 0);
-			dge.rarities = flags(effective[2] ?? 0);
-			dge.collabs = effective[3]?.length ? effective[3] : [];
-			dge.gachas = effective[4]?.length ? effective[4] : [];
-			dge.rate.hp = rates[0] ?? 1;
-			dge.rate.atk = rates[1] ?? 1;
-			dge.rate.rcv = rates[2] ?? 1;
+			const [[types, attrs, rarities, collabs, gachas] = [], [hp , atk, rcv] = [], benefit] = f.r;
+			
+			dge.types = flags(types ?? 0);
+			dge.attrs = flags(attrs ?? 0);
+			dge.rarities = flags(rarities ?? 0);
+			dge.collabs = collabs?.length ? collabs : [];
+			dge.gachas = gachas?.length ? gachas : [];
+
+			dge.rate.hp = hp ?? 1;
+			dge.rate.atk = atk ?? 1;
+			dge.rate.rcv = rcv ?? 1;
+
+			dge.benefit = benefit || 0;
 		} else {
 			dge.attrs = flags(f.r[0] ?? 0);
 			dge.types = flags(f.r[1] ?? 0);
@@ -3211,16 +3216,27 @@ function initialize() {
 	const typeDoms = Array.from(dialogContent.querySelectorAll(".type-list .type-check"));
 	const collabIdIpt = dialogContent.querySelector("#dungeon-collab-id");
 	const gachaIdIpt = dialogContent.querySelector("#dungeon-gacha-id");
+	const benefitDoms = Array.from(dialogContent.querySelectorAll(".benefit-list .benefit-check"));
+	const benefit0 = benefitDoms.find(dom=>parseInt(dom.value, 10) == 0);
+	const benefitNot0 = benefitDoms.filter(dom=>dom != benefit0);
+	const notChecked = function(e){
+		
+		console.log(this.checked,e);
+	}
+	benefitNot0.forEach(dom=>dom.onclick=notChecked);
+	
 	dungeonEnchanceDialog.initialing = function(formation){
 		const dge = formation.dungeonEnchance;
 		function runCheck(checkBox){
-			checkBox.checked = this.includes(parseInt(checkBox.value));
+			checkBox.checked = this.includes(parseInt(checkBox.value, 10));
 		}
 		rareDoms.forEach(runCheck,dge.rarities);
 		attrDoms.forEach(runCheck,dge.attrs);
 		typeDoms.forEach(runCheck,dge.types);
-		collabIdIpt.value = dge.collabs.join();
 		gachaIdIpt.value = dge.gachas.join();
+		const benefit = dge.benefit || 0;
+		benefitDoms.find(dom=>parseInt(dom.value, 10) == benefit).checked = true;
+		collabIdIpt.value = dge.collabs.join();
 
 		const {hp, atk, rcv} = dge.rate;
 		dialogContent.querySelector("#dungeon-hp").value = hp;
@@ -3236,6 +3252,7 @@ function initialize() {
 		const rarities = returnCheckBoxsValues(rareDoms).map(Str2Int);
 		const attrs = returnCheckBoxsValues(attrDoms).map(Str2Int);
 		const types = returnCheckBoxsValues(typeDoms).map(Str2Int);
+		const benefit = Str2Int(returnRadiosValue(benefitDoms));
 
 		const dge = formation.dungeonEnchance;
 		dge.rarities = rarities;
@@ -3244,8 +3261,9 @@ function initialize() {
 		dge.rate.hp = Number(dialogContent.querySelector("#dungeon-hp").value);
 		dge.rate.atk = Number(dialogContent.querySelector("#dungeon-atk").value);
 		dge.rate.rcv = Number(dialogContent.querySelector("#dungeon-rcv").value);
-		dge.collabs = collabIdIpt.value.split(',').map(str=>Number(str)).filter(Boolean);
-		dge.gachas = gachaIdIpt.value.split(',').map(str=>Number(str)).filter(Boolean);
+		dge.collabs = collabIdIpt.value.split(',').map(str=>parseInt(str,10)).filter(Boolean);
+		dge.gachas = gachaIdIpt.value.split(',').map(str=>parseInt(str,10)).filter(Boolean);
+		dge.benefit = benefit;
 
 		dungeonEnchanceDialog.close();
 		createNewUrl();
@@ -3261,6 +3279,7 @@ function initialize() {
 		typeDoms.forEach(unchecked);
 		collabIdIpt.value = '';
 		gachaIdIpt.value = '';
+		benefit0.checked = true;
 		dialogContent.querySelector("#dungeon-hp").value = 1;
 		dialogContent.querySelector("#dungeon-atk").value = 1;
 		dialogContent.querySelector("#dungeon-rcv").value = 1;
@@ -5390,9 +5409,10 @@ function refreshAll(formationData) {
 	
 	//地下城强化的显示，稀有度没有现成的，所以这里来循环生成
 	const dge = formationData.dungeonEnchance;
-	if (Object.values(dge.rate).some(rate => rate != 1)) //如果有任何一个属性的比率不为1，才产生强化图标
+	if (Object.values(dge.rate).some(rate => rate != 1) || dge?.benefit) //如果有任何一个属性的比率不为1，才产生强化图标
 	{
 		dungeonEnchanceDom.innerHTML = '';
+
 		if (dge.rarities.length > 0) {
 			dge.rarities.forEach(rarity=>{
 				const icon = dungeonEnchanceDom.appendChild(document.createElement("icon"));
@@ -5400,6 +5420,7 @@ function refreshAll(formationData) {
 				icon.setAttribute("data-rare-icon", rarity);
 			})
 		}
+
 		if (dge?.collabs?.length) { //添加合作的ID名称
 			dungeonEnchanceDom.appendChild(localTranslating?.skill_parse?.target?.collab_id({id:dge.collabs.join()}));
 		}
@@ -5409,6 +5430,15 @@ function refreshAll(formationData) {
 		
 		let skill = powerUp(dge.attrs, dge.types, p.mul({hp: dge.rate.hp * 100, atk: dge.rate.atk * 100, rcv: dge.rate.rcv * 100}));
 		dungeonEnchanceDom.appendChild(renderSkill(skill));
+
+		if (dge?.benefit) { //添加阴阳
+			const benefitAwoken = dge.benefit == 1 ? 128 : 129;
+			const icon = document.createElement("icon");
+			icon.className ="awoken-icon";
+			icon.setAttribute("data-awoken-icon", benefitAwoken);
+			dungeonEnchanceDom.appendChild(icon);
+		}
+
 		dungeonEnchanceDom.classList.remove(className_displayNone);
 	}else
 	{
