@@ -56,6 +56,9 @@
 }
 .monsterinfo-box .monster-gachaId::before{
 	content: "Egg Machine ID：";
+	transform: scaleX(0.62);
+	margin: 0 -25px;
+	display: inline-block;
 }
 .monsterinfo-box .monster-altName::before{
 	content: "Tags";
