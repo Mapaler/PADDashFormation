@@ -747,7 +747,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	if (dge.benefit) { //当存在加护
 		const benefitAwoken = dge.benefit == 1 ? 128 : 129; //得到加护觉醒编号
 		latterAwokenScale[0].push({ index: benefitAwoken, scale: 1.2 }); //HP
-		latterAwokenScale[1].push({ index: benefitAwoken, scale: 1.5 }); //ATK
+		latterAwokenScale[1].push({ index: benefitAwoken, scale: 5 }); //ATK
 		latterAwokenScale[2].push({ index: benefitAwoken, scale: 1.2 }); //RCV
 	}
 

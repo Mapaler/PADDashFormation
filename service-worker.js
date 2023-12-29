@@ -21551,7 +21551,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"eda7e9de5646cd828178d5f008eeeef4"
+		"e28b45d852a45f5f3daafe1cf071775a"
 	],
 	[
 		"script.js",
@@ -21567,7 +21567,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"f4d6860ad3af80717b7e109113b74539"
+		"11b4a3fd65e597fe3ff3bbdb043f0911"
 	],
 	[
 		"temp.js",
