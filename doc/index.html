@@ -15,9 +15,40 @@
 			background-color: rgba(175, 184, 193, 0.2);
 			border-radius: 6px;
 			font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+			white-space: pre-wrap;
 		}
+
+		comment {
+			color: green;
+		}
+
+		.block-code {
+			display: block;
+			background-color: #ddd;
+		}
+		
+
 		ul>li {
 			margin-bottom: 5px;
+		}
+		summary>:where(h2,h3,h4){
+			display: inline-block;
+		}
+
+		summary {
+			cursor: pointer;
+		}
+
+		img {
+			outline: grey solid 1px;
+		}
+		#language-list {
+			list-style: none;
+			padding: 0;
+			display: flex;
+			position: sticky;
+			top: 0;
+			backdrop-filter: blur(5px);
 		}
 	</style>
 	<script type="text/javascript">
@@ -31,238 +62,392 @@
 		} else {
 			console.error('浏览器不支持 servcie worker');
 		}
+		window.addEventListener("load", ()=>{
+			const langCss = document.querySelector("#language-style");
+			function changeLanguage(){
+				langCss.innerHTML = this.value == "all" ? '' : `[lang]:not(:lang(${this.value})){display: none}`;
+			}
+			const languageInputs = document.getElementsByName("language");
+			languageInputs.forEach(input=>{input.onchange=changeLanguage; if(input.checked) input.onchange()});
+		});
 	</script>
+	<style id="language-style" type="text/css">
+	</style>
 </head>
 
 <body>
-	<h1>智龙迷城队伍图制作工具使用技巧<br>Tips of <em>Puzzle &amp; Dragons Formation Maker</em></h1>
-	<h2>目录 | Index</h2>
+	<ul id="language-list">
+		<li><label><input type="radio" name="language" value="zh"/>中文</label></li>
+		<li><label><input type="radio" name="language" value="en" checked/>English</label></li>
+		<li><label><input type="radio" name="language" value="all"/><span lang="zh">同时显示中英</span><span lang="en">Show Chinese and English both</span></label></li>
+	</ul>
+	<h1>
+		<span lang="zh"><em>智龙迷城急速阵型</em> 使用技巧</span>
+		<span lang="en">Tips of <em>Puzzle &amp; Dragons Dash Formation</em></span>
+	</h1>
+	<h2>
+		<span lang="zh">目录</span>
+		<span lang="en">Index</span>
+	</h2>
 	<ul class="index">
-		<li><a href="#share">分享队伍 | Share your team</a>
+		<li><a href="#share">
+			<span lang="zh">分享队伍</span>
+			<span lang="en">Share your team</span>
+		</a>
 			<ul>
-				<li><a href="#share-by-qr-code">二维码分享 | Share by QR Code</a></li>
-				<li><a href="#data-exchange-with-paddb">与 PADDB 进行数据交换 | Data exchange with PADDB</a></li>
+				<li><a href="#share-by-qr-code">
+					<span lang="zh">二维码分享</span>
+					<span lang="en">Share by QR Code</span>
+				</a></li>
+				<li><a href="#data-exchange-with-paddb">
+					<span lang="zh">与 PADDB 进行数据交换</span>
+					<span lang="en">Data exchange with PADDB</span>
+				</a></li>
 			</ul>
 		</li>
-		<li><a href="#editing-tips">队伍编辑技巧 | Convenient tips for edit</a></li>
-		<li><a href="#search-cards">搜索图鉴 | Search cards</a></li>
-		<li><a href="#bind-box">绑定箱子 | Bind Box</a></li>
-		<li><a href="#advanced-of-text-detail">文字说明的高级功能 | Advanced of the description</a></li>
-		<li><a href="#others">其他 | Others</a></li>
-		<li><a href="#report-bug">报告BUG | Report BUG</a></li>
-		<li><a href="#program-source">程序源代码 | Program Source</a></li>
+		<li><a href="#editing-tips">
+			<span lang="zh">队伍编辑技巧</span>
+			<span lang="en">Convenient tips for edit</span>
+		</a></li>
+		<li><a href="#search-cards">
+			<span lang="zh">搜索图鉴</span>
+			<span lang="en">Search cards</span>
+		</a></li>
+		<li><a href="#bind-box">
+			<span lang="zh">绑定箱子</span>
+			<span lang="en">Bind Box</span>
+		</a></li>
+		<li><a href="#advanced-of-text-detail">
+			<span lang="zh">文字说明的高级功能</span>
+			<span lang="en">Advanced of the description</span>
+		</a></li>
+		<li><a href="#others">
+			<span lang="zh">其他</span>
+			<span lang="en">Others</span>
+		</a></li>
+		<li><a href="#report-bug">
+			<span lang="zh">报告BUG</span>
+			<span lang="en">Report BUG</span>
+		</a></li>
+		<li><a href="#source-code">
+			<span lang="zh">程序源代码</span>
+			<span lang="en">Source Code</span>
+		</a></li>
 	</ul>
 
-	<h2 id="share">分享 | Share</h2>
-	<h3>通过网址分享和收藏队伍 | Share and collect teams by URL</h3>
-	<p>直接复制网址即可分享组队或自己添加收藏夹保存。<br>
-		Copy the URL directly to share the Formation, or add a Bookmark to collect.<br>
-		<img src="images/tips-share.png" alt="分享组队"><br>
-		为了更方便的分享，你可以使用任意第三方<em>短网址服务</em>进一步缩短网址。<br>
-		For easier sharing, you can further shorten your URL using any third-party <em>Short URL Service</em>. Like, <a
-			href="https://bitly.com/">bitly</a>.
+	<h2 id="share">
+		<span lang="zh">分享</span>
+		<span lang="en">Share</span>
+	</h2>
+	<h3>
+		<span lang="zh">通过网址分享和收藏队伍</span>
+		<span lang="en">Share and collect teams by URL</span>
+	</h3>
+	<p>
+		<span lang="zh">直接复制网址即可分享组队或自己添加收藏夹保存。</span>
+		<span lang="en">Copy the URL directly to share the Formation, or add a Bookmark to collect.</span>
+		<br>
+		<img src="images/tips-share.png" alt="分享组队">
+		<br>
+		<span lang="zh">为了更方便的分享，你可以使用任意第三方<em>短网址服务</em>进一步缩短网址。</span>
+		<span lang="en">For easier sharing, you can further shorten your URL using any third-party <em>Short URL Service</em>. Like, <a href="https://bitly.com/">bitly</a>.</span>
 	</p>
-	<h3 id="share-by-qr-code">二维码分享 | Share by QR Code</h3>
-	<p>可以使用摄像头读取队伍二维码<br>
-		You can use the camera to read the Formation QR code<br>
-		<img src="images/tips-qr-read.webp" alt="使用摄像头读取二维码"><br>
-		读取到的队伍会显示为链接<br>
-		The read Formation appears as a link<br>
-		<img src="images/tips-qr-read-found.png" alt="成功读取到二维码"><br>
-		目前可以读取 | Currently can read:
+	<h3 id="share-by-qr-code">
+		<span lang="zh">二维码分享</span>
+		<span lang="en">Share by QR Code</span>
+	</h3>
+	<p>
+		<span lang="zh">可以使用摄像头读取队伍二维码。</span>
+		<span lang="en">You can use the camera to read the Formation QR code.</span>
+		<br>
+		<img src="images/tips-qr-read.webp" alt="使用摄像头读取二维码">
+		<br>
+		
+		<span lang="zh">读取到的队伍会显示为链接。</span>
+		<span lang="en">The read Formation appears as a link.</span>
+		<br>
+		<img src="images/tips-qr-read-found.png" alt="成功读取到二维码">
+		<br>
+		<span lang="zh">目前可以读取：</span>
+		<span lang="en">Currently can read:</span>
 		<ol>
-			<li>PDC 的二维码<br>
-				PDC format QR code<br>
+			<li>
+				<span lang="zh">PDC 的二维码</span>
+				<span lang="en">PDC format QR code</span>
+				<br>
 				<img src="images/tips-qr-pdc.webp" alt="PDC二维码">
 			</li>
-			<li>本程序自有格式的二维码<br>
-				This program's own format QR code<br>
+			<li>
+				<span lang="zh">本程序自有格式的二维码</span>
+				<span lang="en">This program's own format QR code</span>
+				<br>
 				<img src="images/tips-qr-pdf.png" alt="PDF二维码">
 			</li>
-			<li>本程序网址链接的二维码<br>
-				QR code of this program's URL<br>
+			<li>
+				<span lang="zh">本程序网址链接的二维码</span>
+				<span lang="en">QR code of this program's URL</span>
+				<br>
 				<img src="images/tips-qr-url.png" alt="URL二维码">
 			</li>
 		</ol>
 	</p>
-	<h3 id="data-exchange-with-paddb">与 PADDB 进行数据交换 | Data exchange with PADDB</h3>
-	<p>由于 PADDB 跨域，您需要在<a href="https://greasyfork.org/help/installing-user-scripts">用户脚本管理器</a>内安装<a href="https://greasyfork.org/scripts/458521">此辅助脚本</a>以支持此功能。。<br>
-		Because PADDB is cross-domain, you need to install <a href="https://greasyfork.org/scripts/458521">this helper script</a> within the <a href="https://greasyfork.org/help/installing-user-scripts">User Script Manager</a> to support this feature.<br>
-		<img src="images/tips-paddb-install-script.webp" alt="安装脚本"><br>
-		<h4>导入 PADDB 队伍 | Import PADDB team</h4>
+	<h3 id="data-exchange-with-paddb">
+		<span lang="zh">与 PADDB 进行数据交换</span>
+		<span lang="en">Data exchange with PADDB</span>
+	</h3>
+	<p>
+		<span lang="zh">由于 PADDB 跨域，您需要在<a href="https://greasyfork.org/help/installing-user-scripts">用户脚本管理器</a>内安装<a href="https://greasyfork.org/scripts/458521">此辅助脚本</a>以支持此功能。</span>
+		<span lang="en">Because PADDB is cross-domain, you need to install <a href="https://greasyfork.org/scripts/458521">this helper script</a> within the <a href="https://greasyfork.org/help/installing-user-scripts">User Script Manager</a> to support this feature.</span>
+		<br>
+		<img src="images/tips-paddb-install-script.webp" alt="安装脚本">
+		<br>
+		<h4>
+			<span lang="zh">导入 PADDB 队伍</span>
+			<span lang="en">Import PADDB team</span>
+		</h4>
 		<p>
-			上传自己的队伍<br>
-			Upload your own team<br>
-			<img src="images/tips-paddb-upload-team-in-paddb.png" alt="上传自身的脚本"><br>
-			或者在队伍模板里搜索其他人的队伍<br>
-			Or search for someone else's party in the Team Templates<br>
-			<img src="images/tips-paddb-search-team-in-paddb.png" alt="搜索别人的脚本"><br>
-			复制上传后的队伍链接<br>
-			Copy the uploaded Team URL<br>
-			<img src="images/tips-paddb-copy-team-link.png" alt="复制队伍链接"><br>
-			打开二维码与数据交换功能，粘贴队伍链接并读取<br>
-			Turn on the QR code and Data Exchange feature, paste the team link and read it<br>
-			<img src="images/tips-paddb-read-link.png" alt="粘贴队伍链接并读取"><br>
-			读取到的队伍会显示为链接<br>
-			The read Formation appears as a link<br>
-			<img src="images/tips-qr-read-found.png" alt="成功读取到二维码"><br>
-		</p>
-		<h4>将队伍上传到 PADDB | Upload the Team to PADDB</h4>
-		<p>
-			打开二维码与数据交换功能，在下方输入用户名与密码。<br>
-			Turn on the QR code and Data Exchange feature, Enter your user ID and password below.<br>
-			<img src="images/tips-paddb-upload-region.png" alt="PADDB 数据上传区"><br>
-			没有输入队伍链接时，将会上传队伍，并获得一个可被你的账号密码编辑的新的队伍链接。如果有，则会更新当前连接的队伍数据到你的链接。<br>
-			If you do not enter a team link, the team will be uploaded and a new team link will be obtained that can be edited by your account password. If so, the currently team data is updated to the link.<br>
-			你可以在队伍模板里看到你的队伍<br>
-			You can see your team in the team template<br>
-			<img src="images/tips-paddb-search-team-in-paddb.png" alt="搜索别人的脚本"><br>
-			或者通过浏览器打开队伍链接，也可以跳转到 PADDB 内（部分浏览器可能不支持）<br>
-			Or open the team link in your phone browser, which will jump to PADDB (some browsers may not support it)<br>
+			<span lang="zh">上传自己的队伍</span>
+			<span lang="en">Upload your own team</span>
 			<br>
-			注意：| Note:
+			<img src="images/tips-paddb-upload-team-in-paddb.png" alt="上传自身的脚本">
+			<br>
+			<span lang="zh">或者在队伍模板里搜索其他人的队伍</span>
+			<span lang="en">Or search for someone else's party in the Team Templates</span>
+			<br>
+			<img src="images/tips-paddb-search-team-in-paddb.png" alt="搜索别人的脚本">
+			<br>
+			<span lang="zh">复制上传后的队伍链接</span>
+			<span lang="en">Copy the uploaded Team URL</span>
+			<br>
+			<img src="images/tips-paddb-copy-team-link.png" alt="复制队伍链接">
+			<br>
+			<span lang="zh">打开二维码与数据交换功能，粘贴队伍链接并读取</span>
+			<span lang="en">Turn on the QR code and Data Exchange feature, paste the team link and read it</span>
+			<br>
+			<img src="images/tips-paddb-read-link.png" alt="粘贴队伍链接并读取">
+			<br>
+			<span lang="zh">读取到的队伍会显示为链接</span>
+			<span lang="en">The read Formation appears as a link</span>
+			<br>
+			<img src="images/tips-qr-read-found.png" alt="成功读取到二维码">
+			<br>
+		</p>
+		<h4>
+			<span lang="zh">将队伍上传到 PADDB</span>
+			<span lang="en">Upload the Team to PADDB</span>
+		</h4>
+		<p>
+			<span lang="zh">打开二维码与数据交换功能，在下方输入用户名与密码。</span>
+			<span lang="en">Turn on the QR code and Data Exchange feature, Enter your user ID and password below.</span>
+			<br>
+			<img src="images/tips-paddb-upload-region.png" alt="PADDB 数据上传区">
+			<br>
+			<span lang="zh">没有输入队伍链接时，将会上传队伍，并获得一个可被你的账号密码编辑的新的队伍链接。如果有，则会更新当前连接的队伍数据到你的链接。</span>
+			<span lang="en">If you do not enter a team link, the team will be uploaded and a new team link will be obtained that can be edited by your account password. If so, the currently team data is updated to the link.</span>
+			<br>
+			<span lang="zh">你可以在队伍模板里看到你的队伍</span>
+			<span lang="en">You can see your team in the team template</span>
+			<br>
+			<img src="images/tips-paddb-search-team-in-paddb.png" alt="搜索别人的脚本">
+			<br>
+			<span lang="zh">或者通过浏览器打开队伍链接，也可以跳转到 PADDB 内（部分浏览器可能不支持）</span>
+			<span lang="en">Or open the team link in your phone browser, which will jump to PADDB (some browsers may not support it)</span>
+			<br>
+			<br>
+			<span lang="zh">注意：</span>
+			<span lang="en">Note:</span>
 			<ol>
-				<li>PADDB 目前只支持单人游戏队伍。<br>
-					PADDB currently only supports solo team.
+				<li>
+					<span lang="zh">PADDB 目前只支持单人游戏队伍。</span>
+					<span lang="en">PADDB currently only supports solo team.</span>
 				</li>
-				<li>PADDB 不需要注册账号，填写任意的名称和密码即可。<br>
-					用户名与密码没有唯一性，比如：账号: 枫谷剑仙，密码: 1234；账号: 枫谷剑仙，密码: abcd，都可以成功上传，但是两个队伍链接需要用不同的密码才能编辑。<br>
-					注意密码是明文保存在 PADDB 服务器上，不要使用自己其他账号的密码。<br>
-					PADDB does not need to pre-register an account, just use any ID and password. <br>
-					ID and passwords are not unique, for example: ID: mapaler, PASS: 1234; ID: mapaler, PASS: abcd,both can be successfully uploaded, but the two team links need different passwords to edit.<br>
-					Note that the password is stored in plaintext on the PADDB server, do not use the password of your other account.<br>
+				<li>
+					<span lang="zh">PADDB 不需要注册账号，填写任意的名称和密码即可。<br>
+						用户名与密码没有唯一性，比如：账号: 枫谷剑仙，密码: 1234；账号: 枫谷剑仙，密码: abcd，都可以成功上传，但是两个队伍链接需要用不同的密码才能编辑。<br>
+						注意密码是明文保存在 PADDB 服务器上，不要使用自己其他账号的密码。</span>
+					<span lang="en">PADDB does not need to pre-register an account, just use any ID and password. <br>
+						ID and passwords are not unique, for example: ID: mapaler, PASS: 1234; ID: mapaler, PASS: abcd,both can be successfully uploaded, but the two team links need different passwords to edit.<br>
+						Note that the password is stored in plaintext on the PADDB server, do not use the password of your other account.</span>
+					<br>
 				</li>
-				<li>没有正确的用户名和密码你无法修改 PADDB 上其他用户的队伍，但是可以导入本程序后全新上传为自己的并修改。<br>
-					You cannot modify another user's team on PADDB without the correct ID and password, but you can import to this program and upload as your own and modify them.
+				<li>
+					<span lang="zh">没有正确的用户名和密码你无法修改 PADDB 上其他用户的队伍，但是可以导入本程序后全新上传为自己的并修改。</span>
+					<span lang="en">You cannot modify another user's team on PADDB without the correct ID and password, but you can import to this program and upload as your own and modify them.</span>
 				</li>
 			</ol>
 		</p>
 	</p>
-	<h2 id="editing-tips">编辑技巧 | Editing tips</h2>
+	<h2 id="editing-tips">
+		<span lang="zh">编辑技巧</span>
+		<span lang="en">Editing tips</span>
+	</h2>
 	<ul>
-		<li>使用<strong>后退</strong><code>Alt + ←</code>即可撤销上一次修改，需要重做则使用<strong>前进</strong><code>Alt + →</code>。<br>
-			Use <strong>Back</strong><code>Alt + ←</code> to undo the last edit, redo with <strong>Forward</strong><code>Alt + →</code>.<br>
+		<li>
+			<span lang="zh">使用<b>后退</b> <code>Alt + ←</code> 即可撤销上一次修改，需要重做则使用<b>前进</b> <code>Alt + →</code>。</span>
+			<span lang="en">Use <b>Back</b> <code>Alt + ←</code> to undo the last edit, redo with <b>Forward</b> <code>Alt + →</code>.</span>
+			<br>
 			<img src="images/tips-undo.png" alt="撤銷修改">
 		</li>
-		<li><strong>拖拽</strong>卡片头像即可快速交换位置，也支持手机触屏。<br>
-			<strong>Drag</strong> card avatars to quickly swap member's positions, also supports mobile touch
-			screen.<br>
-			<img src="images/tips-interchangeCard.png" alt="切换位置"><br>
-			使用顶部的开关可以切换到复制模式<br>
-			Use the switch at the top can switch to copy mode.
+		<li>
+			<span lang="zh"><b>拖拽</b>卡片头像即可快速交换位置，也支持手机触屏。</span>
+			<span lang="en"><b>Drag</b> card avatars to quickly swap member's positions, also supports mobile touch screen.</span>
+			<br>
+			<img src="images/tips-interchangeCard.png" alt="切换位置">
+			<br>
+			<span lang="zh">使用顶部的开关可以切换到复制模式。</span>
+			<span lang="en">Use the switch at the top can switch to copy mode.</span>
 		</li>
-		<li>如果你希望使用技能切换队长，使用切换按钮。这样可以保留原始队长强调边框，和76板面图标。<br>
-			If you want switch leader by skill, use the switch button. This preserves the original leader accent border,
-			and the 76 board icon.<br>
+		<li>
+			<span lang="zh">如果你希望使用技能切换队长，使用切换按钮。这样可以保留原始队长强调边框，和 76板面 图标。</span>
+			<span lang="en">If you want switch leader by skill, use the switch button. This preserves the original leader accent border, and the 76 board icon.</span>
+			<br>
 			<img src="images/tips-switch-leader.png" alt="切换位置">
 		</li>
-		<li>使用<code>Ctrl + ←/→</code>，或小键盘上的<code>←/→</code>(需关闭<code>NumLock</code>)可以快速切换变身。<br>
-			You can using <code>Ctrl + ←/→</code> or <code>←/→</code> on keypad (turn <code>NumLock</code> off) to
-			quickly change Henshin.<br>
-			<img src="images/tips-arrow-change-henshin.png" alt="按键切换变身"><br>
+		<li>
+			<span lang="zh">使用<code>Ctrl + ←/→</code>，或小键盘上的<code>←/→</code>(需关闭<code>NumLock</code>)可以快速切换变身。</span>
+			<span lang="en">You can using <code>Ctrl + ←/→</code> or <code>←/→</code> on keypad (turn <code>NumLock</code> off) to quickly change Henshin.</span>
+			<br>
+			<img src="images/tips-arrow-change-henshin.png" alt="按键切换变身">
+			<br>
 			<img src="images/tips-arrow-close-numlock.webp" alt="关闭小键盘">
 		</li>
 	</ul>
-	<h2 id="search-cards">搜索图鉴 | Search cards</h2>
+	<h2 id="search-cards">
+		<span lang="zh">搜索图鉴</span>
+		<span lang="en">Search cards</span>
+	</h2>
 	<ul>
-		<li>可以在编辑界面的怪物ID输入<strong>怪物名称</strong>或<strong>标签</strong>来搜索卡片。<br>
-			You can search for card by entering the <strong>Monster Name</strong> or <strong>Tags</strong> in the
-			monster ID of the editing interface.<br>
+		<li>
+			<span lang="zh">可以在编辑界面的怪物ID输入<b>怪物名称</b>或<b>标签</b>来搜索卡片。</span>
+			<span lang="en">You can search for card by entering the <b>Monster Name</b> or <b>Tags</b> in the monster ID of the editing interface.</span>
+			<br>
 			<img src="images/tips-search-name.png" alt="搜索怪物名称">
 		</li>
-		<li>点击<strong>技能名称</strong>，可搜索相同主动技能宠物<br>
-			Click on <strong>Skill Name</strong> to search for the same active skills Cards.<br>
+		<li>
+			<span lang="zh">点击<b>技能名称</b>，可搜索相同主动技能宠物</span>
+			<span lang="en">Click on <b>Skill Name</b> to search for the same active skills Cards.</span>
+			<br>
 			<img src="images/tips-search-skills.png" alt="搜索怪物主动技能">
 		</li>
-		<li>点击<strong>系列ID</strong>或<strong>标签</strong>，可搜索该系列<br>
-			Click the <strong>Series ID</strong> or <strong>Tags</strong> to search for series.<br>
+		<li>
+			<span lang="zh">点击<b>系列ID</b>或<b>标签</b>，可搜索该系列</span>
+			<span lang="en">Click the <b>Series ID</b> or <b>Tags</b> to search for series.</span>
+			<br>
 			<img src="images/tips-search-series.webp" alt="搜索怪物系列">
 		</li>
-		<li>复制本版本游戏数据的<strong>标签</strong>，可在游戏中搜索系列名称<br>
-			Copy the <strong>Tag</strong> of this version of the game data can search for the series in the game.<br>
+		<li>
+			<span lang="zh">复制<b>标签</b>，可在游戏中以名称搜索该系列（不包含其他语言的标签）</span>
+			<span lang="en">Copy <b>Tags</b> to search for the series by name in-game (without Tags in Other Languages)</span>
+			<br>
 			<img src="images/tips-search-TagInGame.png" alt="在游戏中搜索怪物系列">
 		</li>
-		<li>点击编辑界面的卡片头像可以跳转到攻略网站。<br>
-			Click on the card avatar in the editing interface to jump to the Guide.<br>
-			<img src="images/tips-guide.png" alt="攻略网站"><br>
-			在队伍界面和搜索结果的怪物头像上，点击鼠标中键也可以跳转到攻略网站。在手机上则是长按怪物头像然后选择在新标签页打开。<br>
-			Or click the middle mouse button on the monster avatar of the formation interface and search results to jump
-			to the Guide. On your phone, you're long-pressing the monster avatar and then selecting to open it in a new
-			tab.<br>
+		<li>
+			<span lang="zh">点击编辑界面的卡片头像可以跳转到预定义的攻略网站。</span>
+			<span lang="en">Click on the card avatar on the editing interface to jump to a predefined guide website.</span>
+			<br>
+			<img src="images/tips-guide.png" alt="攻略网站">
+			<br>
+			<span lang="zh">在队伍界面和搜索结果的怪物头像上，点击鼠标中键也可以跳转到攻略网站。在手机上则是长按怪物头像然后选择在新标签页打开。</span>
+			<span lang="en">Or click the middle mouse button on the monster avatar of the formation interface and search results to jump to the Guide. On your phone, you're long-pressing the monster avatar and then selecting to open it in a new tab.</span>
+			<br>
 			<img src="images/tips-guide2.png" alt="攻略网站2">
 		</li>
 	</ul>
-	<h2 id="bind-box">绑定箱子 | Bind Box</h2>
-	<p>如果你使用我的箱子功能打开你的游戏数据，你将会获得如下功能。<br>
-		If you use the <strong>My Box</strong> feature to open your game data, you will get the following features.
+	<h2 id="bind-box">
+		<span lang="zh">绑定箱子</span>
+		<span lang="en">Bind Box</span>
+	</h2>
+	<p>
+		<span lang="zh">如果你使用<b>我的箱子</b>功能打开你的游戏数据，你将会获得如下功能。</span>
+		<span lang="en">If you use the <b>My Box</b> feature to open your game data, you will get the following features.</span><br>
+		
 	</p>
 	<ul>
-		<li>将你队伍变成链接<br>
-			Turn your team into a link.<br>
+		<li>
+			<span lang="zh">读取你游戏里面的队伍配置。</span>
+			<span lang="en">Read the team composition in your game.</span>
+			<br>
 			<img src="images/player-open-deck.webp" alt="打开队伍">
 		</li>
-		<li>绑定箱子后，搜索时可以显示箱子内的角色个数。 <br>
-			With bind the box, you can display the number of cards in the box when searching. <br>
-			显示规则是 ×<code>相同ID</code>(<code>进化链其他</code>)<br>
-			The number rule is ×<code>identical ID</code>(<code>other in evolutionary tree</code>)
+		<li>
+			<span lang="zh">绑定箱子后，搜索时可以显示箱子内的角色个数。<br>显示规则是</span>
+			<span lang="en">With bind the box, you can display the number of cards in the box when searching.<br>The number rule is </span>
+			
+			 <code>×&lt;<span lang="zh">相同ID</span><span lang="en">identical ID</span>&gt;(&lt;<span lang="zh">进化链其他</span><span lang="en">other in evolutionary tree</span>&gt;)</code>
+			<br>
 			<img src="images/player-bind-box.webp" alt="绑定箱子"><br>
 		</li>
-		<li>把你的游戏数据发给大佬，让他帮你组队。这样不会有帐号泄露风险。<br>
-			Send your data to an expert and ask him to help team up so there is no risk of your account being stolen.
+		<li>
+			<span lang="zh">把你的游戏数据发给大佬，让他帮你组队。这样不会有帐号泄露风险。</span>
+			<span lang="en">Send your data to an expert and ask him to help team up so there is no risk of your account being stolen.</span>
 		</li>
 	</ul>
-	<p><a href="export-player-data.html">如何得到我的游戏数据？<br>
-		How to get my Game Data?</a></p>
-	<p>你保存的数据全部存于浏览器的本地 IndexedDB 内，不会被上传到服务器，因此更换浏览器就需要重新打开数据。<br>
-		All of the data you save is stored in your browser's local IndexedDB and will not be uploaded to the server, so changing your browser will require you to reopen the data.
+	<p>
+		<a href="export-player-data.html">
+			<span lang="zh">如何得到我的游戏数据？</span>
+			<span lang="en">How to get my Game Data?</span>
+		</a>
 	</p>
-	<h2 id="advanced-of-text-detail">文字的高级功能 | Advanced of text detail</h2>
+	<p>
+		<span lang="zh">你保存的数据全部存于浏览器的本地 <em>IndexedDB</em> 内，不会被上传到服务器，因此更换浏览器就需要重新打开数据。</span>
+		<span lang="en">All of the data you save is stored in your browser's local <em>IndexedDB</em> and will not be uploaded to the server, so changing your browser will require you to reopen the data.</span>
+	</p>
+	<h2 id="advanced-of-text-detail">
+		<span lang="zh">文字的高级功能</span>
+		<span lang="en">Advanced of text detail</span>
+	</h2>
+	<p>
+		<span lang="zh">目前您可以直接使用富文本编辑功能编辑队伍介绍。<br>
+			由于我只是业余开发者，会有很多BUG，您可以随时切换到代码模式进行更详细的编辑。</span>
+		<span lang="en">Currently, you can edit your team descriptions directly using the rich text editing feature.<br>
+			Since I'm just an amateur developer, there will be a lot of bugs, and you can always switch to code mode for more detailed editing.</span>
+		<br>
+		<img src="images/tips-advanced-rich-text.webp" alt="富文本功能">
+	</p>
+	<h2 id="others">
+		<span lang="zh">其他</span>
+		<span lang="en">Others</span>
+	</h2>
 	<ul>
-		<li><code>{m.怪物ID}</code>可以显示怪物头像。<br>
-			<code>{m.[Monster ID]}</code> can display the monster avatar.<br>
-			<img src="images/tips-advanced-card.png" alt="怪物头像"><br><br>
-			<code>{a.觉醒ID}</code>可以显示觉醒图标。<br>
-			<code>{a.[Awoken ID]}</code> can display the Awoken Icon.<br>
-			<code>{o.宝珠ID}</code>可以显示宝珠图标。<br>
-			<code>{o.[Orb ID]}</code> can display the Orb Icon.<br>
-			<code>{l.潜觉ID}</code>可以显示觉醒图标。<br>
-			<code>{l.[Latent ID]}</code> can display the Latent Icon.<br>
-		</li>
-		<li>队伍标题与队伍说明可以使用<code>^16进制颜色代码^内容^p</code>来改变内容颜色；<br>
-			Formation Title and Detail can use the <code>^[Hex Color Code]^Content^p</code> to change the color of the
-			Content.<br>
-			<img src="images/tips-advanced-color.png" alt="文字颜色"><br>
-		</li>
-	</ul>
-	<h2 id="others">其他 | Others</h2>
-	<ul>
-		<li>点击语音觉醒可以试听技能语音。<br>
-			Click Voice Awakening to try out skill voice.<br>
+		<li>
+			<span lang="zh">点击语音觉醒可以试听技能语音。</span>
+			<span lang="en">Click Voice Awakening to try out skill voice.</span>
+			<br>
 			<img src="images/tips-voice.png" alt="语音觉醒">
 		</li>
-		<li>2人只显示部分共用的觉醒的统计（不包括超觉醒），单人和三人则全部显示。<br>
-			The 2P Multi Games Mode shows only several common awoken statistics (excluding super-awakening), but the
-			Solo and 3P Mode shows all.</li>
-		<li>内建的截图按钮依靠 <a
-				href="https://github.com/niklasvh/html2canvas/">html2canvas</a>，会有一些绘制错误，浏览器的截图扩展能够更加还原显示的真实样子。<br>
-			Built-in screenshot button relies on <a href="https://github.com/niklasvh/html2canvas/">html2canvas</a>,
-			there will be some drawing errors, browser screenshot extension can be more restore the real appearance of
-			the display.</li>
-		<li>如果你只是希望将本程序当作简单图鉴使用，可以在参数里加上<code>guide=1</code>，如<code>https://mapaler.gitee.io/paddashformation/solo.html?guide=1</code>。图鉴模式下进入网页时，会直接打开怪物修改界面，并且背景不透明。<br>
-			If you just want to use this program as a simple guide, you can add <code>guide=1</code> to the parameters,
-			such as <code>https://mapaler.github.io/PADDashFormation/solo.html?guide=1</code>. When you enter the page
-			in guide mode, the monster modification interface opens directly and the background is opaque.</li>
+		<li>
+			<span lang="zh">2人只显示部分共用的觉醒的统计（不包括超觉醒），单人和三人则全部显示。</span>
+			<span lang="en">The 2P Multi Games Mode shows only several common awoken statistics (excluding super-awakening), but the Solo and 3P Mode shows all.</span>
+		</li>
+		<li>
+			<span lang="zh">内建的截图按钮依靠 <a href="https://github.com/niklasvh/html2canvas/">html2canvas</a>，会有一些绘制错误，浏览器的截图扩展能够更加还原显示的真实样子。</span>
+			<span lang="en">Built-in screenshot button relies on <a href="https://github.com/niklasvh/html2canvas/">html2canvas</a>, there will be some drawing errors, browser screenshot extension can be more restore the real appearance of the display.</span>
+		</li>
+		<li>
+			<span lang="zh">如果你只是希望将本程序当作简单图鉴使用，可以在参数里加上<code>guide=1</code>，如<code>https://mapaler.gitee.io/paddashformation/solo.html?guide=1</code>。<br>
+				图鉴模式下进入网页时，会直接打开怪物修改界面，并且背景不透明。</span>
+			<span lang="en">If you just want to use this program as a simple guide, you can add <code>guide=1</code> to the parameters, such as <code>https://mapaler.github.io/PADDashFormation/solo.html?guide=1</code>.<br>
+				When you enter the page in guide mode, the monster modification interface opens directly and the background is opaque.</span>
+		</li>
 	</ul>
-	<h2 id="report-bug">报告BUG | Report BUG</h2>
-	<p>如果发现 BUG，请先按 Ctrl+F5 强制刷新，并点击数据更新时间按钮强制更新数据。如仍存在问题可以在 <a
-			href="https://github.com/Mapaler/PADDashFormation/issues">Issues</a> 报告。<br>
-		If a BUG is found, first test again after force refresh by Ctrl-F5, then click the Data Update Time button to
-		force update the data. If there is still a problem, you can report it at the <a
-			href="https://github.com/Mapaler/PADDashFormation/issues">Issues</a>.</p>
-	<h2 id="program-source">程序源代码 | Program Source</h2>
-	<p>你可以在 <a href="https://github.com/Mapaler/PADDashFormation/">GitHub</a> 找到源代码。<br>
-		You can find the source code at <a href="https://github.com/Mapaler/PADDashFormation/">GitHub</a>.</p>
-
+	<h2 id="report-bug">
+		<span lang="zh">报告BUG</span>
+		<span lang="en">Report BUG</span>
+	</h2>
+	<p>
+		<span lang="zh">如果发现 BUG，请先按 Ctrl+F5 强制刷新，并点击数据更新时间按钮强制更新数据。<br>
+			如仍存在问题可以在 <a href="https://github.com/Mapaler/PADDashFormation/issues">Github Issues</a> 报告。</span>
+		<span lang="en">If a BUG is found, first test again after force refresh by Ctrl-F5, then click the Data Update Time button to force update the data.<br>
+			If there is still a problem, you can report it at the <a href="https://github.com/Mapaler/PADDashFormation/issues">Github Issues</a>.</span>
+	</p>
+	<h2 id="source-code">
+		<span lang="zh">程序源代码</span>
+		<span lang="en">Source Code</span>
+	</h2>
+	<p>
+		<span lang="zh">你可以在 <a href="https://github.com/Mapaler/PADDashFormation/">GitHub</a> 找到源代码。</span>
+		<span lang="en">You can find the source code at <a href="https://github.com/Mapaler/PADDashFormation/">GitHub</a>.</span>
+	</p>
 </body>
 
 </html>

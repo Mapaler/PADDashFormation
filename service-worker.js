@@ -21635,7 +21635,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"f387ff0bb52fe448eca4f56d9f83511a"
+		"452c9192136656b9f875d371d904bbb4"
 	],
 	[
 		"script-custom_elements.js",
@@ -21659,7 +21659,7 @@ const cachesMap = new Map([
 	],
 	[
 		"solo.html",
-		"c47b703ec6c60af8aee0d462e56eea63"
+		"85c58af3eae9f600df3e36ff0680e65e"
 	],
 	[
 		"style-monsterimages.css",
@@ -21675,7 +21675,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"ae093665cd99364a9e810a4e2e3b098e"
+		"12d05bc4fd4f83d21c143e82112327ec"
 	],
 	[
 		"languages/en.css",
@@ -21907,11 +21907,11 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/export-player-data.html",
-		"381d83488914d6204beba1dc15c009dc"
+		"bab0f4066b2f9a6e193f7e271ab85184"
 	],
 	[
 		"doc/index.html",
-		"eadecaca6a10b072fc2f8dbbadae7193"
+		"eb8183f2a92811571a974b5f71dec385"
 	],
 	[
 		"doc/images/bluestacks-adb-connect.webp",
@@ -22212,6 +22212,10 @@ const cachesMap = new Map([
 	[
 		"doc/images/tips-advanced-color.png",
 		"db53e0cb1cdaf22a30f34adba12e4582"
+	],
+	[
+		"doc/images/tips-advanced-rich-text.webp",
+		"cbf879bd83def89ebb62de0bb1d8d764"
 	],
 	[
 		"doc/images/tips-arrow-change-henshin.png",
