@@ -1610,7 +1610,7 @@ const skillObjectParsers = {
 		//return powerUp(null, null, p.mul({ atk: atk || 100}), c.exact('match-length', lenExact, flags(attr)), v.percent(percent), [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean), true);
 		//let powerup, condition;
 		let powerup = Boolean(lenMin)
-			? p.scaleMatchLength(flags(attrs), lenMin, lenMin, [atk, 100], [0, 0])
+			? p.scaleMatchLength(flags(attrs), lenMin, lenMin, [atk || 100, 100], [0, 0])
 			: p.mul({ atk: atk || 100});
 		let condition = Boolean(lenExact)
 			? c.exact('match-length', lenExact, flags(attrs))
