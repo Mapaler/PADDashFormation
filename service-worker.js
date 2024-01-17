@@ -21907,11 +21907,11 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/export-player-data.html",
-		"bab0f4066b2f9a6e193f7e271ab85184"
+		"73442c9b70b0578e5b7942a1cb662117"
 	],
 	[
 		"doc/index.html",
-		"eb8183f2a92811571a974b5f71dec385"
+		"264f1479e3b9337362b8938cab01e511"
 	],
 	[
 		"doc/images/bluestacks-adb-connect.webp",

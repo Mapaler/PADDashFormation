@@ -86,8 +86,8 @@ Turn on Fidder's "Allow remote computers to connet", "HTTPS decrypt", "Stream" a
 * 现在你运行模拟器内的游戏，Fidder 就能够截获和解密智龙迷城的数据了。将返回的 JSON 数据保存为文件。  
 Now that you're running the game inside the simulator, Fidder will be able to intercept and decrypt the data from the PAD. Save the response JSON data as a file.
 
-* [可选的]将以下代码加入 Fidder 的自定义代码的`OnBeforeResponse`中就可以每次自动保存文件了。  
-[Optional]Add the following code to `OnBeforeResponse` of Fidder's **Customize Rules** to save the file automatically each time.
+* \[可选的\]将以下代码加入 Fidder 的自定义代码的`OnBeforeResponse`中就可以每次自动保存文件了。  
+\[Optional\]Add the following code to `OnBeforeResponse` of Fidder's **Customize Rules** to save the file automatically each time.
 
 	```js
 	//自动储存智龙迷城数据

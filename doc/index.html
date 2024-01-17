@@ -62,14 +62,6 @@
 		} else {
 			console.error('浏览器不支持 servcie worker');
 		}
-		window.addEventListener("load", ()=>{
-			const langCss = document.querySelector("#language-style");
-			function changeLanguage(){
-				langCss.innerHTML = this.value == "all" ? '' : `[lang]:not(:lang(${this.value})){display: none}`;
-			}
-			const languageInputs = document.getElementsByName("language");
-			languageInputs.forEach(input=>{input.onchange=changeLanguage; if(input.checked) input.onchange()});
-		});
 	</script>
 	<style id="language-style" type="text/css">
 	</style>
@@ -81,6 +73,14 @@
 		<li><label><input type="radio" name="language" value="en" checked/>English</label></li>
 		<li><label><input type="radio" name="language" value="all"/><span lang="zh">同时显示中英</span><span lang="en">Show Chinese and English both</span></label></li>
 	</ul>
+	<script type="text/javascript">
+		const langCss = document.querySelector("#language-style");
+		function changeLanguage(){
+			langCss.innerHTML = this.value == "all" ? '' : `[lang]:not(:lang(${this.value})){display: none}`;
+		}
+		const languageInputs = document.getElementsByName("language");
+		languageInputs.forEach(input=>{input.onchange=changeLanguage; if(input.checked) input.onchange()});
+	</script>
 	<h1>
 		<span lang="zh"><em>智龙迷城急速阵型</em> 使用技巧</span>
 		<span lang="en">Tips of <em>Puzzle &amp; Dragons Dash Formation</em></span>
