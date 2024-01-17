@@ -21907,7 +21907,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/export-player-data.html",
-		"73442c9b70b0578e5b7942a1cb662117"
+		"ffae9f7e547169d8e2ff2476b1ba03d7"
 	],
 	[
 		"doc/index.html",
