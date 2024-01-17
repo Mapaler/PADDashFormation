@@ -21907,11 +21907,115 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/export-player-data.html",
-		"85cc2f42400d0cd0aa6e54b14cf9432b"
+		"381d83488914d6204beba1dc15c009dc"
 	],
 	[
 		"doc/index.html",
 		"eadecaca6a10b072fc2f8dbbadae7193"
+	],
+	[
+		"doc/images/bluestacks-adb-connect.webp",
+		"5b168c16b7a96df21981946725e45d30"
+	],
+	[
+		"doc/images/bluestacks-adb-devices.webp",
+		"391806edd97107633eb3d2bc6e3edd0d"
+	],
+	[
+		"doc/images/bluestacks-adb-shell-set-proxy.webp",
+		"77a42859352fcbd77ca28632fbd622fe"
+	],
+	[
+		"doc/images/bluestacks-cfg-open-root.webp",
+		"033c78276d949b23402caf8f90c61f4a"
+	],
+	[
+		"doc/images/bluestacks-cfg-read-only.webp",
+		"07c26b9d441f46c0786415486c7ac00f"
+	],
+	[
+		"doc/images/bluestacks-find-adb.webp",
+		"e807211fefd379d4e6a868dfcdc4b575"
+	],
+	[
+		"doc/images/bluestacks-find-root.vhd.webp",
+		"a8663d3e4e4a99923ee0b866070a54ce"
+	],
+	[
+		"doc/images/bluestacks-find-userdir.webp",
+		"4caae8fd186e58be82cdd4314bcdebc3"
+	],
+	[
+		"doc/images/bluestacks-multi-add-new-emu.webp",
+		"7e9b27b4c87a094bcb346d15db1956d9"
+	],
+	[
+		"doc/images/bluestacks-pad-login.webp",
+		"cbce14ed4649dc65d53fb52d6ef6e5c9"
+	],
+	[
+		"doc/images/bluestacks-setting-open-adb.webp",
+		"5e745fb804edd553bdd3f3bcd934f782"
+	],
+	[
+		"doc/images/bluestacks-vhd-disk-management-attach.webp",
+		"ce3492cabb4a35afddaf20e94f81495c"
+	],
+	[
+		"doc/images/bluestacks-vhd-disk-management-detach.webp",
+		"8ff8388518fb97ceffa89d5c537e02e3"
+	],
+	[
+		"doc/images/bluestacks-vhd-diskginues-close.webp",
+		"f5f667e4e4c5b59ade751d77cbdcf777"
+	],
+	[
+		"doc/images/bluestacks-vhd-diskginues-copy-cert.webp",
+		"099eae8ef04b4e2423774716a19f2df1"
+	],
+	[
+		"doc/images/bluestacks-vhd-diskginues-open.webp",
+		"7e5556c0ad7a33cf212c1e3ccc829a9b"
+	],
+	[
+		"doc/images/bluestacks-vhd-ext2fsd-assign-drive-letter.webp",
+		"cf51746c90c5bf3f0dff0807a64283b9"
+	],
+	[
+		"doc/images/bluestacks-vhd-ext2fsd-copy-cert.webp",
+		"fe49868031969f281a1856f1902044fd"
+	],
+	[
+		"doc/images/bluestacks-vhd-ext2fsd-flush-cache.webp",
+		"ef35fa51f08cd1bbd2681b8bf750dcdf"
+	],
+	[
+		"doc/images/bluestacks-vhd-ext2fsd-remove-drive-letter.webp",
+		"8130f29f20d9243b0839c64664c65306"
+	],
+	[
+		"doc/images/bluestacks-vhd-ext2fsd-restart-adv-start-1.webp",
+		"441c135757c9cd67d50a6891978ed816"
+	],
+	[
+		"doc/images/bluestacks-vhd-ext2fsd-restart-adv-start-2.webp",
+		"62202c0460aa704d42062ac80518368d"
+	],
+	[
+		"doc/images/bluestacks-vhd-ext2fsd-restart-adv-start-3.webp",
+		"3807e6c9c29dc8875c376794c1cbe22a"
+	],
+	[
+		"doc/images/bluestacks-vhd-ext2fsd-tools-service.webp",
+		"30c08a64f7e626cf9016a06689baeb86"
+	],
+	[
+		"doc/images/bluestacks-vhd-mount-vhd-failed.webp",
+		"7941862be127cb177b86ea4cc2877134"
+	],
+	[
+		"doc/images/bluestacks-vhd-open-disk-management.webp",
+		"af2002e1a501ecf0a6a07b4851041b4e"
 	],
 	[
 		"doc/images/player-bind-box.webp",
@@ -22011,7 +22115,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/images/player-fidder-export-cer-set-proxy.webp",
-		"d2aefd9713f687864bcae155a54f381e"
+		"8375f62093e126465d1ca0ad5bd5119c"
 	],
 	[
 		"doc/images/player-fidder-export-cer-shared-folder.webp",

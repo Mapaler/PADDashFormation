@@ -18,16 +18,37 @@
 			white-space: pre-wrap;
 		}
 
+		comment {
+			color: green;
+		}
+
 		.block-code {
 			display: block;
 			background-color: #ddd;
 		}
+		
 
 		ul>li {
 			margin-bottom: 5px;
 		}
-		summary>h3,summary>h4{
+		summary>:where(h2,h3,h4){
 			display: inline-block;
+		}
+
+		summary {
+			cursor: pointer;
+		}
+
+		img {
+			outline: grey solid 1px;
+		}
+		#language-list {
+			list-style: none;
+			padding: 0;
+			display: flex;
+			position: sticky;
+			top: 0;
+			backdrop-filter: blur(5px);
 		}
 	</style>
 	<script type="text/javascript">
@@ -41,418 +62,938 @@
 		} else {
 			console.error('浏览器不支持 servcie worker');
 		}
+		window.addEventListener("load", ()=>{
+			const langCss = document.querySelector("#language-style");
+			function changeLanguage(){
+				langCss.innerHTML = this.value == "all" ? '' : `[lang]:not(:lang(${this.value})){display: none}`;
+			}
+			const languageInputs = document.getElementsByName("language");
+			languageInputs.forEach(input=>{input.onchange=changeLanguage; if(input.checked) input.onchange()});
+			const openAllDetails = document.querySelector("#open-all-details");
+			openAllDetails.onclick = function(){
+				document.querySelectorAll("details").forEach(node=>node.open=true);
+			}
+		});
 	</script>
+	<style id="language-style" type="text/css">
+	</style>
 </head>
 
 <body>
-	<h1>如何获取用户游戏数据<br>How to get user game data</h1>
-	<h2>目录 | Index</h2>
+	<ul id="language-list">
+		<li><label><input type="radio" name="language" value="zh"/>中文</label></li>
+		<li><label><input type="radio" name="language" value="en" checked/>English</label></li>
+		<li><label><input type="radio" name="language" value="all"/><span lang="zh">同时显示中英</span><span lang="en">Show Chinese and English both</span></label></li>
+		<li><label><button id="open-all-details"><span lang="zh">打开所有折叠内容</span><span lang="en">Open all collapsed content</span></button></li>
+	</ul>
+	<h1>
+		<span lang="zh">如何获取用户游戏数据</span>
+		<span lang="en">How to get user game data</span>
+	</h1>
+	<h2>
+		<span lang="zh">目录</span>
+		<span lang="en">Index</span>
+	</h2>
 	<ul class="index">
-		<li><a href="#my-box">我的箱子功能简介 | Introduction to My Box</a>
-		<li><a href="#android">安卓用户 | Android User</a>
+		<li><a href="#my-box">
+				<span lang="zh">我的箱子功能简介</span>
+				<span lang="en">Introduction to My Box</span>
+			</a>
+		</li>
+		<li><a href="#ios">
+				<span lang="zh">苹果用户</span>
+				<span lang="en">iOS User</span>
+			</a>
+		</li>
+		<li><a href="#android">
+				<span lang="zh">安卓用户</span>
+				<span lang="en">Android User</span>
+			</a>
 			<ul class="index">
-				<li><a href="#no-root">无 Root 设备用户 | No Root device user</a>
-					<ul class="index">
-						<li><a href="#use-HttpCanary">使用 HttpCanary | Use HttpCanary</a></li>
-						<li><a href="#use-Fidder">使用 Fidder | Use Fidder</a></li>
-						<li><a href="#multiple-devices">如何多设备登录 | How to login with multiple devices</a></li>
-					</ul>
+				<li>
+					<a href="#multiple-devices">
+						<span lang="zh">如何多设备登录</span>
+						<span lang="en">How to login with multiple devices</span>
+					</a>
 				</li>
-				<li><a href="#have-root">Root 设备用户 | Root device user</a></li>
+				<li>
+					<a href="#use-HttpCanary">
+						<span lang="zh">使用 HttpCanary</span>
+						<span lang="en">Use HttpCanary</span>
+					</a>
+				</li>
+				<li>
+					<a href="#use-Fidder">
+						<span lang="zh">使用 Fidder</span>
+						<span lang="en">Use Fidder</span>
+					</a>
+				</li>
 			</ul>
 		</li>
-		<li><a href="#ios">苹果用户 | iOS User</a></li>
 	</ul>
-	<h2 id="my-box">我的箱子 | My Box</h2>
-	<p>如果你使用我的箱子功能打开你的游戏数据，你将会获得如下功能。<br>
-		If you use the <strong>My Box</strong> feature to open your game data, you will get the following features.
+	<h2 id="my-box">
+		<span lang="zh">我的箱子</span>
+		<span lang="en">My Box</span>
+	</h2>
+	<p>
+		<span lang="zh">如果你使用<b>我的箱子</b>功能打开你的游戏数据，你将会获得如下功能。</span>
+		<span lang="en">If you use the <b>My Box</b> feature to open your game data, you will get the following features.</span>
 		<ul>
-			<li>将你队伍变成链接<br>
-				Turn your team into a link.<br>
+			<li>
+				<span lang="zh">读取你游戏里面的队伍配置。</span>
+				<span lang="en">Read the team composition in your game.</span>
+				<br>
 				<img src="images/player-open-deck.webp" alt="打开队伍">
 			</li>
-			<li>绑定箱子后，搜索时可以显示箱子内的角色个数。 <br>
-				With bind the box, you can display the number of cards in the box when searching. <br>
-				显示规则是 ×<code>相同ID</code>(<code>进化链其他</code>)<br>
-				The number rule is ×<code>identical ID</code>(<code>other in evolutionary tree</code>)
+			<li>
+				<span lang="zh">绑定箱子后，搜索时可以显示箱子内的角色个数。<br>显示规则是</span>
+				<span lang="en">With bind the box, you can display the number of cards in the box when searching.<br>The number rule is </span>
+				
+				 <code>×&lt;<span lang="zh">相同ID</span><span lang="en">identical ID</span>&gt;(&lt;<span lang="zh">进化链其他</span><span lang="en">other in evolutionary tree</span>&gt;)</code>
+				<br>
 				<img src="images/player-bind-box.webp" alt="绑定箱子"><br>
 			</li>
-			<li>把你的游戏数据发给大佬，让他帮你组队。这样不会有帐号泄露风险。<br>
-				Send your data to an expert and ask him to help team up so there is no risk of your account being stolen.
+			<li>
+				<span lang="zh">把你的游戏数据发给大佬，让他帮你组队。这样不会有帐号泄露风险。</span>
+				<span lang="en">Send your data to an expert and ask him to help team up so there is no risk of your account being stolen.</span>
 			</li>
 		</ul>
 	</p>
-	<p>你保存的数据全部存于浏览器的本地 IndexedDB 内，不会被上传到服务器，因此更换浏览器就需要重新打开数据。<br>
-		All of the data you save is stored in your browser's local IndexedDB and will not be uploaded to the server, so changing your browser will require you to reopen the data.
+	<p>
+		<span lang="zh">你保存的数据全部存于浏览器的本地 <em>IndexedDB</em> 内，不会被上传到服务器，因此更换浏览器就需要重新打开数据。</span>
+		<span lang="en">All of the data you save is stored in your browser's local <em>IndexedDB</em> and will not be uploaded to the server, so changing your browser will require you to reopen the data.</span>
 	</p>
-	<h2 id="android">安卓用户 | Android User</h2>
-	
 	<details>
-		<summary><h3 id="have-root">Root 设备用户 | Root device user</h3></summary>
-		<p>推荐<a href="#multiple-devices">导出 <code>data048.bin</code></a> 并在安卓模拟器上获取用户数据。<br>
-			It is recommended to <a href="#multiple-devices">export <code>data048.bin</code></a> and get user data on the Android emulator.</p>
-		<p>如果希望只用这一台设备，请参考<a href="#use-HttpCanary">HttpCanary</a>方法。<br>
-			If you want to use only this device, refer to the <a href="#use-HttpCanary">HttpCanary</a> method.</p>
+		<summary>
+			<h2 id="ios">
+				<span lang="zh">苹果用户</span>
+				<span lang="en">iOS User</span>
+			</h2>
+		</summary>
+		<span lang="zh">我没有苹果设备，无法研究iOS。可以临时使用 Facebook SNS 跨平台到安卓模拟器登录，进行数据导出。</span>
+		<span lang="en">I don't have an Apple device so I can't research iOS. You can temporarily across platforms sign in to Android Simulator by Facebook Social Media Linking.</span>
+		<br>
+		<img src="images/player-emu-link-SNS.webp" alt="链接 SNS">
 	</details>
-	<h3 id="no-root">无 Root 设备用户 | No Root device user</h3>
-		
-	<p>你需要在在电脑上安装一个能运行智龙迷城的安卓模拟器，比如 夜神模拟器、逍遥安卓、蓝叠模拟器。后面以<a
-			href="https://www.bignox.com/">夜神模拟器国际版</a>进行讲解。（与夜神没有任何赞助关系。国际版自带谷歌套装，也能改中文）<br>
-		You'll need to install an Android simulator on your PC that runs P&amp;D, such as NoxPlayer, MEmu Play,
-		BlueStacks. I'll use <a href="https://www.bignox.com/">NoxPlayer</a> later to explain. (There is no sponsorship
-		relationship with NOX.)
+	<h2 id="android">
+		<span lang="zh">安卓用户</span>
+		<span lang="en">Android User</span>
+	</h2>
+	<p>
+		<span lang="zh">因为此功能不会自动更新游戏数据，需要重新导出，因此强烈建议在模拟器内使用<code>data048.bin</code>实现多设备登录。</span>
+		<span lang="en">Because this feature does not automatically update game data and requires re-export, it is highly recommended to use <code>data048.bin</code> within the Emulator for multi-device login.</span>
 	</p>
-	<p>自行安装智龙迷城游戏并登录你的游戏账号。<br>
-		Install P&amp;D and log in to your game account.<br>
-		<img src="images/player-emu-pad-download-data.webp" alt="下载PAD数据">
+	<p>
+		<span lang="zh">你需要在在电脑上安装一个能运行智龙迷城的安卓模拟器，比如 <em>蓝叠模拟器国际版</em>、<em>夜神模拟器国际版</em>。选国际版是因为自带 Google Play，国内版没有。国际版安装好后也可以选择简体中文，所以没语言障碍。</span>
+		<span lang="en">You'll need to install an Android simulator on your PC that runs P&amp;D, such as <em>BlueStacks</em>, <em>NoxPlayer</em>.</span>
 	</p>
-	<p>如果闪退，打开多开器，添加一个能运行智龙迷城的版本，目前有 7.0.2.1 版的安卓7-64位。<br>
-		If P&amp;D can't be opened, run the Multi-Drive and add a version that runs P&amp;D, currently available in Android 7-64 bits in v7.0.2.1.<br>
-		<img src="images/player-emu-add-new.webp" alt="添加模拟器">
+	<p>
+		<span lang="zh">如果希望直接使用root后的设备，请参考<a href="#use-HttpCanary">HttpCanary</a>方法。</span>
+		<span lang="en">If you wish to use the rooted device directly, refer to the <a href="#use-HttpCanary">HttpCanary</a> method.</span>
 	</p>
-	<p>然后你可以选择在安卓内使用 APP 和电脑上用代理软件两种方式抓包。<br>
-		You can then choose to sniffer in both use the APP within Android and proxy software on your PC.<br>
-	</p>
+	<ul>
+		<li>
+			<details>
+				<summary>
+					<h4>
+						<span lang="zh">蓝叠模拟器国际版</span>
+						<span lang="en">BlueStacks</span>
+					</h4>
+				</summary>
+				<p>
+					<span lang="zh">官方网站：<a href="https://www.bluestacks.com/tw/bluestacks-5.html">https://www.bluestacks.com/tw/bluestacks-5.html</a></span>
+					<span lang="en">Official website:<a href="https://www.bluestacks.com/bluestacks-5.html">https://www.bluestacks.com/bluestacks-5.html</a></span>
+				</p>
+				<p>
+					<span lang="zh">自行安装智龙迷城游戏并测试是否能启动。可以任意新建账号，并下载完成所有的游戏数据。</span>
+					<span lang="en">Install P&amp;D by yourself and test if it can be launched. You can create any new account and download all the game data.</span>
+					<br>
+					<img src="images/bluestacks-pad-login.webp" alt="下载PAD数据">
+				</p>
+				<p>
+					<span lang="zh">如果闪退，打开蓝叠多开器，添加一个能运行智龙迷城的版本，书写本文档时为 v5.20 版的安卓9-64位和打开 Hyper-V 后的安卓11-64位。</span>
+					<span lang="en">If P&amp;D can't be opened, run the BlueStacks Multi-Instance Manager and add a version that runs P&amp;D, currently is Android 9 64-bit and Android 11 64-bit with Hyper-V in v5.20 of this document writing.</span>
+					<br>
+					<img src="images/bluestacks-multi-add-new-emu.webp" alt="添加模拟器">
+				</p>
+			</details>
+		</li>
+		<li>
+			<details>
+				<summary>
+					<h4>
+						<span lang="zh">夜神模拟器国际版</span>
+						<span lang="en">NoxPlayer</span>
+					</h4>
+				</summary>
+				<p>
+					<span lang="zh">官方网站：<a href="https://tw.bignox.com/">https://tw.bignox.com/</a></span>
+					<span lang="en">Official website: <a href="https://www.bignox.com/">https://www.bignox.com/</a></span>
+				</p>
+				<p>
+					<span lang="zh">自行安装智龙迷城游戏并测试是否能启动。可以任意新建账号，并下载完成所有的游戏数据。</span>
+					<span lang="en">Install P&amp;D by yourself and test if it can be launched. You can create any new account and download all the game data.</span>
+					<br>
+					<img src="images/player-emu-pad-download-data.webp" alt="下载PAD数据">
+				</p>
+				<p>
+					<span lang="zh">如果闪退，打开多开器，添加一个能运行智龙迷城的版本，书写本文档时为 v7.0.2.1 版的安卓7-64位。</span>
+					<span lang="en">If P&amp;D can't be opened, run the Multi-Drive and add a version that runs P&amp;D, currently is Android 7 64-bit in v7.0.2.1 of this document writing.</span>
+					<br>
+					<img src="images/player-emu-add-new.webp" alt="添加模拟器">
+				</p>
+			</details>
+		</li>
+	</ul>
+
 	<details>
-		<summary><h4 id="use-HttpCanary">使用 HttpCanary APP | Use HttpCanary APP</h4></summary>
-		<p>请自行从网上搜索并安装 <a href="https://www.423down.com/9279.html">HttpCanary</a>（已被谷歌商店下架）。<br>
-			Please search the web and install <a
-				href="https://apkpure.com/httpcanary-%E2%80%94-http-sniffer-capture-analysis/com.guoshi.httpcanary">HttpCanary</a>
-			yourself (It's blocked by google store).<br>
-			<img src="images/player-emu-install-apk.webp" alt="安装 APK">
+		<summary>
+			<h3 id="multiple-devices">
+				<span lang="zh">如何实现多设备登录</span>
+				<span lang="en">How to login with multiple devices</span>
+			</h3>
+		</summary>
+		<h4>
+			<span lang="zh">从你的安卓设备中提取<code>data048.bin</code></span>
+			<span lang="en">Extract <code>data048 .bin</code> from your Android device</span>
+		</h4>
+		<p>
+			<span lang="zh">智龙迷城的账号唯一识别码(GUID)储存于<code>/data/data/jp.gungho.pad/files/data048.bin</code>中。</span>
+			<span lang="en">The unique account number (GUID) of P&amp;D is stored in the <code>/data/data/jp.gungho.pad/files/data048.bin</code>.</span>
 		</p>
-		<p>打开模拟器的 Root，并重启。<br>
-			Open the simulator's root and restart.<br>
-			<img src="images/player-emu-open-root.webp" alt="打开 Root">
+		<p>
+			<span lang="zh">只需要复制这个文件到另一台设备上的相同路径，就不需要 谷歌 引继，可以随时切换设备登录账号。</span>
+			<span lang="en">Simply copy this file to the same path on another device, you don't need to sign in by Google, you can switch device logins at any time.</span>
 		</p>
-		<p>运行 HttpCanary，按照提示配置本地 VPN 和导入证书（系统可能要求设置密码）。<br>
-			Run HttpCanary, follow the prompts to configure the local VPN and import certificates (The system may require a
-			password).<br>
-			<img src="images/player-emu-httpcanary-vpn.webp" alt="开启 VPN">
-			<img src="images/player-emu-httpcanary-cer.webp" alt="安装证书"><br>
-			授予 Root 权限，将证书移至系统目录。安卓 7 以上必须这样做才能嗅探到 https 的流量。<br>
-			Grant Root permission to move the certificates to the system directory. Android 7 or above must do this to sniff
-			out https traffic.<br>
-			<img src="images/player-emu-httpcanary-move-cer.webp" alt="移动证书到系统目录">
+		<p>
+			<span lang="zh">用处</span>
+			<span lang="en">use:</span>
+			<ul>
+				<li>
+					<span lang="zh">手机、平板、模拟器内都可以登录同一个账号，方便更换游玩设备。</span>
+					<span lang="en">Smart phones, tablets, emulators can log in to the same account, convenient to change play equipment.</span>
+				</li>
+				<li>
+					<span lang="zh">日服和港台服是同一个服务器，所以日本客户端和港台客户端可以同时登陆同一个账号。但是他们的魔法石商店不同，礼包可以分别买一次。</span>
+					<span lang="en">Japanese country client and China Hong Kong & Taiwan province client are the same backend server, so JP clients and HT clients can log in to the same account. But their Magic Stone Shop are different, so gift bags can be bought twice.</span>
+				</li>
+			</ul>
 		</p>
-		<p>可以根据需要关闭 Root 了（日服客户端需要关闭 Root 才能运行）。<br>
-			Root can be closed as needed. (The Japanese version client needs to close Root operation.)
+		<p>
+			<span lang="zh">Root 用户可以直接访问这个文件，复制到另一台设备，并覆盖相同文件即可。</span>
+			<span lang="en">Root users can access the file directly, copy to another device, and overwrite the same file.</span>
 		</p>
-		<p>HttpCanary 菜单内添加智龙迷城为目标应用，可减少其他流量的干扰。<br>
-			Add P&amp;D to the target app in HttpCanary menu, to reduce interference with other traffic.<br>
-			<img src="images/player-emu-httpcanary-target-app.webp" alt="设置目标应用">
+		<p>
+			<span lang="zh">无 Root 用户目前可以使用 <a href="https://developer.android.com/studio/command-line/adb">Android 调试桥 (adb)</a> 导出<code>data048.bin</code>，请看接下来的教学。</span>
+			<span lang="en">No-Root users can currently export data048.bin using <a href="https://developer.android.com/studio/command-line/adb">Android Debug Bridge (adb)</a>, see the next lesson.</span>
 		</p>
-		<p>回到首页，点击主按钮开始嗅探流量。<br>
-			Back on the home page, click the main button to start sniffing traffic.<br>
-			<img src="images/player-emu-httpcanary-start.webp" alt="开始嗅探">
+		<p>
+			<span lang="zh">如要在通过 USB 连接的设备上使用 adb，您必须在设备的系统设置中启用 <b>USB 调试</b>（位于<b>开发者选项</b>下）。如需使用 WLAN 连接到设备来使用 adb，请参阅<a href="https://developer.android.com/studio/command-line/adb#wireless">通过 WLAN 连接到设备</a>。</span>
+			<span lang="en">To use adb with a device connected over USB, you must enable <b>USB debugging</b> in the device system settings, under <b>Developer options</b>. To use adb with a device connected over Wi-Fi, see <a href="https://developer.android.com/studio/command-line/adb#wireless">Connect to a device over Wi-Fi</a>.</span>
 		</p>
-		<p>运行智龙迷城游戏，直到登陆成功。<br>
-			Run the P&amp;D game until log in successfully.<br>
-			<img src="images/player-emu-pad-login.webp" alt="登录游戏">
-		</p>
-		<p>返回
-			HttpCanary，找到<code>padsv.gungho.jp/api.php?action=get_player_data</code>网络请求。（一般紧跟<code>api.php?action=login</code>）<br>
-			Go back to HttpCanary to find the network request <code>padsv.gungho.jp/api.php?action=get_player_data</code>.
-			(Generally followed by <code>api.php?action=login</code>)<br>
-			<img src="images/player-emu-httpcanary-find-item.webp" alt="找到请求">
-		</p>
-		<p>进入该条目，保存响应体。<br>
-			Go to the entry and Save Response Body.<br>
-			<img src="images/player-emu-httpcanary-save-response-body.webp" alt="保存响应体">
-		</p>
-		<p>使用文件管理器找到<code>手机储存/HttpCanary/download/[你保存的名称]/response_body.html</code>，这个就是你的游戏数据。<br>
-			Use the file manager to find
-			<code>[Phone Storage]/HttpCanary/download/[The name you saved]/response_body.html</code>, and this is your game
-			data.<br>
-			<img src="images/player-emu-httpcanary-saved-data.webp" alt="保存的文件">
-		</p>
-		<p>打开模拟器的电脑共享目录。<br>
-			Open the simulator's PC shared folder.<br>
-			<img src="images/player-emu-open-pc-folder.webp" alt="打开电脑共享路径">
-		</p>
-		<p>将<code>response_body.html</code>复制到<code>手机储存/Download</code>文件夹，即可在电脑上看到文件。<br>
-			Copy <code>response_body.html</code> to <code>[Phone Storage]/Download</code> folder to see files on your
-			PC.<br>
-			<img src="images/player-emu-httpcanary-copy-to-download.webp" alt="复制到下载文件夹">
-		</p>
-		<p>到我的箱子功能里打开即可。<br>
-			Open my box function and open it.<br>
-			<img src="images/player-open-data.webp" alt="打开数据">
-		</p>
-		<p>每次获取新的数据，重复 启动 HttpCanary > 登录游戏 > 保存响应体 的步骤。<br>
-			Each time you get new data, repeat the steps to Start httpCanary > Log in to the game > Save Response Body.
-		</p>
-		<p>如果希望不要每次都重新使用 SNS 登录游戏，可以查看<a href="#multiple-devices">如何多设备登录</a>。<br>
-			If you want to not reuse the SNS login game every time, you can see <a href="#multiple-devices">How to login
-				with multiple devices</a>.
-		</p>
-	</details>
-	
-	
-	<details>
-		<summary><h4 id="use-Fidder">在电脑上使用 Fidder | Use Fidder on PC</h4></summary>
-		<p>在电脑上安装<a href="https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe">Fiddler Classic</a><br>
-			Install <a href="https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe">Fiddler Classic</a> on your
-			PC.<br>
-			<img src="images/player-fidder-install.webp" alt="装好的 Fidder">
-		</p>
-		<p>为了使模拟器能连接 Fidder，打开允许远程计算机连接的功能。<br>同时为避免抓到其他无用的流量，推荐你关闭自动设为系统代理的选项并重启 Fidder。<br>
-			In order for the simulator to connect to Fidder, turn on the feature that <em>Allow remote computers to
-				connect</em>.<br>And for avoid catching unwanted traffic, it is recommended that turn off the option <em>Act
-				as the system proxy on startup</em> and restart the Fidder.<br>
-			<img src="images/player-fidder-close-system-proxy.webp" alt="关闭默认代理">
-		</p>
-		<p>打开 HTTPS 解密，警告询问你是否添加证书到电脑可以选择否，因为我们不需要解密电脑上的流量。<br>
-			Turn on <em>decrypt HTTPS traffic</em>. The warning asks if you want to add the certificate to your PC and you
-			can choose No because we don't need to decrypt traffic from your PC.<br>
-			<img src="images/player-fidder-decrypt-https.webp" alt="打开 HTTPS解密">
-		</p>
-		<p>将根证书导出到桌面，之后你将会在桌面上看到一个<code>FiddlerRoot.cer</code>文件。<br>
-			Export the root certificate to the desktop. You will then see a file <code>FiddlerRoot.cer</code> on your
-			desktop.<br>
-			<img src="images/player-fidder-export-cer-to-desktop.webp" alt="导出证书到桌面">
-		</p>
-		<p>如果你有 openssl ，你可以直接将<code>FiddlerRoot.cer</code>转换到安卓需要的格式。<br>
-			If you have openssl, you can directly convert <code>FiddlerRoot.cer</code> to the format android need.
+		<p>
+			<span lang="zh">将你的手机用USB线缆连接到电脑上。</span>
+			<span lang="en">Connect your phone to your computer with a USB cable.</span>
 			<br>
-			<code class="block-code">::Get Hash Value
-openssl x509 -inform DER -in FiddlerRoot.cer -subject_hash_old -noout
-::Rename to Android system version PEM
-openssl x509 -inform DER -in FiddlerRoot.cer -outform PEM -out [Hash Value].0</code>
-		</p>
-		<p>如果没有 openssl ，你可以在桌面按住 <strong>Shift</strong> 点击鼠标右键，在此打开 PowerShell。<br>
-			If you don't have openssl, press and hold <strong>Shift</strong> on the desktop and right-click to open PowerShell here.<br>
-			<img src="images/player-fidder-export-cer-open-powershell.webp" alt="打开PowerShell">
-		</p>
-		<p>在 PowerShell 中，执行以下代码，之后你将会在桌面上，见到一个<code>269953fb.0</code>文件。<br>
-			In PowerShell, execute the following codes, and then you'll see a <code>269953fb.0</code> file on your
-			desktop.<br><br>
-			<code class="block-code"># get the cer full path
-$cert_path=Resolve-Path "FiddlerRoot.cer";
-# create a cert object
-$cert=New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($cert_path);
-# create a md5 object
-$md5 = New-Object -TypeName System.Security.Cryptography.MD5CryptoServiceProvider;
-# to openssl hash "-subject_hash_old"
-# get the cert SubjectName md5 hash
-$md5bin = $md5.ComputeHash($cert.SubjectName.RawData);
-# convert to this format bytes
-$hashnum = ([long]$md5bin[0] -bor ([long]$md5bin[1] -shl 8) -bor ([long]$md5bin[2] -shl 16) -bor ([long]$md5bin[3] -shl 24)) -band 0xffffffff;
-# convert bytes to file name
-$pem_name = [Convert]::ToString($hashnum, 16).padleft(8,"0")+".0";
-# create PEM format content
-$str=New-Object System.Text.StringBuilder("");
-$str.AppendLine("-----BEGIN CERTIFICATE-----");
-$str.AppendLine([Convert]::ToBase64String($cert.RawData, [Base64FormattingOptions]::InsertLineBreaks));
-$str.AppendLine("-----END CERTIFICATE-----");
-# save the file
-$str.ToString() | Out-File -Encoding ascii -FilePath $pem_name</code><br><br>
-			<img src="images/player-fidder-export-cer-convert.webp" alt="证书格式转换">
-		</p>
-		<p>打开模拟器的 Root，并重启。<br>
-			Open the simulator's root and restart.<br>
-			<img src="images/player-emu-open-root.webp" alt="打开 Root">
-		</p>
-		<p>使用共享文件夹，将<code>269953fb.0</code>转移到模拟器。<br>
-			Use the shared folder to transfer <code>269953fb.0</code> to the simulator.<br>
-			<img src="images/player-fidder-export-cer-shared-folder.webp" alt="传送到模拟器">
-		</p>
-		<p>将<code>269953fb.0</code>复制到<code>/system/etc/security/cacerts</code>文件夹内。<br>
-			Copy the <code>269953fb.0</code> to the <code>/system/etc/security/cacerts</code> folder.<br>
-			<img src="images/player-fidder-export-cer-copy-to-system.webp" alt="复制到系统文件夹">
-		</p>
-		<p>打开<code>269953fb.0</code>文件属性，设置权限为<code>-rw-r--r--(644)</code>。<br>
-			Open <code>269953fb.0</code> file properties and set permissions to <code>-rw-r--r--(644)</code><br>
-			<img src="images/player-fidder-export-cer-set-permissions.webp" alt="设置文件属性">
-		</p>
-		<p><strong>重启模拟器</strong>，以使证书被系统读取。<br>
-			<strong>Restart the simulator</strong> so that the certificate is read by the system.
-		</p>
-		<p>可以根据需要关闭 Root 了（日服客户端需要关闭 Root 才能运行）。<br>
-			Root can be closed as needed. (The Japanese version client needs to close Root operation.)
-		</p>
-		<p>修改模拟器内 WiFi 的代理，改为手动模式，主机名为电脑的网卡 IP，端口号为 8888。<br>
-			Modify the proxy of WiFi in the simulator to manual mode, the host name is the computer's network card IP, port
-			number 8888.<br>
-			<img src="images/player-fidder-export-cer-set-proxy.webp" alt="设置WiFi代理"><br>
-			你可以在电脑网卡属性里找到当前 IP。<br>
-			You can find the current IP in the PC network card properties.<br>
-			<img src="images/player-fidder-export-cer-get-pc-ip.webp" alt="查找计算机IP">
-		</p>
-		<p>打开 Fiddler 的自动解码和流式传输。<br>
-			Turn on Fiddler's auto Decode and Stream.<br>
-			<img src="images/player-fidder-open-auto-decode.webp" alt="自动解码">
-		</p>
-		<p>运行智龙迷城游戏，直到登陆成功。<br>
-			Run the P&amp;D game until log in successfully.<br>
-			<img src="images/player-emu-pad-login.webp" alt="登录游戏">
-		</p>
-		<p>然后在 Fidder
-			内找到<code>padsv.gungho.jp/api.php?action=get_player_data</code>网络请求。（一般紧跟<code>api.php?action=login</code>）<br>
-			Go back to Fidder to find the network request <code>padsv.gungho.jp/api.php?action=get_player_data</code>.
-			<img src="images/player-fidder-found-traffic.webp" alt="发现网络请求">
-		</p>
-		<p>在右键菜单内选择保存响应体。<br>
-			Select Save Response Body within the right-click menu.<br>
-			<img src="images/player-fidder-save-response-body.webp" alt="保存响应体">
-		</p>
-		<p>到我的箱子功能里打开即可。<br>
-			Open my box function and open it.<br>
-			<img src="images/player-open-data.webp" alt="打开数据">
-		</p>
-		<p>每次获取新的数据，重复 开启 Fidder > 模拟器内登录游戏 > 保存响应体 的步骤。<br>
-			Each time you get new data, repeat the steps to Start Fidder > Log in to the game in the simulator > Save
-			Response Body.
-		</p>
-		<p>如果希望不要每次都重新使用 SNS 登录游戏，可以查看<a href="#multiple-devices">如何多设备登录</a>。<br>
-			If you want to not reuse the SNS login game every time, you can see <a href="#multiple-devices">How to login
-				with multiple devices</a>.
-		</p>
-		<h5>自动保存响应体 | Auto Save Response Body</h5>
-		<p>Fidder 可以使用脚本自动保存响应体。<br>
-			Fidder can use scripts to automatically save Response Body.
-		</p>
-		<p>在 Fidder 脚本中，快速跳转到<code>OnBeforeResponse</code>。<br>
-			In the Fidder Script, quickly jump to the <code>OnBeforeResponse</code><br>
-			<img src="images/player-fidder-go-to-script.webp" alt="跳到 OnBeforeResponse">
-		</p>
-		<p>将以下代码插入<code>OnBeforeResponse</code>代码括号内，并保存。<br>
-			Insert the following code into the parenthesis of the <code>OnBeforeResponse</code> code and save it.<br>
-			<img src="images/player-fidder-paste-code.webp" alt="保存代码"><br>
-			记得将第一行的文件路径修搞到你自己的文件夹，因为是转义符，右斜杠需要写两次。<br>
-			Remember to fix the first line of file paths to your own folder, because it's an escape character, and the right
-			slash needs to be written twice.<br><br>
-			<code class="block-code">// the file saved path
-	var PADDataPath = "D:\\PAD_Data";
-	if (oSession.uriContains("action=get_player_data")) {
-		oSession.SaveResponseBody(PADDataPath + "\\player-data-" + new Date().getTime() + ".json");
-	}</code>
-		</p>
-	</details>
-	<details>
-		<summary><h4 id="multiple-devices">如何多设备登录 | How to login with multiple devices</h4></summary>
-		<p>智龙迷城的账号唯一识别码(GUID)储存于<code>/data/data/jp.gungho.pad/files/data048.bin</code>中。<br>
-			The unique account number (GUID) of P&amp;D is stored in the
-			<code>/data/data/jp.gungho.pad/files/data048.bin</code>.
-		</p>
-		<p>只需要复制这个文件到另一台设备上的相同路径，就不需要 SNS 引继，可以随时切换设备登录账号。<br>
-			Simply copy this file to the same path on another device, you don't need to sign in by Social Media Linking, you
-			can switch device logins at any time.
-		</p>
-		<p>用处 | use:
-		<ul>
-			<li>手机、平板、模拟器内都可以登录同一个账号，方便更换游玩设备。<br>
-				Smart phones, tablets, emulators can log in to the same account, convenient to change play equipment.</li>
-			<li>日服和港台服是同一个服务器，所以日本客户端和港台客户端可以同时登陆同一个账号。但是他们的魔法石商店不同，礼包可以分别买一次。<br>
-				Japanese country client and China Hong Kong & Taiwan region client are the same backend server, so Jp
-				clients and HT clients can log in to the same account. But their Magic Stone Shop are different, so gift
-				bags can be bought twice.
-			</li>
-		</ul>
-		</p>
-		<p>Root 用户可以直接访问这个文件，复制到另一台设备，并覆盖相同文件即可。<br>
-			Root users can access the file directly, copy to another device, and overwrite the same file.
-		</p>
-		<p>无 Root 用户目前可以使用 <a href="https://developer.android.com/studio/command-line/adb">Android 调试桥 (adb)</a> 导出
-			data048.bin，请看接下来的教学。<br>
-			No-Root users can currently export data048.bin using <a
-				href="https://developer.android.com/studio/command-line/adb">Android Debug Bridge (adb)</a>, see the next
-			lesson.<br>
-		</p>
-		<p>如要在通过 USB 连接的设备上使用 adb，您必须在设备的系统设置中启用 <b>USB 调试</b>（位于<b>开发者选项</b>下）。如需使用 WLAN 连接到设备来使用 adb，请参阅<a
-				href="https://developer.android.com/studio/command-line/adb#wireless">通过 WLAN 连接到设备</a>。<br>
-			To use adb with a device connected over USB, you must enable
-			<b>USB debugging</b> in the device system settings, under <b>
-				Developer options</b>. To use adb with a device connected over Wi-Fi, see
-			<a href="https://developer.android.com/studio/command-line/adb#wireless">Connect to a device over Wi-Fi</a>.
-		</p>
-		<p>将你的手机用USB线缆连接到电脑上。<br>
-			Connect your phone to your computer with a USB cable.<br>
 			<img src="images/player-ph-usb-connect.svg" alt="连接手机">
 		</p>
-		<p>打开 <b>USB 调试</b>。由于不同手机“开发者选项”所在的位置或名称可能有所不同，请您自行搜索您的手机型号的打开方式。<br>
-			Turn on <b>USB debugging</b>. On different devices, the Developer options screen might be located or named
-			differently, please search for your phone.<br>
+		<p>
+			<span lang="zh">打开 <b>USB 调试</b>。由于不同手机“开发者选项”所在的位置或名称可能有所不同，请您自行搜索您的手机型号的打开方式。</span>
+			<span lang="en">Turn on <b>USB debugging</b>. On different devices, the Developer options screen might be located or named differently, please search for your phone.</span>
+			<br>
 			<img src="images/player-ph-open-usb-debug.webp" alt="打开USB调试">
 		</p>
-		<p>如果你在设备管理器内能看到 ADB interface 驱动，那么你很可能可以使用 adb 工具。<br>否则你需要<a href="https://developer.android.com/studio/run/oem-usb">安装手机设备制造商的 USB 驱动程序</a>或者尝试<a
-			href="https://adb.clockworkmod.com/">通用 ADB 驱动</a>。<br>
-			If you can see the ADB interface driver in Device Manager, you're likely to use the adb tool.<br>
-			Otherwise you'll need to <a href="https://developer.android.com/studio/run/oem-usb">install OEM USB drivers</a>
-			or try <a href="https://adb.clockworkmod.com/">Universal ADB Drivers</a>.<br>
+		<p>
+			<span lang="zh">如果你在设备管理器内能看到 ADB interface 驱动，那么你很可能可以使用 adb 工具。<br>否则你需要<a href="https://developer.android.com/studio/run/oem-usb">安装手机设备制造商的 USB 驱动程序</a>或者尝试<a href="https://adb.clockworkmod.com/">通用 ADB 驱动</a>。</span>
+			<span lang="en">If you can see the ADB interface driver in Device Manager, you're likely to use the adb tool.<br>Otherwise you'll need to <a href="https://developer.android.com/studio/run/oem-usb">install OEM USB drivers</a> or try <a href="https://adb.clockworkmod.com/">Universal ADB Drivers</a>.</span>
+			<br>
 			<img src="images/player-ph-device-manager.webp" alt="连接手机">
 		</p>
-		<p>下载 <a href="https://developer.android.com/studio/releases/platform-tools">SDK Platform Tools</a>，adb 工具在里面。<br>
-			Download <a href="https://developer.android.com/studio/releases/platform-tools">SDK Platform Tools</a>, the adb
-			tool in it.
+		<p>
+			<span lang="zh">下载 <a href="https://developer.android.com/studio/releases/platform-tools">SDK Platform Tools</a>，adb 工具在里面。</span>
+			<span lang="en">Download <a href="https://developer.android.com/studio/releases/platform-tools">SDK Platform Tools</a>, the adb tool in it.</span>
 		</p>
-		<p>您可以通过从 <code>platform-tools</code> 目录执行 <code>adb devices</code> 验证设备是否已连接。如果已连接，您将看到设备名称以“设备”形式列出。<br>
-			You can verify that your device is connected by executing <code>adb devices</code> from the
-			<code>platform-tools</code> directory.<br>
+		<p>
+			<span lang="zh">您可以通过从 <code>platform-tools</code> 目录执行以下代码验证设备是否已连接。如果已连接，您将看到设备名称以“设备”形式列出。</span>
+			<span lang="en">You can verify that your device is connected by executing the following code from the <code>platform-tools</code> directory.</span>
+			<code class="block-code">adb devices</code>
+			<br>
 			<img src="images/player-ph-adb-test.webp" alt="测试ADB连接">
 		</p>
-		<p>解锁手机，执行以下代码对游戏数据进行备份。在手机上弹出的确认窗口中输入任意密码并记住或留空。<br>
-			Unlock your phone, perform the following code to back up game data. Enter any password and remember or leave it
-			blank in the confirmation window that pops up on your phone.<br>
-			<code class="block-code">adb backup &lt;包名 | Package Name&gt; -f pad.ab</code><br>
-			包名 | Package Name:
+		<p>
+			<span lang="zh">解锁手机，执行以下代码对游戏数据进行备份。在手机上弹出的确认窗口中输入任意密码并记住或留空。</span>
+			<span lang="en">Unlock your phone, perform the following code to back up game data. Enter any password and remember or leave it blank in the confirmation window that pops up on your phone.</span>
+			<code class="block-code">adb backup &lt;<span lang="zh">包名</span><span lang="en">Package Name</span>&gt; -f pad.ab</code>
+			<span lang="zh">包名</span><span lang="en">Package Name:</span>
 			<ul>
 				<li>パズル＆ドラゴンズ: <code>jp.gungho.pad</code></li>
 				<li>龍族拼圖: <code>jp.gungho.padHT</code></li>
 				<li>Puzzle & Dragons: <code>jp.gungho.padEN</code></li>
 				<li>퍼즐앤드래곤: <code>jp.gungho.padKO</code></li>
 			</ul>
-		<img src="images/player-ph-ab-backup.webp" alt="ADB备份">
+			<img src="images/player-ph-ab-backup.webp" alt="ADB备份">
 		</p>
-		<p>你需要使用<a href="https://github.com/nelenkov/android-backup-extractor/releases/latest">Android backup
-				extractor</a>来解密 ab 文件。同时它是用 Java 编写的，你需要安装 <a href="https://adoptium.net/">Java 11</a> 运行时。<br>
-			You need to use <a href="https://github.com/nelenkov/android-backup-extractor/releases/latest">Android backup
-				extractor</a> to decrypt ab files. And it's written in Java, so you need to install the <a
-				href="https://adoptium.net/">Java 11</a> runtime.<br><br>
-	
-			执行以下代码进行解密。<br>
-			perform the following code to decrypt.<br>
-			<code class="block-code">java -jar abe.jar unpack pad.ab pad.tar [备份密码 | backup password]</code><br>
-			<img src="images/player-ph-ab-unpack.webp" alt="解包 AB"><br>
-			打开这个 <code>pad.tar</code> 压缩包你将会看到<code>data048.bin</code><br>
-			Open this <code>pad.tar</code> package and you'll see the <code>data048.bin</code><br>
+		<p>
+			<span lang="zh">你需要使用<a href="https://github.com/nelenkov/android-backup-extractor/releases/latest">Android backup extractor</a>来解密 ab 文件。同时它是用 Java 编写的，你需要安装 <a href="https://adoptium.net/">Java 11</a> 运行时或更高版本。</span>
+			<span lang="en">You need to use <a href="https://github.com/nelenkov/android-backup-extractor/releases/latest">Android backup extractor</a> to decrypt ab files. And it's written in Java, so you need to install the <a href="https://adoptium.net/">Java 11</a> runtime or later.</span>
+		</p>
+		<p>
+			<span lang="zh">执行以下代码进行解密。</span>
+			<span lang="en">perform the following code to decrypt.</span>
+			<code class="block-code">java -jar abe.jar unpack pad.ab pad.tar [<span lang="zh">备份密码</span><span lang="en">backup password</span>]</code>
+			<br>
+			<img src="images/player-ph-ab-unpack.webp" alt="解包 AB">
+		</p>
+		<p>
+			<span lang="zh">打开这个 <code>pad.tar</code> 压缩包你将会看到 <code>data048.bin</code></span>
+			<span lang="en">Open this <code>pad.tar</code> package and you'll see the <code>data048.bin</code></span>
+			<br>
 			<img src="images/player-ph-ab-unpack-open-zip.webp" alt="解包 AB-打开"><br>
 		</p>
-		<p>打开模拟器的 Root，并重启。<br>
-			Open the simulator's root and restart.<br>
-			<img src="images/player-emu-open-root.webp" alt="打开 Root">
+		<h4>
+			<span lang="zh">将 <code>data048.bin</code> 导入模拟器</span>
+			<span lang="en">Import <code>data048.bin</code> into the simulator</span>
+		</h4>
+		<p>
+			<span lang="zh">你需要先打开模拟器的 root。</span>
+			<span lang="en">You need to open the emulator's root first.</span>
 		</p>
-		<p>使用<code>data048.bin</code>覆盖模拟器内的<code>/data/data/jp.gungho.pad/files/data048.bin</code>，并删除<code>data048.bin</code>和<code>mons</code>文件夹以外的其他文件。<br>
-			Use <code>data048.bin</code> override the <code>/data/data/jp.gungho.pad/files/data048.bin</code> in the
-			emulator, and delete files other than <code>data048.bin</code> and <code>mons</code> folders.<br>
-			<img src="images/player-ph-overwrite-048.webp" alt="覆盖048">
-		</p>
-		<p>打开游戏，然后你就可以在手机和模拟器登录同一个帐号了。<br>
-			Open the game. Then you can log in to the same account on your phone and emulator.<br>
-			<img src="images/player-ph-login-both-phone-and-emulator.webp" alt="手机模拟器同时登陆"><br>
-			注意 | note:
 		<ul>
-			<li>后登录的会使先登录的下线，在地下城内游玩的时候不要登录另一个设备。你可以回到标题画面，重新登录就可以回到这个设备。<br>
-				The next login will bring the first login offline, don't login to another device while playing in the dungeon. You can go back to the title screen and login back to the device.
+			<li>
+				<details>
+					<summary>
+						<span lang="zh">蓝叠模拟器国际版</span>
+						<span lang="en">BlueStacks</span>
+					</summary>
+					<p>
+						<span lang="zh">蓝叠模拟器打开root有些复杂</span>
+						<span lang="en">The BlueStacks emulator is a bit complicated to open root</span>
+					</p>
+					<p>
+						<span lang="zh">打开模拟器的配置文件，默认在<code>C:\ProgramData\BlueStacks_nxt\bluestacks.conf</code>。</span>
+						<span lang="en">Open the configuration file of the emulator, default in <code>C:\ProgramData\BlueStacks_nxt\bluestacks.conf</code>.</span>
+						<br>
+						<span lang="zh">如果忘记你安装在哪里，可以通过注册表查询<code>reg query HKLM\SOFTWARE\BlueStacks_nxt\ /v UserDefinedDir</code>。</span>
+						<span lang="en">IIf you forgot where you installed it, you can query the registry <code>reg query HKLM\SOFTWARE\BlueStacks_nxt\ /v UserDefinedDir</code>.</span>
+						<br>
+						<img src="images/bluestacks-find-userdir.webp" alt="寻找用户定义文件夹">
+					</p>
+					<p>
+						<span lang="zh">搜索所有名称里带“root”的配置，并修改值为 1。</span>
+						<span lang="en">Search for all configurations with "root" in the name and change the value to 1.</span>
+						<br>
+						<img src="images/bluestacks-cfg-open-root.webp" alt="打开 Root">
+					</p>
+					<p>
+						<span lang="zh">然后将此文件设置为只读。</span>
+						<span lang="en">Then make this file read-only.</span>
+						<br>
+						<img src="images/bluestacks-cfg-read-only.webp" alt="设置只读">
+					</p>
+					<p>
+						<span lang="zh">使用完成后，请将上述步骤还原。</span>
+						<span lang="en">Once you are done, restore the above steps.</span>
+					</p>
+					<p>
+						<span lang="zh">如果你觉得这一步麻烦，你也可以直接使用我写好的脚本程序。</span>
+						<span lang="en">If you fell troubled by this step, you can also directly use the script I wrote.</span>
+						<br>
+						<a href="https://github.com/Mapaler/BlueStacksScript">https://github.com/Mapaler/BlueStacksScript</a>
+						<br>
+						<span lang="zh">下载<code>蓝叠打开root.bat</code>和<code>蓝叠打开root.ps1</code>两个文件后放在一起，运行<code>蓝叠打开root.bat</code>就可以一键打开/关闭root</span>
+						<span lang="en">Download the two files of <code>蓝叠打开root.bat</code> and <code>蓝叠打开root.ps1</code> and put them together, run <code>蓝叠打开root.bat</code> to open/close root with one step</span>
+					</p>
+				</details>
 			</li>
-			<li>使用谷歌引继或 SNS 引继会导致服务器重新生成唯一识别码(GUID)，旧有的<code>data048.bin</code>失效。<br>
-				Sign-in by Google Account or Social Media Linking causes the server to regenerate a unique account number
-				(GUID), and invalidate the old <code>data048.bin</code>.
-			</li>
-			<li>对于另一台没有 Root 的手机，你可以使用<code>adb restore pad.ab</code>来导入<code>data048.bin</code>。<br>
-				For another phone that doesn't have Root, you can import <code>data048.bin</code> using the
-				<code>adb restore pad.ab</code>.
+			<li>
+				<details>
+					<summary>
+						<span lang="zh">夜神模拟器国际版</span>
+						<span lang="en">NoxPlayer</span>
+					</summary>
+					<p>
+						<span lang="zh">打开模拟器的 Root，并重启。</span>
+						<span lang="en">Open the simulator's root and restart.</span>
+						<br>
+						<img src="images/player-emu-open-root.webp" alt="打开 Root">
+					</p>
+				</details>
 			</li>
 		</ul>
+		<p>
+			<span lang="zh">使用<code>data048.bin</code>覆盖模拟器内的<code>/data/data/jp.gungho.pad/files/data048.bin</code>，并推荐删除<code>data048.bin</code>和<code>mons</code>文件夹以外的其他文件。</span>
+			<span lang="en">Use <code>data048.bin</code> override the <code>/data/data/jp.gungho.pad/files/data048.bin</code> in the emulator, and it is recommended to delete files other than <code>data048.bin</code> and <code>mons</code> folders.</span>
+			<br>
+			<img src="images/player-ph-overwrite-048.webp" alt="覆盖048">
+		</p>
+		<p>
+			<span lang="zh">打开游戏，然后你就可以在手机和模拟器登录同一个帐号了。</span>
+			<span lang="en">Open the game. Then you can log in to the same account on your phone and emulator.</span>
+			<br>
+			<img src="images/player-ph-login-both-phone-and-emulator.webp" alt="手机模拟器同时登陆"><br>
+			<span lang="zh">注意：</span><span lang="en">note:</span>
+			<ul>
+				<li>
+					<span lang="zh">后登录的会使先登录的下线，在地下城内游玩的时候不要登录另一个设备。你可以回到标题画面，重新登录就可以回到这个设备。</span>
+					<span lang="en">The next login will bring the first login offline, don't login to another device while playing in the dungeon. You can go back to the title screen and login back to the device.</span>
+				</li>
+				<li>
+					<span lang="zh">使用谷歌引继或 SNS 引继会导致服务器重新生成唯一识别码(GUID)，旧有的<code>data048.bin</code>失效。</span>
+					<span lang="en">Sign-in by Google Account or Social Media Linking causes the server to regenerate a unique account number(GUID), and invalidate the old <code>data048.bin</code>.</span>
+				</li>
+				<li>
+					<span lang="zh">对于另一台没有 Root 的手机，你可以使用以下代码来导入<code>data048.bin</code>。</span>
+					<span lang="en">For another phone that doesn't have Root, you can import <code>data048.bin</code> using the following code.</span>
+					<code class="block-code">adb restore pad.ab</code>
+				</li>
+			</ul>
 		</p>
 	</details>
 
-	<h2 id="ios">苹果用户 | iOS User</h2>
-	<p>我没有苹果设备，无法研究iOS。可以临时使用 Facebook SNS 跨平台到<a href="#no-root"></a>安卓模拟器</a>登录，进行数据导出。<br>
-		I don't have an Apple device so I can't study iOS. You can temporarily across platforms sign in to <a
-			href="#no-root">Android Simulator</a> by Facebook Social Media Linking.<br>
-		<img src="images/player-emu-link-SNS.webp" alt="链接 SNS">
+	<p>
+		<span lang="zh">然后你可以选择在安卓内使用 APP 和电脑上用代理软件两种方式抓包。</span>
+		<span lang="en">You can then choose to sniffer in both use the APP within Android and proxy software on your PC.</span>
 	</p>
+	<details>
+		<summary>
+			<h3 id="use-HttpCanary">
+				<span lang="zh">使用 HttpCanary APP</span>
+				<span lang="en">Use HttpCanary APP</span>
+			</h3>
+		</summary>
+		<p>
+			<span lang="zh">请自行从网上搜索并安装 <a href="https://www.423down.com/9279.html">HttpCanary</a>（已被谷歌商店下架）。</span>
+			<span lang="en">Please search the web and install <a href="https://apkpure.net/httpcanary-%E2%80%94-http-sniffer-capture-analysis/com.guoshi.httpcanary">HttpCanary</a> yourself (It's blocked by google store).</span>
+			<br>
+			<img src="images/player-emu-install-apk.webp" alt="安装 APK">
+		</p>
+		<p>
+			<span lang="zh">打开模拟器的 Root，并重启。</span>
+			<span lang="en">Open the simulator's root and restart.</span>
+			<br>
+			<img src="images/player-emu-open-root.webp" alt="打开 Root">
+		</p>
+		<p>
+			<span lang="zh">运行 HttpCanary，按照提示配置本地 VPN 和导入证书（系统可能要求设置密码）。</span>
+			<span lang="en">Run HttpCanary, follow the prompts to configure the local VPN and import certificates (The system may require a password).</span>
+			<br>
+			<img src="images/player-emu-httpcanary-vpn.webp" alt="开启 VPN">
+			<img src="images/player-emu-httpcanary-cer.webp" alt="安装证书">
+			<br>
+			<span lang="zh">授予 Root 权限，将证书移至系统目录。安卓 7 以上必须这样做才能嗅探到 https 的流量。</span>
+			<span lang="en">Grant Root permission to move the certificates to the system directory. Android 7 or above must do this to sniff out https traffic.</span>
+			<br>
+			<img src="images/player-emu-httpcanary-move-cer.webp" alt="移动证书到系统目录">
+		</p>
+		<p>
+			<span lang="zh">可以根据需要关闭 Root 了（日服客户端需要关闭 Root 才能运行）。</span>
+			<span lang="en">Root can be closed as needed. (The Japanese version client needs to close Root operation.)</span>
+		</p>
+		<p>
+			<span lang="zh">HttpCanary 菜单内添加智龙迷城为目标应用，可减少其他流量的干扰。</span>
+			<span lang="en">Add P&amp;D to the target app in HttpCanary menu, to reduce interference with other traffic.</span>
+			<br>
+			<img src="images/player-emu-httpcanary-target-app.webp" alt="设置目标应用">
+		</p>
+		<p>
+			<span lang="zh">回到首页，点击主按钮开始嗅探流量。</span>
+			<span lang="en">Back on the home page, click the main button to start sniffing traffic.</span>
+			<br>
+			<img src="images/player-emu-httpcanary-start.webp" alt="开始嗅探">
+		</p>
+		<p>
+			<span lang="zh">运行智龙迷城游戏，直到登陆成功。</span>
+			<span lang="en">Run the P&amp;D game until log in successfully.</span>
+			<br>
+			<img src="images/player-emu-pad-login.webp" alt="登录游戏">
+		</p>
+		<p>
+			<span lang="zh">返回 HttpCanary，找到<code>padsv.gungho.jp/api.php?action=get_player_data</code>网络请求。（一般紧跟<code>api.php?action=login</code>）</span>
+			<span lang="en">Go back to HttpCanary to find the network request <code>padsv.gungho.jp/api.php?action=get_player_data</code>.(Generally followed by <code>api.php?action=login</code>)</span>
+			<br>
+			<img src="images/player-emu-httpcanary-find-item.webp" alt="找到请求">
+		</p>
+		<p>
+			<span lang="zh">进入该条目，保存响应体。</span>
+			<span lang="en">Go to the entry and Save Response Body.</span>
+			<br>
+			<img src="images/player-emu-httpcanary-save-response-body.webp" alt="保存响应体">
+		</p>
+		<p>
+			<span lang="zh">使用文件管理器找到<code>手机储存/HttpCanary/download/[你保存的名称]/response_body.html</code>，这个就是你的游戏数据。</span>
+			<span lang="en">Use the file manager to find <code>[Phone Storage]/HttpCanary/download/[The name you saved]/response_body.html</code>, and this is your game data.</span>
+			<br>
+			<img src="images/player-emu-httpcanary-saved-data.webp" alt="保存的文件">
+		</p>
+		
+		<p>
+			<span lang="zh">打开模拟器的电脑共享目录。</span>
+			<span lang="en">Open the simulator's PC shared folder.</span>
+			<br>
+			<img src="images/player-emu-open-pc-folder.webp" alt="打开电脑共享路径">
+			<br>
+			<span lang="zh">将<code>response_body.html</code>复制到<code>手机储存/Download</code>文件夹，即可在电脑上看到文件。</span>
+			<span lang="en">Copy <code>response_body.html</code> to <code>[Phone Storage]/Download</code> folder to see files on your PC.</span>
+			<br>
+			<img src="images/player-emu-httpcanary-copy-to-download.webp" alt="复制到下载文件夹">
+			<br>
+			<span lang="zh">其他模拟器拥有类似传输数据到真实电脑的功能，在此不再赘述。</span>
+			<span lang="en">Other emulators have similar features for transferring data to a real computer, please check it yourself.</span>
+		</p>
+		<p>
+			<span lang="zh">到我的箱子功能里打开即可。</span>
+			<span lang="en">Open my box function and open it.</span>
+<br>
+			<img src="images/player-open-data.webp" alt="打开数据">
+		</p>
+		<p>
+			<span lang="zh">每次获取新的数据，重复 启动 HttpCanary > 登录游戏 > 保存响应体 的步骤。</span>
+			<span lang="en">Each time you get new data, repeat the steps to Start httpCanary > Log in to the game > Save Response Body.</span>
+		</p>
+		<p>
+			<span lang="zh">如果希望不要每次都重新使用 SNS 登录游戏，可以查看<a href="#multiple-devices">如何多设备登录</a>。</span>
+			<span lang="en">If you want to not reuse the SNS login game every time, you can see <a href="#multiple-devices">How to login with multiple devices</a></span>.
+		</p>
+	</details>
+	
+	<details>
+		<summary>
+			<h3 id="use-Fidder">
+				<span lang="zh">在电脑上使用 Fidder</span>
+				<span lang="en">Use Fidder on PC</span>
+			</h3>
+		</summary>
+		<p>
+			<span lang="zh">在电脑上安装<a href="https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe">Fiddler Classic</a>。</span>
+			<span lang="en">Install <a href="https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe">Fiddler Classic</a> on your PC.</span>
+			<br>
+			<img src="images/player-fidder-install.webp" alt="装好的 Fidder">
+		</p>
+		<p>
+			<span lang="zh">打开 Fiddler 的自动解码和流式传输。</span>
+			<span lang="en">Turn on Fiddler's auto Decode and Stream.</span>
+			<br>
+			<img src="images/player-fidder-open-auto-decode.webp" alt="自动解码">
+		</p>
+		<p>
+			<span lang="zh">为了使模拟器能连接 Fidder，打开允许远程计算机连接的功能。<br>
+				同时为避免抓到其他无用的流量，推荐你关闭自动设为系统代理的选项并重启 Fidder。</span>
+			<span lang="en">In order for the simulator to connect to Fidder, turn on the feature that <em>Allow remote computers to connect</em>.<br>
+				And for avoid catching unwanted traffic, it is recommended that turn off the option <em>Act as the system proxy on startup</em> and restart the Fidder.</span>
+			<br>
+			<img src="images/player-fidder-close-system-proxy.webp" alt="关闭默认代理">
+			<br>
+			<span lang="zh">可以看到默认的代理端口是<code>8888</code>，如果需要修改，请自行记住修改后的端口号。</span>
+			<span lang="en">You can see that the default proxy port is <code>8888</code>, if you need to modify it, please remember the modified port number.</span>
+		</p>
+		<p>
+			<span lang="zh">打开解密 HTTPS 流量，警告询问你是否添加证书到电脑，可以选择否，因为我们不需要解密电脑上的流量。</span>
+			<span lang="en">Turn on <em>decrypt HTTPS traffic</em>. The warning asks if you want to add the certificate to your PC and you can choose No because we don't need to decrypt traffic from your PC.</span>
+			<br>
+			<img src="images/player-fidder-decrypt-https.webp" alt="打开 HTTPS解密">
+		</p>
+		
+		<h4>
+			<span lang="zh">转换 DER 证书到 PEM 格式</span>
+			<span lang="en">Convert DER certificates to PEM format</span>
+		</h4>
+		<p>
+			<span lang="zh">点击 <em>Actions</em>-<em>Export Root Certificate to Desktop</em> 将根证书导出到桌面，之后你将会在桌面上看到一个<code>FiddlerRoot.cer</code>文件。</span>
+			<span lang="en">Click <em>Actions</em>-<em>Export Root Certificate to Desktop</em>. You will then see a file <code>FiddlerRoot.cer</code> on your desktop.</span>
+			<br>
+			<img src="images/player-fidder-export-cer-to-desktop.webp" alt="导出证书到桌面">
+		</p>
+		<p>
+			<span lang="zh">如果你有 <code>openssl</code> 程序，你可以直接将<code>FiddlerRoot.cer</code>转换到安卓需要的格式。</span>
+			<span lang="en">If you have <code>openssl</code> CLI, you can directly convert <code>FiddlerRoot.cer</code> to the format android need.</span>
+			<br>
+			<code class="block-code">
+<comment>::Get Hash Value</comment>
+openssl x509 -inform DER -in FiddlerRoot.cer -subject_hash_old -noout
+<comment>::It should output "269953fb"</comment>
+
+<comment>::Convert to PEM version and rename to Android system rule, &lt;Hash Value&gt;.0 </comment>
+openssl x509 -inform DER -in FiddlerRoot.cer -outform PEM -out 269953fb.0
+			</code>
+		</p>
+		<p>
+			<span lang="zh">如果没有 <code>openssl</code> ，你可以在桌面按住 <b>Shift</b> 点击鼠标右键，在此打开 PowerShell。</span>
+			<span lang="en">If you don't have <code>openssl</code>, press and hold <b>Shift</b> on the desktop and right-click to open PowerShell here.</span>
+			<br>
+			<img src="images/player-fidder-export-cer-open-powershell.webp" alt="打开PowerShell">
+		</p>
+		<p>
+			<span lang="zh">在 PowerShell 中，执行以下代码，之后你将会在桌面上，见到一个<code>269953fb.0</code>文件。</span>
+			<span lang="en">In PowerShell, execute the following codes, and then you'll see a <code>269953fb.0</code> file on your</span>
+			desktop.<br><br>
+			<code class="block-code">
+<comment># get the cer full path</comment>
+$cert_path=Resolve-Path "FiddlerRoot.cer";
+<comment># create a cert object</comment>
+$cert=New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($cert_path);
+<comment># create a md5 object</comment>
+$md5 = New-Object -TypeName System.Security.Cryptography.MD5CryptoServiceProvider;
+<comment># to openssl hash "-subject_hash_old"</comment>
+<comment># get the cert SubjectName md5 hash</comment>
+$md5bin = $md5.ComputeHash($cert.SubjectName.RawData);
+<comment># convert to this format bytes</comment>
+$hashnum = ([long]$md5bin[0] -bor ([long]$md5bin[1] -shl 8) -bor ([long]$md5bin[2] -shl 16) -bor ([long]$md5bin[3] -shl 24)) -band 0xffffffff;
+<comment># convert bytes to file name</comment>
+$pem_name = [Convert]::ToString($hashnum, 16).padleft(8,"0")+".0";
+<comment># create PEM format content</comment>
+$str=New-Object System.Text.StringBuilder("");
+$str.AppendLine("-----BEGIN CERTIFICATE-----");
+$str.AppendLine([Convert]::ToBase64String($cert.RawData, [Base64FormattingOptions]::InsertLineBreaks));
+$str.AppendLine("-----END CERTIFICATE-----");
+<comment># save the file</comment>
+$str.ToString() | Out-File -Encoding ascii -FilePath $pem_name
+			</code>
+			<br>
+			<img src="images/player-fidder-export-cer-convert.webp" alt="证书格式转换">
+		</p>
+
+		<h4>
+			<span lang="zh">将证书放入安卓系统证书文件夹</span>
+			<span lang="en">Place the certificate in the Android system certificate folder</span>
+		</h4>
+		<ul>
+			<li>
+				<details>
+					<summary>
+						<span lang="zh">蓝叠模拟器</span>
+						<span lang="en">BlueStacks</span>
+					</summary>
+					<p>
+						<span lang="zh">蓝叠无法通过 root 的方式放入证书文件，因此需要直接修改虚拟磁盘文件。</span>
+						<span lang="en">The BlueStacks cannot put the certificate file in emulator by root, so you need to modify the virtual disk file directly.</span>
+					</p>
+					<p>
+						<span lang="zh">找到蓝叠模拟器的 <code>Root.vhd</code> 虚拟磁盘文件。默认在<code>C:\ProgramData\BlueStacks_nxt\Engine\&lt;安卓版本&gt;\Root.vhd</code>，安卓9是 <code>Pie64</code>，安卓11是 <code>Rvc64</code>。</span>
+						<span lang="en">Locate the <code>Root.vhd</code> virtual disk file for the BlueStacks emulator. By default, <code>C:\ProgramData\BlueStacks_nxt\Engine\&lt;Android version&gt;\Root.vhd</code>, Android 9 is <code>Pie64</code>, Android 11 is <code>Rvc64</code>.</span>
+						<br>
+						<img src="images/bluestacks-find-root.vhd.webp" alt="Root.vhd">
+						<br>
+						<span lang="zh">如果忘记你安装在哪里，可以通过注册表查询<code>reg query HKLM\SOFTWARE\BlueStacks_nxt\ /v UserDefinedDir</code>。</span>
+						<span lang="en">IIf you forgot where you installed it, you can query the registry <code>reg query HKLM\SOFTWARE\BlueStacks_nxt\ /v UserDefinedDir</code>.</span>
+						<br>
+						<img src="images/bluestacks-find-userdir.webp" alt="寻找用户定义文件夹">
+					</p>
+					<p>
+						<span lang="zh">由于 安卓（Linux） 的磁盘格式是 Ext3/4 ，Windows下无法识别，所以我们需要使用一些软件来访问。</span>
+						<span lang="en">Since the disk format of Android (Linux) is Ext3/4 and cannot be recognized under Windows, we need to use some software to access it.</span>
+					</p>
+					<ul>
+						<li>
+							<details>
+								<summary>
+									<span lang="zh">如果你拥有<a href="https://www.diskgenius.cn/">DiskGenius专业版</a>，你可以使用它的编辑虚拟磁盘功能插入证书文件。</span>
+									<span lang="en">If you have <a href="https://www.diskgenius.com/">DiskGenius Pro</a>, you can use its Edit Virtual Disk feature to insert certificate files.</span>
+								</summary>
+								<p>
+									<span lang="zh">选择 <em>磁盘</em>-<em>打开虚拟磁盘文件</em>，打开<code>Root.vhd</code>。</span>
+									<span lang="en">Choose <em>Disk</em>-<em>Open Virtual Disk File</em>, and open <code>Root.vhd</code>.</span>
+									<br>
+									<img src="images/bluestacks-vhd-diskginues-open.webp" alt="DiskGenius 打开 vhd">
+								</p>
+								<p>
+									<span lang="zh">找到 <code>主分区(0)/android/system/etc/security/cacerts</code>。在右侧文件列表里面点击右键，选择<em>复制文件到当前分区</em>，将前面生成的<code>269953fb.0</code>放入这里。</span>
+									<span lang="en">Locate <code>Primary(0)/android/system/etc/security/cacerts</code>. Right-click in the file list on the right, select <em>Copy Files to Current Partition</em>, and put the generated <code>269953fb.0</code> here.</span>
+									<br>
+									<img src="images/bluestacks-vhd-diskginues-copy-cert.webp" alt="DiskGenius 复制证书进入虚拟磁盘">
+								</p>
+								<p>
+									<span lang="zh">选择 <em>磁盘</em>-<em>关闭虚拟磁盘文件</em>。</span>
+									<span lang="en">Choose <em>Disk</em>-<em>Close Virtual Disk File</em>.</span>
+									<br>
+									<img src="images/bluestacks-vhd-diskginues-close.webp" alt="DiskGenius 关闭 vhd">
+								</p>
+							</details>
+						</li>
+						<li>
+							<details>
+								<summary>
+									<span lang="zh">使用免费软件 Ext2Fsd 读写 Ext4 格式。</span>
+									<span lang="en">Use the free software Ext2Fsd to read and write the Ext4 format.</span>
+								</summary>
+								<p>
+									<span lang="zh">这个免费软件的兼容性不是很好，所以需要你自己测试版本。</span>
+									<span lang="en">The compatibility of this free software is not very good, so you need to test the version yourself.</span>
+									<ul>
+										<li><a href="https://sourceforge.net/projects/ext2fsd/files/Ext2fsd/0.68/">v0.68</a></li>
+										<li><a href="https://sourceforge.net/projects/ext2fsd/files/Ext2fsd/0.69/">v0.69</a></li>
+										<li><a href="http://www.accum.se/~bosse/">v0.70 beta 3</a></li>
+									</ul>
+									<span lang="zh">请先尝试安装 0.69 版本，如果无法使用再测试 0.68 版本。最后再测试需要特殊使用方式的 0.70 beta 3。</span>
+									<span lang="en">Try installing version 0.69 first, and then test version 0.68 if that doesn't work. Finally, test 0.70 beta 3 which requires special usage.</span>
+								</p>
+								<p>
+									<span lang="zh">运行 <em>Ext2 Volume Manager</em>，选择 <em>Tools</em>-<em>Service Management</em>。<br>
+										如果 <em>Service status</em> 显示的是 <code>Ext2Fsd is already started.</code> 那么就说明成功运行了。</span>
+									<span lang="en">Start <em>Ext2 Volume Manager</em>, choose <em>Tools</em>-<em>Service Management</em>.<br>
+										If the <em>Service status</em> says <code>Ext2Fsd is already started.</code>, Then it ran successfully.</span>
+									<br>
+									<img src="images/bluestacks-vhd-ext2fsd-tools-service.webp" alt="Ext2Fsd 是否打开服务">
+								</p>
+								<details>
+									<summary>
+										<span lang="zh">如果0.68和0.69版本都无法成功运行，那么就需要使用第三者继续开发的0.70 beta 3版本了，这个版本因为没有对驱动签名，所以需要以 禁用驱动强制签名 模式启动才能运行。</span>
+										<span lang="en">If neither 0.68 nor 0.69 can run successfully, then you will need to use the 0.70 beta 3 version of the 3rd party fork, which does not have driver signatures and needs to be started in the Disable Driver Signing mode to run.</span>	
+									</summary>
+									<span lang="zh">以 Win10 为例，打开 <em>Windows 设置</em>-<em>更新和安全</em>-<em>恢复</em>-<em>高级启动</em>，重启电脑进入选择菜单。</span>
+									<span lang="en">Take Win10 as an example, open <em>Windows Settings</em>-<em>Update & Security</em>-<em>Recovery</em>-<em>Advanced Startup</em>, and restart the computer to enter the selection menu. </span>
+									<br>
+									<img src="images/bluestacks-vhd-ext2fsd-restart-adv-start-1.webp" alt="选择高级启动">
+									<br>
+									<span lang="zh">在重启后的引导菜单，选择 <em>疑难解答</em>-<em>高级选项</em>-<em>启动设置</em>-<em>重启</em>。</span>
+									<span lang="en">In the boot menu after the reboot, select <em>Troubleshoot</em>-<em>Advances options</em>-<em>Startup Settings</em>-<em>Restart</em></span>
+									<br>
+									<img src="images/bluestacks-vhd-ext2fsd-restart-adv-start-2.webp" alt="二次选择启动模式">
+									<br>
+									<span lang="zh">在重启后的引导菜单，按下键盘上的 <code>7</code> 或 <code>F7</code> 选择 <em>7) 禁用驱动程序强制签名</em>。</span>
+									<span lang="en">In the boot menu after a reboot, press <code>7</code> or <code>F7</code> on your keyboard to select <em>7) Disable driver signature enforcement</em></span>
+									<br>
+									<img src="images/bluestacks-vhd-ext2fsd-restart-adv-start-3.webp" alt="选择禁用驱动程序强制签名">
+									<br>
+									<span lang="zh">进入 Windows 后，驱动应该就能运行了。</span>
+									<span lang="en">Once you're in Windows, the driver should be ready to run.</span>
+									<br>
+									<img src="images/bluestacks-vhd-ext2fsd-tools-service.webp" alt="Ext2Fs127d 是否打开服务">
+								</details>
+								<p>
+									<span lang="zh">Win10 下可以直接双击打开 <code>Root.vhd</code>，会提示你 <em>无法装载文件</em>，点击确定忽略此提示。</span>
+									<span lang="en">Under Win10, you can directly double-click to open <code>Root.vhd</code>, and will prompt you <em>Could't Mount File</em>. Click OK to ignore the prompt.</span>
+									<br>
+									<img src="images/bluestacks-vhd-mount-vhd-failed.webp" alt="直接打开 vhd 提示装载失败">
+									<br>
+									<span lang="zh">或者你可以在开始按钮上单击右键，打开<em>磁盘管理</em>。</span>
+									<span lang="en">Or you can right-click on the Start button to open <em>Disk Management</em></span>
+									<br>
+									<img src="images/bluestacks-vhd-open-disk-management.webp" alt="打开磁盘管理">
+									<br>
+									<span lang="zh">单击任意空白处，然后点击 <em>操作</em>-<em>附加 VHD</em>，并打开 <code>Root.vhd</code>。</span>
+									<span lang="en">Click on any blank space, then click <em>Action</em>-<em>Attach VHD</em>, and open <code>Root.vhd</code>.</span>
+									<br>
+									<img src="images/bluestacks-vhd-disk-management-attach.webp" alt="磁盘管理附加 VHD">
+								</p>
+								<p>
+									<span lang="zh">运行 <em>Ext2 Volume Manager</em>，选中刚刚挂载的 EXT4 格式磁盘。右键菜单内选择<em>加载装配点盘符</em>或直接按 <code>F4</code> 快捷键，给虚拟磁盘分配一个盘符。</span>
+									<span lang="en">Start <em>Ext2 Volume Manager</em>, select the EXT4 format disk you just mounted. Right-click the menu and select <em>Assign Drive Letter</em> or press the <code>F4</code> shortcut key directly to assign a drive letter to the virtual disk.</span>
+									<br>
+									<img src="images/bluestacks-vhd-ext2fsd-assign-drive-letter.webp" alt="Ext2Fsd 分配盘符">
+								</p>
+								<p>
+									<span lang="zh">就和你平时操作文件一样将证书文件复制到 <code>&lt;盘符&gt;:\android\system\etc\security\cacerts</code>。</span>
+									<span lang="en">Copy the certificate file to the <code>&lt;Drive Letter &gt;:\android\system\etc\security\cacerts</code> as you normally would.</span>
+									<br>
+									<img src="images/bluestacks-vhd-ext2fsd-copy-cert.webp" alt="将证书复制到磁盘">
+								</p>
+								<p>
+									<span lang="zh">回到 <em>Ext2 Volume Manager</em>，选中刚刚挂载的 EXT4 格式磁盘。右键菜单内选择<em>更改装配点盘符</em>或按 <code>F10</code> 快捷键，删除之前分配的盘符。</span>
+									<span lang="en">Back to <em>Ext2 Volume Manager</em>, select the EXT4 format disk you just mounted. Right-click the menu and select <em>Change Drive Letter</em> or press the <code>F10</code> shortcut to delete the previously assigned drive letter.</span>
+									<br>
+									<img src="images/bluestacks-vhd-ext2fsd-remove-drive-letter.webp" alt="Ext2Fsd 删除盘符">
+									<br>
+									<span lang="zh">右键菜单内选择<em>保存系统缓冲</em>或按 <code>F11</code> 快捷键，保存系统缓冲到磁盘。</span>
+									<span lang="en">Right-click the menu and select <em>Flush Cache to Disk</em> or press the <code>F11</code> shortcut to save the system cache to disk.</span>
+									<br>
+									<img src="images/bluestacks-vhd-ext2fsd-flush-cache.webp" alt="Ext2Fsd 保存系统缓冲">
+								</p>
+								<p>
+									<span lang="zh">在开始按钮上单击右键，打开<em>磁盘管理</em>。</span>
+									<span lang="en">Right-click on the Start button to open <em>Disk Management</em></span>
+									<br>
+									<img src="images/bluestacks-vhd-open-disk-management.webp" alt="打开磁盘管理">
+									<br>
+									<span lang="zh">找到我们附加的虚拟磁盘，右键菜单内选择 <em>分离 VHD</em>。</span>
+									<span lang="en">Find the virtual disk we have attached, and select <em>Detach VHD</em> from the context menu.</span>
+									<br>
+									<img src="images/bluestacks-vhd-disk-management-detach.webp" alt="磁盘管理分离 VHD">
+								</p>
+								<p>
+									<span lang="zh">前面的导入 <code>data048.bin</code> 的步骤也可以按照此方法完成，游戏 APP 数据保存在另一个 <code>Data.vhdx</code> 虚拟磁盘里。</span>
+									<span lang="en">The previous steps to import <code>data048.bin</code> can also be completed in this way, and the game APP data is saved in another virtual disk <code>Data.vhdx</code>.</span>
+								</p>
+							</details>
+						</li>
+					</ul>
+				</details>
+			</li>
+			<li>
+				<details>
+					<summary>
+						<span lang="zh">夜神模拟器</span>
+						<span lang="en">NoxPlayer</span>
+					</summary>
+					<p>
+						<span lang="zh">打开模拟器的 Root，并重启。</span>
+						<span lang="en">Open the simulator's root and restart.</span>
+						<br>
+						<img src="images/player-emu-open-root.webp" alt="打开 Root">
+					</p>
+					<p>
+						<span lang="zh">使用共享文件夹，将<code>269953fb.0</code>转移到模拟器。</span>
+						<span lang="en">Use the shared folder to transfer <code>269953fb.0</code> to the simulator.</span>
+						<br>
+						<img src="images/player-fidder-export-cer-shared-folder.webp" alt="传送到模拟器">
+					</p>
+					<p>
+						<span lang="zh">将<code>269953fb.0</code>复制到<code>/system/etc/security/cacerts</code>文件夹内。</span>
+						<span lang="en">Copy the <code>269953fb.0</code> to the <code>/system/etc/security/cacerts</code> folder.</span>
+						<br>
+						<img src="images/player-fidder-export-cer-copy-to-system.webp" alt="复制到系统文件夹">
+					</p>
+					<p>
+						<span lang="zh">打开<code>269953fb.0</code>文件属性，设置权限为<code>-rw-r--r--(644)</code>。</span>
+						<span lang="en">Open <code>269953fb.0</code> file properties and set permissions to <code>-rw-r--r--(644)</code></span>
+						<br>
+						<img src="images/player-fidder-export-cer-set-permissions.webp" alt="设置文件属性">
+					</p>
+					<p>
+						<span lang="zh"><b>重启模拟器</b>，以使证书被系统读取。</span>
+						<span lang="en"><b>Restart the simulator</b> so that the certificate is read by the system.</span>
+					</p>
+					<p>
+						<span lang="zh">可以根据需要关闭 Root 了（日服客户端需要关闭 Root 才能运行）。</span>
+						<span lang="en">Root can be closed as needed. (The Japanese version client needs to close Root operation.)</span>
+					</p>
+				</details>
+			</li>
+		</ul>
+		<h4>
+			<span lang="zh">让模拟器内的网络通过 Fiddler 代理</span>
+			<span lang="en">Let the network inside the emulator go through the Fiddler proxy</span>
+		</h4>
+		<ul>
+			<li>
+				<details>
+					<summary>
+						<span lang="zh">蓝叠模拟器</span>
+						<span lang="en">BlueStacks</span>
+					</summary>
+					<p>
+						<span lang="zh">在模拟器设置内打开模拟器的安卓调试桥功能，记住这里的连接地址。</span>
+						<span lang="en">Turn on the <em>Android Debug Bridge</em> feature in the emulator's settings. Remember the connection address here.</span>
+						<br>
+						<img src="images/bluestacks-setting-open-adb.webp" alt="打开ADB调试">
+					</p>
+					<p>
+						<span lang="zh">使用蓝叠程序自带的 <code>HD-Adb</code> 或原版 <code>adb</code> 执行后续操作。</span>
+						<span lang="en">Use <code>HD-Adb</code> that comes with BlueStacks program or original <code>adb</code> to take the next steps.</span>
+						<br>
+						<img src="images/bluestacks-find-adb.webp" alt="找到HD-Aab">
+						<br>
+						<span lang="zh">在此处打开命令行。如果使用 PowerShell，后面的代码你需要在相对路径前加上“.\”，比如 <code>.\HD-Adb</code></span>
+						<span lang="en">Open the command line here. If you're using PowerShell, you'll need to add ".\" before the relative path, such as <code>.\HD-Adb</code></span>
+					</p>
+					<p>
+						<span lang="zh">使用以下代码连接此模拟器。</span>
+						<span lang="en">Connect this emulator using the following code.</span>
+						<code class="block-code">HD-Adb connect 127.0.0.1:5555</code>
+						<br>
+						<img src="images/bluestacks-adb-connect.webp" alt="Adb 连接设备">
+					</p>
+					<p>
+						<span lang="zh">使用以下代码测试是否连接模拟器。</span>
+						<span lang="en">Use the following code to test whether the emulator is connected.</span>
+						<code class="block-code">HD-Adb devices</code>
+						<br>
+						<img src="images/bluestacks-adb-devices.webp" alt="Adb 查询设备">
+						<br>
+						<span lang="zh">可以看到 emulator-5554 其实也可以用来控制此模拟器，但是它并不是总是可用。</span>
+						<span lang="en">As you can see, the emulator-5554 can also be used to control this emulator, but it is not always available.</span>
+					</p>
+					<p>
+						<span lang="zh">使用以下代码设置此模拟器的网络代理。<code>10.0.2.2</code> 是蓝叠内默认的真实主机地址。</span>
+						<span lang="en">Use the following code to set up a network proxy for this emulator. <code>10.0.2.2</code> is the default real host address in the BlueStacks.</span>
+						<code class="block-code">HD-Adb -s 127.0.0.1:5555 shell settings put global http_proxy 10.0.2.2:8888</code>
+						<br>
+						<img src="images/bluestacks-adb-shell-set-proxy.webp" alt="Adb 设置代理">
+						<br>
+						<span lang="zh">如果你需要取消代理，请使用如下代码。</span>
+						<span lang="en">If you need to delete the proxy, please use the code below.</span>
+						<code class="block-code">HD-Adb -s 127.0.0.1:5555 shell settings put global http_proxy :0</code>
+					</p>
+				</details>
+			</li>
+			<li>
+				<details>
+					<summary>
+						<span lang="zh">夜神模拟器</span>
+						<span lang="en">NoxPlayer</span>
+					</summary>
+					<p>
+						<span lang="zh">修改模拟器内 WiFi 的代理，改为手动模式，主机名为 <code>172.17.100.2</code>（夜神内默认的真实主机地址），端口号为 <code>8888</code>。</span>
+						<span lang="en">Modify the proxy of WiFi in the simulator to manual mode, the host name is <code>172.17.100.2</code>(The default real host address in Nox), port number <code>8888</code>.</span>
+						<br>
+						<img src="images/player-fidder-export-cer-set-proxy.webp" alt="设置WiFi代理">
+					</p>
+				</details>
+			</li>
+		</ul>
+		
+		<p>
+			<span lang="zh">运行智龙迷城游戏，直到登陆成功。<br>
+				然后在 Fidder内找到<code>padsv.gungho.jp/api.php?action=get_player_data</code>网络请求。（一般紧跟<code>api.php?action=login</code>）</span>
+			<span lang="en">Run the P&amp;D game until log in successfully.<br>
+				Go back to Fidder to find the network request <code>padsv.gungho.jp/api.php?action=get_player_data</code>.(Generally followed by <code>api.php?action=login</code>)</span>
+			<br>
+			<img src="images/player-fidder-found-traffic.webp" alt="发现网络请求">
+		</p>
+		<p>
+			<span lang="zh">在右键菜单内选择 <em>Save</em>-<em>Response</em>-<em>Response Body...</em> 保存响应体。</span>
+			<span lang="en">Right-click and select <em>Save</em>-<em>Response</em>-<em>Response Body...</em>.</span>
+			<br>
+			<img src="images/player-fidder-save-response-body.webp" alt="保存响应体">
+		</p>
+		<p>
+			<span lang="zh">到我的箱子功能里打开即可。</span>
+			<span lang="en">Open my box function and open it.</span>
+<br>
+			<img src="images/player-open-data.webp" alt="打开数据">
+		</p>
+		<p>
+			<span lang="zh">每次获取新的数据，重复 开启 Fidder > 模拟器内登录游戏 > 保存响应体 的步骤。</span>
+			<span lang="en">Each time you get new data, repeat the steps to Start Fidder > Log in to the game in the simulator > Save</span>
+			Response Body.
+		</p>
+		<p>
+			<span lang="zh">如果希望不要每次都重新使用 SNS 登录游戏，可以查看<a href="#multiple-devices">如何多设备登录</a>。</span>
+			<span lang="en">If you want to not reuse the SNS login game every time, you can see <a href="#multiple-devices">How to login</span>
+				with multiple devices</a>.
+		</p>
+		<h5>
+			<span lang="zh">自动保存响应体</span>
+			<span lang="en">Auto Save Response Body</span>
+		</h5>
+		<p>
+			<span lang="zh">Fidder 可以使用脚本自动保存响应体。</span>
+			<span lang="en">Fidder can use scripts to automatically save Response Body.</span>
+		</p>
+		<p>
+			<span lang="zh">在 Fidder 脚本中，快速跳转到<code>OnBeforeResponse</code>。</span>
+			<span lang="en">In the Fidder Script, quickly jump to the <code>OnBeforeResponse</code></span>
+			<br>
+			<img src="images/player-fidder-go-to-script.webp" alt="跳到 OnBeforeResponse">
+		</p>
+		<p>
+			<span lang="zh">将以下代码插入<code>OnBeforeResponse</code>代码括号内，并保存。</span>
+			<span lang="en">Insert the following code into the parenthesis of the <code>OnBeforeResponse</code> code and save it.</span>
+			<br>
+			<img src="images/player-fidder-paste-code.webp" alt="保存代码">
+			<br>
+			<span lang="zh">记得将第一行的文件路径修搞到你自己的文件夹，因为是转义符，右斜杠需要写两次。</span>
+			<span lang="en">Remember to fix the first line of file paths to your own folder, because it's an escape character, and the right slash needs to be written twice.</span>
+			<br>
+			<code class="block-code">
+<comment>// the file saved path</comment>
+var PADDataPath = "D:\\PAD_Data";
+if (oSession.uriContains("action=get_player_data")) {
+	oSession.SaveResponseBody(PADDataPath + "\\player-data-" + new Date().getTime() + ".json");
+}
+			</code>
+		</p>
+	</details>
+
 </body>
 
 </html>

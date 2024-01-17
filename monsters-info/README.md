@@ -37,6 +37,9 @@ Execute the code to convert the certificate from *CER* to *PEM* format
 Place the certificate file in the Android system certificate folder`/system/etc/security/cacerts/`  
 参考/Reference: https://www.jianshu.com/p/035f7d7a0f7e
 
+通过[如何获取用户游戏数据](https://mapaler.github.io/PADDashFormation/doc/export-player-data.html)获得完整图文教程。  
+Get the full graphic tutorial via [How to get user game data](https://mapaler.github.io/PADDashFormation/doc/export-player-data.html).  
+
 	<details>
 	<summary>蓝叠模拟器 | BlueStacks</summary>
 
