@@ -431,7 +431,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_108.PNG",
-		"602535df3735c66d2f656b1bdcf802eb"
+		"1d4d9f67d9095627545d03002fd17514"
 	],
 	[
 		"images/cards_ja/CARDS_109.PNG",
@@ -439,7 +439,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_110.PNG",
-		"260cc04c07758db4842b1937bae4f40c"
+		"e454e3289f74ba2529017160b110b0fe"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -1780,6 +1780,10 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv122.wav",
 		"bd76867897b4217698a823279dbc6c5a"
+	],
+	[
+		"sound/voice/ja/padv1225.wav",
+		"9446a7108742a7fee5e1d9bfbbd805ba"
 	],
 	[
 		"sound/voice/ja/padv1226.wav",
@@ -4784,6 +4788,10 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv1908.wav",
 		"f1166a4040eec5ab634bd3a80f6c210a"
+	],
+	[
+		"sound/voice/ja/padv1909.wav",
+		"139ae23183620751c21840235afc1ce5"
 	],
 	[
 		"sound/voice/ja/padv191.wav",
@@ -8907,7 +8915,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_099.PNG",
-		"dc7d2e056c9ab725461b85e0ab7d892b"
+		"55115dce59a6f936635818e5a11ffbe5"
 	],
 	[
 		"images/cards_en/CARDS_100.PNG",
@@ -8919,11 +8927,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_102.PNG",
-		"9567e1e6958d8581d9316243a9ecad7a"
+		"50c04bca981563d0ca812ff86b3ef6be"
 	],
 	[
 		"images/cards_en/CARDS_103.PNG",
-		"271d2a17f5d376bd56fc7b089148cef2"
+		"4e05a2dfd9cfd7e8877d1cff8808ef41"
 	],
 	[
 		"images/cards_en/CARDS_104.PNG",
@@ -15043,7 +15051,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_099.PNG",
-		"dc7d2e056c9ab725461b85e0ab7d892b"
+		"55115dce59a6f936635818e5a11ffbe5"
 	],
 	[
 		"images/cards_ko/CARDS_100.PNG",
@@ -15055,11 +15063,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_102.PNG",
-		"9567e1e6958d8581d9316243a9ecad7a"
+		"50c04bca981563d0ca812ff86b3ef6be"
 	],
 	[
 		"images/cards_ko/CARDS_103.PNG",
-		"271d2a17f5d376bd56fc7b089148cef2"
+		"4e05a2dfd9cfd7e8877d1cff8808ef41"
 	],
 	[
 		"images/cards_ko/CARDS_104.PNG",
