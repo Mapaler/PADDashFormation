@@ -180,17 +180,18 @@ Member.prototype.getAttrsTypesWithWeapon = function(assist) {
 	let changeAttr, appendTypes;
 	if (assistAwakenings?.includes(49)) { //如果有武器
 		//更改副属性
-		changeAttr = assistAwakenings.find(ak=>ak >= 91 && ak <= 95);
-		if (changeAttr) attrs[1] = changeAttr - 91;
+		changeAttr = assistAwakenings.find(ak=>ak >= 91 && ak <= 95); //筛选出武器觉醒
+		if (changeAttr) attrs[1] = changeAttr - 91; //变换为属性
 		//添加类型
-		appendTypes = assistAwakenings.filter(ak=>ak >= 83 && ak <= 90);
-		appendTypes = appendTypes.map(type=>
+		appendTypes = assistAwakenings.filter(ak=>ak >= 83 && ak <= 90); //筛选出武器觉醒
+		appendTypes = appendTypes.map(type=>  //变换为类型
 			typekiller_for_type.find(t=>(type - 52) === t.awoken).type);
-		appendTypes.forEach(appendType=>types.add(appendType));
+		appendTypes = appendTypes.filter(ak=>!types.has(ak)); //去除重复的
+		appendTypes.forEach(appendType=>types.add(appendType)); //添加到类型里
 	}
 	return {
-		attrs: attrs, changeAttr: Boolean(changeAttr),
-		types: Array.from(types), appendType: Boolean(appendTypes?.length)
+		attrs: attrs, isChangeAttr: Boolean(changeAttr),
+		types: Array.from(types), isAppendType: Boolean(appendTypes?.length), appendTypes
 	};
 }
 Member.prototype.outObj = function() {
@@ -294,11 +295,11 @@ MemberTeam.prototype.loadFromMember = function(m) {
 	this.id = m.id;
 	if (m.level != undefined) this.level = m.level;
 	if (m.awoken != undefined) this.awoken = m.awoken;
-	if (m.plus != undefined && Array.isArray(m.plus) && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) > 0) this.plus = JSON.parse(JSON.stringify(m.plus));
-	if (m.latent != undefined && Array.isArray(m.latent) && m.latent.length >= 1) this.latent = JSON.parse(JSON.stringify(m.latent));
+	if (Array.isArray(m?.plus) && m.plus.length >= 3 && (m.plus[0] + m.plus[1] + m.plus[2]) > 0) this.plus = JSON.parse(JSON.stringify(m.plus));
+	if (Array.isArray(m?.latent) && m.latent.length >= 1) this.latent = JSON.parse(JSON.stringify(m.latent));
 	if (m.sawoken != undefined) this.sawoken = m.sawoken;
-	if (m.ability != undefined && Array.isArray(m.ability) && m.plus.length >= 3) this.ability = JSON.parse(JSON.stringify(m.ability));
-	if (m.abilityNoAwoken != undefined && Array.isArray(m.abilityNoAwoken) && m.plus.length >= 3) this.abilityNoAwoken = JSON.parse(JSON.stringify(m.abilityNoAwoken));
+	if (Array.isArray(m?.ability) && m.ability.length >= 3) this.ability = JSON.parse(JSON.stringify(m.ability));
+	if (Array.isArray(m?.abilityNoAwoken) && m.abilityNoAwoken.length >= 3) this.abilityNoAwoken = JSON.parse(JSON.stringify(m.abilityNoAwoken));
 	if (m.skilllevel != undefined) this.skilllevel = m.skilllevel;
 };
 
@@ -6022,20 +6023,28 @@ function refreshMemberTypes(memberTypesDom, team, idx) {
 	if (!memberTypesDom) return; //如果没有dom，直接跳过
 	const member = team[0][idx];
 	const assist = team[1][idx];
-	let {types = [], appendType = false} = member.getAttrsTypesWithWeapon(assist) || {};
-	appendType = appendType && (types.length > member.card.types.length); //appendType还需要满足type数量大于角色真实的type
-	const memberTypesUl = memberTypesDom.querySelector(`.member-types-${idx + 1} .types-ul`);
-	memberTypesUl.innerHTML = '';
-	for (let i = 0;i < types.length; i++) {
+	let {types = [], isAppendType = false, appendTypes} = member.getAttrsTypesWithWeapon(assist) || {};
+	
+	function typeIcon(tid, isAppendType = false) {
 		const iconLi = document.createElement("li");
 		const icon = iconLi.appendChild(document.createElement("icon"))
 		icon.className = "type-icon";
-		icon.setAttribute("data-type-icon", types[i]);
-		if (appendType && i == (types.length - 1)) {
+		icon.setAttribute("data-type-icon", tid);
+		if (isAppendType) {
 			iconLi.classList.add('append-type');
 		}
-		memberTypesUl.appendChild(iconLi);
+		return iconLi;
 	}
+
+	const fragment = document.createDocumentFragment();
+	member.card.types.forEach(tid=>fragment.appendChild(typeIcon(tid)));
+	if (isAppendType) {
+		appendTypes.forEach(tid=>fragment.appendChild(typeIcon(tid, true)));
+	}
+	
+	const memberTypesUl = memberTypesDom.querySelector(`.member-types-${idx + 1} .types-ul`);
+	memberTypesUl.innerHTML = '';
+	memberTypesUl.appendChild(fragment);
 }
 //刷新队员觉醒
 function refreshMemberAwoken(memberAwokenDom, assistAwokenDom, team, idx) {

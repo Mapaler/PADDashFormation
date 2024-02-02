@@ -532,9 +532,13 @@ ul{
 	font-family: var(--game-font-family);
 	content: "+";
 	font-size: 15px;
-	line-height: 10px;
+	line-height: 15px;
+	vertical-align: top;
 	color: yellow;
 	text-shadow: black 0 0 1px,black 0 0 2px, black 2px 2px 0;
+}
+.member-types .append-type+.append-type::before{
+	display: none;
 }
 .member-types .append-type .type-icon{
 	background-color: lightgreen;
