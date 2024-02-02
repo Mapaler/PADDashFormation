@@ -1113,7 +1113,7 @@ function henshinStep(step)
 		});
 	});
 	
-	createNewUrl();
+	createNewUrl({replaceState: true});
 	refreshAll(formation);
 }
 //在单人和多人之间转移数据
@@ -1163,7 +1163,7 @@ function turnPage(toPage, e = null) {
 			pagename = "triple.html";
 			break;
 	}
-	const newURL = createNewUrl({ url: pagename, notPushState: true });
+	const newURL = createNewUrl({ url: pagename, onlyReturnUrl: true });
 	if (e && e.ctrlKey) {
 		window.open(newURL);
 	} else {
@@ -1522,10 +1522,12 @@ function createNewUrl(arg) {
 
 		const newUrl = (arg.url || "") + (newSearch.toString().length > 0 ? '?' + newSearch.toString() : "");
 
-		if (!arg.notPushState) {
-			history.pushState({outForm: outObj}, null, newUrl.length > 0 ? newUrl : location.pathname);
-		} else {
+		if (arg.onlyReturnUrl) {
 			return newUrl;
+		} else {
+			historyAction = arg.replaceState ? history.replaceState : history.pushState;
+			// 报错 Uncaught TypeError: 'pushState' called on an object that does not implement interface History. 参考 https://www.coder.work/article/2664156
+			historyAction.call(history, {outForm: outObj}, null, newUrl.length > 0 ? newUrl : location.pathname);
 		}
 	}
 }
