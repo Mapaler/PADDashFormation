@@ -22783,7 +22783,7 @@ const cachesMap = new Map([
 	],
 	[
 		"fonts/fa-solid-900.woff2",
-		"d5e647388e2415268b700d3df2e30a0d"
+		"6c4eee562650e53cee32496bdfbe534b"
 	],
 	[
 		"fonts/FOT-KurokaneStd-EB.woff2",
