@@ -352,10 +352,11 @@ Formation.prototype.outObj = function() {
 		return teamArr;
 	});
 	let dge = this.dungeonEnchance;
-	if (Object.values(dge.rate).some(rate => rate != 1) || dge.benefit) obj.r = [
+	if (Object.values(dge.rate).some(rate => rate != 1) || dge.benefit || dge.stage>1) obj.r = [
 		[reflags(dge.types),reflags(dge.attrs),reflags(dge.rarities),dge.collabs.length ? dge.collabs : 0,dge.gachas.length ? dge.gachas : 0].deleteLatter(0), //类型,属性,星级
 		[dge.rate.hp,dge.rate.atk,dge.rate.rcv].deleteLatter(1),
-		dge.benefit || 0 //地下城阴阳加护
+		dge.benefit || 0, //地下城阴阳加护
+		dge.stage || 1 //地下城层数
 	];
 	obj.v = dataStructure;
 	/*if (obj.f.every(team=>team[0].length == 0 && team[1].length == 0 && team[2] == undefined) &&
@@ -387,6 +388,7 @@ Formation.prototype.loadObj = function(f) {
 		dge.rate.atk = 1;
 		dge.rate.rcv = 1;
 		dge.benefit = 0;
+		dge.stage = 1;
 		return;
 	}
 	const dataVeision = f?.v ?? (f.f ? 2 : 1); //是第几版格式
@@ -441,7 +443,7 @@ Formation.prototype.loadObj = function(f) {
 	if (f.r)
 	{
 		if (Array.isArray(f.r[0])) {
-			const [[types, attrs, rarities, collabs, gachas] = [], [hp , atk, rcv] = [], benefit] = f.r;
+			const [[types, attrs, rarities, collabs, gachas] = [], [hp , atk, rcv] = [], benefit, stage] = f.r;
 			
 			dge.types = flags(types ?? 0);
 			dge.attrs = flags(attrs ?? 0);
@@ -454,6 +456,7 @@ Formation.prototype.loadObj = function(f) {
 			dge.rate.rcv = rcv ?? 1;
 
 			dge.benefit = benefit || 0;
+			dge.stage = stage || 1;
 		} else {
 			dge.attrs = flags(f.r[0] ?? 0);
 			dge.types = flags(f.r[1] ?? 0);
@@ -3221,6 +3224,7 @@ function initialize() {
 	const gachaIdIpt = dialogContent.querySelector("#dungeon-gacha-id");
 	const benefitDoms = Array.from(dialogContent.querySelectorAll(".benefit-list .benefit-check"));
 	const benefit0 = benefitDoms.find(dom=>parseInt(dom.value, 10) == 0);
+	const currentStageIpt = dialogContent.querySelector("#current-stage");
 	/*const benefitNot0 = benefitDoms.filter(dom=>dom != benefit0);
 	const notChecked = function(e){
 		console.log(this.checked,e);
@@ -3236,14 +3240,16 @@ function initialize() {
 		attrDoms.forEach(runCheck,dge.attrs);
 		typeDoms.forEach(runCheck,dge.types);
 		gachaIdIpt.value = dge.gachas.join();
-		const benefit = dge.benefit || 0;
-		benefitDoms.find(dom=>parseInt(dom.value, 10) == benefit).checked = true;
 		collabIdIpt.value = dge.collabs.join();
 
 		const {hp, atk, rcv} = dge.rate;
 		dialogContent.querySelector("#dungeon-hp").value = hp;
 		dialogContent.querySelector("#dungeon-atk").value = atk;
 		dialogContent.querySelector("#dungeon-rcv").value = rcv;
+
+		const benefit = dge.benefit || 0;
+		benefitDoms.find(dom=>parseInt(dom.value, 10) == benefit).checked = true;
+		currentStageIpt.value = dge.stage || 1;
 
 		this.classList.remove(className_displayNone);
 	}
@@ -3266,6 +3272,7 @@ function initialize() {
 		dge.collabs = collabIdIpt.value.split(',').map(str=>parseInt(str,10)).filter(Boolean);
 		dge.gachas = gachaIdIpt.value.split(',').map(str=>parseInt(str,10)).filter(Boolean);
 		dge.benefit = benefit;
+		dge.stage = parseInt(currentStageIpt.value, 10);
 
 		dungeonEnchanceDialog.close();
 		createNewUrl();
@@ -3285,6 +3292,7 @@ function initialize() {
 		dialogContent.querySelector("#dungeon-hp").value = 1;
 		dialogContent.querySelector("#dungeon-atk").value = 1;
 		dialogContent.querySelector("#dungeon-rcv").value = 1;
+		currentStageIpt.value = 1;
 	};
 	const dungeonEnchanceDialogOpen = controlBox.querySelector("#btn-set-dungeon-enchance");
 	dungeonEnchanceDialogOpen.onclick = function(){
@@ -3323,23 +3331,23 @@ function initialize() {
 
 	const mSeriesId = monInfoBox.querySelector(".monster-seriesId");
 	mSeriesId.onclick = function() { //搜索系列
-		const seriesId = parseInt(this.getAttribute(dataAttrName), 10);
-		if (seriesId > 0) {
-			showSearch(Cards.filter(card => card.seriesId == seriesId));
+		const sid = parseInt(this.getAttribute(dataAttrName), 10);
+		if (sid > 0) {
+			showSearchBySeriesId(sid, "series");
 		}
 	};
 	const mCollabId = monInfoBox.querySelector(".monster-collabId");
 	mCollabId.onclick = function() { //搜索合作
-		const collabId = parseInt(this.getAttribute(dataAttrName), 10);
-		if (collabId > 0); {
-			showSearch(Cards.filter(card => card.collabId == collabId));
+		const sid = parseInt(this.getAttribute(dataAttrName), 10);
+		if (sid > 0) {
+			showSearchBySeriesId(sid, "collab");
 		}
 	};
 	const mGachaId = monInfoBox.querySelector(".monster-gachaId");
-	mGachaId.onclick = function() { //搜索合作
-		const gachaId = parseInt(this.getAttribute(dataAttrName), 10);
-		if (gachaId > 0); {
-			showSearch(Cards.filter(card => card.gachaId == gachaId));
+	mGachaId.onclick = function() { //搜索桶
+		const sid = parseInt(this.getAttribute(dataAttrName), 10);
+		if (sid > 0) {
+			showSearchBySeriesId(sid, "gacha");
 		}
 	};
 	//以字符串搜索窗口
@@ -5411,10 +5419,10 @@ function refreshAll(formationData) {
 	
 	//地下城强化的显示，稀有度没有现成的，所以这里来循环生成
 	const dge = formationData.dungeonEnchance;
-	if (Object.values(dge.rate).some(rate => rate != 1) || dge?.benefit) //如果有任何一个属性的比率不为1，才产生强化图标
+	dungeonEnchanceDom.classList.add(className_displayNone);
+	dungeonEnchanceDom.innerHTML = '';
+	if (Object.values(dge.rate).some(rate => rate != 1)) //如果有任何一个属性的比率不为1，才产生强化图标
 	{
-		dungeonEnchanceDom.innerHTML = '';
-
 		if (dge.rarities.length > 0) {
 			dge.rarities.forEach(rarity=>{
 				const icon = dungeonEnchanceDom.appendChild(document.createElement("icon"));
@@ -5423,30 +5431,66 @@ function refreshAll(formationData) {
 			})
 		}
 
+		const seriesFragment = [];
 		if (dge?.collabs?.length) { //添加合作的ID名称
-			dungeonEnchanceDom.appendChild(localTranslating?.skill_parse?.target?.collab_id({id:dge.collabs.join()}));
+			//搜索并显示合作
+			function searchCollab(event) {
+				const collabId = parseInt(this.getAttribute(dataAttrName), 10);
+				showSearchBySeriesId(collabId, "collab");
+				return false;
+			}
+			const fragment = dge.collabs.map(id=>{
+				const lnk = document.createElement("a");
+				lnk.className ="series-search card-collabId";
+				lnk.setAttribute(dataAttrName, id);
+				lnk.onclick = searchCollab;
+				lnk.textContent = id;
+				return lnk;
+			}).nodeJoin(localTranslating?.skill_parse?.word?.slight_pause());
+
+			seriesFragment.push(localTranslating?.skill_parse?.target?.collab_id({id:fragment}));
 		}
 		if (dge?.gachas?.length) { //添加抽蛋的ID名称
-			dungeonEnchanceDom.appendChild(localTranslating?.skill_parse?.target?.gacha_id({id:dge.gachas.join()}));
-		}
-		
-		let skill = powerUp(dge.attrs, dge.types, p.mul({hp: dge.rate.hp * 100, atk: dge.rate.atk * 100, rcv: dge.rate.rcv * 100}));
-		dungeonEnchanceDom.appendChild(renderSkill(skill));
+			//搜索并显示抽蛋
+			function searchGacha(event) {
+				const collabId = parseInt(this.getAttribute(dataAttrName), 10);
+				showSearchBySeriesId(collabId, "gacha");
+				return false;
+			}
+			const fragment = dge.gachas.map(id=>{
+				const lnk = document.createElement("a");
+				lnk.className ="series-search card-gachaId";
+				lnk.setAttribute(dataAttrName, id);
+				lnk.onclick = searchGacha;
+				lnk.textContent = id;
+				return lnk;
+			}).nodeJoin(localTranslating?.skill_parse?.word?.slight_pause());
 
-		if (dge?.benefit) { //添加阴阳
-			const benefitAwoken = (dge.benefit & 0b1) ? 128 : 129;
-			const icon = document.createElement("icon");
-			icon.className ="awoken-icon";
-			icon.setAttribute("data-awoken-icon", benefitAwoken);
-			if (dge.benefit & 0b10) icon.classList.add("yinyang")
-			dungeonEnchanceDom.appendChild(icon);
+			seriesFragment.push(localTranslating?.skill_parse?.target?.gacha_id({id:fragment}));
 		}
+		const skill = powerUp(dge.attrs, dge.types, p.mul({hp: dge.rate.hp * 100, atk: dge.rate.atk * 100, rcv: dge.rate.rcv * 100}));
+		seriesFragment.push(renderSkill(skill));
 
-		dungeonEnchanceDom.classList.remove(className_displayNone);
-	}else
-	{
-		dungeonEnchanceDom.classList.add(className_displayNone);
+		dungeonEnchanceDom.appendChild(seriesFragment.nodeJoin(localTranslating?.skill_parse?.word?.comma()));
 	}
+	if (dge?.benefit) { //添加阴阳
+		const benefitAwoken = (dge.benefit & 0b1) ? 128 : 129;
+		const icon = document.createElement("icon");
+		icon.className ="awoken-icon";
+		icon.setAttribute("data-awoken-icon", benefitAwoken);
+		if (dge.benefit & 0b10) icon.classList.add("yinyang")
+		dungeonEnchanceDom.appendChild(icon);
+	}
+	if (dge?.stage > 1) { //添加层数
+		const states = localTranslating?.skill_parse?.stats;
+		const dict = {
+			state:states?.cstage(),
+			num: dge?.stage
+		};
+		dungeonEnchanceDom.appendChild(states?.state_is(dict));
+	}
+	dungeonEnchanceDom.classList.remove(className_displayNone);
+
 
 	teamBigBoxs.forEach((teamBigBox, teamNum) => {
 		const teamBox = teamBigBox.querySelector(".team-box");

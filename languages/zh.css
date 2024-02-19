@@ -651,6 +651,10 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "生效陰陽：";
 }
+.dialog-dungeon-enchance .current-stage-list::before
+{
+	content: "当前層数：";
+}
 .dialog-dungeon-enchance .collab-list::after,
 .dialog-dungeon-enchance .gacha-list::after
 {

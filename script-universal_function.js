@@ -747,10 +747,21 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	if (dge.benefit) { //当存在加护
 		const benefitAwokens = [128 , 129]; //0b1是阳，0b10是阴，可以两者都强化
 		flags(dge.benefit).forEach(idx=>{
-			const benefitAwoken = benefitAwokens[idx]; //得到加护觉醒编号
-			latterAwokenScale[0].push({ index: benefitAwoken, scale: 1.2 }); //HP
-			latterAwokenScale[1].push({ index: benefitAwoken, scale: 5 }); //ATK
-			latterAwokenScale[2].push({ index: benefitAwoken, scale: 1.2 }); //RCV
+			const akId = benefitAwokens[idx]; //得到加护觉醒编号
+			latterAwokenScale[0].push({ index: akId, scale: 1.2 }); //HP
+			latterAwokenScale[1].push({ index: akId, scale: 5 }); //ATK
+			latterAwokenScale[2].push({ index: akId, scale: 1.2 }); //RCV
+		});
+	}
+
+	if (dge.stage > 1) { //当存在地下城层数
+		let scale = 1;
+		if (dge.stage>=10) scale = 2;
+		else if (dge.stage>=5) scale = 1.5;
+
+		const akId = 130; //130号熟成觉醒
+		latterAwokenScale.forEach(ab => {
+			ab.push({ index: akId, scale: scale });
 		});
 	}
 
@@ -1040,12 +1051,26 @@ function changeToIdInSkillDetail(event) {
 	monstersID.onchange();
 	return false; //取消链接的默认操作
 }
-//搜索并显示合作
-function searchCollab(event) {
-	const collabId = parseInt(this.getAttribute('data-collabId'), 10);
-	showSearch(Cards.filter(card => card.collabId == collabId));
-	return false;
+
+function showSearchBySeriesId(sId, sType) {
+	showSearch(searchBySeriesId(sId, sType));
 }
+function searchBySeriesId(sId, sType) {
+	if (!Number.isInteger(sId)) sId = parseInt(sId, 10);
+	switch (sType) {
+		case "collab": {//合作
+			return Cards.filter(card => card.collabId == sId);
+		}
+		case "gacha": {//桶
+			return Cards.filter(card => card.gachaId == sId);
+		}
+		case "series":
+		default: { //系列
+			return Cards.filter(card => card.seriesId == sId);
+		}
+	}
+}
+
 //创建序号类图标
 function createIndexedIcon(type, index) {
 	if (type == 'card') {//卡片头像

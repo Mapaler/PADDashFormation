@@ -2755,9 +2755,18 @@ input[disabled]+.awoken-icon,
 	font-family: var(--game-font-family);
 	font-weight: normal;
 }
-.skill-datail-parsed .detail-search::before{
+a.series-search {
+	cursor: pointer;
+	color: brown;
+}
+a.series-search:hover {
+	background: rgba(150,110,10,0.5);
+	border-radius: 5px;
+}
+a.series-search::before {
 	content: "🔍";
 }
+
 .random-active-skill,
 .evolved-active-skill
 {
@@ -4102,16 +4111,6 @@ body.external-link-support #external-support{
 .custom-addition .icon-skill{
 	transform: scale(0.5);
 	margin: -10px;
-}
-.skill-datail-parsed a.detail-search
-{
-	cursor: pointer;
-	color: brown;
-}
-.skill-datail-parsed a.detail-search:hover
-{
-	background: rgba(150,110,10,0.5);
-	border-radius: 5px;
 }
 
 .skill-datail-parsed .merge-board

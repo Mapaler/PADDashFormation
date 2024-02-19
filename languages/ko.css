@@ -630,11 +630,19 @@ label[for="qr-data-type-paddb"]::before
 }
 .dialog-dungeon-enchance .collab-list::before
 {
-	content: "유효한 콜라보 ID：";
+	content: "유효한 콜라보 ID:";
 }
 .dialog-dungeon-enchance .gacha-list::before
 {
-	content: "유효한 가챠 ID：";
+	content: "유효한 가챠 ID:";
+}
+.dialog-dungeon-enchance .benefit-list::before
+{
+	content: "음과 양 보호:";
+}
+.dialog-dungeon-enchance .current-stage-list::before
+{
+	content: "현재 단계:";
 }
 .dialog-dungeon-enchance .collab-list::after,
 .dialog-dungeon-enchance .gacha-list::after

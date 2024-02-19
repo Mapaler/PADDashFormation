@@ -2977,12 +2977,18 @@ function renderCondition(cond) {
 				break;
 			}
 			case 'series':{
+				//搜索并显示合作
+				function searchCollab(event) {
+					const collabId = parseInt(this.getAttribute('data-collabId'), 10);
+					showSearchBySeriesId(collabId, "collab");
+					return false;
+				}
 				dict.ids = cond.compo.ids.map(cid=>{
 					const lnk = document.createElement("a");
-					lnk.className ="detail-search monster-collabId";
+					lnk.className ="series-search card-collabId";
 					lnk.setAttribute("data-collabId",cid);
 					lnk.onclick = searchCollab;
-					lnk.textContent = (cid == 10001 ? Cards[5435] : Cards.find(card=>card.collabId == cid))?.altName?.[0] ?? `No.${cid}`;
+					lnk.textContent = cid;
 					return lnk;
 				}).nodeJoin(tsp.word.slight_pause());
 				frg.ap(tsp.cond.compo_type_series(dict));
@@ -2991,7 +2997,7 @@ function renderCondition(cond) {
 			case 'evolution':{
 				dict.ids = cond.compo.ids.map(type=>{
 					const lnk = document.createElement("a");
-					lnk.className ="detail-search";
+					lnk.className ="series-search";
 					switch (type)
 					{
 						case "pixel-evo":{ //像素进化

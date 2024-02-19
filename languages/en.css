@@ -692,11 +692,19 @@ label[for="qr-data-type-paddb"]::before
 }
 .dialog-dungeon-enchance .collab-list::before
 {
-	content: "Collab ID：";
+	content: "Collab ID:";
 }
 .dialog-dungeon-enchance .gacha-list::before
 {
-	content: "Egg Machine ID：";
+	content: "Egg Machine ID:";
+}
+.dialog-dungeon-enchance .benefit-list::before
+{
+	content: "Yin-Yang Protection:";
+}
+.dialog-dungeon-enchance .current-stage-list::before
+{
+	content: "Current Stage:";
 }
 .dialog-dungeon-enchance .collab-list::after,
 .dialog-dungeon-enchance .gacha-list::after

@@ -228,6 +228,7 @@ const _localTranslating = {
 			teamatk: tp`隊伍${'attrs'}總攻擊力`,
 			teamrcv: tp`隊伍回復力`,
 			cstage: tp`當前地下城層數`,
+			state_is: tp`${'state'}：${'num'}`,
 		},
 		unit: {
 			orbs: tp`個`,

@@ -242,6 +242,7 @@ let localTranslating = {
 			teamatk: tp`Team ${'attrs'} ATK`,
 			teamrcv: tp`Team RCV`,
 			cstage: tp`current Stage of Dungeon`,
+			state_is: tp`${'state'}: ${'num'}`,
 		},
 		unit: {
 			orbs: tp``,
@@ -453,8 +454,9 @@ let localTranslating = {
 			[125]: tp`${'icon'}Enhanced Dark Combos+`,
 			[126]: tp`${'icon'}[T] Increased Attack`,
 			[127]: tp`${'icon'}Enhanced Stats`,
-			[128]: tp`${'icon'}Benefits of the Yang`,
-			[129]: tp`${'icon'}Benefits of the Yin`,
+			[128]: tp`${'icon'}Yang Protection`,
+			[129]: tp`${'icon'}Yin Protection`,
+			[130]: tp`${'icon'}After-Ripening`,
 		}
 	},
 };
@@ -554,7 +556,7 @@ const official_awoken_sorting = [
 	121,122,123,124,125, 39, 40, 41, 42,
 	 91, 92, 93, 94, 95, 65, 66, 67,105,
 	 84, 83, 85, 86, 87, 88, 89, 90, 64,
-	 63,128,129
+	 63,128,129,130
 ];
 const PAD_PASS_BADGE = 1<<7 | 1; //本程序的月卡徽章编号，129
 

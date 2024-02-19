@@ -642,19 +642,27 @@ label[for="qr-data-type-paddb"]::before
 }
 .dialog-dungeon-enchance .attr-list::before
 {
-	content: "有効な属性：";
+	content: "有効な属性:";
 }
 .dialog-dungeon-enchance .type-list::before
 {
-	content: "有効なタイプ：";
+	content: "有効なタイプ:";
 }
 .dialog-dungeon-enchance .collab-list::before
 {
-	content: "有効コラボID：";
+	content: "有効コラボID:";
 }
 .dialog-dungeon-enchance .gacha-list::before
 {
-	content: "有効ガチャID：";
+	content: "有効ガチャID:";
+}
+.dialog-dungeon-enchance .benefit-list::before
+{
+	content: "陰と陽の加護:";
+}
+.dialog-dungeon-enchance .current-stage-list::before
+{
+	content: "現在の層数:";
 }
 .dialog-dungeon-enchance .collab-list::after,
 .dialog-dungeon-enchance .gacha-list::after
