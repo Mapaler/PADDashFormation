@@ -626,6 +626,128 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 	};
 	return qrObj;
 }
+Formation.prototype.getSanbonV1Url = function()
+{
+	const region = ((code)=>{
+		switch (code) {
+			case "ja": return "jp";
+			case "ko": return "kr";
+			case "en": return "na";
+		}
+	})(currentDataSource.code);
+	const sanbonUrl = new URL(`https://sanbon.me/${region}/team-builder`);
+	const search =  sanbonUrl.searchParams;
+	//sanbon目前只支持单人队伍
+	const [members,assists,badge] = this.teams[0];
+	
+	for (let i = 0; i < members.length; i++) {
+		const m = members[i], a = assists[i];
+		m.id > 0 && search.set(`${i}`, m.id);
+		m.sawoken > 0 && search.set(`${i}s`, m.sawoken);
+		m?.latent?.length > 0 && search.set(`${i}l`, m.latent.join());
+		a.id > 0 && search.set(`${i}a`, a.id);
+	}
+	badge > 0 && search.set(`badge`, badge & 0x7f);
+	
+	return sanbonUrl;
+}
+Formation.prototype.getSanbonV2Script = function()
+{
+	function translateRegion(code) {
+		switch (code) {
+			case "ja": return "jp";
+			case "ko": return "kr";
+			case "en": return "na";
+		}
+	};
+	function cardFlattened(card) {
+		if (typeof(card) == 'undefined') return 0;
+		const available_killers = {};
+		for (let i = 20; i <= 27; i++) {
+			available_killers[i] = false;
+		}
+		card.types.filter(i => i >= 0)
+				.flatMap(type => typekiller_for_type.find(t=>t.type==type).allowableLatent)
+				.forEach(t => available_killers[t] = true);
+		const o = {
+			region: translateRegion(currentDataSource.code),
+			num: card.id,
+			name: card.name,
+			rarity: card.rarity,
+			cost: card.cost,
+			attributes: card.attrs,
+			types: card.types,
+			awokens: card.awakenings,
+			super_awokens: card.superAwakenings,
+			available_killers: available_killers,
+			level_final: card.limitBreakIncr ? 120 : card.maxLevel,
+			stat_final: {
+				"hp": card.hp.max,
+				"atk": card.atk.max,
+				"rcv": card.rcv.max,
+			},
+			assistable: card.canAssist,
+			latent_extendable: card.is8Latent,
+			showing_active_skills: [],
+			showing_leader_skills: [],
+		}
+		return o;
+	}
+	//sanbon目前只支持单人队伍
+	const [members,assists,badge] = this.teams[0];
+const scriptLines = [`(()=>{
+	"use strict";
+	const tbs = JSON.parse(sessionStorage.getItem("team-build-store"));
+	const team = tbs.state;
+	team.badge = ${badge & 0x7F};`];
+
+	const _members = {};
+	for (let i = 0; i < members.length; i++) {
+		const m = members[i], a = assists[i];
+		const _m = {
+			num: m.id,
+			level: m.level,
+			superAwoken: m.sawoken,
+			latentAwokens: m.latent.concat(),
+			awokenCount: m.awoken,
+			hpPlus: m.plus[0],
+			atkPlus: m.plus[1],
+			rcvPlus: m.plus[2],
+			assistNum: a.id,
+			assistLevel: a.level,
+			assistPlus: a?.plus?.every(p=>p>=99) ?? false,
+			flattened: cardFlattened(m.card),
+			assistFlattened: cardFlattened(a.card),
+		}
+		_members[i] = _m;
+/*
+scriptLines.push(`const m${i} = team.members[${i}];
+m${i}.num = ${m.id};
+m${i}.level = ${m.level};
+m${i}.superAwoken = ${m.sawoken};
+m${i}.latentAwokens = ${JSON.stringify(m.latent)};
+m${i}.awokenCount = ${m.awoken};
+m${i}.hpPlus = ${m.plus[0]};
+m${i}.atkPlus = ${m.plus[1]};
+m${i}.rcvPlus = ${m.plus[2]};
+m${i}.assistNum = ${a.id};
+m${i}.assistLevel = ${a.level};
+m${i}.assistPlus = ${a.plus.every(p=>p>=99) ? 'true' : 'false'};
+if (m${i}.flattened == 0) m${i}.flattened = {};
+m${i}.flattened.awokens = ${JSON.stringify(m.card.awakenings)};
+m${i}.flattened.super_awokens = ${JSON.stringify(m.card.superAwakenings)};
+m${i}.flattened.available_killers = ${JSON.stringify(m.card.superAwakenings)};
+if (m${i}.assistFlattened == 0) m${i}.assistFlattened = {};
+m${i}.assistFlattened.awokens = ${JSON.stringify(a.id > 0 ? a.card.awakenings : [])};
+m${i}.assistFlattened.super_awokens = ${JSON.stringify(a.id > 0 ? a.card.superAwakenings : [])};
+`);*/
+	}
+scriptLines.push(`team.members = ${JSON.stringify(_members)}`);
+scriptLines.push(`sessionStorage.setItem("team-build-store", JSON.stringify(tbs));
+location.reload();
+})();`);
+	return scriptLines.join('\n');
+}
 Formation.prototype.getQrStr = function(type)
 {
 	switch (type) {
@@ -634,6 +756,12 @@ Formation.prototype.getQrStr = function(type)
 		}
 		case 'paddb': {
 			return JSON.stringify(this.getPaddbQrObj());
+		}
+		case 'sanbon-v1': {
+			return this.getSanbonV1Url();
+		}
+		case 'sanbon-v2': {
+			return this.getSanbonV2Script();
 		}
 		case 'pdc':
 		default: {
@@ -1977,6 +2105,11 @@ function initialize() {
 		
 		let qrTypeRadio = qrSaveBox.qrDataType.find(radio=>radio.checked);
 		if (qrTypeRadio) qrTypeRadio.onclick(); //打开二维码窗口就先产生二维码
+
+		//生成sanbon v1链接
+		qrCodeFrame.querySelector("#sanbon-v1-link").href = formation.getSanbonV1Url(); 
+		qrCodeFrame.querySelector("#sanbon-v2-script").value = formation.getSanbonV2Script(); 
+
 	};
 	qrCodeFrame.hide = function(){qrcodeReader.reset();};
 
@@ -2038,11 +2171,13 @@ function initialize() {
 		qrCodeFrame.refreshQrCode(this.value);
 	}
 	qrSaveBox.qrDataType = Array.from(qrSaveBox.querySelectorAll(".qr-data-type-radio"));
-	qrSaveBox.qrDataType.forEach(radio=>radio.onclick = function(){
-		let qrstr = formation.getQrStr(this.value);
+	function changeOutputType(){
+		const type = this.value;
+		const qrstr = formation.getQrStr(type);
 		qrSaveBox.qrStr.value = qrstr;
 		qrSaveBox.qrStr.onchange();
-	});
+	}
+	qrSaveBox.qrDataType.forEach(radio=>radio.onclick = changeOutputType);
 	qrSaveBox.saveQrImg = qrSaveBox.querySelector(".save-qr-img");
 
 	qrCodeFrame.ondragenter = ()=>false;
@@ -5307,8 +5442,8 @@ function editBoxChangeMonId(id) {
 			const latentSet = new Set(allowable_latent.common);
 			allowable_latent.needAwoken.forEach(obj=>latentSet.add(obj.latent));
 			card.types.filter(i => i >= 0)
-				.map(type => typekiller_for_type.find(t=>t.type==type).allowableLatent)
-				.forEach(tA => tA.forEach(t => latentSet.add(t)));
+				.flatMap(type => typekiller_for_type.find(t=>t.type==type).allowableLatent)
+				.forEach(t => latentSet.add(t));
 			if (card.limitBreakIncr) {
 				allowable_latent.v120.forEach(t => (t!==49 || t===49 && card.attrs[0]===6) && latentSet.add(t));
 			}

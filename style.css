@@ -3533,9 +3533,16 @@ body:not(.external-link-support) #external-support::before
 {
 		padding-bottom: 10px;
 }
+#qr-code-frame #sanbon-v2-script
+{
+	width: calc(100% - 20px);
+	height: 4em;
+	resize: vertical;
+}
 
 #qr-code-frame .read-qr-box::before,
 #qr-code-frame .save-qr-box::before,
+#qr-code-frame .sanbon-me-transfer::before,
 #qr-code-frame .paddb-team-edit::before
 {
 	display: block;

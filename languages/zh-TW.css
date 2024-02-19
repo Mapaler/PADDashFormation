@@ -609,8 +609,8 @@ label[for="qr-data-type-pdc"]::before
 {
 	content: "龍族拼圖傷害計算器 (PDC)";
 }
-label[for="qr-data-type-pdchu"]::before {
-	content: "Valeria (pdchu)";
+label[for="qr-data-type-sanbon-v1"]::before {
+	content: "Sanbon v1 網址";
 }
 label[for="qr-data-type-paddb"]::before
 {

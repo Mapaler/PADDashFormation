@@ -537,6 +537,10 @@ label[for="real-time-change-card"]::after
 {
 	content: "生成二维码：";
 }
+.sanbon-me-transfer::before
+{
+	content: "Sanbon.me：";
+}
 
 .read-qr-box .result-code::before {
 	content: "代码 ";
@@ -608,8 +612,11 @@ label[for="qr-data-type-pdc"]::before
 {
 	content: "智龙迷城伤害计算器 (PDC)";
 }
-label[for="qr-data-type-pdchu"]::before {
-	content: "Valeria (pdchu)";
+label[for="qr-data-type-sanbon-v1"]::before {
+	content: "Sanbon v1 网址";
+}
+label[for="qr-data-type-sanbon-v2"]::before {
+	content: "Sanbon v2 测试脚本";
 }
 label[for="qr-data-type-paddb"]::before
 {

@@ -591,14 +591,14 @@ body:not(.external-link-support) #external-support::after
 
 label[for="qr-data-type-pdf"]::before
 {
-	content: "퍼즐앤드래곤 대시 형성";
+	content: "P&D Dash Formation";
 }
 label[for="qr-data-type-pdc"]::before
 {
 	content: "퍼즐앤드래곤 데미지 카큐라터 (PDC)";
 }
-label[for="qr-data-type-pdchu"]::before {
-	content: "Valeria (pdchu)";
+label[for="qr-data-type-sanbon-v1"]::before {
+	content: "Sanbon v1 URL";
 }
 label[for="qr-data-type-paddb"]::before
 {
