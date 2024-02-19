@@ -1723,7 +1723,15 @@ const skillObjectParsers = {
 		  boardChange([0,1,2,3,4,5]),
 		  autoPath(5),
 		];
-	  },
+	},
+	
+	[258](turns, cap, target) { //改变伤害上限主动技
+		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+		const typeArr = flags(target).map(n => targetTypes[n]);
+		return activeTurns(turns,
+			increaseDamageCap(cap * 1e8, typeArr)
+		);
+	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -2525,15 +2533,10 @@ function renderSkill(skill, option = {})
 				targetDict.target = document.createDocumentFragment();
 
 				//增加队员伤害的技能的目标，删选出来，其他的目标则不显示
-				let atkUpTarget = targets.filter(n=>["self","leader-self","leader-helper","sub-members"].includes(n));
+				const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+				let atkUpTarget = targets.filter(n=>targetTypes.includes(n));
 				if (atkUpTarget.length) {
-					const ul = targetDict.target.appendChild(document.createElement("ul"));
-					ul.className = "team-flags";
-					for (let i = 0; i<6; i++) {
-						const li = ul.appendChild(document.createElement("li"));
-						li.className = "team-member-icon";
-					}
-					atkUpTarget.forEach(n=>ul.classList.add(n));
+					targetDict.target.appendChild(createTeamFlags(atkUpTarget));
 				}
 				
 				targetDict.target.appendChild(targets.map(target=>
@@ -2670,11 +2673,16 @@ function renderSkill(skill, option = {})
 			const {cap, targets} = skill;
 			let dict = {
 				icon: createIcon(skill.kind),
-				targets: targets.map(target=>
-					tsp?.target[target.replaceAll("-","_")]?.())
-					.nodeJoin(tsp.word.slight_pause()),
+				targets: document.createDocumentFragment(),
 				cap: cap.bigNumberToString(),
 			};
+			if (targets[0] !== 'self' || targets.length > 1) {
+				dict.targets.append(createTeamFlags(targets));
+			}
+			dict.targets.append(targets.map(target=>
+				tsp?.target[target.replaceAll("-","_")]?.())
+				.nodeJoin(tsp.word.slight_pause()));
+
 			frg.ap(tsp.skill.increase_damage_cap(dict));
 			break;
 		}

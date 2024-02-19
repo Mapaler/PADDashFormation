@@ -1051,6 +1051,32 @@ function changeToIdInSkillDetail(event) {
 	monstersID.onchange();
 	return false; //取消链接的默认操作
 }
+//产生队伍目标类型
+function createTeamFlags(target)
+{
+	const ul = document.createElement("ul");
+	ul.className = "team-flags";
+	for (let i = 0; i<6; i++) {
+		const li = ul.appendChild(document.createElement("li"));
+		li.className = "team-member-icon";
+	}
+	const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+
+	let _target = [];
+	if (Number.isInteger(target)) {
+		_target = flags(target).map(n=>targetTypes[n]);
+	}
+	else if (Array.isArray(target)) {
+		if (target.every(item=>Number.isInteger(item))) {
+			_target = target.map(n=>targetTypes[n]);
+		}
+		else if (target.every(item=>typeof(item) === 'string')) {
+			_target = target;
+		}
+	}
+	_target.forEach(tar=>ul.classList.add(tar));
+	return ul;
+}
 
 function showSearchBySeriesId(sId, sType) {
 	showSearch(searchBySeriesId(sId, sType));

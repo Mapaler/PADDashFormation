@@ -1290,17 +1290,54 @@ const specialSearchFunctions = (function() {
 		if (!skill) return;
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
-		const ul = fragment.appendChild(document.createElement("ul"));
-		ul.className = "team-flags";
-		for (let i = 0; i<6; i++) {
-			const li = ul.appendChild(document.createElement("li"));
-			li.className = "team-member-icon";
-		}
-		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
-		flags(sk[1]).forEach(n=>ul.classList.add(targetTypes[n]));
+		fragment.appendChild(createTeamFlags(sk[1]));
 		let str = '';
 		str +=`${sk[2] / 100}倍×${sk[0]}T`;
 		fragment.appendChild(document.createTextNode(str));
+		return fragment;
+	}
+	function getIncreaseDamageCap(skill)
+	{
+		let cap = 0;
+		switch (skill.type) {
+			case 241:case 258:
+				cap = skill.params[1];
+				break;
+			case 246:
+				cap = skill.params[2];
+				break;
+			case 247:
+				cap = skill.params[3];
+				break;
+		}
+		return cap;
+	}
+	function memberCap_Addition(card)
+	{
+		const searchTypeArray = [241, 246, 247, 258];
+		const skill = getCardActiveSkill(card, searchTypeArray);
+		if (!skill) return;
+		const sk = skill.params;
+		let cap = getIncreaseDamageCap(skill);
+		
+		const fragment = document.createDocumentFragment();
+		switch (skill.type) {
+			case 258: {
+				fragment.appendChild(createTeamFlags(sk[2]));
+			}
+			case 241: {
+				fragment.append(`${(cap*1e8).bigNumberToString()}×${sk[0]}T`);
+				break;
+			}
+			case 246: {
+				fragment.append(`${(cap*1e8).bigNumberToString()}←${sk[1]}C in ${sk[0]}S`);
+				break;
+			}
+			case 247: {
+				fragment.append(`${(cap*1e8).bigNumberToString()}←${sk[2]} of `, createOrbsList(flags(sk[1])), ` in ${sk[0]}S`);
+				break;
+			}
+		}
 		return fragment;
 	}
 	function dixedDamage_Addition(card)
@@ -1808,23 +1845,7 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Increase Damage Cap",otLangName:{chs:"增加伤害上限 buff",cht:"增加傷害上限 buff"},
 				function:cards=>{
-					function getIncreaseDamageCap(skill)
-					{
-						let cap = 0;
-						switch (skill.type) {
-							case 241:
-								cap = skill.params[1];
-								break;
-							case 246:
-								cap = skill.params[2];
-								break;
-							case 247:
-								cap = skill.params[3];
-								break;
-						}
-						return cap;
-					}
-					const searchTypeArray = [241, 246, 247];
+					const searchTypeArray = [241, 246, 247, 258];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						return skill;
@@ -1834,29 +1855,21 @@ const specialSearchFunctions = (function() {
 						return a_pC - b_pC;
 					});
 				},
-				addition:card=>{
-					const searchTypeArray = [241, 246, 247];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					let cap;
-					switch (skill.type) {
-						case 241:
-							cap = sk[1];
-							break;
-						case 246:
-							cap = sk[2];
-							break;
-						case 247:
-							cap = sk[3];
-							break;
-					}
-					if (skill.type == 241) {
-						return `${(cap*1e8).bigNumberToString()}×${sk[0]}T`;
-					} else {
-						return `${(cap*1e8).bigNumberToString()} in ${sk[0]}S`;
-					}
-				}
+				addition:memberCap_Addition
+			},
+			{name:"Increase Damage Cap (Not Self)",otLangName:{chs:"增加伤害上限 buff(非自身)",cht:"增加傷害上限 buff(非自身)"},
+				function:cards=>{
+					const searchTypeArray = [258];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>{
+						const a_ss = getCardActiveSkill(a, searchTypeArray), b_ss = getCardActiveSkill(b, searchTypeArray);
+						let a_pC = getIncreaseDamageCap(a_ss), b_pC = getIncreaseDamageCap(b_ss);
+						return a_pC - b_pC;
+					});
+				},
+				addition:memberCap_Addition
 			},
 			{name:"Member ATK rate change",otLangName:{chs:"队员攻击力 buff",cht:"隊員攻擊力 buff"},
 				function:cards=>{

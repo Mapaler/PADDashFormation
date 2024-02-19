@@ -275,7 +275,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_069.PNG",
-		"5b62dcf7e09dac4f51718bd9cc1468a2"
+		"abad1663e4f8a421cae2e6ea168f5a56"
 	],
 	[
 		"images/cards_ja/CARDS_070.PNG",
@@ -411,11 +411,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_103.PNG",
-		"4befb7e52ce63a502514543d5173168a"
+		"78ec444fe57c443147ce9904a558a78d"
 	],
 	[
 		"images/cards_ja/CARDS_104.PNG",
-		"38082e827e3d98eac328da15c9be5b10"
+		"4992a52d35fa227dd70c158281b63dc3"
 	],
 	[
 		"images/cards_ja/CARDS_105.PNG",
@@ -427,11 +427,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_107.PNG",
-		"79ede041dbe2abeb27bd0f0147307d9f"
+		"c0d37dfd64d4dd3c081a117d6600ad60"
 	],
 	[
 		"images/cards_ja/CARDS_108.PNG",
-		"1d4d9f67d9095627545d03002fd17514"
+		"e1a00e4409dc4823141fdd360c0e4135"
 	],
 	[
 		"images/cards_ja/CARDS_109.PNG",
@@ -440,6 +440,10 @@ const cachesMap = new Map([
 	[
 		"images/cards_ja/CARDS_110.PNG",
 		"366aa8a0db62deb07bf70b1b1c12711a"
+	],
+	[
+		"images/cards_ja/CARDS_111.PNG",
+		"73f3ef2f1942e11148326bf2f6208b79"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -1784,6 +1788,10 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv122.wav",
 		"bd76867897b4217698a823279dbc6c5a"
+	],
+	[
+		"sound/voice/ja/padv1224.wav",
+		"63342cdbcc799462cf5bf5769e9a7988"
 	],
 	[
 		"sound/voice/ja/padv1225.wav",
@@ -5366,8 +5374,20 @@ const cachesMap = new Map([
 		"89ff1728c49c61892239dc486e824a61"
 	],
 	[
+		"sound/voice/ja/padv2039.wav",
+		"5ef91c5e493a9e6d285af739db5fcb80"
+	],
+	[
 		"sound/voice/ja/padv204.wav",
 		"78791e12c2bccde3eb384c34c8ab3d9d"
+	],
+	[
+		"sound/voice/ja/padv2040.wav",
+		"de665a231d8ea4db7e03fb1fb2e614c1"
+	],
+	[
+		"sound/voice/ja/padv2042.wav",
+		"375534373b256e43e6a400271a71820f"
 	],
 	[
 		"sound/voice/ja/padv205.wav",
@@ -22803,7 +22823,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"452c9192136656b9f875d371d904bbb4"
+		"95385a8e7e272fbb5dacb850667e1eb3"
 	],
 	[
 		"script-custom_elements.js",
@@ -22811,31 +22831,31 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"50731e4d514b657297dc20fb9863bb15"
+		"13a004bccb210a80f3b59d41e405245d"
 	],
 	[
 		"script-skill-parser.js",
-		"c2731a12b9f65f174126f19538a8b5f1"
+		"4519231c3aa362a66e38fa583bc80c48"
 	],
 	[
 		"script-universal_function.js",
-		"e28b45d852a45f5f3daafe1cf071775a"
+		"53b5e9b772192173f139fd58be42eaa8"
 	],
 	[
 		"script.js",
-		"8253d01a692fda416e6fb97e7c75641b"
+		"51a45dedffded8db84da957b47a28c28"
 	],
 	[
 		"solo.html",
-		"85c58af3eae9f600df3e36ff0680e65e"
+		"5dfa10024924d95cb1a32abd94a48418"
 	],
 	[
 		"style-monsterimages.css",
-		"5d4d91a014c65d6a30dfc1fd71a0d305"
+		"c2a4832ca38958cd6ee64211c05e00cd"
 	],
 	[
 		"style.css",
-		"060af75969aef562fc587f09231a01a3"
+		"10c3535a7ad7a4f3c01fa70c7c67d3b5"
 	],
 	[
 		"temp.js",
@@ -22843,11 +22863,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"12d05bc4fd4f83d21c143e82112327ec"
+		"867cc5b572159ba36bc71b5d0449c9ec"
 	],
 	[
 		"languages/en.css",
-		"769d4563a8db708bd1be2b8a7b2c5542"
+		"5c55ac4c8f478076425dc23c8e4b75c7"
 	],
 	[
 		"languages/en.js",
@@ -22855,7 +22875,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"d3145270883efac4462cdfd00bfc081a"
+		"6ac36a23d002754462c2d225c1b7cfab"
 	],
 	[
 		"languages/ja.js",
@@ -22863,7 +22883,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"259ec3d87e43f750cc4ea1d3e2bae3cd"
+		"0a845b5579580b336ed4e6b008026f2e"
 	],
 	[
 		"languages/ko.js",
@@ -22875,19 +22895,19 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.css",
-		"e7d2bc02b6b648428dc74c11446af03b"
+		"717ab281b26486b192defaa3bc068b15"
 	],
 	[
 		"languages/zh-TW.js",
-		"96b5fc34b0a23d46900bcc80dc71499b"
+		"a7eb3cd1b50dc07647e028fcae122180"
 	],
 	[
 		"languages/zh.css",
-		"61d71ec1c0f20f29f44fd625329d49a5"
+		"7320d52c192a768bd1d221073aa4573b"
 	],
 	[
 		"languages/zh.js",
-		"6e6c866f3c573360f51df51e987ab740"
+		"007c91430840864f852949f9030f9db4"
 	],
 	[
 		"images/attrs.png",
@@ -22903,7 +22923,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"c53b59b21984e6bd23ea310751f65101"
+		"33b3147b0144df5c483da3f976789057"
 	],
 	[
 		"images/badge-bg.png",
