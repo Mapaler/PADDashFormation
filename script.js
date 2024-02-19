@@ -628,13 +628,7 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 }
 Formation.prototype.getSanbonV1Url = function()
 {
-	const region = ((code)=>{
-		switch (code) {
-			case "ja": return "jp";
-			case "ko": return "kr";
-			case "en": return "na";
-		}
-	})(currentDataSource.code);
+	const region = sanbonTranslateRegion(currentDataSource.code);
 	const sanbonUrl = new URL(`https://sanbon.me/${region}/team-builder`);
 	const search =  sanbonUrl.searchParams;
 	//sanbon目前只支持单人队伍
@@ -651,15 +645,15 @@ Formation.prototype.getSanbonV1Url = function()
 	
 	return sanbonUrl;
 }
+function sanbonTranslateRegion(code) {
+	switch (code) {
+		case "ja": return "jp";
+		case "ko": return "kr";
+		case "en": return "na";
+	}
+};
 Formation.prototype.getSanbonV2Script = function()
 {
-	function translateRegion(code) {
-		switch (code) {
-			case "ja": return "jp";
-			case "ko": return "kr";
-			case "en": return "na";
-		}
-	};
 	function cardFlattened(card) {
 		if (typeof(card) == 'undefined') return 0;
 		const available_killers = {};
@@ -670,7 +664,7 @@ Formation.prototype.getSanbonV2Script = function()
 				.flatMap(type => typekiller_for_type.find(t=>t.type==type).allowableLatent)
 				.forEach(t => available_killers[t] = true);
 		const o = {
-			region: translateRegion(currentDataSource.code),
+			region: sanbonTranslateRegion(currentDataSource.code),
 			num: card.id,
 			name: card.name,
 			rarity: card.rarity,
@@ -2107,8 +2101,9 @@ function initialize() {
 		if (qrTypeRadio) qrTypeRadio.onclick(); //打开二维码窗口就先产生二维码
 
 		//生成sanbon v1链接
-		qrCodeFrame.querySelector("#sanbon-v1-link").href = formation.getSanbonV1Url(); 
-		qrCodeFrame.querySelector("#sanbon-v2-script").value = formation.getSanbonV2Script(); 
+		qrCodeFrame.querySelector("#sanbon-v1-link").href = formation.getSanbonV1Url();
+		qrCodeFrame.querySelector("#sanbon-v2-link").href = `https://sanbon.me/${sanbonTranslateRegion(currentDataSource.code)}/advanced-team-builder`;
+		qrCodeFrame.querySelector("#sanbon-v2-script").value = formation.getSanbonV2Script();
 
 	};
 	qrCodeFrame.hide = function(){qrcodeReader.reset();};
