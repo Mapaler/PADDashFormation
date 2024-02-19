@@ -3221,12 +3221,11 @@ function initialize() {
 	const gachaIdIpt = dialogContent.querySelector("#dungeon-gacha-id");
 	const benefitDoms = Array.from(dialogContent.querySelectorAll(".benefit-list .benefit-check"));
 	const benefit0 = benefitDoms.find(dom=>parseInt(dom.value, 10) == 0);
-	const benefitNot0 = benefitDoms.filter(dom=>dom != benefit0);
+	/*const benefitNot0 = benefitDoms.filter(dom=>dom != benefit0);
 	const notChecked = function(e){
-		
 		console.log(this.checked,e);
 	}
-	benefitNot0.forEach(dom=>dom.onclick=notChecked);
+	benefitNot0.forEach(dom=>dom.onclick=notChecked);*/
 	
 	dungeonEnchanceDialog.initialing = function(formation){
 		const dge = formation.dungeonEnchance;
@@ -5435,10 +5434,11 @@ function refreshAll(formationData) {
 		dungeonEnchanceDom.appendChild(renderSkill(skill));
 
 		if (dge?.benefit) { //添加阴阳
-			const benefitAwoken = dge.benefit == 1 ? 128 : 129;
+			const benefitAwoken = (dge.benefit & 0b1) ? 128 : 129;
 			const icon = document.createElement("icon");
 			icon.className ="awoken-icon";
 			icon.setAttribute("data-awoken-icon", benefitAwoken);
+			if (dge.benefit & 0b10) icon.classList.add("yinyang")
 			dungeonEnchanceDom.appendChild(icon);
 		}
 

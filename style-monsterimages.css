@@ -1068,8 +1068,14 @@
 .awoken-icon[data-awoken-icon='128']{/*阳之加护*/
 	background-position-y:calc(-32px * 128);
 }
+.awoken-icon[data-awoken-icon='128'].yinyang{/*同时阴阳*/
+	background-position-x: -32px;
+}
 .awoken-icon[data-awoken-icon='129']{/*阴之加护*/
 	background-position-y:calc(-32px * 129);
+}
+.awoken-icon[data-awoken-icon='130']{/*熟成*/
+	background-position-y:calc(-32px * 130);
 }
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],

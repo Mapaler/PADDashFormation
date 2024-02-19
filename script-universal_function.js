@@ -745,10 +745,13 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 
 	//地下城阴阳加护强化
 	if (dge.benefit) { //当存在加护
-		const benefitAwoken = dge.benefit == 1 ? 128 : 129; //得到加护觉醒编号
-		latterAwokenScale[0].push({ index: benefitAwoken, scale: 1.2 }); //HP
-		latterAwokenScale[1].push({ index: benefitAwoken, scale: 5 }); //ATK
-		latterAwokenScale[2].push({ index: benefitAwoken, scale: 1.2 }); //RCV
+		const benefitAwokens = [128 , 129]; //0b1是阳，0b10是阴，可以两者都强化
+		flags(dge.benefit).forEach(idx=>{
+			const benefitAwoken = benefitAwokens[idx]; //得到加护觉醒编号
+			latterAwokenScale[0].push({ index: benefitAwoken, scale: 1.2 }); //HP
+			latterAwokenScale[1].push({ index: benefitAwoken, scale: 5 }); //ATK
+			latterAwokenScale[2].push({ index: benefitAwoken, scale: 1.2 }); //RCV
+		});
 	}
 
 	const abilitys = memberCurves.map((ab, idx) => {
