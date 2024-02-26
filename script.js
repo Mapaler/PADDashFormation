@@ -684,6 +684,7 @@ Formation.prototype.getSanbonV2Script = function()
 			latent_extendable: card.is8Latent,
 			showing_active_skills: [],
 			showing_leader_skills: [],
+			transforms: buildEvoTreeIdsArray(card),
 		}
 		return o;
 	}
@@ -2101,8 +2102,7 @@ function initialize() {
 		if (qrTypeRadio) qrTypeRadio.onclick(); //打开二维码窗口就先产生二维码
 
 		//生成sanbon v1链接
-		qrCodeFrame.querySelector("#sanbon-v1-link").href = formation.getSanbonV1Url();
-		qrCodeFrame.querySelector("#sanbon-v2-link").href = `https://sanbon.me/${sanbonTranslateRegion(currentDataSource.code)}/advanced-team-builder`;
+		qrCodeFrame.querySelector("#sanbon-v2-link").href = `https://sanbon.me/${sanbonTranslateRegion(currentDataSource.code)}/team-builder`;
 		qrCodeFrame.querySelector("#sanbon-v2-script").value = formation.getSanbonV2Script();
 
 	};
