@@ -3560,6 +3560,10 @@ body.external-link-support #external-support{
 	width: 350px;
 }
 
+.qr-data-type-ul {
+	display: flex;
+	justify-content: center;
+}
 .qr-data-type-ul .qr-data-type-radio
 {
 	display: none;

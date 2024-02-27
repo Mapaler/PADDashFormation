@@ -477,6 +477,91 @@ Formation.prototype.getPdfQrObj = function(keepDataSource = true)
 	if (keepDataSource) qrObj.s = currentDataSource.code;
 	return qrObj;
 }
+//pdc的徽章对应数字
+Formation.pdcBadgeMap = [
+	{pdf:undefined,pdc:0}, //什么都没有
+	{pdf:1,pdc:10}, //无限cost
+	{pdf:2,pdc:12}, //小手指
+	{pdf:3,pdc:9}, //全体攻击
+	{pdf:4,pdc:5}, //小回复
+	{pdf:5,pdc:1}, //小血量
+	{pdf:6,pdc:3}, //小攻击
+	{pdf:7,pdc:8}, //SB
+	{pdf:8,pdc:18}, //队长防封
+	{pdf:9,pdc:19}, //SX
+	{pdf:11,pdc:7}, //无天降
+	{pdf:17,pdc:6}, //大回复
+	{pdf:18,pdc:2}, //大血量
+	{pdf:19,pdc:4}, //大攻击
+	{pdf:20,pdc:null}, //三维
+	{pdf:21,pdc:13}, //大手指
+	{pdf:10,pdc:11}, //加经验
+	{pdf:12,pdc:15}, //墨镜
+	{pdf:13,pdc:17}, //防废
+	{pdf:14,pdc:16}, //防毒
+	{pdf:PAD_PASS_BADGE,pdc:14}, //月卡
+];
+//pdc的潜觉对应数字
+Formation.pdcLatentMap = [
+	{pdf:1,pdc:1}, //HP
+	{pdf:2,pdc:0}, //攻击
+	{pdf:3,pdc:2}, //回复
+	{pdf:4,pdc:19}, //手指
+	{pdf:5,pdc:13}, //自回
+	{pdf:6,pdc:14}, //火盾
+	{pdf:7,pdc:15}, //水盾
+	{pdf:8,pdc:16}, //木盾
+	{pdf:9,pdc:17}, //光盾
+	{pdf:10,pdc:18}, //暗盾
+	{pdf:11,pdc:12}, //防坐
+	{pdf:12,pdc:3}, //三维
+	{pdf:13,pdc:35}, //不被换队长
+	{pdf:13,pdc:47}, //不被换队长 ×1.5
+	{pdf:14,pdc:37}, //不掉废
+	{pdf:15,pdc:36}, //不掉毒
+	{pdf:16,pdc:24}, //进化杀
+	{pdf:17,pdc:25}, //觉醒杀
+	{pdf:18,pdc:26}, //强化杀
+	{pdf:19,pdc:27}, //卖钱杀
+	{pdf:20,pdc:4}, //神杀
+	{pdf:21,pdc:5}, //龙杀
+	{pdf:22,pdc:6}, //恶魔杀
+	{pdf:23,pdc:7}, //机械杀
+	{pdf:24,pdc:8}, //平衡杀
+	{pdf:25,pdc:9}, //攻击杀
+	{pdf:26,pdc:10}, //体力杀
+	{pdf:27,pdc:11}, //回复杀
+	{pdf:28,pdc:20}, //大HP
+	{pdf:29,pdc:21}, //大攻击
+	{pdf:30,pdc:22}, //大回复
+	{pdf:31,pdc:23}, //大手指
+	{pdf:32,pdc:28}, //大火盾
+	{pdf:33,pdc:29}, //大水盾
+	{pdf:34,pdc:30}, //大木盾
+	{pdf:35,pdc:31}, //大光盾
+	{pdf:36,pdc:32}, //大暗盾
+	{pdf:37,pdc:33}, //6色破无效
+	{pdf:37,pdc:45}, //6色破无效 ×1.5
+	{pdf:38,pdc:34}, //3色破属吸
+	{pdf:38,pdc:46}, //3色破属吸 ×1.5
+	{pdf:39,pdc:40}, //C珠破吸
+	{pdf:39,pdc:50}, //C珠破吸 ×1.5
+	{pdf:40,pdc:39}, //心横解转转
+	{pdf:40,pdc:49}, //心横解转转 ×1.5
+	{pdf:41,pdc:38}, //U解禁消
+	{pdf:41,pdc:48}, //U解禁消 ×1.5
+	{pdf:42,pdc:41}, //伤害上限×2
+	{pdf:43,pdc:42}, //HP++
+	{pdf:44,pdc:43}, //攻击++
+	{pdf:45,pdc:44}, //回复++
+	{pdf:46,pdc:51}, //心追解云封
+	{pdf:46,pdc:52}, //心追解云封 ×1.5
+	{pdf:47,pdc:53}, //心L大SB
+	{pdf:47,pdc:54}, //心L大SB ×1.5
+	{pdf:48,pdc:55}, //L解禁武器
+	{pdf:48,pdc:56}, //L解禁武器 ×1.8
+	{pdf:49,pdc:57}, //伤害上限×3
+];
 Formation.prototype.getPdcQrStr = function()
 {
 	function genMemberMap(m, a, position = 0)
@@ -484,7 +569,7 @@ Formation.prototype.getPdcQrStr = function()
 		const o = new Map();
 		o.set(0, m.id);
 		if (m.latent.length)
-			o.set(2, m.latent.map(pdfLtent=>pdcLatentMap.find(latent=>latent.pdf === pdfLtent).pdc.toString(36).padStart(2,'0')).join('')); //潜觉
+			o.set(2, m.latent.map(pdfLtent=> Formation.pdcLatentMap.find(latent=>latent.pdf === pdfLtent).pdc.toString(36).padStart(2,'0')).join('')); //潜觉
 		o.set(3, m.level);
 		o.set(4, m.plus[0]);
 		o.set(5, m.plus[1]);
@@ -517,7 +602,7 @@ Formation.prototype.getPdcQrStr = function()
 
 	let pdcTeamsStr = this.teams.map((t,idx,arr)=>{
 		let teamArr = [
-			pdcBadgeMap.find(badge=>badge.pdf === t[2])?.pdc || 0 //徽章
+			Formation.pdcBadgeMap.find(badge=>badge.pdf === t[2])?.pdc || 0 //徽章
 		];
 		const membersArr = t[0];
 		const assistArr = t[1];
@@ -553,6 +638,82 @@ Formation.prototype.getPdcQrStr = function()
 	outArr = outArr.concat(pdcTeamsStr);
 	return outArr.join(']');
 }
+//paddb的徽章对应数字
+Formation.paddbBadgeMap = [
+	{pdf:undefined,paddb:0}, //什么都没有
+	{pdf:1,paddb:1}, //无限cost
+	{pdf:2,paddb:2}, //小手指
+	{pdf:3,paddb:3}, //全体攻击
+	{pdf:4,paddb:4}, //小回复
+	{pdf:5,paddb:5}, //小血量
+	{pdf:6,paddb:6}, //小攻击
+	{pdf:7,paddb:7}, //SB
+	{pdf:8,paddb:8}, //队长防封
+	{pdf:9,paddb:9}, //SX
+	{pdf:11,paddb:14}, //无天降
+	{pdf:17,paddb:10}, //大回复
+	{pdf:18,paddb:11}, //大血量
+	{pdf:19,paddb:12}, //大攻击
+	{pdf:20,paddb:null}, //三维
+	{pdf:21,paddb:13}, //大手指
+	{pdf:10,paddb:18}, //加经验
+	{pdf:12,paddb:15}, //墨镜
+	{pdf:13,paddb:16}, //防废
+	{pdf:14,paddb:17}, //防毒
+	{pdf:PAD_PASS_BADGE,paddb:19}, //月卡
+];
+//paddb的潜觉对应数字
+Formation.paddbLatentMap = [
+	{pdf:1,paddb:13}, //HP
+	{pdf:2,paddb:14}, //攻击
+	{pdf:3,paddb:15}, //回复
+	{pdf:4,paddb:16}, //手指
+	{pdf:5,paddb:17}, //自回
+	{pdf:6,paddb:19}, //火盾
+	{pdf:7,paddb:20}, //水盾
+	{pdf:8,paddb:21}, //木盾
+	{pdf:9,paddb:22}, //光盾
+	{pdf:10,paddb:23}, //暗盾
+	{pdf:11,paddb:18}, //防坐
+	{pdf:12,paddb:27}, //三维
+	{pdf:13,paddb:38}, //不被换队长
+	{pdf:14,paddb:37}, //不掉废
+	{pdf:15,paddb:36}, //不掉毒
+	{pdf:16,paddb:12}, //进化杀
+	{pdf:17,paddb:9}, //觉醒杀
+	{pdf:18,paddb:10}, //强化杀
+	{pdf:19,paddb:11}, //卖钱杀
+	{pdf:20,paddb:2}, //神杀
+	{pdf:21,paddb:1}, //龙杀
+	{pdf:22,paddb:3}, //恶魔杀
+	{pdf:23,paddb:4}, //机械杀
+	{pdf:24,paddb:8}, //平衡杀
+	{pdf:25,paddb:5}, //攻击杀
+	{pdf:26,paddb:6}, //体力杀
+	{pdf:27,paddb:7}, //回复杀
+	{pdf:28,paddb:24}, //大HP
+	{pdf:29,paddb:25}, //大攻击
+	{pdf:30,paddb:26}, //大回复
+	{pdf:31,paddb:33}, //大手指
+	{pdf:32,paddb:28}, //大火盾
+	{pdf:33,paddb:29}, //大水盾
+	{pdf:34,paddb:30}, //大木盾
+	{pdf:35,paddb:31}, //大光盾
+	{pdf:36,paddb:32}, //大暗盾
+	{pdf:37,paddb:35}, //6色破无效
+	{pdf:38,paddb:34}, //3色破属吸
+	{pdf:39,paddb:41}, //C珠破吸
+	{pdf:40,paddb:40}, //心横解转转
+	{pdf:41,paddb:39}, //U解禁消
+	{pdf:42,paddb:42}, //伤害上限×2
+	{pdf:43,paddb:43}, //HP++
+	{pdf:44,paddb:44}, //攻击++
+	{pdf:45,paddb:45}, //回复++
+	{pdf:46,paddb:46}, //心追解云封
+	{pdf:47,paddb:47}, //心L大SB
+	{pdf:48,paddb:48}, //L解禁武器
+	{pdf:49,paddb:49}, //伤害上限×3
+];
 Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 {
 	//PadDb服务器出现没有的怪物就会崩溃，在这里主动保护一下，转换为 1319
@@ -568,7 +729,7 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 	const t = this.teams[0];
 	let teamObj = {
 		name: this.title,
-		badge: paddbBadgeMap.find(badge=>badge.pdf === t[2]).paddb,
+		badge: Formation.paddbBadgeMap.find(badge=>badge.pdf === t[2]).paddb,
 		memo: (this.detail || '') + '\n' + uploadMessage,
 		monsters: {},
 		assists: {},
@@ -606,7 +767,7 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 			active_skill_level: m.skilllevel ?? Skills[m.card.activeSkillId].maxLevel,
 			transform: memberIdChange ? m.level : num,
 			super_awoken: m.sawoken + 2,
-			latent_awokens: m.latent.map(n=>paddbLatentMap.find(latent=>latent.pdf === n).paddb),
+			latent_awokens: m.latent.map(n=>Formation.paddbLatentMap.find(latent=>latent.pdf === n).paddb),
 		};
 		let assistIdChange = changePadDbIdLevel(a.id);
 		teamObj.assists[i] = a.id <= 0 ? null : {
@@ -743,6 +904,103 @@ location.reload();
 })();`);
 	return scriptLines.join('\n');
 }
+
+//paddb的徽章对应数字
+Formation.daddbBadgeMap = [
+	{pdf:undefined,daddb:0}, //什么都没有
+	{pdf:1,daddb:0}, //无限cost
+	{pdf:2,daddb:1}, //小手指
+	{pdf:3,daddb:2}, //全体攻击
+	{pdf:4,daddb:3}, //小回复
+	{pdf:5,daddb:4}, //小血量
+	{pdf:6,daddb:5}, //小攻击
+	{pdf:7,daddb:6}, //SB
+	{pdf:8,daddb:7}, //队长防封
+	{pdf:9,daddb:8}, //SX
+	{pdf:11,daddb:13}, //无天降
+	{pdf:17,daddb:9}, //大回复
+	{pdf:18,daddb:10}, //大血量
+	{pdf:19,daddb:11}, //大攻击
+	{pdf:20,daddb:null}, //三维
+	{pdf:21,daddb:12}, //大手指
+	{pdf:10,daddb:17}, //加经验
+	{pdf:12,daddb:14}, //墨镜
+	{pdf:13,daddb:15}, //防废
+	{pdf:14,daddb:16}, //防毒
+	{pdf:PAD_PASS_BADGE,daddb:18}, //月卡
+];
+//paddb的潜觉对应数字
+Formation.daddbLatentMap = [
+	{pdf:1,daddb:[0,1]}, //HP
+	{pdf:2,daddb:[0,2]}, //攻击
+	{pdf:3,daddb:[0,3]}, //回复
+	{pdf:4,daddb:[0,4]}, //手指
+	{pdf:5,daddb:[0,5]}, //自回
+	{pdf:6,daddb:[0,6]}, //火盾
+	{pdf:7,daddb:[0,7]}, //水盾
+	{pdf:8,daddb:[0,8]}, //木盾
+	{pdf:9,daddb:[0,9]}, //光盾
+	{pdf:10,daddb:[0,10]}, //暗盾
+	{pdf:11,daddb:[0,0]}, //防坐
+	{pdf:12,daddb:[1,15]}, //三维
+	{pdf:13,daddb:[2,4]}, //不被换队长
+	{pdf:14,daddb:[2,3]}, //不掉废
+	{pdf:15,daddb:[2,2]}, //不掉毒
+	{pdf:16,daddb:[1,11]}, //进化杀
+	{pdf:17,daddb:[1,8]}, //觉醒杀
+	{pdf:18,daddb:[1,9]}, //强化杀
+	{pdf:19,daddb:[1,10]}, //卖钱杀
+	{pdf:20,daddb:[1,1]}, //神杀
+	{pdf:21,daddb:[1,0]}, //龙杀
+	{pdf:22,daddb:[1,2]}, //恶魔杀
+	{pdf:23,daddb:[1,3]}, //机械杀
+	{pdf:24,daddb:[1,7]}, //平衡杀
+	{pdf:25,daddb:[1,4]}, //攻击杀
+	{pdf:26,daddb:[1,5]}, //体力杀
+	{pdf:27,daddb:[1,6]}, //回复杀
+	{pdf:28,daddb:[1,12]}, //大HP
+	{pdf:29,daddb:[1,13]}, //大攻击
+	{pdf:30,daddb:[1,14]}, //大回复
+	{pdf:31,daddb:[1,21]}, //大手指
+	{pdf:32,daddb:[1,16]}, //大火盾
+	{pdf:33,daddb:[1,17]}, //大水盾
+	{pdf:34,daddb:[1,18]}, //大木盾
+	{pdf:35,daddb:[1,19]}, //大光盾
+	{pdf:36,daddb:[1,20]}, //大暗盾
+	{pdf:37,daddb:[2,1]}, //6色破无效
+	{pdf:38,daddb:[2,0]}, //3色破属吸
+	{pdf:39,daddb:[2,7]}, //C珠破吸
+	{pdf:40,daddb:[2,6]}, //心横解转转
+	{pdf:41,daddb:[2,5]}, //U解禁消
+	{pdf:42,daddb:[2,8]}, //伤害上限×2
+	{pdf:43,daddb:[1,22]}, //HP++
+	{pdf:44,daddb:[1,23]}, //攻击++
+	{pdf:45,daddb:[1,24]}, //回复++
+	{pdf:46,daddb:[2,9]}, //心追解云封
+	{pdf:47,daddb:[2,10]}, //心L大SB
+	{pdf:48,daddb:[2,12]}, //L解禁武器
+	{pdf:49,daddb:[2,11]}, //伤害上限×3
+];
+Formation.prototype.getDaddbQrObj = function()
+{
+	//PADDB目前只支持单人队伍
+	const [members,assists,badge] = this.teams[0];
+	let teamObj = {
+		name: this.title,
+		badge: Formation.daddbBadgeMap.find(_badge=>_badge.pdf === badge).daddb,
+		staffs: [],
+	}
+	for (let i = 0; i < members.length; i++) {
+		const m = members[i], a = assists[i];
+		teamObj.staffs[i] = {
+			staf: m.id || -1,
+			eq: a.id || -1,
+			sawak: m.sawoken || -1,
+			qawak: m.latent.map(n=>Formation.daddbLatentMap.find(latent=>latent.pdf === n).daddb),
+		};
+	}
+	return teamObj;
+}
 Formation.prototype.getQrStr = function(type)
 {
 	switch (type) {
@@ -751,6 +1009,9 @@ Formation.prototype.getQrStr = function(type)
 		}
 		case 'paddb': {
 			return JSON.stringify(this.getPaddbQrObj());
+		}
+		case 'daddb': {
+			return JSON.stringify(this.getDaddbQrObj());
 		}
 		case 'sanbon-v1': {
 			return this.getSanbonV1Url();
@@ -1727,6 +1988,11 @@ async function inputFromQrString(string)
 				re.type = "PADDB";
 				re.url = paddbObjToURL(obj)
 			}
+			else if (Array.isArray(obj?.staffs)) { //DADDB的对象格式
+				re.type = "DADDB";
+				const newFotmation = daddbFotmationToPdfFotmation(obj);
+				re.url = qrObjToUrl(newFotmation.getPdfQrObj(false));
+			}
 			else {
 				re.error = ERROR_No_formation_data;
 				//re.message = "无队伍数据 | No formation data";
@@ -1877,7 +2143,7 @@ function pdcFotmationToPdfFotmation(inputString)
 		const membersArr = t[0];
 		const assistArr = t[1];
 		//队伍徽章
-		t[2] = pdcTeam.badge === 0 ? 0 : pdcBadgeMap.find(badge=>badge.pdc === pdcTeam.badge).pdf;
+		t[2] = pdcTeam.badge === 0 ? 0 : Formation.pdcBadgeMap.find(badge=>badge.pdc === pdcTeam.badge).pdf;
 		pdcTeam.members.forEach((member)=>{
 			const m = membersArr[member.get(15) || 0];
 			const a = assistArr[member.get(15) || 0];
@@ -1885,7 +2151,7 @@ function pdcFotmationToPdfFotmation(inputString)
 			a.id = member.get(9) || 0; //延迟是-1刚好一样
 			if (member.get(2))
 			{
-				m.latent = member.get(2).map(pdcLatent=>pdcLatentMap.find(latent=>latent.pdc === pdcLatent)?.pdf ?? 0);
+				m.latent = member.get(2).map(pdcLatent=> Formation.pdcLatentMap.find(latent=>latent.pdc === pdcLatent)?.pdf ?? 0);
 			}
 			m.level = member.get(3) || 1;
 			a.level = member.get(10) || 1;
@@ -1912,7 +2178,7 @@ function paddbFotmationToPdfFotmation(obj)
 	f.detail = team.memo.replace(new RegExp('\\n?'+uploadMessage,"i"),"");
 	const t = f.teams[0];
 	//队伍徽章
-	t[2] = paddbBadgeMap.find(badge=>badge.paddb === team.badge).pdf;
+	t[2] = Formation.paddbBadgeMap.find(badge=>badge.paddb === team.badge).pdf;
 	const members = t[0], assists = t[1];
 	for (let i = 0; i< members.length; i++) {
 		const m = members[i], a = assists[i], dm = team.monsters[i], da = team.assists[i];
@@ -1929,7 +2195,7 @@ function paddbFotmationToPdfFotmation(obj)
 						? Cards[m.id].awakenings.length //变身后的觉醒全满
 						: dm.awoken;
 			m.sawoken = dm.super_awoken - 2;
-			m.latent = dm.latent_awokens.map(paddbLatent=>paddbLatentMap.find(latent=>latent.paddb === paddbLatent)?.pdf ?? 0);
+			m.latent = dm.latent_awokens.map(paddbLatent=>Formation.paddbLatentMap.find(latent=>latent.paddb === paddbLatent)?.pdf ?? 0);
 			m.skilllevel = dm.active_skill_level;
 		}
 		if (da) {
@@ -1943,6 +2209,37 @@ function paddbFotmationToPdfFotmation(obj)
 			a.awoken = Cards[a.id].awakenings.length;
 			a.plus = da.plus ? [99,99,99]:[0,0,0];
 			a.skilllevel = da.active_skill_level;
+		}
+	}
+	return f;
+}
+//解析DADDB的数据
+function daddbFotmationToPdfFotmation(obj)
+{
+	const team = obj;
+	const f = new Formation(1, 6);
+	f.title = team.name;
+	const t = f.teams[0];
+	//队伍徽章
+	t[2] = Formation.daddbBadgeMap.find(badge=>badge.daddb === team.badge).pdf;
+	const members = t[0], assists = t[1];
+	for (let i = 0; i< members.length; i++) {
+		const m = members[i], a = assists[i], dm = team.staffs[i];
+		if (dm) {
+			m.id = dm.staf > 0 ? dm.staf : 0;
+			a.id = dm.eq > 0 ? dm.eq : 0;
+			const mCard = m.card, aCard = a.card;
+			m.level = mCard.limitBreakIncr ? 120 : mCard.maxLevel;
+			a.level = aCard.limitBreakIncr ? 120 : aCard.maxLevel;
+
+			m.plus = [99,99,99];
+			a.plus = [99,99,99];
+
+			m.awoken = mCard.awakenings.length;
+			a.awoken = aCard.awakenings.length;
+
+			m.sawoken = dm.sawak;
+			m.latent = dm.qawak.map(daddbLatent=>Formation.daddbLatentMap.find(latent=>latent.daddb[0] === daddbLatent[0] && latent.daddb[1] === daddbLatent[1])?.pdf ?? 0);
 		}
 	}
 	return f;
@@ -2306,7 +2603,7 @@ function initialize() {
 		
 	}
 
-	if (location.protocol == "http:" && location.host != "localhost" && location.host != "127.0.0.1")
+	if (location.protocol == "http:" && location.hostname != "localhost" && location.hostname != "127.0.0.1")
 	{ //http不支持攝像頭
 		//qrReadBox.readQrCamera.classList.add(className_displayNone);
 		qrReadBox.readQrCamera.onclick = function()
@@ -2643,7 +2940,7 @@ function initialize() {
 		icon.onclick = insertIconToText;
 		insertAwokenIconList.appendChild(li);
 	}
-	for (let id of new Set(pdcLatentMap.map(obj=>obj.pdf))) {
+	for (let id of new Set(Formation.pdcLatentMap.map(obj=>obj.pdf))) {
 		const li = document.createElement("li");
 		const icon = li.appendChild(createIndexedIcon('latent', id));
 		icon.onclick = insertIconToText;

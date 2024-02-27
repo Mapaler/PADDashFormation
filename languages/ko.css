@@ -597,6 +597,10 @@ label[for="qr-data-type-pdc"]::before
 {
 	content: "퍼즐앤드래곤 데미지 카큐라터 (PDC)";
 }
+label[for="qr-data-type-daddb"]::before
+{
+	content: "DADDB";
+}
 label[for="qr-data-type-sanbon-v1"]::before {
 	content: "Sanbon v1 URL";
 }

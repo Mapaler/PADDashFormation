@@ -33,6 +33,7 @@ let localTranslating = {
 			"PADDF": "PADDF",
 			"PDC": "PDC",
 			"PADDB": "PADDB",
+			"DADDB": "DADDB",
 		},
 		error: {
 			0: "Unknown Error",
@@ -492,7 +493,7 @@ const allowable_latent = {
 		28,29,30,31,32,33,34,35,36,37,38
 	],
 	killer: [16,17,18,19,20,21,22,23,24,25,26,27], //杀潜觉
-	v120: [42,43,44,45,49], //120才能打的潜觉
+	v120: [42,43,44,45,49], //120才能打的潜觉，3倍上限潜觉需要特殊处理
 	needAwoken: [ //需要觉醒才能打的潜觉
 		{latent:39,awoken:62}, //C珠破吸
 		{latent:40,awoken:20}, //心横解转转
@@ -500,7 +501,7 @@ const allowable_latent = {
 		{latent:46,awoken:45}, //心追解云封
 		{latent:47,awoken:59}, //心L大SB
 		{latent:48,awoken:60}, //L解禁武器
-	]
+	],
 }
 //等效觉醒列表
 const equivalent_awoken = [
@@ -560,167 +561,6 @@ const official_awoken_sorting = [
 ];
 const PAD_PASS_BADGE = 1<<7 | 1; //本程序的月卡徽章编号，129
 
-//pdc的徽章对应数字
-const pdcBadgeMap = [
-	{pdf:undefined,pdc:0}, //什么都没有
-	{pdf:1,pdc:10}, //无限cost
-	{pdf:2,pdc:12}, //小手指
-	{pdf:3,pdc:9}, //全体攻击
-	{pdf:4,pdc:5}, //小回复
-	{pdf:5,pdc:1}, //小血量
-	{pdf:6,pdc:3}, //小攻击
-	{pdf:7,pdc:8}, //SB
-	{pdf:8,pdc:18}, //队长防封
-	{pdf:9,pdc:19}, //SX
-	{pdf:11,pdc:7}, //无天降
-	{pdf:17,pdc:6}, //大回复
-	{pdf:18,pdc:2}, //大血量
-	{pdf:19,pdc:4}, //大攻击
-	{pdf:20,pdc:null}, //三维
-	{pdf:21,pdc:13}, //大手指
-	{pdf:10,pdc:11}, //加经验
-	{pdf:12,pdc:15}, //墨镜
-	{pdf:13,pdc:17}, //防废
-	{pdf:14,pdc:16}, //防毒
-	{pdf:PAD_PASS_BADGE,pdc:14}, //月卡
-];
-//pdc的潜觉对应数字
-const pdcLatentMap = [
-	{pdf:1,pdc:1}, //HP
-	{pdf:2,pdc:0}, //攻击
-	{pdf:3,pdc:2}, //回复
-	{pdf:4,pdc:19}, //手指
-	{pdf:5,pdc:13}, //自回
-	{pdf:6,pdc:14}, //火盾
-	{pdf:7,pdc:15}, //水盾
-	{pdf:8,pdc:16}, //木盾
-	{pdf:9,pdc:17}, //光盾
-	{pdf:10,pdc:18}, //暗盾
-	{pdf:11,pdc:12}, //防坐
-	{pdf:12,pdc:3}, //三维
-	{pdf:13,pdc:35}, //不被换队长
-	{pdf:13,pdc:47}, //不被换队长 ×1.5
-	{pdf:14,pdc:37}, //不掉废
-	{pdf:15,pdc:36}, //不掉毒
-	{pdf:16,pdc:24}, //进化杀
-	{pdf:17,pdc:25}, //觉醒杀
-	{pdf:18,pdc:26}, //强化杀
-	{pdf:19,pdc:27}, //卖钱杀
-	{pdf:20,pdc:4}, //神杀
-	{pdf:21,pdc:5}, //龙杀
-	{pdf:22,pdc:6}, //恶魔杀
-	{pdf:23,pdc:7}, //机械杀
-	{pdf:24,pdc:8}, //平衡杀
-	{pdf:25,pdc:9}, //攻击杀
-	{pdf:26,pdc:10}, //体力杀
-	{pdf:27,pdc:11}, //回复杀
-	{pdf:28,pdc:20}, //大HP
-	{pdf:29,pdc:21}, //大攻击
-	{pdf:30,pdc:22}, //大回复
-	{pdf:31,pdc:23}, //大手指
-	{pdf:32,pdc:28}, //大火盾
-	{pdf:33,pdc:29}, //大水盾
-	{pdf:34,pdc:30}, //大木盾
-	{pdf:35,pdc:31}, //大光盾
-	{pdf:36,pdc:32}, //大暗盾
-	{pdf:37,pdc:33}, //6色破无效
-	{pdf:37,pdc:45}, //6色破无效 ×1.5
-	{pdf:38,pdc:34}, //3色破属吸
-	{pdf:38,pdc:46}, //3色破属吸 ×1.5
-	{pdf:39,pdc:40}, //C珠破吸
-	{pdf:39,pdc:50}, //C珠破吸 ×1.5
-	{pdf:40,pdc:39}, //心横解转转
-	{pdf:40,pdc:49}, //心横解转转 ×1.5
-	{pdf:41,pdc:38}, //U解禁消
-	{pdf:41,pdc:48}, //U解禁消 ×1.5
-	{pdf:42,pdc:41}, //伤害上限×2
-	{pdf:43,pdc:42}, //HP++
-	{pdf:44,pdc:43}, //攻击++
-	{pdf:45,pdc:44}, //回复++
-	{pdf:46,pdc:51}, //心追解云封
-	{pdf:46,pdc:52}, //心追解云封 ×1.5
-	{pdf:47,pdc:53}, //心L大SB
-	{pdf:47,pdc:54}, //心L大SB ×1.5
-	{pdf:48,pdc:55}, //L解禁武器
-	{pdf:48,pdc:56}, //L解禁武器 ×1.8
-	{pdf:49,pdc:57}, //伤害上限×3
-];
-//paddb的徽章对应数字
-const paddbBadgeMap = [
-	{pdf:undefined,paddb:0}, //什么都没有
-	{pdf:1,paddb:1}, //无限cost
-	{pdf:2,paddb:2}, //小手指
-	{pdf:3,paddb:3}, //全体攻击
-	{pdf:4,paddb:4}, //小回复
-	{pdf:5,paddb:5}, //小血量
-	{pdf:6,paddb:6}, //小攻击
-	{pdf:7,paddb:7}, //SB
-	{pdf:8,paddb:8}, //队长防封
-	{pdf:9,paddb:9}, //SX
-	{pdf:11,paddb:14}, //无天降
-	{pdf:17,paddb:10}, //大回复
-	{pdf:18,paddb:11}, //大血量
-	{pdf:19,paddb:12}, //大攻击
-	{pdf:20,paddb:null}, //三维
-	{pdf:21,paddb:13}, //大手指
-	{pdf:10,paddb:18}, //加经验
-	{pdf:12,paddb:15}, //墨镜
-	{pdf:13,paddb:16}, //防废
-	{pdf:14,paddb:17}, //防毒
-	{pdf:129,paddb:19}, //月卡
-];
-//paddb的潜觉对应数字
-const paddbLatentMap = [
-	{pdf:1,paddb:13}, //HP
-	{pdf:2,paddb:14}, //攻击
-	{pdf:3,paddb:15}, //回复
-	{pdf:4,paddb:16}, //手指
-	{pdf:5,paddb:17}, //自回
-	{pdf:6,paddb:19}, //火盾
-	{pdf:7,paddb:20}, //水盾
-	{pdf:8,paddb:21}, //木盾
-	{pdf:9,paddb:22}, //光盾
-	{pdf:10,paddb:23}, //暗盾
-	{pdf:11,paddb:18}, //防坐
-	{pdf:12,paddb:27}, //三维
-	{pdf:13,paddb:38}, //不被换队长
-	{pdf:14,paddb:37}, //不掉废
-	{pdf:15,paddb:36}, //不掉毒
-	{pdf:16,paddb:12}, //进化杀
-	{pdf:17,paddb:9}, //觉醒杀
-	{pdf:18,paddb:10}, //强化杀
-	{pdf:19,paddb:11}, //卖钱杀
-	{pdf:20,paddb:2}, //神杀
-	{pdf:21,paddb:1}, //龙杀
-	{pdf:22,paddb:3}, //恶魔杀
-	{pdf:23,paddb:4}, //机械杀
-	{pdf:24,paddb:8}, //平衡杀
-	{pdf:25,paddb:5}, //攻击杀
-	{pdf:26,paddb:6}, //体力杀
-	{pdf:27,paddb:7}, //回复杀
-	{pdf:28,paddb:24}, //大HP
-	{pdf:29,paddb:25}, //大攻击
-	{pdf:30,paddb:26}, //大回复
-	{pdf:31,paddb:33}, //大手指
-	{pdf:32,paddb:28}, //大火盾
-	{pdf:33,paddb:29}, //大水盾
-	{pdf:34,paddb:30}, //大木盾
-	{pdf:35,paddb:31}, //大光盾
-	{pdf:36,paddb:32}, //大暗盾
-	{pdf:37,paddb:35}, //6色破无效
-	{pdf:38,paddb:34}, //3色破属吸
-	{pdf:39,paddb:41}, //C珠破吸
-	{pdf:40,paddb:40}, //心横解转转
-	{pdf:41,paddb:39}, //U解禁消
-	{pdf:42,paddb:42}, //伤害上限×2
-	{pdf:43,paddb:43}, //HP++
-	{pdf:44,paddb:44}, //攻击++
-	{pdf:45,paddb:45}, //回复++
-	{pdf:46,paddb:46}, //心追解云封
-	{pdf:47,paddb:47}, //心L大SB
-	{pdf:48,paddb:48}, //L解禁武器
-	{pdf:49,paddb:49}, //伤害上限×3
-];
 //排序程序列表
 const sort_function_list = [
 	{tag:"sort_none",name:"无",function:()=>0},

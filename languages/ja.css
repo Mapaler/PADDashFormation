@@ -617,6 +617,10 @@ label[for="qr-data-type-pdc"]::before
 {
 	content: "パズドラダメージ計算 (PDC)";
 }
+label[for="qr-data-type-daddb"]::before
+{
+	content: "DADDB";
+}
 label[for="qr-data-type-sanbon-v1"]::before {
 	content: "Sanbon v1 URL";
 }

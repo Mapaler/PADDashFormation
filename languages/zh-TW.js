@@ -19,6 +19,7 @@ const _localTranslating = {
 			"PADDF": "智龍急速陣型",
 			"PDC": "PDC",
 			"PADDB": "PADDB",
+			"DADDB": "DADDB",
 		},
 		error: {
 			0: "未知錯誤",

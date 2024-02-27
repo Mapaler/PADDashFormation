@@ -612,6 +612,10 @@ label[for="qr-data-type-pdc"]::before
 {
 	content: "智龙迷城伤害计算器 (PDC)";
 }
+label[for="qr-data-type-daddb"]::before
+{
+	content: "DADDB";
+}
 label[for="qr-data-type-sanbon-v1"]::before {
 	content: "Sanbon v1 网址";
 }
