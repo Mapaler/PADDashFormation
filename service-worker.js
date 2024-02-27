@@ -23183,7 +23183,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"5cac16be50a8c03405e2fab43d55f0f9"
+		"063d1442fc5c4eff9ea48f6fff52040e"
 	],
 	[
 		"script-custom_elements.js",
@@ -23191,7 +23191,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"13a004bccb210a80f3b59d41e405245d"
+		"6d0626ffc2851830c4a6bc7ee34d5480"
 	],
 	[
 		"script-skill-parser.js",
@@ -23203,11 +23203,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"1fe38dcd08b28379f7b1282e168f13ca"
+		"97bc738e6401a40c01f3f5497858d384"
 	],
 	[
 		"solo.html",
-		"f56623a3ca8532c775a632463f1b65fa"
+		"dfe186923662b30e1dcf541cba45c56a"
 	],
 	[
 		"style-monsterimages.css",
@@ -23215,7 +23215,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"ccf520aa5d5e653c9c874a4f6ef18dd5"
+		"44b13bc5f6a4207844d31bd5347ce19f"
 	],
 	[
 		"temp.js",
@@ -23223,11 +23223,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"a864fcedfd62f8a10b4e32f37f487c27"
+		"2b81803875ee75bc1e5c1a339e1aa5e6"
 	],
 	[
 		"languages/en.css",
-		"890c22795207a7ce48d94b81cb1c2da9"
+		"2ead48b05d01156478ccc5d05591bf07"
 	],
 	[
 		"languages/en.js",
@@ -23235,7 +23235,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"60212f96389d2dcd52704ddefca000d4"
+		"80ac0fe1f0da5c4e15b60afb3c20c6e9"
 	],
 	[
 		"languages/ja.js",
@@ -23243,7 +23243,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"31800c79d96f2fbf0a1c36cf978e5282"
+		"fe096e4fdfa29fca334852e66f7e6dae"
 	],
 	[
 		"languages/ko.js",
@@ -23255,19 +23255,19 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-TW.css",
-		"a2fb307399710d6c9dc0a21b902a3e3d"
+		"a573e318265b8eceb7496fcf258c0daa"
 	],
 	[
 		"languages/zh-TW.js",
-		"a7eb3cd1b50dc07647e028fcae122180"
+		"79f8db66f79d0f3f6351a47d797dfe5d"
 	],
 	[
 		"languages/zh.css",
-		"b02ff6a7cffea9e8cc8ae869600e9775"
+		"eb05f11f197eb969907eb5221f7aaf64"
 	],
 	[
 		"languages/zh.js",
-		"007c91430840864f852949f9030f9db4"
+		"1514e5ac0e809c068a62c6a9f12f3039"
 	],
 	[
 		"images/attrs.png",

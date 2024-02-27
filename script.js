@@ -6681,23 +6681,17 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		const teamHPArr = countTeamHp(team, leader1id, leader2id, solo);
 		const teamHPNoAwokenArr = countTeamHp(team, leader1id, leader2id, solo, true);
 
+		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount), teamHPAwokenScale = (1 + 0.05 * teamHPAwoken); //全队大血包个数
+		const badgeHPScale = teamsCount == 2 ? 1 : (badge=>{ //徽章倍率
+			switch (badge) {
+				case  5: return 1.05; //小血
+				case 18: return 1.15; //大血
+				case 20: return 1.10; //全属性
+			}
+		})(badge);
 
-		let tHP = teamHPArr.reduce((pv, v) => pv + v, 0); //队伍计算的总HP
-		let tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v) => pv + v, 0); //队伍计算的总HP无觉醒
-
-		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
-
-		let badgeHPScale = 1; //徽章倍率
-		if (badge === 5 && (solo || teamsCount === 3)) {
-			badgeHPScale = 1.05;
-		} else if (badge === 18 && (solo || teamsCount === 3)) {
-			badgeHPScale = 1.15;
-		} else if (badge === 20 && (solo || teamsCount === 3)) {
-			badgeHPScale = 1.10;
-		}
-
-		tHP = Math.round(tHP * (1 + 0.05 * teamHPAwoken) * badgeHPScale);
-		tHPNoAwoken = Math.round(tHPNoAwoken * badgeHPScale);
+		let tHP = Math.round(teamHPArr.reduce((pv, v) => pv + v * teamHPAwokenScale * badgeHPScale, 0)); //队伍计算的总HP
+		let tHPNoAwoken = Math.round(teamHPNoAwokenArr.reduce((pv, v) => pv + v * badgeHPScale, 0)); //队伍计算的总HP无觉醒
 
 		//记录到bar中，方便打开详情时调用
 		hpBar.reduceAttrRangesWithShieldAwoken = reduceAttrRangesWithShieldAwoken; //有盾觉醒的
@@ -6853,11 +6847,10 @@ function refreshFormationTotalHP(totalDom, teams) {
 		const tHPArr = teams.map(function(team) {
 			const teamHPArr = countTeamHp(team, leader1id, leader2id, solo);
 
+			const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount), teamHPAwokenScale = (1 + 0.05 * teamHPAwoken); //全队大血包个数
+			const teamTHP = Math.round(teamHPArr.reduce((pv, v) => pv + v * teamHPAwokenScale)); //队伍计算的总HP
 
-			const teamTHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
-			const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount); //全队大血包个数
-
-			return Math.round(teamTHP * (1 + 0.05 * teamHPAwoken));
+			return teamTHP;
 		});
 		const tHPNoAwokenArr = teams.map(function(team) {
 			const teamHPArr = countTeamHp(team, leader1id, leader2id, solo, true);
