@@ -6689,9 +6689,9 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 20: return 1.10; //全属性
 			}
 		})(badge);
-
-		let tHP = Math.round(teamHPArr.reduce((pv, v) => pv + v * teamHPAwokenScale * badgeHPScale, 0)); //队伍计算的总HP
-		let tHPNoAwoken = Math.round(teamHPNoAwokenArr.reduce((pv, v) => pv + v * badgeHPScale, 0)); //队伍计算的总HP无觉醒
+		//由于JS的小数和强类型语言不完全一致，+1e-12后再做四舍五入会更准确符合游戏内数字
+		let tHP = teamHPArr.reduce((pv, v) => pv + Math.round(v * teamHPAwokenScale * badgeHPScale + 1e-12), 0); //队伍计算的总HP
+		let tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v) => pv + Math.round(v * badgeHPScale + 1e-12), 0); //队伍计算的总HP无觉醒
 
 		//记录到bar中，方便打开详情时调用
 		hpBar.reduceAttrRangesWithShieldAwoken = reduceAttrRangesWithShieldAwoken; //有盾觉醒的
@@ -6844,15 +6844,15 @@ function refreshFormationTotalHP(totalDom, teams) {
 
 		const totalReduce = leastScale.scale;
 
-		const tHPArr = teams.map(function(team) {
+		const tHPArr = teams.map(team=>{
 			const teamHPArr = countTeamHp(team, leader1id, leader2id, solo);
 
 			const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount), teamHPAwokenScale = (1 + 0.05 * teamHPAwoken); //全队大血包个数
-			const teamTHP = Math.round(teamHPArr.reduce((pv, v) => pv + v * teamHPAwokenScale)); //队伍计算的总HP
+			const teamTHP = teamHPArr.reduce((pv, v) => pv + Math.round(v * teamHPAwokenScale + 1e-12)); //队伍计算的总HP
 
 			return teamTHP;
 		});
-		const tHPNoAwokenArr = teams.map(function(team) {
+		const tHPNoAwokenArr = teams.map(team=>{
 			const teamHPArr = countTeamHp(team, leader1id, leader2id, solo, true);
 
 			const teamTHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP

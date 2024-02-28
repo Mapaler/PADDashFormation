@@ -1233,7 +1233,7 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 		//演示用代码
 		//console.log("%s 第1次倍率血量：%s，第2次倍率血量：%s",Cards[m.id].otLangName["chs"],hp1,hp2);
 
-		mHpArr.push(Math.round(mulHP));
+		mHpArr.push(mulHP);
 	}
 
 	//console.log('单个队伍血量：',mHpArr,mHpArr.reduce((p,c)=>p+c));
