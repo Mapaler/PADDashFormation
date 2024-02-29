@@ -1609,11 +1609,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .search-box .attrs-div-div>ul{
 	display: block;
 }
-.search-box>div>ul>li{
-	display: inline-block;
-	vertical-align: top;
-	font-size:16px;
-}
+
 .search-box .attr-list>li{
 	overflow: hidden;
 }
@@ -1714,10 +1710,12 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	content: "类型";
 }*/
 .types-div .type-list,
-.types-div .latent-list,
+.types-div .latent-ul,
 .rare-div .rare-list
 {
-	display: inline-block;
+	display: inline-flex;
+	vertical-align: middle;
+	gap: 3px;
 }
 :where(
 	.type-list,
@@ -2588,6 +2586,10 @@ input[disabled]+.awoken-icon:active,
 .latent-ul .latent-icon[data-latent-icon]{
 	cursor: pointer;
 }
+.team-latents .latent-ul .latent-icon[data-latent-icon]{
+	cursor: default;
+}
+
 /*不允许使用的潜觉，不是手指，半透明，灰度*/
 .awoken-icon.unallowable-awoken,
 input[disabled]+.awoken-icon,

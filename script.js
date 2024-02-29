@@ -4119,7 +4119,7 @@ function initialize() {
 	}
 	s_types.forEach(checkBox=>checkBox.onchange = s_types_onchange);
 
-	const s_types_latentUl = s_typesDiv.querySelector(".latent-list");
+	const s_types_latentUl = s_typesDiv.querySelector(".latent-ul");
 	const s_types_latentli = Array.from(s_types_latentUl.querySelectorAll("li"));
 	function s_types_latentli_onclick(){
 		const latenttype = parseInt(this.getAttribute("data-latent-icon"));
