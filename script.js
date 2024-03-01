@@ -1697,19 +1697,6 @@ function loadData(force = false)
 		}
 		function dealCardsData(_cards)
 		{
-			if (editBox)
-			{
-				const monstersList = editBox.querySelector("#monsters-name-list");
-				let fragment = document.createDocumentFragment();
-				_cards.forEach(function(card, idx, arr) { //添加下拉框候选
-					const opt = fragment.appendChild(document.createElement("option"));
-					opt.value = card.id;
-					opt.label = card.id + " - " + returnMonsterNameArr(card, currentLanguage.searchlist, currentDataSource.code).join(" | ");
-				});
-				
-				monstersList.appendChild(fragment);
-			}
-
 			statusLine?.writeText(localTranslating.status_message.loading_skill_info);
 			if (!force && db && currentCkey.ckey.skill == lastCurrentCkey.ckey.skill) {
 				console.debug("Skills ckey相等，直接读取已有的数据。");
