@@ -443,7 +443,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_111.PNG",
-		"2d14bb9d71f6acdfb4350423954299ef"
+		"d4673b931f61b84dadaa6716e984e363"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
