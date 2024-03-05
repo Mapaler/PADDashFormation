@@ -6674,6 +6674,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case  5: return 1.05; //小血
 				case 18: return 1.15; //大血
 				case 20: return 1.10; //全属性
+				default: return 1;
 			}
 		})(badge);
 		//由于JS的小数和强类型语言不完全一致，+1e-12后再做四舍五入会更准确符合游戏内数字
