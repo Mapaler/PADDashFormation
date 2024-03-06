@@ -802,8 +802,10 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 				return previous + la.scale * latentCount;
 			}, 0) :
 			0;
-
-		let reValue = Math.round(n_base * n_awokenScale + n_base * n_latentScale) + n_plus + n_awoken + Math.round((n_assist_base + n_assist_plus) * bonusScale[idx]);
+		// if (member.id === 10783 && idx === 0) {
+		// 	console.debug(n_base, n_awokenScale, n_latentScale)
+		// }
+		let reValue = Math.round(n_base * n_awokenScale) + Math.round(n_base * n_latentScale) + n_plus + n_awoken + Math.round((n_assist_base + n_assist_plus) * bonusScale[idx]);
 		//因为语音觉醒觉醒无效也生效，所以这里需要计算
 		let reValueNoAwoken = Math.round(n_base * n_awokenScale) + n_plus + Math.round((n_assist_base + n_assist_plus) * bonusScale[idx]);
 
