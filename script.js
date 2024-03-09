@@ -892,7 +892,7 @@ Formation.prototype.getSanbonQrObj = function()
 	const obj = {
 		title: this.title,
 		content: this.detail,
-		mons: members.map(m=>m.id).concat(assists.map(m=>m.id)),
+		mons: assists.map(m=>m.id).concat(members.map(m=>m.id)),
 		data: {
 			badge: badge || 1,
 			members: {},

@@ -24059,7 +24059,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"42cf414b9c5bf0ca0a9cf284879c4760"
+		"03cb43c816ba5e40bb8b2c78b0c0fd45"
 	],
 	[
 		"solo.html",
@@ -24315,7 +24315,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/index.html",
-		"264f1479e3b9337362b8938cab01e511"
+		"a435fdb3de57a9889f13c85b073a925c"
 	],
 	[
 		"doc/images/bluestacks-adb-connect.webp",
