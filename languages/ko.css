@@ -586,7 +586,19 @@ label[for="paddb-team-id"]::before
 }
 body:not(.external-link-support) #external-support::after
 {
-	content: "PADDB 관련 기능을 사용하도록 보조 스크립트를 설치";
+	content: "PADDB/SANBON 관련 기능을 사용하도록 보조 스크립트를 설치";
+}
+
+#qr-code-frame .sanbon-team-edit::before
+{
+	content: "팀 데이터를 sanbon.me에 업로드하려면 다음을 수행.";
+}
+label[for="sanbon-team-id"]::before
+{
+	content: "sanbon.me 팀 링크:";
+}
+#sanbon-save-or-upload-team::before {
+	content: "새 팀을 업로드";
 }
 
 label[for="qr-data-type-pdf"]::before

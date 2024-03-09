@@ -787,25 +787,6 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 	};
 	return qrObj;
 }
-Formation.prototype.getSanbonV1Url = function()
-{
-	const region = sanbonTranslateRegion(currentDataSource.code);
-	const sanbonUrl = new URL(`https://sanbon.me/${region}/team-builder`);
-	const search =  sanbonUrl.searchParams;
-	//sanbon目前只支持单人队伍
-	const [members,assists,badge] = this.teams[0];
-	
-	for (let i = 0; i < members.length; i++) {
-		const m = members[i], a = assists[i];
-		m.id > 0 && search.set(`${i}`, m.id);
-		m.sawoken > 0 && search.set(`${i}s`, m.sawoken);
-		m?.latent?.length > 0 && search.set(`${i}l`, m.latent.join());
-		a.id > 0 && search.set(`${i}a`, a.id);
-	}
-	badge > 0 && search.set(`badge`, badge & 0x7f);
-	
-	return sanbonUrl;
-}
 function sanbonTranslateRegion(code) {
 	switch (code) {
 		case "ja": return "jp";
@@ -903,7 +884,39 @@ scriptLines.push(`sessionStorage.setItem("team-build-store", JSON.stringify(tbs)
 location.reload();
 })();`);
 	return scriptLines.join('\n');
-}
+};
+Formation.prototype.getSanbonQrObj = function()
+{
+	//sanbon目前只支持单人队伍
+	const [members,assists,badge] = this.teams[0];
+	const obj = {
+		title: this.title,
+		content: this.detail,
+		mons: members.map(m=>m.id).concat(assists.map(m=>m.id)),
+		data: {
+			badge: badge || 1,
+			members: {},
+		},
+	};
+	for (let i = 0; i < members.length; i++) {
+		const m = members[i], a = assists[i];
+		const _m = {
+			num: m.id,
+			level: m.level,
+			superAwoken: m.sawoken,
+			latentAwokens: m.latent.concat(),
+			awokenCount: m.awoken,
+			hpPlus: m.plus[0],
+			atkPlus: m.plus[1],
+			rcvPlus: m.plus[2],
+			assistNum: a.id,
+			assistLevel: a.level,
+			assistPlus: a?.plus?.every(p=>p>=99) ?? false,
+		}
+		obj.data.members[i] = _m;
+	}
+	return obj;
+};
 
 //paddb的徽章对应数字
 Formation.daddbBadgeMap = [
@@ -1007,17 +1020,8 @@ Formation.prototype.getQrStr = function(type)
 		case 'paddf': {
 			return JSON.stringify(this.getPdfQrObj());
 		}
-		case 'paddb': {
-			return JSON.stringify(this.getPaddbQrObj());
-		}
 		case 'daddb': {
 			return JSON.stringify(this.getDaddbQrObj());
-		}
-		case 'sanbon-v1': {
-			return this.getSanbonV1Url();
-		}
-		case 'sanbon-v2': {
-			return this.getSanbonV2Script();
 		}
 		case 'pdc':
 		default: {
@@ -1940,7 +1944,7 @@ function qrObjToUrl(obj)
 	{
 		newUrl.searchParams.set("l", l);
 	}
-	//数据服版本
+	//PADDB的ID
 	if (obj.paddbId)
 	{
 		newUrl.searchParams.set("_id", obj.paddbId);
@@ -2839,6 +2843,50 @@ function initialize() {
 				paddbTeamId.onchange();
 			}
 			alert(localTranslating.link_read_message.paddb_success);
+		} else {
+			alert(localTranslating.link_read_message.error[0]);
+		}
+		this.disabled = false;
+	}
+
+	//sanbon.me数据上传
+	//const sanbonTeamEdit = qrContent.querySelector(".sanbon-team-edit");
+	const sanbonTeamId = document.querySelector("#sanbon-team-id");
+	const sanbonSaveOrUpload = document.querySelector("#sanbon-save-or-upload-team");
+	sanbonSaveOrUpload.onclick = async function(){
+		this.disabled = true;
+		if (!btnExternalSupport?.asyncGM_xmlhttpRequest) {
+			alert(localTranslating.link_read_message.need_user_script);
+			return;
+		}
+		let obj = formation.getSanbonQrObj();
+		let postBody = JSON.stringify(obj);
+		const options = {
+			method: "POST",
+			url: `https://sanbon.me/api/${sanbonTranslateRegion(currentDataSource.code)}/upload-team`,
+			data: postBody,
+			headers: {
+				"Content-Type": "application/json",
+				//如果只有ascii字符可以用postBody.length
+				"Content-Length": new Blob([postBody], {type: "application/json"}).size,
+			}
+		};
+		const response = await btnExternalSupport.asyncGM_xmlhttpRequest(options);
+		if (response.status === 401) {
+			alert(localTranslating.link_read_message.paddb_unauthorized);
+		} else if (response.status === 200)  {
+			try {
+				const result = JSON.parse(response.response);
+				console.debug("数据上传返回结果：%o",result);
+				if (result.success) {
+					sanbonTeamId.value = `https://sanbon.me/${sanbonTranslateRegion(currentDataSource.code)}/team/${result.code}`;
+					alert(localTranslating.link_read_message.paddb_success);
+				} else {
+					alert(result.message);
+				}
+			} catch(e) {
+				alert(localTranslating.link_read_message.error[3]);
+			}
 		} else {
 			alert(localTranslating.link_read_message.error[0]);
 		}
@@ -6941,18 +6989,18 @@ function refreshFormationTotalHP(totalDom, teams) {
 			const teamHPArr = countTeamHp(team, leader1id, leader2id, solo);
 
 			const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount), teamHPAwokenScale = (1 + 0.05 * teamHPAwoken); //全队大血包个数
-			const teamTHP = teamHPArr.reduce((pv, v) => pv + Math.round(v * teamHPAwokenScale + 1e-12)); //队伍计算的总HP
+			const teamTHP = teamHPArr.reduce((pv, v) => pv + Math.round(v * teamHPAwokenScale + 1e-12), 0); //队伍计算的总HP
 
 			return teamTHP;
 		});
 		const tHPNoAwokenArr = teams.map(team=>{
 			const teamHPArr = countTeamHp(team, leader1id, leader2id, solo, true);
 
-			const teamTHP = teamHPArr.reduce((pv, v) => pv + v); //队伍计算的总HP
+			const teamTHP = teamHPArr.reduce((pv, v) => pv + v, 0); //队伍计算的总HP
 			return Math.round(teamTHP);
 		});
 		const tHP = tHPArr.reduce((pv, v) => pv + v);
-		const tHPNoAwoken = tHPNoAwokenArr.reduce((pv, v) => pv + v);
+		const tHPNoAwoken = tHPNoAwokenArr.reduce((pv, v) => pv + v, 0);
 
 		//记录到bar中，方便打开详情时调用
 		hpBar.reduceAttrRanges = reduceAttrRanges;

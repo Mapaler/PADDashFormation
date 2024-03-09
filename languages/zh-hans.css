@@ -537,9 +537,9 @@ label[for="real-time-change-card"]::after
 {
 	content: "生成二维码：";
 }
-.sanbon-me-transfer::before
+.sanbon-transfer::before
 {
-	content: "Sanbon.me：";
+	content: "Sanbon.me：（有缺陷的测试功能）";
 }
 
 .read-qr-box .result-code::before {
@@ -599,9 +599,22 @@ label[for="paddb-team-id"]::before
 #paddb-team-id:placeholder-shown+#paddb-save-or-upload-team::before {
 	content: "上传新队伍";
 }
+
 body:not(.external-link-support) #external-support::after
 {
-	content: "安装辅助脚本以使用 PADDB 相关功能";
+	content: "安装辅助脚本以使用 PADDB/SANBON 相关功能";
+}
+
+#qr-code-frame .sanbon-team-edit::before
+{
+	content: "将队伍数据上传至 sanbon.me：";
+}
+label[for="sanbon-team-id"]::before
+{
+	content: "sanbon.me 队伍链接：";
+}
+#sanbon-save-or-upload-team::before {
+	content: "上传新队伍";
 }
 
 label[for="qr-data-type-pdf"]::before

@@ -598,7 +598,19 @@ label[for="paddb-team-id"]::before
 }
 body:not(.external-link-support) #external-support::after
 {
-	content: "安裝輔助腳本以使用 PADDB 相關功能";
+	content: "安裝輔助腳本以使用 PADDB/SANBON 相關功能";
+}
+
+#qr-code-frame .sanbon-team-edit::before
+{
+	content: "將隊伍數據上傳至 sanbon.me：";
+}
+label[for="sanbon-team-id"]::before
+{
+	content: "sanbon.me 隊伍鏈接：";
+}
+#sanbon-save-or-upload-team::before {
+	content: "上傳新隊伍";
 }
 
 label[for="qr-data-type-pdf"]::before

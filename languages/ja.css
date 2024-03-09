@@ -606,7 +606,19 @@ label[for="paddb-team-id"]::before
 }
 body:not(.external-link-support) #external-support::after
 {
-	content: "PADDB 関連機能を使用するセカンダリ スクリプトをインストール";
+	content: "PADDB/SANBON 関連機能を使用するセカンダリ スクリプトをインストール";
+}
+
+#qr-code-frame .sanbon-team-edit::before
+{
+	content: "チーム データを sanbon.me にアップロード:";
+}
+label[for="sanbon-team-id"]::before
+{
+	content: "sanbon.me チームリンク:";
+}
+#sanbon-save-or-upload-team::before {
+	content: "新しいチームをアップロード";
 }
 
 label[for="qr-data-type-pdf"]::before

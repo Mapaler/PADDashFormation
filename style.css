@@ -3542,24 +3542,39 @@ body:not(.external-link-support) #external-support::before
 	resize: vertical;
 }
 
-#qr-code-frame .read-qr-box::before,
-#qr-code-frame .save-qr-box::before,
-#qr-code-frame .sanbon-me-transfer::before,
-#qr-code-frame .paddb-team-edit::before
-{
+#qr-code-frame :where(
+	.read-qr-box,
+	.save-qr-box,
+	.paddb-team-edit,
+	.sanbon-transfer,
+	.sanbon-team-edit,
+)::before {
 	display: block;
 	text-align: left;
 }
-body:not(.solo.external-link-support) .paddb-team-edit{
+body:not(.solo.external-link-support) :where(
+	.paddb-team-edit,
+	.sanbon-team-edit,
+) {
 	/*没有装插件的不显示PADDB上传功能*/
 	display: none;
 }
+body.external-link-support .sanbon-transfer {
+	/*装了插件的不显示sanbon测试功能*/
+	display: none;
+}
+
 body.external-link-support #external-support{
 	/*装了插件的不显示请求装插件的消息*/
 	display: none;
 }
-#paddb-team-id {
+#paddb-team-id,
+#sanbon-team-id {
 	width: 350px;
+}
+.sanbon-transfer::before
+{
+	content: "Sanbon.me：(Defective test functionality)";
 }
 
 .qr-data-type-ul {
