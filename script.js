@@ -2045,13 +2045,28 @@ async function inputFromQrString(string)
 			const txtStringInput = document.body.querySelector("#qr-code-frame .action-button-box .string-input"); //输入的字符串
 			const btnExternalSupport = document.body.querySelector("#external-support");
 			if (btnExternalSupport?.asyncGM_xmlhttpRequest) {
+				//获取 sanbon.me 的 buildId
+				const mainpageResponse = await btnExternalSupport.asyncGM_xmlhttpRequest({
+					method: "GET",
+					url: "https://sanbon.me/",
+				});
+				const domParser = new DOMParser();
+				const sanbonMainpage = domParser.parseFromString(mainpageResponse.response, "text/html");
+				const __NEXT_DATA__ = sanbonMainpage.getElementById("__NEXT_DATA__");
+				const __NEXT_DATA__JSON = JSON.parse(__NEXT_DATA__.innerHTML);
+				const buildId = __NEXT_DATA__JSON.buildId;
+				console.debug("sanbon.me 网站当前的框架 buildId 是 %s",buildId);
+
+				//获取队伍数据的访问链接
 				const langString = url.pathname.substring(1, url.pathname.indexOf(paddbPathPrefix));
 				const langReg = /(?:\w{2}\-)?(\w{2})$/i.exec(langString); //实际上只会有(en|ja|ko)\-(jp|na|kr)
 				const lang_region = langReg[1];
 				const dataUrl = new URL("https://sanbon.me/");
-				dataUrl.pathname = `/_next/data/A-hhA199gMS9v9ZzQPQm8/${lang_region}/team/${teamId}.json`;
+				dataUrl.pathname = `/_next/data/${buildId}/${lang_region}/team/${teamId}.json`;
 				dataUrl.searchParams.set("lang_region", lang_region);
 				dataUrl.searchParams.set("code", teamId);
+
+				console.debug("当前的 sanbon.me 队伍数据链接是 %o",dataUrl);
 				
 				const options = {
 					method: "GET",
