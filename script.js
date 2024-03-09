@@ -1961,6 +1961,30 @@ async function inputFromQrString(string)
 		qrObj.paddbId = obj._id;
 		return qrObjToUrl(qrObj);
 	}
+	function sanbonObjToURL(obj, region) {
+		const newFotmation = sanbonFotmationToPdfFotmation(obj);
+		const qrObj = newFotmation.getPdfQrObj(false);
+		if (region == undefined) {
+			console.debug("从sanbon json数据中获取数据区域");
+			region = obj.pageProps.members["0"].flattened.region;
+		}
+		switch (region) {
+			case "kr": {
+				qrObj.s = "ko";
+				break;
+			}
+			case "na": {
+				qrObj.s = "en";
+				break;
+			}
+			case "jp":
+			default: {
+				qrObj.s = "ja";
+				break;
+			}
+		}
+		return qrObjToUrl(qrObj);
+	}
 	//JSON 类
 	if (string.startsWith("{") && string.endsWith("}"))
 	{ //生成的二维码
@@ -1974,6 +1998,10 @@ async function inputFromQrString(string)
 			else if (typeof obj?.team == "string" && obj.team[0] === "{" && obj.team[obj.team.length-1] === "}") { //PADDB的对象格式
 				re.type = "PADDB";
 				re.url = paddbObjToURL(obj)
+			}
+			else if ("__N_SSG" in obj) { //SANBON的对象格式
+				re.type = "SANBON";
+				re.url = sanbonObjToURL(obj)
 			}
 			else if (Array.isArray(obj?.staffs)) { //DADDB的对象格式
 				re.type = "DADDB";
@@ -2008,6 +2036,40 @@ async function inputFromQrString(string)
 				console.error(error);
 				re.error = ERROR_illegal_URL_format;
 				//re.message = "错误的 网址 格式 | The illegal URL format";
+			}
+		}
+		//sanbon.me 的网址格式，之后要调用脚本功能获取跨域JSON
+		else if(url.host == "sanbon.me" && url.pathname.includes(paddbPathPrefix)) {
+			const teamId = url.pathname.substring(url.pathname.indexOf(paddbPathPrefix) + paddbPathPrefix.length);
+			re.type = "SANBON";
+			const txtStringInput = document.body.querySelector("#qr-code-frame .action-button-box .string-input"); //输入的字符串
+			const btnExternalSupport = document.body.querySelector("#external-support");
+			if (btnExternalSupport?.asyncGM_xmlhttpRequest) {
+				const langString = url.pathname.substring(1, url.pathname.indexOf(paddbPathPrefix));
+				const langReg = /(?:\w{2}\-)?(\w{2})$/i.exec(langString); //实际上只会有(en|ja|ko)\-(jp|na|kr)
+				const lang_region = langReg[1];
+				const dataUrl = new URL("https://sanbon.me/");
+				dataUrl.pathname = `/_next/data/A-hhA199gMS9v9ZzQPQm8/${lang_region}/team/${teamId}.json`;
+				dataUrl.searchParams.set("lang_region", lang_region);
+				dataUrl.searchParams.set("code", teamId);
+				
+				const options = {
+					method: "GET",
+					url: dataUrl,
+				};
+				const response = await btnExternalSupport.asyncGM_xmlhttpRequest(options);
+				try{
+					let obj = JSON.parse(txtStringInput.value = response.response);
+					re.url = sanbonObjToURL(obj, lang_region);
+				} catch(error) {
+					console.error(error);
+					re.error = ERROR_illegal_JSON_format;
+				}
+			} else {
+				re.error = ERROR_Unsupported_format;
+				re.message = localTranslating.link_read_message.need_user_script;
+				re.url = ExternalLinkScriptURL;
+				re.urlName = localTranslating.link_read_message.user_script_link;
 			}
 		}
 		//PADDB 的网址格式，之后要调用脚本功能获取跨域JSON
@@ -2196,6 +2258,34 @@ function paddbFotmationToPdfFotmation(obj)
 			a.awoken = Cards[a.id].awakenings.length;
 			a.plus = da.plus ? [99,99,99]:[0,0,0];
 			a.skilllevel = da.active_skill_level;
+		}
+	}
+	return f;
+}
+//解析sanbon.me的数据
+function sanbonFotmationToPdfFotmation(obj)
+{
+	const team = obj.pageProps;
+	const f = new Formation(1, 6);
+	f.title = team.title;
+	f.detail = team.content;
+	const t = f.teams[0];
+	//队伍徽章
+	t[2] = team.badge;
+	const members = t[0], assists = t[1];
+	for (let i = 0; i< members.length; i++) {
+		const m = members[i], a = assists[i], dm = team.members[i];
+		if (dm) {
+			m.id = dm.num;
+			m.level = dm.level;
+			m.plus = [dm.hpPlus, dm.atkPlus, dm.rcvPlus];
+			m.awoken = dm.awokenCount;
+			m.sawoken = dm.superAwoken;
+			m.latent = dm.latentAwokens;
+			a.id = dm.assistNum;
+			a.awoken = Cards[a.id].awakenings.length;
+			a.plus = dm.assistPlus ? [99,99,99]:[0,0,0];
+			a.level = dm.assistLevel;
 		}
 	}
 	return f;
