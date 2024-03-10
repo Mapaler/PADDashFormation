@@ -3080,7 +3080,7 @@ function initialize() {
 		icon.onclick = insertIconToText;
 		insertAwokenIconList.appendChild(li);
 	}
-	for (let id of new Set(Formation.pdcLatentMap.map(obj=>obj.pdf))) {
+	for (let id of Array.from(editBox.querySelectorAll(".setting-box .row-mon-latent details .m-latent-allowable-ul .latent-icon")).map(li=>li.getAttribute("data-latent-icon"))) {
 		const li = document.createElement("li");
 		const icon = li.appendChild(createIndexedIcon('latent', id));
 		icon.onclick = insertIconToText;
@@ -4994,10 +4994,10 @@ function initialize() {
 
 	//潜觉
 	const monEditLatentUl = settingBox.querySelector(".row-mon-latent .latent-ul");
-	const monEditLatents = Array.from(monEditLatentUl?.querySelectorAll("li"));
+	const monEditLatents = Array.from(monEditLatentUl?.querySelectorAll(".latent-icon"));
 	const monEditLatentAllowableDetail = settingBox.querySelector(".row-mon-latent details");
 	const monEditLatentAllowableUl = monEditLatentAllowableDetail.querySelector(".m-latent-allowable-ul");
-	const monEditLatentsAllowable = Array.from(monEditLatentAllowableUl.querySelectorAll("li"));
+	const monEditLatentsAllowable = Array.from(monEditLatentAllowableUl.querySelectorAll(".latent-icon"));
 	monEditLatentAllowableDetail.open = localStorage_getBoolean(cfgPrefix + 'hide-latent');
 	monEditLatentAllowableDetail.onclick = function(event) {
 		if (event instanceof Event) localStorage.setItem(cfgPrefix + 'hide-latent', Number(!this.open));
@@ -6528,8 +6528,9 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 //刷新队伍觉醒统计
 function refreshTeamAwokenCount(awokenDom, team) {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
-
-	official_awoken_sorting.forEach(ak=>{
+	const awokenResort = new Set([46]); //队伍大血，强制排在第一位
+	official_awoken_sorting.forEach(ak=>awokenResort.add(ak));
+	awokenResort.forEach(ak=>{
 		let totalNum = 0;
 		//搜索等效觉醒
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ak || eak.big === ak);
@@ -6553,7 +6554,7 @@ function refreshTeamAwokenCount(awokenDom, team) {
 		const span = li.appendChild(document.createElement("span"));
 		span.className = "count";
 		span.textContent = totalNum;
-		fragment.appendChild(li);
+		fragment.append(li);
 	});
 
 	const awokenUL = awokenDom.querySelector(".awoken-ul");
