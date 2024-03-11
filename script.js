@@ -894,7 +894,7 @@ Formation.prototype.getSanbonQrObj = function()
 		content: this.detail,
 		mons: assists.map(m=>m.id).concat(members.map(m=>m.id)),
 		data: {
-			badge: badge || 1,
+			badge: (badge || 1) & 0x7f,
 			members: {},
 		},
 	};
@@ -2290,7 +2290,7 @@ function sanbonFotmationToPdfFotmation(obj)
 	f.detail = team.content;
 	const t = f.teams[0];
 	//队伍徽章
-	t[2] = team.badge;
+	t[2] = team.badge === 1 ? PAD_PASS_BADGE : team.badge;
 	const members = t[0], assists = t[1];
 	for (let i = 0; i< members.length; i++) {
 		const m = members[i], a = assists[i], dm = team.members[i];
