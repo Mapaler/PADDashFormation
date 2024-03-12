@@ -1412,6 +1412,12 @@
 	text-align: center;
 	margin-right: 5px;
 }
+.badge:where( /*去武器的徽章*/
+	[data-badge-icon='15'],
+	[data-badge-icon='16'],
+){
+	background-position-x: -54px;
+}
 .badge::before{
 	content: "";
 	display: inline-block;
@@ -1497,6 +1503,7 @@
 	background-position-x: -36px;
 	background-position-y: 0;
 }
+
 :lang(zh) .badge:where(
 	[data-badge-icon='1'],
 	[data-badge-icon='10'],
@@ -1505,22 +1512,33 @@
 )::before {
 	background-position-x: calc(-36px * 3);
 }
+
 :lang(en) .badge:where(
 	[data-badge-icon='1'],
 	[data-badge-icon='3'],
+	[data-badge-icon='7'],
+	[data-badge-icon='8'],
+	[data-badge-icon='9'],
+	[data-badge-icon='12'],
+	[data-badge-icon='13'],
+	[data-badge-icon='14'],
 	[data-badge-icon='20'],
 )::before,
-:lang(ko) .badge[data-badge-icon='3']::before {
+:lang(ko) .badge:where(
+	[data-badge-icon='3'],
+	[data-badge-icon='7'],
+	[data-badge-icon='8'],
+	[data-badge-icon='9'],
+	[data-badge-icon='12'],
+	[data-badge-icon='13'],
+	[data-badge-icon='14'],
+)::before {
 	background-position-x: calc(-36px * 1);
 }
+
 :lang(ko) .badge:where(
 	[data-badge-icon='1'],
 	[data-badge-icon='20'],
-)::before {
-	background-position-x: calc(-36px * 2);
-}
-:lang(ko) .badge:where(
-	[data-badge-icon='3'],
 )::before {
 	background-position-x: calc(-36px * 2);
 }
