@@ -1,17 +1,27 @@
 ﻿const unsupportFeatures = (()=>{
 	function runCodeWithFunction(obj) {
-		return Function('"use strict";return (' + obj + ")")();
+		return Function(`"use strict"; return (${obj})`)();
 	}
-	  
+	function supportsPseudoClass(clazz) {
+		const style = document.createElement('style');
+		style.innerHTML = clazz + '{}';
+		document.head.appendChild(style); // required, or style.sheet === null
+		const result = style.sheet.cssRules.length === 1;
+		style.remove(); // document.head.removeChild(style);
+		return result;
+	}
+
 	const features = [
 		{name: "Optional chaining (?.) / 可选链操作符(?.)", version:{firefox:74,chrome:80,safari:13.4}, url: "https://caniuse.com/mdn-javascript_operators_optional_chaining", test: ()=>Boolean(runCodeWithFunction("undefined?.undefined || true"))},
 		{name: "Nullish coalescing operator (??) / 空值合并操作符(??)", version:{firefox:72,chrome:80,safari:13.4}, url: "https://caniuse.com/mdn-javascript_operators_nullish_coalescing", test: ()=>Boolean(runCodeWithFunction("undefined ?? true"))},
-		{name: "BigInt value (1n) / BigInt 数据类型(1n)", version:{firefox:79,chrome:67,safari:14}, url: "https://caniuse.com/bigint", test: ()=>Boolean(runCodeWithFunction("1n"))},
-		// {name: "CSS selector: :is() / CSS选择器: :is()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/css-matches-pseudo", test: ()=>Boolean(eval("document.querySelector(':is()') || true"))},
-		// {name: "CSS selector: :where() / CSS选择器: :where()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/mdn-css_selectors_where", test: ()=>Boolean(eval("document.querySelector(':where()') || true"))},
-		{name: "CSS selector: :not() / CSS选择器: :not()", version:{firefox:84,chrome:88,safari:9}, url: "https://caniuse.com/css-not-sel-list", test: ()=>Boolean(runCodeWithFunction("document.querySelector(':not(html)') || true"))},
-		// {name: "Private class fields (#name) / 类私有域(#name)", version:{firefox:90,chrome:74,safari:14.5}, url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>Boolean(eval("class test {#v = 0;}; true;"))},
+		{name: "BigInt value (1n) / BigInt 数据类型(1n)", version:{firefox:68,chrome:67,safari:14}, url: "https://caniuse.com/bigint", test: ()=>Boolean(runCodeWithFunction("1n"))},
+		// {name: "CSS selector: :is() / CSS选择器: :is()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/css-matches-pseudo", test: ()=>supportsPseudoClass(":is()")},
+		{name: "CSS selector: :where() / CSS选择器: :where()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/mdn-css_selectors_where", test: ()=>supportsPseudoClass(":where()")},
+		{name: "CSS selector: :not() / CSS选择器: :not()", version:{firefox:84,chrome:88,safari:9}, url: "https://caniuse.com/css-not-sel-list", test: ()=>supportsPseudoClass(":not(html)")},
+		//{name: "CSS selector: :has() / CSS选择器: :has()", version:{firefox:121,chrome:105,safari:15.4}, url: "https://caniuse.com/css-has", test: ()=>supportsPseudoClass(":has(html)")},
+		{name: "Private class fields (#name) / 类私有域(#name)", version:{firefox:90,chrome:74,safari:14.5}, url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>Boolean(runCodeWithFunction("class test {#v = 0;}, true"))},
 		// {name: "Dialog element / Dialog 元素", version:{firefox:98,chrome:37,safari:15.4}, url: "https://caniuse.com/dialog", test: ()=>Boolean(eval("HTMLDialogElement"))},
+		// {name: "Class static initialization blocks / 静态初始化块", version:{firefox:93,chrome:94,safari:16.4}, url: "https://caniuse.com/mdn-javascript_classes_static_initialization_blocks", test: ()=>supportsPseudoClass(":not(html)")},
 	]
 	return features.filter(feature=>{
 		try {
@@ -46,22 +56,22 @@ if (unsupportFeatures.length) {
 	let alertStr;
 	if (/^zh-(?:han(?:s|t)-)?/.test(navigator.language)) {
 		alertStr = 
-`🙁浏览器内核版本太老<br>
+`<div>🙁浏览器内核版本太老<br>
 您的浏览器版本为: ${browserVersion}<br>
 您的浏览器内核不支持本程序使用的以下技术
 <ol>
 ${unsupportFeatures.map(feature=>`<li><a href="${feature.url}">${feature.name}</a></li>`).join('')}
 </ol>
-请更新您的浏览器内核到 Firefox(火狐) ≥ ${needBrowserVersion.firefox} 或 Chrome(谷歌) ≥ ${needBrowserVersion.chrome} 或 Safari ≥ ${needBrowserVersion.safari}。`;
+请更新您的浏览器内核到 Firefox(火狐) ≥ ${needBrowserVersion.firefox} 或 Chrome(谷歌) ≥ ${needBrowserVersion.chrome} 或 Safari ≥ ${needBrowserVersion.safari}。</div>`;
 	} else {
 		alertStr = 
-`🙁Browser kernel is too old<br>
+`<div>🙁Browser kernel is too old<br>
 Your browser is: ${browserVersion}<br>
 Your browser kernel does not support the following technologies used by this program:
 <ol>
 ${unsupportFeatures.map(feature=>`<li><a href="${feature.url}">${feature.name}</a></li>`).join('')}
 </ol>
-Please update your browser core to Firefox ≥ ${needBrowserVersion.firefox} or Chrome ≥ ${needBrowserVersion.chrome} or Safari ≥ ${needBrowserVersion.safari}`;
+Please update your browser core to Firefox ≥ ${needBrowserVersion.firefox} or Chrome ≥ ${needBrowserVersion.chrome} or Safari ≥ ${needBrowserVersion.safari}</div>`;
 	}
 
 //alert(alertStr);
@@ -92,6 +102,12 @@ if (/\b(?:MicroMessenger|WeChat|Weixin|QQ|AliApp)\b/.test(navigator.userAgent)) 
 	const alertDiv = mask.appendChild(document.createElement("div"));
 	alertDiv.className = "alert";
 	alertDiv.innerHTML = `请勿使用内置浏览<br>点击菜单使用正常浏览器打开↗`;
+	const removeMe = mask.appendChild(document.createElement("button"));
+	removeMe.append("我知道了");
+	removeMe.onclick = ()=>{
+		mask.remove();
+		delete mask;
+	};
 
 	const event = window.addEventListener("load", ()=>{
 		document.body.appendChild(mask);

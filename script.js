@@ -115,38 +115,455 @@ DBOpenRequest.onupgradeneeded = function(event) {
 		console.log("PADDF：数据库建立完毕");
 	};
 };
-
-/*class Member2
-{
-	constructor(oldmember, isAssist)
-	{
-		//this.index = oldmember?.index ?? 0;
-		this.id = oldmember?.id ?? 0;
-		//this.exp = oldmember?.exp ?? 0;
-		this.level = oldmember?.level ?? 1;
-		this.plus = oldmember?.plus ?? {hp:0,atk:0,rcv:0};
-		this.awoken = oldmember.awoken ?? 0;
-		this.superAwoken = oldmember.superAwoken ?? null;
-		this.latent = oldmember?.latent.concat() ?? [];
-		this.skillLevel = oldmember.skillLevel ?? 0;
-		this.assist = oldmember.assist ?? null;
-		this.isAssist = Boolean(isAssist !== undefined ? isAssist : oldmember?.isAssist);
-	}
-	calculateAbility(solo,teamCount){
-		const card = Cards[this.id];
-		let bonus = null;
-		if (!this.isAssist &&
-			this.assist &&
-			this.assist.id>0 &&
-			Cards[this.assist.id].attrs[0] === card.attrs[0]
-		){
-			bonus = this.assist.calculateAbility(solo,teamCount);
+class Plus extends Array {
+	constructor(hp = 0 , atk = 0, rcv = 0) {
+		super(3);//建立 Array
+		if (Array.isArray(hp) && hp.length >= 3 //传入数组的形式
+			&& hp.every(n=>Number.isInteger(n))) {
+			this[0] = hp[0];
+			this[1] = hp[1];
+			this[2] = hp[2];
+		} else { //传入三个数字的形式
+			if (!Number.isInteger(hp) || !Number.isInteger(atk) || !Number.isInteger(rcv)) throw new TypeError("传入的+值不是整数");
+			this[0] = hp;
+			this[1] = atk;
+			this[2] = rcv;
 		}
 	}
-	toJSON(){
-
+	get hp() {
+		return this[0];
 	}
-}*/
+	set hp(num) {
+		if (!Number.isInteger(num)) throw new TypeError("传入的+值不是整数");
+		this[0] = num;
+	}
+	get atk() {
+		return this[1];
+	}
+	set atk(num) {
+		if (!Number.isInteger(num)) throw new TypeError("传入的+值不是整数");
+		this[1] = num;
+	}
+	get rcv() {
+		return this[2];
+	}
+	set rcv(num) {
+		if (!Number.isInteger(num)) throw new TypeError("传入的+值不是整数");
+		this[2] = num;
+	}
+	get is297() {
+		return (this[0] + this[1] + this[2]) === 297;
+	}
+}
+class LatentAwakening extends Array {
+	blocks = 6;
+	constructor(arg = []) {
+		super();//建立 Array
+		if (typeof arg === "bigint" ||
+			typeof arg === "number" && Number.isInteger(arg) ||
+			typeof arg === "string" && /^\d+$/.test(arg)
+		){ //单个大数字模式
+			let latentNumber = BigInt(arg);
+			//console.log("原始数字",latentNumber.toString(2));
+			const latentVersion = latentNumber & 0b111n; //记录版本，111是用几位来做记录，也就是最多7位
+			latentNumber >>= 3n; //右移3位
+			//console.log("读取潜觉记录位数",latentNumber.toString(2));
+			const changeLatentBlocksNum = Boolean(latentNumber & 1n); //1时就是开孔了
+			latentNumber >>= 1n; //右移1位
+			//console.log("读取潜觉格子数是否改变",latentNumber.toString(2));
+			if (changeLatentBlocksNum)
+			{
+				this.blocks = Number(latentNumber & 0b1111n);
+				latentNumber >>= 4n;
+				//console.log("读取潜觉格子数",latentNumber.toString(2));
+			}
+			const rightNumn = latentVersion > 6n ? 7n : 5n; //右移的距离
+			const getbnum = (1n << rightNumn) - 1n; //逻辑与的数字 //latentVersion > 6 ? 0b1111111n : 0b11111n;
+			while (latentNumber > 0n)
+			{
+				const latentId = Number(latentNumber & getbnum);
+				this.push(latentId);
+				//判断是几格，然后直接右移几次
+				const useHole = latentUseHole(latentId);
+				latentNumber >>= rightNumn * BigInt(useHole);
+			}
+		} else if (Array.isArray(arg)) {
+			Object.assign(this, arg);
+		}
+	}
+	toBigInt() {
+		//直接使用目前的最新版本
+		const leftNumn = 0b111n;
+		//重复添加潜觉
+		let latentNum = this.reduceRight((pre,latentId, idx)=>{
+			const useHole = latentUseHole(latentId);
+			const latentIdn = BigInt(latentId);
+			for (let i=1; i <= useHole; i++) {
+				pre <<= leftNumn;
+				pre |= latentIdn;
+			}
+			return pre;
+		}, 0n);
+
+		//添加使用的格子数
+		latentNum <<= 4n;
+		latentNum |= BigInt(this.blocks);
+
+		//添加是否已打开格子
+		latentNum <<= 1n;
+		latentNum |= this.blocks > 6 ? 1n : 0n;
+		
+		//潜觉版本，直接来最新版本
+		latentNum <<=3n;
+		latentNum |= latentVersion;
+
+		return BigInt.asUintN(64, latentNum);;
+	}
+}
+class Member2 {
+	id = 0;
+	level = 1;
+	plus = new Plus();
+	awakening = 0;
+	superAwakening= 0;
+	latentAwakening = new LatentAwakening();
+	skillLevel = 0;
+	assistMember = null;
+	get hasAssist() {
+		return assistMember instanceof Member2;
+	}
+	removeAssist() {
+		this.assistMember = null;
+	}
+	constructor(oldMember = {}, assistMember = null)
+	{
+		if (assistMember instanceof Member2) {
+			this.assistMember = assistMember;
+			assistMember.removeAssist();
+		}
+		if (oldMember instanceof Member2) {
+			Object.assign(this, oldMember);
+		}
+	}
+	get card() {
+		return Cards[this.id] ?? Cards[0];
+	}
+}
+class Card {
+	flags = 0;
+	id = 0;
+	name = null;
+	attrs = [];
+	types = [];
+	isUltEvo = false;
+	rarity = 0;
+	cost = 0;
+	maxLevel = 0;
+	feedExp = 0;
+	isEmpty = true;
+	sellPrice = 0;
+	hp = null;
+	atk = null;
+	rcv = null;
+	exp = null;
+	activeSkillId = 0;
+	leaderSkillId = 0;
+	enemy = null;
+	evoBaseId = null;
+	evoMaterials = [];
+	unevoMaterials = [];
+	awakenings = [];
+	superAwakenings = [];
+	evoRootId = 0;
+	seriesId = 0;
+	sellMP = 0;
+	latentAwakeningId = 0;
+	collabId = 0;
+	altName = [];
+	limitBreakIncr = 0;
+	voiceId = 0;
+	blockSkinOrBgmId = 0;
+	specialAttribute = null;
+	searchFlags = [];
+	#leaderSkillTypes = null;
+	gachaId = 0;
+
+	unk01 = null;
+	unk02 = null;
+	unk03 = null;
+	unk04 = null;
+	unk05 = null;
+	unk06 = null;
+	unk07 = null;
+	unk08 = null;
+	static fixId(id, reverse = false){
+		if (id === 0xFFFF) return id;
+		return reverse ? (id >= 9900 ? id + 100 : id) : (id >= 10000 ? id - 100 : id);
+	}
+    constructor(data){
+		if (Array.isArray(data)) {
+			this.fromOfficialData(data);
+		} else {
+			const classPrototype = Card.prototype;
+			
+			for (let key in data) {
+				const propertyDescriptor = Object.getOwnPropertyDescriptor(classPrototype, key);
+				if (propertyDescriptor &&
+					!propertyDescriptor.writable &&
+					!propertyDescriptor.set)
+					continue;
+				this[key] = data[key];
+			}
+		}
+	}
+	fromOfficialData(data) {
+		const e = data.entries();
+		function readCurve(entries) {
+			return {
+				min: entries.next().value[1],
+				max: entries.next().value[1],
+				scale: entries.next().value[1],
+			};
+		}
+		this.id = Card.fixId(e.next().value[1]); //ID
+		this.name = e.next().value[1]; //名字
+		this.attrs.push(e.next().value[1]); //属性1
+		this.attrs.push(e.next().value[1]); //属性2
+		this.isUltEvo = e.next().value[1] !== 0; //是否究极进化
+		this.types.push(e.next().value[1]); //类型1
+		this.types.push(e.next().value[1]); //类型2
+		this.rarity = e.next().value[1]; //星级
+		this.cost = e.next().value[1]; //cost
+		this.unk01 = e.next().value[1]; //未知01
+		this.maxLevel = e.next().value[1]; //最大等级
+		this.feedExp = e.next().value[1]; //1级喂食经验，需要除以4
+		this.isEmpty = e.next().value[1] === 1; //空卡片？
+		this.sellPrice = e.next().value[1]; //1级卖钱，需要除以10
+		this.hp = readCurve(e); //HP增长
+		this.atk = readCurve(e); //攻击增长
+		this.rcv = readCurve(e); //回复增长
+		this.exp = { min: 0, max: e.next().value[1], scale: e.next().value[1] }; //经验增长
+		this.activeSkillId = e.next().value[1]; //主动技
+		this.leaderSkillId = e.next().value[1]; //队长技
+		this.enemy = { //作为怪物的数值
+			countdown: e.next().value[1],
+			hp: readCurve(e),
+			atk: readCurve(e),
+			def: readCurve(e),
+			maxLevel: e.next().value[1],
+			coin: e.next().value[1],
+			exp: e.next().value[1],
+			skills: []
+		};
+		this.evoBaseId = Card.fixId(e.next().value[1]); //进化基础ID
+		this.evoMaterials.push(...([ //进化素材
+			e.next().value[1],
+			e.next().value[1],
+			e.next().value[1],
+			e.next().value[1],
+			e.next().value[1]
+		].map(n=>Card.fixId(n,false))));
+		this.unevoMaterials.push(...([ //退化素材
+			e.next().value[1],
+			e.next().value[1],
+			e.next().value[1],
+			e.next().value[1],
+			e.next().value[1]
+		].map(n=>Card.fixId(n,false))));
+		this.unk02 = e.next().value[1]; //未知02
+		this.unk03 = e.next().value[1]; //未知03
+		this.unk04 = e.next().value[1]; //未知04
+		this.unk05 = e.next().value[1]; //未知05
+		this.unk06 = e.next().value[1]; //未知06
+		this.unk07 = e.next().value[1]; //未知07
+		const numSkills = e.next().value[1]; //几种敌人技能
+		for (let si = 0; si < numSkills; si++) {
+			this.enemy.skills.push({
+				id: e.next().value[1],
+				ai: e.next().value[1],
+				rnd: e.next().value[1]
+			});
+		}
+		const numAwakening = e.next().value[1]; //觉醒个数
+		for (let ai = 0; ai < numAwakening; ai++) {
+			this.awakenings.push(e.next().value[1]);
+		}
+		this.superAwakenings.push(...(e.next().value[1].split(',').filter(Boolean).map(strN=>parseInt(strN,10)))); //超觉醒
+		this.evoRootId = Card.fixId(e.next().value[1]); //进化链根ID
+		this.seriesId = e.next().value[1]; //系列ID
+		this.types.push(e.next().value[1]); //类型3
+		this.sellMP = e.next().value[1]; //卖多少MP
+		this.latentAwakeningId = e.next().value[1]; //潜在觉醒ID
+		this.collabId = e.next().value[1]; //合作ID
+		this.flags = e.next().value[1];
+
+		this.altName.push(...e.next().value[1].split("|").filter(Boolean)); //替换名字（分类标签）
+		this.limitBreakIncr = e.next().value[1]; //110级增长
+		this.voiceId = e.next().value[1]; //语音觉醒的ID
+		this.blockSkinOrBgmId = e.next().value[1]; //珠子皮肤ID
+		this.specialAttribute = e.next().value[1]; //特别属性，比如黄龙
+		this.searchFlags.push(e.next().value[1], e.next().value[1]); //队长技搜索类型，解析写在这里会导致文件太大，所以写到前端去了
+		this.gachaId = e.next().value[1]; //目前猜测是桶ID
+		this.unk08 = e.next().value[1]; //未知08
+		this.attrs.push(e.next().value[1]); //属性3
+		
+		this.attrs = this.attrs.filter(n=>Number.isInteger(n) && n>=0);
+		this.types = this.types.filter(n=>Number.isInteger(n) && n>=0);
+
+		const last = e.next();
+		if (!last.done)
+			console.debug(`有新增数据/residue data for #%d: %o`, this.id , last.value);
+	}
+	get activeSkill(){
+		return Skills[this.activeSkillId];
+	}
+	get leaderSkill(){
+		return Skills[this.leaderSkillId];
+	}
+	get canAssist(){ //是否能当二技
+		return Boolean(this.flags & 1<<0);
+	}
+	get enabled(){ //是否已启用
+		return Boolean(this.flags & 1<<1);
+	}
+	get stacking(){ //flag有1<<3时，不合并占一格，没有时则根据类型进行合并（目前合并已经不占格子）
+		const specialType = [0,12,14,15];
+		return Boolean(this.flags & 1<<3) &&
+			this.types.some(t=>specialType.includes(t)); //0進化用;12能力覺醒用;14強化合成用;15販賣用默认合并
+	}
+	get onlyAssist(){ //是否只能当二技
+		return Boolean(this.flags & 1<<4);
+	}
+	get skillBanner(){ //是否支持8个潜觉
+		return Boolean(this.flags & 1<<5);
+	}
+	get onlyAssist(){ //是否有技能横幅
+		return Boolean(this.flags & 1<<6);
+	}
+	get leaderSkillTypes(){
+		if (this.#leaderSkillTypes == null) {
+			this.#leaderSkillTypes = new LeaderSkillType(this);
+		}
+		return this.#leaderSkillTypes;
+	}
+}
+//队长技能类型的翻译
+class LeaderSkillType{
+	#card = null;
+	#flags = [];
+	#matchMode = null;
+	#restriction = null;
+	#appendEffects = null;
+	constructor(flags1, flags2){
+		if (flags1 instanceof Card || Array.isArray(flags1.searchFlags)) {
+			this.#card = flags1;
+		} else if (Array.isArray(flags1)) {
+			this.#flags.push(...flags1);
+		} else {
+			this.#flags.push(flags1, flags2);
+		}
+	}
+	get matchMode(){
+		if (this.#matchMode == null) {
+			this.#matchMode = new LeaderSkillType_MatchingStyle(this.#card ?? this.#flags);
+		}
+		return this.#matchMode;
+	}
+	get restriction(){
+		if (this.#restriction == null) {
+			this.#restriction = new LeaderSkillType_Restriction_Bind(this.#card ?? this.#flags);
+		}
+		return this.#restriction;
+	}
+	get appendEffects(){
+		if (this.#appendEffects == null) {
+			this.#appendEffects = new LeaderSkillType_ExtraEffects(this.#card ?? this.#flags);
+		}
+		return this.#appendEffects;
+	}
+}
+class LeaderSkillType_MatchingStyle {
+	#card = null;
+	#flags = [];
+	constructor(arg){
+		if (arg instanceof Card || Array.isArray(arg.searchFlags)) {
+			this.#card = arg;
+		} else {
+			this.#flags = arg;
+		}
+	}
+	get multipleAttr(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 0)}
+	get rowMatch(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 1)}
+	get combo(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 2)}
+	get sameColor(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 3)}
+	get LShape(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 4)}
+	get crossMatch(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 5)}
+	get heartCrossMatch(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 6)}
+	get remainOrbs(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 7)}
+	get enhanced5Orbs(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 8)}
+}
+class LeaderSkillType_Restriction_Bind {
+	#card = null;
+	#flags = [];
+	constructor(arg){
+		if (arg instanceof Card || Array.isArray(arg.searchFlags)) {
+			this.#card = arg;
+		} else {
+			this.#flags = arg;
+		}
+	}
+	get attrEnhance(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 9)}
+	get typeEnhance(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 10)}
+	get board7x6(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 11)}
+	get noSkyfall(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 12)}
+	get HpRange(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 13)}
+	get useSkill(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 14)}
+	get moveTimeDecrease_Fixed(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 15)}
+	get minMatchLen(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 16)}
+	get specialTeam(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 17)}
+	get effectWhenRecover(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 18)}
+}
+class LeaderSkillType_ExtraEffects {
+	#card = null;
+	#flags = [];
+	constructor(arg){
+		if (arg instanceof Card || Array.isArray(arg.searchFlags)) {
+			this.#card = arg;
+		} else {
+			this.#flags = arg;
+		}
+	}
+	get addCombo(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 21)}
+	get fixedFollowAttack(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 22)}
+	get scaleFollowAttack(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 23)}
+	get reduce49down(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 24)}
+	get reduce50(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 25)}
+	get reduce51up(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 26)}
+	get moveTimeIncrease(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 20)}
+	get rateMultiplyExp_Coin(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 27)}
+	get rateMultiplyDrop(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 28)}
+	get voidPoison(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 29)}
+	get counterAttack(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 30)}
+	get autoHeal(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 31)}
+	get unbindAwokenBind(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 19)}
+	get resolve(){return Boolean(this.#card?.searchFlags?.[1] ?? this.#flags[1] & 1 << 0)}
+	get predictionFalling(){return Boolean(this.#card?.searchFlags?.[1] ?? this.#flags[1] & 1 << 1)}
+}
+class Team extends Array {
+	badge = 0;
+	helperTeam = null;
+	constructor(memberCount = 6)
+	{
+		super(memberCount);//建立 Array
+	}
+	get leader1(){
+		return this[0];
+	}
+	get leader2(){
+		//当有 helperTeam 时，使用另一个队伍的队长
+		return helperTeam instanceof Team ? this.helperTeam.leader1 : this[5];
+	}
+}
 
 //队员基本的留空
 var Member = function(id = 0) {
@@ -156,7 +573,7 @@ var Member = function(id = 0) {
 };
 //让 Member 能直接获取 card
 Object.defineProperty(Member.prototype, "card", {
-	get() { return Cards[this.id]; }
+	get() { return Cards[this.id] ?? Cards[0]; }
 })
 Member.prototype.effectiveAwokens = function(assist) {
 	const memberCard = this.card;
@@ -1137,9 +1554,7 @@ class PlayerDataCard {
 		};
 		this.awoken = e.next().value[1];
 
-		let parsedLatent = this.parseLatent(e.next().value[1]);
-		this.latentBlocksNum = parsedLatent.latentBlocksNum;
-		this.latent = this.deleteRepeatLatent(parsedLatent.latent.reverse());
+		this.latent = new LatentAwakening(e.next().value[1]);
 
 		this.assistIndex = e.next().value[1];
 		e.next(); //未知
@@ -1170,49 +1585,6 @@ class PlayerDataCard {
 			mon.assist = mon.assistIndex === 0 ? null : parsedCards.find(m=>m.index === mon.assistIndex);
 		});
 		return parsedCards;
-	}
-	parseLatent(number)
-	{
-		let latentNumber = BigInt(number);
-		const obj = {
-			latent: [],
-			latentBlocksNum: 6,
-		};
-		//console.log("原始数字",latentNumber.toString(2));
-		const latentVersion = latentNumber & 0b111n; //记录版本，111是用几位来做记录，也就是最多7位
-		latentNumber >>= 3n; //右移3位
-		//console.log("读取潜觉记录位数",latentNumber.toString(2));
-		const changeLatentBlocksNum = Boolean(latentNumber & 1n); //1时就是开孔了
-		latentNumber >>= 1n; //右移1位
-		//console.log("读取潜觉格子数是否改变",latentNumber.toString(2));
-		if (changeLatentBlocksNum)
-		{
-			obj.latentBlocksNum = Number(latentNumber & 0b1111n);
-			latentNumber >>= 4n;
-			//console.log("读取潜觉格子数",latentNumber.toString(2));
-		}
-		const rightbnum = latentVersion > 6n ? 7n : 5n; //右移的距离
-		const getbnum = (1n << rightbnum) - 1n; //逻辑与的数字 //latentVersion > 6 ? 0b1111111n : 0b11111n;
-		while (latentNumber > 0n)
-		{
-			obj.latent.push(Number(latentNumber & getbnum));
-			latentNumber >>= rightbnum;
-			//console.log("读取一个潜觉",latentNumber.toString(2));
-		}
-		return obj;
-	}
-	deleteRepeatLatent(olatents)
-	{
-		//splice性能太差，改成push一个新的数组
-		const latents = [];
-		for (let ai = 0; ai < olatents.length;)
-		{
-			const latent = olatents[ai];
-			latents.push(latent);
-			const useHole = latentUseHole(latent);
-			ai += useHole;
-		}
-		return latents;
 	}
 }
 //进化树
@@ -1408,51 +1780,6 @@ class RequirementTree extends EvoTree
 	};
 }
 
-//队长技能类型的翻译
-class LeaderSkillType{
-	constructor(flags1, flags2){
-		this.matchMode = {
-			multipleAttr: Boolean(flags1 & 1 << 0),
-			rowMatch: Boolean(flags1 & 1 << 1),
-			combo: Boolean(flags1 & 1 << 2),
-			sameColor: Boolean(flags1 & 1 << 3),
-			LShape: Boolean(flags1 & 1 << 4),
-			crossMatch: Boolean(flags1 & 1 << 5),
-			heartCrossMatch: Boolean(flags1 & 1 << 6),
-			remainOrbs: Boolean(flags1 & 1 << 7),
-			enhanced5Orbs: Boolean(flags1 & 1 << 8),
-		};
-		this.restriction = {
-			attrEnhance: Boolean(flags1 & 1 << 9),
-			typeEnhance: Boolean(flags1 & 1 << 10),
-			board7x6: Boolean(flags1 & 1 << 11),
-			noSkyfall: Boolean(flags1 & 1 << 12),
-			HpRange: Boolean(flags1 & 1 << 13),
-			useSkill: Boolean(flags1 & 1 << 14),
-			moveTimeDecrease_Fixed: Boolean(flags1 & 1 << 15),
-			minMatchLen: Boolean(flags1 & 1 << 16),
-			specialTeam: Boolean(flags1 & 1 << 17),
-			effectWhenRecover: Boolean(flags1 & 1 << 18),
-		};
-		this.appendEffects = {
-			addCombo: Boolean(flags1 & 1 << 21),
-			fixedFollowAttack: Boolean(flags1 & 1 << 22),
-			scaleFollowAttack: Boolean(flags1 & 1 << 23),
-			reduce49down: Boolean(flags1 & 1 << 24),
-			reduce50: Boolean(flags1 & 1 << 25),
-			reduce51up: Boolean(flags1 & 1 << 26),
-			moveTimeIncrease: Boolean(flags1 & 1 << 20),
-			rateMultiplyExp_Coin: Boolean(flags1 & 1 << 27),
-			rateMultiplyDrop: Boolean(flags1 & 1 << 28),
-			voidPoison: Boolean(flags1 & 1 << 29),
-			counterAttack: Boolean(flags1 & 1 << 30),
-			autoHeal: Boolean(flags1 & 1 << 31),
-			unbindAwokenBind: Boolean(flags1 & 1 << 19),
-			resolve: Boolean(flags2 & 1 << 0),
-			predictionFalling: Boolean(flags2 & 1 << 1),
-		};
-	}
-}
 //清除数据
 function clearData()
 {
@@ -1685,7 +2012,7 @@ function loadData(force = false)
 			for (let i = splitIdx + 1; i < _cards.length; i++)
 			{
 				const card = _cards[i];
-				if (card.searchFlags) card.leaderSkillTypes = new LeaderSkillType(...card.searchFlags);
+				if (card.searchFlags) card.leaderSkillTypes = new LeaderSkillType(card);
 				card.onlyAssist = Boolean(card.flags & 1<<4);
 				/*card.unk01p = flags(card.unk01);
 				card.unk02p = flags(card.unk02);
