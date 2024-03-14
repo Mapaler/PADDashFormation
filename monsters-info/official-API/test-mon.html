@@ -135,7 +135,7 @@ window.onload = function()
 	const btn = document.querySelector("#get");
 	get.onclick = function(){
 		let mid = parseInt(iptID.value,10);
-		if (mid>=9900)mid+=100
+		if (mid>=9900 && mid < 1e5)mid+=100
 		g(mid);
 	}
 }

@@ -7184,18 +7184,22 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		
 		const isJa = currentDataSource.code === "ja";
 		
-		const badgeHPScale = teamsCount == 2 ? 1 : (badge=>{ //徽章倍率
+		function getBadgeHPScale(badge, member) {
+			if (teamsCount == 2) return 1;
 			switch (badge) {
 				case  5: return isJa ? 1.10 : 1.05; //小血
 				case 18: return 1.15; //大血
 				case 20: return 1.10; //全属性
 				case 22: case 23: return 1.50; //状态异常耐性&SB++ 辅助无效
+
+				case 24: return member.card.collabId === 92 ? 1.15 : 1; //英雄学院徽章
 				default: return 1;
 			}
-		})(badge);
+		}
+
 		//由于JS的小数和强类型语言不完全一致，+1e-12后再做四舍五入会更准确符合游戏内数字
-		let tHP = teamHPArr.reduce((pv, v) => pv + Math.round(v * teamHPAwokenScale * badgeHPScale + 1e-12), 0); //队伍计算的总HP
-		let tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v) => pv + Math.round(v * badgeHPScale + 1e-12), 0); //队伍计算的总HP无觉醒
+		let tHP = teamHPArr.reduce((pv, v, idx) => pv + Math.round(v * teamHPAwokenScale * getBadgeHPScale(badge, members[idx]) + 1e-12), 0); //队伍计算的总HP
+		let tHPNoAwoken = teamHPNoAwokenArr.reduce((pv, v, idx) => pv + Math.round(v * getBadgeHPScale(badge, members[idx]) + 1e-12), 0); //队伍计算的总HP无觉醒
 
 		//记录到bar中，方便打开详情时调用
 		hpBar.reduceAttrRangesWithShieldAwoken = reduceAttrRangesWithShieldAwoken; //有盾觉醒的
