@@ -4197,12 +4197,16 @@ const specialSearchFunctions = (function() {
 				function:cards=>cards.filter(({attrs:[attr1, attr2]})=>attr1<6 && attr2>=0 && attr1 != attr2)
 			},
 			{name:"Will get Orbs skin",otLangName:{chs:"能获得宝珠皮肤",cht:"能獲得寶珠皮膚"},
-				function:cards=>cards.filter(({blockSkinOrBgmId})=>blockSkinOrBgmId>0 && blockSkinOrBgmId<1e4),
-				addition:({blockSkinOrBgmId})=>`ID.${blockSkinOrBgmId}`
+				function:cards=>cards.filter(({orbSkinOrBgmId})=>orbSkinOrBgmId>0 && orbSkinOrBgmId<1e4),
+				addition:({orbSkinOrBgmId})=>`ID.${orbSkinOrBgmId}`
 			},
 			{name:"Will get BGM",otLangName:{chs:"能获得背景音乐",cht:"能獲得背景音樂"},
-				function:cards=>cards.filter(({blockSkinOrBgmId})=>blockSkinOrBgmId>=1e4),
-				addition:({blockSkinOrBgmId})=>`ID.${blockSkinOrBgmId}`
+				function:cards=>cards.filter(({orbSkinOrBgmId})=>orbSkinOrBgmId>=1e4),
+				addition:({orbSkinOrBgmId})=>`ID.${orbSkinOrBgmId}`
+			},
+			{name:"Will get Team Badge",otLangName:{chs:"能获得队伍徽章",cht:"能獲得隊伍徽章"},
+				function:cards=>cards.filter(({badgeId})=>badgeId),
+				addition:({badgeId})=>`ID.${badgeId}`
 			},
 			{name:"Hava banner when use skill",otLangName:{chs:"使用技能时有横幅",cht:"使用技能時有橫幅"},
 				function:cards=>cards.filter(card=>card.skillBanner)

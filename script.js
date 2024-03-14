@@ -7,7 +7,6 @@ let currentPlayerData; //当前玩家数据
 let markedFilter = []; //收藏的特殊搜索
 let defaultLevel = 99; //默认等级
 
-
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
 
@@ -282,11 +281,12 @@ class Card {
 	altName = [];
 	limitBreakIncr = 0;
 	voiceId = 0;
-	blockSkinOrBgmId = 0;
+	orbSkinOrBgmId = 0;
 	specialAttribute = null;
 	searchFlags = [];
 	#leaderSkillTypes = null;
 	gachaId = 0;
+	badgeId = 0;
 
 	unk01 = null;
 	unk02 = null;
@@ -320,92 +320,93 @@ class Card {
 		const e = data.entries();
 		function readCurve(entries) {
 			return {
-				min: entries.next().value[1],
-				max: entries.next().value[1],
-				scale: entries.next().value[1],
+				min: entries.next().value?.[1],
+				max: entries.next().value?.[1],
+				scale: entries.next().value?.[1],
 			};
 		}
-		this.id = Card.fixId(e.next().value[1]); //ID
-		this.name = e.next().value[1]; //名字
-		this.attrs.push(e.next().value[1]); //属性1
-		this.attrs.push(e.next().value[1]); //属性2
-		this.isUltEvo = e.next().value[1] !== 0; //是否究极进化
-		this.types.push(e.next().value[1]); //类型1
-		this.types.push(e.next().value[1]); //类型2
-		this.rarity = e.next().value[1]; //星级
-		this.cost = e.next().value[1]; //cost
-		this.unk01 = e.next().value[1]; //未知01
-		this.maxLevel = e.next().value[1]; //最大等级
-		this.feedExp = e.next().value[1]; //1级喂食经验，需要除以4
-		this.isEmpty = e.next().value[1] === 1; //空卡片？
-		this.sellPrice = e.next().value[1]; //1级卖钱，需要除以10
+		this.id = Card.fixId(e.next().value?.[1]); //ID
+		this.name = e.next().value?.[1]; //名字
+		this.attrs.push(e.next().value?.[1]); //属性1
+		this.attrs.push(e.next().value?.[1]); //属性2
+		this.isUltEvo = e.next().value?.[1] !== 0; //是否究极进化
+		this.types.push(e.next().value?.[1]); //类型1
+		this.types.push(e.next().value?.[1]); //类型2
+		this.rarity = e.next().value?.[1]; //星级
+		this.cost = e.next().value?.[1]; //cost
+		this.unk01 = e.next().value?.[1]; //未知01
+		this.maxLevel = e.next().value?.[1]; //最大等级
+		this.feedExp = e.next().value?.[1]; //1级喂食经验，需要除以4
+		this.isEmpty = e.next().value?.[1] === 1; //空卡片？
+		this.sellPrice = e.next().value?.[1]; //1级卖钱，需要除以10
 		this.hp = readCurve(e); //HP增长
 		this.atk = readCurve(e); //攻击增长
 		this.rcv = readCurve(e); //回复增长
-		this.exp = { min: 0, max: e.next().value[1], scale: e.next().value[1] }; //经验增长
-		this.activeSkillId = e.next().value[1]; //主动技
-		this.leaderSkillId = e.next().value[1]; //队长技
+		this.exp = { min: 0, max: e.next().value?.[1], scale: e.next().value?.[1] }; //经验增长
+		this.activeSkillId = e.next().value?.[1]; //主动技
+		this.leaderSkillId = e.next().value?.[1]; //队长技
 		this.enemy = { //作为怪物的数值
-			countdown: e.next().value[1],
+			countdown: e.next().value?.[1],
 			hp: readCurve(e),
 			atk: readCurve(e),
 			def: readCurve(e),
-			maxLevel: e.next().value[1],
-			coin: e.next().value[1],
-			exp: e.next().value[1],
+			maxLevel: e.next().value?.[1],
+			coin: e.next().value?.[1],
+			exp: e.next().value?.[1],
 			skills: []
 		};
-		this.evoBaseId = Card.fixId(e.next().value[1]); //进化基础ID
+		this.evoBaseId = Card.fixId(e.next().value?.[1]); //进化基础ID
 		this.evoMaterials.push(...([ //进化素材
-			e.next().value[1],
-			e.next().value[1],
-			e.next().value[1],
-			e.next().value[1],
-			e.next().value[1]
+			e.next().value?.[1],
+			e.next().value?.[1],
+			e.next().value?.[1],
+			e.next().value?.[1],
+			e.next().value?.[1]
 		].map(n=>Card.fixId(n,false))));
 		this.unevoMaterials.push(...([ //退化素材
-			e.next().value[1],
-			e.next().value[1],
-			e.next().value[1],
-			e.next().value[1],
-			e.next().value[1]
+			e.next().value?.[1],
+			e.next().value?.[1],
+			e.next().value?.[1],
+			e.next().value?.[1],
+			e.next().value?.[1]
 		].map(n=>Card.fixId(n,false))));
-		this.unk02 = e.next().value[1]; //未知02
-		this.unk03 = e.next().value[1]; //未知03
-		this.unk04 = e.next().value[1]; //未知04
-		this.unk05 = e.next().value[1]; //未知05
-		this.unk06 = e.next().value[1]; //未知06
-		this.unk07 = e.next().value[1]; //未知07
-		const numSkills = e.next().value[1]; //几种敌人技能
+		this.unk02 = e.next().value?.[1]; //未知02
+		this.unk03 = e.next().value?.[1]; //未知03
+		this.unk04 = e.next().value?.[1]; //未知04
+		this.unk05 = e.next().value?.[1]; //未知05
+		this.unk06 = e.next().value?.[1]; //未知06
+		this.unk07 = e.next().value?.[1]; //未知07
+		const numSkills = e.next().value?.[1]; //几种敌人技能
 		for (let si = 0; si < numSkills; si++) {
 			this.enemy.skills.push({
-				id: e.next().value[1],
-				ai: e.next().value[1],
-				rnd: e.next().value[1]
+				id: e.next().value?.[1],
+				ai: e.next().value?.[1],
+				rnd: e.next().value?.[1]
 			});
 		}
-		const numAwakening = e.next().value[1]; //觉醒个数
+		const numAwakening = e.next().value?.[1]; //觉醒个数
 		for (let ai = 0; ai < numAwakening; ai++) {
-			this.awakenings.push(e.next().value[1]);
+			this.awakenings.push(e.next().value?.[1]);
 		}
-		this.superAwakenings.push(...(e.next().value[1].split(',').filter(Boolean).map(strN=>parseInt(strN,10)))); //超觉醒
-		this.evoRootId = Card.fixId(e.next().value[1]); //进化链根ID
-		this.seriesId = e.next().value[1]; //系列ID
-		this.types.push(e.next().value[1]); //类型3
-		this.sellMP = e.next().value[1]; //卖多少MP
-		this.latentAwakeningId = e.next().value[1]; //潜在觉醒ID
-		this.collabId = e.next().value[1]; //合作ID
-		this.flags = e.next().value[1];
+		this.superAwakenings.push(...(e.next().value?.[1].split(',').filter(Boolean).map(strN=>parseInt(strN,10)))); //超觉醒
+		this.evoRootId = Card.fixId(e.next().value?.[1]); //进化链根ID
+		this.seriesId = e.next().value?.[1]; //系列ID
+		this.types.push(e.next().value?.[1]); //类型3
+		this.sellMP = e.next().value?.[1]; //卖多少MP
+		this.latentAwakeningId = e.next().value?.[1]; //潜在觉醒ID
+		this.collabId = e.next().value?.[1]; //合作ID
+		this.flags = e.next().value?.[1];
 
-		this.altName.push(...e.next().value[1].split("|").filter(Boolean)); //替换名字（分类标签）
-		this.limitBreakIncr = e.next().value[1]; //110级增长
-		this.voiceId = e.next().value[1]; //语音觉醒的ID
-		this.blockSkinOrBgmId = e.next().value[1]; //珠子皮肤ID
-		this.specialAttribute = e.next().value[1]; //特别属性，比如黄龙
-		this.searchFlags.push(e.next().value[1], e.next().value[1]); //队长技搜索类型，解析写在这里会导致文件太大，所以写到前端去了
-		this.gachaId = e.next().value[1]; //目前猜测是桶ID
-		this.unk08 = e.next().value[1]; //未知08
-		this.attrs.push(e.next().value[1]); //属性3
+		this.altName.push(...e.next().value?.[1].split("|").filter(Boolean)); //替换名字（分类标签）
+		this.limitBreakIncr = e.next().value?.[1]; //110级增长
+		this.voiceId = e.next().value?.[1]; //语音觉醒的ID
+		this.orbSkinOrBgmId = e.next().value?.[1]; //珠子皮肤ID
+		this.specialAttribute = e.next().value?.[1]; //特别属性，比如黄龙
+		this.searchFlags.push(e.next().value?.[1], e.next().value?.[1]); //队长技搜索类型，解析写在这里会导致文件太大，所以写到前端去了
+		this.gachaId = e.next().value?.[1]; //目前猜测是桶ID
+		this.unk08 = e.next().value?.[1]; //未知08
+		this.attrs.push(e.next().value?.[1]); //属性3
+		this.badgeId = e.next().value?.[1]; //抽到后获取的徽章ID
 		
 		this.attrs = this.attrs.filter(n=>Number.isInteger(n) && n>=0);
 		this.types = this.types.filter(n=>Number.isInteger(n) && n>=0);
@@ -6504,6 +6505,8 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		leader2 = members[5];
 	let parseLSkill1 = skillParser(leader1?.card?.leaderSkillId),
 		parseLSkill2 = skillParser(leader2?.card?.leaderSkillId);
+
+	const isJa = currentDataSource.code === "ja";
 	//防绑
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"52\"]")) {
 		const teamFlagsMembers = Array.from(targetIcon.parentElement.querySelectorAll(".team-flags li"));
@@ -6515,7 +6518,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 			const memberData = members[mi];
 			const assistData = assists[mi];
 			let thisAwokenNum = 0;
-			if (badge === 8 && mi === 0) {
+			if (badge === 8 && (isJa || mi === 0) || badge === 22) {
 				thisAwokenNum = 2;
 			} else {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
@@ -6601,7 +6604,14 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
 		const thisAwokenNum = awokenCountInTeam(team, 28, solo, teamsCount);
 		let prob = thisAwokenNum / 5;
-		if (badge == 9) prob += 0.5;
+		switch (badge) {
+			case 9:
+				prob += isJa ? 1 : 0.5;
+				break;
+			case 22: //状态异常耐性 辅助无效
+				prob += 1;
+				break;
+		}
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//暗
@@ -6611,7 +6621,14 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 		let prob = thisAwokenNum / 5;
-		if (badge == 12) prob += 0.5;
+		switch (badge) {
+			case 12:
+				prob += isJa ? 1 : 0.5;
+				break;
+			case 22: //状态异常耐性 辅助无效
+				prob += 1;
+				break;
+		}
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//废
@@ -6621,7 +6638,14 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 		let prob = thisAwokenNum / 5;
-		if (badge == 13) prob += 0.5;
+		switch (badge) {
+			case 13:
+				prob += isJa ? 1 : 0.5;
+				break;
+			case 22: //状态异常耐性 辅助无效
+				prob += 1;
+				break;
+		}
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//毒
@@ -6631,7 +6655,14 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 		let prob = thisAwokenNum / 5;
-		if (badge == 14) prob += 0.5;
+		switch (badge) {
+			case 14:
+				prob += isJa ? 1 : 0.5;
+				break;
+			case 22: //状态异常耐性 辅助无效
+				prob += 1;
+				break;
+		}
 		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
 	}
 	//云
@@ -7150,11 +7181,15 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		const teamHPNoAwokenArr = countTeamHp(team, leader1id, leader2id, solo, true);
 
 		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount), teamHPAwokenScale = (1 + 0.05 * teamHPAwoken); //全队大血包个数
+		
+		const isJa = currentDataSource.code === "ja";
+		
 		const badgeHPScale = teamsCount == 2 ? 1 : (badge=>{ //徽章倍率
 			switch (badge) {
-				case  5: return 1.05; //小血
+				case  5: return isJa ? 1.10 : 1.05; //小血
 				case 18: return 1.15; //大血
 				case 20: return 1.10; //全属性
+				case 22: case 23: return 1.50; //状态异常耐性&SB++ 辅助无效
 				default: return 1;
 			}
 		})(badge);
@@ -7248,6 +7283,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		const leader1id_original = members[0].id;
 		const leader2id_original = teamsCount===2 ? (teamIdx === 1 ? teamsA_members[0].id : teamsB_members[0].id) : members[5].id;
 		let effect = tIf_Effect(leader1id,leader2id, leader1id_original,leader2id_original);
+		if (badge == 22) effect.poisonNoEffect = true;
 		refreshEffectDom(tEffectDom, effect);
 	}
 }
