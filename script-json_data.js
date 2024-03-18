@@ -134,8 +134,8 @@ let localTranslating = {
 			reduce_damage: tp`${'condition'}${'chance'}${'icon'}Reduces ${'attrs'} damage taken by ${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'each_time'}${'value'}${'reduceDamage'}${'additional'}`,
 			power_up_targets: tp`[${'attrs_types'}]'s `, //attrs, types, attrs_types
-			henshin: tp`Transforms into ${'cards'}`,
-			random_henshin: tp`Random transforms into ${'cards'}`,
+			henshin: tp`Changes to ${'cards'}`,
+			random_henshin: tp`Random changes to ${'cards'}`,
 			void_poison: tp`Voids ${'poison'} damage`,
 			skill_proviso: tp`The follow-up effect can only be activates ${'condition'}`,
 			impart_awoken: tp`Impart ${'attrs_types'} additional ${'awakenings'}`,

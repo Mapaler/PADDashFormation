@@ -649,14 +649,14 @@ function valueAt(level, maxLevel, curve) {
 function curve(c, level, maxLevel, limitBreakIncr, limitBreakIncr120) {
 	let value = valueAt(level, maxLevel, {
 		min: c.min,
-		max: c.max !== undefined ? c.max : (c.min * maxLevel),
+		max: c.max !== void 0 ? c.max : (c.min * maxLevel),
 		scale: c.scale || 1
 	});
 
 	if (level > maxLevel) {
 		const exceed99 = Math.min(level - maxLevel, 11);
 		const exceed110 = Math.max(0, level - 110);
-		value += c.max !== undefined ?
+		value += c.max !== void 0 ?
 			((c.max * (limitBreakIncr / 100) * (exceed99 / 11)) + (c.max * (limitBreakIncr120 / 100) * (exceed110 / 10))) :
 			(c.min * exceed99 + c.min * exceed110);
 	}

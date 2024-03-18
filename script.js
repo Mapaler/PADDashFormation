@@ -123,7 +123,7 @@ class Plus extends Array {
 			this[1] = hp[1];
 			this[2] = hp[2];
 		} else { //传入三个数字的形式
-			if (!Number.isInteger(hp) || !Number.isInteger(atk) || !Number.isInteger(rcv)) throw new TypeError("传入的+值不是整数");
+			if (!Number.isInteger(hp) || !Number.isInteger(atk) || !Number.isInteger(rcv)) throw new TypeError("传入的 +值 不是整数");
 			this[0] = hp;
 			this[1] = atk;
 			this[2] = rcv;
@@ -133,21 +133,24 @@ class Plus extends Array {
 		return this[0];
 	}
 	set hp(num) {
-		if (!Number.isInteger(num)) throw new TypeError("传入的+值不是整数");
+		if (!Number.isInteger(num)) throw new TypeError("传入的 HP +值 不是整数");
+		if (num < 0 || num > 99) throw new RangeError("HP +值应为 0-99 之间的整数");
 		this[0] = num;
 	}
 	get atk() {
 		return this[1];
 	}
 	set atk(num) {
-		if (!Number.isInteger(num)) throw new TypeError("传入的+值不是整数");
+		if (!Number.isInteger(num)) throw new TypeError("传入的 ATK +值 不是整数");
+		if (num < 0 || num > 99) throw new RangeError("ATK +值应为 0-99 之间的整数");
 		this[1] = num;
 	}
 	get rcv() {
 		return this[2];
 	}
 	set rcv(num) {
-		if (!Number.isInteger(num)) throw new TypeError("传入的+值不是整数");
+		if (!Number.isInteger(num)) throw new TypeError("传入的 RCV +值 不是整数");
+		if (num < 0 || num > 99) throw new RangeError("RCV +值应为 0-99 之间的整数");
 		this[2] = num;
 	}
 	get is297() {
@@ -190,6 +193,9 @@ class LatentAwakening extends Array {
 			Object.assign(this, arg);
 		}
 	}
+	get usedHole() {
+		return this.reduce((p,v)=>p + latentUseHole(v),0);
+	}
 	toBigInt() {
 		//直接使用目前的最新版本
 		const leftNumn = 0b111n;
@@ -220,12 +226,13 @@ class LatentAwakening extends Array {
 	}
 }
 class Member2 {
-	id = 0;
+	id = 0; //原始id
+	changes = null; //变身后id
 	level = 1;
-	plus = new Plus();
 	awakening = 0;
 	superAwakening= 0;
-	latentAwakening = new LatentAwakening();
+	#plus = new Plus();
+	#latentAwakening = new LatentAwakening();
 	skillLevel = 0;
 	assistMember = null;
 	get hasAssist() {
@@ -246,6 +253,48 @@ class Member2 {
 	}
 	get card() {
 		return Cards[this.id] ?? Cards[0];
+	}
+	get plus() {
+		return this.#plus;
+	}
+	set plus(arr) {
+		if (!Array.isArray(arr) || !arr.every(n=>Number.isInteger(n)))
+			throw new TypeError("直接设定 +值 应当为整形数组");
+		this.#plus[0] = arr[0];
+		this.#plus[1] = arr[1];
+		this.#plus[2] = arr[2];
+	}
+	get latentAwakening() {
+		return this.#latentAwakening;
+	}
+	set latentAwakening(arr) {
+		if (!Array.isArray(arr) || !arr.every(n=>Number.isInteger(n)))
+			throw new TypeError("直接设定 潜在觉醒 应当为整形数组");
+		this.#latentAwakening.length = arr.length;
+		for (let i=0;i<arr.length;i++) {
+			this.#latentAwakening[i] = arr[i];
+		}
+	}
+	get needExp() {
+		const expArray = [
+			Math.round(valueAt(this.level, 99, this.card.exp)) //99级以内的经验
+		];
+		if (this.level > 99)
+			expArray.push(Math.max(0, Math.min(this.level, 110) - 100) * 5000000);
+		if (this.level > 110)
+			expArray.push(Math.max(0, Math.min(this.level, 120) - 110) * 20000000);
+		return expArray;
+	}
+	getWorkingAwakenings(states) {
+		const {awakningsBind, removeAssist} = states;
+		if (awakningsBind) return [];
+		const awaknings = this.card.awakenings.slice(0, this.awakening);
+		if (this.hasAssist && !removeAssist) //有武器并且没有禁武器时
+			awaknings.push(...this.assistMember.getAwakenings(states));
+		return awaknings;
+	}
+	getAbilities(states) {
+		const {awakningsBind, removeAssist, dungeonEnchance} = states;
 	}
 }
 class Card {
@@ -553,8 +602,8 @@ class LeaderSkillType_ExtraEffects {
 class Team extends Array {
 	badge = 0;
 	helperTeam = null;
-	constructor(memberCount = 6)
-	{
+	switchesLeader = null;
+	constructor(memberCount = 6) {
 		super(memberCount);//建立 Array
 	}
 	get leader1(){
@@ -563,6 +612,21 @@ class Team extends Array {
 	get leader2(){
 		//当有 helperTeam 时，使用另一个队伍的队长
 		return helperTeam instanceof Team ? this.helperTeam.leader1 : this[5];
+	}
+}
+class Formation2 {
+	teams = [];
+	title = "";
+	detail = "";
+	dungeonEnchance = null;
+	constructor(teamCount) {
+		for (let i=0; i<teamCount; i++) {
+			this.teams.push(new Team(teamCount === 2 ? 5 : 6));
+		}
+		if (teamCount === 2) { //当为2人对物时，互相设定为互助队伍
+			this.teams[0].helperTeam = this.teams[1];
+			this.teams[1].helperTeam = this.teams[0];
+		}
 	}
 }
 

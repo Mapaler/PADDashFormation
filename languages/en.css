@@ -238,7 +238,7 @@ label[for="screenshot-transparent"]::after{
 	content: "🔄Rotating ABC Team";
 }
 .control-box .lbl-henshin-change::before{
-	content: "🦸Henshin";
+	content: "🦸Changes";
 }
 .control-box .lbl-remove-assist::before{
 	content: "⛔Remove Assist";
@@ -555,12 +555,12 @@ label[for="real-time-change-card"]::after
 .henshin .evo-type::before,
 .henshin .evo-type::after
 {
-	content: "Henshin";
+	content: "Changes";
 }
 .random-henshin .evo-type::before,
 .random-henshin .evo-type::after
 {
-	content: "Random Henshin";
+	content: "Random Changes";
 }
 .random-henshin .evo-type-div
 {
@@ -574,7 +574,7 @@ label[for="real-time-change-card"]::after
 .henshin-loop .evo-type::before,
 .henshin-loop .evo-type::after
 {
-	content: "Loop Henshin";
+	content: "Loop Changes";
 }
 .henshin-loop  .evo-type
 {
