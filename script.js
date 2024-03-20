@@ -286,15 +286,23 @@ class Member2 {
 		return expArray;
 	}
 	getWorkingAwakenings(states) {
-		const {awakningsBind, removeAssist} = states;
-		if (awakningsBind) return [];
+		const {outsideOfDungeon, awakningsBind, removeAssist, slotBind} = states;
+		if (slotBind) return [];
+		//封觉醒时，语音、心横仍然生效
 		const awaknings = this.card.awakenings.slice(0, this.awakening);
 		if (this.hasAssist && !removeAssist) //有武器并且没有禁武器时
 			awaknings.push(...this.assistMember.getAwakenings(states));
 		return awaknings;
 	}
 	getAbilities(states) {
-		const {awakningsBind, removeAssist, dungeonEnchance} = states;
+		const {outsideOfDungeon, awakningsBind, removeAssist, dungeonEnchance} = states;
+
+		const abilities = {
+			hp: {base: 0, plus: 0, assist: 0, awaknings: 0},
+			atk: {base: 0, plus: 0, assist: 0, awaknings: 0},
+			rcv: {base: 0, plus: 0, assist: 0, awaknings: 0},
+		}
+		return abilities;
 	}
 }
 class Card {
@@ -616,12 +624,27 @@ class Team extends Array {
 }
 class Formation2 {
 	teams = [];
-	title = "";
-	detail = "";
-	dungeonEnchance = null;
+	title = null;
+	description = null;
+	dungeonEnchancement = {
+		attrs: [],
+		types: [],
+		rarities: [],
+		collabIds: [],
+		gachaIds: [],
+		rate: {
+			hp: 1,
+			atk: 1,
+			rcv: 1
+		},
+		benefitOfYinYang: 0,
+		currentStage: 0,
+	};
 	constructor(teamCount) {
+		this.teams.length = teamCount;
+		const menbersCount = teamCount === 2 ? 5 : 6;
 		for (let i=0; i<teamCount; i++) {
-			this.teams.push(new Team(teamCount === 2 ? 5 : 6));
+			this.teams[i] = new Team(menbersCount);
 		}
 		if (teamCount === 2) { //当为2人对物时，互相设定为互助队伍
 			this.teams[0].helperTeam = this.teams[1];
@@ -629,7 +652,57 @@ class Formation2 {
 		}
 	}
 }
+class Skill {
+	id = 0;
+	name = null;
+	description = null;
+	type = 0;
+	maxLevel = 0;
+	initialCooldown = 0;
+	unk = 0;
+	params = [];
+	#parsed = null;
 
+    constructor(data, i){
+		if (Array.isArray(data)) {
+			this.id = i;
+			this.fromOfficialData(data);
+		} else {
+			const classPrototype = Skill.prototype;
+			for (let key in data) {
+				const propertyDescriptor = Object.getOwnPropertyDescriptor(classPrototype, key);
+				if (propertyDescriptor &&
+					!propertyDescriptor.writable &&
+					!propertyDescriptor.set)
+					continue;
+				this[key] = data[key];
+			}
+		}
+	}
+	fromOfficialData(data) {
+		const e = data.entries();
+		this.name = e.next().value?.[1];
+		this.description = e.next().value?.[1];
+		this.type = e.next().value?.[1];
+		this.maxLevel = e.next().value?.[1];
+		this.initialCooldown = e.next().value?.[1];
+		this.unk = e.next().value?.[1];
+		let last = null;
+		while (last = e.next(), !last.done) {
+			this.params.push(last.value[1]);
+		}
+	}
+	get parsed() {
+		if (this.#parsed == null) {
+			this.#parsed = Skill.skillParser(this);
+		}
+		return this.#parsed;
+	}
+	static skillParser(skill) {
+		if (!(skill instanceof Skill)) throw new TypeError("传入的 技能 不是 Skill 类");
+		return skillParser(skill.id);
+	}
+}
 //队员基本的留空
 var Member = function(id = 0) {
 	this.id = id;
