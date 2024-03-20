@@ -783,7 +783,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		}
 
 		//倍率类觉醒的比例，直接从1开始乘
-		const n_awokenScale = previousAwokenScale[idx].reduce(calculateAwokenScale, 1);
+		const n_previousAwokenScale = previousAwokenScale[idx].reduce(calculateAwokenScale, 1);
 		//觉醒增加的数值
 		const n_awoken = awokenList.length > 0 ?
 			Math.round(awokenAdd[idx].reduce((previous, aw) => {
@@ -802,32 +802,26 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 				return previous + la.scale * latentCount;
 			}, 0) :
 			0;
-		// if (member.id === 10783 && idx === 0) {
-		// 	console.debug(n_base, n_awokenScale, n_latentScale)
-		// }
-		let reValue = Math.round(n_base * n_awokenScale) + Math.round(n_base * n_latentScale) + n_plus + n_awoken + Math.round((n_assist_base + n_assist_plus) * bonusScale[idx]);
-		//因为语音觉醒觉醒无效也生效，所以这里需要计算
-		let reValueNoAwoken = Math.round(n_base * n_awokenScale) + n_plus + Math.round((n_assist_base + n_assist_plus) * bonusScale[idx]);
-
-		//觉醒生效时的协力、语音觉醒等的倍率
-		reValue = Math.floor(reValue * latterAwokenScale[idx].reduce(calculateAwokenScale, 1));
-
-		//都要做四舍五入
-		if (isDge && dgeRate[idx] !== 1)
-		{
-			let rate = dgeRate[idx];
+		let dgeScale = 1; //地下城强化
+		if (isDge && dgeRate[idx] !== 1) {
+			dgeScale = dgeRate[idx];
 			//计算攻击力，有浮游觉醒，且比例小于1时
-			if (idx === 1 && rate < 1 && awokenList.includes(106)) {
+			if (idx === 1 && dgeScale < 1 && awokenList.includes(106)) {
 				//比例乘以20，但是不得大于1
-				rate = Math.min(1, rate * 20);
+				dgeScale = Math.min(1, rate * 20);
 			}
-			reValue = Math.round(reValue * rate);
-			reValueNoAwoken = Math.round(reValueNoAwoken * rate);
-		}else
-		{
-			reValue = Math.round(reValue);
-			reValueNoAwoken = Math.round(reValueNoAwoken);
 		}
+
+		let reValue = Math.round(n_base * n_previousAwokenScale) + n_plus +
+					Math.round(n_base * n_latentScale) + n_awoken +
+					Math.round((n_assist_base + n_assist_plus) * bonusScale[idx]);
+		//觉醒生效时的协力、1.5三维、阴阳、熟成等的倍率
+		reValue = Math.floor(reValue * latterAwokenScale[idx].reduce(calculateAwokenScale, 1) * dgeScale);
+		//因为语音觉醒觉醒无效也生效，所以这里需要计算
+		let reValueNoAwoken = Math.round(n_base * n_previousAwokenScale) + n_plus +
+					Math.round((n_assist_base + n_assist_plus) * bonusScale[idx]);
+		reValueNoAwoken = Math.floor(reValueNoAwoken * dgeScale)
+
 		if (idx < 2) //idx顺序为HP、ATK、RCV
 		{ //HP和ATK最低为1
 			reValue = Math.max(reValue, 1);
