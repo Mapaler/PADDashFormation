@@ -7330,6 +7330,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 22: case 23: return 1.50; //状态异常耐性&SB++ 辅助无效
 
 				case 24: return member.card.collabId === 92 ? 1.15 : 1; //英雄学院徽章
+				case 25: return member.card.gachaId === 2 ? 1.15 : 1; //画师桶徽章
 				default: return 1;
 			}
 		}
