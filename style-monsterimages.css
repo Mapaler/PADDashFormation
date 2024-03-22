@@ -1407,16 +1407,12 @@
 .badge{
 	background-image: url(images/badge-bg.png);
 	width: 53px;
-	height: 41px;
+	height: 42px;
 	text-align: center;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-}
-button.badge {
-	border: none;
-	background-color: unset;
-	cursor: pointer;
+	border-radius: 7px;
 }
 .badge::before{
 	display: inline-block;

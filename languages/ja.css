@@ -73,17 +73,17 @@ label[for="languages"]::after{
 }
 
 .row-mon-ability .m-hp-li::before,
-.dialog-dungeon-enchance label[for="dungeon-hp"]::before
+#dialog-dungeon-enchance label[for="dungeon-hp"]::before
 {
 	content: "HP:";
 }
 .row-mon-ability .m-atk-li::before,
-.dialog-dungeon-enchance label[for="dungeon-atk"]::before
+#dialog-dungeon-enchance label[for="dungeon-atk"]::before
 {
 	content: "攻撃:";
 }
 .row-mon-ability .m-rcv-li::before,
-.dialog-dungeon-enchance label[for="dungeon-rcv"]::before
+#dialog-dungeon-enchance label[for="dungeon-rcv"]::before
 {
 	content: "回復:";
 }
@@ -376,14 +376,14 @@ label[for="show-rich-text-tools"]::after{
 .search-box .awoken-option::before{
 	content: "▼觉醒（AND）";
 }
-.search-box .rare-clear::before
+.search-box .rare-clear::before,
+#dialog-dungeon-enchance .dialog-clear::before
 {
 	content: "リセット";
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before,
-.dialog-dungeon-enchance .dialog-clear::before
+.special-div .special-clear::before
 {
 	content: "クリア";
 }
@@ -644,48 +644,48 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "ダンジョン強化";
 }
-.dialog-dungeon-enchance .dialog-title::before
+#dialog-dungeon-enchance .dialog-title::before
 {
 	content: "ダンジョン強化倍率設定";
 }
-.dialog-dungeon-enchance .dialog-confirm::before
+.dialog-confirm::before
 {
 	content: "確認";
 }
-.dialog-dungeon-enchance .rare-list::before
+#dialog-dungeon-enchance .rare-list::before
 {
 	content: "有効な希少性:";
 }
-.dialog-dungeon-enchance .attr-list::before
+#dialog-dungeon-enchance .attr-list::before
 {
 	content: "有効な属性:";
 }
-.dialog-dungeon-enchance .type-list::before
+#dialog-dungeon-enchance .type-list::before
 {
 	content: "有効なタイプ:";
 }
-.dialog-dungeon-enchance .collab-list::before
+#dialog-dungeon-enchance .collab-list::before
 {
 	content: "有効コラボID:";
 }
-.dialog-dungeon-enchance .gacha-list::before
+#dialog-dungeon-enchance .gacha-list::before
 {
 	content: "有効ガチャID:";
 }
-.dialog-dungeon-enchance .benefit-list::before
+#dialog-dungeon-enchance .benefit-list::before
 {
 	content: "陰と陽の加護:";
 }
-.dialog-dungeon-enchance .current-stage-list::before
+#dialog-dungeon-enchance .current-stage-list::before
 {
 	content: "現在の層数:";
 }
-.dialog-dungeon-enchance .collab-list::after,
-.dialog-dungeon-enchance .gacha-list::after
+#dialog-dungeon-enchance .collab-list::after,
+#dialog-dungeon-enchance .gacha-list::after
 {
 	content: "(複数のIDは\",\"で区切ります)";
 }
-.dialog-dungeon-enchance .stats-list::before
+#dialog-dungeon-enchance .stats-list::before
 {
 	content: "強化倍率：";
 }

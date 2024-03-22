@@ -1250,9 +1250,9 @@ const teamsCount = 1;
 	</div>
 
 	
-	<div class="dialog dialog-dungeon-enchance display-none">
+	<dialog id="dialog-dungeon-enchance" class="dialog">
 		<div class="dialog-title"></div>
-		<div class="dialog-content">
+		<form method="dialog" class="dialog-content">
 			<ul class="rare-list">
 				<li><input type="checkbox" class="rare-check" name="dungeon-rare" value="1" id="dungeon-rare-1" /><label class="rare-icon" data-rare-icon="1" for="dungeon-rare-1"></label></li>
 				<li><input type="checkbox" class="rare-check" name="dungeon-rare" value="2" id="dungeon-rare-2" /><label class="rare-icon" data-rare-icon="2" for="dungeon-rare-2"></label></li>
@@ -1298,17 +1298,21 @@ const teamsCount = 1;
 				<li><label for="dungeon-rcv"></label><input id="dungeon-rcv" type="number" min=0 step=1 value=1 /></li>
 			</ul>
 			<ul class="benefit-list"><!--阴阳加护-->
-				<li><input type="radio" class="benefit-check" name="dungeon-benefit" value="0" id="dungeon-benefit-0" /><label class="awoken-icon" data-awoken-icon="0" for="dungeon-benefit-0"></label></li><!--无-->
+				<li><input type="radio" class="benefit-check" name="dungeon-benefit" value="0" id="dungeon-benefit-0" checked /><label class="awoken-icon" data-awoken-icon="0" for="dungeon-benefit-0"></label></li><!--无-->
 				<li><input type="radio" class="benefit-check" name="dungeon-benefit" value="1" id="dungeon-benefit-1" /><label class="awoken-icon" data-awoken-icon="128" for="dungeon-benefit-1"></label></li><!--阳-->
 				<li><input type="radio" class="benefit-check" name="dungeon-benefit" value="2" id="dungeon-benefit-2" /><label class="awoken-icon" data-awoken-icon="129" for="dungeon-benefit-2"></label></li><!--阴-->
 				<li><input type="radio" class="benefit-check" name="dungeon-benefit" value="3" id="dungeon-benefit-3" /><label class="awoken-icon yinyang" data-awoken-icon="128" for="dungeon-benefit-3"></label></li><!--阴阳-->
 			</ul>
 			<ul class="current-stage-list"><!--当前层数-->
-				<li><label for="current-stage"></label><input id="current-stage" type="number" min="1" step="1" /></li>
+				<li><label for="current-stage"></label><input id="current-stage" type="number" min=1 step=1 /></li>
 			</ul>
-		</div>
-		<div class="dialog-control"><button class="dialog-clear brown-button"></button><button class="dialog-close brown-button"></button><button class="dialog-confirm brown-button"></button></div>
-	</div>
+			<div class="dialog-control">
+				<button class="dialog-clear brown-button" type="reset"></button>
+				<button class="dialog-close brown-button" value="cancel"></button>
+				<button class="dialog-confirm brown-button" type="submit"></button>
+			</div>
+		</form>
+	</dialog>
 
 	<div id="player-data-frame" class="mask display-none">
 		<div class="player-box-title fa"><!--玩家数据子--></div>
@@ -1444,7 +1448,10 @@ const teamsCount = 1;
 		<form method="dialog">
 			<ul class="team-badges">
 			</ul>
-			<div class="dialog-control"><button class="dialog-close brown-button" value="cancel"></button></div>
+			<div class="dialog-control">
+				<button class="dialog-close brown-button" value="cancel"></button>
+				<button class="dialog-confirm brown-button" type="submit" value="submit"></button>
+			</div>
 		</form>
 	</dialog>
 </body>

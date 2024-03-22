@@ -73,17 +73,17 @@ label[for="languages"]::after{
 }
 
 .row-mon-ability .m-hp-li::before,
-.dialog-dungeon-enchance label[for="dungeon-hp"]::before
+#dialog-dungeon-enchance label[for="dungeon-hp"]::before
 {
 	content: "HP:";
 }
 .row-mon-ability .m-atk-li::before,
-.dialog-dungeon-enchance label[for="dungeon-atk"]::before
+#dialog-dungeon-enchance label[for="dungeon-atk"]::before
 {
 	content: "공격:";
 }
 .row-mon-ability .m-rcv-li::before,
-.dialog-dungeon-enchance label[for="dungeon-rcv"]::before
+#dialog-dungeon-enchance label[for="dungeon-rcv"]::before
 {
 	content: "회복:";
 }
@@ -371,14 +371,14 @@ label[for="show-rich-text-tools"]::after{
 .search-box .awoken-option::before{
 	content: "▼각성（AND）";
 }
-.search-box .rare-clear::before
+.search-box .rare-clear::before,
+#dialog-dungeon-enchance .dialog-clear::before
 {
 	content: "재설정";
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before,
-.dialog-dungeon-enchance .dialog-clear::before
+.special-div .special-clear::before
 {
 	content: "명확한";
 }
@@ -624,48 +624,48 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "던전 강화";
 }
-.dialog-dungeon-enchance .dialog-title::before
+#dialog-dungeon-enchance .dialog-title::before
 {
 	content: "지하성 강화 배율 설정";
 }
-.dialog-dungeon-enchance .dialog-confirm::before
+.dialog-confirm::before
 {
 	content: "확인";
 }
-.dialog-dungeon-enchance .rare-list::before
+#dialog-dungeon-enchance .rare-list::before
 {
 	content: "유효한 희귀도:";
 }
-.dialog-dungeon-enchance .attr-list::before
+#dialog-dungeon-enchance .attr-list::before
 {
 	content: "유효한 속성:";
 }
-.dialog-dungeon-enchance .type-list::before
+#dialog-dungeon-enchance .type-list::before
 {
 	content: "유효한 형식:";
 }
-.dialog-dungeon-enchance .collab-list::before
+#dialog-dungeon-enchance .collab-list::before
 {
 	content: "유효한 콜라보 ID:";
 }
-.dialog-dungeon-enchance .gacha-list::before
+#dialog-dungeon-enchance .gacha-list::before
 {
 	content: "유효한 가챠 ID:";
 }
-.dialog-dungeon-enchance .benefit-list::before
+#dialog-dungeon-enchance .benefit-list::before
 {
 	content: "음과 양 보호:";
 }
-.dialog-dungeon-enchance .current-stage-list::before
+#dialog-dungeon-enchance .current-stage-list::before
 {
 	content: "현재 단계:";
 }
-.dialog-dungeon-enchance .collab-list::after,
-.dialog-dungeon-enchance .gacha-list::after
+#dialog-dungeon-enchance .collab-list::after,
+#dialog-dungeon-enchance .gacha-list::after
 {
 	content: "(여러 ID를 \",\"로 구분)";
 }
-.dialog-dungeon-enchance .stats-list::before
+#dialog-dungeon-enchance .stats-list::before
 {
 	content: "배율을 강화:";
 }

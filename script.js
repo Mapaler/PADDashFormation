@@ -4118,13 +4118,26 @@ function initialize() {
 
 	//添加徽章
 	const badgeDialog = document.getElementById("badge-choose");
+	const badgeDialogConfirm = badgeDialog.querySelector(".dialog-confirm");
 	const teamBadgeUl = badgeDialog.querySelector(".team-badges");
+	const changeBadgeDialogConfirmValue = function(e){
+		badgeDialogConfirm.value = this.value;
+	}
+	
 	official_badge_sorting.forEach(bgId=>{
 		const li = document.createElement("li");
-		const button = li.appendChild(document.createElement("button"));
-		button.className = "badge";
-		button.value = bgId;
-		button.setAttribute("data-badge-icon", bgId);
+		const radio = li.appendChild(document.createElement("input"));
+		radio.type="radio";
+		radio.className = "hide-radio";
+		radio.value = bgId;
+		radio.onchange = changeBadgeDialogConfirmValue;
+		radio.name = "choose-team-badge";
+		radio.id = `${radio.name}-${bgId}`;
+
+		const label = li.appendChild(document.createElement("label"));
+		label.className = "badge";
+		label.setAttribute("data-badge-icon", bgId);
+		label.setAttribute("for", radio.id);
 		teamBadgeUl.appendChild(li);
 	});
 	
@@ -4139,11 +4152,14 @@ function initialize() {
 			const team = formation.teams[teamIdx];
 			team[2] = parseInt(returnValue, 10);
 			refreshAll(formation);
+			createNewUrl();
 			//badgeDialog.removeEventListener("close", returnFunc);
 		};
 		teamBadge.onclick = function(){
 			_badgeThis = this;
-			//_badgeThis.value 
+			const currentBadge = teamBadgeUl.querySelector(`#choose-team-badge-${_badgeThis.dataset.badgeIcon}`);
+			if (currentBadge) currentBadge.checked = true;
+
 			badgeDialog.addEventListener("close", returnFunc, {once: true});
 			badgeDialog.showModal();
 		};
@@ -4255,7 +4271,7 @@ function initialize() {
 	});
 	
 	//设置地下城倍率
-	const dungeonEnchanceDialog = document.body.querySelector(".dialog-dungeon-enchance");
+	const dungeonEnchanceDialog = document.getElementById("dialog-dungeon-enchance");
 	const dialogContent = dungeonEnchanceDialog.querySelector(".dialog-content");
 	const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
 	const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
@@ -4263,22 +4279,17 @@ function initialize() {
 	const collabIdIpt = dialogContent.querySelector("#dungeon-collab-id");
 	const gachaIdIpt = dialogContent.querySelector("#dungeon-gacha-id");
 	const benefitDoms = Array.from(dialogContent.querySelectorAll(".benefit-list .benefit-check"));
-	const benefit0 = benefitDoms.find(dom=>parseInt(dom.value, 10) == 0);
 	const currentStageIpt = dialogContent.querySelector("#current-stage");
-	/*const benefitNot0 = benefitDoms.filter(dom=>dom != benefit0);
-	const notChecked = function(e){
-		console.log(this.checked,e);
-	}
-	benefitNot0.forEach(dom=>dom.onclick=notChecked);*/
-	
+
+	//读取当前的地下城设定
 	dungeonEnchanceDialog.initialing = function(formation){
 		const dge = formation.dungeonEnchance;
 		function runCheck(checkBox){
 			checkBox.checked = this.includes(parseInt(checkBox.value, 10));
 		}
-		rareDoms.forEach(runCheck,dge.rarities);
-		attrDoms.forEach(runCheck,dge.attrs);
-		typeDoms.forEach(runCheck,dge.types);
+		rareDoms.forEach(runCheck, dge.rarities);
+		attrDoms.forEach(runCheck, dge.attrs);
+		typeDoms.forEach(runCheck, dge.types);
 		gachaIdIpt.value = dge.gachas.join();
 		collabIdIpt.value = dge.collabs.join();
 
@@ -4290,34 +4301,8 @@ function initialize() {
 		const benefit = dge.benefit || 0;
 		benefitDoms.find(dom=>parseInt(dom.value, 10) == benefit).checked = true;
 		currentStageIpt.value = dge.stage || 1;
-
-		this.classList.remove(className_displayNone);
 	}
-	//初始化Dialog
-	dialogInitialing(dungeonEnchanceDialog);
-	const dungeonEnchanceDialogConfirm = dungeonEnchanceDialog.querySelector(".dialog-confirm");
-	dungeonEnchanceDialogConfirm.onclick = function(){	
-		const rarities = returnCheckBoxsValues(rareDoms).map(Str2Int);
-		const attrs = returnCheckBoxsValues(attrDoms).map(Str2Int);
-		const types = returnCheckBoxsValues(typeDoms).map(Str2Int);
-		const benefit = Str2Int(returnRadiosValue(benefitDoms));
-
-		const dge = formation.dungeonEnchance;
-		dge.rarities = rarities;
-		dge.attrs = attrs;
-		dge.types = types;
-		dge.rate.hp = Number(dialogContent.querySelector("#dungeon-hp").value);
-		dge.rate.atk = Number(dialogContent.querySelector("#dungeon-atk").value);
-		dge.rate.rcv = Number(dialogContent.querySelector("#dungeon-rcv").value);
-		dge.collabs = collabIdIpt.value.split(',').map(str=>parseInt(str,10)).filter(Boolean);
-		dge.gachas = gachaIdIpt.value.split(',').map(str=>parseInt(str,10)).filter(Boolean);
-		dge.benefit = benefit;
-		dge.stage = parseInt(currentStageIpt.value, 10);
-
-		dungeonEnchanceDialog.close();
-		createNewUrl();
-		refreshAll(formation);
-	};
+	/* //直接通过 reset 浏览器默认功能重置了
 	const dungeonEnchanceDialogClear = dungeonEnchanceDialog.querySelector(".dialog-clear");
 	dungeonEnchanceDialogClear.onclick = function(){
 		function unchecked(checkBox) {
@@ -4333,10 +4318,30 @@ function initialize() {
 		dialogContent.querySelector("#dungeon-atk").value = 1;
 		dialogContent.querySelector("#dungeon-rcv").value = 1;
 		currentStageIpt.value = 1;
-	};
+	};*/
 	const dungeonEnchanceDialogOpen = controlBox.querySelector("#btn-set-dungeon-enchance");
 	dungeonEnchanceDialogOpen.onclick = function(){
-		dungeonEnchanceDialog.show(formation);
+		dungeonEnchanceDialog.initialing(formation);
+		dungeonEnchanceDialog.showModal();
+	};
+	dungeonEnchanceDialog.onclose = function(event) {
+		const returnValue = event.target.returnValue;
+		if (returnValue === "cancel") return;
+
+		const dge = formation.dungeonEnchance;
+		dge.rarities = returnCheckBoxsValues(rareDoms).map(Str2Int);
+		dge.attrs = returnCheckBoxsValues(attrDoms).map(Str2Int);
+		dge.types = returnCheckBoxsValues(typeDoms).map(Str2Int);
+		dge.rate.hp = returnCheckBoxsValues(typeDoms).map(Str2Int)(dialogContent.querySelector("#dungeon-hp").value);
+		dge.rate.atk = Number(dialogContent.querySelector("#dungeon-atk").value);
+		dge.rate.rcv = Number(dialogContent.querySelector("#dungeon-rcv").value);
+		dge.collabs = collabIdIpt.value.split(',').map(str=>parseInt(str,10)).filter(Boolean);
+		dge.gachas = gachaIdIpt.value.split(',').map(str=>parseInt(str,10)).filter(Boolean);
+		dge.benefit = Str2Int(returnRadiosValue(benefitDoms));
+		dge.stage = parseInt(currentStageIpt.value, 10);
+
+		refreshAll(formation);
+		createNewUrl();
 	};
 
 	//编辑框
@@ -6543,18 +6548,7 @@ function refreshAll(formationData) {
 		const teamBox = teamBigBox.querySelector(".team-box");
 		const teamData = formationData.teams[teamNum];
 		const badgeBox = teamBigBox.querySelector(".team-badge");
-		if (badgeBox) {
-
-			const badge = badgeBox.querySelector(`#team-${teamNum+1}-badge-${teamData[2] || 0}`);
-			if (badge)
-			{
-				//为了解决火狐在代码片段里无法正确修改checked的问题，所以事先把所有的都切换到false
-				const badges = Array.from(badgeBox.querySelectorAll(`.badge-radio`));
-				badges.forEach(badge=>badge.checked = false);
-				badge.checked = true;
-			}
-			
-		}
+		badgeBox.setAttribute("data-badge-icon", teamData[2] ?? 0);
 
 		const membersDom = teamBox.querySelector(".team-members");
 		const latentsDom = teamBox.querySelector(".team-latents");

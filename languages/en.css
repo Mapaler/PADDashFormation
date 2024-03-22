@@ -74,17 +74,17 @@
 }
 
 .row-mon-ability .m-hp-li::before,
-.dialog-dungeon-enchance label[for="dungeon-hp"]::before
+#dialog-dungeon-enchance label[for="dungeon-hp"]::before
 {
 	content: "HP:";
 }
 .row-mon-ability .m-atk-li::before,
-.dialog-dungeon-enchance label[for="dungeon-atk"]::before
+#dialog-dungeon-enchance label[for="dungeon-atk"]::before
 {
 	content: "ATK:";
 }
 .row-mon-ability .m-rcv-li::before,
-.dialog-dungeon-enchance label[for="dungeon-rcv"]::before
+#dialog-dungeon-enchance label[for="dungeon-rcv"]::before
 {
 	content: "RCV:";
 }
@@ -382,14 +382,14 @@ label[for="show-rich-text-tools"]::after{
 .search-box .awoken-option::before{
 	content: "▼Awoken (AND)";
 }
-.search-box .rare-clear::before
+.search-box .rare-clear::before,
+#dialog-dungeon-enchance .dialog-clear::before
 {
 	content: "Reset";
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before,
-.dialog-dungeon-enchance .dialog-clear::before
+.special-div .special-clear::before
 {
 	content: "Clear";
 }
@@ -686,48 +686,48 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "Dungeon Enchanced";
 }
-.dialog-dungeon-enchance .dialog-title::before
+#dialog-dungeon-enchance .dialog-title::before
 {
 	content: "Dungeon Enchancement Setting";
 }
-.dialog-dungeon-enchance .dialog-confirm::before
+.dialog-confirm::before
 {
 	content: "Confirm";
 }
-.dialog-dungeon-enchance .rare-list::before
+#dialog-dungeon-enchance .rare-list::before
 {
 	content: "Rarity:";
 }
-.dialog-dungeon-enchance .attr-list::before
+#dialog-dungeon-enchance .attr-list::before
 {
 	content: "Attr.:";
 }
-.dialog-dungeon-enchance .type-list::before
+#dialog-dungeon-enchance .type-list::before
 {
 	content: "Types:";
 }
-.dialog-dungeon-enchance .collab-list::before
+#dialog-dungeon-enchance .collab-list::before
 {
 	content: "Collab ID:";
 }
-.dialog-dungeon-enchance .gacha-list::before
+#dialog-dungeon-enchance .gacha-list::before
 {
 	content: "Egg Machine ID:";
 }
-.dialog-dungeon-enchance .benefit-list::before
+#dialog-dungeon-enchance .benefit-list::before
 {
 	content: "Yin-Yang Protection:";
 }
-.dialog-dungeon-enchance .current-stage-list::before
+#dialog-dungeon-enchance .current-stage-list::before
 {
 	content: "Current Stage:";
 }
-.dialog-dungeon-enchance .collab-list::after,
-.dialog-dungeon-enchance .gacha-list::after
+#dialog-dungeon-enchance .collab-list::after,
+#dialog-dungeon-enchance .gacha-list::after
 {
 	content: "(separate multiple IDs with \",\")";
 }
-.dialog-dungeon-enchance .stats-list::before
+#dialog-dungeon-enchance .stats-list::before
 {
 	content: "Enhancement Rate:";
 }

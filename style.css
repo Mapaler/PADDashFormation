@@ -55,6 +55,9 @@ body{
 	margin: 0;
 	background-color: white;
 }
+.hide-radio {
+	display: none;
+}
 details>summary:hover {
 	background-color: #00000044;
 }
@@ -728,11 +731,12 @@ body:not(.show-member-ability) .team-ability, /*队员三维*/
 body:not(.show-member-types) .team-member-types, /*武器觉醒、队员觉醒、队员类型*/
 body:not(.show-member-awoken) :where(.team-assist-awoken , .team-member-awoken), /*武器觉醒、队员觉醒、队员类型*/
 body:not(.show-team-awoken-count) .team-awoken, /*队伍觉醒统计*/
+body:not(.show-team-total-info) :where(.tIf-total-hp, .tIf-effect),
 body:not(.show-team-attrtype-count) .team-total-info-count, /*稀有度、属性与类型计数*/
 body:not(.show-team-awoken-effect) .team-awoken-effect, /*队伍觉醒效果统计*/
 body:not(.show-rich-text-tools) #rich-text-tools /*队伍觉醒效果统计*/
 {
-	display: none;
+	display: none !important;
 }
 
 /*交换队长技的图标*/
@@ -787,20 +791,11 @@ body:not(.show-rich-text-tools) #rich-text-tools /*队伍觉醒效果统计*/
 	opacity: 0.5;
 }
  /*3P下隐藏队伍血量统计*/
-body:not(.show-team-total-info) .formation-box .team-total-info
-{
-	display: none;
-}
 body:not(.show-team-total-info):not(.solo) .formation-box .team-bigbox
 {
 	margin-bottom: 5px;
 }
-body:not(.show-team-total-info):not(.solo) .formation-box .team-badge
-{
-	position: absolute;
-	z-index: 10;
-	right: 0;
-}
+
 /*辅助和队伍的每一只框架*/
 .member, .acquisitus-awoken-icon{
 	display: inline-block;
@@ -824,6 +819,17 @@ body:not(.show-team-total-info):not(.solo) .formation-box .team-badge
 	grid-template-rows: repeat(auto-fill, 41px);
 	grid-gap: 15px;
 	margin: 10px;
+}
+button.badge {
+	border: none;
+	background-color: unset;
+	cursor: pointer;
+}
+label.badge {
+	cursor: pointer;
+}
+#badge-choose .team-badges .hide-radio:checked+ .badge{
+	box-shadow: 0 0 0 5px yellow;
 }
 
 /*队伍的背景色*/
@@ -1121,6 +1127,9 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 }
 
 /*队伍内属性、type的个数统计*/
+.team-total-info-count {
+	margin-bottom: 3px;
+}
 .tIf-rarity,
 .tIf-attrs,
 .tIf-types
@@ -4080,31 +4089,26 @@ body.external-link-support #external-support{
 	border-color: #7F00FF;
 }
 
-.dialog-dungeon-enchance
-{
-	margin-top: 100px;
-	margin-left: calc(50% - 270px);
-}
-.dialog-dungeon-enchance label {
+#dialog-dungeon-enchance label {
 	cursor: pointer;
 }
-.dialog-dungeon-enchance .dialog-content>ul>li
+#dialog-dungeon-enchance .dialog-content>ul>li
 {
 	display: inline-block;
 }
-.dialog-dungeon-enchance .stats-list input
+#dialog-dungeon-enchance .stats-list input
 {
 	width: 50px;
 }
-.dialog-dungeon-enchance .dialog-content>*
+#dialog-dungeon-enchance .dialog-content>*
 {
 	margin-top: 5px;
 }
-.dialog-dungeon-enchance .stats-list>li
+#dialog-dungeon-enchance .stats-list>li
 {
 	margin-right: 5px;
 }
-.dialog-dungeon-enchance .dialog-control>button
+#dialog-dungeon-enchance .dialog-control>button
 {
 	margin-right: 5px;
 }
