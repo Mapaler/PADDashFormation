@@ -446,7 +446,7 @@ label[for="box-have"]::after
 .dialog-close::after,
 .mask-close::after
 {
-	content: "关闭";
+	content: "取消";
 }
 .dialog .dialog-content .additional-string::before
 {

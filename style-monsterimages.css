@@ -1408,14 +1408,19 @@
 	background-image: url(images/badge-bg.png);
 	width: 53px;
 	height: 41px;
-	line-height: 41px;
 	text-align: center;
-	margin-right: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+button.badge {
+	border: none;
+	background-color: unset;
+	cursor: pointer;
 }
 .badge::before{
-	content: "";
 	display: inline-block;
-	vertical-align: middle;
+	content: "";
 	background-repeat: no-repeat;
 	background-image: url(images/badge.png);
 	width: 36px; height: 30px;

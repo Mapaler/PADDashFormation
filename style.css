@@ -340,19 +340,19 @@ ul{
 .dialog
 {
 	color: white;
-	position: absolute;
 	padding: 5px;
-	border: 2px ridge #D1D398;
-	top: 0;
-	background-image: linear-gradient(to bottom,#788321f0,#3E4D14f0);
-	border-radius: 6px;
-	box-shadow: black 2px 0px 1px,black 0px 2px 1px,black -2px 0px 1px,black 0px -2px 1px;
-	margin-left: calc(50% - 200px);
-	margin-top: 30px;
 	font-family: var(--game-font-family);
 	text-shadow: black 2px 2px 0;
-	z-index: 2;
 
+	background-image: linear-gradient(to bottom,#788321d0,#3E4D14d0);
+	background-color: unset;
+	box-shadow: black 2px 0px 1px,black 0px 2px 1px,black -2px 0px 1px,black 0px -2px 1px;
+	border: 2px ridge #D1D398;
+	border-radius: 6px;
+}
+/*模态框背景*/
+.dialog::backdrop {
+	background-color: rgba(0,0,0,0.8);
 	backdrop-filter: blur(3px);
 }
 .dialog .dialog-title
@@ -728,7 +728,7 @@ body:not(.show-member-ability) .team-ability, /*队员三维*/
 body:not(.show-member-types) .team-member-types, /*武器觉醒、队员觉醒、队员类型*/
 body:not(.show-member-awoken) :where(.team-assist-awoken , .team-member-awoken), /*武器觉醒、队员觉醒、队员类型*/
 body:not(.show-team-awoken-count) .team-awoken, /*队伍觉醒统计*/
-body:not(.show-team-attrtype-count) .tIf-addition-info, /*稀有度、属性与类型计数*/
+body:not(.show-team-attrtype-count) .team-total-info-count, /*稀有度、属性与类型计数*/
 body:not(.show-team-awoken-effect) .team-awoken-effect, /*队伍觉醒效果统计*/
 body:not(.show-rich-text-tools) #rich-text-tools /*队伍觉醒效果统计*/
 {
@@ -813,28 +813,19 @@ body:not(.show-team-total-info):not(.solo) .formation-box .team-badge
 .formation-box .monster{
 	margin: 4px; /*留给队长边框的*/
 }
-.team-assist, .team-members,.team-badge{
+.team-assist, .team-members{
 	display: inline-block;
 }
-/* 徽章，平时都隐藏 */
-.team-badge li{
-	display: inline-block;
+
+/* 徽章选择窗口列表 */
+#badge-choose .team-badges {
+	display: grid;
+	grid-template-columns: repeat(8, 53px);
+	grid-template-rows: repeat(auto-fill, 41px);
+	grid-gap: 15px;
+	margin: 10px;
 }
-.badge-radio{
-	display: none;
-}
-.badge{
-	display: none;
-	cursor: pointer;
-}
-/* 显示所有徽章时则打开 */
-.show-all-badges .badge{
-	display: inline-block;
-}
-/* 选中的徽章平时也打开 */
-.team-badge .badge-radio:checked+.badge{
-	display: inline-block;
-}
+
 /*队伍的背景色*/
 .teams {
 	counter-reset: team;
@@ -915,12 +906,20 @@ body:not(.show-team-total-info):not(.solo) .formation-box .team-badge
 .formation-box .team-total-info
 {
 	font-size: 15px;
-	vertical-align: bottom;
 }
 .formation-box .team-total-info
 {
-	display: inline-block;
-	max-width: calc(100% - 60px);
+	display: grid;
+	grid-auto-rows: min-content;
+	grid-template-columns: 53px auto;
+	align-items: end;
+}
+.formation-box .team-badge {
+	grid-row: 1 / 3;
+}
+.formation-box .tIf-effect {
+	display: flex;
+	gap: 3px;
 }
 /*各种信息统计的图标*/
 .tIf-total-skill-boost,
@@ -1126,14 +1125,8 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .tIf-attrs,
 .tIf-types
 {
-	display: inline-block;
-	vertical-align: top;
-}
-.tIf-rarity>li,
-.tIf-attrs>li,
-.tIf-types>li
-{
-	display: inline-block;
+	display: inline-flex;
+	vertical-align: bottom;
 }
 .tIf-attrs icon.attr,
 .tIf-types icon.type-icon

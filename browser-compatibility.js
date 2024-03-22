@@ -20,7 +20,7 @@
 		{name: "CSS selector: :not() / CSS选择器: :not()", version:{firefox:84,chrome:88,safari:9}, url: "https://caniuse.com/css-not-sel-list", test: ()=>supportsPseudoClass(":not(html)")},
 		//{name: "CSS selector: :has() / CSS选择器: :has()", version:{firefox:121,chrome:105,safari:15.4}, url: "https://caniuse.com/css-has", test: ()=>supportsPseudoClass(":has(html)")},
 		{name: "Private class fields (#name) / 类私有域(#name)", version:{firefox:90,chrome:74,safari:14.5}, url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>Boolean(runCodeWithFunction("class test {#v = 0;}, true"))},
-		// {name: "Dialog element / Dialog 元素", version:{firefox:98,chrome:37,safari:15.4}, url: "https://caniuse.com/dialog", test: ()=>Boolean(eval("HTMLDialogElement"))},
+		{name: "Dialog element / Dialog 元素", version:{firefox:98,chrome:37,safari:15.4}, url: "https://caniuse.com/dialog", test: ()=>Boolean(eval("HTMLDialogElement"))},
 		// {name: "Class static initialization blocks / 静态初始化块", version:{firefox:93,chrome:94,safari:16.4}, url: "https://caniuse.com/mdn-javascript_classes_static_initialization_blocks", test: ()=>supportsPseudoClass(":not(html)")},
 	]
 	return features.filter(feature=>{

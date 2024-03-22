@@ -4117,28 +4117,36 @@ function initialize() {
 	});
 
 	//添加徽章
-	const className_ChoseBadges = "show-all-badges";
+	const badgeDialog = document.getElementById("badge-choose");
+	const teamBadgeUl = badgeDialog.querySelector(".team-badges");
+	official_badge_sorting.forEach(bgId=>{
+		const li = document.createElement("li");
+		const button = li.appendChild(document.createElement("button"));
+		button.className = "badge";
+		button.value = bgId;
+		button.setAttribute("data-badge-icon", bgId);
+		teamBadgeUl.appendChild(li);
+	});
+	
 	teamBigBoxs.forEach((teamBigBox, teamIdx) => {
 		//徽章
 		const teamBadge = teamBigBox.querySelector(".team-badge");
-		if (!teamBadge) return;
-		const badges = Array.from(teamBadge.querySelectorAll(".badge-radio"));
-
-		function setBadge() {
-			if (teamBadge.classList.contains(className_ChoseBadges)) {
-				const team = formation.teams[teamIdx];
-				teamBadge.classList.remove(className_ChoseBadges);
-				team[2] = parseInt(this.value, 10);
-				const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-				if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, team, teamIdx);
-				const teamAwokenEffectDom = teamBigBox.querySelector(".team-awoken-effect"); //队伍觉醒效果计算
-				if (teamAwokenEffectDom) refreshTeamAwokenEfeect(teamAwokenEffectDom, team, teamIdx);
-				createNewUrl();
-			} else {
-				teamBadge.classList.add(className_ChoseBadges);
-			}
-		}
-		badges.forEach(badge => badge.onclick = setBadge);
+		const returnFunc = function(event){
+			const returnValue = event.target.returnValue;
+			if (returnValue === "cancel") return;
+			_badgeThis.setAttribute("data-badge-icon", returnValue);
+			_badgeThis.value = returnValue;
+			const team = formation.teams[teamIdx];
+			team[2] = parseInt(returnValue, 10);
+			refreshAll(formation);
+			//badgeDialog.removeEventListener("close", returnFunc);
+		};
+		teamBadge.onclick = function(){
+			_badgeThis = this;
+			//_badgeThis.value 
+			badgeDialog.addEventListener("close", returnFunc, {once: true});
+			badgeDialog.showModal();
+		};
 	});
 
 	//显示HP的详细值
@@ -5678,6 +5686,9 @@ function initialize() {
 		} else {
 			const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 			if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
+			
+			const teamTotalInfoCountDom = teamBigBox.querySelector(".team-total-info-count"); //队伍星级、属性、类型合计
+			if (teamTotalInfoCountDom) refreshTeamTotalCount(teamTotalInfoCountDom, teamData, teamNum);
 
 			const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 			if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
@@ -5759,6 +5770,10 @@ function initialize() {
 
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
+		
+		const teamTotalInfoCountDom = teamBigBox.querySelector(".team-total-info-count"); //队伍星级、属性、类型合计
+		if (teamTotalInfoCountDom) refreshTeamTotalCount(teamTotalInfoCountDom, teamData, teamNum);
+
 		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
 
@@ -6618,6 +6633,9 @@ function refreshAll(formationData) {
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
 		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, teamNum);
 
+		const teamTotalInfoCountDom = teamBigBox.querySelector(".team-total-info-count"); //队伍星级、属性、类型合计
+		if (teamTotalInfoCountDom) refreshTeamTotalCount(teamTotalInfoCountDom, teamData, teamNum);
+
 		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
 		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
 
@@ -7386,9 +7404,35 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		}
 	}
 
-	const tRarityDom = totalDom.querySelector(".tIf-rarity");
-	const tAttrsDom = totalDom.querySelector(".tIf-attrs");
-	const tTypesDom = totalDom.querySelector(".tIf-types");
+	if (tEffectDom)	{
+		//76版队长技能不被换队长所影响
+		const leader1id_original = members[0].id;
+		const leader2id_original = teamsCount===2 ? (teamIdx === 1 ? teamsA_members[0].id : teamsB_members[0].id) : members[5].id;
+		let effect = tIf_Effect(leader1id,leader2id, leader1id_original,leader2id_original);
+		if (badge == 22) effect.poisonNoEffect = true;
+		refreshEffectDom(tEffectDom, effect);
+	}
+}
+//刷新队伍能力值合计
+function refreshTeamTotalCount(totalCountDom, team, teamIdx) {
+	//计算总的生命值
+	if (!totalCountDom) return;
+
+	const [members, assists, badge, swapId] = team;
+
+	const teams = formation.teams;
+	const [teamsA=[], teamsB=[], teamsC=[]] = teams;
+	const [teamsA_members, teamsA_assists, teamsA_badge] = teamsA;
+	const [teamsB_members, teamsB_assists, teamsB_badge] = teamsB;
+
+	//计算当前队伍，2P时则是需要特殊处理
+	const team_2p = teamsCount===2 ? members.concat((teamIdx === 1 ? teamsA_members[0] : teamsB_members[0])) : members;
+	const assistTeam_2p = teamsCount===2 ? assists.concat((teamIdx === 1 ? teamsA_assists[0] : teamsB_assists[0])) : assists;
+
+
+	const tRarityDom = totalCountDom.querySelector(".tIf-rarity");
+	const tAttrsDom = totalCountDom.querySelector(".tIf-attrs");
+	const tTypesDom = totalCountDom.querySelector(".tIf-types");
 	//统计队伍稀有度总数
 	if (tRarityDom)
 	{
@@ -7418,15 +7462,6 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				typeDom.setAttribute(dataAttrName, types[typeId] || 0);
 			});
 		}
-	}
-
-	if (tEffectDom)	{
-		//76版队长技能不被换队长所影响
-		const leader1id_original = members[0].id;
-		const leader2id_original = teamsCount===2 ? (teamIdx === 1 ? teamsA_members[0].id : teamsB_members[0].id) : members[5].id;
-		let effect = tIf_Effect(leader1id,leader2id, leader1id_original,leader2id_original);
-		if (badge == 22) effect.poisonNoEffect = true;
-		refreshEffectDom(tEffectDom, effect);
 	}
 }
 function refreshEffectDom(tEffectDom, effect) {

@@ -542,6 +542,14 @@ const equivalent_awoken = [
 	{small:77,big:125,times:2},//暗串
 ];
 
+const PAD_PASS_BADGE = 1<<7 | 1; //本程序的月卡徽章编号，129
+//官方的徽章排列顺序
+const official_badge_sorting = [
+	  1, PAD_PASS_BADGE,
+	     22, 23,  2,  3,  4,  5,  6,
+	  7,  8,  9, 11, 17, 18, 19, 20,
+	 21, 10, 12, 13, 14, 24, 25,
+]
 //官方的觉醒排列顺序
 const official_awoken_sorting = [
 	 21, 43, 61, 10, 54, 11, 12, 13, 49,
@@ -560,7 +568,6 @@ const official_awoken_sorting = [
 	 84, 83, 85, 86, 87, 88, 89, 90, 64,
 	 63,128,129,130
 ];
-const PAD_PASS_BADGE = 1<<7 | 1; //本程序的月卡徽章编号，129
 
 //排序程序列表
 const sort_function_list = [
@@ -4206,7 +4213,15 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Will get Team Badge",otLangName:{chs:"能获得队伍徽章",cht:"能獲得隊伍徽章"},
 				function:cards=>cards.filter(({badgeId})=>badgeId),
-				addition:({badgeId})=>`ID.${badgeId}`
+				addition:({badgeId})=>{
+					const fragment = document.createDocumentFragment();
+					fragment.append(`ID.${badgeId}`);
+					const icon = document.createElement("icon");
+					icon.className = "badge";
+					icon.setAttribute("data-badge-icon", badgeId);
+					fragment.append(icon);
+					return fragment;
+				}
 			},
 			{name:"Hava banner when use skill",otLangName:{chs:"使用技能时有横幅",cht:"使用技能時有橫幅"},
 				function:cards=>cards.filter(card=>card.skillBanner)
