@@ -4435,8 +4435,8 @@ function initialize() {
 	stringSearchDialog.initialing = function(originalStrArr = [], additionalStrArr = []) {
 		const stringSearchContent = this.querySelector(".dialog-content");
 		const fragment = document.createDocumentFragment();
-		originalStrArr = originalStrArr.map(Boolean)
-		additionalStrArr = additionalStrArr.map(Boolean)
+		originalStrArr = originalStrArr.filter(Boolean)
+		additionalStrArr = additionalStrArr.filter(Boolean)
 		if (originalStrArr.length) {
 			const ul_original = document.createElement("ul");
 			ul_original.className = "original-string";
