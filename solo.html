@@ -543,11 +543,14 @@ const teamsCount = 1;
 		</ul>
 		<div class="detail-box"><textarea class="detail-code" placeholder="输入说明"></textarea><div class="detail-display rich-text" contenteditable="true"></div></div>
 
-		<div class="dialog dialog-hp-detail display-none">
+		<dialog id="dialog-hp-detail" class="dialog">
 			<div class="dialog-title"></div>
+			<form method="dialog">
+				<div class="dialog-content"></div>
+				<div class="dialog-control"><button class="dialog-close brown-button" value="cancel" formmethod="dialog"></button></div>
+			</form>
 			<div class="dialog-content"></div>
-			<div class="dialog-control"><button class="dialog-close brown-button"></button></div>
-		</div>
+		</dialog>
 	</div>
 	<div id="rich-text-tools">
 		<button id="set-font-color" title="Set Font Color"></button><input id="color-chooser" type="color" title="Choose Font Color" />
@@ -1155,18 +1158,13 @@ const teamsCount = 1;
 					</div>
 				</div>
 			</div>
-			<div class="dialog dialog-show-any-string display-none">
+			<dialog class="dialog" id="dialog-search-string">
 				<div class="dialog-title"></div>
-				<div class="dialog-content">
-					<input type="text" class="string-value" readonly /><button class="string-copy"></button>
-				</div>
-				<div class="dialog-control"><button class="dialog-close brown-button"></button></div>
-			</div>
-			<div class="dialog dialog-search-string display-none">
-				<div class="dialog-title"></div>
-				<div class="dialog-content"></div>
-				<div class="dialog-control"><button class="dialog-close brown-button"></button></div>
-			</div>
+				<form method="dialog">
+					<div class="dialog-content"></div>
+					<div class="dialog-control"><button class="dialog-close brown-button" value="cancel" formmethod="dialog"></button></div>
+				</form>
+			</dialog>
 			<div class="mask mask-evolutionary-tree display-none">
 				<button class="mask-close brown-button"></button>
 				<div class="mask-content"></div>
@@ -1449,9 +1447,19 @@ const teamsCount = 1;
 			<ul class="team-badges">
 			</ul>
 			<div class="dialog-control">
-				<button class="dialog-close brown-button" value="cancel"></button>
+				<button class="dialog-close brown-button" formmethod="dialog" value="cancel"></button>
 				<button class="dialog-confirm brown-button" type="submit" value="submit"></button>
 			</div>
+		</form>
+	</dialog>
+
+	<dialog class="dialog" id="dialog-show-any-string">
+		<div class="dialog-title"></div>
+		<form method="dialog">
+			<div class="dialog-content">
+				<input type="text" class="string-value" readonly /><button class="string-copy" type="button"></button>
+			</div>
+			<div class="dialog-control"><button class="dialog-close brown-button" value="cancel" formmethod="dialog"></button></div>
 		</form>
 	</dialog>
 </body>

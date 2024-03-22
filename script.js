@@ -4155,7 +4155,7 @@ function initialize() {
 			createNewUrl();
 			//badgeDialog.removeEventListener("close", returnFunc);
 		};
-		teamBadge.onclick = function(){
+		if (teamBadge) teamBadge.onclick = function(){
 			_badgeThis = this;
 			const currentBadge = teamBadgeUl.querySelector(`#choose-team-badge-${_badgeThis.dataset.badgeIcon}`);
 			if (currentBadge) currentBadge.checked = true;
@@ -4163,89 +4163,20 @@ function initialize() {
 			badgeDialog.addEventListener("close", returnFunc, {once: true});
 			badgeDialog.showModal();
 		};
+		const reduceDetailsBar = teamBigBox.querySelector(".tIf-total-hp .reduce-details");
+		if (reduceDetailsBar) reduceDetailsBar.onclick = function(){
+			hpDetailDialog.initialing(this.reduceAttrRangesWithShieldAwoken, this.reduceAttrRanges, this.tHP, this.tHPNoAwoken);
+			hpDetailDialog.show();
+		}
 	});
 
 	//显示HP的详细值
-	const hpDetailDialog = formationBox.querySelector(".dialog-hp-detail");
+	const hpDetailDialog = document.getElementById("dialog-hp-detail");
 	hpDetailDialog.initialing = function(reduceAttrRanges, reduceAttrRangesWithOutAwoken, tHP, tHPNoAwoken)
 	{
 		const dialogContent = this.querySelector(".dialog-content");
 		const fragment = document.createDocumentFragment();
 		
-		function insertHpRangeTable(reduceRanges, reduceRangesWithOutAwoken, tHP, tHPNoAwoken, attr)
-		{
-			const table = document.createElement("table");
-			table.className = "hp-range-table";
-			table.setAttribute("data-attr", attr);
-			table.createCaption();
-			const tHead = table.createTHead();
-			const tBody = table.createTBody();
-			const rangeRow = tHead.insertRow();
-			rangeRow.className = "hp-range";
-			rangeRow.appendChild(document.createElement("th"));
-			const rageHpRow = tBody.insertRow();
-			rageHpRow.className = "general";
-			rageHpRow.appendChild(document.createElement("th"));
-			const rageHpNoAwokenRow = tBody.insertRow();
-			rageHpNoAwokenRow.className = "awoken-bind";
-			rageHpNoAwokenRow.appendChild(document.createElement("th"));
-			const reduceRow = tBody.insertRow();
-			reduceRow.className = "reduce-scale";
-			reduceRow.appendChild(document.createElement("th"));
-			const reduceHpRow = tBody.insertRow();
-			reduceHpRow.className = "reduce-general";
-			const reduceHpRowTitle = reduceHpRow.appendChild(document.createElement("th"));
-			const reduceHpRowTitleSheild = reduceHpRowTitle.appendChild(document.createElement("icon"));
-			reduceHpRowTitleSheild.className = "sheild";
-			const reduceHpNoAwokenRow = tBody.insertRow();
-			reduceHpNoAwokenRow.className = "reduce-awoken-bind";
-			const reduceHpNoAwokenRowTitle = reduceHpNoAwokenRow.appendChild(document.createElement("th"));
-			const reduceHpNoAwokenRowTitleSheild = reduceHpNoAwokenRowTitle.appendChild(document.createElement("icon"));
-			reduceHpNoAwokenRowTitleSheild.className = "sheild";
-			for (let ri=0;ri<reduceRanges.length;ri++) {
-				const range = reduceRanges[ri];
-				const rangeWOA = reduceRangesWithOutAwoken[ri];
-				const hpRange = rangeRow.insertCell();
-				const hpRangeMin = hpRange.appendChild(document.createElement("span"));
-				hpRangeMin.className = "hp-range-min";
-				hpRangeMin.textContent = range.min;
-				hpRange.append(" ~ ");
-				const hpRangeMax = hpRange.appendChild(document.createElement("span"));
-				hpRangeMax.className = "hp-range-max";
-				hpRangeMax.textContent = range.max;
-
-				const hpGeneral = rageHpRow.insertCell();
-				hpGeneral.textContent = `${Math.round(tHP * (range.min / 100)).bigNumberToString()} ~ ${Math.round(tHP * (range.max/100)).bigNumberToString()}`;
-
-				const hpAwokenBind = rageHpNoAwokenRow.insertCell();
-				hpAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100)).bigNumberToString()} ~ ${Math.round(tHPNoAwoken * (range.max/100)).bigNumberToString()}`;
-
-				const reduce = reduceRow.insertCell();
-				const reduceScale = reduce.appendChild(document.createElement("span"));
-				reduceScale.textContent = `${parseFloat((range.scale * 100).toFixed(2))}`;
-				if (rangeWOA.scale !== range.scale) {
-					reduce.appendChild(document.createTextNode("/"));
-					const reduceScaleWithOutAwoken = reduce.appendChild(document.createElement("span"));
-					reduceScaleWithOutAwoken.textContent = `${parseFloat((rangeWOA.scale * 100).toFixed(2))}`;
-				}
-
-				if (range.probability < 1)
-				{
-					reduce.append("(");
-					const reduceProb = reduce.appendChild(document.createElement("span"));
-					reduceProb.className = "reduce-probability";
-					reduceProb.textContent = `${(range.probability * 100).toFixed(0)}`;
-					reduce.append(")");
-				}
-
-				const reduceGeneral = reduceHpRow.insertCell();
-				reduceGeneral.textContent = `${Math.round(tHP * (range.min / 100) / (1 - range.scale)).bigNumberToString()} ~ ${Math.round(tHP * (range.max/100) / (1 - range.scale)).bigNumberToString()}`;
-				
-				const reduceAwokenBind = reduceHpNoAwokenRow.insertCell();
-				reduceAwokenBind.textContent = `${Math.round(tHPNoAwoken * (rangeWOA.min / 100) / (1 - rangeWOA.scale)).bigNumberToString()} ~ ${Math.round(tHPNoAwoken * (rangeWOA.max/100) / (1 - rangeWOA.scale)).bigNumberToString()}`;
-			}
-			return table;
-		}
 		if (reduceAttrRanges.some(r=>r != reduceAttrRanges[0])) //有指定属性减伤
 		{
 			for (let ri=0;ri<reduceAttrRanges.length;ri++) {
@@ -4260,15 +4191,80 @@ function initialize() {
 		dialogContent.innerHTML = "";
 		dialogContent.appendChild(fragment);
 	}
-	//初始化Dialog
-	dialogInitialing(hpDetailDialog);
+	function insertHpRangeTable(reduceRanges, reduceRangesWithOutAwoken, tHP, tHPNoAwoken, attr)
+	{
+		const table = document.createElement("table");
+		table.className = "hp-range-table";
+		table.setAttribute("data-attr", attr);
+		table.createCaption();
+		const tHead = table.createTHead();
+		const tBody = table.createTBody();
+		const rangeRow = tHead.insertRow();
+		rangeRow.className = "hp-range";
+		rangeRow.appendChild(document.createElement("th"));
+		const rageHpRow = tBody.insertRow();
+		rageHpRow.className = "general";
+		rageHpRow.appendChild(document.createElement("th"));
+		const rageHpNoAwokenRow = tBody.insertRow();
+		rageHpNoAwokenRow.className = "awoken-bind";
+		rageHpNoAwokenRow.appendChild(document.createElement("th"));
+		const reduceRow = tBody.insertRow();
+		reduceRow.className = "reduce-scale";
+		reduceRow.appendChild(document.createElement("th"));
+		const reduceHpRow = tBody.insertRow();
+		reduceHpRow.className = "reduce-general";
+		const reduceHpRowTitle = reduceHpRow.appendChild(document.createElement("th"));
+		const reduceHpRowTitleSheild = reduceHpRowTitle.appendChild(document.createElement("icon"));
+		reduceHpRowTitleSheild.className = "sheild";
+		const reduceHpNoAwokenRow = tBody.insertRow();
+		reduceHpNoAwokenRow.className = "reduce-awoken-bind";
+		const reduceHpNoAwokenRowTitle = reduceHpNoAwokenRow.appendChild(document.createElement("th"));
+		const reduceHpNoAwokenRowTitleSheild = reduceHpNoAwokenRowTitle.appendChild(document.createElement("icon"));
+		reduceHpNoAwokenRowTitleSheild.className = "sheild";
+		for (let ri=0;ri<reduceRanges.length;ri++) {
+			const range = reduceRanges[ri];
+			const rangeWOA = reduceRangesWithOutAwoken[ri];
+			const hpRange = rangeRow.insertCell();
+			const hpRangeMin = hpRange.appendChild(document.createElement("span"));
+			hpRangeMin.className = "hp-range-min";
+			hpRangeMin.textContent = range.min;
+			hpRange.append(" ~ ");
+			const hpRangeMax = hpRange.appendChild(document.createElement("span"));
+			hpRangeMax.className = "hp-range-max";
+			hpRangeMax.textContent = range.max;
 
-	const reduceDetailsBars = Array.from(formationBox.querySelectorAll(".tIf-total-hp .reduce-details"));
-	reduceDetailsBars.forEach(bar => {
-		bar.onclick = function(){
-			hpDetailDialog.show(this.reduceAttrRangesWithShieldAwoken, this.reduceAttrRanges, this.tHP, this.tHPNoAwoken);
-		};
-	});
+			const hpGeneral = rageHpRow.insertCell();
+			hpGeneral.textContent = `${Math.round(tHP * (range.min / 100)).bigNumberToString()} ~ ${Math.round(tHP * (range.max/100)).bigNumberToString()}`;
+
+			const hpAwokenBind = rageHpNoAwokenRow.insertCell();
+			hpAwokenBind.textContent = `${Math.round(tHPNoAwoken * (range.min / 100)).bigNumberToString()} ~ ${Math.round(tHPNoAwoken * (range.max/100)).bigNumberToString()}`;
+
+			const reduce = reduceRow.insertCell();
+			const reduceScale = reduce.appendChild(document.createElement("span"));
+			reduceScale.textContent = `${parseFloat((range.scale * 100).toFixed(2))}`;
+			if (rangeWOA.scale !== range.scale) {
+				reduce.appendChild(document.createTextNode("/"));
+				const reduceScaleWithOutAwoken = reduce.appendChild(document.createElement("span"));
+				reduceScaleWithOutAwoken.textContent = `${parseFloat((rangeWOA.scale * 100).toFixed(2))}`;
+			}
+
+			if (range.probability < 1)
+			{
+				reduce.append("(");
+				const reduceProb = reduce.appendChild(document.createElement("span"));
+				reduceProb.className = "reduce-probability";
+				reduceProb.textContent = `${(range.probability * 100).toFixed(0)}`;
+				reduce.append(")");
+			}
+
+			const reduceGeneral = reduceHpRow.insertCell();
+			reduceGeneral.textContent = `${Math.round(tHP * (range.min / 100) / (1 - range.scale)).bigNumberToString()} ~ ${Math.round(tHP * (range.max/100) / (1 - range.scale)).bigNumberToString()}`;
+			
+			const reduceAwokenBind = reduceHpNoAwokenRow.insertCell();
+			reduceAwokenBind.textContent = `${Math.round(tHPNoAwoken * (rangeWOA.min / 100) / (1 - rangeWOA.scale)).bigNumberToString()} ~ ${Math.round(tHPNoAwoken * (rangeWOA.max/100) / (1 - rangeWOA.scale)).bigNumberToString()}`;
+		}
+		return table;
+	}
 	
 	//设置地下城倍率
 	const dungeonEnchanceDialog = document.getElementById("dialog-dungeon-enchance");
@@ -4396,7 +4392,7 @@ function initialize() {
 		}
 	};
 	//以字符串搜索窗口
-	const stringSearchDialog = settingBox.querySelector(".dialog-search-string");
+	const stringSearchDialog = document.getElementById("dialog-search-string");
 	function searchByString(str)
 	{ // 考虑了一下onlyInTag被废弃了，因为和游戏内搜索不符
 		str = str.trim();
@@ -4436,12 +4432,12 @@ function initialize() {
 		}
 		//input.blur(); //取消焦点
 	}
-	stringSearchDialog.initialing = function(originalStrArr = [], additionalStrArr = [])
-	{
+	stringSearchDialog.initialing = function(originalStrArr = [], additionalStrArr = []) {
 		const stringSearchContent = this.querySelector(".dialog-content");
 		const fragment = document.createDocumentFragment();
-		if (originalStrArr.length > 0 && originalStrArr[0].length > 0)
-		{
+		originalStrArr = originalStrArr.map(Boolean)
+		additionalStrArr = additionalStrArr.map(Boolean)
+		if (originalStrArr.length) {
 			const ul_original = document.createElement("ul");
 			ul_original.className = "original-string";
 			originalStrArr.forEach(str=>{
@@ -4459,8 +4455,7 @@ function initialize() {
 			});
 			fragment.appendChild(ul_original);
 		}
-		if (additionalStrArr.length > 0 && additionalStrArr[0].length > 0)
-		{
+		if (additionalStrArr.length) {
 			const ul_additional = document.createElement("ul");
 			ul_additional.className = "additional-string";
 			additionalStrArr.forEach(str=>{
@@ -4477,10 +4472,6 @@ function initialize() {
 		}
 		stringSearchContent.innerHTML = "";
 		stringSearchContent.appendChild(fragment);
-	}
-	stringSearchDialog.close = function()
-	{
-		this.classList.add(className_displayNone);
 	}
 
 	function dialogShowFunction(...arg){
@@ -4499,8 +4490,6 @@ function initialize() {
 		const closeButton = dialog.querySelector(".dialog-close");
 		closeButton.onclick = dialogCloseButtonFunction;
 	}
-	//初始化Dialog
-	dialogInitialing(stringSearchDialog);
 
 	const mAltName = monInfoBox.querySelector(".monster-altName");
 	mAltName.onclick = function() { //搜索合作
@@ -4508,7 +4497,8 @@ function initialize() {
 		const card = Cards[editBox.mid];
 		if (card)
 		{
-			stringSearchDialog.show(card.altName, card.otTags);
+			stringSearchDialog.initialing(card.altName, card.otTags);
+			stringSearchDialog.show();
 		}
 	};
 	//创建一个新的怪物头像
@@ -5018,18 +5008,17 @@ function initialize() {
 		locationURL.searchParams.set('search-options', optionJSON);
 		const idArr = searchMonList.originalHeads?.map(head=>head.card.id) ?? [];
 		locationURL.searchParams.set('show-search', JSON.stringify(idArr));
-		showAnyStringDialog.show(locationURL.toString());
+		showAnyStringDialog.showString(locationURL.toString(), true);
 	}
-	const showAnyStringDialog = settingBox.querySelector(".dialog-show-any-string");
-	showAnyStringDialog.initialing = function(str) {
-		const ipt = this.querySelector(".string-value");
-		ipt.value = str;
+	const showAnyStringDialog = document.getElementById("dialog-show-any-string");
+	const showAnyStringDialogText = showAnyStringDialog.querySelector(".string-value");
+	showAnyStringDialog.showString = function(str, modal = false) {
+		showAnyStringDialogText.value = str;
+		modal ? this.showModal() : this.show();
 	}
 	showAnyStringDialog.querySelector('.string-copy').onclick = function(){
-		copyString(showAnyStringDialog.querySelector(".string-value"));
+		copyString(showAnyStringDialogText);
 	}
-	//初始化Dialog
-	dialogInitialing(showAnyStringDialog);
 
 	function returnCheckedInput(ipt) {
 		return ipt.checked;
@@ -6548,7 +6537,7 @@ function refreshAll(formationData) {
 		const teamBox = teamBigBox.querySelector(".team-box");
 		const teamData = formationData.teams[teamNum];
 		const badgeBox = teamBigBox.querySelector(".team-badge");
-		badgeBox.setAttribute("data-badge-icon", teamData[2] ?? 0);
+		if (badgeBox) badgeBox.setAttribute("data-badge-icon", teamData[2] ?? 0);
 
 		const membersDom = teamBox.querySelector(".team-members");
 		const latentsDom = teamBox.querySelector(".team-latents");
@@ -7292,11 +7281,11 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 	const teams = formation.teams;
 	const [teamsA=[], teamsB=[], teamsC=[]] = teams;
-	const [teamsA_members, teamsA_assists, teamsA_badge] = teamsA;
-	const [teamsB_members, teamsB_assists, teamsB_badge] = teamsB;
+	const [teamsA_members, teamsA_assists, teamsA_badge, swapIdA] = teamsA;
+	const [teamsB_members, teamsB_assists, teamsB_badge, swapIdB] = teamsB;
 
 	const leader1id = members[swapId || 0].id;
-	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teamsA_members[teamsA_badge || 0].id : teamsB_members[teamsB_badge || 0].id) : members[5].id;
+	const leader2id = teamsCount===2 ? (teamIdx === 1 ? teamsA_members[swapIdA || 0].id : teamsB_members[swapIdB || 0].id) : members[5].id;
 
 	//计算当前队伍，2P时则是需要特殊处理
 	const team_2p = teamsCount===2 ? members.concat((teamIdx === 1 ? teamsA_members[0] : teamsB_members[0])) : members;
@@ -7492,8 +7481,8 @@ function refreshFormationTotalHP(totalDom, teams) {
 	const tEffectDom = totalDom.querySelector(".tIf-effect");
 
 	const [teamsA=[], teamsB=[], teamsC=[]] = teams;
-	const [teamsA_members,,teamsA_badge] = teamsA;
-	const [teamsB_members,,teamsB_badge] = teamsB;
+	const [teamsA_members,,,teamsA_badge] = teamsA;
+	const [teamsB_members,,,teamsB_badge] = teamsB;
 	
 	//因为目前仅用于2P，所以直接在外面固定写了
 	const leader1id = teamsA_members[teamsA_badge || 0].id;

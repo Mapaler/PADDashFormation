@@ -340,8 +340,7 @@ ul{
 }
 
 /*弹出窗口相关*/
-.dialog
-{
+.dialog {
 	color: white;
 	padding: 5px;
 	font-family: var(--game-font-family);
@@ -352,11 +351,14 @@ ul{
 	box-shadow: black 2px 0px 1px,black 0px 2px 1px,black -2px 0px 1px,black 0px -2px 1px;
 	border: 2px ridge #D1D398;
 	border-radius: 6px;
+	backdrop-filter: blur(3px);
+}
+.dialog {
+	background-color: unset;
 }
 /*模态框背景*/
 .dialog::backdrop {
 	background-color: rgba(0,0,0,0.8);
-	backdrop-filter: blur(3px);
 }
 .dialog .dialog-title
 {
@@ -406,7 +408,7 @@ ul{
 	transform: scale(1.1);
 }
 /*
-.dialog-search-string .dialog-title::before
+#dialog-search-string .dialog-title::before
 {
 	content: "以字符串搜索";
 }
@@ -415,14 +417,14 @@ ul{
 	content: "关闭";
 }
 */
-.dialog-show-any-string {
-	width: 400px;
-	top: 100px;
-	position: fixed;
+#dialog-show-any-string {
+	width: 100%;
 }
-.dialog-search-string
+#dialog-search-string
 {
 	width: 260px;
+	top: 100px;
+	z-index: 2;
 }
 .dialog .string-copy,
 .dialog .string-search
@@ -450,7 +452,7 @@ ul{
 	box-sizing: border-box;
 	width: calc(100% - 50px * 1);
 }
-.dialog-search-string .original-string .string-value
+#dialog-search-string .original-string .string-value
 {
 	width: calc(100% - 50px * 2);
 }
@@ -1005,10 +1007,10 @@ label.badge {
 {
 	box-shadow: red 0 0 3px;
 }
-.dialog-hp-detail
-{
-	margin-left: calc(50% - 200px);
-	margin-top: 100px;
+
+#dialog-hp-detail {
+	top: 10px;
+	z-index: 2;
 }
 .hp-range-table
 {

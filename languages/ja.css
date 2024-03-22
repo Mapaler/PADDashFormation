@@ -288,7 +288,7 @@ label[for="show-rich-text-tools"]::after{
 	content: " 秒";
 }
 
-.dialog-hp-detail .dialog-title::before
+#dialog-hp-detail .dialog-title::before
 {
 	content: "HP 範囲減傷の詳細";
 }
@@ -439,7 +439,7 @@ label[for="box-have"]::after
 .control-div .search-share::before{
 	content: "検索を分け合う";
 }
-.dialog-search-string .dialog-title::before
+#dialog-search-string .dialog-title::before
 {
 	content: "タグで検索";
 }
