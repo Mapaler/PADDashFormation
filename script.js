@@ -228,13 +228,18 @@ class LatentAwakening extends Array {
 class Member2 {
 	id = 0; //原始id
 	changes = null; //变身后id
-	level = 1;
-	awakening = 0;
-	superAwakening= 0;
-	#plus = new Plus();
-	#latentAwakening = new LatentAwakening();
-	skillLevel = 0;
-	assistMember = null;
+	level = 1; //等级
+	awakening = 0; //觉醒数量
+	superAwakening= 0; //超觉醒ID
+	#plus = new Plus(); //加值
+	#latentAwakening = new LatentAwakening(); //潜在觉醒
+	skillLevel = 0; //技能等级
+	assistMember = null; //辅助对象的引用
+
+	//下面是游戏状态
+	skillQuantity = 0; //技能填充量
+	evolveSkillStage = null; //储存进化类技能的当前等级
+	attrChange = null; //改变为什么颜色
 	get hasAssist() {
 		return assistMember instanceof Member2;
 	}
