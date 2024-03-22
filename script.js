@@ -5431,7 +5431,8 @@ function initialize() {
 			level: level
 		};
 		const needExpArr = calculateExp(tempMon);
-		monLvExp.textContent = needExpArr ? needExpArr.map(exp=>exp.bigNumberToString()).join(" + ") : "";
+		monLvExp.innerHTML = '';
+		if (needExpArr) monLvExp.append(needExpArr.map(exp=>exp.bigNumberToString({sub: true})).nodeJoin(" + "));
 	}
 	editBox.reCalculateExp = reCalculateExp;
 	//三维
@@ -5682,7 +5683,7 @@ function initialize() {
 			if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, editBox.memberIdx[0]);
 			
 			const teamTotalInfoCountDom = teamBigBox.querySelector(".team-total-info-count"); //队伍星级、属性、类型合计
-			if (teamTotalInfoCountDom) refreshTeamTotalCount(teamTotalInfoCountDom, teamData, teamNum);
+			if (teamTotalInfoCountDom) refreshTeamTotalCount(teamTotalInfoCountDom, teamData, editBox.memberIdx[0]);
 
 			const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
 			if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
@@ -7225,11 +7226,17 @@ function refreshMemberAwoken(memberAwokenDom, assistAwokenDom, team, idx) {
 	});
 }
 
-function setTextContentAndAttribute(dom,str)
+function setTextContentAndAttribute(dom, str, number)
 {
 	if (!dom) return;
-	dom.textContent = str;
-	dom.setAttribute(dataAttrName, str);
+	if (typeof str == "string") {
+		dom.textContent = str;
+	}
+	else {
+		dom.innerHTML = '';
+		dom.append(str);
+	}
+	dom.setAttribute(dataAttrName, number ?? str);
 }
 
 function drawHpInfo(hpBarDom, reduceAttrRanges)
@@ -7354,12 +7361,12 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		const tHpDom_noAwoken = tHpDom.querySelector(".awoken-bind");
 		const tHpDom_reduce = tHpDom.querySelector(".reduce");
 
-		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString());
-		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_general, tHP.bigNumberToString({sub: true}));
+		setTextContentAndAttribute(tHpDom_noAwoken, tHPNoAwoken.bigNumberToString({sub: true}));
 		tHpDom_reduce.classList.toggle("no-reduce", totalReduce == 0);
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
-		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString());
-		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString());
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString({sub: true}));
+		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString({sub: true}));
 	}
 
 	if (tSBDom) {

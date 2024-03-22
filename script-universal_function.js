@@ -192,7 +192,7 @@ function BigNumberToStringLocalise(separators, splitDigits = 3 ) {
 	const grouping = 10 ** splitDigits;
 	separators = separators.map(s=>s.toString());
 	
-	return function(){
+	return function(options = {}){
 		const thisValue = this.valueOf();
 		if (thisValue === 0 ||
 			thisValue === Infinity ||
@@ -213,13 +213,25 @@ function BigNumberToStringLocalise(separators, splitDigits = 3 ) {
 			numLevels.push(numTemp);
 		}
 		
-		let outStr = thisValue < 0 ? '-' : '';
-		for (let i = numLevels.length; i--; ) {
-			if (numLevels[i] > 0)
-				outStr += numLevels[i].toString(10) + separators[i];
+		if (options?.sub) {
+			let outFragment = document.createDocumentFragment();
+			if (thisValue < 0) outFragment.append('-');
+			for (let i = numLevels.length; i--; ) {
+				if (numLevels[i] > 0) {
+					const separator = document.createElement("sub");
+					separator.textContent = separators[i];
+					outFragment.append(numLevels[i].toString(10), separator);
+				}
+			}
+			return outFragment;
+		} else {
+			let outStr = thisValue < 0 ? '-' : '';
+			for (let i = numLevels.length; i--; ) {
+				if (numLevels[i] > 0)
+					outStr += numLevels[i].toString(10) + separators[i];
+			}
+			return outStr;
 		}
-
-		return outStr;
 	}
 }
 Number.prototype.bigNumberToString = BigNumberToStringLocalise(['', 'K ', 'M ', 'G ', 'T ', 'P ', 'E ', 'Z ', 'Y ', 'R ', 'Q '], 3);

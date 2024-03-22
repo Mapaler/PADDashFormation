@@ -860,6 +860,9 @@ label.badge {
 	font-size:0;
 	margin-bottom:10px;
 }
+.team-bigbox sub {
+	font-size: 0.75em;
+}
 .team-bigbox:last-of-type{
 	margin-bottom:0;
 }
