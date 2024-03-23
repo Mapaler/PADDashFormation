@@ -230,11 +230,11 @@ function BigNumberToStringLocalise(separators, splitDigits = 3 ) {
 				if (numLevels[i] > 0)
 					outStr += numLevels[i].toString(10) + separators[i];
 			}
-			return outStr;
+			return outStr.trim();
 		}
 	}
 }
-Number.prototype.bigNumberToString = BigNumberToStringLocalise(['', 'K ', 'M ', 'G ', 'T ', 'P ', 'E ', 'Z ', 'Y ', 'R ', 'Q '], 3);
+Number.prototype.bigNumberToString = BigNumberToStringLocalise(['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'R', 'Q'], 3);
 
 //最多保留N位小数，不留0
 Number.prototype.keepCounts = function(decimalDigits = 2, plusSign = false) {
@@ -1208,10 +1208,6 @@ function descriptionToHTML(str)
 //默认的技能解释的显示行为
 function parseSkillDescription(skill) {
 	return descriptionToHTML(skill?.description);
-}
-//大数字缩短长度，默认返回本地定义字符串
-function parseBigNumber(number) {
-	return number.toLocaleString();
 }
 //判断是否是转生和超转生
 function isReincarnated(card) {

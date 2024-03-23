@@ -248,10 +248,10 @@ let localTranslating = {
 		},
 		unit: {
 			orbs: tp``,
-			times: tp` times`,
-			seconds: tp` seconds`,
-			point: tp` point`,
-			turns: tp` turns`,
+			times: tp`times`,
+			seconds: tp`seconds`,
+			point: tp`point`,
+			turns: tp`turns`,
 		},
 		word: {
 			comment: tp`(${'content'}) `,
