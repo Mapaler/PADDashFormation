@@ -1415,13 +1415,13 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 /*.edit-box .setting-box .row-mon-id::before{
 	content: "▼怪物ID";
 }*/
-.edit-box .setting-box .row-mon-id .m-id{
+.edit-box .setting-box .row-mon-id #m-id{
 	box-sizing: border-box;
 	font-size: 25px;
 	height: 40px;
 	width: calc(100% - 50px);
 }
-.edit-box .setting-box .row-mon-id .search-by-string{
+.edit-box .setting-box .row-mon-id #search-by-string{
 	box-sizing: border-box;
 	font-size: 25px;
 	height: 40px;
@@ -1429,7 +1429,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	margin-left: 5px;
 	padding: 0;
 }
-.edit-box .setting-box .row-mon-id .search-by-string::before{
+.edit-box .setting-box .row-mon-id #search-by-string::before{
 	content: "🔍";
 }
 .edit-box .setting-box .row-mon-id .unable-monster{

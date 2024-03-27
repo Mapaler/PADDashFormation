@@ -4401,7 +4401,7 @@ function initialize() {
 	function searchByString(str)
 	{ // 考虑了一下onlyInTag被废弃了，因为和游戏内搜索不符
 		str = str.trim();
-		if (str === '0') { //如果搜索0，则打开最新的50个
+		if (str.length == 0) { //如果搜索0，则打开最新的50个
 			return Cards.filter(card=>card.enabled).slice(-50);
 		} else if (str.length>0)
 		{
@@ -4508,10 +4508,10 @@ function initialize() {
 	};
 	//创建一个新的怪物头像
 	editBox.createCardHead = function(id, options = {}) {
-		function clickHeadToNewMon() {
+		function clickHeadToNewMon(event) {
+			event.preventDefault(); //取消链接的默认操作
 			monstersID.value = this.card.id;
-			monstersID.onchange();
-			return false; //取消链接的默认操作
+			formIdSearch.onsubmit();
 		}
 		const cli = document.createElement("li");
 		const cdom = cli.head = createCardA(options);
@@ -5310,12 +5310,13 @@ function initialize() {
 
 	//id搜索
 	editBox.changeMonId = editBoxChangeMonId;
-	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
-	const btnSearchByString = settingBox.querySelector(".row-mon-id .search-by-string");
+	
 	function idChange(event)
 	{
-		if (/^\d+$/.test(this.value)) {
-			const newId = parseInt(this.value, 10);
+		event?.preventDefault();
+		const searchString = monstersID.value;
+		if (/^\d+$/.test(searchString)) { //纯ID
+			const newId = parseInt(searchString, 10);
 			if (editBox.mid != newId) //避免多次运行oninput、onchange
 			{
 				editBox.mid = newId;
@@ -5338,33 +5339,27 @@ function initialize() {
 				editBox.changeMonId(newId);
 			}
 			return true;
-		}else
+		}else //字符串搜索
 		{
+			showSearch(searchByString(searchString));
 			return false;
 		}
 	}
-	monstersID.onchange = idChange;
-	monstersID.onkeydown = function(event) {
-		//如果键入回车，字符串长度大于0，且不是数字，则执行字符串搜索
-		if (event.key === "Enter" && this.value.length > 0 && !/^\d+$/.test(this.value))
-		{
-			showSearch(searchByString(this.value));
-		}
-	}
+
+	const formIdSearch = document.getElementById("form-id-search");
+	formIdSearch.onsubmit = idChange;
+	const monstersID = document.getElementById("m-id");
+	const btnSearchByString = document.getElementById("search-by-string");
 	//输入id数字即时更新的开关
 	const realTimeClassName = 'real-time-change-card';
-	const s_realTimeChangeCard = settingBox.querySelector(`#${realTimeClassName}`);
+	const s_realTimeChangeCard = document.getElementById(realTimeClassName);
 	s_realTimeChangeCard.onchange = function(e) {
-		monstersID.oninput = this.checked ? idChange : null;
+		monstersID.oninput = this.checked ? ()=>{formIdSearch.onsubmit();} : null;
 		if (e) localStorage.setItem(cfgPrefix + realTimeClassName, Number(this.checked));
 	}
 	s_realTimeChangeCard.checked = Boolean(Number(localStorage.getItem(cfgPrefix + realTimeClassName)));
 	s_realTimeChangeCard.onchange(false);
 
-	//字符串搜索
-	btnSearchByString.onclick = function() {
-		showSearch(searchByString(monstersID.value));
-	};
 	//觉醒
 	const monEditOuterAwokensRow = editBox.querySelector(".row-awoken-sawoken");
 	const monEditAwokensRow = monInfoBox.querySelector(".row-mon-awoken");
@@ -6129,9 +6124,10 @@ function editMember(teamNum, isAssist, indexInTeam) {
 	}
 
 	const settingBox = editBox.querySelector(".setting-box");
-	const monstersID = settingBox.querySelector(".row-mon-id .m-id");
+	const formIdSearch = document.getElementById("form-id-search");
+	const monstersID = document.getElementById("m-id");
 	monstersID.value = mon.id > 0 ? mon.id : 0;
-	monstersID.onchange();
+	formIdSearch.onsubmit();
 	//觉醒
 	const monEditOuterAwokensRow = editBox.querySelector(".row-awoken-sawoken");
 	const monEditAwokens = monEditOuterAwokensRow.querySelectorAll(".row-mon-awoken .awoken-ul input[name='awoken-number']");
