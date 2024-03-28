@@ -4123,11 +4123,10 @@ function initialize() {
 
 	//添加徽章
 	const badgeDialog = document.getElementById("badge-choose");
-	const badgeDialogConfirm = badgeDialog.querySelector(".dialog-confirm");
+	const badgeDialogForm = badgeDialog.querySelector("form");
+	// const badgeDialogConfirm = badgeDialog.querySelector(".dialog-confirm");
+	const badgeChooseName = "choose-team-badge";
 	const teamBadgeUl = badgeDialog.querySelector(".team-badges");
-	const changeBadgeDialogConfirmValue = function(e){
-		badgeDialogConfirm.value = this.value;
-	}
 	
 	official_badge_sorting.forEach(bgId=>{
 		const li = document.createElement("li");
@@ -4135,8 +4134,7 @@ function initialize() {
 		radio.type="radio";
 		radio.className = "hide-radio";
 		radio.value = bgId;
-		radio.onchange = changeBadgeDialogConfirmValue;
-		radio.name = "choose-team-badge";
+		radio.name = badgeChooseName;
 		radio.id = `${radio.name}-${bgId}`;
 
 		const label = li.appendChild(document.createElement("label"));
@@ -4150,12 +4148,14 @@ function initialize() {
 		//徽章
 		const teamBadge = teamBigBox.querySelector(".team-badge");
 		const returnFunc = function(event){
-			const returnValue = event.target.returnValue;
+			const returnValue = this.returnValue;
 			if (returnValue === "cancel") return;
-			_badgeThis.setAttribute("data-badge-icon", returnValue);
-			_badgeThis.value = returnValue;
+			const formData = new FormData(badgeDialogForm);
+			const badgeValue = formData.get(badgeChooseName) || 0;
+			_badgeThis.setAttribute("data-badge-icon", badgeValue);
+			_badgeThis.value = badgeValue;
 			const team = formation.teams[teamIdx];
-			team[2] = parseInt(returnValue, 10);
+			team[2] = parseInt(badgeValue, 10);
 			refreshAll(formation);
 			createNewUrl();
 			//badgeDialog.removeEventListener("close", returnFunc);
@@ -4273,6 +4273,7 @@ function initialize() {
 	
 	//设置地下城倍率
 	const dungeonEnchanceDialog = document.getElementById("dialog-dungeon-enchance");
+	const dungeonEnchanceForm = dungeonEnchanceDialog.querySelector("form");
 	const dialogContent = dungeonEnchanceDialog.querySelector(".dialog-content");
 	const rareDoms = Array.from(dialogContent.querySelectorAll(".rare-list .rare-check"));
 	const attrDoms = Array.from(dialogContent.querySelectorAll(".attr-list .attr-check"));
@@ -4329,17 +4330,18 @@ function initialize() {
 		const returnValue = event.target.returnValue;
 		if (returnValue === "cancel") return;
 
+		const formData = new FormData(dungeonEnchanceForm);
 		const dge = formation.dungeonEnchance;
-		dge.rarities = returnCheckBoxsValues(rareDoms).map(Str2Int);
-		dge.attrs = returnCheckBoxsValues(attrDoms).map(Str2Int);
-		dge.types = returnCheckBoxsValues(typeDoms).map(Str2Int);
-		dge.rate.hp = returnCheckBoxsValues(typeDoms).map(Str2Int)(dialogContent.querySelector("#dungeon-hp").value);
-		dge.rate.atk = Number(dialogContent.querySelector("#dungeon-atk").value);
-		dge.rate.rcv = Number(dialogContent.querySelector("#dungeon-rcv").value);
-		dge.collabs = collabIdIpt.value.split(',').map(str=>parseInt(str,10)).filter(Boolean);
-		dge.gachas = gachaIdIpt.value.split(',').map(str=>parseInt(str,10)).filter(Boolean);
-		dge.benefit = Str2Int(returnRadiosValue(benefitDoms));
-		dge.stage = parseInt(currentStageIpt.value, 10);
+		dge.rarities = formData.getAll("dungeon-rare").map(Str2Int);
+		dge.attrs = formData.getAll("dungeon-attrs").map(Str2Int);
+		dge.types = formData.getAll("dungeon-types").map(Str2Int);
+		dge.rate.hp = Number(formData.get("dungeon-hp"));
+		dge.rate.atk = Number(formData.get("dungeon-atk"));
+		dge.rate.rcv = Number(formData.get("dungeon-rcv"));
+		dge.collabs = formData.get("dungeon-collab-id").split(',').map(str=>parseInt(str,10)).filter(Boolean);
+		dge.gachas = formData.get("dungeon-gacha-id").split(',').map(str=>parseInt(str,10)).filter(Boolean);
+		dge.benefit = Str2Int(formData.get("dungeon-benefit"));
+		dge.stage = Str2Int(formData.get("current-stage"));
 
 		refreshAll(formation);
 		createNewUrl();

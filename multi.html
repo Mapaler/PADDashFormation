@@ -1552,15 +1552,15 @@ const teamsCount = 2;
 				<li><input type="checkbox" class="type-check" name="dungeon-types" value="15" id="dungeon-type-15" /><label class="type-icon" data-type-icon="15" for="dungeon-type-15"><!--販賣用--></label></li>
 			</ul>
 			<ul class="collab-list">
-				<li><label for="dungeon-collab-id"></label><input id="dungeon-collab-id" type="text" /></li>
+				<li><label for="dungeon-collab-id"></label><input id="dungeon-collab-id" name="dungeon-collab-id" type="text" /></li>
 			</ul>
 			<ul class="gacha-list">
-				<li><label for="dungeon-gacha-id"></label><input id="dungeon-gacha-id" type="text" /></li>
+				<li><label for="dungeon-gacha-id"></label><input id="dungeon-gacha-id" name="dungeon-gacha-id" type="text" /></li>
 			</ul>
 			<ul class="stats-list">
-				<li><label for="dungeon-hp"></label><input id="dungeon-hp" type="number" min=0 step=1 value=1 /></li>
-				<li><label for="dungeon-atk"></label><input id="dungeon-atk" type="number" min=0 step=1 value=1 /></li>
-				<li><label for="dungeon-rcv"></label><input id="dungeon-rcv" type="number" min=0 step=1 value=1 /></li>
+				<li><label for="dungeon-hp"></label><input id="dungeon-hp" name="dungeon-hp" type="number" min=0 step=1 value=1 /></li>
+				<li><label for="dungeon-atk"></label><input id="dungeon-atk" name="dungeon-atk" type="number" min=0 step=1 value=1 /></li>
+				<li><label for="dungeon-rcv"></label><input id="dungeon-rcv" name="dungeon-rcv" type="number" min=0 step=1 value=1 /></li>
 			</ul>
 			<ul class="benefit-list"><!--阴阳加护-->
 				<li><input type="radio" class="benefit-check" name="dungeon-benefit" value="0" id="dungeon-benefit-0" checked /><label class="awoken-icon" data-awoken-icon="0" for="dungeon-benefit-0"></label></li><!--无-->
@@ -1569,7 +1569,7 @@ const teamsCount = 2;
 				<li><input type="radio" class="benefit-check" name="dungeon-benefit" value="3" id="dungeon-benefit-3" /><label class="awoken-icon yinyang" data-awoken-icon="128" for="dungeon-benefit-3"></label></li><!--阴阳-->
 			</ul>
 			<ul class="current-stage-list"><!--当前层数-->
-				<li><label for="current-stage"></label><input id="current-stage" type="number" min=1 step=1 /></li>
+				<li><label for="current-stage"></label><input id="current-stage" name="current-stage" type="number" min=1 step=1 /></li>
 			</ul>
 			<div class="dialog-control">
 				<button class="dialog-clear brown-button" type="reset"></button>
