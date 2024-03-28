@@ -44,9 +44,6 @@ label[for="languages"]::after{
 .edit-box .edit-box-title.edit-box-title-assist::before{
 	content: "変更継承";
 }
-.edit-box .setting-box .row-mon-id::before{
-	content: "▼ID と検索";
-}
 .monsterinfo-box .monster-id::before{
 	content: "No.";
 }

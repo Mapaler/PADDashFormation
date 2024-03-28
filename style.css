@@ -1415,25 +1415,29 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 /*.edit-box .setting-box .row-mon-id::before{
 	content: "▼怪物ID";
 }*/
-.row-mon-id .id-string-search {
+.id-string-search {
 	display: flex;
 	gap: 20px;
-	align-items: baseline;
+	margin-top: 5px;
 }
-.row-mon-id .id-string-search :where(
+.id-string-search,
+.id-string-search :where(
 	input,
 	button
 ) {
 	font-size: 25px;
 	line-height: 25px;
+	height: 100%;
 }
-#form-id-search {
-	flex: 1 1 auto;
-	display: flex;
-}
+#form-id-search,
 #form-string-search {
 	flex: 1 1 auto;
 	display: flex;
+	align-items: baseline;
+}
+#form-id-search::before {
+	content: "ID:";
+	text-shadow: 3px 3px 0 black;
 }
 #card-id{
 	box-sizing: border-box;
@@ -1446,7 +1450,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 #search-by-string{
 	flex: 0 0 50px;
 }
-.edit-box .setting-box .row-mon-id #search-by-string::before{
+#search-by-string::before{
 	content: "🔍";
 }
 .edit-box .setting-box .row-mon-id .unable-monster{
@@ -1467,7 +1471,13 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	height: 40px;
 	font-size: 25px;
 }
-.edit-box .setting-box .row-mon-id .evo-card-list>li,
+.evo-card-list {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 3px;
+	margin-top: 5px;
+}
+
 .edit-box .search-mon-list>li
 {
 	display: inline-block;
@@ -3302,6 +3312,10 @@ table .orb-icon
 {
 	content: "⛓️进化链";
 }*/
+.open-evolutionary-tree {
+	height: 100%;
+	box-sizing: border-box;
+}
 .search-evolution-by-this icon
 {
 	transform: scale(50%);

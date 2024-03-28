@@ -50,9 +50,6 @@ label[for="languages"]::after{
 .edit-box .edit-box-title.edit-box-title-assist::before{
 	content: "修改辅助";
 }
-.edit-box .setting-box .row-mon-id::before{
-	content: "▼ID 和 搜索";
-}
 .monsterinfo-box .monster-id::before{
 	content: "No.";
 }

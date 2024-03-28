@@ -44,9 +44,6 @@ label[for="languages"]::after{
 .edit-box .edit-box-title.edit-box-title-assist::before{
 	content: "보조 수정";
 }
-.edit-box .setting-box .row-mon-id::before{
-	content: "▼ID 및 검색";
-}
 .monsterinfo-box .monster-id::before{
 	content: "No.";
 }

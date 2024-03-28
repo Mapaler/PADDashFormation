@@ -42,9 +42,6 @@
 .edit-box .edit-box-title.edit-box-title-assist::before{
 	content: "Edit Assist";
 }
-.edit-box .setting-box .row-mon-id::before{
-	content: "▼ID and Search";
-}
 .monsterinfo-box .monster-id::before{
 	content: "No.";
 }

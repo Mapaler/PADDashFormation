@@ -4643,14 +4643,6 @@ function initialize() {
 		maskContent.innerHTML = "";
 		maskContent.appendChild(fragment);
 	}
-	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
-	openEvolutionaryTree.onclick = function(event) {
-		if (event.ctrlKey) { //显示进化需求树，不是常用功能，就不做额外的按钮了，所以按住Ctrl点击生效
-			evolutionaryTreeMask.showRequirementTree(editBox.mid);
-		} else {
-			evolutionaryTreeMask.show(editBox.mid);
-		}
-	};
 	//显示进化需求树
 	evolutionaryTreeMask.showRequirementTree = function(monid)
 	{
@@ -5355,15 +5347,6 @@ function initialize() {
 	const monstersID = document.getElementById("card-id");
 	// const txtSearchString = document.getElementById("search-string");
 	// const btnSearchByString = document.getElementById("search-by-string");
-	//输入id数字即时更新的开关
-	const realTimeClassName = 'real-time-change-card';
-	const s_realTimeChangeCard = document.getElementById(realTimeClassName);
-	s_realTimeChangeCard.onchange = function(e) {
-		monstersID.oninput = this.checked ? ()=>{formIdSearch.onsubmit();} : null;
-		if (e) localStorage.setItem(cfgPrefix + realTimeClassName, Number(this.checked));
-	}
-	s_realTimeChangeCard.checked = Boolean(Number(localStorage.getItem(cfgPrefix + realTimeClassName)));
-	s_realTimeChangeCard.onchange(false);
 
 	//觉醒
 	const monEditOuterAwokensRow = editBox.querySelector(".row-awoken-sawoken");
@@ -6228,11 +6211,22 @@ function editBoxChangeMonId(id) {
 
 	const createCardHead = editBox.createCardHead;
 	const evoCardUl = settingBox.querySelector(".row-mon-id .evo-card-list");
+	
+	//进化树
+	const evolutionaryTreeMask = settingBox.querySelector(".mask-evolutionary-tree");
+	const openEvolutionaryTreeClick = function(event) {
+		if (event.ctrlKey) { //显示进化需求树，不是常用功能，就不做额外的按钮了，所以按住Ctrl点击生效
+			evolutionaryTreeMask.showRequirementTree(editBox.mid);
+		} else {
+			evolutionaryTreeMask.show(editBox.mid);
+		}
+	};
+
 	evoCardUl.classList.add(className_displayNone);
 	evoCardUl.innerHTML = ""; //据说直接清空HTML性能更好
-	const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
+	//const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	if (evoLinkCardsIdArray.length > 1) {
-		let fragment = document.createDocumentFragment(); //创建节点用的临时空间
+		const fragment = document.createDocumentFragment(); //创建节点用的临时空间
 		evoLinkCardsIdArray.forEach(function(mid) {
 			const cli = createCardHead(mid, {noTreeCount: true});
 			if (mid == id) {
@@ -6240,12 +6234,16 @@ function editBoxChangeMonId(id) {
 			}
 			fragment.appendChild(cli);
 		});
+		const li = fragment.appendChild(document.createElement("li"));
+		const openEvolutionaryTree = li.appendChild(document.createElement("button"));
+		openEvolutionaryTree.classList = "open-evolutionary-tree";
+		openEvolutionaryTree.onclick = openEvolutionaryTreeClick;
 		evoCardUl.appendChild(fragment);
 		evoCardUl.classList.remove(className_displayNone);
-		openEvolutionaryTree.classList.remove(className_displayNone); //显示进化树按钮
+		//openEvolutionaryTree.classList.remove(className_displayNone); //显示进化树按钮
 	}else
 	{
-		openEvolutionaryTree.classList.add(className_displayNone); //隐藏进化树按钮
+		//openEvolutionaryTree.classList.add(className_displayNone); //隐藏进化树按钮
 	}
 	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
 	//对于进化型才显示
