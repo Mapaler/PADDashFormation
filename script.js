@@ -5311,45 +5311,50 @@ function initialize() {
 	//id搜索
 	editBox.changeMonId = editBoxChangeMonId;
 	
-	function idChange(event)
-	{
+	function idChange(event) {
 		event?.preventDefault();
-		const searchString = monstersID.value;
-		if (/^\d+$/.test(searchString)) { //纯ID
-			const newId = parseInt(searchString, 10);
-			if (editBox.mid != newId) //避免多次运行oninput、onchange
-			{
-				editBox.mid = newId;
-				
-				//图鉴模式记录上一次的内容
-				if (isGuideMod)
+		const formData = new FormData(this);
+		const searchString = formData.get("card-id");
+		const newId = parseInt(searchString, 10);
+		if (editBox.mid != newId) { //避免多次运行oninput、onchange
+			editBox.mid = newId;
+			
+			//图鉴模式记录上一次的内容
+			if (isGuideMod) {
+				const idArr = searchMonList.originalHeads?.map(head=>head.card.id) ?? [];
+				const state = {searchArr:idArr,mid:newId};
+				const locationURL = new URL(location);
+				if (newId === 0) {
+					locationURL.searchParams.delete('id');
+				}else
 				{
-					const idArr = searchMonList.originalHeads?.map(head=>head.card.id) ?? [];
-					const state = {searchArr:idArr,mid:newId};
-					const locationURL = new URL(location);
-					if (newId === 0) {
-						locationURL.searchParams.delete('id');
-					}else
-					{
-						locationURL.searchParams.set('id', newId);
-					}
-					history.pushState(state, null, locationURL);
+					locationURL.searchParams.set('id', newId);
 				}
-
-				editBox.changeMonId(newId);
+				history.pushState(state, null, locationURL);
 			}
-			return true;
-		}else //字符串搜索
-		{
+
+			editBox.changeMonId(newId);
+		}
+	}
+	function search(event) {
+		event?.preventDefault();
+		const formData = new FormData(this);
+		const searchString = formData.get("search-string");
+		if (searchString.length == 0) {
+			showSearch(Cards.filter(card=>card.enabled).slice(-100));
+		} else {
 			showSearch(searchByString(searchString));
-			return false;
 		}
 	}
 
 	const formIdSearch = document.getElementById("form-id-search");
 	formIdSearch.onsubmit = idChange;
-	const monstersID = document.getElementById("m-id");
-	const btnSearchByString = document.getElementById("search-by-string");
+	formIdSearch.onchange = idChange; //让数字快速变化时也改变当前卡片
+	const formStringSearch = document.getElementById("form-string-search");
+	formStringSearch.onsubmit = search;
+	const monstersID = document.getElementById("card-id");
+	// const txtSearchString = document.getElementById("search-string");
+	// const btnSearchByString = document.getElementById("search-by-string");
 	//输入id数字即时更新的开关
 	const realTimeClassName = 'real-time-change-card';
 	const s_realTimeChangeCard = document.getElementById(realTimeClassName);
@@ -6125,7 +6130,7 @@ function editMember(teamNum, isAssist, indexInTeam) {
 
 	const settingBox = editBox.querySelector(".setting-box");
 	const formIdSearch = document.getElementById("form-id-search");
-	const monstersID = document.getElementById("m-id");
+	const monstersID = document.getElementById("card-id");
 	monstersID.value = mon.id > 0 ? mon.id : 0;
 	formIdSearch.onsubmit();
 	//觉醒

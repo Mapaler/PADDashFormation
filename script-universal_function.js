@@ -1052,8 +1052,7 @@ function cardNClick() {
 }
 //技能介绍里的头像的切换
 function changeToIdInSkillDetail(event) {
-	const settingBox = editBox.querySelector(".setting-box");
-	const monstersID = settingBox.querySelector(".row-mon-id #m-id");
+	const monstersID = document.getElementById("card-id");
 	const mid = this.getAttribute("data-cardid");
 	monstersID.value = mid;
 	monstersID.onchange();

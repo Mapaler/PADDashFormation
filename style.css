@@ -1415,19 +1415,36 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 /*.edit-box .setting-box .row-mon-id::before{
 	content: "▼怪物ID";
 }*/
-.edit-box .setting-box .row-mon-id #m-id{
-	box-sizing: border-box;
-	font-size: 25px;
-	height: 40px;
-	width: calc(100% - 50px);
+.row-mon-id .id-string-search {
+	display: flex;
+	gap: 20px;
+	align-items: baseline;
 }
-.edit-box .setting-box .row-mon-id #search-by-string{
-	box-sizing: border-box;
+.row-mon-id .id-string-search :where(
+	input,
+	button
+) {
 	font-size: 25px;
-	height: 40px;
-	width: 45px;
-	margin-left: 5px;
-	padding: 0;
+	line-height: 25px;
+}
+#form-id-search {
+	flex: 1 1 auto;
+	display: flex;
+}
+#form-string-search {
+	flex: 1 1 auto;
+	display: flex;
+}
+#card-id{
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+}
+#search-string{
+	flex: 1 1 auto;
+}
+#search-by-string{
+	flex: 0 0 50px;
 }
 .edit-box .setting-box .row-mon-id #search-by-string::before{
 	content: "🔍";

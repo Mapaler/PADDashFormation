@@ -1963,9 +1963,14 @@ const teamsCount = 3;
 				<input type="checkbox" class="switch-ipt" name="real-time-change-card" id="real-time-change-card"><label class="switch-lbl" for="real-time-change-card"><circle></circle></label>
 				<button class="open-evolutionary-tree display-none"></button>
 				<button class="search-evolution-by-this display-none"><icon class="type-icon" data-type-icon="0"></icon></button>
-				<form id="form-id-search">
-					<input type="search" id="m-id"/><button type="sumbit" id="search-by-string"></button>
-				</form>
+				<div class="id-string-search">
+					<form id="form-id-search">
+						<input type="number" step="1" min="0" max="99999" id="card-id"  name="card-id"/>
+					</form>
+					<form id="form-string-search">
+						<input type="search" id="search-string" name="search-string" /><button type="sumbit" id="search-by-string"></button>
+					</form>
+				</div>
 				<ul class="evo-card-list"></ul>
 			</div>
 			<div class="setting-row row-mon-latent">
