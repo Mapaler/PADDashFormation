@@ -5168,7 +5168,7 @@ function initialize() {
 	}
 	//导出当前的搜索状态
 	searchBox.getSearchOptions = function(){
-		const attrs = s_attr_lists.map(list=>parseInt(returnRadiosValue(list), 2) || 0);
+		const attrs = s_attr_lists.map(list=>Number(returnRadiosValue(list)) || 0);
 		const types = returnCheckBoxsValues(s_types).map(Str2Int);
 		const rares = returnCheckBoxsValues(s_rareChecks).map(Str2Int);
 		const sawokens = returnCheckBoxsValues(s_sawokens).map(Str2Int);
