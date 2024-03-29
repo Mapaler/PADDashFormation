@@ -6,9 +6,6 @@
 .monster .level.max::after{
 	content: "Max";
 }
-.monster .level::before{
-	content: "Lv.";
-}
 .team-box-name .box-name::before
 {
 	content: "Team";

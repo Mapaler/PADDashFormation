@@ -601,9 +601,6 @@ ul{
 }
 
 /*显示怪物觉醒的数字*/
-.awoken-count-num
-{
-}
 .awoken-count-num::before
 {
 	content: attr(data-value);
@@ -656,6 +653,10 @@ ul{
 	bottom: 0;
 	vertical-align: top;
 }
+.monster .level::before{
+	content: "Lv.";
+	font-size: 0.75em;
+}
 .monster .level::after
 {
 	content: attr(data-value);
@@ -673,17 +674,13 @@ ul{
 .monster .level[data-level-range="error"]{
 	color: red;
 }
-/*.monster .level::before{
-	content: "Lv.";
-}.monster .level.max::before{
-	content: "Lv.最大";
-}*/
+/**/
 .monster .id{
 	display: block;
 	color: white;
 	font-family: var(--font-family);
 	font-size: 15px;
-	font-weight: 500;
+	font-weight: 600;
 	line-height: 17px;
 	height: 17px;
 	text-shadow: black 0px 0px 2px,black -1px -1px 1px,black 1px 1px 1px;
@@ -692,19 +689,23 @@ ul{
 	bottom: 15px;
 }
 .monster .id::before{
-	content: "No.";
-	font-size: 12px;
+	content: "#";
+	font-size: 0.75em;
 }
 .monster .skill-cd{
 	text-align: right;
 }
-.monster .skill-cd::before{
+.monster .skill-cd::before,
+.monster .skill-cd::after
+{
 	display: inline-block;
-	content:"CD";
-	font-size: 10px;
+	font-size: 0.75em;
 }
-.monster .skill-cd.loop-skill::before{
-	content:"🔁CD";
+.monster .skill-cd::before{
+	content:"CD";
+}
+.monster .skill-cd.loop-skill::after{
+	content:"🔁";
 }
 .monster .skill-cd {
 	font-size: 13px;
