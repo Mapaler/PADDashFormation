@@ -443,7 +443,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_111.PNG",
-		"0ab6f65648a7ae31ad14b15225cf2b56"
+		"518391e085f82563bf52bfe4c02b67e4"
+	],
+	[
+		"images/cards_ja/CARDS_112.PNG",
+		"a4cc89da558f0f06e168f8a06c3e8f6c"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -1744,6 +1748,10 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv1207.wav",
 		"d7b7379d81459c0e19c7e1a65021d6c6"
+	],
+	[
+		"sound/voice/ja/padv1208.wav",
+		"520fb566f0af24678618a4233e4c4888"
 	],
 	[
 		"sound/voice/ja/padv121.wav",
@@ -6096,6 +6104,10 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv2202.wav",
 		"08afcfb960218cefc3d6e578c7c6e08c"
+	],
+	[
+		"sound/voice/ja/padv2206.wav",
+		"df01168d87249c420857637b48cc074a"
 	],
 	[
 		"sound/voice/ja/padv221.wav",
@@ -24367,7 +24379,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"39b9115f6c7e98e88f0804c0322dbbc9"
+		"2c98a28adce317906c368ead1a249653"
 	],
 	[
 		"solo.html",
@@ -24379,7 +24391,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"2a628de603e42da367d89ade3af351c4"
+		"752b5c78c642e403f1f65bd109c9be37"
 	],
 	[
 		"temp.js",
@@ -24391,7 +24403,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/en.css",
-		"919a649d677ac1afdf25f0a4197075c3"
+		"f8865fcbe06b9a998ffadb31bd491d25"
 	],
 	[
 		"languages/en.js",
@@ -24399,7 +24411,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"9ecc35c10d4f10c126b19f22d1be69fe"
+		"2388b1bcb557d2e4e3138ab227697d13"
 	],
 	[
 		"languages/ja.js",
@@ -24407,7 +24419,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"68fe4df171c902a47a5e21f1074d5491"
+		"e1c95e5707f59ea1889d6b3623cf5ceb"
 	],
 	[
 		"languages/ko.js",
@@ -24419,7 +24431,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.css",
-		"17398d5e7c0a9260fd4ca9b7d2734a8d"
+		"aeb10819542512dfa75ed2252840fc99"
 	],
 	[
 		"languages/zh-hans.js",
@@ -24427,7 +24439,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.css",
-		"0b98cf3dbc71374bacdd73f2c0ed9909"
+		"00f2e72323d77860257fce2827216a46"
 	],
 	[
 		"languages/zh-hant.js",
