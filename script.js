@@ -6238,7 +6238,7 @@ function editBoxChangeMonId(id) {
 		});
 		const li = fragment.appendChild(document.createElement("li"));
 		const openEvolutionaryTree = li.appendChild(document.createElement("button"));
-		openEvolutionaryTree.classList = "open-evolutionary-tree";
+		openEvolutionaryTree.classList = "open-evolutionary-tree brown-button";
 		openEvolutionaryTree.onclick = openEvolutionaryTreeClick;
 		evoCardUl.appendChild(fragment);
 		evoCardUl.classList.remove(className_displayNone);

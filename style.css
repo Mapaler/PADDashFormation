@@ -1419,6 +1419,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	display: flex;
 	gap: 20px;
 	margin-top: 5px;
+	padding: 0 5px;
 }
 .id-string-search,
 .id-string-search :where(
@@ -2123,6 +2124,7 @@ input[disabled]+.awoken-icon:active,
 	grid-template-columns: repeat(auto-fill, 75px);
 	grid-auto-rows: min-content;
 	grid-gap: 5px;
+	padding: 3px;
 }
 .search-mon-list:empty {
 	display: none;
@@ -2169,7 +2171,6 @@ input[disabled]+.awoken-icon:active,
 	width: 100%;
 	box-sizing: border-box;
 	padding: 0 7px;
-	margin-top: 5px;
 }
 .edit-box .monsterinfo-box{
 	display: grid;
