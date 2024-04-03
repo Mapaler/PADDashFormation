@@ -2188,8 +2188,6 @@ input[disabled]+.awoken-icon:active,
 	border-bottom: #72941D ridge 7px;
 	box-shadow: black 0 3px 3px;
 	padding: 5px 10px;
-	position: sticky;
-	top: 0;
 	z-index: 1;
 }
 .row-awoken-sawoken .awoken-ul,
