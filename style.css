@@ -1531,13 +1531,9 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	margin: calc(-100px * (1 - 0.5) / 2);
 }
 .rich-text .detail-mon .monster .id{
-	left: 22px;
 	background-color: rgba(0,0,0,0.5);
 	padding: 2px;
 	font-size: 23px;
-}
-.rich-text .detail-mon .monster .id::before {
-	display: none;
 }
 .rich-text .latent-icon {
 	width: 32px;
