@@ -736,7 +736,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 				memberCard.attrs.some(attr=>dge.attrs.includes(attr)) || //符合属性
 				memberCard.types.some(type=>dge.types.includes(type)) || //符合类型
 				dge?.collabs?.includes(memberCard.collabId) || //符合合作
-				dge?.gachas?.includes(memberCard.gachaId); //符合抽蛋桶
+				dge?.gachas?.some(n=>memberCard.gachaIds.includes(n)); //符合抽蛋桶
 	
 	
 	//储存点亮的觉醒
@@ -1086,20 +1086,25 @@ function createTeamFlags(target)
 }
 
 function showSearchBySeriesId(sId, sType) {
-	showSearch(searchBySeriesId(sId, sType));
-}
-function searchBySeriesId(sId, sType) {
-	if (!Number.isInteger(sId)) sId = parseInt(sId, 10);
 	switch (sType) {
 		case "collab": {//合作
-			return Cards.filter(card => card.collabId == sId);
+			if (!Number.isInteger(sId)) sId = parseInt(sId, 10);
+			showSearch(Cards.filter(card => card.collabId == sId),
+				card => card.collabId);
+			break;
 		}
-		case "gacha": {//桶
-			return Cards.filter(card => card.gachaId == sId);
+		case "gacha": {//桶，是数组
+			if (!sId.every(id=>Number.isInteger(id))) sId = sId,map(id=>parseInt(id, 10));
+			showSearch(sId.flatMap(gachaId=>Cards.filter(card => card.gachaIds.includes(gachaId))),
+				card => card.gachaIds.join());
+			break;
 		}
 		case "series":
 		default: { //系列
-			return Cards.filter(card => card.seriesId == sId);
+			if (!Number.isInteger(sId)) sId = parseInt(sId, 10);
+			showSearch(Cards.filter(card => card.seriesId == sId),
+				card => card.seriesId);
+			break;
 		}
 	}
 }

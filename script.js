@@ -347,7 +347,7 @@ class Card {
 	specialAttribute = null;
 	searchFlags = [];
 	#leaderSkillTypes = null;
-	gachaId = 0;
+	gachaGroupsFlag = 0;
 	badgeId = 0;
 
 	unk01 = null;
@@ -465,7 +465,7 @@ class Card {
 		this.orbSkinOrBgmId = e.next().value?.[1]; //珠子皮肤ID
 		this.specialAttribute = e.next().value?.[1]; //特别属性，比如黄龙
 		this.searchFlags.push(e.next().value?.[1], e.next().value?.[1]); //队长技搜索类型，解析写在这里会导致文件太大，所以写到前端去了
-		this.gachaId = e.next().value?.[1]; //目前猜测是桶ID
+		this.gachaGroupsFlag = e.next().value?.[1]; //目前猜测是桶ID
 		this.unk08 = e.next().value?.[1]; //未知08
 		this.attrs.push(e.next().value?.[1]); //属性3
 		this.badgeId = e.next().value?.[1]; //抽到后获取的徽章ID
@@ -913,7 +913,7 @@ Formation.prototype.outObj = function() {
 	});
 	let dge = this.dungeonEnchance;
 	if (Object.values(dge.rate).some(rate => rate != 1) || dge.benefit || dge.stage>1) obj.r = [
-		[reflags(dge.types),reflags(dge.attrs),reflags(dge.rarities),dge.collabs.length ? dge.collabs : 0,dge.gachas.length ? dge.gachas : 0].deleteLatter(0), //类型,属性,星级
+		[reflags(dge.types),reflags(dge.attrs),reflags(dge.rarities),dge.collabs.length ? dge.collabs : 0, reflags(dge.gachas)].deleteLatter(0), //类型,属性,星级
 		[dge.rate.hp,dge.rate.atk,dge.rate.rcv].deleteLatter(1),
 		dge.benefit || 0, //地下城阴阳加护
 		dge.stage || 1 //地下城层数
@@ -1009,7 +1009,7 @@ Formation.prototype.loadObj = function(f) {
 			dge.attrs = flags(attrs ?? 0);
 			dge.rarities = flags(rarities ?? 0);
 			dge.collabs = collabs?.length ? collabs : [];
-			dge.gachas = gachas?.length ? gachas : [];
+			dge.gachas = Array.isArray(gachas) ? gachas.flatMap(n=>flags(n)) :flags(gachas || 0);
 
 			dge.rate.hp = hp ?? 1;
 			dge.rate.atk = atk ?? 1;
@@ -2157,6 +2157,7 @@ function loadData(force = false)
 				const card = _cards[i];
 				if (card.searchFlags) card.leaderSkillTypes = new LeaderSkillType(card);
 				card.onlyAssist = Boolean(card.flags & 1<<4);
+				card.gachaIds = flags(card.gachaGroupsFlag);
 				/*card.unk01p = flags(card.unk01);
 				card.unk02p = flags(card.unk02);
 				card.unk03p = flags(card.unk03);
@@ -4393,9 +4394,10 @@ function initialize() {
 	};
 	const mGachaId = monInfoBox.querySelector(".monster-gachaId");
 	mGachaId.onclick = function() { //搜索桶
-		const sid = parseInt(this.getAttribute(dataAttrName), 10);
-		if (sid > 0) {
-			showSearchBySeriesId(sid, "gacha");
+		const sids = this.getAttribute(dataAttrName).split(',')
+					 .filter(Boolean).map(n=>parseInt(n, 10));
+		if (sids.length) {
+			showSearchBySeriesId(sids, "gacha");
 		}
 	};
 	//以字符串搜索窗口
@@ -6201,9 +6203,9 @@ function editBoxChangeMonId(id) {
 	mCollabId.classList.toggle(className_displayNone, !card.collabId);
 
 	const mGachaId = monInfoBox.querySelector(".monster-gachaId");
-	mGachaId.textContent = card.gachaId;
-	mGachaId.setAttribute(dataAttrName, card.gachaId);
-	mGachaId.classList.toggle(className_displayNone, !card.gachaId);
+	mGachaId.textContent = card.gachaIds.join();
+	mGachaId.setAttribute(dataAttrName, card.gachaIds.join());
+	mGachaId.classList.toggle(className_displayNone, !card.gachaIds.length);
 
 	const mAltName = monInfoBox.querySelector(".monster-altName");
 	//没有合作名就隐藏
@@ -6483,6 +6485,7 @@ function refreshAll(formationData) {
 		if (dge?.collabs?.length) { //添加合作的ID名称
 			//搜索并显示合作
 			function searchCollab(event) {
+				event.preventDefault();
 				const collabId = parseInt(this.getAttribute(dataAttrName), 10);
 				showSearchBySeriesId(collabId, "collab");
 				return false;
@@ -6501,8 +6504,12 @@ function refreshAll(formationData) {
 		if (dge?.gachas?.length) { //添加抽蛋的ID名称
 			//搜索并显示抽蛋
 			function searchGacha(event) {
-				const collabId = parseInt(this.getAttribute(dataAttrName), 10);
-				showSearchBySeriesId(collabId, "gacha");
+				event.preventDefault();
+				const sids = this.getAttribute(dataAttrName).split(',')
+							 .filter(Boolean).map(n=>parseInt(n, 10));
+				if (sids.length) {
+					showSearchBySeriesId(sids, "gacha");
+				}
 				return false;
 			}
 			const fragment = dge.gachas.map(id=>{
@@ -7344,7 +7351,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 22: case 23: return 1.50; //状态异常耐性&SB++ 辅助无效
 
 				case 24: return member.card.collabId === 92 ? 1.15 : 1; //英雄学院徽章
-				case 25: return member.card.gachaId === 2 ? 1.15 : 1; //画师桶徽章
+				case 25: return member.card.gachaIds.includes(1) ? 1.15 : 1; //画师桶，1号徽章
 				default: return 1;
 			}
 		}

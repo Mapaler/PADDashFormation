@@ -88,7 +88,7 @@ class Card{
 		card.orbSkinOrBgmId = data[i++]; //抽到后珠子皮肤ID
 		card.specialAttribute = data[i++]; //特别属性，比如黄龙
 		card.searchFlags = [data[i++], data[i++]]; //队长技搜索类型，解析写在这里会导致文件太大，所以写到前端去了
-		card.gachaId = data[i++]; //目前猜测是桶ID
+		card.gachaGroupsFlag = data[i++]; //目前猜测是桶ID
 		card.unk08 = data[i++]; //未知08
 		card.attrs.push(data[i++]); //属性3
 		card.badgeId = data[i++]; //抽到后获取的徽章ID

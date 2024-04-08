@@ -24519,11 +24519,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"c0d955c4ccf7c86f7a8443bfdee8c800"
+		"ee468d666737a0415b2bde3b4088db15"
 	],
 	[
 		"script.js",
-		"2c98a28adce317906c368ead1a249653"
+		"32dffb2471552c7567bd1ace2ee04ce5"
 	],
 	[
 		"solo.html",
@@ -24531,7 +24531,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"cb192a75427cbcb98fc6ac49b8538dac"
+		"e6d30681930e0ee13bf656e73242d7f7"
 	],
 	[
 		"style.css",
