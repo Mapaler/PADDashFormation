@@ -38,17 +38,26 @@
 		summary {
 			cursor: pointer;
 		}
+		summary:hover {
+			background-color: #3a8b21;
+		}
+		details[open]>summary:hover {
+			background-color: #8cfd6a;
+		}
 
 		img {
 			outline: grey solid 1px;
 		}
-		#language-list {
-			list-style: none;
-			padding: 0;
-			display: flex;
+		#form-language {
 			position: sticky;
 			top: 0;
 			backdrop-filter: blur(5px);
+		}
+		#language-list {
+			display: inline-flex;
+			list-style: none;
+			padding: 0;
+			margin: 0;
 		}
 	</style>
 	<script type="text/javascript">
@@ -68,20 +77,31 @@
 </head>
 
 <body>
-	<ul id="language-list">
-		<li><label><input type="radio" name="language" value="zh"/>中文</label></li>
-		<li><label><input type="radio" name="language" value="en" checked/>English</label></li>
-		<li><label><input type="radio" name="language" value="all"/><span lang="zh">同时显示中英</span><span lang="en">Show Chinese and English both</span></label></li>
-		<li><label><button id="open-all-details"><span lang="zh">打开所有折叠内容</span><span lang="en">Open all collapsed content</span></button></li>
-	</ul>
+	<form id="form-language">
+		<ul id="language-list">
+			<li><label><input type="radio" name="language" value="zh"/>中文</label></li>
+			<li><label><input type="radio" name="language" value="en" checked/>English</label></li>
+			<li><label><input type="radio" name="language" value="all"/><span lang="zh">同时显示中英</span><span lang="en">Show Chinese and English both</span></label></li>
+		</ul>
+		<label><button id="open-all-details" type="button"><span lang="zh">打开所有折叠内容</span><span lang="en">Open all collapsed content</span></button></label>
+	</form>
 	<script type="text/javascript">
-		const langCss = document.querySelector("#language-style");
-		function changeLanguage(){
-			langCss.innerHTML = this.value == "all" ? '' : `[lang]:not(:lang(${this.value})){display: none}`;
+		const langCss = document.getElementById("language-style");
+		const formLanguage = document.getElementById("form-language");
+		formLanguage.onchange = function(event){
+			const formData = new FormData(this);
+			const language = formData.get("language");
+			if (language  == "all") {
+				langCss.innerHTML = "";
+			} else {
+				langCss.innerHTML = `
+[lang]:not(:lang(${language})){
+	display: none
+}
+				`;
+			}
 		}
-		const languageInputs = document.getElementsByName("language");
-		languageInputs.forEach(input=>{input.onchange=changeLanguage; if(input.checked) input.onchange()});
-		const openAllDetails = document.querySelector("#open-all-details");
+		const openAllDetails = document.getElementById("open-all-details");
 		openAllDetails.onclick = function(){
 			document.querySelectorAll("details").forEach(node=>node.open=true);
 		}
@@ -719,16 +739,16 @@ $str.ToString() | Out-File -Encoding ascii -FilePath $pem_name
 									<span lang="zh">这个免费软件的兼容性不是很好，所以需要你自己测试版本。</span>
 									<span lang="en">The compatibility of this free software is not very good, so you need to test the version yourself.</span>
 									<ul>
-										<li><a href="https://sourceforge.net/projects/ext2fsd/files/Ext2fsd/0.68/">v0.68</a></li>
-										<li><a href="https://sourceforge.net/projects/ext2fsd/files/Ext2fsd/0.69/">v0.69</a></li>
-										<li><a href="http://www.accum.se/~bosse/">v0.70 beta 3</a></li>
+										<li><a href="http://www.accum.se/~bosse/">v0.71</a> (2024-03-02)</li>
+										<li><a href="https://sourceforge.net/projects/ext2fsd/files/Ext2fsd/0.69/">v0.69</a> (2017-11-02)</li>
+										<li><a href="https://sourceforge.net/projects/ext2fsd/files/Ext2fsd/0.68/">v0.68</a> (2016-07-09)</li>
 									</ul>
-									<span lang="zh">请先尝试安装 0.69 版本，如果无法使用再测试 0.68 版本。最后再测试需要特殊使用方式的 0.70 beta 3。</span>
-									<span lang="en">Try installing version 0.69 first, and then test version 0.68 if that doesn't work. Finally, test 0.70 beta 3 which requires special usage.</span>
+									<span lang="zh">请先尝试安装 0.71 版本，如果无法使用再测试 0.69 或 0.68 版本。</span>
+									<span lang="en">Try installing version 0.71 first, and then test version 0.69 or 0.68 if that doesn't work.</span>
 								</p>
 								<p>
-									<span lang="zh">运行 <em>Ext2 Volume Manager</em>，选择 <em>Tools</em>-<em>Service Management</em>。<br>
-										如果 <em>Service status</em> 显示的是 <code>Ext2Fsd is already started.</code> 那么就说明成功运行了。</span>
+									<span lang="zh">运行 <em>Ext2 Volume Manager</em>，选择 <em>工具与设置</em>-<em>配置文件系统驱动</em>。<br>
+										如果 <em>当前状态</em> 显示的是 <code>Ext2Fsd is already started.</code> 那么就说明成功运行了。</span>
 									<span lang="en">Start <em>Ext2 Volume Manager</em>, choose <em>Tools</em>-<em>Service Management</em>.<br>
 										If the <em>Service status</em> says <code>Ext2Fsd is already started.</code>, Then it ran successfully.</span>
 									<br>
@@ -736,8 +756,8 @@ $str.ToString() | Out-File -Encoding ascii -FilePath $pem_name
 								</p>
 								<details>
 									<summary>
-										<span lang="zh">如果0.68和0.69版本都无法成功运行，那么就需要使用第三者继续开发的0.70 beta 3版本了，这个版本因为没有对驱动签名，所以需要以 禁用驱动强制签名 模式启动才能运行。</span>
-										<span lang="en">If neither 0.68 nor 0.69 can run successfully, then you will need to use the 0.70 beta 3 version of the 3rd party fork, which does not have driver signatures and needs to be started in the Disable Driver Signing mode to run.</span>	
+										<span lang="zh">如果0.71、0.69和0.68版本都无法成功运行，那么也可以试试以 禁用驱动强制签名 模式启动才能运行。</span>
+										<span lang="en">If versions 0.71, 0.69, and 0.68 fail to run, then you can also try to start in the Disable Driver Forced Signature mode.</span>	
 									</summary>
 									<span lang="zh">以 Win10 为例，打开 <em>Windows 设置</em>-<em>更新和安全</em>-<em>恢复</em>-<em>高级启动</em>，重启电脑进入选择菜单。</span>
 									<span lang="en">Take Win10 as an example, open <em>Windows Settings</em>-<em>Update & Security</em>-<em>Recovery</em>-<em>Advanced Startup</em>, and restart the computer to enter the selection menu. </span>

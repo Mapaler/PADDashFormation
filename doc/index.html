@@ -68,18 +68,29 @@
 </head>
 
 <body>
-	<ul id="language-list">
-		<li><label><input type="radio" name="language" value="zh"/>中文</label></li>
-		<li><label><input type="radio" name="language" value="en" checked/>English</label></li>
-		<li><label><input type="radio" name="language" value="all"/><span lang="zh">同时显示中英</span><span lang="en">Show Chinese and English both</span></label></li>
-	</ul>
+	<form id="form-language">
+		<ul id="language-list">
+			<li><label><input type="radio" name="language" value="zh"/>中文</label></li>
+			<li><label><input type="radio" name="language" value="en" checked/>English</label></li>
+			<li><label><input type="radio" name="language" value="all"/><span lang="zh">同时显示中英</span><span lang="en">Show Chinese and English both</span></label></li>
+		</ul>
+	</form>
 	<script type="text/javascript">
-		const langCss = document.querySelector("#language-style");
-		function changeLanguage(){
-			langCss.innerHTML = this.value == "all" ? '' : `[lang]:not(:lang(${this.value})){display: none}`;
+		const langCss = document.getElementById("language-style");
+		const formLanguage = document.getElementById("form-language");
+		formLanguage.onchange = function(event){
+			const formData = new FormData(this);
+			const language = formData.get("language");
+			if (language  == "all") {
+				langCss.innerHTML = "";
+			} else {
+				langCss.innerHTML = `
+[lang]:not(:lang(${language})){
+	display: none
+}
+				`;
+			}
 		}
-		const languageInputs = document.getElementsByName("language");
-		languageInputs.forEach(input=>{input.onchange=changeLanguage; if(input.checked) input.onchange()});
 	</script>
 	<h1>
 		<span lang="zh"><em>智龙迷城急速阵型</em> 使用技巧</span>

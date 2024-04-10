@@ -16,8 +16,8 @@ But there are encrypted parameters that I don't know how to generate. So I inter
 * 使用 [Fiddler](https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe)，执行 *HTTPS 中间人攻击*从游戏内抓包获得怪物信息。  
 Use [Fiddler](https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe), do *HTTPS man-in-the-middle attack* to capture monster information from in-game capture.  
 
-* 安卓5可以直接在安卓系统里安装 *CER* 证书，但安卓7开始，系统不再信任用户证书。由于需要安卓 7 才能玩智龙迷城，所以要先创建安卓 7 的模拟器，再安装智龙迷城。   
-Android 5 can install *CER* certificates directly in Android. Starting with Android 7, the system no longer trusts user certificates. Since Android 7 is required to play PAD, you must create an emulator for Android 7 before installing PAD.
+* 安卓5可以直接在安卓系统里安装 *CER* 证书，但安卓7开始，系统不再信任用户证书。由于需要安卓 7 才能玩智龙迷城，所以要先创建安卓 7 以上的模拟器，再安装智龙迷城。   
+Android 5 can install *CER* certificates directly in Android. Starting with Android 7, the system no longer trusts user certificates. Since Android 7 is required to play PAD, you must create an emulator for Android 7 or above before installing PAD.
 
 * 将 Fidder 根证书导出到桌面  
 Export the Fidder Root Certificate to desktop
@@ -45,11 +45,11 @@ Place the certificate file in the Android system certificate folder`/system/etc/
 
 	1. **关闭**所有安卓模拟器  
 	**Close** all Android emulators
-	1. 进入安装时设定的 **BlueStacks_nxt** 位置找到模拟器的系统虚拟磁盘文件。默认为`C:\ProgramData\BlueStacks_nxt\Engine\Nougat64\Root.vhd`。  
-	Go to the **BlueStacks_nxt** location set during installation to locate the emulator's system vDisk file. The default is `C:\ProgramData\BlueStacks_nxt\Engine\Nougat64\Root.vhd`.
+	1. 进入安装时设定的 **BlueStacks_nxt** 位置找到模拟器的系统虚拟磁盘文件。默认为`C:\ProgramData\BlueStacks_nxt\Engine\<模拟器文件夹>\Root.vhd`。  
+	Go to the **BlueStacks_nxt** location set during installation to locate the emulator's system vDisk file. The default is `C:\ProgramData\BlueStacks_nxt\Engine\<Emulator folder>\Root.vhd`.
 	1. 双击`Root.vhd`挂载到 Windows 磁盘管理中。  
 	Double-click `Root.vhd` to mount it into Windows Disk Management.
-	1. 运行 [Ext2Fsd](https://github.com/matt-wu/Ext3Fsd/releases) 的 **Ext2 Volume Manager**，选中刚刚挂载的 EXT4 格式磁盘，右键菜单选择“加载装配点盘符”或按`F4`快捷键，给虚拟磁盘分配一个盘符。  
+	1. 运行 [Ext2Fsd](http://www.accum.se/~bosse/) 的 **Ext2 Volume Manager**，选中刚刚挂载的 EXT4 格式磁盘，右键菜单选择“加载装配点盘符”或按`F4`快捷键，给虚拟磁盘分配一个盘符。  
 	Run **Ext2 Volume Manager** of [Ext2Fsd](https://github.com/matt-wu/Ext3Fsd/releases), select the EXT4 format disk you just mounted, right-click the menu and select "Assign Drive Letter" or press the `F4` shortcut key to assign a drive letter to the virtual disk.
 	1. 在 Windows 下，将证书复制到`X:\android\system\etc\security\cacerts\`  
 	Under Windows, copy the certificate to `X:\android\system\etc\security\cacerts\`
