@@ -1192,8 +1192,28 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-latents .latents,
 .team-member-types .member-types,
 .team-member-awoken .member-awoken,
-.team-assist-awoken .member-awoken{
-	transition: transform 0.4s ease-in-out;
+.team-assist-awoken .member-awoken,
+.team-ability .abilitys
+{
+	transition: transform 1s cubic-bezier(0.35, 2, 0.65, -1);
+}
+@keyframes changing-leader {
+	0% {
+		translate: 0 0;
+	}
+	25% {
+		translate: 0 -50px;
+	}
+	75% {
+		translate: 0 -50px;
+	}
+	100% {
+		translate: 0 0;
+	}
+}
+.changing-leader {
+	animation: changing-leader 1s linear(0, 0.5, 0.5, 1);
+	animation-iteration-count: 1;
 }
 
 .latent-icon{

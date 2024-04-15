@@ -6453,7 +6453,7 @@ function refreshAll(formationData) {
 	const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
 	const dungeonEnchanceDom = formationBox.querySelector(".dungeon-enchance"); //地下城强化
 
-	fragment.append(...formationBox.childNodes);
+	//fragment.append(...formationBox.childNodes);
 
 	const txtTitle = titleBox.querySelector(".title-code");
 	const txtDetail = detailBox.querySelector(".detail-code");
@@ -6546,7 +6546,6 @@ function refreshAll(formationData) {
 	}
 	dungeonEnchanceDom.classList.remove(className_displayNone);
 
-
 	teamBigBoxs.forEach((teamBigBox, teamNum) => {
 		const teamBox = teamBigBox.querySelector(".team-box");
 		const teamData = formationData.teams[teamNum];
@@ -6580,15 +6579,27 @@ function refreshAll(formationData) {
 				teamAssistAwokenLi
 			].forEach(dom=>{
 				if (!dom) return;
-				if (leaderIdx > 0 && ti == 0) //队长
-				{
-					dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-leaderIdx)*-108}px)` : `translateX(${leaderIdx*108}px)`;
-				}
-				else if (leaderIdx > 0 && ti == leaderIdx) //队长员
-				{
-					dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-ti)*108}px)` : `translateX(${ti*-108}px)`;
-				}else
-				{
+				if (leaderIdx > 0 && (ti == 0 || ti == leaderIdx)) {
+					if (ti == 0) {
+						dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-leaderIdx)*-108}px)` : `translateX(${leaderIdx*108}px)`;
+					}
+					else if (ti == leaderIdx)
+					{
+						dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-ti)*108}px)` : `translateX(${ti*-108}px)`;
+					}
+					dom.classList.add("changing-leader");
+					dom.onanimationend = function() {
+						this.classList.remove("changing-leader");
+						this.onanimationend = null;
+					}
+				} else {
+					if (dom.style.transform) {
+						dom.classList.add("changing-leader");
+						dom.onanimationend = function() {
+							this.classList.remove("changing-leader");
+							this.onanimationend = null;
+						}
+					}
 					dom.style.transform = null;
 				}
 			});
@@ -6646,6 +6657,53 @@ function refreshAll(formationData) {
 
 	formationBox.appendChild(fragment);
 	// txtDetail.onblur(); //这个需要放在显示出来后再改才能生效
+
+	
+	// teamBigBoxs.forEach((teamBigBox, teamNum) => {
+	// 	const teamBox = teamBigBox.querySelector(".team-box");
+	// 	const teamData = formationData.teams[teamNum];
+
+	// 	const membersDom = teamBox.querySelector(".team-members");
+	// 	const latentsDom = teamBox.querySelector(".team-latents");
+	// 	const assistsDom = teamBox.querySelector(".team-assist");
+	// 	const teamAbilityDom = teamBigBox.querySelector(".team-ability");
+	// 	const teamMemberTypesDom = teamBigBox.querySelector(".team-member-types"); //队员类型
+	// 	const teamMemberAwokenDom = teamBigBox.querySelector(".team-member-awoken"); //队员觉醒
+	// 	const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
+		
+	// 	for (let ti = 0, ti_len = membersDom.querySelectorAll(".member").length; ti < ti_len; ti++) {
+	// 		const leaderIdx = teamData[3]; //开始设置换队长
+	// 		const memberLi = membersDom.querySelector(`.member-${ti+1}`);
+	// 		const latentLi = latentsDom.querySelector(`.latents-${ti+1}`);
+	// 		const assistsLi = assistsDom.querySelector(`.member-${ti+1}`);
+	// 		const teamAbilityLi = teamAbilityDom && teamAbilityDom.querySelector(`.abilitys-${ti+1}`);
+	// 		const teamMemberTypesLi = teamMemberTypesDom && teamMemberTypesDom.querySelector(`.member-types-${ti+1}`);
+	// 		const teamMemberAwokenLi = teamAbilityDom && teamMemberAwokenDom.querySelector(`.member-awoken-${ti+1}`);
+	// 		const teamAssistAwokenLi = teamAbilityDom && teamAssistAwokenDom.querySelector(`.member-awoken-${ti+1}`);
+	// 		[
+	// 			memberLi,
+	// 			latentLi,
+	// 			assistsLi,
+	// 			teamAbilityLi,
+	// 			teamMemberTypesLi,
+	// 			teamMemberAwokenLi,
+	// 			teamAssistAwokenLi
+	// 		].forEach(dom=>{
+	// 			if (!dom) return;
+	// 			if (leaderIdx > 0 && ti == 0) //队长
+	// 			{
+	// 				dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-leaderIdx)*-108}px)` : `translateX(${leaderIdx*108}px)`;
+	// 			}
+	// 			else if (leaderIdx > 0 && ti == leaderIdx) //队长员
+	// 			{
+	// 				dom.style.transform = formation.teams.length == 2 && teamNum == 1 ? `translateX(${(5-ti)*108}px)` : `translateX(${ti*-108}px)`;
+	// 			}else
+	// 			{
+	// 				dom.style.transform = null;
+	// 			}
+	// 		});
+	// 	}
+	// });
 }
 
 //刷新队伍觉醒效果计算
