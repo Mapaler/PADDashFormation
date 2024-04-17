@@ -2676,9 +2676,9 @@ function renderSkill(skill, option = {})
 				targets: document.createDocumentFragment(),
 				cap: cap.bigNumberToString(),
 			};
-			if (targets[0] !== 'self' || targets.length > 1) {
+			// if (targets[0] !== 'self' || targets.length > 1) {
 				dict.targets.append(createTeamFlags(targets));
-			}
+			// }
 			dict.targets.append(targets.map(target=>
 				tsp?.target[target.replaceAll("-","_")]?.())
 				.nodeJoin(tsp.word.slight_pause()));

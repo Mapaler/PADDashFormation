@@ -1173,7 +1173,17 @@ const specialSearchFunctions = (function() {
 		switch (skill.type) {
 			case 258: {
 				fragment.appendChild(createTeamFlags(sk[2]));
+				break;
 			}
+			case 241:
+			case 246:
+			case 247: {
+				fragment.appendChild(createTeamFlags(1));
+				break;
+			}
+		}
+		switch (skill.type) {
+			case 258:
 			case 241: {
 				fragment.append(`${(cap*1e8).bigNumberToString()}×${sk[0]}T`);
 				break;
@@ -1514,14 +1524,6 @@ const specialSearchFunctions = (function() {
 				},
 				addition:voidsAbsorption_Addition
 			},
-			/*{name:"Voids combo absorption(sort by turns)",otLangName:{chs:"破C吸 buff（按破吸回合排序）",cht:"破C吸 buff（按破吸回合排序）"},
-				function:cards=>{
-				const searchTypeArray = [173];
-				return cards.filter(card=>{
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill && skill.params[2];
-				}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-			},addition:voidsAbsorption_Addition},*/
 			{name:"Voids damage absorption(sort by turns)",otLangName:{chs:"破伤吸 buff（按破吸回合排序）",cht:"破傷吸 buff（按破吸回合排序）"},
 				function:cards=>{
 					const searchTypeArray = [173];
@@ -1532,12 +1534,12 @@ const specialSearchFunctions = (function() {
 				},
 				addition:voidsAbsorption_Addition
 			},
-			{name:"Voids both absorption(sort by turns)",otLangName:{chs:"双破吸 buff（按破吸回合排序）",cht:"雙破吸 buff（按破吸回合排序）"},
+			{name:"Voids combo absorption(sort by turns)",otLangName:{chs:"破C吸 buff（按破吸回合排序）",cht:"破C吸 buff（按破吸回合排序）"},
 				function:cards=>{
 					const searchTypeArray = [173];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && skill.params[1] && skill.params[3];
+						return skill && skill.params[2];
 					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
 				addition:voidsAbsorption_Addition
@@ -1706,12 +1708,41 @@ const specialSearchFunctions = (function() {
 				},
 				addition:memberCap_Addition
 			},
-			{name:"Increase Damage Cap (Not Self)",otLangName:{chs:"增加伤害上限 buff(非自身)",cht:"增加傷害上限 buff(非自身)"},
+			{name:"Increase Damage Cap - Self",otLangName:{chs:"增加伤害上限 buff - 自身",cht:"增加傷害上限 buff - 自身"},
+				function:cards=>{
+					const searchTypeArray = [241, 246, 247, 258];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						if (skill?.type === 258) return Boolean(skill.params[2] & 0b1);
+						else return skill;
+					}).sort((a,b)=>{
+						const a_ss = getCardActiveSkill(a, searchTypeArray), b_ss = getCardActiveSkill(b, searchTypeArray);
+						let a_pC = getIncreaseDamageCap(a_ss), b_pC = getIncreaseDamageCap(b_ss);
+						return a_pC - b_pC;
+					});
+				},
+				addition:memberCap_Addition
+			},
+			{name:"Increase Damage Cap - Leader",otLangName:{chs:"增加伤害上限 buff - 队长",cht:"增加傷害上限 buff - 隊長"},
 				function:cards=>{
 					const searchTypeArray = [258];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
+						return skill && Boolean(skill.params[2] & (0b10 | 0b100));
+					}).sort((a,b)=>{
+						const a_ss = getCardActiveSkill(a, searchTypeArray), b_ss = getCardActiveSkill(b, searchTypeArray);
+						let a_pC = getIncreaseDamageCap(a_ss), b_pC = getIncreaseDamageCap(b_ss);
+						return a_pC - b_pC;
+					});
+				},
+				addition:memberCap_Addition
+			},
+			{name:"Increase Damage Cap - Sub",otLangName:{chs:"增加伤害上限 buff - 队员",cht:"增加傷害上限 buff - 隊員"},
+				function:cards=>{
+					const searchTypeArray = [258];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill && Boolean(skill.params[2] & 0b1000);
 					}).sort((a,b)=>{
 						const a_ss = getCardActiveSkill(a, searchTypeArray), b_ss = getCardActiveSkill(b, searchTypeArray);
 						let a_pC = getIncreaseDamageCap(a_ss), b_pC = getIncreaseDamageCap(b_ss);
@@ -1735,7 +1766,7 @@ const specialSearchFunctions = (function() {
 					const searchTypeArray = [230];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && Boolean(skill.params[1] & 1<<0);
+						return skill && Boolean(skill.params[1] & 0b1);
 					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
 				},
 				addition:memberATK_Addition
@@ -1745,17 +1776,17 @@ const specialSearchFunctions = (function() {
 					const searchTypeArray = [230];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && Boolean(skill.params[1] & (1<<1 | 1<<2));
+						return skill && Boolean(skill.params[1] & (0b10 | 0b100));
 					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
 				},
 				addition:memberATK_Addition
 			},
-			{name:"Member ATK rate change - Member",otLangName:{chs:"队员攻击力 buff - 队员",cht:"隊員攻擊力 buff - 隊員"},
+			{name:"Member ATK rate change - Sub",otLangName:{chs:"队员攻击力 buff - 队员",cht:"隊員攻擊力 buff - 隊員"},
 				function:cards=>{
 					const searchTypeArray = [230];
 					return cards.filter(card=>{
 						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && Boolean(skill.params[1] & 1<<3);
+						return skill && Boolean(skill.params[1] & 0b1000);
 					}).sort((a,b)=>sortByParams(a, b, searchTypeArray, 2));
 				},
 				addition:memberATK_Addition
@@ -4231,10 +4262,10 @@ const specialSearchFunctions = (function() {
 				function:cards=>cards.filter(card=>card.latentAwakeningId>0).sort((a,b)=>a.latentAwakeningId-b.latentAwakeningId)
 			},
 			{name:"Stacked material",otLangName:{chs:"堆叠的素材",cht:"堆疊的素材"},
-				function:cards=>cards.filter(card=>card.stacking),
+				function:cards=>cards.filter(card=>card.stackable),
 			},
 			{name:"Not stacked material",otLangName:{chs:"不堆叠的素材",cht:"不堆疊的素材"},
-				function:cards=>cards.filter(card=>!card.stacking && card.types.some(t=>[0,12,14,15].includes(t))),
+				function:cards=>cards.filter(card=>!card.stackable && card.types.some(t=>[0,12,14,15].includes(t))),
 			},
 			{name:"Original Name",otLangName:{chs:"怪物原始名称",cht:"怪物原始名稱"},
 				function:cards=>cards,

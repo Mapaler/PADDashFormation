@@ -849,7 +849,7 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 	const tempMon = {
 		id: id,
 		level: card.limitBreakIncr ? maxLevel : card.maxLevel,
-		plus: (card.stacking || card.types[0] == 15 && card.types[1] == -1) ? [0, 0, 0] : [99, 99, 99], //当可以叠加时，不能打297
+		plus: (card.stackable || card.types[0] == 15 && card.types[1] == -1) ? [0, 0, 0] : [99, 99, 99], //当可以叠加时，不能打297
 		awoken: card.awakenings.length,
 		sawoken: 0
 	};
@@ -882,7 +882,8 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 	if (canAssist) cardsRange = cardsRange.filter(card=>card.canAssist);
 	if (canLv110) cardsRange = cardsRange.filter(card=>card.limitBreakIncr>0);
 	if (is8Latent) cardsRange = cardsRange.filter(card=>card.is8Latent);
-	if (notWeapon) cardsRange = cardsRange.filter(card=>!card.awakenings.includes(49));
+	if (notWeapon) cardsRange = cardsRange.filter(card=>!card.awakenings.includes(49) && //不是武器
+					!card.stackable); //不可堆叠
 	//属性
 	const anyAttrsFlag = 0b1111101;
 	const anyAttrs = sAttrs.map(attr=>attr === 0 || (attr & anyAttrsFlag) == anyAttrsFlag);

@@ -489,7 +489,7 @@ class Card {
 	get enabled(){ //是否已启用
 		return Boolean(this.flags & 1<<1);
 	}
-	get stacking(){ //flag有1<<3时，不合并占一格，没有时则根据类型进行合并（目前合并已经不占格子）
+	get stackable(){ //flag有1<<3时，不合并占一格，没有时则根据类型进行合并（目前合并已经不占格子）
 		const specialType = [0,12,14,15];
 		return Boolean(this.flags & 1<<3) &&
 			this.types.some(t=>specialType.includes(t)); //0進化用;12能力覺醒用;14強化合成用;15販賣用默认合并
@@ -1684,7 +1684,7 @@ class PlayerDataCard {
 		//叠加型用他们的经验来表示数量
 		const card = Cards[this.id];
 		this.count = 1;
-		if (card && card.stacking)
+		if (card && card.stackable)
 		{
 			this.count = this.exp;
 			this.exp = 0;
@@ -2158,6 +2158,7 @@ function loadData(force = false)
 				if (card.searchFlags) card.leaderSkillTypes = new LeaderSkillType(card);
 				card.onlyAssist = Boolean(card.flags & 1<<4);
 				card.gachaIds = flags(card.gachaGroupsFlag);
+				card.typesFlag = reflags(card.types);
 				/*card.unk01p = flags(card.unk01);
 				card.unk02p = flags(card.unk02);
 				card.unk03p = flags(card.unk03);
@@ -5636,7 +5637,7 @@ function initialize() {
 			mon.sawoken = parseInt(mSAwokenIcon.getAttribute("data-awoken-icon"), 10) || 0;
 		}
 
-		if (card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) &&
+		if (card.stackable || card.types.some(t=>[0,12,14,15].includes(t)) &&
 			mon.level >= card.maxLevel) { //当4种特殊type的时候是无法297和打觉醒的，但是不能叠加的在未满级时可以
 			mon.plus = [0, 0, 0];
 		} else {
@@ -6393,7 +6394,7 @@ function editBoxChangeMonId(id) {
 	skillDetailOriginal.innerHTML = "";
 	skillDetailOriginal.appendChild(parseSkillDescription(activeskill));
 
-	const t_maxLevel = card.stacking ? 1 : activeskill?.maxLevel; //遇到不能升技的，最大等级强制为1
+	const t_maxLevel = card.stackable ? 1 : activeskill?.maxLevel; //遇到不能升技的，最大等级强制为1
 	skillLevel.max = t_maxLevel;
 	skillLevel.value = t_maxLevel;
 	skillLevel_Max.value = t_maxLevel;
@@ -6419,7 +6420,7 @@ function editBoxChangeMonId(id) {
 	rowSkill.appendChild(frg1);
 	rowLederSkill.appendChild(frg2);
 
-	let noPowerup = card.stacking || card.types.some(t=>[0,12,14,15].includes(t)) && card.maxLevel <= 1;
+	let noPowerup = card.stackable || card.types.some(t=>[0,12,14,15].includes(t)) && card.maxLevel <= 1;
 	skillLevel.readOnly = noPowerup;
 	rowMonPlus.classList.toggle("disabled", noPowerup);
 	rowMonLatent.classList.toggle("disabled", noPowerup || card.onlyAssist); //极少数情况会出现仅允许当武器的，不能打潜觉
