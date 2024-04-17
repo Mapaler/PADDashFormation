@@ -545,10 +545,11 @@ const equivalent_awoken = [
 const PAD_PASS_BADGE = 1<<7 | 1; //本程序的月卡徽章编号，129
 //官方的徽章排列顺序
 const official_badge_sorting = [
-	  1, PAD_PASS_BADGE,
-	     22, 23,  2,  3,  4,  5,  6,
+	  1, 22, 23,  2,  3,  4,  5,  6,
 	  7,  8,  9, 11, 17, 18, 19, 20,
-	 21, 10, 12, 13, 14, 24, 25,
+	 21, 10, 12, 13, 14, 24, 25, 26,
+
+	PAD_PASS_BADGE,
 ]
 //官方的觉醒排列顺序
 const official_awoken_sorting = [

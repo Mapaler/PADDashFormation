@@ -1506,6 +1506,27 @@
 .badge[data-badge-icon='25']::before{
 	background-position-y:calc(-30px * 25);
 }
+.badge[data-badge-icon='26']::before{
+	background-position-y:calc(-30px * 26);
+}
+.badge[data-badge-icon='27']::before{
+	background-position-y:calc(-30px * 27);
+}
+.badge[data-badge-icon='28']::before{
+	background-position-y:calc(-30px * 28);
+}
+.badge[data-badge-icon='29']::before{
+	background-position-y:calc(-30px * 29);
+}
+.badge[data-badge-icon='30']::before{
+	background-position-y:calc(-30px * 30);
+}
+.badge[data-badge-icon='31']::before{
+	background-position-y:calc(-30px * 31);
+}
+.badge[data-badge-icon='32']::before{
+	background-position-y:calc(-30px * 32);
+}
 .badge[data-badge-icon='129']::before{
 	background-position-x: -36px;
 	background-position-y: 0;
