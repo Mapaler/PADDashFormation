@@ -130,32 +130,26 @@ class BoardSet
 	})();
 	constructor(...boards) {
 		const boardSet = this;
-		const switchFunction = function(event){ //在65、76、54之间循环切换
-			if (event.ctrlKey) {
-				boardSet.boards.forEach(board=>board.tableNode.classList.remove(className_displayNone));
-				return;
-			}
 
-			let showIdx = boardSet.boards.findIndex(board=>!board.tableNode.classList.contains(className_displayNone));
-			showIdx = (showIdx + 1) % boardSet.boards.length;
-			for (let i=0;i<boardSet.boards.length;i++) {
-				boardSet.boards[i].tableNode.classList.toggle(className_displayNone, i !== showIdx);
-			}
-		}
-
-		this.boards.push(...(boards.filter(board=>board instanceof Board)));
-		this.boards.forEach((board, idx)=>{
-			this.node.appendChild(board.tableNode);
+		boardSet.boards.push(...(boards.filter(board=>board instanceof Board)));
+		boardSet.boards.forEach((board, idx)=>{
+			boardSet.node.appendChild(board.tableNode);
 			const span = document.createElement("span");
 			span.dataset.columnCount = board.columnCount;
 			span.dataset.rowCount = board.rowCount;
-			span.onclick = switchFunction;
-			this.boardsLabel.push(span);
-			this.node.appendChild(span);
+			boardSet.boardsLabel.push(span);
+			boardSet.node.appendChild(span);
 			if (idx > 0) {
 				board.tableNode.classList.add(className_displayNone);
 			}
 		});
+		const span = document.createElement("span");
+		span.className = "show-all-board";
+		span.onclick = function(){
+			boardSet.boards.forEach(board=>board.tableNode.classList.remove(className_displayNone));
+			this.classList.add(className_displayNone);
+		};
+		boardSet.node.appendChild(span);
 	}
 	valueOf() {
 		return this.node;

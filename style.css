@@ -3064,12 +3064,13 @@ label[for="languages"]::after{
 	display: inline-block;
 	vertical-align: middle;
 }
-.board-set>span {
-	cursor: pointer;
-	margin: 0 3px;
-}
 .board-set>span::before {
-	content: attr(data-column-count)"×"attr(data-row-count)"🔁";
+	margin: 0 3px;
+	content: attr(data-column-count)"×"attr(data-row-count);
+}
+.board-set .show-all-board::before {
+	cursor: pointer;
+	content: "🔁";
 }
 .board.display-none+span {
 	display: none;
