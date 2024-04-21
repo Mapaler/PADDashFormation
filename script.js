@@ -1060,6 +1060,11 @@ Formation.pdcBadgeMap = [
 	{pdf:13,pdc:17}, //防废
 	{pdf:14,pdc:16}, //防毒
 	{pdf:PAD_PASS_BADGE,pdc:14}, //月卡
+	{pdf:22,pdc:20}, //无武器全抗性(耐)
+	{pdf:23,pdc:21}, //无武器10SB(S+×5)
+	{pdf:24,pdc:22}, //英雄学院桶
+	{pdf:25,pdc:23}, //画师桶
+	{pdf:26,pdc:24}, //高达桶
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
