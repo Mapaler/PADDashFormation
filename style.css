@@ -1672,16 +1672,16 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	text-align: center;
 }
 
-.search-box .attrs-div {
+#search-attr {
 	display: grid;
 	grid-auto-rows: min-content;
 	grid-template-columns: 100px auto;
 	grid-gap: 3px;
 }
-.search-box .attrs-div .monster {
-	grid-row: 1 / 4;
+#search-attr .options {
+	grid-column: 1 / 3;
 }
-.search-box .attrs-div .monster .custom-avatar {
+#search-attr .monster .custom-avatar {
 	display: block;
 	width: 100%;
 	height: 100%;
@@ -1694,15 +1694,17 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	background-position: center;
 	background-clip: content-box;
 }
-.search-box .attrs-div .monster #avatar-select {
+#avatar-select {
 	display: none;
 }
-.search-box .attrs-div .options {
-	grid-column: 1 / 3;
+#search-attr .attr-selecter-list {
+	display: inline-flex;
+	flex-flow: column;
+	row-gap: 3px;
+	padding-top: 2px;
 }
-.search-box .attrs-div .attr-list {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, 55px);
+#search-attr .attr-list>li {
+	width: 55px;
 }
 .search-box .attrs-div .attr-list label {
 	width: 100%;
@@ -1727,34 +1729,34 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	display: none;
 }
-.attrs-div .attr-list>li,
-.qr-data-type-ul>li
-{
+.horizontally-radio-list {
+	display: flex;
+}
+.horizontally-radio-list>li {
 	border: 1px solid white;
 	border-left: none;
 	background: #947244;
 	display: inline-block;
 	overflow: hidden;
 }
-.attrs-div .attr-list>li:hover,
-.qr-data-type-ul>li:hover
-{
+.horizontally-radio-list>li:hover {
 	background: #E9CB9E;
 }
-.attrs-div .attr-list>li:first-of-type,
-.qr-data-type-ul>li:first-of-type
-{
+.horizontally-radio-list>li:first-of-type {
 	border-radius: 8px 0 0 8px;
 	border-left: 1px solid white;
 }
-.attrs-div .attr-list>li:last-of-type,
-.qr-data-type-ul>li:last-of-type
-{
+.horizontally-radio-list>li:last-of-type {
 	border-radius: 0 8px 8px 0;
 }
-.attrs-div .attr-list input:checked+label,
-.qr-data-type-ul>li input:checked+label
-{
+.horizontally-radio-list label {
+	display: inline-block;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+}
+.horizontally-radio-list input:checked+label {
 	background-color:#8C4242;
 	box-shadow: inset black 0 0 5px;
 	cursor: auto;
