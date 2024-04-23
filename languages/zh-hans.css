@@ -322,7 +322,7 @@ label[for="show-rich-text-tools"]::after{
 .search-box>summary::after{
 	content: "搜索怪物";
 }
-.search-box .attrs-div label[for="fix-main-color"]::after{
+label[for="fix-main-color"]::after{
 	content: "强制属性顺序与选择顺序一致";
 }
 .search-box label[for="consider-equivalent-awoken"]::after{
@@ -377,7 +377,8 @@ label[for="show-rich-text-tools"]::after{
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before
+.special-div .special-clear::before,
+#attr-clear::before
 {
 	content: "清除";
 }
