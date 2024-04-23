@@ -452,10 +452,6 @@ label[for="box-have"]::after
 {
 	content: "Other Languages";
 }
-.open-evolutionary-tree::before
-{
-	content: "⛓️Show Evo Tree";
-}
 .search-evolution-by-this::after
 {
 	content: "Cards that need this card as evolutionary material";

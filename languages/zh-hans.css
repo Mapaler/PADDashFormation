@@ -446,10 +446,6 @@ label[for="box-have"]::after
 {
 	content: "其他語言";
 }
-.open-evolutionary-tree::before
-{
-	content: "⛓️进化链";
-}
 .search-evolution-by-this::after
 {
 	content: "需要此宠物作为进化素材的宠物";

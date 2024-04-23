@@ -446,10 +446,6 @@ label[for="box-have"]::after
 {
 	content: "他の言語";
 }
-.open-evolutionary-tree::before
-{
-	content: "⛓️進化サーチ";
-}
 .search-evolution-by-this::after
 {
 	content: "このカードを進化的な素材として必要とするカード";

@@ -3334,6 +3334,12 @@ table .orb-icon
 .open-evolutionary-tree {
 	height: 100%;
 	box-sizing: border-box;
+	min-width: unset;
+}
+.open-evolutionary-tree::before
+{
+	content: "\f802";
+	font-family: var(--icon-font-family);
 }
 .search-evolution-by-this icon
 {

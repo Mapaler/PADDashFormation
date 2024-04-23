@@ -437,10 +437,6 @@ label[for="not-weapon"]::after
 {
 	content: "다른 언어";
 }
-.open-evolutionary-tree::before
-{
-	content: "⛓️진화 계통";
-}
 .search-evolution-by-this::after
 {
 	content: "진화 자료로이 카드를 필요로하는 카드";
