@@ -1198,17 +1198,17 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 		translate: 0 0;
 	}
 	25% {
-		translate: 0 -50px;
+		translate: 0 -75px;
 	}
 	75% {
-		translate: 0 -50px;
+		translate: 0 -75px;
 	}
 	100% {
 		translate: 0 0;
 	}
 }
 .changing-leader {
-	animation: changing-leader 1s linear(0, 0.5, 0.5, 1);
+	animation: changing-leader 1s cubic-bezier(0.45, 0.25, 0.75, 0.25);
 	animation-iteration-count: 1;
 }
 
