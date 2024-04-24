@@ -4207,9 +4207,6 @@ const specialSearchFunctions = (function() {
 			{name:"Water Att. & Attacker Type(Tanjiro)",otLangName:{chs:"攻击型或水属性（炭治郎队员）",cht:"攻擊型或水屬性（炭治郎隊員）"},
 				function:cards=>cards.filter(card=>card.attrs.includes(1) || card.types.includes(6))
 			},
-			{name:"Fire & Water Att.(Seina)",otLangName:{chs:"火属性或水属性（火车队员）",cht:"火屬性或水屬性（火車隊員）"},
-				function:cards=>cards.filter(card=>card.attrs.includes(0) || card.attrs.includes(1))
-			},
 			{name:"Level limit unable break",otLangName:{chs:"不能突破等级限制",cht:"不能突破等級限制"},
 				function:cards=>cards.filter(card=>card.limitBreakIncr===0)
 			},
@@ -4267,27 +4264,27 @@ const specialSearchFunctions = (function() {
 			{name:"Not stacked material",otLangName:{chs:"不堆叠的素材",cht:"不堆疊的素材"},
 				function:cards=>cards.filter(card=>!card.stackable && card.types.some(t=>[0,12,14,15].includes(t))),
 			},
-			{name:"Original Name",otLangName:{chs:"怪物原始名称",cht:"怪物原始名稱"},
+			{name:"Show Original Name",otLangName:{chs:"显示怪物原始名称",cht:"显示怪物原始名稱"},
 				function:cards=>cards,
 				addition:card=>card.name
 			},
-			{name:"Feed EXP",otLangName:{chs:"合成经验值",cht:"合成經驗值"},
+			{name:"Show Feed EXP",otLangName:{chs:"显示合成经验值",cht:"显示合成經驗值"},
 				function:cards=>cards.filter(card=>card.feedExp > 0).sort((a,b)=>a.feedExp * a.maxLevel - b.feedExp * b.maxLevel),
 				addition:card=>`EXP ${Math.round(card.feedExp * card.maxLevel / 4).bigNumberToString()}`
 			},
-			{name:"Sell Price",otLangName:{chs:"售卖金钱",cht:"售賣金錢"},
+			{name:"Show Sell Price",otLangName:{chs:"显示售卖金钱",cht:"显示售賣金錢"},
 				function:cards=>cards.filter(card=>card.sellPrice > 0).sort((a,b)=>a.sellPrice * a.maxLevel - b.sellPrice * b.maxLevel),
 				addition:card=>`Coin ${Math.round(card.sellPrice * card.maxLevel / 10).bigNumberToString()}`
 			},
-			{name:"Sell Monster Point(MP)",otLangName:{chs:"售卖怪物点数(MP)",cht:"售賣怪物點數(MP)"},
+			{name:"Show Sell Monster Point(MP)",otLangName:{chs:"显示售卖怪物点数(MP)",cht:"显示售賣怪物點數(MP)"},
 				function:cards=>cards,
 				addition:card=>`MP ${card.sellMP.bigNumberToString()}`
 			},
-			{name:"Card Types",otLangName:{chs:"角色类型",cht:"角色類型"},
+			{name:"Show Card Types",otLangName:{chs:"显示角色类型",cht:"显示角色類型"},
 				function:cards=>cards,
 				addition:card=>createTypesList(card.types)
 			},
-			{name:"Card Cost",otLangName:{chs:"角色消耗",cht:"角色消耗"},
+			{name:"Show Card Cost",otLangName:{chs:"显示角色消耗",cht:"显示角色消耗"},
 				function:cards=>cards,
 				addition:card=>`COST ${card.cost}`
 			},
