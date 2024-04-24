@@ -25483,7 +25483,7 @@ const cachesMap = new Map([
 	],
 	[
 		"fonts/fa-solid-900.woff2",
-		"6c4eee562650e53cee32496bdfbe534b"
+		"1ec0ba058c021acf7feaa18081445d63"
 	],
 	[
 		"fonts/FOT-KurokaneStd-EB.woff2",
@@ -25503,7 +25503,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"475bd7b4755f476d625e34082c4a780a"
+		"f30df83eaac9f7df6dbb422b2df2d11f"
 	],
 	[
 		"script-custom_elements.js",
@@ -25519,15 +25519,15 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"9545d2373ad30a645163ee78561c12a9"
+		"d0be9845a7b584b3a5699e39c55c146d"
 	],
 	[
 		"script.js",
-		"847e2e54a07c97f5bf0b6df87848b3b4"
+		"c8873f00986bca39236317543a3a3985"
 	],
 	[
 		"solo.html",
-		"fd72b47437620ac3d36c1c14c6dca18b"
+		"19ece08cfb767949c4ec60f1621bb456"
 	],
 	[
 		"style-monsterimages.css",
@@ -25535,7 +25535,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"80ff7251f60ab0ba92b9acc76fa8382c"
+		"8d9ff894662f1ab5ea926439d43bc820"
 	],
 	[
 		"temp.js",
@@ -25543,11 +25543,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"a09e3bf9f4d43be385ec83b772a33ff8"
+		"bcb2e5b2bec153ec15bc97e9f7c0488e"
 	],
 	[
 		"languages/en.css",
-		"f8865fcbe06b9a998ffadb31bd491d25"
+		"e5a21ebe0953c072015a9ffc89a32589"
 	],
 	[
 		"languages/en.js",
@@ -25555,7 +25555,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"2388b1bcb557d2e4e3138ab227697d13"
+		"3f799231dc30a264b17fd0c56963bce7"
 	],
 	[
 		"languages/ja.js",
@@ -25563,7 +25563,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"e1c95e5707f59ea1889d6b3623cf5ceb"
+		"530f343e7422816a3db9fbeb0b6c64ed"
 	],
 	[
 		"languages/ko.js",
@@ -25575,7 +25575,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.css",
-		"aeb10819542512dfa75ed2252840fc99"
+		"3ce8d2a490a532f4d5084bbe46c00cbd"
 	],
 	[
 		"languages/zh-hans.js",
@@ -25583,7 +25583,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.css",
-		"00f2e72323d77860257fce2827216a46"
+		"96920dbb7191e9e32c948165b820a3b7"
 	],
 	[
 		"languages/zh-hant.js",

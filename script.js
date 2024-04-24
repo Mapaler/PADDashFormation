@@ -4667,6 +4667,7 @@ function initialize() {
 	}
 	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
 	searchEvolutionByThis.onclick = function() {showSearch(Cards.filter(card=>card.evoMaterials.includes(editBox.mid)))};
+	
 	const s_attr_lists = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list")).map(list=>Array.from(list.querySelectorAll("input[type=\"radio\"]")));
 	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
 	const s_typesDiv = searchBox.querySelector(".types-div");
@@ -4675,23 +4676,21 @@ function initialize() {
 	const s_typesLi = Array.from(s_typesUl.querySelectorAll("li"));
 	const s_types = s_typesLi.map(li=>li.querySelector(".type-check")); //checkbox集合
 	const attrPreview = searchBox.querySelector(".attrs-div .monster");
-	
-	//3种属性选择的预览
 	const s_attr_preview_attrs = Array.from(attrPreview.querySelectorAll(".attrs .attr"));
-	function s_attr_onclick(){
-		const attrIdx = parseInt(this.name[this.name.length-1],10) - 1;
-		const valueFlag = parseInt(this.value, 2);
-		const values = flags(valueFlag);
-		let attr = values.length === 1 ? values[0] : 'any';
-		if (attrIdx>0 && attr === 6) attr = -1;
-		s_attr_preview_attrs[attrIdx].dataset.attr = attr;
+	
+	const s_AttrForm = document.getElementById("search-attr");
+	s_AttrForm.onchange = function(event){
+		event?.preventDefault();
+		const formData = new FormData(this);
+		for (let i = 0; i <= 2; i++) {
+			const attr = parseInt(formData.get(`attr-${i+1}`),10);
+			s_attr_preview_attrs[i].dataset.attr = Number.isNaN(attr) ? "any" : attr;
+		}
 	}
-	s_attr_lists.forEach(s_attr_list=>
-		s_attr_list.forEach(s_attr=>{
-			s_attr.onclick = s_attr_onclick;
-			if (s_attr.checked) s_attr.onclick();
-		})
-	);
+	s_AttrForm.onreset = function(event){
+		s_attr_preview_attrs.forEach(node=>node.dataset.attr = "any");
+	};
+
 	//可以自行打开图片设定头像的彩蛋
 	const avatarSelect = attrPreview.querySelector("#avatar-select");
 	const customAvatar = attrPreview.querySelector(".custom-avatar");
@@ -5133,11 +5132,12 @@ function initialize() {
 	searchBox.recoverySearchStatus = function({attrs, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent, notWeapon, specialFilters}) {
 		//属性这里是用的2进制写
 		attrs.forEach((attr, ai)=>{
-			const attr_list = s_attr_lists[ai];
-			let ipt = attr_list.find(opt=>parseInt(opt.value,2) == attr) || attr_list[0];
-			ipt.checked = true;
-			ipt.onclick();
+			const inputs = Array.from(document.getElementsByName(`attr-${ai+1}`));
+			inputs.forEach(ipt=>{
+				ipt.checked = Boolean(attr & 1 << parseInt(ipt.value, 10));
+			});
 		});
+		s_AttrForm.onchange();
 		s_fixMainColor.checked = fixMainColor;
 		s_types.forEach(opt=>opt.checked = types.includes(parseInt(opt.value,10)));
 		s_typeAndOr.checked = typeAndOr;
@@ -5178,7 +5178,14 @@ function initialize() {
 	}
 	//导出当前的搜索状态
 	searchBox.getSearchOptions = function(){
-		const attrs = s_attr_lists.map(list=>Number(returnRadiosValue(list)) || 0);
+		const attrs = (function(formData){
+			const attrsArr = [];
+			for (let i = 0; i <= 2; i++) {
+				const attrNum = reflags(formData.getAll(`attr-${i+1}`).map(Str2Int));
+				attrsArr.push(attrNum);
+			}
+			return attrsArr;
+		})(new FormData(s_AttrForm));
 		const types = returnCheckBoxsValues(s_types).map(Str2Int);
 		const rares = returnCheckBoxsValues(s_rareChecks).map(Str2Int);
 		const sawokens = returnCheckBoxsValues(s_sawokens).map(Str2Int);
@@ -5248,10 +5255,7 @@ function initialize() {
 		searchMonList.classList.add(className_displayNone);
 	};
 	searchClear.onclick = function() { //清空搜索选项
-		s_attr_lists.forEach(list=>{
-			list[0].checked = true;
-			list[0].onclick();
-		});
+		s_AttrForm.reset();
 		s_types.forEach(t => {
 			t.checked = false;
 		});

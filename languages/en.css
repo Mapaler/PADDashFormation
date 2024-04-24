@@ -328,7 +328,7 @@ label[for="show-rich-text-tools"]::after{
 .search-box>summary::after{
 	content: "Search Cards";
 }
-.search-box .attrs-div label[for="fix-main-color"]::after{
+label[for="fix-main-color"]::after{
 	content: "The order of the attributes is consistent with the order you selected";
 }
 .search-box label[for="consider-equivalent-awoken"]::after{
@@ -383,7 +383,8 @@ label[for="show-rich-text-tools"]::after{
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before
+.special-div .special-clear::before,
+#attr-clear::before
 {
 	content: "Clear";
 }

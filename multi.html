@@ -67,23 +67,23 @@ const teamsCount = 2;
 		<div>
 			<a class="down-capture display-none" target="_blank"></a>
 			<button class="btn-qrcode fa"></button>
-			<button id="draw-screenshot"><input type="checkbox" id="screenshot-transparent"><label for="screenshot-transparent">透明</label></button>
+			<button id="draw-screenshot"><input type="checkbox" id="screenshot-transparent"><label for="screenshot-transparent"></label></button>
 			<label for="default-level"></label><input id="default-level" type="number" min="1" max="120" placeholder="110"/>
-			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label class="switch-lbl" for="change-swap-to-copy"></label>
+			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label for="change-swap-to-copy"></label>
 		</div>
 		<details class="config-display-list">
 			<summary></summary>
-			<input type="checkbox" class="switch-ipt" id="show-card-id"><label class="switch-lbl" for="show-card-id"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-card-rarity"><label class="switch-lbl" for="show-card-rarity"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-member-skill-cd"><label class="switch-lbl" for="show-member-skill-cd"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-member-ability"><label class="switch-lbl" for="show-member-ability"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-member-types"><label class="switch-lbl" for="show-member-types"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-member-awoken"><label class="switch-lbl" for="show-member-awoken"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-team-total-info"><label class="switch-lbl" for="show-team-total-info"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-team-attrtype-count"><label class="switch-lbl" for="show-team-attrtype-count"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label class="switch-lbl" for="show-team-awoken-effect"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-team-awoken-count"><label class="switch-lbl" for="show-team-awoken-count"><circle></circle></label>
-			<input type="checkbox" class="switch-ipt" id="show-rich-text-tools"><label class="switch-lbl" for="show-rich-text-tools"><circle></circle></label>
+			<input type="checkbox" class="switch-ipt" id="show-card-id"><label for="show-card-id"></label>
+			<input type="checkbox" class="switch-ipt" id="show-card-rarity"><label for="show-card-rarity"></label>
+			<input type="checkbox" class="switch-ipt" id="show-member-skill-cd"><label for="show-member-skill-cd"></label>
+			<input type="checkbox" class="switch-ipt" id="show-member-ability"><label for="show-member-ability"></label>
+			<input type="checkbox" class="switch-ipt" id="show-member-types"><label for="show-member-types"></label>
+			<input type="checkbox" class="switch-ipt" id="show-member-awoken"><label for="show-member-awoken"></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-total-info"><label for="show-team-total-info"></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-attrtype-count"><label for="show-team-attrtype-count"></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label for="show-team-awoken-effect"></label>
+			<input type="checkbox" class="switch-ipt" id="show-team-awoken-count"><label for="show-team-awoken-count"></label>
+			<input type="checkbox" class="switch-ipt" id="show-rich-text-tools"><label for="show-rich-text-tools"></label>
 		</details>
 		<div class="status"></div>
 		<div>
@@ -821,51 +821,51 @@ const teamsCount = 2;
 		<button id="insert-latent-icon" title="Insert Latent Icon"></button>
 		<button id="insert-type-icon" title="Insert Type Icon"></button>
 		<button id="insert-orb-icon" title="Insert Orb Icon"></button>
-		<input type="checkbox" class="switch-ipt" id="siwtch-code-mode"><label class="switch-lbl" for="siwtch-code-mode" title="Code Mode"><circle></circle></label>
+		<input type="checkbox" class="switch-ipt" id="siwtch-code-mode"><label for="siwtch-code-mode" title="Code Mode"></label>
 	</div>
 	<div class="edit-box display-none">
 		<div class="edit-box-title"><!--修改怪物--></div>
 		<details class="search-box">
 			<summary></summary>
-			<div class="attrs-div"><!--属性-->
+			<form id="search-attr" class="attrs-div"><!--属性-->
 				<label class="monster" for="avatar-select">
 					<input type="file" accept="image/*" id="avatar-select" />
 					<canvas class="custom-avatar" width="100" height="100"></canvas>
 					<div class="attrs">
-						<div class="attr"></div>
-						<div class="attr"></div>
-						<div class="attr"></div>
+						<div class="attr" data-attr="any"></div>
+						<div class="attr" data-attr="any"></div>
+						<div class="attr" data-attr="any"></div>
 					</div>
 				</label>
-				<ul class="attr-list">
-					<li><input type="radio" name="attr-1" class="attr-radio" value="0b1111111" id="search-attr-1-any" checked/><label for="search-attr-1-any"><span class="attr" data-attr-icon="any"></span></label></li><!--任意-->
-					<li><input type="radio" name="attr-1" class="attr-radio" value="0b0000001" id="search-attr-1-0" /><label for="search-attr-1-0"><span class="attr" data-attr-icon="0"></span></label></li><!--火-->
-					<li><input type="radio" name="attr-1" class="attr-radio" value="0b0000010" id="search-attr-1-1" /><label for="search-attr-1-1"><span class="attr" data-attr-icon="1"></span></label></li><!--水-->
-					<li><input type="radio" name="attr-1" class="attr-radio" value="0b0000100" id="search-attr-1-2" /><label for="search-attr-1-2"><span class="attr" data-attr-icon="2"></span></label></li><!--木-->
-					<li><input type="radio" name="attr-1" class="attr-radio" value="0b0001000" id="search-attr-1-3" /><label for="search-attr-1-3"><span class="attr" data-attr-icon="3"></span></label></li><!--光-->
-					<li><input type="radio" name="attr-1" class="attr-radio" value="0b0010000" id="search-attr-1-4" /><label for="search-attr-1-4"><span class="attr" data-attr-icon="4"></span></label></li><!--暗-->
-					<li><input type="radio" name="attr-1" class="attr-radio" value="0b1000000" id="search-attr-1-6" /><label for="search-attr-1-6"><span class="attr" data-attr-icon="6"></span></label></li><!--无主属性-->
-				</ul>
-				<ul class="attr-list">
-					<li><input type="radio" name="attr-2" class="attr-radio" value="0b1111111" id="search-attr-2-any" checked/><label for="search-attr-2-any"><span class="attr" data-attr-icon="any"></span></label></li><!--任意-->
-					<li><input type="radio" name="attr-2" class="attr-radio" value="0b0000001" id="search-attr-2-0" /><label for="search-attr-2-0"><span class="attr" data-attr-icon="0"></span></label></li><!--火-->
-					<li><input type="radio" name="attr-2" class="attr-radio" value="0b0000010" id="search-attr-2-1" /><label for="search-attr-2-1"><span class="attr" data-attr-icon="1"></span></label></li><!--水-->
-					<li><input type="radio" name="attr-2" class="attr-radio" value="0b0000100" id="search-attr-2-2" /><label for="search-attr-2-2"><span class="attr" data-attr-icon="2"></span></label></li><!--木-->
-					<li><input type="radio" name="attr-2" class="attr-radio" value="0b0001000" id="search-attr-2-3" /><label for="search-attr-2-3"><span class="attr" data-attr-icon="3"></span></label></li><!--光-->
-					<li><input type="radio" name="attr-2" class="attr-radio" value="0b0010000" id="search-attr-2-4" /><label for="search-attr-2-4"><span class="attr" data-attr-icon="4"></span></label></li><!--暗-->
-					<li><input type="radio" name="attr-2" class="attr-radio" value="0b1000000" id="search-attr-2-6" /><label for="search-attr-2-6"><span class="attr" data-attr-icon="6"></span></label></li><!--无副属性-->
-				</ul>
-				<ul class="attr-list">
-					<li><input type="radio" name="attr-3" class="attr-radio" value="0b1111111" id="search-attr-3-any" checked/><label for="search-attr-3-any"><span class="attr" data-attr-icon="any"></span></label></li><!--任意-->
-					<li><input type="radio" name="attr-3" class="attr-radio" value="0b0000001" id="search-attr-3-0" /><label for="search-attr-3-0"><span class="attr" data-attr-icon="0"></span></label></li><!--火-->
-					<li><input type="radio" name="attr-3" class="attr-radio" value="0b0000010" id="search-attr-3-1" /><label for="search-attr-3-1"><span class="attr" data-attr-icon="1"></span></label></li><!--水-->
-					<li><input type="radio" name="attr-3" class="attr-radio" value="0b0000100" id="search-attr-3-2" /><label for="search-attr-3-2"><span class="attr" data-attr-icon="2"></span></label></li><!--木-->
-					<li><input type="radio" name="attr-3" class="attr-radio" value="0b0001000" id="search-attr-3-3" /><label for="search-attr-3-3"><span class="attr" data-attr-icon="3"></span></label></li><!--光-->
-					<li><input type="radio" name="attr-3" class="attr-radio" value="0b0010000" id="search-attr-3-4" /><label for="search-attr-3-4"><span class="attr" data-attr-icon="4"></span></label></li><!--暗-->
-					<li><input type="radio" name="attr-3" class="attr-radio" value="0b1000000" id="search-attr-3-6" /><label for="search-attr-3-6"><span class="attr" data-attr-icon="6"></span></label></li><!--无副属性-->
-				</ul>
-				<div class="options"><button id="avatar-save" class="display-none">💾</button><input type="checkbox" name="fix-main-color" id="fix-main-color" checked><label class="switch-lbl" for="fix-main-color"></label></div>
-			</div>
+				<div class="attr-selecter-list">
+					<ul class="attr-list horizontally-radio-list">
+						<li><input type="checkbox" name="attr-1" value="0" id="search-attr-1-0" /><label for="search-attr-1-0"><span class="attr" data-attr-icon="0"></span></label></li><!--火-->
+						<li><input type="checkbox" name="attr-1" value="1" id="search-attr-1-1" /><label for="search-attr-1-1"><span class="attr" data-attr-icon="1"></span></label></li><!--水-->
+						<li><input type="checkbox" name="attr-1" value="2" id="search-attr-1-2" /><label for="search-attr-1-2"><span class="attr" data-attr-icon="2"></span></label></li><!--木-->
+						<li><input type="checkbox" name="attr-1" value="3" id="search-attr-1-3" /><label for="search-attr-1-3"><span class="attr" data-attr-icon="3"></span></label></li><!--光-->
+						<li><input type="checkbox" name="attr-1" value="4" id="search-attr-1-4" /><label for="search-attr-1-4"><span class="attr" data-attr-icon="4"></span></label></li><!--暗-->
+						<li><input type="checkbox" name="attr-1" value="6" id="search-attr-1-6" /><label for="search-attr-1-6"><span class="attr" data-attr-icon="6"></span></label></li><!--无主属性-->
+					</ul>
+					<ul class="attr-list horizontally-radio-list">
+						<li><input type="checkbox" name="attr-2" value="0" id="search-attr-2-0" /><label for="search-attr-2-0"><span class="attr" data-attr-icon="0"></span></label></li><!--火-->
+						<li><input type="checkbox" name="attr-2" value="1" id="search-attr-2-1" /><label for="search-attr-2-1"><span class="attr" data-attr-icon="1"></span></label></li><!--水-->
+						<li><input type="checkbox" name="attr-2" value="2" id="search-attr-2-2" /><label for="search-attr-2-2"><span class="attr" data-attr-icon="2"></span></label></li><!--木-->
+						<li><input type="checkbox" name="attr-2" value="3" id="search-attr-2-3" /><label for="search-attr-2-3"><span class="attr" data-attr-icon="3"></span></label></li><!--光-->
+						<li><input type="checkbox" name="attr-2" value="4" id="search-attr-2-4" /><label for="search-attr-2-4"><span class="attr" data-attr-icon="4"></span></label></li><!--暗-->
+						<li><input type="checkbox" name="attr-2" value="6" id="search-attr-2-6" /><label for="search-attr-2-6"><span class="attr" data-attr-icon="6"></span></label></li><!--无副属性-->
+					</ul>
+					<ul class="attr-list horizontally-radio-list">
+						<li><input type="checkbox" name="attr-3" value="0" id="search-attr-3-0" /><label for="search-attr-3-0"><span class="attr" data-attr-icon="0"></span></label></li><!--火-->
+						<li><input type="checkbox" name="attr-3" value="1" id="search-attr-3-1" /><label for="search-attr-3-1"><span class="attr" data-attr-icon="1"></span></label></li><!--水-->
+						<li><input type="checkbox" name="attr-3" value="2" id="search-attr-3-2" /><label for="search-attr-3-2"><span class="attr" data-attr-icon="2"></span></label></li><!--木-->
+						<li><input type="checkbox" name="attr-3" value="3" id="search-attr-3-3" /><label for="search-attr-3-3"><span class="attr" data-attr-icon="3"></span></label></li><!--光-->
+						<li><input type="checkbox" name="attr-3" value="4" id="search-attr-3-4" /><label for="search-attr-3-4"><span class="attr" data-attr-icon="4"></span></label></li><!--暗-->
+						<li><input type="checkbox" name="attr-3" value="6" id="search-attr-3-6" /><label for="search-attr-3-6"><span class="attr" data-attr-icon="6"></span></label></li><!--无副属性-->
+					</ul>
+				</div>
+				<button id="attr-clear" type="reset" class="brown-button"></button>
+				<div class="options"><button id="avatar-save" type="button" class="display-none">💾</button><input type="checkbox" name="fix-main-color" id="fix-main-color" checked><label for="fix-main-color"></label></div>
+			</form>
 			<div class="types-div"><!--类型-->
 				<ul class="type-list">
 					<li data-type-icon="5"><input type="checkbox" class="type-check" name="types" value="5" id="search-type-5" /><label class="type-icon" data-type-icon="5" for="search-type-5"><!--神--></label></li>
@@ -882,7 +882,7 @@ const teamsCount = 2;
 					<li data-type-icon="15"><input type="checkbox" class="type-check" name="types" value="15" id="search-type-15" /><label class="type-icon" data-type-icon="15" for="search-type-15"><!--販賣用--></label></li>
 					<!--<li><input type="checkbox" class="type-check" name="types" value="9" id="search-type-9" /><label class="display-none" data-type-icon="9" for="search-type-9"></label></li>--><!--特别保护-->
 				</ul>
-				<input type="checkbox" class="switch-ipt" name="type-and-or" id="type-and-or" checked><label class="switch-lbl" for="type-and-or"><circle></circle></label>
+				<input type="checkbox" class="switch-ipt" name="type-and-or" id="type-and-or" checked><label for="type-and-or"></label>
 				<ul class="latent-ul">
 					<li class="latent-icon" data-latent-icon="20"></li><!--神杀-->
 					<li class="latent-icon" data-latent-icon="21"></li><!--龙杀-->
@@ -911,9 +911,9 @@ const teamsCount = 2;
 			</div>
 			<div class="awoken-div"><!--觉醒-->
 				<div class="awoken-option"><!--觉醒搜索选项开关-->
-					<input type="checkbox" name="consider-equivalent-awoken" id="consider-equivalent-awoken" checked><label class="switch-lbl" for="consider-equivalent-awoken"></label>
-					<input type="checkbox" class="switch-ipt" name="include-super-awoken" id="include-super-awoken"><label class="switch-lbl" for="include-super-awoken"><circle></circle></label>
-					<input type="checkbox" class="switch-ipt" name="show-official-awoken-sorting" id="show-official-awoken-sorting"><label class="switch-lbl" for="show-official-awoken-sorting"><circle></circle></label>
+					<input type="checkbox" name="consider-equivalent-awoken" id="consider-equivalent-awoken" checked><label for="consider-equivalent-awoken"></label>
+					<input type="checkbox" class="switch-ipt" name="include-super-awoken" id="include-super-awoken"><label for="include-super-awoken"></label>
+					<input type="checkbox" class="switch-ipt" name="show-official-awoken-sorting" id="show-official-awoken-sorting"><label for="show-official-awoken-sorting"></label>
 				</div>
 				<div class="selected-awokens-div"><!--选中的觉醒列表-->
 					<ul class="awoken-ul selected-awokens">
@@ -1199,10 +1199,10 @@ const teamsCount = 2;
 				</ul>
 			</div>
 			<div class="fast-switch">
-				<input type="checkbox" name="can-assist" id="can-assist"><label class="switch-lbl" for="can-assist"></label>
-				<input type="checkbox" name="can-level-limit-breakthrough" id="can-level-limit-breakthrough"><label class="switch-lbl" for="can-level-limit-breakthrough"></label>
-				<input type="checkbox" name="have-8-latent-slot" id="have-8-latent-slot"><label class="switch-lbl" for="have-8-latent-slot"></label>
-				<input type="checkbox" name="not-weapon" id="not-weapon"><label class="switch-lbl" for="not-weapon"></label>
+				<input type="checkbox" name="can-assist" id="can-assist"><label for="can-assist"></label>
+				<input type="checkbox" name="can-level-limit-breakthrough" id="can-level-limit-breakthrough"><label for="can-level-limit-breakthrough"></label>
+				<input type="checkbox" name="have-8-latent-slot" id="have-8-latent-slot"><label for="have-8-latent-slot"></label>
+				<input type="checkbox" name="not-weapon" id="not-weapon"><label for="not-weapon"></label>
 			</div>
 			<div class="control-div"><!--控制栏-->
 				<button class="search-start"><!--开始搜索--></button>
@@ -1210,14 +1210,14 @@ const teamsCount = 2;
 				<button class="search-clear"><!--清空搜索条件--></button>
 				<button class="search-share"><!--分享搜索内容--></button>
 				<div class="additional-div"><!--额外显示栏-->
-					<input type="checkbox" class="switch-ipt" name="add-show-CD" id="add-show-CD"><label class="switch-lbl" for="add-show-CD"><circle></circle></label>
-					<input type="checkbox" class="switch-ipt" name="add-show-abilities" id="add-show-abilities"><label class="switch-lbl" for="add-show-abilities"><circle></circle></label>
-					<input type="checkbox" class="switch-ipt" name="add-show-abilities-with-awoken" id="add-show-abilities-with-awoken"><label class="switch-lbl" for="add-show-abilities-with-awoken"><circle></circle></label>
-					<input type="checkbox" class="switch-ipt" name="add-show-awoken" id="add-show-awoken"><label class="switch-lbl" for="add-show-awoken"><circle></circle></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-CD" id="add-show-CD"><label for="add-show-CD"></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-abilities" id="add-show-abilities"><label for="add-show-abilities"></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-abilities-with-awoken" id="add-show-abilities-with-awoken"><label for="add-show-abilities-with-awoken"></label>
+					<input type="checkbox" class="switch-ipt" name="add-show-awoken" id="add-show-awoken"><label for="add-show-awoken"></label>
 				</div>
 				<div class="sort-div"><!--排序栏-->
 					<select class="sort-list"></select>
-					<input type="checkbox" class="switch-ipt" name="sort-reverse" id="sort-reverse"><label class="switch-lbl" for="sort-reverse"><circle></circle></label>
+					<input type="checkbox" class="switch-ipt" name="sort-reverse" id="sort-reverse"><label for="sort-reverse"></label>
 					<div class="search-list-length"></div>
 				</div>
 			</div>
@@ -1416,8 +1416,8 @@ const teamsCount = 2;
 					<div class="skill-box">
 						<div class="skill-title"><div class="type-title"></div><span class="skill-name"></span>
 							<div class="skill-parse-control">
-								<input type="checkbox" class="switch-ipt" name="show-skill-original" id="show-skill-original"><label class="switch-lbl" for="show-skill-original"><circle></circle></label>
-								<input type="checkbox" class="switch-ipt" name="merge-skill" id="merge-skill" checked><label class="switch-lbl" for="merge-skill"><circle></circle></label>
+								<input type="checkbox" class="switch-ipt" name="show-skill-original" id="show-skill-original"><label for="show-skill-original"></label>
+								<input type="checkbox" class="switch-ipt" name="merge-skill" id="merge-skill" checked><label for="merge-skill"></label>
 							</div>
 						</div>
 						<div class="skill-datail-original"></div>
@@ -1476,7 +1476,7 @@ const teamsCount = 2;
 				</div>
 			</div>
 			<div class="save-qr-box">
-				<ul class="qr-data-type-ul">
+				<ul class="qr-data-type-ul horizontally-radio-list">
 					<li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="paddf" id="qr-data-type-pdf" checked/><label for="qr-data-type-pdf"></label></li><!--本程序-->
 					<li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="pdc" id="qr-data-type-pdc" /><label for="qr-data-type-pdc"></label></li><!--PDC-->
 					<li><input type="radio" name="qr-data-type" class="qr-data-type-radio" value="daddb" id="qr-data-type-daddb" /><label for="qr-data-type-daddb"></label></li><!--DADDB-->
@@ -1586,7 +1586,7 @@ const teamsCount = 2;
 			<button class="upload-data brown-button fa"></button>
 			<input type="file" class="file-select display-none" multiple/>
 			<a class="how-to-use" target="_blank" href="doc/export-player-data.html"></a>
-			<input type="checkbox" name="box-have" id="box-have"><label class="switch-lbl" for="box-have"></label>
+			<input type="checkbox" name="box-have" id="box-have"><label for="box-have"></label>
 		</div>
 		<div class="mask-content">
 			<ul class="player-datas-list"></ul>
