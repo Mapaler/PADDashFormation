@@ -913,7 +913,7 @@ Formation.prototype.outObj = function() {
 	});
 	let dge = this.dungeonEnchance;
 	if (Object.values(dge.rate).some(rate => rate != 1) || dge.benefit || dge.stage>1) obj.r = [
-		[reflags(dge.types),reflags(dge.attrs),reflags(dge.rarities),dge.collabs.length ? dge.collabs : 0, reflags(dge.gachas)].deleteLatter(0), //类型,属性,星级
+		[Bin.enflags(dge.types),Bin.enflags(dge.attrs),Bin.enflags(dge.rarities),dge.collabs.length ? dge.collabs : 0, Bin.enflags(dge.gachas)].deleteLatter(0), //类型,属性,星级
 		[dge.rate.hp,dge.rate.atk,dge.rate.rcv].deleteLatter(1),
 		dge.benefit || 0, //地下城阴阳加护
 		dge.stage || 1 //地下城层数
@@ -1005,11 +1005,11 @@ Formation.prototype.loadObj = function(f) {
 		if (Array.isArray(f.r[0])) {
 			const [[types, attrs, rarities, collabs, gachas] = [], [hp , atk, rcv] = [], benefit, stage] = f.r;
 			
-			dge.types = flags(types ?? 0);
-			dge.attrs = flags(attrs ?? 0);
-			dge.rarities = flags(rarities ?? 0);
+			dge.types = Bin.unflags(types ?? 0);
+			dge.attrs = Bin.unflags(attrs ?? 0);
+			dge.rarities = Bin.unflags(rarities ?? 0);
 			dge.collabs = collabs?.length ? collabs : [];
-			dge.gachas = Array.isArray(gachas) ? gachas.flatMap(n=>flags(n)) :flags(gachas || 0);
+			dge.gachas = Array.isArray(gachas) ? gachas.flatMap(n=>Bin.unflags(n)) :Bin.unflags(gachas || 0);
 
 			dge.rate.hp = hp ?? 1;
 			dge.rate.atk = atk ?? 1;
@@ -1018,8 +1018,8 @@ Formation.prototype.loadObj = function(f) {
 			dge.benefit = benefit || 0;
 			dge.stage = stage || 1;
 		} else {
-			dge.attrs = flags(f.r[0] ?? 0);
-			dge.types = flags(f.r[1] ?? 0);
+			dge.attrs = Bin.unflags(f.r[0] ?? 0);
+			dge.types = Bin.unflags(f.r[1] ?? 0);
 			dge.rarities.length = 0;
 			dge.rate.hp = f.r[2] ?? 1;
 			dge.rate.atk = f.r[3] ?? 1;
@@ -2162,16 +2162,16 @@ function loadData(force = false)
 				const card = _cards[i];
 				if (card.searchFlags) card.leaderSkillTypes = new LeaderSkillType(card);
 				card.onlyAssist = Boolean(card.flags & 1<<4);
-				card.gachaIds = flags(card.gachaGroupsFlag);
-				card.typesFlag = reflags(card.types);
-				/*card.unk01p = flags(card.unk01);
-				card.unk02p = flags(card.unk02);
-				card.unk03p = flags(card.unk03);
-				card.unk04p = flags(card.unk04);
-				card.unk05p = flags(card.unk05);
-				card.unk06p = flags(card.unk06);
-				card.unk07p = flags(card.unk07);
-				card.unk08p = flags(card.unk08);*/
+				card.gachaIds = Bin.unflags(card.gachaGroupsFlag);
+				card.typesFlag = Bin.enflags(card.types);
+				/*card.unk01p = Bin.unflags(card.unk01);
+				card.unk02p = Bin.unflags(card.unk02);
+				card.unk03p = Bin.unflags(card.unk03);
+				card.unk04p = Bin.unflags(card.unk04);
+				card.unk05p = Bin.unflags(card.unk05);
+				card.unk06p = Bin.unflags(card.unk06);
+				card.unk07p = Bin.unflags(card.unk07);
+				card.unk08p = Bin.unflags(card.unk08);*/
 				cards[card?.id] = card;
 			}
 			return cards;
@@ -5181,7 +5181,7 @@ function initialize() {
 		const attrs = (function(formData){
 			const attrsArr = [];
 			for (let i = 0; i <= 2; i++) {
-				const attrNum = reflags(formData.getAll(`attr-${i+1}`).map(Str2Int));
+				const attrNum = Bin.enflags(formData.getAll(`attr-${i+1}`).map(Str2Int));
 				attrsArr.push(attrNum);
 			}
 			return attrsArr;

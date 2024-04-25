@@ -796,23 +796,6 @@ function skillParser(skillId)
 	return skills;
 }
 
-//返回flag里值为true的数组，如[1,4,7]
-function flags(num){
-	/*
-	return Array.from(new Array(32),(i,n)=>n).filter(n => num & (1 << n)); //性能太差
-	return new Array(32).fill(null).map((i,n)=>n).filter(n => num & (1 << n)); //性能比上者好，但还是不够快
-	*/
-	const arr = [];
-	for (let i = 0; i<32;i++)
-	{
-		if (num & (1<<i))
-		{
-			arr.push(i);
-		}
-	}
-	return arr;
-}
-
 const v = {
 	percent: function(value) {
 		return { kind: SkillValueKind.Percent, value: (value / 100) ?? 1 };
@@ -1157,7 +1140,7 @@ const skillObjectParsers = {
 	[58](attr, min, max) { return damageEnemy('all', attr, v.randomATK(min, max)); },
 	[59](attr, min, max) { return damageEnemy('single', attr, v.randomATK(min, max)); },
 	[60](turns, mul, attr) { return activeTurns(turns, counterAttack(attr, v.percent(100), v.percent(mul))); },
-	[61](attrs, min, base, bonus, stage) { return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min + (stage ?? 0), [base, 100], [bonus, 0])); },
+	[61](attrs, min, base, bonus, stage) { return powerUp(null, null, p.scaleAttrs(Bin.unflags(attrs), min, min + (stage ?? 0), [base, 100], [bonus, 0])); },
 	[62](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, atk: mul })); },
 	[63](type, mul) { return powerUp(null, [type], p.mul({ hp: mul, rcv: mul })); },
 	[64](type, mul) { return powerUp(null, [type], p.mul({ atk: mul, rcv: mul })); },
@@ -1218,17 +1201,17 @@ const skillObjectParsers = {
 	[101](combo, mul) { return powerUp(null, null, p.mul({ atk: mul }), c.exact('combo', combo)); },
   
 	[103](combo, stats1, stats2, mul) { return powerUp(null, null, p.scaleCombos(combo, combo, p.stats(mul, stats1, stats2), [0, 0])); },
-	[104](combo, attrs, stats1, stats2, mul) { return powerUp(flags(attrs), null, p.scaleCombos(combo, combo, p.stats(mul, stats1, stats2), [0, 0])); },
+	[104](combo, attrs, stats1, stats2, mul) { return powerUp(Bin.unflags(attrs), null, p.scaleCombos(combo, combo, p.stats(mul, stats1, stats2), [0, 0])); },
 	[105](rcv, atk) { return powerUp(null, null, p.mul({ rcv, atk })); },
 	[106](hp, atk) { return powerUp(null, null, p.mul({ hp, atk })); },
 	[107](hp, attrs, atk) {
 		return [
 			powerUp(null, null, p.mul({ hp })),
-			attrs && powerUp(flags(attrs), null, p.mul({ atk: atk ?? 100 })) || null,
+			attrs && powerUp(Bin.unflags(attrs), null, p.mul({ atk: atk ?? 100 })) || null,
 		].filter(Boolean);
 	},
 	[108](hp, type, atk) { return [powerUp(null, null, p.mul({ hp })), powerUp(null, [type], p.mul({ atk }))]; },
-	[109](attrs, len, mul) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul, 100], [0, 0])); },
+	[109](attrs, len, mul) { return powerUp(null, null, p.scaleMatchLength(Bin.unflags(attrs), len, len, [mul, 100], [0, 0])); },
 	[110](single, attr, min, max, scale) { return damageEnemy(single ? 'single' : 'all', attr, v.hpScale(min, max, scale)); },
 	[111](attr1, attr2, mul) { return powerUp([attr1, attr2], null, p.mul({ hp: mul, atk: mul })); },
   
@@ -1242,78 +1225,78 @@ const skillObjectParsers = {
 	  ].filter(Boolean);
 	},
 	[118](...ids) { return randomSkills(ids.map(id => this.parser(id))); },
-	[119](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [base || 100, 100], [bonus, 0])); },
+	[119](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleMatchLength(Bin.unflags(attrs), min, max, [base || 100, 100], [bonus, 0])); },
   
-	[121](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })); },
-	[122](percent, attrs, types, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(0, percent)); },
-	[123](percent, attrs, types, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(percent, 100)); },
+	[121](attrs, types, hp, atk, rcv) { return powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })); },
+	[122](percent, attrs, types, atk, rcv) { return powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(0, percent)); },
+	[123](percent, attrs, types, atk, rcv) { return powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(percent, 100)); },
 	[124](attrs1, attrs2, attrs3, attrs4, attrs5, min, mul, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus, 0]));
 	},
 	[125](mon1, mon2, mon3, mon4, mon5, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('card', [mon1, mon2, mon3, mon4, mon5].filter(Boolean))); },
-	[126](attrs, turns, turns2, percent) { return activeTurns(turns === turns2 ? turns : [turns, turns2], orbDropIncrease(v.percent(percent), flags(attrs))); },
+	[126](attrs, turns, turns2, percent) { return activeTurns(turns === turns2 ? turns : [turns, turns2], orbDropIncrease(v.percent(percent), Bin.unflags(attrs))); },
 	[127](cols1, attrs1, cols2, attrs2) {
 	  return fixedOrbs(
-		{ orbs: flags(attrs1), type: 'col', positions: flags(cols1) },
-		{ orbs: flags(attrs2), type: 'col', positions: flags(cols2) }
+		{ orbs: Bin.unflags(attrs1), type: 'col', positions: Bin.unflags(cols1) },
+		{ orbs: Bin.unflags(attrs2), type: 'col', positions: Bin.unflags(cols2) }
 	  );
 	},
 	[128](rows1, attrs1, rows2, attrs2) {
 	  return fixedOrbs(
-		{ orbs: flags(attrs1), type: 'row', positions: flags(rows1) },
-		{ orbs: flags(attrs2), type: 'row', positions: flags(rows2) }
+		{ orbs: Bin.unflags(attrs1), type: 'row', positions: Bin.unflags(rows1) },
+		{ orbs: Bin.unflags(attrs2), type: 'row', positions: Bin.unflags(rows2) }
 	  );
 	},
 	[129](attrs, types, hp, atk, rcv, rAttrs, rPercent) {
 		return [
-			(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
-			rPercent && reduceDamage(flags(rAttrs), v.percent(rPercent)) || null
+			(hp || atk || rcv) && powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
+			rPercent && reduceDamage(Bin.unflags(rAttrs), v.percent(rPercent)) || null
 		].filter(Boolean);
 	},
 	[130](percent, attrs, types, atk, rcv, rAttrs, rPercent) {
 		return [
-			(atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(0, percent)) || null,
-			rPercent && reduceDamage(flags(rAttrs), v.percent(rPercent), c.hp(0, percent)) || null
+			(atk || rcv) && powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(0, percent)) || null,
+			rPercent && reduceDamage(Bin.unflags(rAttrs), v.percent(rPercent), c.hp(0, percent)) || null
 		].filter(Boolean);
 	},
 	[131](percent, attrs, types, atk, rcv, rAttrs, rPercent) {
 		return [
-			(atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(percent, 100)) || null,
-			rPercent && reduceDamage(flags(rAttrs), v.percent(rPercent), c.hp(percent, 100)) || null
+			(atk || rcv) && powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(percent, 100)) || null,
+			rPercent && reduceDamage(Bin.unflags(rAttrs), v.percent(rPercent), c.hp(percent, 100)) || null
 		].filter(Boolean);
 	},
 	[132](turns, time, percent) { return activeTurns(turns, timeExtend(time ? v.constant(time / 10) : v.percent(percent))); },
-	[133](attrs, types, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.useSkill()); },
+	[133](attrs, types, atk, rcv) { return powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.useSkill()); },
 	[136](attrs1, hp1, atk1, rcv1, attrs2, hp2, atk2, rcv2) {
 		return [
-			powerUp(flags(attrs1), null, p.mul({ hp: hp1 || 100, atk: atk1 || 100, rcv: rcv1 || 100 })),
-			powerUp(flags(attrs2), null, p.mul({ hp: hp2 || 100, atk: atk2 || 100, rcv: rcv2 || 100 })),
+			powerUp(Bin.unflags(attrs1), null, p.mul({ hp: hp1 || 100, atk: atk1 || 100, rcv: rcv1 || 100 })),
+			powerUp(Bin.unflags(attrs2), null, p.mul({ hp: hp2 || 100, atk: atk2 || 100, rcv: rcv2 || 100 })),
 		];
 	},
 	[137](types1, hp1, atk1, rcv1, types2, hp2, atk2, rcv2) {
 		return [
-			powerUp(null, flags(types1), p.mul({ hp: hp1 || 100, atk: atk1 || 100, rcv: rcv1 || 100 })),
-			powerUp(null, flags(types2), p.mul({ hp: hp2 || 100, atk: atk2 || 100, rcv: rcv2 || 100 })),
+			powerUp(null, Bin.unflags(types1), p.mul({ hp: hp1 || 100, atk: atk1 || 100, rcv: rcv1 || 100 })),
+			powerUp(null, Bin.unflags(types2), p.mul({ hp: hp2 || 100, atk: atk2 || 100, rcv: rcv2 || 100 })),
 		];
 	},
 	[138](...ids) { return ids.flatMap(id => this.parser(id)); },
 	[139](attrs, types, percent1, less1, mul1, percent2, less2, mul2) {
 		return [
-			powerUp(flags(attrs), flags(types), p.mul({ atk: mul1 || 100 }), less1 ? c.hp(0, percent1) : c.hp(percent1, 100)),
-			powerUp(flags(attrs), flags(types), p.mul({ atk: mul2 || 100 }), less1 ?
+			powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ atk: mul1 || 100 }), less1 ? c.hp(0, percent1) : c.hp(percent1, 100)),
+			powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ atk: mul2 || 100 }), less1 ?
 				(less2 ? c.hp(percent1, percent2) : c.hp(percent2, 100)) :
 				(less2 ? c.hp(0, percent2) : c.hp(percent2, percent1 - 1))
 			),
 		];
 	},
-	[140](attrs, mul) { return setOrbState(flags(attrs), 'enhanced', {enhance: v.percent(mul)}); },
-	[141](count, to, exclude) { return generateOrbs(flags(to), flags(exclude), count); },
+	[140](attrs, mul) { return setOrbState(Bin.unflags(attrs), 'enhanced', {enhance: v.percent(mul)}); },
+	[141](count, to, exclude) { return generateOrbs(Bin.unflags(to), Bin.unflags(exclude), count); },
 	[142](turns, attr) { return activeTurns(turns, changeAttr('self', attr)); },
   
 	[143](mul, dmgAttr) { return damageEnemy('all', dmgAttr ?? 0, v.xTeamHP(mul)); },
 
-	[144](teamAttrs, mul, single, dmgAttr) { return damageEnemy(single ? 'single' : 'all', dmgAttr ?? 0, v.xTeamATK(flags(teamAttrs), mul)); },
+	[144](teamAttrs, mul, single, dmgAttr) { return damageEnemy(single ? 'single' : 'all', dmgAttr ?? 0, v.xTeamATK(Bin.unflags(teamAttrs), mul)); },
 	[145](mul) { return heal(v.xTeamRCV(mul)); },
 	[146](turns1, turns2) { return skillBoost(v.constant(turns1), turns2 ? v.constant(turns2) : undefined); },
   
@@ -1323,10 +1306,10 @@ const skillObjectParsers = {
 	[151](mul1, mul2, percent) {
 		return powerUp(null, null, p.scaleCross([{ single: true, attr: [Attributes.Heart], atk: mul1 || 100, rcv: mul2 || 100 }]), null, v.percent(percent));
 	},
-	[152](attrs, count) { return setOrbState(flags(attrs), 'locked', {count: v.constant(count)}); },
+	[152](attrs, count) { return setOrbState(Bin.unflags(attrs), 'locked', {count: v.constant(count)}); },
 	[153](attr, _) { return changeAttr('opponent', attr); },
-	[154](from, to) { return changeOrbs(fromTo(flags(from), flags(to))); },
-	[155](attrs, types, hp, atk, rcv) { return powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.multiplayer()); },
+	[154](from, to) { return changeOrbs(fromTo(Bin.unflags(from), Bin.unflags(to))); },
+	[155](attrs, types, hp, atk, rcv) { return powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.multiplayer()); },
 	[156](turns, awoken1, awoken2, awoken3, type, mul) {
 		if (type == 1)
 		{
@@ -1350,18 +1333,18 @@ const skillObjectParsers = {
 	[158](len, attrs, types, atk, hp, rcv) {
 	  return [
 		minMatch(len),
-		powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }))
+		powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }))
 	  ];
 	},
-	[159](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [base, 100], [bonus, 0])); },
+	[159](attrs, min, base, bonus, max) { return powerUp(null, null, p.scaleMatchLength(Bin.unflags(attrs), min, max, [base, 100], [bonus, 0])); },
 	[160](turns, combo) { return activeTurns(turns, addCombo(combo)); },
 	[161](percent) { return gravity(v.xMaxHP(percent)); },
 	[162]() { return boardSizeChange(); },
 	[163](attrs, types, hp, atk, rcv, rAttrs, rPercent) {
 	  return [
 		noSkyfall(),
-		(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
-		rPercent && reduceDamage(flags(rAttrs), v.percent(rPercent)) || null,
+		(hp || atk || rcv) && powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
+		rPercent && reduceDamage(Bin.unflags(rAttrs), v.percent(rPercent)) || null,
 	  ].filter(Boolean);
 	},
 	[164](attrs1, attrs2, attrs3, attrs4, min, atk, rcv, bonus) {
@@ -1369,21 +1352,21 @@ const skillObjectParsers = {
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, attrs.length, [atk, rcv], [bonus, bonus]));
 	},
 	[165](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, incr) {
-		const attrsArr = flags(attrs);
+		const attrsArr = Bin.unflags(attrs);
 		return powerUp(null, null, p.scaleAttrs(attrsArr, min, min + (min < attrsArr.length ? (incr ?? 0) : 0), [baseAtk || 100, baseRcv || 100], [bonusAtk, bonusRcv]));
 	},
 	[166](min, baseAtk, baseRcv, bonusAtk, bonusRcv, max) { return powerUp(null, null, p.scaleCombos(min, max, [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
-	[167](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, max) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), min, max, [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
+	[167](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, max) { return powerUp(null, null, p.scaleMatchLength(Bin.unflags(attrs), min, max, [baseAtk, baseRcv], [bonusAtk, bonusRcv])); },
 	[168](turns, awoken1, awoken2, awoken3, awoken4, awoken5, awoken6, mul) {
 		return activeTurns(turns, 
 			powerUp(null, null, p.scaleStateKind([awoken1, awoken2, awoken3, awoken4, awoken5, awoken6].filter(Boolean), null, null, p.mul({atk: mul, hp:0, rcv:0})))
 		);
 	},
 	[169](min, base, percent, bonus, max) { return powerUp(null, null, p.scaleCombos(min, max ?? min, [base || 100, 100], [bonus, 0]), null, v.percent(percent)); },
-	//stage的真实用法目前不知道，缺少样本来判断，不知道到底是直接算数(stage-1)还是算二进制个数(flags(stage).length)。 2022年5月23日
+	//stage的真实用法目前不知道，缺少样本来判断，不知道到底是直接算数(stage-1)还是算二进制个数(Bin.unflags(stage).length)。 2022年5月23日
 	//按 瘦鹅 的说法，也可能是因为暗牛头限制了5色， 所以就算是3级到了6色，也只算5色。
 	[170](attrs, min, base, percent, bonus, stage) {
-		let attrsArr = flags(attrs);
+		let attrsArr = Bin.unflags(attrs);
 		return powerUp(null, null, p.scaleAttrs(attrsArr, min, Math.min(min + (stage || 0), attrsArr.length), [base, 100], [bonus ?? 0, 0]), null, v.percent(percent));
 	},
 	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent, bonus) {
@@ -1403,27 +1386,27 @@ const skillObjectParsers = {
 	[175](series1, series2, series3, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('series', [series1, series2, series3].filter(Boolean))); },
 	[176](row1, row2, row3, row4, row5, attrs) {
 		return fixedOrbs(
-			{ orbs: [attrs ?? 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>flags(row)) }
+			{ orbs: [attrs ?? 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>Bin.unflags(row)) }
 		);
 	},
 	[177](attrs, types, hp, atk, rcv, remains, baseAtk, bonusAtk) {
 	  return [
 		noSkyfall(),
-		(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
+		(hp || atk || rcv) && powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
 		baseAtk && powerUp(null, null, p.scaleRemainOrbs(remains, [baseAtk ?? 100, 100], [bonusAtk ?? 0, 0])) || null
 	  ].filter(Boolean);
 	},
 	[178](time, attrs, types, hp, atk, rcv, attrs2, percent) {
 		return [
 			fixedTime(time),
-			(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })),
-			percent && reduceDamage(flags(attrs2), v.percent(percent)) || null,
+			(hp || atk || rcv) && powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })),
+			percent && reduceDamage(Bin.unflags(attrs2), v.percent(percent)) || null,
 		].filter(Boolean);
-		/*const reduceAttrs = flags(attrs2);
+		/*const reduceAttrs = Bin.unflags(attrs2);
 		const isAllAttr = isEqual(reduceAttrs, Attributes.attr);
 		return [
 			fixedTime(time),
-			(hp || atk || rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), null, isAllAttr ? v.percent(percent) : null),
+			(hp || atk || rcv) && powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), null, isAllAttr ? v.percent(percent) : null),
 			percent && !isAllAttr && reduceDamage(reduceAttrs, v.percent(percent)) || null,
 		].filter(Boolean);*/
 	},
@@ -1435,24 +1418,24 @@ const skillObjectParsers = {
 	},
 	[180](turns, percent) { return activeTurns(turns, orbDropIncrease(v.percent(percent), [], 'enhanced')); },
   
-	[182](attrs, len, mul, percent) { return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul || 100, 100], [0, 0]), null, v.percent(percent)); },
+	[182](attrs, len, mul, percent) { return powerUp(null, null, p.scaleMatchLength(Bin.unflags(attrs), len, len, [mul || 100, 100], [0, 0]), null, v.percent(percent)); },
 	[183](attrs, types, percent1, atk1, reduce, percent2, atk2, rcv2) {
 	  return [
-		(percent1 > 0) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk1 || 100 }), c.hp(percent1, 100), v.percent(reduce)) || null,
-		(atk2 || rcv2) && powerUp(flags(attrs), flags(types), p.mul({ atk: atk2 || 100, rcv: rcv2 || 100 }), c.hp(0, percent2 || percent1)) || null
+		(percent1 > 0) && powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ atk: atk1 || 100 }), c.hp(percent1, 100), v.percent(reduce)) || null,
+		(atk2 || rcv2) && powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ atk: atk2 || 100, rcv: rcv2 || 100 }), c.hp(0, percent2 || percent1)) || null
 	  ].filter(Boolean);
 	},
 	[184](turns) { return activeTurns(turns, noSkyfall()); },
 	[185](time, attrs, types, hp, atk, rcv) {
 	  return [
 		timeExtend(v.constant(time / 100)),
-		powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })),
+		powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })),
 	  ];
 	},
 	[186](attrs, types, hp, atk, rcv) {
 	  return [
 		boardSizeChange(),
-		(hp || atk ||rcv) && powerUp(flags(attrs), flags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
+		(hp || atk ||rcv) && powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 })) || null,
 	  ].filter(Boolean);
 	},
 
@@ -1471,13 +1454,13 @@ const skillObjectParsers = {
 	  return activeTurns(turns, voidEnemyBuff(['damage-void']));
 	},
 	[192](attrs, len, mul, combo) {
-		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [mul || 100, 100], [0, 0], true), null, null, combo ? [addCombo(combo)] : null);
+		return powerUp(null, null, p.scaleMatchLength(Bin.unflags(attrs), len, len, [mul || 100, 100], [0, 0], true), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[193](attrs, atk, rcv, percent) {
-		return powerUp(null, null, p.mul([atk || 100, rcv || 100]), c.LShape(flags(attrs)), v.percent(percent));
+		return powerUp(null, null, p.mul([atk || 100, rcv || 100]), c.LShape(Bin.unflags(attrs)), v.percent(percent));
 	},
 	[194](attrs, min, mul, combo) {
-		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [mul || 100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
+		return powerUp(null, null, p.scaleAttrs(Bin.unflags(attrs), min, min, [mul || 100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[195](percent) {
 	  return selfHarm(percent ? v.xCHP(100 - percent) : v.constantTo(1));
@@ -1492,10 +1475,10 @@ const skillObjectParsers = {
 		return powerUp(null, null, p.mul([atk || 100, 100]), c.heal(heal), percent && v.percent(percent), awokenBind && [unbind(0, awokenBind ?? 0)]);
 	},
 	[199](attrs, min, damage) {
-		return powerUp(null, null, p.scaleAttrs(flags(attrs), min, min, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
+		return powerUp(null, null, p.scaleAttrs(Bin.unflags(attrs), min, min, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[200](attrs, len, damage) {
-		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
+		return powerUp(null, null, p.scaleMatchLength(Bin.unflags(attrs), len, len, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[201](attrs1, attrs2, attrs3, attrs4, min, damage) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
@@ -1516,7 +1499,7 @@ const skillObjectParsers = {
 		c.compo('evolution', [evotype]));
 	},
 
-	[205](attrs, turns) { return activeTurns(turns, orbDropIncrease(null, flags(attrs == -1 ? 0b1111111111: attrs), 'locked')); },
+	[205](attrs, turns) { return activeTurns(turns, orbDropIncrease(null, Bin.unflags(attrs == -1 ? 0b1111111111: attrs), 'locked')); },
 	[206](attrs1, attrs2, attrs3, attrs4, attrs5, min, combo) {
 		const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
 		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, min, [100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
@@ -1524,7 +1507,7 @@ const skillObjectParsers = {
 	[207](turns, time, row1, row2, row3, row4, row5, count) {
 		/*return activeTurns(turns, count ?
 			generateOrbs( ['variation'], null, count, time/100):
-			fixedOrbs( { orbs: ['variation'], time: time/100, type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>flags(row)) })
+			fixedOrbs( { orbs: ['variation'], time: time/100, type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>Bin.unflags(row)) })
 		);*/
 		const options = { time: time/100};
 		if (count) {
@@ -1538,21 +1521,21 @@ const skillObjectParsers = {
 	},
 	[208](count1, to1, exclude1, count2, to2, exclude2) {
 		return [
-			generateOrbs(flags(to1), flags(exclude1), count1),
-			generateOrbs(flags(to2), flags(exclude2), count2),
+			generateOrbs(Bin.unflags(to1), Bin.unflags(exclude1), count1),
+			generateOrbs(Bin.unflags(to2), Bin.unflags(exclude2), count2),
 		];
 	},
 	[209](combo) {
 		return powerUp(null, null, p.scaleCross([{ single: true, attr: [Attributes.Heart], atk: 100, rcv: 100}]), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[210](attrs, reduce, combo) {
-		return powerUp(null, null, p.scaleCross([{ single: false, attr: flags(attrs), atk: 100, rcv: 100}]), null, v.percent(reduce), combo ? [addCombo(combo)] : null);
+		return powerUp(null, null, p.scaleCross([{ single: false, attr: Bin.unflags(attrs), atk: 100, rcv: 100}]), null, v.percent(reduce), combo ? [addCombo(combo)] : null);
 	},
 	[213](attrs, types, ...awakenings) { //赋予觉醒的队长技
-	  return impartAwakenings(flags(attrs), flags(types), awakenings);
+	  return impartAwakenings(Bin.unflags(attrs), Bin.unflags(types), awakenings);
 	},
 	[214](turns) { return activeTurns(turns, bindSkill()); },
-	[215](turns, attrs) { return activeTurns(turns, setOrbState(flags(attrs), 'bound')); },
+	[215](turns, attrs) { return activeTurns(turns, setOrbState(Bin.unflags(attrs), 'bound')); },
 
 	[217](rarity, hp, atk, rcv) {
 		return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }),
@@ -1561,14 +1544,14 @@ const skillObjectParsers = {
 	[218](turns) { return skillBoost(v.constant(-turns)); },
 
 	[219](attrs, len, combo) {
-		return powerUp(null, null, p.scaleMatchLength(flags(attrs), len, len, [100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
+		return powerUp(null, null, p.scaleMatchLength(Bin.unflags(attrs), len, len, [100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[220](attrs, combo) {
-		var skill = powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, combo ? [addCombo(combo)] : null);
+		var skill = powerUp(null, null, p.mul([100,100]), c.LShape(Bin.unflags(attrs)), null, combo ? [addCombo(combo)] : null);
 		return skill;
 	},
 	[221](attrs, damage) {
-		return powerUp(null, null, p.mul([100,100]), c.LShape(flags(attrs)), null, damage ? [followAttackFixed(damage)] : null);
+		return powerUp(null, null, p.mul([100,100]), c.LShape(Bin.unflags(attrs)), null, damage ? [followAttackFixed(damage)] : null);
 	},
 
 	[223](combo, damage) {
@@ -1580,15 +1563,15 @@ const skillObjectParsers = {
 	[227]() { return leaderChange(1); },
 	[228](turns, attrs, types, atk, rcv) {
 		return activeTurns(turns,
-			powerUp(null, null, p.scaleStateKind(null, flags(attrs), flags(types), p.mul({atk: atk, rcv: rcv ?? 0, hp:0})))
+			powerUp(null, null, p.scaleStateKind(null, Bin.unflags(attrs), Bin.unflags(types), p.mul({atk: atk, rcv: rcv ?? 0, hp:0})))
 		);
 	},
 	[229](attrs, types, hp, atk, rcv) {
-		return powerUp(null, null, p.scaleStateKind(null, flags(attrs), flags(types), p.mul({hp: hp || 0, atk: atk || 0, rcv: rcv || 0})));
+		return powerUp(null, null, p.scaleStateKind(null, Bin.unflags(attrs), Bin.unflags(types), p.mul({hp: hp || 0, atk: atk || 0, rcv: rcv || 0})));
 	},
 	[230](turns, target, mul) {
 		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
-		const typeArr = flags(target).map(n => targetTypes[n]);
+		const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
 		return activeTurns(turns, powerUp({targets: typeArr}, null, p.mul({ atk: mul })));
 	},
 	[231](turns, awoken1, awoken2, awoken3, awoken4, awoken5, atk, rcv) {
@@ -1601,13 +1584,13 @@ const skillObjectParsers = {
 		// const len = lenMin || lenExact; //宝珠长度
 		// const ee = Boolean(lenExact); //是否为刚好等于
 		//第二个参数为多少以上就算，第三个参数为多少以上才算
-		//return powerUp(null, null, p.mul({ atk: atk || 100}), c.exact('match-length', lenExact, flags(attr)), v.percent(percent), [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean), true);
+		//return powerUp(null, null, p.mul({ atk: atk || 100}), c.exact('match-length', lenExact, Bin.unflags(attr)), v.percent(percent), [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean), true);
 		//let powerup, condition;
 		let powerup = Boolean(lenMin)
-			? p.scaleMatchLength(flags(attrs), lenMin, lenMin, [atk || 100, 100], [0, 0])
+			? p.scaleMatchLength(Bin.unflags(attrs), lenMin, lenMin, [atk || 100, 100], [0, 0])
 			: p.mul({ atk: atk || 100});
 		let condition = Boolean(lenExact)
-			? c.exact('match-length', lenExact, flags(attrs))
+			? c.exact('match-length', lenExact, Bin.unflags(attrs))
 			: null;
 		let additional = [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean);
 		const eachTime = true;
@@ -1627,20 +1610,20 @@ const skillObjectParsers = {
 		);
 	},
 	[239](colum, turns, row) { //产封条
-		//const colums = flags(colum), rows = flags(row);
+		//const colums = Bin.unflags(colum), rows = Bin.unflags(row);
 		return activeTurns(turns,
-			boardJammingStates('immobility', 'fixed', { positions: {colums: flags(colum), rows: flags(row)} })
+			boardJammingStates('immobility', 'fixed', { positions: {colums: Bin.unflags(colum), rows: Bin.unflags(row)} })
 		);
 	},
 	[241](turns, cap) { //改变伤害上限主动技
 		// const targetTypes = ["self","leader-self","leader-helper","sub-members"];
-		// const typeArr = flags(target).map(n => targetTypes[n]);
+		// const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
 		return activeTurns(turns,
 			increaseDamageCap(cap * 1e8, ["self"])
 		);
 	},
 	[243](turns, attrs, hpPercent, probPercent) { //掉落荆棘珠
-		return activeTurns(turns, orbDropIncrease(v.percent(probPercent), flags(attrs), 'thorn', v.xMaxHP(hpPercent)));
+		return activeTurns(turns, orbDropIncrease(v.percent(probPercent), Bin.unflags(attrs), 'thorn', v.xMaxHP(hpPercent)));
 	},
 	[244](turns, type) { //改变板面大小主动技
 		let width, height;
@@ -1668,13 +1651,13 @@ const skillObjectParsers = {
 		return activeTurns(turns, boardSizeChange(width, height));
 	},
 	[245](rarity, _2, _3, hp, atk, rcv) { //全员满足某种情况，现在是全部星级不一样
- 		return powerUp(flags(_2), flags(_3), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('team-same-rarity', rarity)); 
+ 		return powerUp(Bin.unflags(_2), Bin.unflags(_3), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('team-same-rarity', rarity)); 
 	},
 	[246](time, combo, cap) { //限定时间内转出多少C提高伤害上限
  		return CTW(v.constant(time), c.combos(combo) , increaseDamageCap(cap * 1e8, ["self"]));
 	},
 	[247](time, attr, min, cap) { //限定时间内转出多少色提高伤害上限
- 		return CTW(v.constant(time), c.attrs(flags(attr), min) , increaseDamageCap(cap * 1e8, ["self"]));
+ 		return CTW(v.constant(time), c.attrs(Bin.unflags(attr), min) , increaseDamageCap(cap * 1e8, ["self"]));
 	},
 	[248](turns, ...ids) { //几回合后才生效的技能
 		return delayActiveTurns(turns,
@@ -1683,7 +1666,7 @@ const skillObjectParsers = {
 	},
 	[249](turns, attr, row1, row2, row3, row4, row5, count) {
 		const options = {
-			attrs: flags(attr),
+			attrs: Bin.unflags(attr),
 		};
 		if (count) {
 			options.count = count;
@@ -1709,7 +1692,7 @@ const skillObjectParsers = {
 		return predictionFalling();
 	},
 	//剩余多少个属性珠才能使用技能
-	[255](attr, min, max) { return skillProviso(c.remainAttrOrbs(flags(attr), min ?? 0, max ?? 0)); },
+	[255](attr, min, max) { return skillProviso(c.remainAttrOrbs(Bin.unflags(attr), min ?? 0, max ?? 0)); },
 	
 	[257]() {
 		return [
@@ -1721,7 +1704,7 @@ const skillObjectParsers = {
 	
 	[258](turns, cap, target) { //改变伤害上限主动技
 		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
-		const typeArr = flags(target).map(n => targetTypes[n]);
+		const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
 		return activeTurns(turns,
 			increaseDamageCap(cap * 1e8, typeArr)
 		);
@@ -1735,7 +1718,7 @@ const skillObjectParsers = {
 				default: return type;
 			}
 		})(type);
-		return obstructOpponent(posType, flags(pos), ids);
+		return obstructOpponent(posType, Bin.unflags(pos), ids);
 	},
 };
 
@@ -2583,7 +2566,7 @@ function renderSkill(skill, option = {})
 			let ids = skill.ids, random = skill.random;
 			let doms = ids.map(id=>{
 				let dom = cardN(id);
-				dom.monDom.onclick = changeToIdInSkillDetail;
+				//dom.monDom.onclick = changeToIdInSkillDetail;
 				return dom;	})
 			let dict = {
 				cards: doms.nodeJoin(),
@@ -2972,7 +2955,7 @@ function renderCondition(cond) {
 			case 'card':{
 				dict.ids = cond.compo.ids.map(mid=>{
 					const dom = cardN(mid);
-					dom.monDom.onclick = changeToIdInSkillDetail;
+					//dom.monDom.onclick = changeToIdInSkillDetail;
 					return dom;
 				}).nodeJoin();
 				frg.ap(tsp.cond.compo_type_card(dict));

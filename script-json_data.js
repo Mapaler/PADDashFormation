@@ -956,7 +956,7 @@ const specialSearchFunctions = (function() {
 				break;
 			}
 			case 154:{
-				outArr.push(changes(flags(sk[0] || 1), flags(sk[1] || 1)));
+				outArr.push(changes(Bin.unflags(sk[0] || 1), Bin.unflags(sk[1] || 1)));
 				break;
 			}
 		}
@@ -988,20 +988,20 @@ const specialSearchFunctions = (function() {
 			{
 				outArr.push({
 					count: sk[0],
-					to: flags(sk[1] || 1),
-					exclude: flags(sk[2]),
+					to: Bin.unflags(sk[1] || 1),
+					exclude: Bin.unflags(sk[2]),
 				});
 			}else
 			{
 				outArr.push({
 					count: sk[0],
-					to: flags(sk[1] || 1),
-					exclude: flags(sk[2]),
+					to: Bin.unflags(sk[1] || 1),
+					exclude: Bin.unflags(sk[2]),
 				});
 				outArr.push({
 					count: sk[3],
-					to: flags(sk[4] || 1),
-					exclude: flags(sk[5]),
+					to: Bin.unflags(sk[4] || 1),
+					exclude: Bin.unflags(sk[5]),
 				});
 			}
 		}
@@ -1030,7 +1030,7 @@ const specialSearchFunctions = (function() {
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
 		fragment.appendChild(createSkillIcon('orb-locked'));
-		fragment.appendChild(createOrbsList(flags(sk[0] || 1)));
+		fragment.appendChild(createOrbsList(Bin.unflags(sk[0] || 1)));
 		return fragment;
 	}
 	function dropLock_Addition(card)
@@ -1040,7 +1040,7 @@ const specialSearchFunctions = (function() {
 		if (!skill) return;
 		const sk = skill.params;
 		const fragment = document.createDocumentFragment();
-		fragment.appendChild(createOrbsList(flags(sk[0] != -1 ? sk[0] : 0b1111111111), 'locked'));
+		fragment.appendChild(createOrbsList(Bin.unflags(sk[0] != -1 ? sk[0] : 0b1111111111), 'locked'));
 		fragment.appendChild(document.createTextNode(`×${sk[1]}T`));
 		return fragment;
 	}
@@ -1051,7 +1051,7 @@ const specialSearchFunctions = (function() {
 		if (!skill) return;
 		const sk = skill.params;
 
-		const colors = flags(sk[0]);
+		const colors = Bin.unflags(sk[0]);
 		
 		const fragment = document.createDocumentFragment();
 		fragment.appendChild(createOrbsList(colors, 'drop'));
@@ -1068,7 +1068,7 @@ const specialSearchFunctions = (function() {
 		const colors = [];
 		for (let ai=0;ai<sk.length;ai+=2)
 		{
-			colors.push(flags(sk[ai+1]));
+			colors.push(Bin.unflags(sk[ai+1]));
 		}
 		const fragment = document.createDocumentFragment();
 		fragment.appendChild(document.createTextNode(`竖`));
@@ -1085,7 +1085,7 @@ const specialSearchFunctions = (function() {
 		const colors = [];
 		for (let ai=0;ai<sk.length;ai+=2)
 		{
-			colors.push(flags(sk[ai+1]));
+			colors.push(Bin.unflags(sk[ai+1]));
 		}
 		
 		const fragment = document.createDocumentFragment();
@@ -1193,7 +1193,7 @@ const specialSearchFunctions = (function() {
 				break;
 			}
 			case 247: {
-				fragment.append(`${(cap*1e8).bigNumberToString()}←${sk[2]} of `, createOrbsList(flags(sk[1])), ` in ${sk[0]}S`);
+				fragment.append(`${(cap*1e8).bigNumberToString()}←${sk[2]} of `, createOrbsList(Bin.unflags(sk[1])), ` in ${sk[0]}S`);
 				break;
 			}
 		}
@@ -1308,8 +1308,8 @@ const specialSearchFunctions = (function() {
 			else if(skill.type == 228 && sk[3] > 0)
 			{
 				outObj.skilltype = 1;
-				outObj.attrs = flags(sk[1]);
-				outObj.types = flags(sk[2]);
+				outObj.attrs = Bin.unflags(sk[1]);
+				outObj.types = Bin.unflags(sk[2]);
 				outObj.turns = sk[0];
 				outObj.rate = sk[3];
 			}
@@ -1345,8 +1345,8 @@ const specialSearchFunctions = (function() {
 			const sk = skill.params;
 			if (skill.type == 228 && sk[4] > 0) {
 				outObj.skilltype = 1;
-				outObj.attrs = flags(sk[1]);
-				outObj.types = flags(sk[2]);
+				outObj.attrs = Bin.unflags(sk[1]);
+				outObj.types = Bin.unflags(sk[2]);
 				outObj.turns = sk[0];
 				outObj.rate = sk[4];
 			} else if (skill.type == 231 && sk[7] > 0) {
@@ -1967,7 +1967,7 @@ const specialSearchFunctions = (function() {
 						attrs = sk.slice(0,-1); break;
 					}
 					case 140:{
-						attrs = flags(sk[0]); break;
+						attrs = Bin.unflags(sk[0]); break;
 					}
 				}
 				const fragment = document.createDocumentFragment();
@@ -1989,7 +1989,7 @@ const specialSearchFunctions = (function() {
 					const sk = skill.params;
 					const fragment = document.createDocumentFragment();
 					fragment.appendChild(document.createTextNode(`自封`));
-					fragment.appendChild(createOrbsList(flags(sk[1] || 1)));
+					fragment.appendChild(createOrbsList(Bin.unflags(sk[1] || 1)));
 					fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
 					return fragment;
 				}
@@ -2393,7 +2393,7 @@ const specialSearchFunctions = (function() {
 					const fragment = document.createDocumentFragment();
 					fragment.append(createSkillIcon('board-roulette'));
 					if (skill.type == 249) {
-						fragment.append(createOrbsList(flags(sk[1])));
+						fragment.append(createOrbsList(Bin.unflags(sk[1])));
 					}
 					fragment.append(`${sk[7]? sk[7] : '固定'+sk.slice(2,7).flatMap(flags).length }`,`×${sk[0]}T`);
 					return fragment;
@@ -2428,7 +2428,7 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					const colums = flags(sk[1]), rows = flags(sk[2]);
+					const colums = Bin.unflags(sk[1]), rows = Bin.unflags(sk[2]);
 					const fragment = document.createDocumentFragment();
 					if (colums.length)
 						fragment.append(`${colums.length}竖`);
@@ -2597,7 +2597,7 @@ const specialSearchFunctions = (function() {
 					const fragment = document.createDocumentFragment();
 					fragment.append(createSkillIcon('orb-thorn'));
 					if ((sk[1] & 0b1111111111) != 1023) {
-						let attrs = flags(sk[1]);
+						let attrs = Bin.unflags(sk[1]);
 						fragment.append(createOrbsList(attrs));
 					}
 					fragment.append(`${sk[3]}%×${sk[0]}T`, document.createElement("br"), "/" ,createSkillIcon('maxhp-locked'), `${sk[2]}%`);
@@ -2889,7 +2889,7 @@ const specialSearchFunctions = (function() {
 				function:cards=>cards.filter(card=>{
 					function is30(sk)
 					{
-						return Boolean(flags(sk[1]).length * sk[0] == 30);
+						return Boolean(Bin.unflags(sk[1]).length * sk[0] == 30);
 					}
 					const searchTypeArray = [141];
 					const skill = getCardActiveSkill(card, searchTypeArray);
@@ -2901,7 +2901,7 @@ const specialSearchFunctions = (function() {
 				function:cards=>cards.filter(card=>{
 					function is1515(sk)
 					{
-						return Boolean(flags(sk[1]).length == 2 && sk[0] == 15);
+						return Boolean(Bin.unflags(sk[1]).length == 2 && sk[0] == 15);
 					}
 					const searchTypeArray = [141];
 					const skill = getCardActiveSkill(card, searchTypeArray);
@@ -3115,7 +3115,7 @@ const specialSearchFunctions = (function() {
 				function:cards=>cards.filter(card=>{
 					const searchTypeArray = [128];
 					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill && (skill.params.length>=3 || flags(skill.params[0]).length>=2);
+					return skill && (skill.params.length>=3 || Bin.unflags(skill.params[0]).length>=2);
 				}),
 				addition:generateRowOrbs_Addition
 			},
@@ -3503,7 +3503,7 @@ const specialSearchFunctions = (function() {
 					if (!skill) return;
 					const sk = skill.params;
 					const fragment = document.createDocumentFragment();
-					fragment.append(createOrbsList(flags(sk[0])), sk[2] ? `≤${sk[2]}` : `≥${sk[1]}`);
+					fragment.append(createOrbsList(Bin.unflags(sk[0])), sk[2] ? `≤${sk[2]}` : `≥${sk[1]}`);
 					return fragment;
 				}
 			},
@@ -3568,7 +3568,7 @@ const specialSearchFunctions = (function() {
 					const fragment = document.createDocumentFragment();
 					const sup = document.createElement("sup");
 					sup.textContent = "N";
-					const orbs = createOrbsList(flags(sk[0]));
+					const orbs = createOrbsList(Bin.unflags(sk[0]));
 					fragment.append(`ATK×${sk[3]/100}`,sup,"/",orbs);
 					if (sk[1]) {
 						fragment.append(`×≥${sk[1]}`);
@@ -3675,7 +3675,7 @@ const specialSearchFunctions = (function() {
 					const skill = getCardLeaderSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					const attrs = flags(sk[0]), types = flags(sk[1]);
+					const attrs = Bin.unflags(sk[0]), types = Bin.unflags(sk[1]);
 					const fragment = document.createDocumentFragment();
 					if (attrs.length)
 						fragment.appendChild(createOrbsList(attrs));
@@ -3737,7 +3737,7 @@ const specialSearchFunctions = (function() {
 					let skill;
 					if (skill = getCardLeaderSkill(card, [235])) {
 						nodeArr.push("/");
-						nodeArr.push(createOrbsList(flags(skill.params[0])));
+						nodeArr.push(createOrbsList(Bin.unflags(skill.params[0])));
 						nodeArr.push(`×${skill.params[2]}`);
 					}
 					return nodeArr.nodeJoin();
@@ -3761,7 +3761,7 @@ const specialSearchFunctions = (function() {
 						nodeArr.push("/十字");
 					} else if (skill = getCardLeaderSkill(card, [235])) {
 						nodeArr.push("/");
-						nodeArr.push(createOrbsList(flags(skill.params[0])));
+						nodeArr.push(createOrbsList(Bin.unflags(skill.params[0])));
 						nodeArr.push(`×${skill.params[2]}`);
 					}
 					return nodeArr.nodeJoin();
@@ -3810,7 +3810,7 @@ const specialSearchFunctions = (function() {
 					const skill = getCardLeaderSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					let attrs = flags(sk[0]), types = flags(sk[1]), awakenings = sk.slice(2);
+					let attrs = Bin.unflags(sk[0]), types = Bin.unflags(sk[1]), awakenings = sk.slice(2);
 					const fragment = document.createDocumentFragment();
 					if (attrs.length)
 						fragment.appendChild(createOrbsList(attrs));

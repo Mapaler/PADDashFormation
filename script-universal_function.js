@@ -418,13 +418,6 @@ class Bin extends Set {
 		}
 	}
 }
-//将二进制flag转为数组
-function flags(num) {
-	return Bin.unflags(num);
-}
-function reflags(arr) {
-	return Bin.enflags(arr);
-}
 
 //带标签的模板字符串
 function tp(stringsArr, ...keys) {
@@ -832,7 +825,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	//地下城阴阳加护强化
 	if (dge.benefit) { //当存在加护
 		const benefitAwokens = [128 , 129]; //0b1是阳，0b10是阴，可以两者都强化
-		flags(dge.benefit).forEach(idx=>{
+		Bin.unflags(dge.benefit).forEach(idx=>{
 			const akId = benefitAwokens[idx]; //得到加护觉醒编号
 			latterAwokenScale[0].push({ index: akId, scale: 1.2 }); //HP
 			latterAwokenScale[1].push({ index: akId, scale: 5 }); //ATK
@@ -965,7 +958,7 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 		//如果固定顺序就直接使用当前颜色顺序；否则不考虑顺序时，去除任意色
 		const attrNums = sAttrs.filter(attr=>fixMainColor || attr > 0 && (attr & anyAttrsFlag) !== anyAttrsFlag)
 			.map(attr=>{
-				const attrNum = flags(attr);
+				const attrNum = Bin.unflags(attr);
 				if (attrNum.includes(6)) attrNum.push(undefined,-1); //如果是包含6的，就添加-1和undefined的值
 				return attrNum;
 			});
@@ -1134,26 +1127,20 @@ function cardN(id) {
 	const monDom = createCardA({noBoxCount: true});
 	monOuterDom.appendChild(monDom);
 	monOuterDom.monDom = monDom;
+	monOuterDom.monDom.onclick = cardNClick
 	changeid({ id: id }, monDom);
+
+	function cardNClick(event) {
+		event?.preventDefault();
+		const monstersID = document.getElementById("card-id");
+		const formIdSearch = document.getElementById("form-id-search");
+		monstersID.value = this.getAttribute("data-cardid");
+		formIdSearch.onchange();
+		editBox.show();
+	}
 	return monOuterDom;
 }
-//返回文字说明内怪物Card的纯HTML
-function cardNClick() {
-	const id = parseInt(this.getAttribute("data-cardid"), 10);
-	editBox.show();
-	editBox.mid = id;
-	editBoxChangeMonId(id);
-	//showSearch([id]);
-	return false;
-}
-//技能介绍里的头像的切换
-function changeToIdInSkillDetail(event) {
-	const monstersID = document.getElementById("card-id");
-	const mid = this.getAttribute("data-cardid");
-	monstersID.value = mid;
-	monstersID.onchange();
-	return false; //取消链接的默认操作
-}
+
 //产生队伍目标类型
 function createTeamFlags(target)
 {
@@ -1167,7 +1154,7 @@ function createTeamFlags(target)
 
 	let _target = [];
 	if (Number.isInteger(target)) {
-		_target = flags(target).map(n=>targetTypes[n]);
+		_target = Bin.unflags(target).map(n=>targetTypes[n]);
 	}
 	else if (Array.isArray(target)) {
 		if (target.every(item=>Number.isInteger(item))) {
@@ -1210,7 +1197,7 @@ function createIndexedIcon(type, index) {
 	if (type == 'card') {//卡片头像
 		const avatar = cardN(index);
 		avatar.contentEditable = false;
-		avatar.monDom.setAttribute("onclick", "cardNClick.call(this);return false;")
+		//avatar.monDom.setAttribute("onclick", "cardNClick.call(this);return false;")
 		return avatar;
 	}
 	const icon = document.createElement("icon");
@@ -1389,7 +1376,7 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 			case 163:
 			case 177:
 			case 186:
-				scale = hpMul({ attrs: flags(sk[0]), types: flags(sk[1]) }, sk[2]);
+				scale = hpMul({ attrs: Bin.unflags(sk[0]), types: Bin.unflags(sk[1]) }, sk[2]);
 				break;
 			case 125: //队伍中必须有指定队员
 				const needMonIdArr = sk.slice(0, 5).filter(s => s > 0);
@@ -1397,18 +1384,18 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 				scale = needMonIdArr.every(mid => memberIdArr.includes(mid)) ? sk[5] / 100 : 1;
 				break;
 			case 136:
-				scale = hpMul({ attrs: flags(sk[0]) }, sk[1]);
-				if (sk[4]) scale *= hpMul({ attrs: flags(sk[4]) }, sk[5]);
+				scale = hpMul({ attrs: Bin.unflags(sk[0]) }, sk[1]);
+				if (sk[4]) scale *= hpMul({ attrs: Bin.unflags(sk[4]) }, sk[5]);
 				break;
 			case 137:
-				scale = hpMul({ types: flags(sk[0]) }, sk[1]);
-				if (sk[4]) scale *= hpMul({ types: flags(sk[4]) }, sk[5]);
+				scale = hpMul({ types: Bin.unflags(sk[0]) }, sk[1]);
+				if (sk[4]) scale *= hpMul({ types: Bin.unflags(sk[4]) }, sk[5]);
 				break;
 			case 155:
-				scale = solo ? 1 : hpMul({ attrs: flags(sk[0]), types: flags(sk[1]) }, sk[2]);
+				scale = solo ? 1 : hpMul({ attrs: Bin.unflags(sk[0]), types: Bin.unflags(sk[1]) }, sk[2]);
 				break;
 			case 158:
-				scale = hpMul({ attrs: flags(sk[1]), types: flags(sk[2]) }, sk[4]);
+				scale = hpMul({ attrs: Bin.unflags(sk[1]), types: Bin.unflags(sk[2]) }, sk[4]);
 				break;
 			case 175: //队伍组成全为合作，不包括双方队长
 				const needCollabIdIdArr = sk.slice(0, 3).filter(s => s > 0);
@@ -1417,7 +1404,7 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 				break;
 			case 178:
 			case 185:
-				scale = hpMul({ attrs: flags(sk[1]), types: flags(sk[2]) }, sk[3]);
+				scale = hpMul({ attrs: Bin.unflags(sk[1]), types: Bin.unflags(sk[2]) }, sk[3]);
 				break;
 			case 203:{ //队员为指定类型，不包括双方队长，且队员数大于0
 				let trueMemberCardsArr = memberArr.slice(1, 5).filter(m => m.id > 0).map(m => m.card);
@@ -1442,7 +1429,7 @@ function countTeamHp(team, leader1id, leader2id, solo, noAwoken = false) {
 			case 229:{ //队员中存在每个属性或Type都算一次
 				const {attrs, types} = countTeamTotalAttrsTypes(memberArr, assistArr);
 
-				let correAttrs = flags(sk[0]), correTypes = flags(sk[1]); //符合的属性/类型
+				let correAttrs = Bin.unflags(sk[0]), correTypes = Bin.unflags(sk[1]); //符合的属性/类型
 				 //符合的次数
 				let correTimes = correAttrs.reduce((pre,attr)=>pre + (attrs[attr] || 0),0) +
 								 correTypes.reduce((pre,type)=>pre + (types[type] || 0),0);
@@ -1818,7 +1805,7 @@ function getReduceRange(reduceScales)
 		}
 		else if ((scale.attrs & 31) != 31) //不符合全属性的
 		{
-			const attrs = flags(scale.attrs); //得到属性数组
+			const attrs = Bin.unflags(scale.attrs); //得到属性数组
 			attrs.forEach(n=>{
 				attrsRanges[n] = attrsRanges[n].map(range=>new reduceRange(range)); //复制一个新数组
 				processingRanges(attrsRanges[n], scale); //计算这个数组的减伤比例
