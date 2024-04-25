@@ -2073,6 +2073,7 @@ function loadData(force = false)
 			try {
 				newCkeys = JSON.parse(lastKeyString);
 				console.info("提前预载原来已经储存的数据");
+				if (!newCkeys) return;
 			} catch (e) {
 				console.error("以前还没有下载过数据。", e);
 				return;
@@ -2087,7 +2088,7 @@ function loadData(force = false)
 		}
 		console.debug("目前使用的数据区服是 %s。", currentDataSource.code);
 		
-		currentCkey = newCkeys.find(ckey => ckey.code == currentDataSource.code); //获取当前语言的ckey
+		currentCkey = newCkeys?.find(ckey => ckey.code == currentDataSource.code); //获取当前语言的ckey
 		try {
 			lastCkeys = JSON.parse(lastKeyString); //读取本地储存的原来的ckey
 			if (!Boolean(lastCkeys) || !Array.isArray(lastCkeys))
