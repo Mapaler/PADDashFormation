@@ -25519,11 +25519,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"7d4cc7769b061422c6f55b392f3fd445"
+		"4c6512cc2876102856ecf24775673805"
 	],
 	[
 		"script.js",
-		"bf5e60b56a64419c5592a5c641258d3f"
+		"3e1b60d425c9148f70ea81d518c217fd"
 	],
 	[
 		"solo.html",
@@ -25752,6 +25752,10 @@ const cachesMap = new Map([
 	[
 		"library/html2canvas.min.js",
 		"d7530aa0b7587e627484c49fdf8f13f2"
+	],
+	[
+		"library/minified.js",
+		"4d02ac7bb781ce3f52a8008f2047e77e"
 	],
 	[
 		"library/zxing.umd.min.js",
@@ -26241,37 +26245,48 @@ self.addEventListener('fetch', async function(event) {
 	//console.debug("请求网络", event.request.url, relativePath, md5);
 	if (md5) {
 		url.searchParams.set("md5", md5);
-		const responseWithMd5 = await caches.match(url, {ignoreSearch: false});
-		if (responseWithMd5) {
-			console.debug("%c已有相同 md5 缓存，直接使用缓存：%s，%s", "color: green;", relativePath, md5);
-			event.respondWith(responseWithMd5);
-		} else {
-			//console.debug("%c无相同 md5 缓存，重新在线获取", "color: blue;", url);
-			let newResponse;
+
+		const responseSync = (async () => {
+			// Try to get the response from a cache.
+			const responseWithMd5 = await caches.match(url, {ignoreSearch: false});
+			// Return it if we found one.
+			if (responseWithMd5) {
+				console.debug("%c已有相同 md5 缓存，直接使用缓存：%s，%s", "color: green;", relativePath, md5);
+				return responseWithMd5;
+			}
+			// If we didn't find a match in the cache, use the network.
 			try {
-				newResponse = await fetch(event.request);
-				console.debug("%c无相同 md5 缓存，重新在线获取结果：%s，%s", "color: blue;", relativePath, md5);
+				const newResponse = fetch(event.request);
+				console.debug("%c无相同 md5 缓存，重新在线获取结果：%s，%s", "color: lightblue;", relativePath, md5);
+				const response = await newResponse;
 				const cache = await caches.open(cacheName);
-				await cache.put(url, newResponse.clone());
+				await cache.put(url, response.clone());
+				return response;
 				//console.debug("%c储存新的Cache", "color: blue;", url, cache);
 			} catch (error) {
-				console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据：%s，%s", "color: red;", relativePath, md5, error);
-				newResponse = await caches.match(url, {ignoreSearch: true});
+				console.error("%c数据在线获取失败-有hash，尝试使用忽略 search 的离线数据：%s，%s", "color: red;", relativePath, md5, error);
+				const response = await caches.match(url, {ignoreSearch: true});
+				return response || new Response(new Blob(), { status: 418, statusText: "数据在线获取失败" });
 			}
-			event.respondWith(newResponse);
-		}
+		})();
+		event.respondWith(responseSync);
 	} else {
-		console.debug("无 md5 值，重新在线获取：%s", relativePath);
-		let newResponse;
-		try {
-			newResponse = await fetch(event.request);
-			const cache = await caches.open(cacheName);
-			await cache.put(url, newResponse.clone());
-			event.respondWith(newResponse);
-		} catch (error) {
-			console.error("%c数据在线获取失败，尝试使用忽略 search 的离线数据：%s", "color: red;", relativePath, error);
-			newResponse = await caches.match(url, {ignoreSearch: true});
-		}
-		event.respondWith(newResponse);
+		console.debug("%c无 md5 值，重新在线获取：%s", "color: lightblue;", relativePath);
+
+		const responseSync = (async () => {
+			try {
+				const newResponse = fetch(event.request);
+				const response = await newResponse;
+				const cache = await caches.open(cacheName);
+				await cache.put(url, response.clone());
+				return response;
+				//console.debug("%c储存新的Cache", "color: blue;", url, cache);
+			} catch (error) {
+				console.error("%c数据在线获取失败-无hash，尝试使用忽略 search 的离线数据：%s", "color: red;", relativePath, error);
+				const response = await caches.match(url, {ignoreSearch: true});
+				return response || new Response(new Blob(), { status: 418, statusText: "数据在线获取失败" });
+			}
+		})();
+		event.respondWith(responseSync);
 	}
 });

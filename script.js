@@ -2045,6 +2045,7 @@ function loadData(force = false)
 
 	//开始读取解析怪物数据
 	const sourceDataFolder = "monsters-info";
+	dealCkeyData();
 
 	statusLine?.writeText(localTranslating.status_message.loading_check_version);
 	GM_xmlhttpRequest({
@@ -2061,22 +2062,34 @@ function loadData(force = false)
 	//处理返回的数据
 	function dealCkeyData(responseText)
 	{ //处理数据版本
+		const lastKeyString = localStorage.getItem(cfgPrefix + "ckey");
+
 		let newCkeys; //当前的Ckey们
 		let lastCkeys; //以前Ckey们
 		let currentCkey; //获取当前语言的ckey
 		let lastCurrentCkey; //以前的当前语言的ckey
 
-		try {
-			newCkeys = JSON.parse(responseText);
-		} catch (e) {
-			console.error("新的 Ckey 数据 JSON 解码出错。", e);
-			return;
+		if (responseText === undefined) {
+			try {
+				newCkeys = JSON.parse(lastKeyString);
+				console.info("提前预载原来已经储存的数据");
+			} catch (e) {
+				console.error("以前还没有下载过数据。", e);
+				return;
+			}
+		} else {
+			try {
+				newCkeys = JSON.parse(responseText);
+			} catch (e) {
+				console.error("新的 Ckey 数据 JSON 解码出错。", e);
+				return;
+			}
 		}
 		console.debug("目前使用的数据区服是 %s。", currentDataSource.code);
 		
 		currentCkey = newCkeys.find(ckey => ckey.code == currentDataSource.code); //获取当前语言的ckey
 		try {
-			lastCkeys = JSON.parse(localStorage.getItem(cfgPrefix + "ckey")); //读取本地储存的原来的ckey
+			lastCkeys = JSON.parse(lastKeyString); //读取本地储存的原来的ckey
 			if (!Boolean(lastCkeys) || !Array.isArray(lastCkeys))
 				lastCkeys = [];
 		} catch (e) {

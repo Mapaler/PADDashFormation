@@ -9,7 +9,7 @@ const GM_xmlhttpRequest = function(GM_param) {
 			const _xhr = e.target;
 			if (_xhr.readyState === _xhr.DONE) { //请求完成时
 				console.debug("http状态码：", _xhr.status);
-				if ((_xhr.status === 200 || _xhr.status === 0) && GM_param.onload) //正确加载时
+				if ((_xhr.status === 200) && GM_param.onload) //正确加载时
 				{
 					GM_param.onload(_xhr);
 				} else if (_xhr.status !== 200 && GM_param.onerror) //发生错误时
