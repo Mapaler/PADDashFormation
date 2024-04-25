@@ -337,19 +337,93 @@ Math.isPowerOfTwo = function(n) {
 	else
 		return false;
 }
-//将二进制flag转为数组
-function flags(num) {
-	const arr = [];
-	for (let i = 0; i < 32; i++) {
-		if (num & (1 << i)) {
-			arr.push(i);
+class Bin extends Set {
+	static #typeError_Constructor = "传入的不是 number 和 bigint 类型或这个两个类型的数组";
+	static #typeError_FlagsNum = "传入的不是 number 和 bigint 类型";
+	static #typeError_FlagsArray = "传入的不是 number 类型的数组";
+	static #typeError_NotInteger = "传入的不是 整数";
+	static #rangeError_NotSafe = "传入的 number 大于 53 位";
+	/**
+	 * 构建函数
+	 * @param {(number | bigint | number[])} arg 传入参数
+	 */
+	constructor (arg) {
+		if (typeof arg === "number" || typeof arg === "bigint") {
+			super(Bin.unflags(arg));
+		} else if (Array.isArray(arg) &&
+			arg.every(item=>typeof item === "number" && Number.isSafeInteger(item))
+		){
+			super(arg);
+		} else {
+			throw new TypeError(Bin.#typeError_Constructor);
 		}
 	}
-	return arr;
+	/**
+	 * 将数字或大整形flag转换为数组
+	 * @param {(number | bigint)} number 输入的数字
+ 	 * @returns {number[]} 输出数组
+	 */
+	static unflags(number) {
+		const inputType = typeof number;
+		if (inputType === "number" || inputType === "bigint"){
+			if (inputType === "number" && number > Number.MAX_SAFE_INTEGER) {
+				throw new RangeError(Bin.#rangeError_NotSafe);
+			}
+			const isBigint = inputType === "bigint";
+			const arr = [];
+			for (let i = 0, flag = isBigint ? 1n : 1; flag <= number; i++, flag = (isBigint ? 2n : 2) ** (isBigint ? BigInt(i) : i)) {
+				if (number & flag) {
+					arr.push(i);
+				}
+			}
+			return arr;
+		} else {
+			throw new TypeError(Bin.#typeError_FlagsNum);
+		}
+	}
+	/**
+	 * 将数字序号转换为数字
+	 * @param {number[]} indexArr 输入的序号数组
+	 * @returns {(number | bigint)} 输出的数字
+	 */
+	static enflags(indexArr) {
+		if (Array.isArray(indexArr) &&
+			indexArr.every(item=>typeof item === "number" && Number.isSafeInteger(item))
+		){
+			let result = 0, isBigint = false, baseNum = 2;
+			for (let i = 0; i < indexArr.length; i++) {
+				let value = indexArr[i];
+				//当数值大于52位，即需要换BigInt
+				if (value > 52 && !isBigint) {
+					isBigint = true;
+					result = BigInt(result);
+					baseNum = BigInt(baseNum);
+				}
+				isBigint && (value = BigInt(value)); //一旦需要BigInt了，就转换
+				result = result + baseNum ** value; //用乘方相加而不是位移的优点是可以得到 0xFFFFFFFF 而不是 -1
+			}
+			return result;
+		} else {
+			throw new TypeError(Bin.#typeError_FlagsArray);
+		}
+	}
+	get int() {
+		return Bin.enflags(Array.from(this.values()));
+	}
+	add(index) {
+		if (typeof index === "number" && Number.isSafeInteger(index)){
+			super.add(index);
+		} else {
+			throw new TypeError(Bin.#typeError_NotInteger);
+		}
+	}
 }
 //将二进制flag转为数组
+function flags(num) {
+	return Bin.unflags(num);
+}
 function reflags(arr) {
-	return arr.reduce((pre,cur)=>pre | 1 << cur, 0);
+	return Bin.enflags(arr);
 }
 
 //带标签的模板字符串
