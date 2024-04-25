@@ -364,13 +364,14 @@ class Bin extends Set {
  	 * @returns {number[]} 输出数组
 	 */
 	static unflags(number) {
+		const arr = [];
+		if (!number) return arr;
 		const inputType = typeof number;
 		if (inputType === "number" || inputType === "bigint"){
 			if (inputType === "number" && number > Number.MAX_SAFE_INTEGER) {
 				throw new RangeError(Bin.#rangeError_NotSafe);
 			}
 			const isBigint = inputType === "bigint";
-			const arr = [];
 			for (let i = 0, flag = isBigint ? 1n : 1; flag <= number; i++, flag = (isBigint ? 2n : 2) ** (isBigint ? BigInt(i) : i)) {
 				if (number & flag) {
 					arr.push(i);
@@ -378,7 +379,7 @@ class Bin extends Set {
 			}
 			return arr;
 		} else {
-			throw new TypeError(Bin.#typeError_FlagsNum);
+			throw new TypeError(Bin.#typeError_FlagsNum + " " + number);
 		}
 	}
 	/**
