@@ -1242,7 +1242,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .latent-icon[data-latent-icon]{
 	background-image: linear-gradient(#4499EE 33%,  #2277EE 80%);
 	border-color: #CCEEFF;
-	box-shadow: black 1px 2px 1px -1px inset, black 1px 1px 1px 0;
+	box-shadow: 1px 1px 1px 0 black, inset 2px 2px 1px -1px black ;
 }
 /*队伍的潜觉*/
 .team-latents .latents{
@@ -2963,6 +2963,9 @@ a.series-search::before {
 	display: inline-flex;
 	width: 32px;
 	vertical-align: middle;
+}
+.team-awoken-effect .latent-icon::before{
+	opacity: 0.99;
 }
 .team-awoken-effect .latent-icon.show-enabling-awokwn {
 	width: 64px;
