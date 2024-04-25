@@ -1316,7 +1316,7 @@ const specialSearchFunctions = (function() {
 			else if(skill.type == 231 && sk[6] > 0)
 			{
 				outObj.skilltype = 1;
-				outObj.awoken = sk.slice(1, 5).filter(Boolean).filter(flags);
+				outObj.awoken = sk.slice(1, 5).filter(Boolean);
 				outObj.turns = sk[0];
 				outObj.rate = sk[6];
 			}
@@ -1351,7 +1351,7 @@ const specialSearchFunctions = (function() {
 				outObj.rate = sk[4];
 			} else if (skill.type == 231 && sk[7] > 0) {
 				outObj.skilltype = 1;
-				outObj.awoken = sk.slice(1, 5).filter(Boolean).filter(flags);
+				outObj.awoken = sk.slice(1, 5).filter(Boolean);
 				outObj.turns = sk[0];
 				outObj.rate = sk[7];
 			} else if (skill.type == 50 || skill.type == 90) {
@@ -2395,7 +2395,7 @@ const specialSearchFunctions = (function() {
 					if (skill.type == 249) {
 						fragment.append(createOrbsList(Bin.unflags(sk[1])));
 					}
-					fragment.append(`${sk[7]? sk[7] : '固定'+sk.slice(2,7).flatMap(flags).length }`,`×${sk[0]}T`);
+					fragment.append(`${sk[7]? sk[7] : '固定'+sk.slice(2,7).flatMap(Bin.unflags).length }`,`×${sk[0]}T`);
 					return fragment;
 				}
 			},

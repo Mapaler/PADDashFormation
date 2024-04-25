@@ -25511,11 +25511,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"11cec86f554c4b4dceb01d57850b20a9"
+		"24fa2bd9a0ff6e04fa1520d027701a3e"
 	],
 	[
 		"script-skill-parser.js",
-		"3ec1eb93ca9b88f454c0e9e69e347a06"
+		"7fd84302ec5dc1d1a7b68a8f4bbec9d5"
 	],
 	[
 		"script-universal_function.js",
@@ -25752,10 +25752,6 @@ const cachesMap = new Map([
 	[
 		"library/html2canvas.min.js",
 		"d7530aa0b7587e627484c49fdf8f13f2"
-	],
-	[
-		"library/minified.js",
-		"4d02ac7bb781ce3f52a8008f2047e77e"
 	],
 	[
 		"library/zxing.umd.min.js",

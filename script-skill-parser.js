@@ -1232,7 +1232,7 @@ const skillObjectParsers = {
 	[123](percent, attrs, types, atk, rcv) { return powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.hp(percent, 100)); },
 	[124](attrs1, attrs2, attrs3, attrs4, attrs5, min, mul, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus, 0]));
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(Bin.unflags), min, bonus ? attrs.length : min, [mul, 100], [bonus, 0]));
 	},
 	[125](mon1, mon2, mon3, mon4, mon5, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('card', [mon1, mon2, mon3, mon4, mon5].filter(Boolean))); },
 	[126](attrs, turns, turns2, percent) { return activeTurns(turns === turns2 ? turns : [turns, turns2], orbDropIncrease(v.percent(percent), Bin.unflags(attrs))); },
@@ -1349,7 +1349,7 @@ const skillObjectParsers = {
 	},
 	[164](attrs1, attrs2, attrs3, attrs4, min, atk, rcv, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, attrs.length, [atk, rcv], [bonus, bonus]));
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(Bin.unflags), min, attrs.length, [atk, rcv], [bonus, bonus]));
 	},
 	[165](attrs, min, baseAtk, baseRcv, bonusAtk, bonusRcv, incr) {
 		const attrsArr = Bin.unflags(attrs);
@@ -1371,7 +1371,7 @@ const skillObjectParsers = {
 	},
 	[171](attrs1, attrs2, attrs3, attrs4, min, mul, percent, bonus) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, bonus ? attrs.length : min, [mul, 100], [bonus ?? 0, 0]), null, v.percent(percent));
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(Bin.unflags), min, bonus ? attrs.length : min, [mul, 100], [bonus ?? 0, 0]), null, v.percent(percent));
 	},
 	[172]() { return setOrbState(Attributes.orbs(), 'unlocked'); },
 	[173](turns, attrAbsorb, comboAbsorb, damageAbsorb) {
@@ -1482,7 +1482,7 @@ const skillObjectParsers = {
 	},
 	[201](attrs1, attrs2, attrs3, attrs4, min, damage) {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
-	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, min, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
+	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(Bin.unflags), min, min, [100, 100], [0, 0]), null, null, [followAttackFixed(damage)]);
 	},
 	[202](id) {
 		return henshin(id);
@@ -1502,7 +1502,7 @@ const skillObjectParsers = {
 	[205](attrs, turns) { return activeTurns(turns, orbDropIncrease(null, Bin.unflags(attrs == -1 ? 0b1111111111: attrs), 'locked')); },
 	[206](attrs1, attrs2, attrs3, attrs4, attrs5, min, combo) {
 		const attrs = [attrs1, attrs2, attrs3, attrs4, attrs5].filter(Boolean);
-		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(flags), min, min, [100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
+		return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(Bin.unflags), min, min, [100, 100], [0, 0]), null, null, combo ? [addCombo(combo)] : null);
 	},
 	[207](turns, time, row1, row2, row3, row4, row5, count) {
 		/*return activeTurns(turns, count ?
@@ -1513,7 +1513,7 @@ const skillObjectParsers = {
 		if (count) {
 			options.count = count;
 		} else {
-			options.positions = [row1, row2, row3, row4, row5].map(flags);
+			options.positions = [row1, row2, row3, row4, row5].map(Bin.unflags);
 		}
 		return activeTurns(turns, 
 			boardJammingStates('roulette', count ? 'random' : 'shape', options)
@@ -1671,7 +1671,7 @@ const skillObjectParsers = {
 		if (count) {
 			options.count = count;
 		} else {
-			options.positions = [row1, row2, row3, row4, row5].map(flags);
+			options.positions = [row1, row2, row3, row4, row5].map(Bin.unflags);
 		}
 		return activeTurns(turns, 
 			boardJammingStates('roulette', count ? 'random' : 'shape', options)
