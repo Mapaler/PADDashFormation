@@ -6255,6 +6255,12 @@ function editBoxChangeMonId(id) {
 	//const openEvolutionaryTree = settingBox.querySelector(".row-mon-id .open-evolutionary-tree");
 	if (evoLinkCardsIdArray.length > 1) {
 		const fragment = document.createDocumentFragment(); //创建节点用的临时空间
+
+		const li = fragment.appendChild(document.createElement("li"));
+		const openEvolutionaryTree = li.appendChild(document.createElement("button"));
+		openEvolutionaryTree.classList = "open-evolutionary-tree brown-button";
+		openEvolutionaryTree.onclick = openEvolutionaryTreeClick;
+
 		evoLinkCardsIdArray.forEach(function(mid) {
 			const cli = createCardHead(mid, {noTreeCount: true});
 			if (mid == id) {
@@ -6262,10 +6268,7 @@ function editBoxChangeMonId(id) {
 			}
 			fragment.appendChild(cli);
 		});
-		const li = fragment.appendChild(document.createElement("li"));
-		const openEvolutionaryTree = li.appendChild(document.createElement("button"));
-		openEvolutionaryTree.classList = "open-evolutionary-tree brown-button";
-		openEvolutionaryTree.onclick = openEvolutionaryTreeClick;
+
 		evoCardUl.appendChild(fragment);
 		evoCardUl.classList.remove(className_displayNone);
 		//openEvolutionaryTree.classList.remove(className_displayNone); //显示进化树按钮
@@ -6836,6 +6839,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	//SX
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"28\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const targetMeter = targetIcon.parentElement.querySelector("meter");
 		const thisAwokenNum = awokenCountInTeam(team, 28, solo, teamsCount);
 		let prob = thisAwokenNum / 5;
 		switch (badge) {
@@ -6846,11 +6850,14 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 				prob += 1;
 				break;
 		}
-		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+		const percentValue = Math.round(Math.min(prob,1)*100);
+		targetValue.setAttribute(dataAttrName, percentValue);
+		targetMeter.value = percentValue;
 	}
 	//暗
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"68\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const targetMeter = targetIcon.parentElement.querySelector("meter");
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.big === 68);
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
@@ -6863,11 +6870,14 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 				prob += 1;
 				break;
 		}
-		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+		const percentValue = Math.round(Math.min(prob,1)*100);
+		targetValue.setAttribute(dataAttrName, percentValue);
+		targetMeter.value = percentValue;
 	}
 	//废
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"69\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const targetMeter = targetIcon.parentElement.querySelector("meter");
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.big === 69);
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
@@ -6880,11 +6890,14 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 				prob += 1;
 				break;
 		}
-		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+		const percentValue = Math.round(Math.min(prob,1)*100);
+		targetValue.setAttribute(dataAttrName, percentValue);
+		targetMeter.value = percentValue;
 	}
 	//毒
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"70\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const targetMeter = targetIcon.parentElement.querySelector("meter");
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.big === 70);
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
@@ -6897,33 +6910,47 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 				prob += 1;
 				break;
 		}
-		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+		const percentValue = Math.round(Math.min(prob,1)*100);
+		targetValue.setAttribute(dataAttrName, percentValue);
+		targetMeter.value = percentValue;
 	}
 	//云
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"54\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const targetMeter = targetIcon.parentElement.querySelector("meter");
 		const thisAwokenNum = awokenCountInTeam(team, 54, solo, teamsCount);
 		let prob = thisAwokenNum / 1;
-		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+		const percentValue = Math.round(Math.min(prob,1)*100);
+		targetValue.setAttribute(dataAttrName, percentValue);
+		targetMeter.value = percentValue;
 	}
 	//封条
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"55\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const targetMeter = targetIcon.parentElement.querySelector("meter");
 		const thisAwokenNum = awokenCountInTeam(team, 55, solo, teamsCount);
 		let prob = thisAwokenNum / 1;
-		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+		const percentValue = Math.round(Math.min(prob,1)*100);
+		targetValue.setAttribute(dataAttrName, percentValue);
+		targetMeter.value = percentValue;
 	}
 	//掉废
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"14\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const targetMeter = targetIcon.parentElement.querySelector("meter");
 		let prob = members.some(member=>member?.latent?.includes(14)) ? 1 : 0;
-		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+		const percentValue = Math.round(Math.min(prob,1)*100);
+		targetValue.setAttribute(dataAttrName, percentValue);
+		targetMeter.value = percentValue;
 	}
 	//掉毒
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"15\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const targetMeter = targetIcon.parentElement.querySelector("meter");
 		let prob = members.some(member=>member?.latent?.includes(15)) ? 1 : 0;
-		targetValue.setAttribute(dataAttrName, Math.round(Math.min(prob,1)*100));
+		const percentValue = Math.round(Math.min(prob,1)*100);
+		targetValue.setAttribute(dataAttrName, percentValue);
+		targetMeter.value = percentValue;
 	}
 	//心横解转转
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"40\"]")) {

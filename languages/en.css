@@ -267,6 +267,9 @@ label[for="show-team-awoken-count"]::after{
 label[for="show-team-awoken-effect"]::after{
 	content:"Team's Awoken Effect Calculate";
 }
+label[for="show-meter"]::after{
+	content:"Display as Meter bar";
+}
 label[for="show-team-attrtype-count"]::after{
 	content:"Team's Rarity, Attributes, Types Count";
 }

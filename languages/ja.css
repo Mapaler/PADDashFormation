@@ -261,6 +261,9 @@ label[for="show-team-awoken-count"]::after{
 label[for="show-team-awoken-effect"]::after{
 	content:"チームの覚醒効果の計算";
 }
+label[for="show-meter"]::after{
+	content:"測光バーとして表示";
+}
 label[for="show-team-attrtype-count"]::after{
 	content:"チームの希少性、属性、タイプの合計";
 }

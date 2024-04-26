@@ -263,6 +263,9 @@ label[for="show-team-awoken-count"]::after{
 label[for="show-team-awoken-effect"]::after{
 	content:"隊伍覺醒效果計算";
 }
+label[for="show-meter"]::after{
+	content:"顯示為計量條";
+}
 label[for="show-team-attrtype-count"]::after{
 	content:"隊伍稀有度、屬性與類型計數";
 }

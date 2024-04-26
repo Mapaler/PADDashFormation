@@ -256,6 +256,9 @@ label[for="show-team-awoken-count"]::after{
 label[for="show-team-awoken-effect"]::after{
 	content:"팀의 각성 효과 계산";
 }
+label[for="show-meter"]::after{
+	content:"측광 막대로 표시됨";
+}
 label[for="show-team-attrtype-count"]::after{
 	content:"팀의 희귀도, 속성, 유형 수";
 }
