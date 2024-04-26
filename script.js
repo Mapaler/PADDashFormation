@@ -2108,7 +2108,7 @@ function loadData(force = false)
 		}
 
 		statusLine?.writeText(localTranslating.status_message.loading_mon_info);
-		if (!force && db && currentCkey.ckey.card == lastCurrentCkey.ckey.card) {
+		if (!force && db && currentCkey?.ckey?.card == lastCurrentCkey?.ckey?.card) {
 			console.debug("Cards ckey相等，直接读取已有的数据。");
 			const transaction = db.transaction([`cards`]);
 			const objectStore = transaction.objectStore(`cards`);
