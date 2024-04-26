@@ -26231,7 +26231,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"15e16a8db1bebdb59251e8e5026e5258"
+		"52c7d48ee70f1d71ff5d81efe2f1bc04"
 	],
 	[
 		"languages/en.css",
