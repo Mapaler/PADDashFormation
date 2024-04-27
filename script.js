@@ -2081,6 +2081,7 @@ function loadData(force = false)
 		} else {
 			try {
 				newCkeys = JSON.parse(responseText);
+				if (!newCkeys) return;
 			} catch (e) {
 				console.error("新的 Ckey 数据 JSON 解码出错。", e);
 				return;
@@ -6185,6 +6186,10 @@ function editMember(teamNum, isAssist, indexInTeam) {
 		monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下
 	else
 		editBox.reCalculateAbility();
+	
+	//自动选中ID狂，以方便修改
+	monstersID.focus();
+	monstersID.select();
 }
 //编辑窗，修改怪物ID
 function editBoxChangeMonId(id) {
