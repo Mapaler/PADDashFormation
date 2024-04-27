@@ -863,54 +863,96 @@ const specialSearchFunctions = (function() {
 		const skill = Skills[card.leaderSkillId];
 		return `🛡️${Math.round(getReduceScale(skill) * 100)}%`;
 	}
-
+	function directParseSkills(skillDataArr) {
+		return skillDataArr.flatMap(skill=>skillObjectParsers?.[skill.type]?.apply({ parser: skillParser }, skill.params))
+	}
+	function voidsAbsorption_Turns(card) {
+		const outObj = {
+			"attr-absorb": 0,
+			"combo-absorb": 0,
+			"damage-absorb": 0,
+			"damage-void": 0,
+		};
+		const searchTypeArray = [
+			173,
+			191
+		];
+		const skills = getCardActiveSkills(card, searchTypeArray);
+		skills.reduce((pre,skill)=>{
+			if (skill.type === 173) {
+				if(skill.params[1]) pre["attr-absorb"] ||= skill.params[0];
+				if(skill.params[2]) pre["combo-absorb"] ||= skill.params[0];
+				if(skill.params[3]) pre["damage-absorb"] ||= skill.params[0];
+			} else if (skill.type === 191) {
+				pre["damage-void"] ||= skill.params[0];
+			}
+			return pre
+		}, outObj);
+		return outObj;
+	}
 	function voidsAbsorption_Addition(card)
 	{
-		const searchTypeArray = [173];
-		const skill = getCardActiveSkill(card, searchTypeArray);
-		if (!skill) return;
-		const sk = skill.params;
+		const turnsObj = voidsAbsorption_Turns(card);
+		const namesArr = ["attr-absorb", "combo-absorb", "damage-absorb", "damage-void"];
+		const turns = namesArr.map(name=>turnsObj[name]);
+		const turnsSet = new Set(turns.filter(Boolean));
+		const turnsCount = turnsSet.size;
+
 		const fragment = document.createDocumentFragment();
-		const icons = [
-			sk[1] && 'attr-absorb',
-			sk[2] && 'combo-absorb',
-			sk[3] && 'damage-absorb'
-		].filter(buff => typeof buff === 'string').map(buff=>createSkillIcon(buff))
-		fragment.append(...icons);
-		fragment.append(`×${sk[0]}T`);
+		for (let i = 0; i < namesArr.length; i++) {
+			if (turns[i] > 0) {
+				fragment.append(createSkillIcon(namesArr[i]));
+				if (turnsCount > 1)
+					fragment.append(`-${turns[i]>=9999 ? '全' : `${turns[i]}T` }`);
+			}
+		}
+		if (turnsCount === 1) {
+			const turn = Array.from(turnsSet)[0];
+			fragment.append(`-${turn>=9999 ? '全' : `${turn}T` }`);
+		}
 		return fragment;
 	}
 	function unbind_Turns(card)
 	{
 		const outObj = {
 			normal: 0,
-			awoken: 0
+			awakenings: 0,
+			matches: 0
 		};
-		const searchTypeArray = [117,179];
-		const skill = getCardActiveSkill(card, searchTypeArray);
-		if (skill)
-		{
-			const sk = skill.params;
-			outObj.normal = sk[skill.type == 179 ? 3 : 0] || 0;
-			outObj.awoken = sk[4] || 0;
-		}
+		const searchTypeArray = [
+			117, 179,
+			196
+		];
+		const skills = getCardActiveSkills(card, searchTypeArray);
+		const parsedSkills = directParseSkills(skills);
+		
+		parsedSkills.reduce((pre,cur)=>{
+			pre.normal ||= cur.normal;
+			pre.awakenings ||= cur.awakenings;
+			pre.matches ||= cur.matches;
+			return pre
+		}, outObj);
 		return outObj;
 	}
 	function unbind_Addition(card)
 	{
-		const turns = unbind_Turns(card);
-		
+		const turnsObj = unbind_Turns(card);
+		const namesArr = ["normal", "awakenings", "matches"];
+		const turns = namesArr.map(name=>turnsObj[name]);
+		const turnsSet = new Set(turns.filter(Boolean));
+		const turnsCount = turnsSet.size;
+
 		const fragment = document.createDocumentFragment();
-		if (turns.normal > 0)
-		{
-			fragment.append(createSkillIcon('unbind-normal'));
-			if (turns.normal != turns.awoken)
-				fragment.append(`-${turns.normal>=9999 ? '全' : `${turns.normal}T` }`);
+		for (let i = 0; i < namesArr.length; i++) {
+			if (turns[i] > 0) {
+				fragment.append(createSkillIcon(`unbind-${namesArr[i]}`));
+				if (turnsCount > 1)
+					fragment.append(`-${turns[i]>=9999 ? '全' : `${turns[i]}T` }`);
+			}
 		}
-		if (turns.awoken > 0)
-		{
-			fragment.append(createSkillIcon('unbind-awakenings'));
-			fragment.append(`-${turns.awoken>=9999 ? '全' : `${turns.awoken}T` }`);
+		if (turnsCount === 1) {
+			const turn = Array.from(turnsSet)[0];
+			fragment.append(`-${turn>=9999 ? '全' : `${turn}T` }`);
 		}
 		return fragment;
 	}
@@ -1514,59 +1556,79 @@ const specialSearchFunctions = (function() {
 		{group:true,name:"======Active Skill======",otLangName:{chs:"======主动技======",cht:"======主動技======"}, functions: [
 		]},
 		{group:true,name:"-----Voids Absorption-----",otLangName:{chs:"-----破吸类-----",cht:"-----破吸類-----"}, functions: [
-			{name:"Voids attribute absorption(sort by turns)",otLangName:{chs:"破属吸 buff（按破吸回合排序）",cht:"破屬吸 buff（按破吸回合排序）"},
+			{name:"Voids attribute absorption",otLangName:{chs:"破属吸 buff",cht:"破屬吸 buff"},
 				function:cards=>{
-					const searchTypeArray = [173];
+					const attrName = "attr-absorb";
 					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && skill.params[1];
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+						const turns = voidsAbsorption_Turns(card);
+						return turns[attrName] > 0;
+					}).sort((a,b)=>{
+						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						let a_pC = a_s[attrName], b_pC = b_s[attrName];
+						return a_pC - b_pC;
+					});
 				},
 				addition:voidsAbsorption_Addition
 			},
-			{name:"Voids damage absorption(sort by turns)",otLangName:{chs:"破伤吸 buff（按破吸回合排序）",cht:"破傷吸 buff（按破吸回合排序）"},
+			{name:"Voids damage absorption",otLangName:{chs:"破伤吸 buff",cht:"破傷吸 buff"},
 				function:cards=>{
-					const searchTypeArray = [173];
+					const attrName = "damage-absorb";
 					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && skill.params[3];
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+						const turns = voidsAbsorption_Turns(card);
+						return turns[attrName] > 0;
+					}).sort((a,b)=>{
+						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						let a_pC = a_s[attrName], b_pC = b_s[attrName];
+						return a_pC - b_pC;
+					});
 				},
 				addition:voidsAbsorption_Addition
 			},
-			{name:"Voids combo absorption(sort by turns)",otLangName:{chs:"破C吸 buff（按破吸回合排序）",cht:"破C吸 buff（按破吸回合排序）"},
+			{name:"Pierce through damage void",otLangName:{chs:"贯穿无效盾 buff",cht:"貫穿無效盾 buff"},
 				function:cards=>{
-					const searchTypeArray = [173];
+					const attrName = "damage-void";
 					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill && skill.params[2];
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+						const turns = voidsAbsorption_Turns(card);
+						return turns[attrName] > 0;
+					}).sort((a,b)=>{
+						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						let a_pC = a_s[attrName], b_pC = b_s[attrName];
+						return a_pC - b_pC;
+					});
 				},
 				addition:voidsAbsorption_Addition
 			},
-			{name:"Pierce through damage void(sort by turns)",otLangName:{chs:"贯穿无效盾 buff（按破吸回合排序）",cht:"貫穿無效盾 buff（按破吸回合排序）"},
+			{name:"Voids combo absorption",otLangName:{chs:"破C吸 buff",cht:"破C吸 buff"},
 				function:cards=>{
-					const searchTypeArray = [191];
+					const attrName = "combo-absorb";
 					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+						const turns = voidsAbsorption_Turns(card);
+						return turns[attrName] > 0;
+					}).sort((a,b)=>{
+						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						let a_pC = a_s[attrName], b_pC = b_s[attrName];
+						return a_pC - b_pC;
+					});
 				},
-				addition:card=>{
-					const searchTypeArray = [191];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					const fragment = document.createDocumentFragment();
-					fragment.append(createSkillIcon('damage-void'));
-					fragment.append(`×${sk[0]}T`);
-					return fragment;
-				}
+				addition:voidsAbsorption_Addition
+			},
+			{name:"Voids Triple(except combo)",otLangName:{chs:"三破(不含破C)",cht:"三破(不含破C)"},
+				function:cards=>{
+					return cards.filter(card=>{
+						const turns = voidsAbsorption_Turns(card);
+						return turns["attr-absorb"] > 0 && turns["damage-absorb"] > 0 && turns["damage-void"] > 0;
+					}).sort((a,b)=>{
+						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						let a_pC = a_s["attr-absorb"], b_pC = b_s["attr-absorb"];
+						return a_pC - b_pC;
+					});
+				},
+				addition:voidsAbsorption_Addition
 			},
 		]},
 		{group:true,name:"-----Recovers Bind Status-----",otLangName:{chs:"-----解封类-----",cht:"-----解封類-----"}, functions: [
 			{
-				name:"Unbind normal(sort by turns)",otLangName:{chs:"解封（按解封回合排序）",cht:"解封（按解封回合排序）"},
+				name:"Unbind menber bind",otLangName:{chs:"解封角色",cht:"解封角色"},
 				function:cards=>{
 					return cards.filter(card=>{
 						const turns = unbind_Turns(card);
@@ -1580,11 +1642,39 @@ const specialSearchFunctions = (function() {
 				addition:unbind_Addition
 			},
 			{
-				name:"Unbind awoken(sort by turns)",otLangName:{chs:"解觉醒（按解觉回合排序）",cht:"解覺醒（按解覺回合排序）"},
+				name:"Unbind awakenings bind",otLangName:{chs:"解觉醒",cht:"解覺醒"},
 				function:cards=>{
 					return cards.filter(card=>{
 						const turns = unbind_Turns(card);
-						return turns.awoken > 0;
+						return turns.awakenings > 0;
+					}).sort((a,b)=>{
+						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						let a_pC = a_s.awakenings, b_pC = b_s.awakenings;
+						return a_pC - b_pC;
+					});
+				},
+				addition:unbind_Addition
+			},
+			{
+				name:"Unbind unmatchable",otLangName:{chs:"解禁消珠",cht:"解禁消珠"},
+				function:cards=>{
+					return cards.filter(card=>{
+						const turns = unbind_Turns(card);
+						return turns.matches > 0;
+					}).sort((a,b)=>{
+						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						let a_pC = a_s.matches, b_pC = b_s.matches;
+						return a_pC - b_pC;
+					});
+				},
+				addition:unbind_Addition
+			},
+			{
+				name:"Unbind Triple",otLangName:{chs:"三解",cht:"三解"},
+				function:cards=>{
+					return cards.filter(card=>{
+						const turns = unbind_Turns(card);
+						return turns.normal > 0 && turns.awakenings > 0 && turns.matches > 0;
 					}).sort((a,b)=>{
 						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
 						let a_pC = a_s.awoken, b_pC = b_s.awoken;
@@ -1592,45 +1682,6 @@ const specialSearchFunctions = (function() {
 					});
 				},
 				addition:unbind_Addition
-			},
-			{
-				name:"Unbind both(sort by awoken turns)",otLangName:{chs:"解封+觉醒（按解觉醒回合排序）",cht:"解封+覺醒（按解覺醒回合排序）"},
-				function:cards=>{
-					return cards.filter(card=>{
-						const turns = unbind_Turns(card);
-						return turns.normal && turns.awoken > 0;
-					}).sort((a,b)=>{
-						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
-						let a_pC = a_s.awoken, b_pC = b_s.awoken;
-						return a_pC - b_pC;
-					});
-				},
-				addition:unbind_Addition
-			},
-			{
-				name:"Unbind unmatchable(sort by turns)",otLangName:{chs:"解禁消珠（按消除回合排序）",cht:"解禁消珠（按消除回合排序）"},
-				function:cards=>{
-					const searchTypeArray = [196];
-					return cards.filter(card=>{
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>{
-						const a_s = getCardActiveSkill(a, searchTypeArray), b_s = getCardActiveSkill(b, searchTypeArray);
-						let a_pC = a_s.params[0], b_pC = b_s.params[0];
-						return a_pC - b_pC;
-					})
-	
-					},
-				addition:card=>{
-					const searchTypeArray = [196];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					const fragment = document.createDocumentFragment();
-					fragment.append(createSkillIcon('unbind-matches'));
-					fragment.append(`-${sk[0]>=9999 ? '全' : `${sk[0]}T` }`);
-					return fragment;
-				}
 			},
 		]},
 		{group:true,name:"-----For player team-----",otLangName:{chs:"-----对自身队伍生效类-----",cht:"-----對自身隊伍生效類-----"}, functions: [
@@ -1690,7 +1741,7 @@ const specialSearchFunctions = (function() {
 					if (!skill) return;
 					const fragment = document.createDocumentFragment();
 					fragment.append(createSkillIcon('leader-change'));
-					fragment.append(skill.type == 93 ? '换自身' : '换最后');
+					skill.type == 227 && fragment.append('换👉');
 					return fragment;
 				}
 			},
