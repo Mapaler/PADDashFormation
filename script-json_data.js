@@ -1563,7 +1563,7 @@ const specialSearchFunctions = (function() {
 						const turns = voidsAbsorption_Turns(card);
 						return turns[attrName] > 0;
 					}).sort((a,b)=>{
-						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						const a_s = voidsAbsorption_Turns(a), b_s = voidsAbsorption_Turns(b);
 						let a_pC = a_s[attrName], b_pC = b_s[attrName];
 						return a_pC - b_pC;
 					});
@@ -1577,7 +1577,7 @@ const specialSearchFunctions = (function() {
 						const turns = voidsAbsorption_Turns(card);
 						return turns[attrName] > 0;
 					}).sort((a,b)=>{
-						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						const a_s = voidsAbsorption_Turns(a), b_s = voidsAbsorption_Turns(b);
 						let a_pC = a_s[attrName], b_pC = b_s[attrName];
 						return a_pC - b_pC;
 					});
@@ -1591,7 +1591,7 @@ const specialSearchFunctions = (function() {
 						const turns = voidsAbsorption_Turns(card);
 						return turns[attrName] > 0;
 					}).sort((a,b)=>{
-						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						const a_s = voidsAbsorption_Turns(a), b_s = voidsAbsorption_Turns(b);
 						let a_pC = a_s[attrName], b_pC = b_s[attrName];
 						return a_pC - b_pC;
 					});
@@ -1605,7 +1605,7 @@ const specialSearchFunctions = (function() {
 						const turns = voidsAbsorption_Turns(card);
 						return turns[attrName] > 0;
 					}).sort((a,b)=>{
-						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						const a_s = voidsAbsorption_Turns(a), b_s = voidsAbsorption_Turns(b);
 						let a_pC = a_s[attrName], b_pC = b_s[attrName];
 						return a_pC - b_pC;
 					});
@@ -1618,7 +1618,7 @@ const specialSearchFunctions = (function() {
 						const turns = voidsAbsorption_Turns(card);
 						return turns["attr-absorb"] > 0 && turns["damage-absorb"] > 0 && turns["damage-void"] > 0;
 					}).sort((a,b)=>{
-						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
+						const a_s = voidsAbsorption_Turns(a), b_s = voidsAbsorption_Turns(b);
 						let a_pC = a_s["attr-absorb"], b_pC = b_s["attr-absorb"];
 						return a_pC - b_pC;
 					});
@@ -1677,7 +1677,7 @@ const specialSearchFunctions = (function() {
 						return turns.normal > 0 && turns.awakenings > 0 && turns.matches > 0;
 					}).sort((a,b)=>{
 						const a_s = unbind_Turns(a), b_s = unbind_Turns(b);
-						let a_pC = a_s.awoken, b_pC = b_s.awoken;
+						let a_pC = a_s.normal, b_pC = b_s.normal;
 						return a_pC - b_pC;
 					});
 				},
@@ -1741,7 +1741,7 @@ const specialSearchFunctions = (function() {
 					if (!skill) return;
 					const fragment = document.createDocumentFragment();
 					fragment.append(createSkillIcon('leader-change'));
-					skill.type == 227 && fragment.append('换👉');
+					skill.type === 227 && fragment.append('换👉');
 					return fragment;
 				}
 			},
