@@ -26215,7 +26215,7 @@ const cachesMap = new Map([
 	],
 	[
 		"solo.html",
-		"fa7ba118c169018a3ba161757a404cc3"
+		"8727bc16b97b1e9e2d519e66bdf29dd4"
 	],
 	[
 		"style-monsterimages.css",
@@ -26231,7 +26231,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"52c7d48ee70f1d71ff5d81efe2f1bc04"
+		"0baf0d454c8960c561c1c4cfbbbcc939"
 	],
 	[
 		"languages/en.css",
