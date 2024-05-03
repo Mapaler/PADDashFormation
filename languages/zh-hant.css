@@ -324,7 +324,7 @@ label[for="show-rich-text-tools"]::after{
 }
 
 .search-box>summary::after{
-	content: "搜索怪物";
+	content: "🔎搜索怪物";
 }
 label[for="fix-main-color"]::after{
 	content: "強制屬性順序與選擇順序一致";

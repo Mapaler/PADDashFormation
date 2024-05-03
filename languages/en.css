@@ -329,7 +329,7 @@ label[for="show-rich-text-tools"]::after{
 }
 
 .search-box>summary::after{
-	content: "Search Cards";
+	content: "🔎Search Cards";
 }
 label[for="fix-main-color"]::after{
 	content: "The order of the attributes is consistent with the order you selected";

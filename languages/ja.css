@@ -323,7 +323,7 @@ label[for="show-rich-text-tools"]::after{
 }
 
 .search-box>summary::after{
-	content: "モンスターの検索";
+	content: "🔎モンスターの検索";
 }
 label[for="fix-main-color"]::after{
 	content: "属性の順序は、選択した順序と一致";

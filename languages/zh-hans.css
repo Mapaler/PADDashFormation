@@ -323,7 +323,7 @@ label[for="show-rich-text-tools"]::after{
 }
 
 .search-box>summary::after{
-	content: "搜索怪物";
+	content: "🔎搜索怪物";
 }
 label[for="fix-main-color"]::after{
 	content: "强制属性顺序与选择顺序一致";

@@ -318,7 +318,7 @@ label[for="show-rich-text-tools"]::after{
 }
 
 .search-box>summary::after{
-	content: "몬스터 검색";
+	content: "🔎몬스터 검색";
 }
 label[for="fix-main-color"]::after{
 	content: "속성 순서는 선택한 순서와 일치합니다";

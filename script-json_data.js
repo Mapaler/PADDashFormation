@@ -1019,7 +1019,7 @@ const specialSearchFunctions = (function() {
 	}
 	function generateOrbsParse(card)
 	{
-		let outArr = [];
+		const outArr = [];
 		const searchTypeArray = [141, 208];
 		const skills = getCardActiveSkills(card, searchTypeArray);
 		if (!skills.length) return outArr;
@@ -1030,20 +1030,20 @@ const specialSearchFunctions = (function() {
 			{
 				outArr.push({
 					count: sk[0],
-					to: Bin.unflags(sk[1] || 1),
-					exclude: Bin.unflags(sk[2]),
+					to: sk[1] || 1,
+					exclude: sk[2],
 				});
 			}else
 			{
 				outArr.push({
 					count: sk[0],
-					to: Bin.unflags(sk[1] || 1),
-					exclude: Bin.unflags(sk[2]),
+					to: sk[1] || 1,
+					exclude: sk[2],
 				});
 				outArr.push({
 					count: sk[3],
-					to: Bin.unflags(sk[4] || 1),
-					exclude: Bin.unflags(sk[5]),
+					to: sk[4] || 1,
+					exclude: sk[5],
 				});
 			}
 		}
@@ -1052,14 +1052,11 @@ const specialSearchFunctions = (function() {
 	function generateOrbs_Addition(card)
 	{
 		const gens = generateOrbsParse(card);
-		const searchTypeArray = [141, 208];
-		const skill = getCardActiveSkill(card, searchTypeArray);
-		if (!skill) return;
-		const sk = skill.params;
+		if (!gens.length) return;
 		const fragment = document.createDocumentFragment();
 		for (const gen of gens)
 		{
-			fragment.appendChild(createOrbsList(gen.to));
+			fragment.appendChild(createOrbsList(Bin.unflags(gen.to)));
 			fragment.appendChild(document.createTextNode(`×${gen.count}`));
 		}
 		return fragment;
@@ -2936,19 +2933,7 @@ const specialSearchFunctions = (function() {
 			},
 		]},
 		{group:true,name:"-----Create Orbs-----",otLangName:{chs:"-----随机产珠类-----",cht:"-----隨機產珠類-----"}, functions: [
-			{name:"Create 30 Orbs",otLangName:{chs:"固定30个产珠",cht:"固定30個產珠"},
-				function:cards=>cards.filter(card=>{
-					function is30(sk)
-					{
-						return Boolean(Bin.unflags(sk[1]).length * sk[0] == 30);
-					}
-					const searchTypeArray = [141];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill && is30(skill.params);
-				}),
-				addition:generateOrbs_Addition
-			},
-			{name:"Create 15×2 Orbs",otLangName:{chs:"固定15×2产珠",cht:"固定15×2產珠"},
+			{name:"Create 15×2 color Orbs",otLangName:{chs:"产珠15个×2色",cht:"產珠15個×2色"},
 				function:cards=>cards.filter(card=>{
 					function is1515(sk)
 					{
@@ -2960,52 +2945,71 @@ const specialSearchFunctions = (function() {
 				}),
 				addition:generateOrbs_Addition
 			},
+			{name:"Create 30 Orbs",otLangName:{chs:"产珠30个",cht:"產珠30個"},
+				function:cards=>cards.filter(card=>{
+					function is30(sk)
+					{
+						return Boolean(Bin.unflags(sk[1]).length * sk[0] == 30);
+					}
+					const searchTypeArray = [141];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill && is30(skill.params);
+				}),
+				addition:generateOrbs_Addition
+			},
+			{name:"Create 6 color Orbs",otLangName:{chs:"产珠-生成-6色",cht:"產珠-生成-6色"},
+				function:cards=>cards.filter(card=>{
+					const gens = generateOrbsParse(card);
+					return gens.some(gen=>(gen.to & 0b111111) === 0b111111);
+				}),
+				addition:generateOrbs_Addition
+			},
 			{name:"Create Fire Orbs",otLangName:{chs:"产珠-生成-火",cht:"產珠-生成-火"},
 				function:cards=>cards.filter(card=>{
 					const gens = generateOrbsParse(card);
-					return gens.some(gen=>gen.to.includes(0));
+					return gens.some(gen=>gen.to & 0b000001);
 				}),
 				addition:generateOrbs_Addition
 			},
 			{name:"Create Water Orbs",otLangName:{chs:"产珠-生成-水",cht:"產珠-生成-水"},
 				function:cards=>cards.filter(card=>{
 					const gens = generateOrbsParse(card);
-					return gens.some(gen=>gen.to.includes(1));
+					return gens.some(gen=>gen.to & 0b000010);
 				}),
 				addition:generateOrbs_Addition
 			},
 			{name:"Create Wood Orbs",otLangName:{chs:"产珠-生成-木",cht:"產珠-生成-木"},
 				function:cards=>cards.filter(card=>{
 					const gens = generateOrbsParse(card);
-					return gens.some(gen=>gen.to.includes(2));
+					return gens.some(gen=>gen.to & 0b000100);
 				}),
 				addition:generateOrbs_Addition
 			},
 			{name:"Create Light Orbs",otLangName:{chs:"产珠-生成-光",cht:"產珠-生成-光"},
 				function:cards=>cards.filter(card=>{
 					const gens = generateOrbsParse(card);
-					return gens.some(gen=>gen.to.includes(3));
+					return gens.some(gen=>gen.to & 0b001000);
 				}),
 				addition:generateOrbs_Addition
 			},
 			{name:"Create Dark Orbs",otLangName:{chs:"产珠-生成-暗",cht:"產珠-生成-暗"},
 				function:cards=>cards.filter(card=>{
 					const gens = generateOrbsParse(card);
-					return gens.some(gen=>gen.to.includes(4));
+					return gens.some(gen=>gen.to & 0b010000);
 				}),
 				addition:generateOrbs_Addition
 			},
 			{name:"Create Heart Orbs",otLangName:{chs:"产珠-生成-心",cht:"產珠-生成-心"},
 				function:cards=>cards.filter(card=>{
 					const gens = generateOrbsParse(card);
-					return gens.some(gen=>gen.to.includes(5));
+					return gens.some(gen=>gen.to & 0b100000);
 				}),
 				addition:generateOrbs_Addition
 			},
 			{name:"Create Jammers/Poison Orbs",otLangName:{chs:"产珠-生成-毒废",cht:"產珠-生成-毒廢"},
 				function:cards=>cards.filter(card=>{
 					const gens = generateOrbsParse(card);
-					return gens.some(gen=>gen.to.includes(6) || gen.to.includes(7) || gen.to.includes(8) || gen.to.includes(9));
+					return gens.some(gen=>gen.to & 0b1111000000);
 				}),
 				addition:generateOrbs_Addition
 			},
