@@ -7174,6 +7174,14 @@ const cachesMap = new Map([
 		"c430f686d09d6c7e67f10b778d86f8b7"
 	],
 	[
+		"sound/voice/ja/padv2450.wav",
+		"f53965e2a272b0ac7f458abec87a10e1"
+	],
+	[
+		"sound/voice/ja/padv2451.wav",
+		"1acfccc6223bd3ec340ee2dfef45fdff"
+	],
+	[
 		"sound/voice/ja/padv246.wav",
 		"daadaa2c6ead2ec23de9446d758d4c86"
 	],
@@ -15498,6 +15506,14 @@ const cachesMap = new Map([
 		"b90fc4fba50a2c4c6ee89e64183348c9"
 	],
 	[
+		"sound/voice/en/padv2201.wav",
+		"83cd8a683662a1dbfaf8687559f9c63a"
+	],
+	[
+		"sound/voice/en/padv2202.wav",
+		"08afcfb960218cefc3d6e578c7c6e08c"
+	],
+	[
 		"sound/voice/en/padv221.wav",
 		"60d8288a7bc2220d9feed3a74caeead6"
 	],
@@ -23228,6 +23244,14 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ko/padv220.wav",
 		"b90fc4fba50a2c4c6ee89e64183348c9"
+	],
+	[
+		"sound/voice/ko/padv2201.wav",
+		"83cd8a683662a1dbfaf8687559f9c63a"
+	],
+	[
+		"sound/voice/ko/padv2202.wav",
+		"08afcfb960218cefc3d6e578c7c6e08c"
 	],
 	[
 		"sound/voice/ko/padv221.wav",
