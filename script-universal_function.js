@@ -1640,10 +1640,9 @@ function countTeamSB(team, solo) {
 		sbn += enableAwoken.filter(n=>n===59).length ? member.latent.filter(n=>n===47).length * 3 : 0;
 	}
 	if (solo || teamsCount === 3) {
-		const isJa = currentDataSource.code === "ja";
 		switch (badge) {
 			case 7: //SB
-				sbn += isJa ? 2 : 1;
+				sbn += 2;
 				break;
 			case 23: //SB++ 辅助无效
 				sbn += 10;
@@ -1701,16 +1700,15 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 		let _team = team.concat();
 		//1人、3人计算徽章
 		if (solo || teamsCount === 3) {
-			const isJa = currentDataSource.code === "ja";
 			switch (badge) {
 				case 2: //小手指
-					moveTime.duration.badge = isJa ? 3 : 1;
+					moveTime.duration.badge = 3;
 					break;
 				case 21: //大手指
-					moveTime.duration.badge = isJa ? 4 : 2;
+					moveTime.duration.badge = 4;
 					break;
 				case PAD_PASS_BADGE: //月卡
-					moveTime.duration.badge = isJa ? 4 : 3;
+					moveTime.duration.badge = 4;
 					break;
 				case 22: case 23: //状态异常耐性&SB++ 辅助无效
 					moveTime.duration.badge = 3;

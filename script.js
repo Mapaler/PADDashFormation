@@ -6748,7 +6748,6 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	let parseLSkill1 = skillParser(leader1?.card?.leaderSkillId),
 		parseLSkill2 = skillParser(leader2?.card?.leaderSkillId);
 
-	const isJa = currentDataSource.code === "ja";
 	//防绑
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"52\"]")) {
 		const teamFlagsMembers = Array.from(targetIcon.parentElement.querySelectorAll(".team-flags li"));
@@ -6760,7 +6759,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 			const memberData = members[mi];
 			const assistData = assists[mi];
 			let thisAwokenNum = 0;
-			if (badge === 8 && (isJa || mi === 0) || badge === 22) {
+			if (badge === 8 || badge === 22) {
 				thisAwokenNum = 2;
 			} else {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
@@ -6849,7 +6848,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		let prob = thisAwokenNum / 5;
 		switch (badge) {
 			case 9:
-				prob += isJa ? 1 : 0.5;
+				prob += 1;
 				break;
 			case 22: //状态异常耐性 辅助无效
 				prob += 1;
@@ -6869,7 +6868,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		let prob = thisAwokenNum / 5;
 		switch (badge) {
 			case 12:
-				prob += isJa ? 1 : 0.5;
+				prob += 1;
 				break;
 			case 22: //状态异常耐性 辅助无效
 				prob += 1;
@@ -6889,7 +6888,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		let prob = thisAwokenNum / 5;
 		switch (badge) {
 			case 13:
-				prob += isJa ? 1 : 0.5;
+				prob += 1;
 				break;
 			case 22: //状态异常耐性 辅助无效
 				prob += 1;
@@ -6909,7 +6908,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		let prob = thisAwokenNum / 5;
 		switch (badge) {
 			case 14:
-				prob += isJa ? 1 : 0.5;
+				prob += 1;
 				break;
 			case 22: //状态异常耐性 辅助无效
 				prob += 1;
@@ -7454,12 +7453,10 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount), teamHPAwokenScale = (1 + 0.05 * teamHPAwoken); //全队大血包个数
 		
-		const isJa = currentDataSource.code === "ja";
-		
 		function getBadgeHPScale(badge, member) {
 			if (teamsCount == 2) return 1;
 			switch (badge) {
-				case  5: return isJa ? 1.10 : 1.05; //小血
+				case  5: return 1.10; //小血
 				case 18: return 1.15; //大血
 				case 20: return 1.10; //全属性
 				case 22: case 23: return 1.50; //状态异常耐性&SB++ 辅助无效

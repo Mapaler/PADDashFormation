@@ -1541,23 +1541,15 @@
 	background-position-x: calc(-36px * 3);
 }
 
-body:not([data-game-source="ja"]) .badge:where(
-	[data-badge-icon='7'],
-	[data-badge-icon='8'],
-	[data-badge-icon='9'],
-	[data-badge-icon='12'],
-	[data-badge-icon='13'],
-	[data-badge-icon='14'],
-)::before {
-	background-position-x: calc(-36px * 1);
-}
 :lang(en) .badge:where(
 	[data-badge-icon='1'],
 	[data-badge-icon='3'],
 	[data-badge-icon='20'],
+	[data-badge-icon='22'],
 )::before,
 :lang(ko) .badge:where(
 	[data-badge-icon='3'],
+	[data-badge-icon='22'],
 )::before {
 	background-position-x: calc(-36px * 1);
 }
