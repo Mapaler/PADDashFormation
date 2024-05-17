@@ -2069,7 +2069,7 @@ function loadData(force = false)
 		let currentCkey; //获取当前语言的ckey
 		let lastCurrentCkey; //以前的当前语言的ckey
 
-		if (responseText === undefined) {
+		if (!force && responseText === undefined) {
 			try {
 				newCkeys = JSON.parse(lastKeyString);
 				console.info("提前预载原来已经储存的数据");
@@ -2873,7 +2873,10 @@ function initialize() {
 	statusLine = controlBox.querySelector(".status"); //显示当前状态的
 	statusLine.writeText = function(text) {
 		this.innerHTML = '';
-		if (text) this.textContent = text;
+		if (text) {
+			console.debug(text);
+			this.textContent = text;
+		}
 	};
 	formationBox = document.body.querySelector(".formation-box");
 	editBox = document.body.querySelector(".edit-box");
@@ -4536,7 +4539,7 @@ function initialize() {
 		function clickHeadToNewMon(event) {
 			event.preventDefault(); //取消链接的默认操作
 			monstersID.value = this.card.id;
-			formIdSearch.onsubmit();
+			formIdSearch.onchange();
 		}
 		const cli = document.createElement("li");
 		const cdom = cli.head = createCardA(options);
@@ -5332,11 +5335,7 @@ function initialize() {
 	//id搜索
 	editBox.changeMonId = editBoxChangeMonId;
 	
-	function idChange(event) {
-		event?.preventDefault();
-		const formData = new FormData(this);
-		const searchString = formData.get("card-id");
-		const newId = parseInt(searchString, 10);
+	function idChange(newId) {
 		if (editBox.mid != newId) { //避免多次运行oninput、onchange
 			editBox.mid = newId;
 			
@@ -5369,8 +5368,15 @@ function initialize() {
 	}
 
 	const formIdSearch = document.getElementById("form-id-search");
-	formIdSearch.onsubmit = idChange;
-	formIdSearch.onchange = idChange; //让数字快速变化时也改变当前卡片
+	formIdSearch.onchange = function(event){
+		const formData = new FormData(this);
+		const searchString = formData.get("card-id");
+		const newId = parseInt(searchString, 10);
+		idChange(newId);
+	};//idChange; //让数字快速变化时也改变当前卡片
+	formIdSearch.onsubmit = function(event){
+		event?.preventDefault();
+	};
 	const formStringSearch = document.getElementById("form-string-search");
 	formStringSearch.onsubmit = search;
 	const monstersID = document.getElementById("card-id");
@@ -6144,7 +6150,7 @@ function editMember(teamNum, isAssist, indexInTeam) {
 	const formIdSearch = document.getElementById("form-id-search");
 	const monstersID = document.getElementById("card-id");
 	monstersID.value = mon.id > 0 ? mon.id : 0;
-	formIdSearch.onsubmit();
+	formIdSearch.onchange();
 	//觉醒
 	const monEditOuterAwokensRow = editBox.querySelector(".row-awoken-sawoken");
 	const monEditAwokens = monEditOuterAwokensRow.querySelectorAll(".row-mon-awoken .awoken-ul input[name='awoken-number']");

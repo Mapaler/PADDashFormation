@@ -1193,7 +1193,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-assist-awoken .member-awoken,
 .team-ability .abilitys
 {
-	transition: transform 1s cubic-bezier(0.35, 2, 0.65, -1);
+	transition: transform 0.5s cubic-bezier(0.35, 2, 0.65, -1);
 }
 @keyframes changing-leader {
 	0% {
@@ -1210,7 +1210,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	}
 }
 .changing-leader {
-	animation: changing-leader 1s cubic-bezier(0.45, 0.25, 0.75, 0.25);
+	animation: changing-leader 0.5s cubic-bezier(0.45, 0.25, 0.75, 0.25);
 	animation-iteration-count: 1;
 }
 

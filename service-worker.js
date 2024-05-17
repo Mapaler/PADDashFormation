@@ -26263,7 +26263,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"12467adb3aa2825e287a49ac89ddc1c9"
+		"8d7a86d95fabbf5de1883c3188449241"
 	],
 	[
 		"solo.html",
@@ -26275,7 +26275,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"c34c2e4307455d12036d8bb587a3d7d6"
+		"839c434cacaed4ba4866e59c617c913b"
 	],
 	[
 		"temp.js",
@@ -26993,11 +26993,12 @@ self.addEventListener('fetch', async function(event) {
 			// If we didn't find a match in the cache, use the network.
 			try {
 				const newResponse = fetch(event.request);
-				console.debug("%c无相同 md5 缓存，重新在线获取结果：%s，%s", "color: lightblue;", relativePath, md5);
-				const response = await newResponse;
-				const cache = await caches.open(cacheName);
-				await cache.put(url, response.clone());
-				return response;
+				newResponse.then(async response=>{
+					console.debug("%c无相同 md5 缓存，重新在线获取结果：%s，%s", "color: lightblue;", relativePath, md5);
+					const cache = await caches.open(cacheName);
+					cache.put(url, response.clone());
+				});
+				return newResponse;
 				//console.debug("%c储存新的Cache", "color: blue;", url, cache);
 			} catch (error) {
 				console.error("%c数据在线获取失败-有hash，尝试使用忽略 search 的离线数据：%s，%s", "color: red;", relativePath, md5, error);
@@ -27012,10 +27013,12 @@ self.addEventListener('fetch', async function(event) {
 		const responseSync = (async () => {
 			try {
 				const newResponse = fetch(event.request);
-				const response = await newResponse;
-				const cache = await caches.open(cacheName);
-				await cache.put(url, response.clone());
-				return response;
+				newResponse.then(async response=>{
+					console.debug("%c无相同 md5 缓存，重新在线获取结果：%s，%s", "color: lightblue;", relativePath, md5);
+					const cache = await caches.open(cacheName);
+					cache.put(url, response.clone());
+				});
+				return newResponse;
 				//console.debug("%c储存新的Cache", "color: blue;", url, cache);
 			} catch (error) {
 				console.error("%c数据在线获取失败-无hash，尝试使用忽略 search 的离线数据：%s", "color: red;", relativePath, error);
