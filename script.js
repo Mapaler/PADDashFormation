@@ -1409,7 +1409,7 @@ const scriptLines = [`(()=>{
 		const _m = {
 			num: m.id,
 			level: m.level,
-			superAwoken: m.sawoken,
+			superAwoken: m.sawoken ?? 0,
 			latentAwokens: m.latent.concat(),
 			awokenCount: m.awoken,
 			hpPlus: m.plus[0],
@@ -1455,12 +1455,13 @@ Formation.prototype.getSanbonQrObj = function()
 	//sanbon目前只支持单人队伍
 	const [members,assists,badge] = this.teams[0];
 	const obj = {
-		title: this.title,
-		content: this.detail,
-		mons: assists.map(m=>m.id).concat(members.map(m=>m.id)),
+		region: sanbonTranslateRegion(currentDataSource.code),
+		title: this.title ?? "",
+		content: this.detail ?? "",
+		//mons: assists.map(m=>m.id).concat(members.map(m=>m.id)),
 		data: {
 			badge: (badge || 1) & 0x7f,
-			members: {},
+			members: {}, //等待下面处理
 		},
 	};
 	for (let i = 0; i < members.length; i++) {
@@ -1468,7 +1469,7 @@ Formation.prototype.getSanbonQrObj = function()
 		const _m = {
 			num: m.id,
 			level: m.level,
-			superAwoken: m.sawoken,
+			superAwoken: m.sawoken ?? 0,
 			latentAwokens: m.latent.concat(),
 			awokenCount: m.awoken,
 			hpPlus: m.plus[0],
@@ -3358,14 +3359,17 @@ function initialize() {
 		let postBody = JSON.stringify(obj);
 		const options = {
 			method: "POST",
-			url: `https://sanbon.me/api/${sanbonTranslateRegion(currentDataSource.code)}/upload-team`,
+			url: `https://sanbon.me/api/upload-team-v2`,
 			data: postBody,
 			headers: {
+				"Origin": "https://sanbon.me",
+				"Referer": `https://sanbon.me/${sanbonTranslateRegion(currentDataSource.code)}/team-builder/upload`,
 				"Content-Type": "application/json",
 				//如果只有ascii字符可以用postBody.length
 				"Content-Length": new Blob([postBody], {type: "application/json"}).size,
 			}
 		};
+		console.log(options);
 		const response = await btnExternalSupport.asyncGM_xmlhttpRequest(options);
 		if (response.status === 401) {
 			alert(localTranslating.link_read_message.paddb_unauthorized);
