@@ -3379,14 +3379,13 @@ function initialize() {
 				"Content-Length": new Blob([postBody], {type: "application/json"}).size,
 			}
 		};
-		console.log(options);
 		const response = await btnExternalSupport.asyncGM_xmlhttpRequest(options);
 		if (response.status === 401) {
 			alert(localTranslating.link_read_message.paddb_unauthorized);
 		} else if (response.status === 200)  {
 			try {
 				const result = JSON.parse(response.response);
-				console.debug("数据上传返回结果：%o",result);
+				console.debug("sanbon 数据上传返回结果：%o",result);
 				if (result.success) {
 					sanbonTeamId.value = `https://sanbon.me/${sanbonTranslateRegion(currentDataSource.code)}/team/${result.code}`;
 					alert(localTranslating.link_read_message.paddb_success);
