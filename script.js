@@ -1401,7 +1401,7 @@ const scriptLines = [`(()=>{
 	"use strict";
 	const tbs = JSON.parse(sessionStorage.getItem("team-build-store"));
 	const team = tbs.state;
-	team.badge = ${badge & 0x7F};`];
+	team.badge = ${Formation.sanbonBadgeMap.find(_badge=>_badge.pdf === badge)?.sanbon || badge};`];
 
 	const _members = {};
 	for (let i = 0; i < members.length; i++) {
@@ -1410,7 +1410,7 @@ const scriptLines = [`(()=>{
 			num: m.id,
 			level: m.level,
 			superAwoken: m.sawoken ?? 0,
-			latentAwokens: m.latent.concat(),
+			latentAwokens: m.latent.concat().sort((a, b) => latentUseHole(b) - latentUseHole(a)),
 			awokenCount: m.awoken,
 			hpPlus: m.plus[0],
 			atkPlus: m.plus[1],
@@ -1450,6 +1450,16 @@ location.reload();
 })();`);
 	return scriptLines.join('\n');
 };
+
+//paddb的徽章对应数字
+Formation.sanbonBadgeMap = [
+	{pdf:22,sanbon:15}, //除武器，全防
+	{pdf:23,sanbon:16}, //除武器，10 SB
+	{pdf:24,sanbon:20}, //合作，英雄学院
+	{pdf:25,sanbon:23}, //官桶，画师
+	{pdf:27,sanbon:22}, //合作，高达
+	{pdf:PAD_PASS_BADGE,sanbon:1}, //月卡
+];
 Formation.prototype.getSanbonQrObj = function()
 {
 	//sanbon目前只支持单人队伍
@@ -1460,7 +1470,7 @@ Formation.prototype.getSanbonQrObj = function()
 		content: this.detail ?? "",
 		//mons: assists.map(m=>m.id).concat(members.map(m=>m.id)),
 		data: {
-			badge: (badge || 1) & 0x7f,
+			badge: Formation.sanbonBadgeMap.find(_badge=>_badge.pdf === badge)?.sanbon || badge,
 			members: {}, //等待下面处理
 		},
 	};
@@ -1470,7 +1480,7 @@ Formation.prototype.getSanbonQrObj = function()
 			num: m.id,
 			level: m.level,
 			superAwoken: m.sawoken ?? 0,
-			latentAwokens: m.latent.concat(),
+			latentAwokens: m.latent.concat().sort((a, b) => latentUseHole(b) - latentUseHole(a)),
 			awokenCount: m.awoken,
 			hpPlus: m.plus[0],
 			atkPlus: m.plus[1],
@@ -1566,7 +1576,7 @@ Formation.prototype.getDaddbQrObj = function()
 	const [members,assists,badge] = this.teams[0];
 	let teamObj = {
 		name: this.title,
-		badge: Formation.daddbBadgeMap.find(_badge=>_badge.pdf === badge).daddb,
+		badge: Formation.daddbBadgeMap.find(_badge=>_badge.pdf === badge)?.daddb,
 		staffs: [],
 	}
 	for (let i = 0; i < members.length; i++) {
@@ -1575,7 +1585,7 @@ Formation.prototype.getDaddbQrObj = function()
 			staf: m.id || -1,
 			eq: a.id || -1,
 			sawak: m.sawoken || -1,
-			qawak: m.latent.map(n=>Formation.daddbLatentMap.find(latent=>latent.pdf === n).daddb),
+			qawak: m.latent.map(n=>Formation.daddbLatentMap.find(latent=>latent.pdf === n)?.daddb),
 		};
 	}
 	return teamObj;
@@ -2783,7 +2793,7 @@ function sanbonFotmationToPdfFotmation(obj)
 	f.detail = team.content;
 	const t = f.teams[0];
 	//队伍徽章
-	t[2] = team.badge === 1 ? PAD_PASS_BADGE : team.badge;
+	t[2] = Formation.daddbBadgeMap.find(badge=>badge.sanbon === team.badge)?.pdf || team.badge;
 	const members = t[0], assists = t[1];
 	for (let i = 0; i< members.length; i++) {
 		const m = members[i], a = assists[i], dm = team.members[i];
