@@ -1092,6 +1092,11 @@
 ){
 	background-position-x: -32px;
 }
+body:not([data-game-source="ja"]) .awoken-icon:where(
+	[data-awoken-icon='50'], /*方块心追*/
+){
+	background-position-x: -32px;
+}
 /*类型*/
 .type-icon
 {
@@ -1398,6 +1403,13 @@
 /* 额外有 x1.8 的 6格觉醒 */
 .level-super-break .latent-icon:where(
 	[data-latent-icon='48'],
+)::after
+{
+	background-position-x: calc(-32px * 2);
+}
+/* v21.6 额外有 x1.8 的 6格觉醒 */
+[data-game-source="ja"] .level-super-break .latent-icon:where(
+	[data-latent-icon='37'], /*破无效*/
 )::after
 {
 	background-position-x: calc(-32px * 2);

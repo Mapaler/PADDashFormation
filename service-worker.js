@@ -26271,7 +26271,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"33b1a1ec03af581459dfb2bb0bf6a55c"
+		"bcfc033040f4cbe3a2cf3cd4c1389a3c"
 	],
 	[
 		"style.css",
@@ -26343,7 +26343,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"33b3147b0144df5c483da3f976789057"
+		"3caf45cacc010bd9f8bfe04e4f3ee2ea"
 	],
 	[
 		"images/badge-bg.png",
