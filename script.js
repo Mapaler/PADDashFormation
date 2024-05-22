@@ -349,6 +349,8 @@ class Card {
 	#leaderSkillTypes = null;
 	gachaGroupsFlag = 0;
 	badgeId = 0;
+	syncAwakening = null;
+	syncAwakeningConditions = [];
 
 	unk01 = null;
 	unk02 = null;
@@ -469,6 +471,15 @@ class Card {
 		this.unk08 = e.next().value?.[1]; //未知08
 		this.attrs.push(e.next().value?.[1]); //属性3
 		this.badgeId = e.next().value?.[1]; //抽到后获取的徽章ID
+		this.syncAwakening = e.next().value?.[1]; //同步觉醒
+		const numSyncAkCondition = e.next().value?.[1]; //同步觉醒条件数量
+		for (let ci = 0; ci < numSyncAkCondition; ci++) {
+			this.syncAwakeningConditions.push({
+				id: Card.fixId(e.next().value?.[1]), //怪物ID
+				level: e.next().value?.[1], //怪物等级
+				skillLeval: e.next().value?.[1], //怪物技能等级
+			});
+		}
 		
 		this.attrs = this.attrs.filter(n=>Number.isInteger(n) && n>=0);
 		this.types = this.types.filter(n=>Number.isInteger(n) && n>=0);
@@ -2190,6 +2201,7 @@ function loadData(force = false)
 				card.onlyAssist = Boolean(card.flags & 1<<4);
 				card.gachaIds = Bin.unflags(card.gachaGroupsFlag);
 				card.typesFlag = Bin.enflags(card.types);
+				if (card.syncAwakening && !card.superAwakenings.includes(card.syncAwakening)) card.superAwakenings.push(card.syncAwakening);
 				/*card.unk01p = Bin.unflags(card.unk01);
 				card.unk02p = Bin.unflags(card.unk02);
 				card.unk03p = Bin.unflags(card.unk03);

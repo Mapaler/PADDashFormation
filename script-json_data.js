@@ -4216,6 +4216,9 @@ const specialSearchFunctions = (function() {
 			},
 		]},
 		{group:true,name:"====== Awoken ======",otLangName:{chs:"======觉醒类======",cht:"======覺醒類======"}, functions: [
+			{name:"Have Sync Awoken",otLangName:{chs:"有同步觉醒",cht:"有同步覺醒"},
+				function:cards=>cards.filter(card=>card.syncAwakening)
+			},
 			{name:"8 latent grids",otLangName:{chs:"8格潜觉",cht:"8格潛覺"},
 				function:cards=>cards.filter(card=>card.is8Latent)
 			},

@@ -92,6 +92,15 @@ class Card{
 		card.unk08 = data[i++]; //未知08
 		card.attrs.push(data[i++]); //属性3
 		card.badgeId = data[i++]; //抽到后获取的徽章ID
+		card.syncAwakening = data[i++]; //同步觉醒
+		const numSyncAkCondition = data[i++]; //同步觉醒条件数量
+
+		//同步觉醒条件
+		card.syncAwakeningConditions = Array.from(new Array(numSyncAkCondition ?? 0)).map(() => ({
+			id: Card.fixId(data[i++]), //怪物ID
+			level: data[i++], //怪物等级
+			skillLeval: data[i++], //怪物技能等级
+		}));
 		
 		card.attrs = card.attrs.filter(Number.isInteger);
 		if (card.attrs.indexOf(-1)>0)
