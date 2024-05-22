@@ -690,7 +690,10 @@ function awokenCountInTeam(team, awokenIndex, solo, teamsCount) {
 		//启用的觉醒数组片段
 		let enableAwoken = card.awakenings.slice(0, mon.awoken);
 		//单人、3人时,大于等于100级且297时增加超觉醒
-		if ((solo || teamsCount === 3) && mon.sawoken > 0 && mon.level >= 100 && mon.plus.every(p=>p>=99)) {
+		if ((solo || teamsCount === 3) && mon.sawoken > 0 &&
+			(mon.level >= 100 && mon.plus.every(p=>p>=99) ||
+			mon.sawoken === card.syncAwakening)
+		) {
 			enableAwoken.push(mon.sawoken);
 		}
 		if (assistCard && assistCard.enabled && assistCard.awakenings.includes(49)) { //如果卡片未启用
@@ -810,7 +813,10 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	//储存点亮的觉醒
 	let awokenList = memberCard.awakenings.slice(0, member.awoken);
 	//单人、3人时,大于等于100级且297时增加超觉醒
-	if ((solo || teamsCount === 3) && member.sawoken > 0 && member.level >= 100 && member.plus.every(p=>p>=99)) {
+	if ((solo || teamsCount === 3) && member.sawoken > 0 &&
+		(member.level >= 100 && member.plus.every(p=>p>=99) ||
+		member.sawoken === memberCard.syncAwakening)
+	) {
 		awokenList.push(member.sawoken)
 	}
 	//如果有武器还要计算武器的觉醒
@@ -1624,7 +1630,10 @@ function countTeamSB(team, solo) {
 		const memberCard = henshinBase(member);
 		let enableAwoken = memberCard?.awakenings?.slice(0, member.awoken) || [];
 		//单人、3人时,大于等于100级且297时增加超觉醒
-		if ((solo || teamsCount === 3) && member.sawoken > 0 && member.level >= 100 && member.plus.every(p=>p>=99)) {
+		if ((solo || teamsCount === 3) && member.sawoken > 0 &&
+			(member.level >= 100 && member.plus.every(p=>p>=99) ||
+			member.sawoken === memberCard.syncAwakening)
+		) {
 			enableAwoken.push(member.sawoken);
 		}
 		if (assist.card && assist.card.enabled && assist.card.awakenings.includes(49)) {

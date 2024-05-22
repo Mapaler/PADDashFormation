@@ -733,7 +733,10 @@ Member.prototype.effectiveAwokens = function(assist) {
 	const memberCard = this.card;
 	let enableAwoken = memberCard?.awakenings?.slice(0, this.awoken) || [];
 	//单人、3人时,大于等于100级且297时增加超觉醒
-	if ((solo || teamsCount === 3) && this.sawoken > 0 && this.level >= 100 && this.plus.every(p=>p>=99)) {
+	if ((solo || teamsCount === 3) && this.sawoken > 0 &&
+		(this.level >= 100 && this.plus.every(p=>p>=99) ||
+		this.sawoken === memberCard.syncAwakening)
+	) {
 		enableAwoken.push(this.sawoken);
 	}
 	//添加武器
@@ -6001,8 +6004,10 @@ function changeid(mon, monDom, latentDom, assist) {
 	if (sawoken) { //如果存在超觉醒的DOM
 		if (mon?.sawoken > 0 && //怪物超觉醒编号大于0
 			//card.superAwakenings.length && //卡片有超觉醒
-			mon.level >= 100 && //怪物大于100级
+			(mon.level >= 100 && //怪物大于100级
 			mon.plus.every(p=>p>=99) //怪物297了
+			|| mon.sawoken === card.syncAwakening //同步觉醒
+			)
 		) {
 			sawoken.classList.remove(className_displayNone);
 			const sawokenIcon = sawoken.querySelector(".awoken-icon");
@@ -6357,7 +6362,7 @@ function editBoxChangeMonId(id) {
 
 		const level = settingBox.querySelector(".row-mon-level .m-level");
 		const plusArr = [...settingBox.querySelectorAll(".row-mon-plus input[type='number']")];
-		if (sawoken > 0) {
+		if (sawoken > 0 && sawoken !== card.syncAwakening) {
 			//自动100级
 			if (parseInt(level.value, 10)<100)
 			{
