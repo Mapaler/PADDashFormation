@@ -4669,6 +4669,14 @@ function initialize() {
 			{
 				const sakUl = awokenPreview.appendChild(creatAwokenList(card.superAwakenings)); //添加超觉醒
 				sakUl.classList.add("awoken-preview-superAwakenings");
+				if (card.syncAwakening) {
+					const li = sakUl.insertAdjacentElement("afterbegin",document.createElement("li"));
+					const icon = li.appendChild(document.createElement("icon"));
+					icon.className = "awoken-icon sync-awakening";
+					icon.setAttribute("data-awoken-icon", 0);
+
+				}
+				sakUl.classList.toggle("sync-awakening", Boolean(card.syncAwakening));
 			}
 		}
 		
@@ -5652,6 +5660,8 @@ function initialize() {
 		};
 
 		const abilitys = calculateAbility(tempMon, null, solo, teamsCount);
+
+		mSAwokenIcon.classList.toggle("super-awoken-locked", level <= 99 || plus.some(p=>p<99));
 		monEditLatentUl.classList.toggle("level-super-break", level > 110);; //切换潜觉为120级
 
 		monEditHpValue.textContent = abilitys ? abilitys[0][0].toLocaleString() : 0;
@@ -6351,6 +6361,8 @@ function editBoxChangeMonId(id) {
 
 	//超觉醒
 	const mSAwokenIcon = monEditOuterAwokensRow.querySelector("#current-super-awoken-icon");
+	mSAwokenIcon.classList.toggle("sync-awakening", Boolean(card.syncAwakening));
+
 	const monEditSAwokensRow = monEditOuterAwokensRow.querySelector(".row-mon-super-awoken");
 	const monEditSAwokensUl = monEditSAwokensRow.querySelector(".awoken-ul");
 	//获得之前的所有超觉醒
@@ -6358,24 +6370,26 @@ function editBoxChangeMonId(id) {
 
 	function setSAwoken() {
 		const sawoken = parseInt(this.getAttribute("data-awoken-icon"), 10) || 0;
+
+		if (mSAwokenIcon.classList.contains("super-awoken-locked") && !mSAwokenIcon.classList.contains("sync-awakening")) return;
 		mSAwokenIcon.setAttribute("data-awoken-icon", sawoken);
 
-		const level = settingBox.querySelector(".row-mon-level .m-level");
-		const plusArr = [...settingBox.querySelectorAll(".row-mon-plus input[type='number']")];
-		if (sawoken > 0 && sawoken !== card.syncAwakening) {
-			//自动100级
-			if (parseInt(level.value, 10)<100)
-			{
-				console.debug("点亮超觉醒，自动设定100级");
-				level.value = 100;
-			}
-			//自动打上297
-			if (plusArr.some(ipt=>parseInt(ipt.value, 10)<99))
-			{
-				console.debug("点亮超觉醒，自动设定297");
-				plusArr.forEach(ipt=>ipt.value=99);
-			}
-		}
+		// const level = settingBox.querySelector(".row-mon-level .m-level");
+		// const plusArr = [...settingBox.querySelectorAll(".row-mon-plus input[type='number']")];
+		// if (sawoken > 0 && sawoken !== card.syncAwakening) {
+		// 	//自动100级
+		// 	if (parseInt(level.value, 10)<100)
+		// 	{
+		// 		console.debug("点亮超觉醒，自动设定100级");
+		// 		level.value = 100;
+		// 	}
+		// 	//自动打上297
+		// 	if (plusArr.some(ipt=>parseInt(ipt.value, 10)<99))
+		// 	{
+		// 		console.debug("点亮超觉醒，自动设定297");
+		// 		plusArr.forEach(ipt=>ipt.value=99);
+		// 	}
+		// }
 		editBox.reCalculateAbility();
 	}
 	//怪物没有超觉醒时隐藏超觉醒

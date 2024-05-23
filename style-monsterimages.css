@@ -681,6 +681,12 @@
 .awoken-icon[data-awoken-icon='0']{/*问号*/
 	background-position-y:calc(-32px * 0);
 }
+.awoken-icon.super-awoken-locked[data-awoken-icon='0']{/*未满足超觉醒条件*/
+	background-position-x:calc(-32px * 1);
+}
+.awoken-icon.sync-awakening[data-awoken-icon='0']{/*同步觉醒未启用*/
+	background-position-x:calc(-32px * 2);
+}
 .awoken-icon[data-awoken-icon='1']{/*HP+*/
 	background-position-y:calc(-32px * 1);
 }

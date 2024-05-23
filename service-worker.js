@@ -27603,7 +27603,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"d48fe06d0abde6cc324c31ea5feb2b46"
+		"6bc01d0d3dd1a16a2652bd17bc04532f"
 	],
 	[
 		"solo.html",
@@ -27611,11 +27611,11 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"bcfc033040f4cbe3a2cf3cd4c1389a3c"
+		"ba8540c1326db9e1ba3f0cb4894a7628"
 	],
 	[
 		"style.css",
-		"839c434cacaed4ba4866e59c617c913b"
+		"422f4ee07beebce7698f9ea55978721a"
 	],
 	[
 		"temp.js",
@@ -27683,7 +27683,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"3caf45cacc010bd9f8bfe04e4f3ee2ea"
+		"16fda1df8fa5518d7a90ff8d486eb62c"
 	],
 	[
 		"images/badge-bg.png",

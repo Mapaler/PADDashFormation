@@ -1608,9 +1608,10 @@ label[for="search-string"]::before {
 	margin-top:3px;
 	background-color: #432;
 }
-.awoken-preview .awoken-preview-superAwakenings .awoken-icon{
+.awoken-preview .awoken-preview-superAwakenings .awoken-icon:not(.sync-awakening){
 	opacity: 0.6;
 }
+
 .awoken-preview .awoken-ul>li,
 .custom-addition .awoken-ul>li
 {
