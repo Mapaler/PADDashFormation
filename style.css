@@ -4587,6 +4587,10 @@ body.external-link-support #external-support{
 {
 	background-position-y:calc(-36px * 42);
 }
+.icon-skill[data-icon-type="breaking-shield"]
+{
+	background-position-y:calc(-36px * 43);
+}
 
 :where(:lang(en), :lang(ko)) .icon-skill:where(
 	[data-icon-type="mass-attack"],

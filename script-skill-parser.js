@@ -479,6 +479,7 @@ const SkillKinds = {
 	BoardJammingStates: "board-jamming-states",
 	RemoveAssist: "remove-assist",
 	PredictionFalling: "prediction-falling",
+	BreakingShield: "breaking-shield",
 }
 
 function skillParser(skillId)
@@ -815,6 +816,9 @@ const v = {
 	xCHP: function(value) {
 		return { kind: SkillValueKind.xCHP, value: (value / 100) ?? 1 };
 	},
+	xShield: function(value) {
+		return { kind: SkillValueKind.xShield, value: (value / 100) ?? 1 };
+	},
 	xATK: function(value) {
 		return { kind: SkillValueKind.xATK, value: (value / 100) ?? 1 };
 	},
@@ -1066,6 +1070,9 @@ function removeAssist() {
 }
 function predictionFalling() {
 	return { kind: SkillKinds.PredictionFalling };
+}
+function breakingShield(value) {
+	return { kind: SkillKinds.BreakingShield, value: value };
 }
 
 const skillObjectParsers = {
@@ -1709,6 +1716,7 @@ const skillObjectParsers = {
 			increaseDamageCap(cap * 1e8, typeArr)
 		);
 	},
+	[259](percent) { return breakingShield(v.xShield(percent)); },
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -2283,7 +2291,7 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.drum());
 			break;
 		}
-		case SkillKinds.AutoPath: { //小龙的萌新技能
+		case SkillKinds.AutoPath: { //自动路径，小龙的萌新技能
 			const {matchesNumber} = skill;
 			frg.ap(tsp.skill.auto_path({
 				icon: createIcon(skill.kind),
@@ -2757,6 +2765,15 @@ function renderSkill(skill, option = {})
 				icon: createIcon(skill.kind)
 			};
 			frg.ap(tsp.skill.prediction_falling(dict));
+			break;
+		}
+		case SkillKinds.BreakingShield: { //破白盾
+			let dict = {
+				icon: createIcon(skill.kind),
+				target: tsp.target.enemy(),
+				value: renderValue(skill.value, { percent:true }),
+			};
+			frg.ap(tsp.skill.gravity(dict));
 			break;
 		}
 		
@@ -3313,6 +3330,18 @@ function renderValue(_value, option = {}) {
 			dict = {
 				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
 				stats: renderStat('chp'),
+			};
+			frg.ap(
+				option.percent ? 
+				tspv.mul_of_percent(dict) :
+				tspv.mul_of_times(dict)
+			);
+			break;
+		}
+		case SkillValueKind.xShield: {
+			dict = {
+				value: option.percent ? (_value.value * 100).keepCounts(od,os) : _value.value.keepCounts(od,os),
+				stats: renderStat('shield'),
 			};
 			frg.ap(
 				option.percent ? 

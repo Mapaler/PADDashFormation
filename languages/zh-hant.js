@@ -224,6 +224,7 @@ const _localTranslating = {
 			maxhp: tp`最大HP`,
 			hp: tp`HP`,
 			chp: tp`當前HP`,
+			shield: tp`護盾`,
 			atk: tp`攻擊力`,
 			rcv: tp`回復力`,
 			teamhp: tp`隊伍總HP`,

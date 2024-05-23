@@ -238,6 +238,7 @@ let localTranslating = {
 			maxhp: tp`${'icon'}Max HP`,
 			hp: tp`HP`,
 			chp: tp`current HP`,
+			shield: tp`shield`,
 			atk: tp`ATK`,
 			rcv: tp`RCV`,
 			teamhp: tp`Team HP`,
@@ -2320,7 +2321,10 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return document.createTextNode(`威吓×${sk[0]}T`);
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(createSkillIcon('delay'));
+					fragment.append(`×${sk[0]}T`);
+					return fragment;
 				}
 			},
 			{name:"Reduces enemies' DEF(sort by rate)",otLangName:{chs:"破防（按防御减少比例排序）",cht:"破防（按防禦減少比例排序）"},
@@ -2336,7 +2340,10 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return `破防${sk[1]}%×${sk[0]}T`;
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(createSkillIcon('def-break'));
+					fragment.append(`${sk[1]}%×${sk[0]}T`);
+					return fragment;
 				}
 			},
 			{name:"Poisons enemies(sort by rate)",otLangName:{chs:"中毒（按毒伤比率排序）",cht:"中毒（按毒傷比率排序）"},
@@ -2352,7 +2359,10 @@ const specialSearchFunctions = (function() {
 					const skill = getCardActiveSkill(card, searchTypeArray);
 					if (!skill) return;
 					const sk = skill.params;
-					return `攻击力×${sk[0]/100}倍`;
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(createSkillIcon('poison'));
+					fragment.append(`ATK×${sk[0]/100}`);
+					return fragment;
 				}
 			},
 			{name:"Change enemies's Attr(sort by attr)",otLangName:{chs:"改变敌人属性（按属性排序）",cht:"改變敵人屬性（按屬性排序）"},
@@ -2389,8 +2399,9 @@ const specialSearchFunctions = (function() {
 					const sk = skill.params;
 					
 					const fragment = document.createDocumentFragment();
-					fragment.appendChild(document.createTextNode(`${sk[1]/100}倍`));
+					fragment.appendChild(createSkillIcon('counter-attack'));
 					fragment.appendChild(createOrbsList(sk[2]));
+					fragment.appendChild(document.createTextNode(`×${sk[1]/100}倍`));
 					fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
 		
 					return fragment;
@@ -3242,6 +3253,25 @@ const specialSearchFunctions = (function() {
 					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 				},
 				addition: gravity_Addition
+			},
+			{name:"Breaking Shield",otLangName:{chs:"破白盾",cht:"破白盾"},
+				function:cards=>{
+					const searchTypeArray = [259];
+					return cards.filter(card=>{
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+				},
+				addition:card=>{
+					const searchTypeArray = [259];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					const fragment = document.createDocumentFragment();
+					fragment.appendChild(createSkillIcon('breaking-shield'));
+					fragment.append(`-${sk[0]}%`);
+					return fragment;
+				}
 			},
 		]},
 		{group:true,name:"-----Damage Enemy - Fixed damage-----",otLangName:{chs:"-----对敌直接伤害类-无视防御固伤-----",cht:"-----對敵直接傷害類-無視防禦固傷-----"}, functions: [
