@@ -7500,6 +7500,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 24: return member.card.collabId === 92 ? 1.15 : 1; //英雄学院徽章
 				case 25: return member.card.gachaIds.includes(1) ? 1.15 : 1; //画师桶，1号徽章
 				case 26: return member.card.collabId === 107 ? 1.15 : 1; //高达徽章
+				case 27: return member.card.collabId === 112 ? 1.15 : 1; //转生成为史莱姆
 				default: return 1;
 			}
 		}

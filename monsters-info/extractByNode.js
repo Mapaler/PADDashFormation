@@ -92,6 +92,7 @@ officialAPI.forEach(function (lang) {
 		delete card.unk05;
 		delete card.unk06;
 		delete card.unk07;
+		delete card.syncAwakeningConditions;
 		if (card.unk08 !== undefined && card.unk08 != 0) {
 			console.log('%d 的 unk08 有值了 %s',cardIndex, card.unk08)
 		} else {
