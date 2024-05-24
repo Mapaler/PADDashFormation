@@ -1376,6 +1376,27 @@ function sanbonTranslateRegion(code) {
 };
 Formation.prototype.getSanbonV2Script = function()
 {
+	const region = sanbonTranslateRegion(currentDataSource.code);
+	function skillFlattened(skill, active = true) {
+		const o = {
+			name: skill.name,
+			description: skill.description,
+			details: []
+		}
+		if (active) {
+			Object.assign(o, {
+				cool_initial: skill.initialCooldown,
+				cool_max: skill.initialCooldown - (skill.maxLevel - 1),
+				decoration: {},
+			});
+		} else {
+			Object.assign(o, {
+				durability: 1,
+				durability_up: false,
+			});
+		}
+		return o;
+	}
 	function cardFlattened(card) {
 		if (typeof(card) == 'undefined') return 0;
 		const available_killers = {};
@@ -1386,34 +1407,53 @@ Formation.prototype.getSanbonV2Script = function()
 				.flatMap(type => typekiller_for_type.find(t=>t.type==type).allowableLatent)
 				.forEach(t => available_killers[t] = true);
 		const o = {
-			region: sanbonTranslateRegion(currentDataSource.code),
+			region: region,
 			num: card.id,
 			name: card.name,
 			rarity: card.rarity,
 			cost: card.cost,
-			attributes: card.attrs,
-			types: card.types,
-			awokens: card.awakenings,
-			super_awokens: card.superAwakenings,
-			available_killers: available_killers,
 			level_final: card.limitBreakIncr ? 120 : card.maxLevel,
 			stat_final: {
 				"hp": card.hp.max,
 				"atk": card.atk.max,
 				"rcv": card.rcv.max,
 			},
+			types: card.types,
 			assistable: card.canAssist,
 			latent_extendable: card.is8Latent,
-			showing_active_skills: [],
-			showing_leader_skills: [],
+			awokens: card.awakenings,
+			super_awokens: card.superAwakenings,
+			sync_awoken: card.syncAwakening ?? 0,
+			sync_requirements: card.syncAwakeningConditions?.map(o=>o.id) ?? [],
+			showing_active_skills: [skillFlattened(Skills[card.activeSkillId], true)],
+			showing_leader_skills: [skillFlattened(Skills[card.leaderSkillId], false)],
+			forms: [],
+			available_killers: available_killers,
+			attributes: card.attrs,
 			transforms: buildEvoTreeIdsArray(card),
 		}
 		return o;
 	}
 	//sanbon目前只支持单人队伍
 	const [members,assists,badge] = this.teams[0];
-const scriptLines = [`(()=>{
+const scriptLines = [`(async ()=>{
 	"use strict";
+	const __NEXT_DATA__ = document.getElementById("__NEXT_DATA__");
+	const __NEXT_DATA__JSON = JSON.parse(__NEXT_DATA__.innerHTML);
+	const buildId = __NEXT_DATA__JSON.buildId;
+	const region = "${region}";
+
+	async function fetchFlattened(id) {
+		if (id <= 0) return {};
+		const url = new URL(location.origin);
+		url.pathname = \`/_next/data/\${buildId}/\${region}/monster/\${id}.json\`;
+		url.searchParams.set("lang_region", region);
+		url.searchParams.set("num", id);
+		const response = await fetch(url);
+		const json = await response.json();
+		return json.pageProps.mon;
+	}
+
 	const tbs = JSON.parse(sessionStorage.getItem("team-build-store"));
 	const team = tbs.state;
 	team.badge = ${Formation.sanbonBadgeMap.find(_badge=>_badge.pdf === badge)?.sanbon ?? badge};`];
@@ -1433,8 +1473,10 @@ const scriptLines = [`(()=>{
 			assistNum: a.id,
 			assistLevel: a.level,
 			assistPlus: a?.plus?.every(p=>p>=99) ?? false,
-			flattened: cardFlattened(m.card),
-			assistFlattened: cardFlattened(a.card),
+			// flattened: cardFlattened(m.card),
+			// assistFlattened: cardFlattened(a.card),
+			flattened: `(await fetchFlattened(${m.id}))`,
+			assistFlattened: `(await fetchFlattened(${a.id}))`,
 		}
 		_members[i] = _m;
 /*
@@ -1459,9 +1501,22 @@ m${i}.assistFlattened.awokens = ${JSON.stringify(a.id > 0 ? a.card.awakenings : 
 m${i}.assistFlattened.super_awokens = ${JSON.stringify(a.id > 0 ? a.card.superAwakenings : [])};
 `);*/
 	}
-scriptLines.push(`team.members = ${JSON.stringify(_members)}`);
-scriptLines.push(`sessionStorage.setItem("team-build-store", JSON.stringify(tbs));
-location.reload();
+	async function fetchFlattened(id) {
+		const __NEXT_DATA__ = document.getElementById("__NEXT_DATA__");
+		const __NEXT_DATA__JSON = JSON.parse(__NEXT_DATA__.innerHTML);
+		const buildId = __NEXT_DATA__JSON.buildId;
+
+		const url = new URL(location.origin);
+		url.pathname = `/_next/data/${buildId}/${region}/monster/${id}.json`;
+		url.searchParams.set("lang_region", region);
+		url.searchParams.set("num", id);
+		const response = await fetch(url);
+		const json = await response.json();
+		return json.pageProps.mon;
+	}
+scriptLines.push(`\tteam.members = ${JSON.stringify(_members,null,'\t').replace(/"(\(await fetchFlattened\(\d+\)\))"/igm, "$1")}`);
+scriptLines.push(`\tsessionStorage.setItem("team-build-store", JSON.stringify(tbs));
+\tlocation.reload();
 })();`);
 	return scriptLines.join('\n');
 };
@@ -2811,7 +2866,7 @@ function sanbonFotmationToPdfFotmation(obj)
 	f.title = team.title;
 	f.detail = team.content;
 	const t = f.teams[0];
-	
+
 	//队伍徽章
 	t[2] = Formation.sanbonBadgeMap.find(badge=>badge.sanbon === team.badge)?.pdf ?? team.badge;
 	const members = t[0], assists = t[1];
