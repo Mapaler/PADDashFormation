@@ -82,9 +82,12 @@ officialAPI.forEach(function (lang) {
 			nCard.specialVersion[Math.floor(mid / 100000)] = new Card(oCard);
 		}
 	});*/
+	//为了减小数据文件容量，删掉一些用不上的，有的可以后面游戏内再重新加上
 	for (let cardIndex = 0; oCards[cardIndex][0] < 1e5; cardIndex++) {
 		const card = new Card(oCards[cardIndex]);
-		delete card.enemy;
+		delete card.enemy; //不做地下城解析，用不上
+		delete card.onlyAssist; //数量太少了，游戏内再加
+
 		delete card.unk01;
 		delete card.unk02;
 		delete card.unk03;
@@ -92,14 +95,13 @@ officialAPI.forEach(function (lang) {
 		delete card.unk05;
 		delete card.unk06;
 		delete card.unk07;
-		delete card.syncAwakeningConditions;
-		if (card.unk08 !== undefined && card.unk08 != 0) {
-			console.log('%d 的 unk08 有值了 %s',cardIndex, card.unk08)
-		} else {
-			delete card.unk08;
-		}
+		delete card.unk08;
+
 		if (card.searchFlags.every(num => isNaN(num)))
-			delete card.searchFlags;
+			delete card.searchFlags; //没有队长技能的，用不上
+		
+		if (!card.syncAwakening)
+			delete card.syncAwakeningConditions; //没有同步觉醒
 		monCards.push(card);
 	}
 
