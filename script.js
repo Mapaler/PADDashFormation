@@ -1074,11 +1074,12 @@ Formation.pdcBadgeMap = [
 	{pdf:13,pdc:17}, //防废
 	{pdf:14,pdc:16}, //防毒
 	{pdf:PAD_PASS_BADGE,pdc:14}, //月卡
-	{pdf:22,pdc:20}, //无武器全抗性(耐)
-	{pdf:23,pdc:21}, //无武器10SB(S+×5)
+	{pdf:22,pdc:20}, //除武器，全抗性(耐)
+	{pdf:23,pdc:21}, //除武器，10SB(S+×5)
 	{pdf:24,pdc:22}, //英雄学院桶
 	{pdf:25,pdc:23}, //画师桶
 	{pdf:26,pdc:24}, //高达桶
+	{pdf:27,pdc:25}, //转生成为史莱姆
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -1305,10 +1306,10 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 		return cardid > 9934 ;
 	}
 	//PADDB目前只支持单人队伍
-	const t = this.teams[0];
+	const [members,assists,badge] = this.teams[0];
 	let teamObj = {
 		name: this.title,
-		badge: Formation.paddbBadgeMap.find(badge=>badge.pdf === t[2]).paddb,
+		badge: Formation.paddbBadgeMap.find(badge=>badge.pdf === badge)?.paddb ?? badge,
 		memo: (this.detail || '') + '\n' + uploadMessage,
 		monsters: {},
 		assists: {},
@@ -1323,8 +1324,8 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 		}
 		return mid;
 	}
-	for (let i = 0; i < t[0].length; i++) {
-		const m = t[0][i], a = t[1][i];
+	for (let i = 0; i < members.length; i++) {
+		const m = members[i], a = assists[i];
 		//计算基底的变身情况
 		let num, transform;
 		if (m.card?.henshinFrom?.length > 0 //是变身
@@ -1346,7 +1347,7 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 			active_skill_level: m.skilllevel ?? Skills[m.card.activeSkillId].maxLevel,
 			transform: memberIdChange ? m.level : num,
 			super_awoken: m.sawoken + 2,
-			latent_awokens: m.latent.map(n=>Formation.paddbLatentMap.find(latent=>latent.pdf === n).paddb),
+			latent_awokens: m.latent.map(n=>Formation.paddbLatentMap.find(latent=>latent.pdf === n)?.paddb ?? latent),
 		};
 		let assistIdChange = changePadDbIdLevel(a.id);
 		teamObj.assists[i] = a.id <= 0 ? null : {
@@ -1361,7 +1362,7 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 		// password:"",
 		name: this.title,
 		// "tags":[""],
-		mons: t[0].concat(t[1]).map(m=>m.id > 0 ? protectPadDbId(m.id, true) : ""),
+		mons: members.concat(assists).map(m=>m.id > 0 ? protectPadDbId(m.id, true) : ""),
 		team: JSON.stringify(teamObj),
 	};
 	return qrObj;
@@ -1415,7 +1416,7 @@ const scriptLines = [`(()=>{
 	"use strict";
 	const tbs = JSON.parse(sessionStorage.getItem("team-build-store"));
 	const team = tbs.state;
-	team.badge = ${Formation.sanbonBadgeMap.find(_badge=>_badge.pdf === badge)?.sanbon || badge};`];
+	team.badge = ${Formation.sanbonBadgeMap.find(_badge=>_badge.pdf === badge)?.sanbon ?? badge};`];
 
 	const _members = {};
 	for (let i = 0; i < members.length; i++) {
@@ -1465,13 +1466,14 @@ location.reload();
 	return scriptLines.join('\n');
 };
 
-//paddb的徽章对应数字
+//sanbon的徽章对应数字
 Formation.sanbonBadgeMap = [
-	{pdf:22,sanbon:15}, //除武器，全防
-	{pdf:23,sanbon:16}, //除武器，10 SB
+	{pdf:22,sanbon:15}, //除武器，全抗性(耐)
+	{pdf:23,sanbon:16}, //除武器，10SB(S+×5)
 	{pdf:24,sanbon:20}, //合作，英雄学院
 	{pdf:25,sanbon:23}, //官桶，画师
-	{pdf:27,sanbon:22}, //合作，高达
+	{pdf:26,sanbon:22}, //合作，高达
+	{pdf:27,sanbon:24}, //转生成为史莱姆
 	{pdf:PAD_PASS_BADGE,sanbon:1}, //月卡
 ];
 Formation.prototype.getSanbonQrObj = function()
@@ -1484,7 +1486,7 @@ Formation.prototype.getSanbonQrObj = function()
 		content: this.detail ?? "",
 		//mons: assists.map(m=>m.id).concat(members.map(m=>m.id)),
 		data: {
-			badge: Formation.sanbonBadgeMap.find(_badge=>_badge.pdf === badge)?.sanbon || badge,
+			badge: Formation.sanbonBadgeMap.find(_badge=>_badge.pdf === badge)?.sanbon ?? badge,
 			members: {}, //等待下面处理
 		},
 	};
@@ -1508,7 +1510,7 @@ Formation.prototype.getSanbonQrObj = function()
 	return obj;
 };
 
-//paddb的徽章对应数字
+//daddb的徽章对应数字
 Formation.daddbBadgeMap = [
 	{pdf:undefined,daddb:0}, //什么都没有
 	{pdf:1,daddb:0}, //无限cost
@@ -1530,6 +1532,8 @@ Formation.daddbBadgeMap = [
 	{pdf:12,daddb:14}, //墨镜
 	{pdf:13,daddb:15}, //防废
 	{pdf:14,daddb:16}, //防毒
+	{pdf:22,daddb:19}, //除武器，全抗性(耐)
+	{pdf:23,daddb:20}, //除武器，10SB(S+×5)
 	{pdf:PAD_PASS_BADGE,daddb:18}, //月卡
 ];
 //paddb的潜觉对应数字
@@ -1590,7 +1594,7 @@ Formation.prototype.getDaddbQrObj = function()
 	const [members,assists,badge] = this.teams[0];
 	let teamObj = {
 		name: this.title,
-		badge: Formation.daddbBadgeMap.find(_badge=>_badge.pdf === badge)?.daddb,
+		badge: Formation.daddbBadgeMap.find(_badge=>_badge.pdf === badge)?.daddb ?? badge,
 		staffs: [],
 	}
 	for (let i = 0; i < members.length; i++) {
@@ -1599,7 +1603,7 @@ Formation.prototype.getDaddbQrObj = function()
 			staf: m.id || -1,
 			eq: a.id || -1,
 			sawak: m.sawoken || -1,
-			qawak: m.latent.map(n=>Formation.daddbLatentMap.find(latent=>latent.pdf === n)?.daddb),
+			qawak: m.latent.map(n=>Formation.daddbLatentMap.find(latent=>latent.pdf === n)?.daddb ?? latent),
 		};
 	}
 	return teamObj;
