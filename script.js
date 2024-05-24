@@ -1377,63 +1377,6 @@ function sanbonTranslateRegion(code) {
 Formation.prototype.getSanbonV2Script = function()
 {
 	const region = sanbonTranslateRegion(currentDataSource.code);
-	function skillFlattened(skill, active = true) {
-		const o = {
-			name: skill.name,
-			description: skill.description,
-			details: []
-		}
-		if (active) {
-			Object.assign(o, {
-				cool_initial: skill.initialCooldown,
-				cool_max: skill.initialCooldown - (skill.maxLevel - 1),
-				decoration: {},
-			});
-		} else {
-			Object.assign(o, {
-				durability: 1,
-				durability_up: false,
-			});
-		}
-		return o;
-	}
-	function cardFlattened(card) {
-		if (typeof(card) == 'undefined') return 0;
-		const available_killers = {};
-		for (let i = 20; i <= 27; i++) {
-			available_killers[i] = false;
-		}
-		card.types.filter(i => i >= 0)
-				.flatMap(type => typekiller_for_type.find(t=>t.type==type).allowableLatent)
-				.forEach(t => available_killers[t] = true);
-		const o = {
-			region: region,
-			num: card.id,
-			name: card.name,
-			rarity: card.rarity,
-			cost: card.cost,
-			level_final: card.limitBreakIncr ? 120 : card.maxLevel,
-			stat_final: {
-				"hp": card.hp.max,
-				"atk": card.atk.max,
-				"rcv": card.rcv.max,
-			},
-			types: card.types,
-			assistable: card.canAssist,
-			latent_extendable: card.is8Latent,
-			awokens: card.awakenings,
-			super_awokens: card.superAwakenings,
-			sync_awoken: card.syncAwakening ?? 0,
-			sync_requirements: card.syncAwakeningConditions?.map(o=>o.id) ?? [],
-			showing_active_skills: [skillFlattened(Skills[card.activeSkillId], true)],
-			showing_leader_skills: [skillFlattened(Skills[card.leaderSkillId], false)],
-			forms: [],
-			available_killers: available_killers,
-			attributes: card.attrs,
-			transforms: buildEvoTreeIdsArray(card),
-		}
-		return o;
-	}
 	//sanbon目前只支持单人队伍
 	const [members,assists,badge] = this.teams[0];
 const scriptLines = [`(async ()=>{
@@ -1479,40 +1422,6 @@ const scriptLines = [`(async ()=>{
 			assistFlattened: `(await fetchFlattened(${a.id}))`,
 		}
 		_members[i] = _m;
-/*
-scriptLines.push(`const m${i} = team.members[${i}];
-m${i}.num = ${m.id};
-m${i}.level = ${m.level};
-m${i}.superAwoken = ${m.sawoken};
-m${i}.latentAwokens = ${JSON.stringify(m.latent)};
-m${i}.awokenCount = ${m.awoken};
-m${i}.hpPlus = ${m.plus[0]};
-m${i}.atkPlus = ${m.plus[1]};
-m${i}.rcvPlus = ${m.plus[2]};
-m${i}.assistNum = ${a.id};
-m${i}.assistLevel = ${a.level};
-m${i}.assistPlus = ${a.plus.every(p=>p>=99) ? 'true' : 'false'};
-if (m${i}.flattened == 0) m${i}.flattened = {};
-m${i}.flattened.awokens = ${JSON.stringify(m.card.awakenings)};
-m${i}.flattened.super_awokens = ${JSON.stringify(m.card.superAwakenings)};
-m${i}.flattened.available_killers = ${JSON.stringify(m.card.superAwakenings)};
-if (m${i}.assistFlattened == 0) m${i}.assistFlattened = {};
-m${i}.assistFlattened.awokens = ${JSON.stringify(a.id > 0 ? a.card.awakenings : [])};
-m${i}.assistFlattened.super_awokens = ${JSON.stringify(a.id > 0 ? a.card.superAwakenings : [])};
-`);*/
-	}
-	async function fetchFlattened(id) {
-		const __NEXT_DATA__ = document.getElementById("__NEXT_DATA__");
-		const __NEXT_DATA__JSON = JSON.parse(__NEXT_DATA__.innerHTML);
-		const buildId = __NEXT_DATA__JSON.buildId;
-
-		const url = new URL(location.origin);
-		url.pathname = `/_next/data/${buildId}/${region}/monster/${id}.json`;
-		url.searchParams.set("lang_region", region);
-		url.searchParams.set("num", id);
-		const response = await fetch(url);
-		const json = await response.json();
-		return json.pageProps.mon;
 	}
 scriptLines.push(`\tteam.members = ${JSON.stringify(_members,null,'\t').replace(/"(\(await fetchFlattened\(\d+\)\))"/igm, "$1")}`);
 scriptLines.push(`\tsessionStorage.setItem("team-build-store", JSON.stringify(tbs));
