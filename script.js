@@ -2811,8 +2811,9 @@ function sanbonFotmationToPdfFotmation(obj)
 	f.title = team.title;
 	f.detail = team.content;
 	const t = f.teams[0];
+	
 	//队伍徽章
-	t[2] = Formation.daddbBadgeMap.find(badge=>badge.sanbon === team.badge)?.pdf || team.badge;
+	t[2] = Formation.sanbonBadgeMap.find(badge=>badge.sanbon === team.badge)?.pdf ?? team.badge;
 	const members = t[0], assists = t[1];
 	for (let i = 0; i< members.length; i++) {
 		const m = members[i], a = assists[i], dm = team.members[i];
