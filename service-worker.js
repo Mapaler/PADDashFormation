@@ -27855,7 +27855,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/export-player-data.html",
-		"aad6afca92f58cb444dc4991c3e3e154"
+		"7b5e902b3b080c2173ab0fe0e4609e35"
 	],
 	[
 		"doc/index.html",
@@ -28108,6 +28108,10 @@ const cachesMap = new Map([
 	[
 		"doc/images/player-ph-ab-backup.webp",
 		"0e4e1191a1312eaeac304fcffa25c68e"
+	],
+	[
+		"doc/images/player-ph-ab-succeed-failed.webp",
+		"9a0511d07105714ca367b55dbf307b37"
 	],
 	[
 		"doc/images/player-ph-ab-unpack-open-zip.webp",
