@@ -184,7 +184,7 @@
 		<span lang="zh">你保存的数据全部存于浏览器的本地 <em>IndexedDB</em> 内，不会被上传到服务器，因此更换浏览器就需要重新打开数据。</span>
 		<span lang="en">All of the data you save is stored in your browser's local <em>IndexedDB</em> and will not be uploaded to the server, so changing your browser will require you to reopen the data.</span>
 	</p>
-	<details>
+	<details open>
 		<summary>
 			<h2 id="ios">
 				<span lang="zh">苹果用户</span>
@@ -214,7 +214,7 @@
 	</p>
 	<ul>
 		<li>
-			<details>
+			<details open>
 				<summary>
 					<h4>
 						<span lang="zh">蓝叠模拟器国际版</span>
@@ -240,7 +240,7 @@
 			</details>
 		</li>
 		<li>
-			<details>
+			<details open>
 				<summary>
 					<h4>
 						<span lang="zh">夜神模拟器国际版</span>
@@ -267,7 +267,7 @@
 		</li>
 	</ul>
 
-	<details>
+	<details open>
 		<summary>
 			<h3 id="multiple-devices">
 				<span lang="zh">如何实现多设备登录</span>
@@ -276,7 +276,7 @@
 		</summary>
 		<h4>
 			<span lang="zh">从你的安卓设备中提取<code>data048.bin</code></span>
-			<span lang="en">Extract <code>data048 .bin</code> from your Android device</span>
+			<span lang="en">Extract <code>data048.bin</code> from your Android device</span>
 		</h4>
 		<p>
 			<span lang="zh">智龙迷城的账号唯一识别码(GUID)储存于<code>/data/data/jp.gungho.pad/files/data048.bin</code>中。</span>
@@ -371,6 +371,40 @@
 			<br>
 			<img src="images/player-ph-ab-unpack-open-zip.webp" alt="解包 AB-打开"><br>
 		</p>
+		<p>
+			<h5>
+				<span lang="zh">导出失败的可能原因</span>
+				<span lang="en">Possible reasons for export failures</span>
+			</h5>
+			<ul>
+				<li>
+					<span lang="zh">没有安装具有完整功能的 USB 驱动。</span>
+					<span lang="en">There is no fully functional USB driver installed.</span><br>
+					<span lang="zh">解决办法：</span><span lang="en">Solution:</span><br>
+					<span lang="zh">安装手机 OEM 厂商的最新刷机 USB 驱动程序。</span>
+					<span lang="en">Install the latest flash USB driver from your phone OEM.</span>
+				</li>
+				<li>
+					<span lang="zh">游戏不在前台。</span>
+					<span lang="en">The game is not in the foreground.</span><br>
+					<span lang="zh">解决办法：</span><span lang="en">Solution:</span><br>
+					<span lang="zh">运行并保持游戏界面在前台的时候运行备份命令。</span>
+					<span lang="en">Run and keep the game interface in the foreground while running the backup command.</span>
+				</li>
+				<li>
+					<span lang="zh">安卓版本过高。</span>
+					<span lang="en">The Android version is too high.</span><br>
+					<span lang="zh">因为此功能已被标记为“废弃”，高版本的安卓很可能不再支持非 root 导出。</span>
+					<span lang="en">Because this feature has been marked as "deprecated", it is likely that newer versions of Android will no longer support non-rooted exports。</span><br>
+					<span lang="zh">正确的导出大于 1KB。</span>
+					<span lang="en">A successful export is larger than 1KB.</span><br>
+					<img src="images/player-ph-ab-succeed-failed.webp" alt="解包 成功和失败的"><br>
+					<span lang="zh">解决办法：</span><span lang="en">Solution:</span><br>
+					<span lang="zh">安卓 13 用不了 <code>adb backup</code> 但是可以使用 <code>adb restore</code>，所以可以在低版本的安卓模拟器或老手机内登录游戏，然后使用 <code>adb backup</code> 备份，使用 <code>adb restore</code> 导入到手机。</span>
+					<span lang="en">Android 13 failed with <code>adb backup</code> but successfully use <code>adb restore</code>, so you can log in to the game in an Android emulator (or an older phone), then use <code>adb backup</code> to back up from emulator, and use <code>adb restore</code> to import to your phone.</span>
+				</li>
+			</ul>
+		</p>
 		<h4>
 			<span lang="zh">将 <code>data048.bin</code> 导入模拟器</span>
 			<span lang="en">Import <code>data048.bin</code> into the simulator</span>
@@ -381,7 +415,7 @@
 		</p>
 		<ul>
 			<li>
-				<details>
+				<details open>
 					<summary>
 						<span lang="zh">蓝叠模拟器国际版</span>
 						<span lang="en">BlueStacks</span>
@@ -427,7 +461,7 @@
 				</details>
 			</li>
 			<li>
-				<details>
+				<details open>
 					<summary>
 						<span lang="zh">夜神模拟器国际版</span>
 						<span lang="en">NoxPlayer</span>
@@ -475,7 +509,7 @@
 		<span lang="zh">然后你可以选择在安卓内使用 APP 和电脑上用代理软件两种方式抓包。</span>
 		<span lang="en">You can then choose to sniffer in both use the APP within Android and proxy software on your PC.</span>
 	</p>
-	<details>
+	<details open>
 		<summary>
 			<h3 id="use-HttpCanary">
 				<span lang="zh">使用 HttpCanary APP</span>
@@ -577,7 +611,7 @@
 		</p>
 	</details>
 	
-	<details>
+	<details open>
 		<summary>
 			<h3 id="use-Fidder">
 				<span lang="zh">在电脑上使用 Fidder</span>
@@ -679,7 +713,7 @@ $str.ToString() | Out-File -Encoding ascii -FilePath $pem_name
 		</h4>
 		<ul>
 			<li>
-				<details>
+				<details open>
 					<summary>
 						<span lang="zh">蓝叠模拟器</span>
 						<span lang="en">BlueStacks</span>
@@ -705,7 +739,7 @@ $str.ToString() | Out-File -Encoding ascii -FilePath $pem_name
 					</p>
 					<ul>
 						<li>
-							<details>
+							<details open>
 								<summary>
 									<span lang="zh">如果你拥有<a href="https://www.diskgenius.cn/">DiskGenius专业版</a>，你可以使用它的编辑虚拟磁盘功能插入证书文件。</span>
 									<span lang="en">If you have <a href="https://www.diskgenius.com/">DiskGenius Pro</a>, you can use its Edit Virtual Disk feature to insert certificate files.</span>
@@ -731,7 +765,7 @@ $str.ToString() | Out-File -Encoding ascii -FilePath $pem_name
 							</details>
 						</li>
 						<li>
-							<details>
+							<details open>
 								<summary>
 									<span lang="zh">使用免费软件 Ext2Fsd 读写 Ext4 格式。</span>
 									<span lang="en">Use the free software Ext2Fsd to read and write the Ext4 format.</span>
@@ -755,7 +789,7 @@ $str.ToString() | Out-File -Encoding ascii -FilePath $pem_name
 									<br>
 									<img src="images/bluestacks-vhd-ext2fsd-tools-service.webp" alt="Ext2Fsd 是否打开服务">
 								</p>
-								<details>
+								<details open>
 									<summary>
 										<span lang="zh">如果0.71、0.69和0.68版本都无法成功运行，那么也可以试试以 禁用驱动强制签名 模式启动才能运行。</span>
 										<span lang="en">If versions 0.71, 0.69, and 0.68 fail to run, then you can also try to start in the Disable Driver Forced Signature mode.</span>	
@@ -840,7 +874,7 @@ $str.ToString() | Out-File -Encoding ascii -FilePath $pem_name
 				</details>
 			</li>
 			<li>
-				<details>
+				<details open>
 					<summary>
 						<span lang="zh">夜神模拟器</span>
 						<span lang="en">NoxPlayer</span>
@@ -886,7 +920,7 @@ $str.ToString() | Out-File -Encoding ascii -FilePath $pem_name
 		</h4>
 		<ul>
 			<li>
-				<details>
+				<details open>
 					<summary>
 						<span lang="zh">蓝叠模拟器</span>
 						<span lang="en">BlueStacks</span>
@@ -937,7 +971,7 @@ $str.ToString() | Out-File -Encoding ascii -FilePath $pem_name
 				</details>
 			</li>
 			<li>
-				<details>
+				<details open>
 					<summary>
 						<span lang="zh">夜神模拟器</span>
 						<span lang="en">NoxPlayer</span>
