@@ -959,7 +959,7 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 	if (notWeapon) cardsRange = cardsRange.filter(card=>!card.awakenings.includes(49) && //不是武器
 					!card.stackable); //不可堆叠
 	//属性
-	const anyAttrsFlag = 0b1111101;
+	const anyAttrsFlag = 0b1011111;
 	const isAnyAttrs = sAttrs.map(attr=>attr === 0 || (attr & anyAttrsFlag) == anyAttrsFlag);
 	if (isAnyAttrs.some(any=>!any)) { //当任一属性不为任意颜色时才需要筛选属性，否则跳过属性筛选
 		//如果固定顺序就直接使用当前颜色顺序；否则不考虑顺序时，去除任意色
@@ -979,8 +979,9 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 			});
 		}
 		else {//不限定顺序时
-			const attrFlags = sAttrs.filter(attr=>attr > 0 && (attr & anyAttrsFlag) !== anyAttrsFlag);
-			const notAnyAttrsCount = isAnyAttrs.filter(b=>!b).length;
+			//const attrFlags = sAttrs.filter(attr=>attr > 0 && (attr & anyAttrsFlag) !== anyAttrsFlag);
+			const attrFlags = sAttrs.map(attr=>attr || anyAttrsFlag);
+			//const notAnyAttrsCount = isAnyAttrs.filter(b=>!b).length;
 			cardsRange = cardsRange.filter(({attrs:cAttrs_, id}) => {
 				const cAttrs = cAttrs_.concat();
 				if (cAttrs[1] == undefined) cAttrs[1] = 6;
@@ -997,11 +998,12 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 				// 	const columValue = matrix3x3.reduce((p,v)=>p | v[i],0);
 				// 	columValues.push(columValue);
 				// }
+				if (!rowValues.every(Boolean)) return false; //如果有哪个选择器没有匹配上，直接跳过
 
 				const crossValue = cAttrs.map((cAttr, idx, arr)=> {
 					return arr.filter(item=>item===cAttr).length <= rowValues.filter(item=>item & 1 << cAttr).length;
 				});
-				const match = rowValues.every(Boolean) && crossValue.every(Boolean);
+				const match = crossValue.every(Boolean);
 				// if (match) {
 				// 	console.debug("id: %d, matrix3x3: %o, rowValues: %o, columValues: %o, crossValue: %o", id, matrix3x3, rowValues, columValues, crossValue);
 				// }

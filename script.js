@@ -6167,7 +6167,7 @@ function editMember(teamNum, isAssist, indexInTeam) {
 	//超觉醒
 	//const monEditCurrentSAwokenRow = monEditOuterAwokensRow.querySelector(".current-super-awoken");
 	const mSAwokenIcon = monEditOuterAwokensRow.querySelector("#current-super-awoken-icon");
-	mSAwokenIcon.setAttribute("data-awoken-icon", mon.sawoken);
+	mSAwokenIcon.setAttribute("data-awoken-icon", mon.sawoken ?? 0);
 
 	const monEditLv = settingBox.querySelector(".row-mon-level .m-level");
 	monEditLv.value = mon.level || 1;
@@ -6330,7 +6330,6 @@ function editBoxChangeMonId(id) {
 
 	//超觉醒
 	const mSAwokenIcon = monEditOuterAwokensRow.querySelector("#current-super-awoken-icon");
-	mSAwokenIcon.classList.toggle("sync-awakening", Boolean(card.syncAwakening));
 
 	const monEditSAwokensRow = monEditOuterAwokensRow.querySelector(".row-mon-super-awoken");
 	const monEditSAwokensUl = monEditSAwokensRow.querySelector(".awoken-ul");
@@ -6378,6 +6377,7 @@ function editBoxChangeMonId(id) {
 		btn.onclick = setSAwoken;
 		monEditSAwokensUl.append(btn);
 	});
+	mSAwokenIcon.classList.toggle("sync-awakening", Boolean(card.syncAwakening));
 
 	const monEditLvMax = settingBox.querySelector(".m-level-btn-max");
 	//monEditLvMax.textContent = monEditLvMax.value = card.maxLevel;
