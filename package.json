@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "@xmldom/xmldom": "^0.8.10",
-    "@zxing/library": "^0.20.0",
+    "@zxing/library": "^0.21.1",
     "html2canvas": "^1.4.1",
-    "mime": "^4.0.2",
+    "mime": "^4.0.3",
     "opencc-js": "^1.0.5",
     "xml-formatter": "^3.6.2"
   }
