@@ -1080,6 +1080,7 @@ Formation.pdcBadgeMap = [
 	{pdf:25,pdc:23}, //画师桶
 	{pdf:26,pdc:24}, //高达桶
 	{pdf:27,pdc:25}, //转生成为史莱姆
+	{pdf:28,pdc:26}, //电击文库Index
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -1438,6 +1439,7 @@ Formation.sanbonBadgeMap = [
 	{pdf:25,sanbon:23}, //官桶，画师
 	{pdf:26,sanbon:22}, //合作，高达
 	{pdf:27,sanbon:24}, //转生成为史莱姆
+	{pdf:28,sanbon:25}, //电击文库Index
 	{pdf:PAD_PASS_BADGE,sanbon:1}, //月卡
 ];
 Formation.prototype.getSanbonQrObj = function()
@@ -7472,6 +7474,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 		const teamHPAwoken = awokenCountInTeam(team, 46, solo, teamsCount), teamHPAwokenScale = (1 + 0.05 * teamHPAwoken); //全队大血包个数
 		
+		//徽章血量强化
 		function getBadgeHPScale(badge, member) {
 			if (teamsCount == 2) return 1;
 			switch (badge) {
@@ -7484,6 +7487,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 25: return member.card.gachaIds.includes(1) ? 1.15 : 1; //画师桶，1号徽章
 				case 26: return member.card.collabId === 107 ? 1.15 : 1; //高达徽章
 				case 27: return member.card.collabId === 112 ? 1.15 : 1; //转生成为史莱姆
+				case 28: return member.card.collabId === 110 ? 1.15 : 1; //电击文库Index
 				default: return 1;
 			}
 		}
