@@ -1382,9 +1382,16 @@ Formation.prototype.getSanbonV2Script = function()
 	const [members,assists,badge] = this.teams[0];
 const scriptLines = [`(async ()=>{
 	"use strict";
-	const __NEXT_DATA__ = document.getElementById("__NEXT_DATA__");
-	const __NEXT_DATA__JSON = JSON.parse(__NEXT_DATA__.innerHTML);
-	const buildId = __NEXT_DATA__JSON.buildId;
+	let buildId;
+	if (typeof __NEXT_DATA__ !== 'undefined') {
+		buildId = __NEXT_DATA__?.buildId;
+	} else {
+		const Zstr = window.__next_f.find(o=>o?.[1]?.startsWith("0:"))[1];
+		const regRes = /"buildId":"([\\w\\-]+)"/ig.exec(Zstr);
+		buildId = regRes[1];
+	}
+	if (!buildId) throw Error("buildId not found.");
+	
 	const region = "${region}";
 
 	async function fetchFlattened(id) {
