@@ -1725,11 +1725,15 @@ label[for="search-string"]::before {
 	box-sizing: border-box;
 	padding: 2px;
 	border-radius: 5px;
+}
+#search-attr .monster .custom-avatar,
+.config-display-list .in-card .monster {
 	background-image: url(images/avatar.webp);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-clip: content-box;
+
 }
 #avatar-select {
 	display: none;

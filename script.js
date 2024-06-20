@@ -2172,6 +2172,7 @@ function loadData(force = false)
 		}
 		function loadExtraCardsData(_cards)
 		{
+			//初始化值
 			let splitIdx = _cards.findIndex((card, id)=>card?.id !== id);
 			let cards = _cards.slice(0, splitIdx);
 			for (let i = splitIdx + 1; i < _cards.length; i++)
@@ -4714,7 +4715,7 @@ function initialize() {
 	s_AttrForm.onchange = function(event){
 		event?.preventDefault();
 		const formData = new FormData(this);
-		for (let i = 0; i <= 2; i++) {
+		for (let i = 0; i <= 3; i++) {
 			const attr = parseInt(formData.get(`attr-${i+1}`),10);
 			s_attr_preview_attrs[i].dataset.attr = Number.isNaN(attr) ? "any" : attr;
 		}
@@ -4743,7 +4744,6 @@ function initialize() {
 			img.height * imgScale
 		);
 		img.close();
-		btnCustomAvatarSave.classList.remove(className_displayNone);
 	};
 	const btnCustomAvatarSave = searchBox.querySelector(".attrs-div #avatar-save");
 	btnCustomAvatarSave.onclick = function(event) {
@@ -4757,7 +4757,18 @@ function initialize() {
 			});
 		});
 	}
-
+	//显示第四属性的选择，彩蛋
+	function set_4th_attrs(){
+		btnCustomAvatarSave.classList.remove(className_displayNone);
+		const attrs4 = s_AttrForm.querySelector(".attr-selecter-list .attr-list.display-none");
+		if (attrs4) {
+			Cards.forEach(card=>card.attrs[3] = Math.randomInteger(0,4));
+			attrs4.classList.remove(className_displayNone);
+		}
+		editBox.changeMonId(monstersID.value);
+		alert("恶搞功能：所有角色全部随机设定了第四属性，请勿当真。你可以上传你的自定义图片以制作卡片头像。\n\nSpoof function: All Cards have a random 4th attribute, don't take it seriously. You can upload your custom image to make a card avatar.");
+	}
+	avatarSelect.addEventListener("click", set_4th_attrs, {once: true});
 
 	function s_types_onchange(){
 		const newClassName = `type-killer-${this.value}`;
@@ -5212,7 +5223,7 @@ function initialize() {
 	searchBox.getSearchOptions = function(){
 		const attrs = (function(formData){
 			const attrsArr = [];
-			for (let i = 0; i <= 2; i++) {
+			for (let i = 0; i <= 3; i++) {
 				const attrNum = Bin.enflags(formData.getAll(`attr-${i+1}`).map(Str2Int));
 				attrsArr.push(attrNum);
 			}
@@ -5936,22 +5947,20 @@ function changeid(mon, monDom, latentDom, assist) {
 		monDom.setAttribute("data-cards-pic-x", idxInPage % 10); //添加X方向序号
 		monDom.setAttribute("data-cards-pic-y", Math.floor(idxInPage / 10)); //添加Y方向序号
 
-		const attrDoms = monDom.querySelectorAll(".attr"); //所有属性边框
-		attrDoms[0].setAttribute("data-attr", card.attrs[0]); //主属性
-		let subAttribute = card.attrs[1] ?? -1; //正常的副属性
-		let assistCard = Cards[assist?.id], assistAwakenings = assistCard?.awakenings?.slice(0, assist.awoken);
-		let changeAttr;
-		if (assistAwakenings?.includes(49) &&  //如果传入了辅助武器
-			(changeAttr = assistAwakenings.find(ak=>ak >= 91 && ak <= 95)) //搜索改副属性的觉醒
-		) {
-			subAttribute = changeAttr - 91; //更改副属性
+		const attrDoms = Array.from(monDom.querySelectorAll(".attr")); //所有属性边框
+		attrDoms.forEach((attrDom, idx)=>{
+			attrDom.setAttribute("data-attr", card.attrs[idx] ?? -1);
+		});
+		
+		const assistAwakenings = assist?.card?.awakenings?.slice(0, assist.awoken);
+		const changeAttrAwoken = assistAwakenings?.includes(49) && //是武器
+								assistAwakenings.find(ak=>ak >= 91 && ak <= 95); //有更改副属性觉醒
+		if (changeAttrAwoken) {
+			attrDoms[1].setAttribute("data-attr", changeAttrAwoken - 91); //更改副属性
 		}
-		attrDoms[1].setAttribute("data-attr", subAttribute); //副属性
-		attrDoms[1].classList.toggle("changed-sub-attr", Boolean(changeAttr));
+		attrDoms[1].classList.toggle("changed-sub-attr", Boolean(changeAttrAwoken));
 
-		attrDoms[2].setAttribute("data-attr", card.attrs[2] ?? -1); //第三属性
-
-		monDom.title = "No." + monId + " " + (card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name);
+		monDom.title = `No.${monId} ${card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name}`;
 		monDom.href = currentLanguage.guideURL(monId, card.name);
 		monDom.classList.toggle("allowable-assist", card.canAssist);; //可作为辅助
 

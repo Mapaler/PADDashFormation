@@ -9,6 +9,9 @@
 .monster .attrs .attr:nth-of-type(3){ /*三属性*/
 	background-position-y: -208px;
 }
+.monster .attrs .attr:nth-of-type(4){ /*四属性*/
+	background-position-y: -312px;
+}
 .monster .attrs .attr[data-attr='-1'] {
 	background: none; /*无*/
 }

@@ -959,9 +959,9 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 	if (notWeapon) cardsRange = cardsRange.filter(card=>!card.awakenings.includes(49) && //不是武器
 					!card.stackable); //不可堆叠
 	//属性
-	const anyAttrsFlag = 0b1011111;
-	const isAnyAttrs = sAttrs.map(attr=>attr === 0 || (attr & anyAttrsFlag) == anyAttrsFlag);
-	if (isAnyAttrs.some(any=>!any)) { //当任一属性不为任意颜色时才需要筛选属性，否则跳过属性筛选
+	const anyAttrsFlag = 0b1011111; //所有颜色的查找，注意右边才是最低位
+	sAttrs = sAttrs.map(attr=>attr || anyAttrsFlag); //如果传入搜索为0，提高到任意色
+	if (sAttrs.some(attr=>(attr & anyAttrsFlag) !== anyAttrsFlag)) { //当任一属性不为任意颜色时才需要筛选属性，否则跳过属性筛选
 		//如果固定顺序就直接使用当前颜色顺序；否则不考虑顺序时，去除任意色
 		const attrNums = sAttrs.filter(attr=>fixMainColor || attr > 0 && (attr & anyAttrsFlag) !== anyAttrsFlag)
 			.map(attr=>{
@@ -970,26 +970,38 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 				return attrNum;
 			});
 		if (fixMainColor) {//如果固定了顺序
+			//只有第一属性有搜索内容时才搜索无主属性
+			const isSearchNoMainAttr = (sAttrs[0] ^ 0b1000000) > 0 && sAttrs.slice(1).every(attr=>(attr & anyAttrsFlag) === anyAttrsFlag);
 			cardsRange = cardsRange.filter(({attrs:cAttrs}) => {
 				//默认逻辑为，只要不是any，就判断这个颜色是否包含了对应的颜色
-				return (isAnyAttrs[0] || attrNums[0].includes(cAttrs[0]) ||
-						isAnyAttrs[1] && cAttrs[0] === 6 && attrNums[0].includes(cAttrs[1])) && //只选第一属性的时候，且第一属性为无主属性的时候，也显示副属性等于主属性的
-					   (isAnyAttrs[1] || attrNums[1].includes(cAttrs[1])) &&
-					   (isAnyAttrs[2] || attrNums[2].includes(cAttrs[2]));
+				//不能用怪物颜色来查找，因为怪物只有一个颜色就会提前退出循环，导致不搜索副属性
+				return sAttrs.every((sAttr, idx)=>{				
+					if (idx === 0 && isSearchNoMainAttr && //第一属性搜索，需要搜索无主属性时
+						 //只选第一属性的时候，且第一属性为无主属性的时候，也显示副属性等于主属性的
+						cAttrs[0] === 6 && //角色第一属性为无主属性
+						(sAttr & 1 << cAttrs[1])) return true; //第二属性计算flag
+					
+					const flag = 1 << (Number.isInteger(cAttrs[idx]) ? cAttrs[idx] : 6);
+					return sAttr & flag;
+				});
+				
+				// (isAnyAttrs[0] || attrNums[0].includes(cAttrs[0]) ||
+				// 		isAnyAttrs[1] && cAttrs[0] === 6 && attrNums[0].includes(cAttrs[1])) && //只选第一属性的时候，且第一属性为无主属性的时候，也显示副属性等于主属性的
+				// 	   (isAnyAttrs[1] || attrNums[1].includes(cAttrs[1])) &&
+				// 	   (isAnyAttrs[2] || attrNums[2].includes(cAttrs[2]));
 			});
 		}
 		else {//不限定顺序时
-			//const attrFlags = sAttrs.filter(attr=>attr > 0 && (attr & anyAttrsFlag) !== anyAttrsFlag);
-			const attrFlags = sAttrs.map(attr=>attr || anyAttrsFlag);
 			//const notAnyAttrsCount = isAnyAttrs.filter(b=>!b).length;
-			cardsRange = cardsRange.filter(({attrs:cAttrs_, id}) => {
-				const cAttrs = cAttrs_.concat();
-				if (cAttrs[1] == undefined) cAttrs[1] = 6;
-				if (cAttrs[2] == undefined) cAttrs[2] = 6;
+			cardsRange = cardsRange.filter(({attrs:cAttrs, id}) => {
+				cAttrs = cAttrs.concat();
+				for (let i = 1; i < sAttrs.length; i++) {
+					if (!Number.isInteger(cAttrs[i])) cAttrs[i] = 6;
+				}
 				/*
 					我也不知道为什么这个代码可以跑，没学过矩阵运算，乱猜的，好像结果可以用，结果发现矩阵好像根本没用
 				*/
-				const matrix3x3 = attrFlags.map(sAttr=>{
+				const matrix3x3 = sAttrs.map(sAttr=>{
 					return cAttrs.map(cAttr=>1 << cAttr & sAttr);
 				});
 				const rowValues = matrix3x3.map(row=>row.reduce((p,v)=>p | v,0)); //每个属性都有 filter 匹配
