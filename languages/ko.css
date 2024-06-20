@@ -230,22 +230,31 @@ label[for="screenshot-transparent"]::after{
 	content:"표시된 정보 전환 목록";
 }
 label[for="show-card-id"]::after{
-	content:"🆔카드 ID";
+	content:"카드 ID";
 }
 label[for="show-card-rarity"]::after{
-	content:"⭐️카드의 희귀도";
+	content:"카드의 희귀도";
+}
+label[for="show-member-level"]::after{
+	content:"멤버의 레벨";
+}
+label[for="show-member-plus-point"]::after{
+	content:"멤버의 플러스 포인트";
+}
+label[for="show-member-awoken-count"]::after{
+	content:"회원의 각성 횟수 아이콘";
 }
 label[for="show-member-skill-cd"]::after{
-	content:"❄️회원의 CD";
+	content:"멤버의 CD";
 }
 label[for="show-member-ability"]::after{
-	content:"⚔️회원의 능력";
+	content:"멤버의 능력";
 }
 label[for="show-member-types"]::after{
 	content:"멤버의 타입";
 }
 label[for="show-member-awoken"]::after{
-	content:"👁️멤버의 유형";
+	content:"멤버의 각성 목록";
 }
 label[for="show-team-total-info"]::after{
 	content:"팀의 HP 정보";

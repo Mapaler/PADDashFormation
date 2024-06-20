@@ -237,22 +237,31 @@ label[for="screenshot-transparent"]::after{
 	content:"展示信息開關列表";
 }
 label[for="show-card-id"]::after{
-	content:"🆔卡片ID";
+	content:"卡片ID";
 }
 label[for="show-card-rarity"]::after{
-	content:"⭐️卡片稀有度";
+	content:"卡片稀有度";
+}
+label[for="show-member-level"]::after{
+	content:"隊員等級";
+}
+label[for="show-member-plus-point"]::after{
+	content:"隊員加值";
+}
+label[for="show-member-awoken-count"]::after{
+	content:"隊員覺醒數量角標";
 }
 label[for="show-member-skill-cd"]::after{
-	content:"❄️隊員技能冷卻";
+	content:"隊員技能冷卻";
 }
 label[for="show-member-ability"]::after{
-	content:"⚔️隊員能力值";
+	content:"隊員能力值";
 }
 label[for="show-member-types"]::after{
 	content:"隊員類型";
 }
 label[for="show-member-awoken"]::after{
-	content:"👁️隊員覺醒";
+	content:"隊員覺醒列表";
 }
 label[for="show-team-total-info"]::after{
 	content:"隊伍生命值等信息統計";

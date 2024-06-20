@@ -244,19 +244,28 @@ label[for="show-card-id"]::after{
 	content:"🆔Card's ID";
 }
 label[for="show-card-rarity"]::after{
-	content:"⭐️Card's Rarity";
+	content:"Card's Rarity";
+}
+label[for="show-member-level"]::after{
+	content:"Member's Level";
+}
+label[for="show-member-plus-point"]::after{
+	content:"Member's Plus Point";
+}
+label[for="show-member-awoken-count"]::after{
+	content:"Icon of Member's Awaknings Count";
 }
 label[for="show-member-skill-cd"]::after{
-	content:"❄️Member's Skill CD";
+	content:"Member's Skill CD";
 }
 label[for="show-member-ability"]::after{
-	content:"⚔️Member's Ability";
+	content:"Member's Ability";
 }
 label[for="show-member-types"]::after{
 	content:"Member's Types";
 }
 label[for="show-member-awoken"]::after{
-	content:"👁️Member's Awoken";
+	content:"List of Member's Awakenings";
 }
 label[for="show-team-total-info"]::after{
 	content:"Team's HP Info";

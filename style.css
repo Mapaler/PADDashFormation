@@ -725,10 +725,13 @@ ul{
 }
 body:not(.show-card-id) .monster .id, /*卡片id*/
 body:not(.show-card-rarity) .monster .rarity, /*卡片稀有度*/
-body:not(.show-member-skill-cd) .monster .skill-cd.max-skill, /*队员CD*/
+body:not(.show-member-level) .monster .level, /*队员等级*/
+body:not(.show-member-plus-point) .monster .plus, /*队员加值*/
+body:not(.show-member-awoken-count) .monster .awoken-count-num, /*队员觉醒数量*/
+body:not(.show-member-skill-cd) .monster .skill-cd.max-skill, /*队员CD，不满时还是显示*/
 body:not(.show-member-ability) .team-ability, /*队员三维*/
-body:not(.show-member-types) .team-member-types, /*武器觉醒、队员觉醒、队员类型*/
-body:not(.show-member-awoken) :where(.team-assist-awoken , .team-member-awoken), /*武器觉醒、队员觉醒、队员类型*/
+body:not(.show-member-types) .team-member-types, /*队员类型*/
+body:not(.show-member-awoken) :where(.team-assist-awoken , .team-member-awoken), /*武器觉醒、队员觉醒列表*/
 body:not(.show-team-awoken-count) .team-awoken, /*队伍觉醒统计*/
 body:not(.show-team-total-info) :where(.tIf-total-hp, .tIf-effect),
 body:not(.show-team-attrtype-count) .team-total-info-count, /*稀有度、属性与类型计数*/
@@ -738,6 +741,17 @@ body.show-meter meter+span,
 body:not(.show-rich-text-tools) #rich-text-tools /*富文本框选择器*/
 {
 	display: none !important;
+}
+.config-display-list .in-card{
+	display: grid;
+	grid-template-columns: 75px auto;
+}
+.config-display-list .in-card .switchs{
+	display: flex;
+	flex-wrap: wrap;
+}
+.config-display-list .in-card .switchs input[type="checkbox"].switch-ipt:checked + label::before{
+	background-color: #0A4;
 }
 
 /*交换队长技的图标*/

@@ -235,22 +235,31 @@ label[for="screenshot-transparent"]::after{
 }
 
 label[for="show-card-id"]::after{
-	content:"🆔カード番号";
+	content:"カード番号";
 }
 label[for="show-card-rarity"]::after{
-	content:"⭐️カードの希少性";
+	content:"カードの希少性";
+}
+label[for="show-member-level"]::after{
+	content:"メンバーのレベル";
+}
+label[for="show-member-plus-point"]::after{
+	content:"メンバーのプラス・ポイント";
+}
+label[for="show-member-awoken-count"]::after{
+	content:"メンバーの覚醒数のアイコン";
 }
 label[for="show-member-skill-cd"]::after{
-	content:"❄️メンバーズスキルCD";
+	content:"メンバーのスキルCD";
 }
 label[for="show-member-ability"]::after{
-	content:"⚔️メンバーの能力";
+	content:"メンバーの能力";
 }
 label[for="show-member-types"]::after{
 	content:"メンバーのタイプ";
 }
 label[for="show-member-awoken"]::after{
-	content:"👁️メンバーの覚醒";
+	content:"メンバーの覚醒一覧";
 }
 label[for="show-team-total-info"]::after{
 	content:"チームのHP情報";
