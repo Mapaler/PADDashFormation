@@ -1686,7 +1686,7 @@ class PlayerDataCard {
 		this.level = e.next().value[1];
 		this.skillLevel = e.next().value[1]; //未知
 		e.next(); //未知
-		this.id = e.next().value[1];
+		this.id = cardFixId(e.next().value[1], false);
 
 		//叠加型用他们的经验来表示数量
 		const card = Cards[this.id];
