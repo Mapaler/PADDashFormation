@@ -4701,7 +4701,7 @@ function initialize() {
 	const searchEvolutionByThis = settingBox.querySelector(".row-mon-id .search-evolution-by-this");
 	searchEvolutionByThis.onclick = function() {showSearch(Cards.filter(card=>card.evoMaterials.includes(editBox.mid)))};
 	
-	const s_attr_lists = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list")).map(list=>Array.from(list.querySelectorAll("input[type=\"radio\"]")));
+	//const s_attr_lists = Array.from(searchBox.querySelectorAll(".attrs-div .attr-list")).map(list=>Array.from(list.querySelectorAll("input[type=\"radio\"]")));
 	const s_fixMainColor = searchBox.querySelector("#fix-main-color");
 	const s_typesDiv = searchBox.querySelector(".types-div");
 	const s_typeAndOr = s_typesDiv.querySelector("#type-and-or");
@@ -4715,7 +4715,7 @@ function initialize() {
 	s_AttrForm.onchange = function(event){
 		event?.preventDefault();
 		const formData = new FormData(this);
-		for (let i = 0; i <= 3; i++) {
+		for (let i = 0; i < s_attr_preview_attrs.length; i++) {
 			const attr = parseInt(formData.get(`attr-${i+1}`),10);
 			s_attr_preview_attrs[i].dataset.attr = Number.isNaN(attr) ? "any" : attr;
 		}
@@ -5222,8 +5222,9 @@ function initialize() {
 	//导出当前的搜索状态
 	searchBox.getSearchOptions = function(){
 		const attrs = (function(formData){
+			const attrsList = s_AttrForm.querySelectorAll(".attr-selecter-list .attr-list:not(.display-none)");
 			const attrsArr = [];
-			for (let i = 0; i <= 3; i++) {
+			for (let i = 0; i < attrsList.length; i++) {
 				const attrNum = Bin.enflags(formData.getAll(`attr-${i+1}`).map(Str2Int));
 				attrsArr.push(attrNum);
 			}

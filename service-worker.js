@@ -6067,7 +6067,7 @@ const cachesMap = new Map([
 	],
 	[
 		"sound/voice/ja/padv2191.wav",
-		"d07c2fc9a621d4345c053f3d2187a937"
+		"143e052f3c15efaadaf7eaae277c68e7"
 	],
 	[
 		"sound/voice/ja/padv2192.wav",
@@ -29491,7 +29491,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"a598a7d370517e705b2799104209c960"
+		"06dfac154d6c8a3fdece2e5695481b03"
 	],
 	[
 		"script-custom_elements.js",
@@ -29507,15 +29507,15 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"eb995d69da2ff44026be01f7ba42bee1"
+		"fa1c29c20ebadf94a9405b9f73e4f85b"
 	],
 	[
 		"script.js",
-		"8568d24114f2312366edf38bd1552470"
+		"1329cd6c6afbad409c41146c34b5560e"
 	],
 	[
 		"solo.html",
-		"f55b918d162de2c14a9cd9374b2d2ad3"
+		"3b38841a6ed0189065986db5d40f5e03"
 	],
 	[
 		"style-monsterimages.css",
@@ -29531,7 +29531,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"26802d635b20aecdd824256243a3286f"
+		"5c09b746fcb677cb0a468333d1ea4891"
 	],
 	[
 		"languages/en.css",
@@ -29583,7 +29583,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/avatar.webp",
-		"8b1205de9c876d23562a04a50ca6086a"
+		"73e05c2a9a536873aee4fafb1edd7b82"
 	],
 	[
 		"images/awoken-count-bg.png",
@@ -29867,7 +29867,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/images/bluestacks-vhd-mount-vhd-failed.webp",
-		"7941862be127cb177b86ea4cc2877134"
+		"e41f2de6990b34ae7995a5acb0e3ea0c"
 	],
 	[
 		"doc/images/bluestacks-vhd-open-disk-management.webp",
