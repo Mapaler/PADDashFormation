@@ -1081,6 +1081,7 @@ Formation.pdcBadgeMap = [
 	{pdf:26,pdc:24}, //高达桶
 	{pdf:27,pdc:25}, //转生成为史莱姆
 	{pdf:28,pdc:26}, //电击文库Index
+	{pdf:29,pdc:27}, //奥特曼
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -1447,6 +1448,7 @@ Formation.sanbonBadgeMap = [
 	{pdf:26,sanbon:22}, //合作，高达
 	{pdf:27,sanbon:24}, //转生成为史莱姆
 	{pdf:28,sanbon:25}, //电击文库Index
+	{pdf:29,sanbon:26}, //奥特曼
 	{pdf:PAD_PASS_BADGE,sanbon:1}, //月卡
 ];
 Formation.prototype.getSanbonQrObj = function()
@@ -7505,6 +7507,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 26: return member.card.collabId === 107 ? 1.15 : 1; //高达徽章
 				case 27: return member.card.collabId === 112 ? 1.15 : 1; //转生成为史莱姆
 				case 28: return member.card.collabId === 110 ? 1.15 : 1; //电击文库Index
+				case 29: return member.card.collabId === 102 ? 1.15 : 1; //奥特曼
 				default: return 1;
 			}
 		}
