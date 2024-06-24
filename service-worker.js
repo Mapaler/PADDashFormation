@@ -6067,7 +6067,7 @@ const cachesMap = new Map([
 	],
 	[
 		"sound/voice/ja/padv2191.wav",
-		"143e052f3c15efaadaf7eaae277c68e7"
+		"d07c2fc9a621d4345c053f3d2187a937"
 	],
 	[
 		"sound/voice/ja/padv2192.wav",
@@ -29491,7 +29491,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"06dfac154d6c8a3fdece2e5695481b03"
+		"98b39e54a83572b1f4152ecf70053d88"
 	],
 	[
 		"script-custom_elements.js",
@@ -29511,11 +29511,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"6e067dad55c4c110450cd0f1fd32cfef"
+		"b450f4ce283c8802f6e418a72d0fdc39"
 	],
 	[
 		"solo.html",
-		"3b38841a6ed0189065986db5d40f5e03"
+		"e5a78c6b958828400095edd5a419f692"
 	],
 	[
 		"style-monsterimages.css",
@@ -29523,7 +29523,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"dfdca9305210f9a8d9dde03855a51650"
+		"34ab62d874338ceb3ca3d4f6b38b4b26"
 	],
 	[
 		"temp.js",
@@ -29531,7 +29531,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"5c09b746fcb677cb0a468333d1ea4891"
+		"9fb90a3dfa2f1a30cb961425ecf489e5"
 	],
 	[
 		"languages/en.css",
@@ -29867,7 +29867,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/images/bluestacks-vhd-mount-vhd-failed.webp",
-		"e41f2de6990b34ae7995a5acb0e3ea0c"
+		"7941862be127cb177b86ea4cc2877134"
 	],
 	[
 		"doc/images/bluestacks-vhd-open-disk-management.webp",

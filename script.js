@@ -1369,121 +1369,6 @@ Formation.prototype.getPaddbQrObj = function(keepDataSource = true)
 	};
 	return qrObj;
 }
-function sanbonTranslateRegion(code) {
-	switch (code) {
-		case "ja": return "jp";
-		case "ko": return "kr";
-		case "en": return "na";
-	}
-};
-Formation.prototype.getSanbonV2Script = function()
-{
-	const region = sanbonTranslateRegion(currentDataSource.code);
-	//sanbon目前只支持单人队伍
-	const [members,assists,badge] = this.teams[0];
-const scriptLines = [`(async ()=>{
-	"use strict";
-	let buildId;
-	if (typeof __NEXT_DATA__ !== 'undefined') {
-		buildId = __NEXT_DATA__?.buildId;
-	} else {
-		const Zstr = window.__next_f.find(o=>o?.[1]?.startsWith("0:"))[1];
-		const regRes = /"buildId":"([\\w\\-]+)"/ig.exec(Zstr);
-		buildId = regRes[1];
-	}
-	if (!buildId) throw Error("buildId not found.");
-	
-	const region = "${region}";
-
-	async function fetchFlattened(id) {
-		if (id <= 0) return {};
-		const url = new URL(location.origin);
-		url.pathname = \`/_next/data/\${buildId}/\${region}/monster/\${id}.json\`;
-		url.searchParams.set("lang_region", region);
-		url.searchParams.set("num", id);
-		const response = await fetch(url);
-		const json = await response.json();
-		return json.pageProps.mon;
-	}
-
-	const tbs = JSON.parse(sessionStorage.getItem("team-build-store"));
-	const team = tbs.state;
-	team.badge = ${Formation.sanbonBadgeMap.find(_badge=>_badge.pdf === badge)?.sanbon ?? badge};`];
-
-	const _members = {};
-	for (let i = 0; i < members.length; i++) {
-		const m = members[i], a = assists[i];
-		const _m = {
-			num: m.id,
-			level: m.level,
-			superAwoken: m.sawoken ?? 0,
-			latentAwokens: m.latent.concat().sort((a, b) => latentUseHole(b) - latentUseHole(a)),
-			awokenCount: m.awoken,
-			hpPlus: m.plus[0],
-			atkPlus: m.plus[1],
-			rcvPlus: m.plus[2],
-			assistNum: a.id,
-			assistLevel: a.level,
-			assistPlus: a?.plus?.every(p=>p>=99) ?? false,
-			// flattened: cardFlattened(m.card),
-			// assistFlattened: cardFlattened(a.card),
-			flattened: `(await fetchFlattened(${m.id}))`,
-			assistFlattened: `(await fetchFlattened(${a.id}))`,
-		}
-		_members[i] = _m;
-	}
-scriptLines.push(`\tteam.members = ${JSON.stringify(_members,null,'\t').replace(/"(\(await fetchFlattened\(\d+\)\))"/igm, "$1")}`);
-scriptLines.push(`\tsessionStorage.setItem("team-build-store", JSON.stringify(tbs));
-\tlocation.reload();
-})();`);
-	return scriptLines.join('\n');
-};
-
-//sanbon的徽章对应数字
-Formation.sanbonBadgeMap = [
-	{pdf:22,sanbon:15}, //除武器，全抗性(耐)
-	{pdf:23,sanbon:16}, //除武器，10SB(S+×5)
-	{pdf:24,sanbon:20}, //合作，英雄学院
-	{pdf:25,sanbon:23}, //官桶，画师
-	{pdf:26,sanbon:22}, //合作，高达
-	{pdf:27,sanbon:24}, //转生成为史莱姆
-	{pdf:28,sanbon:25}, //电击文库Index
-	{pdf:29,sanbon:26}, //奥特曼
-	{pdf:PAD_PASS_BADGE,sanbon:1}, //月卡
-];
-Formation.prototype.getSanbonQrObj = function()
-{
-	//sanbon目前只支持单人队伍
-	const [members,assists,badge] = this.teams[0];
-	const obj = {
-		region: sanbonTranslateRegion(currentDataSource.code),
-		title: this.title ?? "",
-		content: this.detail ?? "",
-		//mons: assists.map(m=>m.id).concat(members.map(m=>m.id)),
-		data: {
-			badge: Formation.sanbonBadgeMap.find(_badge=>_badge.pdf === badge)?.sanbon ?? badge,
-			members: {}, //等待下面处理
-		},
-	};
-	for (let i = 0; i < members.length; i++) {
-		const m = members[i], a = assists[i];
-		const _m = {
-			num: m.id,
-			level: m.level,
-			superAwoken: m.sawoken ?? 0,
-			latentAwokens: m.latent.concat().sort((a, b) => latentUseHole(b) - latentUseHole(a)),
-			awokenCount: m.awoken,
-			hpPlus: m.plus[0],
-			atkPlus: m.plus[1],
-			rcvPlus: m.plus[2],
-			assistNum: a.id,
-			assistLevel: a.level,
-			assistPlus: a?.plus?.every(p=>p>=99) ?? false,
-		}
-		obj.data.members[i] = _m;
-	}
-	return obj;
-};
 
 //daddb的徽章对应数字
 Formation.daddbBadgeMap = [
@@ -2463,30 +2348,6 @@ async function inputFromQrString(string)
 		qrObj.paddbId = obj._id;
 		return qrObjToUrl(qrObj);
 	}
-	function sanbonObjToURL(obj, region) {
-		const newFotmation = sanbonFotmationToPdfFotmation(obj);
-		const qrObj = newFotmation.getPdfQrObj(false);
-		if (region == undefined) {
-			console.debug("从sanbon json数据中获取数据区域");
-			region = obj.pageProps.members["0"].flattened.region;
-		}
-		switch (region) {
-			case "kr": {
-				qrObj.s = "ko";
-				break;
-			}
-			case "na": {
-				qrObj.s = "en";
-				break;
-			}
-			case "jp":
-			default: {
-				qrObj.s = "ja";
-				break;
-			}
-		}
-		return qrObjToUrl(qrObj);
-	}
 	//JSON 类
 	if (string.startsWith("{") && string.endsWith("}"))
 	{ //生成的二维码
@@ -2500,10 +2361,6 @@ async function inputFromQrString(string)
 			else if (typeof obj?.team == "string" && obj.team[0] === "{" && obj.team[obj.team.length-1] === "}") { //PADDB的对象格式
 				re.type = "PADDB";
 				re.url = paddbObjToURL(obj)
-			}
-			else if ("__N_SSG" in obj) { //SANBON的对象格式
-				re.type = "SANBON";
-				re.url = sanbonObjToURL(obj)
 			}
 			else if (Array.isArray(obj?.staffs)) { //DADDB的对象格式
 				re.type = "DADDB";
@@ -2538,55 +2395,6 @@ async function inputFromQrString(string)
 				console.error(error);
 				re.error = ERROR_illegal_URL_format;
 				//re.message = "错误的 网址 格式 | The illegal URL format";
-			}
-		}
-		//sanbon.me 的网址格式，之后要调用脚本功能获取跨域JSON
-		else if(url.host == "sanbon.me" && url.pathname.includes(paddbPathPrefix)) {
-			const teamId = url.pathname.substring(url.pathname.indexOf(paddbPathPrefix) + paddbPathPrefix.length);
-			re.type = "SANBON";
-			const txtStringInput = document.body.querySelector("#qr-code-frame .action-button-box .string-input"); //输入的字符串
-			const btnExternalSupport = document.body.querySelector("#external-support");
-			if (btnExternalSupport?.asyncGM_xmlhttpRequest) {
-				//获取 sanbon.me 的 buildId
-				const mainpageResponse = await btnExternalSupport.asyncGM_xmlhttpRequest({
-					method: "GET",
-					url: "https://sanbon.me/",
-				});
-				const domParser = new DOMParser();
-				const sanbonMainpage = domParser.parseFromString(mainpageResponse.response, "text/html");
-				const __NEXT_DATA__ = sanbonMainpage.getElementById("__NEXT_DATA__");
-				const __NEXT_DATA__JSON = JSON.parse(__NEXT_DATA__.innerHTML);
-				const buildId = __NEXT_DATA__JSON.buildId;
-				console.debug("sanbon.me 网站当前的框架 buildId 是 %s",buildId);
-
-				//获取队伍数据的访问链接
-				const langString = url.pathname.substring(1, url.pathname.indexOf(paddbPathPrefix));
-				const langReg = /(?:\w{2}\-)?(\w{2})$/i.exec(langString); //实际上只会有(en|ja|ko)\-(jp|na|kr)
-				const lang_region = langReg[1];
-				const dataUrl = new URL("https://sanbon.me/");
-				dataUrl.pathname = `/_next/data/${buildId}/${lang_region}/team/${teamId}.json`;
-				dataUrl.searchParams.set("lang_region", lang_region);
-				dataUrl.searchParams.set("code", teamId);
-
-				console.debug("当前的 sanbon.me 队伍数据链接是 %o",dataUrl);
-				
-				const options = {
-					method: "GET",
-					url: dataUrl,
-				};
-				const response = await btnExternalSupport.asyncGM_xmlhttpRequest(options);
-				try{
-					let obj = JSON.parse(txtStringInput.value = response.response);
-					re.url = sanbonObjToURL(obj, lang_region);
-				} catch(error) {
-					console.error(error);
-					re.error = ERROR_illegal_JSON_format;
-				}
-			} else {
-				re.error = ERROR_Unsupported_format;
-				re.message = localTranslating.link_read_message.need_user_script;
-				re.url = ExternalLinkScriptURL;
-				re.urlName = localTranslating.link_read_message.user_script_link;
 			}
 		}
 		//PADDB 的网址格式，之后要调用脚本功能获取跨域JSON
@@ -2779,35 +2587,6 @@ function paddbFotmationToPdfFotmation(obj)
 	}
 	return f;
 }
-//解析sanbon.me的数据
-function sanbonFotmationToPdfFotmation(obj)
-{
-	const team = obj.pageProps;
-	const f = new Formation(1, 6);
-	f.title = team.title;
-	f.detail = team.content;
-	const t = f.teams[0];
-
-	//队伍徽章
-	t[2] = Formation.sanbonBadgeMap.find(badge=>badge.sanbon === team.badge)?.pdf ?? team.badge;
-	const members = t[0], assists = t[1];
-	for (let i = 0; i< members.length; i++) {
-		const m = members[i], a = assists[i], dm = team.members[i];
-		if (dm) {
-			m.id = dm.num;
-			m.level = dm.level;
-			m.plus = [dm.hpPlus, dm.atkPlus, dm.rcvPlus];
-			m.awoken = dm.awokenCount;
-			m.sawoken = dm.superAwoken;
-			m.latent = dm.latentAwokens;
-			a.id = dm.assistNum;
-			a.awoken = Cards[a.id].awakenings.length;
-			a.plus = dm.assistPlus ? [99,99,99]:[0,0,0];
-			a.level = dm.assistLevel;
-		}
-	}
-	return f;
-}
 //解析DADDB的数据
 function daddbFotmationToPdfFotmation(obj)
 {
@@ -2995,10 +2774,6 @@ function initialize() {
 		
 		let qrTypeRadio = qrSaveBox.qrDataType.find(radio=>radio.checked);
 		if (qrTypeRadio) qrTypeRadio.onclick(); //打开二维码窗口就先产生二维码
-
-		//生成sanbon v1链接
-		qrCodeFrame.querySelector("#sanbon-v2-link").href = `https://sanbon.me/${sanbonTranslateRegion(currentDataSource.code)}/team-builder`;
-		qrCodeFrame.querySelector("#sanbon-v2-script").value = formation.getSanbonV2Script();
 
 	};
 	qrCodeFrame.hide = function(){qrcodeReader.reset();};
@@ -3345,52 +3120,6 @@ function initialize() {
 				paddbTeamId.onchange();
 			}
 			alert(localTranslating.link_read_message.paddb_success);
-		} else {
-			alert(localTranslating.link_read_message.error[0]);
-		}
-		this.disabled = false;
-	}
-
-	//sanbon.me数据上传
-	//const sanbonTeamEdit = qrContent.querySelector(".sanbon-team-edit");
-	const sanbonTeamId = document.querySelector("#sanbon-team-id");
-	const sanbonSaveOrUpload = document.querySelector("#sanbon-save-or-upload-team");
-	sanbonSaveOrUpload.onclick = async function(){
-		this.disabled = true;
-		if (!btnExternalSupport?.asyncGM_xmlhttpRequest) {
-			alert(localTranslating.link_read_message.need_user_script);
-			return;
-		}
-		let obj = formation.getSanbonQrObj();
-		let postBody = JSON.stringify(obj);
-		const options = {
-			method: "POST",
-			url: `https://sanbon.me/api/upload-team-v2`,
-			data: postBody,
-			headers: {
-				"Origin": "https://sanbon.me",
-				"Referer": `https://sanbon.me/${sanbonTranslateRegion(currentDataSource.code)}/team-builder/upload`,
-				"Content-Type": "application/json",
-				//如果只有ascii字符可以用postBody.length
-				"Content-Length": new Blob([postBody], {type: "application/json"}).size,
-			}
-		};
-		const response = await btnExternalSupport.asyncGM_xmlhttpRequest(options);
-		if (response.status === 401) {
-			alert(localTranslating.link_read_message.paddb_unauthorized);
-		} else if (response.status === 200)  {
-			try {
-				const result = JSON.parse(response.response);
-				console.debug("sanbon 数据上传返回结果：%o",result);
-				if (result.success) {
-					sanbonTeamId.value = `https://sanbon.me/${sanbonTranslateRegion(currentDataSource.code)}/team/${result.code}`;
-					alert(localTranslating.link_read_message.paddb_success);
-				} else {
-					alert(result.message);
-				}
-			} catch(e) {
-				alert(localTranslating.link_read_message.error[3]);
-			}
 		} else {
 			alert(localTranslating.link_read_message.error[0]);
 		}

@@ -3653,32 +3653,18 @@ body:not(.external-link-support) #external-support::before
 {
 		padding-bottom: 10px;
 }
-#qr-code-frame #sanbon-v2-script
-{
-	width: calc(100% - 20px);
-	height: 4em;
-	resize: vertical;
-}
-
 #qr-code-frame :where(
 	.read-qr-box,
 	.save-qr-box,
-	.paddb-team-edit,
-	.sanbon-transfer,
-	.sanbon-team-edit,
+	.paddb-team-edit
 )::before {
 	display: block;
 	text-align: left;
 }
 body:not(.solo.external-link-support) :where(
-	.paddb-team-edit,
-	.sanbon-team-edit,
+	.paddb-team-edit
 ) {
 	/*没有装插件的不显示PADDB上传功能*/
-	display: none;
-}
-body.external-link-support .sanbon-transfer {
-	/*装了插件的不显示sanbon测试功能*/
 	display: none;
 }
 
@@ -3686,13 +3672,8 @@ body.external-link-support #external-support{
 	/*装了插件的不显示请求装插件的消息*/
 	display: none;
 }
-#paddb-team-id,
-#sanbon-team-id {
+#paddb-team-id{
 	width: 350px;
-}
-.sanbon-transfer::before
-{
-	content: "Sanbon.me：(Defective test functionality)";
 }
 
 .qr-data-type-ul {
