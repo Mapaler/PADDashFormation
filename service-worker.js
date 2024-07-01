@@ -6067,7 +6067,7 @@ const cachesMap = new Map([
 	],
 	[
 		"sound/voice/ja/padv2191.wav",
-		"d07c2fc9a621d4345c053f3d2187a937"
+		"143e052f3c15efaadaf7eaae277c68e7"
 	],
 	[
 		"sound/voice/ja/padv2192.wav",
@@ -29499,15 +29499,15 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"aff28db2d3f7a46bddba6b4d559c9c79"
+		"e3cb9b6edd812eb327b009bdb3a29de3"
 	],
 	[
 		"script-skill-parser.js",
-		"5d5e6d38d82035de49807f72b2d8b0c3"
+		"5b5ccf1faedeca0c508b72af22bbf2f4"
 	],
 	[
 		"script-universal_function.js",
-		"fa1c29c20ebadf94a9405b9f73e4f85b"
+		"97285b342df0095b45fd8c1bfe6040f8"
 	],
 	[
 		"script.js",
@@ -29523,7 +29523,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"34ab62d874338ceb3ca3d4f6b38b4b26"
+		"54495620612baaeaeb84b12faef72840"
 	],
 	[
 		"temp.js",
@@ -29567,7 +29567,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.js",
-		"e8f4e76f67a4cbb4a72517e6f17434ee"
+		"75671019575fb6b73345a20f55d06fe2"
 	],
 	[
 		"languages/zh-hant.css",
@@ -29575,7 +29575,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.js",
-		"bede32cfeaa26e46a4cd26d57c319378"
+		"9dae8558cafe9243b3a794acd3487963"
 	],
 	[
 		"images/attrs.png",
@@ -29627,7 +29627,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-add-combo.png",
-		"c662326964c237ddfefedd6e166fff35"
+		"905398205a46fcbbf94c91126b748b4f"
 	],
 	[
 		"images/icon-assist-bind.png",
@@ -29711,7 +29711,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-skills.png",
-		"924dcf954c1f7def6addc3f62e17e028"
+		"d9244ad4fa64ac7ad55481b278e0ef9a"
 	],
 	[
 		"images/icon-switch-leader.png",
@@ -29867,7 +29867,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/images/bluestacks-vhd-mount-vhd-failed.webp",
-		"7941862be127cb177b86ea4cc2877134"
+		"e41f2de6990b34ae7995a5acb0e3ea0c"
 	],
 	[
 		"doc/images/bluestacks-vhd-open-disk-management.webp",

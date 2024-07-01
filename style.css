@@ -34,14 +34,6 @@
 		transform: rotate(360deg);
 	}
 }
-@keyframes gravity-animate{
-	from {
-		transform: scaley(1);
-	}
-	to {
-		transform: scaley(0.5);
-	}
-}
 body{
 	--head-block-width: 108px;
 	--head-block-height: 108px;
@@ -4282,12 +4274,15 @@ body.external-link-support #external-support{
 .icon-skill.status-bind::after,
 .icon-skill.hp-incr::after,
 .icon-skill.hp-decr::after,
+.icon-skill.atk-incr::after,
+.icon-skill.atk-decr::after,
 .icon-skill.boost-incr::after,
 .icon-skill.boost-decr::after,
 .icon-skill[data-icon-type="ctw"]::before,
 .icon-skill[data-icon-type="ctw"]::after,
 .icon-skill[data-icon-type="add-combo"]::after,
-.icon-skill[data-icon-type="fixed-time"]::after
+.icon-skill[data-icon-type="fixed-time"]::after,
+.icon-skill[data-icon-type="increase-damage-cap"]::after
 {
 	content: "";
 	position: absolute;
@@ -4330,6 +4325,7 @@ body.external-link-support #external-support{
 .icon-skill.hp-incr::after,
 .icon-skill.hp-decr::after
 {
+	left: 36px;
 	background-position-x:calc(-36px * 1);
 }
 .icon-skill.hp-incr::after
@@ -4358,6 +4354,7 @@ body.external-link-support #external-support{
 }
 .icon-skill[data-icon-type="heal"]
 {
+	width: 72px;
 	background-position-y:calc(-36px * 8);
 }
 .icon-skill[data-icon-type="def-break"]
@@ -4398,8 +4395,7 @@ body.external-link-support #external-support{
 }
 .icon-skill[data-icon-type="gravity"]
 {
-	animation: gravity-animate 1s infinite;
-	transform-origin: bottom center;
+	width: 72px;
 	background-position-y:calc(-36px * 14);
 }
 .icon-skill[data-icon-type="resolve"]
@@ -4542,9 +4538,31 @@ body.external-link-support #external-support{
 	background-image: url(images/icon-evolved-skill-loop.png);
 	background-size: contain;
 }
+.icon-skill[data-icon-type="slot-power-up"]
+{
+	background-position-y: calc(-36px * 39);
+}
+.icon-skill.atk-incr::after,
+.icon-skill.atk-decr::after
+{
+	transform: scale(0.75);
+}
+.icon-skill.atk-incr::after
+{
+	background-position-y:calc(-36px * 1);
+}
+.icon-skill.atk-decr::after
+{
+	background-position-y:calc(-36px * 2);
+}
 .icon-skill[data-icon-type="increase-damage-cap"]
 {
-	background-position-y:calc(-36px * 36);
+	background-position-y: calc(-36px * 39);
+}
+.icon-skill[data-icon-type="increase-damage-cap"]::after
+{
+	transform: scale(0.75);
+	background-position-y: calc(-36px * 36);
 }
 .icon-skill[data-icon-type="orb-thorn"]
 {
@@ -4559,7 +4577,8 @@ body.external-link-support #external-support{
 }
 .icon-skill[data-icon-type="remove-assist"]
 {
-	background-position-y:calc(-36px * 39);
+	background-image: url(images/icon-skills.png), url(images/icon-skills.png);
+	background-position-y: calc(-36px * 3), calc(-36px * 39);
 }
 .icon-skill[data-icon-type="board-deep-dark"]
 {
@@ -4584,6 +4603,7 @@ body.external-link-support #external-support{
 }
 .icon-skill[data-icon-type="breaking-shield"]
 {
+	width: 72px;
 	background-position-y:calc(-36px * 43);
 }
 

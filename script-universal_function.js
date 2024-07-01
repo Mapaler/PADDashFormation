@@ -962,7 +962,6 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 	const anyAttrsFlag = 0b1011111; //所有颜色的查找，注意右边才是最低位
 	sAttrs = sAttrs.map(attr=>attr || anyAttrsFlag); //如果传入搜索为0，提高到任意色
 
-	console.log(sAttrs);
 	if (sAttrs.some(attr=>(attr & anyAttrsFlag) !== anyAttrsFlag)) { //当任一属性不为任意颜色时才需要筛选属性，否则跳过属性筛选
 		//如果固定顺序就直接使用当前颜色顺序；否则不考虑顺序时，去除任意色
 		const attrNums = sAttrs.filter(attr=>fixMainColor || attr > 0 && (attr & anyAttrsFlag) !== anyAttrsFlag)

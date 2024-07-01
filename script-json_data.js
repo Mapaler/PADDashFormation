@@ -99,7 +99,7 @@ let localTranslating = {
 			auto_heal: tp`${'icon'}Heal ${'stats'} by ${'belong_to'} ${'value'} after matching orbs`,
 			ctw: tp`${'icon'}Move orbs freely for ${'time'}${'addition'}`,
 			ctw_addition: tp`, ${'cond'} is achieved, ${'skill'}`,
-			gravity: tp`${'icon'}Reduce ${'target'} ${'value'}`,
+			gravity: tp`Reduce ${'target'} ${'icon'}${'value'}`,
 			resolve: tp`${'icon'}Survive a single hit when ${'stats'}≧${'min'}`,
 			board_change: tp`Change all orbs to ${'orbs'}`,
 			skill_boost: tp`Team's skills charge ${'icon'}${'turns_min'}${'turns_max'}`,
@@ -143,7 +143,8 @@ let localTranslating = {
 			obstruct_opponent_after_me: tp`The opponent ranked lower than me`,
 			obstruct_opponent_before_me: tp`The opponent ranked higher than me`,
 			obstruct_opponent_designated_position: tp`No.${'positions'} ranked opponents`,
-			increase_damage_cap: tp`The ${'icon'}damage cap of ${'targets'} is increased to ${'cap'}`,
+			slot_power_up: tp`The slot of ${'targets'} ${'icon'}${'value'}`,
+			increase_damage_cap: tp`The ${'icon'}damage cap of ${'targets'} is change to ${'cap'}`,
 			board_jamming_state: tp`Creates ${'count'} ${'icon'}${'state'} ${'size'} at ${'position'}${'comment'}`,
 			board_size_change: tp`Board size changed to ${'icon'}${'size'}`,
 			remove_assist: tp`${'icon'}Remove this assist card (until end of dungeon)`,
@@ -1962,10 +1963,13 @@ const specialSearchFunctions = (function() {
 				},
 				addition:card=>{
 					let rate = damageSelf_Rate(card);
+					const fragment = document.createDocumentFragment();
+					fragment.append(createSkillIcon('heal', 'hp-decr'));
 					if (rate < 100)
-						return `减少${rate}%`;
+						fragment.append(`减少${rate}%`);
 					else
-						return `减少到1`;
+						fragment.append(`减少到1`);
+					return fragment;
 				}
 			},
 		]},

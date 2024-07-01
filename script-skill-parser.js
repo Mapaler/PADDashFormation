@@ -437,6 +437,7 @@ const SkillKinds = {
 	GenerateOrbs: "generate-orbs",
 	FixedOrbs: "fixed-orbs",
 	PowerUp: "power-up",
+	SlotPowerUp: "slot-power-up",
 	CounterAttack: "counter-attack",
 	SetOrbState: "set-orb-state",
 	RateMultiply: "rate-mul",
@@ -982,6 +983,9 @@ function powerUp(attrs, types, value, condition = null, reduceDamage = null, add
 	let targets = attrs?.targets;
 	if (targets) {attrs = null; types = null;}
 	return { kind: SkillKinds.PowerUp, targets, attrs, types, condition, value, reduceDamage, additional, eachTime};
+}
+function slotPowerUp(value, targets) {
+	return { kind: SkillKinds.SlotPowerUp, value, targets};
 }
 function counterAttack(attr, prob, value) {
 	return { kind: SkillKinds.CounterAttack, attr: attr, prob: prob, value: value };
@@ -1579,7 +1583,9 @@ const skillObjectParsers = {
 	[230](turns, target, mul) {
 		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
 		const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
-		return activeTurns(turns, powerUp({targets: typeArr}, null, p.mul({ atk: mul })));
+		return activeTurns(turns,
+			slotPowerUp(p.mul({ atk: mul }), typeArr)
+		);
 	},
 	[231](turns, awoken1, awoken2, awoken3, awoken4, awoken5, atk, rcv) {
 		return activeTurns(turns, powerUp(null, null, p.scaleStateKind([awoken1, awoken2, awoken3, awoken4, awoken5].filter(Boolean), null, null, p.mul({atk: atk, hp:0, rcv: rcv ?? 0}))));
@@ -2570,6 +2576,23 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.power_up(dict));
 			break;
 		}
+		case SkillKinds.SlotPowerUp: { //增加伤害上限
+			const {value, targets} = skill;
+			
+			let dict = {
+				icon: createIcon(skill.kind, value.atk > 1 ? "atk-incr" : "atk-decr"),
+				targets: document.createDocumentFragment(),
+				value: renderPowerUp(value),
+			};
+			
+			dict.targets.append(createTeamFlags(targets));
+			dict.targets.append(targets.map(target=>
+				tsp?.target[target.replaceAll("-","_")]?.())
+				.nodeJoin(tsp.word.slight_pause()));
+
+			frg.ap(tsp.skill.slot_power_up(dict));
+			break;
+		}
 		case SkillKinds.Henshin: { //变身
 			let ids = skill.ids, random = skill.random;
 			let doms = ids.map(id=>{
@@ -2830,41 +2853,40 @@ function renderAttrs(attrs, option = {}) {
 function renderOrbs(attrs, option = {}) {
 	if (!Array.isArray(attrs))
 		attrs = [attrs ?? 0];
+
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
 
 	const tsp = localTranslating.skill_parse;
 	let contentFrg;
 	
-	if (isEqual(attrs, Attributes.orbs()))
-	{
-		contentFrg = tsp.orbs.all();
-	}
-	else if (isEqual(attrs, Attributes.all()))
-	{
-		contentFrg = renderOrbs('_5color');
-	}
-	else if (isEqual(attrs, Attributes._6color()))
-	{
-		contentFrg = tsp.orbs._6color({
-			_5color: renderOrbs('_5color'),
-			orb_rcv: renderOrbs(5),
-		});
-	}
-	else
-	{
-		contentFrg = attrs.map(attr => {
-			const icon = document.createElement("icon");
-			icon.className = "orb";
-			if (option.className) icon.className += " " + option.className;
-			icon.setAttribute("data-orb-icon",attr);
-			let dict = {
-				icon: icon,
+	if (attrs.every(a=>Number.isInteger(a))) {
+		let attrBin = new Bin(attrs);
+		if ((attrBin.int & 0b1111111111) == 0b1111111111) { //十种珠子
+			frg.ap(tsp.orbs.all());
+			attrs.length = 0;
+		} else if ((attrBin.int & 0b11111) == 0b11111) { //基础5色
+			frg.ap(renderOrbs('_5color'));
+			attrBin = new Bin(attrBin.int & 0b1111100000);
+			attrs = [...attrBin];
+			if (attrs.length > 0) { //如果5色以上还有剩的，就增加一个加号
+				frg.ap(' + ');
 			}
-			return tsp.orbs?.[attr](dict);
-		})
-		.nodeJoin(tsp.word.slight_pause());
+		}
 	}
+	contentFrg = attrs.map(attr => {
+		const icon = document.createElement("icon");
+		icon.className = "orb";
+		if (option.className) icon.className += " " + option.className;
+		icon.setAttribute("data-orb-icon",attr);
+		let dict = {
+			icon: icon,
+		}
+		return tsp.orbs?.[attr](dict);
+	})
+	.nodeJoin(tsp.word.slight_pause());
+	frg.ap(contentFrg);
+		
 	if (option.affix)
 		contentFrg = tsp.word.affix_orb({cotent: contentFrg});
 	if (option.any && attrs.length >= 2)
