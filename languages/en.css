@@ -14,21 +14,7 @@
 {
 	content: "Assist";
 }
-.abilitys .hp::before,
-.search-mon-list .hp-preview::before
-{
-	content: "HP:";
-}
-.abilitys .atk::before,
-.search-mon-list .atk-preview::before
-{
-	content: "ATK:";
-}
-.abilitys .rcv::before,
-.search-mon-list .rcv-preview::before
-{
-	content: "RCV:";
-}
+
 .search-mon-list .index-preview::before
 {
 	content: "Weit:";

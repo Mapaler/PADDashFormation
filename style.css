@@ -1324,16 +1324,58 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	width: var(--head-block-width);
 	display: inline-block;
 }
+.abilitys :where(
+	.hp,
+	.atk,
+	.rcv,
+),
+.search-mon-list :where(
+	.hp-preview,
+	.atk-preview,
+	.rcv-preview,
+)
+{
+	display: flex;
+	align-items: center;
+}
+.abilitys :where(
+	.hp,
+	.atk,
+	.rcv,
+)::before,
+.search-mon-list :where(
+	.hp-preview,
+	.atk-preview,
+	.rcv-preview,
+)::before
+{
+	content: "";
+	width: 1em;
+	height: 1em;
+	background-image: url(images/icon-abilities.png);
+	background-size: 1em auto;
+	background-position-x: 0;
+}
+.abilitys .hp::before,
+.search-mon-list .hp-preview::before
+{
+	background-position-y: calc(-1em * 0);
+}
+.abilitys .atk::before,
+.search-mon-list .atk-preview::before
+{
+	background-position-y: calc(-1em * 1);
+}
+.abilitys .rcv::before,
+.search-mon-list .rcv-preview::before
+{
+	background-position-y: calc(-1em * 2);
+}
 .team-ability .enable-bouns
 {
 	color: cornflowerblue;
 }
-.abilitys>div::before
-{
-	font-size: 0.75em;
-	width: 3em;
-	display: inline-block;
-}
+
 /*.abilitys .hp::before{
 	content: "HP：";
 }
@@ -1664,8 +1706,7 @@ label[for="search-string"]::before {
 {
 	font-size: 14px;
 }
-.cd-preview::before,
-.abilities-preview>li::before
+.cd-preview::before
 {
 	font-size: 10px;
 	display: inline-block;

@@ -22,21 +22,7 @@ label[for="languages"]::after{
 {
 	content: "輔助";
 }
-.abilitys .hp::before,
-.search-mon-list .hp-preview::before
-{
-	content: "HP：";
-}
-.abilitys .atk::before,
-.search-mon-list .atk-preview::before
-{
-	content: "攻擊：";
-}
-.abilitys .rcv::before,
-.search-mon-list .rcv-preview::before
-{
-	content: "回復：";
-}
+
 .search-mon-list .index-preview::before
 {
 	content: "加權:";

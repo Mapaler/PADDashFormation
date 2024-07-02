@@ -219,7 +219,7 @@ let localTranslating = {
 		},
 		target: {
 			unknown: tp`Unkown Target`,
-			self: tp`card's`,
+			self: tp`card self`,
 			team: tp`team`,
 			team_last: tp`the lastest member`,
 			team_leader: tp`leader`,
@@ -460,7 +460,7 @@ let localTranslating = {
 			[127]: tp`${'icon'}Enhanced Stats`,
 			[128]: tp`${'icon'}Yang Protection`,
 			[129]: tp`${'icon'}Yin Protection`,
-			[130]: tp`${'icon'}After-Ripening`,
+			[130]: tp`${'icon'}Aging`,
 		}
 	},
 };

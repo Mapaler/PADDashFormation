@@ -6067,7 +6067,7 @@ const cachesMap = new Map([
 	],
 	[
 		"sound/voice/ja/padv2191.wav",
-		"143e052f3c15efaadaf7eaae277c68e7"
+		"d07c2fc9a621d4345c053f3d2187a937"
 	],
 	[
 		"sound/voice/ja/padv2192.wav",
@@ -29499,7 +29499,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"e3cb9b6edd812eb327b009bdb3a29de3"
+		"2f5f48b59f9ca1a21ae43c31302967a0"
 	],
 	[
 		"script-skill-parser.js",
@@ -29523,7 +29523,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"54495620612baaeaeb84b12faef72840"
+		"c8d9587db44037d77eb90855dd510d25"
 	],
 	[
 		"temp.js",
@@ -29535,7 +29535,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/en.css",
-		"fde2b88a3e18da448f3e21bd2bc27b53"
+		"67b83a234625b0eaf862297381468b99"
 	],
 	[
 		"languages/en.js",
@@ -29543,7 +29543,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"c9c450cef95c5b704c088f62937e0e7f"
+		"e26f6a6dd6b37dcd037d96aedc66ed2f"
 	],
 	[
 		"languages/ja.js",
@@ -29551,7 +29551,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"646f55f9fb8f1c837728d5532df2fa64"
+		"809fde0cadfafb0ded31cc52b411578b"
 	],
 	[
 		"languages/ko.js",
@@ -29559,11 +29559,11 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/language-list.js",
-		"b15a6e0512c5b47b1b15fc62c4ed70ad"
+		"f2ab23759b3b9df77280d29ba8731872"
 	],
 	[
 		"languages/zh-hans.css",
-		"20d7b43ffdeb787917a889ba5cfb72f4"
+		"49081d87502177cf042475908a7e0141"
 	],
 	[
 		"languages/zh-hans.js",
@@ -29571,7 +29571,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.css",
-		"2544ec0cb4e96f1b3ea7b76df3561246"
+		"7ef1f9d1e3cce4af1eef45fed616a693"
 	],
 	[
 		"languages/zh-hant.js",
@@ -29624,6 +29624,10 @@ const cachesMap = new Map([
 	[
 		"images/icon-76board.png",
 		"ff4b12c1e21b77fca60ff7b1c7e2766f"
+	],
+	[
+		"images/icon-abilities.png",
+		"b6f43dd28ac7711f5e9fea933b6a0f6f"
 	],
 	[
 		"images/icon-add-combo.png",
@@ -29867,7 +29871,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/images/bluestacks-vhd-mount-vhd-failed.webp",
-		"e41f2de6990b34ae7995a5acb0e3ea0c"
+		"7941862be127cb177b86ea4cc2877134"
 	],
 	[
 		"doc/images/bluestacks-vhd-open-disk-management.webp",
