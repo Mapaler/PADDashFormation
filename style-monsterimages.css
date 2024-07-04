@@ -1574,6 +1574,12 @@ body:not([data-game-source="ja"]) .awoken-icon:where(
 )::before {
 	background-position-x: calc(-36px * 1);
 }
+/* 美服不一样的徽章 */
+[data-game-source="en"] .badge:where(
+	[data-badge-icon='26'], /*高达变成本家*/
+)::before {
+	background-position-x: calc(-36px * 1);
+}
 
 :lang(ko) .badge:where(
 	[data-badge-icon='1'],
