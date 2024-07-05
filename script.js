@@ -1082,6 +1082,7 @@ Formation.pdcBadgeMap = [
 	{pdf:27,pdc:25}, //转生成为史莱姆
 	{pdf:28,pdc:26}, //电击文库Index
 	{pdf:29,pdc:27}, //奥特曼
+	{pdf:30,pdc:28}, //花嫁
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -7237,6 +7238,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 27: return member.card.collabId === 112 ? 1.15 : 1; //转生成为史莱姆
 				case 28: return member.card.collabId === 110 ? 1.15 : 1; //电击文库Index
 				case 29: return member.card.collabId === 102 ? 1.15 : 1; //奥特曼
+				case 30: return member.card.gachaIds.includes(6) ? 1.15 : 1; //花嫁
 				default: return 1;
 			}
 		}
