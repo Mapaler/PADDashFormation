@@ -671,7 +671,7 @@
 .awoken-icon,
 .type-icon
 {
-	display:inline-block;
+	display: inline-flex;
 	width:32px;height:32px;
 	vertical-align: middle;
 	background-repeat: no-repeat;
