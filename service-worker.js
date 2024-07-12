@@ -391,7 +391,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_098.PNG",
-		"f4cf65daf933c31a2783020bd9b59dab"
+		"4e41377ee3d4cc6db1b197478778ddb6"
 	],
 	[
 		"images/cards_ja/CARDS_099.PNG",
@@ -431,7 +431,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_108.PNG",
-		"ba96eac96c77b8220e9b106d51433bbf"
+		"ec9c46e012f031aeafc3ac81c4f60c8b"
 	],
 	[
 		"images/cards_ja/CARDS_109.PNG",
@@ -6071,7 +6071,7 @@ const cachesMap = new Map([
 	],
 	[
 		"sound/voice/ja/padv2191.wav",
-		"d07c2fc9a621d4345c053f3d2187a937"
+		"143e052f3c15efaadaf7eaae277c68e7"
 	],
 	[
 		"sound/voice/ja/padv2192.wav",
@@ -8348,6 +8348,10 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv2714.wav",
 		"44f645fd9b89ca288cce95c06346b025"
+	],
+	[
+		"sound/voice/ja/padv2715.wav",
+		"d34fb0b7ab57d9d8b8c1764454cbb4cb"
 	],
 	[
 		"sound/voice/ja/padv2716.wav",
@@ -29879,7 +29883,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/images/bluestacks-vhd-mount-vhd-failed.webp",
-		"7941862be127cb177b86ea4cc2877134"
+		"e41f2de6990b34ae7995a5acb0e3ea0c"
 	],
 	[
 		"doc/images/bluestacks-vhd-open-disk-management.webp",
