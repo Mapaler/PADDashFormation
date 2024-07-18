@@ -1101,11 +1101,6 @@
 ){
 	background-position-x: -32px;
 }
-body:not([data-game-source="ja"]) .awoken-icon:where(
-	[data-awoken-icon='50'], /*方块心追*/
-){
-	background-position-x: -32px;
-}
 /*类型*/
 .type-icon
 {
@@ -1411,13 +1406,7 @@ body:not([data-game-source="ja"]) .awoken-icon:where(
 }
 /* 额外有 x1.8 的 6格觉醒 */
 .level-super-break .latent-icon:where(
-	[data-latent-icon='48'],
-)::after
-{
-	background-position-x: calc(-32px * 2);
-}
-/* v21.6 额外有 x1.8 的 6格觉醒 */
-[data-game-source="ja"] .level-super-break .latent-icon:where(
+	[data-latent-icon='48'], /*除武器*/
 	[data-latent-icon='37'], /*破无效*/
 )::after
 {
@@ -1451,6 +1440,10 @@ body:not([data-game-source="ja"]) .awoken-icon:where(
 }
 .badge[data-badge-icon='0']::before{
 	background-position-y:calc(-30px * 0);
+}
+.badge[data-badge-icon='129']::before{ /*月卡*/
+	background-position-x: -36px;
+	background-position-y: 0;
 }
 .badge[data-badge-icon='1']::before{
 	background-position-y:calc(-30px * 1);
@@ -1548,9 +1541,101 @@ body:not([data-game-source="ja"]) .awoken-icon:where(
 .badge[data-badge-icon='32']::before{
 	background-position-y:calc(-30px * 32);
 }
-.badge[data-badge-icon='129']::before{
-	background-position-x: -36px;
-	background-position-y: 0;
+.badge[data-badge-icon='33']::before{
+	background-position-y:calc(-30px * 33);
+}
+.badge[data-badge-icon='34']::before{
+	background-position-y:calc(-30px * 34);
+}
+.badge[data-badge-icon='35']::before{
+	background-position-y:calc(-30px * 35);
+}
+.badge[data-badge-icon='36']::before{
+	background-position-y:calc(-30px * 36);
+}
+.badge[data-badge-icon='37']::before{
+	background-position-y:calc(-30px * 37);
+}
+.badge[data-badge-icon='38']::before{
+	background-position-y:calc(-30px * 38);
+}
+.badge[data-badge-icon='39']::before{
+	background-position-y:calc(-30px * 39);
+}
+.badge[data-badge-icon='40']::before{
+	background-position-y:calc(-30px * 40);
+}
+.badge[data-badge-icon='41']::before{
+	background-position-y:calc(-30px * 41);
+}
+.badge[data-badge-icon='42']::before{
+	background-position-y:calc(-30px * 42);
+}
+.badge[data-badge-icon='43']::before{
+	background-position-y:calc(-30px * 43);
+}
+.badge[data-badge-icon='44']::before{
+	background-position-y:calc(-30px * 44);
+}
+.badge[data-badge-icon='45']::before{
+	background-position-y:calc(-30px * 45);
+}
+.badge[data-badge-icon='46']::before{
+	background-position-y:calc(-30px * 46);
+}
+.badge[data-badge-icon='47']::before{
+	background-position-y:calc(-30px * 47);
+}
+.badge[data-badge-icon='48']::before{
+	background-position-y:calc(-30px * 48);
+}
+.badge[data-badge-icon='49']::before{
+	background-position-y:calc(-30px * 49);
+}
+.badge[data-badge-icon='50']::before{
+	background-position-y:calc(-30px * 50);
+}
+.badge[data-badge-icon='51']::before{
+	background-position-y:calc(-30px * 51);
+}
+.badge[data-badge-icon='52']::before{
+	background-position-y:calc(-30px * 52);
+}
+.badge[data-badge-icon='53']::before{
+	background-position-y:calc(-30px * 53);
+}
+.badge[data-badge-icon='54']::before{
+	background-position-y:calc(-30px * 54);
+}
+.badge[data-badge-icon='55']::before{
+	background-position-y:calc(-30px * 55);
+}
+.badge[data-badge-icon='56']::before{
+	background-position-y:calc(-30px * 56);
+}
+.badge[data-badge-icon='57']::before{
+	background-position-y:calc(-30px * 57);
+}
+.badge[data-badge-icon='58']::before{
+	background-position-y:calc(-30px * 58);
+}
+.badge[data-badge-icon='59']::before{
+	background-position-y:calc(-30px * 59);
+}
+.badge[data-badge-icon='60']::before{
+	background-position-y:calc(-30px * 60);
+}
+.badge[data-badge-icon='61']::before{
+	background-position-y:calc(-30px * 61);
+}
+.badge[data-badge-icon='62']::before{
+	background-position-y:calc(-30px * 62);
+}
+.badge[data-badge-icon='63']::before{
+	background-position-y:calc(-30px * 63);
+}
+.badge[data-badge-icon='64']::before{
+	background-position-y:calc(-30px * 64);
 }
 
 :lang(zh) .badge:where(

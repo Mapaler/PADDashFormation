@@ -1083,6 +1083,7 @@ Formation.pdcBadgeMap = [
 	{pdf:28,pdc:26}, //电击文库Index
 	{pdf:29,pdc:27}, //奥特曼
 	{pdf:30,pdc:28}, //花嫁
+	{pdf:31,pdc:29}, //叛逆的鲁鲁修
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -7239,6 +7240,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 28: return member.card.collabId === 110 ? 1.15 : 1; //电击文库Index
 				case 29: return member.card.collabId === 102 ? 1.15 : 1; //奥特曼
 				case 30: return member.card.gachaIds.includes(6) ? 1.15 : 1; //花嫁
+				case 29: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
 				default: return 1;
 			}
 		}
