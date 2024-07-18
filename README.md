@@ -98,7 +98,7 @@ Please refer to existing files.
 * [pad-rikuu](https://github.com/kiootic/pad-rikuu) //Data structure and parser
 * [Puzzle-and-Dragons-Texture-Tool](https://github.com/codywatts/Puzzle-and-Dragons-Texture-Tool) //Extract Images
 * [zxing-js](https://github.com/zxing-js/library) //Read, Write QR Code
-* [html2canvas](https://github.com/niklasvh/html2canvas) //Capture Image
+* [html2canvas](https://github.com/html2canvas/html2canvas) //Capture Image
 * [aaa](https://github.com/jy4340132/aaa) //Play voice(ADPCM wav)
 * [Font Awesome Free](https://github.com/FortAwesome/Font-Awesome) //Font Icon
 * [Zpix (最像素)](https://github.com/SolidZORO/zpix-pixel-font) //Pixel Font
