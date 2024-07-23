@@ -749,23 +749,23 @@ Member.prototype.getAttrsTypesWithWeapon = function(assist) {
 	let memberCard = this.card, assistCard = assist?.card,
 		assistAwakenings = assistCard?.awakenings?.slice(0, assist.awoken);
 	if (this.id <= 0 || !memberCard) return null; //跳过 id 0
-	let attrs = [...memberCard.attrs]; //属性只有两个，因此用固定的数组
+	let attrs = [...memberCard.attrs]; //属性数量固定，因此用固定的数组
 	let types = new Set(memberCard.types); //Type 用Set，确保不会重复
-	let changeAttr, appendTypes;
+	let changeAttr = null, appendTypes = [];
 	if (assistAwakenings?.includes(49)) { //如果有武器
 		//更改副属性
 		changeAttr = assistAwakenings.find(ak=>ak >= 91 && ak <= 95); //筛选出武器觉醒
 		if (changeAttr) attrs[1] = changeAttr - 91; //变换为属性
 		//添加类型
-		appendTypes = assistAwakenings.filter(ak=>ak >= 83 && ak <= 90); //筛选出武器觉醒
-		appendTypes = appendTypes.map(type=>  //变换为类型
-			typekiller_for_type.find(t=>(type - 52) === t.awoken).type);
-		appendTypes = appendTypes.filter(ak=>!types.has(ak)); //去除重复的
-		appendTypes.forEach(appendType=>types.add(appendType)); //添加到类型里
+		appendTypes = assistAwakenings.filter(ak=>ak >= 83 && ak <= 90) //筛选出武器觉醒
+						.map(type=> typekiller_for_type.find(t=>(type - 52) === t.awoken).type);//变换为类型
+		appendTypes = new Set(appendTypes); //变为 Set
+		appendTypes = appendTypes.difference(types); //去除重复的
+		types = types.union(appendTypes); //添加到类型里
 	}
 	return {
-		attrs: attrs, isChangeAttr: Boolean(changeAttr),
-		types: Array.from(types), isAppendType: Boolean(appendTypes?.length), appendTypes
+		attrs, isChangeAttr: Boolean(changeAttr),
+		"types": [...types], isAppendType: Boolean(appendTypes?.size), "appendTypes": [...appendTypes]
 	};
 }
 Member.prototype.outObj = function() {
@@ -5839,11 +5839,10 @@ function changeid(mon, monDom, latentDom, assist) {
 function refreshLatent(latents, member, latentsNode, option) {
 	const maxLatentCount = getMaxLatentCount(member.id); //最大潜觉数量
 	const iconArr = latentsNode.querySelectorAll('.latent-icon');
-	latentsNode.classList.toggle("block-8", maxLatentCount>6);
-	latents = latents.concat();
-	if (option?.sort) latents.sort((a, b) => latentUseHole(b) - latentUseHole(a));
+	latentsNode.classList.toggle("block-8", maxLatentCount > 6);
+	if (option?.sort) latents = latents.toSorted((a, b) => latentUseHole(b) - latentUseHole(a));
 	//如果传入了辅助，才进行有效觉醒的计算，否则算作只有本人的。
-	let effectiveAwokens = option?.assist instanceof Member ? member.effectiveAwokens(option.assist) : null;
+	let effectiveAwokens = new Set(member.effectiveAwokens(option?.assist ?? null));
 	let latentIndex = 0, usedHoleN = 0;
 	//如果传入了武器，就添加有效觉醒
 	for (let ai = 0; ai < iconArr.length; ai++) {
@@ -5853,25 +5852,23 @@ function refreshLatent(latents, member, latentsNode, option) {
 			const thisHoleN = latentUseHole(latent);
 			icon.setAttribute("data-latent-icon", latent);
 			icon.setAttribute("data-latent-hole", thisHoleN);
-			let enableLatent = true;
+			let unallowableLatent = false;
 			//搜索需要觉醒的潜觉
-			if (effectiveAwokens) { //如果有有效觉醒，说明需要计算辅助，否则在单人编辑状态是不需要判断是否需要觉醒的
-				let needAwokenLatent = allowable_latent.needAwoken.find(obj=>obj.latent == latent);
-				if (needAwokenLatent) { //如果是需要觉醒的潜觉
-					let needAwokens = new Set([needAwokenLatent.awoken]);
-					equivalent_awoken.forEach(obj=>{
-						//如果搜索到等效觉醒，把大小值都添加到需要的觉醒
-						if (obj.small === needAwokenLatent.awoken || obj.big === needAwokenLatent.awoken) {
-							needAwokens.add(obj.small);
-							needAwokens.add(obj.big);
-						}
-					});
-					//如果需要的觉醒，在有效觉醒里全都没有
-					if ([...needAwokens].every(ak=>!effectiveAwokens.includes(ak)))
-						enableLatent = false;
-				}
+			const needAwokenLatent = allowable_latent.needAwoken.find(obj=>obj.latent == latent);
+			if (needAwokenLatent) { //如果是需要觉醒的潜觉
+				let needAwokens = new Set([needAwokenLatent.awoken]);
+				equivalent_awoken.forEach(obj=>{
+					//如果搜索到等效觉醒，把大小值都添加到需要的觉醒
+					if (obj.small === needAwokenLatent.awoken || obj.big === needAwokenLatent.awoken) {
+						needAwokens.add(obj.small);
+						needAwokens.add(obj.big);
+					}
+				});
+				//如果需要的觉醒，在有效觉醒里全都没有
+				if (needAwokens.isDisjointFrom(effectiveAwokens))
+					unallowableLatent = true;
 			}
-			icon.classList.toggle('unallowable-latent', !enableLatent);
+			icon.classList.toggle('unallowable-latent', unallowableLatent);
 			usedHoleN += thisHoleN;
 			latentIndex++;
 		} else {
