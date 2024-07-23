@@ -6075,7 +6075,7 @@ const cachesMap = new Map([
 	],
 	[
 		"sound/voice/ja/padv2191.wav",
-		"d07c2fc9a621d4345c053f3d2187a937"
+		"143e052f3c15efaadaf7eaae277c68e7"
 	],
 	[
 		"sound/voice/ja/padv2192.wav",
@@ -30215,7 +30215,7 @@ const cachesMap = new Map([
 	],
 	[
 		"browser-compatibility.js",
-		"7080930e96f7e1f6897642ce00b34853"
+		"13ffac54abcdd4a8135f0352db1e485b"
 	],
 	[
 		"index.html",
@@ -30223,7 +30223,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"4cc20691292d1223c04009fda1e7cdaa"
+		"843cdcc9b713e4eb4fd1e43af325397e"
 	],
 	[
 		"script-custom_elements.js",
@@ -30247,7 +30247,7 @@ const cachesMap = new Map([
 	],
 	[
 		"solo.html",
-		"5c53f3d02e7ac97625fda4e102cefe5d"
+		"99e0b0f844d6b57119a1e87b73313329"
 	],
 	[
 		"style-monsterimages.css",
@@ -30263,7 +30263,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"95041cfe3b8814a7adaa454d7302b778"
+		"596d1bff6d2c26c85d3633d338a62ef7"
 	],
 	[
 		"languages/en.css",
@@ -30474,12 +30474,16 @@ const cachesMap = new Map([
 		"6b1eadf2c9faf6ac18522bd49a50a400"
 	],
 	[
+		"library/core-js.min.js",
+		"f67a060d45569816fe1e15e007a197a4"
+	],
+	[
 		"library/html2canvas.min.js",
 		"a692cfc262fd4a43738caf3edf2c7a3d"
 	],
 	[
 		"library/zxing.umd.min.js",
-		"ce1ec54f24b569dfc71e20bcb806044e"
+		"e5b53f686f2beea4012dd076c6c93d81"
 	],
 	[
 		"library/jy4340132-aaa/adpcm.js",

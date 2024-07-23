@@ -29,18 +29,15 @@ const GM_xmlhttpRequest = function(GM_param) {
 };
 
 //获取URL参数
-function getQueryString(name, url) {
-	const urlObj = new URL(url || document.location);
+function getQueryString(name, inputURL = document.location) {
+	const url = new URL(inputURL);
 	if (!Array.isArray(name)) name = [name];
-	const n_e = name.entries();
-	let n, value;
-	do {
-		n = n_e.next();
-		if (!n.done)
-		{
-			value = urlObj.searchParams.get(n.value[1]);
-		}
-	}while(!n.done && value === undefined)
+	//可以以数组形式传递 name 的多个别名，比如 getQueryString(["l","lang"])
+	let value;
+	for (let index = 0; index < name.length; index++) {
+		value = url.searchParams.get(name[index]);
+		if (value) break;
+	}
 	return value;
 }
 

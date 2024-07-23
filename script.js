@@ -24,7 +24,7 @@ const dataStructure = 5; //阵型输出数据的结构版本
 const cfgPrefix = "PADDF-"; //设置名称的前缀
 const className_displayNone = "display-none";
 const dataAttrName = "data-value"; //用于储存默认数据的属性名
-const isGuideMod = !unsupportFeatures.length && Boolean(Number(getQueryString("guide"))); //是否以图鉴模式启动
+const isGuideMod = Boolean(Number(getQueryString("guide"))); //是否以图鉴模式启动
 
 //用油猴扩展装上，把GM_xmlhttpRequest引入的脚本
 const ExternalLinkScriptURL = "https://greasyfork.org/scripts/458521";
