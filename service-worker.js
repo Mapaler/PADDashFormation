@@ -6075,7 +6075,7 @@ const cachesMap = new Map([
 	],
 	[
 		"sound/voice/ja/padv2191.wav",
-		"143e052f3c15efaadaf7eaae277c68e7"
+		"d07c2fc9a621d4345c053f3d2187a937"
 	],
 	[
 		"sound/voice/ja/padv2192.wav",
@@ -30475,7 +30475,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/core-js.min.js",
-		"f67a060d45569816fe1e15e007a197a4"
+		"581b364bd7de41a800c016497f460132"
 	],
 	[
 		"library/html2canvas.min.js",
