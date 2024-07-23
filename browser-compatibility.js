@@ -15,13 +15,14 @@
 		{name: "Optional chaining (?.) / 可选链操作符(?.)", version:{firefox:74,chrome:80,safari:13.4}, url: "https://caniuse.com/mdn-javascript_operators_optional_chaining", test: ()=>Boolean(runCodeWithFunction("undefined?.undefined || true"))},
 		{name: "Nullish coalescing operator (??) / 空值合并操作符(??)", version:{firefox:72,chrome:80,safari:13.4}, url: "https://caniuse.com/mdn-javascript_operators_nullish_coalescing", test: ()=>Boolean(runCodeWithFunction("undefined ?? true"))},
 		{name: "BigInt value (1n) / BigInt 数据类型(1n)", version:{firefox:68,chrome:67,safari:14}, url: "https://caniuse.com/bigint", test: ()=>Boolean(runCodeWithFunction("1n"))},
-		// {name: "CSS selector: :is() / CSS选择器: :is()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/css-matches-pseudo", test: ()=>supportsPseudoClass(":is()")},
 		{name: "CSS selector: :where() / CSS选择器: :where()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/mdn-css_selectors_where", test: ()=>supportsPseudoClass(":where()")},
 		{name: "CSS selector: :not() / CSS选择器: :not()", version:{firefox:84,chrome:88,safari:9}, url: "https://caniuse.com/css-not-sel-list", test: ()=>supportsPseudoClass(":not(html)")},
 		//{name: "CSS selector: :has() / CSS选择器: :has()", version:{firefox:121,chrome:105,safari:15.4}, url: "https://caniuse.com/css-has", test: ()=>supportsPseudoClass(":has(html)")},
 		{name: "Private class fields (#name) / 类私有域(#name)", version:{firefox:90,chrome:74,safari:14.5}, url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>Boolean(runCodeWithFunction("class test {#v = 0;}, true"))},
 		{name: "Dialog element / Dialog 元素", version:{firefox:98,chrome:37,safari:15.4}, url: "https://caniuse.com/dialog", test: ()=>Boolean(window.HTMLDialogElement)},
-		// {name: "Class static initialization blocks / 静态初始化块", version:{firefox:93,chrome:94,safari:16.4}, url: "https://caniuse.com/mdn-javascript_classes_static_initialization_blocks", test: ()=>supportsPseudoClass(":not(html)")},
+		//{name: "Class static initialization blocks / 静态初始化块", version:{firefox:93,chrome:94,safari:16.4}, url: "https://caniuse.com/mdn-javascript_classes_static_initialization_blocks", test: ()=>Boolean(runCodeWithFunction("class test { static { this.staticProperty = true;};}, true"))},
+		{name: "Array.prototype.toSorted()", version:{firefox:115,chrome:110,safari:16.0}, url: "https://caniuse.com/mdn-javascript_builtins_array_tosorted", test: ()=>Boolean(Array.prototype.toSorted)},
+		{name: "Set.prototype.isDisjointFrom()", version:{firefox:127,chrome:122,safari:17.0}, url: "https://caniuse.com/mdn-javascript_builtins_set_isdisjointfrom", test: ()=>Boolean(Set.prototype.isDisjointFrom)},
 	];
 
 	const unsupportFeatures = features.filter(feature=>{
@@ -114,5 +115,4 @@ Please update your browser core to Firefox ≥ ${needBrowserVersion.firefox} or 
 			window.removeEventListener(event);
 		});
 	}
-})
-
+})();
