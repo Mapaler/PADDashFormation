@@ -4496,11 +4496,22 @@ function initialize() {
 		btnCustomAvatarSave.classList.remove(className_displayNone);
 		const attrs4 = s_AttrForm.querySelector(".attr-selecter-list .attr-list.display-none");
 		if (attrs4) {
-			Cards.forEach(card=>card.attrs[3] = Math.randomInteger(0,4));
+
 			attrs4.classList.remove(className_displayNone);
+			[...s_AttrForm.querySelectorAll(".attr-selecter-list .attr-list")].forEach(list=>list.querySelector("li.display-none").classList.remove(className_displayNone));
 		}
 		editBox.changeMonId(monstersID.value);
-		alert("恶搞功能：所有角色全部随机设定了第四属性，请勿当真。你可以上传你的自定义图片以制作卡片头像。\n\nSpoof function: All Cards have a random 4th attribute, don't take it seriously. You can upload your custom image to make a card avatar.");
+		const spoof = confirm("你可以上传你的自定义图片以制作卡片头像。\nYou can upload your custom image to make a card avatar.\n\n是否启用恶搞功能？\n所有角色全部随机设定四种属性。\nEnable Spoof function ?\nAll Cards set 4 random attrs. ");
+		if (spoof) {
+			Cards.forEach(card=>{
+				if (!card.enabled) return;
+				for (let i = 0; i < 4; i++) {
+					const maxAttr = (i === 1 && card.attrs[0] === 6) ? 5 : 6; //如果第一属性是无属性，第二属性就不可以是无属性
+					card.attrs[i] = Math.randomInteger(0, maxAttr);
+					if (i >= 1 && card.attrs[i] === 6) break; //如果第2属性开始出现了无属性，就不需要再继续了
+				}
+			});
+		}
 	}
 	avatarSelect.addEventListener("click", set_4th_attrs, {once: true});
 

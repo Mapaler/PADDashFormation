@@ -30,8 +30,11 @@
 .monster .attrs .attr[data-attr='4'] {
 	background-position-x: calc(-102px * 4); /*暗*/
 }
+.monster .attrs .attr[data-attr='5'] {
+	background-position-x: calc(-102px * 5); /*心*/
+}
 .monster .attrs .attr:nth-of-type(1)[data-attr='6'] { /*无主属性*/
-	background-image: url(images/CARDFRAMEW.PNG);
+	background-image: url(images/CARDFRAMEW.png);
 	background-position: 0 0;
 }
 .monster .attrs .attr:nth-of-type(1)[data-attr='any'] {
