@@ -297,6 +297,12 @@ label[for$=and-or]::after{
 input:checked+label[for$=and-or]::after{
 	content: "AND";
 }
+#change-swap-to-copy+label[for="change-swap-to-copy"] {
+	cursor: move;
+}
+#change-swap-to-copy:checked+label[for="change-swap-to-copy"] {
+	cursor: copy;
+}
 
 .status{
 	line-height: 16px;

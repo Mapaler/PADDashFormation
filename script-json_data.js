@@ -4249,23 +4249,20 @@ const specialSearchFunctions = (function() {
 				addition:card=>card.evoMaterials[0] === 0xFFFF && `地下城ID:${card.evoMaterials[1]}`
 			},
 		]},
-		{group:true,name:"====== Awoken ======",otLangName:{chs:"======觉醒类======",cht:"======覺醒類======"}, functions: [
+		{group:true,name:"====== Awakenings ======",otLangName:{chs:"======觉醒类======",cht:"======覺醒類======"}, functions: [
 			{name:"Have Sync Awoken",otLangName:{chs:"有同步觉醒",cht:"有同步覺醒"},
 				function:cards=>cards.filter(card=>card.syncAwakening),
 				addition:card=>{if (card.syncAwakeningConditions) {
 					return card.syncAwakeningConditions.map(c=>cardN(c.id)).nodeJoin();
 				}}
 			},
-			{name:"8 latent grids",otLangName:{chs:"8格潜觉",cht:"8格潛覺"},
-				function:cards=>cards.filter(card=>card.is8Latent)
+			{name:"Full Awakening (9 / 8 for weapon)",otLangName:{chs:"满觉醒（9个/武器8个）",cht:"滿覺醒（9個/武器8個）"},
+				function:cards=>cards.filter(card=>card.awakenings.length >= ( card.awakenings.includes(49) ? 8 : 9))
 			},
-			{name:"Have 9 awokens",otLangName:{chs:"有9个觉醒",cht:"有9個覺醒"},
-				function:cards=>cards.filter(card=>card.awakenings.length>=9)
+			{name:"Has, but not full Awakening",otLangName:{chs:"有，但觉醒未满",cht:"有，覺醒未滿"},
+				function:cards=>cards.filter(card=>card.awakenings.length > 0 && card.awakenings.length < ( card.awakenings.includes(49) ? 8 : 9))
 			},
-			{name:"Less than 9 awokens",otLangName:{chs:"不足9个觉醒",cht:"不足9個覺醒"},
-				function:cards=>cards.filter(card=>card.awakenings.length<9)
-			},
-			{name:"3 same Killer Awoken(include super awoken), or 2 with same latent",otLangName:{chs:"3个相同杀觉醒（含超觉），或相同潜觉",cht:"3個相同殺覺醒（含超覺），或相同潛覺"},
+			{name:"3 same Killer (include super Awoken), or 2 with same latent",otLangName:{chs:"3个相同杀觉醒（含超觉），或相同潜觉",cht:"3個相同殺覺醒（含超覺），或相同潛覺"},
 				function:cards=>cards.filter(card=>{
 				const hasAwokenKiller = typekiller_for_type.find(type=>card.awakenings.filter(ak=>ak===type.awoken).length+(card.superAwakenings.includes(type.awoken)?1:0)>=2);
 				if (hasAwokenKiller)
@@ -4290,13 +4287,32 @@ const specialSearchFunctions = (function() {
 				}
 				})
 			},
-			// {name:"8P dedicated hostile skills",otLangName:{chs:"8P专用敌对技能",cht:"8P專用敵對技能"},
-			// 	function:cards=>cards.filter(card=>{
-			// 		const searchTypeArray = [1000];
-			// 		const skill = getCardActiveSkill(card, searchTypeArray);
-			// 		return skill;
-			// 	})
-			// },
+		]},
+		{group:true,name:"----- Kind of Awakening (No Super Awoken) -----",otLangName:{chs:"-----某类觉醒（无超觉）-----",cht:"-----某類覺醒（无超觉）-----"}, functions: [
+			{name:"Any Reduce Attr. Damage Awakening",otLangName:{chs:"任意颜色盾觉醒",cht:"任意顏色盾覺醒"},
+				function:cards=>cards.filter(card=>card.awakenings.some(ak=>ak>=4 && ak<=8))
+			},
+			{name:"Any Killer Awakening",otLangName:{chs:"任意杀手觉醒",cht:"任意殺手覺醒"},
+				function:cards=>cards.filter(card=>card.awakenings.some(ak=>ak>=31 && ak<=42))
+			},
+			{name:"Any Enhanced Orbs Awakening",otLangName:{chs:"任意+珠觉醒",cht:"任意+珠覺醒"},
+				function:cards=>cards.filter(card=>card.awakenings.some(ak=>ak>=14 && ak<=18 || ak === 29 || ak>=99 && ak<=104))
+			},
+			{name:"Any Enhanced Rows Awakening",otLangName:{chs:"任意横行强化觉醒",cht:"任意横行強化覺醒"},
+				function:cards=>cards.filter(card=>card.awakenings.some(ak=>ak>=22 && ak<=26 || ak>=116 && ak<=120))
+			},
+			{name:"Any Enhanced Combos Awakening",otLangName:{chs:"任意连击强化（章鱼烧）觉醒",cht:"任意連擊強化（章魚燒）覺醒"},
+				function:cards=>cards.filter(card=>card.awakenings.some(ak=>ak>=73 && ak<=77 || ak>=121 && ak<=125))
+			},
+			{name:"Any Multi Attr. Enhanced Awakening",otLangName:{chs:"任意杂色强化觉醒",cht:"任意雜色強化覺醒"},
+				function:cards=>cards.filter(card=>card.awakenings.some(ak=>ak === 44 || ak === 51 || ak>=79 && ak<=81 || ak === 97 || ak>=112 && ak<=114))
+			},
+			{name:"Any Add Type Awakening",otLangName:{chs:"任意附加类型觉醒",cht:"任意附加類型覺醒"},
+				function:cards=>cards.filter(card=>card.awakenings.some(ak=>ak>=83 && ak<=90))
+			},
+			{name:"Any Change Sub Attr. Awakening",otLangName:{chs:"任意更改副属性觉醒",cht:"任意更改副屬性覺醒"},
+				function:cards=>cards.filter(card=>card.awakenings.some(ak=>ak>=91 && ak<=95))
+			},
 		]},
 		{group:true,name:"======Others Search======",otLangName:{chs:"======其他搜索======",cht:"======其他搜索======"}, functions: [
 			{name:"Water Att. & Attacker Type(Tanjiro)",otLangName:{chs:"攻击型或水属性（炭治郎队员）",cht:"攻擊型或水屬性（炭治郎隊員）"},
@@ -4321,11 +4337,11 @@ const specialSearchFunctions = (function() {
 			{name:"Have 3 types",otLangName:{chs:"有3个type",cht:"有3個type"},
 				function:cards=>cards.filter(card=>card.types.filter(t=>t>=0).length>=3)
 			},
-			{name:"Have 2 Attrs",otLangName:{chs:"有两个属性",cht:"有兩個屬性"},
-				function:cards=>cards.filter(card=>card.attrs.filter(a=>a>=0 && a<6))
+			{name:"Have 3 Attrs",otLangName:{chs:"有3个属性",cht:"有3個屬性"},
+				function:cards=>cards.filter(card=>card.attrs.filter(a=>a>=0 && a<6).length >= 3)
 			},
-			{name:"2 attrs are different",otLangName:{chs:"主副属性不一致",cht:"主副屬性不一致"},
-				function:cards=>cards.filter(({attrs:[attr1, attr2]})=>attr1<6 && attr2>=0 && attr1 != attr2)
+			{name:"3 attrs are different",otLangName:{chs:"3属性不一致",cht:"3屬性不一致"},
+				function:cards=>cards.filter(({attrs})=>(new Set(attrs.filter(a=>a>=0 && a<6))).size >= 3)
 			},
 			{name:"Will get Orbs skin",otLangName:{chs:"能获得宝珠皮肤",cht:"能獲得寶珠皮膚"},
 				function:cards=>cards.filter(({orbSkinOrBgmId})=>orbSkinOrBgmId>0 && orbSkinOrBgmId<1e4),

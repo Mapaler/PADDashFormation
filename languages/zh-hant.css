@@ -265,7 +265,7 @@ label[for="show-team-attrtype-count"]::after{
 	content:"隊伍稀有度、屬性與類型計數";
 }
 label[for="change-swap-to-copy"]::after{
-	content:"拖拽時使用“複製”（或按住 Ctrl）";
+	content:"拖拽時“複製”（或按住 Ctrl）";
 }
 label[for="default-level"]::after
 {
