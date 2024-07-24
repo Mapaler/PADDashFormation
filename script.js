@@ -4278,12 +4278,14 @@ function initialize() {
 	editBox.createCardHead = function(id, options = {}) {
 		function clickHeadToNewMon(event) {
 			event.preventDefault(); //取消链接的默认操作
-			monstersID.value = this.card.id;
+			monstersID.value = this.dataset.cardid;
 			formIdSearch.onchange();
 		}
 		const cli = document.createElement("li");
-		const cdom = cli.head = createCardA(options);
-		cli.appendChild(cdom);
+
+		const cdom = cli.head = cli.appendChild(createCardA(options));
+		cdom.onclick = clickHeadToNewMon;
+
 		let card;
 		if (id instanceof Member) {
 			changeid(id, cdom);
@@ -4402,7 +4404,6 @@ function initialize() {
 			});
 		}
 
-		cli.onclick = clickHeadToNewMon;
 		return cli;
 	};
 
@@ -5060,9 +5061,8 @@ function initialize() {
 		if (!heads || heads.length === 0) return; //没有数据时，直接返回
 		const sortIndex = parseInt(s_sortList.value, 10);
 		const reverse = s_sortReverse.checked;
-		let headsArray = heads.concat();
 
-		headsArray.sort((head_a, head_b) => {
+		const headsArray = heads.toSorted((head_a, head_b) => {
 			const card_a = head_a.card,
 				card_b = head_b.card;
 			let sortNumber = sort_function_list[sortIndex].function(card_a, card_b);

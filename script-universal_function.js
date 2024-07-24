@@ -949,27 +949,27 @@ function calculateAbility_max(id, solo, teamsCount, maxLevel = 110) {
 }
 //搜索卡片用
 function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rares, awokens, sawokens, equalAk, incSawoken, canAssist, canLv110, is8Latent, notWeapon}) {
-	let cardsRange = cards.concat(); //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
+	let cardsRange = [...cards]; //这里需要复制一份原来的数组，不然若无筛选，后面的排序会改变初始Cards
 	if (canAssist) cardsRange = cardsRange.filter(card=>card.canAssist);
 	if (canLv110) cardsRange = cardsRange.filter(card=>card.limitBreakIncr>0);
 	if (is8Latent) cardsRange = cardsRange.filter(card=>card.is8Latent);
 	if (notWeapon) cardsRange = cardsRange.filter(card=>!card.awakenings.includes(49) && //不是武器
 					!card.stackable); //不可堆叠
 	//属性
-	const anyAttrsFlag = 0b1011111; //所有颜色的查找，注意右边才是最低位
+	const anyAttrsFlag = 0b101_1111; //所有颜色的查找，注意右边才是最低位
 	sAttrs = sAttrs.map(attr=>attr || anyAttrsFlag); //如果传入搜索为0，提高到任意色
 
 	if (sAttrs.some(attr=>(attr & anyAttrsFlag) !== anyAttrsFlag)) { //当任一属性不为任意颜色时才需要筛选属性，否则跳过属性筛选
 		//如果固定顺序就直接使用当前颜色顺序；否则不考虑顺序时，去除任意色
-		const attrNums = sAttrs.filter(attr=>fixMainColor || attr > 0 && (attr & anyAttrsFlag) !== anyAttrsFlag)
-			.map(attr=>{
-				const attrNum = Bin.unflags(attr);
-				if (attrNum.includes(6)) attrNum.push(undefined,-1); //如果是包含6的，就添加-1和undefined的值
-				return attrNum;
-			});
+		// const attrNums = sAttrs.filter(attr=>fixMainColor || attr > 0 && (attr & anyAttrsFlag) !== anyAttrsFlag)
+		// 	.map(attr=>{
+		// 		const attrNum = Bin.unflags(attr);
+		// 		if (attrNum.includes(6)) attrNum.push(undefined,-1); //如果是包含6的，就添加-1和undefined的值
+		// 		return attrNum;
+		// 	});
 		if (fixMainColor) {//如果固定了顺序
 			//只有第一属性有搜索内容时才搜索无主属性
-			const isSearchNoMainAttr = (sAttrs[0] ^ 0b1000000) > 0 && sAttrs.slice(1).every(attr=>(attr & anyAttrsFlag) === anyAttrsFlag);
+			const isSearchNoMainAttr = (sAttrs[0] ^ 0b100_0000) > 0 && sAttrs.slice(1).every(attr=>(attr & anyAttrsFlag) === anyAttrsFlag);
 			cardsRange = cardsRange.filter(({attrs:cAttrs}) => {
 				//默认逻辑为，只要不是any，就判断这个颜色是否包含了对应的颜色
 				//不能用怪物颜色来查找，因为怪物只有一个颜色就会提前退出循环，导致不搜索副属性
@@ -992,7 +992,7 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 		else {//不限定顺序时
 			//const notAnyAttrsCount = isAnyAttrs.filter(b=>!b).length;
 			cardsRange = cardsRange.filter(({attrs:cAttrs, id}) => {
-				cAttrs = cAttrs.concat();
+				cAttrs = [...cAttrs];
 				for (let i = 1; i < sAttrs.length; i++) {
 					if (!Number.isInteger(cAttrs[i])) cAttrs[i] = 6;
 				}
@@ -1024,7 +1024,7 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 	//类型
 	if (types.length > 0) {
 		//所有type都满足，或只需要满足一个type
-		let logicFunc = typeAndOr ? Array.prototype.every : Array.prototype.some;
+		const logicFunc = typeAndOr ? Array.prototype.every : Array.prototype.some;
 		cardsRange = cardsRange.filter(({types: cTypes}) => logicFunc.call(types, t => cTypes.includes(t)));
 	}
 	//稀有度
@@ -1032,7 +1032,7 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 		cardsRange = cardsRange.filter(({rarity}) => rares.includes(rarity));
 	}
 	//觉醒
-	let searchAwokens = [];
+	const searchAwokens = [];
 	//等效觉醒时，把大觉醒数量变成小觉醒数量
 	if (equalAk) {
 		awokens.forEach(ak=>{
@@ -1049,7 +1049,7 @@ function searchCards(cards, {attrs: sAttrs, fixMainColor, types, typeAndOr, rare
 			}
 		});
 	} else {
-		searchAwokens = awokens.concat();
+		searchAwokens.push(...awokens);
 	}
 	if (searchAwokens.length > 0) {
 		cardsRange = cardsRange.filter(card => {

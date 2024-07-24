@@ -1331,6 +1331,14 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .team-leader .monster {
 	border-color: var(--team-ft-color);
 }
+.team-members .monster,
+.team-assist .monster {
+	cursor: grab;
+}
+.team-members .monster:active,
+.team-assist .monster:active {
+	cursor: grabbing;
+}
 
 /*三维计算值*/
 .team-ability .abilitys
@@ -1609,7 +1617,8 @@ label[for="search-string"]::before {
 	transform: scale(0.6);
 	margin: calc(-100px * (1 - 0.6) / 2);
 }
-.rich-text .detail-mon .monster{
+.rich-text .detail-mon .monster,
+.custom-addition .detail-mon .monster{
 	transform: scale(0.5);
 	margin: calc(-100px * (1 - 0.5) / 2);
 }
@@ -2421,7 +2430,7 @@ input[disabled]+.awoken-icon:active,
 	transform: scale(0.84);
 	margin: -3px -1px;
 }
-.edit-box .awoken-ul .awoken-icon,
+.edit-box :where(.awoken-div,.row-awoken-sawoken) .awoken-ul .awoken-icon,
 .row-mon-awoken .awoken-count-num
 {
 	cursor: pointer;
@@ -2742,10 +2751,10 @@ input[disabled]+.awoken-icon:active,
 
 /*不允许使用的潜觉，不是手指，半透明，灰度*/
 .awoken-icon.unallowable-awoken,
-input[disabled]+.awoken-icon,
+.search-box .awoken-ul .awoken-count input[disabled]+.awoken-icon,
 .latent-icon.unallowable-latent
 {
-	cursor: default !important;
+	cursor: not-allowed;
 	opacity: var(--search-icon-unchecked);
 	filter: grayscale(100%);
 }
