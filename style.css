@@ -1623,10 +1623,13 @@ label[for="search-string"]::before {
 	transform: scale(0.6);
 	margin: calc(-100px * (1 - 0.6) / 2);
 }
-.rich-text .detail-mon .monster,
-.custom-addition .detail-mon .monster{
+.rich-text .detail-mon .monster{
 	transform: scale(0.5);
 	margin: calc(-100px * (1 - 0.5) / 2);
+}
+.custom-addition .detail-mon .monster{
+	transform: scale(0.35);
+	margin: calc(-100px * (1 - 0.35) / 2);
 }
 .evo-card-list .monster .id,
 .edit-box .search-mon-list .monster .id,

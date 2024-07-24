@@ -30255,7 +30255,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"4474d92e382f237b4f6b8606bfee972a"
+		"8f587bd2a1c93bad7cb3bae1c5a9b1ad"
 	],
 	[
 		"temp.js",
