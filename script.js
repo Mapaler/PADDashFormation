@@ -2211,6 +2211,19 @@ function reloadFormationData(event) {
 		paddbTeamId.value = `https://paddb.net/team/${_id}`;
 	}
 	
+	//恢复上一次的搜索状态
+	const searchOptions = ((str)=>{
+		try {
+			const obj = JSON.parse(str);
+			return obj.attrs ? obj : null;
+		} catch (error) {
+			return null;
+		}
+	})(getQueryString('search-options') || sessionStorage.getItem('search-options'));
+	if (searchOptions) {
+		editBox?.querySelector(".search-box")?.recoverySearchStatus(searchOptions);
+	}
+
 	//编辑模式直接打开编辑框
 	let editingTarget = ((str)=>{
 		try {
@@ -2220,7 +2233,8 @@ function reloadFormationData(event) {
 			return null;
 		}
 	})(sessionStorage.getItem('editing'));
-	if (!editingTarget && isGuideMod) editingTarget = [0,0,0];
+	
+	if (!editingTarget && (isGuideMod || searchOptions)) editingTarget = [0,0,0];
 	if (editingTarget)
 	{
 		const mid = event?.state?.mid ?? parseInt(getQueryString("id"), 10);
@@ -2246,18 +2260,6 @@ function reloadFormationData(event) {
 		editBox.hide();
 	}
 	
-	//恢复上一次的搜索状态
-	const searchOptions = ((str)=>{
-		try {
-			const obj = JSON.parse(str);
-			return obj.attrs ? obj : null;
-		} catch (error) {
-			return null;
-		}
-	})(getQueryString('search-options') || sessionStorage.getItem('search-options'));
-	if (searchOptions) {
-		editBox?.querySelector(".search-box")?.recoverySearchStatus(searchOptions);
-	}
 	
 	refreshAll(formation);
 }
