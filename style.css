@@ -3075,9 +3075,9 @@ a.series-search::before {
 	width: 32px;
 	vertical-align: middle;
 }
-.team-awoken-effect .latent-icon::before{
+/*.team-awoken-effect .latent-icon::before{
 	opacity: 0.99;
-}
+}*/
 .team-awoken-effect .latent-icon.show-enabling-awokwn {
 	width: 64px;
 }
