@@ -5965,8 +5965,8 @@ function editMember(teamNum, isAssist, indexInTeam) {
 		editBox.reCalculateAbility();
 	
 	//自动选中ID狂，以方便修改
-	monstersID.focus();
-	monstersID.select();
+	//monstersID.focus();
+	//monstersID.select();
 }
 //编辑窗，修改怪物ID
 function editBoxChangeMonId(id) {

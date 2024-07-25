@@ -4345,15 +4345,16 @@ const specialSearchFunctions = (function() {
 			},
 			{name:"Will get Orbs skin",otLangName:{chs:"能获得宝珠皮肤",cht:"能獲得寶珠皮膚"},
 				function:cards=>cards.filter(({orbSkinOrBgmId})=>orbSkinOrBgmId>0 && orbSkinOrBgmId<1e4),
-				addition:({orbSkinOrBgmId})=>`ID.${orbSkinOrBgmId}`
+				addition:({orbSkinOrBgmId})=>Boolean(orbSkinOrBgmId) && `ID.${orbSkinOrBgmId}`
 			},
 			{name:"Will get BGM",otLangName:{chs:"能获得背景音乐",cht:"能獲得背景音樂"},
 				function:cards=>cards.filter(({orbSkinOrBgmId})=>orbSkinOrBgmId>=1e4),
-				addition:({orbSkinOrBgmId})=>`ID.${orbSkinOrBgmId}`
+				addition:({orbSkinOrBgmId})=>Boolean(orbSkinOrBgmId) && `ID.${orbSkinOrBgmId}`
 			},
 			{name:"Will get Team Badge",otLangName:{chs:"能获得队伍徽章",cht:"能獲得隊伍徽章"},
 				function:cards=>cards.filter(({badgeId})=>badgeId),
 				addition:({badgeId})=>{
+					if (!badgeId) return;
 					const fragment = document.createDocumentFragment();
 					fragment.append(`ID.${badgeId}`);
 					const icon = document.createElement("icon");
@@ -4375,6 +4376,8 @@ const specialSearchFunctions = (function() {
 			{name:"Not stacked material",otLangName:{chs:"不堆叠的素材",cht:"不堆疊的素材"},
 				function:cards=>cards.filter(card=>!card.stackable && card.types.some(t=>[0,12,14,15].includes(t))),
 			},
+		]},
+		{group:true,name:"----- Additional display -----",otLangName:{chs:"----- 附加显示 -----",cht:"----- 附加显示 -----"}, functions: [
 			{name:"Show Original Name",otLangName:{chs:"显示怪物原始名称",cht:"显示怪物原始名稱"},
 				function:cards=>cards,
 				addition:card=>card.name
@@ -4398,6 +4401,29 @@ const specialSearchFunctions = (function() {
 			{name:"Show Card Cost",otLangName:{chs:"显示角色消耗",cht:"显示角色消耗"},
 				function:cards=>cards,
 				addition:card=>`COST ${card.cost}`
+			},
+			{name:"Show Card Group ID",otLangName:{chs:"显示角色分组ID",cht:"顯示角色分組ID"},
+				function:cards=>cards,
+				addition:card=>{
+					const ul = document.createElement("ul");
+					ul.className = "monsterinfo-groupId";
+					const mSeriesId = ul.appendChild(document.createElement("li"));
+					mSeriesId.className = "monster-seriesId";
+					mSeriesId.textContent = card.seriesId;
+					mSeriesId.setAttribute(dataAttrName, card.seriesId);
+					mSeriesId.classList.toggle(className_displayNone, !card.seriesId);
+					const mCollabId = ul.appendChild(document.createElement("li"));
+					mCollabId.className = "monster-collabId";
+					mCollabId.textContent = card.collabId;
+					mCollabId.setAttribute(dataAttrName, card.collabId);
+					mCollabId.classList.toggle(className_displayNone, !card.collabId);
+					const mGachaId = ul.appendChild(document.createElement("li"));
+					mGachaId.className = "monster-gachaId";
+					mGachaId.textContent = card.gachaIds.join();
+					mGachaId.setAttribute(dataAttrName, card.gachaIds.join());
+					mGachaId.classList.toggle(className_displayNone, !card.gachaIds.length);
+					return ul;
+				}
 			},
 		]},
 	];

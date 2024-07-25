@@ -1191,21 +1191,18 @@ function showSearchBySeriesId(sId, sType) {
 	switch (sType) {
 		case "collab": {//合作
 			if (!Number.isInteger(sId)) sId = parseInt(sId, 10);
-			showSearch(Cards.filter(card => card.collabId == sId),
-				card => card.collabId);
+			showSearch(Cards.filter(card => card.collabId == sId));
 			break;
 		}
 		case "gacha": {//桶，是数组
 			if (!sId.every(id=>Number.isInteger(id))) sId = sId,map(id=>parseInt(id, 10));
-			showSearch(sId.flatMap(gachaId=>Cards.filter(card => card.gachaIds.includes(gachaId))),
-				card => card.gachaIds.join());
+			showSearch(sId.flatMap(gachaId=>Cards.filter(card => card.gachaIds.includes(gachaId))));
 			break;
 		}
 		case "series":
 		default: { //系列
 			if (!Number.isInteger(sId)) sId = parseInt(sId, 10);
-			showSearch(Cards.filter(card => card.seriesId == sId),
-				card => card.seriesId);
+			showSearch(Cards.filter(card => card.seriesId == sId));
 			break;
 		}
 	}

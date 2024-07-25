@@ -36,13 +36,13 @@ label[for="languages"]::after{
 .monsterinfo-box .monster-id::before{
 	content: "No.";
 }
-.monsterinfo-box .monster-seriesId::before{
+.monsterinfo-groupId .monster-seriesId::before{
 	content: "系列ID：";
 }
-.monsterinfo-box .monster-collabId::before{
+.monsterinfo-groupId .monster-collabId::before{
 	content: "合作ID：";
 }
-.monsterinfo-box .monster-gachaId::before{
+.monsterinfo-groupId .monster-gachaId::before{
 	content: "抽蛋ID：";
 }
 .monsterinfo-box .monster-altName::before{

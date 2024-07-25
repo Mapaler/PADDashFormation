@@ -30,13 +30,13 @@ label[for="languages"]::after{
 .monsterinfo-box .monster-id::before{
 	content: "No.";
 }
-.monsterinfo-box .monster-seriesId::before{
+.monsterinfo-groupId .monster-seriesId::before{
 	content: "シリーズ ID：";
 }
-.monsterinfo-box .monster-collabId::before{
+.monsterinfo-groupId .monster-collabId::before{
 	content: "コラボ ID:";
 }
-.monsterinfo-box .monster-gachaId::before{
+.monsterinfo-groupId .monster-gachaId::before{
 	content: "ガチャ ID：";
 }
 .monsterinfo-box .monster-altName::before{

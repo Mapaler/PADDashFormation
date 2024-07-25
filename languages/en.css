@@ -28,13 +28,13 @@
 .monsterinfo-box .monster-id::before{
 	content: "No.";
 }
-.monsterinfo-box .monster-seriesId::before{
+.monsterinfo-groupId .monster-seriesId::before{
 	content: "Series ID：";
 }
-.monsterinfo-box .monster-collabId::before{
+.monsterinfo-groupId .monster-collabId::before{
 	content: "Collab ID：";
 }
-.monsterinfo-box .monster-gachaId::before{
+.monsterinfo-groupId .monster-gachaId::before{
 	content: "Egg Machine ID：";
 	transform: scaleX(0.62);
 	margin: 0 -25px;
