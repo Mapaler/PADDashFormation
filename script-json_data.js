@@ -34,7 +34,6 @@ let localTranslating = {
 			"PDC": "PDC",
 			"PADDB": "PADDB",
 			"DADDB": "DADDB",
-			"SANBON": "sanbon.me",
 		},
 		error: {
 			0: "Unknown Error",

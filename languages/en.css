@@ -637,19 +637,7 @@ label[for="paddb-team-id"]::before
 }
 body:not(.external-link-support) #external-support::after
 {
-	content: "Install helper scripts to use PADDB/SANBON-related features";
-}
-
-#qr-code-frame .sanbon-team-edit::before
-{
-	content: "Upload Team Data to sanbon.me：";
-}
-label[for="sanbon-team-id"]::before
-{
-	content: "sanbon.me Team Link:";
-}
-#sanbon-save-or-upload-team::before {
-	content: "Upload new Team";
+	content: "Install helper scripts to use PADDB-related features";
 }
 
 label[for="qr-data-type-pdf"]::before
@@ -663,9 +651,6 @@ label[for="qr-data-type-pdc"]::before
 label[for="qr-data-type-daddb"]::before
 {
 	content: "DADDB";
-}
-label[for="qr-data-type-sanbon-v1"]::before {
-	content: "Sanbon v1 URL";
 }
 label[for="qr-data-type-paddb"]::before
 {
