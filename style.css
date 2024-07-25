@@ -460,7 +460,6 @@ ul{
 	display: block;
 	background-repeat: no-repeat;
 	position: relative;
-	cursor: pointer;
 	border-radius: 5px;
 	text-decoration:none;
 }
