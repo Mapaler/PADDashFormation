@@ -6284,15 +6284,9 @@ function refreshAll(formationData) {
 	const dge = formationData.dungeonEnchance;
 	dungeonEnchanceDom.classList.add(className_displayNone);
 	dungeonEnchanceDom.innerHTML = '';
+	const dungeonEnchanceFragment = [];
 	if (Object.values(dge.rate).some(rate => rate != 1)) //如果有任何一个属性的比率不为1，才产生强化图标
 	{
-		if (dge.rarities.length > 0) {
-			dge.rarities.forEach(rarity=>{
-				const icon = dungeonEnchanceDom.appendChild(document.createElement("icon"));
-				icon.className = "rare-icon";
-				icon.setAttribute("data-rare-icon", rarity);
-			})
-		}
 
 		const seriesFragment = [];
 		if (dge?.collabs?.length) { //添加合作的ID名称
@@ -6336,18 +6330,28 @@ function refreshAll(formationData) {
 
 			seriesFragment.push(localTranslating?.skill_parse?.target?.gacha_id({id:fragment}));
 		}
+		if (dge.rarities.length > 0) {
+			const raritiesIcons = dge.rarities.map(rarity=>{
+				const icon = document.createElement("icon");
+				icon.className = "rare-icon";
+				icon.setAttribute("data-rare-icon", rarity);
+				return icon;
+			});
+			seriesFragment.push(raritiesIcons.nodeJoin());
+		}
 		const skill = powerUp(dge.attrs, dge.types, p.mul({hp: dge.rate.hp * 100, atk: dge.rate.atk * 100, rcv: dge.rate.rcv * 100}));
 		seriesFragment.push(renderSkill(skill));
 
-		dungeonEnchanceDom.appendChild(seriesFragment.nodeJoin(localTranslating?.skill_parse?.word?.comma()));
+		dungeonEnchanceFragment.push(seriesFragment.nodeJoin(localTranslating?.skill_parse?.word?.comma()));
 	}
 	if (dge?.benefit) { //添加阴阳
 		const benefitAwoken = (dge.benefit & 0b1) ? 128 : 129;
 		const icon = document.createElement("icon");
 		icon.className ="awoken-icon";
 		icon.setAttribute("data-awoken-icon", benefitAwoken);
-		if (dge.benefit & 0b10) icon.classList.add("yinyang")
-		dungeonEnchanceDom.appendChild(icon);
+		if (dge.benefit & 0b10)
+			icon.classList.add("yinyang");
+		dungeonEnchanceFragment.push(icon);
 	}
 	if (dge?.stage > 1) { //添加层数
 		const states = localTranslating?.skill_parse?.stats;
@@ -6355,8 +6359,9 @@ function refreshAll(formationData) {
 			state:states?.cstage(),
 			num: dge?.stage
 		};
-		dungeonEnchanceDom.appendChild(states?.state_is(dict));
+		dungeonEnchanceFragment.push(states?.state_is(dict));
 	}
+	dungeonEnchanceDom.appendChild(dungeonEnchanceFragment.nodeJoin(localTranslating?.skill_parse?.word?.semicolon()));
 	dungeonEnchanceDom.classList.remove(className_displayNone);
 
 	teamBigBoxs.forEach((teamBigBox, teamNum) => {
