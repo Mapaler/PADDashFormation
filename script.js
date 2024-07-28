@@ -4168,33 +4168,26 @@ function initialize() {
 	};
 	//以字符串搜索窗口
 	const stringSearchDialog = document.getElementById("dialog-search-string");
-	function searchByString(str)
+	//将输入的字符串变为参数数组
+	function parseArgumentsString(str) {
+		const matches = [...str.matchAll(/\"(?<arg>[^\"]*)\"|(?<arg>\S+)/ig)];
+		return matches.map(match=>match?.groups?.arg);
+	}
+	function searchByString(str, onlyInTag = false)
 	{ // 考虑了一下onlyInTag被废弃了，因为和游戏内搜索不符
-		str = str.trim();
-		if (str.length == 0) { //如果搜索0，则打开最新的50个
-			return Cards.filter(card=>card.enabled).slice(-50);
-		} else if (str.length>0)
-		{
-			return Cards.filter(card =>
-				{
-					const names = [card.name];
-					if (card.otLangName)
-					{
-						names.push(...Object.values(card.otLangName));
-					}
-					const tags = card.altName.concat();
-					if (card.otTags)
-					{
-						tags.push(...card.otTags);
-					}
-					return tags.some(astr=>astr.toLowerCase().includes(str.toLowerCase())) ||
-					names.some(astr=>astr.toLowerCase().includes(str.toLowerCase()));
-				}
-			);
-		}else
-		{
-			return [];
-		}
+		if (typeof str !== "string") return;
+		const args = parseArgumentsString(str).map(str=>str.toLowerCase());
+		if (args.length === 0) return;
+		return Cards.filter(card => {
+			let cardTags = card.altName.concat(card?.otTags ?? []); //加入Tag
+			if (!onlyInTag) { //如果不是仅搜索Tag，则加入怪物名称
+				cardTags.push(card.name);
+				card.otLangName && cardTags.push(...Object.values(card.otLangName));
+			}
+			cardTags = cardTags.map(str=>str.toLowerCase()); //先转小写
+			//每一个参数都需要在搜索内容里
+			return args.every(arg=>cardTags.some(str=>str.includes(arg)));
+		});
 	}
 	function copyString(input)
 	{
@@ -4202,48 +4195,52 @@ function initialize() {
 		input.select(); //选择全部
 		if (navigator?.clipboard?.writeText) { //优先使用新API
 			navigator.clipboard.writeText(input.value);
-		} else if (document.execCommand('copy')) {
+		} else {
 			document.execCommand('copy');
 		}
 		//input.blur(); //取消焦点
 	}
 	stringSearchDialog.initialing = function(originalStrArr = [], additionalStrArr = []) {
+		//清除空字符串
+		originalStrArr = originalStrArr.filter(Boolean);
+		additionalStrArr = additionalStrArr.filter(Boolean);
 		const stringSearchContent = this.querySelector(".dialog-content");
 		const fragment = document.createDocumentFragment();
-		originalStrArr = originalStrArr.filter(Boolean)
-		additionalStrArr = additionalStrArr.filter(Boolean)
-		if (originalStrArr.length) {
-			const ul_original = document.createElement("ul");
-			ul_original.className = "original-string";
-			originalStrArr.forEach(str=>{
-				const li = ul_original.appendChild(document.createElement("li"));
-				const ipt = li.appendChild(document.createElement("input"));
-				ipt.className = "string-value";
-				ipt.value = str;
-				ipt.readOnly = true;
+		function copyLeft() {
+			copyString(this.parentElement.querySelector(".string-value"));
+		}
+		function searchLeft() {
+			const oStr = this.parentElement.querySelector(".string-value")?.value;
+			if (!oStr) return;
+			//把Tag内容加上两侧的双引号，避免被区分成不同的参数
+			const str = `"${oStr}"`;
+			str && showSearch(searchByString(str, true));
+		}
+		function stringLine(str, copy = false) {
+			const li = document.createElement("li");
+			const ipt = li.appendChild(document.createElement("input"));
+			ipt.className = "string-value";
+			ipt.value = str;
+			ipt.readOnly = true;
+			if (copy) {
 				const copyBtn = li.appendChild(document.createElement("button"));
 				copyBtn.className = "string-copy";
-				copyBtn.onclick = function(){copyString(ipt)};
-				const searchBtn = li.appendChild(document.createElement("button"));
-				searchBtn.className = "string-search";
-				searchBtn.onclick = function(){showSearch(searchByString(ipt.value))};
-			});
-			fragment.appendChild(ul_original);
+				copyBtn.onclick = copyLeft;
+			}
+			const searchBtn = li.appendChild(document.createElement("button"));
+			searchBtn.className = "string-search";
+			searchBtn.onclick = searchLeft;
+			return li;
+		}
+		if (originalStrArr.length) {
+			const ul_original = fragment.appendChild(document.createElement("ul"));
+			ul_original.className = "original-string";
+			ul_original.append(...originalStrArr.map(str=>stringLine(str, true)));
 		}
 		if (additionalStrArr.length) {
-			const ul_additional = document.createElement("ul");
+			const ul_additional = fragment.appendChild(document.createElement("ul"));
 			ul_additional.className = "additional-string";
-			additionalStrArr.forEach(str=>{
-				const li = ul_additional.appendChild(document.createElement("li"));
-				const ipt = li.appendChild(document.createElement("input"));
-				ipt.className = "string-value";
-				ipt.value = str;
-				ipt.readOnly = true;
-				const searchBtn = li.appendChild(document.createElement("button"));
-				searchBtn.className = "string-search";
-				searchBtn.onclick = function(){showSearch(searchByString(ipt.value))};
-			});
-			fragment.appendChild(ul_additional);
+			ul_additional.append(...additionalStrArr.map(str=>stringLine(str, false)));
 		}
 		stringSearchContent.innerHTML = "";
 		stringSearchContent.appendChild(fragment);
@@ -4902,6 +4899,7 @@ function initialize() {
 			//history.pushState(state, null, location);
 		}
 		searchResultCount.setAttribute("data-search-result-count", searchArr.length);
+		searchResultCount.textContent = searchArr.length;
 		searchMonList.classList.remove(className_displayNone);
 	};
 	//对已经搜索到的Cards重新附加显示

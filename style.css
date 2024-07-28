@@ -361,11 +361,6 @@ ul{
 	text-align: center;
 	margin-bottom: 5px;
 }
-.dialog .dialog-content .additional-string
-{
-	border-top: 2px solid white;
-	margin-top: 5px;
-}
 /*.dialog .dialog-content .additional-string::before
 {
 	content: "其他語言";
@@ -416,16 +411,30 @@ ul{
 }
 #dialog-search-string
 {
-	width: 260px;
-	top: 100px;
+	width: 350px;
+	top: 0;
 	z-index: 2;
+}
+.dialog .dialog-content :where(.original-string, .additional-string) li {
+	display: grid;
+	gap: 5px;
+	margin-bottom: 5px;
+}
+.dialog .dialog-content .original-string li {
+	grid-template-columns: auto 45px 45px;
+}
+.dialog .dialog-content .additional-string li {
+	grid-template-columns: auto 45px;
+}
+.dialog .dialog-content .additional-string
+{
+	border-top: 2px solid white;
+	margin-top: 5px;
 }
 .dialog .string-copy,
 .dialog .string-search
 {
 	box-sizing: border-box;
-	width: 45px;
-	margin-left: 5px;
 	cursor: pointer;
 	background-color: #994433;
 	border: 2px solid #FFCC88;
@@ -433,22 +442,18 @@ ul{
 	border-radius: 5px;
 	padding: 0;
 }
-.dialog .string-copy::before
-{
+.dialog .string-copy::before {
 	content: "📋";
 }
-.dialog .string-search::before
-{
+.dialog .string-search::before {
 	content: "🔍";
 }
 .dialog .string-value
 {
 	box-sizing: border-box;
-	width: calc(100% - 50px * 1);
 }
 #dialog-search-string .original-string .string-value
 {
-	width: calc(100% - 50px * 2);
 }
 
 /*单个怪物*/
@@ -2227,7 +2232,7 @@ input[disabled]+.awoken-icon:active,
 	margin-right: 3px;
 }
 .special-filter-list select{
-	font-size: 20px;
+	font-size: 1.25em;
 	max-width: 100%;
 	box-sizing: border-box;
 }
@@ -2235,9 +2240,13 @@ input[disabled]+.awoken-icon:active,
 .control-div button{
 	font-size: 20px;
 }
-.control-div .search-start{
-	float: right;
-	margin-left: 5px;
+.search-box .control-div .button-div {
+	display: grid;
+	gap: 5px;
+	grid-template-columns: max-content max-content max-content auto max-content;
+}
+.control-div .search-start {
+	grid-column: 5 / 6;
 }
 /*.control-div .search-start::before{
 	content: "开始搜索";
@@ -2264,17 +2273,13 @@ input[disabled]+.awoken-icon:active,
 .search-mon-list:empty {
 	display: none;
 }
-.search-box .search-list-length
-{
-	float: right;
+.search-box .control-div .sort-div {
+	display: grid;
+	gap: 5px;
+	grid-template-columns: max-content max-content max-content auto max-content;
 }
-.search-box .search-list-length[data-search-result-count="0"]
-{
-	display: none;
-}
-.search-box .search-list-length:not([data-search-result-count="0"])::after
-{
-	content: attr(data-search-result-count);
+.search-box .search-list-length {
+	grid-column: 5 / 6;
 }
 /*图鉴模式使用粘性定位*/
 .guide-mod .sticky-box {
