@@ -2155,7 +2155,7 @@ function loadData(force = false)
 				{
 					if (controlBox)
 					{
-						const updateTime = controlBox.querySelector(".datasource-updatetime");
+						const updateTime = controlBox.querySelector("#datasource-updatetime");
 						updateTime.textContent = new Date(currentCkey.updateTime).toLocaleString(undefined, { hour12: false });
 						clearInterval(controlBoxHook);
 					}
@@ -2683,7 +2683,7 @@ function initialize() {
 	}
 
 	//▼添加语言列表开始
-	const langSelectDom = controlBox.querySelector(".languages");
+	const langSelectDom = controlBox.querySelector("#languages");
 	languageList.forEach(lang =>
 		langSelectDom.options.add(new Option(lang.name, lang.i18n))
 	);
@@ -2693,7 +2693,7 @@ function initialize() {
 
 	//▲添加语言列表结束
 	//▼添加数据来源列表开始
-	const dataSelectDom = controlBox.querySelector(".datasource");
+	const dataSelectDom = controlBox.querySelector("#datasource");
 	dataSourceList.forEach(ds =>
 		dataSelectDom.options.add(new Option(ds.source, ds.code))
 	);
@@ -4689,6 +4689,40 @@ function initialize() {
 	const specialFilterUl = s_specialDiv.querySelector(".special-filter-list");
 	const specialFilterFirstLi = specialFilterUl.querySelector("li");
 	const specialFirstSelect = specialFilterFirstLi.querySelector(".special-filter");
+	function filterCopy() {
+		const target = this.parentElement;
+		const newFilter = target.cloneNode(true);
+		const newSelect = newFilter.querySelector(".special-filter");
+		newSelect.selectedIndex = target.querySelector(".special-filter").selectedIndex;
+		filterBindOnclick(newFilter);
+		target.insertAdjacentElement('afterend', newFilter);
+		return newSelect;
+	}
+	function filterShiftUp() {
+		const parent = this.parentElement;
+		const target = parent.previousElementSibling;
+		if (target) {
+			target.insertAdjacentElement('beforebegin', parent);
+		}
+	}
+	function filterShiftDown() {
+		const parent = this.parentElement;
+		const target = parent.nextElementSibling;
+		if (target) {
+			target.insertAdjacentElement('afterend', parent);
+		}
+	}
+	function filterRemove() {
+		this.parentElement.remove();
+	}
+	//给这个特殊搜索绑定函数
+	function filterBindOnclick(li) {
+		li.querySelector(".copy-filter").onclick = filterCopy;
+		li.querySelector(".shift-up-filter").onclick = filterShiftUp;
+		li.querySelector(".shift-down-filter").onclick = filterShiftDown;
+		li.querySelector(".remove-filter").onclick = filterRemove;
+	}
+	filterBindOnclick(specialFilterFirstLi);
 	
 	function newSpecialSearchOption(func, idx1, idx2)
 	{
@@ -4764,7 +4798,6 @@ function initialize() {
 		specialFilterUl.appendChild(specialFilterLi);
 		return specialFilterSelection;
 	}
-	//specialAdd.onclick(); //先运行一次产生两个
 	specialClear.onclick = function() {
 		searchMonList.customAddition = null;
 		specialFilterUl.innerHTML = "";
@@ -4773,6 +4806,8 @@ function initialize() {
 	}
 	specialStar.onclick = function() {
 		const indexs = specialFirstSelect.value.split("|").map(Number);
+		if (indexs[0] === 0 && indexs.length === 1) return;
+
 		let markIdx = markedFilter.findIndex(arr=>arr[0] === indexs[0] && arr[1] === indexs[1]);
 		if (markIdx >= 0) {//已经存在的收藏
 			markedFilter.splice(markIdx,1);
@@ -4955,7 +4990,7 @@ function initialize() {
 		const specialFilterSelections = Array.from(specialFilterUl.querySelectorAll(".special-filter"));
 		//将筛选个数增加到需要的个数
 		for (let i = specialFilterSelections.length; i < specialFilters.length; i++) {
-			specialFilterSelections.push(specialAdd.onclick());
+			specialFilterSelections.push(specialAdd.onclick.onclick());
 		}
 		//将每一个搜索都设置好
 		for (let i = 0; i < specialFilters.length; i++) {
@@ -5587,14 +5622,12 @@ function initialize() {
 	};
 
 	//语言选择
-	const langList = controlBox.querySelector(".languages");
-	langList.onchange = function() {
+	langSelectDom.onchange = function() {
 		createNewUrl({ "language": this.value });
 		history.go();
 	};
 	//数据源选择
-	const dataList = controlBox.querySelector(".datasource");
-	dataList.onchange = function() {
+	dataSelectDom.onchange = function() {
 		createNewUrl({ datasource: this.value });
 		history.go();
 	};
@@ -5603,7 +5636,7 @@ function initialize() {
 	const languageJS = document.head.appendChild(document.createElement("script"));
 	languageJS.id = "language-js";
 	languageJS.type = "text/javascript";
-	languageJS.src = "languages/" + currentLanguage.i18n + ".js";
+	languageJS.src = `languages/${currentLanguage.i18n}.js`;
 
 	if (isGuideMod) //图鉴模式直接打开搜索框
 	{
@@ -7551,7 +7584,7 @@ function fastShowSkill(event) {
 function localisation($tra) {
 	if (!$tra) return;
 	document.title = $tra.webpage_title;
-	controlBox.querySelector(".datasource-updatetime").title = $tra.force_reload_data;
+	controlBox.querySelector("#datasource-updatetime").title = $tra.force_reload_data;
 	formationBox.querySelector(".title-box .title-code").placeholder = $tra.title_blank;
 	formationBox.querySelector(".title-box .title-display").setAttribute("placeholder",$tra.title_blank);
 	formationBox.querySelector(".detail-box .detail-code").placeholder = $tra.detail_blank;

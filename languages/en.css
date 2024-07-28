@@ -181,11 +181,8 @@ label[for="merge-skill"]::after{
 .type-name[data-type-name='9']::after{
 	content: "Special Protection";
 }
-.control-box .datasource-label::before{
-	content: "🕹️Data source:";
-}
-.control-box .datasource-updatetime::before{
-	content: "🗓️Update Time:";
+label[for="datasource"]::after{
+	content: "Game:";
 }
 .control-box .btn-solo-link::before{
 	content: "🧑Jump To Solo Mode";
@@ -381,7 +378,6 @@ label[for="fix-main-color"]::after{
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before,
 #attr-clear::before
 {
 	content: "Clear";
@@ -416,15 +412,6 @@ label[for="not-weapon"]::after
 label[for="box-have"]::after
 {
 	content: "Emphasize my box";
-}
-.special-div .special-add::before {
-	content: "➕";
-}
-.special-div .special-star::before {
-	content: "☆";
-}
-.special-div .special-star.marked::before {
-	content: "★";
 }
 .control-div .search-start::before{
 	content: "🔍Start Search";

@@ -43,11 +43,11 @@ const teamsCount = 3;
 	<noscript>您的浏览器不支持 JavaScript！<br/>Your browser does not support JavaScript!</noscript>
 	<div class="control-box">
 		<div>
-			<label class="languages-label fa" for="languages"></label><select class="languages" id="languages"></select>
-			<label class="datasource-label"><select class="datasource"></select></label>
-			<button onclick="loadData(true);" class="datasource-updatetime" title="强制刷新数据"></button>
-			<a class="help-link fa" target="_blank" href="doc/index.html"></a>
-			<a class="feedback-link fa" target="_blank" href="https://github.com/Mapaler/PADDashFormation/issues"></a>
+			<label for="languages"></label><select class="languages" id="languages"></select>
+			<label for="datasource"></label><select class="datasource" id="datasource"></select>
+			<button onclick="loadData(true);" id="datasource-updatetime" title="强制刷新数据"></button>
+			<a class="help-link" target="_blank" href="doc/index.html"></a>
+			<a class="feedback-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/issues"></a>
 		</div>
 		<div>
 			<button class="btn-clear-data" onclick="clearData();"></button>
@@ -100,7 +100,7 @@ const teamsCount = 3;
 		<div>
 			<span class="lbl-henshin-change"><button class="btn-henshin" data-step="-1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button><button class="btn-henshin" data-step="+1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button></span>
 			<span class="lbl-remove-assist"><button class="btn-remove-assist" onclick="formation.removeAssist();"></span>
-			<button id="btn-set-dungeon-enchance" class="fa"></button>
+			<button id="btn-set-dungeon-enchance"></button>
 		</div>
 	</div>
 	<div class="formation-box">
@@ -1909,19 +1909,27 @@ const teamsCount = 3;
 					</ul>
 				</details>
 			</div>
-			<div class="special-div">
-				<button class="special-add brown-button"></button>
-				<button class="special-clear brown-button"></button>
-				<button class="special-star brown-button"></button>
-				<ul class="special-filter-list">
-					<li><select class="special-filter"></select></li>
-				</ul>
-			</div>
 			<div class="fast-switch">
 				<input type="checkbox" name="can-assist" id="can-assist"><label for="can-assist"></label>
 				<input type="checkbox" name="can-level-limit-breakthrough" id="can-level-limit-breakthrough"><label for="can-level-limit-breakthrough"></label>
 				<input type="checkbox" name="have-8-latent-slot" id="have-8-latent-slot"><label for="have-8-latent-slot"></label>
 				<input type="checkbox" name="not-weapon" id="not-weapon"><label for="not-weapon"></label>
+			</div>
+			<div class="special-div">
+				<div class="button-div">
+					<button class="special-add brown-button"></button>
+					<button class="special-clear brown-button"></button>
+					<button class="special-star brown-button"></button>
+				</div>
+				<ul class="special-filter-list">
+					<li>
+						<select class="special-filter"></select>
+						<button class="copy-filter"></button>
+						<button class="shift-up-filter"></button>
+						<button class="shift-down-filter"></button>
+						<button class="remove-filter"></button>
+					</li>
+				</ul>
 			</div>
 			<div class="control-div"><!--控制栏-->
 				<div class="button-div"><!--额外显示栏-->

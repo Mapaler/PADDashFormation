@@ -16,12 +16,21 @@
 		url("./fonts/zpix.woff2") format('woff2');
 	font-weight: normal;
 	font-style: normal;
-}	
+}
 @font-face {
-	font-family: 'Font Awesome';
+	font-family: 'Font Awesome Solid';
 	src:
 		local("FontAwesome"),
 		url("fonts/fa-solid-900.woff2") format("woff2");
+	font-style: normal;
+	font-weight: 900;
+	font-display: block;
+}
+@font-face {
+	font-family: 'Font Awesome Regular';
+	src:
+		local("FontAwesome"),
+		url("fonts/fa-regular-400.woff2") format("woff2");
 	font-style: normal;
 	font-weight: 900;
 	font-display: block;
@@ -39,7 +48,8 @@ body{
 	--head-block-height: 108px;
 	--search-icon-unchecked: 0.4;
 	--font-family : "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
-	--icon-font-family : 'Font Awesome', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
+	--icon-font-family : 'Font Awesome Solid', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
+	--icon-regular-font-family : 'Font Awesome Regular', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--game-font-family : 'FOT-KurokaneStd-EB',"Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--border-width: 2px;
 
@@ -52,10 +62,6 @@ body{
 }
 details>summary:hover {
 	background-color: #00000044;
-}
-.fa::before {
-	font-family: var(--icon-font-family);
-	margin-right: 3px;
 }
 .control-box,
 .formation-box
@@ -78,6 +84,17 @@ details>summary:hover {
 }
 details>summary {
 	cursor: pointer;
+}
+.control-box :where(
+	label,
+	button,
+	a,
+)::before {
+	font-family: var(--icon-font-family);
+}
+
+.help-link {
+	cursor: help;
 }
 .help-link::before{
 	content: "\f05a";
@@ -382,15 +399,19 @@ ul{
 	border-style: solid;
 	border-width: 2px;
 	border-image: linear-gradient(to bottom,#C38E5F,#2F2008) 1;
+	border-radius: 5px;
 	clip-path: inset(0 round 5px);
-	font-size: 20px;
-	line-height: 20px;
+	font-size: 1.5em;
+	line-height: 1em;
 	vertical-align: middle;
 	color: white;
 	font-family: var(--game-font-family);
 	text-shadow: black 2px 2px 0;
 	cursor: pointer;
 	transition: transform 0.1s;
+}
+.brown-button:hover {
+	color: lightgreen;
 }
 .brown-button:active
 {
@@ -1786,6 +1807,9 @@ label[for="search-string"]::before {
 	grid-template-columns: 100px min-content 30px auto;
 	grid-gap: 3px;
 }
+#search-attr .monster {
+	cursor: help;
+}
 #search-attr .options {
 	grid-column: 1 / 5;
 	grid-row: 2 / 3;
@@ -2024,12 +2048,15 @@ label[for="search-string"]::before {
 	min-height: 32px;
 	box-sizing: border-box;
 	min-width: 320px;
-	background-color: #00000044;
+	background-color: rgba(0,0,0,0.2);
 	border-radius: 6px;
 	box-shadow: inset black 0 0 3px;
 	display: inline-grid;
 	vertical-align: bottom;
-	grid-gap: 0;
+	grid-gap: 1px;
+}
+.selected-awokens-div .awoken-clear {
+	font-size: 1em;
 }
 /*.search-box .awoken-div::before{
 	content: "觉醒";
@@ -2055,19 +2082,17 @@ label[for="search-string"]::before {
 	min-width: unset;
 	background-size: 100px 100px;
 	background-position-y: 40px;
-	font-size: 18px;
-	line-height: 28px;
 	padding: 0;
 	vertical-align: bottom;
 }
-.search-box .rare-clear,
-.search-box .special-add,
-.search-box .special-clear,
-.search-box .special-star
-{
-	min-width: 50px;
-	font-size: 14px;
-	line-height: 20px;
+.search-box :where(
+	.rare-clear,
+	.special-add,
+	.special-clear,
+	.special-star
+) {
+	font-size: 1em;
+	line-height: 1em;
 }
 
 @keyframes awoken-appear {
@@ -2227,14 +2252,62 @@ input[disabled]+.awoken-icon:active,
 	display: inline list-item;
 }
 
+.special-div .button-div {
+	display: inline-flex;
+	column-gap: 5px;
+}
+.special-div .button-div button,
+.special-filter-list button {
+	font-family: var(--icon-font-family);
+}
+.special-div .button-div .brown-button,
+.special-filter-list .brown-button {
+	padding: 0 5px;
+}
+
+.special-div .special-add::before {
+	content: "\002b";
+}
+.special-div .special-clear::before {
+	content: "\f1f8";
+}
+.special-div .special-star::before {
+	content: "\f005";
+}
+.special-div .special-star:not(.marked) {
+	/*未选中时显示线条*/
+	font-family: var(--icon-regular-font-family);
+}
 .special-filter-list>li{
 	margin-bottom: 5px;
 	margin-right: 3px;
+	display: grid;
+	gap: 2px;
+	grid-template-columns:  auto max-content max-content max-content max-content;
 }
-.special-filter-list select{
+.special-filter-list :where(select, button) {
 	font-size: 1.25em;
-	max-width: 100%;
-	box-sizing: border-box;
+}
+
+.special-filter-list .copy-filter::before {
+	content: "\f24d";
+}
+.special-filter-list .shift-up-filter::before {
+	content: "\f077";
+}
+.special-filter-list .shift-down-filter::before {
+	content: "\f078";
+}
+.special-filter-list .remove-filter::before {
+	content: "\f146";
+}
+.special-filter-list>li:first-child .remove-filter,
+.special-filter-list>li:first-child .shift-up-filter,
+.special-filter-list>li:last-child .shift-down-filter {
+	filter: grayscale(100%);
+	opacity: var(--search-icon-unchecked);
+	pointer-events: none;
+	cursor: not-allowed;
 }
 
 .control-div button{
@@ -2959,29 +3032,26 @@ a.series-search::before {
 }
 
 .edit-box .button-box{
-	border-top: black solid 3px;
 	background-color: rgba(0,0,0,0.5);
 	padding: 5px;
 	height: 50px;
+	display: grid;
+	gap: 5px;
+	grid-template-columns: max-content max-content auto max-content max-content;
 }
 .edit-box .button-box .button-null,
 .edit-box .button-box .button-delay,
 .edit-box .button-box .button-cancel,
 .edit-box .button-box .button-done{
-	height: 50px;
 	box-sizing: border-box;
-	font-size: 25px;
-	font-weight: bold;
+	font-size: 1.5em;
+	border-width: 4px;
 }
-.edit-box .button-box .button-null,
-.edit-box .button-box .button-delay{
-	float: left;
-	margin-right:5px;
+.edit-box .button-box .button-cancel{
+	grid-column: 4 / 5;
 }
-.edit-box .button-box .button-cancel,
 .edit-box .button-box .button-done{
-	float: right;
-	margin-left:5px;
+	grid-column: 5 / 6;
 }
 /*.edit-box .button-box .button-null::after{
 	content: "留空格子";
@@ -3131,6 +3201,12 @@ label[for="languages"]::before{
 label[for="languages"]::after{
 	content: "Lanuage:";
 }
+label[for="datasource"]::before{
+	content: "\f11b";
+}
+#datasource-updatetime::before{
+	content: "\f073";
+}
 
 /*
 .control-box .btn-show-mon-skill-cd::before{
@@ -3151,17 +3227,20 @@ label[for="languages"]::after{
 	font-size: 1.5em;
 }
 .control-box .btn-henshin::before{
-	content: "▷";
+	content: "\f04e";
+	font-family: var(--icon-font-family);
 }
 .control-box .btn-henshin[data-step^="-"]::before{
-	content: "◁";
+	content: "\f04a";
 }
 #btn-set-dungeon-enchance {
+	font-size: 1.2em;
 	margin-left: 1em;
 }
 #btn-set-dungeon-enchance::before
 {
 	content: "\f6d9";
+	font-family: var(--icon-font-family);
 }
 .control-box .btn-remove-assist{
 	vertical-align: bottom;

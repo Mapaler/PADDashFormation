@@ -176,11 +176,8 @@ label[for="merge-skill"]::after{
 .type-name[data-type-name='9']::after{
 	content: "特別保護";
 }
-.control-box .datasource-label::before{
-	content: "🕹️数据来源：";
-}
-.control-box .datasource-updatetime::before{
-	content: "🗓️更新时间：";
+label[for="datasource"]::after{
+	content: "游戏：";
 }
 .control-box .btn-solo-link::before{
 	content: "🧑转到单人游戏";
@@ -375,7 +372,6 @@ label[for="fix-main-color"]::after{
 }
 .search-box .awoken-clear::before,
 .search-box .sawoken-clear::before,
-.special-div .special-clear::before,
 #attr-clear::before
 {
 	content: "清除";
@@ -410,15 +406,6 @@ label[for="not-weapon"]::after
 label[for="box-have"]::after
 {
 	content: "强调箱子拥有";
-}
-.special-div .special-add::before {
-	content: "➕";
-}
-.special-div .special-star::before {
-	content: "☆";
-}
-.special-div .special-star.marked::before {
-	content: "★";
 }
 .control-div .search-start::before{
 	content: "🔍开始搜索";
