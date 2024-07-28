@@ -7255,7 +7255,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 28: return member.card.collabId === 110 ? 1.15 : 1; //电击文库Index
 				case 29: return member.card.collabId === 102 ? 1.15 : 1; //奥特曼
 				case 30: return member.card.gachaIds.includes(6) ? 1.15 : 1; //花嫁
-				case 29: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
+				case 31: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
 				default: return 1;
 			}
 		}
