@@ -353,7 +353,7 @@ input[type="checkbox"].switch-ipt+label::before{
 	width: 2em;
 	height: 1.1em;
 	border-radius: 0.5em;
-	background-image: radial-gradient(white 40%, black 50%, transparent 50%);
+	background-image: radial-gradient(white 40%, black 50%, transparent 55%);
 	background-size: 1.1em 1.1em;
 	background-repeat: no-repeat;
 	transition: .3s ease-out;
@@ -3145,8 +3145,11 @@ a.series-search::before {
 	font-family: var(--font-family);
 }
 .team-awoken-effect>ul {
+	--gap: 3px;
 	display: grid;
-	grid-template-columns: repeat(6, 110px);
+	gap: var(--gap);
+	margin-bottom: var(--gap);
+	grid-template-columns: repeat(6, calc(var(--head-block-width) - var(--gap)));
 }
 .team-awoken-effect .team-flags {
 	display: inline-flex;
