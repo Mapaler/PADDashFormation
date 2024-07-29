@@ -1090,6 +1090,7 @@ label.badge {
 }
 .tIf-total-hp .reduce:not(.no-reduce)::before {
 	content: "\f0ec";
+	font-family: var(--icon-font-family);
 }
 .tIf-total-hp .reduce.no-reduce .general,
 .tIf-total-hp .reduce.no-reduce .awoken-bind
