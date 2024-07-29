@@ -490,6 +490,11 @@ ul{
 #dialog-show-any-string {
 	width: 100%;
 }
+#dialog-show-any-string .dialog-content ul li {
+	display: grid;
+	gap: 5px;
+	grid-template-columns: auto 45px;
+}
 #dialog-search-string
 {
 	width: 350px;
@@ -2325,7 +2330,9 @@ input[disabled]+.awoken-icon:active,
 .special-filter-list button {
 	font-family: var(--icon-font-family);
 }
-.special-div .button-div .brown-button,
+.special-div .button-div .brown-button{
+	padding: 0 15px;
+}
 .special-filter-list .brown-button {
 	padding: 0 5px;
 }
@@ -2348,7 +2355,7 @@ input[disabled]+.awoken-icon:active,
 	margin-right: 3px;
 	display: grid;
 	gap: 2px;
-	grid-template-columns:  auto max-content max-content max-content max-content;
+	grid-template-columns: max-content auto max-content max-content max-content max-content;
 }
 .special-filter-list :where(select, button) {
 	font-size: 1.25em;

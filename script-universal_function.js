@@ -704,7 +704,7 @@ function awokenCountInTeam(team, awokenIndex, solo, teamsCount) {
 	return teamAwokenCount;
 }
 //返回可用的怪物名称
-function returnMonsterNameArr(card, lsList, defaultCode) {
+function returnMonsterNameArr(card, lsList = currentLanguage.searchlist, defaultCode = currentDataSource.code) {
 	const monNameArr = lsList.map(lc => { //取出每种语言
 		if (lc == defaultCode)
 			return card.name;

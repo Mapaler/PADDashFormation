@@ -1246,10 +1246,10 @@ const teamsCount = 2;
 				<div class="button-div">
 					<button class="special-add brown-button"></button>
 					<button class="special-clear brown-button"></button>
-					<button class="special-star brown-button"></button>
 				</div>
 				<ul class="special-filter-list">
 					<li>
+						<select class="filter-kind"></select>
 						<select class="special-filter"></select>
 						<button class="copy-filter brown-button"></button>
 						<button class="shift-up-filter brown-button"></button>
@@ -1768,7 +1768,11 @@ const teamsCount = 2;
 		<div class="dialog-title"></div>
 		<form method="dialog">
 			<div class="dialog-content">
-				<input type="text" class="string-value" readonly /><button class="string-copy" type="button"></button>
+				<ul>
+					<li>
+						<input type="text" class="string-value" readonly /><button class="string-copy" type="button"></button>
+					</li>
+				</ul>
 			</div>
 			<div class="dialog-control"><button class="dialog-close brown-button" value="cancel" formmethod="dialog"></button></div>
 		</form>
