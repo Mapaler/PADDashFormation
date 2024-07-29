@@ -3390,7 +3390,8 @@ function initialize() {
 		//如果并没有任何选择区，则返回
 		if (docSelection.rangeCount < 1) return;
 		const range = docSelection.getRangeAt(0);
-		let editingCode = formationBox.classList.contains("edit-code");
+		console.log(range);
+		const editingCode = formationBox.classList.contains("edit-code");
 		let target; //编辑目标
 		if (titleBox.contains(range.commonAncestorContainer)) {
 			target = editingCode ? txtTitle : txtTitleDisplay;
@@ -3420,8 +3421,8 @@ function initialize() {
 		} else
 		{ //富文本模式
 			const docObj = range.extractContents(); //移动了Range 中的内容从文档树到DocumentFragment（文档片段对象)。
-			let parent = range.commonAncestorContainer.parentElement;
-			if (parent !== target && parent.textContent.length == 0) parent.remove();
+			const parent = range.commonAncestorContainer.parentElement;
+			if (target.contains(parent) && parent !== target && parent.textContent.length == 0) parent.remove();
 			range.deleteContents();
 			let dom
 			if (color === "#000000") {
