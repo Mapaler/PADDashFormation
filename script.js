@@ -4200,8 +4200,9 @@ function initialize() {
 	const stringSearchDialog = document.getElementById("dialog-search-string");
 	//将输入的字符串变为参数数组
 	function parseArgumentsString(str) {
-		const matches = [...str.matchAll(/\"(?<arg>[^\"]*)\"|(?<arg>\S+)/ig)];
-		return matches.map(match=>match?.groups?.arg);
+		//火狐v129才支持重复正则表达式匹配组，所以只能这样兼容旧版本
+		const matches = [...str.matchAll(new RegExp('\\"(?<arg1>[^\\"]*)\\"|(?<arg2>\\S+)', "ig"))];
+		return matches.map(match=>match?.groups?.arg1 ?? match?.groups?.arg2);
 	}
 	function searchByString(str, onlyInTag = false)
 	{ // 考虑了一下onlyInTag被废弃了，因为和游戏内搜索不符

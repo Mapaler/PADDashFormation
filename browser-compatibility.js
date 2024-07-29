@@ -23,6 +23,7 @@
 		//{name: "Class static initialization blocks / 静态初始化块", version:{firefox:93,chrome:94,safari:16.4}, url: "https://caniuse.com/mdn-javascript_classes_static_initialization_blocks", test: ()=>Boolean(runCodeWithFunction("class test { static { this.staticProperty = true;};}, true"))},
 		{name: "Array.prototype.toSorted()", version:{firefox:115,chrome:110,safari:16.0}, url: "https://caniuse.com/mdn-javascript_builtins_array_tosorted", test: ()=>Boolean(Array.prototype.toSorted)},
 		{name: "Set.prototype.isDisjointFrom()", version:{firefox:127,chrome:122,safari:17.0}, url: "https://caniuse.com/mdn-javascript_builtins_set_isdisjointfrom", test: ()=>Boolean(Set.prototype.isDisjointFrom)},
+		//{name: "Duplicate named capture group / 重复的正则表达式匹配命名组", version:{firefox:129,chrome:125,safari:17.0}, url: "https://caniuse.com/mdn-javascript_regular_expressions_named_capturing_group_duplicate_named_capturing_groups", test: ()=>Boolean(runCodeWithFunction("/(?<year>\\d{4})-\\d{2}|\\d{2}-(?<year>\\d{4})/"))},
 	];
 
 	const unsupportFeatures = features.filter(feature=>{
@@ -76,7 +77,10 @@ Please update your browser core to Firefox ≥ ${needBrowserVersion.firefox} or 
 		}
 	
 		//alert(alertStr);
-		document.write(alertStr);
+		const event = window.addEventListener("load", ()=>{
+			document.body.insertAdjacentHTML("afterbegin", alertStr);
+			window.removeEventListener("load", event);
+		});
 	}
 
 	if (/\b(?:MicroMessenger|WeChat|Weixin|QQ|AliApp)\b/.test(navigator.userAgent)) {
@@ -112,7 +116,7 @@ Please update your browser core to Firefox ≥ ${needBrowserVersion.firefox} or 
 	
 		const event = window.addEventListener("load", ()=>{
 			document.body.appendChild(mask);
-			window.removeEventListener(event);
+			window.removeEventListener("load", event);
 		});
 	}
 })();
