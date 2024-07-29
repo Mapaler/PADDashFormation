@@ -1,0 +1,18 @@
+@charset "utf-8";
+.team-awoken-effect>ul>li {
+	display: flex;
+	gap: 3px;
+}
+.awoken-ul .awoken-count {
+	display: flex;
+}
+.member-types .types-ul>li {
+	display: flex;
+}
+.member-awoken .awoken-ul>li {
+	display: flex;
+}
+.team-total-info-count>ul>li {
+	display: flex;
+	flex-direction: row;
+}
