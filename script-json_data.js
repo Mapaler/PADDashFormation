@@ -3359,7 +3359,7 @@ const specialSearchFunctions = (function() {
 					}
 				},
 			]},
-			{group:true,name:"Damage Enemy - Fixed damage",otLangName:{chs:"对敌直接伤害类-无视防御固伤",cht:"對敵直接傷害類-無視防禦固傷"}, functions: [
+			{group:true,name:"Damage Enemy - Fixed damage",otLangName:{chs:"对敌直接伤害类-固伤",cht:"對敵直接傷害類-固傷"}, functions: [
 				{name:"Any",otLangName:{chs:"任意",cht:"任意"},
 					function:cards=>{
 						const searchTypeArray = [55,188,56];
@@ -4388,7 +4388,7 @@ const specialSearchFunctions = (function() {
 			]},
 		]},
 		{group:true,name:"Others Search",otLangName:{chs:"其他搜索",cht:"其他搜索"}, functions: [
-			{name:"Water Att. & Attacker Type(Tanjiro)",otLangName:{chs:"攻击型或水属性（炭治郎队员）",cht:"攻擊型或水屬性（炭治郎隊員）"},
+			{name:"Water Att. & Attacker Type(Tanjiro)",otLangName:{chs:"攻击型或水属性（炭治郎）",cht:"攻擊型或水屬性（炭治郎）"},
 				function:cards=>cards.filter(card=>card.attrs.includes(1) || card.types.includes(6))
 			},
 			{name:"Level limit unable break",otLangName:{chs:"不能突破等级限制",cht:"不能突破等級限制"},
