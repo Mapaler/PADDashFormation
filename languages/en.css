@@ -184,47 +184,47 @@ label[for="merge-skill"]::after{
 label[for="datasource"]::after{
 	content: "Game:";
 }
-.control-box .btn-solo-link::before{
-	content: "🧑Jump To Solo Mode";
+#player-number::before{
+	content: "Jump to:";
 }
-.control-box .btn-multi-link::before{
-	content: "🧑‍🤝‍🧑Jump To 2-Player Mode";
+label[for="player-number-1"]::after{
+	content: "Solo";
 }
-.control-box .btn-triple-link::before{
-	content: "👪Jump To 3-Player Mode";
+label[for="player-number-2"]::after{
+	content: "2-Player";
+}
+label[for="player-number-3"]::after{
+	content: "3-Player";
 }
 .control-box .btn-guide-link::before{
 	content: "📓Guide Mode";
 }
-.control-box .btn-clear-data::before{
-	content: "🗑️Clear data";
+#btn-clear-data::after{
+	content: "Clear data";
 }
-#draw-screenshot::before{
-	content: "📷Draw screenshot";
+#draw-screenshot::after{
+	content: "Draw screenshot";
 }
 label[for="screenshot-transparent"]::after{
 	content: "Transparent";
 }
-.control-box .btn-player-data::before{
-	content: "📦My Box";
+#btn-player-data::after{
+	content: "My Box";
 }
-.control-box .btn-swap-AB-team::before{
-	content: "🔄Swap AB Team";
+#btn-swap-team::after{
+	content: "Swap Team";
 }
-.control-box .btn-swap-ABC-team::before{
-	content: "🔄Rotating ABC Team";
+#lbl-henshin-change::after{
+	content: "Changes";
 }
-.control-box .lbl-henshin-change::before{
-	content: "🦸Changes";
-}
-.control-box .lbl-remove-assist::before{
-	content: "⛔Remove Assist";
+#btn-remove-assist::after{
+	content: "Remove Assist";
 }
 .control-box .config-display-list summary::before{
 	content:"Displayed Information Switchs List";
 }
 label[for="show-card-id"]::after{
-	content:"🆔Card's ID";
+	content:"Card's ID";
 }
 label[for="show-card-rarity"]::after{
 	content:"Card's Rarity";
@@ -558,7 +558,7 @@ label[for="real-time-change-card"]::after
 	margin: calc(-100px * (1 - 0.6) / 2);
 }
 
-.control-box .btn-qrcode::after{
+#btn-qrcode::after{
 	content: "QR Code and Data exchange";
 }
 

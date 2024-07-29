@@ -32311,11 +32311,11 @@ const cachesMap = new Map([
 	],
 	[
 		"index.html",
-		"85fbead60e925bd4ddbeff3c41dc7e4e"
+		"31547a3fb252a10d505813ccc41dff53"
 	],
 	[
 		"multi.html",
-		"ef8b77ed22257043aa2feb5011d50711"
+		"9b02c70775a94e796622c12af95040f9"
 	],
 	[
 		"script-custom_elements.js",
@@ -32335,11 +32335,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"669ff567d056349838dd31918ba5d518"
+		"c7c5a6235bf493adc74b6ba2e07e7281"
 	],
 	[
 		"solo.html",
-		"c56f8538c50ca10224097ec96487a7ca"
+		"82c349f550027351f61f3c259476192d"
 	],
 	[
 		"style-monsterimages.css",
@@ -32347,7 +32347,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"1a5c25f37b6f053d824f69a95ff2f0ac"
+		"bba2aa9b132683f673c4f1b98160060a"
 	],
 	[
 		"temp.js",
@@ -32355,11 +32355,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"ee62c5f5155957f3677e91cbe0cf9c42"
+		"3bc2fc342ee70881b6a7053eb6ca9a99"
 	],
 	[
 		"languages/en.css",
-		"303c429e4dbff852fa693ee3554d50c7"
+		"5f71a278d07e34177b4a69c7e466310d"
 	],
 	[
 		"languages/en.js",
@@ -32367,7 +32367,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"cf65de21289e398c959063a2d08c833b"
+		"8c78b0e7b5ba4b336cbe2a8a3e2455e3"
 	],
 	[
 		"languages/ja.js",
@@ -32375,7 +32375,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"10b25940cb5923fd63b39a9c02b4b957"
+		"28b0871e7c7166f2b0266fed3083c1bb"
 	],
 	[
 		"languages/ko.js",
@@ -32387,7 +32387,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.css",
-		"4c9116d3e9d22a171271346d8f79a2ae"
+		"dcb1c5708633e0889c9aee23725a32fd"
 	],
 	[
 		"languages/zh-hans.js",
@@ -32395,7 +32395,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.css",
-		"a7ce01454f8233168f34fa711d35f349"
+		"c041685f375be00e43a5d8b014ff2c70"
 	],
 	[
 		"languages/zh-hant.js",
@@ -32484,6 +32484,10 @@ const cachesMap = new Map([
 	[
 		"images/icon-deep-dark.png",
 		"67c2cc69a6657fb7cb3d8e2d2bed9c11"
+	],
+	[
+		"images/icon-dungeon.png",
+		"bc7e880d1de2b6b6a3b8b1dd0a55f8fd"
 	],
 	[
 		"images/icon-evolved-skill-loop.png",

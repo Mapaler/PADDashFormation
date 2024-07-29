@@ -32,22 +32,31 @@ const teamsCount = 1;
 <body class="solo">
 	<noscript>您的浏览器不支持 JavaScript！<br/>Your browser does not support JavaScript!</noscript>
 	<div class="control-box">
+		<a class="down-capture display-none" target="_blank"></a>
 		<div>
-			<label for="languages"></label><select class="languages" id="languages"></select>
-			<label for="datasource"></label><select class="datasource" id="datasource"></select>
-			<button onclick="loadData(true);" id="datasource-updatetime" title="强制刷新数据"></button>
-			<a class="help-link" target="_blank" href="doc/index.html"></a>
-			<a class="feedback-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/issues"></a>
+			<label for="languages"></label><select id="languages"></select>
+			<label for="datasource"></label><select id="datasource"></select>
+			<button id="datasource-updatetime" title="强制刷新数据"></button>
+			<a id="help-link" target="_blank" href="doc/index.html"></a>
+			<a id="feedback-link" target="_blank" href="https://github.com/Mapaler/PADDashFormation/issues"></a>
 		</div>
 		<div>
-			<button class="btn-clear-data" onclick="clearData();"></button>
-			<button class="btn-player-data"></button>
-			<button class="btn-solo-link" disabled></button><button class="btn-multi-link" onclick="turnPage(2,arguments[0]);"></button><button class="btn-triple-link" onclick="turnPage(3,arguments[0]);"></button>
+			<button id="btn-qrcode"></button>
+			<form id="player-number">
+				<ul class="horizontally-radio-list">
+					<li><input type="radio" name="player-number" value="1" id="player-number-1" /><label for="player-number-1"></label></li>
+					<li><input type="radio" name="player-number" value="2" id="player-number-2" /><label for="player-number-2"></label></li>
+					<li><input type="radio" name="player-number" value="3" id="player-number-3" /><label for="player-number-3"></label></li>
+				</ul>
+			</form>
+			<button id="btn-swap-team"></button>
+			<button id="btn-clear-data"></button>
+			<button id="btn-player-data"></button>
 		</div>
 		<div>
-			<a class="down-capture display-none" target="_blank"></a>
-			<button class="btn-qrcode fa"></button>
-			<button id="draw-screenshot"><input type="checkbox" id="screenshot-transparent"><label for="screenshot-transparent"></label></button>
+			<button id="draw-screenshot"></button>
+			<input type="checkbox" id="screenshot-transparent"><label for="screenshot-transparent"></label>
+
 			<label for="default-level"></label><input id="default-level" type="number" min="1" max="120" placeholder="120"/>
 			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label for="change-swap-to-copy"></label>
 		</div>
@@ -58,7 +67,7 @@ const teamsCount = 1;
 					<div class="attrs">
 						<div class="attr" data-attr="0"></div><div class="attr" data-attr="1"></div><div class="attr" data-attr="2"></div><div class="attr" data-attr="3"></div>
 					</div>
-					<div class="plus"><div class="hp">999</div><div class="atk">999</div><div class="rcv">999</div></div>
+					<div class="plus"><div class="hp">999</div></div>
 					<div class="awoken-count-num" data-value="99"></div>
 					<div class="super-awoken"><div class="awoken-icon" data-awoken-icon="63"></div></div>
 					<div class="level" data-value="999" data-level-range="120"></div>
@@ -86,9 +95,11 @@ const teamsCount = 1;
 			<input type="checkbox" class="switch-ipt" id="show-rich-text-tools"><label for="show-rich-text-tools"></label>
 		</details>
 		<div class="status"></div>
-		<div>
-			<span class="lbl-henshin-change"><button class="btn-henshin" data-step="-1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button><button class="btn-henshin" data-step="+1" onclick="henshinStep(parseInt(this.dataset.step,10));"></button></span>
-			<span class="lbl-remove-assist"><button class="btn-remove-assist" onclick="formation.removeAssist();"></span>
+		<div class="formation-control">
+			<span id="lbl-henshin-change"></span>
+			<button class="btn-henshin" data-step="-1"></button>
+			<button class="btn-henshin" data-step="+1"></button>
+			<button id="btn-remove-assist"></button>
 			<button id="btn-set-dungeon-enchance"></button>
 		</div>
 	</div>
@@ -129,7 +140,7 @@ const teamsCount = 1;
 					<div class="tIf-total-hp">
 						<span class="general"></span>
 						<span class="awoken-bind"></span>
-						<span class="reduce fa">
+						<span class="reduce">
 							<span class="reduce-scale"></span>
 							<span class="general"></span>
 							<span class="awoken-bind"></span>
@@ -1246,10 +1257,10 @@ const teamsCount = 1;
 				<div class="action-button-box">
 					<div class="read-text-box">
 						<input class="string-input" type="text"/>
-						<button class="read-string brown-button fa"><!--读字符串--></button>
+						<button class="read-string brown-button"><!--读字符串--></button>
 					</div>
-					<button class="read-qr-camera brown-button fa"><!--相机扫--></button>
-					<button class="read-qr-file brown-button fa"><!--读文件--></button>
+					<button class="read-qr-camera brown-button"><!--相机扫--></button>
+					<button class="read-qr-file brown-button"><!--读文件--></button>
 					<input type="file" accept="image/*" class="file-select display-none">
 				</div>
 				<div class="info">
@@ -1269,7 +1280,7 @@ const teamsCount = 1;
 				</ul>
 				<input class="string-output" type="text" readonly/>
 				<div class="qr-box"><img class="qr-code-image" /></div>
-				<a download="" class="save-qr-img brown-button fa"><!--保存QR 图片--></a>
+				<a download="" class="save-qr-img brown-button"><!--保存QR 图片--></a>
 			</div>
 			<div class="paddb-team-edit">
 				<div class="user">
@@ -1282,7 +1293,7 @@ const teamsCount = 1;
 				</div>
 			</div>
 		</div>
-		<a id="external-support" class="brown-button fa" href="doc/index.html#data-exchange-with-paddb"></a>
+		<a id="external-support" class="brown-button" href="doc/index.html#data-exchange-with-paddb"></a>
 	</div>
 
 	
@@ -1351,10 +1362,10 @@ const teamsCount = 1;
 	</dialog>
 
 	<div id="player-data-frame" class="mask display-none">
-		<div class="player-box-title fa"><!--玩家数据子--></div>
+		<div class="player-box-title"><!--玩家数据子--></div>
 		<div class="control-button-box">
-			<button class="mask-close brown-button fa"></button>
-			<button class="upload-data brown-button fa"></button>
+			<button class="mask-close brown-button"></button>
+			<button class="upload-data brown-button"></button>
 			<input type="file" class="file-select display-none" multiple/>
 			<a class="how-to-use" target="_blank" href="doc/export-player-data.html"></a>
 			<input type="checkbox" name="box-have" id="box-have"><label for="box-have"></label>
@@ -1375,7 +1386,7 @@ const teamsCount = 1;
 									</div>
 								</td>
 								<td class="name"></td>
-								<td class="control"><button class="brown-button set-default fa"></button><button class="brown-button delete fa"></button></td>
+								<td class="control"><button class="brown-button set-default"></button><button class="brown-button delete"></button></td>
 							</tr>
 							<tr>
 								<td class="lvexp"><div class="progress-bar"><div class="bar"></div></div><div class="level"></div></td>
@@ -1470,7 +1481,7 @@ const teamsCount = 1;
 							</tr>
 							<tr>
 								<td colspan="4">
-									<button class="brown-button open-show-box fa"></button>
+									<button class="brown-button open-show-box"></button>
 								</td>
 							</tr>
 						</tbody>

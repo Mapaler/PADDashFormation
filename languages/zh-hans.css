@@ -2,10 +2,10 @@
 label[for="languages"]::after{
 	content: "语言：";
 }
-.help-link::after{
+#help-link::after{
 	content: "帮助和提示";
 }
-.feedback-link::after{
+#feedback-link::after{
 	content: "反馈";
 }
 .monster.delay::before{
@@ -120,7 +120,7 @@ label[for="merge-skill"]::after{
 	content: "取消修改";
 }
 .edit-box .button-box .button-done::after{
-	content: "确认修改";
+	content: "保存修改";
 }
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "不能辅助";
@@ -179,41 +179,41 @@ label[for="merge-skill"]::after{
 label[for="datasource"]::after{
 	content: "游戏：";
 }
-.control-box .btn-solo-link::before{
-	content: "🧑转到单人游戏";
+#player-number::before{
+	content: "跳转到:";
 }
-.control-box .btn-multi-link::before{
-	content: "🧑‍🤝‍🧑转到2人车队";
+label[for="player-number-1"]::after{
+	content: "单人";
 }
-.control-box .btn-triple-link::before{
-	content: "👪转到3人协力";
+label[for="player-number-2"]::after{
+	content: "2人";
+}
+label[for="player-number-3"]::after{
+	content: "3人";
 }
 .control-box .btn-guide-link::before{
 	content: "📓图鉴模式";
 }
-.control-box .btn-clear-data::before{
-	content: "🗑️清除数据";
+#btn-clear-data::after{
+	content: "清除数据";
 }
-#draw-screenshot::before{
-	content: "📷绘制截图";
+#draw-screenshot::after {
+	content: "绘制截图";
 }
 label[for="screenshot-transparent"]::after{
 	content: "透明";
 }
-.control-box .btn-player-data::before{
-	content: "📦我的箱子";
+#btn-player-data::after{
+	content: "我的箱子";
 }
-.control-box .btn-swap-AB-team::before{
-	content: "🔄交换AB队";
+#btn-swap-team::after{
+	content: "轮换队伍";
 }
-.control-box .btn-swap-ABC-team::before{
-	content: "🔄轮换ABC队";
+#lbl-henshin-change::after{
+	content: "变身";
 }
-.control-box .lbl-henshin-change::before{
-	content: "🦸变身";
-}
-.control-box .lbl-remove-assist::before{
-	content: "⛔解除辅助";
+#btn-remove-assist::after{
+	content: "解除辅助";
 }
 .control-box .config-display-list summary::before{
 	content:"展示信息开关列表";
@@ -501,7 +501,7 @@ label[for="real-time-change-card"]::after
 	content: "循環変身";
 }
 
-.control-box .btn-qrcode::after{
+#btn-qrcode::after{
 	content: "二维码 和 数据交换";
 }
 

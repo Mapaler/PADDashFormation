@@ -173,41 +173,41 @@ label[for="merge-skill"]::after{
 label[for="datasource"]::after{
 	content: "게임:";
 }
-.control-box .btn-solo-link::before{
-	content: "🧑1인 모드 이동";
+#player-number::before{
+	content: "이동:";
 }
-.control-box .btn-multi-link::before{
-	content: "🧑‍🤝‍🧑2인 모드 이동";
+label[for="player-number-1"]::after{
+	content: "1인";
 }
-.control-box .btn-triple-link::before{
-	content: "👪3인 모드 이동";
+label[for="player-number-2"]::after{
+	content: "2인";
+}
+label[for="player-number-3"]::after{
+	content: "3인";
 }
 .control-box .btn-guide-link::before{
 	content: "📓사진 모드";
 }
-.control-box .btn-clear-data::before{
-	content: "🗑️데이터 지우기";
+#btn-clear-data::after{
+	content: "데이터 지우기";
 }
-#draw-screenshot::before{
-	content: "📷스크린 샷 그리기";
+#draw-screenshot::after{
+	content: "스크린 샷 그리기";
 }
 label[for="screenshot-transparent"]::after{
 	content: "투명한";
 }
-.control-box .btn-player-data::before{
-	content: "📦내 상자";
+#btn-player-data::after{
+	content: "내 상자";
 }
-.control-box .btn-swap-AB-team::before{
-	content: "🔄교환 AB 팀";
+#btn-swap-team::after{
+	content: "스옵트립";
 }
-.control-box .btn-swap-ABC-team::before{
-	content: "🔄로테이션 ABC 팀";
+#lbl-henshin-change::after{
+	content: "변신";
 }
-.control-box .lbl-henshin-change::before{
-	content: "🦸변신";
-}
-.control-box .lbl-remove-assist::before{
-	content: "⛔보조를 해제합";
+#btn-remove-assist::after{
+	content: "보조를 해제합";
 }
 .control-box .config-display-list summary::before{
 	content:"표시된 정보 전환 목록";
@@ -496,7 +496,7 @@ label[for="real-time-change-card"]::after
 	content: "루프 변신";
 }
 
-.control-box .btn-qrcode::after{
+#btn-qrcode::after{
 	content: "QR 코드 및 데이터 교환";
 }
 

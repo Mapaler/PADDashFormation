@@ -1819,24 +1819,6 @@ class RequirementTree extends EvoTree
 	};
 }
 
-//清除数据
-function clearData()
-{
-	const locationURL = new URL(location);
-	locationURL.searchParams.delete('d'); //删除数据
-	locationURL.searchParams.delete('l'); //删除语言
-	locationURL.searchParams.delete('_id'); //删除PADDB的ID
-	location = locationURL.toString();
-}
-//轮换ABC队伍
-function swapABCteam()
-{
-	if (formation.teams.length > 1) {
-		formation.teams.push(formation.teams.splice(0, 1)[0]); //将队伍1移动到最后
-		createNewUrl();
-		refreshAll(formation);
-	}
-}
 function henshinStep(step)
 {
 	if (step == 0) return;
@@ -1873,61 +1855,6 @@ function henshinStep(step)
 	createNewUrl({replaceState: true});
 	refreshAll(formation);
 }
-//在单人和多人之间转移数据
-function turnPage(toPage, e = null) {
-	let pagename = null;
-	switch (toPage) {
-		case 1:
-			if (formation.teams[0][0].length < 6) {
-				//把第二支队伍的队长添加到最后方
-				formation.teams[0][0].push(formation.teams[1][0][0]);
-				formation.teams[0][1].push(formation.teams[1][1][0]);
-			}
-			//删掉第2支开始的队伍
-			formation.teams.splice(1);
-			pagename = "solo.html";
-			break;
-		case 2:
-			if (formation.teams.length < 2) { //从1人到2人
-				formation.teams[1] = [
-					[],
-					[]
-				];
-				//把右边的队长加到第二支队伍最后面
-				formation.teams[1][0].splice(0, 0, formation.teams[0][0].splice(5, 1)[0]);
-				formation.teams[1][1].splice(0, 0, formation.teams[0][1].splice(5, 1)[0]);
-			} else { //从3人到2人，直接删除后面两个队伍
-				//删掉第3支开始的队伍
-				formation.teams.splice(2);
-				//删掉前面两支队伍的战友
-				formation.teams[0][0].splice(5);
-				formation.teams[0][1].splice(5);
-				formation.teams[1][0].splice(5);
-				formation.teams[1][1].splice(5);
-			}
-			formation.badge = 0;
-			pagename = "multi.html";
-			break;
-		case 3:
-			if (formation.teams.length < 2) { //从1人到3人
-			} else { //从2人到3人
-				formation.teams[0][0].push(formation.teams[1][0][0]);
-				formation.teams[0][1].push(formation.teams[1][1][0]);
-				formation.teams[1][0].push(formation.teams[0][0][0]);
-				formation.teams[1][1].push(formation.teams[0][1][0]);
-			}
-			formation.badge = 0;
-			pagename = "triple.html";
-			break;
-	}
-	const newURL = createNewUrl({ url: pagename, onlyReturnUrl: true });
-	if (e && e.ctrlKey) {
-		window.open(newURL);
-	} else {
-		location.href = newURL;
-	}
-}
-
 function loadData(force = false)
 {
 	if (force)
@@ -2747,6 +2674,109 @@ function initialize() {
 			line.setAttribute("y2", p2.y);
 	};
 
+	const btnDataUpdateTime = controlBox.querySelector("#datasource-updatetime");
+	btnDataUpdateTime.onclick = function() {
+		loadData(true); //强制更新数据
+	};
+
+	const btnClearData = controlBox.querySelector("#btn-clear-data");
+	btnClearData.onclick = function() {
+		const locationURL = new URL(location);
+		locationURL.searchParams.delete('d'); //删除数据
+		locationURL.searchParams.delete('l'); //删除语言
+		locationURL.searchParams.delete('_id'); //删除PADDB的ID
+		location = locationURL.toString();
+	};
+
+	const formPlayerNumber = controlBox.querySelector("#player-number");
+	formPlayerNumber.onchange = function(event) {
+		const formData = new FormData(this);
+		const newPlayerNumber = parseInt(formData.get("player-number"), 10);
+		if (newPlayerNumber) {
+			turnPage(newPlayerNumber);
+		}
+	}
+
+	formPlayerNumber.querySelectorAll("input[name=\"player-number\"]")[teamsCount-1].checked = true;
+	
+	//在单人和多人之间转移数据
+	function turnPage(toPage, e = null) {
+		let pagename = null;
+		switch (toPage) {
+			case 1:
+				if (formation.teams[0][0].length < 6) {
+					//把第二支队伍的队长添加到最后方
+					formation.teams[0][0].push(formation.teams[1][0][0]);
+					formation.teams[0][1].push(formation.teams[1][1][0]);
+				}
+				//删掉第2支开始的队伍
+				formation.teams.splice(1);
+				pagename = "solo.html";
+				break;
+			case 2:
+				if (formation.teams.length < 2) { //从1人到2人
+					formation.teams[1] = [
+						[],
+						[]
+					];
+					//把右边的队长加到第二支队伍最后面
+					formation.teams[1][0].splice(0, 0, formation.teams[0][0].splice(5, 1)[0]);
+					formation.teams[1][1].splice(0, 0, formation.teams[0][1].splice(5, 1)[0]);
+				} else { //从3人到2人，直接删除后面两个队伍
+					//删掉第3支开始的队伍
+					formation.teams.splice(2);
+					//删掉前面两支队伍的战友
+					formation.teams[0][0].splice(5);
+					formation.teams[0][1].splice(5);
+					formation.teams[1][0].splice(5);
+					formation.teams[1][1].splice(5);
+				}
+				formation.badge = 0;
+				pagename = "multi.html";
+				break;
+			case 3:
+				if (formation.teams.length < 2) { //从1人到3人
+				} else { //从2人到3人
+					formation.teams[0][0].push(formation.teams[1][0][0]);
+					formation.teams[0][1].push(formation.teams[1][1][0]);
+					formation.teams[1][0].push(formation.teams[0][0][0]);
+					formation.teams[1][1].push(formation.teams[0][1][0]);
+				}
+				formation.badge = 0;
+				pagename = "triple.html";
+				break;
+		}
+		const newURL = createNewUrl({ url: pagename, onlyReturnUrl: true });
+		if (e && e.ctrlKey) {
+			window.open(newURL);
+		} else {
+			location.href = newURL;
+		}
+	}
+
+	//轮换ABC队伍
+	const btnSwapTeam = controlBox.querySelector("#btn-swap-team");
+	btnSwapTeam.onclick = function() {
+		if (formation.teams.length > 1) {
+			formation.teams.push(formation.teams.splice(0, 1)[0]); //将队伍1移动到最后
+			createNewUrl();
+			refreshAll(formation);
+		}
+	}
+
+	//变身前进后退
+	const btnHenshinArr = [...controlBox.querySelectorAll(".btn-henshin")];
+	btnHenshinArr.forEach(btn=>btn.onclick = henshinStepButton);
+	function henshinStepButton(event) {
+		return henshinStep(parseInt(this.dataset.step,10));
+	}
+
+	//去除辅助
+	const btnRemoveAssist = controlBox.querySelector("#btn-remove-assist");
+	btnRemoveAssist.onclick = function() {
+		formation.removeAssist();
+	}
+
 	//初始化所有mask的关闭按钮
 	const masks = document.body.querySelectorAll(".mask");
 	masks.forEach(mask=>{
@@ -2761,7 +2791,7 @@ function initialize() {
 		};
 	});
 	const qrCodeFrame = document.body.querySelector("#qr-code-frame");
-	const btnQrCode = controlBox.querySelector(`.btn-qrcode`);
+	const btnQrCode = controlBox.querySelector(`#btn-qrcode`);
 	btnQrCode.onclick = function(){
 		qrCodeFrame.show();
 	};
@@ -3131,7 +3161,7 @@ function initialize() {
 	}
 	
 	const playerDataFrame = document.body.querySelector("#player-data-frame");
-	const btnPlayerData = controlBox.querySelector(`.btn-player-data`);
+	const btnPlayerData = controlBox.querySelector(`#btn-player-data`);
 	btnPlayerData.onclick = function(){
 		playerDataFrame.show();
 	};
@@ -3899,7 +3929,6 @@ function initialize() {
 		const li = document.createElement("li");
 		const radio = li.appendChild(document.createElement("input"));
 		radio.type="radio";
-		radio.className = "hide-radio";
 		radio.value = bgId;
 		radio.name = badgeChooseName;
 		radio.id = `${radio.name}-${bgId}`;

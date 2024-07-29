@@ -57,8 +57,8 @@ body{
 	margin: 0;
 	background-color: white;
 }
-.hide-radio {
-	display: none;
+details>summary {
+	cursor: pointer;
 }
 details>summary:hover {
 	background-color: #00000044;
@@ -66,50 +66,110 @@ details>summary:hover {
 .control-box,
 .formation-box
 {
-	margin: 10px;
+	--margin: 10px;
 }
-.control-box{margin-bottom: 0;}
-.formation-box{margin-top: 0;}
+.control-box {
+	margin: var(--margin) var(--margin) 0 var(--margin);
+}
+.formation-box {
+	margin: 0 var(--margin) var(--margin) var(--margin);
+}
 .noscript {
 	color: red;
 	font-size: 2em;
 }
-.display-none{
+.display-none {
 	display:none !important;
 }
-.disabled{
+.disabled {
 	cursor: not-allowed;
 	pointer-events: none;
 	opacity: 0.5;
 }
-details>summary {
-	cursor: pointer;
-}
+
+/*控制框*/
 .control-box :where(
 	label,
 	button,
 	a,
 )::before {
 	font-family: var(--icon-font-family);
+	margin-right: 3px;
 }
-
-.help-link {
+.control-box>div
+{
+	margin-bottom: 2px;
+}
+label[for="languages"]::before{
+	content: "\f1ab";
+}
+label[for="languages"]::after{
+	content: "Lanuage:";
+}
+label[for="datasource"]::before{
+	content: "\f11b";
+}
+#datasource-updatetime::before{
+	content: "\f073";
+}
+#help-link {
 	cursor: help;
 }
-.help-link::before{
+#help-link::before{
 	content: "\f05a";
 }
-.help-link::after{
+#help-link::after{
 	content: "Help & Tips";
 }
-.feedback-link::before{
+#feedback-link::before{
 	content: "\f4ad";
 }
-.feedback-link::after{
+#feedback-link::after{
 	content: "Feedback";
 }
-.control-box .btn-qrcode::before {
+
+#btn-clear-data::before{
+	content: "\f2ed";
+}
+#btn-player-data::before,
+#player-data-frame .player-box-title::before
+{
+	content: "\f2bd";
+}
+#player-number {
+	display: inline-flex;
+}
+#player-number input {
+	display: none;
+}
+#player-number .horizontally-radio-list label {
+	padding: 0 3px;
+}
+label[for="player-number-1"]::before{
+	content: "\f183";
+}
+label[for="player-number-2"]::before{
+	content: "\e068";
+}
+label[for="player-number-3"]::before{
+	content: "\e591";
+}
+
+#btn-swap-team::before{
+	content: "\f2f1";
+}
+.solo #btn-swap-team {
+	display: none;
+}
+
+#draw-screenshot::before{
+	content: "\f03e";
+}
+#btn-qrcode::before {
     content: "\f029";
+}
+label[for="screenshot-transparent"] {
+	margin-right: 10px;
 }
 
 #rich-text-tools {
@@ -857,6 +917,9 @@ body:not(.show-team-total-info):not(.solo) .formation-box .team-bigbox
 	grid-template-rows: repeat(auto-fill, 41px);
 	grid-gap: 15px;
 	margin: 10px;
+}
+#badge-choose .team-badges input {
+	display: none;
 }
 button.badge {
 	border: none;
@@ -1877,6 +1940,7 @@ label[for="search-string"]::before {
 }
 .horizontally-radio-list {
 	display: flex;
+	color: white;
 }
 .horizontally-radio-list>li {
 	border: 1px solid white;
@@ -3187,26 +3251,6 @@ a.series-search::before {
 .detail-box{
 	margin-top:5px;
 }
-/*控制框*/
-.control-box{
-	margin-bottom: 10px;
-}
-.control-box>div
-{
-	margin-bottom: 2px;
-}
-label[for="languages"]::before{
-	content: "\f1ab";
-}
-label[for="languages"]::after{
-	content: "Lanuage:";
-}
-label[for="datasource"]::before{
-	content: "\f11b";
-}
-#datasource-updatetime::before{
-	content: "\f073";
-}
 
 /*
 .control-box .btn-show-mon-skill-cd::before{
@@ -3222,9 +3266,17 @@ label[for="datasource"]::before{
 	content: "🕴️变身";
 }
 */
-.control-box .lbl-henshin-change button
-{
-	font-size: 1.5em;
+.formation-control {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+.formation-control button {
+	font-size: 1.25em;
+}
+#lbl-henshin-change::before{
+	content: "\e551";
+	font-family: var(--icon-font-family);
 }
 .control-box .btn-henshin::before{
 	content: "\f04e";
@@ -3233,26 +3285,27 @@ label[for="datasource"]::before{
 .control-box .btn-henshin[data-step^="-"]::before{
 	content: "\f04a";
 }
-#btn-set-dungeon-enchance {
-	font-size: 1.2em;
-	margin-left: 1em;
+#btn-set-dungeon-enchance,
+#btn-remove-assist {
+	display: inline-flex;
+	align-items: center;
 }
-#btn-set-dungeon-enchance::before
+#btn-set-dungeon-enchance::before,
+#btn-remove-assist::before
 {
-	content: "\f6d9";
-	font-family: var(--icon-font-family);
-}
-.control-box .btn-remove-assist{
-	vertical-align: bottom;
-}
-.control-box .btn-remove-assist::before{
 	content: "";
-	background-image: url(images/icon-assist-bind.png);
 	background-repeat: no-repeat;
 	background-size: contain;
-	display: block;
-	width: 2em;
-	height: 2em;
+	background-position: center;
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+}
+#btn-set-dungeon-enchance::before {
+	background-image: url(images/icon-dungeon.png);
+}
+#btn-remove-assist::before{
+	background-image: url(images/icon-assist-bind.png);
 }
 #interchange-line{
 	pointer-events: none;
@@ -3742,7 +3795,11 @@ table .orb-icon
 #default-level {
 	width: 50px;
 }
-
+#player-data-frame .brown-button::before,
+#qr-code-frame .brown-button::before {
+	font-family: var(--icon-font-family);
+	margin-right: 3px;
+}
 #qr-code-frame .save-qr-img::before
 {
 	content: "\f0c7";
@@ -3872,6 +3929,9 @@ body.external-link-support #external-support{
 	text-align: center;
 	font-size: 2em;
 }
+#player-data-frame .player-box-title::before {
+	font-family: var(--icon-font-family);
+}
 #player-data-frame .upload-data
 {
 	margin-left: 5px;
@@ -3884,10 +3944,6 @@ body.external-link-support #external-support{
 	margin-left: 15px;
 }
 
-#player-data-frame .player-box-title::before
-{
-	content: "\f2bd";
-}
 #player-data-frame .how-to-use::before
 {
 	content: "📕";

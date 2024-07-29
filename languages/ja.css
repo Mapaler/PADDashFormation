@@ -177,41 +177,41 @@ label[for="merge-skill"]::after{
 label[for="datasource"]::after{
 	content: "ゲーム:";
 }
-.control-box .btn-solo-link::before{
-	content: "🧑ソロモードに移動";
+#player-number::before{
+	content: "ジャップ:";
 }
-.control-box .btn-multi-link::before{
-	content: "🧑‍🤝‍🧑2人協力モードムに移動";
+label[for="player-number-1"]::after{
+	content: "ソロ";
 }
-.control-box .btn-triple-link::before{
-	content: "👪3人協力モードに移動";
+label[for="player-number-2"]::after{
+	content: "2人";
+}
+label[for="player-number-3"]::after{
+	content: "3人";
 }
 .control-box .btn-guide-link::before{
 	content: "📓図鑑モード";
 }
-.control-box .btn-clear-data::before{
-	content: "🗑️データの消去";
+#btn-clear-data::after{
+	content: "データの消去";
 }
-#draw-screenshot::before{
-	content: "📷スクリーンショットを描く";
+#draw-screenshot::after{
+	content: "スクリーンショットを描く";
 }
 label[for="screenshot-transparent"]::after{
 	content: "透明";
 }
-.control-box .btn-player-data::before{
-	content: "📦私の箱";
+#btn-player-data::after{
+	content: "私の箱";
 }
-.control-box .btn-swap-AB-team::before{
-	content: "🔄交換ABチーム";
+#btn-swap-team::after{
+	content: "スワプティ";
 }
-.control-box .btn-swap-ABC-team::before{
-	content: "🔄ローテーションABCチーム";
+#lbl-henshin-change::after{
+	content: "変身";
 }
-.control-box .lbl-henshin-change::before{
-	content: "🦸変身";
-}
-.control-box .lbl-remove-assist::before{
-	content: "⛔アシストを解除";
+#btn-remove-assist::after{
+	content: "アシストを解除";
 }
 .control-box .config-display-list summary::before{
 	content:"情報表示内容の開閉器一覧";

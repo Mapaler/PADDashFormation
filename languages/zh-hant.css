@@ -2,10 +2,10 @@
 label[for="languages"]::after{
 	content: "語言：";
 }
-.help-link::before{
+#help-link::before{
 	content: "\f05a 幫助和提示";
 }
-.feedback-link::before{
+#feedback-link::before{
 	content: "\f4ad 反饋";
 }
 .monster.delay::before{
@@ -179,42 +179,41 @@ label[for="merge-skill"]::after{
 label[for="datasource"]::after{
 	content: "遊戲：";
 }
-.control-box .btn-solo-link::before{
-	content: "🧑轉到單人遊戲";
+#player-number::before{
+	content: "跳轉到:";
 }
-.control-box .btn-multi-link::before{
-	content: "🧑‍🤝‍🧑轉到2人車隊";
+label[for="player-number-1"]::after{
+	content: "單人";
 }
-.control-box .btn-triple-link::before{
-	content: "👪轉到2人協力";
+label[for="player-number-2"]::after{
+	content: "2人";
+}
+label[for="player-number-3"]::after{
+	content: "3人";
 }
 .control-box .btn-guide-link::before{
 	content: "📓圖鑒模式";
 }
-.control-box .btn-clear-data::before{
-	content: "🗑️清除數據";
+#btn-clear-data::after{
+	content: "清除數據";
 }
-#draw-screenshot::before{
-	content: "📷繪製截圖";
+#draw-screenshot::after{
+	content: "繪製截圖";
 }
 label[for="screenshot-transparent"]::after{
 	content: "透明";
 }
-.control-box .btn-player-data::before{
-	content: "📦我的箱子";
+#btn-player-data::after{
+	content: "我的箱子";
 }
-
-.control-box .btn-swap-AB-team::before{
-	content: "🔄交換AB隊";
+#btn-swap-team::after{
+	content: "輪換隊伍";
 }
-.control-box .btn-swap-ABC-team::before{
-	content: "🔄輪換ABC隊";
+#lbl-henshin-change::after{
+	content: "變身";
 }
-.control-box .lbl-henshin-change::before{
-	content: "🦸變身";
-}
-.control-box .lbl-remove-assist::before{
-	content: "⛔解除輔助";
+#btn-remove-assist::after{
+	content: "解除輔助";
 }
 .control-box .config-display-list summary::before{
 	content:"展示信息開關列表";
@@ -502,7 +501,7 @@ label[for="real-time-change-card"]::after
 	content: "循環變身";
 }
 
-.control-box .btn-qrcode::after{
+#btn-qrcode::after{
 	content: "二維碼 和 數據交換";
 }
 
