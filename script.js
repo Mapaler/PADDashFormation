@@ -4757,22 +4757,6 @@ function initialize() {
 	}
 	filterBindOnclick(specialFilterFirstLi);
 	
-	//读取储存的筛选收藏列表
-	const strMakedConfig = JSON.parse(localStorage.getItem(cfgPrefix + "marked-filter"));
-	if (Array.isArray(strMakedConfig)) {
-		strMakedConfig.forEach(([groupName, filterName])=>{
-			const idx1 = specialSearchFunctions.findIndex(group=>group.name == groupName);
-			if (idx1 < 0 ) return;
-			if (filterName !== undefined) {
-				const idx2 = specialSearchFunctions[idx1].functions.findIndex(func=>func.name == filterName);
-				if (idx2 < 0 ) return;
-				markedFilter.push([idx1, idx2]);
-			} else {
-				markedFilter.push([idx1]);
-			}
-		});
-	}
-	
 	function newSpecialSearchOption(func, indexs)
 	{
 		let funcName = returnMonsterNameArr(func)[0];
