@@ -6318,6 +6318,14 @@ function editBoxChangeMonId(id) {
 		btnDone.disabled = card.onlyAssist;
 	}
 
+	//解决SVG问题
+	const activeSkillTitle = skillBox.querySelector("#active-skill-title");
+	const evolvedSkillTitle = skillBox.querySelector("#evolved-skill-title");
+	const leaderSkillTitle = lskillBox.querySelector("#leader-skill-title");
+	svgGradientTextLengthRestore(activeSkillTitle);
+	svgGradientTextLengthRestore(evolvedSkillTitle);
+	svgGradientTextLengthRestore(leaderSkillTitle);
+
 	//去除所有不能再打的潜觉
 	editBox.latent = editBox.latent.filter(lat => allowLatent.includes(lat));
 	editBox.refreshLatent(editBox.latent, id);
@@ -7616,7 +7624,14 @@ function fastShowSkill(event) {
 		showSearch(s_cards); //显示
 	}
 }
-
+function svgGradientTextLengthRestore(svg, force = false) {
+	if (!force && svg.width.baseVal.value > 0) return;
+	console.log(svg,svg.width.baseVal.value);
+	const text = svg.querySelector("text");
+	const rect = text.getBoundingClientRect();
+	console.log(text.textContent,rect.width);
+	svg.width.baseVal.value = rect.width;
+}
 function localisation($tra) {
 	if (!$tra) return;
 	document.title = $tra.webpage_title;
@@ -7625,7 +7640,15 @@ function localisation($tra) {
 	formationBox.querySelector(".title-box .title-display").setAttribute("placeholder",$tra.title_blank);
 	formationBox.querySelector(".detail-box .detail-code").placeholder = $tra.detail_blank;
 	formationBox.querySelector(".detail-box .detail-display").setAttribute("placeholder",$tra.detail_blank);
-
+	gradientTextInit(editBox.querySelector("#active-skill-title"), $tra.active_skill_title);
+	gradientTextInit(editBox.querySelector("#evolved-skill-title"), $tra.evolved_skill_title);
+	gradientTextInit(editBox.querySelector("#leader-skill-title"), $tra.leader_skill_title);
+	function gradientTextInit(svg, str) {
+		const text = svg.querySelector("text");
+		text.textContent = str;
+		const rect = text.getBoundingClientRect();
+		svg.width.baseVal.value = rect.width;
+	}
 	const s_sortList = editBox.querySelector(".search-box .sort-div .sort-list");
 	const sortOptions = Array.from(s_sortList.options);
 	sortOptions.forEach(opt => {

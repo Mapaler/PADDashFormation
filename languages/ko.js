@@ -11,6 +11,9 @@ const _localTranslating = {
 		loading_skill_info: "기술 데이터를 로드 하 고 있습니다.",
 		prepare_capture: "스크린 샷을 준비 하 고 있습니다.",
 	},
+	active_skill_title: "스킬",
+	evolved_skill_title: "진화 기술",
+	leader_skill_title: "리더스킬",
 	link_read_message: {
 		success: tp`검색 ${'type'} 형식입니다. `,
 		need_user_script: `PADDB는 도메인에 걸쳐 있으므로 이 기능을 지원하려면 사용자 스크립트 관리자 내에 보조 스크립트를 설치해야 합니다.`,

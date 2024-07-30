@@ -26,6 +26,9 @@ let localTranslating = {
 		loading_skill_info: "Loading skill data, please wait...",
 		prepare_capture: "Preparing a screenshot, please wait...",
 	},
+	active_skill_title: "Skill",
+	evolved_skill_title: "Evoveld Skill",
+	leader_skill_title: "Leader Skill",
 	link_read_message: {
 		success: tp`Find the ${'type'} format.`,
 		need_user_script: `Because PADDB is cross-domain, you need to install helper script within the User Script Manager to support this feature.`,

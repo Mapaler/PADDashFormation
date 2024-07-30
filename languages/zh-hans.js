@@ -11,6 +11,9 @@ const _localTranslating = {
 		loading_skill_info: "正在加载技能数据，请稍候……",
 		prepare_capture: "正在准备截图，请稍候……",
 	},
+	active_skill_title: "主動技能",
+	evolved_skill_title: "進化技能",
+	leader_skill_title: "隊長技能",
 	link_read_message: {
 		success: tp`发现 ${'type'} 格式。`,
 		need_user_script: `由于 PADDB 跨域，您需要在用户脚本管理器内安装辅助脚本以支持此功能。`,

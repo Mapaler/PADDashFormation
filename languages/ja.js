@@ -11,6 +11,9 @@ const _localTranslating = {
 		loading_skill_info: "スキル データを読み込んでいます。",
 		prepare_capture: "スクリーンショットを準備しています。",
 	},
+	active_skill_title: "スキル",
+	evolved_skill_title: "進化スキル",
+	leader_skill_title: "リーダースキル",
 	link_read_message: {
 		success: tp`発見 ${'type'} 形式.`,
 		need_user_script: `PADDB はドメイン間であるため、この機能をサポートするには、ユーザー スクリプト マネージャ内にセカンダリ スクリプトをインストールする必要があります。`,

@@ -1459,7 +1459,14 @@ const teamsCount = 2;
 				<div class="setting-row row-mon-skill">
 					<!--怪物技能-->
 					<div class="skill-box">
-						<div class="skill-title"><div class="type-title"></div><span class="skill-name"></span>
+						<div class="skill-title">
+							<svg id="active-skill-title" class="gradient-text" height="24" width="100">
+								<text y="18" fill="url(#gradient-active-skill)">Skill</text>
+							</svg>
+							<svg id="evolved-skill-title" class="gradient-text" height="24" width="100">
+								<text y="18" fill="url(#gradient-evolved-skill)">Evoveld Skill</text>
+							</svg>
+							<span class="skill-name"></span>
 							<div class="skill-cd-control">
 								<label class="skill-level-label"><input type="number" class="m-skill-level" min=1 max=99 defaultValue=1 /></label>
 								<button class="m-skill-lv-1" value="1"></button>~<button class="m-skill-lv-max" value="1"></button>
@@ -1473,7 +1480,11 @@ const teamsCount = 2;
 				<div class="setting-row row-mon-leader-skill">
 					<!--怪物队长技能-->
 					<div class="skill-box">
-						<div class="skill-title"><div class="type-title"></div><span class="skill-name"></span>
+						<div class="skill-title">
+							<svg id="leader-skill-title" class="gradient-text" height="24" width="100">
+								<text y="18" fill="url(#gradient-leader-skill)">Leader Skill</text>
+							</svg>
+							<span class="skill-name"></span>
 							<div class="skill-parse-control">
 								<input type="checkbox" class="switch-ipt" name="show-skill-original" id="show-skill-original"><label for="show-skill-original"></label>
 								<input type="checkbox" class="switch-ipt" name="merge-skill" id="merge-skill" checked><label for="merge-skill"></label>
@@ -1777,5 +1788,22 @@ const teamsCount = 2;
 			<div class="dialog-control"><button class="dialog-close brown-button" value="cancel" formmethod="dialog"></button></div>
 		</form>
 	</dialog>
+
+	<svg height="24" width="100">
+		<defs>
+			<linearGradient id="gradient-active-skill" x1="0" x2="0" y1="0" y2="1">
+				<stop offset="25%" stop-color="white" />
+				<stop offset="80%" stop-color="#3377AA" />
+			</linearGradient>
+			<linearGradient id="gradient-evolved-skill" x1="0" x2="0" y1="0" y2="1">
+				<stop offset="25%" stop-color="#228899" />
+				<stop offset="80%" stop-color="#44DDDD" />
+			</linearGradient>
+			<linearGradient id="gradient-leader-skill" x1="0" x2="0" y1="0" y2="1">
+				<stop offset="25%" stop-color="#FFFF99" />
+				<stop offset="80%" stop-color="#EE7744" />
+			</linearGradient>
+		</defs>
+	</svg>
 </body>
 </html>
