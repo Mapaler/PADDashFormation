@@ -4,13 +4,11 @@ let PlayerDatas = []; //玩家数据
 let currentLanguage; //当前语言
 let currentDataSource; //当前数据
 let currentPlayerData; //当前玩家数据
-let markedFilter = []; //收藏的特殊搜索
 let defaultLevel = 99; //默认等级
 
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
 
-let interchangeSvg; //储存划线的SVG
 let controlBox; //储存整个controlBox
 let statusLine; //储存状态栏
 let formationBox; //储存整个formationBox
@@ -2653,26 +2651,14 @@ function initialize() {
 	const iptDefaultLevel = document.getElementById("default-level");
 	iptDefaultLevel.value = localStorage.getItem(cfgPrefix + iptDefaultLevel.id);
 	iptDefaultLevel.onchange = function(event){
-		let num = Number(this.value);
-		defaultLevel = num || this.placeholder;
+		const num = Number(this.value) || Number(this.placeholder);
+		if (Number.isInteger(num)) defaultLevel = num;
 		if (event instanceof Event) localStorage.setItem(cfgPrefix + this.id, this.value);
 	}
 	iptDefaultLevel.onchange(false);
 
-	//触屏使用的切换显示的线条
-	interchangeSvg = document.body.querySelector("#interchange-line");
-	interchangeSvg.line = interchangeSvg.querySelector("g line");
-	interchangeSvg.changePoint = function(p1, p2) {
-		const line = this.line;
-		if (p1 && p1.x != undefined)
-			line.setAttribute("x1", p1.x);
-		if (p1 && p1.y != undefined)
-			line.setAttribute("y1", p1.y);
-		if (p2 && p2.x != undefined)
-			line.setAttribute("x2", p2.x);
-		if (p2 && p2.y != undefined)
-			line.setAttribute("y2", p2.y);
-	};
+	const touchLineCanvas = document.body.querySelector("#touch-line");
+	const touchLineContex = touchLineCanvas.getContext('2d');
 
 	const btnDataUpdateTime = controlBox.querySelector("#datasource-updatetime");
 	btnDataUpdateTime.onclick = function() {
@@ -3760,48 +3746,52 @@ function initialize() {
 		}
 		return false; //没有false将会打开链接
 	}
-	  
-	function noMove(event) {
+	
+	function noDefaultEvent(event) {
 		event.preventDefault();
+	}
+	function drawTouchLine(){
+		touchLineContex.stroke();
 	}
 	  
 	//移动端编辑界面每个怪物的头像的放下
 	function touchstartMonHead(e) {
-		document.addEventListener("touchmove",noMove,{passive:false});
+		document.addEventListener("touchmove",noDefaultEvent,{passive:false});
 		e.stopPropagation();
-		//console.log("开始触摸",e,this);
 		const tc = e.changedTouches[0];
-		const pX = tc.pageX,
-			pY = tc.pageY;
-		interchangeSvg.style.display = "none";
-		interchangeSvg.changePoint({ x: pX, y: pY }, { x: pX, y: pY });
+		const pX = tc.pageX, pY = tc.pageY;
+
+		//清空画布
+		touchLineContex.clearRect(0, 0, touchLineCanvas.width, touchLineCanvas.height);
+		touchLineCanvas.classList.remove(className_displayNone);
+		touchLineCanvas.width = document.body.scrollWidth;
+		touchLineCanvas.height = document.body.scrollHeight;
+
+		let color1 = Math.random(), color2 = color1 + (color1 < 0.5 ? 0.5 : -0.5);
+		touchLineContex.beginPath(); //重新开始一条线
+		touchLineContex.lineWidth = 3; //宽度为5
+		touchLineContex.fillStyle = `hsl(${color1}turn 100% 50%)`; //随机颜色
+		touchLineContex.strokeStyle = `hsl(${color2}turn 100% 50%)`; //随机颜色
+		touchLineContex.arc(pX, pY, 10, 0, 2 * Math.PI);
+		touchLineContex.fill();
+		touchLineContex.stroke();
+		touchLineContex.moveTo(pX, pY); //从下手点开始
 	}
 	//移动端编辑界面每个怪物的头像的移动
 	function touchmoveMonHead(e) {
-		//console.log("移动中",e,this);
 		const tc = e.changedTouches[0];
-		const pX = tc.pageX,
-			pY = tc.pageY;
-		const rect = this.getBoundingClientRect();
-		const top = rect.top + document.documentElement.scrollTop;
-		const left = rect.left + document.documentElement.scrollLeft;
-		if ((pY < top) || (pY > (top + rect.height)) ||
-			(pX < left) || (pX > (left + rect.width))) {
-			interchangeSvg.style.display = "block";
-			interchangeSvg.changePoint(null, { x: pX, y: pY });
-		} else {
-			interchangeSvg.style.display = "none";
-		}
+		const pX = tc.pageX, pY = tc.pageY;
+
+		touchLineContex.lineTo(pX, pY);
+		requestAnimationFrame(()=>drawTouchLine(pX, pY));
 	}
 	//移动端编辑界面每个怪物的头像的结束
 	function touchendMonHead(e) {
-		document.removeEventListener("touchmove",noMove,{passive:false});
+		document.removeEventListener("touchmove",noDefaultEvent,{passive:false});
+		touchLineCanvas.classList.add(className_displayNone);
 		const tc = e.changedTouches[0];
-		const pX = tc.pageX,
-			pY = tc.pageY;
-		//console.log("移动结束",pX,pY,e,this);
-		interchangeSvg.style.display = "none";
-		interchangeSvg.changePoint(null, { x: pX, y: pY });
+		const pX = tc.pageX, pY = tc.pageY;
+
 		const target = allMembers.find(m => {
 			const rect = m.getBoundingClientRect();
 			const top = rect.top + document.documentElement.scrollTop;
@@ -3824,9 +3814,8 @@ function initialize() {
 	}
 	//移动端编辑界面每个怪物的头像的取消
 	function touchcancelMonHead(event) {
-		document.removeEventListener("touchmove",noMove,{passive:false});
-		interchangeSvg.style.display = "none";
-		console.log("移动取消", event, this);
+		document.removeEventListener("touchmove",noDefaultEvent,{passive:false});
+		touchLineCanvas.classList.add(className_displayNone);
 	}
 	function interchangeCard(formArr, toArr, isCopy) {
 		//优先使用传入的复制，然后才是考虑开关

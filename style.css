@@ -55,7 +55,6 @@ body{
 
 	font-family: var(--font-family);
 	background-color: white;
-	overscroll-behavior: none;
 }
 details>summary {
 	cursor: pointer;
@@ -1028,7 +1027,6 @@ label.badge {
 /*队伍A、B的文字*/
 .team-box{
 	vertical-align:bottom;
-	overscroll-behavior: none;
 }
 .team-box-name {
 	display: flex;
@@ -3421,6 +3419,12 @@ a.series-search::before {
 	stroke-linecap: round;
 	stroke-width: 5;
 	stroke-dasharray: 10;
+}
+#touch-line {
+	pointer-events: none;
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 /*面板相关*/

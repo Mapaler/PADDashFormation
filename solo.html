@@ -1256,11 +1256,7 @@ const teamsCount = 1;
 			<a class="monster" target="_blank" data-cardid="" data-cards-pic-idx="" data-cards-pic-x="" data-cards-pic-y="" title=""><div class="attrs"><div class="attr"></div><div class="attr"></div><div class="attr"></div><div class="attr"></div></div><div class="plus"><div class="hp"></div><div class="atk"></div><div class="rcv"></div></div><div class="id"></div><div class="awoken-count-num"></div><div class="super-awoken display-none"><div class="awoken-icon"></div></div><div class="level"></div><div class="rarity"></div><div class="count-in-box"><span class="same-id"></span><span class="evo-tree"></span></div></a>
 		</template>
 	</div>
-	<svg id="interchange-line" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2" height="100%" width="100%" style="display:none;">
-		<g class="transBox">
-			<line />
-		</g>
-	</svg>
+	<canvas id="touch-line"></canvas>
 	<div id="qr-code-frame" class="mask display-none">
 		<button class="mask-close brown-button"></button>
 		<div class="mask-content">
@@ -1527,7 +1523,7 @@ const teamsCount = 1;
 		</form>
 	</dialog>
 
-	<svg height="24" width="100">
+	<svg width="0" height="0">
 		<defs>
 			<linearGradient id="gradient-active-skill" x1="0" x2="0" y1="0" y2="1">
 				<stop offset="25%" stop-color="white" />
