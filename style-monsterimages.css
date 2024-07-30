@@ -1679,11 +1679,13 @@
 .attr
 {
 	display: inline-block;
-	width: 36px;
-	height: 36px;
-	line-height: 36px;
+	--icon-width: 36px;
+	--icon-height: 36px;
+	width: var(--icon-width);
+	height: var(--icon-height);
+	
 	background-image: url(images/attrs.png);
-	background-position-y:calc(36px);
+	background-position-y: var(--icon-height);
 	background-repeat: no-repeat;
 	vertical-align: bottom;
 }

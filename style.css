@@ -3152,7 +3152,7 @@ input[disabled]+.awoken-icon:active,
 .skill-datail-parsed{
 	color: black;
 	padding: 0 8px 6px 8px;
-	line-height: 25px;
+	line-height: 1.25em;
 	white-space: break-spaces;
 }
 .skill-datail-parsed{
@@ -4524,10 +4524,12 @@ body.external-link-support #external-support{
 .icon-skill::after,
 .icon-skill::before
 {
+	--icon-width: 36px;
+	--icon-height: 36px;
+	width: var(--icon-width);
+	height: var(--icon-height);
 	font-weight: normal;
 	display: inline-block;
-	width: 36px;
-	height: 36px;
 	background-image: url(images/icon-skills.png);
 	background-repeat: no-repeat;
 }
