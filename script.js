@@ -7159,9 +7159,11 @@ function refreshMemberTypes(memberTypesDom, team, idx) {
 	}
 
 	const fragment = document.createDocumentFragment();
-	member.card.types.forEach(tid=>fragment.appendChild(typeIcon(tid)));
-	if (isAppendType) {
-		appendTypes.forEach(tid=>fragment.appendChild(typeIcon(tid, true)));
+	if (member.id > 0) {
+		member.card.types.forEach(tid=>fragment.appendChild(typeIcon(tid)));
+		if (isAppendType) {
+			appendTypes.forEach(tid=>fragment.appendChild(typeIcon(tid, true)));
+		}
 	}
 	
 	const memberTypesUl = memberTypesDom.querySelector(`.member-types-${idx + 1} .types-ul`);

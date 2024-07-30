@@ -8,6 +8,9 @@
 	<meta name="viewport"
 		content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<style type="text/css">
+		body {
+			font-size: 1.25em;;
+		}
 		code {
 			padding: .2em .4em;
 			margin: 0;
@@ -42,13 +45,16 @@
 		img {
 			outline: grey solid 1px;
 		}
-		#language-list {
-			list-style: none;
-			padding: 0;
-			display: flex;
+		#form-language {
 			position: sticky;
 			top: 0;
 			backdrop-filter: blur(5px);
+		}
+		#language-list {
+			display: inline-flex;
+			list-style: none;
+			padding: 0;
+			margin: 0;
 		}
 	</style>
 	<script type="text/javascript">
@@ -102,6 +108,10 @@
 		<span lang="en">Index</span>
 	</h2>
 	<ul class="index">
+		<li><a href="#tutorials">
+			<span lang="zh">基础教程</span>
+			<span lang="en">Basic Tutorials</span>
+		</a></li>
 		<li><a href="#share">
 			<span lang="zh">分享队伍</span>
 			<span lang="en">Share your team</span>
@@ -147,6 +157,62 @@
 		</a></li>
 	</ul>
 
+	<h2 id="tutorials">
+		<span lang="zh">教程</span>
+		<span lang="en">Tutorials</span>
+	</h2>
+	<p>
+		<ol>
+			<li>
+				<span lang="zh">选择你的语言（没有人帮忙，所以中文以外的都不保证翻译质量）</span>
+				<span lang="en">Choose your language(No one helps, so the quality of the translation is not guaranteed outside of Chinese)</span>
+			</li>
+			<li>
+				<span lang="zh">选择你的游戏服务器。</span>
+				<span lang="en">Choose your Game server.</span>
+			</li>
+		</ol>
+		<img src="images/tips-tutorials-game-server.webp" alt="选择游戏服务器">
+		<br>
+		<span lang="zh">等待下载游戏数据，直到出现数据更新时间。</span>
+		<span lang="en">Wait for the game data to be downloaded until the data update time appears.</span>
+		<br>
+		<img src="images/tips-tutorials-update-time.webp" alt="等待数据更新">
+		<br>
+		<span lang="zh">单击一个位置，进入这个位置的编辑窗口。</span>
+		<span lang="en">Click on a slot to go to the slot's editing window.</span>
+		<br>
+		<img src="images/tips-tutorials-click-edit.webp" alt="进入怪物编辑">
+		<br>
+		<ol>
+			<li>
+				<span lang="zh">输入卡片 ID，跳转到对应的卡片。</span>
+				<span lang="en">Enter the card ID to jump to the corresponding card.</span>
+			</li>
+			<li>
+				<span lang="zh">点击各处需要修改的地方，如果您玩过游戏，应该能很快理解。</span>
+				<span lang="en">Click on the places where you need to make changes, and if you've played the game, you should be able to understand it quickly.</span>
+			</li>
+			<li>
+				<span lang="zh">点击完成，这个位置就编辑好了。</span>
+				<span lang="en">Click Done, and the slot will be edited.</span>
+			</li>
+		</ol>
+		<img src="images/tips-tutorials-edit-monster.webp" alt="编辑怪物">
+		<br>
+		<span lang="zh">可以在编辑界面的文本搜索处输入<b>怪物名称</b>或<b>标签</b>来搜索卡片。</span>
+		<span lang="en">You can search for card by entering the <b>Monster Name</b> or <b>Tags</b> in the string search of the editing interface.</span>
+		<br>
+		<img src="images/tips-search-name-1.webp" alt="搜索怪物名称">
+		<br>
+		<span lang="zh"><b>拖拽</b>卡片头像即可快速交换位置，也支持手机触屏。</span>
+		<span lang="en"><b>Drag</b> card avatars to quickly swap member's positions, also supports mobile touch screen.</span>
+		<br>
+		<img src="images/tips-interchangeCard.png" alt="切换位置">
+		<br>
+		<span lang="zh">按住 Ctrl ，或手机上使用顶部的开关可以切换到复制模式。</span>
+		<span lang="en">Hold down Ctrl, or use the switch at the top on your phone to switch to copy mode.</span>
+	</p>
 	<h2 id="share">
 		<span lang="zh">分享</span>
 		<span lang="en">Share</span>
@@ -203,92 +269,97 @@
 			</li>
 		</ol>
 	</p>
-	<h3 id="data-exchange-with-paddb">
-		<span lang="zh">与 PADDB 进行数据交换</span>
-		<span lang="en">Data exchange with PADDB</span>
-	</h3>
-	<p>
-		<span lang="zh">由于 PADDB 跨域，您需要在<a href="https://greasyfork.org/help/installing-user-scripts">用户脚本管理器</a>内安装<a href="https://greasyfork.org/scripts/458521">此辅助脚本</a>以支持此功能。</span>
-		<span lang="en">Because PADDB is cross-domain, you need to install <a href="https://greasyfork.org/scripts/458521">this helper script</a> within the <a href="https://greasyfork.org/help/installing-user-scripts">User Script Manager</a> to support this feature.</span>
-		<br>
-		<img src="images/tips-paddb-install-script.webp" alt="安装脚本">
-		<br>
-		<h4>
-			<span lang="zh">导入 PADDB 队伍</span>
-			<span lang="en">Import PADDB team</span>
-		</h4>
+	<details>
+		<summary>
+			<h3 id="data-exchange-with-paddb">
+				<span lang="zh">与 PADDB 进行数据交换</span>
+				<span lang="en">Data exchange with PADDB</span>
+			</h3>
+		</summary>
 		<p>
-			<span lang="zh">上传自己的队伍</span>
-			<span lang="en">Upload your own team</span>
+			<span lang="zh">由于 PADDB 跨域，您需要在<a href="https://greasyfork.org/help/installing-user-scripts">用户脚本管理器</a>内安装<a href="https://greasyfork.org/scripts/458521">此辅助脚本</a>以支持此功能。</span>
+			<span lang="en">Because PADDB is cross-domain, you need to install <a href="https://greasyfork.org/scripts/458521">this helper script</a> within the <a href="https://greasyfork.org/help/installing-user-scripts">User Script Manager</a> to support this feature.</span>
 			<br>
-			<img src="images/tips-paddb-upload-team-in-paddb.png" alt="上传自身的脚本">
+			<img src="images/tips-paddb-install-script.webp" alt="安装脚本">
 			<br>
-			<span lang="zh">或者在队伍模板里搜索其他人的队伍</span>
-			<span lang="en">Or search for someone else's party in the Team Templates</span>
-			<br>
-			<img src="images/tips-paddb-search-team-in-paddb.png" alt="搜索别人的脚本">
-			<br>
-			<span lang="zh">复制上传后的队伍链接</span>
-			<span lang="en">Copy the uploaded Team URL</span>
-			<br>
-			<img src="images/tips-paddb-copy-team-link.png" alt="复制队伍链接">
-			<br>
-			<span lang="zh">打开二维码与数据交换功能，粘贴队伍链接并读取</span>
-			<span lang="en">Turn on the QR code and Data Exchange feature, paste the team link and read it</span>
-			<br>
-			<img src="images/tips-paddb-read-link.png" alt="粘贴队伍链接并读取">
-			<br>
-			<span lang="zh">读取到的队伍会显示为链接</span>
-			<span lang="en">The read Formation appears as a link</span>
-			<br>
-			<img src="images/tips-qr-read-found.png" alt="成功读取到二维码">
-			<br>
+			<h4>
+				<span lang="zh">导入 PADDB 队伍</span>
+				<span lang="en">Import PADDB team</span>
+			</h4>
+			<p>
+				<span lang="zh">上传自己的队伍</span>
+				<span lang="en">Upload your own team</span>
+				<br>
+				<img src="images/tips-paddb-upload-team-in-paddb.png" alt="上传自身的脚本">
+				<br>
+				<span lang="zh">或者在队伍模板里搜索其他人的队伍</span>
+				<span lang="en">Or search for someone else's party in the Team Templates</span>
+				<br>
+				<img src="images/tips-paddb-search-team-in-paddb.png" alt="搜索别人的脚本">
+				<br>
+				<span lang="zh">复制上传后的队伍链接</span>
+				<span lang="en">Copy the uploaded Team URL</span>
+				<br>
+				<img src="images/tips-paddb-copy-team-link.png" alt="复制队伍链接">
+				<br>
+				<span lang="zh">打开二维码与数据交换功能，粘贴队伍链接并读取</span>
+				<span lang="en">Turn on the QR code and Data Exchange feature, paste the team link and read it</span>
+				<br>
+				<img src="images/tips-paddb-read-link.png" alt="粘贴队伍链接并读取">
+				<br>
+				<span lang="zh">读取到的队伍会显示为链接</span>
+				<span lang="en">The read Formation appears as a link</span>
+				<br>
+				<img src="images/tips-qr-read-found.png" alt="成功读取到二维码">
+				<br>
+			</p>
+			<h4>
+				<span lang="zh">将队伍上传到 PADDB</span>
+				<span lang="en">Upload the Team to PADDB</span>
+			</h4>
+			<p>
+				<span lang="zh">打开二维码与数据交换功能，在下方输入用户名与密码。</span>
+				<span lang="en">Turn on the QR code and Data Exchange feature, Enter your user ID and password below.</span>
+				<br>
+				<img src="images/tips-paddb-upload-region.png" alt="PADDB 数据上传区">
+				<br>
+				<span lang="zh">没有输入队伍链接时，将会上传队伍，并获得一个可被你的账号密码编辑的新的队伍链接。如果有，则会更新当前连接的队伍数据到你的链接。</span>
+				<span lang="en">If you do not enter a team link, the team will be uploaded and a new team link will be obtained that can be edited by your account password. If so, the currently team data is updated to the link.</span>
+				<br>
+				<span lang="zh">你可以在队伍模板里看到你的队伍</span>
+				<span lang="en">You can see your team in the team template</span>
+				<br>
+				<img src="images/tips-paddb-search-team-in-paddb.png" alt="搜索别人的脚本">
+				<br>
+				<span lang="zh">或者通过浏览器打开队伍链接，也可以跳转到 PADDB 内（部分浏览器可能不支持）</span>
+				<span lang="en">Or open the team link in your phone browser, which will jump to PADDB (some browsers may not support it)</span>
+				<br>
+				<br>
+				<span lang="zh">注意：</span>
+				<span lang="en">Note:</span>
+				<ol>
+					<li>
+						<span lang="zh">PADDB 目前只支持单人游戏队伍。</span>
+						<span lang="en">PADDB currently only supports solo team.</span>
+					</li>
+					<li>
+						<span lang="zh">PADDB 不需要注册账号，填写任意的名称和密码即可。<br>
+							用户名与密码没有唯一性，比如：账号: 枫谷剑仙，密码: 1234；账号: 枫谷剑仙，密码: abcd，都可以成功上传，但是两个队伍链接需要用不同的密码才能编辑。<br>
+							注意密码是明文保存在 PADDB 服务器上，不要使用自己其他账号的密码。</span>
+						<span lang="en">PADDB does not need to pre-register an account, just use any ID and password. <br>
+							ID and passwords are not unique, for example: ID: mapaler, PASS: 1234; ID: mapaler, PASS: abcd,both can be successfully uploaded, but the two team links need different passwords to edit.<br>
+							Note that the password is stored in plaintext on the PADDB server, do not use the password of your other account.</span>
+						<br>
+					</li>
+					<li>
+						<span lang="zh">没有正确的用户名和密码你无法修改 PADDB 上其他用户的队伍，但是可以导入本程序后全新上传为自己的并修改。</span>
+						<span lang="en">You cannot modify another user's team on PADDB without the correct ID and password, but you can import to this program and upload as your own and modify them.</span>
+					</li>
+				</ol>
+			</p>
 		</p>
-		<h4>
-			<span lang="zh">将队伍上传到 PADDB</span>
-			<span lang="en">Upload the Team to PADDB</span>
-		</h4>
-		<p>
-			<span lang="zh">打开二维码与数据交换功能，在下方输入用户名与密码。</span>
-			<span lang="en">Turn on the QR code and Data Exchange feature, Enter your user ID and password below.</span>
-			<br>
-			<img src="images/tips-paddb-upload-region.png" alt="PADDB 数据上传区">
-			<br>
-			<span lang="zh">没有输入队伍链接时，将会上传队伍，并获得一个可被你的账号密码编辑的新的队伍链接。如果有，则会更新当前连接的队伍数据到你的链接。</span>
-			<span lang="en">If you do not enter a team link, the team will be uploaded and a new team link will be obtained that can be edited by your account password. If so, the currently team data is updated to the link.</span>
-			<br>
-			<span lang="zh">你可以在队伍模板里看到你的队伍</span>
-			<span lang="en">You can see your team in the team template</span>
-			<br>
-			<img src="images/tips-paddb-search-team-in-paddb.png" alt="搜索别人的脚本">
-			<br>
-			<span lang="zh">或者通过浏览器打开队伍链接，也可以跳转到 PADDB 内（部分浏览器可能不支持）</span>
-			<span lang="en">Or open the team link in your phone browser, which will jump to PADDB (some browsers may not support it)</span>
-			<br>
-			<br>
-			<span lang="zh">注意：</span>
-			<span lang="en">Note:</span>
-			<ol>
-				<li>
-					<span lang="zh">PADDB 目前只支持单人游戏队伍。</span>
-					<span lang="en">PADDB currently only supports solo team.</span>
-				</li>
-				<li>
-					<span lang="zh">PADDB 不需要注册账号，填写任意的名称和密码即可。<br>
-						用户名与密码没有唯一性，比如：账号: 枫谷剑仙，密码: 1234；账号: 枫谷剑仙，密码: abcd，都可以成功上传，但是两个队伍链接需要用不同的密码才能编辑。<br>
-						注意密码是明文保存在 PADDB 服务器上，不要使用自己其他账号的密码。</span>
-					<span lang="en">PADDB does not need to pre-register an account, just use any ID and password. <br>
-						ID and passwords are not unique, for example: ID: mapaler, PASS: 1234; ID: mapaler, PASS: abcd,both can be successfully uploaded, but the two team links need different passwords to edit.<br>
-						Note that the password is stored in plaintext on the PADDB server, do not use the password of your other account.</span>
-					<br>
-				</li>
-				<li>
-					<span lang="zh">没有正确的用户名和密码你无法修改 PADDB 上其他用户的队伍，但是可以导入本程序后全新上传为自己的并修改。</span>
-					<span lang="en">You cannot modify another user's team on PADDB without the correct ID and password, but you can import to this program and upload as your own and modify them.</span>
-				</li>
-			</ol>
-		</p>
-	</p>
+	</details>
+	
 	<h2 id="editing-tips">
 		<span lang="zh">编辑技巧</span>
 		<span lang="en">Editing tips</span>
@@ -299,15 +370,6 @@
 			<span lang="en">Use <b>Back</b> <code>Alt + ←</code> to undo the last edit, redo with <b>Forward</b> <code>Alt + →</code>.</span>
 			<br>
 			<img src="images/tips-undo.png" alt="撤銷修改">
-		</li>
-		<li>
-			<span lang="zh"><b>拖拽</b>卡片头像即可快速交换位置，也支持手机触屏。</span>
-			<span lang="en"><b>Drag</b> card avatars to quickly swap member's positions, also supports mobile touch screen.</span>
-			<br>
-			<img src="images/tips-interchangeCard.png" alt="切换位置">
-			<br>
-			<span lang="zh">使用顶部的开关可以切换到复制模式。</span>
-			<span lang="en">Use the switch at the top can switch to copy mode.</span>
 		</li>
 		<li>
 			<span lang="zh">如果你希望使用技能切换队长，使用切换按钮。这样可以保留原始队长强调边框，和 76板面 图标。</span>
@@ -334,10 +396,15 @@
 	</h2>
 	<ul>
 		<li>
-			<span lang="zh">可以在编辑界面的怪物ID输入<b>怪物名称</b>或<b>标签</b>来搜索卡片。</span>
-			<span lang="en">You can search for card by entering the <b>Monster Name</b> or <b>Tags</b> in the monster ID of the editing interface.</span>
+			<span lang="zh">使用空格可以分隔多个关键词。</span>
+			<span lang="en">Use spaces to separate multiple keywords.</span>
 			<br>
-			<img src="images/tips-search-name.png" alt="搜索怪物名称">
+			<img src="images/tips-search-name-2.webp" alt="搜索怪物名称-多个关键词">
+			<br>
+			<span lang="zh">两个半角引号<code>&quot;</code>括起来时，中间的关键词可以包含空格，如<code>&quot;rimuru tempest&quot;</code>。</span>
+			<span lang="en">When two half-width quotation marks <code>&quot;</code> are enclosed, the keyword in the middle can contain spaces, such as <code>&quot;rimuru tempest&quot;</code>.</span>
+			<br>
+			<img src="images/tips-search-name-3.webp" alt="搜索怪物名称-用引号包括">
 		</li>
 		<li>
 			<span lang="zh">点击<b>技能名称</b>，可搜索相同主动技能宠物</span>

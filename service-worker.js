@@ -32339,7 +32339,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"52f74f6f2d496308be5c54dbf9c908a0"
+		"5977ed9c826d121c7080a4d906a0bd67"
 	],
 	[
 		"solo.html",
@@ -32607,11 +32607,11 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/export-player-data.html",
-		"7b5e902b3b080c2173ab0fe0e4609e35"
+		"1a8617125c7103ecaf91a158c1b41563"
 	],
 	[
 		"doc/index.html",
-		"f8ae224436be99decfdb36d616899bdc"
+		"239f35125285a2d626a99e887d8c0b5d"
 	],
 	[
 		"doc/images/bluestacks-adb-connect.webp",
@@ -32990,8 +32990,16 @@ const cachesMap = new Map([
 		"73031634ea7cb82fdec3f7981cb8ce72"
 	],
 	[
-		"doc/images/tips-search-name.png",
-		"0cccd9a1799ebff26e77471514321887"
+		"doc/images/tips-search-name-1.webp",
+		"0df4fbcadce0c558a9040a3d6bc235e4"
+	],
+	[
+		"doc/images/tips-search-name-2.webp",
+		"b755f95368d496680a14f83737ece71e"
+	],
+	[
+		"doc/images/tips-search-name-3.webp",
+		"24fea736b92c64bcf9342f1f47a4c8d5"
 	],
 	[
 		"doc/images/tips-search-series.webp",
@@ -33012,6 +33020,22 @@ const cachesMap = new Map([
 	[
 		"doc/images/tips-switch-leader.png",
 		"1be318ca7da300581686b5fa0e98fb2d"
+	],
+	[
+		"doc/images/tips-tutorials-click-edit.webp",
+		"8509dffda5b3cb01996ccbb4bd161b29"
+	],
+	[
+		"doc/images/tips-tutorials-edit-monster.webp",
+		"7d5eb8bbd41e2e5839896e0937a1cb7a"
+	],
+	[
+		"doc/images/tips-tutorials-game-server.webp",
+		"e17ff39bb168798fa321a23692cab2b2"
+	],
+	[
+		"doc/images/tips-tutorials-update-time.webp",
+		"5184be6d16bd74222f38d155593522a1"
 	],
 	[
 		"doc/images/tips-undo.png",
