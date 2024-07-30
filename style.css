@@ -270,6 +270,13 @@ label[for="siwtch-code-mode"]::after {
 	grid-template-columns: repeat(auto-fill, 36px);
 	grid-auto-rows: 36px;
 }
+#hide-rich-text-tools {
+	float: right;
+}
+#hide-rich-text-tools::before {
+	content: "\f00d";
+	font-size: 1.7em;
+}
 
 .rich-text icon{
 	vertical-align: middle;
@@ -874,8 +881,7 @@ body:not(.show-team-total-info) :where(.tIf-total-hp, .tIf-effect),
 body:not(.show-team-attrtype-count) .team-total-info-count, /*稀有度、属性与类型计数*/
 body:not(.show-team-awoken-effect) .team-awoken-effect, /*队伍觉醒效果统计*/
 body:not(.show-meter) meter, /*显示计量条*/
-body.show-meter meter+span,
-body:not(.show-rich-text-tools) #rich-text-tools /*富文本框选择器*/
+body.show-meter meter+span /*勾选显示计量条则隐藏文字*/
 {
 	display: none !important;
 }

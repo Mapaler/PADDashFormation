@@ -3331,6 +3331,10 @@ function initialize() {
 	const insertLatentIcon = document.getElementById("insert-latent-icon");
 	const insertTypeIcon = document.getElementById("insert-type-icon");
 	const insertOrbIcon = document.getElementById("insert-orb-icon");
+	const hideRichTextTools = document.getElementById("hide-rich-text-tools");
+	hideRichTextTools.onclick = function (event) {
+		richTextTools.classList.add(className_displayNone);
+	}
 
 	const insertAwokenIconList = insertAwokenIcon.list = document.createElement("ul");
 	insertAwokenIconList.className = "awoken-ul " + className_displayNone;
@@ -3670,6 +3674,20 @@ function initialize() {
 		txtDetailDisplay.append(descriptionToHTML(this.value));
 		createNewUrl();
 	};
+
+	function showRichtextTool(event) {
+		richTextTools.classList.remove(className_displayNone);
+	}
+
+	[
+		txtTitleDisplay,
+		txtDetailDisplay,
+		txtTitle,
+		txtDetail
+	].forEach(target=>{
+		target.addEventListener("focus",showRichtextTool);
+	});
+
 	//设置为可以拖放已经编辑好的队伍
 	function richTextDropHandler(event) {
 		let formStr = event.dataTransfer.getData('from');

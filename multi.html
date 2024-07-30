@@ -111,7 +111,6 @@ const teamsCount = 2;
 			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label for="show-team-awoken-effect"></label>
 			<input type="checkbox" class="switch-ipt" id="show-meter"><label for="show-meter"></label>
 			<input type="checkbox" class="switch-ipt" id="show-team-awoken-count"><label for="show-team-awoken-count"></label>
-			<input type="checkbox" class="switch-ipt" id="show-rich-text-tools"><label for="show-rich-text-tools"></label>
 		</details>
 		<div class="status"></div>
 		<div class="formation-control">
@@ -847,7 +846,7 @@ const teamsCount = 2;
 			<div class="dialog-content"></div>
 		</dialog>
 	</div>
-	<div id="rich-text-tools">
+	<div id="rich-text-tools" class="display-none">
 		<button id="set-font-color" title="Set Font Color"></button><input id="color-chooser" type="color" title="Choose Font Color" />
 		<button id="insert-card-avatar" title="Insert Card Avatar"></button>
 		<button id="insert-awoken-icon" title="Insert Awoken Icon"></button>
@@ -855,6 +854,7 @@ const teamsCount = 2;
 		<button id="insert-type-icon" title="Insert Type Icon"></button>
 		<button id="insert-orb-icon" title="Insert Orb Icon"></button>
 		<input type="checkbox" class="switch-ipt" id="siwtch-code-mode"><label for="siwtch-code-mode" title="Code Mode"></label>
+		<button id="hide-rich-text-tools" title="Close"></button>
 	</div>
 	<div class="edit-box display-none">
 		<div class="edit-box-title"><!--修改怪物--></div>
