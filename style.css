@@ -54,7 +54,6 @@ body{
 	--border-width: 2px;
 
 	font-family: var(--font-family);
-	margin: 0;
 	background-color: white;
 }
 details>summary {
@@ -67,12 +66,6 @@ details>summary:hover {
 .formation-box
 {
 	--margin: 10px;
-}
-.control-box {
-	margin: var(--margin) var(--margin) 0 var(--margin);
-}
-.formation-box {
-	margin: 0 var(--margin) var(--margin) var(--margin);
 }
 .noscript {
 	color: red;
@@ -316,6 +309,11 @@ label[for="siwtch-code-mode"]::after {
 ):empty::before{
 	color: grey;
 	content: attr(placeholder);
+	pointer-events: none; /*打开编辑窗后禁止后方有鼠标反应*/
+	width: 0px;
+	display: inline-block;
+	overflow-wrap: normal;
+	word-break: keep-all;
 }
 .guide-mod .control-box>div.status
 {
@@ -406,9 +404,56 @@ ul{
 }
 /*队伍的整个盒子*/
 .formation-box{
-	width: 648px;
-	min-width: 648px;
+	width: calc(var(--head-block-width) * 6);
+	min-width: calc(var(--head-block-width) * 6);
 }
+body.block-width-7 .formation-box{
+	width: calc(var(--head-block-width) * 7);
+	min-width: calc(var(--head-block-width) * 7);
+}
+/*电脑宽屏使用*/
+@media (min-width: 1310px) {
+	.formation-box{
+		width: 100% !important;
+		min-width: unset;
+	}
+	.team-bigbox {
+		display: grid;
+		column-fill: auto;
+		column-count: 2;
+		grid-template-columns: min-content auto;
+		grid-auto-rows: min-content;
+		grid-auto-flow: column dense;
+		gap: 0 10px;
+	}
+	.team-bigbox :where(
+		.team-total-info,
+		.team-box-name,
+		.team-member-types,
+		.team-member-awoken,
+		.team-assist-awoken,
+		.team-ability,
+	) {
+		grid-column: 1;
+	}
+	.team-box-name {
+		grid-row: span 4;
+	}
+	.team-bigbox :where(
+		.team-total-info-count,
+		.team-awoken-effect,
+		.team-awoken,
+	) {
+		grid-column: 2;
+	}
+	.team-awoken-effect {
+		grid-row: span 3;
+	}
+	.team-awoken {
+		grid-row: span 3;
+	}
+}
+
 
 /*弹出窗口相关*/
 .dialog {
@@ -456,23 +501,23 @@ ul{
 	justify-content: center;
 	box-sizing: border-box;
 	min-width: 100px;
-	padding: 5px;
-	background-color: #956A42;
-	background-image: url(images/slate.svg);
-	background-size: 120px 120px;
-	background-clip: padding-box;
-	border-style: solid;
-	border-radius: 3px;
-	border-width: 5px;
-	border-image-source: url(images/brown-button.svg);
-	border-image-slice: 15%;
-	font-size: 1.5em;
-	line-height: 1em;
+	padding: 3px;
+	font-size: 1.3em;
+	line-height: 1.3em;
 	color: white;
 	font-family: var(--game-font-family);
 	text-shadow: black 2px 2px 0;
 	cursor: pointer;
 	transition: transform 0.1s;
+
+	background-image: url(images/slate.svg), linear-gradient(to bottom,#956A42,#956A42), linear-gradient(to bottom,#C38E5F,#2F2008);
+	background-clip: padding-box,padding-box, border-box;
+	background-origin: padding-box,padding-box, border-box;
+	background-size: cover, auto, auto;
+	border-color: transparent;
+	border-style: solid;
+	border-width: 3px;
+	border-radius: 5px;
 }
 .brown-button:hover {
 	color: lightgreen;
@@ -551,11 +596,11 @@ ul{
 	font-family: var(--game-font-family);
 	width: 100px;
 	height: 100px;
-	margin: 0;
 	display: block;
 	background-repeat: no-repeat;
 	position: relative;
 	border-radius: 5px;
+	box-sizing: border-box;
 	text-decoration:none;
 }
 .monster.null,.monster.delay,
@@ -913,7 +958,8 @@ body:not(.show-team-total-info):not(.solo) .formation-box .team-bigbox
 	vertical-align: middle;
 }
 .formation-box .monster{
-	margin: 4px; /*留给队长边框的*/
+	--margin: 4px;
+	margin: var(--margin); /*留给队长边框的*/
 }
 .team-assist, .team-members{
 	display: inline-block;
@@ -938,8 +984,8 @@ button.badge {
 label.badge {
 	cursor: pointer;
 }
-#badge-choose .team-badges .hide-radio:checked+ .badge{
-	box-shadow: 0 0 0 5px yellow;
+#badge-choose .team-badges input:checked+ .badge{
+	outline: 5px yellow solid;
 }
 
 /*队伍的背景色*/
@@ -963,12 +1009,7 @@ label.badge {
 {
 	background-color: var(--team-bg-color);
 }
-.team-bigbox{
-	position: relative;
-	margin-bottom:10px;
-	display: flex;
-	flex-direction: column;
-}
+
 .team-bigbox sub {
 	font-size: 0.75em;
 }
@@ -1248,6 +1289,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 /*队伍内属性、type的个数统计*/
 .team-total-info-count {
 	margin-bottom: 3px;
+	display: inline-flex;
 }
 .tIf-rarity,
 .tIf-attrs,
@@ -1424,16 +1466,13 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 }
 
 /*队长的边框*/
-.team-members .team-leader .monster
-{
-	border-radius: 10px;
-	border-width:4px;
-	border-style:solid;
-	box-sizing: content-box;
-	margin: 0;
+.team-members .team-leader .monster {
+	border-radius: var(--margin);
+	outline-style: solid;
+	outline-width: var(--margin);
 }
 .team-leader .monster {
-	border-color: var(--team-ft-color);
+	outline-color: var(--team-ft-color);
 }
 .team-members .monster,
 .team-assist .monster {
@@ -1704,7 +1743,7 @@ label[for="search-string"] {
 }
 .edit-box .setting-box .row-mon-id .unable-monster .monster{
 	box-sizing: border-box;
-	border: 5px solid red;
+	outline: 5px solid red;
 	border-radius: 10px;
 	overflow: hidden;
 }
@@ -2175,22 +2214,11 @@ label[for="search-string"] {
 
 .search-box .brown-button {
 	min-width: unset;
-	background-size: 100px 100px;
-	background-position-y: 40px;
 	padding: 0;
 	vertical-align: bottom;
 	border-width: 3px;
 	font-size: 1em;
 	line-height: 1em;
-}
-.search-box :where(
-	.rare-clear,
-	.special-add,
-	.special-clear,
-	.special-star,
-	#attr-clear,
-	.awoken-clear,
-) {
 }
 
 @keyframes awoken-appear {
@@ -3139,7 +3167,6 @@ a.series-search::before {
 .edit-box .button-box{
 	background-color: rgba(0,0,0,0.5);
 	padding: 5px;
-	height: 50px;
 	display: grid;
 	gap: 5px;
 	grid-template-columns: max-content max-content auto max-content max-content;

@@ -28,10 +28,6 @@ const teamsCount = 3;
 <script type="text/javascript" src="library/jy4340132-aaa/adpcm.js"></script>
 <!--▲ADPCM播放相关-->
 <style type="text/css">
-.formation-box{
-	width: calc(var(--head-block-width) * 7);
-	min-width: calc(var(--head-block-width) * 7);
-}
 /*队伍之间的分割线*/
 .team-bigbox:not(:first-of-type){
 	border-top: 1px solid gray;
@@ -39,7 +35,7 @@ const teamsCount = 3;
 </style>
 </head>
 
-<body>
+<body class="block-width-7">
 	<noscript>您的浏览器不支持 JavaScript！<br/>Your browser does not support JavaScript!</noscript>
 	<div class="control-box">
 		<a class="down-capture display-none" target="_blank"></a>
