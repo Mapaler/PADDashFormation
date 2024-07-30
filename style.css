@@ -55,6 +55,7 @@ body{
 
 	font-family: var(--font-family);
 	background-color: white;
+	overscroll-behavior: none;
 }
 details>summary {
 	cursor: pointer;
@@ -1027,6 +1028,7 @@ label.badge {
 /*队伍A、B的文字*/
 .team-box{
 	vertical-align:bottom;
+	overscroll-behavior: none;
 }
 .team-box-name {
 	display: flex;

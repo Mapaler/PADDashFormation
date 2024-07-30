@@ -3592,22 +3592,25 @@ function initialize() {
 		}
 		let code = [];
 		for (let node of parentElement.childNodes) {
-			if (node?.lastChild?.nodeName == "BR") node.lastChild.revome();
-			if (node.nodeName == "#text"){ //纯文本
+			let lastChild = node?.lastChild;
+			if (lastChild?.nodeName === "BR"){
+				lastChild.parentElement.removeChild(lastChild);
+			} 
+			if (node.nodeName === "#text"){ //纯文本
 				code.push(node.nodeValue);
 				continue;
-			} else if (node.nodeName == "FONT" && node.color || node.nodeName == "SPAN" && node.style.color) { //文字颜色
-				let colorStr = rgbToHex(node.nodeName == "FONT" && node.color || node.nodeName == "SPAN" && node.style.color);
+			} else if (node.nodeName === "FONT" && node.color || node.nodeName === "SPAN" && node.style.color) { //文字颜色
+				let colorStr = rgbToHex(node.nodeName === "FONT" && node.color || node.nodeName === "SPAN" && node.style.color);
 				code.push(`^${colorStr}^${richTextToCode(node)}^p`);
 				continue;
-			} else if (node.nodeName == "DIV") {
+			} else if (node.nodeName === "DIV") {
 				let lastStr = code[code.length-1];
 				if (lastStr && lastStr[lastStr.length-1] !== '\n') {
 					code.push('\n');
 				}
 				code.push(richTextToCode(node)+'\n');
 				continue;
-			} else if (node.nodeName == "BR") {
+			} else if (node.nodeName === "BR") {
 				code.push('\n');
 				continue;
 			}
@@ -3757,8 +3760,14 @@ function initialize() {
 		}
 		return false; //没有false将会打开链接
 	}
+	  
+	function noMove(event) {
+		event.preventDefault();
+	}
+	  
 	//移动端编辑界面每个怪物的头像的放下
 	function touchstartMonHead(e) {
+		document.addEventListener("touchmove",noMove,{passive:false});
 		e.stopPropagation();
 		//console.log("开始触摸",e,this);
 		const tc = e.changedTouches[0];
@@ -3786,6 +3795,7 @@ function initialize() {
 	}
 	//移动端编辑界面每个怪物的头像的结束
 	function touchendMonHead(e) {
+		document.removeEventListener("touchmove",noMove,{passive:false});
 		const tc = e.changedTouches[0];
 		const pX = tc.pageX,
 			pY = tc.pageY;
@@ -3814,6 +3824,7 @@ function initialize() {
 	}
 	//移动端编辑界面每个怪物的头像的取消
 	function touchcancelMonHead(event) {
+		document.removeEventListener("touchmove",noMove,{passive:false});
 		interchangeSvg.style.display = "none";
 		console.log("移动取消", event, this);
 	}
