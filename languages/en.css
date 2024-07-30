@@ -103,10 +103,10 @@
 	content: "Leader Skill";
 }
 label[for="show-skill-original"]::after{
-	content: "Skill Original";
+	content: "Original";
 }
 label[for="merge-skill"]::after{
-	content: "Merge Skill";
+	content: "Merge";
 }
 
 .edit-box .button-box .button-null::after{
@@ -495,37 +495,37 @@ label[for="real-time-change-card"]::after
 .evolution .evo-type
 {
 	transform: scaleX(0.90);
-	margin: calc(-100px * (1 - 0.90) / 2);
+	margin: 0 calc(-100px * (1 - 0.90) / 2);
 }
 .pixel-evo .evo-type
 {
 	transform: scaleX(0.95);
-	margin: calc(-100px * (1 - 0.95) / 2);
+	margin: 0 calc(-100px * (1 - 0.95) / 2);
 }
 .super-ult-evo .evo-type
 {
 	transform: scaleX(0.65);
-	margin: calc(-100px * (1 - 0.63) / 2);
+	margin: 0 calc(-100px * (1 - 0.63) / 2);
 }
 .reincarnation .evo-type
 {
 	transform: scaleX(0.60);
-	margin: calc(-100px * (1 - 0.55) / 2);
+	margin: 0 calc(-100px * (1 - 0.55) / 2);
 }
 .assist-evo .evo-type
 {
 	transform: scaleX(0.85);
-	margin: calc(-100px * (1 - 0.85) / 2);
+	margin: 0 calc(-100px * (1 - 0.85) / 2);
 }
 .super-reincarnation .evo-type
 {
 	transform: scaleX(0.43);
-	margin: calc(-100px * 1 / 2);
+	margin: 0 calc(-100px * 1 / 2);
 }
 .ordeal-evo .evo-type
 {
 	transform: scaleX(0.75);
-	margin: calc(-100px * (1 - 0.75) / 2);
+	margin: 0 calc(-100px * (1 - 0.75) / 2);
 }
 
 .henshin .evo-type::before,

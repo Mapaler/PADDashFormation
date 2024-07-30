@@ -3381,6 +3381,7 @@ a.series-search::before {
 .control-box .btn-henshin::before{
 	content: "\f04e";
 	font-family: var(--icon-font-family);
+	color: darkblue;
 }
 .control-box .btn-henshin[data-step^="-"]::before{
 	content: "\f04a";
@@ -3802,6 +3803,7 @@ table .orb-icon
 	border-radius: 5px;
 	margin: 4px;
 	padding: 5px;
+	m
 }
 .evo-materials
 {
@@ -3870,25 +3872,23 @@ table .orb-icon
 
 }
 
-.evo-panel-left .evo-type,
-.evo-panel-left .evo-type::after
-{
+.evo-panel-left .evo-type{
+	display: grid;
 	font-family: var(--game-font-family);
 	font-size: 15px;
 	line-height: 15px;
+	padding: 4px 0;
 }
-.evo-panel-left .evo-type
-{
-	display: inline-block;
-	position: relative;
+.evo-panel-left .evo-type::after,
+.evo-panel-left .evo-type::before{
+	grid-area: 1 / 1;
 }
+
 .evo-panel-left .evo-type::after
 {
 	-webkit-background-clip: text; /*垃圾Chrome，不支持无前缀的*/
 	background-clip: text;
 	color: transparent;
-	position: absolute;
-	left: 0;
 }
 
 .evo-panel-left .evo-type::before

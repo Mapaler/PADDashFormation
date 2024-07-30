@@ -102,10 +102,10 @@ label[for="languages"]::after{
 	content: "リーダースキル";
 }
 label[for="show-skill-original"]::after{
-	content: "スキルの原文";
+	content: "原文";
 }
 label[for="merge-skill"]::after{
-	content: "スキルのマージ";
+	content: "マージ";
 }
 
 .edit-box .button-box .button-null::after{

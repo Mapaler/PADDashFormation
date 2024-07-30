@@ -24,6 +24,7 @@ const className_displayNone = "display-none";
 const dataAttrName = "data-value"; //用于储存默认数据的属性名
 const isGuideMod = Boolean(Number(getQueryString("guide"))); //是否以图鉴模式启动
 
+const svgNS = "http://www.w3.org/2000/svg"; //svg用的命名空间
 //用油猴扩展装上，把GM_xmlhttpRequest引入的脚本
 const ExternalLinkScriptURL = "https://greasyfork.org/scripts/458521";
 const paddbPathPrefix = "/team/"; //PADDB的获取队伍网址格式
@@ -1739,6 +1740,11 @@ class EvoTree
 
 		const evoTypeDiv = evotPanel_L.appendChild(document.createElement("div"));
 		evoTypeDiv.className = "evo-type-div";
+
+		// const typeSVG = evotPanel_L.appendChild(document.createElementNS(svgNS,"svg"));
+		// const svgText = typeSVG.appendChild(document.createElementNS(svgNS,'text'));
+		// svgText.setAttribute("y",`10`);
+
 		const evoType = evoTypeDiv.appendChild(document.createElement("span"));
 		evoType.className = "evo-type";
 		const monHead = evotPanel_L.appendChild(createCardHead(this.id, {noTreeCount: true}));
@@ -1750,7 +1756,7 @@ class EvoTree
 
 		const evotMaterials = evotPanel_R.appendChild(document.createElement("ul"));
 		evotMaterials.className = "evo-materials";
-		(this.evoType === "Ordeal Evo" ? [0,0,0,0,0] : this.card.evoMaterials).forEach(mid=>{
+		(this.evoType === "Ordeal Evo" ? new Array(5).fill(0) : this.card.evoMaterials).forEach(mid=>{
 			//const li = evotMaterials.appendChild(document.createElement("li"));
 			evotMaterials.appendChild(createCardHead(mid, {noTreeCount: true}));
 		});
@@ -4908,9 +4914,13 @@ function initialize() {
 	{
 		if (typeof(searchArr) === "number") {
 			searchArr = [searchArr];
-		} else if (Array.isArray(searchArr)) { //如果传入的内容是数字，就转成card对象
+		}
+		if (Array.isArray(searchArr)) { //如果传入的内容是数字，就转成card对象
 			searchArr = searchArr.map(id=>typeof(id) === "object" ? id : Cards[id]);
 		} else {
+			//只是打开之前的显示
+			searchBox.open = true;
+			editBox.show();
 			return; //如果不是数组就直接取消下一步
 		}
 		//如果之前打开了附加显示，继续沿用
@@ -5577,10 +5587,24 @@ function initialize() {
 		editBox.hide();
 	};
 	window.addEventListener("keydown",function(event) {
+		if (event.key === "s" && event.ctrlKey){ //按Ctrl+S打开搜索框
+			event.preventDefault();
+			if (editBox.classList.contains(className_displayNone)) {
+				showSearch();
+			} else {
+				editBox.hide();
+			}
+		}
 		if (!editBox.classList.contains(className_displayNone))
 		{ //编辑窗打开
 			if (event.key === "Escape") { //按下ESC时，自动关闭编辑窗
 				btnCancel.onclick();
+			}
+			if (event.key === "Enter" && //按下回车时
+				document.activeElement === monstersID && //当前焦点是id框
+				editBox.mid == parseInt(monstersID.value, 10) //ID和目前打开的相同（已刷新）
+			) {
+				btnDone.onclick(); //点击完成
 			}
 		}
 		else
@@ -5676,7 +5700,7 @@ function initialize() {
 
 	if (isGuideMod) //图鉴模式直接打开搜索框
 	{
-		showSearch([]);
+		showSearch();
 		//if (monstersID.value.length == 0) editBoxChangeMonId(0);
 	}
 }
@@ -7620,16 +7644,12 @@ function fastShowSkill(event) {
 		return;
 	};
 	const s_cards = Cards.filter(card => card.activeSkillId === skillId || card.leaderSkillId === skillId); //搜索同技能怪物
-	if (s_cards.length > 1) {
-		showSearch(s_cards); //显示
-	}
+	showSearch(s_cards); //显示
 }
 function svgGradientTextLengthRestore(svg, force = false) {
 	if (!force && svg.width.baseVal.value > 0) return;
-	console.log(svg,svg.width.baseVal.value);
 	const text = svg.querySelector("text");
 	const rect = text.getBoundingClientRect();
-	console.log(text.textContent,rect.width);
 	svg.width.baseVal.value = rect.width;
 }
 function localisation($tra) {

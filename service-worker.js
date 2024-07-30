@@ -32319,7 +32319,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"7187d627631fa7abc79622b1bdc2d477"
+		"51f2c471715b6609bcb09441824a5fa4"
 	],
 	[
 		"script-custom_elements.js",
@@ -32339,11 +32339,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"185f13fedf76220cf25070e80d63f4fb"
+		"52f74f6f2d496308be5c54dbf9c908a0"
 	],
 	[
 		"solo.html",
-		"5d9133d40c68f7f9733a3670d4213f3c"
+		"ac82faacab0d49e4ace3e8485f4fdbe9"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -32351,11 +32351,11 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"01af9fbac81c5c7fa2eac76354bc89a1"
+		"15020a2f25262663a81aaa7f9259defc"
 	],
 	[
 		"style.css",
-		"49b86aed1bf468de63b32a5f32870300"
+		"1a761a00d9b9a660e781775f66e03f29"
 	],
 	[
 		"temp.js",
@@ -32363,11 +32363,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"0154840ff2c641967e67a1c7f8a99cb4"
+		"95f1ee3675be5e8bbe795e2ad294b191"
 	],
 	[
 		"languages/en.css",
-		"5f71a278d07e34177b4a69c7e466310d"
+		"591f2e7ee847345caf198e7a1ed2a3f4"
 	],
 	[
 		"languages/en.js",
@@ -32375,7 +32375,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"8c78b0e7b5ba4b336cbe2a8a3e2455e3"
+		"5613bf5868e09633e7f18ae0fae2017f"
 	],
 	[
 		"languages/ja.js",
@@ -32383,7 +32383,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"28b0871e7c7166f2b0266fed3083c1bb"
+		"484bf8541bd553771db82ea7fc43df24"
 	],
 	[
 		"languages/ko.js",
@@ -32395,7 +32395,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.css",
-		"dcb1c5708633e0889c9aee23725a32fd"
+		"7812bc8104d408d8b70f0d1a1723cc72"
 	],
 	[
 		"languages/zh-hans.js",
@@ -32403,7 +32403,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.css",
-		"c041685f375be00e43a5d8b014ff2c70"
+		"14630847a22449fe2780f8e154d8d7c7"
 	],
 	[
 		"languages/zh-hant.js",
@@ -32611,7 +32611,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/index.html",
-		"ffe70f49c504f28439d7d82024a23ec0"
+		"f8ae224436be99decfdb36d616899bdc"
 	],
 	[
 		"doc/images/bluestacks-adb-connect.webp",

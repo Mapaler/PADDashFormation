@@ -104,10 +104,10 @@ label[for="languages"]::after{
 	content: "隊長技能";
 }
 label[for="show-skill-original"]::after{
-	content: "技能原文";
+	content: "原文";
 }
 label[for="merge-skill"]::after{
-	content: "合并技能";
+	content: "合并";
 }
 
 .edit-box .button-box .button-null::after{
