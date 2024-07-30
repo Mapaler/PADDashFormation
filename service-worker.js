@@ -32319,7 +32319,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"bb15813a2d41f033c3fdb7025013c736"
+		"fd2b53625690be01261bfca3d51c8117"
 	],
 	[
 		"script-custom_elements.js",
@@ -32343,7 +32343,7 @@ const cachesMap = new Map([
 	],
 	[
 		"solo.html",
-		"2dcab635615804115b8e8957b8c08e53"
+		"6b624264a58a0e472b20a16665a52451"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -32355,7 +32355,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"0e204f36b14c7bc9f0888332e49de02e"
+		"6e0b1b09be269f87c1f79b9a0055f048"
 	],
 	[
 		"temp.js",
@@ -32363,7 +32363,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"1e72d25c59a9caedcf697d11b034644b"
+		"3135d15a58be52158f3833aef9bb322a"
 	],
 	[
 		"languages/en.css",
@@ -32432,6 +32432,10 @@ const cachesMap = new Map([
 	[
 		"images/badge.png",
 		"e99e7cbd977fce0f5c49339b15e3a25a"
+	],
+	[
+		"images/brown-button.svg",
+		"ddc77250f71df8f5e7a17e348aa7140f"
 	],
 	[
 		"images/card-frame-any.png",
@@ -32564,10 +32568,6 @@ const cachesMap = new Map([
 	[
 		"images/icon.png",
 		"5e6359d908e471761726c927a8376dbf"
-	],
-	[
-		"images/qrcode-solid.svg",
-		"38557995b8cafaf50c16274030c8141d"
 	],
 	[
 		"images/slate.svg",
