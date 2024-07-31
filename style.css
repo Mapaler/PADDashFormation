@@ -1451,23 +1451,27 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	grid-template: repeat(2, 32px) / repeat(3, 32px);
 	/*grid-template-columns: repeat(3, 32px);
 	grid-template-rows: repeat(2, 32px);*/
-	grid-auto-flow: column;
 	grid-gap: 3px 6px;
 	place-content: start center;
+	grid-auto-flow: column dense; /*这个 dense 让潜觉可以自动填充位置*/
 }
 .team-latents .latent-ul.block-8{
 	grid-template-columns: repeat(4, 32px);
 }
 .team-latents .latent-icon[data-latent-hole="1"] {
-	grid-column: span 1;
+	grid-area: span 1 / span 1;
+	/* grid-column: span 1;
+	grid-row: span 1; */
 }
 .team-latents .latent-icon[data-latent-hole="2"] {
-	grid-column: span 1;
-	grid-row: span 2;
+	grid-area: span 2 / span 1;
+	/*grid-column: span 1;
+	grid-row: span 2;*/
 }
 .team-latents .latent-icon[data-latent-hole="6"] {
-	grid-column: span 3;
-	grid-row: span 2;
+	grid-area: span 2 / span 3;
+	/* grid-column: span 3;
+	grid-row: span 2; */
 }
 .team-latents .latent-icon[data-latent-hole="6"]::before,
 .team-latents .latent-icon[data-latent-hole="6"]::after
@@ -2945,13 +2949,19 @@ input[disabled]+.awoken-icon:active,
 	display: none;
 }
 .row-mon-latent .latent-icon[data-latent-hole="1"] {
-	grid-column: span 1;
+	grid-area: span 1 / span 1;
+	/* grid-column: span 1;
+	grid-row: span 1; */
 }
 .row-mon-latent .latent-icon[data-latent-hole="2"] {
-	grid-column: span 2;
+	grid-area: span 1 / span 2;
+	/*grid-column: span 1;
+	grid-row: span 2;*/
 }
 .row-mon-latent .latent-icon[data-latent-hole="6"] {
-	grid-column: span 6;
+	grid-area: span 1 / span 6;
+	/* grid-column: span 3;
+	grid-row: span 2; */
 }
 .latent-icon[data-latent-hole="2"]+.latent-icon,
 .latent-icon[data-latent-hole="6"]+.latent-icon,

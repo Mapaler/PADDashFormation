@@ -5885,7 +5885,7 @@ function changeid(mon, monDom, latentDom, assist) {
 			if (latent.length < 1) {
 				latentDom.classList.add(className_displayNone);
 			} else {
-				refreshLatent(latent, mon, latentDom, {sort:true, assist});
+				refreshLatent(latent, mon, latentDom, {sort:false, assist});
 				latentDom.classList.remove(className_displayNone);
 			}
 			latentDom.classList.toggle("level-super-break", level > 110);; //切换潜觉为120级
@@ -5940,13 +5940,14 @@ function changeid(mon, monDom, latentDom, assist) {
 	//parentNode.appendChild(fragment);
 }
 //刷新潜觉
-function refreshLatent(latents, member, latentsNode, option) {
+function refreshLatent(latents, member, latentsNode, option = {}) {
+	const {sort, assist} = option;
 	const maxLatentCount = getMaxLatentCount(member.id); //最大潜觉数量
 	const iconArr = latentsNode.querySelectorAll('.latent-icon');
 	latentsNode.classList.toggle("block-8", maxLatentCount > 6);
-	if (option?.sort) latents = latents.toSorted((a, b) => latentUseHole(b) - latentUseHole(a));
+	if (sort) latents = latents.toSorted((a, b) => latentUseHole(b) - latentUseHole(a));
 	//如果传入了辅助，才进行有效觉醒的计算，否则算作只有本人的。
-	let effectiveAwokens = new Set(member.effectiveAwokens(option?.assist ?? null));
+	let effectiveAwokens = new Set(member.effectiveAwokens(assist));
 	let latentIndex = 0, usedHoleN = 0;
 	//如果传入了武器，就添加有效觉醒
 	for (let ai = 0; ai < iconArr.length; ai++) {
