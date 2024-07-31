@@ -176,14 +176,18 @@ label[for="screenshot-transparent"] {
 }
 #rich-text-tools button
 {
-	min-width: 64px;
+	min-width: 50px;
 }
+
 #rich-text-tools button,
-#rich-text-tools input
+#rich-text-tools input[type="color"]
 {
 	height: 40px;
 	vertical-align: middle;
 	text-align: center;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 }
 #rich-text-tools button::before {
 	font-family: var(--icon-font-family);
@@ -217,11 +221,8 @@ label[for="siwtch-code-mode"]::after {
 #color-chooser {
 	width: 30px;
 }
-#insert-card-avatar::before {
-	width: 100px;
-	height: 100px;
-	background-image: url(images/CARDFRAME2.PNG), url(images/CARDFRAME2.PNG);
-	background-position: -102px -104px, 0 0;
+#insert-card-avatar .monster
+{
 	transform: scale(calc(32 / 100));
 	margin: calc(-100px * (1 - (32 / 100)) / 2);
 }
@@ -891,8 +892,14 @@ body.show-meter meter+span /*勾选显示计量条则隐藏文字*/
 	display: grid;
 	grid-template-columns: 75px auto;
 }
+.config-display-list .monster{
+	transform: scale(0.75);
+	margin: calc(-100px * (1 - 0.75) / 2);
+}
+
 .config-display-list .in-card .switchs{
 	display: flex;
+	align-content: center;
 	flex-wrap: wrap;
 }
 .config-display-list .in-card .switchs input[type="checkbox"].switch-ipt:checked + label::before{
@@ -1399,7 +1406,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	border-radius: 5px;
 	border-color: rgba(82,82,60,0.5);
 	box-sizing: border-box;
-	display: flex;
+	display: inline-flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
@@ -1780,7 +1787,7 @@ label[for="search-string"] {
 	vertical-align: top;
 }
 .detail-mon{
-	display: inline-block;
+	display: inline-flex;
 	vertical-align: bottom;
 }
 .edit-box .search-mon-list .monster,
@@ -1835,7 +1842,6 @@ label[for="search-string"] {
 .rich-text .latent-icon {
 	width: 32px;
 	height: 32px;
-	display: inline-block;
 }
 /*搜索结果显示觉醒列表的相关css*/
 .awoken-preview .awoken-ul

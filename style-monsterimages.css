@@ -14,6 +14,7 @@
 }
 .monster .attrs .attr[data-attr='-1'] {
 	background: none; /*无*/
+	display: none;
 }
 .monster .attrs .attr[data-attr='0'] {
 	background-position-x: calc(-102px * 0); /*火*/
@@ -1739,7 +1740,7 @@
 .orb::before,
 .orb::after
 {
-	display: inline-block;
+	display: inline-flex;
 	width: 36px;
 	height: 36px;
 	background-image: url(images/icon-orbs.png);
