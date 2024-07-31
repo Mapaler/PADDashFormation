@@ -2165,9 +2165,8 @@ function reloadFormationData(event) {
 		}
 	})(sessionStorage.getItem('editing'));
 	
-	if (!editingTarget && (isGuideMod || searchOptions)) editingTarget = [0,0,0];
-	if (editingTarget)
-	{
+	if (!editingTarget && isGuideMod) editingTarget = [0,0,0];
+	if (editingTarget) {
 		const mid = event?.state?.mid ?? parseInt(getQueryString("id"), 10);
 		const searchArr = event?.state?.searchArr ?? (str=>{
 			try {
