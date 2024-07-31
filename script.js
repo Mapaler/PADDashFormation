@@ -7032,6 +7032,46 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 			orb.setAttribute(dataAttrName,count[oi]);
 		});
 	}
+	//竖心追
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"45\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".count");
+		let count = 0;
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
+			let effectiveAwokens = memberData.effectiveAwokens(assistData);
+			count += effectiveAwokens.filter(ak=>ak===45).length;
+		}
+		targetValue.setAttribute(dataAttrName, (count * 50_0000).bigNumberToString());
+		const targetValue2 = targetIcon.parentElement.querySelector(".count[data-postfix]");
+		targetValue2.setAttribute(dataAttrName, Math.min(count * 20, 100));
+	}
+	//方心追
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"50\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".count");
+		let count = 0;
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
+			let effectiveAwokens = memberData.effectiveAwokens(assistData);
+			count += effectiveAwokens.filter(ak=>ak===50).length;
+		}
+		targetValue.setAttribute(dataAttrName, (count * 1000_0000).bigNumberToString());
+		const targetValue2 = targetIcon.parentElement.querySelector(".count[data-postfix]");
+		targetValue2.setAttribute(dataAttrName, Math.min(count * 50, 100));
+	}
+	//L心
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"59\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".count");
+		let count = 0;
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
+			let effectiveAwokens = memberData.effectiveAwokens(assistData);
+			count += effectiveAwokens.filter(ak=>ak===59).length;
+		}
+		targetValue.setAttribute(dataAttrName, count * 5);
+	}
 }
 //刷新队伍觉醒统计
 function refreshTeamAwokenCount(awokenDom, team) {

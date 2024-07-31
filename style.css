@@ -446,7 +446,7 @@ body.block-width-7 .formation-box{
 		grid-column: 1;
 	}
 	.team-box-name {
-		grid-row: span 4;
+		grid-row: span 3;
 	}
 	.team-bigbox :where(
 		.team-total-info-count,
@@ -1333,7 +1333,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .tIf-attrs icon.attr::before,
 .tIf-types icon.type-icon::before
 {
-	content: "x"attr(data-value);
+	content: "×"attr(data-value);
 	position: absolute;
 	right: 0;
 	bottom: 0;
@@ -1355,7 +1355,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .tIf-types icon.type-icon::before,
 .tIf-rarity icon::before
 {
-	-webkit-text-stroke: 2px black;
+	-webkit-text-stroke: 3px black;
 	paint-order: stroke;
 	text-shadow: black 1px 1px 1px;
 }
@@ -3264,6 +3264,9 @@ a.series-search::before {
 	margin-bottom: var(--gap);
 	grid-template-columns: repeat(6, calc(var(--head-block-width) - var(--gap)));
 }
+.team-awoken-effect>ul>li {
+	display: flex;
+}
 .team-awoken-effect .team-flags {
 	display: inline-flex;
 	vertical-align: middle;
@@ -3286,13 +3289,6 @@ a.series-search::before {
 	border-color: #056139;
 }
 
-.team-awoken-effect .orb-list .orb {
-	color: white;
-	white-space: nowrap;
-	text-shadow: black 1px 1px 1px;
-	position: relative;
-	text-align: center;
-}
 
 .team-awoken-effect meter{
 	width: 70px;
@@ -3306,7 +3302,7 @@ a.series-search::before {
 	color: #c7ff2b;
 	text-shadow: black 1px 1px 1px;
 }
-.team-awoken-effect .count[data-value]::before,
+/*.team-awoken-effect .count[data-value]::before,*/
 .team-awoken-effect .orb-list .orb[data-value]::before
 {
 	content: "×";
@@ -3332,6 +3328,10 @@ a.series-search::before {
 	width: 32px;
 	vertical-align: middle;
 }
+.team-awoken-effect .icon-skill[data-icon-type="breaking-shield"] {
+	transform: scaleX(0.5);
+	margin: 0 -18px;
+}
 /*.team-awoken-effect .latent-icon::before{
 	opacity: 0.99;
 }*/
@@ -3339,13 +3339,27 @@ a.series-search::before {
 	width: 64px;
 }
 .team-awoken-effect .orb-list {
-	display: inline-block;
-	vertical-align: middle;
+	display: inline-flex;
+	align-items: center;
 }
+
 .team-awoken-effect .orb-list .orb {
-	font-size: 16px;
+	font-size: 1em;
 	transform: scale(0.8);
 	margin: calc((36px - 36px * 0.8) / -2);
+
+	color: white;
+	white-space: nowrap;
+	text-shadow: black 1px 1px 1px;
+	-webkit-text-stroke: 2px black;
+	paint-order: stroke;
+
+	align-items: center;
+	justify-content: center;
+}
+.team-awoken-effect .orb.prob.gt100 /*大于100*/{
+	color: #c7ff2b;
+	text-shadow: black 1px 1px 1px;
 }
 
 .team-awoken-effect .orb-list .orb:not([data-value]),
