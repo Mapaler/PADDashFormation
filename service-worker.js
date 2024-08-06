@@ -32615,7 +32615,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/index.html",
-		"239f35125285a2d626a99e887d8c0b5d"
+		"67df78ff5f6b6dcc4ba4a117f9ea447c"
 	],
 	[
 		"doc/images/bluestacks-adb-connect.webp",
@@ -33012,6 +33012,10 @@ const cachesMap = new Map([
 	[
 		"doc/images/tips-search-skills.png",
 		"bbef1fce3e53ecda6c5889ea6fcba53c"
+	],
+	[
+		"doc/images/tips-search-special.webp",
+		"2f5d6d3d0527fe3e1b6ef1c40c1cad38"
 	],
 	[
 		"doc/images/tips-search-TagInGame.png",
