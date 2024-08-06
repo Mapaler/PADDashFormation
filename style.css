@@ -921,6 +921,7 @@ body.show-meter meter+span /*勾选显示计量条则隐藏文字*/
 .monster .switch-leader:hover
 {
 	box-shadow: red 0 0 5px;
+	cursor: pointer;
 }
 .monster .switch-leader:active
 {
