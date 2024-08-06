@@ -3266,6 +3266,7 @@ a.series-search::before {
 }
 .team-awoken-effect>ul>li {
 	display: flex;
+	align-items: center;
 }
 .team-awoken-effect .team-flags {
 	display: inline-flex;
@@ -3328,9 +3329,32 @@ a.series-search::before {
 	width: 32px;
 	vertical-align: middle;
 }
-.team-awoken-effect .icon-skill[data-icon-type="breaking-shield"] {
-	transform: scaleX(0.5);
-	margin: 0 -18px;
+.team-awoken-effect .meter[data-icon-type="breaking-shield"] {
+	box-sizing: border-box;
+	width: 40px;
+	height: 14px;
+	border-color: #CCC;
+	border-style: solid;
+	border-width: 2px;
+	border-radius: 5px;
+	box-shadow: 0 1px 3px black, 0 0 2px #ddd inset;
+	background-color: #222;
+	outline-color: rgba(0,0,0,0.8);
+	outline-style: solid;
+	outline-width: 1px;
+	display: flex;
+	align-items: center;
+	padding: 1px 2px;
+	background-image: none;
+}
+.team-awoken-effect .meter[data-icon-type="breaking-shield"]::before {
+	box-sizing: border-box;
+	content: "";
+	display: block;
+	width: calc(100% - var(--percent));
+	height: 100%;
+	border: none;
+	background-image: linear-gradient(#BDF, white);
 }
 /*.team-awoken-effect .latent-icon::before{
 	opacity: 0.99;
@@ -4922,8 +4946,9 @@ body.external-link-support #external-support{
 {
 	background-position-y:calc(-36px * 38);
 }
-.row-mon-leader-skill .icon-skill[data-icon-type="maxhp-locked"] {
-	display:none;
+.row-mon-leader-skill .icon-skill[data-icon-type="maxhp-locked"],
+.dungeon-enchance .icon-skill[data-icon-type="maxhp-locked"] {
+	display: none;
 }
 .icon-skill[data-icon-type="remove-assist"]
 {

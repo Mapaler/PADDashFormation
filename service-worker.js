@@ -32323,7 +32323,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"1275122ce4b4287900394d699dd760f7"
+		"8e9d49f1a8c0e07016dc5ead62dd8317"
 	],
 	[
 		"script-custom_elements.js",
@@ -32343,11 +32343,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"c3790ece064c661191493d0c4748b43e"
+		"0c3b4320ce5d074a165b2db153906b5b"
 	],
 	[
 		"solo.html",
-		"61328b2597511e132463331c12cf5c13"
+		"fc0bef8484b1f210fdcb96d16117c50c"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -32359,7 +32359,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"ad66c4ba48593ffaeff08a4948aa4c5b"
+		"13d72e748820e5448840bef1679aa05f"
 	],
 	[
 		"temp.js",
@@ -32367,7 +32367,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"e8c4c7088fee60e1b05a204a730d9024"
+		"d1b8716ca989579acb89c695ce011082"
 	],
 	[
 		"languages/en.css",

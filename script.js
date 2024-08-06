@@ -4177,13 +4177,16 @@ function initialize() {
 	editBox.memberIdx = []; //储存队伍数组下标
 	editBox.show = function() {
 		this.classList.remove(className_displayNone);
-		formationBox.classList.add("blur-bg");
-		controlBox.classList.add("blur-bg");
+		//解决SVG问题
+		const activeSkillTitle = skillBox.querySelector("#active-skill-title");
+		const evolvedSkillTitle = skillBox.querySelector("#evolved-skill-title");
+		const leaderSkillTitle = leaderSkillBox.querySelector("#leader-skill-title");
+		svgGradientTextLengthRestore(activeSkillTitle);
+		svgGradientTextLengthRestore(evolvedSkillTitle);
+		svgGradientTextLengthRestore(leaderSkillTitle);
 	};
 	editBox.hide = function() {
 		this.classList.add(className_displayNone);
-		formationBox.classList.remove("blur-bg");
-		controlBox.classList.remove("blur-bg");
 		// if (isGuideMod) {
 		// 	const url = new URL(location);
 		// 	url.searchParams.delete("guide");
@@ -6343,13 +6346,6 @@ function editBoxChangeMonId(id) {
 		btnDone.disabled = card.onlyAssist;
 	}
 
-	//解决SVG问题
-	const activeSkillTitle = skillBox.querySelector("#active-skill-title");
-	const evolvedSkillTitle = skillBox.querySelector("#evolved-skill-title");
-	const leaderSkillTitle = lskillBox.querySelector("#leader-skill-title");
-	svgGradientTextLengthRestore(activeSkillTitle);
-	svgGradientTextLengthRestore(evolvedSkillTitle);
-	svgGradientTextLengthRestore(leaderSkillTitle);
 
 	//去除所有不能再打的潜觉
 	editBox.latent = editBox.latent.filter(lat => allowLatent.includes(lat));
@@ -7044,8 +7040,11 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 			count += effectiveAwokens.filter(ak=>ak===45).length;
 		}
 		targetValue.setAttribute(dataAttrName, (count * 50_0000).bigNumberToString());
+		const percent = Math.min(count * 20, 100);
+		const sheildIcon = targetIcon.parentElement.querySelector("[data-icon-type=\"breaking-shield\"]");
+		sheildIcon.style.setProperty("--percent",`${percent}%`);
 		const targetValue2 = targetIcon.parentElement.querySelector(".count[data-postfix]");
-		targetValue2.setAttribute(dataAttrName, Math.min(count * 20, 100));
+		targetValue2.setAttribute(dataAttrName, percent);
 	}
 	//方心追
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"50\"]")) {
@@ -7058,8 +7057,11 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 			count += effectiveAwokens.filter(ak=>ak===50).length;
 		}
 		targetValue.setAttribute(dataAttrName, (count * 1000_0000).bigNumberToString());
+		const percent = Math.min(count * 50, 100);
+		const sheildIcon = targetIcon.parentElement.querySelector("[data-icon-type=\"breaking-shield\"]");
+		sheildIcon.style.setProperty("--percent",`${percent}%`);
 		const targetValue2 = targetIcon.parentElement.querySelector(".count[data-postfix]");
-		targetValue2.setAttribute(dataAttrName, Math.min(count * 50, 100));
+		targetValue2.setAttribute(dataAttrName, percent);
 	}
 	//L心
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"59\"]")) {
