@@ -1236,12 +1236,7 @@ const teamsCount = 1;
 					<!--怪物技能-->
 					<div class="skill-box">
 						<div class="skill-title">
-							<svg id="active-skill-title" class="gradient-text" height="24" width="100">
-								<text y="18" fill="url(#gradient-active-skill)">Skill</text>
-							</svg>
-							<svg id="evolved-skill-title" class="gradient-text" height="24" width="100">
-								<text y="18" fill="url(#gradient-evolved-skill)">Evoveld Skill</text>
-							</svg>
+							<div class="type-title"></div>
 							<span class="skill-name"></span>
 							<div class="skill-cd-control">
 								<label class="skill-level-label"><input type="number" class="m-skill-level" min=1 max=99 defaultValue=1 /></label>
@@ -1257,9 +1252,7 @@ const teamsCount = 1;
 					<!--怪物队长技能-->
 					<div class="skill-box">
 						<div class="skill-title">
-							<svg id="leader-skill-title" class="gradient-text" height="24" width="100">
-								<text y="18" fill="url(#gradient-leader-skill)">Leader Skill</text>
-							</svg>
+							<div class="type-title"></div>
 							<span class="skill-name"></span>
 							<div class="skill-parse-control">
 								<input type="checkbox" class="switch-ipt" name="show-skill-original" id="show-skill-original"><label for="show-skill-original"></label>
@@ -1562,7 +1555,7 @@ const teamsCount = 1;
 		</form>
 	</dialog>
 
-	<svg width="0" height="0">
+	<!-- <svg width="0" height="0">
 		<defs>
 			<linearGradient id="gradient-active-skill" x1="0" x2="0" y1="0" y2="1">
 				<stop offset="25%" stop-color="white" />
@@ -1576,7 +1569,18 @@ const teamsCount = 1;
 				<stop offset="25%" stop-color="#FFFF99" />
 				<stop offset="80%" stop-color="#EE7744" />
 			</linearGradient>
+			<filter id="text-stroke" x="-50%" y="-50%" width="200%" height="200%" name="inset-shadow">
+				<feComponentTransfer in="SourceAlpha">
+					<feFuncA tableValues="0 1" type="table"/>
+				</feComponentTransfer>
+				<feMorphology operator="dilate" radius="1" />
+				<feComposite in2="SourceAlpha" operator="out" result="offsetblur"/>
+				<feMerge>
+					<feMergeNode in="SourceGraphic"/>
+					<feMergeNode in="offsetblur"/>
+				</feMerge>
+			</filter>
 		</defs>
-	</svg>
+	</svg> -->
 </body>
 </html>

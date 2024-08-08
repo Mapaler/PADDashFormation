@@ -4178,12 +4178,12 @@ function initialize() {
 	editBox.show = function() {
 		this.classList.remove(className_displayNone);
 		//解决SVG问题
-		const activeSkillTitle = skillBox.querySelector("#active-skill-title");
-		const evolvedSkillTitle = skillBox.querySelector("#evolved-skill-title");
-		const leaderSkillTitle = leaderSkillBox.querySelector("#leader-skill-title");
-		svgGradientTextLengthRestore(activeSkillTitle);
-		svgGradientTextLengthRestore(evolvedSkillTitle);
-		svgGradientTextLengthRestore(leaderSkillTitle);
+		// const activeSkillTitle = skillBox.querySelector("#active-skill-title");
+		// const evolvedSkillTitle = skillBox.querySelector("#evolved-skill-title");
+		// const leaderSkillTitle = leaderSkillBox.querySelector("#leader-skill-title");
+		// svgGradientTextLengthRestore(activeSkillTitle);
+		// svgGradientTextLengthRestore(evolvedSkillTitle);
+		// svgGradientTextLengthRestore(leaderSkillTitle);
 	};
 	editBox.hide = function() {
 		this.classList.add(className_displayNone);
@@ -7692,12 +7692,13 @@ function fastShowSkill(event) {
 	const s_cards = Cards.filter(card => card.activeSkillId === skillId || card.leaderSkillId === skillId); //搜索同技能怪物
 	showSearch(s_cards); //显示
 }
-function svgGradientTextLengthRestore(svg, force = false) {
-	if (!force && svg.width.baseVal.value > 0) return;
-	const text = svg.querySelector("text");
-	const rect = text.getBoundingClientRect();
-	svg.width.baseVal.value = rect.width;
-}
+// function svgGradientTextLengthRestore(svg, force = false) {
+// 	if (!force && svg.width.baseVal.value > 0) return;
+// 	const text = svg.querySelector("text");
+// 	const rect = text.getBoundingClientRect();
+// 	console.log(svg, rect.width)
+// 	svg.width.baseVal.value = rect.width;
+// }
 function localisation($tra) {
 	if (!$tra) return;
 	document.title = $tra.webpage_title;
@@ -7706,15 +7707,15 @@ function localisation($tra) {
 	formationBox.querySelector(".title-box .title-display").setAttribute("placeholder",$tra.title_blank);
 	formationBox.querySelector(".detail-box .detail-code").placeholder = $tra.detail_blank;
 	formationBox.querySelector(".detail-box .detail-display").setAttribute("placeholder",$tra.detail_blank);
-	gradientTextInit(editBox.querySelector("#active-skill-title"), $tra.active_skill_title);
-	gradientTextInit(editBox.querySelector("#evolved-skill-title"), $tra.evolved_skill_title);
-	gradientTextInit(editBox.querySelector("#leader-skill-title"), $tra.leader_skill_title);
-	function gradientTextInit(svg, str) {
-		const text = svg.querySelector("text");
-		text.textContent = str;
-		const rect = text.getBoundingClientRect();
-		svg.width.baseVal.value = rect.width;
-	}
+	// gradientTextInit(editBox.querySelector("#active-skill-title"), $tra.active_skill_title);
+	// gradientTextInit(editBox.querySelector("#evolved-skill-title"), $tra.evolved_skill_title);
+	// gradientTextInit(editBox.querySelector("#leader-skill-title"), $tra.leader_skill_title);
+	// function gradientTextInit(svg, str) {
+	// 	const text = svg.querySelector("text");
+	// 	text.textContent = str;
+	// 	const rect = text.getBoundingClientRect();
+	// 	svg.width.baseVal.value = rect.width;
+	// }
 	const s_sortList = editBox.querySelector(".search-box .sort-div .sort-list");
 	const sortOptions = Array.from(s_sortList.options);
 	sortOptions.forEach(opt => {

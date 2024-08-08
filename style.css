@@ -3098,18 +3098,46 @@ input[disabled]+.awoken-icon:active,
 	stroke-width: 2px; stroke: black; paint-order: stroke;
 	text-shadow: none;
 }
-.skill-title .type-title::after{
-	-webkit-background-clip: text;
-	background-clip: text;
-	color: transparent;
-	text-shadow: none;
-	position: absolute;
-	left: 5px;
+
+.evo-panel-left .evo-type,
+.skill-title .type-title
+{
+	display: grid;
+	font-family: var(--game-font-family);
+	font-size: 15px;
+	line-height: 15px;
+	padding: 4px 0;
 }
-.skill-title .type-title::before{
+
+:where(
+	.skill-title .type-title,
+	.evo-panel-left .evo-type,
+)::after,
+:where(
+	.skill-title .type-title,
+	.evo-panel-left .evo-type,
+)::before{
+	grid-area: 1 / 1;
 	text-shadow: none;
+}
+
+:where(
+	.skill-title .type-title,
+	.evo-panel-left .evo-type,
+)::after{
+	color: transparent;
+	-webkit-background-clip: text; /*垃圾Chrome，不支持无前缀的*/
+	background-clip: text;
+	/*filter: url(#text-stroke);*/
+}
+
+:where(
+	.skill-title .type-title,
+	.evo-panel-left .evo-type,
+)::before{
 	-webkit-text-stroke: 3px black;
 }
+
 /* 主动技能 */
 .row-mon-skill .type-title::after
 {
@@ -3927,31 +3955,7 @@ table .orb-icon
 
 }
 
-.evo-panel-left .evo-type{
-	display: grid;
-	font-family: var(--game-font-family);
-	font-size: 15px;
-	line-height: 15px;
-	padding: 4px 0;
-}
-.evo-panel-left .evo-type::after,
-.evo-panel-left .evo-type::before{
-	grid-area: 1 / 1;
-}
 
-.evo-panel-left .evo-type::after
-{
-	-webkit-background-clip: text; /*垃圾Chrome，不支持无前缀的*/
-	background-clip: text;
-	color: transparent;
-}
-
-.evo-panel-left .evo-type::before
-{
-	/*text-shadow: black 1px 1px 0,black -1px 1px 0,black 1px -1px 0,black -1px -1px 0;*/
-	-webkit-text-stroke: 3px black; /*非W3C标准，但都支持*/
-	text-shadow: 0 3px 2px black;
-}
 
 #default-level {
 	width: 50px;
