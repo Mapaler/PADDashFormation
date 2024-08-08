@@ -354,8 +354,9 @@ input[type="checkbox"].switch-ipt+label::after{
 	vertical-align: middle;
 }
 input[type="checkbox"].switch-ipt+label::before{
-	vertical-align: middle;
 	content: "";
+
+	vertical-align: middle;
 	display: inline-block;
 	width: 2em;
 	height: 1.1em;
@@ -1761,20 +1762,18 @@ label[for="search-string"] {
 	content: "\f061";
 	font-family: var(--icon-font-family);
 }
-.edit-box .setting-box .row-mon-id .unable-monster{
+.setting-box .row-mon-id .unable-monster{
 	pointer-events: none;
-	opacity: 0.5;
-}
-.edit-box .setting-box .row-mon-id .unable-monster .monster{
 	box-sizing: border-box;
-	outline: 5px solid red;
-	border-radius: 10px;
+	border-radius: 5px;
+	outline: 5px ridge yellowgreen;
 	overflow: hidden;
+	transform: scale(0.9);
 }
-.edit-box .setting-box .row-mon-id .unable-monster .id{
-	display: none;
+.setting-box .row-mon-id .unable-monster .monster{
+	filter: brightness(0.5);
 }
-.edit-box .setting-box .row-mon-id .search-button{
+.setting-box .row-mon-id .search-button{
 	width: 100%;
 	height: 40px;
 	font-size: 25px;
