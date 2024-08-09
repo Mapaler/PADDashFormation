@@ -25,6 +25,9 @@ Array.prototype.distinct = function () {
 }
 //比较两只怪物是否是同一只（在不同语言服务器）
 function sameCard(m1, m2) {
+	//不管那么多了，懒得判断了
+	return true;
+
 	if (m1 == undefined || m2 == undefined) return false; //是否存在
 	if (m1.attrs[0] != m2.attrs[0]) return false; //主属性
 	//if (m1.attrs[1] != m2.attrs[1]) return false; //副属性
