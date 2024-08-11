@@ -3997,12 +3997,13 @@ function initialize() {
 
 		//给队伍觉醒效果里面的觉醒按钮增加高亮功能
 		const teamAwokenEffect = teamBigBox.querySelector(".team-awoken-effect");
-		const akIcons = teamAwokenEffect.querySelectorAll(".awoken-icon");
-		console.debug(akIcons)
-		akIcons.forEach(icon=>{
-			icon.onmouseenter = highlightAwokenMemberForIcon;
-			icon.onmouseleave = removeAllHighlightOnAwokenMenber;
-		});
+		if (teamAwokenEffect) {
+			const akIcons = teamAwokenEffect.querySelectorAll(".awoken-icon");
+			akIcons.forEach(icon=>{
+				icon.onmouseenter = highlightAwokenMemberForIcon;
+				icon.onmouseleave = removeAllHighlightOnAwokenMenber;
+			});
+		}
 	});
 
 	//显示HP的详细值
