@@ -634,17 +634,18 @@ body.block-width-7 .formation-box{
 	border: 3px black solid;
 }
 .monster.delay::before{
-	width: 94px;
-	height: 94px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
 	color: black;
 	font-size: 30px;
-	line-height: 47px;
 	text-align: center;
 	font-weight: bold;
 	/*content: "应 对\A威 吓";*/
 	font-family: var(--font-family);
 	white-space: pre-wrap;
-	display: inline-block;
 }
 /*怪物属性*/
 .monster .attrs {
@@ -1769,9 +1770,6 @@ label[for="search-string"] {
 	outline: 5px ridge yellowgreen;
 	overflow: hidden;
 	transform: scale(0.9);
-}
-.setting-box .row-mon-id .unable-monster .monster{
-	filter: brightness(0.5);
 }
 .setting-box .row-mon-id .search-button{
 	width: 100%;

@@ -1,6 +1,6 @@
 @charset "utf-8";
 .monster.delay::before{
-	content: "Prevent\A Delay";
+	content: "Delay\A Leeway";
 	font-size: 22px;
 }
 .monster .level.max::after{
@@ -110,22 +110,16 @@ label[for="merge-skill"]::after{
 }
 
 .edit-box .button-box .button-null::after{
-	content: "Leave a blank";
+	content: "Set a Blank";
 }
 .edit-box .button-box .button-delay::after{
-	content: "Prevent Delay";
+	content: "Delay Leeway";
 }
 .edit-box .button-box .button-cancel::after{
 	content: "Cancel";
 }
 .edit-box .button-box .button-done::after{
 	content: "Done";
-}
-.edit-box .button-box .button-null,
-.edit-box .button-box .button-delay,
-.edit-box .button-box .button-cancel,
-.edit-box .button-box .button-done{
-	font-size: 15px;
 }
 .edit-box .button-box .button-done.cant-assist::after{
 	content: "Can't be Assist";
@@ -215,7 +209,7 @@ label[for="screenshot-transparent"]::after{
 	content: "Swap Team";
 }
 #lbl-henshin-change::after{
-	content: "Changes";
+	content: "Transform";
 }
 #btn-remove-assist::after{
 	content: "Remove Assist";
