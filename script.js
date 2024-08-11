@@ -3994,6 +3994,15 @@ function initialize() {
 			hpDetailDialog.initialing(this.reduceAttrRangesWithShieldAwoken, this.reduceAttrRanges, this.tHP, this.tHPNoAwoken);
 			hpDetailDialog.show();
 		}
+
+		//给队伍觉醒效果里面的觉醒按钮增加高亮功能
+		const teamAwokenEffect = teamBigBox.querySelector(".team-awoken-effect");
+		const akIcons = teamAwokenEffect.querySelectorAll(".awoken-icon");
+		console.debug(akIcons)
+		akIcons.forEach(icon=>{
+			icon.onmouseenter = highlightAwokenMemberForIcon;
+			icon.onmouseleave = removeAllHighlightOnAwokenMenber;
+		});
 	});
 
 	//显示HP的详细值
@@ -5687,6 +5696,8 @@ function initialize() {
 		editBox.hide();
 	};
 
+
+
 	//语言选择
 	langSelectDom.onchange = function() {
 		createNewUrl({ "language": this.value });
@@ -7079,6 +7090,38 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 		targetValue.setAttribute(dataAttrName, count * 5);
 	}
 }
+function highlightAwokenMember(inputAwoken, teamDom) {
+	if (!teamDom) return; //每次只生效一个队伍，没有目标队伍就退出
+	const akId = (icon=>{
+		if (Number.isInteger(icon)) {
+			return icon;
+		} else if (icon instanceof HTMLElement && icon.hasAttribute("data-awoken-icon")) {
+			return parseInt(icon.getAttribute("data-awoken-icon"), 10);
+		} else {
+			throw new TypeError("输入的不是 整数 或者含 data-awoken-icon 的 HTML 元素");
+		}
+	})(inputAwoken);
+	const eqak = equivalent_awoken.find(obj=>akId === obj.big || akId === obj.small);
+
+	const akIcons = [...teamDom.querySelectorAll(":where(.team-member-awoken,.team-assist-awoken) .awoken-icon")];
+	akIcons.filter(icon=>{
+		const iconId = parseInt(icon?.dataset?.awokenIcon, 10);
+		return eqak ? (iconId === eqak.big || iconId === eqak.small) : iconId === akId;
+	})
+	.forEach(icon=>icon.classList.add("hightlight"));
+}
+function highlightAwokenMemberForIcon(event) {
+	const teamBigBoxs = [...formationBox.querySelectorAll(".teams .team-bigbox")];
+	const teamBigBox = teamBigBoxs.find(box=>box.contains(this));
+	highlightAwokenMember(this, teamBigBox);
+}
+function removeAllHighlightOnAwokenMenber() {
+	const teamBigBoxs = [...formationBox.querySelectorAll(".teams .team-bigbox")];
+	teamBigBoxs.forEach(teamDom=>{
+		const akIcons = [...teamDom.querySelectorAll(":where(.team-member-awoken,.team-assist-awoken) .awoken-icon")];
+		akIcons.forEach(icon=>icon.classList.remove("hightlight"));
+	});
+}
 //刷新队伍觉醒统计
 function refreshTeamAwokenCount(awokenDom, team) {
 	let fragment = document.createDocumentFragment(); //创建节点用的临时空间
@@ -7108,6 +7151,10 @@ function refreshTeamAwokenCount(awokenDom, team) {
 		const span = li.appendChild(document.createElement("span"));
 		span.className = "count";
 		span.textContent = totalNum;
+
+		icon.onmouseenter = highlightAwokenMemberForIcon;
+		icon.onmouseleave = removeAllHighlightOnAwokenMenber;
+
 		fragment.append(li);
 	});
 

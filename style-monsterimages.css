@@ -685,6 +685,30 @@
 	background-image: url(images/awoken.png);
 	background-position-x: 0;
 }
+@keyframes hightlight-animate{
+	from {
+		outline-offset: 0;
+		outline-color: red;
+	}
+	to {
+		outline-offset: 5px;
+		outline-color: yellow;
+	}
+}
+.awoken-icon.hightlight
+{
+	border-radius: 5px;
+	outline-style: solid;
+	outline-width: 5px;
+	outline-offset: 2px;
+	outline-color: yellow;
+	z-index: 2;
+	animation-name: hightlight-animate;
+	animation-duration: 0.2s;
+	animation-timing-function: linear;
+	animation-direction: alternate-reverse;
+	animation-iteration-count: infinite;
+}
 .awoken-icon[data-awoken-icon='0']{/*问号*/
 	background-position-y:calc(-32px * 0);
 }
