@@ -3998,12 +3998,31 @@ function initialize() {
 		//给队伍觉醒效果里面的觉醒按钮增加高亮功能
 		const teamAwokenEffect = teamBigBox.querySelector(".team-awoken-effect");
 		if (teamAwokenEffect) {
-			const akIcons = teamAwokenEffect.querySelectorAll(".awoken-icon");
+			const t = document.body.querySelector('#template-team-awoken-effect');
+			const clone = document.importNode(t.content, true);
+
+			const akIcons = clone.querySelectorAll(".awoken-icon");
 			akIcons.forEach(icon=>{
 				icon.onmouseenter = highlightAwokenMemberForIcon;
 				icon.onmouseleave = removeAllHighlightOnAwokenMenber;
 			});
+
+			teamAwokenEffect.appendChild(clone);
 		}
+
+		// //给队伍觉醒效果里面增加主动技能点亮图标
+		// if (teamAwokenEffect) {
+		// 	const t = document.body.querySelector('#template-team-active-skill-kind');
+		// 	const clone = document.importNode(t.content, true);
+
+		// 	const akIcons = clone.querySelectorAll(".awoken-icon");
+		// 	akIcons.forEach(icon=>{
+		// 		icon.onmouseenter = highlightAwokenMemberForIcon;
+		// 		icon.onmouseleave = removeAllHighlightOnAwokenMenber;
+		// 	});
+
+		// 	teamAwokenEffect.appendChild(clone);
+		// }
 	});
 
 	//显示HP的详细值
@@ -6710,30 +6729,33 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	
 	//颜色盾
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"4\"]")) {
-		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		const awokens = Array.from(targetIcon.parentElement.querySelectorAll(".awoken-icon"));
 		const teamLatents = members.flatMap(m=>m.latent); //因为盾是固定值，所以直接平面化所有的潜觉
-		for (let oi=0; oi < orbs.length; oi++) {
-			let orb = orbs[oi];
-			const thisAwokenNum = awokenCountInTeam(team, 4+oi, solo, teamsCount);
-			let prob = thisAwokenNum * 0.07 //普通觉醒7%
-					 + teamLatents.filter(l=>l===6+oi).length * 0.01  //小潜觉 1%
-					 + teamLatents.filter(l=>l===32+oi).length * 0.03; //大潜觉 3%
-			orb.setAttribute(dataAttrName,Math.round(Math.min(prob,1)*100));
+
+		for (let ai=0; ai < awokens.length; ai++) {
+			const awoken = awokens[ai];
+			const ak = parseInt(awoken.dataset.awokenIcon, 10);
+			const thisAwokenNum = awokenCountInTeam(team, ak, solo, teamsCount);
+			const prob = thisAwokenNum * 0.07 //普通觉醒7%
+					 + teamLatents.filter(l=>l===2+ak).length * 0.01  //小潜觉 1%
+					 + teamLatents.filter(l=>l===28+ak).length * 0.03; //大潜觉 3%
+			awoken.setAttribute(dataAttrName,Math.round(Math.min(prob,1)*100));
 		}
 	}
 
 	//掉+珠
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"14\"]")) {
-		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		const awokens = Array.from(targetIcon.parentElement.querySelectorAll(".awoken-icon"));
 
-		for (let oi=0; oi < orbs.length; oi++) {
-			let orb = orbs[oi];
-			const equivalentAwoken = equivalent_awoken.find(eak => eak.small === (oi < 5 ? 14+oi : 29));
+		for (let ai=0; ai < awokens.length; ai++) {
+			const awoken = awokens[ai];
+			const ak = parseInt(awoken.dataset.awokenIcon, 10);
+			const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ak);
 			const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 			awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
-			let prob = thisAwokenNum * 0.2; //普通觉醒20%
-			orb.setAttribute(dataAttrName,Math.round(prob*100));
-			orb.classList.toggle("gt100", prob > 1);
+			const prob = thisAwokenNum * 0.2; //普通觉醒20%
+			awoken.setAttribute(dataAttrName,Math.round(prob*100));
+			awoken.classList.toggle("gt100", prob > 1);
 		}
 	}
 
@@ -6817,41 +6839,23 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 	}
 	//云
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"54\"]")) {
-		const targetValue = targetIcon.parentElement.querySelector(".prob");
-		const targetMeter = targetIcon.parentElement.querySelector("meter");
 		const thisAwokenNum = awokenCountInTeam(team, 54, solo, teamsCount);
-		let prob = thisAwokenNum / 1;
-		const percentValue = Math.round(Math.min(prob,1)*100);
-		targetValue.setAttribute(dataAttrName, percentValue);
-		targetMeter.value = percentValue;
+		targetIcon.classList.toggle("disabled", thisAwokenNum === 0);
 	}
 	//封条
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"55\"]")) {
-		const targetValue = targetIcon.parentElement.querySelector(".prob");
-		const targetMeter = targetIcon.parentElement.querySelector("meter");
 		const thisAwokenNum = awokenCountInTeam(team, 55, solo, teamsCount);
-		let prob = thisAwokenNum / 1;
-		const percentValue = Math.round(Math.min(prob,1)*100);
-		targetValue.setAttribute(dataAttrName, percentValue);
-		targetMeter.value = percentValue;
+		targetIcon.classList.toggle("disabled", thisAwokenNum === 0);
 	}
 	//掉废
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"14\"]")) {
-		const targetValue = targetIcon.parentElement.querySelector(".prob");
-		const targetMeter = targetIcon.parentElement.querySelector("meter");
-		let prob = members.some(member=>member?.latent?.includes(14)) ? 1 : 0;
-		const percentValue = Math.round(Math.min(prob,1)*100);
-		targetValue.setAttribute(dataAttrName, percentValue);
-		targetMeter.value = percentValue;
+		const has = members.some(member=>member?.latent?.includes(14));
+		targetIcon.classList.toggle("disabled", !has);
 	}
 	//掉毒
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"15\"]")) {
-		const targetValue = targetIcon.parentElement.querySelector(".prob");
-		const targetMeter = targetIcon.parentElement.querySelector("meter");
-		let prob = members.some(member=>member?.latent?.includes(15)) ? 1 : 0;
-		const percentValue = Math.round(Math.min(prob,1)*100);
-		targetValue.setAttribute(dataAttrName, percentValue);
-		targetMeter.value = percentValue;
+		const has = members.some(member=>member?.latent?.includes(15));
+		targetIcon.classList.toggle("disabled", !has);
 	}
 	//心横解转转
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"40\"]")) {

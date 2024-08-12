@@ -76,6 +76,7 @@ details>summary:hover {
 }
 .disabled {
 	cursor: not-allowed;
+	filter: grayscale(0.75);
 	pointer-events: none;
 	opacity: 0.5;
 }
@@ -2343,12 +2344,13 @@ input[disabled]+.awoken-icon:active,
 	text-align: left;
 }
 
-.awoken-icon::before
+.awoken-icon::before,
+.awoken-icon::after
 {
 	display: block;
 	position: absolute;
-	line-height: 18px;
-	font-size: 18px;
+	line-height: 1.2em;
+	font-size: 1.2em;
 	right: 0;
 	bottom: 0;
 	-webkit-text-stroke: 1px black;
@@ -3329,7 +3331,9 @@ a.series-search::before {
 	color: #c7ff2b;
 	text-shadow: black 1px 1px 1px;
 }
-/*.team-awoken-effect .count[data-value]::before,*/
+.team-awoken-effect .count[data-value][data-prefix]::before {
+	content: attr(data-prefix);
+}
 .team-awoken-effect .orb-list .orb[data-value]::before
 {
 	content: "×";
@@ -3344,11 +3348,9 @@ a.series-search::before {
 {
 	content: attr(data-value);
 }
-.team-awoken-effect .prob[data-value]::after,
-.team-awoken-effect .orb-list .prob[data-value]::after
+.team-awoken-effect .prob[data-value]::after
 {
 	content: "%";
-	font-size: 0.75em;
 }
 .team-awoken-effect .latent-icon {
 	display: inline-flex;
@@ -3407,24 +3409,45 @@ a.series-search::before {
 	align-items: center;
 	justify-content: center;
 }
-.team-awoken-effect .orb.prob.gt100 /*大于100*/{
+.team-awoken-effect .orb-list .orb::before,
+.team-awoken-effect .orb-list .orb::after
+{
+	position: relative;
+}
+
+.team-awoken-effect .prob.gt100 /*大于100*/{
 	color: #c7ff2b;
 	text-shadow: black 1px 1px 1px;
 }
 
-.team-awoken-effect .orb-list .orb:not([data-value]),
-.team-awoken-effect .orb-list .orb[data-value="0"]{
-	filter: grayscale(100%);
+.team-awoken-effect icon.prob {
+	justify-content: center;
+	align-items: end;
+	line-height: 0.75em;
+	font-size: 0.75em;
 }
-.team-awoken-effect .orb-list .orb::before,
-.team-awoken-effect .orb-list .orb::after
-{
-	width: unset;
-	height: unset;
+.team-awoken-effect .prob::before,
+.team-awoken-effect .prob::after {
+	display: inline;
 	position: relative;
+	line-height: 1em;
+	font-size: 1em;
+	margin-bottom: 5px;
 }
+
+.team-awoken-effect .orb-list .orb:not([data-value]),
+.team-awoken-effect .orb-list .orb[data-value="0"],
+.team-awoken-effect .prob:not([data-value]),
+.team-awoken-effect .prob[data-value="0"],
+.team-awoken-effect .disabled {
+	filter: brightness(50%) grayscale(0.7);
+	opacity: 0.75;
+}
+
 .team-awoken-effect .orb-list .orb[data-value="0"]::before,
-.team-awoken-effect .orb-list .orb[data-value="0"]::after {
+.team-awoken-effect .orb-list .orb[data-value="0"]::after,
+.team-awoken-effect icon.prob[data-value="0"]::before,
+.team-awoken-effect icon.prob[data-value="0"]::after {
 	display: none;
 }
 

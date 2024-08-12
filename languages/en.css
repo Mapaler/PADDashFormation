@@ -131,10 +131,10 @@ label[for="merge-skill"]::after{
 	content: "Team Awoken Effect:";
 }
 .team-awoken::before{
-	content: "Team Awoken:";
+	content: "Team Awoken Count:";
 }
 .formation-awoken::before{
-	content: "Total Awoken:";
+	content: "Total Awoken Count:";
 }
 .type-name[data-type-name='4']::after{
 	content: "Dragon";
