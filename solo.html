@@ -1289,10 +1289,12 @@ const teamsCount = 1;
 					<ul class="orb-list"><li class="orb" data-orb-icon="0"></li><li class="orb" data-orb-icon="1"></li><li class="orb" data-orb-icon="2"></li><li class="orb" data-orb-icon="3"></li><li class="orb" data-orb-icon="4"></li></ul>
 				</li>
 				-->
-				<!--心横解转转-->
-				<li><icon class="latent-icon show-enabling-awokwn" data-latent-icon="40"></icon><span class="count" data-prefix="×"></span></li>
 				<!--竖心追解云封-->
-				<li><icon class="latent-icon show-enabling-awokwn" data-latent-icon="46"></icon><span class="count" data-prefix="×"></span></li>
+				<li style="grid-column: span 2;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="46"></icon><span class="count" data-prefix="×"></span></li>
+				<!--心横解转转-->
+				<li style="grid-column: span 2;"><icon class="latent-icon show-enabling-awokwn" data-latent-icon="40"></icon><span class="count" data-prefix="×"></span></li>
+				<!--回复-->
+				<li style="grid-column: span 2;"><icon class="awoken-icon" data-awoken-icon="9"></icon><span class="count" data-postfix=" HP"></span>
 				<!--竖心追破白盾-->
 				<li style="grid-column: span 2;">
 					<icon class="awoken-icon" data-awoken-icon="45"></icon><span class="count"></span>
@@ -1303,8 +1305,6 @@ const teamsCount = 1;
 					<icon class="awoken-icon" data-awoken-icon="50"></icon><span class="count"></span>
 					<icon class="meter" data-icon-type="breaking-shield"></icon><span class="count" data-postfix="%"></span>
 				</li>
-				<!--回复-->
-				<li style="grid-column: span 2;"><icon class="awoken-icon" data-awoken-icon="9"></icon><span class="count" data-postfix=" HP"></span>
 				<!--L心盾-->
 				<li><icon class="awoken-icon" data-awoken-icon="59"></icon><icon class="icon-skill" data-icon-type="reduce-damage"></icon><span class="count" data-postfix="%"></span></li>
 			</ul>
@@ -1312,12 +1312,23 @@ const teamsCount = 1;
 
 		<template id="template-team-active-skill-kind">
 			<ul>
+				<!--溜-->
+				<li>
+					<icon class="icon-skill boost-incr" data-icon-type="skill-boost"></icon>
+					<icon class="icon-skill" data-icon-type="unbind-normal"></icon>
+					<icon class="icon-skill" data-icon-type="unbind-awakenings"></icon>
+					<icon class="icon-skill" data-icon-type="unbind-matches"></icon>
+				</li>
 				<!--破吸-->
 				<li>
 					<icon class="icon-skill" data-icon-type="attr-absorb"></icon>
 					<icon class="icon-skill" data-icon-type="combo-absorb"></icon>
 					<icon class="icon-skill" data-icon-type="damage-absorb"></icon>
 					<icon class="icon-skill" data-icon-type="damage-void"></icon>
+				</li>
+				<!--溜-->
+				<li>
+					<icon class="icon-skill" data-icon-type="reduce-damage"></icon>
 				</li>
 			</ul>
 		</template>
