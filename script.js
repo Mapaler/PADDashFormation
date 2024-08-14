@@ -4276,17 +4276,21 @@ function initialize() {
 			return args.every(arg=>cardTags.some(str=>str.includes(arg)));
 		});
 	}
-	function copyString(input)
-	{
-		input.focus(); //设input为焦点
-		input.select(); //选择全部
-		if (navigator?.clipboard?.writeText) { //优先使用新API
-			navigator.clipboard.writeText(input.value);
+	const copyInputString = (function () { //惰性函数，根据浏览器支持情况只判断一次
+		if (navigator.clipboard) { //优先使用新API
+			return (input)=>{
+				input.focus(); //设input为焦点
+				input.select(); //选择全部
+				navigator.clipboard.writeText(input.value);
+			}
 		} else {
-			document.execCommand('copy');
+			return (input)=>{
+				input.focus(); //设input为焦点
+				input.select(); //选择全部
+				document.execCommand('copy');
+			}
 		}
-		//input.blur(); //取消焦点
-	}
+	})();
 	stringSearchDialog.initialing = function(originalStrArr = [], additionalStrArr = []) {
 		//清除空字符串
 		originalStrArr = originalStrArr.filter(Boolean);
@@ -4294,7 +4298,7 @@ function initialize() {
 		const stringSearchContent = this.querySelector(".dialog-content");
 		const fragment = document.createDocumentFragment();
 		function copyLeft() {
-			copyString(this.parentElement.querySelector(".string-value"));
+			copyInputString(this.parentElement.querySelector(".string-value"));
 		}
 		function searchLeft() {
 			const oStr = this.parentElement.querySelector(".string-value")?.value;
@@ -4910,7 +4914,7 @@ function initialize() {
 		modal ? this.showModal() : this.show();
 	}
 	showAnyStringDialog.querySelector('.string-copy').onclick = function(){
-		copyString(showAnyStringDialogText);
+		copyInputString(showAnyStringDialogText);
 	}
 
 	function returnCheckedInput(ipt) {
