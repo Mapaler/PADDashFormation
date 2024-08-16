@@ -9774,6 +9774,18 @@ const cachesMap = new Map([
 		"abd4e02d2144a49d3e34d8f071927f6c"
 	],
 	[
+		"sound/voice/ja/padv3037.wav",
+		"3d0346c5707ea8bc13c981ad04091abc"
+	],
+	[
+		"sound/voice/ja/padv3038.wav",
+		"369fe6558d944f48187ffca33cdbb384"
+	],
+	[
+		"sound/voice/ja/padv3039.wav",
+		"1a07a43b5b936b546acb13a9656e1b0c"
+	],
+	[
 		"sound/voice/ja/padv304.wav",
 		"f60ecb6c36cc8cc3c4835bcc7068d741"
 	],
