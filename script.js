@@ -1084,6 +1084,7 @@ Formation.pdcBadgeMap = [
 	{pdf:30,pdc:28}, //花嫁
 	{pdf:31,pdc:29}, //叛逆的鲁鲁修
 	{pdf:32,pdc:30}, //漫威
+	{pdf:33,pdc:31}, //泳装
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -1398,7 +1399,7 @@ Formation.daddbBadgeMap = [
 	{pdf:23,daddb:20}, //除武器，10SB(S+×5)
 	{pdf:PAD_PASS_BADGE,daddb:18}, //月卡
 ];
-//paddb的潜觉对应数字
+//daddb的潜觉对应数字
 Formation.daddbLatentMap = [
 	{pdf:1,daddb:[0,1]}, //HP
 	{pdf:2,daddb:[0,2]}, //攻击
@@ -7460,6 +7461,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 30: return member.card.gachaIds.includes(6) ? 1.15 : 1; //花嫁
 				case 31: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
 				case 32: return member.card.collabId === 96 ? 1.15 : 1; //漫威
+				case 33: return member.card.gachaIds.includes(9) ? 1.15 : 1; //泳装
 				default: return 1;
 			}
 		}

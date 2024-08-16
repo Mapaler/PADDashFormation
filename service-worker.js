@@ -459,11 +459,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_115.PNG",
-		"bfdd67f3e4f7ce7dce09ba98828ac725"
+		"9acf4cda3de50366a22ed18759aa25ea"
 	],
 	[
 		"images/cards_ja/CARDS_116.PNG",
-		"5d31864d71bf9e4b0047963696be038a"
+		"350e2a8953aa750096d18786f9aa56ce"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -33483,7 +33483,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"9ff0ee763405b2910d9f229b3f623945"
+		"79bdff71e5aea2579763b7309a6cabe5"
 	],
 	[
 		"script-skill-parser.js",
@@ -33495,7 +33495,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"366f359512c995f514a23e5fbb28f9da"
+		"efc4df4ad3c4471c02c20748bec3884a"
 	],
 	[
 		"solo.html",
@@ -33587,7 +33587,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"79d6928074e7d6815799ca6120a00082"
+		"3c22bdef7949e6316853612c9b954b4f"
 	],
 	[
 		"images/brown-button.svg",
