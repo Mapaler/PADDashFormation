@@ -3366,23 +3366,31 @@ a.series-search::before {
 	border-width: 2px;
 	border-radius: 5px;
 	box-shadow: 0 1px 3px black, 0 0 2px #ddd inset;
-	background-color: #222;
 	outline-color: rgba(0,0,0,0.8);
 	outline-style: solid;
 	outline-width: 1px;
 	display: flex;
 	align-items: center;
 	padding: 1px 2px;
+	background-color: #222;
 	background-image: none;
 }
-.team-awoken-effect .meter[data-icon-type="breaking-shield"]::before {
+.team-awoken-effect .meter[data-icon-type="breaking-shield"]::before,
+.team-awoken-effect .meter[data-icon-type="breaking-shield"]::after
+{
 	box-sizing: border-box;
 	content: "";
 	display: block;
-	width: calc(100% - var(--percent));
 	height: 100%;
 	border: none;
+}
+.team-awoken-effect .meter[data-icon-type="breaking-shield"]::before {
+	width: calc(100% - var(--percent));
 	background-image: linear-gradient(#BDF, white);
+}
+.team-awoken-effect .meter[data-icon-type="breaking-shield"]::after {
+	width: var(--percent);
+	background-color: darkred;
 }
 /*.team-awoken-effect .latent-icon::before{
 	opacity: 0.99;
