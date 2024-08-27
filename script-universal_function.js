@@ -820,10 +820,11 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	//地下城强化
 	const dge = formation.dungeonEnchance;
 	const dgeRate = [dge.rate.hp, dge.rate.atk, dge.rate.rcv];
-	const isDge = (memberAttrsTypesWithWeapon=>{
+	const isDge = (()=>{
+		const memberAttrsTypesWithWeapon = typeof member.getAttrsTypesWithWeapon === "function" ? member.getAttrsTypesWithWeapon(assist) : memberCard;
 		const baseBool = dge.rarities.includes(memberCard.rarity) //符合星级
-		|| dge?.collabs?.includes(memberCard.collabId) //符合合作
-		||dge?.gachas?.some(n=>memberCard.gachaIds.includes(n)); //符合抽蛋桶
+			|| dge?.collabs?.includes(memberCard.collabId) //符合合作
+			|| dge?.gachas?.some(n=>memberCard.gachaIds.includes(n)); //符合抽蛋桶
 		return {
 			awoken: baseBool //计算武器觉醒
 				|| memberAttrsTypesWithWeapon.attrs.some(attr=>dge.attrs.includes(attr)) //符合属性
@@ -834,7 +835,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 				|| memberCard.types.some(type=>dge.types.includes(type)) //符合类型
 				,
 		};
-	})(member.getAttrsTypesWithWeapon(assist));
+	})();
 
 	//地下城阴阳加护强化
 	if (dge.benefit) { //当存在加护
