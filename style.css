@@ -1432,10 +1432,14 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	box-shadow:inset 1px 2px 1px -1px rgba(0,0,0,0.5);
 }
 .latent-icon[data-latent-icon]{
-	background-image: linear-gradient(#4499EE 33%,  #2277EE 80%);
+	/*background-image: linear-gradient(#4499EE 33%,  #2277EE 80%);
 	border-color: #CCEEFF;
-	box-shadow: 1px 1px 1px 0 black, inset 2px 2px 1px -1px black ;
+	box-shadow: 1px 1px 1px 0 black, inset 2px 2px 1px -1px black ;*/
+	border-image-source: url(images/icon-latent-bg.png);
+	border-image-slice: 5 5 6 5 fill;
+	border-image-width: 5px 5px 6px 5px;
 }
+
 /*队伍的潜觉*/
 .team-latents .latents{
 	width: var(--head-block-width);
@@ -3105,7 +3109,7 @@ input[disabled]+.awoken-icon:active,
 	font-family: var(--game-font-family);
 	font-size: 15px;
 	line-height: 15px;
-	padding: 4px 0;
+	padding: 4px;
 }
 
 :where(
