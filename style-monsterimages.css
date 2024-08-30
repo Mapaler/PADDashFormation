@@ -1114,6 +1114,9 @@
 .awoken-icon[data-awoken-icon='130']{/*熟成*/
 	background-position-y:calc(-32px * 130);
 }
+.awoken-icon[data-awoken-icon='131']{/*部位破坏*/
+	background-position-y:calc(-32px * 131);
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],
@@ -1356,6 +1359,14 @@
 )::before{
 	background-position-x: -32px;
 }
+
+/*v21.7 x3变x4*/
+body:not([data-game-source="ja"]) .latent-icon:where(
+	[data-latent-icon='49'],
+)::before{
+	background-position-x: -32px;
+}
+
 /* 队伍界面特殊的 三维潜觉 */
 .latent-ul-div .latent-ul .latent-icon[data-latent-icon='12']::before
 {
@@ -1440,6 +1451,29 @@
 {
 	background-position-x: calc(-32px * 2);
 }
+
+/*v21.7 废、毒有x1.5*/
+body[data-game-source="ja"] .level-super-break .latent-icon:where(
+	[data-latent-icon='14'],
+	[data-latent-icon='15'],
+)::after
+{
+	content: "";
+	margin-left: 3px;
+	background-position-x: calc(-32px * 1);
+	background-position-y: calc(-32px * 42);
+}
+/*v21.7 换队长、转换、云封、禁消有x1.8*/
+body[data-game-source="ja"] .level-super-break .latent-icon:where(
+	[data-latent-icon='13'],
+	[data-latent-icon='40'],
+	[data-latent-icon='41'],
+	[data-latent-icon='46'],
+)::after
+{
+	background-position-x: calc(-32px * 2);
+}
+
 
 /* 徽章背景 */
 .badge{
@@ -1690,6 +1724,13 @@
 /* 美服不一样的徽章 */
 [data-game-source="en"] .badge:where(
 	[data-badge-icon='26'], /*高达变成本家*/
+)::before {
+	background-position-x: calc(-36px * 1);
+}
+
+/*v21.7 SB+10变+20*/
+body:not([data-game-source="ja"]) .badge:where(
+	[data-badge-icon='23'],
 )::before {
 	background-position-x: calc(-36px * 1);
 }

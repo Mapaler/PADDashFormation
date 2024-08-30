@@ -1674,8 +1674,8 @@ function countTeamSB(team, solo) {
 			case 7: //SB
 				sbn += 2;
 				break;
-			case 23: //SB++ 辅助无效
-				sbn += 10;
+			case 23: //SB++ 辅助无效  v21.7 +10变+20
+				sbn += currentDataSource.code === "ja" ? 20 : 10;
 				break;
 		}
 	}
@@ -1712,7 +1712,7 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 	let moveTime = {
 		fixed: false,
 		duration: {
-			default: 5,
+			default: currentDataSource.code === "ja" ? 6 : 5, //  v21.7 +5变+6
 			leader: 0,
 			badge: 0,
 			awoken: 0,

@@ -33507,7 +33507,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"ab50928a604685c3c53033df1ca2f8f9"
+		"bcfc601369803bb7cc94f0c7c2d90cdd"
 	],
 	[
 		"script-custom_elements.js",
@@ -33515,7 +33515,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"79bdff71e5aea2579763b7309a6cabe5"
+		"83cf35668e6e90e02785ea5ee60a19dc"
 	],
 	[
 		"script-skill-parser.js",
@@ -33523,15 +33523,15 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"c1aa9336465c19f92f53d5a3086ece6f"
+		"c83d738d57f3bdccde0a7c00b98875a8"
 	],
 	[
 		"script.js",
-		"efc4df4ad3c4471c02c20748bec3884a"
+		"6dc8cc2b928c021a1f132ef59c65b009"
 	],
 	[
 		"solo.html",
-		"755dbcca9b0bca24d36b8b1f602fd214"
+		"19963ff492de222225334e82db0be495"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -33539,11 +33539,11 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"60ecff0fcbbb2af079b9ab5b91a58211"
+		"0eb7c72b64f5d21cafc16a01c9f33b85"
 	],
 	[
 		"style.css",
-		"fdfda02ae663324139844846459df489"
+		"3ede134e5181a445ec308f446dd46d3a"
 	],
 	[
 		"temp.js",
@@ -33551,7 +33551,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"374c82a640ba53a6431abe49673802b0"
+		"b6743f46751cda2059dda5b5e23eb2ca"
 	],
 	[
 		"languages/en.css",
@@ -33587,7 +33587,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.js",
-		"90e57f9e2d5c7a2d5325a642602dc282"
+		"01d21cbc97e43c62b72e45aaf3da33f4"
 	],
 	[
 		"languages/zh-hant.css",
@@ -33595,7 +33595,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.js",
-		"c38348b33d587f4a7a009c819642fc8c"
+		"b155fe6ad390f1ee581f487c6ee0dd5a"
 	],
 	[
 		"images/attrs.png",
@@ -33611,7 +33611,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"16fda1df8fa5518d7a90ff8d486eb62c"
+		"021f7d8042b82b7eb489edf8ea941a36"
 	],
 	[
 		"images/badge-bg.png",
@@ -33619,7 +33619,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"3c22bdef7949e6316853612c9b954b4f"
+		"ddff292e6d77e8a7a1e763a9119e0824"
 	],
 	[
 		"images/brown-button.svg",
@@ -33706,12 +33706,16 @@ const cachesMap = new Map([
 		"4995a8c58ffd96e37bfff733fdd344c7"
 	],
 	[
+		"images/icon-latent-bg.png",
+		"aa47c7785d4350c1629f419c8216872c"
+	],
+	[
 		"images/icon-latent-block-bg.svg",
 		"bc557a806c57eec5fcccf0ef5a072e19"
 	],
 	[
 		"images/icon-latent.png",
-		"9009258f55c4207a919dd3e3de94effb"
+		"e04bc59355d699bea78c729a15c4d0ae"
 	],
 	[
 		"images/icon-MP.png",
@@ -33767,7 +33771,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/core-js.min.js",
-		"581b364bd7de41a800c016497f460132"
+		"c54a2cfc5c515e908a81db4704fbe204"
 	],
 	[
 		"library/html2canvas.min.js",
@@ -33775,7 +33779,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/zxing.umd.min.js",
-		"e5b53f686f2beea4012dd076c6c93d81"
+		"bc4aee4e60193999c1917a1e14715007"
 	],
 	[
 		"library/jy4340132-aaa/adpcm.js",
