@@ -152,6 +152,7 @@ let localTranslating = {
 			board_size_change: tp`Board size changed to ${'icon'}${'size'}`,
 			remove_assist: tp`${'icon'}Remove this assist card (until end of dungeon)`,
 			prediction_falling: tp`${'icon'}Prediction of falling on board`,
+			play_voice: tp`Play another voice while using the skill ${'icon'}`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -553,7 +554,7 @@ const official_badge_sorting = [
 	  1, 22, 23,  2,  3,  4,  5,  6,
 	  7,  8,  9, 11, 17, 18, 19, 20,
 	 21, 10, 12, 13, 14, 24, 25, 26,
-	 27, 28, 29, 30, 31, 15, 16,
+	 27, 28, 29, 30, 31, 15, 16, 32,
 	PAD_PASS_BADGE,
 ]
 //官方的觉醒排列顺序
@@ -1254,11 +1255,22 @@ const specialSearchFunctions = (function() {
 	}
 	function gravity_Addition(card)
 	{
-		const searchTypeArray = [6, 161];
+		const searchTypeArray = [6, 161, 261];
 		const skill = getCardActiveSkill(card, searchTypeArray);
 		if (!skill) return;
 		const sk = skill.params;
-		return `${skill.type==6?"当前":"最大"}${sk[0]}%`;
+
+		const denominator = skill.type === 161 ? 
+			localTranslating.skill_parse.stats.maxhp() : 
+			localTranslating.skill_parse.stats.chp();
+		const percent = `${sk[0]}%`;
+		const target = skill.type === 261 ? 
+			localTranslating.skill_parse.target.enemy_one() : 
+			localTranslating.skill_parse.target.enemy_all();
+		
+		const fragment = document.createDocumentFragment();
+		//fragment.append(target, denominator, percent);
+		return [target, denominator, percent].nodeJoin(" ");
 	}
 	
 	function healImmediately_Rate(card)
@@ -3314,7 +3326,7 @@ const specialSearchFunctions = (function() {
 			{group:true,name:"Damage Enemy - Gravity",otLangName:{chs:"对敌直接伤害类-重力",cht:"對敵直接傷害類-重力"}, functions: [
 				{name:"Any",otLangName:{chs:"任意",cht:"任意"},
 					function:cards=>{
-						const searchTypeArray = [6, 161];
+						const searchTypeArray = [6, 161, 261];
 						return cards.filter(card=>{
 							const skill = getCardActiveSkill(card, searchTypeArray);
 							return skill;
@@ -3324,7 +3336,7 @@ const specialSearchFunctions = (function() {
 				},
 				{name:"Current HP",otLangName:{chs:"敌人当前血量",cht:"敵人當前血量"},
 					function:cards=>{
-						const searchTypeArray = [6];
+						const searchTypeArray = [6, 261];
 						return cards.filter(card=>{
 							const skill = getCardActiveSkill(card, searchTypeArray);
 							return skill;

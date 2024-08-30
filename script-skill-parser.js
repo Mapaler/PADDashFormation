@@ -476,11 +476,12 @@ const SkillKinds = {
 	SkillProviso: "skill-proviso",
 	ImpartAwakenings: "impart-awakenings",
 	ObstructOpponent: "obstruct-opponent",
-	IncreaseDamageCap: "increase-damage-cap",
+	IncreaseDamageCapacity: "increase-damage-cap",
 	BoardJammingStates: "board-jamming-states",
 	RemoveAssist: "remove-assist",
 	PredictionFalling: "prediction-falling",
 	BreakingShield: "breaking-shield",
+	PlayVoice: "play-voice",
 }
 
 function skillParser(skillId)
@@ -950,7 +951,7 @@ function delayActiveTurns(turns, ...skills) {
 	return skills.length ? { kind: SkillKinds.DelayActiveTurns, turns, skills } : null;
 }
 function damageEnemy(target, attr, damage) {
-	return { kind: SkillKinds.DamageEnemy, target: target, attr: attr, damage: damage };
+	return { kind: SkillKinds.DamageEnemy, target, attr, damage };
 }
 function vampire(attr, damageValue, healValue) {
 	return { kind: SkillKinds.Vampire, attr: attr, damage: damageValue, heal: healValue };
@@ -1018,8 +1019,8 @@ function evolvedSkills(loop, skills) {
 function changeAttr(target, attr) {
 	return { kind: SkillKinds.ChangeAttribute, target: target, attr: attr ?? 0 };
 }
-function gravity(value) {
-	return { kind: SkillKinds.Gravity, value: value };
+function gravity(value, target = "all") {
+	return { kind: SkillKinds.Gravity, value, target };
 }
 function voidEnemyBuff(buffs) {
 	return { kind: SkillKinds.VoidEnemyBuff, buffs: buffs };
@@ -1052,6 +1053,9 @@ function henshin(id, random = false) {
 		random: random
 	};
 }
+function skillPlayVoice(id) {
+	return { kind: SkillKinds.PlayVoice, id };
+}
 function voidPoison() { return { kind: SkillKinds.VoidPoison }; }
 function skillProviso(cond) { return { kind: SkillKinds.SkillProviso, cond: cond }; }
 function impartAwakenings(attrs, types, awakenings) {
@@ -1060,8 +1064,8 @@ function impartAwakenings(attrs, types, awakenings) {
 function obstructOpponent(typeName, pos, ids) {
 	return { kind: SkillKinds.ObstructOpponent, typeName: typeName, pos: pos, enemy_skills: ids };
 }
-function increaseDamageCap(cap, targets) {
-	return { kind: SkillKinds.IncreaseDamageCap, cap: cap, targets: targets};
+function increaseDamageCapacity(cap, targets) {
+	return { kind: SkillKinds.IncreaseDamageCapacity, cap: cap, targets: targets};
 }
 function boardJammingStates(state, posType, options) {
 	return { kind: SkillKinds.BoardJammingStates, state: state, posType: posType, ...options};
@@ -1632,7 +1636,7 @@ const skillObjectParsers = {
 		// const targetTypes = ["self","leader-self","leader-helper","sub-members"];
 		// const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
 		return activeTurns(turns,
-			increaseDamageCap(cap * 1e8, ["self"])
+			increaseDamageCapacity(cap * 1e8, ["self"])
 		);
 	},
 	[243](turns, attrs, hpPercent, probPercent) { //掉落荆棘珠
@@ -1667,10 +1671,10 @@ const skillObjectParsers = {
  		return powerUp(Bin.unflags(_2), Bin.unflags(_3), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('team-same-rarity', rarity)); 
 	},
 	[246](time, combo, cap) { //限定时间内转出多少C提高伤害上限
- 		return CTW(v.constant(time), c.combos(combo) , increaseDamageCap(cap * 1e8, ["self"]));
+ 		return CTW(v.constant(time), c.combos(combo) , increaseDamageCapacity(cap * 1e8, ["self"]));
 	},
 	[247](time, attr, min, cap) { //限定时间内转出多少色提高伤害上限
- 		return CTW(v.constant(time), c.attrs(Bin.unflags(attr), min) , increaseDamageCap(cap * 1e8, ["self"]));
+ 		return CTW(v.constant(time), c.attrs(Bin.unflags(attr), min) , increaseDamageCapacity(cap * 1e8, ["self"]));
 	},
 	[248](turns, ...ids) { //几回合后才生效的技能
 		return delayActiveTurns(turns,
@@ -1719,10 +1723,12 @@ const skillObjectParsers = {
 		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
 		const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
 		return activeTurns(turns,
-			increaseDamageCap(cap * 1e8, typeArr)
+			increaseDamageCapacity(cap * 1e8, typeArr)
 		);
 	},
 	[259](percent) { return breakingShield(v.xShield(percent)); },
+	[260](_, voiceId) { return skillPlayVoice(voiceId); },
+	[261](percent) { return gravity(v.xCHP(percent), 'single'); },
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -2125,10 +2131,11 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.Gravity: { //重力
+			let {value, target} = skill;
 			let dict = {
 				icon: createIcon(skill.kind),
-				target: tsp.target.enemy(),
-				value: renderValue(skill.value, { percent:true }),
+				target: target === 'all' ? tsp.target.enemy_all() : tsp.target.enemy_one(),
+				value: renderValue(value, { percent:true }),
 			};
 			frg.ap(tsp.skill.gravity(dict));
 			break;
@@ -2677,10 +2684,10 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.obstruct_opponent(dict));
 			break;
 		}
-		case SkillKinds.IncreaseDamageCap: { //增加伤害上限
+		case SkillKinds.IncreaseDamageCapacity: { //增加伤害上限
 			const {cap, targets} = skill;
 			let dict = {
-				icon: createIcon(skill.kind),
+				icon: createIcon(skill.kind, cap > 0x7FFFFFFF ? "cap-incr" : "cap-decr"),
 				targets: document.createDocumentFragment(),
 				cap: cap.bigNumberToString(),
 			};
@@ -2797,6 +2804,19 @@ function renderSkill(skill, option = {})
 				value: renderValue(skill.value, { percent:true }),
 			};
 			frg.ap(tsp.skill.gravity(dict));
+			break;
+		}
+		case SkillKinds.PlayVoice: { //播放技能语音
+			const { id } = skill;
+			const icon = document.createElement("icon");
+			icon.className = "awoken-icon";
+			icon.setAttribute("data-awoken-icon", 63);
+			icon.onclick = ()=>playVoiceById(id);
+
+			let dict = {
+				icon,
+			};
+			frg.ap(tsp.skill.play_voice(dict));
 			break;
 		}
 		

@@ -1085,6 +1085,7 @@ Formation.pdcBadgeMap = [
 	{pdf:31,pdc:29}, //叛逆的鲁鲁修
 	{pdf:15,pdc:30}, //漫威
 	{pdf:16,pdc:31}, //泳装
+	{pdf:32,pdc:32}, //怪物猎人
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -5292,10 +5293,7 @@ function initialize() {
 	function playVoiceAwoken() { //点击label才播放语音
 		if (parseInt(this.getAttribute("data-awoken-icon"), 10) === 63) {
 			const card = Cards[editBox.mid];
-			const sndURL = `sound/voice/${currentDataSource.code}/padv${card.voiceId.toString().padStart(3,'0')}.wav`;
-			const decoder = new Adpcm(adpcm_wasm, pcmImportObj);
-			decoder.resetDecodeState(new Adpcm.State(0, 0));
-			decodeAudio(sndURL, decoder.decode.bind(decoder));
+			playVoiceById(card.voiceId);
 		}
 	}
 	monEditAwokensLabel.forEach(akDom => akDom.onclick = playVoiceAwoken);
@@ -7462,6 +7460,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 31: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
 				case 15: return member.card.collabId === 96 ? 1.15 : 1; //漫威
 				case 16: return member.card.gachaIds.includes(9) ? 1.15 : 1; //泳装
+				case 32: return [21, 61].includes(member.card.collabId) ? 1.15 : 1; //怪物猎人
 				default: return 1;
 			}
 		}

@@ -513,6 +513,16 @@ fetch("library/jy4340132-aaa/adpcm.wasm").then((response) => response.arrayBuffe
 			decodeAudio("demo.adpcm", decoder.decode.bind(decoder));
 		}*/
 	});
+
+function playVoiceById(id) { //点击label才播放语音
+	if (!Number.isInteger(id)) {
+		throw new TypeError("传入的音频 ID 不是整数");
+	}
+	const sndURL = `sound/voice/${currentDataSource.code}/padv${id.toString().padStart(3,'0')}.wav`;
+	const decoder = new Adpcm(adpcm_wasm, pcmImportObj);
+	decoder.resetDecodeState(new Adpcm.State(0, 0));
+	decodeAudio(sndURL, decoder.decode.bind(decoder));
+}
 //▲ADPCM播放相关
 
 // 加载 image
