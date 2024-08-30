@@ -33603,7 +33603,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"480d5520a7c21c03f10732b32287864e"
+		"1e3a96d32b5140964a2c77b4ca747cf6"
 	],
 	[
 		"solo.html",
@@ -33695,7 +33695,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"e595fa16fb6b2e78d07393f220aef29c"
+		"9cf6679cba179c98eed42b7f561b1e6a"
 	],
 	[
 		"images/brown-button.svg",

@@ -3965,6 +3965,8 @@ function initialize() {
 		label.setAttribute("data-badge-icon", bgId);
 		label.setAttribute("for", radio.id);
 		teamBadgeUl.appendChild(li);
+
+		if (bgId === 20) li.classList.add(className_displayNone); //全属性徽章，从来没用过
 	});
 	
 	teamBigBoxs.forEach((teamBigBox, teamIdx) => {
