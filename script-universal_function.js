@@ -1568,45 +1568,47 @@ function henshinBase(cardid, firstId)
 //计算卡片队长技+C
 function getSkillAddCombo(card) {
 	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220, 235];
-	const skill = getCardLeaderSkills(card, searchTypeArray)[0];
-	if (!skill) return 0;
-	switch (skill.type) {
-		case 192:
-		case 194:
-			return skill.params[3] ?? 0;
-		case 206:
-			return skill.params[6] ?? 0;
-		case 209:
-			return skill.params[0] ?? 0;
-		case 210:
-		case 219:
-			return skill.params[2] ?? 0;
-		case 220:
-			return skill.params[1] ?? 0;
-		case 235:
-			return skill.params[5] ?? 0;
-		default:
-			return 0;
-	}
+	const skills = getCardLeaderSkills(card, searchTypeArray);
+	return skills.map(skill=>{
+		switch (skill.type) {
+			case 192:
+			case 194:
+				return skill.params[3] ?? 0;
+			case 206:
+				return skill.params[6] ?? 0;
+			case 209:
+				return skill.params[0] ?? 0;
+			case 210:
+			case 219:
+				return skill.params[2] ?? 0;
+			case 220:
+				return skill.params[1] ?? 0;
+			case 235:
+				return skill.params[5] ?? 0;
+			default:
+				return 0;
+		}
+	}).reduce((p,v)=>p+v, 0);
 }
 //计算卡片队长技追打
 function getSkillFixedDamage(card) {
 	const searchTypeArray = [199, 200, 201, 223, 235];
-	const skill = getCardLeaderSkills(card, searchTypeArray)[0];
-	if (!skill) return 0;
-	switch (skill.type) {
-		case 199:
-		case 200:
-			return skill.params[2] ?? 0;
-		case 201:
-			return skill.params[5] ?? 0;
-		case 223:
-			return skill.params[1] ?? 0;
-		case 235:
-			return skill.params[6] ?? 0;
-		default:
-			return 0;
-	}
+	const skills = getCardLeaderSkills(card, searchTypeArray);
+	return skills.map(skill=>{
+		switch (skill.type) {
+			case 199:
+			case 200:
+				return skill.params[2] ?? 0;
+			case 201:
+				return skill.params[5] ?? 0;
+			case 223:
+				return skill.params[1] ?? 0;
+			case 235:
+				return skill.params[6] ?? 0;
+			default:
+				return 0;
+		}
+	}).reduce((p,v)=>p+v, 0);
 }
 function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original) {
 	let effect = {
