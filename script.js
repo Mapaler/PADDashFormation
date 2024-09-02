@@ -1104,7 +1104,9 @@ Formation.pdcLatentMap = [
 	{pdf:13,pdc:35}, //不被换队长
 	{pdf:13,pdc:47}, //不被换队长 ×1.5
 	{pdf:14,pdc:37}, //不掉废
+	{pdf:14,pdc:59}, //不掉废 ×1.5
 	{pdf:15,pdc:36}, //不掉毒
+	{pdf:15,pdc:58}, //不掉毒 ×1.5
 	{pdf:16,pdc:24}, //进化杀
 	{pdf:17,pdc:25}, //觉醒杀
 	{pdf:18,pdc:26}, //强化杀
@@ -1155,7 +1157,7 @@ Formation.prototype.getPdcQrStr = function()
 		const o = new Map();
 		o.set(0, m.id);
 		if (m.latent.length)
-			o.set(2, m.latent.map(pdfLtent=> Formation.pdcLatentMap.find(latent=>latent.pdf === pdfLtent).pdc.toString(36).padStart(2,'0')).join('')); //潜觉
+			o.set(2, m.latent.map(pdfLtent=> (Formation.pdcLatentMap.find(latent=>latent.pdf === pdfLtent)?.pdc ?? pdfLtent).toString(36).padStart(2,'0')).join('')); //潜觉
 		o.set(3, m.level);
 		o.set(4, m.plus[0]);
 		o.set(5, m.plus[1]);
@@ -2462,7 +2464,7 @@ function pdcFotmationToPdfFotmation(inputString)
 			a.id = member.get(9) || 0; //延迟是-1刚好一样
 			if (member.get(2))
 			{
-				m.latent = member.get(2).map(pdcLatent=> Formation.pdcLatentMap.find(latent=>latent.pdc === pdcLatent)?.pdf ?? 0);
+				m.latent = member.get(2).map(pdcLatent=> Formation.pdcLatentMap.find(latent=>latent.pdc === pdcLatent)?.pdf ?? pdcLatent);
 			}
 			m.level = member.get(3) || 1;
 			a.level = member.get(10) || 1;
