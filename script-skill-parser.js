@@ -3208,7 +3208,7 @@ function renderPowerUp(powerUp) {
 			break;
 		}
 		case SkillPowerUpKind.ScaleMatchAttrs: {
-			let matches = powerUp.matches, min = powerUp.min, max = powerUp.max, baseAtk = powerUp.baseAtk, baseRcv = powerUp.baseRcv, bonusAtk = powerUp.bonusAtk, bonusRcv = powerUp.bonusRcv;
+			let { matches, min, max, baseAtk, baseRcv, bonusAtk, bonusRcv } = powerUp;
 			let dict = {
 				matches: matches.map(orbs=>renderOrbs(orbs)).nodeJoin(tsp.word.slight_pause()),
 				min: min,
