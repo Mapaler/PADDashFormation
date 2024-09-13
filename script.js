@@ -1086,6 +1086,7 @@ Formation.pdcBadgeMap = [
 	{pdf:15,pdc:30}, //漫威
 	{pdf:16,pdc:31}, //泳装
 	{pdf:32,pdc:32}, //怪物猎人
+	{pdf:33,pdc:33}, //三丽鸥
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -3967,8 +3968,6 @@ function initialize() {
 		label.setAttribute("data-badge-icon", bgId);
 		label.setAttribute("for", radio.id);
 		teamBadgeUl.appendChild(li);
-
-		if (bgId === 20) li.classList.add(className_displayNone); //全属性徽章，从来没用过
 	});
 	
 	teamBigBoxs.forEach((teamBigBox, teamIdx) => {
@@ -7465,6 +7464,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 15: return member.card.collabId === 96 ? 1.15 : 1; //漫威
 				case 16: return member.card.gachaIds.includes(9) ? 1.15 : 1; //泳装
 				case 32: return [21, 61].includes(member.card.collabId) ? 1.15 : 1; //怪物猎人
+				case 33: return member.card.collabId === 27 ? 1.15 : 1; //三丽鸥
 				default: return 1;
 			}
 		}
