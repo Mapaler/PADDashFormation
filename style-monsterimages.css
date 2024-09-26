@@ -1477,227 +1477,412 @@ body[data-game-source="ja"] .level-super-break .latent-icon:where(
 
 /* 徽章背景 */
 .badge{
+	width: var(--badge-width);
+	height: var(--badge-height);
 	background-image: url(images/badge-bg.png);
-	width: 53px;
-	height: 42px;
-	text-align: center;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-radius: 7px;
+	border-radius: 15px;
 }
 .badge::before{
-	display: inline-block;
+	display: flex;
 	content: "";
 	background-repeat: no-repeat;
 	background-image: url(images/badge.png);
-	width: 36px; height: 30px;
-	background-position-x: 0;
+	width: var(--badge-width);
+	height: var(--badge-height);
 }
 .badge:where( /*去武器的徽章*/
 	[data-badge-icon='22'],
 	[data-badge-icon='23'],
 ){
-	background-position-x: -54px;
-}
-.badge[data-badge-icon='0']::before{
-	background-position-y:calc(-30px * 0);
+	background-position-x: calc(var(--badge-width) * -1);
 }
 .badge[data-badge-icon='129']::before{ /*月卡*/
-	background-position-x: -36px;
+	background-position-x: calc(var(--badge-width) * -1);
 	background-position-y: 0;
 }
+.badge[data-badge-icon='0']::before{
+	background-position-y:calc(var(--badge-height) * -0);
+}
 .badge[data-badge-icon='1']::before{
-	background-position-y:calc(-30px * 1);
+	background-position-y:calc(var(--badge-height) * -1);
 }
 .badge[data-badge-icon='2']::before{
-	background-position-y:calc(-30px * 2);
+	background-position-y:calc(var(--badge-height) * -2);
 }
 .badge[data-badge-icon='3']::before{
-	background-position-y:calc(-30px * 3);
+	background-position-y:calc(var(--badge-height) * -3);
 }
 .badge[data-badge-icon='4']::before{
-	background-position-y:calc(-30px * 4);
+	background-position-y:calc(var(--badge-height) * -4);
 }
 .badge[data-badge-icon='5']::before{
-	background-position-y:calc(-30px * 5);
+	background-position-y:calc(var(--badge-height) * -5);
 }
 .badge[data-badge-icon='6']::before{
-	background-position-y:calc(-30px * 6);
+	background-position-y:calc(var(--badge-height) * -6);
 }
 .badge[data-badge-icon='7']::before{
-	background-position-y:calc(-30px * 7);
+	background-position-y:calc(var(--badge-height) * -7);
 }
 .badge[data-badge-icon='8']::before{
-	background-position-y:calc(-30px * 8);
+	background-position-y:calc(var(--badge-height) * -8);
 }
 .badge[data-badge-icon='9']::before{
-	background-position-y:calc(-30px * 9);
+	background-position-y:calc(var(--badge-height) * -9);
 }
 .badge[data-badge-icon='10']::before{
-	background-position-y:calc(-30px * 10);
+	background-position-y:calc(var(--badge-height) * -10);
 }
 .badge[data-badge-icon='11']::before{
-	background-position-y:calc(-30px * 11);
+	background-position-y:calc(var(--badge-height) * -11);
 }
 .badge[data-badge-icon='12']::before{
-	background-position-y:calc(-30px * 12);
+	background-position-y:calc(var(--badge-height) * -12);
 }
 .badge[data-badge-icon='13']::before{
-	background-position-y:calc(-30px * 13);
+	background-position-y:calc(var(--badge-height) * -13);
 }
 .badge[data-badge-icon='14']::before{
-	background-position-y:calc(-30px * 14);
+	background-position-y:calc(var(--badge-height) * -14);
 }
 .badge[data-badge-icon='15']::before{
-	background-position-y:calc(-30px * 15);
+	background-position-y:calc(var(--badge-height) * -15);
 }
 .badge[data-badge-icon='16']::before{
-	background-position-y:calc(-30px * 16);
+	background-position-y:calc(var(--badge-height) * -16);
 }
 .badge[data-badge-icon='17']::before{
-	background-position-y:calc(-30px * 17);
+	background-position-y:calc(var(--badge-height) * -17);
 }
 .badge[data-badge-icon='18']::before{
-	background-position-y:calc(-30px * 18);
+	background-position-y:calc(var(--badge-height) * -18);
 }
 .badge[data-badge-icon='19']::before{
-	background-position-y:calc(-30px * 19);
+	background-position-y:calc(var(--badge-height) * -19);
 }
 .badge[data-badge-icon='20']::before{
-	background-position-y:calc(-30px * 20);
+	background-position-y:calc(var(--badge-height) * -20);
 }
 .badge[data-badge-icon='21']::before{
-	background-position-y:calc(-30px * 21);
+	background-position-y:calc(var(--badge-height) * -21);
 }
 .badge[data-badge-icon='22']::before{
-	background-position-y:calc(-30px * 22);
+	background-position-y:calc(var(--badge-height) * -22);
 }
 .badge[data-badge-icon='23']::before{
-	background-position-y:calc(-30px * 23);
+	background-position-y:calc(var(--badge-height) * -23);
 }
 .badge[data-badge-icon='24']::before{
-	background-position-y:calc(-30px * 24);
+	background-position-y:calc(var(--badge-height) * -24);
 }
 .badge[data-badge-icon='25']::before{
-	background-position-y:calc(-30px * 25);
+	background-position-y:calc(var(--badge-height) * -25);
 }
 .badge[data-badge-icon='26']::before{
-	background-position-y:calc(-30px * 26);
+	background-position-y:calc(var(--badge-height) * -26);
 }
 .badge[data-badge-icon='27']::before{
-	background-position-y:calc(-30px * 27);
+	background-position-y:calc(var(--badge-height) * -27);
 }
 .badge[data-badge-icon='28']::before{
-	background-position-y:calc(-30px * 28);
+	background-position-y:calc(var(--badge-height) * -28);
 }
 .badge[data-badge-icon='29']::before{
-	background-position-y:calc(-30px * 29);
+	background-position-y:calc(var(--badge-height) * -29);
 }
 .badge[data-badge-icon='30']::before{
-	background-position-y:calc(-30px * 30);
+	background-position-y:calc(var(--badge-height) * -30);
 }
 .badge[data-badge-icon='31']::before{
-	background-position-y:calc(-30px * 31);
+	background-position-y:calc(var(--badge-height) * -31);
 }
 .badge[data-badge-icon='32']::before{
-	background-position-y:calc(-30px * 32);
+	background-position-y:calc(var(--badge-height) * -32);
 }
 .badge[data-badge-icon='33']::before{
-	background-position-y:calc(-30px * 33);
+	background-position-y:calc(var(--badge-height) * -33);
 }
 .badge[data-badge-icon='34']::before{
-	background-position-y:calc(-30px * 34);
+	background-position-y:calc(var(--badge-height) * -34);
 }
 .badge[data-badge-icon='35']::before{
-	background-position-y:calc(-30px * 35);
+	background-position-y:calc(var(--badge-height) * -35);
 }
 .badge[data-badge-icon='36']::before{
-	background-position-y:calc(-30px * 36);
+	background-position-y:calc(var(--badge-height) * -36);
 }
 .badge[data-badge-icon='37']::before{
-	background-position-y:calc(-30px * 37);
+	background-position-y:calc(var(--badge-height) * -37);
 }
 .badge[data-badge-icon='38']::before{
-	background-position-y:calc(-30px * 38);
+	background-position-y:calc(var(--badge-height) * -38);
 }
 .badge[data-badge-icon='39']::before{
-	background-position-y:calc(-30px * 39);
+	background-position-y:calc(var(--badge-height) * -39);
 }
 .badge[data-badge-icon='40']::before{
-	background-position-y:calc(-30px * 40);
+	background-position-y:calc(var(--badge-height) * -40);
 }
 .badge[data-badge-icon='41']::before{
-	background-position-y:calc(-30px * 41);
+	background-position-y:calc(var(--badge-height) * -41);
 }
 .badge[data-badge-icon='42']::before{
-	background-position-y:calc(-30px * 42);
+	background-position-y:calc(var(--badge-height) * -42);
 }
 .badge[data-badge-icon='43']::before{
-	background-position-y:calc(-30px * 43);
+	background-position-y:calc(var(--badge-height) * -43);
 }
 .badge[data-badge-icon='44']::before{
-	background-position-y:calc(-30px * 44);
+	background-position-y:calc(var(--badge-height) * -44);
 }
 .badge[data-badge-icon='45']::before{
-	background-position-y:calc(-30px * 45);
+	background-position-y:calc(var(--badge-height) * -45);
 }
 .badge[data-badge-icon='46']::before{
-	background-position-y:calc(-30px * 46);
+	background-position-y:calc(var(--badge-height) * -46);
 }
 .badge[data-badge-icon='47']::before{
-	background-position-y:calc(-30px * 47);
+	background-position-y:calc(var(--badge-height) * -47);
 }
 .badge[data-badge-icon='48']::before{
-	background-position-y:calc(-30px * 48);
+	background-position-y:calc(var(--badge-height) * -48);
 }
 .badge[data-badge-icon='49']::before{
-	background-position-y:calc(-30px * 49);
+	background-position-y:calc(var(--badge-height) * -49);
 }
 .badge[data-badge-icon='50']::before{
-	background-position-y:calc(-30px * 50);
+	background-position-y:calc(var(--badge-height) * -50);
 }
 .badge[data-badge-icon='51']::before{
-	background-position-y:calc(-30px * 51);
+	background-position-y:calc(var(--badge-height) * -51);
 }
 .badge[data-badge-icon='52']::before{
-	background-position-y:calc(-30px * 52);
+	background-position-y:calc(var(--badge-height) * -52);
 }
 .badge[data-badge-icon='53']::before{
-	background-position-y:calc(-30px * 53);
+	background-position-y:calc(var(--badge-height) * -53);
 }
 .badge[data-badge-icon='54']::before{
-	background-position-y:calc(-30px * 54);
+	background-position-y:calc(var(--badge-height) * -54);
 }
 .badge[data-badge-icon='55']::before{
-	background-position-y:calc(-30px * 55);
+	background-position-y:calc(var(--badge-height) * -55);
 }
 .badge[data-badge-icon='56']::before{
-	background-position-y:calc(-30px * 56);
+	background-position-y:calc(var(--badge-height) * -56);
 }
 .badge[data-badge-icon='57']::before{
-	background-position-y:calc(-30px * 57);
+	background-position-y:calc(var(--badge-height) * -57);
 }
 .badge[data-badge-icon='58']::before{
-	background-position-y:calc(-30px * 58);
+	background-position-y:calc(var(--badge-height) * -58);
 }
 .badge[data-badge-icon='59']::before{
-	background-position-y:calc(-30px * 59);
+	background-position-y:calc(var(--badge-height) * -59);
 }
 .badge[data-badge-icon='60']::before{
-	background-position-y:calc(-30px * 60);
+	background-position-y:calc(var(--badge-height) * -60);
 }
 .badge[data-badge-icon='61']::before{
-	background-position-y:calc(-30px * 61);
+	background-position-y:calc(var(--badge-height) * -61);
 }
 .badge[data-badge-icon='62']::before{
-	background-position-y:calc(-30px * 62);
+	background-position-y:calc(var(--badge-height) * -62);
 }
 .badge[data-badge-icon='63']::before{
-	background-position-y:calc(-30px * 63);
+	background-position-y:calc(var(--badge-height) * -63);
 }
 .badge[data-badge-icon='64']::before{
-	background-position-y:calc(-30px * 64);
+	background-position-y:calc(var(--badge-height) * -64);
+}
+.badge[data-badge-icon='65']::before{
+	background-position-y:calc(var(--badge-height) * -65);
+}
+.badge[data-badge-icon='66']::before{
+	background-position-y:calc(var(--badge-height) * -66);
+}
+.badge[data-badge-icon='67']::before{
+	background-position-y:calc(var(--badge-height) * -67);
+}
+.badge[data-badge-icon='68']::before{
+	background-position-y:calc(var(--badge-height) * -68);
+}
+.badge[data-badge-icon='69']::before{
+	background-position-y:calc(var(--badge-height) * -69);
+}
+.badge[data-badge-icon='70']::before{
+	background-position-y:calc(var(--badge-height) * -70);
+}
+.badge[data-badge-icon='71']::before{
+	background-position-y:calc(var(--badge-height) * -71);
+}
+.badge[data-badge-icon='72']::before{
+	background-position-y:calc(var(--badge-height) * -72);
+}
+.badge[data-badge-icon='73']::before{
+	background-position-y:calc(var(--badge-height) * -73);
+}
+.badge[data-badge-icon='74']::before{
+	background-position-y:calc(var(--badge-height) * -74);
+}
+.badge[data-badge-icon='75']::before{
+	background-position-y:calc(var(--badge-height) * -75);
+}
+.badge[data-badge-icon='76']::before{
+	background-position-y:calc(var(--badge-height) * -76);
+}
+.badge[data-badge-icon='77']::before{
+	background-position-y:calc(var(--badge-height) * -77);
+}
+.badge[data-badge-icon='78']::before{
+	background-position-y:calc(var(--badge-height) * -78);
+}
+.badge[data-badge-icon='79']::before{
+	background-position-y:calc(var(--badge-height) * -79);
+}
+.badge[data-badge-icon='80']::before{
+	background-position-y:calc(var(--badge-height) * -80);
+}
+.badge[data-badge-icon='81']::before{
+	background-position-y:calc(var(--badge-height) * -81);
+}
+.badge[data-badge-icon='82']::before{
+	background-position-y:calc(var(--badge-height) * -82);
+}
+.badge[data-badge-icon='83']::before{
+	background-position-y:calc(var(--badge-height) * -83);
+}
+.badge[data-badge-icon='84']::before{
+	background-position-y:calc(var(--badge-height) * -84);
+}
+.badge[data-badge-icon='85']::before{
+	background-position-y:calc(var(--badge-height) * -85);
+}
+.badge[data-badge-icon='86']::before{
+	background-position-y:calc(var(--badge-height) * -86);
+}
+.badge[data-badge-icon='87']::before{
+	background-position-y:calc(var(--badge-height) * -87);
+}
+.badge[data-badge-icon='88']::before{
+	background-position-y:calc(var(--badge-height) * -88);
+}
+.badge[data-badge-icon='89']::before{
+	background-position-y:calc(var(--badge-height) * -89);
+}
+.badge[data-badge-icon='90']::before{
+	background-position-y:calc(var(--badge-height) * -90);
+}
+.badge[data-badge-icon='91']::before{
+	background-position-y:calc(var(--badge-height) * -91);
+}
+.badge[data-badge-icon='92']::before{
+	background-position-y:calc(var(--badge-height) * -92);
+}
+.badge[data-badge-icon='93']::before{
+	background-position-y:calc(var(--badge-height) * -93);
+}
+.badge[data-badge-icon='94']::before{
+	background-position-y:calc(var(--badge-height) * -94);
+}
+.badge[data-badge-icon='95']::before{
+	background-position-y:calc(var(--badge-height) * -95);
+}
+.badge[data-badge-icon='96']::before{
+	background-position-y:calc(var(--badge-height) * -96);
+}
+.badge[data-badge-icon='97']::before{
+	background-position-y:calc(var(--badge-height) * -97);
+}
+.badge[data-badge-icon='98']::before{
+	background-position-y:calc(var(--badge-height) * -98);
+}
+.badge[data-badge-icon='99']::before{
+	background-position-y:calc(var(--badge-height) * -99);
+}
+.badge[data-badge-icon='100']::before{
+	background-position-y:calc(var(--badge-height) * -100);
+}
+.badge[data-badge-icon='101']::before{
+	background-position-y:calc(var(--badge-height) * -101);
+}
+.badge[data-badge-icon='102']::before{
+	background-position-y:calc(var(--badge-height) * -102);
+}
+.badge[data-badge-icon='103']::before{
+	background-position-y:calc(var(--badge-height) * -103);
+}
+.badge[data-badge-icon='104']::before{
+	background-position-y:calc(var(--badge-height) * -104);
+}
+.badge[data-badge-icon='105']::before{
+	background-position-y:calc(var(--badge-height) * -105);
+}
+.badge[data-badge-icon='106']::before{
+	background-position-y:calc(var(--badge-height) * -106);
+}
+.badge[data-badge-icon='107']::before{
+	background-position-y:calc(var(--badge-height) * -107);
+}
+.badge[data-badge-icon='108']::before{
+	background-position-y:calc(var(--badge-height) * -108);
+}
+.badge[data-badge-icon='109']::before{
+	background-position-y:calc(var(--badge-height) * -109);
+}
+.badge[data-badge-icon='110']::before{
+	background-position-y:calc(var(--badge-height) * -110);
+}
+.badge[data-badge-icon='111']::before{
+	background-position-y:calc(var(--badge-height) * -111);
+}
+.badge[data-badge-icon='112']::before{
+	background-position-y:calc(var(--badge-height) * -112);
+}
+.badge[data-badge-icon='113']::before{
+	background-position-y:calc(var(--badge-height) * -113);
+}
+.badge[data-badge-icon='114']::before{
+	background-position-y:calc(var(--badge-height) * -114);
+}
+.badge[data-badge-icon='115']::before{
+	background-position-y:calc(var(--badge-height) * -115);
+}
+.badge[data-badge-icon='116']::before{
+	background-position-y:calc(var(--badge-height) * -116);
+}
+.badge[data-badge-icon='117']::before{
+	background-position-y:calc(var(--badge-height) * -117);
+}
+.badge[data-badge-icon='118']::before{
+	background-position-y:calc(var(--badge-height) * -118);
+}
+.badge[data-badge-icon='119']::before{
+	background-position-y:calc(var(--badge-height) * -119);
+}
+.badge[data-badge-icon='120']::before{
+	background-position-y:calc(var(--badge-height) * -120);
+}
+.badge[data-badge-icon='121']::before{
+	background-position-y:calc(var(--badge-height) * -121);
+}
+.badge[data-badge-icon='122']::before{
+	background-position-y:calc(var(--badge-height) * -122);
+}
+.badge[data-badge-icon='123']::before{
+	background-position-y:calc(var(--badge-height) * -123);
+}
+.badge[data-badge-icon='124']::before{
+	background-position-y:calc(var(--badge-height) * -124);
+}
+.badge[data-badge-icon='125']::before{
+	background-position-y:calc(var(--badge-height) * -125);
+}
+.badge[data-badge-icon='126']::before{
+	background-position-y:calc(var(--badge-height) * -126);
 }
 
 :lang(zh) .badge:where(
@@ -1706,7 +1891,7 @@ body[data-game-source="ja"] .level-super-break .latent-icon:where(
 	[data-badge-icon='20'],
 	[data-badge-icon='129'],
 )::before {
-	background-position-x: calc(-36px * 3);
+	background-position-x: calc(var(--badge-width) * -3);
 }
 
 :lang(en) .badge:where(
@@ -1719,27 +1904,27 @@ body[data-game-source="ja"] .level-super-break .latent-icon:where(
 	[data-badge-icon='3'],
 	[data-badge-icon='22'],
 )::before {
-	background-position-x: calc(-36px * 1);
+	background-position-x: calc(var(--badge-width) * -1);
 }
 /* 美服不一样的徽章 */
 [data-game-source="en"] .badge:where(
 	[data-badge-icon='26'], /*高达变成本家*/
 )::before {
-	background-position-x: calc(-36px * 1);
+	background-position-x: calc(var(--badge-width) * -1);
 }
 
 /*v21.7 SB+10变+20*/
 body:not([data-game-source="ja"]) .badge:where(
 	[data-badge-icon='23'],
 )::before {
-	background-position-x: calc(-36px * 1);
+	background-position-x: calc(var(--badge-width) * -1);
 }
 
 :lang(ko) .badge:where(
 	[data-badge-icon='1'],
 	[data-badge-icon='20'],
 )::before {
-	background-position-x: calc(-36px * 2);
+	background-position-x: calc(var(--badge-width) * -2);
 }
 /*属性图片*/
 .attr

@@ -53,6 +53,9 @@ body{
 	--game-font-family : 'FOT-KurokaneStd-EB',"Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--border-width: 2px;
 
+	--badge-width: 102px;
+	--badge-height: 76px;
+
 	font-family: var(--font-family);
 	background-color: white;
 }
@@ -987,13 +990,21 @@ body:not(.show-team-total-info):not(.solo) .formation-box .team-bigbox
 /* 徽章选择窗口列表 */
 #badge-choose .team-badges {
 	display: grid;
-	grid-template-columns: repeat(8, 53px);
-	grid-template-rows: repeat(auto-fill, 41px);
+	grid-template-columns: repeat(8, max-content);
+	grid-template-rows: repeat(auto-fill, max-content);
 	grid-gap: 15px;
 	margin: 10px;
 }
 #badge-choose .team-badges input {
 	display: none;
+}
+#badge-choose .team-badges .badge,
+.formation-box .team-badge,
+.custom-addition .badge
+{
+	/*缩小一半*/
+	transform: scale(0.5);
+	margin: calc(var(--badge-height) * -0.25) calc(var(--badge-width) * -0.25);
 }
 button.badge {
 	border: none;
@@ -1094,11 +1105,12 @@ label.badge {
 {
 	display: grid;
 	grid-auto-rows: min-content;
-	grid-template-columns: 53px auto;
+	grid-template-columns: max-content auto;
 	align-items: end;
 }
 .formation-box .team-badge {
 	grid-row: 1 / 3;
+	padding: 0;
 }
 .formation-box .tIf-total-hp,
 .formation-box .tIf-effect {
