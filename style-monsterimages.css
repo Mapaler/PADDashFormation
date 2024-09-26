@@ -1484,6 +1484,7 @@ body[data-game-source="ja"] .level-super-break .latent-icon:where(
 	justify-content: center;
 	align-items: center;
 	border-radius: 15px;
+	box-shadow: 0 3px 3px 1px black;
 }
 .badge::before{
 	display: flex;
