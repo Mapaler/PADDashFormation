@@ -32,6 +32,7 @@ function sanbonGuideUrl(id) {
 }
 function mydelfGuideUrl(id) {
 	const url = new URL(location);
+	url.searchParams.delete('d');
 	url.searchParams.set("guide",1);
 	url.searchParams.set("id",id);
 	return url;

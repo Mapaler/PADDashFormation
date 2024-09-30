@@ -4230,6 +4230,12 @@ function initialize() {
 	};
 
 	const monInfoBox = editBox.querySelector(".monsterinfo-box");
+	const monInfoBoxMainAvatar = monInfoBox.querySelector(".monster");
+	monInfoBoxMainAvatar.onclick = function(){ //主头像修改为点击保存自身画面
+		const id = parseInt(this.dataset.cardid, 10) || 0;
+		captureScreenshot(this, `${id}`, true);
+	}
+
 	const searchBox = editBox.querySelector(".search-box");
 	const settingBox = editBox.querySelector(".setting-box");
 
@@ -5840,10 +5846,13 @@ function changeid(mon, monDom, latentDom, assist) {
 		attrDoms[1].classList.toggle("changed-sub-attr", Boolean(changeAttrAwoken));
 
 		monDom.title = `No.${monId} ${card.otLangName ? (card.otLangName[currentLanguage.searchlist[0]] || card.name) : card.name}`;
-		monDom.href = currentLanguage.guideURL(monId, card.name);
+		
 		monDom.classList.toggle("allowable-assist", card.canAssist);; //可作为辅助
 
 		monDom.classList.toggle("wepon", card.awakenings.includes(49));; //武器
+
+		//如果是链接，增加链接
+		if (monDom instanceof HTMLAnchorElement) monDom.href = currentLanguage.guideURL(monId, card.name);
 	}
 	const levelDom = monDom.querySelector(".level");
 	if (levelDom) { //如果提供了等级
