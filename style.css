@@ -1421,41 +1421,30 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	animation-iteration-count: 1;
 }
 
-.latent-icon{
+.latent-icon {
 	border-width: 2px;
 	border-style: ridge;
 	border-radius: 5px;
-	border-color: rgba(82,82,60,0.5);
 	box-sizing: border-box;
 	display: inline-flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-}
-.latent-icon::before,
-.latent-icon::after
-{
-	margin: -2px;
-	width: 32px;
-	height: 32px;
-	background-image: url(images/icon-latent.png);
-	background-repeat: no-repeat;
-}
-.latent-icon::before{
-	content: "";
-}
-.latent-icon:not([data-latent-icon]){
-	background-color: rgba(33,28,21,0.5);
-	box-shadow:inset 1px 2px 1px -1px rgba(0,0,0,0.5);
-}
-.latent-icon[data-latent-icon]{
+
 	background-image: linear-gradient(#4499EE 33%,  #2277EE 80%);
 	border-color: #CCEEFF;
 	box-shadow: 1px 1px 1px 0 black, inset 2px 2px 1px -1px black ;
+
 	/*html2canvas 不支持*/
 	/*border-image-source: url(images/icon-latent-bg.png);
 	border-image-slice: 5 5 6 5 fill;
 	border-image-width: 5px 5px 6px 5px;*/
+}
+.latent-icon:not([data-latent-icon]){ /*没有设定的空格*/
+	border-color: rgba(82,82,60,0.5);
+	background-image: none;
+	background-color: rgba(33,28,21,0.5);
+	box-shadow:inset 1px 2px 1px -1px rgba(0,0,0,0.5);
 }
 
 /*队伍的潜觉*/
@@ -1465,24 +1454,30 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	vertical-align: top;
 }
 .team-latents .latent-ul{
-	width: 152px;
-	transform: scale(0.65);
+	--icon-width: var(--awoken-width);
+	--icon-height: var(--awoken-height);
+	--row-gap: 4px;
+	--column-gap: 8px;
+	--transform-scale: 0.65;
+
+	width: max-content;
+	transform: scale(var(--transform-scale));
 	transform-origin: left top;
 	margin-left: 4px;
-	margin-bottom: calc( -64px * (1 - 0.65) + 1px);
+	margin-bottom: calc( (var(--awoken-height) * 2 + var(--row-gap)) * (1 - var(--transform-scale)) * -1 + 2px);
 	/*margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);*/
 	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
 	/*潜在觉醒布局，使用 gird*/
 	display: grid;
-	grid-template: repeat(2, 32px) / repeat(3, 32px);
-	/*grid-template-columns: repeat(3, 32px);
-	grid-template-rows: repeat(2, 32px);*/
-	grid-gap: 3px 6px;
+	grid-template-columns: repeat(3, var(--icon-width));
+	grid-template-rows: repeat(2, var(--icon-height));
+	row-gap: var(--row-gap);
+	column-gap: var(--column-gap);
 	place-content: start center;
 	grid-auto-flow: column dense; /*这个 dense 让潜觉可以自动填充位置*/
 }
 .team-latents .latent-ul.block-8{
-	grid-template-columns: repeat(4, 32px);
+	grid-template-columns: repeat(4, var(--icon-width));
 }
 .team-latents .latent-icon[data-latent-hole="1"] {
 	grid-area: span 1 / span 1;
@@ -1863,10 +1858,6 @@ label[for="search-string"] {
 	background-color: rgba(0,0,0,0.5);
 	padding: 2px;
 	font-size: 23px;
-}
-.rich-text .latent-icon {
-	width: 32px;
-	height: 32px;
 }
 /*搜索结果显示觉醒列表的相关css*/
 .awoken-preview .awoken-ul
@@ -2580,6 +2571,11 @@ input[disabled]+.awoken-icon:active,
 	padding: 5px 10px;
 	z-index: 1;
 }
+.edit-box .monsterinfo-box .monster-head .monster {
+	background-color: unset;
+	border: none;
+	cursor: pointer;
+}
 .row-awoken-sawoken .awoken-ul,
 .row-awoken-sawoken .current-super-awoken
 {
@@ -2953,18 +2949,23 @@ input[disabled]+.awoken-icon:active,
 	text-align: center;
 }
 .row-mon-latent .latent-ul{
+	--icon-width: var(--awoken-width);
+	--row-gap: 8px;
+	--column-gap: 12px;
+
 	background: rgba(88,75,56,154);
 	border: 2px ridge #94733f;
 	border-radius: 7px;
 	padding: 3px;
 	/*潜在觉醒布局，使用 gird*/
 	display: inline-grid;
-	grid-template-columns: repeat(6, 32px);
-	grid-auto-rows: 32px;
-	grid-gap: 12px;
+	grid-template-columns: repeat(6, var(--icon-width));
+	grid-auto-rows: var(--icon-height);
+	row-gap: var(--row-gap);
+	column-gap: var(--column-gap);
 }
 .row-mon-latent .latent-ul.block-8 {
-	grid-template-columns: repeat(8, 32px);
+	grid-template-columns: repeat(8, var(--icon-width));
 }
 /*没有block-8的，7格开始不显示*/
 .latent-ul:not(.block-8)>.latent-icon:nth-of-type(n+7) {
@@ -3376,7 +3377,6 @@ a.series-search::before {
 }
 .team-awoken-effect .latent-icon {
 	display: inline-flex;
-	width: 32px;
 	vertical-align: middle;
 }
 .team-awoken-effect .meter[data-icon-type="breaking-shield"] {
@@ -3428,7 +3428,7 @@ a.series-search::before {
 .team-awoken-effect .orb-list .orb {
 	font-size: 1em;
 	transform: scale(0.8);
-	margin: calc((36px - 36px * 0.8) / -2);
+	margin: calc((var(--icon-height)) * (1 - 0.8) / -2);
 
 	color: white;
 	white-space: nowrap;
@@ -3936,7 +3936,6 @@ table .orb-icon
 	border-radius: 5px;
 	margin: 4px;
 	padding: 5px;
-	m
 }
 .evo-materials
 {
