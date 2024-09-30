@@ -1,46 +1,89 @@
 @charset "utf-8";
-/*怪物边框*/
+
+.monster {
+	--x-pos: calc(var(--head-width) + 2px);
+	--y-pos: calc(var(--head-height) + 2px);
+	--x-pos-start: 0px;
+	--y-pos-start: 0px;
+	--card-x-index: 0;
+	--card-y-index: 0;
+	background-position-x: calc(var(--x-pos) * var(--card-x-index) * -1 - var(--x-pos-start)); /*火*/
+	background-position-y: calc(var(--y-pos) * var(--card-y-index) * -1 - var(--y-pos-start));
+}
+/*宠物在图中编号对应的坐标*/
+.monster[data-cards-pic-x='0']{--card-x-index: 0;}
+.monster[data-cards-pic-x='1']{--card-x-index: 1;}
+.monster[data-cards-pic-x='2']{--card-x-index: 2;}
+.monster[data-cards-pic-x='3']{--card-x-index: 3;}
+.monster[data-cards-pic-x='4']{--card-x-index: 4;}
+.monster[data-cards-pic-x='5']{--card-x-index: 5;}
+.monster[data-cards-pic-x='6']{--card-x-index: 6;}
+.monster[data-cards-pic-x='7']{--card-x-index: 7;}
+.monster[data-cards-pic-x='8']{--card-x-index: 8;}
+.monster[data-cards-pic-x='9']{--card-x-index: 9;}
+.monster[data-cards-pic-y='0']{--card-y-index: 0;}
+.monster[data-cards-pic-y='1']{--card-y-index: 1;}
+.monster[data-cards-pic-y='2']{--card-y-index: 2;}
+.monster[data-cards-pic-y='3']{--card-y-index: 3;}
+.monster[data-cards-pic-y='4']{--card-y-index: 4;}
+.monster[data-cards-pic-y='5']{--card-y-index: 5;}
+.monster[data-cards-pic-y='6']{--card-y-index: 6;}
+.monster[data-cards-pic-y='7']{--card-y-index: 7;}
+.monster[data-cards-pic-y='8']{--card-y-index: 8;}
+.monster[data-cards-pic-y='9']{--card-y-index: 9;}
+
+/*属性边框*/
+.monster .attrs {
+	--attr-y-index: 0;
+	--attr-x-index: 0;
+	--y-pos:  calc(var(--head-height) + 4px);
+}
+.monster .attrs .attr{
+	background-position-x: calc(var(--x-pos) * var(--attr-x-index) * -1 - var(--x-pos-start)); /*火*/
+	background-position-y: calc(var(--y-pos) * var(--attr-y-index) * -1 - var(--y-pos-start));
+}
 .monster .attrs .attr:nth-of-type(1){ /*主属性*/
-	background-position-y: 0;
+	--attr-y-index: 0;
 }
 .monster .attrs .attr:nth-of-type(2){ /*副属性*/
-	background-position-y: -104px;
+	--attr-y-index: 1;
 }
 .monster .attrs .attr:nth-of-type(3){ /*三属性*/
-	background-position-y: -208px;
+	--attr-y-index: 2;
 }
 .monster .attrs .attr:nth-of-type(4){ /*四属性*/
-	background-position-y: -312px;
+	--attr-y-index: 3;
 }
 .monster .attrs .attr[data-attr='-1'] {
 	background: none; /*无*/
 	display: none;
 }
-.monster .attrs .attr[data-attr='0'] {
-	background-position-x: calc(-102px * 0); /*火*/
+.monster .attrs .attr[data-attr='0'] { /*火*/
+	--attr-x-index: 0;
 }
-.monster .attrs .attr[data-attr='1'] {
-	background-position-x: calc(-102px * 1); /*水*/
+.monster .attrs .attr[data-attr='1'] { /*水*/
+	--attr-x-index: 1;
 }
-.monster .attrs .attr[data-attr='2'] {
-	background-position-x: calc(-102px * 2); /*木*/
+.monster .attrs .attr[data-attr='2'] { /*木*/
+	--attr-x-index: 2;
 }
-.monster .attrs .attr[data-attr='3'] {
-	background-position-x: calc(-102px * 3); /*光*/
+.monster .attrs .attr[data-attr='3'] { /*光*/
+	--attr-x-index: 3;
 }
-.monster .attrs .attr[data-attr='4'] {
-	background-position-x: calc(-102px * 4); /*暗*/
+.monster .attrs .attr[data-attr='4'] { /*暗*/
+	--attr-x-index: 4;
 }
-.monster .attrs .attr[data-attr='5'] {
-	background-position-x: calc(-102px * 5); /*心*/
+.monster .attrs .attr[data-attr='5'] { /*心*/
+	--attr-x-index: 5;
 }
+
 .monster .attrs .attr:nth-of-type(1)[data-attr='6'] { /*无主属性*/
 	background-image: url(images/CARDFRAMEW.png);
-	background-position: 0 0;
+	background-position: calc(var(--x-pos-start) * -1) calc(var(--y-pos-start) * -1);
 }
 .monster .attrs .attr:nth-of-type(1)[data-attr='any'] {
 	background-image: url(images/card-frame-any.png);
-	background-position: 0 0;
+	background-position: calc(var(--x-pos-start) * -1) calc(var(--y-pos-start) * -1);
 }
 /*
 .monster .attrs .attr[data-attr='any'] {
@@ -650,33 +693,13 @@
 [data-game-source="ko"] .monster[data-cards-pic-idx='199']{background-image: url(images/cards_ko/CARDS_199.PNG);}
 /*.en-only.monster[data-cards-pic-idx='54']{background-image: url(images/cards/en/CARDS_054.PNG);}
 .en-only.monster[data-cards-pic-idx='55']{background-image: url(images/cards/en/CARDS_055.PNG);}*/
-/*宠物在图中编号对应的坐标*/
-.monster[data-cards-pic-x='0']{background-position-x:calc(-102px * 0);}
-.monster[data-cards-pic-x='1']{background-position-x:calc(-102px * 1);}
-.monster[data-cards-pic-x='2']{background-position-x:calc(-102px * 2);}
-.monster[data-cards-pic-x='3']{background-position-x:calc(-102px * 3);}
-.monster[data-cards-pic-x='4']{background-position-x:calc(-102px * 4);}
-.monster[data-cards-pic-x='5']{background-position-x:calc(-102px * 5);}
-.monster[data-cards-pic-x='6']{background-position-x:calc(-102px * 6);}
-.monster[data-cards-pic-x='7']{background-position-x:calc(-102px * 7);}
-.monster[data-cards-pic-x='8']{background-position-x:calc(-102px * 8);}
-.monster[data-cards-pic-x='9']{background-position-x:calc(-102px * 9);}
-.monster[data-cards-pic-y='0']{background-position-y:calc(-102px * 0);}
-.monster[data-cards-pic-y='1']{background-position-y:calc(-102px * 1);}
-.monster[data-cards-pic-y='2']{background-position-y:calc(-102px * 2);}
-.monster[data-cards-pic-y='3']{background-position-y:calc(-102px * 3);}
-.monster[data-cards-pic-y='4']{background-position-y:calc(-102px * 4);}
-.monster[data-cards-pic-y='5']{background-position-y:calc(-102px * 5);}
-.monster[data-cards-pic-y='6']{background-position-y:calc(-102px * 6);}
-.monster[data-cards-pic-y='7']{background-position-y:calc(-102px * 7);}
-.monster[data-cards-pic-y='8']{background-position-y:calc(-102px * 8);}
-.monster[data-cards-pic-y='9']{background-position-y:calc(-102px * 9);}
 /*觉醒、类型、潜觉*/
 .awoken-icon,
 .type-icon
 {
 	display: inline-flex;
-	width:32px;height:32px;
+	width: var(--awoken-width);
+	height: var(--awoken-height);
 	vertical-align: middle;
 	background-repeat: no-repeat;
 }
@@ -710,418 +733,418 @@
 	animation-iteration-count: infinite;
 }
 .awoken-icon[data-awoken-icon='0']{/*问号*/
-	background-position-y:calc(-32px * 0);
+	background-position-y:calc(var(--awoken-height) * -0);
 }
 .awoken-icon.super-awoken-locked[data-awoken-icon='0']{/*未满足超觉醒条件*/
-	background-position-x:calc(-32px * 1);
+	background-position-x:calc(var(--awoken-width) * -1);
 }
 .awoken-icon.sync-awakening[data-awoken-icon='0']{/*同步觉醒未启用*/
-	background-position-x:calc(-32px * 2);
+	background-position-x:calc(var(--awoken-width) * -2);
 }
 .awoken-icon[data-awoken-icon='1']{/*HP+*/
-	background-position-y:calc(-32px * 1);
+	background-position-y:calc(var(--awoken-height) * -1);
 }
 .awoken-icon[data-awoken-icon='2']{/*攻击+*/
-	background-position-y:calc(-32px * 2);
+	background-position-y:calc(var(--awoken-height) * -2);
 }
 .awoken-icon[data-awoken-icon='3']{/*回复+*/
-	background-position-y:calc(-32px * 3);
+	background-position-y:calc(var(--awoken-height) * -3);
 }
 .awoken-icon[data-awoken-icon='4']{/*火盾*/
-	background-position-y:calc(-32px * 4);
+	background-position-y:calc(var(--awoken-height) * -4);
 }
 .awoken-icon[data-awoken-icon='5']{/*水盾*/
-	background-position-y:calc(-32px * 5);
+	background-position-y:calc(var(--awoken-height) * -5);
 }
 .awoken-icon[data-awoken-icon='6']{/*木盾*/
-	background-position-y:calc(-32px * 6);
+	background-position-y:calc(var(--awoken-height) * -6);
 }
 .awoken-icon[data-awoken-icon='7']{/*光盾*/
-	background-position-y:calc(-32px * 7);
+	background-position-y:calc(var(--awoken-height) * -7);
 }
 .awoken-icon[data-awoken-icon='8']{/*暗盾*/
-	background-position-y:calc(-32px * 8);
+	background-position-y:calc(var(--awoken-height) * -8);
 }
 .awoken-icon[data-awoken-icon='9']{/*自回*/
-	background-position-y:calc(-32px * 9);
+	background-position-y:calc(var(--awoken-height) * -9);
 }
 .awoken-icon[data-awoken-icon='10']{/*防封*/
-	background-position-y:calc(-32px * 10);
+	background-position-y:calc(var(--awoken-height) * -10);
 }
 .awoken-icon[data-awoken-icon='11']{/*防暗*/
-	background-position-y:calc(-32px * 11);
+	background-position-y:calc(var(--awoken-height) * -11);
 }
 .awoken-icon[data-awoken-icon='12']{/*防废*/
-	background-position-y:calc(-32px * 12);
+	background-position-y:calc(var(--awoken-height) * -12);
 }
 .awoken-icon[data-awoken-icon='13']{/*防毒*/
-	background-position-y:calc(-32px * 13);
+	background-position-y:calc(var(--awoken-height) * -13);
 }
 .awoken-icon[data-awoken-icon='14']{/*火+*/
-	background-position-y:calc(-32px * 14);
+	background-position-y:calc(var(--awoken-height) * -14);
 }
 .awoken-icon[data-awoken-icon='15']{/*水+*/
-	background-position-y:calc(-32px * 15);
+	background-position-y:calc(var(--awoken-height) * -15);
 }
 .awoken-icon[data-awoken-icon='16']{/*木+*/
-	background-position-y:calc(-32px * 16);
+	background-position-y:calc(var(--awoken-height) * -16);
 }
 .awoken-icon[data-awoken-icon='17']{/*光+*/
-	background-position-y:calc(-32px * 17);
+	background-position-y:calc(var(--awoken-height) * -17);
 }
 .awoken-icon[data-awoken-icon='18']{/*暗+*/
-	background-position-y:calc(-32px * 18);
+	background-position-y:calc(var(--awoken-height) * -18);
 }
 .awoken-icon[data-awoken-icon='19']{/*手指*/
-	background-position-y:calc(-32px * 19);
+	background-position-y:calc(var(--awoken-height) * -19);
 }
 .awoken-icon[data-awoken-icon='20']{/*心解*/
-	background-position-y:calc(-32px * 20);
+	background-position-y:calc(var(--awoken-height) * -20);
 }
 .awoken-icon[data-awoken-icon='21']{/*SB*/
-	background-position-y:calc(-32px * 21);
+	background-position-y:calc(var(--awoken-height) * -21);
 }
 .awoken-icon[data-awoken-icon='22']{/*火横*/
-	background-position-y:calc(-32px * 22);
+	background-position-y:calc(var(--awoken-height) * -22);
 }
 .awoken-icon[data-awoken-icon='23']{/*水横*/
-	background-position-y:calc(-32px * 23);
+	background-position-y:calc(var(--awoken-height) * -23);
 }
 .awoken-icon[data-awoken-icon='24']{/*木横*/
-	background-position-y:calc(-32px * 24);
+	background-position-y:calc(var(--awoken-height) * -24);
 }
 .awoken-icon[data-awoken-icon='25']{/*光横*/
-	background-position-y:calc(-32px * 25);
+	background-position-y:calc(var(--awoken-height) * -25);
 }
 .awoken-icon[data-awoken-icon='26']{/*暗横*/
-	background-position-y:calc(-32px * 26);
+	background-position-y:calc(var(--awoken-height) * -26);
 }
 .awoken-icon[data-awoken-icon='27']{/*U*/
-	background-position-y:calc(-32px * 27);
+	background-position-y:calc(var(--awoken-height) * -27);
 }
 .awoken-icon[data-awoken-icon='28']{/*SX*/
-	background-position-y:calc(-32px * 28);
+	background-position-y:calc(var(--awoken-height) * -28);
 }
 .awoken-icon[data-awoken-icon='29']{/*心+*/
-	background-position-y:calc(-32px * 29);
+	background-position-y:calc(var(--awoken-height) * -29);
 }
 .awoken-icon[data-awoken-icon='30']{/*协力*/
-	background-position-y:calc(-32px * 30);
+	background-position-y:calc(var(--awoken-height) * -30);
 }
 .awoken-icon[data-awoken-icon='31']{/*龙杀*/
-	background-position-y:calc(-32px * 31);
+	background-position-y:calc(var(--awoken-height) * -31);
 }
 .awoken-icon[data-awoken-icon='32']{/*神杀*/
-	background-position-y:calc(-32px * 32);
+	background-position-y:calc(var(--awoken-height) * -32);
 }
 .awoken-icon[data-awoken-icon='33']{/*恶魔杀*/
-	background-position-y:calc(-32px * 33);
+	background-position-y:calc(var(--awoken-height) * -33);
 }
 .awoken-icon[data-awoken-icon='34']{/*机杀*/
-	background-position-y:calc(-32px * 34);
+	background-position-y:calc(var(--awoken-height) * -34);
 }
 .awoken-icon[data-awoken-icon='35']{/*平衡杀*/
-	background-position-y:calc(-32px * 35);
+	background-position-y:calc(var(--awoken-height) * -35);
 }
 .awoken-icon[data-awoken-icon='36']{/*攻击杀*/
-	background-position-y:calc(-32px * 36);
+	background-position-y:calc(var(--awoken-height) * -36);
 }
 .awoken-icon[data-awoken-icon='37']{/*体力杀*/
-	background-position-y:calc(-32px * 37);
+	background-position-y:calc(var(--awoken-height) * -37);
 }
 .awoken-icon[data-awoken-icon='38']{/*回复杀*/
-	background-position-y:calc(-32px * 38);
+	background-position-y:calc(var(--awoken-height) * -38);
 }
 .awoken-icon[data-awoken-icon='39']{/*进化杀*/
-	background-position-y:calc(-32px * 39);
+	background-position-y:calc(var(--awoken-height) * -39);
 }
 .awoken-icon[data-awoken-icon='40']{/*觉醒杀*/
-	background-position-y:calc(-32px * 40);
+	background-position-y:calc(var(--awoken-height) * -40);
 }
 .awoken-icon[data-awoken-icon='41']{/*强化杀*/
-	background-position-y:calc(-32px * 41);
+	background-position-y:calc(var(--awoken-height) * -41);
 }
 .awoken-icon[data-awoken-icon='42']{/*卖钱杀*/
-	background-position-y:calc(-32px * 42);
+	background-position-y:calc(var(--awoken-height) * -42);
 }
 .awoken-icon[data-awoken-icon='43']{/*7c*/
-	background-position-y:calc(-32px * 43);
+	background-position-y:calc(var(--awoken-height) * -43);
 }
 .awoken-icon[data-awoken-icon='44']{/*5色破防*/
-	background-position-y:calc(-32px * 44);
+	background-position-y:calc(var(--awoken-height) * -44);
 }
 .awoken-icon[data-awoken-icon='45']{/*心追*/
-	background-position-y:calc(-32px * 45);
+	background-position-y:calc(var(--awoken-height) * -45);
 }
 .awoken-icon[data-awoken-icon='46']{/*全体HP*/
-	background-position-y:calc(-32px * 46);
+	background-position-y:calc(var(--awoken-height) * -46);
 }
 .awoken-icon[data-awoken-icon='47']{/*全体回复*/
-	background-position-y:calc(-32px * 47);
+	background-position-y:calc(var(--awoken-height) * -47);
 }
 .awoken-icon[data-awoken-icon='48']{/*破无效*/
-	background-position-y:calc(-32px * 48);
+	background-position-y:calc(var(--awoken-height) * -48);
 }
 .awoken-icon[data-awoken-icon='49']{/*武器觉醒*/
-	background-position-y:calc(-32px * 49);
+	background-position-y:calc(var(--awoken-height) * -49);
 }
 .awoken-icon[data-awoken-icon='50']{/*方块心追*/
-	background-position-y:calc(-32px * 50);
+	background-position-y:calc(var(--awoken-height) * -50);
 }
 .awoken-icon[data-awoken-icon='51']{/*5色溜*/
-	background-position-y:calc(-32px * 51);
+	background-position-y:calc(var(--awoken-height) * -51);
 }
 .awoken-icon[data-awoken-icon='52']{/*大防封*/
-	background-position-y:calc(-32px * 52);
+	background-position-y:calc(var(--awoken-height) * -52);
 }
 .awoken-icon[data-awoken-icon='53']{/*大手指*/
-	background-position-y:calc(-32px * 53);
+	background-position-y:calc(var(--awoken-height) * -53);
 }
 .awoken-icon[data-awoken-icon='54']{/*防云*/
-	background-position-y:calc(-32px * 54);
+	background-position-y:calc(var(--awoken-height) * -54);
 }
 .awoken-icon[data-awoken-icon='55']{/*防封条*/
-	background-position-y:calc(-32px * 55);
+	background-position-y:calc(var(--awoken-height) * -55);
 }
 .awoken-icon[data-awoken-icon='56']{/*大SB*/
-	background-position-y:calc(-32px * 56);
+	background-position-y:calc(var(--awoken-height) * -56);
 }
 .awoken-icon[data-awoken-icon='57']{/*满血强化*/
-	background-position-y:calc(-32px * 57);
+	background-position-y:calc(var(--awoken-height) * -57);
 }
 .awoken-icon[data-awoken-icon='58']{/*下半血强化*/
-	background-position-y:calc(-32px * 58);
+	background-position-y:calc(var(--awoken-height) * -58);
 }
 .awoken-icon[data-awoken-icon='59']{/*L盾*/
-	background-position-y:calc(-32px * 59);
+	background-position-y:calc(var(--awoken-height) * -59);
 }
 .awoken-icon[data-awoken-icon='60']{/*L解锁*/
-	background-position-y:calc(-32px * 60);
+	background-position-y:calc(var(--awoken-height) * -60);
 }
 .awoken-icon[data-awoken-icon='61']{/*10c*/
-	background-position-y:calc(-32px * 61);
+	background-position-y:calc(var(--awoken-height) * -61);
 }
 .awoken-icon[data-awoken-icon='62']{/*c珠*/
-	background-position-y:calc(-32px * 62);
+	background-position-y:calc(var(--awoken-height) * -62);
 }
 .awoken-icon[data-awoken-icon='63']{/*语音*/
-	background-position-y:calc(-32px * 63);
+	background-position-y:calc(var(--awoken-height) * -63);
 }
 .awoken-icon[data-awoken-icon='64']{/*奖励增加*/
-	background-position-y:calc(-32px * 64);
+	background-position-y:calc(var(--awoken-height) * -64);
 }
 .awoken-icon[data-awoken-icon='65']{/*HP-*/
-	background-position-y:calc(-32px * 65);
+	background-position-y:calc(var(--awoken-height) * -65);
 }
 .awoken-icon[data-awoken-icon='66']{/*攻击-*/
-	background-position-y:calc(-32px * 66);
+	background-position-y:calc(var(--awoken-height) * -66);
 }
 .awoken-icon[data-awoken-icon='67']{/*回复-*/
-	background-position-y:calc(-32px * 67);
+	background-position-y:calc(var(--awoken-height) * -67);
 }
 .awoken-icon[data-awoken-icon='68']{/*大防暗*/
-	background-position-y:calc(-32px * 68);
+	background-position-y:calc(var(--awoken-height) * -68);
 }
 .awoken-icon[data-awoken-icon='69']{/*大防废*/
-	background-position-y:calc(-32px * 69);
+	background-position-y:calc(var(--awoken-height) * -69);
 }
 .awoken-icon[data-awoken-icon='70']{/*大防毒*/
-	background-position-y:calc(-32px * 70);
+	background-position-y:calc(var(--awoken-height) * -70);
 }
 .awoken-icon[data-awoken-icon='71']{/*掉废*/
-	background-position-y:calc(-32px * 71);
+	background-position-y:calc(var(--awoken-height) * -71);
 }
 .awoken-icon[data-awoken-icon='72']{/*掉毒*/
-	background-position-y:calc(-32px * 72);
+	background-position-y:calc(var(--awoken-height) * -72);
 }
 .awoken-icon[data-awoken-icon='73']{/*火串*/
-	background-position-y:calc(-32px * 73);
+	background-position-y:calc(var(--awoken-height) * -73);
 }
 .awoken-icon[data-awoken-icon='74']{/*水串*/
-	background-position-y:calc(-32px * 74);
+	background-position-y:calc(var(--awoken-height) * -74);
 }
 .awoken-icon[data-awoken-icon='75']{/*木串*/
-	background-position-y:calc(-32px * 75);
+	background-position-y:calc(var(--awoken-height) * -75);
 }
 .awoken-icon[data-awoken-icon='76']{/*光串*/
-	background-position-y:calc(-32px * 76);
+	background-position-y:calc(var(--awoken-height) * -76);
 }
 .awoken-icon[data-awoken-icon='77']{/*暗串*/
-	background-position-y:calc(-32px * 77);
+	background-position-y:calc(var(--awoken-height) * -77);
 }
 .awoken-icon[data-awoken-icon='78']{/*十字*/
-	background-position-y:calc(-32px * 78);
+	background-position-y:calc(var(--awoken-height) * -78);
 }
 .awoken-icon[data-awoken-icon='79']{/*3色*/
-	background-position-y:calc(-32px * 79);
+	background-position-y:calc(var(--awoken-height) * -79);
 }
 .awoken-icon[data-awoken-icon='80']{/*4色*/
-	background-position-y:calc(-32px * 80);
+	background-position-y:calc(var(--awoken-height) * -80);
 }
 .awoken-icon[data-awoken-icon='81']{/*5色*/
-	background-position-y:calc(-32px * 81);
+	background-position-y:calc(var(--awoken-height) * -81);
 }
 .awoken-icon[data-awoken-icon='82']{/*12珠*/
-	background-position-y:calc(-32px * 82);
+	background-position-y:calc(var(--awoken-height) * -82);
 }
 .awoken-icon[data-awoken-icon='83']{/*附加神类型*/
-	background-position-y:calc(-32px * 83);
+	background-position-y:calc(var(--awoken-height) * -83);
 }
 .awoken-icon[data-awoken-icon='84']{/*附加龙类型*/
-	background-position-y:calc(-32px * 84);
+	background-position-y:calc(var(--awoken-height) * -84);
 }
 .awoken-icon[data-awoken-icon='85']{/*附加恶魔类型*/
-	background-position-y:calc(-32px * 85);
+	background-position-y:calc(var(--awoken-height) * -85);
 }
 .awoken-icon[data-awoken-icon='86']{/*附加机械类型*/
-	background-position-y:calc(-32px * 86);
+	background-position-y:calc(var(--awoken-height) * -86);
 }
 .awoken-icon[data-awoken-icon='87']{/*附加平衡类型*/
-	background-position-y:calc(-32px * 87);
+	background-position-y:calc(var(--awoken-height) * -87);
 }
 .awoken-icon[data-awoken-icon='88']{/*附加攻击类型*/
-	background-position-y:calc(-32px * 88);
+	background-position-y:calc(var(--awoken-height) * -88);
 }
 .awoken-icon[data-awoken-icon='89']{/*附加体力类型*/
-	background-position-y:calc(-32px * 89);
+	background-position-y:calc(var(--awoken-height) * -89);
 }
 .awoken-icon[data-awoken-icon='90']{/*附加回复类型*/
-	background-position-y:calc(-32px * 90);
+	background-position-y:calc(var(--awoken-height) * -90);
 }
 .awoken-icon[data-awoken-icon='91']{/*附加火属性*/
-	background-position-y:calc(-32px * 91);
+	background-position-y:calc(var(--awoken-height) * -91);
 }
 .awoken-icon[data-awoken-icon='92']{/*附加水属性*/
-	background-position-y:calc(-32px * 92);
+	background-position-y:calc(var(--awoken-height) * -92);
 }
 .awoken-icon[data-awoken-icon='93']{/*附加木属性*/
-	background-position-y:calc(-32px * 93);
+	background-position-y:calc(var(--awoken-height) * -93);
 }
 .awoken-icon[data-awoken-icon='94']{/*附加光属性*/
-	background-position-y:calc(-32px * 94);
+	background-position-y:calc(var(--awoken-height) * -94);
 }
 .awoken-icon[data-awoken-icon='95']{/*附加暗属性*/
-	background-position-y:calc(-32px * 95);
+	background-position-y:calc(var(--awoken-height) * -95);
 }
 .awoken-icon[data-awoken-icon='96']{/*大U*/
-	background-position-y:calc(-32px * 96);
+	background-position-y:calc(var(--awoken-height) * -96);
 }
 .awoken-icon[data-awoken-icon='97']{/*大5色溜*/
-	background-position-y:calc(-32px * 97);
+	background-position-y:calc(var(--awoken-height) * -97);
 }
 .awoken-icon[data-awoken-icon='98']{/*大自回*/
-	background-position-y:calc(-32px * 98);
+	background-position-y:calc(var(--awoken-height) * -98);
 }
 .awoken-icon[data-awoken-icon='99']{/*大火+*/
-	background-position-y:calc(-32px * 99);
+	background-position-y:calc(var(--awoken-height) * -99);
 }
 .awoken-icon[data-awoken-icon='100']{/*大水+*/
-	background-position-y:calc(-32px * 100);
+	background-position-y:calc(var(--awoken-height) * -100);
 }
 .awoken-icon[data-awoken-icon='101']{/*大木+*/
-	background-position-y:calc(-32px * 101);
+	background-position-y:calc(var(--awoken-height) * -101);
 }
 .awoken-icon[data-awoken-icon='102']{/*大光+*/
-	background-position-y:calc(-32px * 102);
+	background-position-y:calc(var(--awoken-height) * -102);
 }
 .awoken-icon[data-awoken-icon='103']{/*大暗+*/
-	background-position-y:calc(-32px * 103);
+	background-position-y:calc(var(--awoken-height) * -103);
 }
 .awoken-icon[data-awoken-icon='104']{/*大心+*/
-	background-position-y:calc(-32px * 104);
+	background-position-y:calc(var(--awoken-height) * -104);
 }
 .awoken-icon[data-awoken-icon='105']{/*S-*/
-	background-position-y:calc(-32px * 105);
+	background-position-y:calc(var(--awoken-height) * -105);
 }
 .awoken-icon[data-awoken-icon='106']{/*浮游*/
-	background-position-y:calc(-32px * 106);
+	background-position-y:calc(var(--awoken-height) * -106);
 }
 .awoken-icon[data-awoken-icon='107']{/*大7c*/
-	background-position-y:calc(-32px * 107);
+	background-position-y:calc(var(--awoken-height) * -107);
 }
 .awoken-icon[data-awoken-icon='108']{/*大L解锁*/
-	background-position-y:calc(-32px * 108);
+	background-position-y:calc(var(--awoken-height) * -108);
 }
 .awoken-icon[data-awoken-icon='109']{/*大破无效*/
-	background-position-y:calc(-32px * 109);
+	background-position-y:calc(var(--awoken-height) * -109);
 }
 .awoken-icon[data-awoken-icon='110']{/*大十字*/
-	background-position-y:calc(-32px * 110);
+	background-position-y:calc(var(--awoken-height) * -110);
 }
 .awoken-icon[data-awoken-icon='111']{/*大10c*/
-	background-position-y:calc(-32px * 111);
+	background-position-y:calc(var(--awoken-height) * -111);
 }
 .awoken-icon[data-awoken-icon='112']{/*大3色*/
-	background-position-y:calc(-32px * 112);
+	background-position-y:calc(var(--awoken-height) * -112);
 }
 .awoken-icon[data-awoken-icon='113']{/*大4色*/
-	background-position-y:calc(-32px * 113);
+	background-position-y:calc(var(--awoken-height) * -113);
 }
 .awoken-icon[data-awoken-icon='114']{/*大5色*/
-	background-position-y:calc(-32px * 114);
+	background-position-y:calc(var(--awoken-height) * -114);
 }
 .awoken-icon[data-awoken-icon='115']{/*大心解*/
-	background-position-y:calc(-32px * 115);
+	background-position-y:calc(var(--awoken-height) * -115);
 }
 .awoken-icon[data-awoken-icon='116']{/*3火横*/
-	background-position-y:calc(-32px * 116);
+	background-position-y:calc(var(--awoken-height) * -116);
 }
 .awoken-icon[data-awoken-icon='117']{/*3水横*/
-	background-position-y:calc(-32px * 117);
+	background-position-y:calc(var(--awoken-height) * -117);
 }
 .awoken-icon[data-awoken-icon='118']{/*3木横*/
-	background-position-y:calc(-32px * 118);
+	background-position-y:calc(var(--awoken-height) * -118);
 }
 .awoken-icon[data-awoken-icon='119']{/*3光横*/
-	background-position-y:calc(-32px * 119);
+	background-position-y:calc(var(--awoken-height) * -119);
 }
 .awoken-icon[data-awoken-icon='120']{/*3暗横*/
-	background-position-y:calc(-32px * 120);
+	background-position-y:calc(var(--awoken-height) * -120);
 }
 .awoken-icon[data-awoken-icon='121']{/*大火串*/
-	background-position-y:calc(-32px * 121);
+	background-position-y:calc(var(--awoken-height) * -121);
 }
 .awoken-icon[data-awoken-icon='122']{/*大水串*/
-	background-position-y:calc(-32px * 122);
+	background-position-y:calc(var(--awoken-height) * -122);
 }
 .awoken-icon[data-awoken-icon='123']{/*大木串*/
-	background-position-y:calc(-32px * 123);
+	background-position-y:calc(var(--awoken-height) * -123);
 }
 .awoken-icon[data-awoken-icon='124']{/*大光串*/
-	background-position-y:calc(-32px * 124);
+	background-position-y:calc(var(--awoken-height) * -124);
 }
 .awoken-icon[data-awoken-icon='125']{/*大暗串*/
-	background-position-y:calc(-32px * 125);
+	background-position-y:calc(var(--awoken-height) * -125);
 }
 .awoken-icon[data-awoken-icon='126']{/*T字*/
-	background-position-y:calc(-32px * 126);
+	background-position-y:calc(var(--awoken-height) * -126);
 }
 .awoken-icon[data-awoken-icon='127']{/*三维*/
-	background-position-y:calc(-32px * 127);
+	background-position-y:calc(var(--awoken-height) * -127);
 }
 .awoken-icon[data-awoken-icon='127']{/*三维*/
-	background-position-y:calc(-32px * 127);
+	background-position-y:calc(var(--awoken-height) * -127);
 }
 .awoken-icon[data-awoken-icon='128']{/*阳之加护*/
-	background-position-y:calc(-32px * 128);
+	background-position-y:calc(var(--awoken-height) * -128);
 }
 .awoken-icon[data-awoken-icon='128'].yinyang{/*同时阴阳*/
-	background-position-x: -32px;
+	background-position-x:calc(var(--awoken-width) * -1);
 }
 .awoken-icon[data-awoken-icon='129']{/*阴之加护*/
-	background-position-y:calc(-32px * 129);
+	background-position-y:calc(var(--awoken-height) * -129);
 }
 .awoken-icon[data-awoken-icon='130']{/*熟成*/
-	background-position-y:calc(-32px * 130);
+	background-position-y:calc(var(--awoken-height) * -130);
 }
 .awoken-icon[data-awoken-icon='131']{/*部位破坏*/
-	background-position-y:calc(-32px * 131);
+	background-position-y:calc(var(--awoken-height) * -131);
 }
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],
 ){
-    background-position-x: calc(-32px * 2);
+	background-position-x:calc(var(--awoken-width) * -2);
 }
 :where(:lang(en), :lang(ko)) .awoken-icon:where(
 	[data-awoken-icon='40'],
@@ -1130,241 +1153,241 @@
 	[data-awoken-icon='48'],
 	[data-awoken-icon='109'],
 ){
-	background-position-x: -32px;
+	background-position-x:calc(var(--awoken-width) * -1);
 }
 /*类型*/
 .type-icon
 {
 	background-image: url(images/type.png);
-	background-position-x: 0;
-	background-position-y: 32px; /*默认不显示*/
+	background-position-x:calc(var(--awoken-width) * -0);
+	background-position-y:calc(var(--awoken-height) * 1); /*默认不显示*/
 }
 .type-icon[data-type-icon='0']
 {/*进化用*/
-	background-position-y:calc(-32px * 0);
+	background-position-y:calc(var(--awoken-height) * -0);
 }
 .type-icon[data-type-icon='1']
 {/*平衡*/
-	background-position-y:calc(-32px * 1);
+	background-position-y:calc(var(--awoken-height) * -1);
 }
 .type-icon[data-type-icon='2']
 {/*体力*/
-	background-position-y:calc(-32px * 2);
+	background-position-y:calc(var(--awoken-height) * -2);
 }
 .type-icon[data-type-icon='3']
 {/*回复*/
-	background-position-y:calc(-32px * 3);
+	background-position-y:calc(var(--awoken-height) * -3);
 }
 .type-icon[data-type-icon='4']
 {/*龙*/
-	background-position-y:calc(-32px * 4);
+	background-position-y:calc(var(--awoken-height) * -4);
 }
 .type-icon[data-type-icon='5']
 {/*神*/
-	background-position-y:calc(-32px * 5);
+	background-position-y:calc(var(--awoken-height) * -5);
 }
 .type-icon[data-type-icon='6']
 {/*攻击*/
-	background-position-y:calc(-32px * 6);
+	background-position-y:calc(var(--awoken-height) * -6);
 }
 .type-icon[data-type-icon='7']
 {/*恶魔*/
-	background-position-y:calc(-32px * 7);
+	background-position-y:calc(var(--awoken-height) * -7);
 }
 .type-icon[data-type-icon='8']
 {/*机械*/
-	background-position-y:calc(-32px * 8);
+	background-position-y:calc(var(--awoken-height) * -8);
 }
 .type-icon[data-type-icon='9']
 {/*特别保护*/
-	background-position-y:calc(-32px * 9);
+	background-position-y:calc(var(--awoken-height) * -9);
 }
 .type-icon[data-type-icon='12']
 {/*能力觉醒用*/
-	background-position-y:calc(-32px * 12);
+	background-position-y:calc(var(--awoken-height) * -12);
 }
 .type-icon[data-type-icon='14']
 {/*强化合成用*/
-	background-position-y:calc(-32px * 14);
+	background-position-y:calc(var(--awoken-height) * -14);
 }
 .type-icon[data-type-icon='15']
 {/*贩卖用*/
-	background-position-y:calc(-32px * 15);
+	background-position-y:calc(var(--awoken-height) * -15);
 }
 :where(:lang(en), :lang(ko)) .type-icon:where(
 	[data-type-icon='12'],
 	[data-type-icon='9'],
 ){
-	background-position-x: -32px;
+	background-position-x:calc(var(--awoken-width) * -1);
 }
 /*潜在觉醒*/
 /*7格开始没有id的，显示锁*/
 .latent-ul>.latent-icon:nth-of-type(n+7):not([data-latent-icon]):before {
-	background-position-x: -32px;
+	background-position-x:calc(var(--awoken-width) * -1);
 }
 .latent-icon[data-latent-icon]::before{
-	background-position-x: 0;
+	background-position-x:calc(var(--awoken-width) * -0);
 }
 .latent-icon[data-latent-icon='1']::before{ /*HP*/
-	background-position-y: calc(-32px * 1);
+	background-position-y:calc(var(--awoken-height) * -1);
 }
 .latent-icon[data-latent-icon='2']::before{ /*攻击*/
-	background-position-y: calc(-32px * 2);
+	background-position-y:calc(var(--awoken-height) * -2);
 }
 .latent-icon[data-latent-icon='3']::before{ /*回复*/
-	background-position-y: calc(-32px * 3);
+	background-position-y:calc(var(--awoken-height) * -3);
 }
 .latent-icon[data-latent-icon='4']::before{ /*手指*/
-	background-position-y: calc(-32px * 4);
+	background-position-y:calc(var(--awoken-height) * -4);
 }
 .latent-icon[data-latent-icon='5']::before{ /*自回*/
-	background-position-y: calc(-32px * 5);
+	background-position-y:calc(var(--awoken-height) * -5);
 }
 .latent-icon[data-latent-icon='6']::before{ /*火盾*/
-	background-position-y: calc(-32px * 6);
+	background-position-y:calc(var(--awoken-height) * -6);
 }
 .latent-icon[data-latent-icon='7']::before{ /*水盾*/
-	background-position-y: calc(-32px * 7);
+	background-position-y:calc(var(--awoken-height) * -7);
 }
 .latent-icon[data-latent-icon='8']::before{ /*木盾*/
-	background-position-y: calc(-32px * 8);
+	background-position-y:calc(var(--awoken-height) * -8);
 }
 .latent-icon[data-latent-icon='9']::before{ /*光盾*/
-	background-position-y: calc(-32px * 9);
+	background-position-y:calc(var(--awoken-height) * -9);
 }
 .latent-icon[data-latent-icon='10']::before{ /*暗盾*/
-	background-position-y: calc(-32px * 10);
+	background-position-y:calc(var(--awoken-height) * -10);
 }
 .latent-icon[data-latent-icon='11']::before{ /*防坐*/
-	background-position-y: calc(-32px * 11);
+	background-position-y:calc(var(--awoken-height) * -11);
 }
 .latent-icon[data-latent-icon='12']::before{ /*三维*/
-	background-position-y: calc(-32px * 12);
+	background-position-y:calc(var(--awoken-height) * -12);
 }
 .latent-icon[data-latent-icon='13']::before{ /*不被换队长*/
-	background-position-y: calc(-32px * 13);
+	background-position-y:calc(var(--awoken-height) * -13);
 }
 .latent-icon[data-latent-icon='14']::before{ /*不掉废*/
-	background-position-y: calc(-32px * 14);
+	background-position-y:calc(var(--awoken-height) * -14);
 }
 .latent-icon[data-latent-icon='15']::before{ /*不掉毒*/
-	background-position-y: calc(-32px * 15);
+	background-position-y:calc(var(--awoken-height) * -15);
 }
 .latent-icon[data-latent-icon='16']::before{ /*进化杀*/
-	background-position-y: calc(-32px * 16);
+	background-position-y:calc(var(--awoken-height) * -16);
 }
 .latent-icon[data-latent-icon='17']::before{ /*觉醒杀*/
-	background-position-y: calc(-32px * 17);
+	background-position-y:calc(var(--awoken-height) * -17);
 }
 .latent-icon[data-latent-icon='18']::before{ /*强化杀*/
-	background-position-y: calc(-32px * 18);
+	background-position-y:calc(var(--awoken-height) * -18);
 }
 .latent-icon[data-latent-icon='19']::before{ /*卖钱杀*/
-	background-position-y: calc(-32px * 19);
+	background-position-y:calc(var(--awoken-height) * -19);
 }
 .latent-icon[data-latent-icon='20']::before{ /*神杀*/
-	background-position-y: calc(-32px * 20);
+	background-position-y:calc(var(--awoken-height) * -20);
 }
 .latent-icon[data-latent-icon='21']::before{ /*龙杀*/
-	background-position-y: calc(-32px * 21);
+	background-position-y:calc(var(--awoken-height) * -21);
 }
 .latent-icon[data-latent-icon='22']::before{ /*恶魔杀*/
-	background-position-y: calc(-32px * 22);
+	background-position-y:calc(var(--awoken-height) * -22);
 }
 .latent-icon[data-latent-icon='23']::before{ /*机械杀*/
-	background-position-y: calc(-32px * 23);
+	background-position-y:calc(var(--awoken-height) * -23);
 }
 .latent-icon[data-latent-icon='24']::before{ /*平衡杀*/
-	background-position-y: calc(-32px * 24);
+	background-position-y:calc(var(--awoken-height) * -24);
 }
 .latent-icon[data-latent-icon='25']::before{ /*攻击杀*/
-	background-position-y: calc(-32px * 25);
+	background-position-y:calc(var(--awoken-height) * -25);
 }
 .latent-icon[data-latent-icon='26']::before{ /*体力杀*/
-	background-position-y: calc(-32px * 26);
+	background-position-y:calc(var(--awoken-height) * -26);
 }
 .latent-icon[data-latent-icon='27']::before{ /*回复杀*/
-	background-position-y: calc(-32px * 27);
+	background-position-y:calc(var(--awoken-height) * -27);
 }
 .latent-icon[data-latent-icon='28']::before{ /*大HP*/
-	background-position-y: calc(-32px * 28);
+	background-position-y:calc(var(--awoken-height) * -28);
 }
 .latent-icon[data-latent-icon='29']::before{ /*大攻击*/
-	background-position-y: calc(-32px * 29);
+	background-position-y:calc(var(--awoken-height) * -29);
 }
 .latent-icon[data-latent-icon='30']::before{ /*大回复*/
-	background-position-y: calc(-32px * 30);
+	background-position-y:calc(var(--awoken-height) * -30);
 }
 .latent-icon[data-latent-icon='31']::before{ /*大手指*/
-	background-position-y: calc(-32px * 31);
+	background-position-y:calc(var(--awoken-height) * -31);
 }
 .latent-icon[data-latent-icon='32']::before{ /*大火盾*/
-	background-position-y: calc(-32px * 32);
+	background-position-y:calc(var(--awoken-height) * -32);
 }
 .latent-icon[data-latent-icon='33']::before{ /*大水盾*/
-	background-position-y: calc(-32px * 33);
+	background-position-y:calc(var(--awoken-height) * -33);
 }
 .latent-icon[data-latent-icon='34']::before{ /*大木盾*/
-	background-position-y: calc(-32px * 34);
+	background-position-y:calc(var(--awoken-height) * -34);
 }
 .latent-icon[data-latent-icon='35']::before{ /*大光盾*/
-	background-position-y: calc(-32px * 35);
+	background-position-y:calc(var(--awoken-height) * -35);
 }
 .latent-icon[data-latent-icon='36']::before{ /*大暗盾*/
-	background-position-y: calc(-32px * 36);
+	background-position-y:calc(var(--awoken-height) * -36);
 }
 .latent-icon[data-latent-icon='37']::before{ /*6色破无效*/
-	background-position-y: calc(-32px * 37);
+	background-position-y:calc(var(--awoken-height) * -37);
 }
 .latent-icon[data-latent-icon='38']::before{ /*3色破属吸*/
-	background-position-y: calc(-32px * 38);
+	background-position-y:calc(var(--awoken-height) * -38);
 }
 .latent-icon[data-latent-icon='39']::before{ /*C珠破吸*/
-	background-position-y: calc(-32px * 39);
+	background-position-y:calc(var(--awoken-height) * -39);
 }
 .latent-icon[data-latent-icon='40']::before{ /*心横解转转*/
-	background-position-y: calc(-32px * 40);
+	background-position-y:calc(var(--awoken-height) * -40);
 }
 .latent-icon[data-latent-icon='41']::before{ /*U解禁消*/
-	background-position-y: calc(-32px * 41);
+	background-position-y:calc(var(--awoken-height) * -41);
 }
 .latent-icon[data-latent-icon='42']::before{ /*伤害上限×2*/
-	background-position-y: calc(-32px * 42);
+	background-position-y:calc(var(--awoken-height) * -42);
 }
 .latent-icon[data-latent-icon='43']::before{ /*HP++*/
-	background-position-y: calc(-32px * 43);
+	background-position-y:calc(var(--awoken-height) * -43);
 }
 .latent-icon[data-latent-icon='44']::before{ /*攻击++*/
-	background-position-y: calc(-32px * 44);
+	background-position-y:calc(var(--awoken-height) * -44);
 }
 .latent-icon[data-latent-icon='45']::before{ /*回复++*/
-	background-position-y: calc(-32px * 45);
+	background-position-y:calc(var(--awoken-height) * -45);
 }
 .latent-icon[data-latent-icon='46']::before{ /*心追解云封*/
-	background-position-y: calc(-32px * 46);
+	background-position-y:calc(var(--awoken-height) * -46);
 }
 .latent-icon[data-latent-icon='47']::before{ /*心L大SB*/
-	background-position-y: calc(-32px * 47);
+	background-position-y:calc(var(--awoken-height) * -47);
 }
 .latent-icon[data-latent-icon='48']::before{ /*L解禁武器*/
-	background-position-y: calc(-32px * 48);
+	background-position-y:calc(var(--awoken-height) * -48);
 }
 .latent-icon[data-latent-icon='49']::before{ /*伤害上限×3*/
-	background-position-y: calc(-32px * 49);
+	background-position-y:calc(var(--awoken-height) * -49);
 }
 :is(:lang(en), :lang(ko)) .latent-icon:where(
 	[data-latent-icon='17'],
 	[data-latent-icon='37'],
 	[data-latent-icon='39'],
 )::before{
-	background-position-x: -32px;
+	background-position-x:calc(var(--awoken-width) * -1);
 }
 
 /*v21.7 x3变x4*/
 body:not([data-game-source="ja"]) .latent-icon:where(
 	[data-latent-icon='49'],
 )::before{
-	background-position-x: -32px;
+	background-position-x:calc(var(--awoken-width) * -1);
 }
 
 /* 队伍界面特殊的 三维潜觉 */
@@ -1372,7 +1395,7 @@ body:not([data-game-source="ja"]) .latent-icon:where(
 {
 	margin-left: -5px;
 	width: 76px;
-	background-position-x: -32px;
+	background-position-x:calc(var(--awoken-width) * -1);
 }
 /* 潜觉编辑界面，这几个潜觉需要多显示一个需求的普通觉醒 */
 .m-latent-allowable-ul .latent-icon:where(
@@ -1400,22 +1423,22 @@ body:not([data-game-source="ja"]) .latent-icon:where(
 	opacity: 0.5;
 }
 .latent-icon.show-enabling-awokwn[data-latent-icon='39']::after{ /*C珠破吸*/
-	background-position-y: calc(-32px * 62);
+	background-position-y:calc(var(--awoken-height) * -62);
 }
 .latent-icon.show-enabling-awokwn[data-latent-icon='40']::after{ /*心横解转转*/
-	background-position-y: calc(-32px * 20);
+	background-position-y:calc(var(--awoken-height) * -20);
 }
 .latent-icon.show-enabling-awokwn[data-latent-icon='41']::after{ /*U解禁消*/
-	background-position-y: calc(-32px * 27);
+	background-position-y:calc(var(--awoken-height) * -27);
 }
 .latent-icon.show-enabling-awokwn[data-latent-icon='46']::after{ /*心追解云封*/
-	background-position-y: calc(-32px * 45);
+	background-position-y:calc(var(--awoken-height) * -45);
 }
 .latent-icon.show-enabling-awokwn[data-latent-icon='47']::after{ /*心L大SB*/
-	background-position-y: calc(-32px * 59);
+	background-position-y:calc(var(--awoken-height) * -59);
 }
 .latent-icon.show-enabling-awokwn[data-latent-icon='48']::after{ /*心L大SB*/
-	background-position-y: calc(-32px * 60);
+	background-position-y:calc(var(--awoken-height) * -60);
 }
 
 /* 额外有 x1.5 的 6格觉醒 */
@@ -1440,8 +1463,8 @@ body:not([data-game-source="ja"]) .latent-icon:where(
 	content: "×1.5";*/
 	content: "";
 	margin-left: 3px;
-	background-position-x: calc(-32px * 1);
-	background-position-y: calc(-32px * 42);
+	background-position-x:calc(var(--awoken-width) * -1);
+	background-position-y:calc(var(--awoken-height) * -42);
 }
 /* 额外有 x1.8 的 6格觉醒 */
 .level-super-break .latent-icon:where(
@@ -1449,7 +1472,7 @@ body:not([data-game-source="ja"]) .latent-icon:where(
 	[data-latent-icon='37'], /*破无效*/
 )::after
 {
-	background-position-x: calc(-32px * 2);
+	background-position-x:calc(var(--awoken-width) * -2);
 }
 
 /*v21.7 废、毒有x1.5*/
@@ -1460,8 +1483,8 @@ body[data-game-source="ja"] .level-super-break .latent-icon:where(
 {
 	content: "";
 	margin-left: 3px;
-	background-position-x: calc(-32px * 1);
-	background-position-y: calc(-32px * 42);
+	background-position-x:calc(var(--awoken-width) * -1);
+	background-position-y:calc(var(--awoken-height) * -42);
 }
 /*v21.7 换队长、转换、云封、禁消有x1.8*/
 body[data-game-source="ja"] .level-super-break .latent-icon:where(
@@ -1944,13 +1967,13 @@ body:not([data-game-source="ja"]) .badge:where(
 .attr[data-attr-icon='any'],
 .attr[data-attr-icon='self']
 {
-	background-position-x: -36px;
-	background-position-y:calc(-36px * 0);
+	background-position-x:calc(var(--icon-width) * -1);
+	background-position-y:calc(var(--icon-height) * -0);
 }
 .attr[data-attr-icon='fixed']
 {
-	background-position-x: -36px;
-	background-position-y:calc(-36px * 1);
+	background-position-x:calc(var(--icon-width) * -1);
+	background-position-y:calc(var(--icon-height) * -1);
 }
 
 .attr[data-attr-icon='-1']
@@ -1959,31 +1982,31 @@ body:not([data-game-source="ja"]) .badge:where(
 }
 .attr[data-attr-icon='0']
 {
-	background-position-y:calc(-36px * 0);
+	background-position-y:calc(var(--icon-height) * -0);
 }
 .attr[data-attr-icon='1']
 {
-	background-position-y:calc(-36px * 1);
+	background-position-y:calc(var(--icon-height) * -1);
 }
 .attr[data-attr-icon='2']
 {
-	background-position-y:calc(-36px * 2);
+	background-position-y:calc(var(--icon-height) * -2);
 }
 .attr[data-attr-icon='3']
 {
-	background-position-y:calc(-36px * 3);
+	background-position-y:calc(var(--icon-height) * -3);
 }
 .attr[data-attr-icon='4']
 {
-	background-position-y:calc(-36px * 4);
+	background-position-y:calc(var(--icon-height) * -4);
 }
 .attr[data-attr-icon='5']
 {
-	background-position-y:calc(-36px * 5);
+	background-position-y:calc(var(--icon-height) * -5);
 }
 .attr[data-attr-icon='6']
 {
-	background-position-y:calc(-36px * 6);
+	background-position-y:calc(var(--icon-height) * -6);
 }
 
 /*珠子图片*/
@@ -1992,17 +2015,19 @@ body:not([data-game-source="ja"]) .badge:where(
 .orb::after
 {
 	display: inline-flex;
-	width: 36px;
-	height: 36px;
+	--icon-width: 36px;
+	--icon-height: 36px;
+	width: var(--icon-width);
+	height: var(--icon-height);
 	background-image: url(images/icon-orbs.png);
-	background-position-y: 36px;
+	background-position-y: calc(var(--icon-height) * 1);
 	background-repeat: no-repeat;
 	vertical-align: bottom;
 }
 .orb::before,
 .orb::after
 {
-	background-position-x: -36px;
+	background-position-x:calc(var(--icon-width) * -1);
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -2010,17 +2035,17 @@ body:not([data-game-source="ja"]) .badge:where(
 .orb.enhanced::after
 {
 	content: "";
-	background-position-y:calc(-36px * 0);
+	background-position-y:calc(var(--icon-height) * -0);
 }
 .orb.locked::before
 {
 	content: "";
-	background-position-y:calc(-36px * 1);
+	background-position-y:calc(var(--icon-height) * -1);
 }
 .orb.drop::before
 {
 	content: "";
-	background-position-y:calc(-36px * 2);
+	background-position-y:calc(var(--icon-height) * -2);
 }
 .orb.bound
 {
@@ -2029,14 +2054,14 @@ body:not([data-game-source="ja"]) .badge:where(
 .orb.bound::before
 {
 	content: "";
-	background-position-y:calc(-36px * 3);
+	background-position-y:calc(var(--icon-height) * -3);
 	animation: hidden-visible-animate 0.8s infinite ease-out alternate;
 }
 
 .orb[data-orb-icon='_5color']
 {
 	background-image: url(images/icon-skills.png);
-	background-position-y:calc(-36px * 24);
+	background-position-y:calc(var(--icon-height) * -24);
 }
 .orb[data-orb-icon='-1']
 {
@@ -2044,41 +2069,41 @@ body:not([data-game-source="ja"]) .badge:where(
 }
 .orb[data-orb-icon='0']
 {
-	background-position-y:calc(-36px * 0);
+	background-position-y:calc(var(--icon-height) * -0);
 }
 .orb[data-orb-icon='1']
 {
-	background-position-y:calc(-36px * 1);
+	background-position-y:calc(var(--icon-height) * -1);
 }
 .orb[data-orb-icon='2']
 {
-	background-position-y:calc(-36px * 2);
+	background-position-y:calc(var(--icon-height) * -2);
 }
 .orb[data-orb-icon='3']
 {
-	background-position-y:calc(-36px * 3);
+	background-position-y:calc(var(--icon-height) * -3);
 }
 .orb[data-orb-icon='4']
 {
-	background-position-y:calc(-36px * 4);
+	background-position-y:calc(var(--icon-height) * -4);
 }
 .orb[data-orb-icon='5']
 {
-	background-position-y:calc(-36px * 5);
+	background-position-y:calc(var(--icon-height) * -5);
 }
 .orb[data-orb-icon='6']
 {
-	background-position-y:calc(-36px * 6);
+	background-position-y:calc(var(--icon-height) * -6);
 }
 .orb[data-orb-icon='7']
 {
-	background-position-y:calc(-36px * 7);
+	background-position-y:calc(var(--icon-height) * -7);
 }
 .orb[data-orb-icon='8']
 {
-	background-position-y:calc(-36px * 8);
+	background-position-y:calc(var(--icon-height) * -8);
 }
 .orb[data-orb-icon='9']
 {
-	background-position-y:calc(-36px * 9);
+	background-position-y:calc(var(--icon-height) * -9);
 }

@@ -44,14 +44,19 @@
 	}
 }
 body{
-	--head-block-width: 108px;
-	--head-block-height: 108px;
+	--head-width: 100px;
+	--head-height: 100px;
+	--head-block-width: calc(var(--head-width) + 8px);
+	--head-block-height: calc(var(--head-height) + 8px);
 	--search-icon-unchecked: 0.4;
 	--font-family : "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--icon-font-family : 'Font Awesome Solid', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--icon-regular-font-family : 'Font Awesome Regular', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--game-font-family : 'FOT-KurokaneStd-EB',"Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--border-width: 2px;
+
+	--awoken-width: 32px;
+	--awoken-height: 32px;
 
 	--badge-width: 102px;
 	--badge-height: 76px;
@@ -608,8 +613,8 @@ body.block-width-7 .formation-box{
 /*单个怪物*/
 .monster{
 	font-family: var(--game-font-family);
-	width: 100px;
-	height: 100px;
+	width: var(--head-width);
+	height: var(--head-height);
 	display: block;
 	background-repeat: no-repeat;
 	position: relative;

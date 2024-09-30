@@ -2560,23 +2560,20 @@ function daddbFotmationToPdfFotmation(obj)
 	return f;
 }
 //截图
-function captureScreenshot(target, transparent) {
+function captureScreenshot(target, filename = "capture", transparent = true) {
 	statusLine?.writeText(localTranslating.status_message.prepare_capture);
 	//去掉可能的空白文字的编辑状态
 	formationBox.classList.remove("edit-code");
 	const downLink = controlBox.querySelector(".down-capture");
-	setTimeout(()=>{
-		html2canvas(target, transparent ? {backgroundColor: null} : undefined).then(canvas => {
-			canvas.toBlob(function(blob) {
-				window.URL.revokeObjectURL(downLink.href);
-				downLink.href = URL.createObjectURL(blob);
-				downLink.download = `${document.title}.png`;
-				downLink.click();
-				statusLine?.writeText();
-			});
-			//document.body.appendChild(canvas);
+	html2canvas(target, transparent ? {backgroundColor: null} : undefined).then(canvas => {
+		canvas.toBlob(function(blob) {
+			window.URL.revokeObjectURL(downLink.href);
+			downLink.href = URL.createObjectURL(blob);
+			downLink.download = `${filename}.png`;
+			downLink.click();
+			statusLine?.writeText();
 		});
-	},500);
+	});
 }
 
 window.onload = initialize; //界面初始化
@@ -2587,7 +2584,7 @@ function initialize() {
 	const screenshotTransparent = document.querySelector("#screenshot-transparent");
 	drawScreenshot.onclick = function(event) {
 		if (event.target == this) {
-			captureScreenshot(formationBox, screenshotTransparent.checked);
+			captureScreenshot(formationBox, document.title, screenshotTransparent.checked);
 		}
 	}
 
