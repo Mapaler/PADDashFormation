@@ -36147,7 +36147,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"59bd2f7483fa323682f42cd872fc0343"
+		"09fb016ad5e9f707abddeeff11c4beeb"
 	],
 	[
 		"script-custom_elements.js",
@@ -36167,11 +36167,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"a03eac2c81faec10c509b388225d1770"
+		"963b5bed10b1221f913502e3d3a2c9bc"
 	],
 	[
 		"solo.html",
-		"58293ffb0eae8f066c40fa79eeb1932a"
+		"5969f0234b76f7ae2286044d7e911c4f"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -36179,11 +36179,11 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"b4d1d4aca6f4ed09771b460d4bfa23a2"
+		"00c33f68daeeab993e0066527fb849b5"
 	],
 	[
 		"style.css",
-		"93bbdd79ed8ad5d2a8ec7275237e241c"
+		"81281f6828feb896c18e3e59f845a484"
 	],
 	[
 		"temp.js",
@@ -36191,7 +36191,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"b50aa603822f381cf8c6350c780074ee"
+		"9c530bb8c6b5b4f49e17f2c68421c04e"
 	],
 	[
 		"languages/en.css",
@@ -36219,7 +36219,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/language-list.js",
-		"f2ab23759b3b9df77280d29ba8731872"
+		"4fe101d3e160216a8d58f88294c66ef8"
 	],
 	[
 		"languages/zh-hans.css",

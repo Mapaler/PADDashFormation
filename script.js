@@ -5804,6 +5804,8 @@ function changeid(mon, monDom, latentDom, assist) {
 	}
 
 	monDom.setAttribute("data-cardid", monId); //设定新的id
+	//monDom.style.setProperty("--card-id",monId);
+
 	if (monId < 0) //如果是延迟
 	{
 		monDom.removeAttribute("href");
