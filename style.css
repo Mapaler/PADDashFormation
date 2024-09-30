@@ -46,14 +46,15 @@
 body{
 	--head-width: 100px;
 	--head-height: 100px;
-	--head-block-width: calc(var(--head-width) + 8px);
-	--head-block-height: calc(var(--head-height) + 8px);
+	--head-block--border-width: 4px;
+	--head-block-width: calc(var(--head-width) + var(--head-block--border-width) * 2);
+	--head-block-height: calc(var(--head-height) + var(--head-block--border-width) * 2);
 	--search-icon-unchecked: 0.4;
 	--font-family : "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--icon-font-family : 'Font Awesome Solid', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--icon-regular-font-family : 'Font Awesome Regular', "Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
 	--game-font-family : 'FOT-KurokaneStd-EB',"Microsoft Yahei","Microsoft JhengHei","Source Han Sans",Arial, Helvetica, sans-serif, "Malgun Gothic", "맑은 고딕", "Gulim", AppleGothic;
-	--border-width: 2px;
+	--char-border-width: 2px;
 
 	--awoken-width: 32px;
 	--awoken-height: 32px;
@@ -985,7 +986,7 @@ body:not(.show-team-total-info):not(.solo) .formation-box .team-bigbox
 	vertical-align: middle;
 }
 .formation-box .monster{
-	--margin: 4px;
+	--margin: var(--head-block--border-width);
 	margin: var(--margin); /*留给队长边框的*/
 }
 .team-assist, .team-members{
@@ -1460,10 +1461,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	--column-gap: 8px;
 	--transform-scale: 0.65;
 
-	width: max-content;
+	/*width: calc(var(--icon-width) * 4 + var(--column-gap) * 3);*/
+	width: 100%;
 	transform: scale(var(--transform-scale));
-	transform-origin: left top;
-	margin-left: 4px;
+	transform-origin: center top;
+	/*transform-origin: left top;*/
 	margin-bottom: calc( (var(--awoken-height) * 2 + var(--row-gap)) * (1 - var(--transform-scale)) * -1 + 2px);
 	/*margin: calc(-64px * (1 - 0.63) / 2 + 3px) calc((108px - 152px) / 2);*/
 	/*-152 * (1 - 0.63) + 108 - 152 * 0.63，化简为108 - 152*/
@@ -2751,7 +2753,7 @@ input[disabled]+.awoken-icon:active,
 	content: "▼怪物能力";
 }*/
 .row-mon-ability ul{
-	margin-top: var(--border-width);
+	margin-top: var(--char-border-width);
 }
 .row-mon-ability ul li::before{
 	width: 2.5em;
@@ -2792,7 +2794,7 @@ input[disabled]+.awoken-icon:active,
 .row-mon-plus .plus-box{
 	border-color: #A07740;
 	border-style: solid;
-	border-width: var(--border-width);
+	border-width: var(--char-border-width);
 	border-radius: 8px;
 	background-color: #44392C;
 	box-shadow: inset black 0 3px 5px;
