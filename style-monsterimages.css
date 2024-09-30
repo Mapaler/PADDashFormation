@@ -1166,7 +1166,11 @@
 {
 	background-image: url(images/type.png);
 	--icon-x-index: 0;
-	--icon-y-index: -1; /*默认不显示*/
+	--icon-y-index: 0;
+}
+.type-icon:not([data-type-icon])
+{
+	background-image: unset;
 }
 .type-icon[data-type-icon='0']
 {/*进化用*/
@@ -2076,6 +2080,10 @@ body:not([data-game-source="ja"]) .badge:where(
 	position: absolute;
 	left: 0;
 	right: 0;
+}
+.orb:not([data-orb-icon])
+{
+	background-image: unset;
 }
 .orb.enhanced::after
 {
