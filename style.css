@@ -633,11 +633,6 @@ body.block-width-7 .formation-box{
 	background-color: rgba(230,230,230,0.5);
 	border: 3px grey dashed;
 }
-.edit-box .monster.null{
-	background-color: #653;
-	border: none;
-	box-shadow: inset black 0 0 7px;
-}
 .monster.delay{
 	background-color: yellow;
 	box-shadow: inset orange 0 0 7px;
@@ -2577,6 +2572,10 @@ input[disabled]+.awoken-icon:active,
 	background-color: unset;
 	border: none;
 	cursor: pointer;
+}
+.edit-box .monsterinfo-box .monster-head .monster.null{
+	background-color: #653;
+	box-shadow: inset black 0 0 7px;
 }
 .row-awoken-sawoken .awoken-ul,
 .row-awoken-sawoken .current-super-awoken

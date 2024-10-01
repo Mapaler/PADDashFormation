@@ -4600,7 +4600,7 @@ function initialize() {
 			[...s_AttrForm.querySelectorAll(".attr-selecter-list .attr-list")].forEach(list=>list.querySelector("li.display-none").classList.remove(className_displayNone));
 		}
 		editBox.changeMonId(monstersID.value);
-		const spoof = confirm("你可以上传你的自定义图片以制作卡片头像。\nYou can upload your custom image to make a card avatar.\n\n是否启用恶搞功能？\n所有角色全部随机设定四种属性。\nEnable Spoof function ?\nAll Cards set 4 random attrs. ");
+		const spoof = confirm("你可以上传你的自定义图片以制作卡片头像。\nYou can upload your custom image to make a card avatar.\n\n是否启用😈恶搞功能？\n所有角色全部随机设定四种属性。\nEnable 😈Spoof function ?\nAll Cards set 4 random attrs. ");
 		if (spoof) {
 			Cards.forEach(card=>{
 				if (!card.enabled) return;

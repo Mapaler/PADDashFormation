@@ -54,7 +54,12 @@
 .monster .attrs .attr:nth-of-type(4){ /*四属性*/
 	--attr-y-index: 3;
 }
-.monster .attrs .attr[data-attr='-1'] {
+.monster .attrs .attr[data-attr='-1'],
+.monster .attrs .attr:where(
+	[data-attr='any'],
+	[data-attr='6'],
+):nth-of-type(n+2)
+{
 	background: none; /*无*/
 	display: none;
 }
@@ -76,14 +81,12 @@
 .monster .attrs .attr[data-attr='5'] { /*心*/
 	--attr-x-index: 5;
 }
-
-.monster .attrs .attr:nth-of-type(1)[data-attr='6'] { /*无主属性*/
-	background-image: url(images/CARDFRAMEW.png);
-	background-position: calc(var(--x-pos-start) * -1) calc(var(--y-pos-start) * -1);
+.monster .attrs .attr[data-attr='6'] { /*无主属性*/
+	--attr-x-index: 6;
 }
-.monster .attrs .attr:nth-of-type(1)[data-attr='any'] {
+.monster .attrs .attr[data-attr='any'] {
+	--attr-x-index: 0;
 	background-image: url(images/card-frame-any.png);
-	background-position: calc(var(--x-pos-start) * -1) calc(var(--y-pos-start) * -1);
 }
 /*
 .monster .attrs .attr[data-attr='any'] {
