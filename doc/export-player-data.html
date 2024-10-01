@@ -9,7 +9,6 @@
 		content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<style type="text/css">
 		body {
-			font-size: 1.25em;;
 		}
 		code {
 			padding: .2em .4em;
@@ -50,6 +49,7 @@
 
 		img {
 			outline: grey solid 1px;
+			max-width: 100%;
 		}
 		#form-language {
 			position: sticky;
@@ -95,7 +95,9 @@
 			const formData = new FormData(this);
 			const language = formData.get("language");
 			if (language  == "all") {
-				langCss.innerHTML = "";
+				langCss.innerHTML = `
+[lang] {display:block;}
+				`;
 			} else {
 				langCss.innerHTML = `
 [lang]:not(:lang(${language})){
@@ -104,7 +106,12 @@
 				`;
 			}
 		}
+		if (/^zh\b/i.test(navigator.language)) {
+			const languageZh = formLanguage.querySelector('input[name="language"][value="zh"]');
+			languageZh && (languageZh.checked = true);
+		}
 		formLanguage.onchange();
+		
 		const openAllDetails = document.getElementById("open-all-details");
 		openAllDetails.onclick = function(){
 			document.querySelectorAll("details").forEach(node=>node.open=true);

@@ -36167,7 +36167,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"963b5bed10b1221f913502e3d3a2c9bc"
+		"09b2d8e669f53c8e0b66aed5c27cc022"
 	],
 	[
 		"solo.html",
@@ -36179,11 +36179,11 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"a9528becc8c4e90c8ced6cb1fda4ec9a"
+		"ab153407ebbe5d123d4170b21c8ebc42"
 	],
 	[
 		"style.css",
-		"3d5371df89386c6c725b0172d7e85655"
+		"2043a51c36152aec55b885dd7794b4b6"
 	],
 	[
 		"temp.js",
@@ -36275,7 +36275,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/CARDFRAME2.png",
-		"13006618d031ec6f749b1cc1f429d42e"
+		"06dbd71f7237c5effd645c4ebbe647ca"
 	],
 	[
 		"images/CARDFRAMEW.png",
@@ -36439,11 +36439,11 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/export-player-data.html",
-		"1a8617125c7103ecaf91a158c1b41563"
+		"05275f5501d580f53bf163027de2c597"
 	],
 	[
 		"doc/index.html",
-		"67df78ff5f6b6dcc4ba4a117f9ea447c"
+		"6b00206673f027d8dc5e72a9165d2519"
 	],
 	[
 		"doc/images/bluestacks-adb-connect.webp",
@@ -36760,6 +36760,14 @@ const cachesMap = new Map([
 	[
 		"doc/images/tips-arrow-close-numlock.webp",
 		"7d2c3d6922b116dc63d0dc7ec05ba9d2"
+	],
+	[
+		"doc/images/tips-generate-avatar-1.webp",
+		"7a5a024c6e06a78f04d19bff5719bbd1"
+	],
+	[
+		"doc/images/tips-generate-avatar-2.webp",
+		"f3d8fb9bada506ad9a26e63d9181e3dd"
 	],
 	[
 		"doc/images/tips-guide.png",

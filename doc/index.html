@@ -9,7 +9,6 @@
 		content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<style type="text/css">
 		body {
-			font-size: 1.25em;;
 		}
 		code {
 			padding: .2em .4em;
@@ -44,6 +43,7 @@
 
 		img {
 			outline: grey solid 1px;
+			max-width: 100%;
 		}
 		#form-language {
 			position: sticky;
@@ -88,7 +88,9 @@
 			const formData = new FormData(this);
 			const language = formData.get("language");
 			if (language  == "all") {
-				langCss.innerHTML = "";
+				langCss.innerHTML = `
+[lang] {display:block;}
+				`;
 			} else {
 				langCss.innerHTML = `
 [lang]:not(:lang(${language})){
@@ -96,6 +98,10 @@
 }
 				`;
 			}
+		}
+		if (/^zh\b/i.test(navigator.language)) {
+			const languageZh = formLanguage.querySelector('input[name="language"][value="zh"]');
+			languageZh && (languageZh.checked = true);
 		}
 		formLanguage.onchange();
 	</script>
@@ -430,13 +436,14 @@
 			<img src="images/tips-search-TagInGame.png" alt="在游戏中搜索怪物系列">
 		</li>
 		<li>
-			<span lang="zh">点击编辑界面的卡片头像可以跳转到预定义的攻略网站。</span>
-			<span lang="en">Click on the card avatar on the editing interface to jump to a predefined guide website.</span>
+			<span lang="zh">点击编辑界面的卡片头像可以生成这个头像的图片。</span>
+			<span lang="en">Click on the card avatar on the editing interface to generate a picture of this avatar.</span>
 			<br>
-			<img src="images/tips-guide.png" alt="攻略网站">
+			<img src="images/tips-generate-avatar-1.webp" alt="点击可以生成头像图片">
+			<img src="images/tips-generate-avatar-2.webp" alt="打开保存的头像图片">
 			<br>
-			<span lang="zh">在队伍界面和搜索结果的怪物头像上，点击鼠标中键也可以跳转到攻略网站。在手机上则是长按怪物头像然后选择在新标签页打开。</span>
-			<span lang="en">Or click the middle mouse button on the monster avatar of the formation interface and search results to jump to the Guide. On your phone, you're long-pressing the monster avatar and then selecting to open it in a new tab.</span>
+			<span lang="zh">在队伍界面和搜索结果的怪物头像上，点击鼠标中键可以跳转到指定的怪物图鉴。在手机上则是长按怪物头像然后选择在新标签页打开。</span>
+			<span lang="en">Or click the middle mouse button on the monster avatar of the formation interface and search results to jump to the card Guide. On your phone, you're long-pressing the monster avatar and then selecting to open it in a new tab.</span>
 			<br>
 			<img src="images/tips-guide2.png" alt="攻略网站2">
 		</li>
