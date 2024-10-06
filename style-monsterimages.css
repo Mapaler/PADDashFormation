@@ -1983,13 +1983,6 @@ body[data-game-source="ja"] .level-super-break .latent-icon:where(
 	--icon-x-index: 1;
 }
 
-/*v21.7 SB+10变+20*/
-body:not([data-game-source="ja"]) .badge:where(
-	[data-badge-icon='23'],
-)::before {
-	--icon-x-index: 1;
-}
-
 
 /*属性图片*/
 .attr

@@ -1690,8 +1690,8 @@ function countTeamSB(team, solo) {
 			case 7: //SB
 				sbn += 2;
 				break;
-			case 23: //SB++ 辅助无效  v21.7 +10变+20
-				sbn += currentDataSource.code === "ja" ? 20 : 10;
+			case 23: //SB++ 辅助无效 +20
+				sbn += 20;
 				break;
 		}
 	}
