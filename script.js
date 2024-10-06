@@ -4545,15 +4545,30 @@ function initialize() {
 	const s_attr_preview_attrs = Array.from(attrPreview.querySelectorAll(".attrs .attr"));
 	
 	const s_AttrForm = document.getElementById("search-attr");
+	let attrAnimeHook = null; //储存动画钩子
+	const attrsMatrix = new Array(s_attr_preview_attrs.length);
+	function attrLoopAnime(){
+		for (let i = 0; i < s_attr_preview_attrs.length; i++) {
+			const attrs = attrsMatrix[i];
+			if (attrs.length) s_attr_preview_attrs[i].dataset.attr = attrs.randomItem();
+		}
+	}
 	s_AttrForm.onchange = function(event){
 		event?.preventDefault();
 		const formData = new FormData(this);
 		for (let i = 0; i < s_attr_preview_attrs.length; i++) {
-			const attr = parseInt(formData.get(`attr-${i+1}`),10);
-			s_attr_preview_attrs[i].dataset.attr = Number.isNaN(attr) ? "any" : attr;
+			attrsMatrix[i] = formData.getAll(`attr-${i+1}`).map(v=>parseInt(v,10));
+			const attrs = attrsMatrix[i];
+			if (attrs.length < 1) attrs.push("any");
 		}
+		clearInterval(attrAnimeHook); //清除旧动画
+		attrLoopAnime();
+		if (attrsMatrix.some(attrs=>attrs.length > 1)) //如果某一个选择的属性大于 1
+			attrAnimeHook = setInterval(attrLoopAnime, 1000); //每秒做一次随机动画
 	}
+	s_AttrForm.onchange(); //先跑一次，这样刷新前的属性也会显示出来
 	s_AttrForm.onreset = function(event){
+		clearInterval(attrAnimeHook);
 		s_attr_preview_attrs.forEach(node=>node.dataset.attr = "any");
 	};
 
@@ -4600,14 +4615,16 @@ function initialize() {
 			[...s_AttrForm.querySelectorAll(".attr-selecter-list .attr-list")].forEach(list=>list.querySelector("li.display-none").classList.remove(className_displayNone));
 		}
 		editBox.changeMonId(monstersID.value);
-		const spoof = confirm("你可以上传你的自定义图片以制作卡片头像。\nYou can upload your custom image to make a card avatar.\n\n是否启用😈恶搞功能？\n所有角色全部随机设定四种属性。\nEnable 😈Spoof function ?\nAll Cards set 4 random attrs. ");
+		const spoof = confirm("你可以上传你的自定义图片以制作卡片头像。\nYou can upload your custom image to make a card avatar.\n\n是否启用🤡恶搞功能？\n所有角色全部随机设定四种属性。\nEnable 🤡Spoof function ?\nAll Cards set 4 random attrs. ");
 		if (spoof) {
 			Cards.forEach(card=>{
 				if (!card.enabled) return;
-				for (let i = 0; i < 4; i++) {
+				card.attrs.length = 0; //清除旧的属性
+				card.attrs[0] = Math.randomInteger(0, 6);
+				for (let i = 1; i < 4; i++) {
 					const maxAttr = (i === 1 && card.attrs[0] === 6) ? 5 : 6; //如果第一属性是无属性，第二属性就不可以是无属性
 					card.attrs[i] = Math.randomInteger(0, maxAttr);
-					if (i >= 1 && card.attrs[i] === 6) break; //如果第2属性开始出现了无属性，就不需要再继续了
+					if (i >= 1 && card.attrs[i] === 6) break; //如果第2属性开始，一旦出现了无属性，就不需要再继续了
 				}
 			});
 		}

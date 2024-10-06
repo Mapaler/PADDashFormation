@@ -1053,8 +1053,8 @@ function henshin(id, random = false) {
 		random: random
 	};
 }
-function skillPlayVoice(id) {
-	return { kind: SkillKinds.PlayVoice, id };
+function skillPlayVoice(skillStage, VoiceId) {
+	return { kind: SkillKinds.PlayVoice, stage: skillStage, id: VoiceId };
 }
 function voidPoison() { return { kind: SkillKinds.VoidPoison }; }
 function skillProviso(cond) { return { kind: SkillKinds.SkillProviso, cond: cond }; }
@@ -1727,7 +1727,7 @@ const skillObjectParsers = {
 		);
 	},
 	[259](percent) { return breakingShield(v.xShield(percent)); },
-	[260](_, voiceId) { return skillPlayVoice(voiceId); },
+	[260](skillStage, voiceId) { return skillPlayVoice(skillStage, voiceId); },
 	[261](percent) { return gravity(v.xCHP(percent), 'single'); },
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -2807,13 +2807,16 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.PlayVoice: { //播放技能语音
-			const { id } = skill;
+			const { stage, id } = skill;
 			const icon = document.createElement("icon");
 			icon.className = "awoken-icon";
 			icon.setAttribute("data-awoken-icon", 63);
-			icon.onclick = ()=>playVoiceById(id);
+			icon.dataset.voiceId = id || Cards[editBox.mid].voiceId;
+			icon.onclick = playOwnVoiceId;
 
 			let dict = {
+				stage,
+				id,
 				icon,
 			};
 			frg.ap(tsp.skill.play_voice(dict));
@@ -2827,6 +2830,9 @@ function renderSkill(skill, option = {})
 	}
 	return frg;
 };
+function playOwnVoiceId(){
+	playVoiceById(parseInt(this.dataset.voiceId,10));
+}
 
 function renderStat(stat, option) {
 	const frg = document.createDocumentFragment();

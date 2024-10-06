@@ -36155,19 +36155,19 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"720ea9bd491b412e8394615817e360f0"
+		"4350b4b335a157ac288679ed38ab0348"
 	],
 	[
 		"script-skill-parser.js",
-		"7eb75bb6cc99901755f7936e32ee985e"
+		"5e7e4e67bad2eebc0e57567b12934c6a"
 	],
 	[
 		"script-universal_function.js",
-		"f01a8abf20339eed9bbed18881a84dbf"
+		"ce92b110d47442e699eab7ce59d1bdfc"
 	],
 	[
 		"script.js",
-		"09b2d8e669f53c8e0b66aed5c27cc022"
+		"1ad3f288192a83141d6731842240f2bb"
 	],
 	[
 		"solo.html",
@@ -36227,7 +36227,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.js",
-		"e17c9e42e1def0ea098b2726dde7809a"
+		"71138b459d0d9851f2554e6336f32a98"
 	],
 	[
 		"languages/zh-hant.css",
@@ -36235,7 +36235,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.js",
-		"78f6a3649d0be85e6936b30e7f2dac96"
+		"677bd55683bbe9f7055523ed462db5b9"
 	],
 	[
 		"images/attrs.png",
@@ -36275,7 +36275,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/CARDFRAME2.png",
-		"06dbd71f7237c5effd645c4ebbe647ca"
+		"4d98541e37b80195d59fb59832c1f189"
 	],
 	[
 		"images/CARDFRAMEW.png",

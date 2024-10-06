@@ -322,6 +322,10 @@ Array.prototype.nodeJoin = function(separator)
 	});
 	return frg;
 }
+//数组随机选择一个元素
+Array.prototype.randomItem = function(){
+	return this[Math.randomInteger(this.length-1)];
+};
 
 Math.randomInteger = function(max, min = 0) {
 	let _max = Math.max(max, min),

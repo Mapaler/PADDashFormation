@@ -137,7 +137,7 @@ const _localTranslating = {
 			board_size_change: tp`板面大小改变为${'icon'}${'size'}`,
 			remove_assist: tp`${'icon'}移除自身的辅助宠物（直到地下城结束）`,
 			prediction_falling: tp`盘面上可以${'icon'}预知宝珠掉落`,
-			play_voice: tp`使用技能时播放另一段语音 ${'icon'}`,
+			play_voice: tp`播放第 ${'stage'} 阶段的语音 ${'icon'}`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,

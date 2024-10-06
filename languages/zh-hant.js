@@ -137,7 +137,7 @@ const _localTranslating = {
 			board_size_change: tp`板面大小改變為${'icon'}${'size'}`,
 			remove_assist: tp`${'icon'}移除自身的輔助寵物（直到地下城結束）`,
 			prediction_falling: tp`盤面上可以${'icon'}預知寶珠掉落`,
-			play_voice: tp`使用技能時播放另一段語音 ${'icon'}`,
+			play_voice: tp`播放第 ${'stage'} 階段的語音 ${'icon'}`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,

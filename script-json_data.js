@@ -152,7 +152,7 @@ let localTranslating = {
 			board_size_change: tp`Board size changed to ${'icon'}${'size'}`,
 			remove_assist: tp`${'icon'}Remove this assist card (until end of dungeon)`,
 			prediction_falling: tp`${'icon'}Prediction of falling on board`,
-			play_voice: tp`Play another voice while using the skill ${'icon'}`,
+			play_voice: tp`Play voice of the phase ${'stage'} of active skill ${'icon'}`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -465,6 +465,7 @@ let localTranslating = {
 			[128]: tp`${'icon'}Yang Protection`,
 			[129]: tp`${'icon'}Yin Protection`,
 			[130]: tp`${'icon'}Aging`,
+			[131]: tp`${'icon'}Part Break`,
 		}
 	},
 };
