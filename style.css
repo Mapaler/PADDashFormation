@@ -1016,7 +1016,7 @@ label.badge {
 	cursor: pointer;
 }
 #badge-choose .team-badges input:checked+ .badge{
-	outline: 5px yellow solid;
+	outline: 10px yellow solid;
 }
 
 /*队伍的背景色*/
