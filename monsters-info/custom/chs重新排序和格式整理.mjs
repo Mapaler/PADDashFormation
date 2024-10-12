@@ -11,6 +11,10 @@ chdir(__dirname);
 const ljson = readFileSync("./chs.json", 'utf-8'); //使用同步读取
 const ccard = JSON.parse(ljson);//将字符串转换为json对象
 ccard.forEach(c => {
+	// if (c.id>=4684 && c.id<=9899) {
+	// 	c.name = c.name.replace(/^卡片：/,"卡牌：");
+	// 	c.name = c.name.replace(/^(.+)的卡$/,"卡牌：$1");
+	// }
 	const tags = new Set(c.tags);
 	if(c.name.includes("希石")){
 		tags.add("希石");
