@@ -1909,6 +1909,7 @@ function loadData(force = false)
 			}
 		} else {
 			try {
+				if (!responseText) return;
 				newCkeys = JSON.parse(responseText);
 				if (!newCkeys) return;
 			} catch (e) {
