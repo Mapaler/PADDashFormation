@@ -4,7 +4,7 @@
 		guideURL:sanbonGuideUrl //or (id,name)=>`http://www.puzzledragonx.com/en/search.asp?q=${name}`
 	},
 	{
-		name:"中文（傳統）",i18n:"zh-hant",i18n_RegExp:/^zh-(?:hant-)?(TW|HK)/i,searchlist:["cht","ja"],
+		name:"中文（傳統）",i18n:"zh-hant",i18n_RegExp:/^zh-(?:hant-)?(TW|HK)/i,searchlist:["cht","chs","ja"],
 		guideURL:mydelfGuideUrl
 	},
 	{

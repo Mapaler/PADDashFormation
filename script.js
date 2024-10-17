@@ -1088,6 +1088,8 @@ Formation.pdcBadgeMap = [
 	{pdf:32,pdc:32}, //怪物猎人
 	{pdf:33,pdc:33}, //三丽鸥
 	{pdf:34,pdc:34}, //咒术回战
+	{pdf:35,pdc:35}, //万圣节
+	{pdf:36,pdc:36}, //数码宝贝
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -7494,6 +7496,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 33: return member.card.collabId === 27 ? 1.15 : 1; //三丽鸥
 				case 34: return member.card.collabId === 97 ? 1.15 : 1; //咒术回战
 				case 35: return member.card.gachaIds.includes(11) ? 1.15 : 1; //万圣节
+				case 36: return member.card.collabId === 114 ? 1.15 : 1; //数码宝贝
 				default: return 1;
 			}
 		}

@@ -19,6 +19,9 @@ ccard.forEach(c => {
 	if(c.name.includes("希石")){
 		tags.add("希石");
 	}
+	if(c.name.includes("合作硬币")){
+		tags.add("活动票/活动硬币");
+	}
 	c.tags = [...tags];
 });
 
@@ -32,3 +35,8 @@ writeFile(`./chs.json`, JSON.stringify(ccard, null, '\t'), function (err) {
 		console.error(err);
 	}
 });
+
+/*
+导出未翻译数据
+Cards.filter(card=>card.enabled && !card?.otLangName?.chs).map(card=>({id:card.id,name:card.name,tags:card.altName}))
+*/
