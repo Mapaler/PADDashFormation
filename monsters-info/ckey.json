@@ -3,9 +3,9 @@
 		"code": "ja",
 		"ckey": {
 			"card": "1d86bb7809247c29c7959762779d00ef",
-			"skill": "99e9506a028a969988392f2d05a5a25f"
+			"skill": "fb70303d06dad894273df0cb10ef7fe8"
 		},
-		"updateTime": 1729170157315
+		"updateTime": 1729257100722
 	},
 	{
 		"code": "en",
@@ -21,6 +21,6 @@
 			"card": "f2ad7023c983f9e2727986a965d5e22c",
 			"skill": "44f6c6e73548593aedf0b5e58f19936b"
 		},
-		"updateTime": 1728639171834
+		"updateTime": 1729257433702
 	}
 ]
