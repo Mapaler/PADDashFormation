@@ -1417,12 +1417,12 @@
 	--icon-x-index: 1;
 }
 
-/*v21.7 x3变x4*/
-body:not([data-game-source="ja"]) .latent-icon:where(
+/*v21.7 日服x3变x4，美韩服不变，就这样写。*/
+/*body:not([data-game-source="ja"]) .latent-icon:where(
 	[data-latent-icon='49'],
 )::before{
 	--icon-x-index: 1;
-}
+}*/
 
 /* 编辑界面特殊的 三维潜觉 */
 .latent-ul-div .latent-ul .latent-icon[data-latent-icon='12']::before
@@ -1478,15 +1478,17 @@ body:not([data-game-source="ja"]) .latent-icon:where(
 
 /* 额外有 x1.5 的 6格觉醒 */
 .level-super-break .latent-icon:where(
-	[data-latent-icon='13'],
-	[data-latent-icon='37'],
-	[data-latent-icon='38'],
-	[data-latent-icon='39'],
-	[data-latent-icon='40'],
-	[data-latent-icon='41'],
-	[data-latent-icon='46'],
-	[data-latent-icon='47'],
-	[data-latent-icon='48'],
+	[data-latent-icon='13'], /*防换队长*/
+	[data-latent-icon='14'], /*防费*/
+	[data-latent-icon='15'], /*防毒*/
+	[data-latent-icon='37'], /*破无效*/
+	[data-latent-icon='38'], /*破属吸*/
+	[data-latent-icon='39'], /*破伤吸*/
+	[data-latent-icon='40'], /*解轮盘赌*/
+	[data-latent-icon='41'], /*解禁消*/
+	[data-latent-icon='46'], /*解云封*/
+	[data-latent-icon='47'], /*S++*/
+	[data-latent-icon='48'],/*解封武器*/
 )::after
 {
 	/*font-family: var(--game-font-family);
@@ -1503,35 +1505,16 @@ body:not([data-game-source="ja"]) .latent-icon:where(
 }
 /* 额外有 x1.8 的 6格觉醒 */
 .level-super-break .latent-icon:where(
-	[data-latent-icon='48'], /*除武器*/
+	[data-latent-icon='13'], /*防换队长*/
 	[data-latent-icon='37'], /*破无效*/
+	[data-latent-icon='40'], /*解轮盘赌*/
+	[data-latent-icon='41'], /*解禁消*/
+	[data-latent-icon='46'], /*解云封*/
+	[data-latent-icon='48'], /*解封武器*/
 )::after
 {
 	--icon-x-index: 2;
 }
-
-/*v21.7 废、毒有x1.5*/
-body[data-game-source="ja"] .level-super-break .latent-icon:where(
-	[data-latent-icon='14'],
-	[data-latent-icon='15'],
-)::after
-{
-	content: "";
-	margin-left: 3px;
-	--icon-x-index: 1;
-	--icon-y-index: 42;
-}
-/*v21.7 换队长、转换、云封、禁消有x1.8*/
-body[data-game-source="ja"] .level-super-break .latent-icon:where(
-	[data-latent-icon='13'],
-	[data-latent-icon='40'],
-	[data-latent-icon='41'],
-	[data-latent-icon='46'],
-)::after
-{
-	--icon-x-index: 2;
-}
-
 
 /* 徽章背景 */
 .badge{
