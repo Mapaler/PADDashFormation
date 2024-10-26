@@ -1597,14 +1597,14 @@ const skillObjectParsers = {
 	[232](...ids) { return evolvedSkills(false, ids.map(id => this.parser(id))); },
 	[233](...ids) { return evolvedSkills(true, ids.map(id => this.parser(id))); },
 	[234](min, max) { return skillProviso(c.stage(min ?? 0, max ?? 0)); },
-	[235](attrs, lenMin, lenExact, atk, reducePercent, combo, damage) {
+	[235](attrs, lenMin, lenExact, atk, reducePercent, combo, damage, rcv) {
 		// const len = lenMin || lenExact; //宝珠长度
 		// const ee = Boolean(lenExact); //是否为刚好等于
 		//第二个参数为多少以上就算，第三个参数为多少以上才算
 		//return powerUp(null, null, p.mul({ atk: atk || 100}), c.exact('match-length', lenExact, Bin.unflags(attr)), v.percent(percent), [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean), true);
 		//let powerup, condition;
 		let powerup = Boolean(lenMin)
-			? p.scaleMatchLength(Bin.unflags(attrs), lenMin, lenMin, [atk || 100, 100], [0, 0])
+			? p.scaleMatchLength(Bin.unflags(attrs), lenMin, lenMin, [atk || 100, rcv || 100], [0, 0])
 			: p.mul({ atk: atk || 100});
 		let condition = Boolean(lenExact)
 			? c.exact('match-length', lenExact, Bin.unflags(attrs))
