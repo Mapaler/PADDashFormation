@@ -2584,6 +2584,41 @@ window.onload = initialize; //界面初始化
 
 //初始化
 function initialize() {
+	if (/localhost/i.test(location.hostname) || /mapaler\.com/i.test(location.hostname)) {
+		// const alert = document.createElement("dialog");
+		// const h1 = alert.appendChild(document.createElement("h1"));
+		// h1.textContent = "Notice | 公告";
+		const alert = document.createElement("div");
+		const title1 = alert.appendChild(document.createElement("h3"));
+		title1.textContent = "Notice";
+
+		const link1 = document.createElement("a");
+		link1.href = "https://mapaler.github.io/PADDashFormation";
+		link1.textContent = "GitHub Pages Mirror";
+
+		const link1_2 = document.createElement("a");
+		link1_2.href = "https://pad.ideawork.cn";
+		link1_2.textContent = "Mirror by @BigBug";
+
+		const p1 = alert.appendChild(document.createElement("p"));
+		p1.append("Since my VPS is currently CentOS 7 that has been discontinued, and I am ready to migrate to a new version OS in the near future. I need to rebuild the server environment after the upgrade, this website cannot be accessed, please use ",link1, " or ", link1_2," during this time.");
+
+		const title2 = alert.appendChild(document.createElement("h3"));
+		title2.textContent = "公告";
+
+		const link2 = link1.cloneNode();
+		link2.textContent = "GitHub Pages 镜像";
+
+		const link2_2 = link1_2.cloneNode();
+		link2_2.textContent = "@大虫子搭的国内镜像";
+
+		const p2 = alert.appendChild(document.createElement("p"));
+		p2.append("由于本人的 VPS 目前是已经停止维护的 CentOS 7，准备近期迁移到新版本系统。升级后我需要重新搭建服务器环境，本网站无法正常访问，请先使用 ",link2, " 或 ", link2_2,"。");
+		
+		document.body.appendChild(alert);
+	}
+
+
 	const drawScreenshot = document.querySelector("#draw-screenshot");
 	const screenshotTransparent = document.querySelector("#screenshot-transparent");
 	drawScreenshot.onclick = function(event) {
