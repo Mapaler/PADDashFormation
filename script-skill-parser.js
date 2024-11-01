@@ -2551,9 +2551,8 @@ function renderSkill(skill, option = {})
 			if (attrs_types.length)
 			{
 				targetDict.attrs_types = attrs_types.nodeJoin(tsp.word.slight_pause());
+				dict.targets = tsp.skill.power_up_targets(targetDict);
 			}
-			
-			if (attrs_types.length) dict.targets = tsp.skill.power_up_targets(targetDict);
 
 			if (value){
 				/*if (attrs?.includes(5) && value.kind == SkillPowerUpKind.Multiplier)
@@ -2588,7 +2587,7 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.power_up(dict));
 			break;
 		}
-		case SkillKinds.SlotPowerUp: { //增加伤害上限
+		case SkillKinds.SlotPowerUp: { //增加卡槽伤害倍率
 			const {value, targets} = skill;
 			
 			let dict = {
@@ -2696,17 +2695,39 @@ function renderSkill(skill, option = {})
 				targets: document.createDocumentFragment(),
 				cap: cap.bigNumberToString(),
 			};
-			if (targets?.length) {
-				dict.targets.append(createTeamFlags(targets));
-				dict.targets.append(targets.map(target=>
+
+			let targetDict = {}, attrs_types = [];
+			if (attrs?.length && !isEqual(attrs, Attributes.all()))
+			{
+				targetDict.attrs = renderAttrs(attrs || [], {affix: attrs?.filter(attr=> attr !== 5)?.length});
+				attrs_types.push(targetDict.attrs);
+			}
+			if (types?.length)
+			{
+				targetDict.types = renderTypes(types || [], {affix: true});
+				attrs_types.push(targetDict.types);
+			}
+			if (targets != undefined)
+			{
+				targetDict.target = document.createDocumentFragment();
+
+				//增加队员伤害的技能的目标，删选出来，其他的目标则不显示
+				const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+				let atkUpTarget = targets.filter(n=>targetTypes.includes(n));
+				if (atkUpTarget.length) {
+					targetDict.target.appendChild(createTeamFlags(atkUpTarget));
+				}
+				
+				targetDict.target.appendChild(targets.map(target=>
 					tsp?.target[target.replaceAll("-","_")]?.())
 					.nodeJoin(tsp.word.slight_pause()));
+
+				attrs_types.push(targetDict.target);
 			}
-			if (attrs?.length) {
-				dict.targets.append(renderAttrs(attrs));
-			}
-			if (types?.length) {
-				dict.targets.append(renderTypes(types));
+			if (attrs_types.length)
+			{
+				targetDict.attrs_types = attrs_types.nodeJoin(tsp.word.slight_pause());
+				dict.targets = tsp.skill.power_up_targets(targetDict);
 			}
 
 			frg.ap(tsp.skill.increase_damage_cap(dict));
