@@ -1064,8 +1064,8 @@ function impartAwakenings(attrs, types, awakenings) {
 function obstructOpponent(typeName, pos, ids) {
 	return { kind: SkillKinds.ObstructOpponent, typeName: typeName, pos: pos, enemy_skills: ids };
 }
-function increaseDamageCapacity(cap, targets) {
-	return { kind: SkillKinds.IncreaseDamageCapacity, cap: cap, targets: targets};
+function increaseDamageCapacity(cap, targets, attrs, types) {
+	return { kind: SkillKinds.IncreaseDamageCapacity, cap, targets, attrs, types};
 }
 function boardJammingStates(state, posType, options) {
 	return { kind: SkillKinds.BoardJammingStates, state: state, posType: posType, ...options};
@@ -1729,6 +1729,11 @@ const skillObjectParsers = {
 	[259](percent) { return breakingShield(v.xShield(percent)); },
 	[260](skillStage, voiceId) { return skillPlayVoice(skillStage, voiceId); },
 	[261](percent) { return gravity(v.xCHP(percent), 'single'); },
+	[263](turns, cap, attr, type) { //按属性改变伤害上限主动技
+		return activeTurns(turns,
+			increaseDamageCapacity(cap * 1e8, void 0, Bin.unflags(attr), Bin.unflags(type))
+		);
+	},
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -2685,18 +2690,24 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.IncreaseDamageCapacity: { //增加伤害上限
-			const {cap, targets} = skill;
+			const {cap, targets, attrs, types} = skill;
 			let dict = {
 				icon: createIcon(skill.kind, cap > 0x7FFFFFFF ? "cap-incr" : "cap-decr"),
 				targets: document.createDocumentFragment(),
 				cap: cap.bigNumberToString(),
 			};
-			// if (targets[0] !== 'self' || targets.length > 1) {
+			if (targets?.length) {
 				dict.targets.append(createTeamFlags(targets));
-			// }
-			dict.targets.append(targets.map(target=>
-				tsp?.target[target.replaceAll("-","_")]?.())
-				.nodeJoin(tsp.word.slight_pause()));
+				dict.targets.append(targets.map(target=>
+					tsp?.target[target.replaceAll("-","_")]?.())
+					.nodeJoin(tsp.word.slight_pause()));
+			}
+			if (attrs?.length) {
+				dict.targets.append(renderAttrs(attrs));
+			}
+			if (types?.length) {
+				dict.targets.append(renderTypes(types));
+			}
 
 			frg.ap(tsp.skill.increase_damage_cap(dict));
 			break;
