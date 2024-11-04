@@ -130,6 +130,8 @@ let localTranslating = {
 			set_orb_state_locked: tp`${'icon'}Locks ${'value'}${'orbs'}`,
 			set_orb_state_unlocked: tp`${'icon'}Unlocks ${'orbs'}`,
 			set_orb_state_bound: tp`${'orbs'} are unmatchable`,
+			set_orb_state_combo_drop: tp`Add ${'value'} ${'icon'}combo drop on ${'orbs'}`,
+			set_orb_state_nail: tp`Add ${'value'} ${'icon'}nail on ${'orbs'}`,
 			rate_multiply: tp`${'rate'} ${'value'} when entering as leader`,
 			rate_multiply_drop: tp`${'icon'}Drop rate`,
 			rate_multiply_coin: tp`${'icon'}Coins`,
@@ -1071,14 +1073,46 @@ const specialSearchFunctions = (function() {
 	}
 	function lock_Addition(card)
 	{
-		const searchTypeArray = [152];
-		const skill = getCardActiveSkill(card, searchTypeArray);
-		if (!skill) return;
-		const sk = skill.params;
-		const fragment = document.createDocumentFragment();
-		fragment.appendChild(createSkillIcon('orb-locked'));
-		fragment.appendChild(createOrbsList(Bin.unflags(sk[0] || 1)));
-		return fragment;
+		const searchTypeArray = [152, 190, 262];
+		const skills = getCardActiveSkills(card, searchTypeArray, true);
+		if (!skills.length) return;
+		return skills.map(skill=>{
+			const sk = skill.params;
+			const fragment = document.createDocumentFragment();
+			switch (skill.type) {
+				case 152:{
+					fragment.append(
+						createSkillIcon('orb-locked')
+					);
+					if (sk[1] < 42) fragment.append(`×${sk[1]}`);
+					fragment.append(
+						createOrbsList(Bin.unflags(sk[0] || 1))
+					);
+					break;
+				}
+				case 190:{
+					fragment.append(
+						createSkillIcon('orb-combo-drop')
+					);
+					if (sk[1] < 42) fragment.append(`×${sk[1]}`);
+					fragment.append(
+						createOrbsList(Bin.unflags(sk[0] || 1))
+					);
+					break;
+				}
+				case 262:{
+					fragment.append(
+						createSkillIcon('orb-nail')
+					);
+					if (sk[0] < 42) fragment.append(`×${sk[0]}`);
+					fragment.append(
+						createOrbsList(Attributes.orbs())
+					);
+					break;
+				}
+			}
+			return fragment;
+		}).nodeJoin('');
 	}
 	function dropLock_Addition(card)
 	{
@@ -2454,10 +2488,26 @@ const specialSearchFunctions = (function() {
 							}
 						}
 						const fragment = document.createDocumentFragment();
-						fragment.appendChild(document.createTextNode(`强化`));
+						fragment.appendChild(createSkillIcon('orb-enhanced'));
 						fragment.appendChild(createOrbsList(attrs));
 						return fragment;
 					}
+				},
+				{name:"Add Combo Drop",otLangName:{chs:"加豆荚",cht:"加豆莢"},
+					function:cards=>cards.filter(card=>{
+						const searchTypeArray = [190];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}),
+					addition:lock_Addition
+				},
+				{name:"Add Nail",otLangName:{chs:"加钉子",cht:"加釘子"},
+					function:cards=>cards.filter(card=>{
+						const searchTypeArray = [262];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}),
+					addition:lock_Addition
 				},
 				{name:"Bind self matchable",otLangName:{chs:"自封消珠 debuff",cht:"自封消珠 debuff"},
 					function:cards=>cards.filter(card=>{

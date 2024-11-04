@@ -2075,7 +2075,7 @@
 	--icon-y-index: 1;
 }
 .orb.drop::before
-{
+{ /* 珠子加掉率 */
 	content: "";
 	--icon-y-index: 2;
 }
@@ -2083,11 +2083,20 @@
 {
 	filter:brightness(0.8);
 }
-.orb.bound::before
+.orb.enhanced::after
 {
 	content: "";
-	--icon-y-index: 3;
-	animation: hidden-visible-animate 0.8s infinite ease-out alternate;
+	--icon-y-index: 0;
+}
+.orb.combo-drop::before
+{ /* 有豆荚的珠子 */
+	content: "";
+	--icon-y-index: 5;
+}
+.orb.nail::before
+{ /* 有豆荚的珠子 */
+	content: "";
+	--icon-y-index: 6;
 }
 
 .orb[data-orb-icon='_5color']

@@ -992,7 +992,7 @@ function counterAttack(attr, prob, value) {
 	return { kind: SkillKinds.CounterAttack, attr: attr, prob: prob, value: value };
 }
 function setOrbState(orbs, state, arg) {
-	return { kind: SkillKinds.SetOrbState, orbs: orbs, state: state, arg: arg};
+	return { kind: SkillKinds.SetOrbState, orbs, state, arg};
 }
 function rateMultiply(value, rate) {
 	return { kind: SkillKinds.RateMultiply, value: value, rate: rate };
@@ -1464,6 +1464,7 @@ const skillObjectParsers = {
 		autoPath(3),
 	  ];
 	},
+	[190](attrs, count) { return setOrbState(Bin.unflags(attrs), 'combo-drop', {count: v.constant(count)}); },
 
 	[191](turns) {
 	  return activeTurns(turns, voidEnemyBuff(['damage-void']));
@@ -1729,6 +1730,7 @@ const skillObjectParsers = {
 	[259](percent) { return breakingShield(v.xShield(percent)); },
 	[260](skillStage, voiceId) { return skillPlayVoice(skillStage, voiceId); },
 	[261](percent) { return gravity(v.xCHP(percent), 'single'); },
+	[262](count) { return setOrbState(Attributes.orbs(), 'nail', {count: v.constant(count)}); },
 	[263](turns, cap, attr, type) { //按属性改变伤害上限主动技
 		return activeTurns(turns,
 			increaseDamageCapacity(cap * 1e8, void 0, Bin.unflags(attr), Bin.unflags(type))
@@ -1801,7 +1803,7 @@ function renderSkillEntry(skills)
 						break;
 					}
 					case SkillKinds.GenerateOrbs: { //产生珠子
-						let orbs = skill.orbs, exclude = skill.exclude, count = skill.count;
+						const { orbs, exclude, count } = skill;
 						boardsBar.boards.forEach(board=>board.generateOrbs(orbs, count, exclude));
 						break;
 					}
@@ -2462,9 +2464,13 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.SetOrbState: {
-			let orbs = skill.orbs, state = skill.state, arg = skill.arg;
+			const {orbs, state, arg} = skill;
 			let dict = {
-				orbs: renderOrbs(orbs, {className: state, affix: true}),
+				orbs: renderOrbs(orbs, {
+					//有的时候附加效果限制个数，这个附加图标加到文字里面的图标上面的去不好看也不准确，应该只加到面板里。
+					//className: state,
+					affix: true
+				}),
 				icon: createIcon('orb-' + state),
 			};
 			switch (state)
@@ -2486,6 +2492,18 @@ function renderSkill(skill, option = {})
 				}
 				case "bound":{
 					frg.ap(tsp.skill.set_orb_state_bound(dict));
+					break;
+				}
+				case "combo-drop":{
+					if (arg.count.value < 42)
+						dict.value = renderValue(arg.count, {unit: tsp.unit.orbs});
+					frg.ap(tsp.skill.set_orb_state_combo_drop(dict));
+					break;
+				}
+				case "nail":{
+					if (arg.count.value < 42)
+						dict.value = renderValue(arg.count, {unit: tsp.unit.orbs});
+					frg.ap(tsp.skill.set_orb_state_nail(dict));
 					break;
 				}
 			}
@@ -2911,6 +2929,8 @@ function renderAttrs(attrs, option = {}) {
 function renderOrbs(attrs, option = {}) {
 	if (!Array.isArray(attrs))
 		attrs = [attrs ?? 0];
+	else
+		attrs = [...attrs];
 
 	const frg = document.createDocumentFragment();
 	if (typeof localTranslating == "undefined") return frg;
@@ -2922,7 +2942,7 @@ function renderOrbs(attrs, option = {}) {
 		let attrBin = new Bin(attrs);
 		if ((attrBin.int & 0b1111111111) == 0b1111111111) { //十种珠子
 			frg.ap(tsp.orbs.all());
-			attrs.length = 0;
+			attrs.length = 0; //之前是引用，这里会导致数组被清空的错误
 		} else if ((attrBin.int & 0b11111) == 0b11111) { //基础5色
 			frg.ap(renderOrbs('_5color'));
 			attrBin = new Bin(attrBin.int & 0b1111100000);

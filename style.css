@@ -5037,6 +5037,10 @@ body.external-link-support #external-support{
 	width: 72px;
 	background-position-y:calc(-36px * 43);
 }
+.icon-skill[data-icon-type="orb-combo-drop"]
+{
+	background-position-y:calc(-36px * 44);
+}
 
 .card-skill-list .play-voice [data-awoken-icon="63"] {
 	cursor: pointer;

@@ -115,6 +115,8 @@ const _localTranslating = {
 			set_orb_state_locked: tp`將${'orbs'}${'icon'}鎖定${'value'}`,
 			set_orb_state_unlocked: tp`${'icon'}解除${'orbs'}的鎖定狀態`,
 			set_orb_state_bound: tp`無法消除${'orbs'}`,
+			set_orb_state_combo_drop: tp`${'orbs'}增加${'value'}${'icon'}豆莢狀態`,
+			set_orb_state_nail: tp`${'orbs'}增加${'value'}${'icon'}釘子狀態`,
 			rate_multiply: tp`作為隊長進入地下城時，${'rate'}變為${'value'}`,
 			rate_multiply_drop: tp`${'icon'}怪物蛋掉落率`,
 			rate_multiply_coin: tp`${'icon'}金幣掉落率`,
