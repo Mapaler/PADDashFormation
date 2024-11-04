@@ -1196,7 +1196,7 @@ const specialSearchFunctions = (function() {
 	{
 		let cap = 0;
 		switch (skill.type) {
-			case 241:case 258:
+			case 241:case 258:case 263:
 				cap = skill.params[1];
 				break;
 			case 246:
@@ -1210,7 +1210,7 @@ const specialSearchFunctions = (function() {
 	}
 	function memberCap_Addition(card)
 	{
-		const searchTypeArray = [241, 246, 247, 258];
+		const searchTypeArray = [241, 246, 247, 258, 263];
 		const skill = getCardActiveSkill(card, searchTypeArray);
 		if (!skill) return;
 		const sk = skill.params;
@@ -1228,10 +1228,25 @@ const specialSearchFunctions = (function() {
 				fragment.appendChild(createTeamFlags(1));
 				break;
 			}
+			case 263: {
+				const attrs = Bin.unflags(sk[2]);
+				if (attrs?.length)
+				{
+					fragment.appendChild(createOrbsList(attrs));
+				}
+				const types = Bin.unflags(sk[3]);
+				if (types?.length)
+				{
+					fragment.appendChild(createTypesList(types));
+				}
+				break;
+			}
 		}
+		//fragment.append(createSkillIcon(SkillKinds.IncreaseDamageCapacity, cap > 21 ? "cap-incr" : "cap-decr"));
 		switch (skill.type) {
 			case 258:
-			case 241: {
+			case 241:
+			case 263: {
 				fragment.append(`${(cap*1e8).bigNumberToString()}×${sk[0]}T`);
 				break;
 			}
@@ -1792,7 +1807,7 @@ const specialSearchFunctions = (function() {
 				{group:true,name:"Increase Damage Cap",otLangName:{chs:"增加伤害上限",cht:"增加傷害上限"}, functions: [
 					{name:"Increase Damage Cap - Any",otLangName:{chs:"增加伤害上限 - 任意",cht:"增加傷害上限 - 任意"},
 						function:cards=>{
-							const searchTypeArray = [241, 246, 247, 258];
+							const searchTypeArray = [241, 246, 247, 258, 263];
 							return cards.filter(card=>{
 								const skill = getCardActiveSkill(card, searchTypeArray);
 								return skill;
@@ -1839,6 +1854,20 @@ const specialSearchFunctions = (function() {
 							return cards.filter(card=>{
 								const skill = getCardActiveSkill(card, searchTypeArray);
 								return skill && Boolean(skill.params[2] & 0b1000);
+							}).sort((a,b)=>{
+								const a_ss = getCardActiveSkill(a, searchTypeArray), b_ss = getCardActiveSkill(b, searchTypeArray);
+								let a_pC = getIncreaseDamageCap(a_ss), b_pC = getIncreaseDamageCap(b_ss);
+								return a_pC - b_pC;
+							});
+						},
+						addition:memberCap_Addition
+					},
+					{name:"Increase Damage Cap - Attr./Types",otLangName:{chs:"增加伤害上限 - 属性/类型",cht:"增加傷害上限 - 屬性/類型"},
+						function:cards=>{
+							const searchTypeArray = [263];
+							return cards.filter(card=>{
+								const skill = getCardActiveSkill(card, searchTypeArray);
+								return skill;
 							}).sort((a,b)=>{
 								const a_ss = getCardActiveSkill(a, searchTypeArray), b_ss = getCardActiveSkill(b, searchTypeArray);
 								let a_pC = getIncreaseDamageCap(a_ss), b_pC = getIncreaseDamageCap(b_ss);
