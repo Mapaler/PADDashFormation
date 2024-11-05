@@ -1168,7 +1168,13 @@ Formation.prototype.getPdcQrStr = function()
 		o.set(5, m.plus[1]);
 		o.set(6, m.plus[2]);
 		o.set(7, (m?.awoken >= Cards[m.id].awakenings.length) ? -1 : m.awoken);
-		o.set(8, m?.sawoken ?? 0);
+		const card = m.card;
+		if (m.level <= card.maxLevel && (card?.henshinFrom?.length || card?.henshinTo?.length)) {
+			o.set(8, 0);
+			o.set(16, m?.sawoken ?? 0);
+		} else {
+			o.set(8, m?.sawoken ?? 0);
+		}
 		if (a.id != 0)
 		{
 			o.set(9, a.id);
@@ -1181,8 +1187,8 @@ Formation.prototype.getPdcQrStr = function()
 		o.set(15, position);
 		return o;
 	}
-	let outArr = [
-		[1,this.teams.length - 1]
+	const outArr = [
+		[1,this.teams.length - 1].join(',')
 	];
 	
 	if (this.teams.length == 2)
@@ -1193,7 +1199,7 @@ Formation.prototype.getPdcQrStr = function()
 		team1[1].push(team2[1].shift());
 	}
 
-	let pdcTeamsStr = this.teams.map((t,idx,arr)=>{
+	const pdcTeamsStrArr = this.teams.map((t,idx,arr)=>{
 		let teamArr = [
 			Formation.pdcBadgeMap.find(badge=>badge.pdf === t[2])?.pdc || 0 //徽章
 		];
@@ -1203,17 +1209,18 @@ Formation.prototype.getPdcQrStr = function()
 		{
 			if (membersArr[i].id > 0 || assistArr[i].id > 0)
 			{
-				let pdcMemberMap = genMemberMap(membersArr[i], assistArr[i], (arr.length == 2 && idx == 1) ? i+1 : i); //2人协力时，队伍2编号0是空的
-				let pdcMemberArr = Array.from(pdcMemberMap);
-				pdcMemberStr = pdcMemberArr.map(item => {
-					if (item[1] == undefined)
+				const pdcMemberMap = genMemberMap(membersArr[i], assistArr[i], (arr.length == 2 && idx == 1) ? i+1 : i); //2人协力时，队伍2编号0是空的
+				const pdcMemberArr = Array.from(pdcMemberMap.entries()).sort((a,b)=>a[0]-b[0]);
+				console.log(pdcMemberArr)
+				const pdcMemberStr = pdcMemberArr.map(item => {
+					if (item[1] == void 0)
 					{
 						return null;
 					}
 					return [
 					item[0].toString(36).padStart(2,'0'),
 					item[1].toString(36).padStart(2,'0')
-				].join('')}).filter(item=>item).join(',');
+				].join('')}).filter(Boolean).join(',');
 				teamArr.push(pdcMemberStr);
 			}
 		}
@@ -1228,8 +1235,7 @@ Formation.prototype.getPdcQrStr = function()
 		team2[1].splice(0,0,team1[1].pop());
 	}
 
-	outArr = outArr.concat(pdcTeamsStr);
-	return outArr.join(']');
+	return outArr.concat(pdcTeamsStrArr).join(']');
 }
 //paddb的徽章对应数字
 Formation.paddbBadgeMap = [
@@ -2483,7 +2489,7 @@ function pdcFotmationToPdfFotmation(inputString)
 
 			m.awoken = member.get(7) >= 0 ? member.get(7) : Cards[m.id].awakenings.length;
 			a.awoken = member.get(14) >= 0 ? member.get(14) : (a.id > 0 ? Cards[a.id].awakenings.length : 0);
-			m.sawoken = member.get(8);
+			m.sawoken = member.get(8) || member.get(16); //8是普通的超觉醒，16是变身的同步觉醒
 		});
 	});
 	return f;
