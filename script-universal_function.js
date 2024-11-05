@@ -187,7 +187,7 @@ function BigNumberToStringLocalise(separators, splitDigits = 3 ) {
 	if (splitDigits < 1) throw new RangeError('数字分隔位数至少是1位');
 
 	const grouping = 10 ** splitDigits;
-	separators = separators.map(s=>s.toString());
+	separators = separators.map(String); //确保所有的分割符都是字符串
 	
 	return function(options = {}){
 		const thisValue = this.valueOf();
@@ -210,25 +210,24 @@ function BigNumberToStringLocalise(separators, splitDigits = 3 ) {
 			numLevels.push(numTemp);
 		}
 		
-		if (options?.sub) {
-			let outFragment = document.createDocumentFragment();
-			if (thisValue < 0) outFragment.append('-');
-			for (let i = numLevels.length; i--; ) {
-				if (numLevels[i] > 0) {
-					const separator = document.createElement("sub");
-					separator.textContent = separators[i];
-					outFragment.append(numLevels[i].toString(10), separator);
-				}
+		const { sub: useSubElement } = options;
+		const outArr = [];
+		if (thisValue < 0) outArr.push('-'); //小于0的添加负号
+		for (let i = numLevels.length - 1; i >= 0; i--) {
+			if (numLevels[i] == 0) continue; //如果这一段是0，直接不显示
+
+			let numberStr = numLevels[i].toString(10);
+			if (i == numLevels.length - 1) numberStr = numberStr.padStart(i == numLevels.length - 1 ? 1 : splitDigits, "0");
+			outArr.push(numberStr);
+			if (useSubElement) {
+				const separator = document.createElement("sub");
+				separator.textContent = separators[i];
+				outArr.push(separator);
+			} else {
+				outArr.push(separators[i]);
 			}
-			return outFragment;
-		} else {
-			let outStr = thisValue < 0 ? '-' : '';
-			for (let i = numLevels.length; i--; ) {
-				if (numLevels[i] > 0)
-					outStr += numLevels[i].toString(10) + separators[i];
-			}
-			return outStr.trim();
 		}
+		return useSubElement ? outArr.nodeJoin() : outArr.join('').trim();
 	}
 }
 Number.prototype.bigNumberToString = BigNumberToStringLocalise(['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'R', 'Q'], 3);
@@ -297,20 +296,16 @@ Array.prototype.groupBy = function(func) {
 //将内容添加到代码片段
 DocumentFragment.prototype.ap = function(...args)
 {
-	args.forEach(arg=>{
-		if (Array.isArray(arg)) //数组，递归自身
-		{
-			arg.forEach(item=>this.ap(item));
-		}
-		else if (arg !== null && arg !== void 0) //其他内容的转换为文字添加
-		{
-			this.append(arg);
-		}
-	}, this);
+	const items = args.flat(Infinity).filter(item=>item !== null && item !== void 0);
+	this.append(...items);
 	return this;
 }
 
-//将数组和分隔符添加到一个代码片段，类似join
+/**
+ * 将数组和分隔符添加到一个代码片段，类似join
+ * @param {(string | Node)} separator 每个对象之间合并的分割符或代码片段
+ * @returns {DocumentFragment} 一个文档片段
+ */
 Array.prototype.nodeJoin = function(separator)
 {
 	const frg = document.createDocumentFragment();
