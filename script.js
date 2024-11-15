@@ -1091,6 +1091,7 @@ Formation.pdcBadgeMap = [
 	{pdf:35,pdc:35}, //万圣节
 	{pdf:36,pdc:36}, //数码宝贝
 	{pdf:37,pdc:37}, //diss你
+	{pdf:38,pdc:38}, //GungHo本家
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -7540,6 +7541,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 35: return member.card.gachaIds.includes(11) ? 1.15 : 1; //万圣节
 				case 36: return member.card.collabId === 114 ? 1.15 : 1; //数码宝贝
 				case 37: return member.card.collabId === 90 ? 1.15 : 1; //diss你
+				case 38: return member.card.collabId === 1 ? 1.15 : 1; //GungHo本家
 				default: return 1;
 			}
 		}
