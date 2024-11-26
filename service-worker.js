@@ -463,7 +463,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_116.PNG",
-		"2b5dc01f7a5678ce1d54644aeb773e24"
+		"4aa054af4ccbae2323b70e5c48a2afaa"
 	],
 	[
 		"images/cards_ja/CARDS_117.PNG",
