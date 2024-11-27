@@ -1834,6 +1834,10 @@ const cachesMap = new Map([
 		"bd76867897b4217698a823279dbc6c5a"
 	],
 	[
+		"sound/voice/ja/padv1220.wav",
+		"7bae3c21e7ed4df33794d191d5a30ab6"
+	],
+	[
 		"sound/voice/ja/padv1221.wav",
 		"959da39b537c7558f6988951224f7796"
 	],
@@ -12272,6 +12276,10 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv3604.wav",
 		"79184f05df0c50c3e176f3a863d79457"
+	],
+	[
+		"sound/voice/ja/padv3605.wav",
+		"dbeff38177fa43db08e8ef3d654c710c"
 	],
 	[
 		"sound/voice/ja/padv361.wav",
