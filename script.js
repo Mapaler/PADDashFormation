@@ -1092,6 +1092,7 @@ Formation.pdcBadgeMap = [
 	{pdf:36,pdc:36}, //数码宝贝
 	{pdf:37,pdc:37}, //diss你
 	{pdf:38,pdc:38}, //GungHo本家
+	{pdf:39,pdc:39}, //周刊少年Magazine
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -7542,6 +7543,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 36: return member.card.collabId === 114 ? 1.15 : 1; //数码宝贝
 				case 37: return member.card.collabId === 90 ? 1.15 : 1; //diss你
 				case 38: return member.card.collabId === 1 ? 1.15 : 1; //GungHo本家
+				case 39: return member.card.collabId === 115 ? 1.15 : 1; //周刊少年Magazine
 				default: return 1;
 			}
 		}
