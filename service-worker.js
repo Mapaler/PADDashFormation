@@ -16151,7 +16151,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_070.PNG",
-		"5940803d354d236fb5517866a81776da"
+		"77af42d6acc086e0b2368eb7428e70f0"
 	],
 	[
 		"images/cards_en/CARDS_071.PNG",
@@ -16235,11 +16235,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_091.PNG",
-		"0124505a826a9c2bceb3643b11c87147"
+		"374ff60f063a702d268bdff24d86debf"
 	],
 	[
 		"images/cards_en/CARDS_092.PNG",
-		"b46f26ce1bb57b84be153ca4de2a9d20"
+		"6e59a552fa62dcbcd63e1cb4deb69827"
 	],
 	[
 		"images/cards_en/CARDS_093.PNG",
@@ -16303,7 +16303,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_108.PNG",
-		"a08caf4d6eb3ed9bd77d59456c74c47e"
+		"f7263593adffe98098de01d2b85300e0"
 	],
 	[
 		"images/cards_en/CARDS_109.PNG",
@@ -16335,7 +16335,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_116.PNG",
-		"232e9d1b401b6d95a846b451ee8c4834"
+		"a207399de76059a7187f3cfefeef60a3"
 	],
 	[
 		"images/cards_en/CARDS_117.PNG",
@@ -26559,7 +26559,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_070.PNG",
-		"5940803d354d236fb5517866a81776da"
+		"77af42d6acc086e0b2368eb7428e70f0"
 	],
 	[
 		"images/cards_ko/CARDS_071.PNG",
@@ -26643,11 +26643,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_091.PNG",
-		"0124505a826a9c2bceb3643b11c87147"
+		"374ff60f063a702d268bdff24d86debf"
 	],
 	[
 		"images/cards_ko/CARDS_092.PNG",
-		"b46f26ce1bb57b84be153ca4de2a9d20"
+		"6e59a552fa62dcbcd63e1cb4deb69827"
 	],
 	[
 		"images/cards_ko/CARDS_093.PNG",
@@ -26711,7 +26711,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_108.PNG",
-		"a08caf4d6eb3ed9bd77d59456c74c47e"
+		"f7263593adffe98098de01d2b85300e0"
 	],
 	[
 		"images/cards_ko/CARDS_109.PNG",
@@ -26743,7 +26743,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_116.PNG",
-		"232e9d1b401b6d95a846b451ee8c4834"
+		"a207399de76059a7187f3cfefeef60a3"
 	],
 	[
 		"images/cards_ko/CARDS_117.PNG",
@@ -38479,7 +38479,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"825aea31ea61e82142a634ccc7230d9f"
+		"258489993ab6a3e1ea352f1330946752"
 	],
 	[
 		"style.css",
@@ -38559,7 +38559,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"31e4d5a49fac0e87031a8138eb394f8f"
+		"a9705033b5c76563ee437192f433a6a2"
 	],
 	[
 		"images/brown-button.svg",
