@@ -7544,6 +7544,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 37: return member.card.collabId === 90 ? 1.15 : 1; //diss你
 				case 38: return member.card.collabId === 1 ? 1.15 : 1; //GungHo本家
 				case 39: return member.card.collabId === 115 ? 1.15 : 1; //周刊少年Magazine
+				case 40: return member.card.gachaIds.includes(12) ? 1.15 : 1; //圣诞节
 				default: return 1;
 			}
 		}
