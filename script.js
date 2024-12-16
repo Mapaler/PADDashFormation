@@ -2489,8 +2489,8 @@ function pdcFotmationToPdfFotmation(inputString)
 			a.plus[1] = member.get(12) || 0;
 			a.plus[2] = member.get(13) || 0;
 
-			m.awoken = member.get(7) >= 0 ? member.get(7) : Cards[m.id].awakenings.length;
-			a.awoken = member.get(14) >= 0 ? member.get(14) : (a.id > 0 ? Cards[a.id].awakenings.length : 0);
+			m.awoken = member.get(7) >= 0 ? member.get(7) : (Cards[m.id]?.awakenings?.length ?? 0);
+			a.awoken = member.get(14) >= 0 ? member.get(14) : (Cards[a.id > 0 ? a.id : 0]?.awakenings?.length ?? 0);
 			m.sawoken = member.get(8) || member.get(16); //8是普通的超觉醒，16是变身的同步觉醒
 		});
 	});
