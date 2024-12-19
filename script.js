@@ -1094,7 +1094,7 @@ Formation.pdcBadgeMap = [
 	{pdf:38,pdc:38}, //GungHo本家
 	{pdf:39,pdc:39}, //周刊少年Magazine
 	{pdf:40,pdc:40}, //圣诞节
-	{pdf:41,pdc:41}, //GA文库
+	{pdf:41,pdc:49}, //GA文库
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -7547,7 +7547,15 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 38: return member.card.collabId === 1 ? 1.15 : 1; //GungHo本家
 				case 39: return member.card.collabId === 115 ? 1.15 : 1; //周刊少年Magazine
 				case 40: return member.card.gachaIds.includes(12) ? 1.15 : 1; //圣诞节
-				case 41: return member.card.collabId === 116 ? 1.15 : 1; //GA文库
+				case 41: return member.card.types.includes(5) ? 1.05 : 1; //神属性
+				case 42: return member.card.types.includes(4) ? 1.05 : 1; //龙属性
+				case 43: return member.card.types.includes(7) ? 1.05 : 1; //恶属性
+				case 44: return member.card.types.includes(8) ? 1.05 : 1; //机械属性
+				case 45: return member.card.types.includes(1) ? 1.05 : 1; //平衡属性
+				case 46: return member.card.types.includes(6) ? 1.05 : 1; //攻击属性
+				case 47: return member.card.types.includes(2) ? 1.05 : 1; //体力属性
+				case 48: return member.card.types.includes(3) ? 1.05 : 1; //回复属性
+				case 49: return member.card.collabId === 116 ? 1.15 : 1; //GA文库
 				default: return 1;
 			}
 		}

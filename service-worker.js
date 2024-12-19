@@ -39271,7 +39271,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"532e47cc1039bdec0adec096f0f02458"
+		"a6d45be5ada6ff8fd191ed60402223ad"
 	],
 	[
 		"script-skill-parser.js",
@@ -39283,7 +39283,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"e5f7499356334269ae9684db8aec1946"
+		"451c75307a755fb6ac22ffdf31b42c78"
 	],
 	[
 		"solo.html",
@@ -39375,7 +39375,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"6d6527b4577ce88425bd0bfc202f805d"
+		"663436e50b6981a43b0c7f165b98929d"
 	],
 	[
 		"images/brown-button.svg",
