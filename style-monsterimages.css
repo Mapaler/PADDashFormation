@@ -1963,6 +1963,10 @@
 [data-game-source="en"] .badge:where(
 	[data-badge-icon='15'], /*漫威变成本家*/
 	[data-badge-icon='26'], /*高达变成本家*/
+)::before,
+/* 韩服不一样的徽章 */
+[data-game-source="ko"] .badge:where(
+	[data-badge-icon='15'], /*漫威变成本家*/
 )::before {
 	--icon-x-index: 1;
 }
