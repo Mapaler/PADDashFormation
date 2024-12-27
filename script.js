@@ -1085,16 +1085,6 @@ Formation.pdcBadgeMap = [
 	{pdf:31,pdc:29}, //叛逆的鲁鲁修
 	{pdf:15,pdc:30}, //漫威
 	{pdf:16,pdc:31}, //泳装
-	{pdf:32,pdc:32}, //怪物猎人
-	{pdf:33,pdc:33}, //三丽鸥
-	{pdf:34,pdc:34}, //咒术回战
-	{pdf:35,pdc:35}, //万圣节
-	{pdf:36,pdc:36}, //数码宝贝
-	{pdf:37,pdc:37}, //diss你
-	{pdf:38,pdc:38}, //GungHo本家
-	{pdf:39,pdc:39}, //周刊少年Magazine
-	{pdf:40,pdc:40}, //圣诞节
-	{pdf:41,pdc:49}, //GA文库
 ];
 //pdc的潜觉对应数字
 Formation.pdcLatentMap = [
@@ -1205,7 +1195,7 @@ Formation.prototype.getPdcQrStr = function()
 
 	const pdcTeamsStrArr = this.teams.map((t,idx,arr)=>{
 		let teamArr = [
-			Formation.pdcBadgeMap.find(badge=>badge.pdf === t[2])?.pdc || 0 //徽章
+			Formation.pdcBadgeMap.find(badge=>badge.pdf === t[2])?.pdc || t[2] //徽章
 		];
 		const membersArr = t[0];
 		const assistArr = t[1];
@@ -2472,7 +2462,7 @@ function pdcFotmationToPdfFotmation(inputString)
 		const membersArr = t[0];
 		const assistArr = t[1];
 		//队伍徽章
-		t[2] = pdcTeam.badge === 0 ? 0 : Formation.pdcBadgeMap.find(badge=>badge.pdc === pdcTeam.badge).pdf;
+		t[2] = Formation.pdcBadgeMap.find(badge=>badge.pdc === pdcTeam.badge)?.pdf || pdcTeam.badge;
 		pdcTeam.members.forEach((member)=>{
 			const m = membersArr[member.get(15) || 0];
 			const a = assistArr[member.get(15) || 0];
@@ -7556,6 +7546,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 47: return member.card.types.includes(2) ? 1.05 : 1; //体力属性
 				case 48: return member.card.types.includes(3) ? 1.05 : 1; //回复属性
 				case 49: return member.card.collabId === 116 ? 1.15 : 1; //GA文库
+				case 50: return member.card.gachaIds.includes(0) ? 1.15 : 1; //正月(新年)
 				default: return 1;
 			}
 		}
