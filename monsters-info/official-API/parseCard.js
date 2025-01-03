@@ -99,7 +99,7 @@ class Card{
 		card.syncAwakeningConditions = Array.from(new Array(numSyncAkCondition ?? 0)).map(() => ({
 			id: Card.fixId(data[i++]), //怪物ID
 			level: data[i++], //怪物等级
-			skillLeval: data[i++], //怪物技能等级
+			skillLevel: data[i++], //怪物技能等级
 		}));
 		
 		card.attrs = card.attrs.filter(Number.isInteger);

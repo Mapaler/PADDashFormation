@@ -476,7 +476,7 @@ class Card {
 			this.syncAwakeningConditions.push({
 				id: Card.fixId(e.next().value?.[1]), //怪物ID
 				level: e.next().value?.[1], //怪物等级
-				skillLeval: e.next().value?.[1], //怪物技能等级
+				skillLevel: e.next().value?.[1], //怪物技能等级
 			});
 		}
 		
