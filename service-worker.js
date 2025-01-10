@@ -423,7 +423,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_106.PNG",
-		"bbc0e8bbaf75cde015bf03356227577a"
+		"dbd1083b05d834f6970fbf1f51311316"
 	],
 	[
 		"images/cards_ja/CARDS_107.PNG",
@@ -487,7 +487,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_122.PNG",
-		"2dfe449d1a028eebfadee5deb3f7c4a4"
+		"2c5c3c96341fe2ae31e1ac8b0314d446"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -9926,6 +9926,14 @@ const cachesMap = new Map([
 		"7e10e85221193026472eb206920ee85c"
 	],
 	[
+		"sound/voice/ja/padv3066.wav",
+		"7701cdcc1b338f9c5408127e7873a06f"
+	],
+	[
+		"sound/voice/ja/padv3067.wav",
+		"5c24670158f3feec45f723eace974917"
+	],
+	[
 		"sound/voice/ja/padv3068.wav",
 		"b188d8f7a7d5f16a8ad6753c0ed6f68a"
 	],
@@ -14294,12 +14302,68 @@ const cachesMap = new Map([
 		"474c5db64759c5fc9af359a6f5cfe6aa"
 	],
 	[
+		"sound/voice/ja/padv4067.wav",
+		"b006af44ef4daeac994fe905e9deffba"
+	],
+	[
+		"sound/voice/ja/padv4068.wav",
+		"07af7938749a0ac2c06848e532707e1b"
+	],
+	[
+		"sound/voice/ja/padv4069.wav",
+		"9348dd0f1e28043959eb0e8c3eb2b462"
+	],
+	[
 		"sound/voice/ja/padv407.wav",
 		"e8ef867dda64c148f9c40b2954a82adf"
 	],
 	[
+		"sound/voice/ja/padv4070.wav",
+		"27dd8dc648e119d946b06d1c21af111d"
+	],
+	[
+		"sound/voice/ja/padv4071.wav",
+		"a058377dd5bac8d47b8285d576ed7fb0"
+	],
+	[
+		"sound/voice/ja/padv4072.wav",
+		"0fdb94e547e5bdc704d3b1394b98e878"
+	],
+	[
+		"sound/voice/ja/padv4073.wav",
+		"aaebfa181106b40691f24cf102c38784"
+	],
+	[
+		"sound/voice/ja/padv4074.wav",
+		"bec16454c65cf89857bf1385d1d0d39e"
+	],
+	[
+		"sound/voice/ja/padv4075.wav",
+		"7b188e0bda4a60ca475ad3d284a628f2"
+	],
+	[
+		"sound/voice/ja/padv4076.wav",
+		"2e38a6b0a871d0ee49aa465536ac59e6"
+	],
+	[
+		"sound/voice/ja/padv4077.wav",
+		"a70783399edbef68d4996647fd82c739"
+	],
+	[
+		"sound/voice/ja/padv4078.wav",
+		"cd06516c4247478f4f0e12b3353d75df"
+	],
+	[
+		"sound/voice/ja/padv4079.wav",
+		"a14295c6632357191c3880baad711e32"
+	],
+	[
 		"sound/voice/ja/padv408.wav",
 		"57042132bf370305b0e0d4b4e5e1a314"
+	],
+	[
+		"sound/voice/ja/padv4080.wav",
+		"b058f7f8d895d4030e70ad1bcce99a1e"
 	],
 	[
 		"sound/voice/ja/padv409.wav",
@@ -41291,7 +41355,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"247299273c6251939382cc9bfc3ecf41"
+		"d9d76afeaa0a4ba4ac94e106cf2117e2"
 	],
 	[
 		"script-skill-parser.js",
@@ -41303,7 +41367,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"721c08a787f64e33e8c63a28532fcb91"
+		"7e7f9333103b1282337b1f5946d47389"
 	],
 	[
 		"solo.html",
@@ -41395,7 +41459,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"4574cefa80e48a6bf111ca2a5276dc28"
+		"b2529516943c1a86c1ce9e10509e8366"
 	],
 	[
 		"images/brown-button.svg",
