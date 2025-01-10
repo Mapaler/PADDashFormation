@@ -136,6 +136,8 @@ let localTranslating = {
 			rate_multiply_drop: tp`${'icon'}Drop rate`,
 			rate_multiply_coin: tp`${'icon'}Coins`,
 			rate_multiply_exp: tp`${'icon'}Rank EXP`,
+			rate_multiply_plus_point: tp`${'icon'}Plus Point`,
+			rate_multiply_part_break: tp`${'icon'}Part Break Drop rate`,
 			reduce_damage: tp`${'condition'}${'chance'}${'icon'}Reduces ${'attrs'} damage taken by ${'value'}`,
 			power_up: tp`${'condition'}${'targets'}${'each_time'}${'value'}${'reduceDamage'}${'additional'}`,
 			power_up_targets: tp`[${'attrs_types'}]'s `, //attrs, types, attrs_types
@@ -3990,14 +3992,20 @@ const specialSearchFunctions = (function() {
 					addition:card=>{
 						const value = getSkillFixedDamage(card);
 						if (value <= 0 ) return;
-						let nodeArr = [`${value.bigNumberToString()}固伤`];
-						let skill;
-						if (skill = getCardLeaderSkill(card, [235])) {
-							nodeArr.push("/");
-							nodeArr.push(createOrbsList(Bin.unflags(skill.params[0])));
-							nodeArr.push(`×${skill.params[2]}`);
+						const fragment = document.createDocumentFragment();
+						
+						const icon = document.createElement("icon");
+						icon.className = "attr";
+						icon.setAttribute("data-attr-icon", "fixed");
+
+						fragment.append(icon, value.bigNumberToString());
+						let skill = getCardLeaderSkill(card, [235]);
+						if (skill) {
+							fragment.append("/",
+								createOrbsList(Bin.unflags(skill.params[0])),
+								`×${skill.params[2]}`);
 						}
-						return nodeArr.nodeJoin();
+						return fragment;
 					}
 				},
 				{name:"Adds combo",otLangName:{chs:"队长技+C",cht:"隊長技+C"},
@@ -4012,16 +4020,19 @@ const specialSearchFunctions = (function() {
 					addition:card=>{
 						const value = getSkillAddCombo(card);
 						if (value <= 0 ) return;
-						let nodeArr = [`+${value.bigNumberToString()}C`];
+						const fragment = document.createDocumentFragment();
+						fragment.append(createSkillIcon('add-combo'), value.bigNumberToString());
 						let skill;
 						if (skill = getCardLeaderSkill(card, [210])) {
-							nodeArr.push("/十字");
+							fragment.append("/十字");
 						} else if (skill = getCardLeaderSkill(card, [235])) {
-							nodeArr.push("/");
-							nodeArr.push(createOrbsList(Bin.unflags(skill.params[0])));
-							nodeArr.push(`×${skill.params[2]}`);
+							if (skill?.params?.[5]) {
+								fragment.append("/",
+									createOrbsList(Bin.unflags(skill.params[0])),
+									`×${skill.params[2]}`);
+							}
 						}
-						return nodeArr.nodeJoin();
+						return fragment;
 					}
 				},
 				{name:"Move time changes",otLangName:{chs:"队长技加/减秒",cht:"隊長技加/減秒"},
@@ -4037,7 +4048,12 @@ const specialSearchFunctions = (function() {
 						const skill = getCardLeaderSkill(card, searchTypeArray);
 						if (!skill) return;
 						const value = skill.params[0];
-						return `${value > 0 ? "+" : ""}${value/100}s`;
+						const fragment = document.createDocumentFragment();
+						fragment.append(createSkillIcon("status-time", value < 0 ? "time-decr" : "time-incr"),
+							value > 0 ? "+" : "-",
+							Math.abs(value/100),
+							"s");
+						return fragment;
 					}
 				},
 				{name:"Fixed move time",otLangName:{chs:"固定操作时间",cht:"固定操作時間"},
@@ -4053,7 +4069,11 @@ const specialSearchFunctions = (function() {
 						const skill = getCardLeaderSkill(card, searchTypeArray);
 						if (!skill) return;
 						const value = skill.params[0];
-						return `固定${value}s`;
+						const fragment = document.createDocumentFragment();
+						fragment.append(createSkillIcon("fixed-time"),
+							Math.abs(value),
+							"s");
+						return fragment;
 					}
 				},
 				{name:"Impart Awakenings",otLangName:{chs:"赋予觉醒",cht:"賦予覺醒"},
@@ -4195,54 +4215,103 @@ const specialSearchFunctions = (function() {
 						}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 					}
 				},
-				{name:"Increase item drop rate",otLangName:{chs:"增加道具掉落率",cht:"增加道具掉落率"},
-					function:cards=>{
-						const searchTypeArray = [53];
-						return cards.filter(card=>{
+				{group:true,name:"Increased drop rewards",otLangName:{chs:"增加掉落奖励",cht:"增加掉落獎勵"}, functions: [
+					{name:"Increase Item Drop rate",otLangName:{chs:"增加道具掉落率",cht:"增加道具掉落率"},
+						function:cards=>{
+							const searchTypeArray = [53];
+							return cards.filter(card=>{
+								const skill = getCardLeaderSkill(card, searchTypeArray);
+								return skill;
+							}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+						},
+						addition:card=>{
+							const searchTypeArray = [53];
 							const skill = getCardLeaderSkill(card, searchTypeArray);
-							return skill;
-						}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+							if (!skill) return;
+							const sk = skill.params;
+							const fragment = document.createDocumentFragment();
+							fragment.appendChild(createSkillIcon('rate-mul-drop'));
+							fragment.append(`x${sk[0]/100}`);
+							return fragment;
+						}
 					},
-					addition:card=>{
-						const searchTypeArray = [53];
-						const skill = getCardLeaderSkill(card, searchTypeArray);
-						if (!skill) return;
-						const sk = skill.params;
-						return `掉率x${sk[0]/100}`;
-					}
-				},
-				{name:"Increase coin rate",otLangName:{chs:"增加金币掉落倍数",cht:"增加金幣掉落倍數"},
-					function:cards=>{
-					const searchTypeArray = [54];
-					return cards.filter(card=>{
-						const skill = getCardLeaderSkill(card, searchTypeArray);
-						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
-					},
-					addition:card=>{
+					{name:"Increase Coin rate",otLangName:{chs:"增加金币掉落倍数",cht:"增加金幣掉落倍數"},
+						function:cards=>{
 						const searchTypeArray = [54];
-						const skill = getCardLeaderSkill(card, searchTypeArray);
-						if (!skill) return;
-						const sk = skill.params;
-						return `金币x${sk[0]/100}`;
-					}
-				},
-				{name:"Increase Exp rate",otLangName:{chs:"增加经验获取倍数",cht:"增加經驗獲取倍數"},
-					function:cards=>{
-						const searchTypeArray = [148];
 						return cards.filter(card=>{
 							const skill = getCardLeaderSkill(card, searchTypeArray);
 							return skill;
 						}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+						},
+						addition:card=>{
+							const searchTypeArray = [54];
+							const skill = getCardLeaderSkill(card, searchTypeArray);
+							if (!skill) return;
+							const sk = skill.params;
+							const fragment = document.createDocumentFragment();
+							fragment.appendChild(createSkillIcon('rate-mul-coin'));
+							fragment.append(`x${sk[0]/100}`);
+							return fragment;
+						}
 					},
-					addition:card=>{
-						const searchTypeArray = [148];
-						const skill = getCardLeaderSkill(card, searchTypeArray);
-						if (!skill) return;
-						const sk = skill.params;
-						return `经验x${sk[0]/100}`;
-					}
-				},
+					{name:"Increase Exp rate",otLangName:{chs:"增加经验获取倍数",cht:"增加經驗獲取倍數"},
+						function:cards=>{
+							const searchTypeArray = [148];
+							return cards.filter(card=>{
+								const skill = getCardLeaderSkill(card, searchTypeArray);
+								return skill;
+							}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+						},
+						addition:card=>{
+							const searchTypeArray = [148];
+							const skill = getCardLeaderSkill(card, searchTypeArray);
+							if (!skill) return;
+							const sk = skill.params;
+							const fragment = document.createDocumentFragment();
+							fragment.appendChild(createSkillIcon('rate-mul-exp'));
+							fragment.append(`x${sk[0]/100}`);
+							return fragment;
+						}
+					},
+					{name:"Increase Plus Point rate",otLangName:{chs:"增加加蛋值掉落倍数",cht:"增加加蛋值掉落倍數"},
+						function:cards=>{
+						const searchTypeArray = [264];
+						return cards.filter(card=>{
+							const skill = getCardLeaderSkill(card, searchTypeArray);
+							return skill;
+						}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+						},
+						addition:card=>{
+							const searchTypeArray = [264];
+							const skill = getCardLeaderSkill(card, searchTypeArray);
+							if (!skill) return;
+							const sk = skill.params;
+							const fragment = document.createDocumentFragment();
+							fragment.appendChild(createSkillIcon('rate-mul-plus_point'));
+							fragment.append(`x${sk[0]/100}`);
+							return fragment;
+						}
+					},
+					{name:"Increase Part Break drop rate",otLangName:{chs:"增加部位破坏素材掉率",cht:"增加部位破壞素材掉率"},
+						function:cards=>{
+						const searchTypeArray = [265];
+						return cards.filter(card=>{
+							const skill = getCardLeaderSkill(card, searchTypeArray);
+							return skill;
+						}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+						},
+						addition:card=>{
+							const searchTypeArray = [265];
+							const skill = getCardLeaderSkill(card, searchTypeArray);
+							if (!skill) return;
+							const sk = skill.params;
+							const fragment = document.createDocumentFragment();
+							fragment.appendChild(createSkillIcon('rate-mul-part_break'));
+							fragment.append(`x${sk[0]/100}`);
+							return fragment;
+						}
+					},
+				]},
 			]},
 			{group:true,name:"HP Scale",otLangName:{chs:"血倍率",cht:"血倍率"}, functions: [
 				{name:"HP Scale [3, ∞)",otLangName:{chs:"队长血倍率[2, ∞)",cht:"隊長血倍率[2, ∞)"},

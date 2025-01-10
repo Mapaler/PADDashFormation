@@ -1736,6 +1736,8 @@ const skillObjectParsers = {
 			increaseDamageCapacity(cap * 1e8, void 0, Bin.unflags(attr), Bin.unflags(type))
 		);
 	},
+	[264](mul) { return rateMultiply(v.percent(mul), 'plus_point'); },
+	[265](mul) { return rateMultiply(v.percent(mul), 'part_break'); },
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {

@@ -1889,13 +1889,15 @@ label[for="search-string"] {
 }
 .awoken-preview .awoken-icon,
 .custom-addition .awoken-icon,
-.custom-addition .type-icon
+.custom-addition .type-icon,
+.custom-addition .attr
 {
 	filter: unset;
 	transform: scale(0.75);
 	margin: calc(-32px * (1 - 0.75) / 2);
 }
-.custom-addition .board .orb {
+.custom-addition .board .orb
+ {
 	filter: unset;
 	transform: scale(0.5);
 	margin: calc(-36px * (1 - 0.5) / 2);
@@ -5060,4 +5062,13 @@ body.external-link-support #external-support{
 }
 :lang(ko) .icon-skill[data-icon-type="resolve"] {
 	background-position-x: calc(-36px * 2);
+}
+
+.icon-skill[data-icon-type="rate-mul-plus_point"]
+{
+	background-position-y:calc(-36px * 45);
+}
+.icon-skill[data-icon-type="rate-mul-part_break"]
+{
+	background-position-y:calc(-36px * 46);
 }

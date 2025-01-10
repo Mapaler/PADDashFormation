@@ -41355,11 +41355,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"d9d76afeaa0a4ba4ac94e106cf2117e2"
+		"93003bbb7ee2d688ed4e68b21d39a53f"
 	],
 	[
 		"script-skill-parser.js",
-		"1747fe828fc25e0394f82245eccca5c7"
+		"7b4700be7e38bbfdddfe90e251103675"
 	],
 	[
 		"script-universal_function.js",
@@ -41383,7 +41383,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"0548eea7ac972f4bac0ffebf384a51e5"
+		"16b834eb40e460324cdf9c3f2fcfe0b8"
 	],
 	[
 		"temp.js",
@@ -41427,7 +41427,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.js",
-		"8552840a3934a8eee0d0e001419036d9"
+		"68e8eca512a164fab743ed6b455d8ab6"
 	],
 	[
 		"languages/zh-hant.css",
@@ -41435,7 +41435,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.js",
-		"3f4938a03f1d14544bd9da895126ed6c"
+		"b046584b6338fd1e0f7f93108e0dd16f"
 	],
 	[
 		"images/attrs.png",
@@ -41587,7 +41587,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-skills.png",
-		"9b5c57a64636cbfddffbb4549f5e6035"
+		"66cc711b4a07f80bb869650ccdb23eec"
 	],
 	[
 		"images/icon-switch-leader.png",
