@@ -5604,8 +5604,6 @@ function initialize() {
 		const teamBigBox = teamBigBoxs[teamIdx];
 		const teamBox = teamBigBox.querySelector(".team-box");
 
-		teamData[isAssist][memberIdx] = mon;
-
 		mon.id = editBox.mid;
 		const card = mon.card || Cards[0];
 		const skill = Skills[card.activeSkillId];
@@ -5623,9 +5621,9 @@ function initialize() {
 			mon.level >= card.maxLevel) { //当4种特殊type的时候是无法297和打觉醒的，但是不能叠加的在未满级时可以
 			mon.plus = [0, 0, 0];
 		} else {
-			mon.plus[0] = parseInt(monEditAddHp.value) || 0;
-			mon.plus[1] = parseInt(monEditAddAtk.value) || 0;
-			mon.plus[2] = parseInt(monEditAddRcv.value) || 0;
+			mon.plus[0] = parseInt(monEditAddHp.value, 10) || 0;
+			mon.plus[1] = parseInt(monEditAddAtk.value, 10) || 0;
+			mon.plus[2] = parseInt(monEditAddRcv.value, 10) || 0;
 			if (!editBox.isAssist) { //如果不是辅助，则可以设定潜觉
 				mon.latent = editBox.latent.concat();
 			}
@@ -5635,53 +5633,11 @@ function initialize() {
 		if (skillLevelNum < skill.maxLevel) {
 			mon.skilllevel = skillLevelNum;
 		}
-		changeid(mon, editBox.monsterHead,
-			isAssist ? null : editBox.latentBox, //潜觉Node
-			isAssist ? null : teamData[1][memberIdx] //assist数据
-		);
 
-		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
-		refreshAbility(teamAbilityDom, teamData, memberIdx); //本人能力值
+		teamData[isAssist][memberIdx] = mon;
 
-		let changeAttrTypeWeapon = false;
-		let awokens = card.awakenings;
-		if (!editBox.isAssist) {//如果改的不是辅助
-			awokens = teamData[isAssist + 1][memberIdx].card.awakenings;
-		}
-		if (awokens.includes(49) && awokens.some(ak => ak >= 83 && ak <= 95)) changeAttrTypeWeapon = true;
-
-		//如果是2人协力，且修改的是队长的情况，为了刷新另一个队伍时间计算，直接刷新整个队形
-		if (teamsCount === 2 && memberIdx === 0 || changeAttrTypeWeapon) {
-			refreshAll(formation);
-		} else {
-			const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-			if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, teamIdx);
-			
-			const teamTotalInfoCountDom = teamBigBox.querySelector(".team-total-info-count"); //队伍星级、属性、类型合计
-			if (teamTotalInfoCountDom) refreshTeamTotalCount(teamTotalInfoCountDom, teamData, teamIdx);
-
-			const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
-			if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
-
-			const teamAwokenEffectDom = teamBigBox.querySelector(".team-awoken-effect"); //队伍觉醒效果计算
-			if (teamAwokenEffectDom) refreshTeamAwokenEfeect(teamAwokenEffectDom, teamData, teamIdx);
-	
-			const teamMemberTypesDom = teamBigBox.querySelector(".team-member-types"); //队员类型
-			if (teamMemberTypesDom) refreshMemberTypes(teamMemberTypesDom, teamData, memberIdx); //刷新本人觉醒
-
-			const teamMemberAwokenDom = teamBigBox.querySelector(".team-member-awoken"); //队员觉醒
-			const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
-			if (teamMemberAwokenDom && teamAssistAwokenDom) refreshMemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, memberIdx); //刷新本人觉醒
-
-			const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
-			if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
-			const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
-			if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
-	
-			//刷新该队员的CD
-			refreshMemberSkillCD(teamBox, teamData, memberIdx);
-		}
-
+		refreshAll(formation);
+		
 		createNewUrl();
 		editBox.hide();
 	};
@@ -5690,6 +5646,8 @@ function initialize() {
 			event.preventDefault();
 			if (editBox.classList.contains(className_displayNone)) {
 				showSearch();
+				const monstersID = document.getElementById("card-id");
+				monstersID.focus();
 			} else {
 				editBox.hide();
 			}
@@ -5732,11 +5690,6 @@ function initialize() {
 		const teamData = formation.teams[teamIdx];
 		teamData[isAssist][memberIdx] = mon;
 
-		changeid(mon, editBox.monsterHead, editBox.latentBox);
-
-		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
-		refreshAbility(teamAbilityDom, teamData, memberIdx); //本人能力值
-
 		refreshAll(formation);
 		
 		createNewUrl();
@@ -5749,34 +5702,7 @@ function initialize() {
 		const teamData = formation.teams[teamIdx];
 		teamData[isAssist][memberIdx] = mon;
 
-		changeid(mon, editBox.monsterHead, editBox.latentBox);
-
-		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
-		refreshAbility(teamAbilityDom, teamData, memberIdx); //本人能力值
-
-		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, teamIdx);
-		
-		const teamTotalInfoCountDom = teamBigBox.querySelector(".team-total-info-count"); //队伍星级、属性、类型合计
-		if (teamTotalInfoCountDom) refreshTeamTotalCount(teamTotalInfoCountDom, teamData, teamIdx);
-
-		const formationTotalInfoDom = formationBox.querySelector(".formation-total-info"); //所有队伍能力值合计
-		if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
-
-		const teamMemberTypesDom = teamBigBox.querySelector(".team-member-types"); //队员类型
-		if (teamMemberTypesDom) refreshMemberTypes(teamMemberTypesDom, teamData, memberIdx); //刷新本人觉醒
-
-		const teamMemberAwokenDom = teamBigBox.querySelector(".team-member-awoken"); //队员觉醒
-		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
-		if (teamMemberAwokenDom && teamAssistAwokenDom) refreshMemberAwoken(teamMemberAwokenDom, teamAssistAwokenDom, teamData, memberIdx); //刷新本人觉醒
-
-		const teamAwokenDom = teamBigBox.querySelector(".team-awoken"); //队伍觉醒合计
-		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
-		const formationAwokenDom = formationBox.querySelector(".formation-awoken"); //所有队伍觉醒合计
-		if (formationAwokenDom) refreshFormationAwokenCount(formationAwokenDom, formation.teams);
-
-		//刷新改队员的CD
-		refreshMemberSkillCD(teamBigBox, teamData, memberIdx);
+		refreshAll(formation);
 
 		createNewUrl();
 		editBox.hide();
