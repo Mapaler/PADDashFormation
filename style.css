@@ -1087,6 +1087,12 @@ label.badge {
 	font-size: 18px;
 	font-weight: bold;
 }
+.assist-label.same-evo-tree {
+	background-color: var(--team-bg-color);
+}
+.team-assist .member.same-evo-tree {
+	background-color: var(--team-bg-color);
+}
 .team-assist-label .assist-label::before {
 	content: "▼";
 }

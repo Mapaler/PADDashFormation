@@ -3895,7 +3895,7 @@ function initialize() {
 					const teamBigBox = teamBigBoxs[teamNum];
 					const teamBox = teamBigBox.querySelector(".team-box");
 					const memberBox = teamBox.querySelector(isAssist ? ".team-assist" : ".team-members");
-					const memberLi = memberBox.querySelector(`.member-${indexInTeam+1}`);
+					const memberLi = memberBox.querySelector(`.member[data-index="${indexInTeam}"]`);
 					const monsterHead = memberLi.querySelector(".monster");
 					monsterHead.classList.add("show-disabled-action");
 					monsterHead.onanimationend = function() {
@@ -6500,7 +6500,7 @@ function refreshAll(formationData) {
 		const memberLiDoms = Array.from(teamBox.querySelectorAll(".team-members .member")); //队员
 		const latentLiDoms = Array.from(teamBox.querySelectorAll(".team-latents .latents")); //潜觉
 		const assistLiDoms = Array.from(teamBox.querySelectorAll(".team-assist .member")); //辅助
-		const assistsLabelLiDoms = Array.from(teamBox.querySelector(".team-assist-label .assist-label")); //辅助的那个字
+		const assistsLabelLiDoms = Array.from(teamBox.querySelectorAll(".team-assist-label .assist-label")); //辅助的那个字
 
 		const teamAbilityDom = teamBigBox.querySelector(".team-ability");
 		const teamMemberTypesDom = teamBigBox.querySelector(".team-member-types"); //队员类型
@@ -6574,7 +6574,12 @@ function refreshAll(formationData) {
 				memberCard.attrs[0] === assistCard.attrs[0] || //如果主属性相等
 				memberCard.attrs[0]===6 || assistCard.attrs[0]===6 //或任一为仅副属性
 			);
-			const sameEvoTree = 1;
+			//同一进化链
+			const sameEvoTree = isSameEvoTree(member, assist);
+			const assistLabel = assistsLabelLiDoms[memberLiDoms.indexOf(memberLi)];
+			assistLabel && assistLabel.classList.toggle("same-evo-tree",sameEvoTree);
+			assistsLi.classList.toggle("same-evo-tree",sameEvoTree);
+
 			teamAbilityLi?.classList?.toggle("enable-bouns", enableBouns);
 
 			//隐藏队长的自身换为换队长的技能
