@@ -6507,10 +6507,10 @@ function refreshAll(formationData) {
 		const teamMemberAwokenDom = teamBigBox.querySelector(".team-member-awoken"); //队员觉醒
 		const teamAssistAwokenDom = teamBigBox.querySelector(".team-assist-awoken"); //辅助觉醒
 
-		const teamAbilityLiDoms = Array.from(teamBox.querySelectorAll(".team-ability .abilitys")); //三维
-		const teamMemberTypesLiDoms  = Array.from(teamBox.querySelectorAll(".team-member-types .member-types"));//队员类型
-		const teamMemberAwokenLiDoms  = Array.from(teamBox.querySelectorAll(".team-member-awoken .member-awoken"));//队员觉醒
-		const teamAssistAwokenLiDoms  = Array.from(teamBox.querySelectorAll(".team-assist-awoken .member-awoken"));//辅助觉醒
+		const teamAbilityLiDoms = Array.from(teamAbilityDom.querySelectorAll(".abilitys")); //三维
+		const teamMemberTypesLiDoms  = Array.from(teamMemberTypesDom.querySelectorAll(".member-types"));//队员类型
+		const teamMemberAwokenLiDoms  = Array.from(teamMemberAwokenDom.querySelectorAll(".member-awoken"));//队员觉醒
+		const teamAssistAwokenLiDoms  = Array.from(teamAssistAwokenDom.querySelectorAll(".member-awoken"));//辅助觉醒
 		
 		for (let ti = 0, ti_len = memberLiDoms.length; ti < ti_len; ti++) {
 			const leaderIdx = teamData[3]; //开始设置换队长
@@ -6574,13 +6574,13 @@ function refreshAll(formationData) {
 				memberCard.attrs[0] === assistCard.attrs[0] || //如果主属性相等
 				memberCard.attrs[0]===6 || assistCard.attrs[0]===6 //或任一为仅副属性
 			);
+			teamAbilityLi && teamAbilityLi.classList.toggle("enable-bouns", enableBouns);
+			
 			//同一进化链
 			const sameEvoTree = isSameEvoTree(member, assist);
 			const assistLabel = assistsLabelLiDoms[memberLiDoms.indexOf(memberLi)];
 			assistLabel && assistLabel.classList.toggle("same-evo-tree",sameEvoTree);
 			assistsLi.classList.toggle("same-evo-tree",sameEvoTree);
-
-			teamAbilityLi?.classList?.toggle("enable-bouns", enableBouns);
 
 			//隐藏队长的自身换为换队长的技能
 			if (ti == 5 || //好友队长永远隐藏
