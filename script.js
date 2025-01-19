@@ -4231,7 +4231,7 @@ function initialize() {
 		dge.rate.atk = Number(formData.get("dungeon-atk"));
 		dge.rate.rcv = Number(formData.get("dungeon-rcv"));
 		dge.collabs = formData.get("dungeon-collab-id").split(',').map(str=>parseInt(str,10)).filter(Boolean);
-		dge.gachas = formData.get("dungeon-gacha-id").split(',').map(str=>parseInt(str,10)).filter(Boolean);
+		dge.gachas = formData.get("dungeon-gacha-id").split(',').map(str=>parseInt(str,10)).filter(Number.isInteger);
 		dge.benefit = Str2Int(formData.get("dungeon-benefit"));
 		dge.stage = Str2Int(formData.get("current-stage"));
 
