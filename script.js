@@ -7494,6 +7494,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 49: return member.card.collabId === 116 ? 1.15 : 1; //GA文库
 				case 50: return member.card.gachaIds.includes(0) ? 1.15 : 1; //正月(新年)
 				case 51: return member.card.gachaIds.includes(14) ? 1.15 : 1; //女子桶
+				case 52: return member.card.gachaIds.includes(2) ? 1.15 : 1; //情人节
 				default: return 1;
 			}
 		}
