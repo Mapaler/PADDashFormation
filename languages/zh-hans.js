@@ -142,6 +142,7 @@ const _localTranslating = {
 			remove_assist: tp`${'icon'}移除自身的辅助宠物（直到地下城结束）`,
 			prediction_falling: tp`盘面上可以${'icon'}预知宝珠掉落`,
 			play_voice: tp`播放第 ${'stage'} 阶段的语音 ${'icon'}`,
+			times_limit: tp`【使用次数限制：${'turns'}】`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,
@@ -239,7 +240,8 @@ const _localTranslating = {
 			teamatk: tp`队伍${'attrs'}总攻击力`,
 			teamrcv: tp`队伍回复力`,
 			cstage: tp`当前地下城层数`,
-			state_is: tp`${'state'}：${'num'}`,
+			broken_parts: tp`部位破坏数`,
+			state_is: tp`${'icon'}${'state'}：${'num'}`,
 		},
 		unit: {
 			orbs: tp`个`,

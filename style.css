@@ -3525,6 +3525,11 @@ a.series-search::before {
 .control-box .btn-henshin[data-step^="-"]::before{
 	content: "\f04a";
 }
+.dungeon-enchance {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
 #btn-set-dungeon-enchance,
 #btn-remove-assist {
 	display: inline-flex;
@@ -3541,8 +3546,11 @@ a.series-search::before {
 	width: 1em;
 	height: 1em;
 }
-#btn-set-dungeon-enchance::before {
+#btn-set-dungeon-enchance::before,
+.icon-skill[data-icon-type="current-stage"]
+{
 	background-image: url(images/icon-dungeon.png);
+	background-position: center;
 }
 #btn-remove-assist::before{
 	background-image: url(images/icon-assist-bind.png);
@@ -4694,7 +4702,8 @@ body.external-link-support #external-support{
 }
 .card-skill-list .skill-proviso,
 .card-skill-list .delay-active-turns::first-line, /*延迟生效技能的第一行*/
-.card-skill-list .remove-assist
+.card-skill-list .remove-assist,
+.card-skill-list .times-limit
 {
 	color: blue;
 }

@@ -157,6 +157,7 @@ let localTranslating = {
 			remove_assist: tp`${'icon'}Remove this assist card (until end of dungeon)`,
 			prediction_falling: tp`${'icon'}Prediction of falling on board`,
 			play_voice: tp`Play voice of the phase ${'stage'} of active skill ${'icon'}`,
+			times_limit: tp`[Number of times skill can be used: ${'turns'}]`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -254,7 +255,8 @@ let localTranslating = {
 			teamatk: tp`Team ${'attrs'} ATK`,
 			teamrcv: tp`Team RCV`,
 			cstage: tp`current Stage of Dungeon`,
-			state_is: tp`${'state'}: ${'num'}`,
+			broken_parts: tp`number of Broken Parts`,
+			state_is: tp`${'icon'}${'state'}: ${'num'}`,
 		},
 		unit: {
 			orbs: tp``,

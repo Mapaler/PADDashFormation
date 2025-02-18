@@ -621,6 +621,10 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "현재 단계:";
 }
+#dialog-dungeon-enchance .broken-parts-list::before
+{
+	content: "깨진 부품의 수:";
+}
 #dialog-dungeon-enchance .collab-list::after,
 #dialog-dungeon-enchance .gacha-list::after
 {

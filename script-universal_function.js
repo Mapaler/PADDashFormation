@@ -868,6 +868,13 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		});
 	}
 
+	if (dge.brokens > 0) { //破坏部位个数
+		//131号部位破坏觉醒
+		latterAwokenScale.forEach(ab => {
+			ab.push({ index: 131, scale: 1.2 ** dge.brokens });
+		});
+	}
+
 	const abilitys = memberCurves.map((ab, idx) => {
 		const n_base = Math.round(curve(ab, member.level, memberCard.maxLevel, memberCard.limitBreakIncr, limitBreakIncr120[idx])); //等级基础三维
 		const n_plus = member.plus[idx] * plusAdd[idx]; //加值增加量

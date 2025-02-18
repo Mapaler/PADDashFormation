@@ -654,6 +654,7 @@ class Formation2 {
 		},
 		benefitOfYinYang: 0,
 		currentStage: 0,
+		brokenParts: 0,
 	};
 	constructor(teamCount) {
 		this.teams.length = teamCount;
@@ -890,7 +891,10 @@ let Formation = function(teamCount, memberCount) {
 			hp: 1,
 			atk: 1,
 			rcv: 1
-		}
+		},
+		benefit: 0,
+		stage: 0,
+		brokens: 0,
 	}
 	for (let ti = 0; ti < teamCount; ti++) {
 		const team = [
@@ -929,7 +933,8 @@ Formation.prototype.outObj = function() {
 		[Bin.enflags(dge.types),Bin.enflags(dge.attrs),Bin.enflags(dge.rarities),dge.collabs.length ? dge.collabs : 0, Bin.enflags(dge.gachas)].deleteLatter(0), //类型,属性,星级
 		[dge.rate.hp,dge.rate.atk,dge.rate.rcv].deleteLatter(1),
 		dge.benefit || 0, //地下城阴阳加护
-		dge.stage || 1 //地下城层数
+		dge.stage || 1, //地下城层数
+		dge.brokens || 0, //破坏部位数
 	];
 	obj.v = dataStructure;
 	/*if (obj.f.every(team=>team[0].length == 0 && team[1].length == 0 && team[2] == undefined) &&
@@ -962,6 +967,7 @@ Formation.prototype.loadObj = function(f) {
 		dge.rate.rcv = 1;
 		dge.benefit = 0;
 		dge.stage = 1;
+		dge.brokens = 0;
 		return;
 	}
 	const dataVeision = f?.v ?? (f.f ? 2 : 1); //是第几版格式
@@ -1016,7 +1022,7 @@ Formation.prototype.loadObj = function(f) {
 	if (f.r)
 	{
 		if (Array.isArray(f.r[0])) {
-			const [[types, attrs, rarities, collabs, gachas] = [], [hp , atk, rcv] = [], benefit, stage] = f.r;
+			const [[types, attrs, rarities, collabs, gachas] = [], [hp , atk, rcv] = [], benefit, stage, brokens] = f.r;
 			
 			dge.types = Bin.unflags(types ?? 0);
 			dge.attrs = Bin.unflags(attrs ?? 0);
@@ -1030,6 +1036,7 @@ Formation.prototype.loadObj = function(f) {
 
 			dge.benefit = benefit || 0;
 			dge.stage = stage || 1;
+			dge.brokens = brokens || 0;
 		} else {
 			dge.attrs = Bin.unflags(f.r[0] ?? 0);
 			dge.types = Bin.unflags(f.r[1] ?? 0);
@@ -4174,6 +4181,7 @@ function initialize() {
 	const gachaIdIpt = dialogContent.querySelector("#dungeon-gacha-id");
 	const benefitDoms = Array.from(dialogContent.querySelectorAll(".benefit-list .benefit-check"));
 	const currentStageIpt = dialogContent.querySelector("#current-stage");
+	const brokenPartsIpt = dialogContent.querySelector("#broken-parts");
 
 	//读取当前的地下城设定
 	dungeonEnchanceDialog.initialing = function(formation){
@@ -4195,6 +4203,7 @@ function initialize() {
 		const benefit = dge.benefit || 0;
 		benefitDoms.find(dom=>parseInt(dom.value, 10) == benefit).checked = true;
 		currentStageIpt.value = dge.stage || 1;
+		brokenPartsIpt.value = dge.brokens || 0;
 	}
 	/* //直接通过 reset 浏览器默认功能重置了
 	const dungeonEnchanceDialogClear = dungeonEnchanceDialog.querySelector(".dialog-clear");
@@ -4234,6 +4243,7 @@ function initialize() {
 		dge.gachas = formData.get("dungeon-gacha-id").split(',').map(str=>parseInt(str,10)).filter(Number.isInteger);
 		dge.benefit = Str2Int(formData.get("dungeon-benefit"));
 		dge.stage = Str2Int(formData.get("current-stage"));
+		dge.brokens = Str2Int(formData.get("broken-parts"));
 
 		refreshAll(formation);
 		createNewUrl();
@@ -6483,8 +6493,18 @@ function refreshAll(formationData) {
 	if (dge?.stage > 1) { //添加层数
 		const states = localTranslating?.skill_parse?.stats;
 		const dict = {
+			icon: createSkillIcon("current-stage"),
 			state:states?.cstage(),
 			num: dge?.stage
+		};
+		dungeonEnchanceFragment.push(states?.state_is(dict));
+	}
+	if (dge?.brokens > 1) { //添加层数
+		const states = localTranslating?.skill_parse?.stats;
+		const dict = {
+			icon: createSkillIcon("rate-mul-part_break"),
+			state:states?.broken_parts(),
+			num: dge?.brokens
 		};
 		dungeonEnchanceFragment.push(states?.state_is(dict));
 	}

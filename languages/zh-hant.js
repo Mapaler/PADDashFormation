@@ -142,6 +142,7 @@ const _localTranslating = {
 			remove_assist: tp`${'icon'}移除自身的輔助寵物（直到地下城結束）`,
 			prediction_falling: tp`盤面上可以${'icon'}預知寶珠掉落`,
 			play_voice: tp`播放第 ${'stage'} 階段的語音 ${'icon'}`,
+			times_limit: tp`【使用次數限制：${'turns'}】`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,
@@ -239,7 +240,8 @@ const _localTranslating = {
 			teamatk: tp`隊伍${'attrs'}總攻擊力`,
 			teamrcv: tp`隊伍回復力`,
 			cstage: tp`當前地下城層數`,
-			state_is: tp`${'state'}：${'num'}`,
+			broken_parts: tp`部位破壞數`,
+			state_is: tp`${'icon'}${'state'}：${'num'}`,
 		},
 		unit: {
 			orbs: tp`個`,

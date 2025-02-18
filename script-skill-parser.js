@@ -482,6 +482,7 @@ const SkillKinds = {
 	PredictionFalling: "prediction-falling",
 	BreakingShield: "breaking-shield",
 	PlayVoice: "play-voice",
+	TimesLimit: "times-limit",
 }
 
 function skillParser(skillId)
@@ -1080,7 +1081,10 @@ function predictionFalling() {
 	return { kind: SkillKinds.PredictionFalling };
 }
 function breakingShield(value) {
-	return { kind: SkillKinds.BreakingShield, value: value };
+	return { kind: SkillKinds.BreakingShield, value };
+}
+function timesLimit(turns) {
+	return { kind: SkillKinds.TimesLimit, turns };
 }
 
 const skillObjectParsers = {
@@ -1738,6 +1742,10 @@ const skillObjectParsers = {
 	},
 	[264](mul) { return rateMultiply(v.percent(mul), 'plus_point'); },
 	[265](mul) { return rateMultiply(v.percent(mul), 'part_break'); },
+
+	//限制技能使用次数
+	[268](turns) { return timesLimit(turns); },
+
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
 			switch (type) {
@@ -2872,6 +2880,14 @@ function renderSkill(skill, option = {})
 				icon,
 			};
 			frg.ap(tsp.skill.play_voice(dict));
+			break;
+		}
+		case SkillKinds.TimesLimit: { //使用次数限制
+			const { turns } = skill;
+			let dict = {
+				turns
+			};
+			frg.ap(tsp.skill.times_limit(dict));
 			break;
 		}
 		

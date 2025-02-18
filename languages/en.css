@@ -677,6 +677,10 @@ label[for="qr-data-type-paddb"]::before
 {
 	content: "Current Stage:";
 }
+#dialog-dungeon-enchance .broken-parts-list::before
+{
+	content: "Number of Broken Parts:";
+}
 #dialog-dungeon-enchance .collab-list::after,
 #dialog-dungeon-enchance .gacha-list::after
 {
