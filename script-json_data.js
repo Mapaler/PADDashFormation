@@ -3674,11 +3674,12 @@ const specialSearchFunctions = (function() {
 
 					/*
 					 * 202,变身，只能用一次
+					 * 214,自封技能
 					 * 218,坐CD，永远都无法循环
 					 * 250,移除武器，作为基底时直接无法使用
 					 * 268,使用次数限制
 					 */
-					const cantLoopSkill = getActuallySkills(skill, [202, 218, 250, 268]);
+					const cantLoopSkill = getActuallySkills(skill, [202, 214, 218, 250, 268]);
 					if (cantLoopSkill.length) return false;
 
 					const minCD = getSkillMinCD(skill); //主动技最小的CD
