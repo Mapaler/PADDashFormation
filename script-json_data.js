@@ -3660,9 +3660,36 @@ const specialSearchFunctions = (function() {
 				function:cards=>cards.filter(card=>{
 					if (card.activeSkillId == 0) return false;
 					let skill = Skills[card.activeSkillId];
-					//如果是单向进化类技能，也获取最后一次技能
-					if (skill.type == 232) skill = Skills[skill.params[skill.params.length-1]];
-					return skill.initialCooldown - (skill.maxLevel - 1) <= 1;
+					//单向进化技能，采用最后一个子技能
+					if (skill.type == 232) skill = Skills[skill.params.at(-1)];
+					return getSkillMinCD(skill) <= 1;
+				})
+			},
+			{name:"Skill Loop less than 4 card",otLangName:{chs:"4 个队员能循环开",cht:"4 個隊員能循環開"},
+				function:cards=>cards.filter(card=>{
+					if (card.activeSkillId == 0) return false;
+					let skill = Skills[card.activeSkillId];
+					//单向进化技能，采用最后一个子技能
+					if (skill.type === 232) skill = Skills[skill.params.at(-1)];
+
+					/*
+					 * 202,变身，只能用一次
+					 * 218,坐CD，永远都无法循环
+					 * 250,移除武器，作为基底时直接无法使用
+					 * 268,使用次数限制
+					 */
+					const cantLoopSkill = getActuallySkills(skill, [202, 218, 250, 268]);
+					if (cantLoopSkill.length) return false;
+
+					const minCD = getSkillMinCD(skill); //主动技最小的CD
+					let realCD = minCD;
+					const skillBoost = getActuallySkills(skill, [146], false); //溜
+					if (skillBoost.length) {
+						realCD = skillBoost.reduce((cd,subSkill)=>{
+							return cd - subSkill.params[0] * 3; //第一个参数是溜几回合，3个角色就是×3
+						}, realCD);
+					}
+					return minCD > 1 && realCD <= 4;
 				})
 			},
 			{name:"Time pause",otLangName:{chs:"时间暂停",cht:"時間暫停"},
@@ -3701,6 +3728,13 @@ const specialSearchFunctions = (function() {
 					const value = skill.params[0];
 					return `${skill.type == 232 ? "单向进化" : "🔁循环变化"}`;
 				}
+			},
+			{name:"Not Evolved active",otLangName:{chs:"非进化类技能",cht:"非進化類技能"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [232, 233];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return !skill;
+				})
 			},
 			{name:"Enable require HP range",otLangName:{chs:"技能使用血线要求",cht:"技能使用血線要求"},
 				function:cards=>cards.filter(card=>{
@@ -3766,6 +3800,20 @@ const specialSearchFunctions = (function() {
 					const fragment = document.createDocumentFragment();
 					fragment.append(createOrbsList(Bin.unflags(sk[0])), sk[2] ? `≤${sk[2]}` : `≥${sk[1]}`);
 					return fragment;
+				}
+			},
+			{name:"Has limit of times a skill can be used",otLangName:{chs:"技能使用有次数限制",cht:"技能使用有次數限制"},
+				function:cards=>cards.filter(card=>{
+					const searchTypeArray = [268];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+				}),
+				addition:card=>{
+					const searchTypeArray = [268];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					if (!skill) return;
+					const sk = skill.params;
+					return `限${sk[0]}次`;
 				}
 			},
 		]},

@@ -1553,6 +1553,9 @@ function getActuallySkills(skill, skillTypes, searchRandom = true) {
 		return [];
 	}
 }
+function getSkillMinCD(skill){
+	return skill.initialCooldown - (skill.maxLevel - 1);
+}
 //返回变身宠的初级
 function henshinBase(cardid, firstId)
 {

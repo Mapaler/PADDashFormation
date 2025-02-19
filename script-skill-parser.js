@@ -1995,7 +1995,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.EvolvedSkills: { //技能进化
-			let skills = skill.skills, loop = skill.loop;
+			let {skills, loop} = skill;
 			const ul = document.createElement("ul");
 			ul.className = "evolved-active-skill";
 			skills.forEach((subSkill, idx)=>{
