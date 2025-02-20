@@ -1752,7 +1752,7 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 	let moveTime = {
 		fixed: false,
 		duration: {
-			default: currentDataSource.code === "ja" ? 6 : 5, //  v21.7 +5变+6
+			default: 6,
 			leader: 0,
 			badge: 0,
 			awoken: 0,
