@@ -17719,7 +17719,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_101.PNG",
-		"b65f9faa86d1b012d61dbe42cf7a1d9d"
+		"adff84cac63d19fd387fdcf48910fb8b"
 	],
 	[
 		"images/cards_en/CARDS_102.PNG",
@@ -17799,7 +17799,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_121.PNG",
-		"b9e4ccfc0ab8495f1c69d227c2bf2e9f"
+		"f207dc3598633f0cd3d940111c6573a6"
 	],
 	[
 		"images/cards_en/CARDS_122.PNG",
@@ -27182,76 +27182,788 @@ const cachesMap = new Map([
 		"0a99438c90903938baaedac7692643cf"
 	],
 	[
+		"sound/voice/en/padv3884.wav",
+		"162db3a798e667e4dc7f0922fa89a2d8"
+	],
+	[
+		"sound/voice/en/padv3885.wav",
+		"fa861b70add678944f45a68fa8b96b8e"
+	],
+	[
+		"sound/voice/en/padv3886.wav",
+		"21036a564dd34760b5e6112fe417b835"
+	],
+	[
+		"sound/voice/en/padv3887.wav",
+		"ce591dd78351afc738fc448d6652f372"
+	],
+	[
+		"sound/voice/en/padv3888.wav",
+		"dc72fda04b66b2acd86f7930f1495f50"
+	],
+	[
+		"sound/voice/en/padv3889.wav",
+		"cad2a672fbd37d2c4536cd3b4a0ebe97"
+	],
+	[
 		"sound/voice/en/padv389.wav",
 		"4d1cf43d864627d0ce4d1b0c2920cd66"
+	],
+	[
+		"sound/voice/en/padv3890.wav",
+		"796bae8db3aa1e635c332b5168433560"
+	],
+	[
+		"sound/voice/en/padv3891.wav",
+		"753c8fb86d04d7fe7dba787b93e56902"
+	],
+	[
+		"sound/voice/en/padv3892.wav",
+		"b1029a123bfec6687749a464ae67a78d"
+	],
+	[
+		"sound/voice/en/padv3893.wav",
+		"11cc352328e1c4c44d242fb7027eb94a"
+	],
+	[
+		"sound/voice/en/padv3894.wav",
+		"d8f7dd08d81cf9bfbd4ced0421dbeb81"
+	],
+	[
+		"sound/voice/en/padv3895.wav",
+		"381237a3e733cd2e6d6b4d0232eea1fa"
+	],
+	[
+		"sound/voice/en/padv3896.wav",
+		"63e468ee6dfeedf78aa9e23a2798bf98"
+	],
+	[
+		"sound/voice/en/padv3897.wav",
+		"26701faafb3a4c5d650744755a2b7e5a"
+	],
+	[
+		"sound/voice/en/padv3898.wav",
+		"ce3af9aee371746e77d34d89488f003c"
+	],
+	[
+		"sound/voice/en/padv3899.wav",
+		"33e31410a5f29d444c59920e64c662c9"
 	],
 	[
 		"sound/voice/en/padv390.wav",
 		"7f9cc44dc790621dd061f2a8949b3981"
 	],
 	[
+		"sound/voice/en/padv3900.wav",
+		"9c001dd31f04ef1308c8cbc23bf810dd"
+	],
+	[
+		"sound/voice/en/padv3901.wav",
+		"915865ff38ce4f2a8a9d2f3f24f1f5ec"
+	],
+	[
+		"sound/voice/en/padv3902.wav",
+		"4d93cf2b4f136be96df8cfe997926280"
+	],
+	[
+		"sound/voice/en/padv3903.wav",
+		"d03f6d13cdfdbeb25e08cd5e1ee572e0"
+	],
+	[
+		"sound/voice/en/padv3904.wav",
+		"37c48a2385d9b03686c1ef80949232b6"
+	],
+	[
+		"sound/voice/en/padv3905.wav",
+		"50a27a11a707ca7d1a5da68168f8eb7f"
+	],
+	[
+		"sound/voice/en/padv3906.wav",
+		"ab8b198a8e2d77b03433adf6c3ef1e00"
+	],
+	[
+		"sound/voice/en/padv3907.wav",
+		"609e9ca252c01e6b45a0cc2b6a6b329d"
+	],
+	[
+		"sound/voice/en/padv3908.wav",
+		"093b7a5dc4affdb50c5bdcd7b17a09fd"
+	],
+	[
+		"sound/voice/en/padv3909.wav",
+		"f40f3cd1ccae2f7eff0598e73868a8b2"
+	],
+	[
 		"sound/voice/en/padv391.wav",
 		"4b24a073a3a784bd5b07c2d5a855046a"
+	],
+	[
+		"sound/voice/en/padv3910.wav",
+		"4c903c59f550e270b40652eecb2b5777"
+	],
+	[
+		"sound/voice/en/padv3911.wav",
+		"5b7c592604258b203d8f6966846b9d56"
+	],
+	[
+		"sound/voice/en/padv3912.wav",
+		"263a88b227834b26755a881b73aafff2"
+	],
+	[
+		"sound/voice/en/padv3913.wav",
+		"21b85c2b5e940788f6df6eae41546a75"
+	],
+	[
+		"sound/voice/en/padv3914.wav",
+		"f2c696b09a86761b424e9b47458304e0"
+	],
+	[
+		"sound/voice/en/padv3915.wav",
+		"e30ee9f430a1729e26e0fb092acbaddd"
+	],
+	[
+		"sound/voice/en/padv3916.wav",
+		"81f3fa623cb66644ab27a74d3c5caa71"
+	],
+	[
+		"sound/voice/en/padv3917.wav",
+		"fd7d916486b5e09233c16c1a14099c66"
+	],
+	[
+		"sound/voice/en/padv3918.wav",
+		"65532966c0a8779d600912828a35e9d8"
+	],
+	[
+		"sound/voice/en/padv3919.wav",
+		"b3f1a5b6bdef4ec74c750ac7df14e13a"
 	],
 	[
 		"sound/voice/en/padv392.wav",
 		"852e1ecd0a76a7e683229265c7ce6020"
 	],
 	[
+		"sound/voice/en/padv3920.wav",
+		"39ff6d852e31b093bbd58e24736af787"
+	],
+	[
+		"sound/voice/en/padv3921.wav",
+		"7b932f92d6f31b831cf428682193507a"
+	],
+	[
+		"sound/voice/en/padv3922.wav",
+		"306295749c48429da3026d7f9c1ed5d9"
+	],
+	[
+		"sound/voice/en/padv3923.wav",
+		"310b1cbca221775a0fa4feed88d23610"
+	],
+	[
+		"sound/voice/en/padv3924.wav",
+		"397dc626f391980aa1b1cb6f91f8ab05"
+	],
+	[
+		"sound/voice/en/padv3925.wav",
+		"279e44bdb1820e66d576a869660d26a8"
+	],
+	[
+		"sound/voice/en/padv3926.wav",
+		"19b1dd2e8638e1ad497145082ea0bff2"
+	],
+	[
+		"sound/voice/en/padv3927.wav",
+		"c2065457395b0189b83ee18b15eaabb7"
+	],
+	[
+		"sound/voice/en/padv3928.wav",
+		"06fb623f967421f7d814a500bf7faa35"
+	],
+	[
+		"sound/voice/en/padv3929.wav",
+		"0cdc97496d56068faf7d9b5ba1e148f0"
+	],
+	[
 		"sound/voice/en/padv393.wav",
 		"bca86b7c347d96011536373fc322c545"
+	],
+	[
+		"sound/voice/en/padv3930.wav",
+		"2a36b9aca4f070828de0b95b9b112743"
+	],
+	[
+		"sound/voice/en/padv3931.wav",
+		"985d56e12eb3793a74c2a3b3ba26c011"
+	],
+	[
+		"sound/voice/en/padv3932.wav",
+		"149839d303ebfb0b315b6905deb91cf3"
+	],
+	[
+		"sound/voice/en/padv3933.wav",
+		"93135355c5dc47534cfa13f9acb87f5a"
+	],
+	[
+		"sound/voice/en/padv3934.wav",
+		"4c7d38b1ebf2f6ca2b59d55eeb983c7c"
+	],
+	[
+		"sound/voice/en/padv3935.wav",
+		"a7e2ef95c5741dc7b95941b02bd9ffae"
+	],
+	[
+		"sound/voice/en/padv3936.wav",
+		"eca118c4828189f8e309c9f62bbfde9b"
+	],
+	[
+		"sound/voice/en/padv3937.wav",
+		"5e5d495132d397ac1bb26bd93cc1a440"
+	],
+	[
+		"sound/voice/en/padv3938.wav",
+		"fdac107b563689a5cd9216dbb44e2cca"
+	],
+	[
+		"sound/voice/en/padv3939.wav",
+		"6210422f5a6179aaa9c621b581009f84"
 	],
 	[
 		"sound/voice/en/padv394.wav",
 		"dd48f3d64305b1b90c750c45a5314972"
 	],
 	[
+		"sound/voice/en/padv3940.wav",
+		"7cd541144aa5fe208db7e07a809ef2b4"
+	],
+	[
+		"sound/voice/en/padv3941.wav",
+		"f9f72c29b394376bd0ba72eab357eca0"
+	],
+	[
+		"sound/voice/en/padv3942.wav",
+		"933d9d41af2489c485c3847ba38a584a"
+	],
+	[
+		"sound/voice/en/padv3943.wav",
+		"c5664de795c7380af4d932df7a7acabf"
+	],
+	[
+		"sound/voice/en/padv3944.wav",
+		"7f4ac6e68e3983f374ba8d970e0fd023"
+	],
+	[
+		"sound/voice/en/padv3945.wav",
+		"9e0190667f1c0e9a272e61c1832f17af"
+	],
+	[
+		"sound/voice/en/padv3946.wav",
+		"8ce7315aa5b8553bc9be2d9d60e05525"
+	],
+	[
+		"sound/voice/en/padv3947.wav",
+		"aad296373a1300e3ebe9e7e0bb258787"
+	],
+	[
+		"sound/voice/en/padv3948.wav",
+		"e9a2d6690fa87b6ed3e3dffc8a9bdae1"
+	],
+	[
+		"sound/voice/en/padv3949.wav",
+		"a27bf29e84abc8d3276436c05a76311d"
+	],
+	[
 		"sound/voice/en/padv395.wav",
 		"5003d42cf68183d7bbdd40599e4d9c5d"
+	],
+	[
+		"sound/voice/en/padv3950.wav",
+		"95ed62ce8d04ac12dcdf7b40c080a417"
+	],
+	[
+		"sound/voice/en/padv3951.wav",
+		"defe7cabdd7409eb31df2eb6d95e0625"
+	],
+	[
+		"sound/voice/en/padv3952.wav",
+		"48dafd54116542f404df5a95cd50f1b0"
+	],
+	[
+		"sound/voice/en/padv3953.wav",
+		"2698046ddd0d16bfdd27a8360c24f879"
+	],
+	[
+		"sound/voice/en/padv3954.wav",
+		"55933b192d7e4a76cc6dfcb4f36c6006"
+	],
+	[
+		"sound/voice/en/padv3955.wav",
+		"f4c616396945539cbbaf7221ce9e0a01"
+	],
+	[
+		"sound/voice/en/padv3956.wav",
+		"78fa8e8a5d4cb44f9a15319f64e228fd"
+	],
+	[
+		"sound/voice/en/padv3957.wav",
+		"88395bf9623465365e93e75a20256e15"
+	],
+	[
+		"sound/voice/en/padv3958.wav",
+		"134b26cea263f82f6af241c877351b37"
+	],
+	[
+		"sound/voice/en/padv3959.wav",
+		"c6c977c257f4fac86d64595bcd0647cf"
 	],
 	[
 		"sound/voice/en/padv396.wav",
 		"a8cf633f1f95239aa8dcfdf3759dd784"
 	],
 	[
+		"sound/voice/en/padv3960.wav",
+		"6016a39dbbba05e41065f96fcfcd08e1"
+	],
+	[
+		"sound/voice/en/padv3961.wav",
+		"01066d9be1a8ec28d0e46ca7eaaea999"
+	],
+	[
+		"sound/voice/en/padv3962.wav",
+		"d81f78dd08af141540881268260a22bd"
+	],
+	[
+		"sound/voice/en/padv3963.wav",
+		"0535faadf987cc3da6805d2d8e5c5943"
+	],
+	[
+		"sound/voice/en/padv3964.wav",
+		"069dede974a6ba88f3a231c57584174c"
+	],
+	[
+		"sound/voice/en/padv3965.wav",
+		"3b74a824c22e41acd2ba26f62b4f5421"
+	],
+	[
+		"sound/voice/en/padv3966.wav",
+		"1d4bc56b4c8e3622b5fd84c710a85a91"
+	],
+	[
+		"sound/voice/en/padv3967.wav",
+		"ef1664a1b74e24068ecc2d75560b3bb8"
+	],
+	[
+		"sound/voice/en/padv3968.wav",
+		"91337a558b023a08a2896ffa79f4aa1e"
+	],
+	[
+		"sound/voice/en/padv3969.wav",
+		"1defe83121a52f7362c5801233d7eee8"
+	],
+	[
 		"sound/voice/en/padv397.wav",
 		"08f8bb8be9e137f465e7a83f34223606"
+	],
+	[
+		"sound/voice/en/padv3970.wav",
+		"da7728e291217fd104a3af940da5a3ec"
+	],
+	[
+		"sound/voice/en/padv3971.wav",
+		"31399e9f7165b20ce8866f833d995777"
+	],
+	[
+		"sound/voice/en/padv3972.wav",
+		"fa2b5e140259eec0c7129367f1f72a4a"
+	],
+	[
+		"sound/voice/en/padv3973.wav",
+		"8894c84e58177997f02d23a3aea5bc9d"
+	],
+	[
+		"sound/voice/en/padv3974.wav",
+		"b6513c4c5e8204feaca4c96c863f1845"
+	],
+	[
+		"sound/voice/en/padv3975.wav",
+		"d2770c6938afd4e6535444c597b78c08"
+	],
+	[
+		"sound/voice/en/padv3976.wav",
+		"ae2e60db6d6283542d9b2f69d9a567fd"
+	],
+	[
+		"sound/voice/en/padv3977.wav",
+		"eebfe036a6ac66c52f418e99ca5cbde8"
+	],
+	[
+		"sound/voice/en/padv3978.wav",
+		"7296e7901fd71fa881d3b3de8b9982c8"
+	],
+	[
+		"sound/voice/en/padv3979.wav",
+		"dace3fdf3b7f4a7f800e891a81992cfc"
 	],
 	[
 		"sound/voice/en/padv398.wav",
 		"4eaa0546fc27cbcfed17698acb643ddc"
 	],
 	[
+		"sound/voice/en/padv3980.wav",
+		"9593d0c75877331efde91c2733a93d40"
+	],
+	[
+		"sound/voice/en/padv3981.wav",
+		"acff6379936d3f131b20fdb2107dfab3"
+	],
+	[
+		"sound/voice/en/padv3982.wav",
+		"8b89a646ca750f3e373864ce57240391"
+	],
+	[
+		"sound/voice/en/padv3983.wav",
+		"2dc9b1e2fa5ee395ce79a5081ea73a01"
+	],
+	[
+		"sound/voice/en/padv3984.wav",
+		"bb5fb9f93819f9b70d79af728de0414c"
+	],
+	[
+		"sound/voice/en/padv3985.wav",
+		"4f2fa1cb3ca1160ceeff09cee2cf078b"
+	],
+	[
+		"sound/voice/en/padv3986.wav",
+		"29c253ff5df4b5e1f171f3cc5302193b"
+	],
+	[
+		"sound/voice/en/padv3987.wav",
+		"f6392f9d8d29331b5aee55414ebbe75d"
+	],
+	[
+		"sound/voice/en/padv3988.wav",
+		"95bda8e9987d4def2869cee635b7d952"
+	],
+	[
+		"sound/voice/en/padv3989.wav",
+		"a1bbf3f9986a65e5577a534812a5ddb1"
+	],
+	[
 		"sound/voice/en/padv399.wav",
 		"cad3dba339abe36c4c1f6d23cf1defac"
+	],
+	[
+		"sound/voice/en/padv3990.wav",
+		"1305984ad1ce1e32e7e94ba1292c909c"
+	],
+	[
+		"sound/voice/en/padv3991.wav",
+		"b434203a8dbf411f789c9b4c96814ecb"
+	],
+	[
+		"sound/voice/en/padv3992.wav",
+		"e7076c11e1513a7d923d31d1de7de319"
+	],
+	[
+		"sound/voice/en/padv3993.wav",
+		"4de0787fe3c9624b0d7c20376c984f52"
+	],
+	[
+		"sound/voice/en/padv3994.wav",
+		"3a7db58f611224cd3ca67c676f67fa29"
+	],
+	[
+		"sound/voice/en/padv3995.wav",
+		"30161f051c97cf577e5315834a60c8f7"
+	],
+	[
+		"sound/voice/en/padv3996.wav",
+		"c6a365d48979e4757d98acfeb0ec1a8b"
+	],
+	[
+		"sound/voice/en/padv3997.wav",
+		"a6d90d0c2dee847527cb59d08eed1485"
+	],
+	[
+		"sound/voice/en/padv3998.wav",
+		"8e7fc9e9688cc83701d51bd7a6b870ff"
+	],
+	[
+		"sound/voice/en/padv3999.wav",
+		"57d541808ef8a210ece91f4b19d3e2ab"
 	],
 	[
 		"sound/voice/en/padv400.wav",
 		"41bc5834bd70ef29ca1aeb2983785126"
 	],
 	[
+		"sound/voice/en/padv4000.wav",
+		"04f9861b3ef951fd1b20f06b98d7c850"
+	],
+	[
+		"sound/voice/en/padv4001.wav",
+		"0f08d561cd386b3ba66c6142e06de450"
+	],
+	[
+		"sound/voice/en/padv4002.wav",
+		"6a2c72e332d95d3fc0bbdaac287ad892"
+	],
+	[
+		"sound/voice/en/padv4003.wav",
+		"5595d938b66702cd0a6c2ffd37ec4acd"
+	],
+	[
+		"sound/voice/en/padv4004.wav",
+		"575f0c6365c64575b9110ba8f7b51f5a"
+	],
+	[
+		"sound/voice/en/padv4005.wav",
+		"bd66cb038679be4e7cdb8e8b2becbe39"
+	],
+	[
+		"sound/voice/en/padv4006.wav",
+		"389ce0a8cc03f0d3db7c626045a89d0b"
+	],
+	[
+		"sound/voice/en/padv4007.wav",
+		"39413083137a73e46ca4ebb492eecabe"
+	],
+	[
+		"sound/voice/en/padv4008.wav",
+		"ae455b5695449b0ecbf6377a34c0aaa0"
+	],
+	[
+		"sound/voice/en/padv4009.wav",
+		"ee3e2d709c7c5c69b8e0c65d1a6813bf"
+	],
+	[
 		"sound/voice/en/padv401.wav",
 		"70d06368c9222577fa4ea4e07359f5b6"
+	],
+	[
+		"sound/voice/en/padv4010.wav",
+		"e53723efd2cafb6a04c03daaea9f4697"
+	],
+	[
+		"sound/voice/en/padv4011.wav",
+		"183d9ce9f935190e566b8b2e070a1b25"
+	],
+	[
+		"sound/voice/en/padv4012.wav",
+		"5ac025cc0d7e037f25f111e3b02339ba"
+	],
+	[
+		"sound/voice/en/padv4013.wav",
+		"3cadfa6177a99186752f64916d207d4b"
+	],
+	[
+		"sound/voice/en/padv4014.wav",
+		"7bcf58f977c5a20e74eb6337980dc0b9"
+	],
+	[
+		"sound/voice/en/padv4015.wav",
+		"1262d92d98db69ba54eff0e5081aa5fa"
+	],
+	[
+		"sound/voice/en/padv4016.wav",
+		"d51e749e5f1ef1c8d19f2a72447d087a"
+	],
+	[
+		"sound/voice/en/padv4017.wav",
+		"256decbb6498133aaaeac12a1b2b64e8"
+	],
+	[
+		"sound/voice/en/padv4018.wav",
+		"b2da382b9f3ac93a8c78f153c0c67b20"
+	],
+	[
+		"sound/voice/en/padv4019.wav",
+		"fb565fc33058d56e4a2395a3ae0d0783"
 	],
 	[
 		"sound/voice/en/padv402.wav",
 		"ebeb841b30ede1ddabfa9fa5b5d4eba9"
 	],
 	[
+		"sound/voice/en/padv4020.wav",
+		"2f95fad590917ef067aa76cfb63bd394"
+	],
+	[
+		"sound/voice/en/padv4021.wav",
+		"404faa3fc67d634ede805de88d1b1d98"
+	],
+	[
+		"sound/voice/en/padv4022.wav",
+		"bbba1658d46b2d78ff29812f5c05a685"
+	],
+	[
+		"sound/voice/en/padv4023.wav",
+		"e5c2b5218a2abda29f642f254987fe32"
+	],
+	[
+		"sound/voice/en/padv4024.wav",
+		"2f4c2d6355279b6cd9ea1716338e98d7"
+	],
+	[
+		"sound/voice/en/padv4025.wav",
+		"4e7e91a6eb8b6f94193d31f09de62012"
+	],
+	[
+		"sound/voice/en/padv4026.wav",
+		"f153a5b2190b85d0af37be2c2f445ae3"
+	],
+	[
+		"sound/voice/en/padv4027.wav",
+		"1acd485619977f48744b766be936b2c3"
+	],
+	[
+		"sound/voice/en/padv4028.wav",
+		"bf2c392e73d768a8ec3646853ce63a2d"
+	],
+	[
+		"sound/voice/en/padv4029.wav",
+		"a9c55f3f6f188cf65f93aa81722b605f"
+	],
+	[
 		"sound/voice/en/padv403.wav",
 		"bd38bbf2d4724ad37a07d33ea8aa73a5"
+	],
+	[
+		"sound/voice/en/padv4030.wav",
+		"873466fe7aef3f15b73c97716996874b"
+	],
+	[
+		"sound/voice/en/padv4031.wav",
+		"b7b57b3fc245087fdf1284f0462120a3"
+	],
+	[
+		"sound/voice/en/padv4032.wav",
+		"0c17848ec3335c04bee8e7431150cc92"
+	],
+	[
+		"sound/voice/en/padv4033.wav",
+		"2e7f77fad09f7cd65e9ea33821e56ce5"
+	],
+	[
+		"sound/voice/en/padv4034.wav",
+		"3a7e0cd9eff9f2a6c01082f8dded38e1"
+	],
+	[
+		"sound/voice/en/padv4035.wav",
+		"17d1dfbabe4824efb1ae2543236c26f4"
+	],
+	[
+		"sound/voice/en/padv4036.wav",
+		"87423fcc6d279da3cb77910999b739f4"
+	],
+	[
+		"sound/voice/en/padv4037.wav",
+		"ae1708b3f703afa255666b650ab4bae1"
+	],
+	[
+		"sound/voice/en/padv4038.wav",
+		"e1771b90408b9c8f9702ddfe4b3d8fca"
+	],
+	[
+		"sound/voice/en/padv4039.wav",
+		"4468864f97948c0e7d0a2c4c2d6e1112"
 	],
 	[
 		"sound/voice/en/padv404.wav",
 		"307b4936fe78cfb229b31c63128620b9"
 	],
 	[
+		"sound/voice/en/padv4040.wav",
+		"eef82300d1ba3d844e86befdc7e8e3db"
+	],
+	[
+		"sound/voice/en/padv4041.wav",
+		"1fe64d0a508fbf17dfb42d379b2d7661"
+	],
+	[
+		"sound/voice/en/padv4042.wav",
+		"1f4d427202b29eccba1f2868eabe5f28"
+	],
+	[
+		"sound/voice/en/padv4043.wav",
+		"4650f129c99d12c71559bc5e87604d3a"
+	],
+	[
+		"sound/voice/en/padv4044.wav",
+		"af54edf92db88994c19b55747c1e6814"
+	],
+	[
+		"sound/voice/en/padv4045.wav",
+		"08aaaae2c5cf5074183b9459df30503b"
+	],
+	[
+		"sound/voice/en/padv4046.wav",
+		"d5c828f926e052e93573a3a98cd7e242"
+	],
+	[
+		"sound/voice/en/padv4047.wav",
+		"87f81d082a986ee67f9140933bf94bda"
+	],
+	[
+		"sound/voice/en/padv4048.wav",
+		"f4101b58d155cda45c0f62993a98ab79"
+	],
+	[
+		"sound/voice/en/padv4049.wav",
+		"ace5e8b0b4ddd10a26a991405dc5f292"
+	],
+	[
 		"sound/voice/en/padv405.wav",
 		"dfc0e01533b7754757e5259fdf205298"
 	],
 	[
+		"sound/voice/en/padv4050.wav",
+		"83132bd9d79e7b31505999d579a2f9ec"
+	],
+	[
+		"sound/voice/en/padv4051.wav",
+		"cef6b113edc5a906a5cc94d9a1986930"
+	],
+	[
+		"sound/voice/en/padv4052.wav",
+		"316085533e9569d66f29b5c7ee1edec9"
+	],
+	[
+		"sound/voice/en/padv4053.wav",
+		"7d612fa44989608dede205d6e842eceb"
+	],
+	[
+		"sound/voice/en/padv4054.wav",
+		"66d59cc9a2c68d20fe7fb65dfb8e27f8"
+	],
+	[
+		"sound/voice/en/padv4055.wav",
+		"e76055ff062f26c09256c10b95ef84a9"
+	],
+	[
+		"sound/voice/en/padv4056.wav",
+		"8ccb30e38ab692c44a04c66f80a21139"
+	],
+	[
+		"sound/voice/en/padv4057.wav",
+		"b0d51665885bf0bf8d34e3de89456fca"
+	],
+	[
+		"sound/voice/en/padv4058.wav",
+		"468ad7e25244520bba8e98dae0ac531d"
+	],
+	[
+		"sound/voice/en/padv4059.wav",
+		"2e7f10c85ed122d0f35b167ddc5d0014"
+	],
+	[
 		"sound/voice/en/padv406.wav",
 		"5329a34e08f21ae4c6e91cea378ad1d4"
+	],
+	[
+		"sound/voice/en/padv4060.wav",
+		"b9b91e5756a734f87b08b3c74f9fee38"
+	],
+	[
+		"sound/voice/en/padv4061.wav",
+		"fbc488c33da1c6588d8eb73cdb2f43d8"
 	],
 	[
 		"sound/voice/en/padv4062.wav",
@@ -29235,7 +29947,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_101.PNG",
-		"b65f9faa86d1b012d61dbe42cf7a1d9d"
+		"adff84cac63d19fd387fdcf48910fb8b"
 	],
 	[
 		"images/cards_ko/CARDS_102.PNG",
@@ -29315,7 +30027,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_121.PNG",
-		"b9e4ccfc0ab8495f1c69d227c2bf2e9f"
+		"f207dc3598633f0cd3d940111c6573a6"
 	],
 	[
 		"images/cards_ko/CARDS_122.PNG",
@@ -39746,76 +40458,788 @@ const cachesMap = new Map([
 		"0a99438c90903938baaedac7692643cf"
 	],
 	[
+		"sound/voice/ko/padv3884.wav",
+		"162db3a798e667e4dc7f0922fa89a2d8"
+	],
+	[
+		"sound/voice/ko/padv3885.wav",
+		"fa861b70add678944f45a68fa8b96b8e"
+	],
+	[
+		"sound/voice/ko/padv3886.wav",
+		"21036a564dd34760b5e6112fe417b835"
+	],
+	[
+		"sound/voice/ko/padv3887.wav",
+		"ce591dd78351afc738fc448d6652f372"
+	],
+	[
+		"sound/voice/ko/padv3888.wav",
+		"dc72fda04b66b2acd86f7930f1495f50"
+	],
+	[
+		"sound/voice/ko/padv3889.wav",
+		"cad2a672fbd37d2c4536cd3b4a0ebe97"
+	],
+	[
 		"sound/voice/ko/padv389.wav",
 		"4d1cf43d864627d0ce4d1b0c2920cd66"
+	],
+	[
+		"sound/voice/ko/padv3890.wav",
+		"796bae8db3aa1e635c332b5168433560"
+	],
+	[
+		"sound/voice/ko/padv3891.wav",
+		"753c8fb86d04d7fe7dba787b93e56902"
+	],
+	[
+		"sound/voice/ko/padv3892.wav",
+		"b1029a123bfec6687749a464ae67a78d"
+	],
+	[
+		"sound/voice/ko/padv3893.wav",
+		"11cc352328e1c4c44d242fb7027eb94a"
+	],
+	[
+		"sound/voice/ko/padv3894.wav",
+		"d8f7dd08d81cf9bfbd4ced0421dbeb81"
+	],
+	[
+		"sound/voice/ko/padv3895.wav",
+		"381237a3e733cd2e6d6b4d0232eea1fa"
+	],
+	[
+		"sound/voice/ko/padv3896.wav",
+		"63e468ee6dfeedf78aa9e23a2798bf98"
+	],
+	[
+		"sound/voice/ko/padv3897.wav",
+		"26701faafb3a4c5d650744755a2b7e5a"
+	],
+	[
+		"sound/voice/ko/padv3898.wav",
+		"ce3af9aee371746e77d34d89488f003c"
+	],
+	[
+		"sound/voice/ko/padv3899.wav",
+		"33e31410a5f29d444c59920e64c662c9"
 	],
 	[
 		"sound/voice/ko/padv390.wav",
 		"7f9cc44dc790621dd061f2a8949b3981"
 	],
 	[
+		"sound/voice/ko/padv3900.wav",
+		"9c001dd31f04ef1308c8cbc23bf810dd"
+	],
+	[
+		"sound/voice/ko/padv3901.wav",
+		"915865ff38ce4f2a8a9d2f3f24f1f5ec"
+	],
+	[
+		"sound/voice/ko/padv3902.wav",
+		"4d93cf2b4f136be96df8cfe997926280"
+	],
+	[
+		"sound/voice/ko/padv3903.wav",
+		"d03f6d13cdfdbeb25e08cd5e1ee572e0"
+	],
+	[
+		"sound/voice/ko/padv3904.wav",
+		"37c48a2385d9b03686c1ef80949232b6"
+	],
+	[
+		"sound/voice/ko/padv3905.wav",
+		"50a27a11a707ca7d1a5da68168f8eb7f"
+	],
+	[
+		"sound/voice/ko/padv3906.wav",
+		"ab8b198a8e2d77b03433adf6c3ef1e00"
+	],
+	[
+		"sound/voice/ko/padv3907.wav",
+		"609e9ca252c01e6b45a0cc2b6a6b329d"
+	],
+	[
+		"sound/voice/ko/padv3908.wav",
+		"093b7a5dc4affdb50c5bdcd7b17a09fd"
+	],
+	[
+		"sound/voice/ko/padv3909.wav",
+		"f40f3cd1ccae2f7eff0598e73868a8b2"
+	],
+	[
 		"sound/voice/ko/padv391.wav",
 		"4b24a073a3a784bd5b07c2d5a855046a"
+	],
+	[
+		"sound/voice/ko/padv3910.wav",
+		"4c903c59f550e270b40652eecb2b5777"
+	],
+	[
+		"sound/voice/ko/padv3911.wav",
+		"5b7c592604258b203d8f6966846b9d56"
+	],
+	[
+		"sound/voice/ko/padv3912.wav",
+		"263a88b227834b26755a881b73aafff2"
+	],
+	[
+		"sound/voice/ko/padv3913.wav",
+		"21b85c2b5e940788f6df6eae41546a75"
+	],
+	[
+		"sound/voice/ko/padv3914.wav",
+		"f2c696b09a86761b424e9b47458304e0"
+	],
+	[
+		"sound/voice/ko/padv3915.wav",
+		"e30ee9f430a1729e26e0fb092acbaddd"
+	],
+	[
+		"sound/voice/ko/padv3916.wav",
+		"81f3fa623cb66644ab27a74d3c5caa71"
+	],
+	[
+		"sound/voice/ko/padv3917.wav",
+		"fd7d916486b5e09233c16c1a14099c66"
+	],
+	[
+		"sound/voice/ko/padv3918.wav",
+		"65532966c0a8779d600912828a35e9d8"
+	],
+	[
+		"sound/voice/ko/padv3919.wav",
+		"b3f1a5b6bdef4ec74c750ac7df14e13a"
 	],
 	[
 		"sound/voice/ko/padv392.wav",
 		"852e1ecd0a76a7e683229265c7ce6020"
 	],
 	[
+		"sound/voice/ko/padv3920.wav",
+		"39ff6d852e31b093bbd58e24736af787"
+	],
+	[
+		"sound/voice/ko/padv3921.wav",
+		"7b932f92d6f31b831cf428682193507a"
+	],
+	[
+		"sound/voice/ko/padv3922.wav",
+		"306295749c48429da3026d7f9c1ed5d9"
+	],
+	[
+		"sound/voice/ko/padv3923.wav",
+		"310b1cbca221775a0fa4feed88d23610"
+	],
+	[
+		"sound/voice/ko/padv3924.wav",
+		"397dc626f391980aa1b1cb6f91f8ab05"
+	],
+	[
+		"sound/voice/ko/padv3925.wav",
+		"279e44bdb1820e66d576a869660d26a8"
+	],
+	[
+		"sound/voice/ko/padv3926.wav",
+		"19b1dd2e8638e1ad497145082ea0bff2"
+	],
+	[
+		"sound/voice/ko/padv3927.wav",
+		"c2065457395b0189b83ee18b15eaabb7"
+	],
+	[
+		"sound/voice/ko/padv3928.wav",
+		"06fb623f967421f7d814a500bf7faa35"
+	],
+	[
+		"sound/voice/ko/padv3929.wav",
+		"0cdc97496d56068faf7d9b5ba1e148f0"
+	],
+	[
 		"sound/voice/ko/padv393.wav",
 		"bca86b7c347d96011536373fc322c545"
+	],
+	[
+		"sound/voice/ko/padv3930.wav",
+		"2a36b9aca4f070828de0b95b9b112743"
+	],
+	[
+		"sound/voice/ko/padv3931.wav",
+		"985d56e12eb3793a74c2a3b3ba26c011"
+	],
+	[
+		"sound/voice/ko/padv3932.wav",
+		"149839d303ebfb0b315b6905deb91cf3"
+	],
+	[
+		"sound/voice/ko/padv3933.wav",
+		"93135355c5dc47534cfa13f9acb87f5a"
+	],
+	[
+		"sound/voice/ko/padv3934.wav",
+		"4c7d38b1ebf2f6ca2b59d55eeb983c7c"
+	],
+	[
+		"sound/voice/ko/padv3935.wav",
+		"a7e2ef95c5741dc7b95941b02bd9ffae"
+	],
+	[
+		"sound/voice/ko/padv3936.wav",
+		"eca118c4828189f8e309c9f62bbfde9b"
+	],
+	[
+		"sound/voice/ko/padv3937.wav",
+		"5e5d495132d397ac1bb26bd93cc1a440"
+	],
+	[
+		"sound/voice/ko/padv3938.wav",
+		"fdac107b563689a5cd9216dbb44e2cca"
+	],
+	[
+		"sound/voice/ko/padv3939.wav",
+		"6210422f5a6179aaa9c621b581009f84"
 	],
 	[
 		"sound/voice/ko/padv394.wav",
 		"dd48f3d64305b1b90c750c45a5314972"
 	],
 	[
+		"sound/voice/ko/padv3940.wav",
+		"7cd541144aa5fe208db7e07a809ef2b4"
+	],
+	[
+		"sound/voice/ko/padv3941.wav",
+		"f9f72c29b394376bd0ba72eab357eca0"
+	],
+	[
+		"sound/voice/ko/padv3942.wav",
+		"933d9d41af2489c485c3847ba38a584a"
+	],
+	[
+		"sound/voice/ko/padv3943.wav",
+		"c5664de795c7380af4d932df7a7acabf"
+	],
+	[
+		"sound/voice/ko/padv3944.wav",
+		"7f4ac6e68e3983f374ba8d970e0fd023"
+	],
+	[
+		"sound/voice/ko/padv3945.wav",
+		"9e0190667f1c0e9a272e61c1832f17af"
+	],
+	[
+		"sound/voice/ko/padv3946.wav",
+		"8ce7315aa5b8553bc9be2d9d60e05525"
+	],
+	[
+		"sound/voice/ko/padv3947.wav",
+		"aad296373a1300e3ebe9e7e0bb258787"
+	],
+	[
+		"sound/voice/ko/padv3948.wav",
+		"e9a2d6690fa87b6ed3e3dffc8a9bdae1"
+	],
+	[
+		"sound/voice/ko/padv3949.wav",
+		"a27bf29e84abc8d3276436c05a76311d"
+	],
+	[
 		"sound/voice/ko/padv395.wav",
 		"5003d42cf68183d7bbdd40599e4d9c5d"
+	],
+	[
+		"sound/voice/ko/padv3950.wav",
+		"95ed62ce8d04ac12dcdf7b40c080a417"
+	],
+	[
+		"sound/voice/ko/padv3951.wav",
+		"defe7cabdd7409eb31df2eb6d95e0625"
+	],
+	[
+		"sound/voice/ko/padv3952.wav",
+		"48dafd54116542f404df5a95cd50f1b0"
+	],
+	[
+		"sound/voice/ko/padv3953.wav",
+		"2698046ddd0d16bfdd27a8360c24f879"
+	],
+	[
+		"sound/voice/ko/padv3954.wav",
+		"55933b192d7e4a76cc6dfcb4f36c6006"
+	],
+	[
+		"sound/voice/ko/padv3955.wav",
+		"f4c616396945539cbbaf7221ce9e0a01"
+	],
+	[
+		"sound/voice/ko/padv3956.wav",
+		"78fa8e8a5d4cb44f9a15319f64e228fd"
+	],
+	[
+		"sound/voice/ko/padv3957.wav",
+		"88395bf9623465365e93e75a20256e15"
+	],
+	[
+		"sound/voice/ko/padv3958.wav",
+		"134b26cea263f82f6af241c877351b37"
+	],
+	[
+		"sound/voice/ko/padv3959.wav",
+		"c6c977c257f4fac86d64595bcd0647cf"
 	],
 	[
 		"sound/voice/ko/padv396.wav",
 		"a8cf633f1f95239aa8dcfdf3759dd784"
 	],
 	[
+		"sound/voice/ko/padv3960.wav",
+		"6016a39dbbba05e41065f96fcfcd08e1"
+	],
+	[
+		"sound/voice/ko/padv3961.wav",
+		"01066d9be1a8ec28d0e46ca7eaaea999"
+	],
+	[
+		"sound/voice/ko/padv3962.wav",
+		"d81f78dd08af141540881268260a22bd"
+	],
+	[
+		"sound/voice/ko/padv3963.wav",
+		"0535faadf987cc3da6805d2d8e5c5943"
+	],
+	[
+		"sound/voice/ko/padv3964.wav",
+		"069dede974a6ba88f3a231c57584174c"
+	],
+	[
+		"sound/voice/ko/padv3965.wav",
+		"3b74a824c22e41acd2ba26f62b4f5421"
+	],
+	[
+		"sound/voice/ko/padv3966.wav",
+		"1d4bc56b4c8e3622b5fd84c710a85a91"
+	],
+	[
+		"sound/voice/ko/padv3967.wav",
+		"ef1664a1b74e24068ecc2d75560b3bb8"
+	],
+	[
+		"sound/voice/ko/padv3968.wav",
+		"91337a558b023a08a2896ffa79f4aa1e"
+	],
+	[
+		"sound/voice/ko/padv3969.wav",
+		"1defe83121a52f7362c5801233d7eee8"
+	],
+	[
 		"sound/voice/ko/padv397.wav",
 		"08f8bb8be9e137f465e7a83f34223606"
+	],
+	[
+		"sound/voice/ko/padv3970.wav",
+		"da7728e291217fd104a3af940da5a3ec"
+	],
+	[
+		"sound/voice/ko/padv3971.wav",
+		"31399e9f7165b20ce8866f833d995777"
+	],
+	[
+		"sound/voice/ko/padv3972.wav",
+		"fa2b5e140259eec0c7129367f1f72a4a"
+	],
+	[
+		"sound/voice/ko/padv3973.wav",
+		"8894c84e58177997f02d23a3aea5bc9d"
+	],
+	[
+		"sound/voice/ko/padv3974.wav",
+		"b6513c4c5e8204feaca4c96c863f1845"
+	],
+	[
+		"sound/voice/ko/padv3975.wav",
+		"d2770c6938afd4e6535444c597b78c08"
+	],
+	[
+		"sound/voice/ko/padv3976.wav",
+		"ae2e60db6d6283542d9b2f69d9a567fd"
+	],
+	[
+		"sound/voice/ko/padv3977.wav",
+		"eebfe036a6ac66c52f418e99ca5cbde8"
+	],
+	[
+		"sound/voice/ko/padv3978.wav",
+		"7296e7901fd71fa881d3b3de8b9982c8"
+	],
+	[
+		"sound/voice/ko/padv3979.wav",
+		"dace3fdf3b7f4a7f800e891a81992cfc"
 	],
 	[
 		"sound/voice/ko/padv398.wav",
 		"4eaa0546fc27cbcfed17698acb643ddc"
 	],
 	[
+		"sound/voice/ko/padv3980.wav",
+		"9593d0c75877331efde91c2733a93d40"
+	],
+	[
+		"sound/voice/ko/padv3981.wav",
+		"acff6379936d3f131b20fdb2107dfab3"
+	],
+	[
+		"sound/voice/ko/padv3982.wav",
+		"8b89a646ca750f3e373864ce57240391"
+	],
+	[
+		"sound/voice/ko/padv3983.wav",
+		"2dc9b1e2fa5ee395ce79a5081ea73a01"
+	],
+	[
+		"sound/voice/ko/padv3984.wav",
+		"bb5fb9f93819f9b70d79af728de0414c"
+	],
+	[
+		"sound/voice/ko/padv3985.wav",
+		"4f2fa1cb3ca1160ceeff09cee2cf078b"
+	],
+	[
+		"sound/voice/ko/padv3986.wav",
+		"29c253ff5df4b5e1f171f3cc5302193b"
+	],
+	[
+		"sound/voice/ko/padv3987.wav",
+		"f6392f9d8d29331b5aee55414ebbe75d"
+	],
+	[
+		"sound/voice/ko/padv3988.wav",
+		"95bda8e9987d4def2869cee635b7d952"
+	],
+	[
+		"sound/voice/ko/padv3989.wav",
+		"a1bbf3f9986a65e5577a534812a5ddb1"
+	],
+	[
 		"sound/voice/ko/padv399.wav",
 		"cad3dba339abe36c4c1f6d23cf1defac"
+	],
+	[
+		"sound/voice/ko/padv3990.wav",
+		"1305984ad1ce1e32e7e94ba1292c909c"
+	],
+	[
+		"sound/voice/ko/padv3991.wav",
+		"b434203a8dbf411f789c9b4c96814ecb"
+	],
+	[
+		"sound/voice/ko/padv3992.wav",
+		"e7076c11e1513a7d923d31d1de7de319"
+	],
+	[
+		"sound/voice/ko/padv3993.wav",
+		"4de0787fe3c9624b0d7c20376c984f52"
+	],
+	[
+		"sound/voice/ko/padv3994.wav",
+		"3a7db58f611224cd3ca67c676f67fa29"
+	],
+	[
+		"sound/voice/ko/padv3995.wav",
+		"30161f051c97cf577e5315834a60c8f7"
+	],
+	[
+		"sound/voice/ko/padv3996.wav",
+		"c6a365d48979e4757d98acfeb0ec1a8b"
+	],
+	[
+		"sound/voice/ko/padv3997.wav",
+		"a6d90d0c2dee847527cb59d08eed1485"
+	],
+	[
+		"sound/voice/ko/padv3998.wav",
+		"8e7fc9e9688cc83701d51bd7a6b870ff"
+	],
+	[
+		"sound/voice/ko/padv3999.wav",
+		"57d541808ef8a210ece91f4b19d3e2ab"
 	],
 	[
 		"sound/voice/ko/padv400.wav",
 		"41bc5834bd70ef29ca1aeb2983785126"
 	],
 	[
+		"sound/voice/ko/padv4000.wav",
+		"04f9861b3ef951fd1b20f06b98d7c850"
+	],
+	[
+		"sound/voice/ko/padv4001.wav",
+		"0f08d561cd386b3ba66c6142e06de450"
+	],
+	[
+		"sound/voice/ko/padv4002.wav",
+		"6a2c72e332d95d3fc0bbdaac287ad892"
+	],
+	[
+		"sound/voice/ko/padv4003.wav",
+		"5595d938b66702cd0a6c2ffd37ec4acd"
+	],
+	[
+		"sound/voice/ko/padv4004.wav",
+		"575f0c6365c64575b9110ba8f7b51f5a"
+	],
+	[
+		"sound/voice/ko/padv4005.wav",
+		"bd66cb038679be4e7cdb8e8b2becbe39"
+	],
+	[
+		"sound/voice/ko/padv4006.wav",
+		"389ce0a8cc03f0d3db7c626045a89d0b"
+	],
+	[
+		"sound/voice/ko/padv4007.wav",
+		"39413083137a73e46ca4ebb492eecabe"
+	],
+	[
+		"sound/voice/ko/padv4008.wav",
+		"ae455b5695449b0ecbf6377a34c0aaa0"
+	],
+	[
+		"sound/voice/ko/padv4009.wav",
+		"ee3e2d709c7c5c69b8e0c65d1a6813bf"
+	],
+	[
 		"sound/voice/ko/padv401.wav",
 		"70d06368c9222577fa4ea4e07359f5b6"
+	],
+	[
+		"sound/voice/ko/padv4010.wav",
+		"e53723efd2cafb6a04c03daaea9f4697"
+	],
+	[
+		"sound/voice/ko/padv4011.wav",
+		"183d9ce9f935190e566b8b2e070a1b25"
+	],
+	[
+		"sound/voice/ko/padv4012.wav",
+		"5ac025cc0d7e037f25f111e3b02339ba"
+	],
+	[
+		"sound/voice/ko/padv4013.wav",
+		"3cadfa6177a99186752f64916d207d4b"
+	],
+	[
+		"sound/voice/ko/padv4014.wav",
+		"7bcf58f977c5a20e74eb6337980dc0b9"
+	],
+	[
+		"sound/voice/ko/padv4015.wav",
+		"1262d92d98db69ba54eff0e5081aa5fa"
+	],
+	[
+		"sound/voice/ko/padv4016.wav",
+		"d51e749e5f1ef1c8d19f2a72447d087a"
+	],
+	[
+		"sound/voice/ko/padv4017.wav",
+		"256decbb6498133aaaeac12a1b2b64e8"
+	],
+	[
+		"sound/voice/ko/padv4018.wav",
+		"b2da382b9f3ac93a8c78f153c0c67b20"
+	],
+	[
+		"sound/voice/ko/padv4019.wav",
+		"fb565fc33058d56e4a2395a3ae0d0783"
 	],
 	[
 		"sound/voice/ko/padv402.wav",
 		"ebeb841b30ede1ddabfa9fa5b5d4eba9"
 	],
 	[
+		"sound/voice/ko/padv4020.wav",
+		"2f95fad590917ef067aa76cfb63bd394"
+	],
+	[
+		"sound/voice/ko/padv4021.wav",
+		"404faa3fc67d634ede805de88d1b1d98"
+	],
+	[
+		"sound/voice/ko/padv4022.wav",
+		"bbba1658d46b2d78ff29812f5c05a685"
+	],
+	[
+		"sound/voice/ko/padv4023.wav",
+		"e5c2b5218a2abda29f642f254987fe32"
+	],
+	[
+		"sound/voice/ko/padv4024.wav",
+		"2f4c2d6355279b6cd9ea1716338e98d7"
+	],
+	[
+		"sound/voice/ko/padv4025.wav",
+		"4e7e91a6eb8b6f94193d31f09de62012"
+	],
+	[
+		"sound/voice/ko/padv4026.wav",
+		"f153a5b2190b85d0af37be2c2f445ae3"
+	],
+	[
+		"sound/voice/ko/padv4027.wav",
+		"1acd485619977f48744b766be936b2c3"
+	],
+	[
+		"sound/voice/ko/padv4028.wav",
+		"bf2c392e73d768a8ec3646853ce63a2d"
+	],
+	[
+		"sound/voice/ko/padv4029.wav",
+		"a9c55f3f6f188cf65f93aa81722b605f"
+	],
+	[
 		"sound/voice/ko/padv403.wav",
 		"bd38bbf2d4724ad37a07d33ea8aa73a5"
+	],
+	[
+		"sound/voice/ko/padv4030.wav",
+		"873466fe7aef3f15b73c97716996874b"
+	],
+	[
+		"sound/voice/ko/padv4031.wav",
+		"b7b57b3fc245087fdf1284f0462120a3"
+	],
+	[
+		"sound/voice/ko/padv4032.wav",
+		"0c17848ec3335c04bee8e7431150cc92"
+	],
+	[
+		"sound/voice/ko/padv4033.wav",
+		"2e7f77fad09f7cd65e9ea33821e56ce5"
+	],
+	[
+		"sound/voice/ko/padv4034.wav",
+		"3a7e0cd9eff9f2a6c01082f8dded38e1"
+	],
+	[
+		"sound/voice/ko/padv4035.wav",
+		"17d1dfbabe4824efb1ae2543236c26f4"
+	],
+	[
+		"sound/voice/ko/padv4036.wav",
+		"87423fcc6d279da3cb77910999b739f4"
+	],
+	[
+		"sound/voice/ko/padv4037.wav",
+		"ae1708b3f703afa255666b650ab4bae1"
+	],
+	[
+		"sound/voice/ko/padv4038.wav",
+		"e1771b90408b9c8f9702ddfe4b3d8fca"
+	],
+	[
+		"sound/voice/ko/padv4039.wav",
+		"4468864f97948c0e7d0a2c4c2d6e1112"
 	],
 	[
 		"sound/voice/ko/padv404.wav",
 		"307b4936fe78cfb229b31c63128620b9"
 	],
 	[
+		"sound/voice/ko/padv4040.wav",
+		"eef82300d1ba3d844e86befdc7e8e3db"
+	],
+	[
+		"sound/voice/ko/padv4041.wav",
+		"1fe64d0a508fbf17dfb42d379b2d7661"
+	],
+	[
+		"sound/voice/ko/padv4042.wav",
+		"1f4d427202b29eccba1f2868eabe5f28"
+	],
+	[
+		"sound/voice/ko/padv4043.wav",
+		"4650f129c99d12c71559bc5e87604d3a"
+	],
+	[
+		"sound/voice/ko/padv4044.wav",
+		"af54edf92db88994c19b55747c1e6814"
+	],
+	[
+		"sound/voice/ko/padv4045.wav",
+		"08aaaae2c5cf5074183b9459df30503b"
+	],
+	[
+		"sound/voice/ko/padv4046.wav",
+		"d5c828f926e052e93573a3a98cd7e242"
+	],
+	[
+		"sound/voice/ko/padv4047.wav",
+		"87f81d082a986ee67f9140933bf94bda"
+	],
+	[
+		"sound/voice/ko/padv4048.wav",
+		"f4101b58d155cda45c0f62993a98ab79"
+	],
+	[
+		"sound/voice/ko/padv4049.wav",
+		"ace5e8b0b4ddd10a26a991405dc5f292"
+	],
+	[
 		"sound/voice/ko/padv405.wav",
 		"dfc0e01533b7754757e5259fdf205298"
 	],
 	[
+		"sound/voice/ko/padv4050.wav",
+		"83132bd9d79e7b31505999d579a2f9ec"
+	],
+	[
+		"sound/voice/ko/padv4051.wav",
+		"cef6b113edc5a906a5cc94d9a1986930"
+	],
+	[
+		"sound/voice/ko/padv4052.wav",
+		"316085533e9569d66f29b5c7ee1edec9"
+	],
+	[
+		"sound/voice/ko/padv4053.wav",
+		"7d612fa44989608dede205d6e842eceb"
+	],
+	[
+		"sound/voice/ko/padv4054.wav",
+		"66d59cc9a2c68d20fe7fb65dfb8e27f8"
+	],
+	[
+		"sound/voice/ko/padv4055.wav",
+		"e76055ff062f26c09256c10b95ef84a9"
+	],
+	[
+		"sound/voice/ko/padv4056.wav",
+		"8ccb30e38ab692c44a04c66f80a21139"
+	],
+	[
+		"sound/voice/ko/padv4057.wav",
+		"b0d51665885bf0bf8d34e3de89456fca"
+	],
+	[
+		"sound/voice/ko/padv4058.wav",
+		"468ad7e25244520bba8e98dae0ac531d"
+	],
+	[
+		"sound/voice/ko/padv4059.wav",
+		"2e7f10c85ed122d0f35b167ddc5d0014"
+	],
+	[
 		"sound/voice/ko/padv406.wav",
 		"5329a34e08f21ae4c6e91cea378ad1d4"
+	],
+	[
+		"sound/voice/ko/padv4060.wav",
+		"b9b91e5756a734f87b08b3c74f9fee38"
+	],
+	[
+		"sound/voice/ko/padv4061.wav",
+		"fbc488c33da1c6588d8eb73cdb2f43d8"
 	],
 	[
 		"sound/voice/ko/padv4062.wav",
