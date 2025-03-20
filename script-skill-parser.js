@@ -866,7 +866,7 @@ const c = {
 		return { compo: { type: type, ids: ids } };
 	},
 	remainOrbs: function (count) { return { remainOrbs: { count: count } }; },
-	useSkill: function () { return { useSkill: true }; },
+	useSkill: function (times = 1) { return { useSkill: times }; },
 	multiplayer: function () { return { multiplayer: true }; },
 	prob: function (percent) { return { prob: percent }; },
 	LShape: function (attrs) { return { LShape: { attrs: attrs } }; },
@@ -1082,6 +1082,9 @@ function predictionFalling() {
 }
 function breakingShield(value) {
 	return { kind: SkillKinds.BreakingShield, value };
+}
+function timesLimit(turns) {
+	return { kind: SkillKinds.TimesLimit, turns };
 }
 function timesLimit(turns) {
 	return { kind: SkillKinds.TimesLimit, turns };
@@ -1745,6 +1748,8 @@ const skillObjectParsers = {
 
 	//限制技能使用次数
 	[268](turns) { return timesLimit(turns); },
+	//一回合内使用几次技能才有倍率的队长技。
+	[270](times, atk, rcv) { { return powerUp(Bin.unflags(31), null, p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.useSkill(times)); } },
 
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -3049,7 +3054,11 @@ function renderCondition(cond) {
 		else
 			frg.ap(tsp.cond.hp_belong_to_range(dict));
 	} else if (cond.useSkill) {
-		frg.ap(tsp.cond.use_skill());
+		frg.ap(tsp.cond.use_skill(
+			cond.useSkill > 1
+			? {times: tsp.cond.use_skill_times({times: cond.useSkill})}
+			: null
+		));
 	} else if (cond.multiplayer) {
 		frg.ap(tsp.cond.multi_player());
 	} else if (cond.remainOrbs) {

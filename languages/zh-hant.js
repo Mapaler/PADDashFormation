@@ -166,6 +166,7 @@ const _localTranslating = {
 			hp_greater_or_equal: tp`${'hp'} ≥ ${'min'} 時`,
 			hp_belong_to_range: tp`${'hp'} ∈ [${'min'},${'max'}] 時`,
 			use_skill: tp`使用技能時`,
+			use_skill_times: tp`${'times'}次`,
 			multi_player: tp`協力時`,
 			remain_orbs: tp`剩餘寶珠 ≤ ${'value'} 時`,
 			exact_combo: tp`剛好${'value'}連擊時`,

@@ -180,7 +180,8 @@ let localTranslating = {
 			hp_less_or_equal: tp`When ${'hp'} ≤ ${'max'} `,
 			hp_greater_or_equal: tp`When ${'hp'} ≥ ${'min'} `,
 			hp_belong_to_range: tp`When ${'hp'} ∈ [${'min'},${'max'}] `,
-			use_skill: tp`When skills used `,
+			use_skill: tp`When skills used ${'times'}`,
+			use_skill_times: tp`${'times'} times `,
 			multi_player: tp`When in Multiplayer Mode `,
 			remain_orbs: tp`When ≤ ${'value'} Orbs on the board `,
 			exact_combo: tp`When exactly ${'value'} combos `,
@@ -561,10 +562,10 @@ const official_badge_sorting = [ //20是没有启用的全属性徽章，现在�
 	  1, 22, 23,  2,  3,  4,  5,  6,
 	  7,  8,  9, 11, 17, 18, 19, 21,
 	 10, 12, 13, 14, 41, 42, 43, 44,
-	 45, 46, 47, 48, 24, 25, 26, 27,
+	 45, 46, 47, 48, 24, 25, 26, 53, 27,
 	 28, 29, 30, 31, 15, 16, 32, 33,
 	 34, 35, 36, 37, 38, 39, 40, 49,
-	 50, 51, 52,
+	 50, 51, 52, 54, 55,
 	PAD_PASS_BADGE,
 ]
 //官方的觉醒排列顺序

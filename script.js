@@ -7486,7 +7486,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 				case 24: return member.card.collabId === 92 ? 1.15 : 1; //英雄学院徽章
 				case 25: return member.card.gachaIds.includes(1) ? 1.15 : 1; //画师桶，1号徽章
-				case 26: return member.card.collabId === 107 ? 1.15 : 1; //高达徽章
+				case 26: case 53: return member.card.collabId === 107 ? 1.15 : 1; //高达徽章
 				case 27: return member.card.collabId === 112 ? 1.15 : 1; //转生成为史莱姆
 				case 28: return member.card.collabId === 110 ? 1.15 : 1; //电击文库Index
 				case 29: return member.card.collabId === 102 ? 1.15 : 1; //奥特曼
@@ -7515,6 +7515,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 50: return member.card.gachaIds.includes(0) ? 1.15 : 1; //正月(新年)
 				case 51: return member.card.gachaIds.includes(14) ? 1.15 : 1; //女子桶
 				case 52: return member.card.gachaIds.includes(2) ? 1.15 : 1; //情人节
+				case 54: case 55: return member.card.collabId === 117 ? 1.15 : 1; //排球少年
 				default: return 1;
 			}
 		}
