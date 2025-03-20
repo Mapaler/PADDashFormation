@@ -1189,7 +1189,7 @@ function cardN(id) {
 }
 
 //产生队伍目标类型
-function createTeamFlags(target)
+function createTeamFlags(target, type)
 {
 	const ul = document.createElement("ul");
 	ul.className = "team-flags";
@@ -1197,7 +1197,7 @@ function createTeamFlags(target)
 		const li = ul.appendChild(document.createElement("li"));
 		li.className = "team-member-icon";
 	}
-	const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+	const targetTypes = type == 2 ? SkillTarget.type2 : SkillTarget.type1;
 
 	let _target = [];
 	if (Number.isInteger(target)) {

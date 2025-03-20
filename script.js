@@ -565,15 +565,15 @@ class LeaderSkillType_MatchingStyle {
 			this.#flags = arg;
 		}
 	}
-	get multipleAttr(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 0)}
-	get rowMatch(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 1)}
-	get combo(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 2)}
-	get sameColor(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 3)}
-	get LShape(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 4)}
-	get crossMatch(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 5)}
-	get heartCrossMatch(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 6)}
-	get remainOrbs(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 7)}
-	get enhanced5Orbs(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 8)}
+	get multipleAttr(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 0)}
+	get rowMatch(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 1)}
+	get combo(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 2)}
+	get sameColor(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 3)}
+	get LShape(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 4)}
+	get crossMatch(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 5)}
+	get heartCrossMatch(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 6)}
+	get remainOrbs(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 7)}
+	get enhanced5Orbs(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 8)}
 }
 class LeaderSkillType_Restriction_Bind {
 	#card = null;
@@ -585,16 +585,16 @@ class LeaderSkillType_Restriction_Bind {
 			this.#flags = arg;
 		}
 	}
-	get attrEnhance(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 9)}
-	get typeEnhance(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 10)}
-	get board7x6(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 11)}
-	get noSkyfall(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 12)}
-	get HpRange(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 13)}
-	get useSkill(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 14)}
-	get moveTimeDecrease_Fixed(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 15)}
-	get minMatchLen(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 16)}
-	get specialTeam(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 17)}
-	get effectWhenRecover(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 18)}
+	get attrEnhance(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 9)}
+	get typeEnhance(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 10)}
+	get board7x6(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 11)}
+	get noSkyfall(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 12)}
+	get HpRange(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 13)}
+	get useSkill(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 14)}
+	get moveTimeDecrease_Fixed(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 15)}
+	get minMatchLen(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 16)}
+	get specialTeam(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 17)}
+	get effectWhenRecover(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 18)}
 }
 class LeaderSkillType_ExtraEffects {
 	#card = null;
@@ -606,21 +606,21 @@ class LeaderSkillType_ExtraEffects {
 			this.#flags = arg;
 		}
 	}
-	get addCombo(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 21)}
-	get fixedFollowAttack(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 22)}
-	get scaleFollowAttack(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 23)}
-	get reduce49down(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 24)}
-	get reduce50(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 25)}
-	get reduce51up(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 26)}
-	get moveTimeIncrease(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 20)}
-	get rateMultiplyExp_Coin(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 27)}
-	get rateMultiplyDrop(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 28)}
-	get voidPoison(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 29)}
-	get counterAttack(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 30)}
-	get autoHeal(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 31)}
-	get unbindAwokenBind(){return Boolean(this.#card?.searchFlags?.[0] ?? this.#flags[0] & 1 << 19)}
-	get resolve(){return Boolean(this.#card?.searchFlags?.[1] ?? this.#flags[1] & 1 << 0)}
-	get predictionFalling(){return Boolean(this.#card?.searchFlags?.[1] ?? this.#flags[1] & 1 << 1)}
+	get addCombo(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 21)}
+	get fixedFollowAttack(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 22)}
+	get scaleFollowAttack(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 23)}
+	get reduce49down(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 24)}
+	get reduce50(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 25)}
+	get reduce51up(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 26)}
+	get moveTimeIncrease(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 20)}
+	get rateMultiplyExp_Coin(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 27)}
+	get rateMultiplyDrop(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 28)}
+	get voidPoison(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 29)}
+	get counterAttack(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 30)}
+	get autoHeal(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 31)}
+	get unbindAwokenBind(){return Boolean((this.#card?.searchFlags?.[0] ?? this.#flags[0]) & 1 << 19)}
+	get resolve(){return Boolean((this.#card?.searchFlags?.[1] ?? this.#flags[1]) & 1 << 0)}
+	get predictionFalling(){return Boolean((this.#card?.searchFlags?.[1] ?? this.#flags[1]) & 1 << 1)}
 }
 class Team extends Array {
 	badge = 0;

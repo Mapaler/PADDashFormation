@@ -386,6 +386,11 @@ class Board
 	}
 }
 
+const SkillTarget = {
+	type1: ["self","leader-self","leader-helper","sub-members"],
+	type2: ["right-neighbor","left-neighbor","self"],
+};
+
 const SkillValue = {
 	isLess: function (value) {
 		if (value.kind === SkillValueKind.Percent) return value.value < 1;
@@ -449,6 +454,7 @@ const SkillKinds = {
 	BoardChange: "board-change",
 	Unbind: "unbind",
 	BindSkill: "bind-skill",
+	BindCard: "bind-card",
 	RandomSkills: "random-skills",
 	EvolvedSkills: "evolved-skills",
 	SkillProviso: "skill-proviso",
@@ -1008,6 +1014,7 @@ function unbind(normal, awakenings, matches) {
 	return { kind: SkillKinds.Unbind, normal: normal, awakenings: awakenings , matches: matches};
 }
 function bindSkill() { return { kind: SkillKinds.BindSkill}; }
+function bindCard() { return { kind: SkillKinds.BindCard}; }
 function boardChange(attrs) {
 	return { kind: SkillKinds.BoardChange, attrs: attrs };
 }
@@ -1592,8 +1599,9 @@ const skillObjectParsers = {
 	[229](attrs, types, hp, atk, rcv) {
 		return powerUp(null, null, p.scaleStateKind(null, Bin.unflags(attrs), Bin.unflags(types), p.mul({hp: hp || 0, atk: atk || 0, rcv: rcv || 0})));
 	},
+	//按位置增伤主动技1
 	[230](turns, target, mul) {
-		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+		const targetTypes = SkillTarget.type1;
 		const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
 		return activeTurns(turns,
 			slotPowerUp(p.mul({ atk: mul }), typeArr)
@@ -1641,7 +1649,7 @@ const skillObjectParsers = {
 		);
 	},
 	[241](turns, cap) { //改变伤害上限主动技
-		// const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+		// const targetTypes = SkillTarget.type1;
 		// const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
 		return activeTurns(turns,
 			increaseDamageCapacity(cap * 1e8, ["self"])
@@ -1726,9 +1734,9 @@ const skillObjectParsers = {
 		  autoPath(5),
 		];
 	},
-	
+	//按位置改变伤害上限主动技1
 	[258](turns, cap, target) { //改变伤害上限主动技
-		const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+		const targetTypes = SkillTarget.type1;
 		const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
 		return activeTurns(turns,
 			increaseDamageCapacity(cap * 1e8, typeArr)
@@ -1745,9 +1753,26 @@ const skillObjectParsers = {
 	},
 	[264](mul) { return rateMultiply(v.percent(mul), 'plus_point'); },
 	[265](mul) { return rateMultiply(v.percent(mul), 'part_break'); },
-
+	//按位置改变伤害上限主动技2
+	[266](turns, cap, target) {
+		const targetTypes = SkillTarget.type2;
+		const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
+		return activeTurns(turns,
+			increaseDamageCapacity(cap * 1e8, typeArr)
+		);
+	},
+	//卡片自绑定
+	[267](turns) {return activeTurns(turns, bindCard()); },
 	//限制技能使用次数
 	[268](turns) { return timesLimit(turns); },
+	//按位置增伤主动技2
+	[269](turns, target, mul) {
+		const targetTypes = SkillTarget.type2;
+		const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
+		return activeTurns(turns,
+			slotPowerUp(p.mul({ atk: mul }), typeArr)
+		);
+	},
 	//一回合内使用几次技能才有倍率的队长技。
 	[270](times, atk, rcv) { { return powerUp(Bin.unflags(31), null, p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.useSkill(times)); } },
 
@@ -2255,6 +2280,13 @@ function renderSkill(skill, option = {})
 			frg.ap(tsp.skill.bind_skill(dict));
 			break;
 		}
+		case SkillKinds.BindCard: {
+			let dict = {
+				icon: createIcon(skill.kind)
+			};
+			frg.ap(tsp.skill.bind_card(dict));
+			break;
+		}
 		case SkillKinds.BoardChange: { //洗版
 			const attrs = skill.attrs;
 			let dict = {
@@ -2569,7 +2601,7 @@ function renderSkill(skill, option = {})
 				targetDict.target = document.createDocumentFragment();
 
 				//增加队员伤害的技能的目标，删选出来，其他的目标则不显示
-				const targetTypes = ["self","leader-self","leader-helper","sub-members"];
+				const targetTypes = SkillTarget.type1.concat(SkillTarget.type2);
 				let atkUpTarget = targets.filter(n=>targetTypes.includes(n));
 				if (atkUpTarget.length) {
 					targetDict.target.appendChild(createTeamFlags(atkUpTarget));
@@ -2745,11 +2777,11 @@ function renderSkill(skill, option = {})
 				targetDict.target = document.createDocumentFragment();
 
 				//增加队员伤害的技能的目标，删选出来，其他的目标则不显示
-				const targetTypes = ["self","leader-self","leader-helper","sub-members"];
-				let atkUpTarget = targets.filter(n=>targetTypes.includes(n));
-				if (atkUpTarget.length) {
-					targetDict.target.appendChild(createTeamFlags(atkUpTarget));
-				}
+				// const targetTypes = SkillTarget.type1;
+				// let atkUpTarget = targets.filter(n=>targetTypes.includes(n));
+				// if (atkUpTarget.length) {
+					targetDict.target.appendChild(createTeamFlags(targets));
+				// }
 				
 				targetDict.target.appendChild(targets.map(target=>
 					tsp?.target[target.replaceAll("-","_")]?.())

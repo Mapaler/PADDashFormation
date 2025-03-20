@@ -3837,8 +3837,12 @@ table .orb-icon
 .team-flags.sub-members  .team-member-icon:not(:first-of-type):not(:last-of-type) {
 	background-color: lightgreen;
 }
-.team-flags.self  .team-member-icon:nth-of-type(4) {
+.team-flags.self .team-member-icon:nth-of-type(4) {
 	background-color: lightblue !important; 
+}
+.team-flags.right-neighbor .team-member-icon:nth-of-type(5),
+.team-flags.left-neighbor .team-member-icon:nth-of-type(3) {
+	background-color: violet !important; 
 }
 
 /*.open-evolutionary-tree::before
@@ -4725,7 +4729,8 @@ body.external-link-support #external-support{
 .icon-skill[data-icon-type="ctw"]::after,
 .icon-skill[data-icon-type="add-combo"]::after,
 .icon-skill[data-icon-type="fixed-time"]::after,
-.icon-skill[data-icon-type="increase-damage-cap"]::after
+.icon-skill[data-icon-type="increase-damage-cap"]::after,
+.icon-skill[data-icon-type="bind-card"]::after
 {
 	content: "";
 	position: absolute;
@@ -5011,6 +5016,17 @@ body.external-link-support #external-support{
 {
 	background-position-x: -36px;
 }
+
+.icon-skill[data-icon-type="bind-card"]
+{
+	background-position-y: calc(-36px * 39);
+}
+.icon-skill[data-icon-type="bind-card"]::after
+{
+	transform: scale(0.75);
+	background-position-y: calc(-36px * 47);
+}
+
 .icon-skill[data-icon-type="orb-thorn"]
 {
 	background-position-y:calc(-36px * 37);
