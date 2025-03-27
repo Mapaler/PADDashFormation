@@ -44231,11 +44231,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"0bdc4d583774cd51cf302f7709cc3fb7"
+		"312ac475579456dbff44887ccaceb658"
 	],
 	[
 		"script.js",
-		"270447ead17c33194fb0525cab9744f7"
+		"c6c3de98108ff05bcd1099a8f39907e8"
 	],
 	[
 		"solo.html",
@@ -44479,7 +44479,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/core-js.min.js",
-		"a650d77560070956aae8559c8cc62f21"
+		"8b28275b4bc0267c494cd46a15a7734f"
 	],
 	[
 		"library/html2canvas.min.js",

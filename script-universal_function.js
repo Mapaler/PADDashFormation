@@ -48,7 +48,6 @@ const localStorage_getBoolean = function(name, defaultValue = false) {
 	else return Boolean(Number(value));
 }
 
-/* 写了，但是暂时不用
 // 将字符串转为二进制字符串
 String.prototype.toUTF8Blob = function() {
 	return new Blob([this.valueOf()], {
@@ -67,6 +66,55 @@ Blob.prototype.toBase64 = function() {
 			reject(new Error('blobToBase64 error'));
 		};
 	});
+}
+
+
+/**
+ * @readonly
+ * @enum {boolean}
+ */
+const Endian = {
+	little: true,
+	big: false
+};
+
+const ArrayConvert = {
+	/**
+	 * 将数字数组转为 ArrayBuffer
+	 * @typedef {(Int8Array|Uint8Array|Uint8ClampedArray|Int16Array|Uint16Array|Int32Array|Uint32Array|Float32Array|Float64Array)} TypedArray
+	 * @param {number[]} arr - 传入数据数组
+	 * @param {TypedArray} typed - 输出什么 TypedArray
+	 * @param {boolean=} endian - True 是小端序(Little Endian), False 是大端序(Big Endian)
+	 * @returns {TypedArray} 输出 ArrayBuffer
+	 */
+	NumberArrayToBuffer: function(arr, typed, endian = true){
+		const typedArray = new typed(arr.length);
+		const buffer = typedArray.buffer;
+		const typedName = typed.name.replace(/(?:Clamped)?Array$/i,"") ;
+		const dv = new DataView(buffer);
+		arr.forEach((num, idx)=>{
+			dv[`set${typedName}`](idx * typed.BYTES_PER_ELEMENT, num, endian);
+		});
+		return typedArray;
+	},
+	/**
+	 * 将 ArrayBuffer 或 TypedArray 转为数字数组
+	 * @typedef {(Int8Array|Uint8Array|Uint8ClampedArray|Int16Array|Uint16Array|Int32Array|Uint32Array|Float32Array|Float64Array)} TypedArray
+	 * @param {(TypedArray|ArrayBuffer)} data - 传入数据
+	 * @param {TypedArray} typed - 读取什么 TypedArray
+	 * @param {boolean=} endian - True 是小端序(Little Endian), False 是大端序(Big Endian)
+	 * @returns {number[]} 输出的数字数组
+	 */
+	BufferToNumberArray: function(data, typed, endian = true){
+		const buffer = (data instanceof ArrayBuffer) ? data : data.buffer;
+		const arr = new Array(buffer.byteLength / typed.BYTES_PER_ELEMENT);
+		const typedName = typed.name.replace(/(?:Clamped)?Array$/i,"") ;
+		const dv = new DataView(buffer);
+		for (let i = 0; i < arr.length; i ++) {
+			arr[i] = dv[`get${typedName}`](i * typed.BYTES_PER_ELEMENT, endian);
+		}
+		return arr;
+	}
 }
 
 const Base64 = {
@@ -166,14 +214,26 @@ const Base64 = {
 			sB64Enc.substring(0, sB64Enc.length - 2 + nMod3) +
 			(nMod3 === 2 ? "" : nMod3 === 1 ? "=" : "==")
 		);
+	},
+	bytesToBase64DataUrl: async function(bytes, type = "application/octet-stream") {
+		return await new Promise((resolve, reject) => {
+			const reader = Object.assign(new FileReader(), {
+				onload: () => resolve(reader.result),
+				onerror: () => reject(reader.error),
+			});
+			reader.readAsDataURL(new File([bytes], "", { type }));
+		});
+	},
+	dataUrlToBytes: async function(dataUrl) {
+		const res = await fetch(dataUrl);
+		return new Uint8Array(await res.arrayBuffer());
 	}
 }
 
 //Buffer转16进制字符串
-Uint8Array.prototype.toHex = function() {
+Uint8Array.prototype.toHex1 = function() {
 	return [...this].map(n=>n.toString(16).padStart(2,'0')).join('');
 }
-*/
 
 /**
  * 大数字以数字量级分隔符形式输出

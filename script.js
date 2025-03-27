@@ -2188,10 +2188,18 @@ function reloadFormationData(event) {
 		const mid = event?.state?.mid ?? parseInt(getQueryString("id"), 10);
 		const searchArr = event?.state?.searchArr ?? (str=>{
 			try {
-				const arr = JSON.parse(str);
-				if (Array.isArray(arr) && arr.every(item=>Number.isInteger(item))) {
-					return arr;
-				} else return;
+				const obj = JSON.parse(str);
+				//2025年3月27日之前的数字数组
+				if (Array.isArray(obj) && obj.every(item=>Number.isInteger(item))) {
+					return obj;
+				}
+				//2025年3月27日之后的 Uint16 数组转 Base64
+				else if (obj.ui16) {
+					const ui8arr = Base64.decodeToUint8Array(obj.ui16);
+					const idArr = ArrayConvert.BufferToNumberArray(ui8arr, Uint16Array, Endian.little);
+					return idArr;
+				}
+				else return;
 			} catch (error) {
 				return;
 			}
@@ -4978,8 +4986,17 @@ function initialize() {
 		const optionJSON = JSON.stringify(options);
 		const locationURL = new URL(location);
 		locationURL.searchParams.set('search-options', optionJSON);
+
 		const idArr = searchMonList.originalHeads?.map(head=>head.card.id) ?? [];
-		locationURL.searchParams.set('show-search', JSON.stringify(idArr));
+		if (idArr.length > 0) {
+			const ui16Arr = ArrayConvert.NumberArrayToBuffer(idArr, Uint16Array, Endian.little);
+			const b64 = Base64.encodeFromUint8Array(new Uint8Array(ui16Arr.buffer));
+			const outObj = {
+				"ui16": b64
+			};
+			locationURL.searchParams.set('show-search', JSON.stringify(outObj));
+		}
+
 		showAnyStringDialog.showString(locationURL.toString(), true);
 	}
 	const showAnyStringDialog = document.getElementById("dialog-show-any-string");
