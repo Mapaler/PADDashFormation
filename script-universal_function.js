@@ -68,7 +68,6 @@ Blob.prototype.toBase64 = function() {
 	});
 }
 
-
 /**
  * @readonly
  * @enum {boolean}
@@ -130,7 +129,21 @@ const Base64 = {
 		const str = decoder.decode(view);
 		return str;
 	},
-	//Base64还原成Uint8Array
+	bytesToBase64DataUrl: async function(bytes, type = "application/octet-stream") {
+		return await new Promise((resolve, reject) => {
+			const reader = Object.assign(new FileReader(), {
+				onload: () => resolve(reader.result),
+				onerror: () => reject(reader.error),
+			});
+			reader.readAsDataURL(new File([bytes], "", { type }));
+		});
+	},
+	dataUrlToBytes: async function(dataUrl) {
+		const res = await fetch(dataUrl);
+		return new Uint8Array(await res.arrayBuffer());
+	}
+	/*
+	//Base64还原成Uint8Array，已经被原生的 Uint8Array.fromBase64() 替代。
 	decodeToUint8Array: function base64DecToArr(sBase64, nBlocksSize) {
 		function b64ToUint6(nChr) {
 			return nChr > 64 && nChr < 91
@@ -172,7 +185,7 @@ const Base64 = {
 	
 		return taBytes;
 	},
-	//Uint8Array编码成Base64
+	//Uint8Array编码成Base64，已经被原生的 Uint8Array.prototype.toBase64() 替代。
 	encodeFromUint8Array: function base64EncArr(aBytes) {
 		function uint6ToB64(nUint6) {
 			return nUint6 < 26
@@ -215,24 +228,7 @@ const Base64 = {
 			(nMod3 === 2 ? "" : nMod3 === 1 ? "=" : "==")
 		);
 	},
-	bytesToBase64DataUrl: async function(bytes, type = "application/octet-stream") {
-		return await new Promise((resolve, reject) => {
-			const reader = Object.assign(new FileReader(), {
-				onload: () => resolve(reader.result),
-				onerror: () => reject(reader.error),
-			});
-			reader.readAsDataURL(new File([bytes], "", { type }));
-		});
-	},
-	dataUrlToBytes: async function(dataUrl) {
-		const res = await fetch(dataUrl);
-		return new Uint8Array(await res.arrayBuffer());
-	}
-}
-
-//Buffer转16进制字符串
-Uint8Array.prototype.toHex1 = function() {
-	return [...this].map(n=>n.toString(16).padStart(2,'0')).join('');
+	*/
 }
 
 /**

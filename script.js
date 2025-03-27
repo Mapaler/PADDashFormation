@@ -2195,7 +2195,7 @@ function reloadFormationData(event) {
 				}
 				//2025年3月27日之后的 Uint16 数组转 Base64
 				else if (obj.ui16) {
-					const ui8arr = Base64.decodeToUint8Array(obj.ui16);
+					const ui8arr = Uint8Array.fromBase64(obj.ui16);
 					const idArr = ArrayConvert.BufferToNumberArray(ui8arr, Uint16Array, Endian.little);
 					return idArr;
 				}
@@ -4990,7 +4990,9 @@ function initialize() {
 		const idArr = searchMonList.originalHeads?.map(head=>head.card.id) ?? [];
 		if (idArr.length > 0) {
 			const ui16Arr = ArrayConvert.NumberArrayToBuffer(idArr, Uint16Array, Endian.little);
-			const b64 = Base64.encodeFromUint8Array(new Uint8Array(ui16Arr.buffer));
+			
+			console.log(ui16Arr, new Uint8Array(ui16Arr.buffer));
+			const b64 = (new Uint8Array(ui16Arr.buffer)).toBase64();
 			const outObj = {
 				"ui16": b64
 			};

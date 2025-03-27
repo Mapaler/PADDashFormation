@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "@html2canvas/html2canvas": "^1.6.3",
-    "@xmldom/xmldom": "^0.9.6",
+    "@xmldom/xmldom": "^0.9.8",
     "@zxing/library": "^0.21.3",
-    "core-js-bundle": "^3.39.0",
+    "core-js-bundle": "^3.41.0",
     "mime": "^4.0.6",
     "opencc-js": "^1.0.5",
-    "xml-formatter": "^3.6.3"
+    "xml-formatter": "^3.6.5"
   }
 }
