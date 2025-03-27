@@ -24,6 +24,8 @@
 		{name: "Array.prototype.toSorted()", version:{firefox:115,chrome:110,safari:16.0}, url: "https://caniuse.com/mdn-javascript_builtins_array_tosorted", test: ()=>Boolean(Array.prototype.toSorted)},
 		{name: "Set.prototype.isDisjointFrom()", version:{firefox:127,chrome:122,safari:17.0}, url: "https://caniuse.com/mdn-javascript_builtins_set_isdisjointfrom", test: ()=>Boolean(Set.prototype.isDisjointFrom)},
 		//{name: "Duplicate named capture group / 重复的正则表达式匹配命名组", version:{firefox:129,chrome:125,safari:17.0}, url: "https://caniuse.com/mdn-javascript_regular_expressions_named_capturing_group_duplicate_named_capturing_groups", test: ()=>Boolean(runCodeWithFunction("/(?<year>\\d{4})-\\d{2}|\\d{2}-(?<year>\\d{4})/"))},
+		{name: "Uint8Array.fromBase64()", version:{firefox:133,chrome:Infinity,safari:18.2}, url: "https://caniuse.com/mdn-javascript_builtins_uint8array_frombase64", test: ()=>Boolean(Uint8Array.fromBase64)},
+		{name: "Uint8Array.prototype.toBase64()", version:{firefox:133,chrome:Infinity,safari:18.2}, url: "https://caniuse.com/mdn-javascript_builtins_uint8array_tobase64", test: ()=>Boolean(Uint8Array.fromBase64)},
 	];
 
 	const unsupportFeatures = features.filter(feature=>{

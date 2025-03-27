@@ -4991,7 +4991,6 @@ function initialize() {
 		if (idArr.length > 0) {
 			const ui16Arr = ArrayConvert.NumberArrayToBuffer(idArr, Uint16Array, Endian.little);
 			
-			console.log(ui16Arr, new Uint8Array(ui16Arr.buffer));
 			const b64 = (new Uint8Array(ui16Arr.buffer)).toBase64();
 			const outObj = {
 				"ui16": b64
