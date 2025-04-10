@@ -3807,13 +3807,15 @@ table .orb-icon
 	content: "💣";
 }
 .team-flags .team-member-icon {
+	--box-width: 10px;
+	--box-height: 10px;
 	display: inline-block;
 	border-width: 1px;
 	border-style: solid;
 	border-color: black;
 	border-radius: 3px;
-	width: 10px;
-	height:10px;
+	width: var(--box-width);
+	height:var(--box-height);
 }
 .team-flags .team-member-icon:first-of-type,
 .team-flags .team-member-icon:last-of-type
@@ -3842,7 +3844,25 @@ table .orb-icon
 }
 .team-flags.right-neighbor .team-member-icon:nth-of-type(5),
 .team-flags.left-neighbor .team-member-icon:nth-of-type(3) {
-	background-color: violet !important; 
+	background-color: violet !important;
+}
+/* 做一个箭头 */
+.team-flags.right-neighbor .team-member-icon:nth-of-type(5)::before,
+.team-flags.left-neighbor .team-member-icon:nth-of-type(3)::before {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border-style: solid;
+	border-width: calc(var(--box-height) / 2)  calc(var(--box-width) / 2);
+	border-color: transparent;
+}
+.team-flags.right-neighbor .team-member-icon:nth-of-type(3)::before {
+	border-right-color: #0009;
+}
+.team-flags.right-neighbor .team-member-icon:nth-of-type(5)::before {
+	border-left-color: #0009;
 }
 
 /*.open-evolutionary-tree::before
@@ -5059,7 +5079,8 @@ body.external-link-support #external-support{
 	line-height: 1.5em;
 }
 .skill-datail-parsed .team-flags {
-	display: inline-block;
+	display: inline-flex;
+	align-items: end;
 }
 .icon-skill[data-icon-type="auto-path"]
 {

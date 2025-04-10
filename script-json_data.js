@@ -1226,7 +1226,7 @@ const specialSearchFunctions = (function() {
 	function memberATK_Addition(card)
 	{
 		const searchTypeArray = [230, 269];
-		const skills = getCardActiveSkills(card, searchTypeArray);
+		const skills = getCardActiveSkills(card, searchTypeArray, true);
 		return skills.map(skill=>{
 			const sk = skill.params;
 			const fragment = document.createDocumentFragment();
@@ -1254,7 +1254,7 @@ const specialSearchFunctions = (function() {
 	function memberCap_Addition(card)
 	{
 		const searchTypeArray = [241, 246, 247, 258, 263, 266];
-		const skills = getCardActiveSkills(card, searchTypeArray);
+		const skills = getCardActiveSkills(card, searchTypeArray, true);
 		return skills.map(skill=>{
 			const sk = skill.params;
 			let cap = getIncreaseDamageCap(skill);
