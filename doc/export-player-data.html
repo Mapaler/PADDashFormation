@@ -675,7 +675,7 @@
 			<code class="block-code">
 <comment>::Get Hash Value</comment>
 openssl x509 -inform DER -in FiddlerRoot.cer -subject_hash_old -noout
-<comment>::It should output "269953fb"</comment>
+<comment>::It may output "269953fb"</comment>
 
 <comment>::Convert to PEM version and rename to Android system rule, &lt;Hash Value&gt;.0 </comment>
 openssl x509 -inform DER -in FiddlerRoot.cer -outform PEM -out 269953fb.0
