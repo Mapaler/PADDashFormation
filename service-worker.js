@@ -423,7 +423,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_106.PNG",
-		"fb0db444ee72647c3ed1123a9eadfaa9"
+		"97474bd1d1b743112ad39f66978f3311"
 	],
 	[
 		"images/cards_ja/CARDS_107.PNG",
@@ -46699,7 +46699,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/export-player-data.html",
-		"05275f5501d580f53bf163027de2c597"
+		"2a5ad47371fc5f0f3d42f72ce4e34f2f"
 	],
 	[
 		"doc/index.html",
