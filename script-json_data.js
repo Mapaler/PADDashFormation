@@ -1654,12 +1654,19 @@ const specialSearchFunctions = (function() {
 						return parsedGroupSkill.skills.every(parsedSubSkill=>isLoopBuff(parsedSubSkill, cd));
 					}
 					//进化类技能，排除循环进化，并只计算最后一级
-					if (parsedGroupSkill.kind == SkillKinds.EvolvedSkills && !parsedGroupSkill.loop) {
-						let lastIdx = parsedGroupSkill.params.length - 1;
-						let subSkill = Skills[parsedGroupSkill.params[lastIdx]];
-						let subCd = subSkill.initialCooldown - (subSkill.maxLevel - 1); //技能最短CD
-						let parsedSubSkill = parsedGroupSkill.skills[lastIdx];
-						if (isLoopBuff(parsedSubSkill, subCd)) return true;
+					if (parsedGroupSkill.kind == SkillKinds.EvolvedSkills) {
+						const subSkills = parsedGroupSkill.params.map(id=>Skills[id]);
+						if (parsedGroupSkill.loop) { //循环的
+							let subCd = subSkills.reduce((p,subSkill)=>{
+								p += subSkill.initialCooldown - (subSkill.maxLevel - 1);
+								return p;
+							}, 0);
+							return parsedGroupSkill.skills.some(skill=>isLoopBuff(skill, subCd));
+						} else { //不循环的
+							let subSkill = subSkills.at(-1);
+							let subCd = subSkill.initialCooldown - (subSkill.maxLevel - 1); //技能最短CD
+							return isLoopBuff(parsedGroupSkill.skills.at(-1), subCd);
+						}
 					}
 					return false;
 				})
