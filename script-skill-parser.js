@@ -489,6 +489,7 @@ const SkillKinds = {
 	BreakingShield: "breaking-shield",
 	PlayVoice: "play-voice",
 	TimesLimit: "times-limit",
+	FixedStartingPosition: "fixed-starting-position",
 }
 
 function skillParser(skillId)
@@ -1093,8 +1094,8 @@ function breakingShield(value) {
 function timesLimit(turns) {
 	return { kind: SkillKinds.TimesLimit, turns };
 }
-function timesLimit(turns) {
-	return { kind: SkillKinds.TimesLimit, turns };
+function fixedStartingPosition() {
+	return { kind: SkillKinds.FixedStartingPosition };
 }
 
 const skillObjectParsers = {
@@ -1775,6 +1776,8 @@ const skillObjectParsers = {
 	},
 	//一回合内使用几次技能才有倍率的队长技。
 	[270](times, atk, rcv) { { return powerUp(Bin.unflags(31), null, p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.useSkill(times)); } },
+	//固定起手位置
+	[273](turns) {return activeTurns(turns, fixedStartingPosition()); },
 
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -2925,6 +2928,13 @@ function renderSkill(skill, option = {})
 				turns
 			};
 			frg.ap(tsp.skill.times_limit(dict));
+			break;
+		}
+		case SkillKinds.FixedStartingPosition: { //固定起手位置
+			let dict = {
+				icon: createIcon(skill.kind)
+			};
+			frg.ap(tsp.skill.fixed_starting_position(dict));
 			break;
 		}
 		

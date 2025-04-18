@@ -5124,3 +5124,24 @@ body.external-link-support #external-support{
 {
 	background-position-y:calc(-36px * 46);
 }
+
+.icon-skill[data-icon-type="fixed-starting-position"]::before,
+.icon-skill[data-icon-type="fixed-starting-position"]::after{
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-position-y:calc(-36px * 48);
+}
+
+.icon-skill[data-icon-type="fixed-starting-position"]::before
+{
+	animation: rotate-animate 5s infinite linear;
+}
+.icon-skill[data-icon-type="fixed-starting-position"]::after
+{
+	background-position-x:calc(-36px * 1);
+	animation: hidden-visible-animate 0.3s infinite alternate ease-out;
+}
+
+/*animation: rotate-animate 5s infinite linear;*/

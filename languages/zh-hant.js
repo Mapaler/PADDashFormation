@@ -143,6 +143,7 @@ const _localTranslating = {
 			prediction_falling: tp`盤面上可以${'icon'}預知寶珠掉落`,
 			play_voice: tp`播放第 ${'stage'} 階段的語音 ${'icon'}`,
 			times_limit: tp`【使用次數限制：${'turns'}】`,
+			fixed_starting_position: tp`${'icon'}固定起手位置`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,

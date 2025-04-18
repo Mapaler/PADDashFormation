@@ -159,6 +159,7 @@ let localTranslating = {
 			prediction_falling: tp`${'icon'}Prediction of falling on board`,
 			play_voice: tp`Play voice of the phase ${'stage'} of active skill ${'icon'}`,
 			times_limit: tp`[Number of times skill can be used: ${'turns'}]`,
+			fixed_starting_position: tp`${'icon'}Fixed starting position`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -2739,6 +2740,13 @@ const specialSearchFunctions = (function() {
 						}
 						return `[${width}×${height}]×${sk[0]}T`;
 					}
+				},
+				{name:"Fixed starting position",otLangName:{chs:"固定起手位置",cht:"固定起手位置"},
+					function:cards=>cards.filter(card=>{
+					const searchTypeArray = [273];
+					const skill = getCardActiveSkill(card, searchTypeArray);
+					return skill;
+					})
 				},
 			]},
 			{group:true,name:"Orbs Drop",otLangName:{chs:"珠子掉落 类",cht:"珠子掉落 類"}, functions: [
