@@ -189,6 +189,7 @@ const _localTranslating = {
 
 			L_shape: tp`以L字形式消除5個${'orbs'}時`,
 			heal: tp`以${'orbs'}回復${'heal'}${'stats'}時`,
+			awakening_activated: tp`${'awakenings'}同時發動時`,
 		},
 		position: {
 			top: tp`上方第${'pos'}橫行`,

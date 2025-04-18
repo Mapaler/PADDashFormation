@@ -205,6 +205,7 @@ let localTranslating = {
 
 			L_shape: tp`When matching an L shape of 5 ${'orbs'} `,
 			heal: tp`When healing at least ${'heal'} ${'stats'} with ${'orbs'} `,
+			awakening_activated: tp`When ${'awakenings'} activated at the same time `,
 		},
 		position: {
 			top: tp`${'pos'} of top rows`,
@@ -283,7 +284,7 @@ let localTranslating = {
 			affix_attr: tp`${'cotent'} attr.`,
 			affix_orb: tp`${'cotent'} orbs`,
 			affix_type: tp`${'cotent'} types`,
-			affix_awakening: tp`${'cotent'} awoken`,
+			affix_awakening: tp`${'cotent'} awakenings`,
 			affix_exclude: tp`, exclude ${'cotent'}`,
 			each_time: tp`each time `,
 			different: tp`different`,
@@ -763,6 +764,7 @@ const specialSearchFunctions = (function() {
 			case 151: //十字心触发
 			case 169: //C触发
 			case 198: //回血触发
+			case 271: //激活觉醒触发
 				scale = sk[2]/100;
 				break;
 			case 170: //多色触发

@@ -1632,12 +1632,13 @@ function henshinBase(cardid, firstId)
 }
 //计算卡片队长技+C
 function getSkillAddCombo(card) {
-	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220, 235];
+	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220, 235, 271];
 	const skills = getCardLeaderSkills(card, searchTypeArray);
 	return skills.map(skill=>{
 		switch (skill.type) {
 			case 192:
 			case 194:
+			case 271:
 				return skill.params[3] ?? 0;
 			case 206:
 				return skill.params[6] ?? 0;
@@ -1657,7 +1658,7 @@ function getSkillAddCombo(card) {
 }
 //计算卡片队长技追打
 function getSkillFixedDamage(card) {
-	const searchTypeArray = [199, 200, 201, 223, 235];
+	const searchTypeArray = [199, 200, 201, 223, 235, 271];
 	const skills = getCardLeaderSkills(card, searchTypeArray);
 	return skills.map(skill=>{
 		switch (skill.type) {
@@ -1670,6 +1671,8 @@ function getSkillFixedDamage(card) {
 				return skill.params[1] ?? 0;
 			case 235:
 				return skill.params[6] ?? 0;
+			case 271:
+				return skill.params[4] ?? 0;
 			default:
 				return 0;
 		}
@@ -1975,7 +1978,7 @@ function getAttrShieldAwokenReduceScales(team) {
 }
 //获取盾减伤比例组
 function getReduceScales(leaderid) {
-	const searchTypeArray = [16, 17, 36, 38, 43, 129, 163, 130, 131, 178, 151, 169, 198, 170, 182, 193, 171, 183, 235];
+	const searchTypeArray = [16, 17, 36, 38, 43, 129, 163, 130, 131, 178, 151, 169, 198, 170, 182, 193, 171, 183, 235, 271];
 	const lss = getCardLeaderSkills(Cards[leaderid], searchTypeArray);
 	
 	function leaderReduceScale(ls) {
@@ -2056,6 +2059,7 @@ function getReduceScales(leaderid) {
 			case 151: //十字心触发
 			case 169: //C触发
 			case 198: //回血触发
+			case 271: //激活觉醒触发
 				reduce.scale = (sk[2] || 0) / 100;
 				break;
 			case 170: //多色触发

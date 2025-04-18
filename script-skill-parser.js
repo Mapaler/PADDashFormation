@@ -876,14 +876,15 @@ const c = {
 	useSkill: function (times = 1) { return { useSkill: times }; },
 	multiplayer: function () { return { multiplayer: true }; },
 	prob: function (percent) { return { prob: percent }; },
-	LShape: function (attrs) { return { LShape: { attrs: attrs } }; },
-	heal: function (min) { return { heal: { min: min } }; },
-	stage: function (min, max) {
-		return { stage: { min: min ?? 0, max: max ?? 0 } };
+	LShape: function (attrs) { return { LShape: { attrs } }; },
+	heal: function (min) { return { heal: { min } }; },
+	stage: function (min=0, max=0) {
+		return { stage: { min, max } };
 	},
 	remainAttrOrbs: function (attrs, min, max) {
 		return { remainAttrOrbs: { attrs, min, max} };
 	},
+	awakeningActivated: function (awakenings) { return { awakeningActivated: { awakenings } }; },
 }
 
 const p = {
@@ -1776,6 +1777,28 @@ const skillObjectParsers = {
 	},
 	//一回合内使用几次技能才有倍率的队长技。
 	[270](times, atk, rcv) { { return powerUp(Bin.unflags(31), null, p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.useSkill(times)); } },
+	//同时发动觉醒时强化
+	[271](awakenings, atk, reducePercent, combo, damage, rcv) {
+		const awakeningsType = [
+			27, //U-猜的
+			48, //九宫-猜的
+			60, //L字
+			78, //十字-猜的
+			126, //T字
+			22, //横排-猜的
+			23,
+			24,
+			25,
+			26,
+			79, //三色
+			80, //四色
+			81, //五色-猜的
+			82, //饼干-猜的
+		];
+		const awakeningsArr = Bin.unflags(awakenings).map(n => awakeningsType[n]);
+		let additional = [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean);
+		return powerUp(null, null, p.mul({ atk: atk, rcv: rcv}), c.awakeningActivated(awakeningsArr), v.percent(reducePercent), additional);
+	},
 	//固定起手位置
 	[273](turns) {return activeTurns(turns, fixedStartingPosition()); },
 
@@ -3247,6 +3270,11 @@ function renderCondition(cond) {
 			frg.ap(tsp.cond.orbs_greater_or_equal(dict));
 		else if (cond.remainAttrOrbs.max > 0)
 			frg.ap(tsp.cond.orbs_less_or_equal(dict));
+	} else if (cond.awakeningActivated) {
+		let dict = {
+			awakenings: renderAwakenings(cond.awakeningActivated.awakenings, {affix: true}),
+		};
+		frg.ap(tsp.cond.awakening_activated(dict));
 	} else {
 		frg.ap(tsp.cond.unknown());
 	}
