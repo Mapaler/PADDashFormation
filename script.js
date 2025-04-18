@@ -7535,6 +7535,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 52: return member.card.gachaIds.includes(2) ? 1.15 : 1; //情人节
 				case 54: case 55: return member.card.collabId === 117 ? 1.15 : 1; //排球少年
 				case 56: case 57: return member.card.gachaIds.includes(3) ? 1.15 : 1; //新学期(学园)
+				case 58: case 59: return member.card.collabId === 118 ? 1.15 : 1; //柯南
 				default: return 1;
 			}
 		}
