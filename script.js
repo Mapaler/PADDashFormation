@@ -6781,7 +6781,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			}
 		}
 		targetValue.setAttribute(dataAttrName, count.bigNumberToString());
-		if (option.teamHP) {
+		if (count > 0 && option.teamHP) {
 			targetValue.setAttribute("data-percent", (Math.floor(count / option.teamHP.tHP * 1000) / 10));
 		}
 	}
