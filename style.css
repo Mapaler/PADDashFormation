@@ -3372,6 +3372,10 @@ a.series-search::before {
 {
 	content: attr(data-value)attr(data-postfix);
 }
+.team-awoken-effect .count[data-value][data-percent]::after
+{
+	content: attr(data-value)attr(data-postfix)"("attr(data-percent)"%)";
+}
 .team-awoken-effect .prob[data-value]::before,
 .team-awoken-effect .orb-list .prob[data-value]::before
 {

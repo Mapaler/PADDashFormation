@@ -6642,7 +6642,8 @@ function refreshAll(formationData) {
 
 		}
 		const teamTotalInfoDom = teamBigBox.querySelector(".team-total-info"); //队伍能力值合计
-		if (teamTotalInfoDom) refreshTeamTotalHP(teamTotalInfoDom, teamData, teamNum);
+		let teamHP = null;
+		if (teamTotalInfoDom) teamHP = refreshTeamTotalHP(teamTotalInfoDom, teamData, teamNum);
 
 		const teamTotalInfoCountDom = teamBigBox.querySelector(".team-total-info-count"); //队伍星级、属性、类型合计
 		if (teamTotalInfoCountDom) refreshTeamTotalCount(teamTotalInfoCountDom, teamData, teamNum);
@@ -6651,7 +6652,7 @@ function refreshAll(formationData) {
 		if (teamAwokenDom) refreshTeamAwokenCount(teamAwokenDom, teamData);
 
 		const teamAwokenEffectDom = teamBigBox.querySelector(".team-awoken-effect"); //队伍觉醒效果计算
-		if (teamAwokenEffectDom) refreshTeamAwokenEfeect(teamAwokenEffectDom, teamData, teamNum);
+		if (teamAwokenEffectDom) refreshTeamAwokenEfeect(teamAwokenEffectDom, teamData, teamNum, { teamHP });
 	});
 
 	if (formationTotalInfoDom) refreshFormationTotalHP(formationTotalInfoDom, formation.teams);
@@ -6710,7 +6711,7 @@ function refreshAll(formationData) {
 }
 
 //刷新队伍觉醒效果计算
-function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
+function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 	const [members, assists, badge, swapId] = team;
 	let targetIcon;
 	//解析两个队长技
@@ -6780,6 +6781,9 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti) {
 			}
 		}
 		targetValue.setAttribute(dataAttrName, count.bigNumberToString());
+		if (option.teamHP) {
+			targetValue.setAttribute("data-percent", (Math.floor(count / option.teamHP.tHP * 1000) / 10));
+		}
 	}
 	
 	//颜色盾
@@ -7445,6 +7449,7 @@ function drawHpInfo(hpBarDom, reduceAttrRanges)
 function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	//计算总的生命值
 	if (!totalDom) return;
+	const outdata = {};
 	const tHpDom = totalDom.querySelector(".tIf-total-hp");
 	const tSBDom = totalDom.querySelector(".tIf-total-skill-boost");
 	const tMoveDom = totalDom.querySelector(".tIf-total-move");
@@ -7564,6 +7569,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".reduce-scale"), (totalReduce * 100).toFixed(2));
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".general"), tReduceHP.bigNumberToString({sub: true}));
 		setTextContentAndAttribute(tHpDom_reduce.querySelector(".awoken-bind"), tReduceHPNoAwoken.bigNumberToString({sub: true}));
+		Object.assign(outdata,{tHP, tHPNoAwoken, totalReduce, tReduceHP, tReduceHPNoAwoken});
 	}
 
 	if (tSBDom) {
@@ -7599,6 +7605,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		if (badge == 22) effect.poisonNoEffect = true;
 		refreshEffectDom(tEffectDom, effect);
 	}
+	return outdata;
 }
 //刷新队伍能力值合计
 function refreshTeamTotalCount(totalCountDom, team, teamIdx) {

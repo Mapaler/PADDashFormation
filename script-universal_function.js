@@ -1688,25 +1688,26 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original)
 		inflicts: [0,0],
 	};
 	const card1 = Cards[leader1id], card2 = Cards[leader2id];
-	{ //计算队伍是否为76
+	const card1_original = henshinBase(leader1id_original), card2_original = henshinBase(leader2id_original);
+	{ //计算队伍是否为76，判断初始队长+变身前
 		const searchTypeArray = [162, 186];
-		effect.board76 = Boolean(getCardLeaderSkills(henshinBase(leader1id_original), searchTypeArray).length) ||
-						 Boolean(getCardLeaderSkills(henshinBase(leader2id_original), searchTypeArray).length);
+		effect.board76 = Boolean(getCardLeaderSkills(card1_original, searchTypeArray).length) ||
+						 Boolean(getCardLeaderSkills(card2_original, searchTypeArray).length);
 	}
 	{ //计算队伍是否为无天降
 		const searchTypeArray = [163, 177];
-		effect.noSkyfall = Boolean(getCardLeaderSkills(henshinBase(leader1id_original), searchTypeArray).length) ||
-						   Boolean(getCardLeaderSkills(henshinBase(leader2id_original), searchTypeArray).length);
+		effect.noSkyfall = Boolean(getCardLeaderSkills(card1, searchTypeArray).length) ||
+						   Boolean(getCardLeaderSkills(card2, searchTypeArray).length);
 	}
 	{ //计算队伍是否为毒无效
 		const searchTypeArray = [197];
-		effect.poisonNoEffect = Boolean(getCardLeaderSkills(henshinBase(leader1id_original), searchTypeArray).length) ||
-								Boolean(getCardLeaderSkills(henshinBase(leader2id_original), searchTypeArray).length);
+		effect.poisonNoEffect = Boolean(getCardLeaderSkills(card1, searchTypeArray).length) ||
+								Boolean(getCardLeaderSkills(card2, searchTypeArray).length);
 	}
 	{ //计算队伍是否有根性
 		const searchTypeArray = [14];
-		effect.resolve = Boolean(getCardLeaderSkills(henshinBase(leader1id_original), searchTypeArray).length) ||
-						 Boolean(getCardLeaderSkills(henshinBase(leader2id_original), searchTypeArray).length);
+		effect.resolve = Boolean(getCardLeaderSkills(card1, searchTypeArray).length) ||
+						 Boolean(getCardLeaderSkills(card2, searchTypeArray).length);
 	}
 	{ //计算队伍的+C
 		effect.addCombo[0] = getSkillAddCombo(card1);
