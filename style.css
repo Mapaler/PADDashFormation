@@ -3862,7 +3862,7 @@ table .orb-icon
 	border-width: calc(var(--box-height) / 2)  calc(var(--box-width) / 2);
 	border-color: transparent;
 }
-.team-flags.right-neighbor .team-member-icon:nth-of-type(3)::before {
+.team-flags.left-neighbor .team-member-icon:nth-of-type(3)::before {
 	border-right-color: #0009;
 }
 .team-flags.right-neighbor .team-member-icon:nth-of-type(5)::before {
