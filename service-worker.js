@@ -19599,7 +19599,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_098.PNG",
-		"650de25a37064d180b8d27c4bba233fa"
+		"0b4b45541fbe7359ccc3aa7d707253e5"
 	],
 	[
 		"images/cards_en/CARDS_099.PNG",
@@ -19655,7 +19655,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_112.PNG",
-		"987a2c17c08c65ce5771bec9e9c58bc9"
+		"fd3bb820f695ec31416439c8c711d5fa"
 	],
 	[
 		"images/cards_en/CARDS_113.PNG",
@@ -19695,11 +19695,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_122.PNG",
-		"1c5340659f06b40440169c77a0bc158a"
+		"ec836375c5814c49609d87aecc9c92b1"
 	],
 	[
 		"images/cards_en/CARDS_123.PNG",
-		"d542798a1d8404bd11377cdede010f28"
+		"e8581a45601c2f47efd5392811c79c91"
 	],
 	[
 		"sound/voice/en/padv001.wav",
@@ -48267,7 +48267,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"a1a385afe56abaa1d09f2f56b015d6c4"
+		"86355a13942be255eab0e5bbd8ac9830"
 	],
 	[
 		"script-skill-parser.js",
@@ -48291,7 +48291,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"2573851eaa09e66f9444a6ffd48866aa"
+		"6005ab9877e1c20b47c0968cccbf9a4b"
 	],
 	[
 		"style.css",
@@ -48371,7 +48371,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"134c6a8204d392b5b232d1738adf7afb"
+		"2e173e0c1fbea20a06056cd64e9b49d1"
 	],
 	[
 		"images/brown-button.svg",
