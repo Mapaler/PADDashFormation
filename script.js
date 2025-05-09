@@ -7523,7 +7523,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 35: return member.card.gachaIds.includes(11) ? 1.15 : 1; //万圣节
 				case 36: return member.card.collabId === 114 ? 1.15 : 1; //数码宝贝
 				case 37: return member.card.collabId === 90 ? 1.15 : 1; //diss你
-				case 38: return member.card.collabId === 1 ? 1.15 : 1; //GungHo本家
+				case 38: case 62: return member.card.collabId === 1 ? 1.15 : 1; //GungHo本家
 				case 39: return member.card.collabId === 115 ? 1.15 : 1; //周刊少年Magazine
 				case 40: return member.card.gachaIds.includes(12) ? 1.15 : 1; //圣诞节
 				case 41: return member.card.types.includes(5) ? 1.05 : 1; //神属性
