@@ -205,7 +205,7 @@ let localTranslating = {
 
 			L_shape: tp`When matching an L shape of 5 ${'orbs'} `,
 			heal: tp`When healing at least ${'heal'} ${'stats'} with ${'orbs'} `,
-			awakening_activated: tp`When ${'awakenings'} activated at the same time `,
+			awakening_activated: tp`When [${'awakenings'}] activated `,
 		},
 		position: {
 			top: tp`${'pos'} of top rows`,
@@ -569,8 +569,8 @@ const official_badge_sorting = [ //20是没有启用的全属性徽章，现在�
 	 10, 12, 13, 14, 41, 42, 43, 44,
 	 45, 46, 47, 48, 24, 25, 26, 53, 27,
 	 28, 29, 30, 31, 15, 16, 32, 33,
-	 34, 35, 36, 37, 38, 39, 40, 49,
-	 50, 51, 52, 54, 55, 56, 57, 58, 59, 60, 61, 62,
+	 34, 35, 36, 37, 38, 62, 39, 40, 49,
+	 50, 51, 52, 54, 55, 56, 57, 58, 59, 60, 61,
 	
 ]
 //官方的觉醒排列顺序
@@ -3969,10 +3969,31 @@ const specialSearchFunctions = (function() {
 				},
 				{name:"Less remain on the board",otLangName:{chs:"剩珠倍率",cht:"剩珠倍率"},
 					function:cards=>cards.filter(card=>{
-					const searchTypeArray = [177];
-					const skill = getCardLeaderSkill(card, searchTypeArray);
-					return skill?.params[5];
+						const searchTypeArray = [177];
+						const skill = getCardLeaderSkill(card, searchTypeArray);
+						return skill?.params[5];
 					})
+				},
+				{name:"Awakening active",otLangName:{chs:"激活觉醒",cht:"激活覺醒"},
+					function:cards=>cards.filter(card=>{
+						const searchTypeArray = [271];
+						const skill = getCardLeaderSkill(card, searchTypeArray);
+						return skill;
+					}),
+					addition:card=>{
+						const searchTypeArray = [271];
+						const skill = getCardLeaderSkill(card, searchTypeArray);
+						if (!skill) return;
+						const parsedSkills = skillParser(skill.id);
+						const parsedSkill = parsedSkills.find(subSkil=>
+							subSkil
+							?.condition
+							?.awakeningActivated
+							?.awakenings?.length);
+						const fragment = document.createDocumentFragment();
+						fragment.append("要",creatAwokenList(parsedSkill.condition.awakeningActivated.awakenings));
+						return fragment;
+					}
 				},
 			]},
 			{group:true,name:"Restriction/Bind",otLangName:{chs:"限制",cht:"限制"}, functions: [
