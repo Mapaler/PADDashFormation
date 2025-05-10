@@ -2685,13 +2685,13 @@ const specialSearchFunctions = (function() {
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						if (!skill) return;
 						const sk = skill.params;
-						const colums = Bin.unflags(sk[1]), rows = Bin.unflags(sk[2]);
+						const colums = Bin.unflags(sk[0]), rows = Bin.unflags(sk[2]);
 						const fragment = document.createDocumentFragment();
 						if (colums.length)
 							fragment.append(`${colums.length}竖`);
 						if (rows.length)
 							fragment.append(`${rows.length}横`);
-						fragment.append(`×${sk[0]}T`);
+						fragment.append(`×${sk[1]}T`);
 						return fragment;
 					}
 				},

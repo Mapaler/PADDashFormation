@@ -335,7 +335,13 @@ Array.prototype.shuffle = function() {
 }
 //数组随机移除元素
 Array.prototype.randomShift = function() {
-	return this.splice(Math.random() * this.length, 1)?.[0];
+	if (this.length === 0) {
+		return null;
+	} else if (this.length === 1) {
+		return this.shift();
+	} else {
+		return this.splice(Math.random() * this.length, 1)?.[0];
+	}
 }
 //数组分组函数，用法：array.groupBy((a,b)=>a.type === b.type)
 Array.prototype.groupBy = function(func) {
@@ -375,7 +381,13 @@ Array.prototype.nodeJoin = function(separator)
 }
 //数组随机选择一个元素
 Array.prototype.randomItem = function(){
-	return this[Math.randomInteger(this.length-1)];
+	if (this.length === 0) {
+		return null;
+	} else if (this.length === 1) {
+		return this[0];
+	} else {
+		return this[Math.randomInteger(this.length-1)];
+	}
 };
 
 Math.randomInteger = function(max, min = 0) {

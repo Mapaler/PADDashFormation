@@ -231,21 +231,23 @@ class Board
 			block.states.add(blockState);
 	}
 	//设定横行
-	setRows(rows, attr, state, blockState)
+	setRows(rows, attrs, state, blockState)
 	{
+		if (!Array.isArray(attrs)) attrs = [attrs];
 		for (let ri of rows)
 		{
 			ri = this.getTargetRowIndex(ri);
 			const orbsRow = this.orbsData[ri], blocksRow = this.blocksData[ri];
 			for (let ci=0; ci<this.columnCount; ci++)
 			{
-				this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attr, state, blockState);
+				this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attrs.randomItem(), state, blockState);
 			}
 		}
 	}
 	//设定竖列
-	setColumns(cols, attr, state, blockState)
+	setColumns(cols, attrs, state, blockState)
 	{
+		if (!Array.isArray(attrs)) attrs = [attrs];
 		for (let ci of cols)
 		{
 			ci = this.getTargetColumnIndex(ci);
@@ -253,16 +255,17 @@ class Board
 			{
 				const orbsRow = this.orbsData[ri], blocksRow = this.blocksData[ri];
 
-				this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attr, state, blockState);
+				this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attrs.randomItem(), state, blockState);
 				if (blockState == 'immobility') { //如果是封条，额外添加需要旋转的信息
-					this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attr, state, 'rotate');
+					this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attrs.randomItem(), state, 'rotate');
 				}
 			}
 		}
 	}
 	//设定形状
-	setShape(matrix, attr, state, blockState)
+	setShape(matrix, attrs, state, blockState)
 	{
+		if (!Array.isArray(attrs)) attrs = [attrs];
 		//const setOrb = typeof(state) == 'number';
 		function fillRow(ri, inputRow)
 		{
@@ -272,9 +275,9 @@ class Board
 				ci = this.getTargetColumnIndex(ci);
 				if (this.columnCount >= 7 && ci == 4)
 				{
-					this.setOrbAndBlock(orbsRow[ci - 1], blocksRow[ci - 1], attr, state, blockState);
+					this.setOrbAndBlock(orbsRow[ci - 1], blocksRow[ci - 1], attrs.randomItem(), state, blockState);
 				}
-				this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attr, state, blockState);
+				this.setOrbAndBlock(orbsRow[ci], blocksRow[ci], attrs.randomItem(), state, blockState);
 			}
 		}
 		for (let i=0; i<matrix.length; i++)
@@ -1267,17 +1270,27 @@ const skillObjectParsers = {
 	},
 	[125](mon1, mon2, mon3, mon4, mon5, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('card', [mon1, mon2, mon3, mon4, mon5].filter(Boolean))); },
 	[126](attrs, turns, turns2, percent) { return activeTurns(turns === turns2 ? turns : [turns, turns2], orbDropIncrease(v.percent(percent), Bin.unflags(attrs))); },
-	[127](cols1, attrs1, cols2, attrs2) {
-	  return fixedOrbs(
-		{ orbs: Bin.unflags(attrs1), type: 'col', positions: Bin.unflags(cols1) },
-		{ orbs: Bin.unflags(attrs2), type: 'col', positions: Bin.unflags(cols2) }
-	  );
+	[127](...params) { //cols1, attrs1, cols2, attrs2 ...
+		const generates = [];
+		for (let i = 0; i < params.length; i+=2) {
+			generates.push({
+				orbs: Bin.unflags(params[i+1]),
+				type: 'col',
+				positions: Bin.unflags(params[i])
+			});
+		}
+		return fixedOrbs.apply(null, generates);
 	},
-	[128](rows1, attrs1, rows2, attrs2) {
-	  return fixedOrbs(
-		{ orbs: Bin.unflags(attrs1), type: 'row', positions: Bin.unflags(rows1) },
-		{ orbs: Bin.unflags(attrs2), type: 'row', positions: Bin.unflags(rows2) }
-	  );
+	[128](...params) { //rows1, attrs1, rows2, attrs2 ...
+		const generates = [];
+		for (let i = 0; i < params.length; i+=2) {
+			generates.push({
+				orbs: Bin.unflags(params[i+1]),
+				type: 'row',
+				positions: Bin.unflags(params[i])
+			});
+		}
+		return fixedOrbs.apply(null, generates);
 	},
 	[129](attrs, types, hp, atk, rcv, rAttrs, rPercent) {
 		return [
@@ -1417,7 +1430,7 @@ const skillObjectParsers = {
 	[175](series1, series2, series3, hp, atk, rcv) { return powerUp(null, null, p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.compo('series', [series1, series2, series3].filter(Boolean))); },
 	[176](row1, row2, row3, row4, row5, attrs) {
 		return fixedOrbs(
-			{ orbs: [attrs ?? 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(row=>Bin.unflags(row)) }
+			{ orbs: [attrs ?? 0], type: 'shape', positions: [row1, row2, row3, row4, row5].map(Bin.unflags) }
 		);
 	},
 	[177](attrs, types, hp, atk, rcv, remains, baseAtk, bonusAtk) {
@@ -1876,14 +1889,14 @@ function renderSkillEntry(skills)
 					case SkillKinds.FixedOrbs: { //固定位置产生珠子
 						for (const generate of skill.generates)
 						{
-							let orb = generate.orbs?.[0];
+							const orbs = generate.orbs;
 							if (generate.type == 'shape') {
-								boardsBar.boards.forEach(board=>board.setShape(generate.positions, orb));
+								boardsBar.boards.forEach(board=>board.setShape(generate.positions, orbs));
 							} else {
 								if (generate.type == 'row')
-									boardsBar.boards.forEach(board=>board.setRows(generate.positions, orb));
+									boardsBar.boards.forEach(board=>board.setRows(generate.positions, orbs));
 								else
-									boardsBar.boards.forEach(board=>board.setColumns(generate.positions, orb));
+									boardsBar.boards.forEach(board=>board.setColumns(generate.positions, orbs));
 							}
 						}
 						break;
@@ -2460,14 +2473,14 @@ function renderSkill(skill, option = {})
 
 			for (const generate of generates)
 			{
-				let orb = generate.orbs?.[0];
-				let dict = {
-					orbs: renderOrbs(orb),
+				const orbs = generate.orbs;
+				const dict = {
+					orbs: renderOrbs(orbs),
 				};
 				if (generate.type == 'shape')
 				{
 					dict.position = tsp.position.shape();
-					boardsBar?.boards?.forEach(board=>board.setShape(generate.positions, orb));
+					boardsBar?.boards?.forEach(board=>board.setShape(generate.positions, orbs));
 				}else
 				{
 					let posFrgs = [];
@@ -2477,13 +2490,13 @@ function renderSkill(skill, option = {})
 						const [sequence, reverse] = posSplit(generate.positions, 'row');
 						if (sequence.length) posFrgs.push(tsp.position.top({pos: sequence.join(slight_pause)}));
 						if (reverse.length) posFrgs.push(tsp.position.bottom({pos: reverse.join(slight_pause)}));
-						boardsBar?.boards?.forEach(board=>board.setRows(generate.positions, orb));
+						boardsBar?.boards?.forEach(board=>board.setRows(generate.positions, orbs));
 					}else
 					{
 						const [sequence, reverse] = posSplit(generate.positions, 'colum');
 						if (sequence.length) posFrgs.push(tsp.position.left({pos: sequence.join(slight_pause)}));
 						if (reverse.length) posFrgs.push(tsp.position.right({pos: reverse.join(slight_pause)}));
-						boardsBar?.boards?.forEach(board=>board.setColumns(generate.positions, orb));
+						boardsBar?.boards?.forEach(board=>board.setColumns(generate.positions, orbs));
 					}
 					dict.position = posFrgs.nodeJoin(tsp.word.slight_pause());
 				}
