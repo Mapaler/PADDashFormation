@@ -1826,6 +1826,7 @@ label[for="search-string"] {
 .rich-text .detail-mon .monster{
 	transform: scale(0.5);
 	margin: calc(-100px * (1 - 0.5) / 2);
+	pointer-events: none;
 }
 .custom-addition .detail-mon .monster{
 	transform: scale(0.35);
@@ -1853,11 +1854,15 @@ label[for="search-string"] {
 .rich-text .detail-mon{
 	width: 50px;
 	height: 50px;
+	user-select: none; /* 禁止文本选中 */
 }
 .rich-text .detail-mon .monster .id{
 	background-color: rgba(0,0,0,0.5);
 	padding: 2px;
 	font-size: 23px;
+}
+.rich-text .drag-able-icon {
+	cursor: grab;
 }
 /*搜索结果显示觉醒列表的相关css*/
 .awoken-preview .awoken-ul

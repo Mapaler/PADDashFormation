@@ -1245,15 +1245,15 @@ function cardN(id) {
 	monOuterDom.monDom.onclick = cardNClick
 	changeid({ id: id }, monDom);
 
-	function cardNClick(event) {
-		event?.preventDefault();
-		const monstersID = document.getElementById("card-id");
-		const formIdSearch = document.getElementById("form-id-search");
-		monstersID.value = this.getAttribute("data-cardid");
-		formIdSearch.onchange();
-		editBox.show();
-	}
 	return monOuterDom;
+}
+function cardNClick(event) {
+	event?.preventDefault();
+	const monstersID = document.getElementById("card-id");
+	const formIdSearch = document.getElementById("form-id-search");
+	monstersID.value = this.getAttribute("data-cardid");
+	formIdSearch.onchange();
+	editBox.show();
 }
 
 //产生队伍目标类型
@@ -1304,41 +1304,67 @@ function showSearchBySeriesId(sId, sType) {
 	}
 }
 
+function richTextCardNClick(){
+	this.querySelector(".monster").click();
+}
 //创建序号类图标
 function createIndexedIcon(type, index) {
+	const className = "drag-able-icon";
+	let icon;
 	if (type == 'card') {//卡片头像
-		const avatar = cardN(index);
-		avatar.contentEditable = false;
-		//avatar.monDom.setAttribute("onclick", "cardNClick.call(this);return false;")
-		return avatar;
-	}
-	const icon = document.createElement("icon");
-	icon.setAttribute("contenteditable", false);
-	//icon.contentEditable = false;
-	switch(type) {
-		case 'awoken': { //觉醒
-			icon.className = "awoken-icon";
-			icon.setAttribute("data-awoken-icon", index);
-			break;
-		}
-		case 'type': { //类型
-			icon.className = "type-icon";
-			icon.setAttribute("data-type-icon", index);
-			break;
-		}
-		case 'orb': { //宝珠
-			icon.className = "orb";
-			icon.setAttribute("data-orb-icon", index);
-			break;
-		}
-		case 'latent': { //潜觉
-			icon.className = `latent-icon`;
-			icon.setAttribute("data-latent-icon", index);
-			icon.setAttribute("data-latent-hole", 1);
-			break;
+		icon = cardN(index);
+		icon.onclick = richTextCardNClick;
+	} else {
+		icon = document.createElement("icon");
+		switch(type) {
+			case 'awoken': { //觉醒
+				icon.className = "awoken-icon";
+				icon.setAttribute("data-awoken-icon", index);
+				break;
+			}
+			case 'type': { //类型
+				icon.className = "type-icon";
+				icon.setAttribute("data-type-icon", index);
+				break;
+			}
+			case 'orb': { //宝珠
+				icon.className = "orb";
+				icon.setAttribute("data-orb-icon", index);
+				break;
+			}
+			case 'latent': { //潜觉
+				icon.className = `latent-icon`;
+				icon.setAttribute("data-latent-icon", index);
+				icon.setAttribute("data-latent-hole", 1);
+				break;
+			}
 		}
 	}
+	icon.classList.add(className);
+	icon.contentEditable = false;
+	icon.draggable = true;
+	icon.ondragstart = indexedIconOnDragStart;
+	icon.indexedIcon = {type, index}; //拖拽用的
 	return icon;
+}
+function indexedIconOnDragStart(event){
+	draggedNode = this; // 记录原始节点
+	event.dataTransfer.effectAllowed = 'copyMove';
+	event.dataTransfer.setData("indexed-icon", JSON.stringify(this.indexedIcon));
+}
+
+//获取光标插入点位置
+function getCaretRange(event) {
+	let range;
+	if (document.caretPositionFromPoint) {
+		const pos = document.caretPositionFromPoint(event.clientX, event.clientY);
+		range = document.createRange();
+		range.setStart(pos.offsetNode, pos.offset);
+	}
+	else if (document.caretRangeFromPoint) {
+		range = document.caretRangeFromPoint(event.clientX, event.clientY);
+	}
+	return range;
 }
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)

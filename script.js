@@ -18,6 +18,8 @@ let qrcodeReader; //二维码读取
 let qrcodeWriter; //二维码输出
 let selectedDeviceId; //视频源id
 
+let draggedNode = null; // 保存被拖动的原始节点
+
 const dataStructure = 5; //阵型输出数据的结构版本
 const cfgPrefix = "PADDF-"; //设置名称的前缀
 const className_displayNone = "display-none";
@@ -3742,16 +3744,53 @@ function initialize() {
 
 	//设置为可以拖放已经编辑好的队伍
 	function richTextDropHandler(event) {
-		let formStr = event.dataTransfer.getData('from');
-		if (formStr) {
+		//console.debug(event);
+
+		let isCopy = event.ctrlKey; //默认为按Ctrl是复制,不然是移动
+		if (controlBox.querySelector("#change-swap-to-copy").checked)
+			isCopy = !isCopy; //勾选后逆向操作
+		event.dataTransfer.dropEffect = isCopy ? 'copy' : 'move';
+		
+		let newIcon;
+		const formStr = event.dataTransfer.getData('from');
+		if (formStr) { //从队伍里拖下来的,需要重新创建怪物头像,强制复制
 			event.preventDefault();
+			isCopy = true;
+			event.dataTransfer.dropEffect = 'copy';
 			const [teamNum, isAssist, indexInTeam] = JSON.parse(formStr);
-			const mon = formation.teams[teamNum][isAssist][indexInTeam]
-			event.target.insertAdjacentElement('afterbegin', createIndexedIcon('card', mon.id));
-		} 
+			const mon = formation.teams[teamNum][isAssist][indexInTeam];
+			newIcon = createIndexedIcon('card', mon.id);
+		} else if (draggedNode) {
+			if (event.dataTransfer.dropEffect === 'move') {
+				newIcon = draggedNode;
+			} else {
+				//因为需要保留完整行为,所以不能直接用 cloneNode(true)
+				const indexed = event.dataTransfer.getData('indexed-icon');
+				const {type, index} = JSON.parse(indexed);
+				newIcon = createIndexedIcon(type, index);
+			}
+		}
+		// 重置引用
+		draggedNode = null;
+
+		if (newIcon) {
+			event.preventDefault();
+			const range = getCaretRange(event); //插入点
+			if (range) {
+				range.insertNode(newIcon);
+			} else {
+				event.target.insertAdjacentElement('afterbegin', newIcon);
+			}
+		}
 	}
 	txtTitleDisplay.ondrop = richTextDropHandler;
 	txtDetailDisplay.ondrop = richTextDropHandler;
+	txtTitleDisplay.ondragover = richTextDragOverHandler;
+	txtDetailDisplay.ondragover = richTextDragOverHandler;
+	//必须加上这个才可以内部拖动
+	function richTextDragOverHandler(event) {
+		event.preventDefault();
+	}
 
 	//这个写法的目的其实是为了确保添加顺序与1、2、3一致，即便打乱了顺序，也能正确添加
 	for (let ti = 0, ti_len = formationBox.querySelectorAll(".team-bigbox").length; ti < ti_len; ti++) {
@@ -3797,7 +3836,7 @@ function initialize() {
 	}
 	//编辑界面每个怪物的头像的放下
 	function dropMonHead(event) {
-		let formStr = event.dataTransfer.getData('from');
+		const formStr = event.dataTransfer.getData('from');
 		if (!formStr) return false;
 		const dataFrom = JSON.parse(formStr);
 		const dataTo = getMemberArrayIndexFromMonHead(this);
@@ -3882,7 +3921,7 @@ function initialize() {
 	}
 	function interchangeCard(formArr, toArr, isCopy) {
 		//优先使用传入的复制，然后才是考虑开关
-		isCopy = isCopy || controlBox.querySelector("#change-swap-to-copy").checked; //储存交换“复制”和“替换”
+		isCopy = isCopy ?? controlBox.querySelector("#change-swap-to-copy").checked; //储存交换“复制”和“替换”
 		const [fromTeamNum, fromIsAssist, fromIndexInTeam] = formArr;
 		const [toTeamNum, toIsAssist, toIndexInTeam] = toArr;
 
