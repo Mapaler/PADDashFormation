@@ -3755,12 +3755,14 @@ function initialize() {
 		const formStr = event.dataTransfer.getData('from');
 		if (formStr) { //从队伍里拖下来的,需要重新创建怪物头像,强制复制
 			event.preventDefault();
-			isCopy = true;
-			event.dataTransfer.dropEffect = 'copy';
 			const [teamNum, isAssist, indexInTeam] = JSON.parse(formStr);
 			const mon = formation.teams[teamNum][isAssist][indexInTeam];
 			newIcon = createIndexedIcon('card', mon.id);
 		} else if (draggedNode) {
+			if (richTextTools.contains(draggedNode)) {
+				isCopy = true;
+				event.dataTransfer.dropEffect = 'copy';
+			}
 			if (event.dataTransfer.dropEffect === 'move') {
 				newIcon = draggedNode;
 			} else {
