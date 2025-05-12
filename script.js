@@ -3773,7 +3773,7 @@ function initialize() {
 		// 重置引用
 		draggedNode = null;
 
-		if (newIcon) {
+		if (newIcon && !newIcon.contains(event.target)) {
 			event.preventDefault();
 			const range = getCaretRange(event); //插入点
 			if (range) {
@@ -3781,6 +3781,8 @@ function initialize() {
 			} else {
 				event.target.insertAdjacentElement('afterbegin', newIcon);
 			}
+
+			indexedIconFocusSelf.call(newIcon); //拖拽后选中，这里不传event，因为不希望这里的ctrl影响到移动或复制
 		}
 	}
 	txtTitleDisplay.ondrop = richTextDropHandler;

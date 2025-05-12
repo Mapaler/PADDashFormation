@@ -1854,7 +1854,7 @@ label[for="search-string"] {
 .rich-text .detail-mon{
 	width: 50px;
 	height: 50px;
-	user-select: none; /* 禁止文本选中 */
+	user-select: none;
 }
 .rich-text .detail-mon .monster .id{
 	background-color: rgba(0,0,0,0.5);
@@ -1863,6 +1863,20 @@ label[for="search-string"] {
 }
 .rich-text .drag-able-icon {
 	cursor: grab;
+	/* 禁止文本选中 */
+	user-select: none;
+}
+.rich-text .drag-able-icon * {
+	pointer-events: none;
+	user-select: none;
+}
+.rich-text .drag-able-icon:active,
+.rich-text .drag-able-icon:focus
+{
+	outline-width: 1px;
+	outline-offset: 2px;
+	outline-style: dotted;
+	outline-color: slateblue;
 }
 /*搜索结果显示觉醒列表的相关css*/
 .awoken-preview .awoken-ul

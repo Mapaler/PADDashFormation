@@ -1305,7 +1305,7 @@ function showSearchBySeriesId(sId, sType) {
 }
 
 function richTextCardNClick(){
-	this.querySelector(".monster").click();
+	this.querySelector(".monster").onclick();
 }
 //创建序号类图标
 function createIndexedIcon(type, index) {
@@ -1343,29 +1343,57 @@ function createIndexedIcon(type, index) {
 	icon.classList.add(className);
 	icon.contentEditable = false;
 	icon.draggable = true;
+	//icon.tabIndex = 0; // 为了让 :focus 生效
 	icon.ondragstart = indexedIconOnDragStart;
+	icon.addEventListener("click", indexedIconFocusSelf);
 	icon.indexedIcon = {type, index}; //拖拽用的
 	return icon;
 }
 function indexedIconOnDragStart(event){
-	draggedNode = this; // 记录原始节点
-	event.dataTransfer.effectAllowed = 'copyMove';
-	event.dataTransfer.setData("indexed-icon", JSON.stringify(this.indexedIcon));
+	if (event.dataTransfer) {
+		draggedNode = this; // 记录原始节点
+		event.dataTransfer.effectAllowed = 'copyMove';
+		event.dataTransfer.setData("indexed-icon", JSON.stringify(this.indexedIcon));
+	}
+}
+function indexedIconFocusSelf(event){
+	const selectRange = document.createRange();
+	const selection = window.getSelection();
+	if (!event?.ctrlKey) {
+		//调整为只选中节点开始的部位
+		selectRange.setEndBefore(this);
+		selectRange.setStartBefore(this);
+		// //调整为只选中节点结束的部位
+		// selectRange.setEndAfter(this);
+		// selectRange.setStartAfter(this);
+		selection.removeAllRanges();
+	}
+	else {
+		selectRange.selectNode(this); //按住Ctrl时选中整个节点
+	}
+	selection.addRange(selectRange);
 }
 
-//获取光标插入点位置
-function getCaretRange(event) {
-	let range;
+//获取光标插入点位置（惰性函数）
+const getCaretRange = (()=>{
 	if (document.caretPositionFromPoint) {
-		const pos = document.caretPositionFromPoint(event.clientX, event.clientY);
-		range = document.createRange();
-		range.setStart(pos.offsetNode, pos.offset);
+		return function(event){
+			const pos = document.caretPositionFromPoint(event.clientX, event.clientY);
+			const range = document.createRange();
+			range.setStart(pos.offsetNode, pos.offset);
+			return range;
+		}
 	}
 	else if (document.caretRangeFromPoint) {
-		range = document.caretRangeFromPoint(event.clientX, event.clientY);
+		return function(event){
+			const range = document.caretRangeFromPoint(event.clientX, event.clientY);
+			return range;
+		}
+	} else {
+		return ()=>{};
 	}
-	return range;
-}
+})();
+
 //将怪物的文字介绍解析为HTML
 function descriptionToHTML(str)
 {
