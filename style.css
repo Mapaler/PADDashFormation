@@ -268,7 +268,7 @@ label[for="siwtch-code-mode"]::after {
 	margin: calc(-36px * (1 - (32 / 36)) / 2);
 }
 #rich-text-tools>ul icon {
-	cursor: pointer;
+	cursor: grab;
 }
 #rich-text-tools>ul {
 	margin-top: 10px;
@@ -1826,7 +1826,6 @@ label[for="search-string"] {
 .rich-text .detail-mon .monster{
 	transform: scale(0.5);
 	margin: calc(-100px * (1 - 0.5) / 2);
-	pointer-events: none;
 }
 .custom-addition .detail-mon .monster{
 	transform: scale(0.35);
@@ -1861,17 +1860,16 @@ label[for="search-string"] {
 	padding: 2px;
 	font-size: 23px;
 }
-.rich-text .drag-able-icon {
+.rich-text .detail-mon .monster * {
+	pointer-events: none;
+}
+.rich-text [draggable="true"] {
 	cursor: grab;
 	/* 禁止文本选中 */
 	user-select: none;
 }
-.rich-text .drag-able-icon * {
-	pointer-events: none;
-	user-select: none;
-}
-.rich-text .drag-able-icon:active,
-.rich-text .drag-able-icon:focus
+.rich-text [draggable="true"]:active,
+.rich-text [draggable="true"]:focus
 {
 	outline-width: 1px;
 	outline-offset: 2px;

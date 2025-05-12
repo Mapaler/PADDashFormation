@@ -3779,9 +3779,26 @@ function initialize() {
 			event.preventDefault();
 			const range = getCaretRange(event); //插入点
 			if (range) {
+				let dragIcon = event?.target?.closest('.drag-able-icon');
+				if (dragIcon) { //如果插入点在另一个图标上，不允许放入，进行特殊处理
+					//被放置物体内放手时鼠标的位置，因为角色头像会被缩小1/2，但是X的值是原始大小的位置，所以这里要除2
+					const offsetX = event.offsetX  / (dragIcon.classList.contains("detail-mon") ? 2 : 1);
+					//被放置物体框的宽度
+					const clientWidth = dragIcon.clientWidth;
+					//再物体内左右的比例
+					const posPercentX = offsetX / clientWidth;
+					//比例小于1/2放到左边，大于1/2放到右边
+					if (posPercentX < 0.5) {
+						range.setStartBefore(dragIcon);
+						range.setEndBefore(dragIcon);
+					} else {
+						range.setStartAfter(dragIcon);
+						range.setEndAfter(dragIcon);
+					}
+				}
 				range.insertNode(newIcon);
 			} else {
-				event.target.insertAdjacentElement('afterbegin', newIcon);
+				event.target.insertAdjacentElement('beforeend', newIcon);
 			}
 
 			indexedIconFocusSelf.call(newIcon); //拖拽后选中，这里不传event，因为不希望这里的ctrl影响到移动或复制

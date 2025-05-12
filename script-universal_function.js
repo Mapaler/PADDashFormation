@@ -1247,10 +1247,10 @@ function cardN(id) {
 	const monOuterDom = document.createElement("span");
 	monOuterDom.className = "detail-mon";
 	const monDom = createCardA({noBoxCount: true});
-	monOuterDom.appendChild(monDom);
-	monOuterDom.monDom = monDom;
-	monOuterDom.monDom.onclick = cardNClick
+	monDom.onclick = cardNClick
 	changeid({ id: id }, monDom);
+	monOuterDom.monDom = monDom;
+	monOuterDom.appendChild(monDom);
 
 	return monOuterDom;
 }
@@ -1320,7 +1320,6 @@ function createIndexedIcon(type, index) {
 	let icon;
 	if (type == 'card') {//卡片头像
 		icon = cardN(index);
-		icon.onclick = richTextCardNClick;
 	} else {
 		icon = document.createElement("icon");
 		switch(type) {
