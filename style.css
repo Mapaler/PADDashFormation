@@ -176,10 +176,12 @@ label[for="screenshot-transparent"] {
 }
 
 #rich-text-tools {
-	background-color: rgba(200,200,200,0.5);
 	position: sticky;
+	left: 0;
 	bottom: 0;
-	margin-top: 10px;
+	box-sizing: border-box;
+	width: 100%;
+	background-color: rgba(200,200,200,0.5);
 	backdrop-filter: blur(3px);
 	padding: 5px;
 	user-select: none; /*让内容不可选中*/
@@ -1600,6 +1602,8 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .types-ul {
 	display: grid;
 	grid-auto-flow: column;
+	grid-auto-columns: max-content;
+	grid-gap: 4px;
 }
 /*队员觉醒统计*/
 .member-awoken,
@@ -1620,6 +1624,9 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	grid-auto-rows: 21px;
 	place-content: start center;
+}
+.member-types .types-ul {
+	grid-gap: 0;
 }
 .member-awoken .awoken-ul
 {

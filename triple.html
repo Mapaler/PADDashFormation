@@ -1382,20 +1382,23 @@ const teamsCount = 3;
 		</dialog>
 	</div>
 	<div id="rich-text-tools" class="display-none">
-		<button id="set-font-color" title="Set Font Color"></button><input id="color-chooser" type="color" title="Choose Font Color" />
-		<button id="insert-card-avatar" title="Insert Card Avatar">
-			<div class="monster" data-cardid="23" data-cards-pic-idx="1" data-cards-pic-x="2" data-cards-pic-y="2">
-				<div class="attrs">
-					<div class="attr" data-attr="0"></div>
+		<div id="rich-text-tools-contents"></div>
+		<div id="rich-text-tools-controls">
+			<button id="set-font-color" title="Set Font Color"></button><input id="color-chooser" type="color" title="Choose Font Color" />
+			<button id="insert-card-avatar" title="Insert Card Avatar">
+				<div class="monster" data-cardid="23" data-cards-pic-idx="1" data-cards-pic-x="2" data-cards-pic-y="2">
+					<div class="attrs">
+						<div class="attr" data-attr="0"></div>
+					</div>
 				</div>
-			</div>
-		</button>
-		<button id="insert-awoken-icon" title="Insert Awoken Icon"></button>
-		<button id="insert-latent-icon" title="Insert Latent Icon"></button>
-		<button id="insert-type-icon" title="Insert Type Icon"></button>
-		<button id="insert-orb-icon" title="Insert Orb Icon"></button>
-		<input type="checkbox" class="switch-ipt" id="siwtch-code-mode"><label for="siwtch-code-mode" title="Code Mode"></label>
-		<button id="hide-rich-text-tools" title="Close"></button>
+			</button>
+			<button id="insert-awoken-icon" title="Insert Awoken Icon"></button>
+			<button id="insert-latent-icon" title="Insert Latent Icon"></button>
+			<button id="insert-type-icon" title="Insert Type Icon"></button>
+			<button id="insert-orb-icon" title="Insert Orb Icon"></button>
+			<input type="checkbox" class="switch-ipt" id="siwtch-code-mode"><label for="siwtch-code-mode" title="Code Mode"></label>
+			<button id="hide-rich-text-tools" title="Close"></button>
+		</div>
 	</div>
 	<div class="edit-box display-none">
 		<div class="edit-box-title"><!--修改怪物--></div>

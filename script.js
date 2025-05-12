@@ -3420,7 +3420,7 @@ function initialize() {
 		icon.onclick = insertIconToText;
 		insertOrbList.appendChild(li);
 	}
-	richTextTools.append(
+	richTextTools.querySelector("#rich-text-tools-contents").append(
 		insertTypeIconList,
 		insertAwokenIconList,
 		insertLatentIconList,
