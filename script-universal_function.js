@@ -48,12 +48,13 @@ const localStorage_getBoolean = function(name, defaultValue = false) {
 	else return Boolean(Number(value));
 }
 
-// 将字符串转为二进制字符串
+// 将字符串转为 Blob
 String.prototype.toUTF8Blob = function() {
 	return new Blob([this.valueOf()], {
 		type: 'text/plain'
 	});
 }
+//将 Blob 转为 Base64
 Blob.prototype.toBase64 = function() {
 	return new Promise((resolve, reject) => {
 		const fileReader = new FileReader();
@@ -120,12 +121,12 @@ const Base64 = {
 	strToBase64: function(str) {
 		const encoder = new TextEncoder()
 		const view = encoder.encode(str);
-		const base64 = Base64.encodeFromUint8Array(view);
+		const base64 = view.toBase64(view);
 		return base64;
 	},
 	base64ToStr: function(base64) {
 		const decoder = new TextDecoder()
-		const view = Base64.decodeToUint8Array(base64);
+		const view = Uint8Array.fromBase64(base64);
 		const str = decoder.decode(view);
 		return str;
 	},

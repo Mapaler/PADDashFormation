@@ -4101,7 +4101,7 @@ function initialize() {
 			const t = document.body.querySelector('#template-team-awoken-effect');
 			const clone = document.importNode(t.content, true);
 
-			const akIcons = clone.querySelectorAll(".awoken-icon");
+			const akIcons = clone.querySelectorAll(":where(.awoken-icon,.latent-icon.show-enabling-awokwn)");
 			akIcons.forEach(icon=>{
 				icon.onmouseenter = highlightAwokenMemberForIcon;
 				icon.onmouseleave = removeAllHighlightOnAwokenMenber;
@@ -7197,20 +7197,48 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		targetValue.setAttribute(dataAttrName, count * 5);
 	}
 }
-function highlightAwokenMember(inputAwoken, teamDom) {
-	if (!teamDom) return; //每次只生效一个队伍，没有目标队伍就退出
+function highlightAwokenMember(event, teamIndex) {
+	if (teamIndex<0) return; //没有目标队伍就退出
+	const teamBox = formationBox.querySelector(`.teams .team-bigbox:nth-of-type(${teamIndex+1})`);
+	if (!teamBox) return; //没有目标队伍就退出
+	const icon = this;
 	const akId = (icon=>{
 		if (Number.isInteger(icon)) {
 			return icon;
 		} else if (icon instanceof HTMLElement && icon.hasAttribute("data-awoken-icon")) {
 			return parseInt(icon.getAttribute("data-awoken-icon"), 10);
+		} else if (icon instanceof HTMLElement && icon.hasAttribute("data-latent-icon")) {
+			const latentId = parseInt(icon.getAttribute("data-latent-icon"), 10);
+			switch(latentId) {
+				case 39: return 62; //豆荚破伤吸
+				case 40: return 20; //心横消转转
+				case 41: return 27; //U消禁消
+				case 46: return 45; //心追解云封
+				case 47: return 59; //心L SB+
+				case 48: return 60; //L解封武器
+				default: return;
+			}
 		} else {
 			throw new TypeError("输入的不是 整数 或者含 data-awoken-icon 的 HTML 元素");
 		}
-	})(inputAwoken);
+	})(icon);
+	if (!akId) return;
 	const eqak = equivalent_awoken.find(obj=>akId === obj.big || akId === obj.small);
 
-	const akIcons = [...teamDom.querySelectorAll(":where(.team-member-awoken,.team-assist-awoken) .awoken-icon")];
+	let findArea = [];
+	if (icon.classList.contains("latent-icon") && icon.hasAttribute("data-latent-icon")) {
+		const latentId = parseInt(icon.getAttribute("data-latent-icon"), 10);
+		formation.teams[teamIndex][0]
+			.forEach((member,idx)=>{
+				if (member.latent.includes(latentId)) {
+					findArea.push(...teamBox.querySelectorAll(`:where(.team-member-awoken,${latentId === 48 ? "" : ".team-assist-awoken"}) .member-awoken[data-index="${idx}"]`));
+				}
+			});
+	} else {
+		findArea.push(...teamBox.querySelectorAll(":where(.team-member-awoken,.team-assist-awoken)"));
+	}
+	
+	const akIcons = findArea.flatMap(node=>Array.from(node.querySelectorAll(".awoken-icon")));
 	akIcons.filter(icon=>{
 		const iconId = parseInt(icon?.dataset?.awokenIcon, 10);
 		return eqak ? (iconId === eqak.big || iconId === eqak.small) : iconId === akId;
@@ -7219,13 +7247,13 @@ function highlightAwokenMember(inputAwoken, teamDom) {
 }
 function highlightAwokenMemberForIcon(event) {
 	const teamBigBoxs = [...formationBox.querySelectorAll(".teams .team-bigbox")];
-	const teamBigBox = teamBigBoxs.find(box=>box.contains(this));
-	highlightAwokenMember(this, teamBigBox);
+	const teamIndex = teamBigBoxs.findIndex(box=>box.contains(this));
+	highlightAwokenMember.call(this, event, teamIndex);
 }
 function removeAllHighlightOnAwokenMenber() {
 	const teamBigBoxs = [...formationBox.querySelectorAll(".teams .team-bigbox")];
 	teamBigBoxs.forEach(teamDom=>{
-		const akIcons = [...teamDom.querySelectorAll(":where(.team-member-awoken,.team-assist-awoken) .awoken-icon")];
+		const akIcons = [...teamDom.querySelectorAll(":where(.team-member-awoken,.team-assist-awoken) .awoken-icon.hightlight")];
 		akIcons.forEach(icon=>icon.classList.remove("hightlight"));
 	});
 }
