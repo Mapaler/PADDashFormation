@@ -1227,6 +1227,11 @@ function copyString(input) {
 	});
 	//input.blur(); //取消焦点
 }
+function cardAOnDragStart(event){
+	if (event.dataTransfer) {
+		event.dataTransfer.setData("card-id", this.dataset.cardid);
+	}
+}
 //产生一个怪物头像
 function createCardA(option) {
 	const t = document.body.querySelector('#template-card-a');
@@ -1234,6 +1239,7 @@ function createCardA(option) {
 	const monster = clone.querySelector(".monster");
 	if (option?.noTreeCount) monster.querySelector(".count-in-box .evo-tree").remove();
 	if (option?.noBoxCount) monster.querySelector(".count-in-box").remove();
+	monster.ondragstart = cardAOnDragStart; //拖拽怪物头像时，记录怪物id到拖拽
 	return monster;
 }
 //返回文字说明内怪物Card的纯HTML

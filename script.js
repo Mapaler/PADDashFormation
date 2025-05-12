@@ -3744,18 +3744,16 @@ function initialize() {
 
 	//设置为可以拖放已经编辑好的队伍
 	function richTextDropHandler(event) {
-		//console.debug(event);
-
 		let isCopy = event.ctrlKey; //默认为按Ctrl是复制,不然是移动
 		if (controlBox.querySelector("#change-swap-to-copy").checked)
 			isCopy = !isCopy; //勾选后逆向操作
 		event.dataTransfer.dropEffect = isCopy ? 'copy' : 'move';
 		
 		let newIcon;
-		const formStr = event.dataTransfer.getData('from');
-		if (formStr) { //从队伍里拖下来的,需要重新创建怪物头像,强制复制
+		let dataFormStr, cardId;
+		if (dataFormStr = event.dataTransfer.getData('from')) { //从队伍里拖下来的,需要重新创建怪物头像,强制复制
 			event.preventDefault();
-			const [teamNum, isAssist, indexInTeam] = JSON.parse(formStr);
+			const [teamNum, isAssist, indexInTeam] = JSON.parse(dataFormStr);
 			const mon = formation.teams[teamNum][isAssist][indexInTeam];
 			newIcon = createIndexedIcon('card', mon.id);
 		} else if (draggedNode) {
@@ -3771,6 +3769,8 @@ function initialize() {
 				const {type, index} = JSON.parse(indexed);
 				newIcon = createIndexedIcon(type, index);
 			}
+		} else if (cardId = event.dataTransfer.getData('card-id')) {
+			newIcon = createIndexedIcon("card", parseInt(cardId, 10));
 		}
 		// 重置引用
 		draggedNode = null;
