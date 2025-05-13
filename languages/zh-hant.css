@@ -218,6 +218,9 @@ label[for="screenshot-transparent"]::after{
 .control-box .config-display-list summary::before{
 	content:"展示信息開關列表";
 }
+label[for="use-side-mode"]::after{
+	content:"編輯界面使用側欄模式";
+}
 label[for="show-card-id"]::after{
 	content:"卡片ID";
 }

@@ -217,6 +217,9 @@ label[for="screenshot-transparent"]::after{
 .control-box .config-display-list summary::before{
 	content:"Displayed Information Switchs List";
 }
+label[for="use-side-mode"]::after{
+	content:"Use side mode in edit interface";
+}
 label[for="show-card-id"]::after{
 	content:"Card's ID";
 }

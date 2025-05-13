@@ -216,7 +216,9 @@ label[for="screenshot-transparent"]::after{
 .control-box .config-display-list summary::before{
 	content:"情報表示内容の開閉器一覧";
 }
-
+label[for="use-side-mode"]::after{
+	content:"編集画面でサイドバーモードを使用";
+}
 label[for="show-card-id"]::after{
 	content:"カード番号";
 }

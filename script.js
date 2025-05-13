@@ -2636,11 +2636,10 @@ function initialize() {
 	// }
 
 
-	const drawScreenshot = document.querySelector("#draw-screenshot");
-	const screenshotTransparent = document.querySelector("#screenshot-transparent");
+	const drawScreenshot = document.getElementById("draw-screenshot");
 	drawScreenshot.onclick = function(event) {
 		if (event.target == this) {
-			captureScreenshot(formationBox, document.title, screenshotTransparent.checked);
+			captureScreenshot(formationBox, document.title, document.getElementById("screenshot-transparent").checked);
 		}
 	}
 
@@ -2710,6 +2709,13 @@ function initialize() {
 		return checkbox;
 	}
 	const displaySwitchList = Array.from(document.querySelectorAll(".config-display-list .switch-ipt"));
+
+	displaySwitchList.push(...[
+			// "screenshot-transparent",
+			// "change-swap-to-copy",
+			"use-side-mode",
+		].map(id=>document.getElementById(id))
+	);
 	displaySwitchList.forEach(initializeSwitch);
 
 	//默认等级
@@ -3844,7 +3850,9 @@ function initialize() {
 		const arr = getMemberArrayIndexFromMonHead(this);
 		editBox.editMon(arr[0], arr[1], arr[2]);
 		allMembers.forEach(member=>member.classList.remove("hightlight"));
-		this.classList.add("hightlight");
+		if (document.getElementById("use-side-mode").checked) {
+			this.classList.add("hightlight");
+		}
 		return false; //没有false将会打开链接
 	}
 	//编辑界面每个怪物的头像的拖动
@@ -4338,7 +4346,9 @@ function initialize() {
 	editBox.memberIdx = []; //储存队伍数组下标
 	editBox.show = function() {
 		this.classList.remove(className_displayNone);
-		document.body.classList.add("side-mode");
+		if (document.getElementById("use-side-mode").checked) {
+			document.body.classList.add("side-mode");
+		}
 		//解决SVG问题
 		// const activeSkillTitle = skillBox.querySelector("#active-skill-title");
 		// const evolvedSkillTitle = skillBox.querySelector("#evolved-skill-title");

@@ -81,6 +81,10 @@ const teamsCount = 2;
 		</div>
 		<details class="config-display-list">
 			<summary></summary>
+			<div class="setting">
+				<label for="default-level"></label><input id="default-level" type="number" min="1" max="120" placeholder="120"/>
+				<input type="checkbox" id="use-side-mode"><label for="use-side-mode"></label>
+			</div>
 			<div class="in-card">
 				<div class="monster allowable-assist" title="No.99999 博丽灵梦">
 					<div class="attrs">
@@ -103,14 +107,16 @@ const teamsCount = 2;
 					<input type="checkbox" class="switch-ipt" id="show-member-skill-cd"><label for="show-member-skill-cd"></label>
 				</div>
 			</div>
-			<input type="checkbox" class="switch-ipt" id="show-member-ability"><label for="show-member-ability"></label>
-			<input type="checkbox" class="switch-ipt" id="show-member-types"><label for="show-member-types"></label>
-			<input type="checkbox" class="switch-ipt" id="show-member-awoken"><label for="show-member-awoken"></label>
-			<input type="checkbox" class="switch-ipt" id="show-team-total-info"><label for="show-team-total-info"></label>
-			<input type="checkbox" class="switch-ipt" id="show-team-attrtype-count"><label for="show-team-attrtype-count"></label>
-			<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label for="show-team-awoken-effect"></label>
-			<input type="checkbox" class="switch-ipt" id="show-meter"><label for="show-meter"></label>
-			<input type="checkbox" class="switch-ipt" id="show-team-awoken-count"><label for="show-team-awoken-count"></label>
+			<div class="in-team">
+				<input type="checkbox" class="switch-ipt" id="show-member-ability"><label for="show-member-ability"></label>
+				<input type="checkbox" class="switch-ipt" id="show-member-types"><label for="show-member-types"></label>
+				<input type="checkbox" class="switch-ipt" id="show-member-awoken"><label for="show-member-awoken"></label>
+				<input type="checkbox" class="switch-ipt" id="show-team-total-info"><label for="show-team-total-info"></label>
+				<input type="checkbox" class="switch-ipt" id="show-team-attrtype-count"><label for="show-team-attrtype-count"></label>
+				<input type="checkbox" class="switch-ipt" id="show-team-awoken-effect"><label for="show-team-awoken-effect"></label>
+				<input type="checkbox" class="switch-ipt" id="show-meter"><label for="show-meter"></label>
+				<input type="checkbox" class="switch-ipt" id="show-team-awoken-count"><label for="show-team-awoken-count"></label>
+			</div>
 		</details>
 		<div class="status"></div>
 		<div class="formation-control">

@@ -212,6 +212,9 @@ label[for="screenshot-transparent"]::after{
 .control-box .config-display-list summary::before{
 	content:"표시된 정보 전환 목록";
 }
+label[for="use-side-mode"]::after{
+	content:"편집 인터페이스에서 사이드바 모드 사용";
+}
 label[for="show-card-id"]::after{
 	content:"카드 ID";
 }
