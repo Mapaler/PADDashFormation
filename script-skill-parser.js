@@ -1683,7 +1683,7 @@ const skillObjectParsers = {
 			}
 			case 2: {
 				width = 5;
-				height = 3;
+				height = 4;
 				break;
 			}
 			case 3: {
