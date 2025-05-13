@@ -1290,23 +1290,24 @@ function createTeamFlags(target, type)
 	return ul;
 }
 
-function showSearchBySeriesId(sId, sType) {
+function searchBySeriesId(sId, sType) {
 	switch (sType) {
 		case "collab": {//合作
-			if (!Number.isInteger(sId)) sId = parseInt(sId, 10);
-			showSearch(Cards.filter(card => card.collabId == sId));
-			break;
+			if (!Number.isInteger(sId))
+				sId = parseInt(sId, 10);
+			return Cards.filter(card => card.collabId == sId);
 		}
 		case "gacha": {//桶，是数组
-			if (!sId.every(id=>Number.isInteger(id))) sId = sId,map(id=>parseInt(id, 10));
-			showSearch(sId.flatMap(gachaId=>Cards.filter(card => card.gachaIds.includes(gachaId))));
-			break;
+			if (!sId.every(id=>Number.isInteger(id)))
+				sId = sId.map(id=>parseInt(id, 10));
+			return sId.flatMap(gachaId=>
+				Cards.filter(card => card.gachaIds.includes(gachaId)));
 		}
 		case "series":
 		default: { //系列
-			if (!Number.isInteger(sId)) sId = parseInt(sId, 10);
-			showSearch(Cards.filter(card => card.seriesId == sId));
-			break;
+			if (!Number.isInteger(sId))
+				sId = parseInt(sId, 10);
+			return Cards.filter(card => card.seriesId == sId);
 		}
 	}
 }

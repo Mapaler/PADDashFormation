@@ -3506,7 +3506,7 @@ function initialize() {
 	}
 	colorChooser.onchange(false);
 	//添加头像图标
-	insertCardAvatar.onclick = insertIconToText
+	insertCardAvatar.onclick = insertIconToText;
 	//添加其他序号图标
 	function insertIconToText() {
 		//如果并没有任何选择区，则返回
@@ -3750,7 +3750,7 @@ function initialize() {
 		event.dataTransfer.dropEffect = isCopy ? 'copy' : 'move';
 		
 		let newIcon;
-		let dataFormStr, cardId;
+		let dataFormStr, dataCardId;
 		if (dataFormStr = event.dataTransfer.getData('from')) { //从队伍里拖下来的,需要重新创建怪物头像,强制复制
 			event.preventDefault();
 			const [teamNum, isAssist, indexInTeam] = JSON.parse(dataFormStr);
@@ -3769,8 +3769,8 @@ function initialize() {
 				const {type, index} = JSON.parse(indexed);
 				newIcon = createIndexedIcon(type, index);
 			}
-		} else if (cardId = event.dataTransfer.getData('card-id')) {
-			newIcon = createIndexedIcon("card", parseInt(cardId, 10));
+		} else if (dataCardId = event.dataTransfer.getData('card-id')) {
+			newIcon = createIndexedIcon("card", parseInt(dataCardId, 10));
 		}
 		// 重置引用
 		draggedNode = null;
@@ -3843,6 +3843,8 @@ function initialize() {
 	function clickMonHead(e) {
 		const arr = getMemberArrayIndexFromMonHead(this);
 		editBox.editMon(arr[0], arr[1], arr[2]);
+		allMembers.forEach(member=>member.classList.remove("hightlight"));
+		this.classList.add("hightlight");
 		return false; //没有false将会打开链接
 	}
 	//编辑界面每个怪物的头像的拖动
@@ -3857,17 +3859,27 @@ function initialize() {
 	}
 	//编辑界面每个怪物的头像的放下
 	function dropMonHead(event) {
-		const formStr = event.dataTransfer.getData('from');
-		if (!formStr) return false;
-		const dataFrom = JSON.parse(formStr);
-		const dataTo = getMemberArrayIndexFromMonHead(this);
+		event.preventDefault();
+		let dataFormStr, dataCardId;
+		if (dataFormStr = event.dataTransfer.getData('from')) {
+			//从队伍里拖过来的，进行交换
+			const dataFrom = JSON.parse(dataFormStr);
+			const dataTo = getMemberArrayIndexFromMonHead(this);
 
-		if ((dataTo[0] !== dataFrom[0]) ||
-			(dataTo[1] !== dataFrom[1]) ||
-			(dataTo[2] !== dataFrom[2])) { //必须有所不同才继续交换
-			interchangeCard(dataFrom, dataTo, event.ctrlKey);
+			if ((dataTo[0] !== dataFrom[0]) ||
+				(dataTo[1] !== dataFrom[1]) ||
+				(dataTo[2] !== dataFrom[2])) { //必须有所不同才继续交换
+				interchangeCard(dataFrom, dataTo, event.ctrlKey);
+			}
 		}
-		return false; //没有false将会打开链接
+		else if (dataCardId = event.dataTransfer.getData('card-id')) {
+			const cardId = parseInt(dataCardId, 10);
+			const arr = getMemberArrayIndexFromMonHead(this);
+			formation.teams[arr[0]][arr[1]][arr[2]].id = cardId;
+			createNewUrl(); //刷新URL
+			refreshAll(formation);
+		}
+		return false;
 	}
 	
 	function noDefaultEvent(event) {
@@ -4326,6 +4338,7 @@ function initialize() {
 	editBox.memberIdx = []; //储存队伍数组下标
 	editBox.show = function() {
 		this.classList.remove(className_displayNone);
+		document.body.classList.add("side-mode");
 		//解决SVG问题
 		// const activeSkillTitle = skillBox.querySelector("#active-skill-title");
 		// const evolvedSkillTitle = skillBox.querySelector("#evolved-skill-title");
@@ -4336,6 +4349,8 @@ function initialize() {
 	};
 	editBox.hide = function() {
 		this.classList.add(className_displayNone);
+		document.body.classList.remove("side-mode");
+		allMembers.forEach(member=>member.classList.remove("hightlight"));
 		// if (isGuideMod) {
 		// 	const url = new URL(location);
 		// 	url.searchParams.delete("guide");
@@ -4360,14 +4375,14 @@ function initialize() {
 	mSeriesId.onclick = function() { //搜索系列
 		const sid = parseInt(this.getAttribute(dataAttrName), 10);
 		if (sid > 0) {
-			showSearchBySeriesId(sid, "series");
+			showSearch(searchBySeriesId(sid, "series"));
 		}
 	};
 	const mCollabId = monInfoBox.querySelector(".monster-collabId");
 	mCollabId.onclick = function() { //搜索合作
 		const sid = parseInt(this.getAttribute(dataAttrName), 10);
 		if (sid > 0) {
-			showSearchBySeriesId(sid, "collab");
+			showSearch(searchBySeriesId(sid, "collab"));
 		}
 	};
 	const mGachaId = monInfoBox.querySelector(".monster-gachaId");
@@ -4375,7 +4390,7 @@ function initialize() {
 		const sids = this.getAttribute(dataAttrName).split(',')
 					 .filter(Boolean).map(n=>parseInt(n, 10));
 		if (sids.length) {
-			showSearchBySeriesId(sids, "gacha");
+			showSearch(searchBySeriesId(sids, "gacha"));
 		}
 	};
 	//以字符串搜索窗口
@@ -6509,7 +6524,7 @@ function refreshAll(formationData) {
 			function searchCollab(event) {
 				event.preventDefault();
 				const collabId = parseInt(this.getAttribute(dataAttrName), 10);
-				showSearchBySeriesId(collabId, "collab");
+				showSearch(searchBySeriesId(collabId, "collab"));
 				return false;
 			}
 			const fragment = dge.collabs.map(id=>{
@@ -6530,7 +6545,7 @@ function refreshAll(formationData) {
 				const sids = this.getAttribute(dataAttrName).split(',')
 							 .filter(Boolean).map(n=>parseInt(n, 10));
 				if (sids.length) {
-					showSearchBySeriesId(sids, "gacha");
+					showSearch(searchBySeriesId(sids, "gacha"));
 				}
 				return false;
 			}
