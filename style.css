@@ -362,7 +362,7 @@ label[for="siwtch-code-mode"]::after {
 	word-break: keep-all;
 	white-space:nowrap;
 }
-.guide-mod .control-box>div.status
+body:where(.guide-mod,.side-mode) .control-box>div.status
 {
 	display: block;
 }
@@ -518,14 +518,9 @@ body.block-width-7 .formation-box{
 	body.side-mode>.edit-box {
 		position: inherit;
 		grid-column: 2;
-		background-color: rgb(102, 73, 50);
-		backdrop-filter: unset;
-	}
-	body.side-mode>.edit-box::backdrop{
-		filter: unset;
 	}
 	body.side-mode #rich-text-tools {
-		z-index: 1;
+		z-index: 6;
 	}
 }
 
@@ -1719,11 +1714,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 .edit-box::backdrop{
 	filter: blur(5px);
 }
-.guide-mod .edit-box{
+body:where(.guide-mod,.side-mode) .edit-box{
 	background-color: rgb(102, 73, 50);
 	backdrop-filter: unset;
 }
-.guide-mod .edit-box::backdrop{
+body:where(.guide-mod,.side-mode) .edit-box::backdrop{
 	filter: unset;
 }
 .edit-box-title{
@@ -2607,13 +2602,14 @@ input[disabled]+.awoken-icon:active,
 	grid-column: 5 / 6;
 }
 /*图鉴模式使用粘性定位*/
-.guide-mod .sticky-box {
+body:where(.guide-mod,.side-mode) .sticky-box{
 	position: sticky;
 	top: 0;
 	z-index: 2;
 }
 /*图鉴模式默认高度为30%设备高度，可修改大小*/
-.search-mon-list{
+.search-mon-list
+{
 	overflow: auto;
 	height: 30vh;
 	resize: vertical;
