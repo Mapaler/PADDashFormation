@@ -3364,7 +3364,7 @@ function initialize() {
 		}
 	}
 
-	let docSelection = document.getSelection();
+	const docSelection = document.getSelection();
 	//标题和介绍文本框
 	const titleBox = formationBox.querySelector(".title-box");
 	const detailBox = formationBox.querySelector(".detail-box");
@@ -3398,25 +3398,25 @@ function initialize() {
 
 	for (let id of official_awoken_sorting) {
 		const li = document.createElement("li");
-		const icon = li.appendChild(createIndexedIcon('awoken', id));
+		const icon = li.appendChild(createIndexedIcon('awoken', id, true));
 		icon.onclick = insertIconToText;
 		insertAwokenIconList.appendChild(li);
 	}
 	for (let id of Array.from(editBox.querySelectorAll(".setting-box .row-mon-latent details .m-latent-allowable-ul .latent-icon")).map(li=>li.getAttribute("data-latent-icon"))) {
 		const li = document.createElement("li");
-		const icon = li.appendChild(createIndexedIcon('latent', id));
+		const icon = li.appendChild(createIndexedIcon('latent', id, true));
 		icon.onclick = insertIconToText;
 		insertLatentIconList.appendChild(li);
 	}
 	for (let obj of typekiller_for_type) {
 		const li = document.createElement("li");
-		const icon = li.appendChild(createIndexedIcon('type', obj.type));
+		const icon = li.appendChild(createIndexedIcon('type', obj.type, true));
 		icon.onclick = insertIconToText;
 		insertTypeIconList.appendChild(li);
 	}
 	for (let i=0;i<10;i++) {
 		const li = document.createElement("li");
-		const icon = li.appendChild(createIndexedIcon('orb', i));
+		const icon = li.appendChild(createIndexedIcon('orb', i, true));
 		icon.onclick = insertIconToText;
 		insertOrbList.appendChild(li);
 	}
@@ -5754,7 +5754,7 @@ function initialize() {
 		}
 		else
 		{
-			let selection = window.getSelection(), selectNodes = selection?.focusNode?.childNodes;
+			let selection = docSelection, selectNodes = selection?.focusNode?.childNodes;
 			//如果正在编辑文本，则不执行快捷键操作
 			if (selectNodes && Array.from(selectNodes).some(node=>node?.nodeName === "TEXTAREA" || node?.nodeName === "INPUT"))
 				return;

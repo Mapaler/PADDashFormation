@@ -1315,7 +1315,7 @@ function richTextCardNClick(){
 	this.querySelector(".monster").onclick();
 }
 //创建序号类图标
-function createIndexedIcon(type, index) {
+function createIndexedIcon(type, index, noFocus = false) {
 	const className = "drag-able-icon";
 	let icon;
 	if (type == 'card') {//卡片头像
@@ -1351,7 +1351,7 @@ function createIndexedIcon(type, index) {
 	icon.draggable = true;
 	//icon.tabIndex = 0; // 为了让 :focus 生效
 	icon.ondragstart = indexedIconOnDragStart;
-	icon.addEventListener("click", indexedIconFocusSelf);
+	if (!noFocus) icon.addEventListener("click", indexedIconFocusSelf);
 	icon.indexedIcon = {type, index}; //拖拽用的
 	return icon;
 }
@@ -1364,7 +1364,7 @@ function indexedIconOnDragStart(event){
 }
 function indexedIconFocusSelf(event){
 	const selectRange = document.createRange();
-	const selection = window.getSelection();
+	const selection = document.getSelection();
 	if (!event?.ctrlKey) {
 		//调整为只选中节点开始的部位
 		selectRange.setEndBefore(this);
