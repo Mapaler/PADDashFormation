@@ -1712,6 +1712,7 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	width:100%;
 	box-sizing: border-box;
 	min-width:664px;
+	z-index: 5;
 	
 	backdrop-filter: blur(5px);
 }

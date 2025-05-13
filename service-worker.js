@@ -48267,7 +48267,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"373f78144c5116b5d3f6ead65a7b5b4f"
+		"464f3861e773979998d6fb98428af666"
 	],
 	[
 		"script-custom_elements.js",
@@ -48279,19 +48279,19 @@ const cachesMap = new Map([
 	],
 	[
 		"script-skill-parser.js",
-		"bd6a5a83d0deed2d45322fa4b09babe0"
+		"8f36a12a93a4cfedaa39476ce1bb4c96"
 	],
 	[
 		"script-universal_function.js",
-		"89578559749c3ed863cfdd28dc9659a0"
+		"d96b6d18c7e312f121746402ecd57f0d"
 	],
 	[
 		"script.js",
-		"ba49d4bf3c347197e846e7810c8e83b0"
+		"b471d517217cef5c4ea2459cfae21b28"
 	],
 	[
 		"solo.html",
-		"2f93d00b4479373f9c6c59ea47a9f530"
+		"7430477da7cf8ff47951400f7152b8a1"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -48299,11 +48299,11 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"6005ab9877e1c20b47c0968cccbf9a4b"
+		"1c434389b1582206afcb287bf45f88b3"
 	],
 	[
 		"style.css",
-		"42309adedf30e1958ef988806256b488"
+		"9fe95f6bea2b9f29d1157cb6a625a4c6"
 	],
 	[
 		"temp.js",
@@ -48311,11 +48311,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"eb90f2884fc54ef297f223485584b4e3"
+		"ab8237be0d312096c54ed25859aa02fa"
 	],
 	[
 		"languages/en.css",
-		"e56cd1673fb38271beef4140253fac99"
+		"44feff889ee52648f53d2af42e99f78e"
 	],
 	[
 		"languages/en.js",
@@ -48323,7 +48323,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"65e6262c2def7c2f0aab139e944e03c3"
+		"9a6f16441b0e47be39d397e9e6a5e296"
 	],
 	[
 		"languages/ja.js",
@@ -48331,7 +48331,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"e48eb69533c76d4634319e278f0e8576"
+		"c0b7a6ffbe89d0936733c1214f99b5ae"
 	],
 	[
 		"languages/ko.js",
@@ -48343,7 +48343,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.css",
-		"381d81c3b8759c84a86fab1afc53b58b"
+		"46bfd4418135b078788094f749e33373"
 	],
 	[
 		"languages/zh-hans.js",
@@ -48351,7 +48351,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.css",
-		"1badddc2e94c1ba143ba2092c4caff9b"
+		"6d01e57287e6a77c1511bdc4fcfdce91"
 	],
 	[
 		"languages/zh-hant.js",
