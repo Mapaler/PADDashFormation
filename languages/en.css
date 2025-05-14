@@ -220,6 +220,9 @@ label[for="screenshot-transparent"]::after{
 label[for="use-side-mode"]::after{
 	content:"Use side mode in edit interface";
 }
+label[for="use-sticky"]::after{
+	content:"Use sticky position in edit interface";
+}
 label[for="show-card-id"]::after{
 	content:"Card's ID";
 }

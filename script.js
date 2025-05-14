@@ -2697,23 +2697,26 @@ function initialize() {
 	//设定初始的显示设置
 	//初始化开关
 	function initializeSwitch(checkbox) {
-		//开关设置的快速保存
-		function switchFastSave(event) {
-			document.body.classList.toggle(this.id, this.checked);
-			if (event instanceof Event) localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
-		}
 		if (!checkbox) return;
 		checkbox.onchange = switchFastSave;
-		checkbox.checked = localStorage_getBoolean(cfgPrefix + checkbox.id, true);
+		checkbox.checked = localStorage_getBoolean(cfgPrefix + checkbox.id, Boolean(Number(checkbox.dataset.default ?? 1)));
 		checkbox.onchange(false);
 		return checkbox;
+	}
+	//开关设置的快速保存
+	function switchFastSave(event) {
+		if (!Boolean(Number(this.dataset.noClass)))
+			document.body.classList.toggle(this.id, this.checked);
+		if (event instanceof Event)
+			localStorage.setItem(cfgPrefix + this.id, Number(this.checked));
 	}
 	const displaySwitchList = Array.from(document.querySelectorAll(".config-display-list .switch-ipt"));
 
 	displaySwitchList.push(...[
-			// "screenshot-transparent",
-			// "change-swap-to-copy",
+			"screenshot-transparent",
+			"change-swap-to-copy",
 			"use-side-mode",
+			"use-sticky",
 		].map(id=>document.getElementById(id))
 	);
 	displaySwitchList.forEach(initializeSwitch);
@@ -5460,7 +5463,8 @@ function initialize() {
 		awokenCountLabel.setAttribute(dataAttrName, value);
 		awokenCountLabel.classList.toggle("full-awoken", value > 0 && value == card?.awakenings?.length);
 
-		reCalculateAbility();
+		editBox.reCalculateAbility(); //重计算三维
+		editBox.refreshLatent(); //刷新潜觉
 	}
 	monEditAwokens.forEach(akDom => akDom.onclick = checkAwoken);
 
@@ -5478,7 +5482,9 @@ function initialize() {
 	const mSAwokenIcon = monEditOuterAwokensRow.querySelector("#current-super-awoken-icon");
 	mSAwokenIcon.onclick = function(){
 		this.setAttribute("data-awoken-icon", 0);
-		reCalculateAbility();
+
+		editBox.reCalculateAbility(); //重计算三维
+		editBox.refreshLatent(); //刷新潜觉
 	}
 
 	//3个快速设置this.ipt为自己的value
@@ -5491,8 +5497,9 @@ function initialize() {
 	//等级
 	const monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.onchange = function() {
-		reCalculateExp();
-		reCalculateAbility();
+		editBox.reCalculateExp();
+		editBox.reCalculateAbility(); //重计算三维
+		editBox.refreshLatent(); //刷新潜觉
 	};
 	const monEditLvMin = settingBox.querySelector(".m-level-btn-min");
 	const monLvExp = settingBox.querySelector(".m-level-exp");
@@ -5555,8 +5562,8 @@ function initialize() {
 	monEditLatentAllowableDetail.onclick = function(event) {
 		if (event instanceof Event) localStorage.setItem(cfgPrefix + 'hide-latent', Number(!this.open));
 	}
-	editBox.refreshLatent = function(latent, monid) {//刷新潜觉
-		refreshLatent(latent, new Member(monid), monEditLatentUl);
+	editBox.refreshLatent = function() {//刷新潜觉
+		refreshLatent(this.latent, this.getCurrentMember(), monEditLatentUl);
 	};
 
 	const rowSkill = settingBox.querySelector(".row-mon-skill");
@@ -5640,7 +5647,7 @@ function initialize() {
 		{
 			editBox.latent.splice(aIdx, 1);
 			editBox.reCalculateAbility(); //重计算三维
-			editBox.refreshLatent(editBox.latent, editBox.mid); //刷新潜觉
+			editBox.refreshLatent(); //刷新潜觉
 		}
 	}
 	monEditLatents.forEach(la => la.onclick = deleteLatent);
@@ -5658,7 +5665,7 @@ function initialize() {
 			return;
 
 		editBox.reCalculateAbility();
-		editBox.refreshLatent(editBox.latent, editBox.mid);
+		editBox.refreshLatent();
 	}
 	monEditLatentsAllowable.forEach(la => la.onclick = addLatent);
 
@@ -5697,6 +5704,7 @@ function initialize() {
 	editBox.reCalculateAbility = reCalculateAbility;
 
 	const btnCancel = editBox.querySelector(".button-cancel");
+	const btnClose = editBox.querySelector(".edit-box-title .mask-close");
 	const btnDone = editBox.querySelector(".button-done");
 	const btnNull = editBox.querySelector(".button-null");
 	const btnDelay = editBox.querySelector(".button-delay");
@@ -5706,23 +5714,13 @@ function initialize() {
 		editBox.memberIdx = [];
 		editBox.hide();
 	};
-	btnDone.onclick = function() {
-		if (parseInt(monEditLv.value, 10) == 0) {
-			btnNull.onclick();
-			return;
-		}
+	btnClose.onclick = btnCancel.onclick;
+	editBox.getCurrentMember = function(){
 		const mon = editBox.isAssist ? new MemberAssist() : new MemberTeam();
-		const [teamIdx, isAssist, memberIdx] = editBox.memberIdx;
-		const teamData = formation.teams[teamIdx];
-		const teamBigBox = teamBigBoxs[teamIdx];
-		const teamBox = teamBigBox.querySelector(".team-box");
-
 		mon.id = editBox.mid;
 		const card = mon.card || Cards[0];
 		const skill = Skills[card.activeSkillId];
-
 		mon.level = parseInt(monEditLv.value, 10);
-
 		const mAwokenNumIpt = monEditAwokensRow.querySelector("input[name='awoken-number']:checked");
 		mon.awoken = mAwokenNumIpt ? parseInt(mAwokenNumIpt.value, 10) : 0;
 		if (card.superAwakenings.length) //如果支持超觉醒
@@ -5746,7 +5744,19 @@ function initialize() {
 		if (skillLevelNum < skill.maxLevel) {
 			mon.skilllevel = skillLevelNum;
 		}
+		return mon;
+	}
+	btnDone.onclick = function() {
+		if (parseInt(monEditLv.value, 10) == 0) {
+			btnNull.onclick();
+			return;
+		}
+		const [teamIdx, isAssist, memberIdx] = editBox.memberIdx;
+		const teamData = formation.teams[teamIdx];
+		// const teamBigBox = teamBigBoxs[teamIdx];
+		// const teamBox = teamBigBox.querySelector(".team-box");
 
+		const mon = editBox.getCurrentMember();
 		teamData[isAssist][memberIdx] = mon;
 
 		refreshAll(formation);
@@ -6191,17 +6201,17 @@ function editMember(teamNum, isAssist, indexInTeam) {
 	const btnDelay = editBox.querySelector(".button-box .button-delay");
 	if (!isAssist) {
 		editBox.latent = mon.latent ? mon.latent.concat() : [];
-		editBox.refreshLatent(editBox.latent, mon.id);
 	}
 	rowMonLatent.classList.toggle(className_displayNone, isAssist);;
 	editBoxTitle.classList.toggle("edit-box-title-assist", isAssist);;
 	btnDelay.classList.toggle(className_displayNone, !isAssist);;
-
-	editBox.reCalculateExp();
+	
 	if (mon.awoken !== undefined && monEditAwokens[mon.awoken])
 		monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下
-	else
-		editBox.reCalculateAbility();
+
+	editBox.reCalculateExp();
+	editBox.reCalculateAbility();
+	editBox.refreshLatent();
 	
 	//自动选中ID狂，以方便修改
 	//monstersID.focus();
@@ -6360,6 +6370,7 @@ function editBoxChangeMonId(id) {
 		// 	}
 		// }
 		editBox.reCalculateAbility();
+		editBox.refreshLatent(); //刷新潜觉
 	}
 	//怪物没有超觉醒时隐藏超觉醒
 	const monEditCurrentSAwokenRow = monEditOuterAwokensRow.querySelector(".current-super-awoken");
@@ -6493,7 +6504,7 @@ function editBoxChangeMonId(id) {
 
 	//去除所有不能再打的潜觉
 	editBox.latent = editBox.latent.filter(lat => allowLatent.includes(lat));
-	editBox.refreshLatent(editBox.latent, id);
+	editBox.refreshLatent();
 	editBox.reCalculateExp();
 	editBox.reCalculateAbility();
 }

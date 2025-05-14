@@ -215,6 +215,9 @@ label[for="screenshot-transparent"]::after{
 label[for="use-side-mode"]::after{
 	content:"편집 인터페이스에서 사이드바 모드 사용";
 }
+label[for="use-sticky"]::after{
+	content:"편집 인터페이스에서 스티키 포지셔닝 사용";
+}
 label[for="show-card-id"]::after{
 	content:"카드 ID";
 }

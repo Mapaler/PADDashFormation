@@ -74,16 +74,15 @@ const teamsCount = 2;
 		</div>
 		<div>
 			<button id="draw-screenshot"></button>
-			<input type="checkbox" id="screenshot-transparent"><label for="screenshot-transparent"></label>
-
-			<label for="default-level"></label><input id="default-level" type="number" min="1" max="120" placeholder="120"/>
-			<input type="checkbox" name="change-swap-to-copy" id="change-swap-to-copy"><label for="change-swap-to-copy"></label>
+			<input type="checkbox" id="screenshot-transparent" data-no-class="1" data-default="0"><label for="screenshot-transparent"></label>
+			<input type="checkbox" id="change-swap-to-copy" data-no-class="1" data-default="0"><label for="change-swap-to-copy"></label>
 		</div>
 		<details class="config-display-list">
 			<summary></summary>
 			<div class="setting">
 				<label for="default-level"></label><input id="default-level" type="number" min="1" max="120" placeholder="120"/>
-				<input type="checkbox" id="use-side-mode"><label for="use-side-mode"></label>
+				<input type="checkbox" id="use-side-mode" data-no-class="1"><label for="use-side-mode"></label>
+				<input type="checkbox" class="switch-ipt" id="use-sticky"><label for="use-sticky"></label>
 			</div>
 			<div class="in-card">
 				<div class="monster allowable-assist" title="No.99999 博丽灵梦">

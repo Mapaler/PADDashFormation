@@ -219,6 +219,9 @@ label[for="screenshot-transparent"]::after{
 label[for="use-side-mode"]::after{
 	content:"編集画面でサイドバーモードを使用";
 }
+label[for="use-sticky"]::after{
+	content:"編集画面でスティッキー位置を使用する";
+}
 label[for="show-card-id"]::after{
 	content:"カード番号";
 }

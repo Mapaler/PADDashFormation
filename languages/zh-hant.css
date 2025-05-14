@@ -221,6 +221,9 @@ label[for="screenshot-transparent"]::after{
 label[for="use-side-mode"]::after{
 	content:"編輯界面使用側欄模式";
 }
+label[for="use-sticky"]::after{
+	content:"編輯界面使用黏性定位";
+}
 label[for="show-card-id"]::after{
 	content:"卡片ID";
 }

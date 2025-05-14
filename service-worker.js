@@ -48267,7 +48267,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"464f3861e773979998d6fb98428af666"
+		"4dc8cd2afb23f7b42f7796bd88365a8e"
 	],
 	[
 		"script-custom_elements.js",
@@ -48287,11 +48287,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"b471d517217cef5c4ea2459cfae21b28"
+		"ce3ec6865c12a5415c589d8d1bfbfaae"
 	],
 	[
 		"solo.html",
-		"7430477da7cf8ff47951400f7152b8a1"
+		"a9bca8e47616043f5c62851d3dc456e1"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -48303,7 +48303,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"9fe95f6bea2b9f29d1157cb6a625a4c6"
+		"5e09384e7d8e3bfd20885455bacc2c7a"
 	],
 	[
 		"temp.js",
@@ -48311,11 +48311,11 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"ab8237be0d312096c54ed25859aa02fa"
+		"4cf1fb7c421aa5ec74b2610bdb1878bf"
 	],
 	[
 		"languages/en.css",
-		"44feff889ee52648f53d2af42e99f78e"
+		"c1d5aca45b5b4379a2a553070b8852e9"
 	],
 	[
 		"languages/en.js",
@@ -48323,7 +48323,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ja.css",
-		"9a6f16441b0e47be39d397e9e6a5e296"
+		"9435ea1636e9a8389502a7ce07d23caa"
 	],
 	[
 		"languages/ja.js",
@@ -48331,7 +48331,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/ko.css",
-		"c0b7a6ffbe89d0936733c1214f99b5ae"
+		"9f2052af52e181a383c3ea25477649fd"
 	],
 	[
 		"languages/ko.js",
@@ -48343,7 +48343,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.css",
-		"46bfd4418135b078788094f749e33373"
+		"e236d607e29f36710817a2a3b27a5c8a"
 	],
 	[
 		"languages/zh-hans.js",
@@ -48351,7 +48351,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.css",
-		"6d01e57287e6a77c1511bdc4fcfdce91"
+		"6be62563e13e5263c704432960e2c41e"
 	],
 	[
 		"languages/zh-hant.js",
