@@ -48291,7 +48291,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"ce3ec6865c12a5415c589d8d1bfbfaae"
+		"9687910fc7def4fe936ea2afaf4c4cf4"
 	],
 	[
 		"solo.html",
@@ -48567,7 +48567,7 @@ const cachesMap = new Map([
 	],
 	[
 		"doc/index.html",
-		"6b00206673f027d8dc5e72a9165d2519"
+		"8fa8a304df48bb61cdbe487270ec1ecd"
 	],
 	[
 		"doc/images/bluestacks-adb-connect.webp",
@@ -48872,6 +48872,10 @@ const cachesMap = new Map([
 	[
 		"doc/images/tips-advanced-color.png",
 		"db53e0cb1cdaf22a30f34adba12e4582"
+	],
+	[
+		"doc/images/tips-advanced-rich-text-drag-dop.webp",
+		"55bebe4674f8469b676813d2136201c2"
 	],
 	[
 		"doc/images/tips-advanced-rich-text.webp",
