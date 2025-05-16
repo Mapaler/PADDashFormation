@@ -1260,6 +1260,7 @@ function cardNClick(event) {
 	const formIdSearch = document.getElementById("form-id-search");
 	monstersID.value = this.getAttribute("data-cardid");
 	formIdSearch.onchange();
+	allMembers.forEach(member=>member.classList.remove("hightlight"));
 	editBox.show();
 }
 
