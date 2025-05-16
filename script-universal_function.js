@@ -1837,22 +1837,24 @@ function countTeamSB(team, solo) {
 
 	return sbn;
 }
+//返回一个角色的根ID
+function returnCardRootId(mid, henshin = true)
+{
+	const card = Cards[mid];
+	if (!card) return null;
+	let rootid = card.evoRootId;
+	const m = Cards[rootid];
+	if (henshin && Array.isArray(m.henshinFrom) && m.henshinFrom[0] < m.id)
+	{ //只有变身来源小于目前id的，才继续找base,为了解决黑魔导女孩的问题，将来如果需要要可以改成检测是否能110级
+		rootid = returnCardRootId(m.henshinFrom[0]);
+	}
+	return rootid;
+}
 //判断两个角色是否是同一进化链
 function isSameEvoTree(mon1, mon2) {
 	if (mon1.id <= 0 || mon2.id <= 0) return false;
-	//返回一个角色的根ID
-	function returnRootId(mid, henshin = true)
-	{
-		let rootid = Cards[mid].evoRootId;
-		const m = Cards[rootid];
-		if (henshin && Array.isArray(m.henshinFrom) && m.henshinFrom[0] < m.id)
-		{ //只有变身来源小于目前id的，才继续找base,为了解决黑魔导女孩的问题，将来如果需要要可以改成检测是否能110级
-			rootid = returnRootId(m.henshinFrom[0]);
-		}
-		return rootid;
-	}
-	const mon1RootId = returnRootId(mon1.id, mon1.level <= mon1.card.maxLevel);
-	const mon2RootId = returnRootId(mon2.id, mon2.level <= mon2.card.maxLevel);
+	const mon1RootId = returnCardRootId(mon1.id, mon1.level <= mon1.card.maxLevel);
+	const mon2RootId = returnCardRootId(mon2.id, mon2.level <= mon2.card.maxLevel);
 
 	return mon1RootId == mon2RootId;
 }

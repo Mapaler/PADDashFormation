@@ -1653,20 +1653,7 @@ class EvoTree
 		const _this = this;
 		this.parent = parent;
 		if (parent == null) //如果没有提供父级，则寻找进化根
-		{
-			//返回一个角色的根ID
-			function returnRootId(mid)
-			{
-				mid = Cards[mid].evoRootId;
-				const m = Cards[mid];
-				if (Array.isArray(m.henshinFrom) && m.henshinFrom[0] < m.id)
-				{ //只有变身来源小于目前id的，才继续找base,为了解决黑魔导女孩的问题，将来如果需要要可以改成检测是否能110级
-					mid = returnRootId(m.henshinFrom[0]);
-				}
-				return mid;
-			}
-			mid = returnRootId(mid);
-		}
+			mid = returnCardRootId(mid);
 		const card = Cards[mid];
 		
 		this.id = mid;
