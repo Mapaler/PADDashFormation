@@ -463,7 +463,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_116.PNG",
-		"9368ddfa26f629533ad39d7b3b7b6ac0"
+		"6121d27109152dd6172647d6b2f82ad4"
 	],
 	[
 		"images/cards_ja/CARDS_117.PNG",
@@ -14326,6 +14326,10 @@ const cachesMap = new Map([
 		"8935bbabcc044d2abab20bddbc26d32d"
 	],
 	[
+		"sound/voice/ja/padv4066.wav",
+		"a310127f522468a43e21d56a2c8fc0a3"
+	],
+	[
 		"sound/voice/ja/padv4067.wav",
 		"b006af44ef4daeac994fe905e9deffba"
 	],
@@ -17112,6 +17116,10 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ja/padv471.wav",
 		"d40399c63ffede1481c8c9c29aadcaa8"
+	],
+	[
+		"sound/voice/ja/padv4710.wav",
+		"c20948510cc10ce2872d9dbd2ea35bd2"
 	],
 	[
 		"sound/voice/ja/padv4711.wav",
@@ -48935,7 +48943,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"4dc8cd2afb23f7b42f7796bd88365a8e"
+		"f54feb98c6c883b6bafd77909e88e3d9"
 	],
 	[
 		"script-custom_elements.js",
@@ -48943,7 +48951,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"d1b966c0449f40c97a14cd9c0495e8b9"
+		"4dcfbe18a01fece9a38da352f4420186"
 	],
 	[
 		"script-skill-parser.js",
@@ -48951,15 +48959,15 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"ab521c679d140575ac261032f3347127"
+		"e3f1f7e73f08b6217bf19c3bc9b3c98a"
 	],
 	[
 		"script.js",
-		"9687910fc7def4fe936ea2afaf4c4cf4"
+		"cd1ee6bbe678201a0aa2b8c800be767b"
 	],
 	[
 		"solo.html",
-		"a9bca8e47616043f5c62851d3dc456e1"
+		"d83b0bc3dc180e84af13855901b91fdc"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -48967,11 +48975,11 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"1c434389b1582206afcb287bf45f88b3"
+		"4f99e4352b2ccd4807b125c5e36ea0f2"
 	],
 	[
 		"style.css",
-		"5e09384e7d8e3bfd20885455bacc2c7a"
+		"2588ee8890caa7faccd18a73a7f9eb23"
 	],
 	[
 		"temp.js",
@@ -48979,7 +48987,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"4cf1fb7c421aa5ec74b2610bdb1878bf"
+		"dc6d86f3b5672c9830b50684ef9a39b5"
 	],
 	[
 		"languages/en.css",
@@ -49039,7 +49047,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"021f7d8042b82b7eb489edf8ea941a36"
+		"279706706519410b584a0c56fd4ef29e"
 	],
 	[
 		"images/badge-bg.png",

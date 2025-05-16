@@ -2009,7 +2009,8 @@ function loadData(force = false)
 				card.onlyAssist = Boolean(card.flags & 1<<4);
 				card.gachaIds = Bin.unflags(card.gachaGroupsFlag);
 				card.typesFlag = Bin.enflags(card.types);
-				if (card.syncAwakening && !card.superAwakenings.includes(card.syncAwakening)) card.superAwakenings.push(card.syncAwakening);
+				if (card.syncAwakening && !card.superAwakenings.includes(card.syncAwakening))
+					card.superAwakenings.push(card.syncAwakening);
 				/*card.unk01p = Bin.unflags(card.unk01);
 				card.unk02p = Bin.unflags(card.unk02);
 				card.unk03p = Bin.unflags(card.unk03);
@@ -6324,7 +6325,7 @@ function editBoxChangeMonId(id) {
 		}
 		mAwokenIcon[ai].classList.toggle(className_displayNone, ai >= card.awakenings.length);;
 	}
-	mAwokenIpt[card.awakenings.length].click(); //选择最后一个觉醒
+	mAwokenIpt[card?.awakenings?.length]?.click(); //选择最后一个觉醒
 
 	//超觉醒
 	const mSAwokenIcon = monEditOuterAwokensRow.querySelector("#current-super-awoken-icon");
@@ -6364,7 +6365,7 @@ function editBoxChangeMonId(id) {
 	monEditCurrentSAwokenRow.classList.toggle(className_displayNone, card.superAwakenings.length == 0);
 	monEditSAwokensRow.classList.toggle(className_displayNone, card.superAwakenings.length == 0);
 	
-	if (!card.superAwakenings.includes(prevSAwoken)){
+	if (!card.superAwakenings.includes(prevSAwoken)) {
 		mSAwokenIcon.setAttribute("data-awoken-icon", 0);
 		//切换后没有相同超觉，则直接撤销这个超觉
 	}
@@ -7235,6 +7236,18 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			count += effectiveAwokens.filter(ak=>ak===59).length;
 		}
 		targetValue.setAttribute(dataAttrName, count * 5);
+	}
+	//下午茶
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"132\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".count");
+		let count = 0;
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
+			let effectiveAwokens = memberData.effectiveAwokens(assistData);
+			count += effectiveAwokens.filter(ak=>ak===132).length;
+		}
+		targetValue.setAttribute(dataAttrName, Math.min(count * 20, 100));
 	}
 }
 function highlightAwokenMember(event, teamIndex) {

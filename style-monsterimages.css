@@ -1127,6 +1127,9 @@
 .awoken-icon[data-awoken-icon='131']{/*部位破坏*/
 	--icon-y-index: 131;
 }
+.awoken-icon[data-awoken-icon='132']{/*下午茶*/
+	--icon-y-index: 132;
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],

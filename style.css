@@ -3408,6 +3408,7 @@ a.series-search::before {
 .team-awoken-effect>ul {
 	--gap: 3px;
 	display: grid;
+	grid-auto-flow: row dense;
 	gap: var(--gap);
 	margin-bottom: var(--gap);
 	grid-template-columns: repeat(6, calc(var(--head-block-width) - var(--gap)));
