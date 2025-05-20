@@ -3161,10 +3161,10 @@ body.use-sticky .sticky-box{
 	border-radius: 10px;
 	background-color: #B1AAA0;
 	overflow: hidden;
-	box-shadow: inset black 0 0 5px;
+	box-shadow: inset black 0 0 2px;
 }
 .row-mon-leader-skill .skill-box{
-	background-color: #D0CD81;
+	background-color: #D2D5D5;
 }
 .skill-box .m-skill-level {
 	height: 30px;
