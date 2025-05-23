@@ -7680,6 +7680,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 56: case 57: return member.card.gachaIds.includes(3) ? 1.15 : 1; //新学期(学园)
 				case 58: case 59: return member.card.collabId === 118 ? 1.15 : 1; //柯南
 				case 60: case 61: return member.card.gachaIds.includes(4) ? 1.15 : 1; //纺星精灵(花朵拟人)
+				case 63: case 64: return member.card.gachaIds.includes(15) ? 1.15 : 1; //女仆管家
 				default: return 1;
 			}
 		}
