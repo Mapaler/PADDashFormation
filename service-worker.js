@@ -50235,7 +50235,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"663ba5cc491de11c5a14b34a55c43eba"
+		"2d95ac4cb28e69456a5c8581adaa452d"
 	],
 	[
 		"solo.html",
@@ -50482,8 +50482,16 @@ const cachesMap = new Map([
 		"8b28275b4bc0267c494cd46a15a7734f"
 	],
 	[
+		"library/html-to-image.js",
+		"8c69fd08591f0c8b77996c381f40e5d3"
+	],
+	[
 		"library/html2canvas.min.js",
 		"a692cfc262fd4a43738caf3edf2c7a3d"
+	],
+	[
+		"library/modern-screenshot.js",
+		"b3af08b760252ed46bd2be973f010533"
 	],
 	[
 		"library/zxing.umd.min.js",

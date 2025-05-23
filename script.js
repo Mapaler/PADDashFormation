@@ -6881,8 +6881,8 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			const thisAwokenNum = awokenCountInTeam(team, ak, solo, teamsCount);
 			const prob = thisAwokenNum * 0.07 //普通觉醒7%
 					 + teamLatents.filter(l=>l===2+ak).length * 0.01  //小潜觉 1%
-					 + teamLatents.filter(l=>l===28+ak).length * 0.03; //大潜觉 3%
-			awoken.setAttribute(dataAttrName,Math.round(Math.min(prob,1)*100));
+					 + teamLatents.filter(l=>l===28+ak).length * 0.025; //大潜觉 2.5%
+			awoken.setAttribute(dataAttrName,Math.round(Math.min(prob,1)*1000)/10);
 		}
 	}
 
