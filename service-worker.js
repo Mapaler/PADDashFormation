@@ -18494,6 +18494,10 @@ const cachesMap = new Map([
 		"ca5821d4ba87cf0d006da08b64cbc356"
 	],
 	[
+		"sound/voice/ja/padv5023.wav",
+		"0fbd65443dd6b785f39f844e6e590452"
+	],
+	[
 		"sound/voice/ja/padv503.wav",
 		"ed7dc0e898bc2f21c0445bd5579d6d63"
 	],
@@ -20931,7 +20935,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_118.PNG",
-		"bf1bf44b4e766f2e110d6f8f9a405f4b"
+		"1441cbf657b300930a8d7bb513c725b0"
 	],
 	[
 		"images/cards_en/CARDS_119.PNG",
@@ -34315,7 +34319,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_118.PNG",
-		"bf1bf44b4e766f2e110d6f8f9a405f4b"
+		"1441cbf657b300930a8d7bb513c725b0"
 	],
 	[
 		"images/cards_ko/CARDS_119.PNG",
@@ -50482,16 +50486,8 @@ const cachesMap = new Map([
 		"8b28275b4bc0267c494cd46a15a7734f"
 	],
 	[
-		"library/html-to-image.js",
-		"8c69fd08591f0c8b77996c381f40e5d3"
-	],
-	[
 		"library/html2canvas.min.js",
 		"a692cfc262fd4a43738caf3edf2c7a3d"
-	],
-	[
-		"library/modern-screenshot.js",
-		"b3af08b760252ed46bd2be973f010533"
 	],
 	[
 		"library/zxing.umd.min.js",
