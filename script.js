@@ -7651,7 +7651,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 27: return member.card.collabId === 112 ? 1.15 : 1; //转生成为史莱姆
 				case 28: return member.card.collabId === 110 ? 1.15 : 1; //电击文库Index
 				case 29: return member.card.collabId === 102 ? 1.15 : 1; //奥特曼
-				case 30: return member.card.gachaIds.includes(6) ? 1.15 : 1; //花嫁
+				case 30: case 65: return member.card.gachaIds.includes(6) ? 1.15 : 1; //花嫁
 				case 31: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
 				case 15: return member.card.collabId === 96 ? 1.15 : 1; //漫威
 				case 16: return member.card.gachaIds.includes(9) ? 1.15 : 1; //泳装
