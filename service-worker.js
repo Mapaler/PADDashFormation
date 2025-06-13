@@ -20891,7 +20891,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_106.PNG",
-		"3bf608520483df5296a78687b028d198"
+		"f8ab4c15848cd3a856048a8aa3f62bd5"
 	],
 	[
 		"images/cards_en/CARDS_107.PNG",
@@ -20931,7 +20931,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_116.PNG",
-		"f78a402337a9e5cda82a14e03a34b8c8"
+		"c1e9d36dc32c227e9b56b0265a8ee33e"
 	],
 	[
 		"images/cards_en/CARDS_117.PNG",
