@@ -52659,7 +52659,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"24f11a6cef26c474f599525ca02f751e"
+		"6d6176831ecfaa93bfd6d581e5b0bbf9"
 	],
 	[
 		"solo.html",
@@ -52675,7 +52675,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"bf846d491e4359c44d30c2afc2efbddd"
+		"7a18008a6416162b03aafd1c990937f8"
 	],
 	[
 		"temp.js",

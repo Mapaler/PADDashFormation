@@ -753,8 +753,11 @@ body.block-width-7 .formation-box{
 	box-shadow: 1px 1px 3px lightgreen,1px 1px  3px lightgreen,1px 1px  3px lightgreen;
 }
 /*怪物-加值*/
-.monster .plus{
+.monster .plus,
+.row-mon-plus .plus-value{
 	color: yellow;
+}
+.monster .plus{
 	font-size: 17px;
 	line-height: 17px;
 	text-shadow: black 0 0 1px,black 0 0 2px, black 2px 2px 0;
@@ -2902,9 +2905,7 @@ body.use-sticky .sticky-box{
 /*.m-plus-hp-li::before{content: "HP";}
 .m-plus-atk-li::before{content: "攻击";}
 .m-plus-rcv-li::before{content: "回复";}*/
-.row-mon-plus .plus-value{
-	color: yellow;
-}
+
 .row-mon-plus .plus-value::before{content: "(+";}
 .row-mon-plus .plus-value::after{content: ")";}
 

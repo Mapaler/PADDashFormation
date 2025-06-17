@@ -6003,12 +6003,7 @@ function changeid(mon, monDom, latentDom, assist) {
 	const plusDom = monDom.querySelector(".plus");
 	if (plusDom) //如果提供了加值，且怪物头像内有加值
 	{
-		const [hp=0,atk=0,rcv=0] = mon?.plus;
-		const plusArr = {
-			hp: mon?.plus?.[0] ?? 0,
-			atk: mon?.plus?.[1] ?? 0,
-			rcv: mon?.plus?.[2] ?? 0,
-		};
+		const [hp=0, atk=0, rcv=0] = mon?.plus ?? [];
 		const sum = hp + atk + rcv;
 		if (sum <= 0) {
 			plusDom.classList.add(className_displayNone);
