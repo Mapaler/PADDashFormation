@@ -5522,18 +5522,18 @@ function initialize() {
 	const monEditRcvValue = rowMonAbility.querySelector(".m-rcv-li .ability-value");
 	//加蛋
 	const rowMonPlus = settingBox.querySelector(".row-mon-plus");
-	const monEditAddHp = rowMonPlus.querySelector(".m-plus-hp");
+	const monEditAddHp = rowMonPlus.querySelector(".plus-box .m-hp-li .m-plus");
 	monEditAddHp.onchange = reCalculateAbility;
-	const monEditAddAtk = rowMonPlus.querySelector(".m-plus-atk");
+	const monEditAddAtk = rowMonPlus.querySelector(".plus-box .m-atk-li .m-plus");
 	monEditAddAtk.onchange = reCalculateAbility;
-	const monEditAddRcv = rowMonPlus.querySelector(".m-plus-rcv");
+	const monEditAddRcv = rowMonPlus.querySelector(".plus-box .m-rcv-li .m-plus");
 	monEditAddRcv.onchange = reCalculateAbility;
 	//297按钮
 	const monEditPlusFastSettings = Array.from(rowMonPlus.querySelectorAll(".m-plus-fast-setting"));
 	monEditPlusFastSettings.forEach(btn=>btn.onclick=plusFastSetting);
 	function plusFastSetting(){
 		const sumPlus = parseInt(this.value, 10);
-		let one_plus = Math.floor(sumPlus / 3);
+		const one_plus = sumPlus * 99;
 		monEditAddHp.value = one_plus;
 		monEditAddAtk.value = one_plus;
 		monEditAddRcv.value = one_plus;
@@ -6003,22 +6003,24 @@ function changeid(mon, monDom, latentDom, assist) {
 	const plusDom = monDom.querySelector(".plus");
 	if (plusDom) //如果提供了加值，且怪物头像内有加值
 	{
+		const [hp=0,atk=0,rcv=0] = mon?.plus;
 		const plusArr = {
 			hp: mon?.plus?.[0] ?? 0,
 			atk: mon?.plus?.[1] ?? 0,
 			rcv: mon?.plus?.[2] ?? 0,
 		};
-		const plusCount = plusArr.hp + plusArr.atk + plusArr.rcv;
-		if (plusCount <= 0) {
+		const sum = hp + atk + rcv;
+		if (sum <= 0) {
 			plusDom.classList.add(className_displayNone);
-		} else if (plusCount === 297) {
-			plusDom.classList.add("has297");
-			plusDom.classList.remove(className_displayNone);
 		} else {
-			plusDom.querySelector(".hp").textContent = plusArr.hp;
-			plusDom.querySelector(".atk").textContent = plusArr.atk;
-			plusDom.querySelector(".rcv").textContent = plusArr.rcv;
-			plusDom.classList.remove("has297");
+			plusDom.querySelector(".hp").textContent = hp;
+			plusDom.querySelector(".atk").textContent = atk;
+			plusDom.querySelector(".rcv").textContent = rcv;
+			plusDom.querySelector(".sum").textContent = sum;
+			//刚好297
+			sum === 297 ? plusDom.classList.add("eq297") : plusDom.classList.remove("eq297");
+			//大于297
+			sum > 297 ? plusDom.classList.add("gt297") : plusDom.classList.remove("gt297");
 			plusDom.classList.remove(className_displayNone);
 		}
 	}
@@ -6170,9 +6172,9 @@ function editMember(teamNum, isAssist, indexInTeam) {
 
 	const monEditLv = settingBox.querySelector(".row-mon-level .m-level");
 	monEditLv.value = mon.level || 1;
-	const monEditAddHp = settingBox.querySelector(".row-mon-plus .m-plus-hp");
-	const monEditAddAtk = settingBox.querySelector(".row-mon-plus .m-plus-atk");
-	const monEditAddRcv = settingBox.querySelector(".row-mon-plus .m-plus-rcv");
+	const monEditAddHp = settingBox.querySelector(".row-mon-plus .plus-box .m-hp-li .m-plus");
+	const monEditAddAtk = settingBox.querySelector(".row-mon-plus .plus-box .m-atk-li .m-plus");
+	const monEditAddRcv = settingBox.querySelector(".row-mon-plus .plus-box .m-rcv-li .m-plus");
 	if (mon.plus && mon.id > 0) {
 		monEditAddHp.value = mon.plus[0];
 		monEditAddAtk.value = mon.plus[1];
@@ -6475,9 +6477,9 @@ function editBoxChangeMonId(id) {
 	rowMonPlus.classList.toggle("disabled", noPowerup);
 	rowMonLatent.classList.toggle("disabled", noPowerup || card.onlyAssist); //极少数情况会出现仅允许当武器的，不能打潜觉
 	if (noPowerup) { //当可以叠加时，不能打297和潜觉
-		rowMonPlus.querySelector(".m-plus-hp").value = 0;
-		rowMonPlus.querySelector(".m-plus-atk").value = 0;
-		rowMonPlus.querySelector(".m-plus-rcv").value = 0;
+		rowMonPlus.querySelector(".plus-box .m-hp-li .m-plus").value = 0;
+		rowMonPlus.querySelector(".plus-box .m-atk-li .m-plus").value = 0;
+		rowMonPlus.querySelector(".plus-box .m-rcv-li .m-plus").value = 0;
 	}
 
 	const btnDone = editBox.querySelector(".button-done");

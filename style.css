@@ -769,17 +769,18 @@ body.block-width-7 .formation-box{
 .monster .plus .hp::before,
 .monster .plus .atk::before,
 .monster .plus .rcv::before,
-.monster .plus.has297::before
+.monster .plus .sum::before
 {
 	content: "+";
 }
-.monster .plus.has297::after{
-	content: "297";
+.monster .plus[class*="297"] :where(
+	.hp,
+	.atk,
+	.rcv
+){ /*当是297时隐藏3维*/
+	display:none;
 }
-.monster .plus.has297 .hp,
-.monster .plus.has297 .atk,
-.monster .plus.has297 .rcv
-{ /*当是297时隐藏3维*/
+.monster .plus:not([class*="297"]) .sum{
 	display:none;
 }
 /*怪物-觉醒*/
@@ -2914,7 +2915,7 @@ body.use-sticky .sticky-box{
 	font-size: inherit;
 	text-shadow: inherit;
 	box-sizing: border-box;
-	width: 2em;
+	width: 3em;
 	line-height: 28px;
 	height: 28px;
 	padding: 0;
@@ -2929,7 +2930,7 @@ body.use-sticky .sticky-box{
 }
 .row-mon-plus .m-plus-fast-setting::before
 {
-	content: "+"attr(value);
+	content: "×"attr(value);
 }
 .row-mon-plus .m-plus-fast-setting
 {
@@ -3032,7 +3033,7 @@ body.use-sticky .sticky-box{
 	float: right;
 }
 .m-level,
-.m-plus-hp,.m-plus-atk,.m-plus-rcv,
+.m-plus,
 .m-skill-level
 {
 	border: 1px solid grey;
