@@ -2091,7 +2091,14 @@ const specialSearchFunctions = (function() {
 						const searchTypeArray = [250];
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						return skill;
-					})
+					}),
+					addition:card=>{
+						const searchTypeArray = [250];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						if (!skill) return;
+						const sk = skill.params;
+						return renderAwakenings(sk);
+					}
 				},
 			]},
 			{group:true,name:"Player's HP change",otLangName:{chs:"玩家HP操纵类",cht:"玩家HP操縱類"}, functions: [

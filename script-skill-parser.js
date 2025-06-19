@@ -1071,8 +1071,8 @@ function skillPlayVoice(skillStage, VoiceId) {
 }
 function voidPoison() { return { kind: SkillKinds.VoidPoison }; }
 function skillProviso(cond) { return { kind: SkillKinds.SkillProviso, cond: cond }; }
-function impartAwakenings(attrs, types, awakenings) {
-	return { kind: SkillKinds.ImpartAwakenings, attrs: attrs, types: types, awakenings: awakenings };
+function impartAwakenings(attrs, types, target, awakenings) {
+	return { kind: SkillKinds.ImpartAwakenings, attrs, types, target, awakenings };
 }
 function obstructOpponent(typeName, pos, ids) {
 	return { kind: SkillKinds.ObstructOpponent, typeName: typeName, pos: pos, enemy_skills: ids };
@@ -1577,7 +1577,7 @@ const skillObjectParsers = {
 		return powerUp(null, null, p.scaleCross([{ single: false, attr: Bin.unflags(attrs), atk: 100, rcv: 100}]), null, v.percent(reduce), combo ? [addCombo(combo)] : null);
 	},
 	[213](attrs, types, ...awakenings) { //赋予觉醒的队长技
-	  return impartAwakenings(Bin.unflags(attrs), Bin.unflags(types), awakenings);
+	  return impartAwakenings(Bin.unflags(attrs), Bin.unflags(types), null, awakenings);
 	},
 	[214](turns) { return activeTurns(turns, bindSkill()); },
 	[215](turns, attrs) { return activeTurns(turns, setOrbState(Bin.unflags(attrs), 'bound')); },
@@ -1725,8 +1725,12 @@ const skillObjectParsers = {
 			boardJammingStates('roulette', count ? 'random' : 'shape', options)
 		);
 	},
-	[250]() { //去除自身辅助
-	  return removeAssist();
+	[250](...awakenings) { //去除自身辅助，如果有参数则是赋予觉醒
+		const skillEffects = [removeAssist()];
+		if (awakenings.length) {
+			skillEffects.unshift(impartAwakenings(null, null, SkillTarget.type1[0], awakenings));
+		}
+		return skillEffects;
 	},
 	[251](turns, min, max) { //产超暗暗珠
 		return activeTurns(turns,
@@ -1791,26 +1795,39 @@ const skillObjectParsers = {
 	//一回合内使用几次技能才有倍率的队长技。
 	[270](times, atk, rcv) { { return powerUp(Bin.unflags(31), null, p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.useSkill(times)); } },
 	//同时发动觉醒时强化
-	[271](awakenings, atk, reducePercent, combo, damage, rcv) {
+	[271](awakeningsFlag, atk, reducePercent, combo, damage, rcv) {
 		const awakeningsType = [
-			27, //U-猜的
-			48, //九宫-猜的
+			27, //U
+			48, //九宫
 			60, //L字
-			78, //十字-猜的
-			126, //T字
-			22, //横排-猜的
-			23,
-			24,
-			25,
-			26,
+			78, //十字
+
+			126,//T字
+			22, //横排-火
+			23, //横排-水
+			24, //横排-木
+
+			25, //横排-光
+			26, //横排-暗
 			79, //三色
 			80, //四色
-			81, //五色-猜的
-			82, //饼干-猜的
+
+			81, //五色
+			0,
+			0,
+			73, //串串-火
+
+			74, //串串-水
+			75, //串串-木
+			76, //串串-光
+			77, //串串-暗
+
+			0,
+			82, //饼干
 		];
-		const awakeningsArr = Bin.unflags(awakenings).map(n => awakeningsType[n]);
+		const awakeningsArr = Bin.unflags(awakeningsFlag).map(n => awakeningsType[n] || 0);
 		let additional = [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean);
-		return powerUp(null, null, p.mul({ atk: atk, rcv: rcv}), c.awakeningActivated(awakeningsArr), v.percent(reducePercent), additional);
+		return powerUp(null, null, p.mul({ atk: atk || 100, rcv: rcv || 100}), c.awakeningActivated(awakeningsArr), v.percent(reducePercent), additional);
 	},
 	//固定起手位置
 	[273](turns) {return activeTurns(turns, fixedStartingPosition()); },
@@ -2739,7 +2756,7 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.ImpartAwakenings: { //赋予队员觉醒
-			let attrs = skill.attrs, types = skill.types, awakenings = skill.awakenings;
+			let {attrs, types, target, awakenings} = skill;
 			let dict = {
 				awakenings: renderAwakenings(awakenings, {affix: true}),
 			}
@@ -2754,6 +2771,11 @@ function renderSkill(skill, option = {})
 			{
 				dict.types = renderTypes(types || [], {affix: true});
 				attrs_types.push(dict.types);
+			}
+			if (target)
+			{
+				dict.target = tsp?.target[target.replaceAll("-","_")]?.();
+				attrs_types.push(dict.target);
 			}
 			if (attrs_types.length)
 			{
