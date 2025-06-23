@@ -3037,7 +3037,7 @@ function renderAttrs(attrs, option = {}) {
 	{
 		contentFrg = attrs.map(attr => {
 			const icon = document.createElement("icon");
-			icon.className = "attr";
+			icon.className = "attr-icon";
 			icon.setAttribute("data-attr-icon",attr);
 			return tsp.attrs?.[attr]({icon: icon});
 		})

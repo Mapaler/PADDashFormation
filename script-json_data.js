@@ -4153,7 +4153,7 @@ const specialSearchFunctions = (function() {
 						const fragment = document.createDocumentFragment();
 						
 						const icon = document.createElement("icon");
-						icon.className = "attr";
+						icon.className = "attr-icon";
 						icon.setAttribute("data-attr-icon", "fixed");
 
 						fragment.append(icon, value.bigNumberToString());

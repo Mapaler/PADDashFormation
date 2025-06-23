@@ -1955,7 +1955,7 @@
 
 
 /*属性图片*/
-.attr
+.attr-icon
 {
 	--icon-width: 36px;
 	--icon-height: 36px;
@@ -1973,47 +1973,47 @@
 	background-position-x:calc(var(--icon-width) * var(--icon-x-index) * -1);
 	background-position-y:calc(var(--icon-height) * var(--icon-y-index) * -1);
 }
-.attr[data-attr-icon='any'],
-.attr[data-attr-icon='self']
+.attr-icon[data-attr-icon='any'],
+.attr-icon[data-attr-icon='self']
 {
 	--icon-x-index: 1;
 	--icon-y-index: 0;
 }
-.attr[data-attr-icon='fixed']
+.attr-icon[data-attr-icon='fixed']
 {
 	--icon-x-index: 1;
 	--icon-y-index: 1;
 }
 
-.attr[data-attr-icon='-1']
+.attr-icon[data-attr-icon='-1']
 {
 	width: auto;
 }
-.attr[data-attr-icon='0']
+.attr-icon[data-attr-icon='0']
 {
 	--icon-y-index: 0;
 }
-.attr[data-attr-icon='1']
+.attr-icon[data-attr-icon='1']
 {
 	--icon-y-index: 1;
 }
-.attr[data-attr-icon='2']
+.attr-icon[data-attr-icon='2']
 {
 	--icon-y-index: 2;
 }
-.attr[data-attr-icon='3']
+.attr-icon[data-attr-icon='3']
 {
 	--icon-y-index: 3;
 }
-.attr[data-attr-icon='4']
+.attr-icon[data-attr-icon='4']
 {
 	--icon-y-index: 4;
 }
-.attr[data-attr-icon='5']
+.attr-icon[data-attr-icon='5']
 {
 	--icon-y-index: 5;
 }
-.attr[data-attr-icon='6']
+.attr-icon[data-attr-icon='6']
 {
 	--icon-y-index: 6;
 }

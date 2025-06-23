@@ -7781,7 +7781,7 @@ function refreshTeamTotalCount(totalCountDom, team, teamIdx) {
 	{
 		const {attrs, types} = countTeamTotalAttrsTypes(team_2p, assistTeam_2p);
 		if (tAttrsDom) {
-			const attrDoms = Array.from(tAttrsDom.querySelectorAll(".attr"));
+			const attrDoms = Array.from(tAttrsDom.querySelectorAll(".attr-icon"));
 			attrDoms.forEach(attrDom=>{
 				const attrId = parseInt(attrDom.getAttribute("data-attr-icon"));
 				attrDom.setAttribute(dataAttrName, attrs[attrId] || 0);
