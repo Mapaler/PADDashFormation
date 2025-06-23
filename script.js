@@ -3865,10 +3865,12 @@ function initialize() {
 			const dataFrom = JSON.parse(dataFormStr);
 			const dataTo = getMemberArrayIndexFromMonHead(this);
 
+			const isCopy = document.getElementById("change-swap-to-copy").checked ^ event.ctrlKey;
+
 			if ((dataTo[0] !== dataFrom[0]) ||
 				(dataTo[1] !== dataFrom[1]) ||
 				(dataTo[2] !== dataFrom[2])) { //必须有所不同才继续交换
-				interchangeCard(dataFrom, dataTo, event.ctrlKey);
+				interchangeCard(dataFrom, dataTo, isCopy);
 			}
 		}
 		else if (dataCardId = event.dataTransfer.getData('card-id')) {
@@ -3953,7 +3955,7 @@ function initialize() {
 	}
 	function interchangeCard(formArr, toArr, isCopy) {
 		//优先使用传入的复制，然后才是考虑开关
-		isCopy = isCopy ?? controlBox.querySelector("#change-swap-to-copy").checked; //储存交换“复制”和“替换”
+		isCopy = isCopy ?? document.getElementById("change-swap-to-copy").checked; //储存交换“复制”和“替换”
 		const [fromTeamNum, fromIsAssist, fromIndexInTeam] = formArr;
 		const [toTeamNum, toIsAssist, toIndexInTeam] = toArr;
 
