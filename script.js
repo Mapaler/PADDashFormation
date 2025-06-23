@@ -6008,10 +6008,10 @@ function changeid(mon, monDom, latentDom, assist) {
 		if (sum <= 0) {
 			plusDom.classList.add(className_displayNone);
 		} else {
-			plusDom.querySelector(".hp").textContent = hp;
-			plusDom.querySelector(".atk").textContent = atk;
-			plusDom.querySelector(".rcv").textContent = rcv;
-			plusDom.querySelector(".sum").textContent = sum;
+			plusDom.querySelector(".hp").dataset.value = hp;
+			plusDom.querySelector(".atk").dataset.value = atk;
+			plusDom.querySelector(".rcv").dataset.value = rcv;
+			plusDom.querySelector(".sum").dataset.value = sum;
 			//刚好297
 			sum === 297 ? plusDom.classList.add("eq297") : plusDom.classList.remove("eq297");
 			//大于297
