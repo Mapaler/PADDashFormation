@@ -5492,10 +5492,17 @@ function initialize() {
 	//等级
 	const monEditLv = settingBox.querySelector(".m-level");
 	monEditLv.onchange = function() {
+		const card = Cards[editBox.mid] || 0;
+		const level = parseInt(this.value, 10) || 1;
+		this.parentElement.classList.toggle("max", level === card.maxLevel);
+		const range = getCardLevelRange(level, card.maxLevel, card.limitBreakIncr);
+		this.parentElement.dataset.levelRange = range;
+	};
+	monEditLv.addEventListener("change", ()=>{
 		editBox.reCalculateExp();
 		editBox.reCalculateAbility(); //重计算三维
 		editBox.refreshLatent(); //刷新潜觉
-	};
+	});
 	const monEditLvMin = settingBox.querySelector(".m-level-btn-min");
 	const monLvExp = settingBox.querySelector(".m-level-exp");
 	monEditLvMin.ipt = monEditLv;
@@ -5982,17 +5989,10 @@ function changeid(mon, monDom, latentDom, assist) {
 			const level = mon.level ?? 1;
 			levelDom.setAttribute(dataAttrName, level);
 	
-			levelDom.classList.toggle("max", level === card.maxLevel);;
+			levelDom.classList.toggle("max", level === card.maxLevel);
 			//如果等级刚好等于最大等级，则修改为“最大”的字
-			if (level >= 111 && level <= 120 && card.limitBreakIncr) {
-				levelDom.setAttribute("data-level-range", "120");
-			} else if (level >= 99 && level <= 110 && card.limitBreakIncr) {
-				levelDom.setAttribute("data-level-range", "110");
-			} else if (level > card.maxLevel) {
-				levelDom.setAttribute("data-level-range", "error");
-			} else {
-				levelDom.setAttribute("data-level-range", "99");
-			}
+			const range = getCardLevelRange(level, card.maxLevel, card.limitBreakIncr);
+			levelDom.setAttribute("data-level-range", range);
 			levelDom.classList.remove(className_displayNone);
 		} else {
 			levelDom.classList.add(className_displayNone);
@@ -6416,6 +6416,7 @@ function editBoxChangeMonId(id) {
 	monEditLv110.setAttribute("data-limit-break-incr",card.limitBreakIncr);
 	monEditLv110.classList.toggle(className_displayNone, !card.limitBreakIncr);;
 	monEditLv120.classList.toggle(className_displayNone, !card.limitBreakIncr);;
+	monEditLv.onchange();
 
 	const mCost = settingBox.querySelector(".monster-cost");
 	mCost.textContent = card.cost;

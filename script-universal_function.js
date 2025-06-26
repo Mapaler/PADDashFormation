@@ -27,7 +27,18 @@ const GM_xmlhttpRequest = function(GM_param) {
 	//发送数据
 	xhr.send(GM_param.data ? GM_param.data : null);
 };
-
+//返回当前卡片所处的等级范围，用来显示不同的等级颜色
+function getCardLevelRange(level, maxLevel = 99, limitBreakIncr = false) {
+	if (level >= 111 && level <= 120 && limitBreakIncr) {
+		return 120;
+	} else if (level >= 99 && level <= 110 && limitBreakIncr) {
+		return 110;
+	} else if (level > maxLevel) {
+		return "error";
+	} else {
+		return 99;
+	}
+}
 //获取URL参数
 function getQueryString(name, inputURL = document.location) {
 	const url = new URL(inputURL);

@@ -873,9 +873,10 @@ body.block-width-7 .formation-box{
 }
 /*怪物-等级*/
 .monster .level{
+	--level-color: white;
 	font-size: 15px;
 	line-height: 17px;
-	color: white;
+	color: var(--level-color);
 	height: 17px;
 	text-shadow: black 0 0 2px, black 2px 2px 0;
 	position: absolute;
@@ -891,18 +892,28 @@ body.block-width-7 .formation-box{
 {
 	content: attr(data-value);
 }
-.monster .level.max
+.monster .level.max,
+.level-value.max
 {
-	color: #FEFF85;
+	--level-color: #FEFF85;
 }
-.monster .level[data-level-range="110"]{
-	color: #85BCFF;
+.monster .level[data-level-range="110"],
+.level-value[data-level-range="110"]
+{
+	--level-color: #85BCFF;
 }
-.monster .level[data-level-range="120"]{
-	color: #19F897;
+.monster .level[data-level-range="120"],
+.level-value[data-level-range="120"]
+{
+	--level-color: #19F897;
 }
-.monster .level[data-level-range="error"]{
-	color: red;
+.monster .level[data-level-range="error"],
+.level-value[data-level-range="error"]
+{
+	--level-color: red;
+}
+.row-mon-level .level-value {
+	color: var(--level-color);
 }
 /**/
 .monster .id{
@@ -3033,13 +3044,14 @@ body.use-sticky .sticky-box{
 	font-size: 0.75em;
 	display: block;
 }
-.m-level-btn-110
-{
+.m-level-btn-110 {
 	color: blue;
 }
-.m-level-btn-120
-{
+.m-level-btn-120 {
 	color: green;
+}
+.m-plus-fast-setting[value="3"]{
+	color: orange;
 }
 /*
 .m-level-exp::before{
