@@ -5348,9 +5348,10 @@ function initialize() {
 		s_canLevelLimitBreakthrough.checked = false;
 		s_have8LatentSlot.checked = false;
 		
-		searchMonList.originalHeads = null;
 		searchResultCount.setAttribute("data-search-result-count", 0);
+		searchResultCount.innerHTML = '';
 		searchMonList.innerHTML = "";
+		searchMonList.originalHeads = null;
 
 		sessionStorage.removeItem('search-options');
 	};
