@@ -1631,6 +1631,10 @@ class PlayerDataCard {
 		m.awoken = this.awoken;
 		m.skilllevel = this.skillLevel;
 		m.plus = [this.plus.hp,this.plus.atk,this.plus.rcv];
+		//游戏数据里大于297的只储存HP
+		if (m.plus.every(v=>v>=99) && m.plus[0]>=100) {
+			m.plus.fill(m.plus[0]);
+		}
 		m.sawoken = this.superAwoken;
 		m.latent = this.latent.concat();
 		return m;
@@ -5525,21 +5529,39 @@ function initialize() {
 	//加蛋
 	const rowMonPlus = settingBox.querySelector(".row-mon-plus");
 	const monEditAddHp = rowMonPlus.querySelector(".plus-box .m-hp-li .m-plus");
-	monEditAddHp.onchange = reCalculateAbility;
 	const monEditAddAtk = rowMonPlus.querySelector(".plus-box .m-atk-li .m-plus");
-	monEditAddAtk.onchange = reCalculateAbility;
 	const monEditAddRcv = rowMonPlus.querySelector(".plus-box .m-rcv-li .m-plus");
-	monEditAddRcv.onchange = reCalculateAbility;
+	const plusNodeArr = [
+		monEditAddHp,
+		monEditAddAtk,
+		monEditAddRcv
+	];
+	plusNodeArr.forEach((node)=>{
+		node.onchange = checkPlus; //先检查加值
+		node.addEventListener("change", reCalculateAbility); //重新计算三维
+	});
 	//297按钮
 	const monEditPlusFastSettings = Array.from(rowMonPlus.querySelectorAll(".m-plus-fast-setting"));
 	monEditPlusFastSettings.forEach(btn=>btn.onclick=plusFastSetting);
 	function plusFastSetting(){
-		const sumPlus = parseInt(this.value, 10);
+		const sumPlus = parseInt(this.value, 10) || 0;
 		const one_plus = sumPlus * 99;
-		monEditAddHp.value = one_plus;
-		monEditAddAtk.value = one_plus;
-		monEditAddRcv.value = one_plus;
+		plusNodeArr.forEach(node=>node.value = one_plus);
+		checkPlus.call(plusNodeArr[0]);
 		reCalculateAbility();
+	}
+	function checkPlus(event){
+		const thisValue = parseInt(this.value, 10); //目前修改的数据
+		if (!Number.isInteger(thisValue)) return; //如果不能被解析为整数，则返回
+		plusNodeArr.forEach(node=>node.parentElement.classList.toggle("gt297", thisValue >= 100));
+		const currentValues = plusNodeArr.map(node=>parseInt(node.value, 10) || 0);
+		if (currentValues.some(v=>v>=100)) {
+			if (thisValue >= 100) {
+				plusNodeArr.filter(node=>node!==this).forEach(node=>node.value = thisValue);
+			} else {
+				plusNodeArr.filter(node=>node!==this).forEach(node=>node.value = Math.min(99,parseInt(node.value, 10) || 0));
+			}
+		}
 	}
 
 	//潜觉
@@ -6198,6 +6220,7 @@ function editMember(teamNum, isAssist, indexInTeam) {
 	if (mon.awoken !== undefined && monEditAwokens[mon.awoken])
 		monEditAwokens[mon.awoken].click(); //涉及到觉醒数字的显示，所以需要点一下
 
+	monEditAddHp.onchange();
 	editBox.reCalculateExp();
 	editBox.reCalculateAbility();
 	editBox.refreshLatent();

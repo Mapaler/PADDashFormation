@@ -792,11 +792,16 @@ body.block-width-7 .formation-box{
 .monster .plus.gt297>*::before {
 	-webkit-text-stroke: 2px black;
 }
-.monster .plus.gt297>*::after {
+.monster .plus.gt297>*::after,
+.row-mon-plus .plus-value.gt297
+{
 	background-image: linear-gradient(#FF7711 25%, #FFEE33 80%);
 	color: transparent;
 	-webkit-background-clip: text;
 	background-clip: text;
+}
+.row-mon-plus .plus-value.gt297 {
+	text-shadow: none;
 }
 
 .monster.null>div,
@@ -2935,6 +2940,10 @@ body.use-sticky .sticky-box{
 	font-family: inherit;
 	font-size: inherit;
 	text-shadow: inherit;
+	background-image: inherit;
+	-webkit-background-clip: inherit;
+	background-clip: inherit;
+	
 	box-sizing: border-box;
 	width: 3em;
 	line-height: 28px;
