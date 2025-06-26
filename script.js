@@ -3105,7 +3105,7 @@ function initialize() {
 			selectedDeviceId = localStorage.getItem(cfgPrefix + sourceSelect_id);
 			if (videoInputDevices.every(device=>device.deviceId != selectedDeviceId))
 			{
-				selectedDeviceId = videoInputDevices[0].deviceId;
+				selectedDeviceId = videoInputDevices?.[0]?.deviceId;
 			}
 			if (videoInputDevices.length >= 1) {
 				videoInputDevices.forEach((element) => {
