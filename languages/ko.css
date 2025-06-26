@@ -339,6 +339,9 @@ label[for="fix-main-color"]::after{
 .search-box label[for="sort-reverse"]::after{
 	content: "역순";
 }
+.search-box label[for="only-show-dungeon-enhance"]::after{
+	content: "던전에 의해서만 강화됩니다";
+}
 .search-box .additional-div::before{
 	content: "추가 표시:";
 }

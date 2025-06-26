@@ -2668,6 +2668,9 @@ body.use-sticky .sticky-box{
 	height: 30vh;
 	resize: vertical;
 }
+.search-mon-list.only-show-dungeon-enhance>li:not(.is-dge) {
+	display: none;
+}
 
 .setting-box .row-mon-id .real-time-change-card-label
 {

@@ -5122,8 +5122,7 @@ function initialize() {
 	const s_add_show_abilities_with_awoken = searchBox.querySelector("#add-show-abilities-with-awoken"); //是否显示计算觉醒的三维
 	
 	const searchResultCount = searchBox.querySelector(".search-list-length");
-	showSearch = function(searchArr, customAdditionalFunction)
-	{
+	showSearch = function(searchArr, customAdditionalFunction) {
 		if (typeof(searchArr) === "number") {
 			searchArr = [searchArr];
 		}
@@ -5141,7 +5140,6 @@ function initialize() {
 		}
 
 		searchBox.open = true;
-		searchMonList.classList.remove(className_displayNone);
 		editBox.show();
 		const createCardHead = editBox.createCardHead;
 
@@ -5165,11 +5163,10 @@ function initialize() {
 				customAddition: Array.isArray(customAdditionalFunction) ? customAdditionalFunction : (typeof customAdditionalFunction == "function" ? [customAdditionalFunction] : [])
 			};
 			searchMonList.originalHeads = searchArr.map(card => {
-				if (card instanceof Member) {
-					return createCardHead(card, additionalOption);
-				} else {
-					return createCardHead(card.id, additionalOption);
-				}
+				const avatarNode = createCardHead(card instanceof Member ? card : card.id, additionalOption);
+				const isDge = isDungeonEnhance(formation.dungeonEnchance, card);
+				avatarNode.classList.toggle("is-dge", isDge.awoken);
+				return avatarNode;
 			});
 			searchMonList.customAddition = additionalOption.customAddition;
 			//对头像列表进行排序
@@ -5394,6 +5391,11 @@ function initialize() {
 		newOpt.setAttribute("data-tag", sfunc.tag);
 		s_sortList.options.add(newOpt);
 	});
+	const s_isDge = document.getElementById("only-show-dungeon-enhance");
+	s_isDge.onchange = function(){
+		searchMonList.classList.toggle(this.id, this.checked);
+	}
+	s_isDge.onchange();
 
 	//id搜索
 	editBox.changeMonId = editBoxChangeMonId;

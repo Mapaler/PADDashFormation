@@ -845,6 +845,26 @@ function calculateExp(member) {
 		expArray.push(Math.max(0, Math.min(member.level, 120) - 110) * 20000000);
 	return expArray;
 }
+function isDungeonEnhance(dge, member, assist) {
+	const memberCard = Cards[member.id];
+	const memberAttrsTypesWithWeapon = (typeof member.getAttrsTypesWithWeapon === "function" && assist instanceof MemberAssist)
+		? member.getAttrsTypesWithWeapon(assist)
+		: memberCard;
+
+	const baseBool = dge.rarities.includes(memberCard?.rarity) //符合星级
+		|| dge?.collabs?.includes(memberCard?.collabId) //符合合作
+		|| dge?.gachas?.some(n=>memberCard?.gachaIds.includes(n)); //符合抽蛋桶
+	return {
+		awoken: baseBool //计算武器觉醒
+			|| memberAttrsTypesWithWeapon.attrs.some(attr=>dge.attrs.includes(attr)) //符合属性
+			|| memberAttrsTypesWithWeapon.types.some(type=>dge.types.includes(type)) //符合类型
+			,
+		noAwoken: baseBool //不计算武器觉醒
+			|| memberCard.attrs.some(attr=>dge.attrs.includes(attr)) //符合属性
+			|| memberCard.types.some(type=>dge.types.includes(type)) //符合类型
+			,
+	};
+}
 //计算怪物的能力
 function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	if (!member) return null;
@@ -909,22 +929,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	//地下城强化
 	const dge = formation.dungeonEnchance;
 	const dgeRate = [dge.rate.hp, dge.rate.atk, dge.rate.rcv];
-	const isDge = (()=>{
-		const memberAttrsTypesWithWeapon = typeof member.getAttrsTypesWithWeapon === "function" ? member.getAttrsTypesWithWeapon(assist) : memberCard;
-		const baseBool = dge.rarities.includes(memberCard.rarity) //符合星级
-			|| dge?.collabs?.includes(memberCard.collabId) //符合合作
-			|| dge?.gachas?.some(n=>memberCard.gachaIds.includes(n)); //符合抽蛋桶
-		return {
-			awoken: baseBool //计算武器觉醒
-				|| memberAttrsTypesWithWeapon.attrs.some(attr=>dge.attrs.includes(attr)) //符合属性
-				|| memberAttrsTypesWithWeapon.types.some(type=>dge.types.includes(type)) //符合类型
-				,
-			noAwoken: baseBool //不计算武器觉醒
-				|| memberCard.attrs.some(attr=>dge.attrs.includes(attr)) //符合属性
-				|| memberCard.types.some(type=>dge.types.includes(type)) //符合类型
-				,
-		};
-	})();
+	const isDge = isDungeonEnhance(dge, member, assist);
 
 	//地下城阴阳加护强化
 	if (dge.benefit) { //当存在加护

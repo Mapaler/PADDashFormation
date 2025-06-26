@@ -344,6 +344,9 @@ label[for="fix-main-color"]::after{
 .search-box label[for="sort-reverse"]::after{
 	content: "逆序";
 }
+.search-box label[for="only-show-dungeon-enhance"]::after{
+	content: "仅显示被地下城增强的";
+}
 .search-box .additional-div::before{
 	content: "附加显示：";
 }

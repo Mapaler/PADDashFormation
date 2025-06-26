@@ -344,6 +344,9 @@ label[for="fix-main-color"]::after{
 .search-box label[for="sort-reverse"]::after{
 	content: "Reverse";
 }
+.search-box label[for="only-show-dungeon-enhance"]::after{
+	content: "Only enhanced by dungeons";
+}
 .search-box .additional-div::before{
 	content: "Additional display:";
 }
