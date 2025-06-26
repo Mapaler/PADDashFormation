@@ -1,62 +1,61 @@
 let merge_skill = false;
 
-const Attributes = {
-	/*0: "Fire",
-	1: "Water",
-	2: "Wood",
-	3: "Light",
-	4: "Dark",
-	5: "Heart",
-	6: "Jammer",
-	7: "Poison",
-	8: "MPoison",
-	9: "Bomb",*/
-	Fire: 0,
-	Water: 1,
-	Wood: 2,
-	Light: 3,
-	Dark: 4,
-	Heart: 5,
-	Jammer: 6,
-	Poison: 7,
-	MPoison: 8,
-	Bomb: 9,
+class Attributes {
+	static "0" = "Fire";
+	static "1" = "Water";
+	static "2" = "Wood";
+	static "3" = "Light";
+	static "4" = "Dark";
+	static "5" = "Heart";
+	static "6" = "Jammer";
+	static "7" = "Poison";
+	static "8" = "MPoison";
+	static "9" = "Bomb";
+	static Fire = 0;
+	static Water = 1;
+	static Wood = 2;
+	static Light = 3;
+	static Dark = 4;
+	static Heart = 5;
+	static Jammer = 6;
+	static Poison = 7;
+	static MPoison = 8;
+	static Bomb = 9;
+	static get all() {
+		return [
+			Attributes.Fire,
+			Attributes.Water,
+			Attributes.Wood,
+			Attributes.Light,
+			Attributes.Dark
+		];
+	}
+	static get _6color() {
+		return [
+			Attributes.Fire,
+			Attributes.Water,
+			Attributes.Wood,
+			Attributes.Light,
+			Attributes.Dark,
+			Attributes.Heart
+		];
+	}
+	static get orbs() {
+		return [
+			Attributes.Fire,
+			Attributes.Water,
+			Attributes.Wood,
+			Attributes.Light,
+			Attributes.Dark,
+			Attributes.Heart,
+			Attributes.Jammer,
+			Attributes.Poison,
+			Attributes.MPoison,
+			Attributes.Bomb
+		];
+	}
 }
-Object.entries(Attributes).forEach(([name, oid])=>Attributes[oid] = name)
 
-Attributes.all = function () {
-	return [
-		this.Fire,
-		this.Water,
-		this.Wood,
-		this.Light,
-		this.Dark
-	];
-}
-Attributes._6color = function () {
-	return [
-		this.Fire,
-		this.Water,
-		this.Wood,
-		this.Light,
-		this.Dark,
-		this.Heart
-	];
-}
-Attributes.orbs = function () {
-	return [
-		this.Fire,
-		this.Water,
-		this.Wood,
-		this.Light,
-		this.Dark,
-		this.Heart,
-		this.Jammer,
-		this.Poison,
-		this.MPoison,
-		this.Bomb,
-	];
-}
 //代码来自于 https://www.jianshu.com/p/3644833bca33
 function isEqual(obj1,obj2) {
 	//判断是否是对象或数组
@@ -863,7 +862,7 @@ const c = {
 		return { hp: { min: min / 100, max: max / 100 } };
 	},
 	exact: function (type, value, attrs, multiple = false) {
-		if (attrs === void 0) { attrs = Attributes.all(); }
+		if (attrs === void 0) { attrs = Attributes.all; }
 		return { exact: { type: type, value: value, attrs: attrs, multiple: multiple} };
 	},
 	combos: function (min) {
@@ -1417,7 +1416,7 @@ const skillObjectParsers = {
 	  const attrs = [attrs1, attrs2, attrs3, attrs4].filter(Boolean);
 	  return powerUp(null, null, p.scaleMatchAttrs(attrs.flatMap(Bin.unflags), min, bonus ? attrs.length : min, [mul, 100], [bonus ?? 0, 0]), null, v.percent(percent));
 	},
-	[172]() { return setOrbState(Attributes.orbs(), 'unlocked'); },
+	[172]() { return setOrbState(Attributes.orbs, 'unlocked'); },
 	[173](turns, attrAbsorb, comboAbsorb, damageAbsorb) {
 	  return activeTurns(turns, voidEnemyBuff(
 		[
@@ -1488,7 +1487,7 @@ const skillObjectParsers = {
 	},
 	[189]() {
 	  return [
-		setOrbState(Attributes.orbs(), 'unlocked'),
+		setOrbState(Attributes.orbs, 'unlocked'),
 		boardChange([0,1,2,3]),
 		autoPath(3),
 	  ];
@@ -1748,7 +1747,7 @@ const skillObjectParsers = {
 	
 	[257]() {
 		return [
-		  setOrbState(Attributes.orbs(), 'unlocked'),
+		  setOrbState(Attributes.orbs, 'unlocked'),
 		  boardChange([0,1,2,3,4,5]),
 		  autoPath(5),
 		];
@@ -1764,7 +1763,7 @@ const skillObjectParsers = {
 	[259](percent) { return breakingShield(v.xShield(percent)); },
 	[260](skillStage, voiceId) { return skillPlayVoice(skillStage, voiceId); },
 	[261](percent) { return gravity(v.xCHP(percent), 'single'); },
-	[262](count) { return setOrbState(Attributes.orbs(), 'nail', {count: v.constant(count)}); },
+	[262](count) { return setOrbState(Attributes.orbs, 'nail', {count: v.constant(count)}); },
 	[263](turns, cap, attr, type) { //按属性改变伤害上限主动技
 		return activeTurns(turns,
 			increaseDamageCapacity(cap * 1e8, void 0, Bin.unflags(attr), Bin.unflags(type))
@@ -2642,7 +2641,7 @@ function renderSkill(skill, option = {})
 			if (condition) dict.condition = renderCondition(condition);
 			
 			let targetDict = {}, attrs_types = [];
-			if (attrs?.length && !isEqual(attrs, Attributes.all()))
+			if (attrs?.length && !isEqual(attrs, Attributes.all))
 			{
 				targetDict.attrs = renderAttrs(attrs || [], {affix: attrs?.filter(attr=> attr !== 5)?.length});
 				attrs_types.push(targetDict.attrs);
@@ -2762,7 +2761,7 @@ function renderSkill(skill, option = {})
 			}
 			
 			let attrs_types = [];
-			if (attrs?.length && !isEqual(attrs, Attributes.all()))
+			if (attrs?.length && !isEqual(attrs, Attributes.all))
 			{
 				dict.attrs = renderAttrs(attrs || [], {affix: attrs?.filter(attr=> attr !== 5)?.length});
 				attrs_types.push(dict.attrs);
@@ -2823,7 +2822,7 @@ function renderSkill(skill, option = {})
 			};
 
 			let targetDict = {}, attrs_types = [];
-			if (attrs?.length && !isEqual(attrs, Attributes.all()))
+			if (attrs?.length && !isEqual(attrs, Attributes.all))
 			{
 				targetDict.attrs = renderAttrs(attrs || [], {affix: attrs?.filter(attr=> attr !== 5)?.length});
 				attrs_types.push(targetDict.attrs);
@@ -3029,7 +3028,7 @@ function renderAttrs(attrs, option = {}) {
 	
 	const tsp = localTranslating.skill_parse;
 	let contentFrg;
-	if (isEqual(attrs, Attributes.all()))
+	if (isEqual(attrs, Attributes.all))
 	{
 		contentFrg = tsp.attrs.all();
 	}

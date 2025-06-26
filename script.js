@@ -116,6 +116,7 @@ DBOpenRequest.onupgradeneeded = function(event) {
 	};
 };
 class Plus extends Array {
+	static maxValue = 297;
 	constructor(hp = 0 , atk = 0, rcv = 0) {
 		super(3);//建立 Array
 		if (Array.isArray(hp) && hp.length >= 3 //传入数组的形式
@@ -135,7 +136,7 @@ class Plus extends Array {
 	}
 	set hp(num) {
 		if (!Number.isInteger(num)) throw new TypeError("传入的 HP +值 不是整数");
-		if (num < 0 || num > 99) throw new RangeError("HP +值应为 0-99 之间的整数");
+		if (num < 0 || num > Plus.maxValue) throw new RangeError("HP +值应为 0-99 之间的整数");
 		this[0] = num;
 	}
 	get atk() {
@@ -143,7 +144,7 @@ class Plus extends Array {
 	}
 	set atk(num) {
 		if (!Number.isInteger(num)) throw new TypeError("传入的 ATK +值 不是整数");
-		if (num < 0 || num > 99) throw new RangeError("ATK +值应为 0-99 之间的整数");
+		if (num < 0 || num > Plus.maxValue) throw new RangeError("ATK +值应为 0-99 之间的整数");
 		this[1] = num;
 	}
 	get rcv() {
@@ -151,7 +152,7 @@ class Plus extends Array {
 	}
 	set rcv(num) {
 		if (!Number.isInteger(num)) throw new TypeError("传入的 RCV +值 不是整数");
-		if (num < 0 || num > 99) throw new RangeError("RCV +值应为 0-99 之间的整数");
+		if (num < 0 || num > Plus.maxValue) throw new RangeError("RCV +值应为 0-99 之间的整数");
 		this[2] = num;
 	}
 	get is297() {
