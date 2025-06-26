@@ -5722,10 +5722,12 @@ function initialize() {
 			mon.level >= card.maxLevel) { //当4种特殊type的时候是无法297和打觉醒的，但是不能叠加的在未满级时可以
 			mon.plus = [0, 0, 0];
 		} else {
-			mon.plus[0] = parseInt(monEditAddHp.value, 10) || 0;
-			mon.plus[1] = parseInt(monEditAddAtk.value, 10) || 0;
-			mon.plus[2] = parseInt(monEditAddRcv.value, 10) || 0;
-			if (!editBox.isAssist) { //如果不是辅助，则可以设定潜觉
+			mon.plus = [monEditAddHp, monEditAddAtk, monEditAddRcv].map(node=>parseInt(node.value, 10) || 0);
+			if (editBox.isAssist) {
+				//武器超过297的部分无效
+				mon.plus = mon.plus.map(value=>Math.min(value, 99));
+			} else {
+				//如果不是辅助，则可以设定潜觉
 				mon.latent = editBox.latent.concat();
 			}
 		}
