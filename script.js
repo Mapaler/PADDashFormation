@@ -7711,6 +7711,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 60: case 61: return member.card.gachaIds.includes(4) ? 1.15 : 1; //纺星精灵(花朵拟人)
 				case 63: case 64: return member.card.gachaIds.includes(15) ? 1.15 : 1; //女仆管家
 				case 66: case 67: return member.card.gachaIds.includes(13) ? 1.15 : 1; //酒桶
+				case 68: case 69: return member.card.gachaIds.includes(8) ? 1.15 : 1; //龙契士&龙唤士桶(对桶外合作id不生效)
 				default: return 1;
 			}
 		}
