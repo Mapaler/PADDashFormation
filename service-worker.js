@@ -503,7 +503,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_126.PNG",
-		"bd230f6dea4f527a3285f3dcf3d14a69"
+		"e941c103ac926b3f30273bdb56e7c54d"
 	],
 	[
 		"images/cards_ja/CARDS_127.PNG",
@@ -54587,7 +54587,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"b618f4b575ee19e2fc5605074776f652"
+		"87d8ed9704ea5d11050a6783ca1d7996"
 	],
 	[
 		"images/brown-button.svg",
