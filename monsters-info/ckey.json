@@ -10,17 +10,17 @@
 	{
 		"code": "en",
 		"ckey": {
-			"card": "e2eb92fcacce8f25ca3593501b4a3f17",
-			"skill": "f887b657c992bb5dc0e1256932da6af1"
+			"card": "5bee4b91262b84250d8e425fd58fa926",
+			"skill": "41a7831e3090e3b14ca147163eb5616e"
 		},
-		"updateTime": 1753886542502
+		"updateTime": 1754237196926
 	},
 	{
 		"code": "ko",
 		"ckey": {
-			"card": "7a349f1c90534e7b2f2fcdc72efab613",
-			"skill": "86672150d45c4a135bcd28d616dabf32"
+			"card": "7d02df2ece70dd26f290174be464d204",
+			"skill": "33bbdcbd1fcd3997f0f0f8413f35b277"
 		},
-		"updateTime": 1753886542502
+		"updateTime": 1754237196926
 	}
 ]
