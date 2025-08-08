@@ -19766,6 +19766,22 @@ const cachesMap = new Map([
 		"c85fa9ce4bedf0132c254d0d9a9662d2"
 	],
 	[
+		"sound/voice/ja/padv5314.wav",
+		"08708b45d8402dbb50028bd0199b4126"
+	],
+	[
+		"sound/voice/ja/padv5315.wav",
+		"043612dfde41bf226014aae1ca1d877b"
+	],
+	[
+		"sound/voice/ja/padv5316.wav",
+		"034f2610cf8b0927f3deb5eb99a12015"
+	],
+	[
+		"sound/voice/ja/padv5317.wav",
+		"bbb433d61e0734d57b95680bb0a94230"
+	],
+	[
 		"sound/voice/ja/padv532.wav",
 		"f2b50c8624db8f200c5bed32366a7e4d"
 	],
@@ -22039,7 +22055,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_106.PNG",
-		"4d60763fef52fb60533f370db17b6e20"
+		"fbec379fdcc1faeec1d13846b75b24b9"
 	],
 	[
 		"images/cards_en/CARDS_107.PNG",
@@ -22119,7 +22135,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_126.PNG",
-		"5bdc5fc5640b17dc9994afdfdb92ff62"
+		"b451de261d0233d9154b85f7913de8f9"
+	],
+	[
+		"images/cards_en/CARDS_127.PNG",
+		"eb4e55f4bb2af0992637b03b12cc5d12"
 	],
 	[
 		"sound/voice/en/padv001.wav",
@@ -38547,7 +38567,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_106.PNG",
-		"4d60763fef52fb60533f370db17b6e20"
+		"fbec379fdcc1faeec1d13846b75b24b9"
 	],
 	[
 		"images/cards_ko/CARDS_107.PNG",
@@ -38627,7 +38647,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_126.PNG",
-		"5bdc5fc5640b17dc9994afdfdb92ff62"
+		"b451de261d0233d9154b85f7913de8f9"
+	],
+	[
+		"images/cards_ko/CARDS_127.PNG",
+		"eb4e55f4bb2af0992637b03b12cc5d12"
 	],
 	[
 		"sound/voice/ko/padv001.wav",
@@ -56955,7 +56979,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"afd43a4746a19c65eb9d4da3b341c74c"
+		"18752602e73fc6317efa080095cf2892"
 	],
 	[
 		"script-custom_elements.js",
@@ -56975,11 +56999,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"0e09610f3c46c91d63c4b68098263241"
+		"2791c229aed785793eed5717803024d9"
 	],
 	[
 		"solo.html",
-		"757690e647d6a30f69ad942c85550757"
+		"3734b8b6db21df451e1735075fcc4c75"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -56991,7 +57015,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"4922f21188a7c946fb4ecdc8bccdac1c"
+		"c7046a8f803b51cc5e08a63971c5d2ba"
 	],
 	[
 		"temp.js",
@@ -56999,7 +57023,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"9de212235c69fe05833e1ff6ea06597b"
+		"4ed2f4519f5b158129248fc9b1fc910e"
 	],
 	[
 		"languages/en.css",
