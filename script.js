@@ -7009,6 +7009,16 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		targetValue.setAttribute(dataAttrName, percentValue);
 		targetMeter.value = percentValue;
 	}
+	//下午茶
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"132\"]")) {
+		const targetValue = targetIcon.parentElement.querySelector(".prob");
+		const targetMeter = targetIcon.parentElement.querySelector("meter");
+		const thisAwokenNum = awokenCountInTeam(team, 132, solo, teamsCount);
+		let prob = thisAwokenNum / 5;
+		const percentValue = Math.round(Math.min(prob,1)*100);
+		targetValue.setAttribute(dataAttrName, percentValue);
+		targetMeter.value = percentValue;
+	}
 	//云
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"54\"]")) {
 		const thisAwokenNum = awokenCountInTeam(team, 54, solo, teamsCount);
@@ -7265,18 +7275,6 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			count += effectiveAwokens.filter(ak=>ak===59).length;
 		}
 		targetValue.setAttribute(dataAttrName, count * 5);
-	}
-	//下午茶
-	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"132\"]")) {
-		const targetValue = targetIcon.parentElement.querySelector(".count");
-		let count = 0;
-		for (let mi=0; mi < members.length; mi++) {
-			const memberData = members[mi];
-			const assistData = assists[mi];
-			let effectiveAwokens = memberData.effectiveAwokens(assistData);
-			count += effectiveAwokens.filter(ak=>ak===132).length;
-		}
-		targetValue.setAttribute(dataAttrName, Math.min(count * 20, 100));
 	}
 }
 function highlightAwokenMember(event, teamIndex) {

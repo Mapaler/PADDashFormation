@@ -3469,7 +3469,7 @@ a.series-search::before {
 	align-items: flex-end;
 }
 .team-awoken-effect .team-flags .team-member-icon {
-	width: 20px;
+	width: 10px;
 	height: 20px;
 }
 .team-awoken-effect .team-flags .team-member-icon[data-value="0"] {
