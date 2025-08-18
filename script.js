@@ -6124,12 +6124,12 @@ function refreshLatent(latents, member, latentsNode, option = {}) {
 	//如果传入了武器，就添加有效觉醒
 	for (let ai = 0; ai < iconArr.length; ai++) {
 		const icon = iconArr[ai], latent = latents[latentIndex];
+		let unallowableLatent = false;
 		if (latent != undefined && ai >= usedHoleN && ai < maxLatentCount) //有潜觉
 		{
 			const thisHoleN = latentUseHole(latent);
 			icon.setAttribute("data-latent-icon", latent);
 			icon.setAttribute("data-latent-hole", thisHoleN);
-			let unallowableLatent = false;
 			//搜索需要觉醒的潜觉
 			const needAwokenLatent = allowable_latent.needAwoken.find(obj=>obj.latent == latent);
 			if (needAwokenLatent) { //如果是需要觉醒的潜觉
@@ -6145,13 +6145,13 @@ function refreshLatent(latents, member, latentsNode, option = {}) {
 				if (needAwokens.isDisjointFrom(effectiveAwokens))
 					unallowableLatent = true;
 			}
-			icon.classList.toggle('unallowable-latent', unallowableLatent);
 			usedHoleN += thisHoleN;
 			latentIndex++;
 		} else {
 			icon.removeAttribute("data-latent-icon");
 			icon.removeAttribute("data-latent-hole");
 		}
+		icon.classList.toggle('unallowable-latent', unallowableLatent);
 	}
 };
 //点击怪物头像，出现编辑窗
@@ -7094,17 +7094,25 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 	}
 	//L解禁武器
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"48\"]")) {
+		const latentId = parseInt(targetIcon.dataset.latentIcon, 10);
+		const awokenId = allowable_latent.needAwoken.find(obj=>obj.latent === latentId)?.awoken;
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === awokenId);
 		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
-		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 60);
-		let count = new Array(orbs.length).fill(0);
+		const count = new Array(orbs.length).fill(0);
 		for (let mi=0; mi < members.length; mi++) {
 			const memberData = members[mi];
-			//const assistData = assists[mi]; //L解禁武器，武器上的L无意义
-			if (memberData?.latent?.includes(48)) {
-				let effectiveAwokens = memberData.effectiveAwokens();
-				let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+			const assistData = void 0; //assists[mi]; //L解禁武器，武器上的L无意义
+			const latentCount = memberData.latent.filter(id=>id===latentId).length;
+			
+			if (latentCount > 0) {
+				let effectiveAwokens = memberData.effectiveAwokens(assistData);
+				let thisAwokenNum = (
+					effectiveAwokens.filter(ak=>ak===equivalentAwoken.small).length
+					+ effectiveAwokens.filter(ak=>ak===equivalentAwoken.big).length
+					* equivalentAwoken.times)
+				* latentCount;
 				if (thisAwokenNum == 0) continue;
-				const {attrs=[]} = memberData.getAttrsTypesWithWeapon() || {};
+				const {attrs=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
 				attrs.distinct().forEach(attr=>{
 					count[attr] += thisAwokenNum;
 				});
@@ -7136,17 +7144,57 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			orb.setAttribute(dataAttrName,count[oi]);
 		});
 	}
-	//U解禁消
-	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"41\"]")) {
+	//十字追部位
+	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"50\"]")) {
+		const latentId = parseInt(targetIcon.dataset.latentIcon, 10);
+		const awokenId = allowable_latent.needAwoken.find(obj=>obj.latent === latentId)?.awoken;
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === awokenId);
 		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
-		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 27);
-		let count = new Array(orbs.length).fill(0);
+		const count = new Array(orbs.length).fill(0);
 		for (let mi=0; mi < members.length; mi++) {
 			const memberData = members[mi];
 			const assistData = assists[mi];
-			if (memberData?.latent?.includes(41)) {
+			const latentCount = memberData.latent.filter(id=>id===latentId).length;
+			
+			if (latentCount > 0) {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
-				let thisAwokenNum = effectiveAwokens.filter(ak=>ak==equivalentAwoken.small).length + effectiveAwokens.filter(ak=>ak==equivalentAwoken.big).length * equivalentAwoken.times;
+				let thisAwokenNum = (
+					effectiveAwokens.filter(ak=>ak===equivalentAwoken.small).length
+					+ effectiveAwokens.filter(ak=>ak===equivalentAwoken.big).length
+					* equivalentAwoken.times)
+				* latentCount;
+				if (thisAwokenNum == 0) continue;
+				const {attrs=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
+				attrs.distinct().forEach(attr=>{
+					count[attr] += thisAwokenNum;
+				});
+			} else {
+				continue;
+			}
+		}
+		orbs.forEach((orb,oi)=>{
+			orb.setAttribute(dataAttrName,count[oi]);
+		});
+	}
+	//U解禁消
+	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"41\"]")) {
+		const latentId = parseInt(targetIcon.dataset.latentIcon, 10);
+		const awokenId = allowable_latent.needAwoken.find(obj=>obj.latent === latentId)?.awoken;
+		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === awokenId);
+		const orbs = Array.from(targetIcon.parentElement.querySelectorAll(".orb-list .orb"));
+		const count = new Array(orbs.length).fill(0);
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
+			const latentCount = memberData.latent.filter(id=>id===latentId).length;
+			
+			if (latentCount > 0) {
+				let effectiveAwokens = memberData.effectiveAwokens(assistData);
+				let thisAwokenNum = (
+					effectiveAwokens.filter(ak=>ak===equivalentAwoken.small).length
+					+ effectiveAwokens.filter(ak=>ak===equivalentAwoken.big).length
+					* equivalentAwoken.times)
+				* latentCount;
 				if (thisAwokenNum == 0) continue;
 				const {attrs=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
 				attrs.distinct().forEach(attr=>{
@@ -7296,6 +7344,7 @@ function highlightAwokenMember(event, teamIndex) {
 				case 46: return 45; //心追解云封
 				case 47: return 59; //心L SB+
 				case 48: return 60; //L解封武器
+				case 50: return 78; //十字追部位
 				default: return;
 			}
 		} else {
@@ -7710,6 +7759,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 63: case 64: return member.card.gachaIds.includes(15) ? 1.15 : 1; //女仆管家
 				case 66: case 67: return member.card.gachaIds.includes(13) ? 1.15 : 1; //酒桶
 				case 68: case 69: return member.card.gachaIds.includes(8) ? 1.15 : 1; //龙契士&龙唤士桶(对桶外合作id不生效)
+				case 70: case 71: return member.card.collabId === 93 ? 1.15 : 1; //鬼灭之刃
 				default: return 1;
 			}
 		}

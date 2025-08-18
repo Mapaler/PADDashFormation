@@ -1366,7 +1366,7 @@
 .latent-icon[data-latent-icon='41']::before{ /*U解禁消*/
 	--icon-y-index: 41;
 }
-.latent-icon[data-latent-icon='42']::before{ /*伤害上限×2*/
+.latent-icon[data-latent-icon='42']::before{ /*伤害上限×4*/
 	--icon-y-index: 42;
 }
 .latent-icon[data-latent-icon='43']::before{ /*HP++*/
@@ -1387,8 +1387,11 @@
 .latent-icon[data-latent-icon='48']::before{ /*L解禁武器*/
 	--icon-y-index: 48;
 }
-.latent-icon[data-latent-icon='49']::before{ /*伤害上限×3*/
+.latent-icon[data-latent-icon='49']::before{ /*伤害上限×8*/
 	--icon-y-index: 49;
+}
+.latent-icon[data-latent-icon='50']::before{ /*十字追部位*/
+	--icon-y-index: 50;
 }
 :is(:lang(en), :lang(ko)) .latent-icon:where(
 	[data-latent-icon='17'],
@@ -1419,6 +1422,7 @@
 	[data-latent-icon='46'],
 	[data-latent-icon='47'],
 	[data-latent-icon='48'],
+	[data-latent-icon='50'],
 ){ /*所以横向占两格*/
 	grid-column: span 2;
 }
@@ -1431,6 +1435,7 @@
 	[data-latent-icon='46'],
 	[data-latent-icon='47'],
 	[data-latent-icon='48'],
+	[data-latent-icon='50'],
 )::after 
 {
 	content: "";
@@ -1455,6 +1460,9 @@
 }
 .latent-icon.show-enabling-awokwn[data-latent-icon='48']::after{ /*心L大SB*/
 	--icon-y-index: 60;
+}
+.latent-icon.show-enabling-awokwn[data-latent-icon='50']::after{ /*十字追部位*/
+	--icon-y-index: 78;
 }
 
 /* 额外有 x1.5 的 6格觉醒 */
