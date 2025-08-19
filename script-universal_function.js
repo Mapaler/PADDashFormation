@@ -932,14 +932,16 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	const dgeRate = [dge.rate.hp, dge.rate.atk, dge.rate.rcv];
 	const isDge = isDungeonEnhance(dge, member, assist);
 
+	//v22.6 变化
+	const isJP = currentDataSource.code === "jp";
 	//地下城阴阳加护强化
 	if (dge.benefit) { //当存在加护
 		const benefitAwokens = [128 , 129]; //0b1是阳，0b10是阴，可以两者都强化
 		Bin.unflags(dge.benefit).forEach(idx=>{
 			const akId = benefitAwokens[idx]; //得到加护觉醒编号
-			latterAwokenScale[0].push({ index: akId, scale: 1.2 }); //HP
+			latterAwokenScale[0].push({ index: akId, scale: isJP ? 2 : 1.2 }); //HP
 			latterAwokenScale[1].push({ index: akId, scale: 5 }); //ATK
-			latterAwokenScale[2].push({ index: akId, scale: 1.2 }); //RCV
+			latterAwokenScale[2].push({ index: akId, scale: isJP ? 2 : 1.2 }); //RCV
 		});
 	}
 

@@ -1401,12 +1401,13 @@
 	--icon-x-index: 1;
 }
 
-/*v21.7 日服x3变x4，美韩服不变，就这样写。*/
-/*body:not([data-game-source="ja"]) .latent-icon:where(
+/*v22.6 日服x2变x4，x4变x8，美韩服不变，就这样写。*/
+body:not([data-game-source="ja"]) .latent-icon:where(
+	[data-latent-icon='42'],
 	[data-latent-icon='49'],
 )::before{
 	--icon-x-index: 1;
-}*/
+}
 
 /* 编辑界面特殊的 三维潜觉 */
 .latent-ul-div .latent-ul .latent-icon[data-latent-icon='12']::before
@@ -1490,10 +1491,23 @@
 	content: "";
 	margin-left: 3px;
 	--icon-x-index: 1;
-	--icon-y-index: 42;
+	--icon-y-index: 45;
+}
+
+/*v22.6 日服 额外效果x1.5、x1.8变x2，美韩服不变，就这样写。*/
+/* 额外有 x1.5 的 6格觉醒 */
+body:not([data-game-source="ja"]) .level-super-break .latent-icon:where(
+	[data-latent-icon='14'], /*防费*/
+	[data-latent-icon='15'], /*防毒*/
+	[data-latent-icon='38'], /*破属吸*/
+	[data-latent-icon='39'], /*破伤吸*/
+	[data-latent-icon='47'], /*S++*/
+)::after
+{
+	--icon-y-index: 43;
 }
 /* 额外有 x1.8 的 6格觉醒 */
-.level-super-break .latent-icon:where(
+body:not([data-game-source="ja"]) .level-super-break .latent-icon:where(
 	[data-latent-icon='13'], /*防换队长*/
 	[data-latent-icon='37'], /*破无效*/
 	[data-latent-icon='40'], /*解轮盘赌*/
@@ -1502,7 +1516,7 @@
 	[data-latent-icon='48'], /*解封武器*/
 )::after
 {
-	--icon-x-index: 2;
+	--icon-y-index: 44;
 }
 
 /* 徽章背景 */
