@@ -103,7 +103,7 @@ let localTranslating = {
 			auto_heal: tp`${'icon'}Heal ${'stats'} by ${'belong_to'} ${'value'} after matching orbs`,
 			ctw: tp`${'icon'}Move orbs freely for ${'time'}${'addition'}`,
 			ctw_addition: tp`, ${'cond'} is achieved, ${'skill'}`,
-			gravity: tp`Reduce ${'target'} ${'icon'}${'value'}`,
+			gravity: tp`Reduce ${'part'}${'target'} ${'icon'}${'value'}`,
 			resolve: tp`${'icon'}Survive a single hit when ${'stats'}≧${'min'}`,
 			board_change: tp`Change all orbs to ${'orbs'}`,
 			skill_boost: tp`Team's skills charge ${'icon'}${'turns_min'}${'turns_max'}`,
@@ -206,6 +206,8 @@ let localTranslating = {
 			L_shape: tp`When matching an L shape of 5 ${'orbs'} `,
 			heal: tp`When healing at least ${'heal'} ${'stats'} with ${'orbs'} `,
 			awakening_activated: tp`When [${'awakenings'}] activated `,
+
+			state_is_active: tp`When[${'state'}] effect is active`,
 		},
 		position: {
 			top: tp`${'pos'} of top rows`,
@@ -247,6 +249,7 @@ let localTranslating = {
 			enemy_all: tp`all enemys`,
 			enemy_one: tp`1 enemy`,
 			enemy_attr: tp`${'attr'} enemy`,
+			enemy_part: tp`the Part of `,
 			the_attr: tp`attr of the matched Orbs`,
 		},
 		stats: {
@@ -263,6 +266,9 @@ let localTranslating = {
 			cstage: tp`current Stage of Dungeon`,
 			broken_parts: tp`number of Broken Parts`,
 			state_is: tp`${'icon'}${'state'}: ${'num'}`,
+		},
+		buffs: {
+			orb_drop_increase: tp`${'orbs'} more likely to appear`,
 		},
 		unit: {
 			orbs: tp``,
@@ -478,6 +484,7 @@ let localTranslating = {
 			[129]: tp`${'icon'}Yin Protection`,
 			[130]: tp`${'icon'}Aging`,
 			[131]: tp`${'icon'}Part Break`,
+			[132]: tp`${'icon'}Afternoon Tea`,
 		}
 	},
 };

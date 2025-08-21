@@ -88,7 +88,7 @@ const _localTranslating = {
 			auto_heal: tp`${'icon'}消除宝珠的回合，回复${'belong_to'}${'value'}的${'stats'}`,
 			ctw: tp`${'icon'}${'time'}内时间停止，可以任意移动宝珠${'addition'}`,
 			ctw_addition: tp`，达成${'cond'}时，${'skill'}`,
-			gravity: tp`造成${'target'}${'icon'}${'value'}的伤害`,
+			gravity: tp`造成${'target'}${'part'}${'icon'}${'value'}的伤害`,
 			resolve: tp`${'icon'}如${'stats'}≧${'min'}，受到单一次致命攻击时，将会以1点 HP 生还`,
 			board_change: tp`全画面的宝珠变为${'orbs'}`,
 			skill_boost: tp`自身以外成员的技能冷却储备${'icon'}${'turns_min'}${'turns_max'}`,
@@ -191,6 +191,8 @@ const _localTranslating = {
 			L_shape: tp`以L字形式消除5个${'orbs'}时`,
 			heal: tp`以${'orbs'}回复${'heal'}${'stats'}时`,
 			awakening_activated: tp`[${'awakenings'}]发动时`,
+
+			state_is_active: tp`在[${'state'}]效果发动中`,
 		},
 		position: {
 			top: tp`上方第${'pos'}横行`,
@@ -232,6 +234,7 @@ const _localTranslating = {
 			enemy_all: tp`敌方全体`,
 			enemy_one: tp`敌方1体`,
 			enemy_attr: tp`${'attr'}敌人`,
+			enemy_part: tp`部位`,
 			the_attr: tp`该组宝珠对应属性`,
 		},
 		stats: {
@@ -248,6 +251,9 @@ const _localTranslating = {
 			cstage: tp`当前地下城层数`,
 			broken_parts: tp`部位破坏数`,
 			state_is: tp`${'icon'}${'state'}：${'num'}`,
+		},
+		buffs: {
+			orb_drop_increase: tp`${'orbs'}掉落率提高`,
 		},
 		unit: {
 			orbs: tp`个`,
@@ -463,6 +469,7 @@ const _localTranslating = {
 			[129]: tp`${'icon'}阴之加护`,
 			[130]: tp`${'icon'}熟成`,
 			[131]: tp`${'icon'}部位破坏`,
+			[132]: tp`${'icon'}奶茶`,
 		}
 	},
 };

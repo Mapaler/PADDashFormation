@@ -87,7 +87,7 @@ const _localTranslating = {
 			auto_heal: tp`${'icon'}消除寶珠的回合，回復${'belong_to'}${'value'}的${'stats'}`,
 			ctw: tp`${'icon'}${'time'}內時間停止，可以任意移動寶珠${'addition'}`,
 			ctw_addition: tp`，達成${'cond'}時，${'skill'}`,
-			gravity: tp`造成${'target'}${'icon'}${'value'}的傷害`,
+			gravity: tp`造成${'target'}${'part'}${'icon'}${'value'}的傷害`,
 			resolve: tp`${'icon'}如${'stats'}≧${'min'}，受到單一次致命攻擊時，將會以1點 HP 生還`,
 			board_change: tp`全畫面的寶珠變為${'orbs'}`,
 			skill_boost: tp`自身以外成員的技能冷卻儲備${'icon'}${'turns_min'}${'turns_max'}`,
@@ -190,6 +190,8 @@ const _localTranslating = {
 			L_shape: tp`以L字形式消除5個${'orbs'}時`,
 			heal: tp`以${'orbs'}回復${'heal'}${'stats'}時`,
 			awakening_activated: tp`[${'awakenings'}]發動時`,
+
+			state_is_active: tp`在[${'state'}]效果發動中`,
 		},
 		position: {
 			top: tp`上方第${'pos'}橫行`,
@@ -231,6 +233,7 @@ const _localTranslating = {
 			enemy_all: tp`敵方全體`,
 			enemy_one: tp`敵方1體`,
 			enemy_attr: tp`${'attr'}敵人`,
+			enemy_part: tp`部位`,
 			the_attr: tp`該組寶珠對應屬性`,
 		},
 		stats: {
@@ -247,6 +250,9 @@ const _localTranslating = {
 			cstage: tp`當前地下城層數`,
 			broken_parts: tp`部位破壞數`,
 			state_is: tp`${'icon'}${'state'}：${'num'}`,
+		},
+		buffs: {
+			orb_drop_increase: tp`${'orbs'}掉落率提高`,
 		},
 		unit: {
 			orbs: tp`個`,
@@ -461,6 +467,7 @@ const _localTranslating = {
 			[129]: tp`${'icon'}陰之加護`,
 			[130]: tp`${'icon'}熟成`,
 			[131]: tp`${'icon'}部位破壞`,
+			[132]: tp`${'icon'}奶茶`,
 		}
 	},
 };

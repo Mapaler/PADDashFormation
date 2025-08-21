@@ -459,7 +459,6 @@ const SkillKinds = {
 	BindCard: "bind-card",
 	RandomSkills: "random-skills",
 	EvolvedSkills: "evolved-skills",
-	SkillProviso: "skill-proviso",
 	ChangeAttribute: "change-attr",
 	SkillBoost: "skill-boost",
 	AddCombo: "add-combo",
@@ -492,6 +491,7 @@ const SkillKinds = {
 	PlayVoice: "play-voice",
 	TimesLimit: "times-limit",
 	FixedStartingPosition: "fixed-starting-position",
+	PartGravity: "part-gravity",
 }
 
 function skillParser(skillId)
@@ -887,6 +887,9 @@ const c = {
 		return { remainAttrOrbs: { attrs, min, max} };
 	},
 	awakeningActivated: function (awakenings) { return { awakeningActivated: { awakenings } }; },
+	stateIsActive: function (type, attrs) {
+		return { stateIsActive: { type, attrs} };
+	},
 }
 
 const p = {
@@ -1031,8 +1034,11 @@ function evolvedSkills(loop, skills) {
 function changeAttr(target, attr) {
 	return { kind: SkillKinds.ChangeAttribute, target: target, attr: attr ?? 0 };
 }
-function gravity(value, target = "all") {
-	return { kind: SkillKinds.Gravity, value, target };
+function gravity(value, target = "all", isPartGravity = false) {
+	return { kind: isPartGravity ? SkillKinds.PartGravity : SkillKinds.Gravity,
+		value,
+		target
+	};
 }
 function voidEnemyBuff(buffs) {
 	return { kind: SkillKinds.VoidEnemyBuff, buffs: buffs };
@@ -1830,6 +1836,17 @@ const skillObjectParsers = {
 	},
 	//固定起手位置
 	[273](turns) {return activeTurns(turns, fixedStartingPosition()); },
+	//宝珠掉落率提高时才能使用技能
+	[275](typeNum, attrFlag) {
+		const typeNames = [
+			null,
+			"orb-drop-increase",
+		]
+		let type = typeNames[typeNum];
+		return skillProviso(c.stateIsActive(type, Bin.unflags(attrFlag)));
+	},
+	//部位的重力
+	[276](percent) { return gravity(v.xCHP(percent), void 0, true); },
 
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -2236,6 +2253,17 @@ function renderSkill(skill, option = {})
 			let {value, target} = skill;
 			let dict = {
 				icon: createIcon(skill.kind),
+				target: target === 'all' ? tsp.target.enemy_all() : tsp.target.enemy_one(),
+				value: renderValue(value, { percent:true }),
+			};
+			frg.ap(tsp.skill.gravity(dict));
+			break;
+		}
+		case SkillKinds.PartGravity: { //部位重力
+			let {value, target} = skill;
+			let dict = {
+				icon: createIcon("rate-mul-part_break"), //直接用重力的
+				part: tsp.target.enemy_part(),
 				target: target === 'all' ? tsp.target.enemy_all() : tsp.target.enemy_one(),
 				value: renderValue(value, { percent:true }),
 			};
@@ -3309,6 +3337,21 @@ function renderCondition(cond) {
 			awakenings: renderAwakenings(cond.awakeningActivated.awakenings, {affix: true}),
 		};
 		frg.ap(tsp.cond.awakening_activated(dict));
+	} else if (cond.stateIsActive) {
+		const {	type, attrs} = cond.stateIsActive;
+		let state;
+		switch (type) {
+			case "orb-drop-increase": {
+				state = tsp.buffs.orb_drop_increase({
+					orbs:renderOrbs(attrs, {className: "drop", affix: true})
+				});
+				break;
+			}
+		}
+		let dict = {
+			state: state,
+		};
+		frg.ap(tsp.cond.state_is_active(dict));
 	} else {
 		frg.ap(tsp.cond.unknown());
 	}
