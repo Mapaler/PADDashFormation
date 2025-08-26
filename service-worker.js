@@ -60775,11 +60775,11 @@ const cachesMap = new Map([
 	],
 	[
 		"fonts/fa-regular-400.woff2",
-		"89672701a5874b80be27649e0494e354"
+		"49d7fd7a16b90576fb4ac8e2b5f2ad27"
 	],
 	[
 		"fonts/fa-solid-900.woff2",
-		"4a6591ab5460ae5cbff1ecbd6e52193a"
+		"18dd0b25bda3d372b262b08edeed525a"
 	],
 	[
 		"fonts/FOT-KurokaneStd-EB.woff2",
@@ -61063,7 +61063,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/core-js.min.js",
-		"4ba2329c1909aa2b39748cb8f8ace0f1"
+		"14092514469b918eaac0c2dde129f8a9"
 	],
 	[
 		"library/html2canvas.min.js",
