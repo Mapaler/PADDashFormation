@@ -3555,6 +3555,25 @@ const specialSearchFunctions = (function() {
 						return fragment;
 					}
 				},
+				{name:"Park Breaking",otLangName:{chs:"部位破坏重力",cht:"部位破壞重力"},
+					function:cards=>{
+						const searchTypeArray = [276];
+						return cards.filter(card=>{
+							const skill = getCardActiveSkill(card, searchTypeArray);
+							return skill;
+						}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+					},
+					addition:card=>{
+						const searchTypeArray = [276];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						if (!skill) return;
+						const sk = skill.params;
+						const fragment = document.createDocumentFragment();
+						fragment.appendChild(createSkillIcon('rate-mul-part_break'));
+						fragment.append(`-${sk[0]}%`);
+						return fragment;
+					}
+				},
 			]},
 			{group:true,name:"Damage Enemy - Fixed damage",otLangName:{chs:"对敌直接伤害类-固伤",cht:"對敵直接傷害類-固傷"}, functions: [
 				{name:"Any",otLangName:{chs:"任意",cht:"任意"},
@@ -3832,86 +3851,110 @@ const specialSearchFunctions = (function() {
 					return !skill;
 				})
 			},
-			{name:"Enable require HP range",otLangName:{chs:"技能使用血线要求",cht:"技能使用血線要求"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [225];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
-				addition:card=>{
-					const searchTypeArray = [225];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					let strArr = [];
-					if (sk[0]) strArr.push(`≥${sk[0]}%`);
-					if (sk[1]) strArr.push(`≤${sk[1]}%`);
-					return `HP ${strArr.join(" ")}`;
-				}
-			},
-			{name:"Enable require Dungeon Stage",otLangName:{chs:"技能使用地下城层数要求",cht:"技能使用地下城層數要求"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [234];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
-				addition:card=>{
-					const searchTypeArray = [234];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					let strArr = [];
-					if (sk[0]) strArr.push(`≥${sk[0]}`);
-					if (sk[1]) strArr.push(`≤${sk[1]}`);
-					return `层 ${strArr.join(" ")}`;
-				}
-			},
-			{name:"Delay active after skill use",otLangName:{chs:"技能使用后延迟生效",cht:"技能使用后延迟生效"},
-				function:cards=>{
-					const searchTypeArray = [248];
-					return cards.filter(card=>{
+			{group:true,name:"Skill use is conditional",otLangName:{chs:"技能使用具有限制",cht:"技能使用具有限制"}, functions: [
+				{name:"Enable require HP range",otLangName:{chs:"技能使用要求血线",cht:"技能使用要求血線"},
+					function:cards=>cards.filter(card=>{
+						const searchTypeArray = [225];
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						return skill;
-					}).sort((a,b)=>sortByParams(a,b,searchTypeArray))
+					}),
+					addition:card=>{
+						const searchTypeArray = [225];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						if (!skill) return;
+						const sk = skill.params;
+						let strArr = [];
+						if (sk[0]) strArr.push(`≥${sk[0]}%`);
+						if (sk[1]) strArr.push(`≤${sk[1]}%`);
+						return `HP ${strArr.join(" ")}`;
+					}
 				},
-				addition:card=>{
-					const searchTypeArray = [248];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					return `延迟${sk[0]}T`;
-				}
-			},
-			{name:"Enable require number of Orbs",otLangName:{chs:"技能使用珠子数量要求",cht:"技能使用珠子数量要求"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [255];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
-				addition:card=>{
-					const searchTypeArray = [255];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					const fragment = document.createDocumentFragment();
-					fragment.append(createOrbsList(Bin.unflags(sk[0])), sk[2] ? `≤${sk[2]}` : `≥${sk[1]}`);
-					return fragment;
-				}
-			},
-			{name:"Has limit of times a skill can be used",otLangName:{chs:"技能使用有次数限制",cht:"技能使用有次數限制"},
-				function:cards=>cards.filter(card=>{
-					const searchTypeArray = [268];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					return skill;
-				}),
-				addition:card=>{
-					const searchTypeArray = [268];
-					const skill = getCardActiveSkill(card, searchTypeArray);
-					if (!skill) return;
-					const sk = skill.params;
-					return `限${sk[0]}次`;
-				}
-			},
+				{name:"Enable require Dungeon Stage",otLangName:{chs:"技能使用要求地下城层数",cht:"技能使用要求地下城層數"},
+					function:cards=>cards.filter(card=>{
+						const searchTypeArray = [234];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}),
+					addition:card=>{
+						const searchTypeArray = [234];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						if (!skill) return;
+						const sk = skill.params;
+						let strArr = [];
+						if (sk[0]) strArr.push(`≥${sk[0]}`);
+						if (sk[1]) strArr.push(`≤${sk[1]}`);
+						return `层 ${strArr.join(" ")}`;
+					}
+				},
+				{name:"Delay active after skill use",otLangName:{chs:"技能使用后延迟生效",cht:"技能使用后延迟生效"},
+					function:cards=>{
+						const searchTypeArray = [248];
+						return cards.filter(card=>{
+							const skill = getCardActiveSkill(card, searchTypeArray);
+							return skill;
+						}).sort((a,b)=>sortByParams(a,b,searchTypeArray))
+					},
+					addition:card=>{
+						const searchTypeArray = [248];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						if (!skill) return;
+						const sk = skill.params;
+						return `延迟${sk[0]}T`;
+					}
+				},
+				{name:"Enable require number of Orbs",otLangName:{chs:"技能使用要求宝珠数量",cht:"技能使用要求寶珠数量"},
+					function:cards=>cards.filter(card=>{
+						const searchTypeArray = [255];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}),
+					addition:card=>{
+						const searchTypeArray = [255];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						if (!skill) return;
+						const sk = skill.params;
+						const fragment = document.createDocumentFragment();
+						fragment.append(createOrbsList(Bin.unflags(sk[0])), sk[2] ? `≤${sk[2]}` : `≥${sk[1]}`);
+						return fragment;
+					}
+				},
+				{name:"Has limit of times a skill can be used",otLangName:{chs:"技能使用有次数限制",cht:"技能使用有次數限制"},
+					function:cards=>cards.filter(card=>{
+						const searchTypeArray = [268];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}),
+					addition:card=>{
+						const searchTypeArray = [268];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						if (!skill) return;
+						const sk = skill.params;
+						return `限${sk[0]}次`;
+					}
+				},
+				{name:"Enable require drop state of Orbs",otLangName:{chs:"技能使用要求宝珠掉落状态",cht:"技能使用要求寶珠掉落狀態"},
+					function:cards=>cards.filter(card=>{
+						const searchTypeArray = [275];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						return skill;
+					}),
+					addition:card=>{
+						const searchTypeArray = [275];
+						const skill = getCardActiveSkill(card, searchTypeArray);
+						if (!skill) return;
+						const [typeNum, attrFlag] = skill.params;
+						const fragment = document.createDocumentFragment();
+						// const typeNames = [
+						// 	null,
+						// 	"orb-drop-increase",
+						// ]
+						// const type = typeNames[typeNum];
+						const attrs = Bin.unflags(attrFlag);
+						fragment.append(createOrbsList(attrs, "drop"));
+						return fragment;
+					}
+				},
+			]},
 		]},
 		
 		{group:true,name:"Leader Skills",otLangName:{chs:"队长技",cht:"隊長技"}, functions: [

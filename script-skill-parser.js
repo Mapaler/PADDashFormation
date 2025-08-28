@@ -1827,7 +1827,7 @@ const skillObjectParsers = {
 			76, //串串-光
 			77, //串串-暗
 
-			0,
+			20, //心横解封
 			82, //饼干
 		];
 		const awakeningsArr = Bin.unflags(awakeningsFlag).map(n => awakeningsType[n] || 0);

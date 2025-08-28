@@ -2051,6 +2051,7 @@ body:not([data-game-source="ja"]) .level-super-break .latent-icon:where(
 	--icon-y-index: 0;
 	
 	display: inline-flex;
+	position: relative;
 	width: var(--icon-width);
 	height: var(--icon-height);
 	background-image: url(images/icon-orbs.png);
