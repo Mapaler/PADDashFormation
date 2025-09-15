@@ -4,7 +4,7 @@
 This is a Puzzle & Dragons Formation Maker.
 
 这个工具可以帮助你方便的制作和分享车队阵型或单人队形。电脑、智能手机上都可以轻松使用。   
-This tool can help you easily create and share Swipe Formation or Solo Formation. Easy to use on your PC and Smart Phone.
+This tool can help you easily create and share Swipe/Farming Formation or Solo Team. Easy to use on your PC and Smart Phone.
 
 ### 预览 | Preview
 
@@ -14,25 +14,28 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 | **3人协力 \| 3P** | **手机 \| Mobile**  |
 | ![3人协力界面预览](doc/images/preview-capture-3p.png) | ![手机端预览](doc/images/preview-mobile.jpg) |
 
-# 如何使用 | HOW TO USE
-推荐[![][firefox]火狐浏览器](https://www.mozilla.org/firefox/new/) | [![][firefox]Firefox](https://www.mozilla.org/firefox/new/) is recommended
-## 快速使用在线版（推荐） | Online Quick Start (Recommended)
+### 目前支持的语言 | Languages currently supported
+| 名称<br>Name | 界面<br>UI | 技能解析<br>Skill parser | 人工检查<br>Manual inspection | 翻译工具<br>Translation tool |
+| --- | --- | --- | --- | --- |
+| 中文（简体） | ✅ | ✅ | ✅ | 原生<br>Native |
+| 中文（繁體） | ✅| ✅ | ❌ | OpenCC |
+| English | ✅ | ✅ | ✅ | bing translator |
+| 日本語 | ✅ | ❌ | ❌ | bing translator |
+| 북한/한국어 | ✅ | ❌ | ❌ | bing translator |
+
+## 如何使用 | HOW TO USE
+> [!TIP]
+> 推荐[![][firefox]火狐浏览器](https://www.mozilla.org/firefox/new/) | [![][firefox]Firefox](https://www.mozilla.org/firefox/new/) is recommended
+### 快速使用在线版（推荐） | Online Quick Start (Recommended)
 * <https://mapaler.github.io/PADDashFormation/> (Github Pages)
 * <https://mapaler.com/PADDashFormation/> (我自己的镜像 | my own mirror)
 
-## 创建你自己的镜像网站 | Create your own mirror web site
+### 创建你自己的镜像网站 | Create your own mirror web site
 `git clone`到你的 *http* 服务目录即可访问，将来更新时只需要`git pull`即可。  
 `git clone` to your *http* service directory for visited, and `git pull` for future updates.
 
-# 翻译我 | Translate me
-## 目前支持的语言 | Languages currently supported
-1. 中文（简体）
-1. 中文（繁體）
-1. English
-1. 日本語 (スキル解析翻訳のヘルプが必要です,  by Bing Translator)
-1. 북한/한국어 (스킬 구문 분석 번역에 도움이 필요,  by Bing Translator)
-
-## How to **Pull requests**
+## 翻译我 | Translate me
+### How to **Pull requests**
 1. Click **Fork** In the page top right corner. Fork your own copy of this repository to your account.
 1. Use Git to clone/pull repository locally for modification (How to modify please see below).
 1. Use Git to commit and push changes to your repository on GitHub.
@@ -40,7 +43,7 @@ This tool can help you easily create and share Swipe Formation or Solo Formation
 1. Click the **Compare Across Forks** button and select your fork, the page then displays the changes.
 1. Click the **Create pull request** button and enter the details of the modification, create your pull request.
 
-## Translate
+### Translate
 1. Go to the `languages` folder
 1. Push your language info into `language-list.js`.  
 This is an Object for a language list item.
@@ -75,10 +78,12 @@ This is an Object for a language list item.
 1. Create your language's Localisation file `[i18n].css` and `[i18n].js`.  
 Please refer to existing files.
 
-# 权利归属 | Copyright
+## 权利归属 | Copyright
+> [!NOTE]
 > 本软件灵感来源于[PDC 智龙迷城伤害计算器](https://play.google.com/store/apps/details?id=com.corombo13.paddamagecal)  
 > This software is inspired by [PDC パズドラダメージ計算](https://play.google.com/store/apps/details?id=com.corombo13.paddamagecal)
 
+> [!IMPORTANT]
 > © GungHo Online Entertainment Inc. All Cards Images && Info Right Reserved.  
 > 所有图片素材版权与怪物信息归属于GungHo在线娱乐有限公司。  
 > パズル&ドラゴンズに関する画像及び情報等の権利はGungHo Online Entertainment Inc.に帰属します。
@@ -88,14 +93,16 @@ Please refer to existing files.
 > * [Puzzle & Dragons](https://www.puzzleanddragons.us/)
 > * [퍼즐앤드래곤](https://pad.neocyon.com/W/)
 
+> [!IMPORTANT]
 > © Fontworks Inc. Font Kurokane Right Reserved.  
 > くろかね字体版权归属于Fontworks有限公司。  
 > [くろかね書体](//fontworks.co.jp/fontsearch/kurokanestd-eb/)の権利は フォントワークス株式会社 に帰属します。
 
+> [!NOTE]
 > 卡片中文名、中文分类来自于[Puzzle & Dragons 戰友系統及資訊網](//pad.skyozora.com/)
 
-# 使用开源软件 | Open source software used
-* [pad-rikuu](https://github.com/kiootic/pad-rikuu) //Data structure and parser
+## 使用开源软件 | Open source software used
+* [pad-rikuu](https://github.com/kiootic/pad-rikuu) //Game data structure and parser
 * [Puzzle-and-Dragons-Texture-Tool](https://github.com/codywatts/Puzzle-and-Dragons-Texture-Tool) //Extract Images
 * [zxing-js](https://github.com/zxing-js/library) //Read, Write QR Code
 * [html2canvas](https://github.com/html2canvas/html2canvas) //Capture Image

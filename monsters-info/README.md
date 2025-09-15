@@ -1,5 +1,5 @@
 # 如何获取怪物数据 | How to acquire monster data
-# 原理 | Principles
+## 原理 | Principles
 * 目前的获取 API 为  
 The current acquisition API is
 
@@ -18,14 +18,14 @@ Use [Fiddler Classic](https://api.getfiddler.com/fc/latest), do *HTTPS man-in-th
 * 安卓 5 可以直接在安卓系统里安装 *CER* 证书，但安卓7开始，系统不再信任用户证书。由于需要安卓 7 才能玩智龙迷城，所以要先创建安卓 7 以上的模拟器，再安装智龙迷城。   
 Android 5 can install *CER* certificates directly in Android. Starting with Android 7, the system no longer trusts user certificates. Since Android 7 is required to play PAD, you must create an emulator for Android 7 or above before installing PAD.
 
-# 流程 | Processes
+## 流程 | Processes
+> [!TIP]
+> 通过[如何获取用户游戏数据](https://mapaler.github.io/PADDashFormation/doc/export-player-data.html)查看完整图文教程。[^1]  
+See the full graphic tutorial via [How to get user game data](https://mapaler.github.io/PADDashFormation/doc/export-player-data.html).[^1]
 
-通过[如何获取用户游戏数据](https://mapaler.github.io/PADDashFormation/doc/export-player-data.html)查看完整图文教程。  
-See the full graphic tutorial via [How to get user game data](https://mapaler.github.io/PADDashFormation/doc/export-player-data.html).
+[^1]: 参考/Reference: https://www.jianshu.com/p/035f7d7a0f7e  
 
-参考/Reference: https://www.jianshu.com/p/035f7d7a0f7e  
-
-## 转换证书 | Convert certificates
+### 转换证书 | Convert certificates
 1. 将 Fidder 根证书导出到桌面。  
 Export the Fidder Root Certificate to desktop.  
 
@@ -82,11 +82,11 @@ You can also use the following bat file to do this, and you need to modify the O
 	Write-Host "转换完成！生成的 PEM 文件: $pwd\$hash.0"
 	~~~
 
-## 将证书文件放入安卓系统证书文件夹 | Place the certificate file in the Android system certificate folder
+### 将证书文件放入安卓系统证书文件夹 | Place the certificate file in the Android system certificate folder
 将证书文件放入安卓系统证书文件夹`/system/etc/security/cacerts/`  
 Place the certificate file in the Android system certificate folder`/system/etc/security/cacerts/`  
 
-### 蓝叠模拟器 | BlueStacks
+#### 蓝叠模拟器 | BlueStacks
 
 1. **关闭**所有安卓模拟器  
 **Close** all Android emulators
@@ -103,7 +103,7 @@ In **Ext2 Volume Manager**, select "Flush Cache to Disk" or press the `F11` shor
 1. 运行 `diskmgmt.msc` 打开系统磁盘管理，在虚拟磁盘上点击右键，选择“分离VHD”。  
 Run `diskmgmt.msc` to open System Disk Management, right-click on the virtual disk and select "Detach VHD".
 
-### 夜神模拟器 | NoxPlayer
+#### 夜神模拟器 | NoxPlayer
 
 1. 打开安卓模拟器的**Root**  
 Turn on the **Root** of the Android simulator
@@ -114,8 +114,8 @@ Within the emulator, use a file manager that supports root reading and writing, 
 1. 关闭安卓模拟器的 **Root**  
 Turn off the **Root** of the Android simulator
   
-## 设置模拟器代理 | Set up the emulator proxy
-### 蓝叠模拟器 | BlueStacks
+### 设置模拟器代理 | Set up the emulator proxy
+#### 蓝叠模拟器 | BlueStacks
 1. 运行模拟器，在 设置-高级 内打开 Android调试(ADB)，并记下调试 IP 和端口，默认为`127.0.0.1:5555`  
 Run the emulator, open Android Debugging (ADB) in Settings-Advanced, and note the debug IP and port, which defaults to `127.0.0.1:5555`
 1. 在终端里输入`adb connect 127.0.0.1:5555`连接设备  
@@ -123,11 +123,11 @@ Enter `adb connect 127.0.0.1:5555` in the terminal to connect the device
 1. 将安卓模拟器内的网络代理设置到 Fidder 上。蓝叠里的真实电脑IP默认为`10.0.2.2`，Fidder 默认端口为`8888`，在终端里输入`adb -s 127.0.0.1:5555 shell settings put global http_proxy 10.0.2.2:8888`  
 Set the network proxy in the Android emulator to Fidder. The default real computer IP in BlueStacks is `10.0.2.2`, the default port of Fidder is `8888`, enter in the terminal `adb -s 127.0.0.1:5555 shell settings put global http_proxy 10.0.2.2:8888`
 
-### 夜神模拟器 | NoxPlayer
+#### 夜神模拟器 | NoxPlayer
 1. 将安卓模拟器内的 WiFi 代理设置到 Fidder 上。夜神里的真实电脑IP默认为`172.17.100.2`，Fidder 默认端口为`8888`  
 Set up the WiFi proxy in the Android emulator to Fidder. The real computer IP in Nox defaults to `172.17.100.2`, and the Fidder default port is `8888`
 
-## 通过代理解析数据 | Parse data through the proxy
+### 通过代理解析数据 | Parse data through the proxy
 
 1. 打开 Fidder 的 允许远程计算机连接、HTTPS 解密、流式传输，和 GZIP 解码  
 Turn on Fidder's "Allow remote computers to connet", "HTTPS decrypt", "Stream" and "Decode"
@@ -176,12 +176,12 @@ Execute the following code in CMD
 1. 会将每种语言的信息提取到一个文件内，互相之间也保留有不同语言的怪物名称、标签数据  
 Each language's information is extracted into a file, and monster names and tag data in different languages are retained from each other
 
----
-### Only For 🇨🇳Chinese
-
-`CHT.json`与`CHS.json`的中文信息来源于战友网，见子项目 https://github.com/Mapaler/Download-pad.skyozora.com
-
-由于目前战友网已经关闭，后来的很多内容是网友人工添加。
-
-运行`提取中文数据.bat`，将战友网页面内容抽出，抽出过程使用 [opencc-js](https://github.com/nk2028/opencc-js) 的 NodeJs 模块来繁转简。
-然后再运行一遍 `提取整合怪物信息.bat` 把中文插进去。
+> [!Note]
+> ### Only For 🇨🇳Chinese
+> `CHT.json`与`CHS.json`的中文信息来源于战友网，见子项目 https://github.com/Mapaler/Download-pad.skyozora.com
+>
+> 由于目前战友网已经关闭，后来的很多内容是网友人工添加。
+>
+> 运行`提取中文数据.bat`，将战友网页面内容抽出，抽出过程使用 [opencc-js](https://github.com/nk2028/opencc-js) 的 NodeJs 模块来繁转简。
+>
+> 然后再运行一遍 `提取整合怪物信息.bat` 把中文插进去。
