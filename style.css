@@ -1897,7 +1897,6 @@ label[for="search-string"] {
 	font-family: var(--icon-font-family);
 }
 .setting-box .row-mon-id .unable-monster{
-	pointer-events: none;
 	box-sizing: border-box;
 	border-radius: 5px;
 	outline: 5px ridge yellowgreen;
