@@ -873,6 +873,12 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	const memberCard = Cards[member.id];
 	const assistCard = assist ? Cards[assist.id] : null;
 	if (!memberCard || memberCard.id == 0 || !memberCard.enabled) return null;
+	
+	const enableAssist = assist && assistCard?.id > 0 && assistCard?.enabled && assistCard?.canAssist;
+	const enableAssistBouns = enableAssist &&
+		(memberCard.attrs[0] === assistCard.attrs[0] || memberCard.attrs[0] == 6 || assistCard.attrs[0] == 6);
+	const assistAwokenList = enableAssist ? assistCard.awakenings.slice(0, assist.awoken) : []; //储存武器已经点亮的觉醒
+	const enableAssistAwoken = enableAssist && assistAwokenList.includes(49); //49是武器觉醒，确认已经点亮了武器觉醒
 
 	const bonusScale = [0.1, 0.05, 0.15]; //辅助宠物附加的属性倍率
 	const plusAdd = [10, 5, 3]; //加值的增加值
@@ -899,6 +905,14 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 			ab.push({ index: 30, scale: 1.5 });
 		});
 	}
+	
+	if (enableAssistBouns && // 辅助共鸣觉醒，需要同主属性
+		assistCard.types.some(t=>memberCard.types.includes(t)) //并且有共同的 Type
+	) {
+		latterAwokenScale.forEach(ab => {
+			ab.push({ index: 138, scale: 3 });
+		});
+	}
 
 	const latentScale = [ //对应加三维潜在觉醒的序号与增加比例
 		[{ index: 1, scale: 0.015 }, { index: 12, scale: 0.03 }, { index: 28, scale: 0.045 }, { index: 43, scale: 0.10 }], //HP
@@ -906,7 +920,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		[{ index: 3, scale: 0.1 }, { index: 12, scale: 0.2 }, { index: 30, scale: 0.3 }, { index: 45, scale: 0.35 }] //RCV
 	];
 	const memberCurves = [memberCard?.hp, memberCard?.atk, memberCard?.rcv];
-	const assistCurves = assistCard?.canAssist && [assistCard.hp, assistCard.atk, assistCard.rcv];
+	const assistCurves = enableAssist && [assistCard.hp, assistCard.atk, assistCard.rcv];
 	
 	//储存点亮的觉醒
 	let awokenList = memberCard.awakenings.slice(0, member.awoken);
@@ -918,13 +932,8 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		awokenList.push(member.sawoken)
 	}
 	//如果有武器还要计算武器的觉醒
-	let enableBouns = false;
-	if (assistCard?.id > 0 && assistCard.enabled) {
-		const assistAwokenList = assistCard.awakenings.slice(0, assist.awoken); //储存武器点亮的觉醒
-		if (assistAwokenList.includes(49)) { //49是武器觉醒，确认已经点亮了武器觉醒
-			awokenList.push(...assistAwokenList);
-		}
-		enableBouns = memberCard.attrs[0] === assistCard.attrs[0] || memberCard.attrs[0] == 6 || assistCard.attrs[0] == 6;
+	if (enableAssistAwoken) {
+		awokenList.push(...assistAwokenList);
 	}
 
 	//地下城强化
@@ -932,16 +941,14 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	const dgeRate = [dge.rate.hp, dge.rate.atk, dge.rate.rcv];
 	const isDge = isDungeonEnhance(dge, member, assist);
 
-	//v22.6 变化
-	const isJP = currentDataSource.code === "jp";
 	//地下城阴阳加护强化
 	if (dge.benefit) { //当存在加护
 		const benefitAwokens = [128 , 129]; //0b1是阳，0b10是阴，可以两者都强化
 		Bin.unflags(dge.benefit).forEach(idx=>{
 			const akId = benefitAwokens[idx]; //得到加护觉醒编号
-			latterAwokenScale[0].push({ index: akId, scale: isJP ? 2 : 1.2 }); //HP
+			latterAwokenScale[0].push({ index: akId, scale: 2 }); //HP
 			latterAwokenScale[1].push({ index: akId, scale: 5 }); //ATK
-			latterAwokenScale[2].push({ index: akId, scale: isJP ? 2 : 1.2 }); //RCV
+			latterAwokenScale[2].push({ index: akId, scale: 2 }); //RCV
 		});
 	}
 
@@ -969,7 +976,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		let n_assist_base = 0,
 			n_assist_plus = 0; //辅助的bonus
 		//计算辅助的额外血量
-		if (assistCurves && enableBouns) {
+		if (enableAssistBouns) {
 			n_assist_base = Math.round(curve(assistCurves[idx], assist.level, assistCard.maxLevel, assistCard.limitBreakIncr, limitBreakIncr120[idx])); //辅助等级基础三维
 			n_assist_plus = assist.plus[idx] * plusAdd[idx]; //辅助加值增加量
 		}

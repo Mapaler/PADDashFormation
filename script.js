@@ -6925,7 +6925,11 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			const equivalentAwoken = equivalent_awoken.find(eak => eak.small === ak);
 			const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 			awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
-			const prob = thisAwokenNum * 0.2; //普通觉醒20%
+			let prob = thisAwokenNum * 0.2; //普通觉醒20%
+
+			const _5colorAwokenNum = awokenCountInTeam(team, 137, solo, teamsCount); 
+			if (_5colorAwokenNum) prob += _5colorAwokenNum * 0.1;
+
 			awoken.setAttribute(dataAttrName,Math.round(prob*100));
 			awoken.classList.toggle("gt100", prob > 1);
 		}

@@ -1130,6 +1130,24 @@
 .awoken-icon[data-awoken-icon='132']{/*下午茶*/
 	--icon-y-index: 132;
 }
+.awoken-icon[data-awoken-icon='133']{/*火水同时攻击*/
+	--icon-y-index: 133;
+}
+.awoken-icon[data-awoken-icon='134']{/*水木同时攻击*/
+	--icon-y-index: 134;
+}
+.awoken-icon[data-awoken-icon='135']{/*木火同时攻击*/
+	--icon-y-index: 135;
+}
+.awoken-icon[data-awoken-icon='136']{/*技能延迟耐性*/
+	--icon-y-index: 136;
+}
+.awoken-icon[data-awoken-icon='137']{/*五色宝珠强化*/
+	--icon-y-index: 137;
+}
+.awoken-icon[data-awoken-icon='138']{/*辅助共鸣*/
+	--icon-y-index: 138;
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],
@@ -1401,14 +1419,6 @@
 	--icon-x-index: 1;
 }
 
-/*v22.6 日服x2变x4，x4变x8，美韩服不变，就这样写。*/
-body:not([data-game-source="ja"]) .latent-icon:where(
-	[data-latent-icon='42'],
-	[data-latent-icon='49'],
-)::before{
-	--icon-x-index: 1;
-}
-
 /* 编辑界面特殊的 三维潜觉 */
 .latent-ul-div .latent-ul .latent-icon[data-latent-icon='12']::before
 {
@@ -1492,31 +1502,6 @@ body:not([data-game-source="ja"]) .latent-icon:where(
 	margin-left: 3px;
 	--icon-x-index: 1;
 	--icon-y-index: 45;
-}
-
-/*v22.6 日服 额外效果x1.5、x1.8变x2，美韩服不变，就这样写。*/
-/* 额外有 x1.5 的 6格觉醒 */
-body:not([data-game-source="ja"]) .level-super-break .latent-icon:where(
-	[data-latent-icon='14'], /*防费*/
-	[data-latent-icon='15'], /*防毒*/
-	[data-latent-icon='38'], /*破属吸*/
-	[data-latent-icon='39'], /*破伤吸*/
-	[data-latent-icon='47'], /*S++*/
-)::after
-{
-	--icon-y-index: 43;
-}
-/* 额外有 x1.8 的 6格觉醒 */
-body:not([data-game-source="ja"]) .level-super-break .latent-icon:where(
-	[data-latent-icon='13'], /*防换队长*/
-	[data-latent-icon='37'], /*破无效*/
-	[data-latent-icon='40'], /*解轮盘赌*/
-	[data-latent-icon='41'], /*解禁消*/
-	[data-latent-icon='46'], /*解云封*/
-	[data-latent-icon='48'], /*解封武器*/
-)::after
-{
-	--icon-y-index: 44;
 }
 
 /* 徽章背景 */

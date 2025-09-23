@@ -485,6 +485,12 @@ let localTranslating = {
 			[130]: tp`${'icon'}Aging`,
 			[131]: tp`${'icon'}Part Break`,
 			[132]: tp`${'icon'}Afternoon Tea`,
+			[133]: tp`${'icon'}Fire and Water attack simultaneously`,
+			[134]: tp`${'icon'}Water and Wood attack simultaneously`,
+			[135]: tp`${'icon'}Wood and Fire attack simultaneously`,
+			[136]: tp`${'icon'}Skill Delay Resistance`,
+			[137]: tp`${'icon'}Enhanced 5 color Orbs`,
+			[138]: tp`${'icon'}Assist Resonance`,
 		}
 	},
 };
@@ -598,7 +604,8 @@ const official_awoken_sorting = [
 	121,122,123,124,125, 39, 40, 41, 42,
 	 91, 92, 93, 94, 95, 65, 66, 67,105,
 	 84, 83, 85, 86, 87, 88, 89, 90, 63,
-	128,129,130,132, 64,131,
+	128,129,130,132, 64,131,133,134,135,
+	136,137,138
 ];
 
 //排序程序列表
