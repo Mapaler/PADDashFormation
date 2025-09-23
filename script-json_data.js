@@ -1128,7 +1128,7 @@ const specialSearchFunctions = (function() {
 					);
 					if (sk[0] < 42) fragment.append(`×${sk[0]}`);
 					fragment.append(
-						createOrbsList(Attributes.orbs())
+						createOrbsList(Attributes.orbs)
 					);
 					break;
 				}
