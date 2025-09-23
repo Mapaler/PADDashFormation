@@ -7106,7 +7106,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		for (let mi=0; mi < members.length; mi++) {
 			const memberData = members[mi];
 			const assistData = void 0; //assists[mi]; //L解禁武器，武器上的L无意义
-			const latentCount = memberData.latent.filter(id=>id===latentId).length;
+			const latentCount = memberData?.latent && memberData.latent.filter(id=>id===latentId).length;
 			
 			if (latentCount > 0) {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
@@ -7158,7 +7158,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		for (let mi=0; mi < members.length; mi++) {
 			const memberData = members[mi];
 			const assistData = assists[mi];
-			const latentCount = memberData.latent.filter(id=>id===latentId).length;
+			const latentCount = memberData?.latent && memberData.latent.filter(id=>id===latentId).length;
 			
 			if (latentCount > 0) {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
@@ -7190,7 +7190,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		for (let mi=0; mi < members.length; mi++) {
 			const memberData = members[mi];
 			const assistData = assists[mi];
-			const latentCount = memberData.latent.filter(id=>id===latentId).length;
+			const latentCount = memberData?.latent && memberData.latent.filter(id=>id===latentId).length;
 			
 			if (latentCount > 0) {
 				let effectiveAwokens = memberData.effectiveAwokens(assistData);
