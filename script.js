@@ -748,24 +748,31 @@ Member.prototype.effectiveAwokens = function(assist) {
 	}
 	return enableAwoken;
 }
-Member.prototype.getAttrsTypesWithWeapon = function(assist) {
-	let memberCard = this.card, assistCard = assist?.card,
-		assistAwakenings = assistCard?.awakenings?.slice(0, assist.awoken);
+Member.prototype.getAttrsTypesWithWeapon = function(assist, impartAwakenings) {
+	const memberCard = this.card, assistCard = assist?.card;
+	let cardAwakenings = memberCard?.awakenings?.slice(0, this.awoken), assistAwakenings = assistCard?.awakenings?.slice(0, assist.awoken);
+	if (assistAwakenings?.includes(49)) {
+		cardAwakenings.push(...assistAwakenings);
+	}
+	if (impartAwakenings) {
+		cardAwakenings.push(...impartAwakenings);
+	}
+
 	if (this.id <= 0 || !memberCard) return null; //跳过 id 0
 	let attrs = [...memberCard.attrs]; //属性数量固定，因此用固定的数组
 	let types = new Set(memberCard.types); //Type 用Set，确保不会重复
 	let changeAttr = null, appendTypes = [];
-	if (assistAwakenings?.includes(49)) { //如果有武器
-		//更改副属性
-		changeAttr = assistAwakenings.find(ak=>ak >= 91 && ak <= 95); //筛选出武器觉醒
-		if (changeAttr) attrs[1] = changeAttr - 91; //变换为属性
-		//添加类型
-		appendTypes = assistAwakenings.filter(ak=>ak >= 83 && ak <= 90) //筛选出武器觉醒
-						.map(type=> typekiller_for_type.find(t=>(type - 52) === t.awoken).type);//变换为类型
-		appendTypes = new Set(appendTypes); //变为 Set
-		appendTypes = appendTypes.difference(types); //去除重复的
-		types = types.union(appendTypes); //添加到类型里
-	}
+
+	//更改副属性
+	changeAttr = cardAwakenings.find(ak=>ak >= 91 && ak <= 95); //筛选出武器觉醒
+	if (changeAttr) attrs[1] = changeAttr - 91; //变换为属性
+	//添加类型
+	appendTypes = cardAwakenings.filter(ak=>ak >= 83 && ak <= 90) //筛选出武器觉醒
+					.map(type=> typekiller_for_type.find(t=>(type - 52) === t.awoken).type);//变换为类型
+	appendTypes = new Set(appendTypes); //变为 Set
+	appendTypes = appendTypes.difference(types); //去除重复的
+	types = types.union(appendTypes); //添加到类型里
+
 	return {
 		attrs, isChangeAttr: Boolean(changeAttr),
 		"types": [...types], isAppendType: Boolean(appendTypes?.size), "appendTypes": [...appendTypes]
@@ -7105,18 +7112,23 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		const count = new Array(orbs.length).fill(0);
 		for (let mi=0; mi < members.length; mi++) {
 			const memberData = members[mi];
-			const assistData = void 0; //assists[mi]; //L解禁武器，武器上的L无意义
+			const assistData = assists[mi]; //L解禁武器，武器上的L无意义
 			const latentCount = memberData?.latent && memberData.latent.filter(id=>id===latentId).length;
 			
 			if (latentCount > 0) {
-				let effectiveAwokens = memberData.effectiveAwokens(assistData);
+				let effectiveAwokens = memberData.effectiveAwokens(void 0);
+				//但是武器是有附加觉醒的技能时则有意义
+				const impartAwakenings = skillParser(assistData.card.activeSkillId).find(skill=>skill.kind===SkillKinds.ImpartAwakenings)?.awakenings;
+				if (impartAwakenings) {
+					effectiveAwokens.push(...impartAwakenings);
+				}
 				let thisAwokenNum = (
 					effectiveAwokens.filter(ak=>ak===equivalentAwoken.small).length
 					+ effectiveAwokens.filter(ak=>ak===equivalentAwoken.big).length
 					* equivalentAwoken.times)
 				* latentCount;
 				if (thisAwokenNum == 0) continue;
-				const {attrs=[]} = memberData.getAttrsTypesWithWeapon(assistData) || {};
+				const {attrs=[]} = memberData.getAttrsTypesWithWeapon(void 0, impartAwakenings) || {};
 				attrs.distinct().forEach(attr=>{
 					count[attr] += thisAwokenNum;
 				});
@@ -7366,6 +7378,14 @@ function highlightAwokenMember(event, teamIndex) {
 			.forEach((member,idx)=>{
 				if (member.latent.includes(latentId)) {
 					awokenFindArea.push(...teamBox.querySelectorAll(`:where(.team-member-awoken,${latentId === 48 ? "" : ".team-assist-awoken"}) .member-awoken[data-index="${idx}"]`));
+					// if (latentId === 48) {
+					// 	const assistData = formation.teams[teamIndex][1][idx];
+					// 	if (assistData.id <= 0 ||
+					// 		skillParser(assistData.card.activeSkillId).every(skill=>skill.kind!==SkillKinds.ImpartAwakenings)) {
+					// 		assistData = void 0;
+					// 	}
+					// 	assistData && awokenFindArea.push(...teamBox.querySelectorAll(`:where(.team-assist-awoken) .member-awoken[data-index="${idx}"]`));
+					// }
 				}
 			});
 		const latents = teamBox.querySelectorAll(`.team-latents .latent-icon[data-latent-icon="${latentId}"]`);
