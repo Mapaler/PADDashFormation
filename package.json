@@ -4,8 +4,8 @@
     "@xmldom/xmldom": "^0.9.8",
     "@zxing/library": "^0.21.3",
     "core-js-bundle": "^3.45.1",
-    "mime": "^4.0.7",
+    "mime": "^4.1.0",
     "opencc-js": "^1.0.5",
-    "xml-formatter": "^3.6.6"
+    "xml-formatter": "^3.6.7"
   }
 }

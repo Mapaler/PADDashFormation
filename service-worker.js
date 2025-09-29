@@ -61631,11 +61631,11 @@ const cachesMap = new Map([
 	],
 	[
 		"fonts/fa-regular-400.woff2",
-		"49d7fd7a16b90576fb4ac8e2b5f2ad27"
+		"3c9951b1bc6632f7935394341c16a5f2"
 	],
 	[
 		"fonts/fa-solid-900.woff2",
-		"18dd0b25bda3d372b262b08edeed525a"
+		"ff919779d8d0e4ad6fab6e819c120be5"
 	],
 	[
 		"fonts/FOT-KurokaneStd-EB.woff2",
