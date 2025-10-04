@@ -26,6 +26,7 @@
 		//{name: "Duplicate named capture group / 重复的正则表达式匹配命名组", version:{firefox:129,chrome:125,safari:17.0}, url: "https://caniuse.com/mdn-javascript_regular_expressions_named_capturing_group_duplicate_named_capturing_groups", test: ()=>Boolean(runCodeWithFunction("/(?<year>\\d{4})-\\d{2}|\\d{2}-(?<year>\\d{4})/"))},
 		{name: "Uint8Array.fromBase64()", version:{firefox:133,chrome:Infinity,safari:18.2}, url: "https://caniuse.com/mdn-javascript_builtins_uint8array_frombase64", test: ()=>Boolean(Uint8Array.fromBase64)},
 		{name: "Uint8Array.prototype.toBase64()", version:{firefox:133,chrome:Infinity,safari:18.2}, url: "https://caniuse.com/mdn-javascript_builtins_uint8array_tobase64", test: ()=>Boolean(Uint8Array.fromBase64)},
+		{name: "CSS property: paint-order / CSS属性: paint-order", version:{firefox:60,chrome:123,safari:11}, url: "https://caniuse.com/mdn-css_properties_paint-order", test: ()=>supportsPseudoClass(":not(html)")},
 	];
 
 	const unsupportFeatures = features.filter(feature=>{
