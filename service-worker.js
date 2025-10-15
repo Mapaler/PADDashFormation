@@ -511,7 +511,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_128.PNG",
-		"1669cd741fabfe6272bd458a9db564b8"
+		"8b3bb21fc4ff71d035ae6c9f9b72499e"
 	],
 	[
 		"images/cards_ja/CARDS_129.PNG",
@@ -520,6 +520,10 @@ const cachesMap = new Map([
 	[
 		"images/cards_ja/CARDS_130.PNG",
 		"df2140d1c6b23a5966178056e97a3949"
+	],
+	[
+		"images/cards_ja/CARDS_131.PNG",
+		"6eca23ba37d9768bbfd41e12d265c175"
 	],
 	[
 		"sound/voice/ja/padv001.wav",
@@ -24459,7 +24463,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_106.PNG",
-		"dba4f31ef616e95d6cfb9433e92523e0"
+		"8d1d415d2a8df5afc9c5df11d0a4fbd1"
 	],
 	[
 		"images/cards_en/CARDS_107.PNG",
@@ -24551,7 +24555,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_129.PNG",
-		"5cfec657f68829e87eda67cfa46decd6"
+		"16010c637971fc46102467b8e9b2385a"
 	],
 	[
 		"sound/voice/en/padv001.wav",
@@ -42286,6 +42290,18 @@ const cachesMap = new Map([
 		"455cbc42cfb0c49659b6e39d3a7edf09"
 	],
 	[
+		"sound/voice/en/padv5722.wav",
+		"50ec905decc8609e8a3d85059fd8bcbd"
+	],
+	[
+		"sound/voice/en/padv5723.wav",
+		"cbd9400ccba65d69fb36b88427ef3680"
+	],
+	[
+		"sound/voice/en/padv5724.wav",
+		"efe053976a9c6736e85823b8e1ab82fe"
+	],
+	[
 		"sound/voice/en/padv573.wav",
 		"c5d3079ff3f4ead439ec9f3d2023398c"
 	],
@@ -43731,7 +43747,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_106.PNG",
-		"dba4f31ef616e95d6cfb9433e92523e0"
+		"8d1d415d2a8df5afc9c5df11d0a4fbd1"
 	],
 	[
 		"images/cards_ko/CARDS_107.PNG",
@@ -43823,7 +43839,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_129.PNG",
-		"2e96fec016186c8e32e26a2a11a5605b"
+		"1a65a4ce522074bd769b622a0775996a"
 	],
 	[
 		"sound/voice/ko/padv001.wav",
@@ -63168,6 +63184,18 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ko/padv5721.wav",
 		"455cbc42cfb0c49659b6e39d3a7edf09"
+	],
+	[
+		"sound/voice/ko/padv5722.wav",
+		"50ec905decc8609e8a3d85059fd8bcbd"
+	],
+	[
+		"sound/voice/ko/padv5723.wav",
+		"cbd9400ccba65d69fb36b88427ef3680"
+	],
+	[
+		"sound/voice/ko/padv5724.wav",
+		"efe053976a9c6736e85823b8e1ab82fe"
 	],
 	[
 		"sound/voice/ko/padv573.wav",
