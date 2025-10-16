@@ -5,6 +5,8 @@ let currentLanguage; //当前语言
 let currentDataSource; //当前数据
 let currentPlayerData; //当前玩家数据
 let defaultLevel = 99; //默认等级
+//日服总是各种改动参数，所以需要的时候就这样判断
+let isJP = true;
 
 const teamBigBoxs = []; //储存全部teamBigBox
 const allMembers = []; //储存所有成员，包含辅助
@@ -32,10 +34,6 @@ const ExternalLinkScriptURL = "https://greasyfork.org/scripts/458521";
 const paddbPathPrefix = "/team/"; //PADDB的获取队伍网址格式
 const uploadMessage = "Use PADDashFormation to read the Team URL and restore correct team for ID > 9934.\nhttps://github.com/Mapaler/PADDashFormation";
 
-if (location.search.includes('&amp;')) {
-	location.search = location.search.replace(/&amp;/ig, '&');
-}
-
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('service-worker.js', {scope: './'})
 	.then(function(registration) {
@@ -48,7 +46,7 @@ if ('serviceWorker' in navigator) {
 }
 
 //一开始就加载当前语言
-if (currentLanguage == undefined)
+if (!currentLanguage)
 {
 	const parameter_i18n = getQueryString(["l","lang"]); //获取参数指定的语言
 	const browser_i18n = navigator.language; //获取浏览器语言
@@ -73,11 +71,12 @@ if (currentLanguage == undefined)
 }
 
 //一开始就加载当前数据
-if (currentDataSource == undefined)
+if (!currentDataSource)
 {
 	const parameter_dsCode = getQueryString("s"); //获取参数指定的数据来源
 	currentDataSource = dataSourceList.find(ds => ds.code == parameter_dsCode) || dataSourceList[0]; //筛选出符合的数据源
 }
+isJP = currentDataSource.code === "ja";
 
 const dbName = "PADDF";
 let db = null;
@@ -6935,7 +6934,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			let prob = thisAwokenNum * 0.2; //普通觉醒20%
 
 			const _5colorAwokenNum = awokenCountInTeam(team, 137, solo, teamsCount); 
-			if (_5colorAwokenNum) prob += _5colorAwokenNum * 0.1;
+			if (_5colorAwokenNum) prob += _5colorAwokenNum * 0.2;
 
 			awoken.setAttribute(dataAttrName,Math.round(prob*100));
 			awoken.classList.toggle("gt100", prob > 1);
@@ -7751,7 +7750,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 27: return member.card.collabId === 112 ? 1.15 : 1; //转生成为史莱姆
 				case 28: return member.card.collabId === 110 ? 1.15 : 1; //电击文库Index
 				case 29: return member.card.collabId === 102 ? 1.15 : 1; //奥特曼
-				case 30: case 65: return member.card.gachaIds.includes(6) ? 1.15 : 1; //花嫁
+				case 30: return member.card.gachaIds.includes(6) ? 1.15 : 1; //花嫁
+				case 65: return member.card.gachaIds.includes(6) ? 1.25 : 1; //花嫁+
 				case 31: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
 				case 15: return member.card.collabId === 96 ? 1.15 : 1; //漫威
 				case 16: case 70: return member.card.gachaIds.includes(9) ? 1.15 : 1; //泳装
@@ -7778,7 +7778,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 51: return member.card.gachaIds.includes(14) ? 1.15 : 1; //女子桶
 				case 52: return member.card.gachaIds.includes(2) ? 1.15 : 1; //情人节
 				case 54: case 55: return member.card.collabId === 117 ? 1.15 : 1; //排球少年
-				case 56: case 57: return member.card.gachaIds.includes(3) ? 1.15 : 1; //新学期(学园)
+				case 56: return member.card.gachaIds.includes(3) ? 1.15 : 1; //新学期(学园)
+				case 57: return member.card.gachaIds.includes(3) ? 1.25 : 1; //新学期(学园)+
 				case 58: case 59: return member.card.collabId === 118 ? 1.15 : 1; //柯南
 				case 60: case 61: return member.card.gachaIds.includes(4) ? 1.15 : 1; //纺星精灵(花朵拟人)
 				case 63: case 64: return member.card.gachaIds.includes(15) ? 1.15 : 1; //女仆管家
