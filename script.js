@@ -7757,7 +7757,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 15: return member.card.collabId === 96 ? 1.15 : 1; //漫威
 				case 16: case 70: return member.card.gachaIds.includes(9) ? 1.15 : 1; //泳装
 				case 32: return [21, 61].includes(member.card.collabId) ? 1.15 : 1; //怪物猎人
-				case 33: return member.card.collabId === 27 ? 1.15 : 1; //三丽鸥
+				case 33: case 76: return member.card.collabId === 27 ? 1.15 : 1; //三丽鸥
 				case 34: return member.card.collabId === 97 ? 1.15 : 1; //咒术回战
 				case 35: return member.card.gachaIds.includes(11) ? 1.15 : 1; //万圣节
 				case 75: return member.card.gachaIds.includes(11) ? 1.25 : 1; //万圣节+
