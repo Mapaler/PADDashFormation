@@ -492,6 +492,7 @@ const SkillKinds = {
 	TimesLimit: "times-limit",
 	FixedStartingPosition: "fixed-starting-position",
 	PartGravity: "part-gravity",
+	DestroyOrb: "destroy-orb",
 }
 
 function skillParser(skillId)
@@ -1031,8 +1032,8 @@ function randomSkills(skills) {
 function evolvedSkills(loop, skills) {
 	return { kind: SkillKinds.EvolvedSkills, loop: loop, skills: skills };
 }
-function changeAttr(target, attr) {
-	return { kind: SkillKinds.ChangeAttribute, target: target, attr: attr ?? 0 };
+function changeAttr(attr, targets) {
+	return { kind: SkillKinds.ChangeAttribute, attr, targets };
 }
 function gravity(value, target = "all", isPartGravity = false) {
 	return { kind: isPartGravity ? SkillKinds.PartGravity : SkillKinds.Gravity,
@@ -1105,6 +1106,9 @@ function timesLimit(turns) {
 }
 function fixedStartingPosition() {
 	return { kind: SkillKinds.FixedStartingPosition };
+}
+function destroyOrb(attrs) {
+	return { kind: SkillKinds.DestroyOrb, attrs };
 }
 
 const skillObjectParsers = {
@@ -1341,7 +1345,7 @@ const skillObjectParsers = {
 	},
 	[140](attrs, mul) { return setOrbState(Bin.unflags(attrs), 'enhanced', {enhance: v.percent(mul)}); },
 	[141](count, to, exclude) { return generateOrbs(Bin.unflags(to), Bin.unflags(exclude), count); },
-	[142](turns, attr) { return activeTurns(turns, changeAttr('self', attr)); },
+	[142](turns, attr) { return activeTurns(turns, changeAttr(attr, ['self'])); },
   
 	[143](mul, dmgAttr) { return damageEnemy('all', dmgAttr ?? 0, v.xTeamHP(mul)); },
 
@@ -1356,7 +1360,7 @@ const skillObjectParsers = {
 		return powerUp(null, null, p.scaleCross([{ single: true, attr: [Attributes.Heart], atk: mul1 || 100, rcv: mul2 || 100 }]), null, v.percent(percent));
 	},
 	[152](attrs, count) { return setOrbState(Bin.unflags(attrs), 'locked', {count: v.constant(count)}); },
-	[153](attr, _) { return changeAttr('opponent', attr); },
+	[153](attr, _) { return changeAttr(attr, ['enemy_all']); },
 	[154](from, to) { return changeOrbs(fromTo(Bin.unflags(from), Bin.unflags(to))); },
 	[155](attrs, types, hp, atk, rcv) { return powerUp(Bin.unflags(attrs), Bin.unflags(types), p.mul({ hp: hp || 100, atk: atk || 100, rcv: rcv || 100 }), c.multiplayer()); },
 	[156](turns, awoken1, awoken2, awoken3, type, mul) {
@@ -1607,7 +1611,7 @@ const skillObjectParsers = {
 	[223](combo, damage) {
 		return powerUp(null, null, p.scaleCombos(combo, combo, [100, 100], [0, 0]), null, null, damage ? [followAttackFixed(damage)] : null);
 	},
-	[224](turns, attr) { return activeTurns(turns, changeAttr('opponent', attr)); },
+	[224](turns, attr) { return activeTurns(turns, changeAttr(attr, ['enemy_all'])); },
 	[225](min, max) { return skillProviso(c.hp(min ?? 0, max ?? 100)); },
 	[226](turns, percent) { return activeTurns(turns, orbDropIncrease(v.percent(percent), [], 'nail')); },
 	[227]() { return leaderChange(1); },
@@ -1766,7 +1770,7 @@ const skillObjectParsers = {
 			increaseDamageCapacity(cap * 1e8, typeArr)
 		);
 	},
-	[259](percent) { return breakingShield(v.xShield(percent)); },
+	[259](percent) { return breakingShield(v.xShield(percent)); }, //破白盾
 	[260](skillStage, voiceId) { return skillPlayVoice(skillStage, voiceId); },
 	[261](percent) { return gravity(v.xCHP(percent), 'single'); },
 	[262](count) { return setOrbState(Attributes.orbs, 'nail', {count: v.constant(count)}); },
@@ -1829,13 +1833,27 @@ const skillObjectParsers = {
 
 			20, //心横解封
 			82, //饼干
+			133, //火水同时攻击
+			134, //火水同时攻击
+
+			135, //水木同时攻击
 		];
 		const awakeningsArr = Bin.unflags(awakeningsFlag).map(n => awakeningsType[n] || 0);
 		let additional = [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean);
 		return powerUp(null, null, p.mul({ atk: atk || 100, rcv: rcv || 100}), c.awakeningActivated(awakeningsArr), v.percent(reducePercent), additional);
 	},
+	//破白盾-2
+	[272](times) { return breakingShield(v.xShield(times * 100)); },
 	//固定起手位置
 	[273](turns) {return activeTurns(turns, fixedStartingPosition()); },
+	//改变其他位置的队友颜色
+	[274](turns, attr, target) {
+		const targetTypes = [...SkillTarget.type1,...SkillTarget.type2];
+		const typeArr = Bin.unflags(target).map(n => targetTypes[n]);
+		return activeTurns(turns,
+			changeAttr(attr, typeArr)
+		);
+	},
 	//宝珠掉落率提高时才能使用技能
 	[275](typeNum, attrFlag) {
 		const typeNames = [
@@ -1847,6 +1865,7 @@ const skillObjectParsers = {
 	},
 	//部位的重力
 	[276](percent) { return gravity(v.xCHP(percent), void 0, true); },
+	[277](attr) { return destroyOrb(Bin.unflags(attr)); },
 
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -2585,11 +2604,22 @@ function renderSkill(skill, option = {})
 			break;
 		}
 		case SkillKinds.ChangeAttribute: {
-			let attr = skill.attr, target = skill.target;
+			const { attr, targets } = skill;
 			let dict = {
-				attrs: renderAttrs(attr, {affix: true}),
-				target: target === 'opponent' ? tsp.target.enemy_all() : tsp.target.self(),
+				attr: renderAttrs(attr, {affix: true}),
+				target: document.createDocumentFragment(),
 			};
+			
+			const targetTypes = [...SkillTarget.type1,...SkillTarget.type2];
+			let atkUpTarget = targets.filter(n=>targetTypes.includes(n));
+			if (atkUpTarget.length) {
+				dict.target.appendChild(createTeamFlags(atkUpTarget));
+			}
+			
+			dict.target.appendChild(targets.map(target=>
+				tsp?.target[target.replaceAll("-","_")]?.())
+				.nodeJoin(tsp.word.slight_pause()));
+
 			frg.ap(tsp.skill.change_attribute(dict));
 			break;
 		}
@@ -2684,7 +2714,7 @@ function renderSkill(skill, option = {})
 				targetDict.target = document.createDocumentFragment();
 
 				//增加队员伤害的技能的目标，删选出来，其他的目标则不显示
-				const targetTypes = SkillTarget.type1.concat(SkillTarget.type2);
+				const targetTypes = [...SkillTarget.type1,...SkillTarget.type2];
 				let atkUpTarget = targets.filter(n=>targetTypes.includes(n));
 				if (atkUpTarget.length) {
 					targetDict.target.appendChild(createTeamFlags(atkUpTarget));
@@ -3020,6 +3050,14 @@ function renderSkill(skill, option = {})
 				icon: createIcon(skill.kind)
 			};
 			frg.ap(tsp.skill.fixed_starting_position(dict));
+			break;
+		}
+		case SkillKinds.DestroyOrb: { //固定起手位置
+			const { attrs } = skill;
+			let dict = {
+				orbs: renderOrbs(attrs, { affix: true}),
+			};
+			frg.ap(tsp.skill.destroy_orb(dict));
 			break;
 		}
 		

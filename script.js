@@ -7040,6 +7040,11 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		const thisAwokenNum = awokenCountInTeam(team, 55, solo, teamsCount);
 		targetIcon.classList.toggle("disabled", thisAwokenNum === 0);
 	}
+	//手指
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"140\"]")) {
+		const thisAwokenNum = awokenCountInTeam(team, 140, solo, teamsCount);
+		targetIcon.classList.toggle("disabled", thisAwokenNum === 0);
+	}
 	//掉废
 	if (targetIcon = awokenEffectDom.querySelector(".latent-icon[data-latent-icon=\"14\"]")) {
 		const has = members.some(member=>member?.latent?.includes(14));
@@ -7761,7 +7766,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 34: return member.card.collabId === 97 ? 1.15 : 1; //咒术回战
 				case 35: return member.card.gachaIds.includes(11) ? 1.15 : 1; //万圣节
 				case 75: return member.card.gachaIds.includes(11) ? 1.25 : 1; //万圣节+
-				case 36: return member.card.collabId === 114 ? 1.15 : 1; //数码宝贝
+				case 36: case 77: return member.card.collabId === 114 ? 1.15 : 1; //数码宝贝
 				case 37: return member.card.collabId === 90 ? 1.15 : 1; //diss你
 				case 38: case 62: return member.card.collabId === 1 ? 1.15 : 1; //GungHo本家
 				case 39: return member.card.collabId === 115 ? 1.15 : 1; //周刊少年Magazine

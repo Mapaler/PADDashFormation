@@ -111,7 +111,7 @@ const _localTranslating = {
 			damage_absorb: tp`${'icon'}伤害吸收`,
 			damage_void: tp`${'icon'}伤害无效`,
 			void_enemy_buff: tp`敌人的 ${'buff'} 无效化`,
-			change_attribute: tp`将${'target'}变为${'attrs'}`,
+			change_attribute: tp`将${'target'}变为${'attr'}`,
 			set_orb_state_enhanced: tp`${'icon'}强化${'orbs'}（每颗宝珠效力增加${'value'}）`,
 			set_orb_state_locked: tp`将${'orbs'}${'icon'}锁定${'value'}`,
 			set_orb_state_unlocked: tp`${'icon'}解除${'orbs'}的锁定状态`,
@@ -145,6 +145,7 @@ const _localTranslating = {
 			play_voice: tp`播放第 ${'stage'} 阶段的语音 ${'icon'}`,
 			times_limit: tp`【使用次数限制：${'turns'}】`,
 			fixed_starting_position: tp`${'icon'}固定起手位置`,
+			destroy_orb: tp`破坏所有的${'orbs'}`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,
@@ -476,6 +477,9 @@ const _localTranslating = {
 			[136]: tp`${'icon'}防座`,
 			[137]: tp`${'icon'}五色+`,
 			[138]: tp`${'icon'}武器同色`,
+			[139]: tp`${'icon'}自力`,
+			[140]: tp`${'icon'}防手指`,
+			[141]: tp`${'icon'}达人多色`,
 		}
 	},
 };

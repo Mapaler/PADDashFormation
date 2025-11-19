@@ -1148,6 +1148,15 @@
 .awoken-icon[data-awoken-icon='138']{/*辅助共鸣*/
 	--icon-y-index: 138;
 }
+.awoken-icon[data-awoken-icon='139']{/*自力*/
+	--icon-y-index: 139;
+}
+.awoken-icon[data-awoken-icon='140']{/*防手指*/
+	--icon-y-index: 140;
+}
+.awoken-icon[data-awoken-icon='141']{/*达人多色*/
+	--icon-y-index: 141;
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],

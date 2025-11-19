@@ -126,7 +126,7 @@ let localTranslating = {
 			damage_absorb: tp`${'icon'}Damage absorption`,
 			damage_void: tp`${'icon'}Damage void`,
 			void_enemy_buff: tp`Voids enemies' ${'buff'}`,
-			change_attribute: tp`${'target'} Att. changes to ${'attrs'}`,
+			change_attribute: tp`${'target'}'s Att. changes to ${'attr'}`,
 			set_orb_state_enhanced: tp`${'orbs'} ${'icon'}enhanced (${'value'} per orb)`,
 			set_orb_state_locked: tp`${'icon'}Locks ${'value'}${'orbs'}`,
 			set_orb_state_unlocked: tp`${'icon'}Unlocks ${'orbs'}`,
@@ -160,6 +160,7 @@ let localTranslating = {
 			play_voice: tp`Play voice of the phase ${'stage'} of active skill ${'icon'}`,
 			times_limit: tp`[Number of times skill can be used: ${'turns'}]`,
 			fixed_starting_position: tp`${'icon'}Fixed starting position`,
+			destroy_orb: tp`Destroy all ${'orbs'}`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -483,14 +484,17 @@ let localTranslating = {
 			[128]: tp`${'icon'}Yang Protection`,
 			[129]: tp`${'icon'}Yin Protection`,
 			[130]: tp`${'icon'}Aging`,
-			[131]: tp`${'icon'}Part Break`,
+			[131]: tp`${'icon'}Part Break Bonus`,
 			[132]: tp`${'icon'}Afternoon Tea`,
-			[133]: tp`${'icon'}Fire and Water attack simultaneously`,
-			[134]: tp`${'icon'}Water and Wood attack simultaneously`,
-			[135]: tp`${'icon'}Wood and Fire attack simultaneously`,
+			[133]: tp`${'icon'}Fire & Water Attack`,
+			[134]: tp`${'icon'}Water & Wood Attack`,
+			[135]: tp`${'icon'}Wood & Fire Attack`,
 			[136]: tp`${'icon'}Skill Delay Resistance`,
-			[137]: tp`${'icon'}Enhanced 5 color Orbs`,
+			[137]: tp`${'icon'}All Attr. Enhanced`,
 			[138]: tp`${'icon'}Assist Resonance`,
+			[139]: tp`${'icon'}Self-reliance`,
+			[140]: tp`${'icon'}Resist operation time change`,
+			[141]: tp`${'icon'}Powerful people's multi-color enhancement`,
 		}
 	},
 };
@@ -589,87 +593,25 @@ const official_badge_sorting = [ //20是没有启用的全属性徽章，现在�
 	 71, 72, 73, 74
 ]
 //官方的觉醒排列顺序
-const official_awoken_sorting = (() => {
-	// 内部数据，不暴露到全局
-	const en = [
-		 21, 43, 61, 10, 54, 11, 12, 13, 49,
-		 56,107,111, 52, 55, 68, 69, 70, 28,
-		 19, 48, 27, 78, 60,126, 59, 45, 50,
-		 53,109, 96,110,108, 79, 80, 81, 51,
-		106, 57, 58, 82, 62,112,113,114, 97,
-		 14, 15, 16, 17, 18, 29,  9, 20, 44,
-		 99,100,101,102,103,104, 98,115, 71,
-		 22, 23, 24, 25, 26, 46, 47, 30, 72,
-		116,117,118,119,120,  1,  2,  3,127,
-		  4,  5,  6,  7,  8, 32, 31, 33, 34,
-		 73, 74, 75, 76, 77, 35, 36, 37, 38,
-		121,122,123,124,125, 39, 40, 41, 42,
-		 91, 92, 93, 94, 95, 65, 66, 67,105,
-		 84, 83, 85, 86, 87, 88, 89, 90, 63,
-		128,129,130,132, 64,131,133,134,135,
-		136,137,138
-	];
-
-	const jp = [
-		21, 43, 61, 10, 54, 11, 12, 13, 49,
-		56,107,111, 52, 55, 68, 69, 70, 28,
-		19, 48, 27, 78, 60,126, 59, 45, 50,
-		53,109, 96,110,108, 79, 80, 81, 51,
-		106, 57, 58, 82, 62,112,113,114, 97,
-		136,133,134,135,137, 29,  9, 20, 44,
-		99,100,101,102,103,104, 98,115, 71,
-		22, 23, 24, 25, 26, 46, 47, 30, 72,
-		116,117,118,119,120,  1,  2,  3,127,
-		4,  5,  6,  7,  8, 32, 31, 33, 34,
-		73, 74, 75, 76, 77, 35, 36, 37, 38,
-		121,122,123,124,125, 39, 40, 41, 42,
-		91, 92, 93, 94, 95, 65, 66, 67,105,
-		84, 83, 85, 86, 87, 88, 89, 90, 63,
-		128,129,130,132, 64,131,138,
-		//已废弃觉醒，但是不能删除，否则导致程序有问题
-		14, 15, 16, 17, 18
-	];
-
-	// 创建 Proxy
-	const proxy = new Proxy([], {
-		get(_, prop) {
-			const actual = isJP ? jp : en;
-
-			if (typeof prop === 'string') {
-				// 数字索引
-				if (/^\d+$/.test(prop)) {
-					return actual[Number(prop)];
-				}
-				// length
-				if (prop === 'length') {
-					return actual.length;
-				}
-				// 数组方法
-				if (typeof actual[prop] === 'function') {
-					return actual[prop].bind(actual);
-				}
-			}
-			// 其他属性（包括 Symbol）
-			return Reflect.get(actual, prop, actual);
-		},
-
-		ownKeys() {
-			return Reflect.ownKeys(isJP ? jp : en);
-		},
-
-		getOwnPropertyDescriptor(_, prop) {
-			return Reflect.getOwnPropertyDescriptor(isJP ? jp : en, prop);
-		}
-	});
-
-	// 可选：如果你真的想让 proxy.ja 和 proxy.en 可访问（调试用）
-	// Object.defineProperties(proxy, {
-	// 	ja: { value: ja, writable: false, configurable: false },
-	// 	en: { value: en, writable: false, configurable: false }
-	// });
-
-	return proxy;
-})();
+const official_awoken_sorting = [
+	 21, 43, 61,140, 54, 11, 12, 13, 49,
+	 56,107,111, 52, 55, 68, 69, 70, 28,
+	141, 48, 27, 78, 60,126, 59, 45, 50,
+	 53,109, 96,110,108, 79, 80, 81, 51,
+	106, 57, 58, 82, 62,112,113,114, 97,
+	136,133,134,135,137, 29,  9, 20, 44,
+	 99,100,101,102,103,104, 98,115, 71,
+	 22, 23, 24, 25, 26, 46, 47, 30, 72,
+	116,117,118,119,120,  1,  2,  3,127,
+	  4,  5,  6,  7,  8, 32, 31, 33, 34,
+	 73, 74, 75, 76, 77, 35, 36, 37, 38,
+	121,122,123,124,125, 39, 40, 41, 42,
+	 91, 92, 93, 94, 95, 65, 66, 67,105,
+	 84, 83, 85, 86, 87, 88, 89, 90, 63,
+	128,129,130,132, 64,131,138,139,
+	//已废弃觉醒，但是不能删除，否则导致程序有问题
+	 10, 14, 15, 16, 17, 18, 19,
+];
 
 //排序程序列表
 const sort_function_list = [
@@ -2096,26 +2038,34 @@ const specialSearchFunctions = (function() {
 						addition:memberATK_Addition
 					},
 				]},
-				{name:"Change card self's Attr",otLangName:{chs:"转换自身属性",cht:"轉換自身屬性"},
+				{name:"Change member's Attr",otLangName:{chs:"转换队员属性",cht:"轉換隊員屬性"},
 					function:cards=>{
-						const searchTypeArray = [142];
+						const searchTypeArray = [142, 274];
 						return cards.filter(card=>{
 							const skill = getCardActiveSkill(card, searchTypeArray);
 							return skill;
 						}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
 					},
 					addition:card=>{
-						const searchTypeArray = [142];
-						const skill = getCardActiveSkill(card, searchTypeArray);
-						if (!skill) return;
-						const sk = skill.params;
+						const searchTypeArray = [142, 274];
+						const skills = getCardActiveSkills(card, searchTypeArray, true);
+						return skills.map(skill=>{
+							const [ turns, attr, target ] = skill.params;
+							const fragment = document.createDocumentFragment();
+							fragment.appendChild(createTeamFlags(skill.type === 142 ? 1 : target, skill.type === 142 ? 1 : 0b11));
+							fragment.append("→", createOrbsList(attr), `×${turns}T`);
+							return fragment;
+						}).nodeJoin(document.createElement("br"));
+
+						// if (!skill) return;
+						// const sk = skill.params;
 	
-						const fragment = document.createDocumentFragment();
-						fragment.appendChild(document.createTextNode(`自→`));
-						fragment.appendChild(createOrbsList(sk[1]));
-						fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
+						// const fragment = document.createDocumentFragment();
+						// fragment.appendChild(document.createTextNode(`自→`));
+						// fragment.appendChild(createOrbsList(sk[1]));
+						// fragment.appendChild(document.createTextNode(`×${sk[0]}T`));
 			
-						return fragment;
+						// return fragment;
 					}
 				},
 				{name:"↓Reduce skills charge",otLangName:{chs:"【坐】增加CD",cht:"【坐】增加CD"},
@@ -3608,20 +3558,27 @@ const specialSearchFunctions = (function() {
 				},
 				{name:"Breaking Shield",otLangName:{chs:"破白盾",cht:"破白盾"},
 					function:cards=>{
-						const searchTypeArray = [259];
+						const searchTypeArray = [259, 272];
 						return cards.filter(card=>{
 							const skill = getCardActiveSkill(card, searchTypeArray);
 							return skill;
-						}).sort((a,b)=>sortByParams(a,b,searchTypeArray));
+						}).sort((a,b)=>{
+							const a_s = getCardActiveSkill(a, searchTypeArray),
+								b_s = getCardActiveSkill(b, searchTypeArray);
+							const a_p = a_s.params[0] * (a_s.type === 259 ? 1 : 100),
+								b_p = b_s.params[0] * (b_s.type === 259 ? 1 : 100);
+							return a_p - b_p;
+						});
 					},
 					addition:card=>{
-						const searchTypeArray = [259];
+						const searchTypeArray = [259, 272];
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						if (!skill) return;
-						const sk = skill.params;
+						 
+						const percent = skill.params[0] * (skill.type === 259 ? 1 : 100);
 						const fragment = document.createDocumentFragment();
 						fragment.appendChild(createSkillIcon('breaking-shield'));
-						fragment.append(`-${sk[0]}%`);
+						fragment.append(`-${percent}%`);
 						return fragment;
 					}
 				},

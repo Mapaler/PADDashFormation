@@ -875,6 +875,7 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	if (!memberCard || memberCard.id == 0 || !memberCard.enabled) return null;
 	
 	const enableAssist = assist && assistCard?.id > 0 && assistCard?.enabled && assistCard?.canAssist;
+	const disableAssist = assist && assistCard?.id === 0;
 	const enableAssistBouns = enableAssist &&
 		(memberCard.attrs[0] === assistCard.attrs[0] || memberCard.attrs[0] == 6 || assistCard.attrs[0] == 6);
 	const assistAwokenList = enableAssist ? assistCard.awakenings.slice(0, assist.awoken) : []; //储存武器已经点亮的觉醒
@@ -906,11 +907,17 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		});
 	}
 	
-	if (enableAssistBouns && // 辅助共鸣觉醒，需要同主属性
+	if (enableAssistBouns && // 辅助共鸣觉醒，需要武器同主属性
 		assistCard.types.some(t=>memberCard.types.includes(t)) //并且有共同的 Type
 	) {
 		latterAwokenScale.forEach(ab => {
 			ab.push({ index: 138, scale: 3 });
+		});
+	}
+
+	if (disableAssist) { //自力觉醒，需要没有辅助
+		latterAwokenScale.forEach(ab => {
+			ab.push({ index: 139, scale: 3 });
 		});
 	}
 
@@ -1299,7 +1306,7 @@ function createTeamFlags(target, type)
 		const li = ul.appendChild(document.createElement("li"));
 		li.className = "team-member-icon";
 	}
-	const targetTypes = type == 2 ? SkillTarget.type2 : SkillTarget.type1;
+	const targetTypes = Bin.unflags(type).flatMap(n=>SkillTarget[`type${n+1}`]);
 
 	let _target = [];
 	if (Number.isInteger(target)) {
