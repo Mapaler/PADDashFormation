@@ -67802,8 +67802,12 @@ const cachesMap = new Map([
 		"6b1eadf2c9faf6ac18522bd49a50a400"
 	],
 	[
+		"library/copy-libs.js",
+		"6fd28bde871b095afa45bbb8479b38b7"
+	],
+	[
 		"library/core-js.min.js",
-		"e97fc61708a867d73cae91f2c0309fec"
+		"2f93625c23998364f75161ada8a9c16e"
 	],
 	[
 		"library/html2canvas.min.js",
