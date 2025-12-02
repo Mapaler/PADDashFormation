@@ -25,7 +25,8 @@ This tool can help you easily create and share Swipe/Farming Formation or Solo T
 
 ## 如何使用 | HOW TO USE
 > [!TIP]
-> 推荐[![][firefox]火狐浏览器](https://www.mozilla.org/firefox/new/) | [![][firefox]Firefox](https://www.mozilla.org/firefox/new/) is recommended
+> 推荐最新的[<img width="24" height="24" alt="Firefox" src="https://www.mozilla.org/media/img/firefox/favicon.ico" />火狐浏览器](https://www.mozilla.org/firefox/new/)，Win 7 及 XP 可以使用仍在维护的[<img width="24" height="24" alt="Supermium" src="https://www.win32subsystem.live/supermium/images/Supermium.png" />Supermium 浏览器](https://www.win32subsystem.live/supermium/)  
+> We recommend the latest [<img width="24" height="24" alt="Firefox" src="https://www.mozilla.org/media/img/firefox/favicon.ico" /> Firefox browser](https://www.mozilla.org/firefox/new/). For Windows 7 and XP, you can use the actively maintained [<img width="24" height="24" alt="Supermium" src="https://www.win32subsystem.live/supermium/images/Supermium.png" /> Supermium browser](https://www.win32subsystem.live/supermium/).
 ### 快速使用在线版（推荐） | Online Quick Start (Recommended)
 * <https://mapaler.github.io/PADDashFormation/> (Github Pages)
 * <https://mapaler.com/PADDashFormation/> (我自己的镜像 | my own mirror)
@@ -114,3 +115,4 @@ Please refer to existing files.
 * [opencc-js](https://github.com/nk2028/opencc-js) //繁转简
 
 [firefox]: https://www.mozilla.org/media/img/firefox/favicon.ico
+[supermium]: https://www.win32subsystem.live/supermium/images/Supermium.png

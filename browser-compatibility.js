@@ -1,4 +1,102 @@
 ﻿(()=>{
+	const features = [
+		{
+			name: "BigInt value (1n) / BigInt 数据类型(1n)",
+			version:{firefox:68,chrome:67,safari:14},
+			url: "https://caniuse.com/bigint",
+			test: ()=>Boolean(runCodeWithFunction("1n"))
+		},
+		{
+			name: "Optional chaining (?.) / 可选链操作符(?.)",
+			version:{firefox:74,chrome:80,safari:13.4},
+			url: "https://caniuse.com/mdn-javascript_operators_optional_chaining",
+			test: ()=>Boolean(runCodeWithFunction("undefined?.undefined || true"))
+		},
+		{
+			name: "Nullish coalescing operator (??) / 空值合并操作符(??)",
+			version:{firefox:72,chrome:80,safari:13.4},
+			url: "https://caniuse.com/mdn-javascript_operators_nullish_coalescing",
+			test: ()=>Boolean(runCodeWithFunction("undefined ?? true"))
+		},
+		{
+			name: "regular_expressions: Named capture group: (?<name>...) / 正则表达式: 命名捕获组",
+			version:{firefox:78,chrome:64,safari:11.1},
+			url: "https://caniuse.com/mdn-javascript_regular_expressions_named_capturing_group",
+			test: ()=>Boolean(runCodeWithFunction("/(?<name>)/"))
+		},
+		{
+			name: "CSS selector: :where() / CSS选择器: :where()",
+			version:{firefox:78,chrome:88,safari:14},
+			url: "https://caniuse.com/mdn-css_selectors_where",
+			test: ()=>supportsPseudoClass(":where()")
+		},
+		{
+			name: "CSS selector: :not() / CSS选择器: :not()",
+			version:{firefox:84,chrome:88,safari:9},
+			url: "https://caniuse.com/css-not-sel-list",
+			test: ()=>supportsPseudoClass(":not(html)")
+		},
+		// {
+		// 	name: "CSS selector: :has() / CSS选择器: :has()",
+		// 	version:{firefox:121,chrome:105,safari:15.4},
+		// 	url: "https://caniuse.com/css-has",
+		// 	test: ()=>supportsPseudoClass(":has(html)")
+		// },
+		{
+			name: "Private class fields (#name) / 类私有域(#name)",
+			version:{firefox:90,chrome:74,safari:14.5},
+			url: "https://caniuse.com/mdn-javascript_classes_private_class_fields",
+			test: ()=>Boolean(runCodeWithFunction("class test {#v = 0;}, true"))
+		},
+		{
+			name: "Dialog element / Dialog 元素",
+			version:{firefox:98,chrome:37,safari:15.4},
+			url: "https://caniuse.com/dialog",
+			test: ()=>Boolean(window.HTMLDialogElement)
+		},
+		// {
+		// 	name: "Class static initialization blocks / 静态初始化块",
+		// 	version:{firefox:93,chrome:94,safari:16.4},
+		// 	url: "https://caniuse.com/mdn-javascript_classes_static_initialization_blocks",
+		// 	test: ()=>Boolean(runCodeWithFunction("class test { static { this.staticProperty = true;};}, true"))
+		// },
+		{
+			name: "Array.prototype.toSorted()",
+			version:{firefox:115,chrome:110,safari:16.0},
+			url: "https://caniuse.com/mdn-javascript_builtins_array_tosorted",
+			test: ()=>Boolean(Array.prototype.toSorted)
+		},
+		{
+			name: "Set.prototype.isDisjointFrom()",
+			version:{firefox:127,chrome:122,safari:17.0},
+			url: "https://caniuse.com/mdn-javascript_builtins_set_isdisjointfrom",
+			test: ()=>Boolean(Set.prototype.isDisjointFrom)
+		},
+		// {
+		// 	name: "Duplicate named capture group / 重复的正则表达式匹配命名组",
+		// 	version:{firefox:129,chrome:125,safari:17.0},
+		// 	url: "https://caniuse.com/mdn-javascript_regular_expressions_named_capturing_group_duplicate_named_capturing_groups",
+		// 	test: ()=>Boolean(runCodeWithFunction("/(?<year>\\d{4})-\\d{2}|\\d{2}-(?<year>\\d{4})/"))
+		// },
+		{
+			name: "Uint8Array.fromBase64()",
+			version:{firefox:133,chrome:140,safari:18.2},
+			url: "https://caniuse.com/mdn-javascript_builtins_uint8array_frombase64",
+			test: ()=>Boolean(Uint8Array.fromBase64)
+		},
+		{
+			name: "Uint8Array.prototype.toBase64()",
+			version:{firefox:133,chrome:140,safari:18.2},
+			url: "https://caniuse.com/mdn-javascript_builtins_uint8array_tobase64",
+			test: ()=>Boolean(Uint8Array.prototype.toBase64)},
+		{
+			name: "CSS property: paint-order / CSS属性: paint-order",
+			version:{firefox:60,chrome:123,safari:11},
+			url: "https://caniuse.com/mdn-css_properties_paint-order",
+			test: ()=>supportsPseudoClass(":not(html)")
+		},
+	];
+
 	function runCodeWithFunction(obj) {
 		return Function(`"use strict"; return (${obj})`)();
 	}
@@ -10,24 +108,6 @@
 		style.remove(); // document.head.removeChild(style);
 		return result;
 	}
-
-	const features = [
-		{name: "Optional chaining (?.) / 可选链操作符(?.)", version:{firefox:74,chrome:80,safari:13.4}, url: "https://caniuse.com/mdn-javascript_operators_optional_chaining", test: ()=>Boolean(runCodeWithFunction("undefined?.undefined || true"))},
-		{name: "Nullish coalescing operator (??) / 空值合并操作符(??)", version:{firefox:72,chrome:80,safari:13.4}, url: "https://caniuse.com/mdn-javascript_operators_nullish_coalescing", test: ()=>Boolean(runCodeWithFunction("undefined ?? true"))},
-		{name: "BigInt value (1n) / BigInt 数据类型(1n)", version:{firefox:68,chrome:67,safari:14}, url: "https://caniuse.com/bigint", test: ()=>Boolean(runCodeWithFunction("1n"))},
-		{name: "CSS selector: :where() / CSS选择器: :where()", version:{firefox:78,chrome:88,safari:14}, url: "https://caniuse.com/mdn-css_selectors_where", test: ()=>supportsPseudoClass(":where()")},
-		{name: "CSS selector: :not() / CSS选择器: :not()", version:{firefox:84,chrome:88,safari:9}, url: "https://caniuse.com/css-not-sel-list", test: ()=>supportsPseudoClass(":not(html)")},
-		//{name: "CSS selector: :has() / CSS选择器: :has()", version:{firefox:121,chrome:105,safari:15.4}, url: "https://caniuse.com/css-has", test: ()=>supportsPseudoClass(":has(html)")},
-		{name: "Private class fields (#name) / 类私有域(#name)", version:{firefox:90,chrome:74,safari:14.5}, url: "https://caniuse.com/mdn-javascript_classes_private_class_fields", test: ()=>Boolean(runCodeWithFunction("class test {#v = 0;}, true"))},
-		{name: "Dialog element / Dialog 元素", version:{firefox:98,chrome:37,safari:15.4}, url: "https://caniuse.com/dialog", test: ()=>Boolean(window.HTMLDialogElement)},
-		//{name: "Class static initialization blocks / 静态初始化块", version:{firefox:93,chrome:94,safari:16.4}, url: "https://caniuse.com/mdn-javascript_classes_static_initialization_blocks", test: ()=>Boolean(runCodeWithFunction("class test { static { this.staticProperty = true;};}, true"))},
-		{name: "Array.prototype.toSorted()", version:{firefox:115,chrome:110,safari:16.0}, url: "https://caniuse.com/mdn-javascript_builtins_array_tosorted", test: ()=>Boolean(Array.prototype.toSorted)},
-		{name: "Set.prototype.isDisjointFrom()", version:{firefox:127,chrome:122,safari:17.0}, url: "https://caniuse.com/mdn-javascript_builtins_set_isdisjointfrom", test: ()=>Boolean(Set.prototype.isDisjointFrom)},
-		//{name: "Duplicate named capture group / 重复的正则表达式匹配命名组", version:{firefox:129,chrome:125,safari:17.0}, url: "https://caniuse.com/mdn-javascript_regular_expressions_named_capturing_group_duplicate_named_capturing_groups", test: ()=>Boolean(runCodeWithFunction("/(?<year>\\d{4})-\\d{2}|\\d{2}-(?<year>\\d{4})/"))},
-		{name: "Uint8Array.fromBase64()", version:{firefox:133,chrome:Infinity,safari:18.2}, url: "https://caniuse.com/mdn-javascript_builtins_uint8array_frombase64", test: ()=>Boolean(Uint8Array.fromBase64)},
-		{name: "Uint8Array.prototype.toBase64()", version:{firefox:133,chrome:Infinity,safari:18.2}, url: "https://caniuse.com/mdn-javascript_builtins_uint8array_tobase64", test: ()=>Boolean(Uint8Array.fromBase64)},
-		{name: "CSS property: paint-order / CSS属性: paint-order", version:{firefox:60,chrome:123,safari:11}, url: "https://caniuse.com/mdn-css_properties_paint-order", test: ()=>supportsPseudoClass(":not(html)")},
-	];
 
 	const unsupportFeatures = features.filter(feature=>{
 		try {
@@ -47,7 +127,7 @@
 			} else if (regRes = /\bVersion\/([\d\.]+)\s+.*\b(Safari)\//ig.exec(UA)) {
 				return `${regRes[2]} ${regRes[1]}`;
 			} else {
-				UA;
+				return UA;
 			}
 		})(navigator.userAgent);
 		//支持的最低版本
@@ -67,7 +147,8 @@
 <ol>
 ${unsupportFeatures.map(feature=>`<li><a href="${feature.url}">${feature.name}</a></li>`).join('')}
 </ol>
-请更新您的浏览器内核到 Firefox(火狐) ≥ ${needBrowserVersion.firefox} 或 Chrome(谷歌) ≥ ${needBrowserVersion.chrome} 或 Safari ≥ ${needBrowserVersion.safari}。</p>`;
+请更新您的浏览器内核到 Firefox(火狐) ≥ ${needBrowserVersion.firefox} 或 Chrome(谷歌) ≥ ${needBrowserVersion.chrome} 或 Safari ≥ ${needBrowserVersion.safari}。<br>
+如果您使用的是已经停止支持的 Windows XP 或 Windows 7，可以使用 <a href="https://www.win32subsystem.live/supermium/">Supermium 浏览器</a> 以支持新特性。</p>`;
 		} else {
 			alertStr = 
 `<p lang="en">🙁Browser kernel is too old<br>
@@ -76,7 +157,8 @@ Your browser kernel does not support the following technologies used by this pro
 <ol>
 ${unsupportFeatures.map(feature=>`<li><a href="${feature.url}">${feature.name}</a></li>`).join('')}
 </ol>
-Please update your browser core to Firefox ≥ ${needBrowserVersion.firefox} or Chrome ≥ ${needBrowserVersion.chrome} or Safari ≥ ${needBrowserVersion.safari}</p>`;
+Please update your browser core to Firefox ≥ ${needBrowserVersion.firefox} or Chrome ≥ ${needBrowserVersion.chrome} or Safari ≥ ${needBrowserVersion.safari}.<br>
+If you are using Windows XP or Windows 7, which are no longer supported, you can use the <a href="https://www.win32subsystem.live/supermium/">Supermium browser</a> to gain support for modern web features.</p>`;
 		}
 	
 		//alert(alertStr);
@@ -114,7 +196,6 @@ Please update your browser core to Firefox ≥ ${needBrowserVersion.firefox} or 
 		removeMe.append("我知道了");
 		removeMe.onclick = ()=>{
 			mask.remove();
-			delete mask;
 		};
 	
 		const event = window.addEventListener("load", ()=>{
