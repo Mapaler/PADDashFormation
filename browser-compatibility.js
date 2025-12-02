@@ -88,12 +88,13 @@
 			name: "Uint8Array.prototype.toBase64()",
 			version:{firefox:133,chrome:140,safari:18.2},
 			url: "https://caniuse.com/mdn-javascript_builtins_uint8array_tobase64",
-			test: ()=>Boolean(Uint8Array.prototype.toBase64)},
-		{
+			test: ()=>Boolean(Uint8Array.prototype.toBase64)
+		},
+		{ // 由于浏览器都有这个标识但未实现功能，所以这一项无法用此手段检测。
 			name: "CSS property: paint-order / CSS属性: paint-order",
 			version:{firefox:60,chrome:123,safari:11},
 			url: "https://caniuse.com/mdn-css_properties_paint-order",
-			test: ()=>supportsPseudoClass(":not(html)")
+			test: () => CSS.supports('paint-order: stroke')
 		},
 	];
 
