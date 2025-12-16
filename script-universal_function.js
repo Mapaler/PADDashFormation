@@ -1298,7 +1298,7 @@ function cardNClick(event) {
 }
 
 //产生队伍目标类型
-function createTeamFlags(target, type)
+function createTeamFlags(target, type=1)
 {
 	const ul = document.createElement("ul");
 	ul.className = "team-flags";
