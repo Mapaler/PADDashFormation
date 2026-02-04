@@ -7785,6 +7785,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 80: return member.card.gachaIds.includes(0) ? 1.25 : 1; //正月(新年)+
 				case 51: return member.card.gachaIds.includes(14) ? 1.15 : 1; //女子桶
 				case 52: return member.card.gachaIds.includes(2) ? 1.15 : 1; //情人节
+				case 83: return member.card.gachaIds.includes(2) ? 1.25 : 1; //情人节+
 				case 54: case 55: return member.card.collabId === 117 ? 1.15 : 1; //排球少年
 				case 56: return member.card.gachaIds.includes(3) ? 1.15 : 1; //新学期(学园)
 				case 57: return member.card.gachaIds.includes(3) ? 1.25 : 1; //新学期(学园)+
