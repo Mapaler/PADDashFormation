@@ -112,6 +112,9 @@ details>summary:hover {
 	animation-direction: alternate-reverse;
 	animation-iteration-count: infinite;
 }
+.monster.hightlight {
+	animation-duration: 0.5s;
+}
 
 /*控制框*/
 .control-box :where(
