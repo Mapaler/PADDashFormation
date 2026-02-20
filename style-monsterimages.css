@@ -1109,9 +1109,6 @@
 .awoken-icon[data-awoken-icon='127']{/*三维*/
 	--icon-y-index: 127;
 }
-.awoken-icon[data-awoken-icon='127']{/*三维*/
-	--icon-y-index: 127;
-}
 .awoken-icon[data-awoken-icon='128']{/*阳之加护*/
 	--icon-y-index: 128;
 }
@@ -1156,6 +1153,9 @@
 }
 .awoken-icon[data-awoken-icon='141']{/*达人多色*/
 	--icon-y-index: 141;
+}
+.awoken-icon[data-awoken-icon='142']{/*三维+*/
+	--icon-y-index: 142;
 }
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
