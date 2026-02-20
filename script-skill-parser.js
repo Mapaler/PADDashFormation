@@ -493,6 +493,7 @@ const SkillKinds = {
 	FixedStartingPosition: "fixed-starting-position",
 	PartGravity: "part-gravity",
 	DestroyOrb: "destroy-orb",
+	VoidFieldBuff: "void-field-buff",
 }
 
 function skillParser(skillId)
@@ -1042,7 +1043,12 @@ function gravity(value, target = "all", isPartGravity = false) {
 	};
 }
 function voidEnemyBuff(buffs) {
+	if (!Array.isArray(buffs)) buffs = [buffs];
 	return { kind: SkillKinds.VoidEnemyBuff, buffs: buffs };
+}
+function voidFieldBuff(buffs) {
+	if (!Array.isArray(buffs)) buffs = [buffs];
+	return { kind: SkillKinds.VoidFieldBuff, buffs: buffs };
 }
 function skillBoost(value1, value2) { return { kind: SkillKinds.SkillBoost, min: value1, max: value2 ?? value1 }; }
 function minMatch(value) { return { kind: SkillKinds.MinMatchLength, value: value }; }
@@ -1866,6 +1872,8 @@ const skillObjectParsers = {
 	//部位的重力
 	[276](percent) { return gravity(v.xCHP(percent), void 0, true); },
 	[277](attr) { return destroyOrb(Bin.unflags(attr)); },
+	//超重力无效化
+	[278](turns) {return activeTurns(turns, voidFieldBuff(["super-gravity"])); },
 
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -2587,20 +2595,28 @@ function renderSkill(skill, option = {})
 			frg.ap(flag ? tsp.skill.orb_drop_increase_flag(dict) : tsp.skill.orb_drop_increase(dict));
 			break;
 		}
-		case SkillKinds.VoidEnemyBuff: {
-			let buffs = skill.buffs;
+		case SkillKinds.VoidEnemyBuff:
+		case SkillKinds.VoidFieldBuff:
+		{
+			const { buffs } = skill;
 			let subDocument = [];
 			for (const buff of buffs)
 			{
 				let dict = {
 					icon: createIcon(buff),
 				};
-				subDocument.push(tsp.skill[buff.replace(/\-/g,'_')](dict));
+				let skillFunc = tsp.skill[buff.replace(/\-/g,'_')];
+				if (skillFunc) {
+					subDocument.push(skillFunc(dict));
+				} else {
+					subDocument.push(document.createTextNode(buff));
+				}
 			}
 			let dict = {
 				buff: subDocument.nodeJoin(tsp.word.slight_pause()),
 			};
-			frg.ap(tsp.skill.void_enemy_buff(dict));
+			
+			frg.ap(tsp.skill[skill.kind.replace(/\-/g,'_')](dict));
 			break;
 		}
 		case SkillKinds.ChangeAttribute: {

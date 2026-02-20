@@ -384,6 +384,7 @@ Array.prototype.nodeJoin = function(separator)
 {
 	const frg = document.createDocumentFragment();
 	this.forEach((item, idx, arr)=>{
+		//if (typeof item === "string") item = document.createTextNode(item);
 		frg.ap(item);
 		if (idx < (arr.length - 1) && separator !== null && separator !== void 0) {
 			frg.ap(separator instanceof Node ? separator.cloneNode(true) : separator);
@@ -885,20 +886,20 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	const plusAdd = [10, 5, 3]; //加值的增加值
 	const limitBreakIncr120 = [10, 5, 5]; //120三维增加百分比例
 
-	const awokenAdd = [ //对应加三维觉醒的序号与增加值
-		[{ index: 1, value: 500 }, { index: 65, value: -2500 }], //HP
-		[{ index: 2, value: 100 }, { index: 66, value: -1000 }], //ATK
-		[{ index: 3, value: 200 }, { index: 67, value: -2000 }] //RCV
+	const awokenAdd = [ //对应加三维觉醒的序号与增加值, 日服23.0 提高数值
+		[{ index: 1, value: isJP ? 2000 : 500 }, { index: 65, value: -2500 }], //HP
+		[{ index: 2, value: isJP ? 1000 : 100 }, { index: 66, value: -1000 }], //ATK
+		[{ index: 3, value: isJP ? 500 :200 }, { index: 67, value: -2000 }] //RCV
 	];
 	const previousAwokenScale = [ //在297之前，对应比例加三维觉醒的序号与倍率值，63 语音觉醒
 		[{ index: 63, scale: 1.1 }], //HP
 		[{ index: 63, scale: 1.1 }], //ATK
 		[{ index: 63, scale: 1.1 }] //RCV
 	];
-	const latterAwokenScale = [ //在297之后，对应比例加三维觉醒的序号与倍率值，30 协力觉醒、127 三维觉醒、132 下午茶觉醒
-		[{ index: 127, scale: 1.5 }, { index: 132, scale: 1.25 }], //HP
-		[{ index: 127, scale: 1.5 }, { index: 132, scale: 1.25 }], //ATK
-		[{ index: 127, scale: 1.5 }, { index: 132, scale: 1.25 }] //RCV
+	const latterAwokenScale = [ //在297之后，对应比例加三维觉醒的序号与倍率值，30 协力觉醒、127 三维觉醒、132 下午茶觉醒、142 三维觉醒+
+		[{ index: 127, scale: 1.5 }, { index: 132, scale: 1.25 }, { index: 142, scale: 1.8 }], //HP
+		[{ index: 127, scale: 1.5 }, { index: 132, scale: 1.25 }, { index: 142, scale: 1.8 }], //ATK
+		[{ index: 127, scale: 1.5 }, { index: 132, scale: 1.25 }, { index: 142, scale: 1.8 }] //RCV
 	];
 
 	if (!solo) { //协力时计算协力觉醒
@@ -1785,7 +1786,7 @@ function getSkillFixedDamage(card) {
 		}
 	}).reduce((p,v)=>p+v, 0);
 }
-function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original) {
+function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original, badge) {
 	let effect = {
 		board76: false,
 		noSkyfall: false,
@@ -1823,6 +1824,26 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original)
 	{ //计算队伍的追打
 		effect.inflicts[0] = getSkillFixedDamage(card1);
 		effect.inflicts[1] = getSkillFixedDamage(card2);
+	}
+
+	switch (badge) {
+		case 22: {
+			effect.poisonNoEffect = true;
+			break;
+		}
+		case 86: {
+			effect.inflicts.push(2.5e7);
+			break;
+		}
+		case 89: {
+			effect.inflicts.push(2e7);
+			effect.addCombo.push(2);
+			break;
+		}
+		case 90: {
+			effect.addCombo.push(3);
+			break;
+		}
 	}
 	return effect;
 }

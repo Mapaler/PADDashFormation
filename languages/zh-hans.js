@@ -111,6 +111,7 @@ const _localTranslating = {
 			damage_absorb: tp`${'icon'}伤害吸收`,
 			damage_void: tp`${'icon'}伤害无效`,
 			void_enemy_buff: tp`敌人的 ${'buff'} 无效化`,
+			void_field_buff: tp`场地的 ${'buff'} 无效化`,
 			change_attribute: tp`将${'target'}变为${'attr'}`,
 			set_orb_state_enhanced: tp`${'icon'}强化${'orbs'}（每颗宝珠效力增加${'value'}）`,
 			set_orb_state_locked: tp`将${'orbs'}${'icon'}锁定${'value'}`,
@@ -146,6 +147,7 @@ const _localTranslating = {
 			times_limit: tp`【使用次数限制：${'turns'}】`,
 			fixed_starting_position: tp`${'icon'}固定起手位置`,
 			destroy_orb: tp`破坏所有的${'orbs'}`,
+			super_gravity: tp`${'icon'}超重力`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,
@@ -480,6 +482,7 @@ const _localTranslating = {
 			[139]: tp`${'icon'}自力`,
 			[140]: tp`${'icon'}防手指`,
 			[141]: tp`${'icon'}达人多色`,
+			[142]: tp`${'icon'}三维+`,
 		}
 	},
 };

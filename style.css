@@ -5290,4 +5290,9 @@ body.external-link-support #external-support{
 	animation: hidden-visible-animate 0.3s infinite alternate ease-out;
 }
 
+.icon-skill[data-icon-type="super-gravity"]
+{
+	background-position-y:calc(-36px * 49);
+}
+
 /*animation: rotate-animate 5s infinite linear;*/

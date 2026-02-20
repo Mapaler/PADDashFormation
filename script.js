@@ -6874,7 +6874,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 9);
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
-		let count = thisAwokenNum * 1000; //普通觉醒每个加1000
+		let count = thisAwokenNum * isJP ? 1500 : 1000; //普通觉醒每个加1000, 日服23.0 提高数值
 
 		//自动回复的队长技能
 		let lsAwoken1 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal),
@@ -7749,6 +7749,10 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 18: return 1.15; //大血
 				case 20: return 1.10; //全属性
 				case 22: case 23: return 1.50; //状态异常耐性&SB++ 辅助无效
+				case 86: //L强化
+				case 89: //5色强化
+				case 90: //方块强化
+					return 1.05;
 
 				case 24: case 79: return member.card.collabId === 92 ? 1.15 : 1; //英雄学院徽章
 				case 25: return member.card.gachaIds.includes(1) ? 1.15 : 1; //画师桶，1号徽章
@@ -7796,6 +7800,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 68: case 69: return member.card.gachaIds.includes(8) ? 1.15 : 1; //龙契士&龙唤士桶(对桶外合作id不生效)
 				case 71: case 72: return member.card.collabId === 93 ? 1.15 : 1; //鬼灭之刃
 				case 81: case 82: return member.card.collabId === 121 ? 1.15 : 1; //RE:0
+				case 84: case 85: return member.card.collabId === 122 ? 1.15 : 1; //葬送的芙莉莲
 				default: return 1;
 			}
 		}
@@ -7856,8 +7861,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 		//76版队长技能不被换队长所影响
 		const leader1id_original = members[0].id;
 		const leader2id_original = teamsCount===2 ? (teamIdx === 1 ? teamsA_members[0].id : teamsB_members[0].id) : members[5].id;
-		let effect = tIf_Effect(leader1id,leader2id, leader1id_original,leader2id_original);
-		if (badge == 22) effect.poisonNoEffect = true;
+		let effect = tIf_Effect(leader1id,leader2id, leader1id_original,leader2id_original, teamsCount != 2 && badge);
 		refreshEffectDom(tEffectDom, effect);
 	}
 	return outdata;

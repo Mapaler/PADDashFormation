@@ -125,7 +125,8 @@ let localTranslating = {
 			combo_absorb: tp`${'icon'}Combo absorption`,
 			damage_absorb: tp`${'icon'}Damage absorption`,
 			damage_void: tp`${'icon'}Damage void`,
-			void_enemy_buff: tp`Voids enemies' ${'buff'}`,
+			void_enemy_buff: tp`Voids enemies's ${'buff'}`,
+			void_field_buff: tp`Voids filed's ${'buff'}`,
 			change_attribute: tp`${'target'}'s Att. changes to ${'attr'}`,
 			set_orb_state_enhanced: tp`${'orbs'} ${'icon'}enhanced (${'value'} per orb)`,
 			set_orb_state_locked: tp`${'icon'}Locks ${'value'}${'orbs'}`,
@@ -161,6 +162,7 @@ let localTranslating = {
 			times_limit: tp`[Number of times skill can be used: ${'turns'}]`,
 			fixed_starting_position: tp`${'icon'}Fixed starting position`,
 			destroy_orb: tp`Destroy all ${'orbs'}`,
+			super_gravity: tp`${'icon'}Super Gravity`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -492,9 +494,10 @@ let localTranslating = {
 			[136]: tp`${'icon'}Skill Delay Resistance`,
 			[137]: tp`${'icon'}All Attr. Enhanced`,
 			[138]: tp`${'icon'}Assist Resonance`,
-			[139]: tp`${'icon'}Self-reliance`,
-			[140]: tp`${'icon'}Resist operation time change`,
-			[141]: tp`${'icon'}Powerful people's multi-color enhancement`,
+			[139]: tp`${'icon'}Self-Reliance`,
+			[140]: tp`${'icon'}Move Time Change Resistance`,
+			[141]: tp`${'icon'}Expert Multi-Match`,
+			[142]: tp`${'icon'}Enhanced Stats+`,
 		}
 	},
 };
@@ -590,7 +593,7 @@ const official_badge_sorting = [ //20是没有启用的全属性徽章，现在�
 	 34, 35, 75, 36, 77, 37, 38, 62, 39, 40, 78, 49,
 	 50, 80, 51, 52, 83, 54, 55, 56, 57, 58, 59,
 	 60, 61, 63, 64, 66, 67, 68, 69,
-	 71, 72, 73, 74, 81, 82
+	 71, 72, 73, 74, 81, 82, 84, 85, 86, 89, 90,
 ]
 //官方的觉醒排列顺序
 const official_awoken_sorting = [
@@ -916,10 +919,12 @@ const specialSearchFunctions = (function() {
 			"combo-absorb": 0,
 			"damage-absorb": 0,
 			"damage-void": 0,
+			"super-gravity": 0,
 		};
 		const searchTypeArray = [
 			173,
-			191
+			191,
+			278
 		];
 		const skills = getCardActiveSkills(card, searchTypeArray);
 		skills.reduce((pre,skill)=>{
@@ -929,6 +934,8 @@ const specialSearchFunctions = (function() {
 				if(skill.params[3]) pre["damage-absorb"] ||= skill.params[0];
 			} else if (skill.type === 191) {
 				pre["damage-void"] ||= skill.params[0];
+			} else if (skill.type === 278) {
+				pre["super-gravity"] ||= skill.params[0];
 			}
 			return pre
 		}, outObj);
@@ -937,7 +944,7 @@ const specialSearchFunctions = (function() {
 	function voidsAbsorption_Addition(card)
 	{
 		const turnsObj = voidsAbsorption_Turns(card);
-		const namesArr = ["attr-absorb", "combo-absorb", "damage-absorb", "damage-void"];
+		const namesArr = ["attr-absorb", "combo-absorb", "damage-absorb", "damage-void","super-gravity"];
 		const turns = namesArr.map(name=>turnsObj[name]);
 		const turnsSet = new Set(turns.filter(Boolean));
 		const turnsCount = turnsSet.size;
@@ -2549,6 +2556,20 @@ const specialSearchFunctions = (function() {
 			
 						return fragment;
 					}
+				},
+				{name:"Voids Super Gravity",otLangName:{chs:"超重力无效 buff",cht:"超重力無效 buff"},
+					function:cards=>{
+						const attrName = "super-gravity";
+						return cards.filter(card=>{
+							const turns = voidsAbsorption_Turns(card);
+							return turns[attrName] > 0;
+						}).sort((a,b)=>{
+							const a_s = voidsAbsorption_Turns(a), b_s = voidsAbsorption_Turns(b);
+							let a_pC = a_s[attrName], b_pC = b_s[attrName];
+							return a_pC - b_pC;
+						});
+					},
+					addition:voidsAbsorption_Addition
 				},
 			]},
 			{group:true,name:"Orbs States Change",otLangName:{chs:"改变宝珠状态类",cht:"改變寶珠狀態類"}, functions: [
