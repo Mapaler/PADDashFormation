@@ -889,8 +889,8 @@ const c = {
 		return { remainAttrOrbs: { attrs, min, max} };
 	},
 	awakeningActivated: function (awakenings) { return { awakeningActivated: { awakenings } }; },
-	stateIsActive: function (type, attrs) {
-		return { stateIsActive: { type, attrs} };
+	stateIsActive: function (type, indexes) {
+		return { stateIsActive: { type, indexes } };
 	},
 }
 
@@ -1861,13 +1861,31 @@ const skillObjectParsers = {
 		);
 	},
 	//宝珠掉落率提高时才能使用技能
-	[275](typeNum, attrFlag) {
+	[275](typeNum, flag) {
 		const typeNames = [
-			null,
 			"orb-drop-increase",
+			"enhanced-orb-drop-increase",
+			"attr-powerup",
+			"type-powerup"
 		]
-		let type = typeNames[typeNum];
-		return skillProviso(c.stateIsActive(type, Bin.unflags(attrFlag)));
+		const type = Bin.unflags(typeNum).map(n => typeNames[n] || 0)[0];
+		let indexes = null;
+		switch (type) {
+			case "orb-drop-increase": {
+				indexes = Bin.unflags(flag);
+				break;
+			}
+			case "enhanced-orb-drop-increase": {
+				indexes = null;
+				break;
+			}
+			case "attr-powerup":
+			case "type-powerup": {
+				indexes = flag;
+				break;
+			}
+		}
+		return skillProviso(c.stateIsActive(type, indexes));
 	},
 	//部位的重力
 	[276](percent) { return gravity(v.xCHP(percent), void 0, true); },
@@ -3392,12 +3410,31 @@ function renderCondition(cond) {
 		};
 		frg.ap(tsp.cond.awakening_activated(dict));
 	} else if (cond.stateIsActive) {
-		const {	type, attrs} = cond.stateIsActive;
+		const {	type, indexes } = cond.stateIsActive;
 		let state;
 		switch (type) {
 			case "orb-drop-increase": {
 				state = tsp.buffs.orb_drop_increase({
-					orbs:renderOrbs(attrs, {className: "drop", affix: true})
+					orbs:renderOrbs(indexes, {className: "drop", affix: true})
+				});
+				break;
+			}
+			case "enhanced-orb-drop-increase": {
+				state = tsp.buffs.orb_drop_increase({
+					orbs:tsp.orbs.enhanced({icon:createSkillIcon("orb-enhanced")})
+				});
+				
+				break;
+			}
+			case "attr-powerup": {
+				state = tsp.buffs.target_powerup({
+					target:renderAttrs(indexes , {affix: true})
+				});
+				break;
+			}
+			case "type-powerup": {
+				state = tsp.buffs.target_powerup({
+					target:renderTypes(indexes , {affix: true})
 				});
 				break;
 			}

@@ -272,6 +272,7 @@ let localTranslating = {
 		},
 		buffs: {
 			orb_drop_increase: tp`${'orbs'} more likely to appear`,
+			target_powerup: tp`${'target'} Enhanced`,
 		},
 		unit: {
 			orbs: tp``,
@@ -3980,7 +3981,7 @@ const specialSearchFunctions = (function() {
 						return `限${sk[0]}次`;
 					}
 				},
-				{name:"Enable require drop state of Orbs",otLangName:{chs:"技能使用要求宝珠掉落状态",cht:"技能使用要求寶珠掉落狀態"},
+				{name:"Enable require BUFF state",otLangName:{chs:"技能使用要求buff状态",cht:"技能使用要求buff狀態"},
 					function:cards=>cards.filter(card=>{
 						const searchTypeArray = [275];
 						const skill = getCardActiveSkill(card, searchTypeArray);
@@ -3990,15 +3991,33 @@ const specialSearchFunctions = (function() {
 						const searchTypeArray = [275];
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						if (!skill) return;
-						const [typeNum, attrFlag] = skill.params;
+						const [typeNum, flag] = skill.params;
 						const fragment = document.createDocumentFragment();
-						// const typeNames = [
-						// 	null,
-						// 	"orb-drop-increase",
-						// ]
-						// const type = typeNames[typeNum];
-						const attrs = Bin.unflags(attrFlag);
-						fragment.append(createOrbsList(attrs, "drop"));
+						const typeNames = [
+							"orb-drop-increase",
+							"enhanced-orb-drop-increase",
+							"attr-powerup",
+							"type-powerup"
+						]
+						const type = Bin.unflags(typeNum).map(n => typeNames[n] || 0)[0];
+						switch (type) {
+							case "orb-drop-increase": {
+								fragment.append(createOrbsList(Bin.unflags(flag), "drop"));
+								break;
+							}
+							case "enhanced-orb-drop-increase": {
+								fragment.append(createSkillIcon("orb-enhanced"));
+								break;
+							}
+							case "attr-powerup": {
+								fragment.append(createOrbsList(flag));
+								break;
+							}
+							case "type-powerup": {
+								fragment.append(createTypesList(flag));
+								break;
+							}
+						}
 						return fragment;
 					}
 				},

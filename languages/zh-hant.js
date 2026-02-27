@@ -256,6 +256,7 @@ const _localTranslating = {
 		},
 		buffs: {
 			orb_drop_increase: tp`${'orbs'}掉落率提高`,
+			target_powerup: tp`${'target'}攻擊力提高`,
 		},
 		unit: {
 			orbs: tp`個`,
