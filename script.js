@@ -6874,7 +6874,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 9);
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
-		let count = thisAwokenNum * isJP ? 1500 : 1000; //普通觉醒每个加1000, 日服23.0 提高数值
+		let count = thisAwokenNum * (isJP ? 1500 : 1000); //普通觉醒每个加1000, 日服23.0 提高数值
 
 		//自动回复的队长技能
 		let lsAwoken1 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal),
@@ -7801,6 +7801,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 71: case 72: return member.card.collabId === 93 ? 1.15 : 1; //鬼灭之刃
 				case 81: case 82: return member.card.collabId === 121 ? 1.15 : 1; //RE:0
 				case 84: case 85: return member.card.collabId === 122 ? 1.15 : 1; //葬送的芙莉莲
+				case 91: case 92: return member.card.gachaIds.includes(10) ? 1.15 : 1; //大罪龙与钥匙之勇者
 				default: return 1;
 			}
 		}
