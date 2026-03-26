@@ -6873,11 +6873,12 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		const targetValue = targetIcon.parentElement.querySelector(".count");
 		const equivalentAwoken = equivalent_awoken.find(eak => eak.small === 9);
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
-		awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
-		let count = thisAwokenNum * (isJP ? 1500 : 1000); //普通觉醒每个加1000, 日服23.0 提高数值
+							  awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
+		let count = 0;
+		count += (isJP ? 1500 : 1000) * thisAwokenNum; //普通觉醒每个加1000, 日服23.0 提高数值
 
 		//自动回复的队长技能
-		let lsAwoken1 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal),
+		const lsAwoken1 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal),
 			lsAwoken2 = parseLSkill2.filter(skill=>skill.kind == SkillKinds.AutoHeal);
 		if (lsAwoken1.length) {
 			const [,,rcv] = leader1.ability;
@@ -6890,12 +6891,16 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 
 		for (let mi=0; mi < members.length; mi++) {
 			const memberData = members[mi];
-			let latentCount = memberData?.latent?.filter(l=>l===5).length;
-			if (latentCount>0) { //自动回复潜觉，不考虑任何297和觉醒
-				let memberCard = memberData.card;
-				//计算没有297的纯三维
-				let memberRCV = Math.round(curve(memberCard.rcv, memberData.level, memberCard.maxLevel, memberCard.limitBreakIncr, 5));
-				count += Math.round(memberRCV * 0.15 * latentCount); //回复力的15%
+			const latentCount = memberData?.latent?.filter(l=>l===5).length;
+			if (latentCount > 0) { //自动回复潜觉，不考虑任何297和觉醒
+				if (isJP) { //潜在觉醒每个加500, 日服23.1 提高数值
+					count += 500 * latentCount; //回复力的15%
+				} else {
+					const memberCard = memberData.card;
+					//计算没有297的纯三维
+					let memberRCV = Math.round(curve(memberCard.rcv, memberData.level, memberCard.maxLevel, memberCard.limitBreakIncr, 5));
+					count += Math.round(memberRCV * 0.15 * latentCount); //回复力的15%
+				}
 			} else {
 				continue;
 			}
@@ -7752,6 +7757,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 86: //L强化
 				case 89: //5色强化
 				case 90: //方块强化
+				case 95: //3色强化
 					return 1.05;
 
 				case 24: case 79: return member.card.collabId === 92 ? 1.15 : 1; //英雄学院徽章

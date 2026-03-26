@@ -1826,22 +1826,27 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original,
 		effect.inflicts[1] = getSkillFixedDamage(card2);
 	}
 
+	//徽章增加的附加效果，按照目前已知的情况写死在这里了，以后如果有新的需要再加
 	switch (badge) {
-		case 22: {
+		case 22: { //状态异常耐性
 			effect.poisonNoEffect = true;
 			break;
 		}
-		case 86: {
+		case 86: { //L强化
 			effect.inflicts.push(2.5e7);
 			break;
 		}
-		case 89: {
+		case 89: { //5色强化
 			effect.inflicts.push(2e7);
 			effect.addCombo.push(2);
 			break;
 		}
-		case 90: {
+		case 90: { //方块强化
 			effect.addCombo.push(3);
+			break;
+		}
+		case 95: { //3色强化
+			effect.addCombo.push(2);
 			break;
 		}
 	}
