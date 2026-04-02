@@ -7805,6 +7805,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 66: case 67: return member.card.gachaIds.includes(13) ? 1.15 : 1; //酒桶
 				case 68: case 69: return member.card.gachaIds.includes(8) ? 1.15 : 1; //龙契士&龙唤士桶(对桶外合作id不生效)
 				case 71: case 72: return member.card.collabId === 93 ? 1.15 : 1; //鬼灭之刃
+				case 73: case 74: return member.card.collabId === 120 ? 1.15 : 1; //怪兽8号
 				case 81: case 82: return member.card.collabId === 121 ? 1.15 : 1; //RE:0
 				case 84: case 85: return member.card.collabId === 122 ? 1.15 : 1; //葬送的芙莉莲
 				case 91: case 92: return member.card.gachaIds.includes(10) ? 1.15 : 1; //大罪龙与钥匙之勇者

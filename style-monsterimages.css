@@ -1542,6 +1542,44 @@
 ){
 	background-position-x: calc(var(--badge-width) * -1);
 }
+.badge:where( /*联动的蓝色徽章底*/
+	[data-badge-icon='24'],
+	[data-badge-icon='79'],
+	[data-badge-icon='26'],
+	[data-badge-icon='53'],
+	[data-badge-icon='27'],
+	[data-badge-icon='28'],
+	[data-badge-icon='29'],
+	[data-badge-icon='31'],
+	[data-badge-icon='15'],
+	[data-badge-icon='32'],
+	[data-badge-icon='33'],
+	[data-badge-icon='76'],
+	[data-badge-icon='34'],
+	[data-badge-icon='36'],
+	[data-badge-icon='77'],
+	[data-badge-icon='37'],
+	[data-badge-icon='38'],
+	[data-badge-icon='62'],
+	[data-badge-icon='39'],
+	[data-badge-icon='49'],
+	[data-badge-icon='54'],
+	[data-badge-icon='55'],
+	[data-badge-icon='58'],
+	[data-badge-icon='59'],
+	[data-badge-icon='71'],
+	[data-badge-icon='72'],
+	[data-badge-icon='73'],
+	[data-badge-icon='74'],
+	[data-badge-icon='81'],
+	[data-badge-icon='82'],
+	[data-badge-icon='84'],
+	[data-badge-icon='85'],
+	[data-badge-icon='93'],
+	[data-badge-icon='94'],
+){
+	background-position-y: calc(var(--badge-height) * -1);
+}
 .badge[data-badge-icon='129']::before{ /*月卡*/
 	--icon-x-index: 1;
 	--icon-y-index: 0;
