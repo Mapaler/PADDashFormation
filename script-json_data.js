@@ -3995,12 +3995,16 @@ const specialSearchFunctions = (function() {
 						const [typeNum, flag] = skill.params;
 						const fragment = document.createDocumentFragment();
 						const typeNames = [
-							"orb-drop-increase",
-							"enhanced-orb-drop-increase",
-							"attr-powerup",
-							"type-powerup"
+							"orb-drop-increase", //掉落率提高，1
+							"enhanced-orb-drop-increase", //掉落强化珠，2
+							null,
+							null,
+							null,
+							null,
+							"attr-powerup", //属性强化，7
+							"type-powerup" //类型强化，8
 						]
-						const type = Bin.unflags(typeNum).map(n => typeNames[n] || 0)[0];
+						const type = typeNames[typeNum-1];
 						switch (type) {
 							case "orb-drop-increase": {
 								fragment.append(createOrbsList(Bin.unflags(flag), "drop"));
@@ -4011,11 +4015,11 @@ const specialSearchFunctions = (function() {
 								break;
 							}
 							case "attr-powerup": {
-								fragment.append(createOrbsList(flag));
+								fragment.append(createOrbsList(flag, "powerup"));
 								break;
 							}
 							case "type-powerup": {
-								fragment.append(createTypesList(flag));
+								fragment.append(createTypesList(flag, "powerup"));
 								break;
 							}
 						}

@@ -80595,7 +80595,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"0caba5f83e650bc4f90a8a11d925f698"
+		"ce6eee0c853214de3687be325be0dc52"
 	],
 	[
 		"script-custom_elements.js",
@@ -80603,11 +80603,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"9b8deeef2fa7522e4e1b73556f252996"
+		"6dd376ea72e2845f6e8ff7c53701316a"
 	],
 	[
 		"script-skill-parser.js",
-		"7c550a863e49782a50b42f5a69a2ac52"
+		"b5e59e5c7de34dc44b96f5bf3d67fdc7"
 	],
 	[
 		"script-universal_function.js",
@@ -80619,7 +80619,7 @@ const cachesMap = new Map([
 	],
 	[
 		"solo.html",
-		"b0d4355e9f0bbafa8a79e7d1023150be"
+		"039de689a28d3eab34615b4fa0eb9262"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -80639,7 +80639,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"4328022067f78b0faa0dd1c926109222"
+		"f7b441db590dba5e0af21f9c8601b615"
 	],
 	[
 		"languages/en.css",
@@ -80863,7 +80863,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/core-js.min.js",
-		"9c2b3ec09627a6214771964b087f6447"
+		"af3045731f62fe876479715c8c9c84e8"
 	],
 	[
 		"library/html2canvas.min.js",

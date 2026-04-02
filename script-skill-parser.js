@@ -1863,12 +1863,17 @@ const skillObjectParsers = {
 	//宝珠掉落率提高时才能使用技能
 	[275](typeNum, flag) {
 		const typeNames = [
-			"orb-drop-increase",
-			"enhanced-orb-drop-increase",
-			"attr-powerup",
-			"type-powerup"
+			"orb-drop-increase", //掉落率提高，1
+			"enhanced-orb-drop-increase", //掉落强化珠，2
+			null,
+			null,
+			null,
+			null,
+			"attr-powerup", //属性强化，7
+			"type-powerup" //类型强化，8
 		]
-		const type = Bin.unflags(typeNum).map(n => typeNames[n] || 0)[0];
+		// const type = Bin.unflags(typeNum).map(n => typeNames[n] || 0)[0]; //之前以为是位运算，后来发现又不是
+		const type = typeNames[typeNum-1];
 		let indexes = null;
 		switch (type) {
 			case "orb-drop-increase": {
