@@ -7810,6 +7810,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 84: case 85: return member.card.collabId === 122 ? 1.15 : 1; //葬送的芙莉莲
 				case 91: case 92: return member.card.gachaIds.includes(10) ? 1.15 : 1; //大罪龙与钥匙之勇者
 				case 93: case 94: return member.card.collabId === 41 ? 1.15 : 1; //迷你角色
+				case 96: case 97: return member.card.gachaIds.includes(5)  ? 1.15 : 1; //式神使与妖
 				default: return 1;
 			}
 		}
