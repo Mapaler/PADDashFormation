@@ -6875,7 +6875,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 		const thisAwokenNum = awokenCountInTeam(team, equivalentAwoken.small, solo, teamsCount) +
 							  awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 		let count = 0;
-		count += (isJP ? 1500 : 1000) * thisAwokenNum; //普通觉醒每个加1000, 日服23.0 提高数值
+		count += 1500 * thisAwokenNum; //普通觉醒每个加1500
 
 		//自动回复的队长技能
 		const lsAwoken1 = parseLSkill1.filter(skill=>skill.kind == SkillKinds.AutoHeal),

@@ -886,10 +886,10 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	const plusAdd = [10, 5, 3]; //加值的增加值
 	const limitBreakIncr120 = [10, 5, 5]; //120三维增加百分比例
 
-	const awokenAdd = [ //对应加三维觉醒的序号与增加值, 日服23.0 提高数值
-		[{ index: 1, value: isJP ? 2000 : 500 }, { index: 65, value: -2500 }], //HP
-		[{ index: 2, value: isJP ? 1000 : 100 }, { index: 66, value: -1000 }], //ATK
-		[{ index: 3, value: isJP ? 500 :200 }, { index: 67, value: -2000 }] //RCV
+	const awokenAdd = [ //对应加三维觉醒的序号与增加值
+		[{ index: 1, value: 2000 }, { index: 65, value: -2500 }], //HP
+		[{ index: 2, value: 1000 }, { index: 66, value: -1000 }], //ATK
+		[{ index: 3, value: 500 }, { index: 67, value: -2000 }] //RCV
 	];
 	const previousAwokenScale = [ //在297之前，对应比例加三维觉醒的序号与倍率值，63 语音觉醒
 		[{ index: 63, scale: 1.1 }], //HP
