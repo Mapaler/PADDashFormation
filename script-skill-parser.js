@@ -391,6 +391,39 @@ class Board
 const SkillTarget = {
 	type1: ["self","leader-self","leader-helper","sub-members"],
 	type2: ["right-neighbor","left-neighbor","self"],
+	enhancedAwakeningsId: [
+			27, //U
+			48, //九宫
+			60, //L字
+			78, //十字
+
+			126,//T字
+			22, //横排-火
+			23, //横排-水
+			24, //横排-木
+
+			25, //横排-光
+			26, //横排-暗
+			79, //三色
+			80, //四色
+
+			81, //五色
+			0,
+			0,
+			73, //串串-火
+
+			74, //串串-水
+			75, //串串-木
+			76, //串串-光
+			77, //串串-暗
+
+			20, //心横解封
+			82, //饼干
+			133, //火水同时攻击
+			134, //火水同时攻击
+
+			135, //水木同时攻击
+	],
 };
 
 const SkillValue = {
@@ -892,6 +925,7 @@ const c = {
 	stateIsActive: function (type, indexes) {
 		return { stateIsActive: { type, indexes } };
 	},
+	enemyAttr: function (attrs) { return { enemyAttr: { attrs } }; },
 }
 
 const p = {
@@ -1811,40 +1845,7 @@ const skillObjectParsers = {
 	[270](times, atk, rcv) { { return powerUp(Bin.unflags(31), null, p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.useSkill(times)); } },
 	//同时发动觉醒时强化
 	[271](awakeningsFlag, atk, reducePercent, combo, damage, rcv) {
-		const awakeningsType = [
-			27, //U
-			48, //九宫
-			60, //L字
-			78, //十字
-
-			126,//T字
-			22, //横排-火
-			23, //横排-水
-			24, //横排-木
-
-			25, //横排-光
-			26, //横排-暗
-			79, //三色
-			80, //四色
-
-			81, //五色
-			0,
-			0,
-			73, //串串-火
-
-			74, //串串-水
-			75, //串串-木
-			76, //串串-光
-			77, //串串-暗
-
-			20, //心横解封
-			82, //饼干
-			133, //火水同时攻击
-			134, //火水同时攻击
-
-			135, //水木同时攻击
-		];
-		const awakeningsArr = Bin.unflags(awakeningsFlag).map(n => awakeningsType[n] || 0);
+		const awakeningsArr = Bin.unflags(awakeningsFlag).map(n => SkillTarget.enhancedAwakeningsId[n] || 0);
 		let additional = [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean);
 		return powerUp(null, null, p.mul({ atk: atk || 100, rcv: rcv || 100}), c.awakeningActivated(awakeningsArr), v.percent(reducePercent), additional);
 	},
@@ -1894,9 +1895,25 @@ const skillObjectParsers = {
 	},
 	//部位的重力
 	[276](percent) { return gravity(v.xCHP(percent), void 0, true); },
-	[277](attr) { return destroyOrb(Bin.unflags(attr)); },
+	//破坏宝珠
+	[277](attr) { 
+		const attrs = Bin.unflags(attr);
+		return destroyOrb(attrs);
+	},
 	//超重力无效化
 	[278](turns) {return activeTurns(turns, voidFieldBuff(["super-gravity"])); },
+	//宝珠掉落率提高时才能使用技能
+	[279](attr) {
+		const attrs = Bin.unflags(attr);
+		return skillProviso(c.enemyAttr(attrs));
+	},
+	//每次发动觉醒时强化
+	[280](awakening, atk, reducePercent, combo, damage, rcv) {
+		const awakeningsArr = [awakening];
+		let additional = [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean);
+		const eachTime = true;
+		return powerUp(null, null, p.mul({ atk: atk || 100, rcv: rcv || 100}), c.awakeningActivated(awakeningsArr), v.percent(reducePercent), additional, eachTime);
+	},
 
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -3444,10 +3461,15 @@ function renderCondition(cond) {
 				break;
 			}
 		}
-		let dict = {
+		const dict = {
 			state: state,
 		};
 		frg.ap(tsp.cond.state_is_active(dict));
+	} else if (cond.enemyAttr) {
+		const dict = {
+			attrs: renderAttrs(cond.enemyAttr.attrs, {affix: true}),
+		};
+		frg.ap(tsp.cond.enemy_attr(dict));
 	} else {
 		frg.ap(tsp.cond.unknown());
 	}

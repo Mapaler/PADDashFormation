@@ -1420,6 +1420,9 @@
 .latent-icon[data-latent-icon='50']::before{ /*十字追部位*/
 	--icon-y-index: 50;
 }
+.latent-icon[data-latent-icon='51']::before{ /*方块破防*/
+	--icon-y-index: 51;
+}
 :is(:lang(en), :lang(ko)) .latent-icon:where(
 	[data-latent-icon='17'],
 	[data-latent-icon='37'],
@@ -1443,6 +1446,7 @@
 	[data-latent-icon='47'],
 	[data-latent-icon='48'],
 	[data-latent-icon='50'],
+	[data-latent-icon='51'],
 ){ /*所以横向占两格*/
 	grid-column: span 2;
 }
@@ -1456,6 +1460,7 @@
 	[data-latent-icon='47'],
 	[data-latent-icon='48'],
 	[data-latent-icon='50'],
+	[data-latent-icon='51'],
 )::after 
 {
 	content: "";
@@ -1484,8 +1489,11 @@
 .latent-icon.show-enabling-awokwn[data-latent-icon='50']::after{ /*十字追部位*/
 	--icon-y-index: 78;
 }
+.latent-icon.show-enabling-awokwn[data-latent-icon='51']::after{ /*方块破防*/
+	--icon-y-index: 48;
+}
 
-/* 额外有 x1.5 的 6格觉醒 */
+/* 额外有 x2 的 6格觉醒 */
 .level-super-break .latent-icon:where(
 	[data-latent-icon='13'], /*防换队长*/
 	[data-latent-icon='14'], /*防费*/
@@ -1498,6 +1506,7 @@
 	[data-latent-icon='46'], /*解云封*/
 	[data-latent-icon='47'], /*S++*/
 	[data-latent-icon='48'],/*解封武器*/
+	[data-latent-icon='51'],/*方块破防*/
 )::after
 {
 	/*font-family: var(--game-font-family);
@@ -1506,7 +1515,7 @@
 	text-shadow: black -1px -1px 1px,black 1px -1px 1px,black -1px 1px 1px,black 1px 1px 1px;
 	text-align: center;
 	color: orange;
-	content: "×1.5";*/
+	content: "×2";*/
 	content: "";
 	margin-left: 3px;
 	--icon-x-index: 1;
@@ -1577,6 +1586,8 @@
 	[data-badge-icon='85'],
 	[data-badge-icon='93'],
 	[data-badge-icon='94'],
+	[data-badge-icon='99'],
+	[data-badge-icon='99'],
 ){
 	background-position-y: calc(var(--badge-height) * -1);
 }

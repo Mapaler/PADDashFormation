@@ -196,6 +196,7 @@ const _localTranslating = {
 			awakening_activated: tp`[${'awakenings'}]发动时`,
 
 			state_is_active: tp`在[${'state'}]效果发动中`,
+			enemy_attr: tp`当敌人的属性是${'attrs'}时`,
 		},
 		position: {
 			top: tp`上方第${'pos'}横行`,

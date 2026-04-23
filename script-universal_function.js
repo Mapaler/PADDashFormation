@@ -735,6 +735,10 @@ function latentUseHole(latentId) {
 		{
 			return 6;
 		}
+		case 51:
+		{
+			return 4;
+		}
 		case  1: case  2: case  3: case  4: case  5:
 		case  6: case  7: case  8: case  9: case 10:
 		case 11: case 12:
@@ -1740,13 +1744,13 @@ function henshinBase(cardid, firstId)
 }
 //计算卡片队长技+C
 function getSkillAddCombo(card) {
-	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220, 235, 271];
+	const searchTypeArray = [192, 194, 206, 209, 210, 219, 220, 235, 271, 280];
 	const skills = getCardLeaderSkills(card, searchTypeArray);
 	return skills.map(skill=>{
 		switch (skill.type) {
 			case 192:
 			case 194:
-			case 271:
+			case 271: case 280:
 				return skill.params[3] ?? 0;
 			case 206:
 				return skill.params[6] ?? 0;
@@ -1766,7 +1770,7 @@ function getSkillAddCombo(card) {
 }
 //计算卡片队长技追打
 function getSkillFixedDamage(card) {
-	const searchTypeArray = [199, 200, 201, 223, 235, 271];
+	const searchTypeArray = [199, 200, 201, 223, 235, 271, 280];
 	const skills = getCardLeaderSkills(card, searchTypeArray);
 	return skills.map(skill=>{
 		switch (skill.type) {
@@ -1779,7 +1783,7 @@ function getSkillFixedDamage(card) {
 				return skill.params[1] ?? 0;
 			case 235:
 				return skill.params[6] ?? 0;
-			case 271:
+			case 271: case 280:
 				return skill.params[4] ?? 0;
 			default:
 				return 0;

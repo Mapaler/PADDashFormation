@@ -1591,6 +1591,9 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 	/*grid-column: span 1;
 	grid-row: span 2;*/
 }
+.team-latents .latent-icon[data-latent-hole="4"] {
+	grid-area: span 2 / span 2;
+}
 .team-latents .latent-icon[data-latent-hole="6"] {
 	grid-area: span 2 / span 3;
 	/* grid-column: span 3;
@@ -1601,6 +1604,11 @@ body:not(.solo) .awoken-icon[data-awoken-icon="64"]::after
 {
 	transform: scale(1.50);
 	margin: calc(32px / 4);
+}
+.team-latents .latent-icon[data-latent-hole="4"]::before,
+.team-latents .latent-icon[data-latent-hole="4"]::after
+{
+	transform: scale(1.20);
 }
 .team-latents .latent-icon.unallowable-latent {
 	opacity: unset;
@@ -3128,12 +3136,18 @@ body.use-sticky .sticky-box{
 	/*grid-column: span 1;
 	grid-row: span 2;*/
 }
+.row-mon-latent .latent-icon[data-latent-hole="4"] {
+	grid-area: span 1 / span 4;
+}
 .row-mon-latent .latent-icon[data-latent-hole="6"] {
 	grid-area: span 1 / span 6;
 	/* grid-column: span 3;
 	grid-row: span 2; */
 }
 .latent-icon[data-latent-hole="2"]+.latent-icon,
+.latent-icon[data-latent-hole="4"]+.latent-icon,
+.latent-icon[data-latent-hole="4"]+.latent-icon+.latent-icon,
+.latent-icon[data-latent-hole="4"]+.latent-icon+.latent-icon+.latent-icon,
 .latent-icon[data-latent-hole="6"]+.latent-icon,
 .latent-icon[data-latent-hole="6"]+.latent-icon+.latent-icon,
 .latent-icon[data-latent-hole="6"]+.latent-icon+.latent-icon+.latent-icon,
