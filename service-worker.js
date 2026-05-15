@@ -547,7 +547,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_137.PNG",
-		"b48ef7da24257ce9dab2adb07dd138e1"
+		"0e53b83cc4e7c932f0e120e0fe89289a"
 	],
 	[
 		"images/cards_ja/CARDS_138.PNG",
@@ -31439,11 +31439,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_128.PNG",
-		"32190ff6aa83a3666650998036013ee3"
+		"693372bc61b5fc4535d54aa19ea2b5ec"
 	],
 	[
 		"images/cards_en/CARDS_129.PNG",
-		"feba00ae99fb9b0f9414aa623e178115"
+		"82816303e4bf988e68ff7c49263accb0"
 	],
 	[
 		"images/cards_en/CARDS_130.PNG",
@@ -31459,7 +31459,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_133.PNG",
-		"c2f84a2878cdcfdb36872f8a9fbb9997"
+		"1e8a22ee539fb8e8cca5ece00d54528e"
 	],
 	[
 		"images/cards_en/CARDS_134.PNG",
@@ -31471,7 +31471,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_136.PNG",
-		"fafbba2592b89a33d0f422b7dda8d30e"
+		"889dc5b52e8ddf4c5a3f3028f84d1d63"
 	],
 	[
 		"sound/voice/en/padv001.wav",
@@ -47402,6 +47402,10 @@ const cachesMap = new Map([
 		"7b51b93243ec5f4904afb5e018ec92e2"
 	],
 	[
+		"sound/voice/en/padv5303.wav",
+		"5667230724e0d83956643b9bfe393298"
+	],
+	[
 		"sound/voice/en/padv5305.wav",
 		"63f9132683e0c77114637183227abc58"
 	],
@@ -55798,6 +55802,10 @@ const cachesMap = new Map([
 		"f062a584c9482d54da3bc988e3192fd5"
 	],
 	[
+		"sound/voice/en/padv7342.wav",
+		"16e511c64dbf66d017c4307580aa1db0"
+	],
+	[
 		"sound/voice/en/padv735.wav",
 		"351423d4613a5c0d645fac4936b6454a"
 	],
@@ -56683,11 +56691,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_128.PNG",
-		"32190ff6aa83a3666650998036013ee3"
+		"693372bc61b5fc4535d54aa19ea2b5ec"
 	],
 	[
 		"images/cards_ko/CARDS_129.PNG",
-		"4127393be1b94ded3a80b6e3f467fa3c"
+		"e4c9ad19a99e0772b1d6182eaf826820"
 	],
 	[
 		"images/cards_ko/CARDS_130.PNG",
@@ -56703,7 +56711,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_133.PNG",
-		"c2f84a2878cdcfdb36872f8a9fbb9997"
+		"1e8a22ee539fb8e8cca5ece00d54528e"
 	],
 	[
 		"images/cards_ko/CARDS_134.PNG",
@@ -56715,7 +56723,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_136.PNG",
-		"2774dd42baf24418cee58128a192ce9f"
+		"889dc5b52e8ddf4c5a3f3028f84d1d63"
 	],
 	[
 		"sound/voice/ko/padv001.wav",
@@ -74258,6 +74266,10 @@ const cachesMap = new Map([
 		"7b51b93243ec5f4904afb5e018ec92e2"
 	],
 	[
+		"sound/voice/ko/padv5303.wav",
+		"5667230724e0d83956643b9bfe393298"
+	],
+	[
 		"sound/voice/ko/padv5305.wav",
 		"63f9132683e0c77114637183227abc58"
 	],
@@ -82652,6 +82664,10 @@ const cachesMap = new Map([
 	[
 		"sound/voice/ko/padv734.wav",
 		"f062a584c9482d54da3bc988e3192fd5"
+	],
+	[
+		"sound/voice/ko/padv7342.wav",
+		"16e511c64dbf66d017c4307580aa1db0"
 	],
 	[
 		"sound/voice/ko/padv735.wav",
