@@ -148,6 +148,7 @@ const _localTranslating = {
 			fixed_starting_position: tp`${'icon'}固定起手位置`,
 			destroy_orb: tp`破坏所有的${'orbs'}`,
 			super_gravity: tp`${'icon'}超重力`,
+			analyze: tp`${'icon'}分析敌人的HP值和防御力，${'defBreak'}`,
 		},
 		power: {
 			unknown: tp`[ 未知能力提升: ${'type'} ]`,
@@ -485,6 +486,7 @@ const _localTranslating = {
 			[140]: tp`${'icon'}防手指`,
 			[141]: tp`${'icon'}达人多色`,
 			[142]: tp`${'icon'}三维+`,
+			[143]: tp`${'icon'}加速`,
 		}
 	},
 };

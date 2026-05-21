@@ -5308,5 +5308,9 @@ body.external-link-support #external-support{
 {
 	background-position-y:calc(-36px * 49);
 }
+.icon-skill[data-icon-type="analyze"]
+{
+	background-position-y:calc(-36px * 50);
+}
 
 /*animation: rotate-animate 5s infinite linear;*/

@@ -1157,6 +1157,9 @@
 .awoken-icon[data-awoken-icon='142']{/*三维+*/
 	--icon-y-index: 142;
 }
+.awoken-icon[data-awoken-icon='143']{/*加速*/
+	--icon-y-index: 143;
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],

@@ -527,6 +527,7 @@ const SkillKinds = {
 	PartGravity: "part-gravity",
 	DestroyOrb: "destroy-orb",
 	VoidFieldBuff: "void-field-buff",
+	Analyze: "analyze",
 }
 
 function skillParser(skillId)
@@ -1089,6 +1090,7 @@ function minMatch(value) { return { kind: SkillKinds.MinMatchLength, value: valu
 function fixedTime(value) { return { kind: SkillKinds.FixedTime, value: v.constant(value) }; }
 function addCombo(value) { return { kind: SkillKinds.AddCombo, value: value }; }
 function defBreak(value) { return { kind: SkillKinds.DefenseBreak, value: value }; }
+function analyze(value) { return { kind: SkillKinds.Analyze, value: value }; }
 function poison(value) { return { kind: SkillKinds.Poison, value: value }; }
 function CTW(time, cond, skill) {
 	return { kind: SkillKinds.CTW, time, cond, skill };
@@ -1173,6 +1175,7 @@ const skillObjectParsers = {
 	[16](percent) { return reduceDamage('all', v.percent(percent)); },
 	[17](attr, percent) { return reduceDamage([attr], v.percent(percent)); },
 	[18](turns) { return activeTurns(turns, delay()); },
+	//破防
 	[19](turns, percent) { return activeTurns(turns, defBreak(v.percent(percent))); },
 	[20](from1, to1, from2, to2) { 
 		if ((to1 ?? 0) == (to2 ?? 0))
@@ -1914,6 +1917,8 @@ const skillObjectParsers = {
 		const eachTime = true;
 		return powerUp(null, null, p.mul({ atk: atk || 100, rcv: rcv || 100}), c.awakeningActivated(awakeningsArr), v.percent(reducePercent), additional, eachTime);
 	},
+	//解析
+	[282](percent) { return analyze(v.percent(percent)); },
 
 	[1000](type, pos, ...ids) {
 		const posType = (type=>{
@@ -2248,6 +2253,15 @@ function renderSkill(skill, option = {})
 				value: renderValue(skill.value, {percent: true}),
 			};
 			frg.ap(tsp.skill.defense_break(dict));
+			break;
+		}
+		case SkillKinds.Analyze: { //分析
+
+			const dict = {
+				icon: createIcon(skill.kind),
+				defBreak: renderSkill(defBreak(skill.value)),
+			};
+			frg.ap(tsp.skill.analyze(dict));
 			break;
 		}
 		case SkillKinds.Poison: { //毒

@@ -163,6 +163,7 @@ let localTranslating = {
 			fixed_starting_position: tp`${'icon'}Fixed starting position`,
 			destroy_orb: tp`Destroy all ${'orbs'}`,
 			super_gravity: tp`${'icon'}Super Gravity`,
+			analyze: tp`${'icon'}Analyze the enemy's HP and DEF, ${'defBreak'}`,
 		},
 		power: {
 			unknown: tp`[ Unkonwn power up: ${'type'} ]`,
@@ -500,6 +501,7 @@ let localTranslating = {
 			[140]: tp`${'icon'}Move Time Change Resistance`,
 			[141]: tp`${'icon'}Expert Multi-Match`,
 			[142]: tp`${'icon'}Enhanced Stats+`,
+			[143]: tp`${'icon'}Accelerate`,
 		}
 	},
 };
@@ -2483,20 +2485,41 @@ const specialSearchFunctions = (function() {
 				},
 				{name:"Reduces enemies' DEF",otLangName:{chs:"破防",cht:"破防"},
 					function:cards=>{
-						const searchTypeArray = [19];
+						const searchTypeArray = [19, 282];
 						return cards.filter(card=>{
 							const skill = getCardActiveSkill(card, searchTypeArray);
 							return skill;
-						}).sort((a,b)=>sortByParams(a,b,searchTypeArray,1,0));
+						}).sort((a,b)=>{
+							const a_s = getCardActiveSkill(a, searchTypeArray),
+			  					  b_s = getCardActiveSkill(b, searchTypeArray);
+
+							return a_s.type - b_s.type ||
+								a_s.params[1] - b_s.params[1] ||
+								a_s.params[0] - b_s.params[0];
+						});
 					},
 					addition:card=>{
-						const searchTypeArray = [19];
+						const searchTypeArray = [19, 282];
 						const skill = getCardActiveSkill(card, searchTypeArray);
 						if (!skill) return;
 						const sk = skill.params;
 						const fragment = document.createDocumentFragment();
-						fragment.appendChild(createSkillIcon('def-break'));
-						fragment.append(`${sk[1]}%×${sk[0]}T`);
+						switch (skill.type) {
+							case 19: {
+								fragment.append(
+									createSkillIcon('def-break'),
+									`${sk[1]}%×${sk[0]}T`
+								);
+								break;
+							}
+							case 282: {
+								fragment.append(
+									createSkillIcon('analyze'),
+									`${sk[0]}%`
+								);
+								break;
+							}
+						}
 						return fragment;
 					}
 				},
