@@ -6893,14 +6893,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			const memberData = members[mi];
 			const latentCount = memberData?.latent?.filter(l=>l===5).length;
 			if (latentCount > 0) { //自动回复潜觉，不考虑任何297和觉醒
-				if (isJP) { //潜在觉醒每个加500, 日服23.1 提高数值
-					count += 500 * latentCount; //回复力的15%
-				} else {
-					const memberCard = memberData.card;
-					//计算没有297的纯三维
-					let memberRCV = Math.round(curve(memberCard.rcv, memberData.level, memberCard.maxLevel, memberCard.limitBreakIncr, 5));
-					count += Math.round(memberRCV * 0.15 * latentCount); //回复力的15%
-				}
+				count += 500 * latentCount;
 			} else {
 				continue;
 			}
