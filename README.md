@@ -25,8 +25,9 @@ This tool can help you easily create and share Swipe/Farming Formation or Solo T
 
 ## 如何使用 | HOW TO USE
 > [!TIP]
-> 推荐最新的[![firefox]火狐浏览器](https://www.mozilla.org/firefox/new/)，Win 7 及 XP 可以使用仍在维护的[![supermium]Supermium 浏览器](https://www.win32subsystem.live/supermium/)  
-> We recommend the latest [![firefox] Firefox browser](https://www.mozilla.org/firefox/new/). For Windows 7 and XP, you can use the actively maintained [![supermium] Supermium browser](https://www.win32subsystem.live/supermium/).
+> 推荐最新的[![firefox]火狐浏览器](https://www.mozilla.org/firefox/new/)。  
+> I recommend the latest [![firefox] Firefox browser](https://www.mozilla.org/firefox/new/).
+
 ### 快速使用在线版（推荐） | Online Quick Start (Recommended)
 * <https://mapaler.github.io/PADDashFormation/> (Github Pages)
 * <https://mapaler.com/PADDashFormation/> (我自己的镜像 | my own mirror)
@@ -34,6 +35,15 @@ This tool can help you easily create and share Swipe/Farming Formation or Solo T
 ### 创建你自己的镜像网站 | Create your own mirror web site
 `git clone`到你的 *http* 服务目录即可访问，将来更新时只需要`git pull`即可。  
 `git clone` to your *http* service directory for visited, and `git pull` for future updates.
+
+### 兼容性
+我会不断采用最新的前端技术，只保证兼容目前最新的火狐 ESR 版本。如果你还在使用比较老的操作系统，可以使用以下仍在维护的浏览器。  
+I will keep using the latest front-end technologies and only guarantee compatibility with the latest Firefox ESR version. If you're still using an older operating system, you can use the following browsers that are still being maintained.
+
+| 浏览器<br>Browser | 内核<br>Core | Windows 7/Visita | Windows XP |
+| ----- | ---- | ---------------- | ---------- |
+| [![r3dfox] r3dfox](http://eclipse.cx/projects/r3dfox) | Firefox | ✅ | ❌ |
+| [![supermium] Supermium](https://www.win32subsystem.live/supermium) | Chromium | ✅ | ✅ |
 
 ## 翻译我 | Translate me
 ### How to **Pull requests**
@@ -115,4 +125,5 @@ Please refer to existing files.
 * [opencc-js](https://github.com/nk2028/opencc-js) //繁转简
 
 [firefox]: https://www.mozilla.org/media/img/firefox/favicon.ico
-[supermium]: https://www.win32subsystem.live/supermium/images/Supermium.png
+[supermium]: https://raw.githubusercontent.com/win32ss/supermium/refs/heads/main/chrome/app/theme/chromium/product_logo_48.png
+[r3dfox]: https://raw.githubusercontent.com/Eclipse-Community/r3dfox/refs/heads/esr140.11/browser/branding/official/default48.png
