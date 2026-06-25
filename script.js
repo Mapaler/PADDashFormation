@@ -7747,10 +7747,11 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 18: return 1.15; //大血
 				case 20: return 1.10; //全属性
 				case 22: case 23: return 1.50; //状态异常耐性&SB++ 辅助无效
-				case 86: //L强化
-				case 89: //5色强化
-				case 90: //方块强化
-				case 95: //3色强化
+				case 86:	//L强化
+				case 89:	//5色强化
+				case 90:	//方块强化
+				case 95:	//3色强化
+				case 100:	//U强化
 					return 1.05;
 
 				case 24: case 79: return member.card.collabId === 92 ? 1.15 : 1; //英雄学院徽章
