@@ -9,6 +9,7 @@
 /monsters-info/official-API/*-shop_item.json
 *_formatting.json
 /sound/voice/variables.txt
+/sound/voice/config_sync.bat
 /fonts/.font-spider
 /images/*.fw.png
 /package-lock.json
