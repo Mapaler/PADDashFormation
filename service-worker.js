@@ -1,5 +1,5 @@
 ﻿"use strict";
-const cacheName = 'PDDF-v1';
+const cacheName = 'PDDF-v2';
 importScripts('./caches-map.js'); // 引入独立文件，cachesMap 变量即可用
 
 // 安装阶段跳过等待，直接进入 active
