@@ -19,8 +19,8 @@ if errorlevel 1 (
 )
 
 :: 检查必要变量
-if not exist "%FASTCOPYPATH%" (
-    echo 错误：FASTCOPYPATH 指定的文件不存在，请检查路径。
+if not exist "%FASTCOPY_PATH%" (
+    echo 错误：FASTCOPY_PATH 指定的文件不存在，请检查路径。
     pause
     exit /b 1
 )
@@ -36,8 +36,8 @@ if not exist "%DATAPATH%" (
 
 echo 正在复制语音文件...
 title 正在复制语音文件
-"%FASTCOPYPATH%" /cmd=diff /open_window /auto_close "%DATAPATH%\mon2\padv*.wav" /to=.\ja
-"%FASTCOPYPATH%" /cmd=diff /open_window /auto_close "%DATAPATH%\cards_EN\padv*.wav" /to=.\en
-"%FASTCOPYPATH%" /cmd=diff /open_window /auto_close "%DATAPATH%\cards_KO\padv*.wav" /to=.\ko
+"%FASTCOPY_PATH%" /cmd=diff /open_window /auto_close "%DATAPATH%\mon2\padv*.wav" /to=.\ja
+"%FASTCOPY_PATH%" /cmd=diff /open_window /auto_close "%DATAPATH%\cards_EN\padv*.wav" /to=.\en
+"%FASTCOPY_PATH%" /cmd=diff /open_window /auto_close "%DATAPATH%\cards_KO\padv*.wav" /to=.\ko
 echo 语音文件复制完成
 pause
