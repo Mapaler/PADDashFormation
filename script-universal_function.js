@@ -1849,8 +1849,20 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original,
 			effect.addCombo.push(3);
 			break;
 		}
-		case 95: { //3色强化
+		case 95: //3色强化
+		case 100: //U强化
+		{ 
 			effect.addCombo.push(2);
+			break;
+		}
+		case 101: { //4色强化
+			effect.inflicts.push(1e7);
+			effect.addCombo.push(2);
+			break;
+		}
+		case 102: { //水横强化
+			effect.inflicts.push(1e7);
+			effect.addCombo.push(1);
 			break;
 		}
 	}

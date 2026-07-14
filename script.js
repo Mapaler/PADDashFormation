@@ -7752,6 +7752,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 90:	//方块强化
 				case 95:	//3色强化
 				case 100:	//U强化
+				case 101:	//四色强化
 					return 1.05;
 
 				case 24: case 79: return member.card.collabId === 92 ? 1.15 : 1; //英雄学院徽章
