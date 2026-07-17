@@ -5,8 +5,11 @@ const path = require('path');
 // 定义映射关系：[源路径, 目标路径]
 const mappings = [
   ['node_modules/core-js-bundle/minified.js', 'library/core-js.min.js'],
+  ['node_modules/core-js-bundle/minified.js.map', 'library/minified.js.map'],
   ['node_modules/@html2canvas/html2canvas/dist/html2canvas.min.js', 'library/html2canvas.min.js'],
+  ['node_modules/@html2canvas/html2canvas/dist/main.js.map', 'library/main.js.map'],
   ['node_modules/@zxing/library/umd/index.min.js', 'library/zxing.umd.min.js'],
+  ['node_modules/@zxing/library/umd/index.min.js.map', 'library/index.min.js.map'],
 ];
 
 // 确保目标目录存在

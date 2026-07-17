@@ -14,3 +14,4 @@
 /images/*.fw.png
 /package-lock.json
 /run http-server.bat
+/library/*.map
