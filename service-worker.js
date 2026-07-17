@@ -8,55 +8,99 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('activate', function(event) {
-    event.waitUntil(activateHandler());
+	event.waitUntil(activateHandler());
 });
 
 async function activateHandler() {
-    console.debug("Service Worker activate");
-    const baseUrl = new URL(".", location);
-    const baseUrlString = baseUrl.origin + baseUrl.pathname;
+	console.debug("Service Worker activate");
+	const baseUrl = new URL(".", location);
+	const baseUrlString = baseUrl.origin + baseUrl.pathname;
 
-    // 1. 立即控制所有客户端
-    await self.clients.claim();
+	// 1. 立即控制所有客户端
+	await self.clients.claim();
 
-    // 2. 获取所有缓存分类名
-    const keyList = await caches.keys();
+	// 2. 获取所有缓存分类名
+	const keyList = await caches.keys();
 
-    // 3. 遍历处理每一个缓存分类
-    for (const key of keyList) {
-        if (cacheName !== key) {
-            // 如果缓存分类名不匹配，直接删除
-            console.debug("未检测到该缓存分类，删除", key);
-            await caches.delete(key);
-            continue;
-        }
+	// 3. 遍历处理每一个缓存分类
+	for (const key of keyList) {
+		if (cacheName !== key) {
+			// 如果缓存分类名不匹配，直接删除
+			console.debug("未检测到该缓存分类，删除", key);
+			await caches.delete(key);
+			continue;
+		}
 
-        // 4. 处理当前缓存分类 (cacheName === key)
-        const cache = await caches.open(key);
-        const requests = await cache.keys();
-        console.debug("检测已有缓存分类", key);
+		// 4. 处理当前缓存分类 (cacheName === key)
+		const cache = await caches.open(key);
+		const requests = await cache.keys();
+		console.debug("检测已有缓存分类", key);
 
-        for (const request of requests) {
-            const url = new URL(request.url);
-            const relativePath = (url.origin + url.pathname).replace(baseUrlString, "");
-            const oldVersion = url.searchParams.get("v");
-            const newVersion = cachesMap.get(relativePath);
+		for (const request of requests) {
+			const url = new URL(request.url);
+			const relativePath = (url.origin + url.pathname).replace(baseUrlString, "");
+			const oldVersion = url.searchParams.get("v");
+			const newVersion = cachesMap.get(relativePath);
 
-            // 如果缓存中的版本与新的版本不匹配，删除该缓存
-            if (newVersion && newVersion !== oldVersion) {
-                console.debug("删除版本不匹配的缓存", request);
-                await cache.delete(request);
-            }
-        }
-    }
+			// 如果缓存中的版本与新的版本不匹配，删除该缓存
+			if (newVersion && newVersion !== oldVersion) {
+				console.debug("删除版本不匹配的缓存", request);
+				await cache.delete(request);
+			}
+		}
+	}
 }
 
 self.addEventListener('fetch', function(event) {
 	const url = new URL(event.request.url);
-	url.search = "";
+	const pathname = url.pathname;
 	const baseUrl = new URL(".", location);
 	const baseUrlString = baseUrl.origin + baseUrl.pathname;
-	const relativePath = (url.origin + url.pathname).replace(baseUrlString, "");
+	const relativePath = (url.origin + pathname).replace(baseUrlString, "");
+
+	// --- [新增] 对 monsters-info 数据文件采用"网络优先"策略 ---
+	// 判断是否属于数据文件（monsters-info 目录下的 JSON 文件）
+	if (relativePath.startsWith('monsters-info/') && /\.json$/i.test(pathname)) {
+		event.respondWith(
+			(async function() {
+				// 1. 优先尝试网络请求（带重试机制）
+				try {
+					console.debug("🌐 [数据] 尝试联网获取:", relativePath);
+					const networkResponse = await fetchWithRetry(event.request);
+					
+					// 2. 网络成功：存入缓存供断网时使用（存的时候去掉 ?t= 参数）
+					const responseForCache = networkResponse.clone();
+					caches.open(cacheName).then(cache => {
+						// 关键：存缓存时用 pathname，不带任何参数
+						const cacheUrl = new URL(pathname, location.origin);
+						cache.put(cacheUrl, responseForCache);
+						console.debug("💾 [数据] 缓存已更新（用于断网降级）:", relativePath);
+					});
+					
+					// 直接返回网络响应
+					return networkResponse;
+					
+				} catch (error) {
+					// 3. 网络失败：尝试从缓存降级（忽略 ?t= 参数）
+					console.warn("⚠️ [数据] 网络失败，尝试使用缓存降级:", relativePath);
+					const cachedResponse = await caches.match(url, { ignoreSearch: true });
+					if (cachedResponse) {
+						console.debug("✅ [数据] 缓存降级成功:", relativePath);
+						return cachedResponse;
+					}
+					
+					// 4. 完全无缓存
+					console.error("❌ [数据] 无可用缓存:", relativePath);
+					return new Response(
+						`无法加载数据文件，请检查网络连接后刷新。\n${error.message}`,
+						{ status: 503, statusText: "Service Unavailable" }
+					);
+				}
+			})()
+		);
+		return; // 数据文件处理完毕，终止后续逻辑
+	}
+
 	const newVersion = cachesMap.get(relativePath);
 	
 	if (newVersion) {
