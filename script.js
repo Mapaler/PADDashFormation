@@ -7763,7 +7763,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 29: return member.card.collabId === 102 ? 1.15 : 1; //奥特曼
 				case 30: return member.card.gachaIds.includes(6) ? 1.15 : 1; //花嫁
 				case 65: return member.card.gachaIds.includes(6) ? 1.25 : 1; //花嫁+
-				case 31: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
+				case 31: case 103: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
 				case 15: return member.card.collabId === 96 ? 1.15 : 1; //漫威
 				case 16: case 70: return member.card.gachaIds.includes(9) ? 1.15 : 1; //泳装
 				case 32: return [21, 61].includes(member.card.collabId) ? 1.15 : 1; //怪物猎人
