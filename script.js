@@ -7748,6 +7748,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 20: return 1.10; //全属性
 				case 22: case 23: return 1.50; //状态异常耐性&SB++ 辅助无效
 				case 86:	//L强化
+				case 87:	//十字强化
 				case 89:	//5色强化
 				case 90:	//方块强化
 				case 95:	//3色强化
@@ -7765,7 +7766,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 65: return member.card.gachaIds.includes(6) ? 1.25 : 1; //花嫁+
 				case 31: case 103: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
 				case 15: return member.card.collabId === 96 ? 1.15 : 1; //漫威
-				case 16: case 70: return member.card.gachaIds.includes(9) ? 1.15 : 1; //泳装
+				case 16: return member.card.gachaIds.includes(9) ? 1.15 : 1; //泳装
+				case 70: return member.card.gachaIds.includes(9) ? 1.25 : 1; //泳装+
 				case 32: return [21, 61].includes(member.card.collabId) ? 1.15 : 1; //怪物猎人
 				case 33: case 76: return member.card.collabId === 27 ? 1.15 : 1; //三丽鸥
 				case 34: return member.card.collabId === 97 ? 1.15 : 1; //咒术回战

@@ -1855,7 +1855,9 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original,
 			effect.addCombo.push(2);
 			break;
 		}
-		case 101: { //4色强化
+		case 87:  //十字强化
+		case 101: //4色强化
+		{
 			effect.inflicts.push(1e7);
 			effect.addCombo.push(2);
 			break;
