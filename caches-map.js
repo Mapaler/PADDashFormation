@@ -90725,7 +90725,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/core-js.min.js",
-		"4c6c17b969f8e3df"
+		"9838e0caa9d8e966"
 	],
 	[
 		"library/html2canvas.min.js",

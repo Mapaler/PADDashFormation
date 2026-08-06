@@ -3,7 +3,7 @@
     "@html2canvas/html2canvas": "^1.6.3",
     "@xmldom/xmldom": "^0.9.10",
     "@zxing/library": "^0.23.0",
-    "core-js-bundle": "^3.49.0",
+    "core-js-bundle": "^3.50.0",
     "mime": "^4.1.0",
     "opencc-js": "^1.4.1",
     "xml-formatter": "^3.7.0",
