@@ -5475,13 +5475,14 @@ function initialize() {
 
 	const monEditAwokensLabel = Array.from(monEditAwokensRow.querySelectorAll(".awoken-ul .awoken-icon"));
 
-	function playVoiceAwoken() { //点击label才播放语音
-		if (parseInt(this.getAttribute("data-awoken-icon"), 10) === 63) {
-			const card = Cards[editBox.mid];
-			playVoiceById(card.voiceId);
-		}
-	}
-	monEditAwokensLabel.forEach(akDom => akDom.onclick = playVoiceAwoken);
+	// 由于声音文件过大，去除部署声音文件
+	// function playVoiceAwoken() { //点击label才播放语音
+	// 	if (parseInt(this.getAttribute("data-awoken-icon"), 10) === 63) {
+	// 		const card = Cards[editBox.mid];
+	// 		playVoiceById(card.voiceId);
+	// 	}
+	// }
+	// monEditAwokensLabel.forEach(akDom => akDom.onclick = playVoiceAwoken);
 
 	//超觉醒
 	const mSAwokenIcon = monEditOuterAwokensRow.querySelector("#current-super-awoken-icon");

@@ -3097,7 +3097,8 @@ function renderSkill(skill, option = {})
 			icon.className = "awoken-icon";
 			icon.setAttribute("data-awoken-icon", 63);
 			icon.dataset.voiceId = id || Cards[editBox.mid].voiceId;
-			icon.onclick = playOwnVoiceId;
+			// 由于声音文件过大，去除部署声音文件
+			//icon.onclick = playOwnVoiceId;
 
 			let dict = {
 				stage,

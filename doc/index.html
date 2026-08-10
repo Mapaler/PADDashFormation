@@ -56,6 +56,9 @@
 			padding: 0;
 			margin: 0;
 		}
+		.deprecated {
+			color: red;
+		}
 	</style>
 	<script type="text/javascript">
 		if ('serviceWorker' in navigator) {
@@ -510,8 +513,8 @@
 	</h2>
 	<ul>
 		<li>
-			<span lang="zh">点击语音觉醒可以试听技能语音。</span>
-			<span lang="en">Click Voice Awakening to try out skill voice.</span>
+			<span lang="zh"><s>点击语音觉醒可以试听技能语音。</s><br><span class="deprecated">由于语音文件累计大小过于庞大，为加速项目部署，此功能已废弃。 2026年8月10日</span></span>
+			<span lang="en"><s>Click Voice Awakening to try out skill voice.</s><br><span class="deprecated">This feature has been deprecated because the cumulative size of the audio files is too large, slowing down project deployment. 2026-08-10</span></span>
 			<br>
 			<img src="images/tips-voice.png" alt="语音觉醒">
 		</li>
