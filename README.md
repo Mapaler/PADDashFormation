@@ -6,6 +6,8 @@ This is a Puzzle & Dragons Formation Maker.
 这个工具可以帮助你方便的制作和分享车队阵型或单人队形。电脑、智能手机上都可以轻松使用。   
 This tool can help you easily create and share Swipe/Farming Formation or Solo Team. Easy to use on your PC and Smart Phone.
 
+[关于本项目开发的说明](about-development.md)
+
 ### 预览 | Preview
 
 | **单人 \| Solo** | **2人协力 \| 2P** |
