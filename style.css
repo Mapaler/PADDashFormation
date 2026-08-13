@@ -5256,9 +5256,9 @@ body.external-link-support #external-support{
 	background-position-y:calc(-36px * 44);
 }
 
-.card-skill-list .play-voice [data-awoken-icon="63"] {
+/* .card-skill-list .play-voice [data-awoken-icon="63"] {
 	cursor: pointer;
-}
+} */
 
 :where(:lang(en), :lang(ko)) .icon-skill:where(
 	[data-icon-type="mass-attack"],
