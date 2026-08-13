@@ -7712,11 +7712,28 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 	const assistTeam_2p = teamsCount===2 ? assists.concat((teamIdx === 1 ? teamsA_assists[0] : teamsB_assists[0])) : assists;
 
 	if (tHpDom) {
-		const reduceScales1 = getReduceScales(leader1id);
-		const reduceScales2 = getReduceScales(leader2id);
+		//徽章盾强化
+		function getBadgeReduceScale(badge, member) {
+			const reduce = new ShieldReduce(0);
+
+			if (teamsCount == 2) return 1;
+			switch (badge) {
+				case 104:	//U强化
+				case 105:	//四色强化
+				{
+					reduce.scale = 0.05;
+				}
+			}
+			return reduce;
+		}
+
+		const reduceScales = [...getReduceScales(leader1id),...getReduceScales(leader2id)];
+
+		reduceScales.push(getBadgeReduceScale(badge, void 0)); //添加徽章的盾
+
 		const reduceAttrSeildAwokenScales = getAttrShieldAwokenReduceScales(team);
-		const reduceAttrRanges = getReduceRange(reduceScales1.concat(reduceScales2));
-		const reduceAttrRangesWithShieldAwoken = getReduceRange(reduceScales1.concat(reduceScales2, reduceAttrSeildAwokenScales));
+		const reduceAttrRanges = getReduceRange(reduceScales);
+		const reduceAttrRangesWithShieldAwoken = getReduceRange([...reduceScales, ...reduceAttrSeildAwokenScales]);
 		//将所有范围平铺，然后选择盾最少那个作为基础盾值
 		const leastScale = reduceAttrRanges.flat().sort((a,b)=>a.scale-b.scale)[0];
 
@@ -7750,6 +7767,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 22: case 23: return 1.50; //状态异常耐性&SB++ 辅助无效
 				case 86:	//L强化
 				case 87:	//十字强化
+				case 88:	//T强化
 				case 89:	//5色强化
 				case 90:	//方块强化
 				case 95:	//3色强化

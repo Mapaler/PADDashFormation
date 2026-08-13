@@ -561,7 +561,11 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_141.PNG",
-		"b489a517468c179e"
+		"d473fbb5665067fc"
+	],
+	[
+		"images/cards_ja/CARDS_142.PNG",
+		"922417246e86df20"
 	],
 	[
 		"images/cards_en/CARDS_001.PNG",
@@ -1709,7 +1713,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"d5e9b3c58b955195"
+		"92ca89f0ba7d3437"
 	],
 	[
 		"script-skill-parser.js",
@@ -1717,11 +1721,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"5eadf5a3429e8f04"
+		"967dd084d26cb061"
 	],
 	[
 		"script.js",
-		"a6b43991b3c2e825"
+		"caf010b253e6f6ed"
 	],
 	[
 		"solo.html",
@@ -1813,7 +1817,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"2c0a4f8148208819"
+		"ad19249883ea12af"
 	],
 	[
 		"images/brown-button.svg",

@@ -1836,7 +1836,10 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original,
 			effect.poisonNoEffect = true;
 			break;
 		}
-		case 86: { //L强化
+		case 86: //L强化
+		case 104: //水串
+		case 105: //木串
+		{
 			effect.inflicts.push(2.5e7);
 			break;
 		}
@@ -1856,13 +1859,16 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original,
 			break;
 		}
 		case 87:  //十字强化
+		case 88:  //T强化
 		case 101: //4色强化
 		{
 			effect.inflicts.push(1e7);
 			effect.addCombo.push(2);
 			break;
 		}
-		case 102: { //水横强化
+		case 102: //水横强化
+		case 106: //火横强化
+		{
 			effect.inflicts.push(1e7);
 			effect.addCombo.push(1);
 			break;
@@ -2100,6 +2106,16 @@ function getReduceRange(reduceScales)
 	});
 	return attrsRanges;
 }
+class ShieldReduce {
+	scale = 0;
+	hp = { max: 100, min: 0 };
+	probability = 1;
+	attrs = 0b11111; //5色是31
+
+	constructor(scale) {
+		this.scale = scale;
+	}
+}
 //获取盾潜觉的减伤比例组
 function getAttrShieldAwokenReduceScales(team) {
 	//5种盾潜觉
@@ -2114,15 +2130,7 @@ function getAttrShieldAwokenReduceScales(team) {
 		const latent1Num = team[0].reduce((count, member) => count + (member?.latent?.filter(l => l == shield.latent1)?.length ?? 0), 0);
 		const latent2Num = team[0].reduce((count, member) => count + (member?.latent?.filter(l => l == shield.latent2)?.length ?? 0), 0);
 		
-		const reduce = {
-			scale: 0,
-			hp: {
-				max: 100,
-				min: 0
-			},
-			probability: 1,
-			attrs: 31, //5色是31
-		};
+		const reduce = new ShieldReduce(0);
 
 		reduce.scale = Math.min(akNum * 0.07 + latent1Num * 0.01 + latent2Num * 0.025, 1);
 		if (reduce.scale == 0) return false;
@@ -2136,15 +2144,7 @@ function getReduceScales(leaderid) {
 	const lss = getCardLeaderSkills(Cards[leaderid], searchTypeArray);
 	
 	function leaderReduceScale(ls) {
-		const reduce = {
-			scale: 0,
-			hp: {
-				max: 100,
-				min: 0
-			},
-			probability: 1,
-			attrs: 31, //5色是31
-		};
+		const reduce = new ShieldReduce(0);
 		if (!ls) return reduce;
 		const sk = ls.params;
 		switch (ls.type) {
