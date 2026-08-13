@@ -138,6 +138,7 @@ self.addEventListener('fetch', function(event) {
 				const responseForCache = networkResponse.clone();
 				caches.open(cacheName).then(cache => {
 					const cacheUrl = new URL(event.request.url);
+					cacheUrl.search = ""; //因为是静态网站，URL里储存的全是数据，因此不需要原始 url 里的任何 search
 					if (newVersion) {
 						cacheUrl.searchParams.set("v", newVersion);
 					}
