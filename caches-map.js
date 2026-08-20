@@ -1121,7 +1121,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_139.PNG",
-		"be592ae685ed49bb"
+		"4cb0a8bb11eabe9c"
 	],
 	[
 		"images/cards_ko/CARDS_001.PNG",
@@ -1677,7 +1677,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_139.PNG",
-		"be592ae685ed49bb"
+		"4cb0a8bb11eabe9c"
 	],
 	[
 		"fonts/fa-regular-400.woff2",
@@ -1741,7 +1741,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style.css",
-		"aeb1335204cc5268"
+		"4e357cef62da92a5"
 	],
 	[
 		"temp.js",
