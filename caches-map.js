@@ -1969,7 +1969,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/copy-libs.js",
-		"bc78afa856212dc0"
+		"65c2a160d3efb689"
 	],
 	[
 		"library/core-js.min.js",
@@ -1977,7 +1977,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/html2canvas.min.js",
-		"94ce9787a4e0ecd2"
+		"6fab38e9f1cabcdf"
 	],
 	[
 		"library/zxing.umd.min.js",

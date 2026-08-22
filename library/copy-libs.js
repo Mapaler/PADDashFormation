@@ -7,7 +7,7 @@ const mappings = [
   ['node_modules/core-js-bundle/minified.js', 'library/core-js.min.js'],
   ['node_modules/core-js-bundle/minified.js.map', 'library/minified.js.map'],
   ['node_modules/@html2canvas/html2canvas/dist/html2canvas.min.js', 'library/html2canvas.min.js'],
-  ['node_modules/@html2canvas/html2canvas/dist/main.js.map', 'library/main.js.map'],
+  ['node_modules/@html2canvas/html2canvas/dist/html2canvas.min.js.map', 'library/html2canvas.min.js.map'],
   ['node_modules/@zxing/library/umd/index.min.js', 'library/zxing.umd.min.js'],
   ['node_modules/@zxing/library/umd/index.min.js.map', 'library/index.min.js.map'],
 ];
