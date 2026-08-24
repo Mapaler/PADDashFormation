@@ -7782,22 +7782,22 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 28: return member.card.collabId === 110 ? 1.15 : 1; //电击文库Index
 				case 29: return member.card.collabId === 102 ? 1.15 : 1; //奥特曼
 				case 30: return member.card.gachaIds.includes(6) ? 1.15 : 1; //花嫁
-				case 65: return member.card.gachaIds.includes(6) ? 1.25 : 1; //花嫁+
+				case 65: return member.card.gachaIds.includes(6) ? 1.30 : 1; //花嫁+
 				case 31: case 103: return member.card.collabId === 113 ? 1.15 : 1; //叛逆的鲁鲁修
 				case 15: return member.card.collabId === 96 ? 1.15 : 1; //漫威
 				case 16: return member.card.gachaIds.includes(9) ? 1.15 : 1; //泳装
-				case 70: return member.card.gachaIds.includes(9) ? 1.25 : 1; //泳装+
+				case 70: return member.card.gachaIds.includes(9) ? 1.30 : 1; //泳装+
 				case 32: return [21, 61].includes(member.card.collabId) ? 1.15 : 1; //怪物猎人
 				case 33: case 76: return member.card.collabId === 27 ? 1.15 : 1; //三丽鸥
 				case 34: return member.card.collabId === 97 ? 1.15 : 1; //咒术回战
 				case 35: return member.card.gachaIds.includes(11) ? 1.15 : 1; //万圣节
-				case 75: return member.card.gachaIds.includes(11) ? 1.25 : 1; //万圣节+
+				case 75: return member.card.gachaIds.includes(11) ? 1.30 : 1; //万圣节+
 				case 36: case 77: return member.card.collabId === 114 ? 1.15 : 1; //数码宝贝
 				case 37: return member.card.collabId === 90 ? 1.15 : 1; //diss你
 				case 38: case 62: return member.card.collabId === 1 ? 1.15 : 1; //GungHo本家
 				case 39: return member.card.collabId === 115 ? 1.15 : 1; //周刊少年Magazine
 				case 40: return member.card.gachaIds.includes(12) ? 1.15 : 1; //圣诞节
-				case 78: return member.card.gachaIds.includes(12) ? 1.25 : 1; //圣诞节+
+				case 78: return member.card.gachaIds.includes(12) ? 1.30 : 1; //圣诞节+
 				case 41: return member.card.types.includes(5) ? 1.05 : 1; //神属性
 				case 42: return member.card.types.includes(4) ? 1.05 : 1; //龙属性
 				case 43: return member.card.types.includes(7) ? 1.05 : 1; //恶属性
@@ -7808,15 +7808,16 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 48: return member.card.types.includes(3) ? 1.05 : 1; //回复属性
 				case 49: return member.card.collabId === 116 ? 1.15 : 1; //GA文库
 				case 50: return member.card.gachaIds.includes(0) ? 1.15 : 1; //正月(新年)
-				case 80: return member.card.gachaIds.includes(0) ? 1.25 : 1; //正月(新年)+
+				case 80: return member.card.gachaIds.includes(0) ? 1.30 : 1; //正月(新年)+
 				case 51: return member.card.gachaIds.includes(14) ? 1.15 : 1; //女子桶
 				case 52: return member.card.gachaIds.includes(2) ? 1.15 : 1; //情人节
-				case 83: return member.card.gachaIds.includes(2) ? 1.25 : 1; //情人节+
+				case 83: return member.card.gachaIds.includes(2) ? 1.30 : 1; //情人节+
 				case 54: case 55: return member.card.collabId === 117 ? 1.15 : 1; //排球少年
 				case 56: return member.card.gachaIds.includes(3) ? 1.15 : 1; //新学期(学园)
-				case 57: return member.card.gachaIds.includes(3) ? 1.25 : 1; //新学期(学园)+
+				case 57: return member.card.gachaIds.includes(3) ? 1.30 : 1; //新学期(学园)+
 				case 58: case 59: return member.card.collabId === 118 ? 1.15 : 1; //柯南
-				case 60: case 61: return member.card.gachaIds.includes(4) ? 1.15 : 1; //纺星精灵(花朵拟人)
+				case 60: return member.card.gachaIds.includes(4) ? 1.15 : 1; //纺星精灵(花朵拟人)
+				case 61: return member.card.gachaIds.includes(4) ? 1.30 : 1; //纺星精灵(花朵拟人)+
 				case 63: case 64: return member.card.gachaIds.includes(15) ? 1.15 : 1; //女仆管家
 				case 66: case 67: return member.card.gachaIds.includes(13) ? 1.15 : 1; //酒桶
 				case 68: case 69: return member.card.gachaIds.includes(8) ? 1.15 : 1; //龙契士&龙唤士桶(对桶外合作id不生效)
@@ -7824,9 +7825,11 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 73: case 74: return member.card.collabId === 120 ? 1.15 : 1; //怪兽8号
 				case 81: case 82: return member.card.collabId === 121 ? 1.15 : 1; //RE:0
 				case 84: case 85: return member.card.collabId === 122 ? 1.15 : 1; //葬送的芙莉莲
-				case 91: case 92: return member.card.gachaIds.includes(10) ? 1.15 : 1; //大罪龙与钥匙之勇者
+				case 91: return member.card.gachaIds.includes(10) ? 1.15 : 1; //大罪龙与钥匙之勇者
+				case 92: return member.card.gachaIds.includes(10) ? 1.30 : 1; //大罪龙与钥匙之勇者+
 				case 93: case 94: return member.card.collabId === 41 ? 1.15 : 1; //迷你角色
-				case 96: case 97: return member.card.gachaIds.includes(5)  ? 1.15 : 1; //式神使与妖
+				case 96: return member.card.gachaIds.includes(5)  ? 1.15 : 1; //式神使与妖
+				case 97: return member.card.gachaIds.includes(5)  ? 1.30 : 1; //式神使与妖+
 				case 98: case 99: return member.card.collabId === 75  ? 1.15 : 1; //银魂
 				default: return 1;
 			}
