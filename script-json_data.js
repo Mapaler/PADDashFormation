@@ -596,6 +596,37 @@ const equivalent_awoken = [
 	// {small:19,big:147,times:4}, //命运之魂
 ];
 
+//明确的等效内容直接添加
+const equivalent_effect_awoken = equivalent_awoken.map(item=>{
+	return {
+		id: item.big,
+		effect: [
+			{id:item.small,times:item.times}
+		]
+	}
+});
+
+equivalent_effect_awoken.push({id: 137, effect: [ //5色+
+	{ id:14, num:0.5 },
+	{ id:15, num:0.5 },
+	{ id:16, num:0.5 },
+	{ id:17, num:0.5 },
+	{ id:18, num:0.5 },
+]});
+
+// equivalent_effect_awoken.specialAwokens = {
+// 	ability_10p: 127 & 0x40000000, //记为 127 三维觉醒的基础 1.0
+// },
+// equivalent_effect_awoken.push({id: 127, effect: [ //三维觉醒 1.5
+// 	{ id:equivalent_effect_awoken.specialAwokens.ability_10p, num:1.5 }
+// ]});
+// equivalent_effect_awoken.push({id: 142, effect: [ //三维觉醒+ 1.8
+// 	{ id:equivalent_effect_awoken.specialAwokens.ability_10p, num:1.8 }
+// ]});
+// equivalent_effect_awoken.push({id: 132, effect: [ //奶茶觉醒 1.25
+// 	{ id:equivalent_effect_awoken.specialAwokens.ability_10p, num:1.25 }
+// ]});
+
 const PAD_PASS_BADGE = 1<<7 | 1; //本程序的月卡徽章编号，129
 //官方的徽章排列顺序
 const official_badge_sorting = [ //20是没有启用的全属性徽章，现在也不在游戏内显示了

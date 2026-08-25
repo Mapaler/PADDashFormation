@@ -1997,6 +1997,8 @@
 	[data-badge-icon='1'],
 	[data-badge-icon='10'],
 	[data-badge-icon='20'],
+	[data-badge-icon='93'],
+	[data-badge-icon='94'],
 	[data-badge-icon='129'],
 )::before {
 	--icon-x-index: 3;
@@ -2008,6 +2010,8 @@
 	[data-badge-icon='20'],
 	[data-badge-icon='22'],
 	[data-badge-icon='90'],
+	[data-badge-icon='93'],
+	[data-badge-icon='94'],
 )::before,
 :lang(ko) .badge:where(
 	[data-badge-icon='3'],
@@ -2019,6 +2023,8 @@
 :lang(ko) .badge:where(
 	[data-badge-icon='1'],
 	[data-badge-icon='20'],
+	[data-badge-icon='93'],
+	[data-badge-icon='94'],
 )::before {
 	--icon-x-index: 2;
 }

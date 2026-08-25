@@ -1713,7 +1713,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"6b17b821bdcd87a3"
+		"102082c30777e0e6"
 	],
 	[
 		"script-skill-parser.js",
@@ -1737,7 +1737,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"aa8bb36673c4d176"
+		"add9a0dae3200e1b"
 	],
 	[
 		"style.css",
@@ -1817,7 +1817,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"ad19249883ea12af"
+		"977949add12360db"
 	],
 	[
 		"images/brown-button.svg",
