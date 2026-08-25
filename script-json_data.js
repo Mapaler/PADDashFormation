@@ -502,6 +502,10 @@ let localTranslating = {
 			[141]: tp`${'icon'}Expert Multi-Match`,
 			[142]: tp`${'icon'}Enhanced Stats+`,
 			[143]: tp`${'icon'}Accelerate`,
+			[144]: tp`${'icon'}Ultra Enhanced Combos`,
+			[145]: tp`${'icon'}Hopeful Soul`,
+			[146]: tp`${'icon'}Courageous Soul`,
+			[147]: tp`${'icon'}Fateful Soul`,
 		}
 	},
 };
@@ -585,6 +589,11 @@ const equivalent_awoken = [
 	{small:75,big:123,times:2},//木串
 	{small:76,big:124,times:2},//光串
 	{small:77,big:125,times:2},//暗串
+	// 这些可能并不是绝对对应的，先不启用
+	// {small:127,big:142,times:1.6},//三维觉醒
+	// {small:21,big:145,times:2}, //希望之魂
+	// {small:28,big:146,times:2}, //勇气之魂
+	// {small:19,big:147,times:4}, //命运之魂
 ];
 
 const PAD_PASS_BADGE = 1<<7 | 1; //本程序的月卡徽章编号，129
@@ -604,7 +613,7 @@ const official_badge_sorting = [ //20是没有启用的全属性徽章，现在�
 ]
 //官方的觉醒排列顺序
 const official_awoken_sorting = [
-	 21, 43, 61,140, 54, 11, 12, 13, 49,
+	 21, 43, 61,144, 54,140, 12, 13, 49,
 	 56,107,111, 52, 55, 68, 69, 70, 28,
 	141, 48, 27, 78, 60,126, 59, 45, 50,
 	 53,109, 96,110,108, 79, 80, 81, 51,
@@ -619,9 +628,9 @@ const official_awoken_sorting = [
 	 91, 92, 93, 94, 95, 65, 66, 67,105,
 	 84, 83, 85, 86, 87, 88, 89, 90, 63,
 	128,129,130,132, 64,131,138,139,142,
-	143,
+	143,145,146,147,
 	//已废弃觉醒，但是不能删除，否则导致程序有问题
-	 10, 14, 15, 16, 17, 18, 19,
+	 10, 11, 14, 15, 16, 17, 18, 19,
 ];
 
 //排序程序列表

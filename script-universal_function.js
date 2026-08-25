@@ -901,10 +901,22 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 		[{ index: 63, scale: 1.1 }] //RCV
 	];
 	const latterAwokenScale = [ //在297之后，对应比例加三维觉醒的序号与倍率值，30 协力觉醒、127 三维觉醒、132 下午茶觉醒、142 三维觉醒+
-		[{ index: 127, scale: 1.5 }, { index: 132, scale: 1.25 }, { index: 142, scale: 1.8 }], //HP
-		[{ index: 127, scale: 1.5 }, { index: 132, scale: 1.25 }, { index: 142, scale: 1.8 }], //ATK
-		[{ index: 127, scale: 1.5 }, { index: 132, scale: 1.25 }, { index: 142, scale: 1.8 }] //RCV
+		[ //HP
+		],
+		[ //ATK
+		],
+		[ //RCV
+		]
 	];
+	//三个值一样的，就简化写在这里了
+	latterAwokenScale.forEach(ab => {
+		ab.push({ index: 127, scale: 1.5 }); //127 三维觉醒
+		ab.push({ index: 132, scale: 1.25 }); //132 下午茶觉醒
+		ab.push({ index: 142, scale: 1.8 }); //142 三维觉醒+
+		ab.push({ index: 145, scale: 1.5 }); //145 希望之魂
+		ab.push({ index: 146, scale: 1.5 }); //146 勇气之魂
+		ab.push({ index: 147, scale: 1.5 }); //147 命运之魂
+	});
 
 	if (!solo) { //协力时计算协力觉醒
 		latterAwokenScale.forEach(ab => {
@@ -1906,6 +1918,8 @@ function countTeamSB(team, solo) {
 		sbn -= enableAwoken.filter(n=>n===105).length;
 		//心L 59，心L大SB潜觉 47
 		sbn += enableAwoken.filter(n=>n===59).length ? member.latent.filter(n=>n===47).length * 3 : 0;
+		//希望之魂 145
+		sbn += enableAwoken.filter(n=>n===145).length * 2;
 	}
 	if (solo || teamsCount === 3) {
 		switch (badge) {
@@ -2022,6 +2036,7 @@ function countMoveTime(team, leader1id, leader2id, teamIdx) {
 		const awokenMoveTime = [
 			{ index: 19, value: 0.5 }, //小手指
 			{ index: 53, value: 1 }, //大手指
+			{ index: 147, value: 2 }, //命运之魂
 		];
 		moveTime.duration.awoken += awokenMoveTime.reduce((duration, aw) =>
 			duration + awokenCountInTeam(_team, aw.index, solo, teamsCount) * aw.value, 0);

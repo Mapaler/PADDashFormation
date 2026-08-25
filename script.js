@@ -6934,7 +6934,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			let prob = thisAwokenNum * 0.2; //普通觉醒20%
 
 			const _5colorAwokenNum = awokenCountInTeam(team, 137, solo, teamsCount); 
-			if (_5colorAwokenNum) prob += _5colorAwokenNum * 0.1; //五色珠觉醒20%
+			if (_5colorAwokenNum) prob += _5colorAwokenNum * 0.1; //五色珠觉醒10%
 
 			awoken.setAttribute(dataAttrName,Math.round(prob*100));
 			awoken.classList.toggle("gt100", prob > 1);
@@ -6945,7 +6945,9 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"28\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".prob");
 		const targetMeter = targetIcon.parentElement.querySelector("meter");
-		const thisAwokenNum = awokenCountInTeam(team, 28, solo, teamsCount);
+		const thisAwokenNum = awokenCountInTeam(team, 28, solo, teamsCount) //SX
+			+ awokenCountInTeam(team, 146, solo, teamsCount) * 2 //勇气之魂
+			;
 		let prob = thisAwokenNum / 5;
 		switch (badge) {
 			case 9:

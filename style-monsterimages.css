@@ -1160,6 +1160,18 @@
 .awoken-icon[data-awoken-icon='143']{/*加速*/
 	--icon-y-index: 143;
 }
+.awoken-icon[data-awoken-icon='144']{/*15c*/
+	--icon-y-index: 144;
+}
+.awoken-icon[data-awoken-icon='145']{/*希望之魂*/
+	--icon-y-index: 145;
+}
+.awoken-icon[data-awoken-icon='146']{/*勇气之魂*/
+	--icon-y-index: 146;
+}
+.awoken-icon[data-awoken-icon='147']{/*命运之魂*/
+	--icon-y-index: 147;
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],

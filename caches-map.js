@@ -561,7 +561,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_141.PNG",
-		"d473fbb5665067fc"
+		"87879ce7a7115834"
 	],
 	[
 		"images/cards_ja/CARDS_142.PNG",
@@ -1705,7 +1705,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"ec9beee08b87ed4c"
+		"6125938ca87687b8"
 	],
 	[
 		"script-custom_elements.js",
@@ -1713,7 +1713,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"92ca89f0ba7d3437"
+		"6b17b821bdcd87a3"
 	],
 	[
 		"script-skill-parser.js",
@@ -1721,15 +1721,15 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"967dd084d26cb061"
+		"cbec169f562a34f5"
 	],
 	[
 		"script.js",
-		"ce3ee419ceee105c"
+		"df6f312674ca358c"
 	],
 	[
 		"solo.html",
-		"84f3caf4e844600f"
+		"dd8795302a458a06"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -1737,7 +1737,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"83b38772e7d30a7a"
+		"aa8bb36673c4d176"
 	],
 	[
 		"style.css",
@@ -1749,7 +1749,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"04958963c269d26f"
+		"74d73e36cd09d23d"
 	],
 	[
 		"languages/en.css",
@@ -1785,7 +1785,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.js",
-		"f056c20ad0850e40"
+		"65b89e952606917b"
 	],
 	[
 		"languages/zh-hant.css",
@@ -1793,7 +1793,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.js",
-		"ce393ca4d4f7d172"
+		"004f0206d51dbcf3"
 	],
 	[
 		"images/attrs.png",
@@ -1809,7 +1809,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"aef3bda429404866"
+		"e8b61cb2a54454e5"
 	],
 	[
 		"images/badge-bg.png",
