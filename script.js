@@ -7833,6 +7833,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 96: return member.card.gachaIds.includes(5)  ? 1.15 : 1; //式神使与妖
 				case 97: return member.card.gachaIds.includes(5)  ? 1.30 : 1; //式神使与妖+
 				case 98: case 99: return member.card.collabId === 75  ? 1.15 : 1; //银魂
+				case 107: case 108: return member.card.collabId === 52  ? 1.15 : 1; //死神
 				default: return 1;
 			}
 		}

@@ -1604,6 +1604,8 @@
 	[data-badge-icon='98'],
 	[data-badge-icon='99'],
 	[data-badge-icon='103'],
+	[data-badge-icon='107'],
+	[data-badge-icon='108'],
 ){
 	background-position-y: calc(var(--badge-height) * -1);
 }
