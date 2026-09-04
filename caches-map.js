@@ -557,7 +557,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ja/CARDS_140.PNG",
-		"227553eb2a30d1d5"
+		"e2428e6568b2e62d"
 	],
 	[
 		"images/cards_ja/CARDS_141.PNG",
@@ -1125,7 +1125,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_en/CARDS_140.PNG",
-		"bd4b4754f3d8ec79"
+		"49aeda2970cdfbf4"
 	],
 	[
 		"images/cards_ko/CARDS_001.PNG",
@@ -1685,7 +1685,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/cards_ko/CARDS_140.PNG",
-		"bd4b4754f3d8ec79"
+		"49aeda2970cdfbf4"
 	],
 	[
 		"fonts/fa-regular-400.woff2",
@@ -1985,7 +1985,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/html2canvas.min.js",
-		"e84e58ca3a04295d"
+		"97c7aecf6b335a89"
 	],
 	[
 		"library/zxing.umd.min.js",
