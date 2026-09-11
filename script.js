@@ -7720,8 +7720,9 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 
 			if (teamsCount == 2) return 1;
 			switch (badge) {
-				case 104:	//U强化
-				case 105:	//四色强化
+				case 104:	//水串
+				case 105:	//木串
+				case 108:	//火串
 				{
 					reduce.scale = 0.05;
 				}
