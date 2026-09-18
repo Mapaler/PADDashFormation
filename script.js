@@ -6869,6 +6869,19 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			teamFlagsMembers[mi].setAttribute(dataAttrName, Math.round(Math.min(thisAwokenNum/2,1)*100));
 		}
 	}
+	//防除武
+	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"148\"]")) {
+		const teamFlagsMembers = Array.from(targetIcon.parentElement.querySelectorAll(".team-flags li"));
+
+		for (let mi=0; mi < members.length; mi++) {
+			const memberData = members[mi];
+			const assistData = assists[mi];
+			let thisAwokenNum = 0;
+			let effectiveAwokens = memberData.effectiveAwokens(assistData);
+			thisAwokenNum = effectiveAwokens.filter(ak=>ak==148).length;
+			teamFlagsMembers[mi].setAttribute(dataAttrName, Math.round(Math.min(thisAwokenNum,1)*100));
+		}
+	}
 	//自动回复
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"9\"]")) {
 		const targetValue = targetIcon.parentElement.querySelector(".count");

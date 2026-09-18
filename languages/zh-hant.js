@@ -489,6 +489,7 @@ const _localTranslating = {
 			[145]: tp`${'icon'}希望之魂`,
 			[146]: tp`${'icon'}勇氣之魂`,
 			[147]: tp`${'icon'}命運之魂`,
+			[148]: tp`${'icon'}防除武`,
 		}
 	},
 };

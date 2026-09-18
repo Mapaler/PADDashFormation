@@ -1172,6 +1172,9 @@
 .awoken-icon[data-awoken-icon='147']{/*命运之魂*/
 	--icon-y-index: 147;
 }
+.awoken-icon[data-awoken-icon='148']{/*防除武*/
+	--icon-y-index: 148;
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],

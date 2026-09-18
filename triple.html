@@ -1664,6 +1664,7 @@ const teamsCount = 3;
 						<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="145"></button><!--希望之魂--></li>
 						<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="146"></button><!--勇气之魂--></li>
 						<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="147"></button><!--命运之魂--></li>
+						<li class="awoken-count"><button class="awoken-icon" data-awoken-icon="148" data-max-count="1"></button><!--防除武--></li>
 					</ul>
 				</div>
 				<details class="sawoken-detail"><!--超觉醒列表-->
@@ -1816,6 +1817,7 @@ const teamsCount = 3;
 						<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="145" id="search-awoken-145" /><label class="awoken-icon" data-awoken-icon="145" for="search-awoken-145"></label><!--希望之魂--></li>
 						<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="146" id="search-awoken-146" /><label class="awoken-icon" data-awoken-icon="146" for="search-awoken-146"></label><!--勇气之魂--></li>
 						<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="147" id="search-awoken-147" /><label class="awoken-icon" data-awoken-icon="147" for="search-awoken-147"></label><!--命运之魂--></li>
+						<li class="awoken-count"><input type="checkbox" class="sawoken-check" name="types" value="148" id="search-awoken-148" /><label class="awoken-icon" data-awoken-icon="148" for="search-awoken-148"></label><!--防除武--></li>
 					</ul>
 				</details>
 			</div>
@@ -2206,6 +2208,17 @@ const teamsCount = 3;
 				<li style="grid-column: span 2;">
 					<icon class="awoken-icon" data-awoken-icon="50"></icon><span class="count"></span>
 					<icon class="meter" data-icon-type="breaking-shield"></icon><span class="count" data-postfix="%"></span>
+				</li>
+				<!--防除武-->
+				<li><icon class="awoken-icon" data-awoken-icon="148"></icon>
+					<ul class="team-flags">
+						<li class="team-member-icon"></li>
+						<li class="team-member-icon"></li>
+						<li class="team-member-icon"></li>
+						<li class="team-member-icon"></li>
+						<li class="team-member-icon"></li>
+						<li class="team-member-icon"></li>
+					</ul>
 				</li>
 			</ul>
 		</template>

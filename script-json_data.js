@@ -506,6 +506,7 @@ let localTranslating = {
 			[145]: tp`${'icon'}Hopeful Soul`,
 			[146]: tp`${'icon'}Courageous Soul`,
 			[147]: tp`${'icon'}Fateful Soul`,
+			[148]: tp`${'icon'}Remove Assist Resistance`,
 		}
 	},
 };
@@ -659,7 +660,7 @@ const official_awoken_sorting = [
 	 91, 92, 93, 94, 95, 65, 66, 67,105,
 	 84, 83, 85, 86, 87, 88, 89, 90, 63,
 	128,129,130,132, 64,131,138,139,142,
-	143,145,146,147,
+	143,145,146,147,148,
 	//已废弃觉醒，但是不能删除，否则导致程序有问题
 	 10, 11, 14, 15, 16, 17, 18, 19,
 ];

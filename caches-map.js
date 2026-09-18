@@ -1721,7 +1721,7 @@ const cachesMap = new Map([
 	],
 	[
 		"multi.html",
-		"6125938ca87687b8"
+		"7ee8292ffc2dfa55"
 	],
 	[
 		"script-custom_elements.js",
@@ -1729,7 +1729,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"35d83e2583c80b40"
+		"aaba804f29eb34d5"
 	],
 	[
 		"script-skill-parser.js",
@@ -1741,11 +1741,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script.js",
-		"714fc3654ba190e1"
+		"179d4de96d9bc1a4"
 	],
 	[
 		"solo.html",
-		"dd8795302a458a06"
+		"f8a4329e13eef2bc"
 	],
 	[
 		"style-fix-html2canvas.css",
@@ -1753,7 +1753,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"88a21e9406e62e35"
+		"13e1802b7b0a031c"
 	],
 	[
 		"style.css",
@@ -1765,7 +1765,7 @@ const cachesMap = new Map([
 	],
 	[
 		"triple.html",
-		"74d73e36cd09d23d"
+		"b7a4c8c2d2cc80c9"
 	],
 	[
 		"languages/en.css",
@@ -1801,7 +1801,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hans.js",
-		"65b89e952606917b"
+		"24d4b1ab4431c3a9"
 	],
 	[
 		"languages/zh-hant.css",
@@ -1809,7 +1809,7 @@ const cachesMap = new Map([
 	],
 	[
 		"languages/zh-hant.js",
-		"004f0206d51dbcf3"
+		"2a2632c393783bf9"
 	],
 	[
 		"images/attrs.png",
@@ -1825,7 +1825,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/awoken.png",
-		"e8b61cb2a54454e5"
+		"4463c7f5e51c8bba"
 	],
 	[
 		"images/badge-bg.png",
@@ -1961,7 +1961,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-skills.png",
-		"e9a9476f5f0ec3e6"
+		"d5eb64ef947ccf3b"
 	],
 	[
 		"images/icon-switch-leader.png",
