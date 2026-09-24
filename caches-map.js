@@ -1729,7 +1729,7 @@ const cachesMap = new Map([
 	],
 	[
 		"script-json_data.js",
-		"aaba804f29eb34d5"
+		"515153a4e18a9052"
 	],
 	[
 		"script-skill-parser.js",
@@ -1737,11 +1737,11 @@ const cachesMap = new Map([
 	],
 	[
 		"script-universal_function.js",
-		"cbec169f562a34f5"
+		"ae403f9221955b25"
 	],
 	[
 		"script.js",
-		"179d4de96d9bc1a4"
+		"aad09a4bd3aba84f"
 	],
 	[
 		"solo.html",
@@ -1753,7 +1753,7 @@ const cachesMap = new Map([
 	],
 	[
 		"style-monsterimages.css",
-		"13e1802b7b0a031c"
+		"6a77db0eca1b5c2e"
 	],
 	[
 		"style.css",
@@ -1833,7 +1833,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/badge.png",
-		"d38f06c2f27fa8c1"
+		"d1c014b64378df9d"
 	],
 	[
 		"images/brown-button.svg",
@@ -1929,7 +1929,7 @@ const cachesMap = new Map([
 	],
 	[
 		"images/icon-latent.png",
-		"737e87579bde76d9"
+		"f932c8fb1b8a05c8"
 	],
 	[
 		"images/icon-MP.png",

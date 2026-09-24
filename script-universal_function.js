@@ -891,7 +891,8 @@ function calculateAbility(member, assist = null, solo = true, teamsCount = 1) {
 	const limitBreakIncr120 = [10, 5, 5]; //120三维增加百分比例
 
 	const awokenAdd = [ //对应加三维觉醒的序号与增加值
-		[{ index: 1, value: 2000 }, { index: 65, value: -2500 }], //HP
+		// 日服 v23.5 HP強化 从 2000 改为 3000
+		[{ index: 1, value: isJP ? 3000 : 2000 }, { index: 65, value: -2500 }], //HP
 		[{ index: 2, value: 1000 }, { index: 66, value: -1000 }], //ATK
 		[{ index: 3, value: 500 }, { index: 67, value: -2000 }] //RCV
 	];

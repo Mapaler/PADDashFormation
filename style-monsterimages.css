@@ -1411,7 +1411,7 @@
 .latent-icon[data-latent-icon='41']::before{ /*U解禁消*/
 	--icon-y-index: 41;
 }
-.latent-icon[data-latent-icon='42']::before{ /*伤害上限×4*/
+.latent-icon[data-latent-icon='42']::before{ /*伤害上限×5*/
 	--icon-y-index: 42;
 }
 .latent-icon[data-latent-icon='43']::before{ /*HP++*/
@@ -1432,7 +1432,7 @@
 .latent-icon[data-latent-icon='48']::before{ /*L解禁武器*/
 	--icon-y-index: 48;
 }
-.latent-icon[data-latent-icon='49']::before{ /*伤害上限×8*/
+.latent-icon[data-latent-icon='49']::before{ /*伤害上限×10*/
 	--icon-y-index: 49;
 }
 .latent-icon[data-latent-icon='50']::before{ /*十字追部位*/
@@ -1447,6 +1447,13 @@
 	[data-latent-icon='39'],
 )::before{
 	--icon-x-index: 1;
+}
+/* 日服 v23.5 更新将 ×4、×8 上限改成了 ×5、×10 */
+body:not([data-game-source="ja"]) .latent-icon:where(
+	[data-latent-icon='42'],
+	[data-latent-icon='49'],
+)::before{
+	--icon-x-index: 2;
 }
 
 /* 编辑界面特殊的 三维潜觉 */
@@ -1609,6 +1616,7 @@
 	[data-badge-icon='103'],
 	[data-badge-icon='107'],
 	[data-badge-icon='108'],
+	[data-badge-icon='112'],
 ){
 	background-position-y: calc(var(--badge-height) * -1);
 }

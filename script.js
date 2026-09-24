@@ -7736,6 +7736,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 104:	//水串
 				case 105:	//木串
 				case 108:	//火串
+				case 110:	//光串
+				case 111:	//暗串
 				{
 					reduce.scale = 0.05;
 				}
@@ -7848,6 +7850,7 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 97: return member.card.gachaIds.includes(5)  ? 1.30 : 1; //式神使与妖+
 				case 98: case 99: return member.card.collabId === 75  ? 1.15 : 1; //银魂
 				case 107: case 108: return member.card.collabId === 52  ? 1.15 : 1; //死神
+				case 112: return member.card.collabId === 123  ? 1.30 : 1; //偶像大师
 				default: return 1;
 			}
 		}
