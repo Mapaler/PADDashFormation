@@ -6938,6 +6938,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 	if (targetIcon = awokenEffectDom.querySelector(".awoken-icon[data-awoken-icon=\"14\"]")) {
 		const awokens = Array.from(targetIcon.parentElement.querySelectorAll(".awoken-icon"));
 
+		const _5colorAwokenNum = awokenCountInTeam(team, 137, solo, teamsCount); 
 		for (let ai=0; ai < awokens.length; ai++) {
 			const awoken = awokens[ai];
 			const ak = parseInt(awoken.dataset.awokenIcon, 10);
@@ -6946,8 +6947,7 @@ function refreshTeamAwokenEfeect(awokenEffectDom, team, ti, option) {
 			awokenCountInTeam(team, equivalentAwoken.big, solo, teamsCount) * equivalentAwoken.times;
 			let prob = thisAwokenNum * 0.2; //普通觉醒20%
 
-			const _5colorAwokenNum = awokenCountInTeam(team, 137, solo, teamsCount); 
-			if (_5colorAwokenNum) prob += _5colorAwokenNum * 0.1; //五色珠觉醒10%
+			if (_5colorAwokenNum && ai !== 5) prob += _5colorAwokenNum * 0.2; //五色珠觉醒10%
 
 			awoken.setAttribute(dataAttrName,Math.round(prob*100));
 			awoken.classList.toggle("gt100", prob > 1);
