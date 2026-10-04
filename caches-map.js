@@ -2005,7 +2005,7 @@ const cachesMap = new Map([
 	],
 	[
 		"library/html2canvas.min.js",
-		"12085c29b65f0595"
+		"aefd901ab04a654d"
 	],
 	[
 		"library/zxing.umd.min.js",
