@@ -1175,6 +1175,21 @@
 .awoken-icon[data-awoken-icon='148']{/*防除武*/
 	--icon-y-index: 148;
 }
+.awoken-icon[data-awoken-icon='149']{/*火竖*/
+	--icon-y-index: 149;
+}
+.awoken-icon[data-awoken-icon='150']{/*水竖*/
+	--icon-y-index: 150;
+}
+.awoken-icon[data-awoken-icon='151']{/*木竖*/
+	--icon-y-index: 151;
+}
+.awoken-icon[data-awoken-icon='152']{/*光竖*/
+	--icon-y-index: 152;
+}
+.awoken-icon[data-awoken-icon='153']{/*暗竖*/
+	--icon-y-index: 153;
+}
 :lang(zh) .awoken-icon:where(
 	[data-awoken-icon='46'],
 	[data-awoken-icon='47'],
