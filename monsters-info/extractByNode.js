@@ -71,7 +71,6 @@ officialAPI.forEach(function (lang) {
 	const cardJsonObj = JSON.parse(cardJson);
 	const oCards = lang.cardOriginal = cardJsonObj.card;//将字符串转换为json对象
 
-	const monCards = lang.cards = [];
 	//const monCards = lang.cards = oCards.map(ocard=>new Card(ocard));
 	/*oCards.forEach((oCard, idx)=>{
 		let mid = oCard[0];
@@ -85,9 +84,13 @@ officialAPI.forEach(function (lang) {
 			nCard.specialVersion[Math.floor(mid / 100000)] = new Card(oCard);
 		}
 	});*/
-	//为了减小数据文件容量，删掉一些用不上的，有的可以后面游戏内再重新加上
-	for (let cardIndex = 0; oCards[cardIndex][0] < 1e5; cardIndex++) {
-		const card = new Card(oCards[cardIndex]);
+	let _monCards = oCards.filter(oCard=>{
+		const [id] = oCard;
+		return id < 10_0000;
+	});
+	_monCards = _monCards.map(oCard=>{
+		const card = new Card(oCard);
+		
 		delete card.enemy; //不做地下城解析，用不上
 		delete card.onlyAssist; //数量太少了，游戏内再加
 
@@ -105,8 +108,24 @@ officialAPI.forEach(function (lang) {
 		
 		if (!card.syncAwakening)
 			delete card.syncAwakeningConditions; //没有同步觉醒
-		monCards.push(card);
+		return card;
+	});
+	_monCards.sort((card1,card2)=>card1.id - card2.id);
+	// 目前最新的美服、韩服数据，空的地方已经不用东西填了，为了兼容旧的程序，需要自己用 Card[0] 去填充
+	const Cards = [], card0 = _monCards[0];
+	for (let i = 0; i <= _monCards.at(-1).id; i++) {
+		const card = _monCards.find(_card=>_card.id === i);
+		if (card) {
+			Cards[i] = card;
+		} else {
+			const newBlankCard = structuredClone(card0);
+			newBlankCard.id = i;
+			Cards[i] = newBlankCard;
+		}
 	}
+
+	lang.cards = Cards;
+
 
 	//加入自定义的语言
 	lang.customName.forEach(function (lcode) {
@@ -114,7 +133,7 @@ officialAPI.forEach(function (lang) {
 		const ljson = fs.readFileSync("custom/" + lcode + ".json", 'utf-8'); //使用同步读取
 		const ccard = JSON.parse(ljson);//将字符串转换为json对象
 		ccard.forEach(function (cm) { //每个文件内的名字循环
-			let m = monCards[cm.id];
+			let m = Cards[cm.id];
 			if (m) {
 				if (!m.otLangName) //如果没有其他语言名称属性，则添加一个对象属性
 					m.otLangName = {};
@@ -134,7 +153,7 @@ officialAPI.forEach(function (lang) {
 	const oSkills = lang.skillOriginal = skillJsonObj.skill;//将字符串转换为json对象
 	lang.skills = oSkills.map((oc, idx) => new Skill(idx, oc)); //每一项生成分析对象
 
-	lang.cards.forEach((m, cardId, cardArr) => {
+	Cards.forEach((m, cardId, cardArr) => {
 		let henshinTo = null;
 		const henshinSkill = getActuallySkills(lang.skills, m.activeSkillId, [202, 236]);
 		if (henshinSkill.length) {
@@ -144,16 +163,24 @@ officialAPI.forEach(function (lang) {
 				m.henshinTo = henshinTo;
 				//变身来源可能有多个，因此将变身来源修改为数组
 				for (let toId of henshinTo) {
-					let henshinFrom = cardArr[toId].henshinFrom;
-					if (Array.isArray(henshinFrom)) {
-						henshinFrom.push(cardId);
+					const cardHenshinTo = cardArr.find(card=>card.id===toId);
+					if (!cardHenshinTo) continue;
+					if (Array.isArray(cardHenshinTo.henshinFrom)) {
+						cardHenshinTo.henshinFrom.push(cardId);
 					} else {
-						cardArr[toId].henshinFrom = [cardId];
+						cardHenshinTo.henshinFrom = [cardId];
 					}
 				}
 			}
 		}
 	});
+
+	let debugArr = Cards.filter((card, idx) =>{
+		return card.id !== idx;
+	});
+	if (debugArr.length) {
+		console.error("编号在数组内不正确的有",debugArr.map(card=>card.id).join());
+	}
 
 	//const eskillJson = fs.readFileSync("official-API/" + lang.code +"-enemy_skill.json", 'utf-8'); //使用同步读取技能
 	//const eskillJsonObj = JSON.parse(eskillJson);

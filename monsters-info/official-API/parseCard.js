@@ -1,21 +1,16 @@
 ﻿//分析卡片的函数,Code From https://github.com/kiootic/pad-rikuu
 class Card{
+	id = 0
+	name = ""
+	attrs = []
+	types = []
 	static fixId(id, reverse = false){
 		if (id === 0xFFFF) return id;
 		return reverse ? (id >= 9900 ? id + 100 : id) : (id >= 10000 ? id - 100 : id);
 	}
     constructor(data){
-		let card = this;
-		card.attrs=[];
-		card.types=[];
+		const card = this;
 		let i = 0;
-		function readCurve() {
-			return {
-				min: data[i++],
-				max: data[i++],
-				scale: data[i++],
-			};
-		}
 		card.id = Card.fixId(data[i++]); //ID
 		card.name = data[i++]; //名字
 		card.attrs.push(data[i++]); //属性1
@@ -110,6 +105,14 @@ class Card{
 			card.types = card.types.slice(0,card.types.indexOf(-1)); //type里面去掉-1
 		if (i < data.length)
 			console.log(`有新增数据/residue data for #${card.id}: ${i} ${data[i]}`);
+
+		function readCurve() {
+			return {
+				min: data[i++],
+				max: data[i++],
+				scale: data[i++],
+			};
+		}
 	}
 }
 //对于Nodejs输出成模块
