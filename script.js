@@ -7738,6 +7738,11 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 108:	//火串
 				case 110:	//光串
 				case 111:	//暗串
+				case 113:	//火竖
+				case 114:	//水竖
+				case 115:	//木竖
+				case 116:	//光竖
+				case 117:	//暗竖
 				{
 					reduce.scale = 0.05;
 				}

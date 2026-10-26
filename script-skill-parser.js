@@ -391,38 +391,45 @@ class Board
 const SkillTarget = {
 	type1: ["self","leader-self","leader-helper","sub-members"],
 	type2: ["right-neighbor","left-neighbor","self"],
-	enhancedAwakeningsId: [
-			27, //U
-			48, //九宫
-			60, //L字
-			78, //十字
+	enhancedAwakeningsId1: [
+		27, //U
+		48, //九宫
+		60, //L字
+		78, //十字
 
-			126,//T字
-			22, //横排-火
-			23, //横排-水
-			24, //横排-木
+		126,//T字
+		22, //横排-火
+		23, //横排-水
+		24, //横排-木
 
-			25, //横排-光
-			26, //横排-暗
-			79, //三色
-			80, //四色
+		25, //横排-光
+		26, //横排-暗
+		79, //三色
+		80, //四色
 
-			81, //五色
-			0,
-			0,
-			73, //串串-火
+		81, //五色
+		0,
+		0,
+		73, //串串-火
 
-			74, //串串-水
-			75, //串串-木
-			76, //串串-光
-			77, //串串-暗
+		74, //串串-水
+		75, //串串-木
+		76, //串串-光
+		77, //串串-暗
 
-			20, //心横解封
-			82, //饼干
-			133, //火水同时攻击
-			134, //火水同时攻击
+		20, //心横解封
+		82, //饼干
+		133, //火水同时攻击
+		134, //火水同时攻击
 
-			135, //水木同时攻击
+		135, //水木同时攻击
+	],
+	enhancedAwakeningsId2: [
+		149,	//火竖
+		150,	//水竖
+		151,	//木竖
+		152,	//光竖
+		153,	//暗竖
 	],
 };
 
@@ -1846,9 +1853,9 @@ const skillObjectParsers = {
 	},
 	//一回合内使用几次技能才有倍率的队长技。
 	[270](times, atk, rcv) { { return powerUp(Bin.unflags(31), null, p.mul({ atk: atk || 100, rcv: rcv || 100 }), c.useSkill(times)); } },
-	//同时发动觉醒时强化
+	//同时发动觉醒时强化1
 	[271](awakeningsFlag, atk, reducePercent, combo, damage, rcv) {
-		const awakeningsArr = Bin.unflags(awakeningsFlag).map(n => SkillTarget.enhancedAwakeningsId[n] || 0);
+		const awakeningsArr = Bin.unflags(awakeningsFlag).map(n => SkillTarget.enhancedAwakeningsId1[n] || 0);
 		let additional = [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean);
 		return powerUp(null, null, p.mul({ atk: atk || 100, rcv: rcv || 100}), c.awakeningActivated(awakeningsArr), v.percent(reducePercent), additional);
 	},
@@ -1916,6 +1923,12 @@ const skillObjectParsers = {
 		let additional = [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean);
 		const eachTime = true;
 		return powerUp(null, null, p.mul({ atk: atk || 100, rcv: rcv || 100}), c.awakeningActivated(awakeningsArr), v.percent(reducePercent), additional, eachTime);
+	},
+	//同时发动觉醒时强化2
+	[285](awakeningsFlag, atk, reducePercent, combo, damage, rcv) {
+		const awakeningsArr = Bin.unflags(awakeningsFlag).map(n => SkillTarget.enhancedAwakeningsId2[n] || 0);
+		let additional = [combo ? addCombo(combo) : null, damage ? followAttackFixed(damage) : null].filter(Boolean);
+		return powerUp(null, null, p.mul({ atk: atk || 100, rcv: rcv || 100}), c.awakeningActivated(awakeningsArr), v.percent(reducePercent), additional);
 	},
 	//解析
 	[282](percent) { return analyze(v.percent(percent)); },

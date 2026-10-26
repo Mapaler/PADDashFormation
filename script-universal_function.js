@@ -1852,6 +1852,9 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original,
 		case 86: //L强化
 		case 104: //水串
 		case 105: //木串
+		case 108:	//火串
+		case 110:	//光串
+		case 111:	//暗串
 		{
 			effect.inflicts.push(2.5e7);
 			break;
@@ -1867,6 +1870,11 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original,
 		}
 		case 95: //3色强化
 		case 100: //U强化
+		case 113:	//火竖
+		case 114:	//水竖
+		case 115:	//木竖
+		case 116:	//光竖
+		case 117:	//暗竖
 		{ 
 			effect.addCombo.push(2);
 			break;
