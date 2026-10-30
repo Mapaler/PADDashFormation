@@ -2237,7 +2237,8 @@ function getReduceScales(leaderid) {
 			case 151: //十字心触发
 			case 169: //C触发
 			case 198: //回血触发
-			case 271: //激活觉醒触发
+			case 271: //激活觉醒触发1
+			case 285: //激活觉醒触发2
 				reduce.scale = (sk[2] || 0) / 100;
 				break;
 			case 170: //多色触发
