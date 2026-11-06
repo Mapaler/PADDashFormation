@@ -1875,6 +1875,9 @@ function tIf_Effect(leader1id, leader2id, leader1id_original,leader2id_original,
 		case 115:	//木竖
 		case 116:	//光竖
 		case 117:	//暗竖
+		case 118:	//火水
+		case 119:	//水木
+		case 120:	//木火
 		{ 
 			effect.addCombo.push(2);
 			break;

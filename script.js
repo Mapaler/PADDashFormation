@@ -7745,6 +7745,14 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 117:	//暗竖
 				{
 					reduce.scale = 0.05;
+					break;
+				}
+				case 118:	//火水
+				case 119:	//水木
+				case 120:	//木火
+				{
+					reduce.scale = 0.06;
+					break;
 				}
 			}
 			return reduce;
