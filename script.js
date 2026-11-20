@@ -7864,6 +7864,8 @@ function refreshTeamTotalHP(totalDom, team, teamIdx) {
 				case 98: case 99: return member.card.collabId === 75  ? 1.15 : 1; //银魂
 				case 107: case 108: return member.card.collabId === 52  ? 1.15 : 1; //死神
 				case 112: return member.card.collabId === 123  ? 1.30 : 1; //偶像大师
+				case 125: return member.card.gachaIds.includes(16) ? 1.15 : 1; //精灵术士&炼金术
+				case 126: return member.card.gachaIds.includes(16) ? 1.30 : 1; //精灵术士&炼金术+
 				default: return 1;
 			}
 		}

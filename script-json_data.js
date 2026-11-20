@@ -648,7 +648,7 @@ const official_badge_sorting = [ //20是没有启用的全属性徽章，现在�
 	 91, 92, 93, 94, 95, 96, 97, 98, 99,
 	100,101,102,104,105,106,107,108,109,
 	110,111,112,113,114,115,116,117,
-	118,119,120,
+	118,119,120,121,122,123,124,125,126,
 ]
 //官方的觉醒排列顺序
 const official_awoken_sorting = [
@@ -5030,7 +5030,7 @@ const specialSearchFunctions = (function() {
 					addition:({orbSkinOrBgmId})=>Boolean(orbSkinOrBgmId) && `ID.${orbSkinOrBgmId}`
 				},
 				{name:"Will get Team Badge",otLangName:{chs:"能获得队伍徽章",cht:"能獲得隊伍徽章"},
-					function:cards=>cards.filter(({badgeId})=>badgeId),
+					function:cards=>cards.filter(({badgeId})=>badgeId).sort(({badgeId: id_a},{badgeId: id_b})=>id_a-id_b),
 					addition:({badgeId})=>{
 						if (!badgeId) return;
 						const fragment = document.createDocumentFragment();
